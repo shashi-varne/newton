@@ -128,7 +128,7 @@ class WnatsappEditNumber extends Component {
   };
 
   render() {
-    console.log(storageService().get('mobile'))
+
     return (
       <Container
         showLoader={this.state.show_loader}

@@ -118,12 +118,46 @@ class WhatsappOtpVerification extends Component {
 
         let { id } = resultData.contact_details;
 
-        this.navigate("otp-success", {
-          params: {
-            mobile: otpBaseData.mobile_no,
-            contact_id: id
+        // calling consent api
+        if (id) {
+          let body = {
+            contact_id: id,
+            consent: true,
+            communication_type: "whatsapp",
+          };
+  
+          try {
+            this.setState({
+              show_loader: true,
+            });
+            const res = await Api.post(
+              `/api/communication/contact/consent?user_id=${this.state.user_id}`,
+              body
+            );
+            let resultData = res.pfwresponse.result || {};
+  
+            if (res.pfwresponse.status_code === 200 && !resultData.error) {
+              this.setState({
+                show_loader: true,
+              });
+  
+              this.navigate("otp-success");
+            } else {
+              this.setState({
+                show_loader: false,
+              });
+              toast(
+                resultData.error || resultData.message || "Something went wrong"
+              );
+            }
+          } catch (err) {
+            this.setState({
+              show_loader: false,
+              // openDialog: true,
+            });
+            toast("Something went wrong");
           }
-        });
+        }
       } else {
         this.setState({
           show_loader: false,

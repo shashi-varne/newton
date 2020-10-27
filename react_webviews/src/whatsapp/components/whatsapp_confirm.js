@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize } from "../common/functions";
+import { initialize, getContact } from "../common/functions";
+import Api from "utils/api";
+import toast from "../../common/ui/Toast";
 
 class WhastappConfirmNumber extends Component {
   constructor(props) {
@@ -11,6 +13,7 @@ class WhastappConfirmNumber extends Component {
     };
 
     this.initialize = initialize.bind(this);
+    this.getContact = getContact.bind(this);
   }
 
   componentWillMount() {
@@ -34,7 +37,7 @@ class WhastappConfirmNumber extends Component {
   }
 
   handleEdit = () => {
-    this.sendEvents("edit")
+    this.sendEvents("edit");
     this.navigate("edit-number", {
       params: {
         mobile: this.state.mobile,
@@ -42,29 +45,64 @@ class WhastappConfirmNumber extends Component {
     });
   };
 
-  handleClick = () => {
-    this.sendEvents("next")
+  handleClick = async () => {
+    this.sendEvents("next");
 
     if (this.state.verified) {
-      this.navigate("otp-success", {
-        params: {
-          mobile: this.state.mobile || '',
-        },
-      });
+      let id = await this.getContact();
+
+      if (id) {
+        let body = {
+          contact_id: id,
+          consent: true,
+          communication_type: "whatsapp",
+        };
+
+        try {
+          this.setState({
+            show_loader: true,
+          });
+          const res = await Api.post(
+            `/api/communication/contact/consent?user_id=${this.state.user_id}`,
+            body
+          );
+          let resultData = res.pfwresponse.result || {};
+
+          if (res.pfwresponse.status_code === 200 && !resultData.error) {
+            this.setState({
+              show_loader: true,
+            });
+
+            this.navigate("otp-success");
+          } else {
+            this.setState({
+              show_loader: false,
+            });
+            toast(
+              resultData.error || resultData.message || "Something went wrong"
+            );
+          }
+        } catch (err) {
+          this.setState({
+            show_loader: false,
+            // openDialog: true,
+          });
+          toast("Something went wrong");
+        }
+      }
     } else {
       this.navigate("whatsapp-edit", {
         params: {
-          mobile: this.state.mobile || '',
+          mobile: this.state.mobile || "",
         },
       });
     }
-    
-  }
+  };
 
   render() {
     let { show_loader } = this.state;
-    let mobile = this.state.mobile || '';
-console.log(mobile)
+    let mobile = this.state.mobile || "";
+
     let ui_mobile;
 
     if (!show_loader && mobile) {

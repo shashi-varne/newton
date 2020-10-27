@@ -25,6 +25,8 @@ export async function initialize() {
       const { mobile, user_id, verified } = resultData;
 
       storageService().set('user_id', user_id);
+      storageService().set('mobile', mobile);
+      
       this.setState({
         productName: getConfig().productName,
         mobile: (mobile && mobile.slice(3)) || "",
