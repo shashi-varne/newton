@@ -14,14 +14,14 @@ class HowToStepsClass extends Component {
 
   renderList = (option, index) => {
     return (
-      <div key={index} className="tile">
+      <div key={index} className="tile tile_step">
         {option.icon && <img className="icon"
           src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Gold" />}
         {option.img && <img className="icon"
           src={option.img} alt="Gold" />}
-        <div className="content">
+        <div className="content content_step">
           {this.state.baseData.show_index && <span> {index + 1}. </span>}
-          <div className="content">
+          <div className="content content_step">
             {option.title && <div className="content-title">{option.title}</div>}
             {option.subtitle && <div className="content-subtitle">{option.subtitle}</div>}
           </div>
@@ -41,7 +41,7 @@ class HowToStepsClass extends Component {
           </div>
         </div>}
 
-        <div className='common-steps-images' style={{ margin: '10px 0 0 0' }}>
+        <div className='common-steps-images common-steps-images_steps'>
           {this.state.baseData.options.map(this.renderList)}
         </div>
       </div>
