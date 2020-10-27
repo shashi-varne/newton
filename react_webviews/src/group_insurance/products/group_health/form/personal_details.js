@@ -179,7 +179,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
-    if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number' && name !== 'weight'){
+    if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number' && name !== 'weight' 
+    && name !== 'occupation'){
       return;
     }
 
