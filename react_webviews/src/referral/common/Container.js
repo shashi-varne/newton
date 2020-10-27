@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 
 import Header from './Header';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -19,7 +18,7 @@ class Container extends Component {
     super(props);
     this.state = {
       openDialog: false,
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+      productName: getConfig().productName
     }
   }
 
@@ -74,7 +73,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={this.state.loaderMain} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
           </div>
         </div>
       );
