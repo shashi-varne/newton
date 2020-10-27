@@ -53,6 +53,8 @@ class GroupHealthLanding extends Component {
 
     let screenData = this.state.providerConfig[screen_name];
 
+    console.log( this.state.providerConfig,"providerConfig")
+
     nativeCallback({ action: "take_control_reset" });
 
     let stepsContentMapper = {
@@ -332,7 +334,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 10px 0" }}
+            style={{ margin: "40px 0 15px 0" }}
           >
             Overview
           </div>

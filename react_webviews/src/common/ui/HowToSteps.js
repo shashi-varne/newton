@@ -36,12 +36,12 @@ class HowToStepsClass extends Component {
 
       <div className="common-how-steps" style={{ border: 'none', ...this.props.style }}>
         {this.state.baseData.title && <div className="top-tile">
-          <div className="generic-page-title">
+          <div className="top-title">
             {this.state.baseData.title}
           </div>
         </div>}
 
-        <div className='common-steps-images' style={{ margin: '-10px 0 0 0' }}>
+        <div className='common-steps-images' style={{ margin: '10px 0 0 0' }}>
           {this.state.baseData.options.map(this.renderList)}
         </div>
       </div>
