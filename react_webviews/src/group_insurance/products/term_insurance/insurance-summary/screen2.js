@@ -6,11 +6,9 @@ import cover_period from 'assets/cover_period_icon.png';
 import life_cover from 'assets/life_cover_icon.png';
 import income from 'assets/income_icon.png';
 import smoking from 'assets/smoking_icon.png';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import Api from 'utils/api';
-import Modal from 'material-ui/Modal';
-import Typography from 'material-ui/Typography';
+import LoaderModal from '../../../common/Modal';
 import qs from 'qs';
 import { income_pairs } from '../../../constants';
 import { numDifferentiation } from 'utils/validators';
@@ -82,7 +80,7 @@ class Resume extends Component {
       apiError: '',
       openResponseDialog: false,
       params: qs.parse(props.history.location.search.slice(1)),
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+      productName: getConfig().productName
     }
   }
 
@@ -471,20 +469,10 @@ class Resume extends Component {
 
   renderModal = () => {
     return (
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+      <LoaderModal 
         open={this.state.openModal}
-      >
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', borderRadius: 4, minWidth: 320, padding: 25, textAlign: 'center' }}>
-          <div style={{ padding: '20px 0 30px' }}>
-            <img src={this.state.loaderMain} alt="" />
-          </div>
-          <Typography variant="subheading" id="simple-modal-description" style={{ color: '#444' }}>
-            {this.state.openModalMessage}
-          </Typography>
-        </div>
-      </Modal>
+        message={this.state.openModalMessage}
+      />
     );
   }
 
