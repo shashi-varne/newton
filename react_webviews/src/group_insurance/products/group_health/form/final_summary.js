@@ -764,7 +764,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>}
 
                 {props.open && props.title === 'Address details' &&
-                    <div className="bct-content">
+                    <div className={`bct-content bct-content-address`}>
 
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
@@ -1017,7 +1017,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </Grid>
                         </Grid>
                     </div>
-                    <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
+                      <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
                 </div>
                 {this.state.medical_dialog_data &&
                     <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
