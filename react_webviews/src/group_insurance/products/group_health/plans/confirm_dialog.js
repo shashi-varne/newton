@@ -60,6 +60,7 @@ class ConfirmDialogClass extends Component {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogContent>
+                <div style={{padding: '0px 5px 0px 10px',fontSize:'14px'}} >
                     <div className="gold-dialog" id="alert-dialog-description">
                         <div className="mid-buttons">
                             <WithProviderLayout type="default"
@@ -95,6 +96,7 @@ class ConfirmDialogClass extends Component {
 
                          </div>                     
                     </div>
+                </div>    
                 </DialogContent>
             </Dialog >
         );

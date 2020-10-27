@@ -76,7 +76,7 @@ class RadioGrp extends Component {
     return (
       <div>
         <div className="RadioWithIcon">
-            {this.props.label}
+              {this.props.label}
           {/* <span className={(this.props.error) ? 'error' : ''}>{(this.props.error) ? 'Mandatory' : ''}</span> */}
         </div>
         <Grid container spacing={16}>
