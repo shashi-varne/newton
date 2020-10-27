@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../common/functions";
-import { storageService } from "utils/validators";
 
 class WhastappConfirmNumber extends Component {
   constructor(props) {
@@ -16,16 +15,6 @@ class WhastappConfirmNumber extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let { params } = this.props.location;
-
-    if (!params) {
-      params = {};
-    }
-
-    this.setState({
-      params_mobile: params.mobile || storageService().get('mobile') || ""
-    })
   }
 
   sendEvents(user_action) {
@@ -59,13 +48,13 @@ class WhastappConfirmNumber extends Component {
     if (this.state.verified) {
       this.navigate("otp-success", {
         params: {
-          mobile: this.state.params_mobile || this.state.mobile,
+          mobile: this.state.mobile || '',
         },
       });
     } else {
       this.navigate("whatsapp-edit", {
         params: {
-          mobile: this.state.params_mobile || this.state.mobile,
+          mobile: this.state.mobile || '',
         },
       });
     }
@@ -74,8 +63,8 @@ class WhastappConfirmNumber extends Component {
 
   render() {
     let { show_loader } = this.state;
-    let mobile = this.state.params_mobile || this.state.mobile || '';
-
+    let mobile = this.state.mobile || '';
+console.log(mobile)
     let ui_mobile;
 
     if (!show_loader && mobile) {

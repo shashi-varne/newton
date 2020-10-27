@@ -52,7 +52,7 @@ export async function initialize() {
 
 export async function getContact() {
   let user_id = storageService().get('user_id');
-  let mobile = storageService().get('mobile')
+  let mobile = storageService().get('mobile');
 
   try {
     this.setState({

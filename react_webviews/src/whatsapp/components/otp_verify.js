@@ -116,9 +116,12 @@ class WhatsappOtpVerification extends Component {
           show_loader: false,
         });
 
+        let { id } = resultData.contact_details;
+
         this.navigate("otp-success", {
           params: {
-            mobile: otpBaseData.mobile_no
+            mobile: otpBaseData.mobile_no,
+            contact_id: id
           }
         });
       } else {

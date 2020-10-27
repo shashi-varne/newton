@@ -26,7 +26,8 @@ class WhatsappOtpSuccess extends Component {
     }
 
     this.setState({
-      mobile_no: params.mobile,
+      mobile_no: params.mobile || "",
+      contact_id: params.contact_id || ""
     }, () => {
       storageService().set('mobile', params.mobile)
     });
@@ -51,7 +52,7 @@ class WhatsappOtpSuccess extends Component {
   handleClick = async () => {
     this.sendEvents("next");
 
-    let id = await this.getContact();
+    let id = (!this.state.contact_id && await this.getContact()) || this.state.contact_id;
 
     if (id) {
       let body = {
