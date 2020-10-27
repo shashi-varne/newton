@@ -5,12 +5,13 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { Button } from 'material-ui';
+import { getConfig } from '../../utils/functions';
 import toast from '../../common/ui/Toast';
 import { navigate } from '../common/commonFunctions';
 import EmailRequestSteps from './EmailRequestSteps';
 import { requestStatement } from '../common/ApiCalls';
 import { formattedDate } from '../../utils/validators';
-import { regenTimeLimit } from '../constants';
+// import { regenTimeLimit } from '../constants';
 
 const theme = createMuiTheme({
   overrides: {
@@ -65,6 +66,7 @@ export default class EmailExpand extends Component {
       parent.navigate(`statement_request/${email.email}`, {
         navigateBackTo: 'settings',
         noEmailChange: true,
+        fromResync: true,
       });
     } catch (err) {
       parent.setLoader(false);
@@ -78,7 +80,7 @@ export default class EmailExpand extends Component {
     return (
       <Fragment>
         <Button
-          variant="outlined" color="secondary"
+          color="secondary"
           classes={{
             root: 'resync-btn',
             label: 'gen-statement-btn-label',
@@ -99,7 +101,7 @@ export default class EmailExpand extends Component {
 
   renderStatementPending = () => {
     const { email, parent } = this.props;
-    const showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
+    // const showRegenerateBtn = (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
     return (
       <div className="ext-pf-subheader">
         <h4>Statement request sent</h4>
@@ -107,11 +109,11 @@ export default class EmailExpand extends Component {
           parent={parent}
           emailDetail={email}
           emailForwardedHandler={this.props.emailForwardedHandler}
-          showRegenerateBtn={showRegenerateBtn}
+          showRegenerateBtn={true}
           emailLinkClick={() => parent.navigate('email_example_view', {
             comingFrom: 'settings',
           })}
-          classes={{ emailBox: 'info-box-email-expand' }}
+          boxStyle={{ background: getConfig().productName === 'fisdom' ? '#DFD8EF' : '#D6ECFF' }}
         />
       </div>
     );

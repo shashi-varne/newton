@@ -110,7 +110,7 @@
   font-weight: 500;
 }
 .RadioWithIcon {
-  color: var(--label);
+  color: #0A1D32;
   font-size: 13px;
   margin-bottom: 15px;
   position: relative;
@@ -667,8 +667,8 @@ body[data-device="mobile"] {
   span {
     border-radius: 4px;
     color: #767E86;
-    text-align: justify;
-    margin: '0 0 0 10px'
+    margin: '0 0 0 10px';
+    z-index: 99999;
   }
   
   .tooltip-arrrow {
