@@ -4,8 +4,7 @@ import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import { FormControl } from 'material-ui/Form';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import { fetchFHCData } from '../../common/ApiCalls';
 import { storageService } from '../../../utils/validators';
 import { formatAmount } from 'utils/validators';
@@ -36,7 +35,7 @@ class LoanSummary extends Component {
       fhc_data: new FHC(),
       accordianTab: 'house_loan',
       type: getConfig().productName,
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+      productName: getConfig().productName
     };
     this.navigate = navigate.bind(this);
   }
