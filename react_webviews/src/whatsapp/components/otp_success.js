@@ -55,6 +55,9 @@ class WhatsappOtpSuccess extends Component {
         handleClick={this.handleClick}
         buttonTitle="OK"
         mobile_no={this.state.mobile_no}
+        headerData={{
+          icon: "close",
+        }}
       >
         <div className="otp-success center">
           <img
