@@ -3,8 +3,7 @@ import { withRouter } from "react-router";
 
 import Header from "./Header";
 import Footer from "./footer";
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import { nativeCallback } from "utils/native_callback";
 import Button from "material-ui/Button";
 import Dialog, {
@@ -16,7 +15,7 @@ import Dialog, {
 import '../../utils/native_listner';
 import { getConfig, setHeights } from 'utils/functions';
 // import {checkStringInString, storageService} from 'utils/validators';
-import { isFunction } from "../../utils/validators";
+import { isEmpty, isFunction } from "../../utils/validators";
 
 class Container extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ class Container extends Component {
       openPopup: false,
       popupText: "",
       callbackType: "",
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+      productName: getConfig().productName,
       inPageTitle: true,
     };
   }
@@ -169,7 +168,7 @@ class Container extends Component {
       return (
         <div className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ''}`}>
           <div className="LoaderOverlay">
-            <img src={this.state.loaderMain} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
               {this.props.loaderData && this.props.loaderData.loadingText && 
                 <div className="LoaderOverlayText">{this.props.loaderData.loadingText}</div>
               }
@@ -192,6 +191,7 @@ class Container extends Component {
     } else {
       el = document.getElementsByClassName('Container')[0];
     }
+    if (!el || isEmpty(el)) return;
     let height = el.getBoundingClientRect().top;
     return height;
   }

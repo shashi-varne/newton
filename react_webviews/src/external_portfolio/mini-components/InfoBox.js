@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { copyToClipboard } from 'utils/validators';
-// import Toast from '../../common/ui/Toast';
 import toast from '../../common/ui/Toast';
 
 export default class InfoBox extends Component {
@@ -29,6 +28,7 @@ export default class InfoBox extends Component {
       children,
       ctrlText,
       isCopiable,
+      boxStyle = {},
     } = this.props;
 
     const classes = this.props.classes || {};
@@ -42,7 +42,8 @@ export default class InfoBox extends Component {
     return (
       <div
         id="info-box"
-        className={classes.root}>
+        className={classes.root}
+        style={boxStyle}>
         {image && 
           <div id="info-box-img">
             <img
