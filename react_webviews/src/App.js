@@ -22,7 +22,8 @@ import CommonLanding from './common/components/landing';
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
 import Loan from './loan';
-import KycEsign from './kyc_esign'
+import Payment from './payment';
+import KycEsign from './kyc_esign';
 
 class App extends Component {
   render() {
@@ -43,6 +44,7 @@ class App extends Component {
           <Route path="/w-report" component={WealthReport} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/loan" component={Loan} />
+          <Route path="/pg" component={Payment} />
           <Route path="/kyc-esign" component={KycEsign} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
           <Route path="/webview/:main_module" component={CommonLanding} />

@@ -41,7 +41,7 @@ class HowToStepsClass extends Component {
           </div>
         </div>}
 
-        <div className='common-steps-images' style={{ margin: '10px 0 0 0' }}>
+        <div className='common-steps-images' style={{ margin: '-10px 0 0 0' }}>
           {this.state.baseData.options.map(this.renderList)}
         </div>
       </div>

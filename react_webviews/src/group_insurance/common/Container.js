@@ -4,8 +4,7 @@ import { getConfig, manageDialog, setHeights } from 'utils/functions';
 import Header from './Header';
 import Footer from './footer';
 import Banner from '../../common/ui/Banner';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import { nativeCallback, openModule } from 'utils/native_callback';
 import Button from 'material-ui/Button';
 import Dialog, {
@@ -28,7 +27,7 @@ class Container extends Component {
       openPopup: false,
       popupText: '',
       callbackType: '',
-      loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+      productName: getConfig().productName,
       inPageTitle: false,
       force_hide_inpage_title: false
     }
@@ -458,7 +457,7 @@ class Container extends Component {
       return (
         <div className="Loader">
           <div className="LoaderOverlay">
-            <img src={this.state.loaderMain} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
           </div>
         </div>
       );
