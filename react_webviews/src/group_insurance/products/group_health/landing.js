@@ -53,6 +53,8 @@ class GroupHealthLanding extends Component {
 
     let screenData = this.state.providerConfig[screen_name];
 
+    console.log( this.state.providerConfig,"providerConfig")
+
     nativeCallback({ action: "take_control_reset" });
 
     let stepsContentMapper = {
@@ -251,12 +253,12 @@ class GroupHealthLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
-        <div className="common-top-page-subtitle-dark">
+        <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
           {this.state.providerConfig.subtitle}
         </div>
 
         <div className="group-health-landing">
-          <div style={{ margin: "15px 0 0 0", cursor: "pointer" }}>
+          <div style={{ margin: "0 0 0 0", cursor: "pointer" }}>
             <ReactResponsiveCarousel
               CarouselImg={this.state.offerImageData}
               callbackFromParent={this.carouselSwipe_count}
@@ -332,7 +334,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 10px 0" }}
+            style={{ margin: "40px 0 20px 0" }}
           >
             Overview
           </div>
@@ -394,7 +396,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 15px 0" }}
+            style={{ margin: "40px 0 20px 0" }}
           >
             Benefits of health insurance
           </div>
@@ -425,13 +427,13 @@ class GroupHealthLanding extends Component {
           </div>
 
           <HowToSteps
-            style={{ margin: "10px 0 0 0" }}
+            style={{ margin: "20px 0px 0px 0px" }}
             baseData={this.state.stepsContentMapper}
           />
 
           <div
             className="generic-page-title"
-            style={{ margin: "-10px 0 15px 0" }}
+            style={{ margin: "4px 0 20px 0" }}
           >
             Things to know
           </div>
@@ -446,11 +448,11 @@ class GroupHealthLanding extends Component {
             </div>
             <div>Frequently asked questions</div>
           </div>
-          <div className="generic-hr" style={{ margin: "0px 0 30px 0" }}></div>
+          <div className="generic-hr" style={{ margin: "0px 0 40px 0" }}></div>
 
           <div
             className="accident-plan-read"
-            style={{ padding: 0, margin: "20px 0 0 0" }}
+            style={{ padding: 0, margin: "20px 0 10px 0" }}
             onClick={() =>
               this.openInBrowser(this.state.common.details_doc, "read_document")
             }
@@ -469,7 +471,7 @@ class GroupHealthLanding extends Component {
           </div>
           <div
             className="CheckBlock2 accident-plan-terms"
-            style={{ padding: 0 }}
+            style={{ padding: 0, margin : '10px 0px 34px 0px' }}
           >
            <Grid container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">
