@@ -253,7 +253,7 @@ class GroupHealthLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
-        <div className="common-top-page-subtitle-dark" >
+        <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
           {this.state.providerConfig.subtitle}
         </div>
 
