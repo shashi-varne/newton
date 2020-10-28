@@ -36,7 +36,7 @@ class HowToStepsClass extends Component {
 
       <div className="common-how-steps" style={{ border: 'none', ...this.props.style }}>
         {this.state.baseData.title && <div className="top-tile">
-          <div className="top-title">
+          <div className="generic-page-title">
             {this.state.baseData.title}
           </div>
         </div>}
