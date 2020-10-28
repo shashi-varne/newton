@@ -168,7 +168,7 @@ class GroupHealthPlanList extends Component {
                 noFooter={true}
                 onlyButton={true}
             >
-                <div className="group-health-plan-list">
+                <div className="group-health-plan-list" style={{marginTop: '-15px'}}>
                     <div className="tiles">
                         {this.state.plan_data.coverplan.map(this.renderPlans)}
                     </div>

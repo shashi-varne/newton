@@ -306,7 +306,7 @@ class GroupHealthPlanDetails extends Component {
             onlyButton={true}
             handleClick={() => this.handleClick()}
           >
-            <div className="group-health-plan-details">
+            <div className="group-health-plan-details" style={{marginTop: '-6px'}}>
               <div className="group-health-top-content-plan-logo">
                 <div className="left">
                   <div className="tc-title">

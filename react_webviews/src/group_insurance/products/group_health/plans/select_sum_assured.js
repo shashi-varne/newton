@@ -141,7 +141,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
             buttonData={this.state.bottomButtonData}
             handleClick={() => this.handleClick()}
           >
-            <div className="common-top-page-subtitle flex-between-center">
+            <div className="common-top-page-subtitle flex-between-center" style={{marginTop: '-70px'}}>
               Claim can be made upto the selected amount
               <GenericTooltip
                 productName={getConfig().productName}
