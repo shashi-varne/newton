@@ -253,12 +253,12 @@ class GroupHealthLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
-        <div className="common-top-page-subtitle-dark">
+        <div className="common-top-page-subtitle-dark" >
           {this.state.providerConfig.subtitle}
         </div>
 
         <div className="group-health-landing">
-          <div style={{ margin: "15px 0 0 0", cursor: "pointer" }}>
+          <div style={{ margin: "0 0 0 0", cursor: "pointer" }}>
             <ReactResponsiveCarousel
               CarouselImg={this.state.offerImageData}
               callbackFromParent={this.carouselSwipe_count}
