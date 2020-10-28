@@ -196,7 +196,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         info.title = 'Applicant name';
                     }
 
-                    if (info.key === 'height' || info.key === 'weight') {
+                    if (['height', 'weight', 'occupation'].indexOf(info.key) !== -1) {
                         continue;
                     }
                 }
