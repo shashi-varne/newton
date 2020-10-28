@@ -732,6 +732,9 @@ input#pan {
   .common-steps-images {
     margin: 40px 0 0 0;
   }
+  .common-steps-images_steps{
+    margin: 20px 0 0 0;
+  }
 }
 
 .generic-page-title {
@@ -754,11 +757,21 @@ input#pan {
     // font-size: 13px;
     margin: 0 0 0 20px;
   }
+
+  .content_step{
+    margin: 0 0 0 10px;
+  }
+
   .tile {
     display: flex;
     align-items: center;
     margin: 30px 0 30px 0px;
   }
+
+  .tile_step{
+    margin: 20px 0 20px 0px;
+  }
+
   .content-title {
     color: #041d34;
     font-size: 14px;
