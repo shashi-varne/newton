@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import {validateNumber} from 'utils/validators';
+import {validateNumber, validateLengthDynamic } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
@@ -224,7 +224,15 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
 
-        for (var key in form_data) {
+        for(let key in form_data){
+            if(key === 'addressline' || key ==="addressline2" || key ==="p_addressline" || key === "p_addressline2"){
+                if(validateLengthDynamic(form_data[key], 4)){
+                    form_data[key+'_error'] = "Please enter at least 4 characters";
+                }
+            }
+        }
+        
+        for (let key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
                     canSubmitForm = false;
