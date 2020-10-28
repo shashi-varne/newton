@@ -91,7 +91,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         var value = event.target ? event.target.value : event;
 
-        if(containsSpecialCharactersAndNumbers(value)){
+        if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
             return;
         }
         var form_data = this.state.form_data || {};
@@ -411,6 +411,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             class="NomineeName"
                             id="name"
                             name="name"
+                            maxLength="50"
                             error={this.state.form_data.name_error ? true : false}
                             helperText={this.state.form_data.name_error}
                             value={this.state.form_data.name || ''}
