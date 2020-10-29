@@ -128,6 +128,7 @@ class WnatsappEditNumber extends Component {
   };
 
   render() {
+    let { mobile_no } = this.state;
 
     return (
       <Container
@@ -156,7 +157,7 @@ class WnatsappEditNumber extends Component {
                 maxLength={14}
                 id="number"
                 name="mobile_no"
-                value={"+91 " + this.state.mobile_no || ""}
+                value={"+91 " + (mobile_no !== 'null' ? mobile_no : '')}
                 onChange={this.handleChange("mobile_no")}
                 inputMode="numeric"
               />

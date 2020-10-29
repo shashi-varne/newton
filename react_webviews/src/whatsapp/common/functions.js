@@ -15,14 +15,11 @@ export async function initialize() {
       show_loader: true
     });
 
-    let body = {
-      user: ["user"]
-    }
-    const res = await Api.post(`/api/user/account/summary`, body);
+    const res = await Api.get('/api/iam/myaccount');
+    const resultData = res.pfwresponse.result || {};
 
     if (res.pfwresponse.status_code === 200) {
-      const resultData = res.pfwresponse.result.data.user.user.data;
-      const { mobile, user_id, verified } = resultData;
+      const { mobile, user_id } = resultData.user;
 
       storageService().set('user_id', user_id);
       storageService().set('mobile', mobile);
@@ -30,13 +27,18 @@ export async function initialize() {
       this.setState({
         productName: getConfig().productName,
         mobile: (mobile && mobile.slice(3)) || "",
-        user_id: user_id, 
-        verified: verified
+        user_id: user_id,
       });
 
       this.setState({
         show_loader: false,
       });
+      
+    } else {
+      this.setState({
+        show_loader: false
+      });
+      toast(resultData.error || resultData.message || "Something went wrong");
     }
 
   } catch (err) {

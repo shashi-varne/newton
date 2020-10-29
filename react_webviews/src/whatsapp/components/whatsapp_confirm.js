@@ -48,54 +48,46 @@ class WhastappConfirmNumber extends Component {
   handleClick = async () => {
     this.sendEvents("next");
 
-    if (this.state.verified) {
-      let id = await this.getContact();
+    let id = await this.getContact();
 
-      if (id) {
-        let body = {
-          contact_id: id,
-          consent: true,
-          communication_type: "whatsapp",
-        };
+    if (id) {
+      let body = {
+        contact_id: id,
+        consent: true,
+        communication_type: "whatsapp",
+      };
 
-        try {
+      try {
+        this.setState({
+          show_loader: true,
+        });
+        const res = await Api.post(
+          `/api/communication/contact/consent?user_id=${this.state.user_id}`,
+          body
+        );
+        let resultData = res.pfwresponse.result || {};
+
+        if (res.pfwresponse.status_code === 200 && !resultData.error) {
           this.setState({
             show_loader: true,
           });
-          const res = await Api.post(
-            `/api/communication/contact/consent?user_id=${this.state.user_id}`,
-            body
-          );
-          let resultData = res.pfwresponse.result || {};
 
-          if (res.pfwresponse.status_code === 200 && !resultData.error) {
-            this.setState({
-              show_loader: true,
-            });
-
-            this.navigate("otp-success");
-          } else {
-            this.setState({
-              show_loader: false,
-            });
-            toast(
-              resultData.error || resultData.message || "Something went wrong"
-            );
-          }
-        } catch (err) {
+          this.navigate("otp-success");
+        } else {
           this.setState({
             show_loader: false,
-            // openDialog: true,
           });
-          toast("Something went wrong");
+          toast(
+            resultData.error || resultData.message || "Something went wrong"
+          );
         }
+      } catch (err) {
+        this.setState({
+          show_loader: false,
+          // openDialog: true,
+        });
+        toast("Something went wrong");
       }
-    } else {
-      this.navigate("whatsapp-edit", {
-        params: {
-          mobile: this.state.mobile || "",
-        },
-      });
     }
   };
 
