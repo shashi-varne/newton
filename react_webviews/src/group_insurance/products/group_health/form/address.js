@@ -234,9 +234,9 @@ class GroupHealthPlanAddressDetails extends Component {
         }
         
         if(this.state.sameAddressCheck){
-            for(var key in form_data){
-                if(key.includes('p_') && key.includes('_error')){
-                    delete form_data[key];
+            for(var form_key in form_data){
+                if(form_key.includes('p_') && form_key.includes('_error')){
+                    delete form_data[form_key];
                 }
             }
         }
