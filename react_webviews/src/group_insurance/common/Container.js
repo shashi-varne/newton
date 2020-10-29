@@ -199,7 +199,7 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
-
+     
     if(this.checkStringInString('group-health')) {
 
       // #TODO need to handle back accoridng to entry/landing
@@ -566,7 +566,8 @@ class Container extends Component {
             showDotDot={this.props.showDotDot}
             noFooter={this.props.noFooter}
             withProvider={this.props.withProvider}
-            buttonData={this.props.buttonData} />
+            buttonData={this.props.buttonData}
+             />
         }
         {/* No Internet */}
         {this.renderDialog()}

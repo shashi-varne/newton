@@ -31,11 +31,11 @@ export function validateLengthAddress(string) {
 
 export function validateLengthDynamic(string, length) {
   let nameSplit = string.trim(" ");
-  if (nameSplit.length > length) {
-    return false;
+  if (nameSplit.length < length) {
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 export function validateAddressWords(string, length) {
@@ -890,3 +890,14 @@ export function isEmpty(value) {
 export function nonRoundingToFixed(val, decimalPlaces) {
   return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }
+
+export function containsSpecialCharacters(value){
+  var format = /[$&+,:;=?@#|'<>.^*()%!"-]/g;
+  return format.test(value);
+}
+
+export function containsSpecialCharactersAndNumbers(value){
+  var format = /[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
+  return format.test(value);
+}
+
