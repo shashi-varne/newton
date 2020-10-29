@@ -464,7 +464,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://payment-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -554,7 +554,7 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
-  let { sdk_capabilities } = main_query_params;
+  let { sdk_capabilites } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
@@ -625,11 +625,11 @@ export const getConfig = () => {
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
   }
-  
-  if (sdk_capabilities) {
-    returnConfig.sdk_capabilities = sdk_capabilities;
-    searchParams += `&sdk_capabilities=${sdk_capabilities}`;
-    searchParamsMustAppend += `&sdk_capabilities=${sdk_capabilities}`;
+
+  if (sdk_capabilites) {
+    returnConfig.sdk_capabilites = sdk_capabilites;
+    searchParams += `&sdk_capabilites=${sdk_capabilites}`;
+    searchParamsMustAppend += `&sdk_capabilites=${sdk_capabilites}`;
   }
 
   if (checkValidString(partner_code)) {
