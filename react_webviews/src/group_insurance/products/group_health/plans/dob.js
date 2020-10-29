@@ -151,7 +151,11 @@ class GroupHealthPlanDob extends Component {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
+                    if (provider === "HDFCERGO" && (age.age > dob_adult.max || age.age < dob_adult.min)) {
+                        dob_data.error = `Valid age is between ${dob_adult.min + 3} - ${dob_adult.max - 1} years`;
+                        canProceed = false;
+                    }
+                    else if(age.age > dob_adult.max || age.age < dob_adult.min) {
                         dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max - 1} years`;
                         canProceed = false;
                     } else if (manAgeCheck === key && age.age < dob_married_male.min) {
