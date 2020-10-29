@@ -67,12 +67,14 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.total_members = groupHealthPlanDataProp.post_body.mem_info.adult + groupHealthPlanDataProp.post_body.mem_info.child;
       properties.members = groupHealthPlanDataProp.final_dob_data;
       properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
-      properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium;
+      properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium_showable || groupHealthPlanDataProp.plan_selected_final.base_premium;
       properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
       properties.net_premium = groupHealthPlanDataProp.plan_selected_final.net_premium;
       properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst_tax;
       properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
     }
+
+    properties.total_discount = properties.discount_amount;
     this.setState({ properties: properties });
   };
 
