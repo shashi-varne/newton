@@ -554,10 +554,10 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
+  let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-
   let project = 'insurance';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -624,6 +624,12 @@ export const getConfig = () => {
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
+  }
+  
+  if (sdk_capabilities) {
+    returnConfig.sdk_capabilities = sdk_capabilities;
+    searchParams += `&sdk_capabilities=${sdk_capabilities}`;
+    searchParamsMustAppend += `&sdk_capabilities=${sdk_capabilities}`;
   }
 
   if (checkValidString(partner_code)) {
