@@ -225,9 +225,9 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
 
-        for(var key in form_data){
+        for(let key in form_data){
             if(key === 'addressline' || key ==="addressline2" || key ==="p_addressline" || key === "p_addressline2"){
-                if(validateLengthDynamic(form_data[key], 3)){
+                if(validateLengthDynamic(form_data[key], 4)){
                     form_data[key+'_error'] = "Please enter at least 4 characters";
                 }
             }

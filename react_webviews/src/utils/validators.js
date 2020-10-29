@@ -31,11 +31,11 @@ export function validateLengthAddress(string) {
 
 export function validateLengthDynamic(string, length) {
   let nameSplit = string.trim(" ");
-  if (nameSplit.length > length) {
-    return false;
+  if (nameSplit.length < length) {
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 export function validateAddressWords(string, length) {
