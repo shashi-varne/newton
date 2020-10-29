@@ -17,7 +17,8 @@ class GroupHealthPlanStarSumInsured extends Component {
         this.state = {
             next_screen: '',
             sum_assured: ["300000", "400000", "500000", "1000000", "1500000", "2000000", "2500000"],
-            // selectedIndex: 1,
+            premiumAmt: null,
+            selectedIndex: 0,
             loadingPremium: true
         };
 
@@ -30,33 +31,45 @@ class GroupHealthPlanStarSumInsured extends Component {
     }
 
     updatePremium = async () => {
-        let { post_body, dob_data, selectedIndex } = this.state;
-        
+        // let premium_data = this.state.premium_data;
+        this.setState({
+            premiumAmt: this.state.premium_data[this.state.selectedIndex].premium
+        })
+    }
 
-        let body = {
-            "pincode": post_body.pincode,
-            "sum_assured": this.state.sum_assured[selectedIndex],
-            "cover_plan": post_body.cover_plan,
-            "account_type": post_body.account_type,
-            "mem_info": post_body.mem_info,
-            ...dob_data
+    async componentDidMount() {
+        let groupHealthPlanData = this.state.groupHealthPlanData;
+        let post_body = groupHealthPlanData.post_body;
+        // let sum_assured = post_body.sum_assured;
+
+
+        for(var key in post_body.member_details){
+            if(post_body.member_details[key].gender === "MALE"){
+                post_body.member_details[key].gender = "M"
+            }else{
+                post_body.member_details[key].gender = "F"
+            }
         }
 
+        let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id', 'postal_code'];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
         try {
             this.setState({ loadingPremium: true, apiError :false });
-            const res = await Api.post('api/ins_service/api/insurance/star/premium', body);
+            const res = await Api.post('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/star', body);
 
             this.setState({ loadingPremium: false, premiumData: [] });
             let resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200 && resultData.premium) {
-                const [premiumData] = resultData.premium.WF;
+            if (res.pfwresponse.status_code === 200 && resultData.premium_details) {
     
                 this.setState({
-                    premiumData,
-                    premiumAmt: formatAmountInr(premiumData.net_premium),
+                    premium_data: resultData.premium_details
+                },  ()=>{
+                    console.log('premium data', this.state.premium_data)
                 });
-    
-                // this.updatePremium(premium)
+
             } else {
                 this.setState({
                     premiumAmt: '--',
@@ -65,7 +78,6 @@ class GroupHealthPlanStarSumInsured extends Component {
                 toast(resultData.error || 'Something went wrong! Please try again.');
             }
            
-            
 
         } catch (err) {
             console.log(err);
@@ -76,14 +88,8 @@ class GroupHealthPlanStarSumInsured extends Component {
                 apiError :true
             });
         }
-    }
 
-    async componentDidMount() {
-        let groupHealthPlanData = this.state.groupHealthPlanData;
-        let post_body = groupHealthPlanData.post_body;
-        let sum_assured = post_body.sum_assured;
-        
-        let selectedIndex = this.state.sum_assured.indexOf(sum_assured);
+        // let selectedIndex = this.state.sum_assured.indexOf(sum_assured);
 
         let dob_data = {};
         groupHealthPlanData.final_dob_data.forEach(item => {
@@ -92,12 +98,12 @@ class GroupHealthPlanStarSumInsured extends Component {
             }
         });
 
-        this.setState({
-            selectedIndex: selectedIndex,
-            post_body: post_body,
-            dob_data: dob_data
-        }, () => this.updatePremium())
-
+        // this.setState({
+        //     selectedIndex: selectedIndex,
+        //     post_body: post_body,
+        //     dob_data: dob_data
+        // }, () => this.updatePremium())
+        this.updatePremium();
         
     }
 
@@ -135,13 +141,13 @@ class GroupHealthPlanStarSumInsured extends Component {
         });
     }
 
-    renderPlans = (sum_amount, index) => {
+    renderPlans = (item, index) => {
         return (
             <div onClick={() => this.choosePlan(index)}
                 className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
                 <div className="select-tile">
                     <div className="name">
-                        {numDifferentiationInr(sum_amount)}
+                        {numDifferentiationInr(item.sum_insured)}
                     </div>
                     <div className="completed-icon">
                         {index === this.state.selectedIndex &&
@@ -153,13 +159,13 @@ class GroupHealthPlanStarSumInsured extends Component {
     }
 
     handleClick = () => {
-        const { groupHealthPlanData, premiumData } = this.state;
+        const { groupHealthPlanData, premium_data } = this.state;
         
-        if (this.state.loadingPremium || isEmpty(premiumData)) return;
+        if (this.state.loadingPremium || isEmpty(premium_data)) return;
         this.sendEvents('next');
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
-        groupHealthPlanData.sum_assured = this.state.sum_assured[this.state.selectedIndex];
-        groupHealthPlanData.post_body.sum_assured = this.state.sum_assured[this.state.selectedIndex];
+        groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
+        groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
         groupHealthPlanData.plan_selected_final = premiumData;
 
         const { plan_selected_final } = groupHealthPlanData;
@@ -186,6 +192,8 @@ class GroupHealthPlanStarSumInsured extends Component {
             logo: this.state.providerConfig.logo_cta
         }
 
+        console.log('pre', this.state.premium_data)
+
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -206,7 +214,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 </div>
                 <div className="group-health-plan-select-sum-assured">
                     <div className="generic-choose-input">
-                        {this.state.sum_assured.map(this.renderPlans)}
+                        {this.state.premium_data && this.state.premium_data.map(this.renderPlans)}
                     </div>
                 </div>
             </Container>

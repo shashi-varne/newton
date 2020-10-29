@@ -111,7 +111,7 @@ class GroupHealthPlanStarPincode extends Component {
         let post_body = groupHealthPlanData.post_body;
 
         if (canProceed) {
-            post_body.pincode = this.state.pincode;
+            post_body.postal_code = this.state.pincode;
             groupHealthPlanData.pincode = this.state.pincode;
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);

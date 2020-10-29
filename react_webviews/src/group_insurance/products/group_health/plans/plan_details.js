@@ -65,6 +65,7 @@ class GroupHealthPlanDetails extends Component {
 
         if (provider === 'STAR') {
             post_body.sum_assured = '300000';
+            post_body.plan_id = "FHONEW";
         }
 
         groupHealthPlanData.post_body = post_body;
