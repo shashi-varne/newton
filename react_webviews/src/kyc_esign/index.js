@@ -12,6 +12,7 @@ import NotFound from "../common/components/NotFound";
 import DigiStatus from "./components/digilocker";
 import NsdlStatus from "./components/nsdl";
 import AppUpdate from "./components/app_update";
+import ESignInfo from "./components/esign_info";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -53,6 +54,7 @@ const Kyc_Esign = props => {
           <Route path={`${url}/digilocker`} component={DigiStatus} />
           <Route path={`${url}/nsdl`} component={NsdlStatus} />
           <Route path={`${url}/app-update`} component={AppUpdate} />
+          <Route path={`${url}/info`} component={ESignInfo} />
           
           <Route component={NotFound} />
         </Switch>
