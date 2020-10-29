@@ -178,7 +178,7 @@ class GroupHealthPlanSelectCity extends Component {
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
-                <div className="common-title-content-gap"></div>
+                
                 <FormControl fullWidth>
                     <div className="InputField">
                     {this.state.suggestions_list.length > 0 &&

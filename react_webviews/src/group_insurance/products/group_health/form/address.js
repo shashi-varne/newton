@@ -34,7 +34,8 @@ class GroupHealthPlanAddressDetails extends Component {
             get_lead: true,
             next_state: 'nominee',
             screen_name: 'address_screen',
-            checked: false
+            checked: false,
+            sameAddressCheck: false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -232,7 +233,14 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         }
         
-        for (let key in form_data) {
+        if(this.state.sameAddressCheck){
+            for(var form_key in form_data){
+                if(form_key.includes('p_') && form_key.includes('_error')){
+                    delete form_data[form_key];
+                }
+            }
+        }
+        for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
                     canSubmitForm = false;
@@ -480,7 +488,8 @@ class GroupHealthPlanAddressDetails extends Component {
 
     handleCheckBox = name => event => {
         this.setState({
-            [name]: event.target.checked
+            [name]: event.target.checked,
+            sameAddressCheck: !this.state.sameAddressCheck
         }, () => {
             this.setPermAddress();
         })
