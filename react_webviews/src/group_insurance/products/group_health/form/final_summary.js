@@ -874,7 +874,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="group-health-final-summary" style={{marginTop: '-8px'}}>
+                <div className="group-health-final-summary">
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>

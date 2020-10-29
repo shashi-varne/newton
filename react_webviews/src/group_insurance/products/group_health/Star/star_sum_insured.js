@@ -204,7 +204,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 }
                 content = "In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Also, this amount will be shared amongst all the insured members; hence, we recommend to have adequate coverage to manage health expenses."/>
                 </div>
-                <div className="group-health-plan-select-sum-assured" style={{marginTop: '0px'}}>
+                <div className="group-health-plan-select-sum-assured">
                     <div className="generic-choose-input">
                         {this.state.sum_assured.map(this.renderPlans)}
                     </div>

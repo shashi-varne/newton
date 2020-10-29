@@ -170,7 +170,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             buttonData={this.state.bottomButtonData}
             handleClick={() => this.handleClick()}
           >
-            <div className="common-top-page-subtitle flex-between-center" style={{marginTop: '-70px'}}>
+            <div className="common-top-page-subtitle flex-between-center">
               Health expenses will be covered for this period
               <GenericTooltip
                 productName={getConfig().productName}
