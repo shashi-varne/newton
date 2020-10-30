@@ -47,7 +47,7 @@ class Api {
       }
     }
     if (sdk_capabilities) {
-      axios.defaults.headers.common['sdk-capabilites'] = sdk_capabilities;
+      axios.defaults.headers.common['sdk-capabilities'] = sdk_capabilities;
     }
     let options = Object.assign({
       method: verb,
