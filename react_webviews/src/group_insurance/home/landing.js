@@ -2,29 +2,6 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import qs from 'qs';
 import { insuranceStateMapper } from '../constants';
-import insurance_fisdom from 'assets/ic_fisdom_insurance_fisdom.svg';
-import insurance_myway from 'assets/ic_fisdom_insurance_myway.svg';
-
-import hospicash_fisdom from 'assets/ic_hospicash_fisdom.svg';
-import hospicash_myway from 'assets/ic_hospicash_myway.svg';
-import accident_fisdom from 'assets/ic_personal_accident_fisdom.svg';
-import accident_myway from 'assets/ic_personal_accident_myway.svg';
-import wallet_fisdom from 'assets/ic_wallet_fisdom.svg';
-import wallet_myway from 'assets/ic_wallet_myway.svg';
-import dengue_fisdom from 'assets/ic_dengue_insurance_fisdom.svg';
-import dengue_myway from 'assets/ic_dengue_insurance_myway.svg';
-import corona_fisdom from 'assets/ic_coronavirus_insurance_fisdom.svg';
-import corona_myway from 'assets/ic_coronavirus_insurance_myway.svg';
-// import resume_tag from 'assets/resume_tag.png';
-
-import instant_fisdom from 'assets/instant_fisdom.svg';
-import instant_myway from 'assets/instant_myway.svg';
-
-import health_fisdom from 'assets/ic_health_fisdom.svg';
-import health_myway from 'assets/ic_health_myway.svg';
-import life_insurance_fisdom from 'assets/fisdom/life_insurance_logo.svg'
-import life_insurance_myway from 'assets/myway/life_insurance_logo.svg'
-
 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -53,53 +30,43 @@ class Landing extends Component {
     window.sessionStorage.setItem('group_insurance_plan_final_data', '');
     nativeCallback({ action: 'take_control_reset' });
     window.sessionStorage.setItem('group_insurance_payment_url', '');
-    let insurance = this.state.type !== 'fisdom' ? insurance_myway : insurance_fisdom;
-    //  let  health_icon  = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
-    let hospicash = this.state.type !== 'fisdom' ? hospicash_myway : hospicash_fisdom;
-    let accident_icon = this.state.type !== 'fisdom' ? accident_myway : accident_fisdom;
-    let wallet_icon = this.state.type !== 'fisdom' ? wallet_myway : wallet_fisdom;
-    let instant_icon = this.state.type !== 'fisdom' ? instant_myway : instant_fisdom;
-    let dengue_icon = this.state.type !== 'fisdom' ? dengue_myway : dengue_fisdom;
-    let corona_icon = this.state.type !== 'fisdom' ? corona_myway : corona_fisdom;
-    let health_insurance_icon = this.state.type !== 'fisdom' ? health_myway : health_fisdom;
-    let insurancelogo = this.state.type !== 'fisdom' ? life_insurance_myway : life_insurance_fisdom;
-  
+
     let insuranceProducts = [
       {
         key: 'LIFEINSURANCE',
         title: 'Life insurance',
         subtitle: 'Starts from ₹7,000/year',
-        icon: insurancelogo
+        icon: 'life_insurance'
       },
       {
         key: 'HEALTH_INSURANCE',
         title: 'Health Insurance',
         subtitle: 'Starts from ₹4,000/year',
-        icon: health_insurance_icon
+        icon: 'ic_health'
       },
       {
         key: 'CORONA',
         title: 'Coronavirus Insurance',
         subtitle: 'starts from ₹459',
-        icon: corona_icon
+        icon: 'ic_coronavirus_insurance'
       },
       {
         key: 'PERSONAL_ACCIDENT',
         title: 'Personal Accident Insurance',
         subtitle: 'Starts from ₹ 200/year',
-        icon: accident_icon
+        icon: 'ic_personal_accident'
       },
       {
         key: 'HOSPICASH',
         title: 'Hospital Daily Cash',
         subtitle: 'Starts from ₹750/year',
-        icon: hospicash
+        icon: 'ic_hospicash'
       },
       {
         key: 'SMART_WALLET',
         title: 'Smart Wallet(fraud protection)',
         subtitle: 'Starts from ₹250/year',
-        icon: wallet_icon
+        icon: 'ic_wallet'
       }
     ];
 
@@ -119,9 +86,6 @@ class Landing extends Component {
     this.setState({
       openModuleData: openModuleData || {},
       insuranceProducts: insuranceProducts,
-      insurance: insurance,
-      instant_icon: instant_icon,
-      dengue_icon: dengue_icon
     })
   }
 
@@ -345,7 +309,7 @@ class Landing extends Component {
         paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer'
       }}>
         <div style={{ display: 'flex' }}>
-          <img src={props.icon} alt="" style={{ marginRight: '20px' }} />
+          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '20px' }} />
           <div>
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px', fontWeight: 500 }}>{props.title}
               {props.key === 'CORONA' && !props.resume_flag &&
@@ -396,13 +360,13 @@ class Landing extends Component {
         <div style={{ padding: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
-            <img src={this.state.insurance} alt="" />
+            < img  src={ require(`assets/ic_hand_insurance_${this.state.type}.svg`)} alt='' />
           </div>
           <div style={{
             marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
             display: 'flex'
           }}>
-            <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
+            <img style={{ margin: '0px 10px 0 0' }} src={ require(`assets/instant_${this.state.type}.svg`)  }alt="" />
             Get instant policy issuance
             </div>
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
