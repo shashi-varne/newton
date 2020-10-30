@@ -9,25 +9,25 @@ export default class StarPremium extends Component {
   }
 
   render() {
-    return (
 
+    return (
       <div className="premium-info">
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Sum insured</div>
           <div className="pi-tile-right">
-            {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.plan_selected_final.sum_assured * this.props.total_member :
-              this.props.plan_selected_final.sum_assured)}
+            {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.sum_assured * this.props.total_members :
+              this.props.sum_assured)}
           </div>
         </div>
         {this.props.type_of_plan === 'NF' &&
           <div className="nf-info">
-            {(`${numDifferentiationInr(this.props.plan_selected_final.sum_assured)} x ${this.props.total_member}`)}
+            {(`${numDifferentiationInr(this.props.sum_assured)} x ${this.props.total_members}`)}
           </div>
         }
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Cover period</div>
-      <div className="pi-tile-right">{this.props.plan_selected_final.tenure} year{this.props.plan_selected_final.tenure>'1' && <span>s</span>}</div>
+      <div className="pi-tile-right">{this.props.tenure} year{this.props.tenure>'1' && <span>s</span>}</div>
         </div>
 
         <div className="generic-hr"></div>
@@ -36,7 +36,7 @@ export default class StarPremium extends Component {
           Premium details
         </div>
 
-        {this.props.type_of_plan === 'NF' &&
+        {/* {this.props.type_of_plan === 'NF' &&
           <div>
             <div className="flex-between pi-tile">
               <div className="pi-tile-left">Individual premium</div>
@@ -44,18 +44,18 @@ export default class StarPremium extends Component {
             {this.props.final_dob_data.map(this.renderIndPremium)}
             <div className="generic-hr"></div>
           </div>
-        }
+        } */}
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.base_premium)}</div>
         </div>
 
 
-        {this.props.plan_selected_final.total_discount > 0 &&
+        {this.props.total_discount > 0 &&
           <div className="flex-between pi-tile">
-            {/* {this.props.plan_selected_final.total_discount_percentage}% */}
+            {/* {this.props.total_discount_percentage}% */}
             <div className="pi-tile-left">Total discount</div>
-            <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.total_discount)}</div>
+            <div className="pi-tile-right">{inrFormatDecimal(this.props.total_discount)}</div>
           </div>
         }
 
@@ -65,20 +65,19 @@ export default class StarPremium extends Component {
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Net premium</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.base_premium -
-            this.props.plan_selected_final.total_discount)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.net_premium)}</div>
         </div>
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">GST</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.gst_tax)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.gst_tax)}</div>
         </div>
 
         <div className="generic-hr"></div>
 
         <div className="flex-between pi-tile" style={{ fontWeight: 600 }}>
           <div className="pi-tile-left">Total payable</div>
-          <div className="pi-tile-right">{inrFormatDecimal(this.props.plan_selected_final.total_amount)}</div>
+          <div className="pi-tile-right">{inrFormatDecimal(this.props.total_amount)}</div>
         </div>
 
         <div className="generic-hr"></div>

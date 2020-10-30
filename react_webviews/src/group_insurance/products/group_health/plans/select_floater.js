@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
-// import { getConfig } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 
 import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
@@ -10,6 +10,8 @@ import { initialize, updateBottomPremium } from '../common_data';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import { childeNameMapper } from '../../../constants';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
+
 class GroupHealthPlanSelectFloater extends Component {
 
     constructor(props) {
@@ -272,36 +274,33 @@ class GroupHealthPlanSelectFloater extends Component {
     render() {
 
         return (
-            <Container
-                events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
-                title={'Select cover type'}
-                buttonTitle="CONTINUE"
-                withProvider={true}
-                buttonData={this.state.bottomButtonData}
-                handleClick={() => this.handleClick()}
-            >
-
-                <div className="common-top-page-subtitle flex-between-center">
-                    Choose how to use the sum insured across family members
-                 <img 
-                        className="tooltip-icon"
-                        data-tip="1. For entire family -<br />
+          <Container
+            events={this.sendEvents("just_set_events")}
+            showLoader={this.state.show_loader}
+            title={"Select cover type"}
+            buttonTitle="CONTINUE"
+            withProvider={true}
+            buttonData={this.state.bottomButtonData}
+            handleClick={() => this.handleClick()}
+          >
+            <div className="common-top-page-subtitle flex-between-center">
+              Choose how to use the sum insured across family members
+              <GenericTooltip
+                productName={getConfig().productName}
+                content={( <div>1. For entire family 
                         Also called 'Family floater', in this case sum insured is shared amongst the members. For ex- if the sum insured is ₹4 lacs, total claims of all the members together will be covered upto ₹4 lacs.<br />
-                        <br />
-                        2. For each member -<br />
-                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lacs, each member can individually claim upto ₹4 lacs."
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)}
-                        alt="" />
-                </div>
-                
-                <div className="group-health-plan-select-floater">
+                          <br></br>
+                        2. For each member 
+                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lacs, each member can individually claim upto ₹4 lacs.</div> )}
+              />
+            </div>
 
-                    <div className="generic-choose-input">
-                        {this.state.premium_data_floater.map(this.renderPlans)}
-                    </div>
-                </div>
-            </Container>
+            <div className="group-health-plan-select-floater">
+              <div className="generic-choose-input">
+                {this.state.premium_data_floater.map(this.renderPlans)}
+              </div>
+            </div>
+          </Container>
         );
     }
 }

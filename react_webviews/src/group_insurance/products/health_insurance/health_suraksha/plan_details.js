@@ -58,8 +58,8 @@ class HealthSuraksha extends Component {
         'icon': this.state.ic_hs_b1
       },
       {
-        'disc': '60 days pre  & 180 days post hospitalization cover',
-        'key' : 'hospitalization_cover',
+        'disc': '60 days pre  & 180 days post hospitalisation cover',
+        'key' : 'hospitalisation_cover',
         'icon': this.state.ic_hs_b2
       },
       {
@@ -92,7 +92,7 @@ class HealthSuraksha extends Component {
       'premium_details': [
         {
           "sum_assured": 7500000,
-          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "product_benefits_included": ['room_rent', 'hospitalisation_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
           "premium": "1061",
           "tax_amount": "",
           "plus_benefit": 'Cover amount upto ₹75,00,000',
@@ -102,7 +102,7 @@ class HealthSuraksha extends Component {
         },
         {
           "sum_assured": 1500000,
-          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "product_benefits_included": ['room_rent', 'hospitalisation_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
           "premium": "669",
           "tax_amount": "",
           "plus_benefit": 'Cover amount upto ₹15,00,000',
@@ -112,7 +112,7 @@ class HealthSuraksha extends Component {
         },
         {
           "sum_assured": 500000,
-          "product_benefits_included": ['room_rent', 'hospitalization_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
+          "product_benefits_included": ['room_rent', 'hospitalisation_cover', 'ambulance_allowances', 'sum_insured', 'daycare', 'enitre_family'],
           "premium": "446",
           "tax_amount": "",
           "plus_benefit": 'Cover amount upto ₹5,00,000',

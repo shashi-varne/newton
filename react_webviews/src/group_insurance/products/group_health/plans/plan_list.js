@@ -8,6 +8,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 class GroupHealthPlanList extends Component {
 
@@ -119,11 +120,7 @@ class GroupHealthPlanList extends Component {
                 <div className="pi-left">{props.label}</div>
                 <div className="pi-right">{props.value}</div>
                 {props.tooltip_content && <div className="info-img">
-                    <img
-                        id={index}
-                        className="tooltip-icon"
-                        data-tip={props.tooltip_content}
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                    <GenericTooltip content={props.tooltip_content} productName={getConfig().productName}/>
                 </div>}
             </div>
         )
@@ -132,7 +129,7 @@ class GroupHealthPlanList extends Component {
     renderPlans = (props, index) => {
         let plan_data = props;
         return (
-            <div className="tile" key={index}>
+            <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">

@@ -31,14 +31,14 @@ export const hdfc = {
     },
     landing_screen: {
         offerImageData: [
-            { src: 'hdfc_icn_landing_card_1.svg' },
-            { src: 'hdfc_icn_landing_card_2.svg' },
-            { src: 'hdfc_icn_landing_card_3.svg' }
+            { src: 'hdfc_icn_landing_card_1.png' },
+            { src: 'hdfc_icn_landing_card_2.png' },
+            { src: 'hdfc_icn_landing_card_3.png' }
         ],
         whats_covered: [
             'Diseases occurred before policy issuance will be covered after 3 years',
             'Ayurveda, unani, sidha and homeopathy  treatments',
-            '60 days pre and 180 days post hospitalization expenses',
+            '60 days pre and 180 days post hospitalisation expenses',
             'Organ donor expenses',
             'Mental health and home health care'
         ],
@@ -56,11 +56,11 @@ export const hdfc = {
                 'options': [
                     {
                         'title': 'Why do I need health insurance?',
-                        'subtitle': 'With the advancement in technology and the availability of more effective treatments, the cost of healthcare has steeply increased. Health insurance policy ensures that medical bills and hospitalization expenses should not get paid from your hard-earned money. It takes care of the hospitalization and treatment charges as well as provides assured tax benefit under section 80D of Income Tax.'
+                        'subtitle': 'With the advancement in technology and the availability of more effective treatments, the cost of healthcare has steeply increased. Health insurance policy ensures that medical bills and hospitalisation expenses should not get paid from your hard-earned money. It takes care of the hospitalisation and treatment charges as well as provides assured tax benefit under section 80D of Income Tax.'
                     },
                     {
                         'title': 'What are the benefits of having a health insurance policy?',
-                        'subtitle': 'Having a health insurance policy covers expenses incurred due to hospitalization. This includes in-patient treatments, pre and post hospitalization expenses, daycare procedures, home healthcare, etc.'
+                        'subtitle': 'Having a health insurance policy covers expenses incurred due to hospitalisation. This includes in-patient treatments, pre and post hospitalisation expenses, daycare procedures, home healthcare, etc.'
                     },
                     {
                         'title': 'Can I change the hospital during the course of treatment?',
@@ -68,11 +68,11 @@ export const hdfc = {
                     },
                     {
                         'title': 'Is the health insurance coverage applicable worldwide?',
-                        'subtitle': 'In certain conditions, you might be eligible for reimbursement of overseas treatment, such as pre-diagnosed planned hospitalization, outpatient treatment, and second opinion in case of sudden illness while traveling under your health insurance plan.'
+                        'subtitle': 'In certain conditions, you might be eligible for reimbursement of overseas treatment, such as pre-diagnosed planned hospitalisation, outpatient treatment, and second opinion in case of sudden illness while traveling under your health insurance plan.'
                     },
                     {
                         'title': 'Does my policy cover diagnostic charges?',
-                        'subtitle': 'Most pre-hospitalization and post-hospitalization expenses (up to 60 days) are covered under the health insurance policy, such as X - rays, CT scans, MRI, ultrasound nursing, physicians, medicines, etc.'
+                        'subtitle': 'Most pre-hospitalisation and post-hospitalisation expenses (up to 60 days) are covered under the health insurance policy, such as X - rays, CT scans, MRI, ultrasound nursing, physicians, medicines, etc.'
                     }
                 ],
             },
@@ -208,7 +208,7 @@ export const religare = {
         nominee_screen: 'plan-lifestyle-details'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 100 }, 
+        'dob_adult': { min: 18, max: 99 }, 
         'dob_child': { minDays: 91, minAge: 5, max: 25 },
         'dob_married_male': { min: 21, max: 25 },
         'dob_married_female': {min: 18}

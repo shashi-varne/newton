@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
   calculateAge, toFeet, capitalizeFirstLetter,
-  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate
+  formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, containsSpecialCharactersAndNumbers, containsSpecialCharacters
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
@@ -20,6 +20,7 @@ import Dialog, {
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -166,6 +167,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   handleChange = name => event => {
 
+    
     var input = document.getElementById('dob');
     input.onkeyup = formatDate;
 
@@ -177,6 +179,14 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
+    if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
+      return;
+    }
+
+    if(name === 'pan_number' && containsSpecialCharacters(value)){
+      return;
+    }
+    
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
     }
@@ -518,7 +528,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title={this.setEditTitle(this.state.header_title)}
         withProvider={true}
@@ -527,23 +537,26 @@ class GroupHealthPlanPersonalDetails extends Component {
         buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
       >
-
-        {this.state.header_subtitle &&
+        {this.state.header_subtitle && (
           <div className="common-top-page-subtitle">
             {this.state.header_subtitle}
-          </div>}
+          </div>
+        )}
+        
         <div className="InputField">
           <Input
             type="text"
             width="40"
             label="Full name"
             class="Name"
+            maxLength="50"
             id="name"
             name="name"
-            error={(this.state.form_data.name_error) ? true : false}
+            error={this.state.form_data.name_error ? true : false}
             helperText={this.state.form_data.name_error}
-            value={this.state.form_data.name || ''}
-            onChange={this.handleChange()} />
+            value={this.state.form_data.name || ""}
+            onChange={this.handleChange()}
+          />
         </div>
         <div className="InputField">
           <Input
@@ -555,15 +568,17 @@ class GroupHealthPlanPersonalDetails extends Component {
             id="dob"
             name="dob"
             max={currentDate}
-            error={(this.state.form_data.dob_error) ? true : false}
+            error={this.state.form_data.dob_error ? true : false}
             helperText={this.state.form_data.dob_error}
-            value={this.state.form_data.dob || ''}
+            value={this.state.form_data.dob || ""}
             placeholder="DD/MM/YYYY"
             maxLength="10"
-            onChange={this.handleChange()} />
+            onChange={this.handleChange()}
+          />
         </div>
 
-        {(this.state.member_key === 'self' || this.state.member_key === 'applicant') &&
+        {(this.state.member_key === "self" ||
+          this.state.member_key === "applicant") && (
           <div className="InputField">
             <RadioWithoutIcon
               width="40"
@@ -572,80 +587,98 @@ class GroupHealthPlanPersonalDetails extends Component {
               options={genderOptions}
               id="gender"
               name="gender"
-              error={(this.state.form_data.gender_error) ? true : false}
+              error={this.state.form_data.gender_error ? true : false}
               helperText={this.state.form_data.gender_error}
-              value={this.state.form_data.gender || ''}
-              onChange={this.handleChangeRadio('gender')} />
-          </div>}
-
-        {(this.state.member_key === 'self' || this.state.member_key === 'applicant') &&
-          this.state.pan_needed &&
-          <div className="InputField flex-between" style={{ alignItems: 'baseline' }}>
-            <Input
-              error={(this.state.form_data.pan_number_error) ? true : false}
-              helperText={this.state.form_data.pan_number_error}
-              type="text"
-              width="40"
-              label="Enter PAN"
-              class="name"
-              id="name"
-              name="pan_number"
-              maxLength="10"
-              value={this.state.form_data.pan_number || ''}
-              onChange={this.handleChange('pan_number')} />
-            <img
-              className="tooltip-icon"
-              style={{ margin: '0 0 0 10px' }}
-              // ref={ref => this.fooRef = ref} onClick={() => { ReactTooltip.rebuild(); }}
-              data-tip={`As per the IRDA guidelines, PAN is required if premium amount is greater than Rs ${this.state.pan_amount}`}
-              src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+              value={this.state.form_data.gender || ""}
+              onChange={this.handleChangeRadio("gender")}
+            />
           </div>
-        }
-        {this.state.member_key !== 'applicant' && <div>
-          <DropdownInModal
-            parent={this}
-            options={this.state.height_options}
-            header_title="Select Height (cm)"
-            cta_title="SAVE"
-            selectedIndex={this.state.selectedIndex}
-            value={this.state.form_data.height}
-            error={(this.state.form_data.height_error) ? true : false}
-            helperText={this.state.form_data.height_error}
-            width="40"
-            label="Height (cm)"
-            class="Education"
-            id="height"
-            name="height"
-            onChange={this.handleChange('height')}
-          />
-        </div>}
-        {this.state.member_key !== 'applicant' && <div className="InputField">
-          <Input
-            type="number"
-            width="40"
-            label="Weight (Kg)"
-            class="Name"
-            id="name"
-            name="weight"
-            error={(this.state.form_data.weight_error) ? true : false}
-            helperText={this.state.form_data.weight_error}
-            value={this.state.form_data.weight || ''}
-            onChange={this.handleChange('weight')} />
-        </div>}
-        {this.state.providerConfig.key === 'STAR' && this.state.member_key !== 'applicant' && <div className="InputField">
-          <DropdownWithoutIcon
-            width="40"
-            dataType="AOB"
-            options={this.state.occupationOptions}
-            id="occupation"
-            label="Occupation"
-            name="occupation"
-            error={this.state.form_data.occupation_error ? true : false}
-            helperText={this.state.form_data.occupation_error}
-            value={this.state.form_data.occupation || ''}
-            onChange={this.handleChange('occupation')}
-          />
-        </div>}
+        )}
+
+        {(this.state.member_key === "self" ||
+          this.state.member_key === "applicant") &&
+          this.state.pan_needed && (
+            <div
+              className="InputField flex-between"
+              style={{ alignItems: "baseline" }}
+            >
+              <Input
+                error={this.state.form_data.pan_number_error ? true : false}
+                helperText={this.state.form_data.pan_number_error}
+                type="text"
+                width="40"
+                label="Enter PAN"
+                class="name"
+                id="name"
+                name="pan_number"
+                maxLength="10"
+                value={this.state.form_data.pan_number || ""}
+                onChange={this.handleChange("pan_number")}
+              />
+              <GenericTooltip
+                content={
+                  <div>
+                    As per the IRDA guidelines, PAN is required if premium
+                    amount is greater than Rs {this.state.pan_amount}
+                  </div>
+                }
+                productName={getConfig().productName}
+              />
+            </div>
+          )}
+        {this.state.member_key !== "applicant" && (
+          <div>
+            <DropdownInModal
+              parent={this}
+              options={this.state.height_options}
+              header_title="Select Height (cm)"
+              cta_title="SAVE"
+              selectedIndex={this.state.selectedIndex}
+              value={this.state.form_data.height}
+              error={this.state.form_data.height_error ? true : false}
+              helperText={this.state.form_data.height_error}
+              width="40"
+              label="Height (cm)"
+              class="Education"
+              id="height"
+              name="height"
+              onChange={this.handleChange("height")}
+            />
+          </div>
+        )}
+        {this.state.member_key !== "applicant" && (
+          <div className="InputField">
+            <Input
+              type="number"
+              width="40"
+              label="Weight (Kg)"
+              class="Name"
+              id="name"
+              name="weight"
+              error={this.state.form_data.weight_error ? true : false}
+              helperText={this.state.form_data.weight_error}
+              value={this.state.form_data.weight || ""}
+              onChange={this.handleChange("weight")}
+            />
+          </div>
+        )}
+        {this.state.providerConfig.key === "STAR" &&
+          this.state.member_key !== "applicant" && (
+            <div className="InputField">
+              <DropdownWithoutIcon
+                width="40"
+                dataType="AOB"
+                options={this.state.occupationOptions}
+                id="occupation"
+                label="Occupation"
+                name="occupation"
+                error={this.state.form_data.occupation_error ? true : false}
+                helperText={this.state.form_data.occupation_error}
+                value={this.state.form_data.occupation || ""}
+                onChange={this.handleChange("occupation")}
+              />
+            </div>
+          )}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}
         {this.renderResetDialog()}
