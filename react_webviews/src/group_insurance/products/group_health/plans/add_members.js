@@ -31,7 +31,7 @@ const parents_category_options = [
     },
     {
         'name': 'Parents in-law',
-        'value': 'parentsinlaw'
+        'value': 'parent_in_law'
     }
 ];
 
@@ -123,7 +123,7 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
-        if (this.state.account_type === 'parentsinlaw') {
+        if (this.state.account_type === 'parent_in_law') {
             if (!this.state.parents_option) {
                 this.setState({
                     parents_option_error: 'Please select this option'
@@ -139,7 +139,7 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
-        if (['selfandfamily', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
+        if (['self_family', 'family'].includes(this.state.account_type) && !this.state.other_adult_member) {
             if(this.state.account_type==='family'){
             this.setState({
                 other_adult_member_error: 'Please select this option'
@@ -172,7 +172,7 @@ class GroupHealthPlanAddMembers extends Component {
             }
         }
 
-        if (this.state.account_type === 'parentsinlaw') {
+        if (this.state.account_type === 'parent_in_law') {
             ui_members.parents_option = this.state.parents_option;
             let keysToCheck = [];
             if (this.state.parents_option === 'parents') {
@@ -188,11 +188,11 @@ class GroupHealthPlanAddMembers extends Component {
             });
         }
 
-        if (['selfandfamily', 'family'].includes(this.state.account_type)) {
+        if (['self_family', 'family'].includes(this.state.account_type)) {
             ui_members.other_adult_member = this.state.other_adult_member;
 
 
-            if (this.state.account_type === 'selfandfamily') {
+            if (this.state.account_type === 'self_family') {
                 ui_members.self = true;
             }
 
@@ -246,7 +246,7 @@ class GroupHealthPlanAddMembers extends Component {
         post_body.adults = adult_total;
         post_body.children = child_total;
 
-        if(this.state.account_type === 'selfandfamily') {
+        if(this.state.account_type === 'self_family') {
 
             if(!this.state.self_gender) {
                 this.setState({
@@ -282,7 +282,7 @@ class GroupHealthPlanAddMembers extends Component {
             ui_members.self_gender = '';
         }
 
-        if(provider === 'STAR' && total_insured < 2 && this.state.account_type !== 'selfandfamily') {
+        if(provider === 'STAR' && total_insured < 2 && this.state.account_type !== 'self_family') {
             toast('Please select atleast one more member');
             canProceed = false;
         }
@@ -313,10 +313,10 @@ class GroupHealthPlanAddMembers extends Component {
                 "screen_name": 'add members',
                 'son': ui_members.son_total || '',
                 'daughter': ui_members.daughter_total || '',
-                'self': ['selfandfamily', 'self'].includes(this.state.insured_account_type) ? 'yes' : 'no',
+                'self': ['self_family', 'self'].includes(this.state.insured_account_type) ? 'yes' : 'no',
                 'parent' : `${(ui_members.father ? 'father, ' : '')} ${(ui_members.mother ? 'mother' : '') }`,
                 'parent_in_law': `${(ui_members['father_in_law'] ? 'father_in_law, ' : '')} ${(ui_members['mother_in_law'] ? 'mother_in_law' : '') }`,
-                'adult_member': ['selfandfamily', 'family'].includes(this.state.account_type) ? this.state.other_adult_member : ''
+                'adult_member': ['self_family', 'family'].includes(this.state.account_type) ? this.state.other_adult_member : ''
             }
         };
 
@@ -398,7 +398,7 @@ class GroupHealthPlanAddMembers extends Component {
             onlyButton={true}
             handleClick={() => this.handleClick()}
           >
-            {["selfandfamily"].indexOf(this.state.account_type) !== -1 && (
+            {["self_family"].indexOf(this.state.account_type) !== -1 && (
               <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
@@ -416,7 +416,7 @@ class GroupHealthPlanAddMembers extends Component {
               </div>
             )}
 
-            {["selfandfamily"].indexOf(this.state.account_type) !== -1 && (
+            {["self_family"].indexOf(this.state.account_type) !== -1 && (
               <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
@@ -433,14 +433,14 @@ class GroupHealthPlanAddMembers extends Component {
               </div>
             )}
 
-            {["selfandfamily", "family"].indexOf(this.state.account_type) !==
+            {["self_family", "family"].indexOf(this.state.account_type) !==
               -1 && (
               <div>
                 <div className="InputField">
                   <RadioWithoutIcon
                     width="40"
                     label={
-                      this.state.account_type === "selfandfamily"
+                      this.state.account_type === "self_family"
                         ? "Other adult member"
                         : "Adult member"
                     }
@@ -478,7 +478,7 @@ class GroupHealthPlanAddMembers extends Component {
               </div>
             )}
 
-            {["parentsinlaw"].includes(this.state.account_type) && (
+            {["parent_in_law"].includes(this.state.account_type) && (
               <div>
                 <div className="InputField">
                   <RadioWithoutIcon
@@ -502,7 +502,7 @@ class GroupHealthPlanAddMembers extends Component {
                         productName={getConfig().productName}
                         content={
                           <div>
-                            This plan requires both the {this.state.parents_option === "parentsinlaw" ? "parents in-law" : "parents"} to be covered together.
+                            This plan requires both the {this.state.parents_option === "parent_in_law" ? "parents in-law" : "parents"} to be covered together.
                           </div>
                         }
                       />
@@ -510,12 +510,12 @@ class GroupHealthPlanAddMembers extends Component {
                     <div className="generic-hr"></div>
                     <PlusMinusInput
                       label={childeNameMapper(
-                        this.state.parents_option === "parentsinlaw"
+                        this.state.parents_option === "parent_in_law"
                           ? "father_in_law"
                           : "father"
                       )}
                       name={
-                        this.state.parents_option === "parentsinlaw"
+                        this.state.parents_option === "parent_in_law"
                           ? "father_in_law"
                           : "father"
                       }
@@ -524,12 +524,12 @@ class GroupHealthPlanAddMembers extends Component {
                     <div className="generic-hr"></div>
                     <PlusMinusInput
                       label={childeNameMapper(
-                        this.state.parents_option === "parentsinlaw"
+                        this.state.parents_option === "parent_in_law"
                           ? "mother_in_law"
                           : "mother"
                       )}
                       name={
-                        this.state.parents_option === "parentsinlaw"
+                        this.state.parents_option === "parent_in_law"
                           ? "mother_in_law"
                           : "mother"
                       }

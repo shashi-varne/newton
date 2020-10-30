@@ -63,6 +63,11 @@ class GroupHealthPlanDetails extends Component {
             groupHealthPlanData[keys_to_empty[i]] = '';
         }
 
+        let keys_to_remove = ['base_premium', 'sum_assured', 'discount_amount', 'insured_pattern','tax_amount', 'tenure','total_amount', 'type_of_plan']
+        for(let key in keys_to_remove){
+          delete post_body[keys_to_remove[key]]
+        }
+
         if (provider === 'STAR') {
             post_body.sum_assured = '300000';
             post_body.plan_id = "FHONEW";
@@ -240,6 +245,8 @@ class GroupHealthPlanDetails extends Component {
             productName,
             extra_data,
         } = this.state;
+
+        console.log('ben', benefits)
         return (
           <Container
             events={this.sendEvents("just_set_events")}

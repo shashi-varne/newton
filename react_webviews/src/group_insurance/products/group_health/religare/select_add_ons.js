@@ -37,11 +37,18 @@ class GroupHealthPlanAddOns extends Component {
 
     async componentDidMount() {
 
-        let body = this.state.groupHealthPlanData.post_body;
+        let post_body = this.state.groupHealthPlanData.post_body;
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
-        let cta_premium = this.state.groupHealthPlanData.net_premium_addons || this.state.bottomButtonData.leftSubtitleUnformatted;
+        let cta_premium = this.state.groupHealthPlanData.post_body.base_premium || this.state.bottomButtonData.leftSubtitleUnformatted;
         this.updateBottomPremiumAddOns(cta_premium);
         
         this.setState({
@@ -51,7 +58,6 @@ class GroupHealthPlanAddOns extends Component {
         
         if (add_ons_data.length === 0) {
             try {
-
                 const res = await Api.post('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
 
                 this.setState({
@@ -59,8 +65,10 @@ class GroupHealthPlanAddOns extends Component {
                 });
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
-                    add_ons_data = resultData.optional || [];
+                    
+                    add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
 
+                    
                     let options = [];
                     let opd_data_options = add_ons_data[1].price;
                     for(var key in opd_data_options){
@@ -70,7 +78,24 @@ class GroupHealthPlanAddOns extends Component {
                         }
                         options.push(opt);
                     }
-                   
+
+                    let temp = add_ons_data[2];
+                        add_ons_data[2] = add_ons_data[3];
+                        add_ons_data[3] = temp;
+                    
+                    
+                    if(this.state.groupHealthPlanData.post_body.si === "400000"){
+                        
+                        for(var item in add_ons_data){
+                            if(add_ons_data[item].id === "ncb"){
+                                add_ons_data[item].checked = true;
+                                add_ons_data[item].disabled = true;
+                                add_ons_data[item].bottom_text = "This benefit is mandatory with your selected plan";
+                            }
+                        }    
+                    }
+                    console.log(add_ons_data)
+
                     add_ons_data[1].price = options;
                     add_ons_data[1].default_premium = parseInt(add_ons_data[1].price[0].premium);
                     add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].cover_amount;
@@ -112,7 +137,8 @@ class GroupHealthPlanAddOns extends Component {
             }
         });
 
-        let updated_premium = cta_premium + parseInt(total_premium);
+        let updated_premium = parseInt(cta_premium) + parseInt(total_premium);
+        
         this.updateBottomPremiumAddOns(updated_premium);
     }
 
@@ -133,13 +159,12 @@ class GroupHealthPlanAddOns extends Component {
          
         let data = add_ons_data[index];
 
+        
         let indexOption = event;
         data.selectedIndexOption = indexOption;
 
         data.selected_cover_amount =  data.price[indexOption].cover_amount;
         data.selected_premium =  parseInt(data.price[indexOption].premium);
-
-
 
         add_ons_data[index] = data;
 
@@ -151,6 +176,7 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
+        console.log('in render ', add_ons_data)
         return (
             <div>
                 {add_ons_data.map((item, index) => (
@@ -177,6 +203,7 @@ class GroupHealthPlanAddOns extends Component {
                                             formatAmountInr(item.default_premium)
                                         }
                                     </div>
+                                    <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                 </div>
                           <GenericTooltip content={item.description} productName={getConfig().productName} />
                             </span>
@@ -235,20 +262,19 @@ class GroupHealthPlanAddOns extends Component {
         let add_ons_body = [];
         let  add_ons_json = {};
         // eslint-disable-next-line
-        this.state.add_ons_data.map((item) => {
 
-            
+        this.state.add_ons_data.map((item) => {            
             if(item.checked) {
 
                 if (Array.isArray(item.price)) {
-                    add_ons_body.push(item.price[item.selectedIndexOption].id);
-                    add_ons_json[item.price[item.selectedIndexOption].id] = {
+                    add_ons_body.push(`opd-${item.selected_premium || item.default_premium}`)
+                    add_ons_json[item.price[item.selectedIndexOption].id || 'opd'] = {
                         premium: item.selected_premium || item.default_premium,
                         title: item.name
                     };
                 } else {
                     add_ons_json[item.id] = {
-                        premium: item.selected_premium || item.default_premium,
+                        premium: item.price || item.selected_premium || item.default_premium,
                         title: item.name
                     };
                     add_ons_body.push(item.id);
@@ -256,14 +282,15 @@ class GroupHealthPlanAddOns extends Component {
             }
 
         })
-
+        console.log('json', add_ons_json);
+        console.log('arr', add_ons_body);
 
         groupHealthPlanData.post_body.add_ons = add_ons_body;
         groupHealthPlanData.post_body.add_ons_json = add_ons_json;
         groupHealthPlanData.add_ons_data = this.state.add_ons_data;
         this.setLocalProviderData(groupHealthPlanData);
 
-        this.navigate(this.state.next_screen);
+        // this.navigate(this.state.next_screen);
 
     }
 

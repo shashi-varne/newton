@@ -121,7 +121,7 @@ class GroupHealthPlanDob extends Component {
         let ui_members = groupHealthPlanData.ui_members || {};
         let self_gender = ui_members.self_gender || '';
         let manAgeCheck = '';
-        if(this.state.account_type === 'selfandfamily' || this.state.account_type === 'family') {
+        if(this.state.account_type === 'self_family' || this.state.account_type === 'family') {
             if(self_gender === 'MALE') {
                 manAgeCheck = 'self';
             } else if((self_gender === 'FEMALE' && ui_members.husband) || ui_members.husband) {
@@ -214,8 +214,9 @@ class GroupHealthPlanDob extends Component {
             }
             post_body.member_details = member_details;
 
-            if(ui_members.self_gender && post_body.self_account_key) {
-                post_body.self_account_key.gender = ui_members.self_gender;
+
+            if(ui_members.self_gender && post_body.member_details.self_account_key) {
+                post_body.member_details.self_account_key.gender = ui_members.self_gender;
             }
 
             if(provider === 'RELIGARE') {  //reset

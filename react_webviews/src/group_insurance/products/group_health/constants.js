@@ -91,7 +91,7 @@ export const hdfc = {
             },
             {
                 'name': 'Self & family members',
-                'value': 'selfandfamily'
+                'value': 'self_family'
             },
             {
                 'name': 'Parents',
@@ -298,7 +298,7 @@ export const religare = {
             },
             {
                 'name': 'Self & family members',
-                'value': 'selfandfamily'
+                'value': 'self_family'
             },
             {
                 'name': 'Parents',
@@ -579,11 +579,11 @@ export const star = {
             },
             {
                 'name': 'Self & family members',
-                'value': 'selfandfamily'
+                'value': 'self_family'
             },
             {
                 'name': 'Parents/Parents-in-law',
-                'value': 'parentsinlaw'
+                'value': 'parent_in_law'
             }
         ]
     },
@@ -897,12 +897,12 @@ export const avilableMembersToInsured = [
     {
         'key': 'father_in_law',
         'value': '',
-        'backend_key': 'parent_inlaw_account1_key'
+        'backend_key': 'parent_in_law_account1_key'
     },
     {
         'key': 'mother_in_law',
         'value': '',
-        'backend_key': 'parent_inlaw_account2_key'
+        'backend_key': 'parent_in_law_account2_key'
     },
     {
         'key': 'son',

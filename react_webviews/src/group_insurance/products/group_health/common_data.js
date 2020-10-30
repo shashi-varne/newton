@@ -75,7 +75,7 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            let url = `/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`;
+            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`;
 
             if(this.state.screen_name === 'final_summary_screen') {
                 url += `&forms_completed=true`;
@@ -89,16 +89,10 @@ export async function initialize() {
             });
             if (res.pfwresponse.status_code === 200) {
 
-                lead = resultData.quote;
-                lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
+                lead = resultData;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
-                    lead: resultData.quote || {},
-                    common_data: {
-                        ...resultData.common,
-                        tnc: resultData.common.tnc || resultData.tnc
-                    },
-                    insured_account_type: lead.account_type || ''
+                    lead: resultData || {},
                 }, () => {
                     if (this.onload && !this.state.ctaWithProvider) {
                         this.onload();
@@ -221,7 +215,7 @@ export async function initialize() {
 }
 
 export function updateBottomPremium(premium) {
-    if(this.state.premium_data || this.state.add_ons_data){
+    if(this.state.premium_data){
         this.setState({
             bottomButtonData: {
                 ...this.state.bottomButtonData,

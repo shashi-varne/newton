@@ -8,6 +8,7 @@ import toast from '../../../../common/ui/Toast';
 import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
+import { post } from 'jquery';
 
 
 class GroupHealthPlanSelectSumAssured extends Component {
@@ -30,25 +31,35 @@ class GroupHealthPlanSelectSumAssured extends Component {
 
     async componentDidMount() {
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        console.log('gh',groupHealthPlanData)
         let post_body = groupHealthPlanData.post_body;
+        
+        let keys_to_remove = ['si', 'base_premium', 'premium']
+        for(let key in keys_to_remove){
+            delete groupHealthPlanData.post_body[keys_to_remove[key]];
+        }
+        this.setLocalProviderData(groupHealthPlanData);
 
         this.setState({
             show_loader: true
         });
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type'];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
         
         try {
-            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,post_body);
+            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
             this.setState({
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
-            console.log('res', resultData);
             if (res.pfwresponse.status_code === 200) {
                 
             groupHealthPlanData.plan_selected.premium_data = resultData.premium_details;
             this.setLocalProviderData(groupHealthPlanData);
-
+                
             this.setState({
               premium_data: resultData.premium_details
             })
@@ -67,7 +78,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
         }, () => {
-            this.updateBottomPremium();
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
         })
     }
 
@@ -107,8 +118,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
         groupHealthPlanData.sum_assured = selectedPlan.sum_insured;
-        groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_insured;
-
+        // groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_insured;
+        groupHealthPlanData.post_body.si = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.base_premium = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.premium = selectedPlan.sum_insured;
 
@@ -145,7 +156,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setState({
             selectedIndex: index
         }, () => {
-            this.updateBottomPremium();
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
         });
     }
 

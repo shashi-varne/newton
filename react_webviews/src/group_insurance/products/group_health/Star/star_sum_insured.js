@@ -16,7 +16,6 @@ class GroupHealthPlanStarSumInsured extends Component {
         super(props);
         this.state = {
             next_screen: '',
-            sum_assured: ["300000", "400000", "500000", "1000000", "1500000", "2000000", "2500000"],
             premiumAmt: null,
             selectedIndex: 0,
             loadingPremium: true
@@ -43,19 +42,16 @@ class GroupHealthPlanStarSumInsured extends Component {
         // let sum_assured = post_body.sum_assured;
 
 
-        for(var key in post_body.member_details){
-            if(post_body.member_details[key].gender === "MALE"){
-                post_body.member_details[key].gender = "M"
-            }else{
-                post_body.member_details[key].gender = "F"
-            }
-        }
 
         let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id', 'postal_code'];
         let body = {};
         for(let key of allowed_post_body_keys){
             body[key] = post_body[key];
         }
+        this.setState({
+            show_loader: true
+        });
+
         try {
             this.setState({ loadingPremium: true, apiError :false });
             const res = await Api.post('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/star', body);
@@ -66,8 +62,6 @@ class GroupHealthPlanStarSumInsured extends Component {
     
                 this.setState({
                     premium_data: resultData.premium_details
-                },  ()=>{
-                    console.log('premium data', this.state.premium_data)
                 });
 
             } else {
@@ -77,7 +71,9 @@ class GroupHealthPlanStarSumInsured extends Component {
                 })
                 toast(resultData.error || 'Something went wrong! Please try again.');
             }
-           
+           this.setState({
+                show_loader: false
+            });
 
         } catch (err) {
             console.log(err);
@@ -89,8 +85,6 @@ class GroupHealthPlanStarSumInsured extends Component {
             });
         }
 
-        // let selectedIndex = this.state.sum_assured.indexOf(sum_assured);
-
         let dob_data = {};
         groupHealthPlanData.final_dob_data.forEach(item => {
             dob_data[item.backend_key] = {
@@ -98,11 +92,6 @@ class GroupHealthPlanStarSumInsured extends Component {
             }
         });
 
-        // this.setState({
-        //     selectedIndex: selectedIndex,
-        //     post_body: post_body,
-        //     dob_data: dob_data
-        // }, () => this.updatePremium())
         this.updatePremium();
         
     }
@@ -158,27 +147,57 @@ class GroupHealthPlanStarSumInsured extends Component {
         )
     }
 
-    handleClick = () => {
+    handleClick = async () => {
         const { groupHealthPlanData, premium_data } = this.state;
         
-        if (this.state.loadingPremium || isEmpty(premium_data)) return;
-        this.sendEvents('next');
-        groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
-        groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
-        groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
-        groupHealthPlanData.plan_selected_final = premiumData;
+        let post_body = groupHealthPlanData.post_body;
+        let allowed_post_body_keys = ['adults', 'children', 'member_details', 'plan_id', 'postal_code'];
+        let body = {};
+        
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+        body['si'] = this.state.premium_data[this.state.selectedIndex].sum_insured;
+                
+        try{
+            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/star`, body);
 
-        const { plan_selected_final } = groupHealthPlanData;
+            var resultData = res.pfwresponse.result;
+
+            var plan_selected_final = resultData.premium_details;
+            
+            if (this.state.loadingPremium || isEmpty(premium_data)) return;
+            this.sendEvents('next');
+            groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
+            groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
+            groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
+            groupHealthPlanData.plan_selected_final = plan_selected_final;
+
+            
+        
         Object.assign(groupHealthPlanData.post_body, {
             tenure: plan_selected_final.tenure,
-            tax_amount: plan_selected_final.gst_tax,
+            tax_amount: plan_selected_final.gst[1],
             base_premium: plan_selected_final.base_premium,
-            premium: plan_selected_final.net_premium,
-            total_amount: plan_selected_final.total_amount,
-            discount_amount: plan_selected_final.total_discount,
+            premium: plan_selected_final.premium,
+            total_amount: plan_selected_final.premium_after_tax || 0,
+            discount_amount: plan_selected_final.discount.family[1] + plan_selected_final.discount.tenure[1],
             insured_pattern: plan_selected_final.insured_pattern,
-            plan_code: groupHealthPlanData.plan_selected_final.plan_code,
+            plan_code: plan_selected_final.plan_code,
+            postal_code: body.postal_code,
+            total_si: body.si,
+            sum_assured: this.state.premium_data[this.state.selectedIndex].sum_insured,
+            gst: plan_selected_final.gst[1]
         });
+        
+        }catch(err){
+            toast('Something went wrong');
+            this.setState({
+                premiumAmt: '--',
+                loadingPremium: false,
+                apiError :true
+            });
+        }        
 
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate(this.state.next_screen || 'plan-premium-summary');
@@ -191,8 +210,6 @@ class GroupHealthPlanStarSumInsured extends Component {
             provider: this.state.providerConfig.key,
             logo: this.state.providerConfig.logo_cta
         }
-
-        console.log('pre', this.state.premium_data)
 
         return (
             <Container
