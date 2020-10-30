@@ -9,7 +9,7 @@ const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
 
 let redirect_url = getConfig().redirect_url;
-let sdk_capabilites = getConfig().sdk_capabilites;
+let sdk_capabilities = getConfig().sdk_capabilities;
 let is_secure = false;
 
 axios.defaults.baseURL = decodeURIComponent(base_url).replace(/\/$/, "");
@@ -46,8 +46,8 @@ class Api {
 
       }
     }
-    if (sdk_capabilites) {
-      axios.defaults.headers.common['sdk-capabilites'] = sdk_capabilites;
+    if (sdk_capabilities) {
+      axios.defaults.headers.common['sdk-capabilites'] = sdk_capabilities;
     }
     let options = Object.assign({
       method: verb,
