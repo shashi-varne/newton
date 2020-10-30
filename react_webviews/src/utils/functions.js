@@ -597,6 +597,7 @@ export const getConfig = () => {
     project = 'kyc-esign';
   } else if (main_pathname.indexOf('pg') >= 0) {
     project = 'pg';
+    generic_callback = "true";
   }
 
 
