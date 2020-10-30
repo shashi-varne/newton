@@ -10,7 +10,6 @@ import DropdownInModal from '../../../../common/ui/DropdownInModal';
 import { initialize, updateBottomPremium, updateBottomPremiumAddOns } from '../common_data';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-import ReactTooltip from "react-tooltip";
 import { compact } from 'lodash';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 

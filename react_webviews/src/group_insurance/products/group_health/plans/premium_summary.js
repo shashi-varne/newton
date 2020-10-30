@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 
 import { nativeCallback } from "utils/native_callback";
-import { ghGetMember } from "../../../constants";
 import { storageService } from "utils/validators";
-import { initialize, setLocalProviderData } from "../common_data";
+import { initialize } from "../common_data";
 import BottomInfo from "../../../../common/ui/BottomInfo";
 import Api from "utils/api";
 import toast from "../../../../common/ui/Toast";
@@ -35,7 +34,6 @@ class GroupHealthPlanPremiumSummary extends Component {
   onload = async () => {
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
     let post_body = groupHealthPlanData.post_body;
-    console.log('post_body', body);
 
     let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', 'plan_code','tenure', 'individual_si', 'total_si', 'premium', 'base_premium', 'gst', 'family_discount', 'tenure_discount', 'gst', 'postal_code'];
     
@@ -59,7 +57,6 @@ class GroupHealthPlanPremiumSummary extends Component {
 
       try{
         let res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
-        console.log('res', res);
         
       let resultData = res.pfwresponse.result;
       let quote_id = resultData.quotation.id;
@@ -75,7 +72,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       }
   
     }
-    console.log('in onload')
+    
     let properties = {};
     let lead = this.state.lead;
     let groupHealthPlanDataProp = this.state.groupHealthPlanData;
@@ -196,7 +193,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         var resultData = res.pfwresponse.result;
         
         if (res.pfwresponse.status_code === 200) {
-          let lead = resultData.quotation;
+          // let lead = resultData.quotation;
           // lead.member_base = ghGetMember(lead, this.state.providerConfig);
           // storageService().set("ghs_ergo_quote_id", resultData.quotation.id);
           // this.navigate("personal-details/" + lead.member_base[0].key);

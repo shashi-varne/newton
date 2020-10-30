@@ -8,7 +8,6 @@ import toast from '../../../../common/ui/Toast';
 import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
-import { post } from 'jquery';
 
 
 class GroupHealthPlanSelectSumAssured extends Component {
