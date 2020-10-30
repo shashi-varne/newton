@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import Container from  '../../common/Container';
 
-import term_fisdom from 'assets/ic_term_insurance_fisdom.svg';
-import term_myway from 'assets/ic_term_insurance_myway.svg';
-import money_pig_fisdom from 'assets/fisdom/money_pig.svg'
-import money_pig_myway from 'assets/myway/money_pig.svg'
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
 
@@ -26,22 +22,19 @@ class lifeinsurence extends Component {
 
     nativeCallback({ action: 'take_control_reset' });
 
-    let termlogo = this.state.type !== 'fisdom' ? term_myway : term_fisdom
-    let money_pig =  this.state.type !== 'fisdom' ? money_pig_myway : money_pig_fisdom
-
     let insuranceProducts = [
       {
         key: 'team',
         title: 'Team Insurence',
         subtitle: 'Get comprensive life coverage',
-        icon: termlogo,
+        icon: 'ic_term_insurance',
         disabled: false
       },
       {
         key: 'lifeinsurencesavings',
         title: 'Insurence Savings plan',
         subtitle: 'Life coverage with wealth creation',
-        icon: money_pig,
+        icon: 'money_pig',
         disabled: false
       }
     ];
@@ -74,6 +67,7 @@ class lifeinsurence extends Component {
   }
 
   renderPorducts(props, index) {
+
     if(!props.disabled) {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
@@ -82,7 +76,7 @@ class lifeinsurence extends Component {
         }}
         >   
           <div className='insurance_plans_types'>
-              <img src={props.icon} alt="" className="insurance_plans_logos"/>
+       <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
             <div>
               <div className='insurance_plans_logos_text'
               >{props.title}{props.key === 'team' && !props.resume_flag &&
