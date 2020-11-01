@@ -203,9 +203,9 @@ export const gold_providers = {
     'safegold': {
         key: 'safegold',
         title: 'Safegold',
-        subtitle: '24 Karat | 99.5% pure',
+        subtitle: '24 Karat | 99.99% pure',
         logo: 'logo_safegold.svg',
-        karat: '24K 99.5%'
+        karat: '24K 99.99%'
     }
 }
 
