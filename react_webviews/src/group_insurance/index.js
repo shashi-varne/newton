@@ -106,7 +106,7 @@ import CoronaPlanPayment from './products/corona/payment';
 import CoronaPaymentCallback from './products/corona/payment-callback';
 
 /*************************** Life Insurence **********************************/
-import lifeinsurence from './products/life_insurance/entry';
+import LifeInsuranceEntry from './products/life_insurance/entry';
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -172,6 +172,11 @@ import EtliPersonalDetails2 from './products/term_insurance/etli/personal_detail
 import EtliPersonalDetails3 from './products/term_insurance/etli/personal_details3';
 import EtliAuthFailed from './products/term_insurance/etli/auth_failed';
 
+
+//fyntune
+import FyntuneLanding from './products/life_insurance/landing';
+import ResumeIntermeditePage from './products/life_insurance/resumeIntermediatePage';
+
 // common
 
 import Report from './report';
@@ -188,7 +193,7 @@ import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how
 import Tooltip from '../common/ui/Tooltip';
 import StarAddress from './products/group_health/Star/star_address';
 
-import FyntuneLanding from './products/life_insurance/landing';
+
 
 
 const generateClassName = createGenerateClassName({
@@ -323,9 +328,10 @@ console.log(url)
           <Route path={`${url}/wallet/payment-callback`} component={SmartwalletPaymentCallback} />
 
            {/********** Life Insurance **********/}
-           <Route path={`${url}/life-insurance/entry`} component={lifeinsurence} />
+           <Route path={`${url}/life-insurance/entry`} component={LifeInsuranceEntry} />
            <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
-           <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />                                                                                                                                                                     
+           <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />      
+           <Route path={`${url}/life-insurance/resume-intermediate`} component={ResumeIntermeditePage}/>                                                                                                                                                               
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />

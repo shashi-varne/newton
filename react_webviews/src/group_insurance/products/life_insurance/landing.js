@@ -7,7 +7,7 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
-import StepsToFollow from './stepsToFollow';
+import StepsToFollow from '../../../common/ui/stepsToFollow';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -21,10 +21,53 @@ class FyntuneLanding extends Component {
     };
   }
 
+
+  navigate = (pathname) => {
+    this.props.history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    });
+  };
+
+  async componentDidMount(){
+
+    // we get resume_data from API call
+    var resume_data = res_resume.pfwresponse.result;
+    this.setState({resume_data: resume_data})
+}
+
   handleClick = () => {
     this.sendEvents("next");
-    console.log("To be done");
-  };
+  
+  //we get the below data from API call  
+  var res = res_lead.pfwresponse.result;
+  var new_quote_redirection_url = this.state.res.redirection_url;
+
+  if(res.resume_present){
+    toast(`Already payment done for the previous journey`);
+    return;
+
+  }else if(getConfig().Web){
+    nativeCallback({
+      action: 'open_in_browser',
+      message: {
+        url: new_quote_redirection_url,
+      },
+    });
+
+  }else{
+    let back_url = encodeURIComponent(
+      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+    );
+    nativeCallback({
+      action: 'open_inapp_tab',
+      message: {
+          url: new_quote_redirection_url || '',
+          back_url: back_url || ''
+      }
+    });
+  }
+};
 
 
   sendEvents(user_action, data = {}) {
@@ -59,10 +102,33 @@ class FyntuneLanding extends Component {
   };
 
   handleResume = () => {
-    // if (!this.state.quoteResume || !this.state.quoteResume.id) {
-    //   return;
-    // }
+    if (!this.state.resume_data.resume_present) {
+      return;
+    }
     this.sendEvents("next", {resume_clicked: "yes"});
+    var resume_redirection_url = this.state.resume_data.redirection_url;
+
+    if(getConfig().Web){
+      nativeCallback({
+        action: 'open_in_browser',
+        message: {
+          url: resume_redirection_url,
+        },
+      });
+    }else{
+    let back_url = encodeURIComponent(
+      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+    );
+
+    nativeCallback({
+      action: 'open_inapp_tab',
+      message: {
+          url: resume_redirection_url || '',
+          back_url: back_url || ''
+      }
+    });
+    }
+
   };
 
 
@@ -106,8 +172,8 @@ class FyntuneLanding extends Component {
               />
         </div>
 
-        {/* {this.state.quoteResume && this.state.quoteResume.id && ( */}
-        { true && (
+        {/* { this.state.resume_data.resume_present && ( */}
+          { true && (
             <div className="resume-card" onClick={() => this.handleResume()}>
               <div className="rc-title">Recent activity</div>
 

@@ -10,7 +10,7 @@ import { nativeCallback } from '../../../utils/native_callback'
 
 
 
-class lifeinsurence extends Component {
+class LifeInsuranceEntry extends Component {
 
   constructor(props) {
     super(props);
@@ -32,8 +32,8 @@ class lifeinsurence extends Component {
     let insuranceProducts = [
       {
         key: 'team',
-        title: 'Team Insurence',
-        subtitle: 'Get comprensive life coverage',
+        title: 'Team Insurance',
+        subtitle: 'Get comprehensive life coverage',
         icon: termlogo,
         disabled: false
       },
@@ -140,4 +140,4 @@ class lifeinsurence extends Component {
   }
 }
 
-export default lifeinsurence;
+export default LifeInsuranceEntry;
