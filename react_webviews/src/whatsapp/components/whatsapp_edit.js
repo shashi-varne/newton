@@ -79,8 +79,8 @@ class WnatsappEditNumber extends Component {
     storageService().set('mobile', mobile);
     if (
       mobile.length !== 10 ||
-      !validateNumber(mobile) ||
-      !numberShouldStartWith(mobile)
+      !validateNumber(mobile) 
+      // !numberShouldStartWith(mobile)
     ) {
       canProceed = false;
       this.setState({
