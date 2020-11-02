@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 import qs from 'qs';
 import { storageService} from 'utils/validators';
 import { getConfig } from 'utils/functions';
@@ -14,7 +13,7 @@ class CommonLanding extends Component {
             show_loader: true,
             type: getConfig().productName,
             params: qs.parse(props.history.location.search.slice(1)),
-            loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
+            productName: getConfig().productName
         }
 
     }
@@ -70,7 +69,7 @@ class CommonLanding extends Component {
         return (
             <div className="Loader">
               <div className="LoaderOverlay">
-                <img src={this.state.loaderMain} alt="" />
+                <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
               </div>
             </div>
           );

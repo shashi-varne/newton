@@ -112,6 +112,8 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst[0] || 0; 
       properties.total_amount = groupHealthPlanDataProp.plan_selected_final.premium_after_family_discount;
     }
+
+    properties.total_discount = properties.discount_amount;
     this.setState({ properties: properties });
   };
 
@@ -254,17 +256,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           </div>
           {this.state.properties && this.renderProviderPremium()}
 
-          <div className="premium-summary-motivator">
-          <BottomInfo
-            summaryPage={true}
-            fixedPosition="0px"
-            baseData={{
-              content:
-                "Complete your details and get quality medical treatments at affordable cost",
-            }}
-          />
-          </div>
-        </div>
+          <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />        </div>
       </Container>
     );
   }

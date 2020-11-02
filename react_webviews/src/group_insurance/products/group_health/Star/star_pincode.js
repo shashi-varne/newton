@@ -130,6 +130,7 @@ class GroupHealthPlanStarPincode extends Component {
                 buttonTitle="CONTINUE"
                 handleClick={() => this.handleClick()}
             >
+                
                 <FormControl fullWidth>
                     <div className="InputField">
                         <Input

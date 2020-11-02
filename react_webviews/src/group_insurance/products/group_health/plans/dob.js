@@ -152,7 +152,7 @@ class GroupHealthPlanDob extends Component {
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
                     if (age.age > dob_adult.max || age.age < dob_adult.min) {
-                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
+                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max - 1} years`;
                         canProceed = false;
                     } else if (manAgeCheck === key && age.age < dob_married_male.min) {
                         dob_data.error = `Minimum age is ${dob_married_male.min} for married male`;
@@ -162,7 +162,7 @@ class GroupHealthPlanDob extends Component {
                 } else {
                     let dob_child = validation_props.dob_child;
                     if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
-                        dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
+                        dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max - 1} years`;
                         canProceed = false;
                     }
                     child_ages.push(age.age);
@@ -286,7 +286,7 @@ class GroupHealthPlanDob extends Component {
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
-
+                
                 {this.state.final_dob_data.map(this.renderDobs)}
 
                 <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />

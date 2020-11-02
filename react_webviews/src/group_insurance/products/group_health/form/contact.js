@@ -188,6 +188,7 @@ class GroupHealthPlanContactDetails extends Component {
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
+
                 <FormControl fullWidth>
 
                     <div className="InputField">

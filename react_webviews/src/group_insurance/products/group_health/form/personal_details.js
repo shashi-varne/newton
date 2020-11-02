@@ -179,7 +179,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
-    if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number'){
+    if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
       return;
     }
 
@@ -542,6 +542,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             {this.state.header_subtitle}
           </div>
         )}
+        
         <div className="InputField">
           <Input
             type="text"
