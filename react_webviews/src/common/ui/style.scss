@@ -684,3 +684,54 @@ body[data-device="mobile"] {
     }
   }
 }
+
+.journey-steps {
+  .top-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #0a1c32;
+    margin-bottom: 20px;
+  }
+}
+
+.journey-steps-count {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .circle-count {
+    border:1px solid #4F2DA7;
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    margin: 0 -15px 0 0;
+    background-color: #ffffff !important;
+    z-index: 1;
+    
+    .count {
+      margin: 25% 0 0 35%;
+    }
+  }
+
+  .steps-content {
+    border:1px solid #4F2DA7;
+    padding: 12px 60px 12px 30px;
+    border-radius: 6px;
+    width: 90%;
+
+    .title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #767E86;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 10px;
+      font-weight: 300;
+      color: #767E86;
+      line-height: 1.5;
+    }
+  }
+
+}

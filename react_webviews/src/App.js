@@ -22,6 +22,7 @@ import CommonLanding from './common/components/landing';
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
 import Loan from './loan';
+import Loan_idfc from './loan_idfc';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
 
@@ -43,7 +44,8 @@ class App extends Component {
           <Route path="/isip" component={IsipBIller} />
           <Route path="/w-report" component={WealthReport} />
           <Route path="/help" component={HelpSupport} />
-          <Route path="/loan" component={Loan} />
+          <Route path="/loan1" component={Loan} />
+          <Route path="/loan/idfc" component={Loan_idfc} />
           <Route path="/pg" component={Payment} />
           <Route path="/kyc-esign" component={KycEsign} />
           <Route path="/webview/:main_module/:sub_module" component={CommonLanding} />
