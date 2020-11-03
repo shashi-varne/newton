@@ -222,7 +222,7 @@ const ScrollToTop = withRouter(
 
 const Insurance = (props) => {
   const { url } = props.match;
-console.log(url)
+
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
