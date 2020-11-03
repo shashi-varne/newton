@@ -46,7 +46,7 @@ export default class HDFCPremium extends Component {
           Premium details
         </div>
 
-        {this.props.type_of_plan === 'NF' &&
+        {/* {this.props.type_of_plan === 'NF' &&
           <div>
             <div className="flex-between pi-tile">
               <div className="pi-tile-left">Individual premium</div>
@@ -54,7 +54,7 @@ export default class HDFCPremium extends Component {
             {this.props.members.map(this.renderIndPremium)}
              <div className="generic-hr"></div>
           </div>
-        }
+        } */}
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
           <div className="pi-tile-right">{inrFormatDecimal(this.props.base_premium)}</div>

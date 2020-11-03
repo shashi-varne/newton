@@ -20,8 +20,8 @@ class DigiStatus extends Component {
   }
 
   render() {
-    const {show_loader, productName} = this.state;
-    const {status = "failed"} = this.state.params; 
+    const { show_loader, productName } = this.state;
+    const { status = "failed" } = this.state.params;
     const headerData = {
       icon: "close",
       goBack: this.handleClick
@@ -30,24 +30,24 @@ class DigiStatus extends Component {
     return (
       <Container
         showLoader={show_loader}
-        title= {status === "success"? 'eSign KYC completed' : 'eSign KYC failed'}
+        title={status === "success" ? 'eSign KYC completed' : 'eSign KYC failed'}
         handleClick={this.handleClick}
         buttonTitle='OKAY'
         headerData={headerData}
       >
         <div className="nsdl-status">
           <img
-            src={ require(`assets/ils_esign_${status}_${productName}.svg`)}
-            style={{width:"100%"}}
-            alt="Nsdl Status" 
+            src={require(`assets/${productName}/ils_esign_${status}.svg`)}
+            style={{ width: "100%" }}
+            alt="Nsdl Status"
           />
-          {status === "success" ? 
+          {status === "success" ?
             <div className="nsdl-status-text">
-                You have successfully signed your KYC documents.
+              You have successfully signed your KYC documents.
             </div>
             :
             <div className="nsdl-status-text">
-                Sorry! the eSign verification is failed. Please try again.
+              Sorry! the eSign verification is failed. Please try again.
             </div>
           }
         </div>
