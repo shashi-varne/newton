@@ -158,9 +158,8 @@ class GroupHealthPlanDob extends Component {
                     else if(age.age > dob_adult.max || age.age < dob_adult.min) {
                         dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max - 1} years`;
                         canProceed = false;
-                    } else {
-                        adult_ages.push(age.age);
                     }
+                    adult_ages.push(age.age);
                 } else {
                     let dob_child = validation_props.dob_child;
                     if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
