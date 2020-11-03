@@ -248,7 +248,7 @@ class FyntuneLanding extends Component {
          <p className="heading">Get your plan in 5 easy steps</p>
          {
            this.state.stepsToFollow.map( (step) =>{
-             return <StepsToFollow key={step.key} keyId={step.key} title={step.title} subtitle={step.subtitle} />
+             return <StepsToFollow key={index + 1} keyId={index + 1} title={step.title} subtitle={step.subtitle} />
            })
          }
          

@@ -27,7 +27,7 @@ class LifeInsuranceEntry extends Component {
         key: 'team',
         title: 'Team Insurance',
         subtitle: 'Get comprehensive life coverage',
-        icon: termlogo,
+        icon: 'ic_term_insurance',
         disabled: false
       },
       {

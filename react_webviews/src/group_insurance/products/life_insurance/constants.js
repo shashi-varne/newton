@@ -22,27 +22,22 @@ export var fyntuneConstants = {
     },
     stepsToFollow : [
       {
-        key: "1",
         title: "Get free quotes",
         subtitle: "To start, enter a few details & get free quotes",
       },
       {
-        key: "2",
         title: "Complete application form",
         subtitle: "Now select a plan you like and fill up an application form",
       },
       {
-        key: "3",
         title: "Make payment",
         subtitle: "Make your first payment securely",
       },
       {
-        key: "4",
         title: "Answer medical and lifestyle questions",
         subtitle: "Help us with a few answers to evaluate your application",
       },
       {
-        key: "5",
         title: "Upload and request documents",
         subtitle: "Lastly, upload all the required documents and you're good to go",
       },
