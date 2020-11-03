@@ -57,24 +57,24 @@ class GroupHealthPlanAddressDetails extends Component {
         let lead = this.state.lead || {};
         let form_data =  {
             ...this.state.form_data,
-            ...lead.permanent_address
-        };
+            ...lead.address_details.permanent_address
+        };                                                                            console.log(lead) //
 
-        let correspondence_address = lead.correspondence_address || {};
-        let permanent_address = lead.permanent_address || {};
+        let correspondence_address = lead.address_details.correspondence_address || {};
+        let permanent_address = lead.address_details.permanent_address || {};
 
         if (this.state.provider === 'RELIGARE') {
             form_data = {
                 ...this.state.form_data,
-                addressline: correspondence_address.addressline || '',
-                addressline2: correspondence_address.addressline2 || '',
+                addressline: correspondence_address.addr_line1 || '',
+                addressline2: correspondence_address.addr_line1 || '',
                 pincode: correspondence_address.pincode || '',
                 city: correspondence_address.city || '',
                 state: correspondence_address.state || '',
                 country: correspondence_address.country || '',
 
-                p_addressline: permanent_address.addressline || '',
-                p_addressline2: permanent_address.addressline2 || '',
+                p_addressline: permanent_address.addr_line1 || '',
+                p_addressline2: permanent_address.addr_line1 || '',
                 p_pincode: permanent_address.pincode || '',
                 p_city: permanent_address.city || '',
                 p_state: permanent_address.state || '',
@@ -92,9 +92,9 @@ class GroupHealthPlanAddressDetails extends Component {
         }
         
         if(this.state.provider === 'HDFCERGO') {
-            form_data.city = lead.city;
+            form_data.city = lead.address_details.permanent_address.city;
         }
-
+        console.log(form_data,".....................",form_data.pincode)
         if (form_data.pincode) {
             form_data.pincode_match = true;
         }
@@ -243,16 +243,28 @@ class GroupHealthPlanAddressDetails extends Component {
 
             let body = {};
             if (provider === 'HDFCERGO') {
+                // body = {
+                //     permanent_address: {  //for ergo, in backend we are storing current in permanent_address key
+                //         addressline: form_data.addressline,
+                //         addressline2: form_data.addressline2,
+                //         pincode: form_data.pincode,
+                //         state: form_data.state,
+                //         city: form_data.city
+                //     }
+                // }
+
                 body = {
-                    permanent_address: {  //for ergo, in backend we are storing current in permanent_address key
-                        addressline: form_data.addressline,
-                        addressline2: form_data.addressline2,
-                        pincode: form_data.pincode,
-                        state: form_data.state,
-                        city: form_data.city
+                    "application_id": "3fcfde82-f5c2-4f03-82fe-b16513791cdb",
+                    "address_details": {
+                        "permanent_address": {
+                            "state": form_data.state || 'bangalore',
+                            "addr_line1": form_data.addressline,
+                            "pincode": form_data.pincode,
+                            "addr_line2": form_data.addressline2,
+                            "city": form_data.city
+                        }
                     }
                 }
-
             }
 
             if (provider === 'RELIGARE') {
@@ -278,7 +290,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 };
 
             }
-
+console.log(body , form_data, "form_dataform_dataform_dataform_dataform_dataform_data") 
             this.updateLead(body);
         }
     }

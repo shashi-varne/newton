@@ -179,7 +179,8 @@ class GroupHealthPlanIsPed extends Component {
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
-            this.updateLead(body);
+            console.log(body)
+            // this.updateLead(body)
         }
 
     }

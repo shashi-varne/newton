@@ -266,6 +266,15 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
 
+
+            // let body = {
+            //     "application_id": "e9f7c567-1909-4c01-b30c-21448e64f2e5",
+            //     "nominee_details": {
+            //         "name": "Pulasthya Reddy S",
+            //         "relation": "Sibling",
+            //         "DOB": "20/11/2018"
+            //     }
+            // }
             if (this.state.providerConfig.provider_api === 'star') {
 
                 let appointee_account_key =  {};
@@ -288,7 +297,6 @@ class GroupHealthPlanNomineeDetails extends Component {
                     
                 }
             }
-            
             
             this.updateLead(body);
         }

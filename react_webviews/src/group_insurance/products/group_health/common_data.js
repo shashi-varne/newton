@@ -66,6 +66,66 @@ export async function initialize() {
         member_base: []
     };
 
+    // if (this.state.get_lead) {
+    //     try {
+
+    //         this.setState({
+    //             show_loader: true
+    //         });
+
+    //         let quote_id = storageService().get('ghs_ergo_quote_id');
+
+    //         let url = `/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`;
+
+    //         if(this.state.screen_name === 'final_summary_screen') {
+    //             url += `&forms_completed=true`;
+    //         }
+    //         const res = await Api.get(url); console.log(res)
+              
+    //         var resultData = res.pfwresponse.result;
+            
+    //          this.setState({
+    //             show_loader: false
+    //         });
+    //         if (res.pfwresponse.status_code === 200) {
+
+    //             lead = resultData.quote;
+    //             lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
+    //             lead.member_base = ghGetMember(lead, this.state.providerConfig);
+    //             console.log(lead.member_base)
+    //             console.log( lead.member_base)
+    //             this.setState({
+    //                 lead: resultData.quote || {},
+    //                 common_data: {
+    //                     ...resultData.common,
+    //                     tnc: resultData.common.tnc || resultData.tnc
+    //                 },
+    //                 insured_account_type: lead.account_type || ''
+    //             }, () => {
+    //                 if (this.onload && !this.state.ctaWithProvider) {
+    //                     this.onload();
+    //                 }
+
+    //             })
+    //         } else {
+    //             toast(resultData.error || resultData.message
+    //                 || 'Something went wrong');
+    //         }
+    //     } catch (err) {
+    //         console.log(err);
+    //         this.setState({
+    //             show_loader: false,
+    //             lead: lead,
+    //             common_data: {}
+    //         });
+    //         toast('Something went wrong');
+    //     }
+    // }
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
     if (this.state.get_lead) {
         try {
 
@@ -73,14 +133,12 @@ export async function initialize() {
                 show_loader: true
             });
 
-            let quote_id = storageService().get('ghs_ergo_quote_id');
-
-            let url = `/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`;
+            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=eb19cc9f-eac4-4d8a-8181-d6ed30a87ff1`;
 
             if(this.state.screen_name === 'final_summary_screen') {
                 url += `&forms_completed=true`;
             }
-            const res = await Api.get(url);
+            const res = await Api.get(url); console.log(res)
               
             var resultData = res.pfwresponse.result;
             
@@ -89,11 +147,14 @@ export async function initialize() {
             });
             if (res.pfwresponse.status_code === 200) {
 
-                lead = resultData.quote;
-                lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
-                lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                lead = resultData.quotation_details;
+                // lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
+                // lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                // lead.member_base = {}
+                lead.member_base = resultData.insured_people_details
+                console.log(  lead.member_base)
                 this.setState({
-                    lead: resultData.quote || {},
+                    lead: resultData || {},
                     common_data: {
                         ...resultData.common,
                         tnc: resultData.common.tnc || resultData.tnc
@@ -120,19 +181,24 @@ export async function initialize() {
         }
     }
 
+   
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     if (this.state.ctaWithProvider) {
 
+        console.log(lead)
 
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
-            leftSubtitle = lead.total_amount;
-            sum_assured = lead.sum_assured;
+            leftSubtitle = lead.total_sum_insured;
+            sum_assured = lead.total_premium;
             tenure = lead.tenure;
-            base_premium = lead.base_premium;
-            tax_amount = lead.tax_amount;
-            total_amount = lead.total_amount;
+            base_premium = lead.total_premium;
+            tax_amount = lead.gst;
+            total_amount = lead.total_premium;
 
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
@@ -218,6 +284,122 @@ export async function initialize() {
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+// if (this.state.ctaWithProvider) {
+//      console.log(lead)
+
+//     let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
+//     if (this.state.get_lead) {
+//         leftTitle = lead.plan_id || '';
+//         leftSubtitle = lead.plan_id;
+//         sum_assured = lead.total_sum_insured;
+//         tenure = lead.tenure;
+//         base_premium = lead.base_premium;
+//         tax_amount = lead.gst;
+//         total_amount = lead.total_premium;
+
+//     } else {
+//         let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
+//         let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
+
+//         this.setState({
+//             premium_data: premium_data
+//         })
+
+//         leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
+//         if(selectedIndexSumAssured && premium_data){
+//         leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].premium : '';
+//         }
+
+//     }
+
+//     let bottomButtonData = {
+//         leftTitle: leftTitle,
+//         leftSubtitle: inrFormatDecimal(leftSubtitle),
+//         leftSubtitleUnformatted: leftSubtitle,
+//         leftArrow: 'up',
+//         provider: providerConfig.key,
+//         logo: providerConfig.logo_cta
+//     }
+
+//     let confirmDialogData = {
+//         buttonData: {
+//             ...bottomButtonData,
+//             leftArrow: 'down'
+//         },
+//         buttonTitle: "OK",
+//         content1: [
+//             {
+//                 'name': 'Basic premium ', 'value':
+//                     inrFormatDecimal(base_premium)
+//             },
+//             { 'name': 'GST', 'value': inrFormatDecimal(tax_amount) }
+//         ],
+//         content2: [
+//             { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
+//         ],
+//         sum_assured: sum_assured,
+//         tenure: tenure
+//     }
+
+//     if(provider === 'RELIGARE' && lead.add_ons_amount) {
+
+//         confirmDialogData.content1 = [
+//             {
+//                 'name': 'Basic premium ', 'value':
+//                     inrFormatDecimal(base_premium)
+//             }
+//         ]
+
+//         let add_ons_backend = lead.add_ons_json;
+//         let data = [];
+//         let heading_added = false;
+//         for (var key in add_ons_backend) {
+//             data.push({
+//                 name: add_ons_backend[key].title,
+//                 value: inrFormatDecimal(add_ons_backend[key].premium),
+//                 heading: !heading_added ? 'Add ons' : ''
+//             })
+
+//             heading_added = true;
+//         }
+
+//         confirmDialogData.content1 = confirmDialogData.content1.concat(data);
+
+//         confirmDialogData.content1.push({
+//             'name': 'GST', 'value': inrFormatDecimal(tax_amount) 
+//         })
+//     }
+
+
+//     this.setState({
+//         bottomButtonData: bottomButtonData,
+//         confirmDialogData: confirmDialogData
+//     }, () => {
+//         if (this.onload) {
+//             this.onload();
+//         }
+
+//     })
+// }
+// }
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 export function updateBottomPremium(premium) {
 
     this.setState({
@@ -228,10 +410,8 @@ export function updateBottomPremium(premium) {
     })
 }
 
-export async function updateLead(body, quote_id) {
+export async function updateLead( body, quote_id) {
     try {
-
-
         if (!quote_id) {
             quote_id = storageService().get('ghs_ergo_quote_id');
         }
@@ -240,14 +420,21 @@ export async function updateLead(body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
+        const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/update_application_details' , body)
 
+        // const res = await Api.post('/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc', body)
+
+        // const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
+         console.log(res, "response")
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
                 console.log('if');
             } else {
+                this.setState({
+                    show_loader: false
+                });
                 this.navigate(this.state.next_state);
             }
             
