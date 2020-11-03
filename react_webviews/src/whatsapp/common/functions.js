@@ -55,7 +55,7 @@ export async function initialize() {
 }
 
 export async function getContact() {
-  let user_id = storageService().get('user_id');
+  // let user_id = storageService().get('user_id');
   let mobile = storageService().get('mobile');
 
   try {
@@ -63,7 +63,7 @@ export async function getContact() {
       show_loader: true
     });
 
-    const res = await Api.get(`api/communication/contact/get?user_id=${user_id}&contact_value=${mobile}`);
+    const res = await Api.get(`api/communication/contact/get?contact_value=${mobile}`);
 
     
     if (res.pfwresponse.status_code === 200) {
