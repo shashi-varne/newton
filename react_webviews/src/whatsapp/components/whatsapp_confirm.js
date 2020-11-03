@@ -62,7 +62,8 @@ class WhastappConfirmNumber extends Component {
           show_loader: true,
         });
         const res = await Api.post(
-          `/api/communication/contact/consent?user_id=${this.state.user_id}`,
+          // `/api/communication/contact/consent?user_id=${this.state.user_id}`,
+          `/api/communication/contact/consent`,
           body
         );
         let resultData = res.pfwresponse.result || {};
