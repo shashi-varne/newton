@@ -105,6 +105,8 @@ import CoronaPlanDetails from './products/corona';
 import CoronaPlanPayment from './products/corona/payment';
 import CoronaPaymentCallback from './products/corona/payment-callback';
 
+/*************************** Life Insurence **********************************/
+import lifeinsurence from './products/life_insurance/entry';
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -317,6 +319,11 @@ const Insurance = (props) => {
           <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
           <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
           <Route path={`${url}/wallet/payment-callback`} component={SmartwalletPaymentCallback} />
+
+           {/********** Life Insurance **********/}
+           <Route path={`${url}/life-insurance/entry`} component={lifeinsurence} />
+           <Route path={`${url}/life-insurance/lifeinsurencesavings/landing`} component={HealthInsuranceLanding} />
+           <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />                                                                                                                                                                     
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />
