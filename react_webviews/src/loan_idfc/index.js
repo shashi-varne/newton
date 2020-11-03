@@ -11,6 +11,8 @@ import NotFound from "../common/components/NotFound";
 
 
 import Landing from "./components/general/landing";
+import MobileVerify from "./components/general/mobile_verify";
+import OtpVerification from "./components/general/otp_verify";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -51,7 +53,8 @@ const Lending = props => {
         <Switch>
 
           <Route path={`${url}/home`} component={Landing} />
-
+          <Route path={`${url}/edit-number`} component={MobileVerify} />
+          <Route path={`${url}/otp-verify`} component={OtpVerification} />
        
           <Route component={NotFound} />
 

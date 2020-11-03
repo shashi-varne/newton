@@ -5,7 +5,24 @@
     .title {
       margin: 10px 10px;
       font-size: 13px;
-      color: #767E86;
+      color: #767e86;
     }
+  }
+}
+
+.verify-mobile {
+  .mobile {
+    margin-bottom: 15px;
+  }
+}
+
+.verify-mobile,
+.otp-verification {
+  .subtitle {
+    font-size: 13px;
+    font-weight: 400;
+    color: #767e86;
+    margin-bottom: 20px;
+    line-height: 22px;
   }
 }
