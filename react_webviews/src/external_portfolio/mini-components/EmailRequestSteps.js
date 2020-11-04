@@ -153,17 +153,17 @@ export default class EmailRequestSteps extends Component {
     /* Store email detail in LS here so email_not_received and 
     statement_not_received screens can use this data */
     storageService().setObject('email_detail_hni', emailDetail);
-    if (getConfig().app === 'android') {
-      parent.setState({
-        show_loader: true,
-        loadingText: <CAMSLoader />,
-      });
-      setTimeout(() => {
-        parent.navigate('cams_webpage');
-      }, 2000);
-    } else {
-      parent.navigate('cams_request_steps');
-    }
+    // if (getConfig().app === 'android') {
+    //   parent.setState({
+    //     show_loader: true,
+    //     loadingText: <CAMSLoader />,
+    //   });
+    //   setTimeout(() => {
+    //     parent.navigate('cams_webpage');
+    //   }, 2000);
+    // } else {
+    parent.navigate('cams_request_steps');
+    // }
   }
 
   onPopupClose = () => {
