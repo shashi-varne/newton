@@ -428,7 +428,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://sdk-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://payment-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -559,6 +559,8 @@ export const getConfig = () => {
     project = 'w-report';
   } else if (main_pathname.indexOf('kyc-esign') >= 0) {
     project = 'kyc-esign';
+  } else if (main_pathname.indexOf('pg') >= 0) {
+    project = 'pg';
   }
 
   

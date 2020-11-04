@@ -1,0 +1,1014 @@
+.paymentMainContainer {
+    .header-title-page {
+      padding: 0 20px 0 20px;
+    }
+    .MuiToolbar-gutters {
+      padding-left: 14px !important;
+    }
+    .Footer {
+      margin: 0px 20px 15px 20px;
+    }
+
+    .white-bg {
+      background: #fff;
+    }
+    
+    .light-grey {
+      color: #878787;
+    }
+    
+    .dark-grey {
+      color: #4a4a4a;
+    }
+    
+    .uppercase {
+      text-transform: uppercase;
+    }
+    
+    .block-padding {
+      padding: 15px;
+    }
+    
+    .paymentcard {
+      background: #fff;
+      border-bottom: 1px solid #ededed;
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      margin-bottom: 0;
+    }
+    
+    .paymentcard.upi {
+      border-top: 1px solid #ededed;
+    }
+    
+    .bold {
+      font-family: 'RobotoB';
+    }
+    
+    .blue {
+      color: #3792fc;
+    }
+    
+    .light-blue-background {
+      background: #f1f7ff;
+    }
+    
+    .grey-background {
+      background: #f1f1f1;
+    }
+    
+    .light-grey-background {
+      background: #f9f9f9;
+    }
+    
+    .grey-color-text {
+      color: #aeaeae;
+    }
+    
+    .dark-grey-text {
+      color: #4a4a4a;
+    }
+    
+    .margin-top {
+      margin-top: 15px;
+    }
+    
+    .margin-top-30 {
+      margin-top: 30px;
+    }
+    
+    .margin-0 {
+      margin: 0 !important;
+    }
+    
+    .page-padding {
+      padding: 15px;
+    }
+    
+    .page-padding-10 {
+      padding: 10px;
+    }
+    
+    .green-color {
+      color: #229942;
+    }
+    
+    .red-color {
+      color: #d0021b;
+    }
+    
+    .display-none {
+      display: none;
+    }
+    
+    .display-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .hint-color {
+      color: #b6b6b6;
+    }
+    
+    .mgr-10 {
+      margin-right: 10px;
+    }
+    
+    .mgb-15 {
+      margin-bottom: 15px !important;
+    }
+    
+    .flex-3 {
+      flex: 3;
+    }
+    
+    .flex-1 {
+      flex: 1;
+    }
+    
+    /* Main */
+    #payment {
+      margin: 0;
+      padding: 0;
+      font-family: 'RobotoR';
+      max-width: 767px;
+      margin: 0 auto;
+      overflow-y: scroll;
+    }
+    
+    /* header.bob {
+      background-color: #ff5c34;
+    }
+    
+    header.pro {
+      background-color: #3792fc;
+    }
+    
+    header.ios {
+      background: #3792fc;
+    } */
+    
+    header h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: normal;
+    }
+    
+    header p {
+      margin: 0;
+      line-height: normal;
+      font-family: 'RobotoL';
+      font-style: italic;
+    }
+    
+    header img {
+      margin-right: 20px;
+      padding: 0 5px;
+    }
+    
+    .content {
+      height: 100%;
+    }
+    
+    .hint {
+      padding: 15px;
+    }
+    
+    .flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .bottomtext {
+      font-size: 10px;
+      color: #4a4a4a;
+      text-align: center;
+    }
+    
+    .paymentcard .item-header {
+      display: flex;
+      font-size: 12px;
+      align-items: center;
+    }
+    
+    .paymentcard .item-header img {
+      margin-right: 20px;
+    }
+    
+    .payment-option {
+      padding-top: 25px;
+      font-size: 20px;
+    }
+    
+    .payment-option-sub {
+      padding-top: 0;
+      font-size: 14px;
+    }
+
+    .carousel {
+      margin-top: 20px;
+    }
+    
+    .carousel .carousel-flex {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: -ms-autohiding-scrollbar; 
+    }
+    
+    .carousel .carousel-flex .carousel-item {
+      background: #f8f8f8;
+      border: 1px solid #f8f8f8;
+      border-radius: 3px;
+      padding: 20px;
+      margin-right: 15px;
+    }
+    
+    .carousel .carousel-flex .carousel-item.active {
+      border: 1px solid #55d677;
+      background: #fff;
+    }
+    
+    .carousel .carousel-flex .carousel-item .item img {
+      margin-right: 10px;
+    }
+    
+    .dropdown {
+      margin: 20px 0;
+    }
+    
+    select {
+      width: 100%;
+      background: #fff;
+      border: 0;
+      border-bottom: 2px solid #cecece;
+      padding: 10px 0;
+      font-size: 16px;
+    }
+    
+    .add-button button, .footer button, .upi-button button {
+      width: 100%;
+      font-family: 'RobotoB';
+      background: #35cb5d;
+      border-radius: 5px;
+      padding: 15px;
+      border: 0;
+      color: #fff;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    
+    .add-button button.bfdl, .footer button.bfdl, .upi-button button.bfdl {
+      background: #ff5928;
+    }
+    
+    .upi-button button {
+      width: 100%;
+      font-family: 'RobotoB';
+      background: #b5b5b5;
+      border-radius: 5px;
+      padding: 15px;
+      border: 0;
+      color: #fff;
+      font-size: 16px;
+    }
+    
+    .upi-button button.active {
+      background: #35cb5d;
+    }
+    
+    .upi-button button.active.bfdl {
+      background: #ff5928;
+    }
+    
+    .add-button button:disabled, .footer button:disabled {
+      background: #b4ebc3;
+    }
+    
+    .add-button button.bfdl:disabled, .footer button.bfdl:disabled {
+      background: #ebebeb;
+    }
+    
+    .selected-bank {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .selected-bank .icon {
+      margin-right: 10px;
+    }
+    
+    .selected-bank .banktext-header {
+      font-size: 10px;
+      font-weight: bold;
+      color: #8d879b;
+    }
+    
+    .selected-bank .banktext-subheader {
+      font-size: 13px;
+      padding-top: 5px;
+      color: #160d2e;
+    }
+    
+    .selected-bank .change {
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 14px;
+      color: #35CB5D;
+    }
+    
+    .payusing {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 18px;
+        padding-bottom: 20px;
+    }
+    
+    .card-footer-images {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    
+    .card-footer-images img {
+      margin-right: 10px;
+    }
+    
+    .card-footer-images .more {
+      color: #b0b0b0;
+      font-family: 'RobotoB';
+      font-size: 18px;
+    }
+    
+    .infobar .flex .item img {
+      margin-right: 15px;
+      width: 100%;
+    }
+    
+    .infobar .flex .item img.hand {
+      width: 50px;
+    }
+    
+    .infobar .flex .item .image {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      padding: 3px;
+    }
+    
+    .infobar .fund {
+      margin-bottom: 20px;
+    }
+    
+    .infobar .fund:last-child {
+      margin-bottom: 0;
+    }
+    
+    .infobar .fund .fund-name {
+      line-height: 1.3em;
+    }
+    
+    .infobar .fund .fund-amount {
+      text-align: right;
+    }
+    
+    .infobar-border {
+      border-top: 2px solid #e2e9f3;
+    }
+    
+    .infobar-bank {
+      padding-left: 0;
+    }
+    
+    .infobar .flex .item .blue {
+      font-size: 12px;
+    }
+    .infobar.bankselected {
+      background-color: #dfd8ef;
+      color: #8d879b;
+      text-align: center;
+      font-size: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 5px 0;
+    }
+    
+    input[name="account_number"] { -webkit-text-security: disc; }
+    
+    .form-container {
+      padding-top: 40px;
+    }
+    .form-input {
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    .form-input label {
+      position: relative;
+      display: block;
+      width: 100%;
+      min-height: 45px;
+    }
+    .form-input .placeholder {
+      position: absolute;
+      display: block;
+      top: 23px;
+      font-size: 18px;
+      transition: all 200ms ease-in-out;
+      width: 100%;
+      cursor: text;
+    }
+    .form-input input {
+      z-index: 1;
+      width: 100%;
+      font-size: 16px;
+      border: 0;
+      border-bottom: 2px solid #cecece;
+      transition: border-color 200ms ease-in-out;
+      outline: none;
+      padding-top: 10px;
+      margin: 10px 0;
+    }
+    .form-input input {
+      height: 35px;
+    }
+    .form-input input:focus,
+    .form-input input:valid {
+      border-bottom: 2px solid #cecece;
+    }
+    .form-input input:focus + .placeholder,
+    .form-input input:disabled + .placeholder,
+    .form-input input:valid + .placeholder {
+      top: 0;
+      cursor: inherit;
+      font-size: 14px;
+      color: #878787;
+    }
+    .form-input input.loading {    
+      background-color: #ffffff;
+      background-image: url("/static/img/ifsc_loader.gif");
+      background-size: 25px 25px;
+      background-position:right center;
+      background-repeat: no-repeat;
+    }
+    .validation {
+      display: flex;
+      align-items: center;
+    }
+    
+    .validation img {
+      margin-right: 10px;
+    }
+    
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px;
+      margin: 0;
+    }
+    .footer.old-ios {
+      position: relative !important;
+    }
+    .consent {
+      color: #878787;
+      margin: 30px 0;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+    }
+    .encription {
+      margin: 40px 0 30px;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+    }
+    
+    .encription img {
+      height: 20px;
+      padding: 0 15px;
+    }
+    
+    .neft-wrapper {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .neft-wrapper .page-footer  {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .neft-wrapper .payment-btn  {
+      background-color: #35cb5d;
+      color: #ffffff;
+      padding: 5px 15px;
+      text-transform: none;
+      font-size: 18px;
+      line-height: 36px;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .neft-wrapper .payment-btn:hover {
+      color: #ffffff;
+    }
+    
+    /* MODAL STYLES
+    -------------------------------*/
+    
+    .modal {
+      position: fixed; /* Stay in place */
+      z-index: 9999; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+    }
+    
+    .modal.modal-center {
+      display: flex!important;
+      align-items: center!important;
+    }
+    
+    .modal.modal-center .modal-content {
+      flex-grow: 1;
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      border: 1px solid #888;
+      width: 95%;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    }
+    
+    #paymentModal .modal-content {
+      margin: auto 20px;
+    }
+    
+    .upitext {
+      margin-top: 40px;
+      font-size: 14px;
+    }
+    
+    .upitext .checkbox {
+      display: block;
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 25px;
+      cursor: pointer;
+      font-size: 22px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    .upitext .active {
+      color: #35cb5d;
+    }
+    
+    .upitext .active.bfdl {
+      color: #ff5928;
+    }
+    
+    .upitext .checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+    
+    .neft_checkmark {
+      position: absolute;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      border: 1px solid #35cb5d;
+    }
+    
+    .neft_checkmark.bfdl {
+      border: 1px solid #ff5928;
+    }
+    
+    .upitext .checkbox input:checked ~ .neft_checkmark {
+      background-color: #35cb5d;
+    }
+    
+    .upitext .checkbox input:checked ~ .neft_checkmark.bfdl {
+      background-color: #ff5928;
+    }
+    
+    .neft_checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+    
+    input:checked ~ .neft_checkmark:after {
+      display: block;
+    }
+    
+    .upitext .checkbox .neft_checkmark:after {
+      left: 9px;
+      top: 5px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    
+    .neft_checkmark:after {
+      left: 9px;
+      top: 5px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+    
+    #selectBankModal .modal-content .header {
+      margin-top: 25px;
+    }
+    
+    .modal-content .header h1 {
+      color: #444;
+      padding: 0;
+      font-size: 20px;
+      line-height: 1.3em;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    .modal-content .list {
+      padding: 5px 0;
+    }
+    
+    .modal-content .list .item {
+      color: #4a4a4a;
+      font-size: 14px;
+      padding: 5px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    #selectBankModal .modal-content .list .item {
+      padding: 17px 20px;
+    }
+    
+    #upiModal .modal-content .list .item {
+      padding: 10px;
+    }
+    
+    #selectBankModal .modal-content {
+      width: 100%;
+      border: 0;
+      border-radius: 0;
+      height: 100%;
+    }
+    
+    #selectBankModal .modal-content .list .item.disabled {
+      opacity: 0.3;
+      -moz-opacity: 0.3;
+      -khtml-opacity: 0.3;
+    }
+    
+    #accountModal .modal-content .list, #netModal .modal-content .list {
+      padding: 10px 0;
+    }
+    
+    #accountModal .modal-content .list .item, #netModal .modal-content .list .item  {
+      padding: 15px 20px;
+    }
+    
+    .modal-content .list .item img {
+      margin-right: 15px;
+    }
+    
+    .modal-content .list .item .text {
+      font-size: 13px;
+      font-weight: bold;
+      line-height: 1.3em;
+    }
+    
+    .modal-content .list .item .subtext {
+      font-size: 13px;
+      color: #767e86;
+      line-height: 1.3em;
+    }
+    
+    .modal-content .list .item .selected_bank {
+      display: flex;
+      align-items: center;
+    }
+    .modal-content .list .item .selected_bank .primary {
+      color: #d3dbe4;
+      font-size: 10px;
+      margin-right: 7px;
+    }
+    
+    .modal-content .list .item.active {
+      background: #f4f4f4;
+    }
+    
+    .modal-content .buttons p {
+      font-size: 14px;
+    }
+    
+    /* ---------- */
+    
+    .selectedBank {
+      padding: 15px 0;
+      border-top: 1px solid #ededed;
+      border-bottom: 1px solid #ededed;
+    }
+    
+    .selectedBank .dark-grey-text {
+      padding-top: 10px;
+      font-size: 16px;
+    }
+    
+    .selectedBank .more-bank {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    #paymentModal .loader {
+      text-align: center;
+      margin: 30px 0 10px 0;
+    }
+    
+    #paymentModal .quote {
+      padding: 20px;
+      line-height: 1.5em;
+      font-size: 18px;
+    }
+    
+    #paymentModal .author {
+      text-align: right;
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+    
+    #paymentModal .header {
+      text-align: center;
+      font-weight: 500;
+      padding: 20px 20px 30px;
+    }
+    
+    #paymentModal .helper {
+      text-align: center;
+      padding: 5px 10px 30px 10px;
+    }
+    
+    .billdesk {
+      padding-top: 50px;
+    }
+    
+    .billdesk h1 {
+      margin: 0;
+      text-align: center;
+    }
+    
+    .billdesk .boxes {
+      text-align: center;
+      padding-top: 30px;
+      width: 60%;
+      margin: 0 auto;
+    }
+    
+    .billdesk .box {
+      background: #eee;
+      padding: 40px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+    
+    .unsupport-bank {
+      background: #f1f1f1;
+      color: #aeaeae;
+      padding: 10px 15px;
+    }
+    
+    .upi-with-bank {
+      margin-left: 30px;
+    }
+    
+    .upi-with-bank img {
+      margin-right: 15px;
+    }
+    
+    .questions .list label {
+      display: flex;
+      align-items: center;
+    }
+    
+    .questions .list .item {
+      padding: 5px 15px;
+    }
+    
+    .buttons {
+      margin: 10px;
+      margin-top: 10px;
+    }
+    
+    .buttons button {
+      width: 100%;
+      border-radius: 3px;
+      border: 1px solid #35cb5d;
+      background: #fff;
+      padding: 15px;
+      font-family: 'RobotoB';
+      font-size: 16px;
+    }
+    
+    .buttons button.border-button {
+      background-color: #fff;
+      color: #35cb5d;
+      margin-bottom: 10px;
+    }
+    
+    .buttons button.filled-button {
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      background-color: #35cb5d;
+      color: #fff;
+    }
+    
+    .buttons button.border-button.bfdl {
+      border: 1px solid #ff5928;
+      color: #004164;
+    }
+    .buttons button.filled-button.bfdl {
+      background-color: #ff5928;
+    }
+  
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      color: #23527c;
+      border-bottom: 1px dotted black;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      
+      /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      margin-left: -60px;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+    table {
+      width: 100%;
+    }
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;    
+    }
+    
+    .tab input {
+      position: absolute;
+        opacity: 0;
+        z-index: -1;
+    }
+    
+    /* Accordion styles */
+    .tabs {
+      overflow: hidden;
+    }
+    .tab {
+      color: white;
+      overflow: hidden;
+    }
+    .tab-label {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 15px;
+      align-items: center;
+     /* Icon */
+    }
+    .tab-label:hover {
+      background: #fff;
+    }
+    .tab-label::after {
+      width: 1em;
+      height: 1em;
+      text-align: center;
+      transition: all 0.35s;
+    }
+    
+    .tab-label.fisdom::after {
+      content: url('../../assets/fisdom/down_arrow.svg');
+    }
+    .tab-label.myway::after {
+      content: url('../../assets/myway/down_arrow.svg');
+    }
+    
+    .tab-content {
+      max-height: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 15px 0 55px;
+      transition: all 0.35s;
+    }
+    .tab-close {
+      display: flex;
+      justify-content: flex-end;
+      background: #fff;
+      cursor: pointer;
+    }
+    .tab-close:hover {
+      background: #fff;
+    }
+    input:checked + .tab-label {
+      background: #fff;
+    }
+    input:checked + .tab-label::after {
+      transform: rotate(180deg);
+    }
+    input:checked ~ .tab-content {
+      max-height: 100vh;
+      padding-bottom: 20px;
+    }
+    
+    @-webkit-keyframes sk-circleFadeDelay {
+      0%, 39%, 100% { opacity: 0; }
+      40% { opacity: 1; }
+    }
+    
+    @keyframes sk-circleFadeDelay {
+      0%, 39%, 100% { opacity: 0; }
+      40% { opacity: 1; } 
+    }
+    
+    @media (max-width: 320px)
+    {
+      .ContainerWrapper .Container.new {
+        padding-bottom: 30px;
+      }
+    }
+    
+  }
+#neftModal, #selectBankModal {
+  z-index: 9999;
+}
+body[data-device="web"] {
+  #selectBankModal.modal, #neftModal.modal {
+    left: unset;
+    max-width: var(--desktop-width);
+    margin: 0 auto;
+    .footer {
+      max-width: var(--desktop-width);
+      margin: 0 auto;
+    }
+  }
+}
+.ic_close {
+  padding: 14px 14px 0;
+}
