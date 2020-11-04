@@ -54,5 +54,16 @@ export const idfc_config = {
         { 'step': '5', 'title': 'Sanction and disbursal', 'subtitle': 'IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.' }
       ]
     }
+  },
+  journey_screen: {
+    journeyData: {
+      options: [
+        { 'step': '1', 'title': 'Enter basic details', 'subtitle': 'Fill in personal and work details to get started with your loan application.' },
+        { 'step': '2', 'title': 'Create loan application', 'subtitle': 'Check your KYC status to proceed with your loan application.' },
+        { 'step': '3', 'title': 'Provide income details', 'subtitle': 'Enter your loan requirements and income details to get the best loan offer.' },
+        { 'step': '4', 'title': 'Upload documents', 'subtitle': 'Provide your office address and upload documents to get your loan sanctioned.' },
+        { 'step': '5', 'title': 'Sanction and disbursal', 'subtitle': 'IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.' }
+      ]
+    }
   }
 }

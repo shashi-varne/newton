@@ -172,7 +172,7 @@ class Container extends Component {
           {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
           <Header
             disableBack={this.props.disableBack}
-            title={this.props.title}
+            // title={this.props.title}
             smallTitle={this.props.smallTitle}
             provider={this.props.provider}
             count={this.props.count}

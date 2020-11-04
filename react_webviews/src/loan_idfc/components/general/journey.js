@@ -4,12 +4,12 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import JourneySteps from "../../../common/ui/JourneySteps";
 
-class JourneyTrack extends Component {
+class JourneyMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "landing_screen",
+      screen_name: "journey_screen",
     };
 
     this.initialize = initialize.bind(this);
@@ -21,11 +21,11 @@ class JourneyTrack extends Component {
 
   onload = async () => {
     let screenData = this.state.screenData;
-    
+
     this.setState({
-      screenData: screenData
-    })
-  }
+      screenData: screenData,
+    });
+  };
 
   handleClick = () => {};
 
@@ -45,23 +45,33 @@ class JourneyTrack extends Component {
     }
   }
 
+  handleClick2 = () => {};
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        inPageTitle={false}
         noFooter={true}
         headerData={{
           icon: "close",
         }}
+        hidePageTitle={true}
       >
-          <div className="journey-track">
-            <img className="center" src={require(`assets/${this.state.productName}/journey.svg`)} alt="" />
-            <JourneySteps baseData={this.state.screenData.journeyData} />
-          </div>
+        <div className="journey-track">
+          <img
+            className="center"
+            src={require(`assets/${this.state.productName}/journey.svg`)}
+            alt=""
+          />
+
+          <JourneySteps
+            handleClick={this.handleClick2}
+            baseData={this.state.screenData.journeyData}
+          />
+        </div>
       </Container>
     );
   }
 }
 
-export default JourneyTrack;
+export default JourneyMap;

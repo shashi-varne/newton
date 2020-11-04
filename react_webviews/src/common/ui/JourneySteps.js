@@ -12,37 +12,64 @@ class JourneyStepsClass extends Component {
     };
   }
 
-  renderList = (options, index) => {
+  renderStaticList = (options, index) => {
     return (
       <div className="journey-steps-count" key={index}>
         <div className="circle-count">
           <div className="count">{options.step}</div>
         </div>
         <div className="steps-content">
-          <div className="title">
-            {options.title}
-          </div>
-          <div className="subtitle">
-            {options.subtitle}
-          </div>
+          <div className="title">{options.title}</div>
+          <div className="subtitle">{options.subtitle}</div>
         </div>
       </div>
-    )
-  }
+    );
+  };
+
+  renderList = (options, index) => {
+    const props = this.props;
+
+    return (
+      <div className="journey-steps-count" key={index}>
+        <div className="circle-count">
+          <div className="count">{options.step}</div>
+          {/* <div className="count">
+            <img src={require(`assets/check_icon_color.svg`)} alt="" />
+          </div> */}
+        </div>
+        <div className="steps-content">
+          <div className="title flex" style={{ color: "#3792FC" }}>
+            {options.title}
+            <span
+              className="status"
+              onClick={() => {
+                props.handleClick();
+              }}
+            >
+              SUMMARY
+            </span>
+            {/* <img src={require(`assets/Vector.svg`)} alt="" /> */}
+          </div>
+          <div className="subtitle">{options.subtitle}</div>
+        </div>
+      </div>
+    );
+  };
 
   render() {
+    const props = this.props;
+    
     return (
-      <div className="journey-steps" style={{...this.props.style}}>
-        {this.state.baseData.title && <div className="top-title">
-            {this.state.baseData.title}
-          </div>}
+      <div className="journey-steps" style={{ ...this.props.style }}>
+        {this.state.baseData.title && (
+          <div className="top-title">{this.state.baseData.title}</div>
+        )}
 
-        <div className='steps-count'>
-          {this.state.baseData.options.map(this.renderList)}
-          {/* {this.renderList()} */}
+        <div className="steps-count">
+          {this.state.baseData.options.map(props.static ? this.renderStaticList : this.renderList)}
         </div>
       </div>
-    )
+    );
   }
 }
 

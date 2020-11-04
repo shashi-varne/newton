@@ -67,7 +67,7 @@ class Landing extends Component {
           </div>
           <HowToSteps style={{ marginTop: 20,marginBottom:0 }} baseData={this.state.screenData.stepeContentMapper} />
 
-          <JourneySteps baseData={this.state.screenData.journeyData} />
+          <JourneySteps static={true} baseData={this.state.screenData.journeyData} />
 
           <div style={{margin: '40px 0 40px 0'}}>
             <div className="generic-hr"></div>
