@@ -422,9 +422,15 @@ export async function updateLead( body, quote_id) {
             show_loader: true
         });
 
+<<<<<<< Updated upstream
         const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/update_application_details' , body)
 
         // const res = await Api.post('/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc', body)
+=======
+        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
+        // const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/update_application_details',body)
+
+>>>>>>> Stashed changes
 
         // const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
          console.log(res, "response")
@@ -434,9 +440,13 @@ export async function updateLead( body, quote_id) {
                 this.props.history.goBack();
                 console.log('if');
             } else {
+<<<<<<< Updated upstream
                 this.setState({
                     show_loader: false
                 });
+=======
+                console.log(this.state.next_state, "helloooo",res)
+>>>>>>> Stashed changes
                 this.navigate(this.state.next_state);
             }
             

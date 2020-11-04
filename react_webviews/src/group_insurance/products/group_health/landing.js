@@ -56,7 +56,6 @@ class GroupHealthLanding extends Component {
     nativeCallback({ action: "take_control_reset" });
 
     let stepsContentMapper = {
-      title: `Get insured with ease`,
       options: [
         {
           icon: "icn_hs_no_document",
@@ -94,6 +93,7 @@ class GroupHealthLanding extends Component {
         `api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/get/quoteid`
       );
 
+      console.log(res)
       if (!openModuleData.sub_module) {
         this.setState({
           show_loader: false,

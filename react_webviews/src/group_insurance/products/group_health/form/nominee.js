@@ -274,25 +274,46 @@ class GroupHealthPlanNomineeDetails extends Component {
                     "relation": this.state.form_data.relation,
                 }
             }
+<<<<<<< Updated upstream
+=======
+
+            // let body = {
+            //     nominee_details : {
+            //         name: this.state.form_data.name,
+            //         relation: this.state.form_data.relation
+            //     }
+            // }
+
+>>>>>>> Stashed changes
             if (this.state.providerConfig.provider_api === 'star') {
 
-                let appointee_account_key =  {};
+                // let appointee_account_key =  {};
                 if(this.state.renderAppointee) {
-                    appointee_account_key =  {
-                        name: this.state.form_data.appointeename,
-                        relation: this.state.form_data.appointeerelation,
-                        dob: this.state.form_data.appointeedob
-                    }
+                    // appointee_account_key =  {
+                    //     "name": this.state.form_data.appointeename,
+                    //     "relation": this.state.form_data.appointeerelation,
+                    //     "DOB": this.state.form_data.appointeedob
+                    // }
     
                 }
 
+                // body = {
+                //     nominee_account_key: {
+                //         name: this.state.form_data.name,
+                //         relation: this.state.form_data.relation,
+                //         dob: this.state.form_data.dob
+                //     },
+                //     appointee_account_key: appointee_account_key
+                    
+                // }
+
                 body = {
                     nominee_account_key: {
-                        name: this.state.form_data.name,
-                        relation: this.state.form_data.relation,
-                        dob: this.state.form_data.dob
+                        "name": this.state.form_data.name,
+                        "relation": this.state.form_data.relation,
+                        "DOB": this.state.form_data.dob
                     },
-                    appointee_account_key: appointee_account_key
+                    // appointee_account_key: appointee_account_key
                     
                 }
             }

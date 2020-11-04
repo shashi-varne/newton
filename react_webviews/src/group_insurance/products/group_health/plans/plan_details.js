@@ -386,7 +386,7 @@ class GroupHealthPlanDetails extends Component {
                 <div
                   className="special-benefit"
                   style={{
-                    backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
+                    // backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
                   }}
                 >
                   <img

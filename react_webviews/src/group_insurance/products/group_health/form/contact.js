@@ -157,9 +157,21 @@ class GroupHealthPlanContactDetails extends Component {
                     }
             }
 
+<<<<<<< Updated upstream
 
 
             // console.log(body)
+=======
+            // let body = {
+            //     "application_id": "daf83cf6-98d1-4172-9383-531a75b11b90",
+            //     "buyer_details" : {
+            //         "phone_number": this.state.form_data.mobile_number,
+            //         "email": this.state.form_data.email,
+            //         "gender": "MALE"
+            //     }
+            // }
+            
+>>>>>>> Stashed changes
             this.updateLead(body);
         }
     }

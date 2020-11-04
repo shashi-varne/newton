@@ -267,7 +267,101 @@ class GroupHealthPlanAddressDetails extends Component {
                         }
                     }
                 }
+<<<<<<< Updated upstream
+=======
+                // body = {
+                //     "address_details": {
+                //         "permanent_address": {
+
+
+                //             "state": form_data.state,
+                //             "addr_line1": form_data.addressline,
+
+
+                //             "country": form_data.country || 'INDIA',
+                //             "pincode": form_data.pincode,
+
+                //             "addr_line2": "annapoorneshwari_nagar",
+
+                //             "city": form_data.city
+                //         },
+                //         "correspondence_addr_same": "n",
+                //         "correspondence_address": {
+                //             "area": "madhudi",
+                //             "district": "agali",
+                //             "state": "Andhra Pradesh",
+                //             "addr_line1": "158, 4th cross, 5th main, RHCS layout",
+                //             "landmark": "statue",
+                //             "house_no": "158",
+                //             "country": "India",
+                //             "pincode": "560091",
+                //             "area_id": null,
+                //             "addr_line2": "agali, Andhra",
+                //             "street": null,
+                //             "city": "AGALI RURAL"
+                //         }
+                //     }
+
+                // }
+>>>>>>> Stashed changes
             }
+
+            // }
+
+
+
+            // if (provider === 'RELIGARE') {
+
+                // body = {
+                //     "address_details": {
+                //         "permanent_address": {
+
+
+                //             "state": form_data.state,
+                //             "addr_line1": form_data.addressline,
+
+
+                //             "country": form_data.country || 'INDIA',
+                //             "pincode": form_data.pincode,
+
+                //             "addr_line2": "annapoorneshwari_nagar",
+
+                //             "city": form_data.city
+                //         },
+                //         "correspondence_addr_same": "n",
+                //         "correspondence_address": {
+                //             "state": form_data.state,
+                //             "addr_line1":form_data.addressline,
+                //             "area_id": null,
+                //             "addr_line2":  form_data.addressline2,
+                //             "street": null,
+                //             "city":form_data.city
+                //         }
+                //     }
+
+                // }
+
+            // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             if (provider === 'RELIGARE') {
 
