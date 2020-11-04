@@ -115,27 +115,27 @@ export const hdfc = {
         nominee_opts: [
             {
                 'name': 'SIBLING',
-                'value': 'SIBLING'
+                'value': 'Sibling'
             },
             {
                 'name': 'CHILD',
-                'value': 'CHILD'
+                'value': 'Child'
             },
             {
                 'name': 'NIECE',
-                'value': 'NIECE'
+                'value': 'Niece'
             },
             {
                 'name': 'GRANDPARENT',
-                'value': 'GRANDPARENT'
+                'value': 'Grand Parent'
             },
             {
                 'name': 'GRANDCHILD',
-                'value': 'GRANDCHILD'
+                'value': 'Grand Child'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
+                'value': 'Brother In Law'
             },
             {
                 'name': 'SISTER IN LAW',

@@ -133,7 +133,7 @@ export async function initialize() {
                 show_loader: true
             });
 
-            let app_id = 'a23e74f9-4ec1-4680-9d6d-0bbbe0286549'
+            let app_id = '78f0b856-28e6-4ef1-9933-369be4ff916b'
 
             let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=${app_id}`;
 

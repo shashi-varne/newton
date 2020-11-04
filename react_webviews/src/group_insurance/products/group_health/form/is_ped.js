@@ -40,9 +40,9 @@ class GroupHealthPlanIsPed extends Component {
         this.setState({
             next_state: next_state
         })
-
-        let account_type = lead.account_type;
-
+            
+        let account_type = lead.quotation_details.insurance_type;
+        console.log(lead,account_type)
         let radio_title = 'Do you have any pre-existing diseases?';
         if (account_type !== 'self') {
             radio_title = 'Does any of the members have any pre-existing disease?';
@@ -50,20 +50,24 @@ class GroupHealthPlanIsPed extends Component {
 
         let is_ped = 'NO';
 
-        let member_base = lead.member_base;
+        let member_base = lead.insured_people_details;
         let form_data = {};
 
         for (var mem in member_base) {
-            let mem_info = member_base[mem];
-            if (mem_info.ped_exists) {
+            let mem_info = member_base[mem];   console.log(mem_info)
+            if (mem_info.insured_person.ped) {
                 is_ped = 'YES';
-                form_data[mem_info.key + '_checked'] = true;
+                console.log(mem_info.insured_person.relation)
+                form_data[mem_info.insured_person.relation + '_checked'] = true;
             }
+
+            console.log(form_data)
         }
 
         form_data.is_ped = is_ped;
 
         for (var key in form_data) {
+            console.log(key, form_data)
             this.setState({
                 [key]: form_data[key]
             });
@@ -158,21 +162,21 @@ class GroupHealthPlanIsPed extends Component {
             
         }
 
-        if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
-            canSubmitForm = false;
-            toast('Please select atleast one');
-        }
+        // if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
+        //     canSubmitForm = false;
+        //     toast('Please select atleast one');
+        // }
 
-        if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
-            next_state = 'self';
-            body['self_account_key'].ped_exists = 'true';
-        }
+        // if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
+        //     next_state = 'self';
+        //     body['self_account_key'].ped_exists = 'true';
+        // }
 
-        if(form_data.is_ped === 'YES' && this.props.edit) {
-            this.setState({
-                force_forward: true
-            })
-        }
+        // if(form_data.is_ped === 'YES' && this.props.edit) {
+        //     this.setState({
+        //         force_forward: true
+        //     })
+        // }
 
         if (canSubmitForm) {
 
@@ -236,14 +240,15 @@ class GroupHealthPlanIsPed extends Component {
     };
 
     renderMembers = (props, index) => {
+        console.log(props, props.insured_person.relation)
         if (props.key === 'applicant') {
             return;
         }
         return (
             <div key={index}>
                 <PlusMinusInput
-                    name={props.key}
-                    label={childeNameMapper(props.key)}
+                    name={props.insured_person.relation}
+                    label={childeNameMapper(props.insured_person.relation)}
                     parent={this}
                 />
                 <div className="generic-hr"></div>
@@ -252,7 +257,7 @@ class GroupHealthPlanIsPed extends Component {
     }
 
     render() {
-
+        console.log("this.state.form_data", this.state.form_data)
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
