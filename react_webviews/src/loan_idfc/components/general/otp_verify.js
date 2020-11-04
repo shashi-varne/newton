@@ -61,7 +61,7 @@ class OtpVerification extends Component {
 
     handleClick = async () => {
         this.sendEvents('next');
-        let { otpBaseData } = this.state;
+        // let { otpBaseData } = this.state;
 
         if (!this.state.otp) {
             this.setState({

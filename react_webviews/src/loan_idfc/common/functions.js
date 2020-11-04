@@ -1,7 +1,7 @@
-import { storageService, dobFormatTest, inFormatTest } from "utils/validators";
+// import { storageService, dobFormatTest, inFormatTest } from "utils/validators";
 import { getConfig } from 'utils/functions';
-import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
+// import Api from 'utils/api';
+// import toast from '../../common/ui/Toast';
 import { openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 import { idfc_config } from '../constants';
