@@ -27,10 +27,10 @@ class WnatsappEditNumber extends Component {
       params = {};
     }
 
-    let mobile = params.mobile || storageService().get('mobile').slice(3) || "";
+    let mobile = params.mobile || storageService().get('mobile') || "";
     this.setState(
       {
-        mobile_no: mobile,
+        mobile_no: mobile.length > 10 ? mobile.slice(3) : mobile,
         original_no: mobile
       },
       () => {
@@ -157,6 +157,7 @@ class WnatsappEditNumber extends Component {
                 mobile: mobile,
               },
             });
+
             toast("An OTP send to your mobile number");
           } else {
             this.setState({
