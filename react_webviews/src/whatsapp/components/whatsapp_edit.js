@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize } from "../common/functions";
+import { initialize, getContact } from "../common/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import {
@@ -18,6 +18,7 @@ class WnatsappEditNumber extends Component {
     this.state = {};
 
     this.initialize = initialize.bind(this);
+    this.getContact = getContact.bind(this);
   }
 
   componentWillMount() {
@@ -26,10 +27,11 @@ class WnatsappEditNumber extends Component {
       params = {};
     }
 
-    let mobile = params.mobile || storageService().get('mobile') || "";
+    let mobile = params.mobile || storageService().get('mobile').slice(3) || "";
     this.setState(
       {
         mobile_no: mobile,
+        original_no: mobile
       },
       () => {
         this.initialize();
@@ -76,7 +78,9 @@ class WnatsappEditNumber extends Component {
     let canProceed = true;
     let mobile = this.state.mobile_no;
 
-    storageService().set('mobile', mobile);
+    let { mobile_no, original_no } = this.state;
+
+    storageService().set('mobile', `91|${mobile}`);
     if (
       mobile.length !== 10 ||
       !validateNumber(mobile) 
@@ -89,40 +93,85 @@ class WnatsappEditNumber extends Component {
     }
 
     if (canProceed) {
-      let body = {
-        mobile: mobile,
-      };
-      try {
-        this.setState({
-          show_loader: true,
-        });
 
-        let res = await Api.post("/api/communication/send/otp", body);
+      if (mobile_no === original_no) {
+        let id = await this.getContact();
 
-        var resultData = res.pfwresponse.result;
+        if (id) {
+          let body = {
+            contact_id: id,
+            consent: true,
+            communication_type: "whatsapp",
+          };
+  
+          try {
+            this.setState({
+              show_loader: true,
+            });
+            const res = await Api.post(
+              `/api/communication/contact/consent`,
+              body
+            );
+            let resultData = res.pfwresponse.result || {};
+  
+            if (res.pfwresponse.status_code === 200 && !resultData.error) {
+              this.setState({
+                show_loader: true,
+              });
+  
+              this.navigate("otp-success");
+            } else {
+              this.setState({
+                show_loader: false,
+              });
+              toast(
+                resultData.error || resultData.message || "Something went wrong"
+              );
+            }
+          } catch (err) {
+            this.setState({
+              show_loader: false,
+            });
+            toast("Something went wrong");
+          }
+        }
+      } else {
 
-        if (res.pfwresponse.status_code === 200 && !resultData.error) {
-          let otp_id = resultData.otp_id || "";
-          this.navigate("otp-verify", {
-            params: {
-              otp_id: otp_id,
-              mobile: mobile,
-            },
+        let body = {
+          mobile: mobile,
+        };
+        try {
+          this.setState({
+            show_loader: true,
           });
-          toast("An OTP send to your mobile number");
-        } else {
+  
+          let res = await Api.post("/api/communication/send/otp", body);
+  
+          var resultData = res.pfwresponse.result;
+  
+          if (res.pfwresponse.status_code === 200 && !resultData.error) {
+            let otp_id = resultData.otp_id || "";
+            this.navigate("otp-verify", {
+              params: {
+                otp_id: otp_id,
+                mobile: mobile,
+              },
+            });
+            toast("An OTP send to your mobile number");
+          } else {
+            this.setState({
+              show_loader: false,
+            });
+            toast(
+              resultData.error || resultData.message || "Something went wrong"
+            );
+          }
+        } catch (err) {
           this.setState({
             show_loader: false,
           });
-          toast(
-            resultData.error || resultData.message || "Something went wrong"
-          );
+          toast("Something went wrong");
         }
-      } catch (err) {
-        this.setState({
-          show_loader: false,
-        });
-        toast("Something went wrong");
       }
     }
   };
