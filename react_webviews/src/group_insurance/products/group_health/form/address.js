@@ -58,11 +58,11 @@ class GroupHealthPlanAddressDetails extends Component {
         let form_data =  {
             ...this.state.form_data,
             ...lead.address_details.permanent_address
-        };                                                                            console.log(lead) //
+        };                                                                          
 
         let correspondence_address = lead.address_details.correspondence_address || {};
         let permanent_address = lead.address_details.permanent_address || {};
-
+ 
         if (this.state.provider === 'RELIGARE') {
             form_data = {
                 ...this.state.form_data,
@@ -90,7 +90,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 this.getCityListReligare({form_data, name: 'p_pincode'});
             };
         }
-        
+        console.log(permanent_address,"..........................",correspondence_address) 
         if(this.state.provider === 'HDFCERGO') {
             form_data.city = lead.address_details.permanent_address.city;
         }
@@ -119,10 +119,12 @@ class GroupHealthPlanAddressDetails extends Component {
         if (!name) {
             name = event.target.name;
         }
+
+        console.log(name)
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
-        if(name.includes('addressline')){
+        if(name.includes('addr_line1')){
             value = event.target ? event.target.value.substr(0, 60) : event;
         }
         if (name === 'mobile_number') {
@@ -137,7 +139,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         this.setState({
             form_data: form_data
-        })
+        }, () => console.log(form_data))
 
     };
 
@@ -172,8 +174,8 @@ class GroupHealthPlanAddressDetails extends Component {
 
         this.sendEvents('next');
         let keysMapper = {
-            'addressline': 'Address line 1',
-            'addressline2': 'Address line 2',
+            'addr_line1': 'Address line 1',
+            'addr_line2': 'Address line 2',
             'pincode': 'pincode',
             'city': 'city',
             'p_addressline': 'Address line 1',
@@ -182,7 +184,7 @@ class GroupHealthPlanAddressDetails extends Component {
             'p_city': 'city'
         }
 
-        let keys_to_check = ['addressline', 'addressline2', 'pincode'];
+        let keys_to_check = ['addr_line1', 'addr_line2', 'pincode'];
         if (provider === 'RELIGARE') {
             if (checked) {
                 form_data.p_pincode_error = '';
@@ -254,10 +256,10 @@ class GroupHealthPlanAddressDetails extends Component {
                 // }
 
                 body = {
-                    "application_id": "3fcfde82-f5c2-4f03-82fe-b16513791cdb",
+                    "application_id": "a23e74f9-4ec1-4680-9d6d-0bbbe0286549",
                     "address_details": {
                         "permanent_address": {
-                            "state": form_data.state || 'bangalore',
+                            "state": form_data.state,
                             "addr_line1": form_data.addressline,
                             "pincode": form_data.pincode,
                             "addr_line2": form_data.addressline2,
@@ -330,8 +332,8 @@ console.log(body , form_data, "form_dataform_dataform_dataform_dataform_dataform
         form_data[name] = pincode;
         form_data[name + '_error'] = '';
         form_data.pincode_match = false;
-
-
+        let cityName = this.state.lead.address_details.permanent_address.city
+       
 
         if (pincode.length === 6) {
             this.setState({
@@ -339,7 +341,7 @@ console.log(body , form_data, "form_dataform_dataform_dataform_dataform_dataform
                 isLoadingCity: true
             })
             try {
-                const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${this.state.lead.city}`));
+                const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${cityName}`));
 
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
@@ -642,25 +644,25 @@ console.log(body , form_data, "form_dataform_dataform_dataform_dataform_dataform
                     <div className="InputField">
                         <Input
                             type="text"
-                            id="addressline"
+                            id="addr_line1"
                             label="Address line 1"
-                            name="addressline"
+                            name="addr_line1"
                             placeholder="ex: 16/1 Queens paradise"
                             error={(this.state.form_data.addressline_error) ? true : false}
                             helperText={this.state.form_data.addressline_error}
-                            value={this.state.form_data.addressline || ''}
+                            value={this.state.form_data.addr_line1 || ''}
                             onChange={this.handleChange()} />
                     </div>
                     <div className="InputField">
                         <Input
                             type="text"
-                            id="addressline2"
+                            id="addr_line2"
                             label="Address line 2"
-                            name="addressline2"
+                            name="addr_line2"
                             placeholder="ex: 16/1 Queens paradise"
                             error={(this.state.form_data.addressline2_error) ? true : false}
                             helperText={this.state.form_data.addressline2_error}
-                            value={this.state.form_data.addressline2 || ''}
+                            value={this.state.form_data.addr_line2 || ''}
                             onChange={this.handleChange()} />
                     </div>
                     {this.state.provider === 'HDFCERGO' &&

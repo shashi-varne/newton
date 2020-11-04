@@ -392,7 +392,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (this.state.backend_key === 'self_account_key') {
            var body = {
-          "application_id": "a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc",
+          "application_id": "`a23e74f9-4ec1-4680-9d6d-0bbbe0286549`",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -413,7 +413,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       } else {
         var body = {
-          "application_id": "a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc",
+          "application_id": "a23e74f9-4ec1-4680-9d6d-0bbbe0286549",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -430,7 +430,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
          var body = {
-          "application_id": "a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc",
+          "application_id": "a23e74f9-4ec1-4680-9d6d-0bbbe0286549",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',

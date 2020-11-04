@@ -56,19 +56,19 @@ class GroupHealthPlanNomineeDetails extends Component {
             })
         }
 
-        let lead = this.state.lead || {};
-        let form_data = lead.nominee_account_key || {};
+        let lead = this.state.lead || {}; 
+        let form_data = lead.nominee_details || {};  console.log(form_data.relation)
         let appointee_account_key = lead.appointee_account_key || {}
-        form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+        form_data['DOB'] = form_data['DOB'] ? form_data['DOB'].replace(/\\-/g, '/').split('-').join('/') : '';
 
         if (lead.appointee_account_key) {
             form_data.appointeename = appointee_account_key.name;
             form_data.appointeerelation = appointee_account_key.relation;
-            form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
+            form_data['appointeedob'] = appointee_account_key['DOB'].replace(/\\-/g, '/').split('-').join('/');
         }
         
 
-        const { age } = calculateAge(form_data['dob'], 'byMonth');
+        const { age } = calculateAge(form_data['DOB'], 'byMonth');
 
         this.setState({
             form_data: form_data,
@@ -166,7 +166,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         const keysMapper = {
             'name': 'name',
             'relation': 'relation',
-            'dob': 'dob',
+            'dob': 'DOB',
             'appointeename': 'appointee name',
             'appointeerelation': 'appointee relation',
             'appointeedob': 'appointee dob'
@@ -195,8 +195,8 @@ class GroupHealthPlanNomineeDetails extends Component {
             }
         }
 
-        const { name, dob, relation } = form_data;
-       
+        const { name, DOB, relation } = form_data;
+       let dob = DOB
         if (!isEmpty(form_data) && noOfWords(name) < 2) {
             form_data.name_error = 'Enter valid full name';
         } else if (name && !validateAlphabets(name)) {
@@ -257,24 +257,24 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
         }
-        
-        if (canSubmitForm) {
-            let body = {
-                nominee_account_key: {
-                    name: this.state.form_data.name,
-                    relation: this.state.form_data.relation,
-                }
-            }
-
-
+        console.log("canSubmitFormcanSubmitForm : ", canSubmitForm)
+        if (true) {
             // let body = {
-            //     "application_id": "e9f7c567-1909-4c01-b30c-21448e64f2e5",
-            //     "nominee_details": {
-            //         "name": "Pulasthya Reddy S",
-            //         "relation": "Sibling",
-            //         "DOB": "20/11/2018"
+            //     nominee_account_key: {
+            //         name: this.state.form_data.name,
+            //         relation: this.state.form_data.relation,
             //     }
             // }
+
+
+            let body = {
+                "application_id": "a23e74f9-4ec1-4680-9d6d-0bbbe0286549",
+                "nominee_details": {
+                    "name":  this.state.form_data.name,
+                    "relation": this.state.form_data.relation,
+                    "DOB" : "05/05/2018"
+                }
+            }
             if (this.state.providerConfig.provider_api === 'star') {
 
                 let appointee_account_key =  {};
@@ -282,7 +282,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     appointee_account_key =  {
                         name: this.state.form_data.appointeename,
                         relation: this.state.form_data.appointeerelation,
-                        dob: this.state.form_data.appointeedob
+                        DOB: this.state.form_data.appointeedob
                     }
     
                 }
@@ -291,14 +291,14 @@ class GroupHealthPlanNomineeDetails extends Component {
                     nominee_account_key: {
                         name: this.state.form_data.name,
                         relation: this.state.form_data.relation,
-                        dob: this.state.form_data.dob
+                        DOB: this.state.form_data.DOB
                     },
                     appointee_account_key: appointee_account_key
                     
                 }
             }
-            
-            this.updateLead(body);
+            console.log(this.state.form_data,this.state.form_data.relation)
+            this.updateLead(body);     
         }
     }
 
@@ -311,7 +311,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'nominee details',
-                'dob': this.state.form_data.dob ? 'yes' : 'no',
+                'DOB': this.state.form_data.DOB ? 'yes' : 'no',
                 'from_edit': this.props.edit ? 'yes' : 'no',
                 'nominee_name': this.state.form_data.name ? 'yes' : 'no',
                 'nominee_relation': this.state.form_data.relation ? 'yes' : 'no',
@@ -448,7 +448,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             max="10"
                             error={this.state.form_data.dob_error ? true : false}
                             helperText={this.state.form_data.dob_error}
-                            value={this.state.form_data.dob || ''}
+                            value={this.state.form_data.DOB || ''}
                             placeholder="DD/MM/YYYY"
                             maxLength="10"
                             onChange={this.handleChangeDob()} />

@@ -133,7 +133,9 @@ export async function initialize() {
                 show_loader: true
             });
 
-            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=eb19cc9f-eac4-4d8a-8181-d6ed30a87ff1`;
+            let app_id = 'a23e74f9-4ec1-4680-9d6d-0bbbe0286549'
+
+            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=${app_id}`;
 
             if(this.state.screen_name === 'final_summary_screen') {
                 url += `&forms_completed=true`;
