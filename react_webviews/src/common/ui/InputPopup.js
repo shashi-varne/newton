@@ -9,7 +9,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Input from './Input';
 import { isValidMonthYear } from "utils/validators";
-import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob, containsSpecialCharacters } from "utils/validators";
 
 class InputPopupClass extends Component {
     constructor(props) {
@@ -37,6 +37,10 @@ class InputPopupClass extends Component {
         }  
         var value = event.target ? event.target.value : event;
 
+        if(containsSpecialCharacters(value)){
+            return; 
+        }
+    
         if(this.props.sinceWhenInput && name === 'startDateModal') {
     
             if (!dobFormatTest(value)) {

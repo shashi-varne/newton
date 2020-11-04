@@ -187,7 +187,7 @@ class DropdownInModalClass extends Component {
                         })
                         
                     }}>
-                    <InputLabel htmlFor={this.props.id}>
+                    <InputLabel htmlFor={this.props.id} style={{marginTop: '-25px'}}>
                         <span style={{fontSize: '0.8rem'}}>{this.props.label}</span>
                     </InputLabel>
 

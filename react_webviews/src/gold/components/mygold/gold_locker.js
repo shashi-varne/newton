@@ -194,6 +194,10 @@ class GoldLocker extends Component {
       title = 'Bought ' + data.order_details.gold_weight + ' gms'; 
     }
 
+    if(type === 'buy_back') {
+      title = 'By offer ' + data.order_details.gold_weight + ' gms'; 
+    }
+
     if(type === 'sell') {
       title = 'Sold ' + data.order_details.gold_weight + ' gms'; 
     }

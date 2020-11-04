@@ -162,7 +162,7 @@ class HealthInsuranceLanding extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Health insurance">
-        <div style={{ padding: '20px' }}>
+        <div>
           <div className='products'>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Insure your health</h1>
             <div>
