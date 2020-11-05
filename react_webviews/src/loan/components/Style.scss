@@ -135,6 +135,17 @@
     color: #767e86;
     line-height: 24px;
   }
+
+  .loader-container {
+    text-align: center;
+
+    img {
+      width: 30%;
+      height: 30%;
+    }
+  }
+
+  
 }
 
 .loan-calculator {
@@ -666,19 +677,9 @@
 }
 
 
-.loanMainContainer {
-  .header-title-page {
-    padding: 0 20px 0 20px;
-  }
-  .Container {
-    padding: 20px 20px;
-  }
-  .MuiToolbar-gutters {
-    padding-left: 14px !important;
-  }
-  .Footer {
-    margin: 0px 20px 15px 20px;
-  }
+
+.MuiToolbar-gutters {
+  padding-left: 14px !important;
 }
 
 .checkbox-loan {

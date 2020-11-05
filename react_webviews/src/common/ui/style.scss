@@ -110,11 +110,11 @@
   font-weight: 500;
 }
 .RadioWithIcon {
-  color: var(--label);
-  font-size: 0.8rem;
+  color: #0A1D32;
+  font-size: 13px;
   margin-bottom: 15px;
   position: relative;
-}
+  }
 .RadioWithIcon.professional2 {
   color: #4a4a4a !important;
   font-size: 0.8rem;
@@ -473,10 +473,10 @@ body[data-device="web"] {
 body[data-device="mobile"] {
   .__react_component_tooltip {
     // left: auto !important;
-    // margin-right: 10px !important;
+    margin-right: -1px !important;
     width: 62%;
     // right: 0px;
-    margin-top: 40px !important;
+    margin-top: 70px !important;
   }
   .__react_component_tooltip.show {
     opacity: 1;
@@ -494,7 +494,7 @@ body[data-device="mobile"] {
   .input-box {
     display: flex;
     justify-content: space-between;
-    margin: 43px 0 0 0;
+    margin: 25px 0 0 0;
     border-bottom: 1px solid #949494;
     padding: 0 0 3px 0;
     cursor: pointer;
@@ -548,8 +548,8 @@ body[data-device="mobile"] {
 }
 
 .plus-minus-input-label {
-  color: #8d879b;
-  font-size: 13;
+  color: #0A1D32;
+  font-size: 14px;
   font-weight: 400;
   margin: 0 0 10px 0;
 }
@@ -660,4 +660,27 @@ body[data-device="mobile"] {
 
 .__react_component_tooltip .multi-line {
   text-align: left !important;
+}
+
+
+.generic-tooltip {
+  span {
+    border-radius: 4px;
+    color: #767E86;
+    margin: '0 0 0 10px';
+    z-index: 99999;
+  }
+  
+  .tooltip-arrrow {
+    right: 20px;
+    position: relative;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .generic-tooltip {
+    span {
+      width: 270px;
+    }
+  }
 }

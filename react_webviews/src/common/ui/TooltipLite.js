@@ -12,7 +12,7 @@ class Tooltips extends React.Component {
       <ClickAwayListener onClickAway={onClickAway || noop}>
         <Tooltip
           padding={20}
-          background="white"
+          background={this.props.background || 'white'}
           content={this.props.content}
           tagName="span"
           zIndex={100000}
@@ -22,10 +22,11 @@ class Tooltips extends React.Component {
           className={this.props.className}
           useHover={this.props.useHover}
           arrowContent={(
-            <svg style={{ display: 'block' }} viewBox="0 0 21 11" width="20px" height="10px">
+            <svg className={this.props.classNameArrow} style={{ display: 'block' }} viewBox="0 0 21 11" 
+            width="20px" height="10px">
               <path
                 d="M0,11 L9.43630703,1.0733987 L9.43630703,1.0733987 C10.1266203,0.3284971 11.2459708,0 11.936284,1.0733987 L20,11"
-                style={{ stroke: '#d3d3d3', fill: 'white' }}
+                style={{ stroke: '#d3d3d3', fill: this.props.backgroundArrow }}
               />
             </svg>
           )}

@@ -178,7 +178,7 @@ class GroupHealthPlanSelectCity extends Component {
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
-
+                
                 <FormControl fullWidth>
                     <div className="InputField">
                     {this.state.suggestions_list.length > 0 &&
@@ -197,7 +197,7 @@ class GroupHealthPlanSelectCity extends Component {
                     }
                     </div>
                 </FormControl>
-                <BottomInfo baseData={{ 'content': 'Get cashless treatments at 10000+ cities' }} />
+                <BottomInfo baseData={{ 'content': 'Get cashless treatment at 10000+ cities' }} />
             </Container>
         );
     }
