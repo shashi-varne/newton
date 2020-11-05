@@ -150,28 +150,16 @@ class GroupHealthPlanContactDetails extends Component {
             // }
 
             let body = {        //        new api
-                    "application_id": "78f0b856-28e6-4ef1-9933-369be4ff916b",
+                    "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
                     "buyer_details": {
                         "phone_number": this.state.form_data.mobile_number,
                         "email": this.state.form_data.email,
                     }
             }
 
-<<<<<<< Updated upstream
 
 
             // console.log(body)
-=======
-            // let body = {
-            //     "application_id": "daf83cf6-98d1-4172-9383-531a75b11b90",
-            //     "buyer_details" : {
-            //         "phone_number": this.state.form_data.mobile_number,
-            //         "email": this.state.form_data.email,
-            //         "gender": "MALE"
-            //     }
-            // }
-            
->>>>>>> Stashed changes
             this.updateLead(body);
         }
     }

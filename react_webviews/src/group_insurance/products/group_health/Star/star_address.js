@@ -43,13 +43,13 @@ class StarAddress extends Component {
       });
     }
 
-    const { lead = {} } = this.state;
+    const { lead = {} } = this.state;                            console.log(lead)
     lead.permanent_address = lead.permanent_address || {};
-    let form_data = lead.permanent_address || {};
+    let form_data = lead.address_details.permanent_address || {};
 
-    form_data.city = lead.permanent_address.city;
-    form_data.area_id = lead.permanent_address.area_id;
-    form_data.pincode = lead.permanent_address.pincode || '';
+    form_data.city = lead.address_details.permanent_address.city;
+    form_data.area_id = lead.address_details.permanent_address.area_id;
+    form_data.pincode = lead.address_details.permanent_address.pincode || '';
     this.setState({
       form_data,
       bottomButtonData: {
@@ -191,12 +191,33 @@ class StarAddress extends Component {
         acc[key] = `${form_data[key]}`;
         return acc;
       }, {});
+      // const body = {
+      //   permanent_address: {
+      //     ...data_to_send,
+      //     'district': '',
+      //   },
+      // };
+
+
+      console.log(form_data)
+
       const body = {
-        permanent_address: {
-          ...data_to_send,
-          'district': '',
-        },
-      };
+        "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",  // 7d02ff2c-f16d-4daa-8071-c7ae04b36aac
+        "address_details": {                   
+          "permanent_address": {
+            "state": form_data.state,
+            "addr_line1": form_data.addressline,
+            "pincode": form_data.pincode,
+            "addr_line2":form_data.addressline2,
+            "city": form_data.city
+          }
+        }
+      }
+
+
+
+          console.log(body)
+
       this.updateLead(body);
     }
   };

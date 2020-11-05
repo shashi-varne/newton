@@ -40,30 +40,36 @@ class GroupHealthPlanSelectPed extends Component {
 
 
     onload = () => {
-                              console.log("927992799279")
+console.log("927992799279")
         this.setState({
             options: [],
             show_checkbox: false
         })
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
 
-        let {lead, provider} = this.state;
-        let member_base = lead.member_base; console.log(member_base,"hello")
+        let {lead, provider} = this.state;    console.log("lead............",lead)
+        let member_base = lead.insured_people_details; 
         let member_key = this.props.match.params.member_key;
-           console.log(member_key,lead)
-        let member_info_index  = member_base.findIndex(data => data.key === member_key);
-        let member_info = member_base[member_info_index];
-        let backend_key = member_info.backend_key;
-        let ped_diseases_name = member_info.ped_diseases_name;console.log(member_info,member_base,member_key)
+           console.log(member_base , "......................"  ,member_key,lead)
+        let member_info_index  = member_base.findIndex(data => data.insured_person.relation === member_key); console.log(member_info_index )
+        let member_info = member_base[member_info_index]
+        console.log( member_info )
+        let backend_key = member_info.insured_person.relation_key;      console.log( member_info.answers.pre_existing_diseases)
+        let ped_diseases_name = member_info.answers.pre_existing_diseases; 
 
-        ped_diseases_name = (ped_diseases_name || '').split(',');
+        // ped_diseases_name = (ped_diseases_name || '').split(',');
+
+         
+
+
+
           console.log(this.state.screenData.ped_list)
         let options = this.state.screenData.ped_list.map((item, index) => {
             item.checked = false;
             item.start_date = '';
             item.answer_description = '';
             item.description = index === this.state.screenData.ped_list.length - 1 ? '' : item.description;
-
+            item.question_id = item.id
             return item;
         });
         console.log(options)
@@ -184,8 +190,15 @@ class GroupHealthPlanSelectPed extends Component {
         this.sendEvents('next');
 
         let {options, provider ,lead, member_info_index} = this.state;
-        let member_base = lead.member_base;
+        let member_base = lead.insured_people_details; 
+
         let current_member = member_base[member_info_index];
+
+
+        // console.log( member_base[member_info_index], ";;;;;;;;;;;;;;;;;;;;;;;;;", current_member)
+
+
+
         if (options[options.length - 1].checked &&
             !this.state.pedOther) {
             toast('Enter details in other or uncheck it');
@@ -194,19 +207,19 @@ class GroupHealthPlanSelectPed extends Component {
 
             let next_state = '';
             for (var i =0; i < member_base.length; i++) {
-                if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
+                if(member_base[i].insured_person.relation === this.state.member_key && i !== member_base.length -1) {
                     for (var k =i+1; k < member_base.length; k++) {
-                        if(member_base[k].ped_exists && member_base[k].key !== 'applicant') {
-                            next_state = member_base[k].key;
+                        if(member_base[k].insured_person.ped && member_base[k].key !== 'applicant') {
+                            next_state = member_base[k].insured_person.relation;
                             break;
                         }
                     }
                 }
-            }
+            }                 console.log(next_state, ".............member_base................",member_base)
 
 
             let body = {};
-
+            let pre_existing_diseases = []
             if(provider === 'HDFCERGO') {
                 let ped_diseases_name = '';
 
@@ -215,24 +228,38 @@ class GroupHealthPlanSelectPed extends Component {
                     if(options[j].checked) {
     
                         let value = options[j].name;
+
+                        console.log("-----------------------------------------",value)
     
                         if(options[j].name === 'Other') {
                             value = this.state[this.state.otherInputData.name];
                         }
-    
-    
-                        if(!ped_diseases_name) {
-                            ped_diseases_name = value;
-                        } else {
-                            ped_diseases_name += ',' + value;
+
+                        let obj = {
+                            "yes_no": true,
+                            "question_id": options[j].id
                         }
+            
+                        pre_existing_diseases.push(obj)
+    
+                        // if(!ped_diseases_name) {
+                        //     ped_diseases_name = value;
+
+                        //     "pre_existing_diseases": [{
+                        //         "yes_no": true,
+                        //         "question_id": "hdfc_ergo_ped_cholesterol"
+                        //     }]
+                        // } 
+                        // else {
+                        //     ped_diseases_name += ',' + value;
+                        // }
                     } 
                 }
     
-                if(!ped_diseases_name) {
-                    toast('Atleast select one or uncheck this member');
-                    return;
-                }
+                // if(!ped_diseases_name) {
+                //     toast('Atleast select one or uncheck this member');
+                //     return;
+                // }
 
                 let body_to_send =  {
                     ped_diseases_name: ped_diseases_name,
@@ -245,15 +272,16 @@ class GroupHealthPlanSelectPed extends Component {
 
 
 
-//  let bbody = {
-//      "application_id": "26084492-1b41-4488-9352-4581ff5b4da9",
-//      "answers": {
-//          "spouse_account_key": [{
-//              "question_id": "hdfc_ergo_ped_renal_kidneystone_urinary",
-//              "yes_no": true
-//          }]
-//      }
-//  }
+           body = {
+               "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac", //7d02ff2c-f16d-4daa-8071-c7ae04b36aac
+               "answers": {
+                   [this.state.backend_key]: {
+                       pre_existing_diseases
+                   }
+               }
+           }
+
+
                 current_member = {
                     ...current_member,
                     ...body_to_send
@@ -284,19 +312,19 @@ class GroupHealthPlanSelectPed extends Component {
                 }
     
     
-                if(!min_one_ped) {
-                    toast('Atleast select one or uncheck this member');
-                    return;
-                }
+                // if(!min_one_ped) {
+                //     toast('Atleast select one or uncheck this member');
+                //     return;
+                // }
 
-                let body_to_send = {
-                    ped_exists: "true",
-                    ped_diseases: ped_diseases
-                }
+                // let body_to_send = {
+                //     ped_exists: "true",
+                //     ped_diseases: ped_diseases
+                // }
     
-                body = {
-                    [this.state.backend_key] : body_to_send
-                }
+                // body = {
+                //     [this.state.backend_key] : body_to_send
+                // }
 
                 let data_to_store = [];
 
@@ -315,7 +343,8 @@ class GroupHealthPlanSelectPed extends Component {
                 } //to store the member specific info, because we will not hit the api again
             }
 
-            lead.member_base[member_info_index] = current_member;
+            console.log(lead)
+            lead.insured_people_details[member_info_index].insured_person = current_member;
 
             this.setState({
                 next_state: next_state || this.state.next_state,
@@ -323,27 +352,8 @@ class GroupHealthPlanSelectPed extends Component {
                 lead: lead
             })
 
-
-
-            let bbody = {
-                "application_id": "26084492-1b41-4488-9352-4581ff5b4da9",
-                "answers": {
-                    "spouse_account_key": [{
-                        "question_id": "hdfc_ergo_ped_renal_kidneystone_urinary",
-                        "yes_no": true
-                    }]
-                }
-            }
-
-            let boody = {
-                "self_account_key": {
-                    "ped_diseases_name": "Asthma,Cholecystectomy/Gall bladder surgery/removal",
-                    "ped_exists": "true"
-                }
-            }
-
-              console.log(body)
-            // this.updateLead(body);
+              console.log(body, ".......................................body")
+            this.updateLead(body);
         }
     }
 

@@ -29,7 +29,18 @@ class GroupHealthStarPlanSelectPed extends Component {
 
   onload() {
 
-    let { member_base, account_type } = this.state.lead;
+    let { insured_people_details, quotation_details } = this.state.lead;
+    let account_type  =  quotation_details.insurance_type
+    let member_base =  []
+
+
+    insured_people_details.forEach(element => {
+      member_base.push(element.insured_person)
+    });
+
+    member_base.forEach(element => {
+      element.key = element.relation
+    });
 
     member_base.push({
         key: 'none'
@@ -192,34 +203,36 @@ class GroupHealthStarPlanSelectPed extends Component {
       canProceed = false;
       toast("Select atleast one option");
     }
-
-
-    let body = {};
-
-    if (canProceed) {
-
-      for (var i in member_base) {
-        let member_data = member_base[i];
-
-        if (member_data.key !== 'none') {
-          let backend_key = member_data.backend_key;
-          body[backend_key] = {};
-
-          if ((member_data.ped_exists  === 'Yes' ||
-          member_data.ped_exists === true) && !none_option_selected) {
-            body[backend_key].ped_exists = 'true';
-            body[backend_key].ped_diseases_name = member_data.ped_diseases_name;
-          } else {
-            body[backend_key].ped_exists = 'false';
-            body[backend_key].ped_diseases_name = '';
-          }
-        }
-
-      }
-
-      this.updateLead(body);
-    }
-  };
+   let body = {
+     "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac"
+   }
+   if (canProceed) {
+     body.answers = {}
+     for (var i in member_base) {
+       let member_data = member_base[i];
+       if (member_data.key !== 'none') {
+         let backend_key = member_data.relation_key;
+         let pre_existing_diseases_array = []
+         if ((member_data.ped_exists === 'Yes' ||
+             member_data.ped_exists === true) && !none_option_selected) {
+           let obj = {
+             "yes_no": true,
+             "question_id": "star_ped_question",
+             "description": member_data.ped_diseases_name
+           }
+           pre_existing_diseases_array.push(obj)
+           body.answers[backend_key] = {}
+           body.answers[backend_key]['pre_existing_diseases'] = pre_existing_diseases_array
+         } else {
+           body.answers[backend_key] = {}
+           body.answers[backend_key]['pre_existing_diseases'] = pre_existing_diseases_array
+         }
+       }
+     }
+     console.log(body)
+     this.updateLead(body);
+   }
+   };
 
   handleClose = () => {
     this.setState({

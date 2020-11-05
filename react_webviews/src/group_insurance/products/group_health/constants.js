@@ -157,21 +157,21 @@ export const hdfc = {
     },
     select_ped_screen: {
         ped_list: [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
-            { 'name': 'Adenoid/ Adenoidectomy' },
-            { 'name': 'Appendix/Appendicitis/Appendix surgery' },
-            { 'name': 'Asthma' },
-            { 'name': 'Cataract - 1 Eye/Both Eyes' },
-            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia' },
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' },
-            { 'name': 'Diabetes/High Sugar' },
-            { 'name': 'Fall/Accidental Injury' },
-            { 'name': 'Fistula' },
-            { 'name': 'Fissure' },
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue' },
-            { 'name': 'Fibroid/Myomectomy' },
-            { 'name': 'Fracture with implant/rod/screw/plate' },
-            { 'name': 'Other' }
+            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' ,   "id": "hdfc_ergo_ped_tuberculosis",},
+            { 'name': 'Adenoid/ Adenoidectomy',  "id": "hdfc_ergo_ped_renal_kidneystone_urinary", },
+            { 'name': 'Appendix/Appendicitis/Appendix surgery' , "id" : "hdfc_ergo_ped_hypothyroid"},
+            { 'name': 'Asthma' ,  "id": "hdfc_ergo_ped_asthma" },
+            { 'name': 'Cataract - 1 Eye/Both Eyes' ,    "id": "hdfc_ergo_ped_cataract" },
+            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', "id": "hdfc_ergo_ped_cholesterol", },
+            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' ,  "id": "hdfc_ergo_ped_tonsils_tonsillectomy", },
+            { 'name': 'Diabetes/High Sugar' ,  "id": "hdfc_ergo_ped_diabetes",},
+            { 'name': 'Fall/Accidental Injury' ,   "id": "hdfc_ergo_ped_fall_accidental_injury"},
+            { 'name': 'Fistula' ,  "id": "hdfc_ergo_ped_uterus_removal",},
+            { 'name': 'Fissure',  "id": "hdfc_ergo_ped_uterus_removal", },
+            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', "id": "hdfc_ergo_ped_fall_accidental_injury"  },
+            { 'name': 'Fibroid/Myomectomy',  "id": "hdfc_ergo_ped_fall_accidental_injury" },
+            { 'name': 'Fracture with implant/rod/screw/plate' , "id": "hdfc_ergo__ped_fracture_with_implant",},
+            { 'name': 'Other' ,  "id": "hdfc_ergo_ped_other_diseases", }
         ]
     },
     payment_screen: {

@@ -256,7 +256,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 // }
 
                 body = {
-                    "application_id": "78f0b856-28e6-4ef1-9933-369be4ff916b",
+                    "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -267,43 +267,6 @@ class GroupHealthPlanAddressDetails extends Component {
                         }
                     }
                 }
-<<<<<<< Updated upstream
-=======
-                // body = {
-                //     "address_details": {
-                //         "permanent_address": {
-
-
-                //             "state": form_data.state,
-                //             "addr_line1": form_data.addressline,
-
-
-                //             "country": form_data.country || 'INDIA',
-                //             "pincode": form_data.pincode,
-
-                //             "addr_line2": "annapoorneshwari_nagar",
-
-                //             "city": form_data.city
-                //         },
-                //         "correspondence_addr_same": "n",
-                //         "correspondence_address": {
-                //             "area": "madhudi",
-                //             "district": "agali",
-                //             "state": "Andhra Pradesh",
-                //             "addr_line1": "158, 4th cross, 5th main, RHCS layout",
-                //             "landmark": "statue",
-                //             "house_no": "158",
-                //             "country": "India",
-                //             "pincode": "560091",
-                //             "area_id": null,
-                //             "addr_line2": "agali, Andhra",
-                //             "street": null,
-                //             "city": "AGALI RURAL"
-                //         }
-                //     }
-
-                // }
->>>>>>> Stashed changes
             }
 
             // }

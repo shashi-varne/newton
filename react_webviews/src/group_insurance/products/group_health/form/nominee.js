@@ -268,23 +268,13 @@ class GroupHealthPlanNomineeDetails extends Component {
 
 
             let body = {
-                "application_id": "78f0b856-28e6-4ef1-9933-369be4ff916b", // 78f0b856-28e6-4ef1-9933-369be4ff916b
+                "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac", // 7d02ff2c-f16d-4daa-8071-c7ae04b36aac
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
                 }
             }
-<<<<<<< Updated upstream
-=======
 
-            // let body = {
-            //     nominee_details : {
-            //         name: this.state.form_data.name,
-            //         relation: this.state.form_data.relation
-            //     }
-            // }
-
->>>>>>> Stashed changes
             if (this.state.providerConfig.provider_api === 'star') {
 
                 // let appointee_account_key =  {};
@@ -308,10 +298,11 @@ class GroupHealthPlanNomineeDetails extends Component {
                 // }
 
                 body = {
+                    "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
                     nominee_account_key: {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,
-                        "DOB": this.state.form_data.dob
+                        // "DOB": this.state.form_data.dob
                     },
                     // appointee_account_key: appointee_account_key
                     

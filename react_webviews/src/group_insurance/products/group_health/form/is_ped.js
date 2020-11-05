@@ -120,6 +120,76 @@ class GroupHealthPlanIsPed extends Component {
         })
     }
 
+    // handleClick = async () => {
+
+    //     this.sendEvents('next');
+    //     let form_data = this.state.form_data;
+    //     let canSubmitForm = true;
+    //     if (!form_data.is_ped) {
+    //         form_data.is_ped_error = 'Please select this';
+    //         canSubmitForm = false;
+    //     }
+
+    //     this.setState({
+    //         form_data: form_data
+    //     })
+
+    //     let member_base = this.state.lead.member_base;
+
+
+    //     let body = {};
+    //     let next_state = '';
+    //     body['self_account_key'] = {
+    //         ped_exists: 'false'
+    //     };
+
+    //     for (var i in member_base) {
+    //         let key = member_base[i].key;
+    //         let backend_key = member_base[i].backend_key;
+    //         body[backend_key] = {};
+
+    //         if(key !== 'applicant') {
+    //             if (form_data[key + '_checked']) {
+    //                 body[backend_key].ped_exists = 'true';
+    
+    //                 if (!next_state) {
+    //                     next_state = key;
+    //                 }
+    //             } else {
+    //                 body[backend_key].ped_exists = 'false';
+    //             }
+    //         }
+            
+    //     }
+
+    //     // if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
+    //     //     canSubmitForm = false;
+    //     //     toast('Please select atleast one');
+    //     // }
+
+    //     // if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
+    //     //     next_state = 'self';
+    //     //     body['self_account_key'].ped_exists = 'true';
+    //     // }
+
+    //     // if(form_data.is_ped === 'YES' && this.props.edit) {
+    //     //     this.setState({
+    //     //         force_forward: true
+    //     //     })
+    //     // }
+
+    //     if (canSubmitForm) {
+
+    //         this.setState({
+    //             next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
+    //         })
+    //         console.log(body)
+    //         // this.updateLead(body)
+    //     }
+    // }
+
+
+
     handleClick = async () => {
 
         this.sendEvents('next');
@@ -134,8 +204,9 @@ class GroupHealthPlanIsPed extends Component {
             form_data: form_data
         })
 
-        let member_base = this.state.lead.member_base;
+        let member_base = this.state.lead.insured_people_details;
 
+        console.log(this.state.lead.insured_people_details,member_base, "member_base")
 
         let body = {};
         let next_state = '';
@@ -143,23 +214,54 @@ class GroupHealthPlanIsPed extends Component {
             ped_exists: 'false'
         };
 
-        for (var i in member_base) {
-            let key = member_base[i].key;
-            let backend_key = member_base[i].backend_key;
-            body[backend_key] = {};
 
-            if(key !== 'applicant') {
+
+        // {
+        //     "application_id": "ca0162e2-8a98-4cf9-a1fe-dc88b0e1c9b9",
+        //     "insured_people_details": [
+        //         {
+        //              "ped" : true,
+        //             "relation_key": "child_account1_key"
+                  
+        //         },
+        //         {
+        //             "relation_key": "self_account_key",
+        //               "ped" : true
+        //         },
+        //         {
+        //             "relation_key": "spouse_account_key",
+        //              "ped" : true
+        //         }
+        //     ]
+        // }
+
+        let insured_people_details = []
+
+        for (var i in member_base) {
+            let backend_key = member_base[i].insured_person.relation_key;
+            let key = member_base[i].insured_person.relation;
+            // let backend_key = member_base[i].backend_key;
+            body[backend_key] = {};
+            console.log("..........................", form_data, "........................")
+            if (backend_key !== 'applicant') {
                 if (form_data[key + '_checked']) {
-                    body[backend_key].ped_exists = 'true';
-    
+                    let obj = {
+                        "relation_key": backend_key,
+                        'ped': true
+                    }
+                    insured_people_details.push(obj)
+                    // body[backend_key].ped_exists = 'true';
                     if (!next_state) {
                         next_state = key;
                     }
                 } else {
-                    body[backend_key].ped_exists = 'false';
+                    let obj = {
+                        "relation_key": backend_key,
+                        'ped': false
+                    }
+                    insured_people_details.push(obj)
                 }
             }
-            
         }
 
         // if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
@@ -177,18 +279,21 @@ class GroupHealthPlanIsPed extends Component {
         //         force_forward: true
         //     })
         // }
-
+                                         console.log(canSubmitForm)
         if (canSubmitForm) {
 
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
-            console.log(body)
-            // this.updateLead(body)
+            let body = {
+                "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac", //07f87365-2665-49c6-81e8-cf880062baf0
+                insured_people_details
+            }
+            console.log(body,"..........................",insured_people_details)
+            this.updateLead(body);
         }
 
     }
-
 
     sendEvents(user_action) {
         let eventObj = {
