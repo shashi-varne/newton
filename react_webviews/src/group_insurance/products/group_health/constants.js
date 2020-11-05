@@ -20,7 +20,7 @@ export const hdfc = {
         'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
         'dob_married_male': { min: 21, max: 90 },
-        'dob_married_female': {min: 18}
+        'dob_married_female': {min: 18, max: 90}
     },
     applicant_detail_screen: {
         fields: [
