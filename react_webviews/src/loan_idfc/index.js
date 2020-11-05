@@ -14,6 +14,10 @@ import Landing from "./components/general/landing";
 import MobileVerify from "./components/general/mobile_verify";
 import OtpVerification from "./components/general/otp_verify";
 import JourneyMap from "./components/general/journey";
+import KnowMore1 from "./components/general/know_more1";
+import KnowMore2 from "./components/general/know_more2";
+import KnowMore3 from "./components/general/know_more3";
+import Calculator from "./components/general/calculator";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -57,6 +61,10 @@ const Lending = props => {
           <Route path={`${url}/edit-number`} component={MobileVerify} />
           <Route path={`${url}/otp-verify`} component={OtpVerification} />
           <Route path={`${url}/journey-map`} component={JourneyMap} />
+          <Route path={`${url}/know-more-1`} component={KnowMore1} />
+          <Route path={`${url}/know-more-2`} component={KnowMore2} />
+          <Route path={`${url}/know-more-3`} component={KnowMore3} />
+          <Route path={`${url}/calculator`} component={Calculator} />
        
           <Route component={NotFound} />
 

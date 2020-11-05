@@ -1050,3 +1050,45 @@ input#pan {
   color: #767E86;
   margin-top: 10px;
 }
+
+.toolbar-title {
+  width: 90%;
+
+  .head {
+    text-align: center;
+    font-size: 13px;
+    color: #767E86;
+  }
+}
+
+.journey-progress {
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+  color: var(--primary);
+
+  .hhr {
+    display: flex;
+    align-items: center;
+
+    .hr1 {
+      border: 1px solid #fff;
+      width: 50%;
+    }
+
+    .hr2 {
+      border: 1px solid var(--primary);
+      width: 50%;
+    }
+
+    .dot {
+      height: 8px;
+      width: 8px;
+      border: 1px solid #4f2da7;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+    }
+  }
+  
+}

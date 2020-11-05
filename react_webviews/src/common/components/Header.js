@@ -35,7 +35,31 @@ const Header = ({ classes, title, count, total, current, goBack,
          <Close />}
       </IconButton>
 
-      <div>
+      <div className="toolbar-title">
+        {/* <div className="head">
+          Application form
+        </div>
+        <div style={{display:'flex', flexFlow:1}}>
+          <div className="journey-progress">
+            <div className="hhr">
+              <hr className="hr1" />
+              <span className="dot"></span>
+              <hr className="hr2" />
+            </div>
+            
+            <div>KYC status check</div>
+          </div>
+          <div className="journey-progress">
+          <div className="hhr"><hr className="hr2" /><span className="dot"></span><hr className="hr2" /></div>
+            <div>KYC status check</div>
+          </div>
+          <div className="journey-progress">
+          <div className="hhr"><hr className="hr2" /><span className="dot"></span><hr className="hr1" /></div>
+            <div>KYC status check</div>
+          </div>
+        </div> */}
+
+
         <div
         style={style}
           className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}

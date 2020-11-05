@@ -5,13 +5,6 @@ import Header from '../../common/components/Header';
 import {didmount} from '../../common/components/container_functions';
 
 import Footer from "./footer";
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  // DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
 
 import { nativeCallback } from "utils/native_callback";
 import '../../utils/native_listner';
@@ -116,45 +109,6 @@ class Container extends Component {
     });
   }
 
-  handlePopup = () => {
-  
-    this.setState({
-      openPopup: false
-    });
-
-    if(this.state.callbackType === 'loan_home') {
-      this.navigate('/loan/home');
-    } else if(this.state.callbackType === 'loan_journey') {
-      this.navigate('/loan/journey');
-    } else {
-      nativeCallback({ action: this.state.callbackType });
-    }
-
-  }
-
-  renderPopup = () => {
-    return (
-      <Dialog
-          fullScreen={false}
-          open={this.state.openPopup}
-          onClose={this.handleClose}
-          aria-labelledby="responsive-dialog-title"
-      >
-          <DialogContent>
-              <DialogContentText>{this.state.popupText}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-              <Button onClick={this.handlePopup} color="default" autoFocus>
-                  Yes
-              </Button>
-              <Button onClick={this.handleClose} color="default">
-                  No
-              </Button>
-          </DialogActions>
-      </Dialog>
-  );
-  }
-
   render() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -172,7 +126,7 @@ class Container extends Component {
           {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
           <Header
             disableBack={this.props.disableBack}
-            // title={this.props.title}
+            title={this.props.title}
             smallTitle={this.props.smallTitle}
             provider={this.props.provider}
             count={this.props.count}
@@ -233,8 +187,6 @@ class Container extends Component {
             />
           )}
           {/* No Internet */}
-          {this.renderDialog()}
-          {this.renderPopup()}
         </div>
       );
     }
