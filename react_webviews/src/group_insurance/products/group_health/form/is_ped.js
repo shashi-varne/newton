@@ -42,7 +42,7 @@ class GroupHealthPlanIsPed extends Component {
         })
             
         let account_type = lead.quotation_details.insurance_type;
-        console.log(lead,account_type)
+
         let radio_title = 'Do you have any pre-existing diseases?';
         if (account_type !== 'self') {
             radio_title = 'Does any of the members have any pre-existing disease?';
@@ -54,20 +54,16 @@ class GroupHealthPlanIsPed extends Component {
         let form_data = {};
 
         for (var mem in member_base) {
-            let mem_info = member_base[mem];   console.log(mem_info)
+            let mem_info = member_base[mem];
             if (mem_info.insured_person.ped) {
                 is_ped = 'YES';
-                console.log(mem_info.insured_person.relation)
                 form_data[mem_info.insured_person.relation + '_checked'] = true;
             }
-
-            console.log(form_data)
         }
 
         form_data.is_ped = is_ped;
 
         for (var key in form_data) {
-            console.log(key, form_data)
             this.setState({
                 [key]: form_data[key]
             });
@@ -120,76 +116,6 @@ class GroupHealthPlanIsPed extends Component {
         })
     }
 
-    // handleClick = async () => {
-
-    //     this.sendEvents('next');
-    //     let form_data = this.state.form_data;
-    //     let canSubmitForm = true;
-    //     if (!form_data.is_ped) {
-    //         form_data.is_ped_error = 'Please select this';
-    //         canSubmitForm = false;
-    //     }
-
-    //     this.setState({
-    //         form_data: form_data
-    //     })
-
-    //     let member_base = this.state.lead.member_base;
-
-
-    //     let body = {};
-    //     let next_state = '';
-    //     body['self_account_key'] = {
-    //         ped_exists: 'false'
-    //     };
-
-    //     for (var i in member_base) {
-    //         let key = member_base[i].key;
-    //         let backend_key = member_base[i].backend_key;
-    //         body[backend_key] = {};
-
-    //         if(key !== 'applicant') {
-    //             if (form_data[key + '_checked']) {
-    //                 body[backend_key].ped_exists = 'true';
-    
-    //                 if (!next_state) {
-    //                     next_state = key;
-    //                 }
-    //             } else {
-    //                 body[backend_key].ped_exists = 'false';
-    //             }
-    //         }
-            
-    //     }
-
-    //     // if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
-    //     //     canSubmitForm = false;
-    //     //     toast('Please select atleast one');
-    //     // }
-
-    //     // if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
-    //     //     next_state = 'self';
-    //     //     body['self_account_key'].ped_exists = 'true';
-    //     // }
-
-    //     // if(form_data.is_ped === 'YES' && this.props.edit) {
-    //     //     this.setState({
-    //     //         force_forward: true
-    //     //     })
-    //     // }
-
-    //     if (canSubmitForm) {
-
-    //         this.setState({
-    //             next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
-    //         })
-    //         console.log(body)
-    //         // this.updateLead(body)
-    //     }
-    // }
-
-
-
     handleClick = async () => {
 
         this.sendEvents('next');
@@ -206,15 +132,11 @@ class GroupHealthPlanIsPed extends Component {
 
         let member_base = this.state.lead.insured_people_details;
 
-        console.log(this.state.lead.insured_people_details,member_base, "member_base")
-
         let body = {};
         let next_state = '';
         body['self_account_key'] = {
             ped_exists: 'false'
         };
-
-
 
         // {
         //     "application_id": "ca0162e2-8a98-4cf9-a1fe-dc88b0e1c9b9",
@@ -242,7 +164,7 @@ class GroupHealthPlanIsPed extends Component {
             let key = member_base[i].insured_person.relation;
             // let backend_key = member_base[i].backend_key;
             body[backend_key] = {};
-            console.log("..........................", form_data, "........................")
+          
             if (backend_key !== 'applicant') {
                 if (form_data[key + '_checked']) {
                     let obj = {
@@ -278,18 +200,18 @@ class GroupHealthPlanIsPed extends Component {
         //     this.setState({
         //         force_forward: true
         //     })
-        // }
-                                         console.log(canSubmitForm)
+        //
+
         if (canSubmitForm) {
 
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
             let body = {
-                "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac", //07f87365-2665-49c6-81e8-cf880062baf0
+                "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5", //6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
                 insured_people_details
             }
-            console.log(body,"..........................",insured_people_details)
+
             this.updateLead(body);
         }
 
@@ -345,7 +267,7 @@ class GroupHealthPlanIsPed extends Component {
     };
 
     renderMembers = (props, index) => {
-        console.log(props, props.insured_person.relation)
+
         if (props.key === 'applicant') {
             return;
         }
@@ -362,7 +284,7 @@ class GroupHealthPlanIsPed extends Component {
     }
 
     render() {
-        console.log("this.state.form_data", this.state.form_data)
+
         return (
             <Container
                 events={this.sendEvents('just_set_events')}

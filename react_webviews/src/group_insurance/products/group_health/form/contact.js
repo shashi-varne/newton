@@ -39,7 +39,7 @@ class GroupHealthPlanContactDetails extends Component {
             })
         }
 
-        let lead = this.state.lead;   console.log(lead)
+        let lead = this.state.lead;
         let form_data = {
             email: lead.buyer_details.email || '',
             mobile_number: lead.buyer_details.phone_number || ''
@@ -144,22 +144,14 @@ class GroupHealthPlanContactDetails extends Component {
 
         if (canSubmitForm) {
 
-            // let body = {
-            //     "email": this.state.form_data.email,
-            //     "mobile_number": this.state.form_data.mobile_number
-            // }
-
-            let body = {        //        new api
-                    "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
-                    "buyer_details": {
-                        "phone_number": this.state.form_data.mobile_number,
-                        "email": this.state.form_data.email,
-                    }
+            let body = {
+                "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
+                "buyer_details": {
+                    "phone_number": this.state.form_data.mobile_number,
+                    "email": this.state.form_data.email,
+                }
             }
 
-
-
-            // console.log(body)
             this.updateLead(body);
         }
     }

@@ -30,12 +30,14 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   onload() {
 
-
-    let { member_base, account_type } = this.state.lead;
+    let { insured_people_details, quotation_details } = this.state.lead;
+    
+    let account_type  =  quotation_details.insurance_type
+    let member_base = [];
 
     let none_option_selected = true;
     for (var mem in member_base) {
-      if(member_base[mem].life_style_question_exists) {
+      if(member_base[mem].answers.life_style_details.length > 0) {
         none_option_selected = false;
         break;
       }
@@ -51,11 +53,25 @@ class GroupHealthPlanLifestyleDetail extends Component {
         life_style_question_exists: none_option_selected
       })
     }
+
+    insured_people_details.forEach(element => {
+      member_base.push(element.insured_person)
+    });
+
+    member_base.forEach(element => {
+      element.key = element.relation
+    });
+
+    member_base.push({
+        key: 'none'
+    })
+       console.log(member_base)
+
     let list = [];
-
+   
     if (account_type === "self") {
-
-      member_base[0].life_style_question_exists = member_base[0].life_style_question_exists ? 'Yes' : 'No';
+  
+      member_base[0].life_style_question_exists = member_base[0].answer.life_style_details.length > 0 ? 'Yes' : 'No';
 
       member_base[0].radio_options =  [
         {
@@ -176,6 +192,10 @@ class GroupHealthPlanLifestyleDetail extends Component {
   handleCheckbox = (event, index) => {
 
     let { member_base, none_option_selected } = this.state;
+
+
+
+
     member_base[index].life_style_question_exists = event.target.checked;
 
     let isNone = member_base[index].key === 'none';
@@ -268,35 +288,62 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
 
-    let body = {};
+    // let body = {};
 
-    this.sendEvents("next", {member_base: member_base});
-    if (canProceed) {
+    // this.sendEvents("next", {member_base: member_base});
+    // if (canProceed) {
+    //   for (var i in member_base) {
+    //     let member_data = member_base[i];
+    //     if (member_data.key !== 'none') {
+    //       let backend_key = member_data.backend_key;
+    //       body[backend_key] = {};
+    //       if ((member_data.life_style_question_exists  === 'Yes' ||
+    //       member_data.life_style_question_exists === true) && !none_option_selected) {
+    //         body[backend_key].life_style_question_exists = 'true';
+    //         body[backend_key].life_style_question = {
+    //           answer: 'true',
+    //           answer_description: member_data.life_style_question.answer_description,
+    //           start_date: member_data.life_style_question.start_date
+    //         }
+    //       } else {
+    //         body[backend_key].life_style_question_exists = 'false';
+    //         body[backend_key].life_style_question = {}
+    //       }
+    //     }
+    //   }
+    //   this.updateLead(body);
+    // }
 
-      for (var i in member_base) {
-        let member_data = member_base[i];
 
-        if (member_data.key !== 'none') {
-          let backend_key = member_data.backend_key;
-          body[backend_key] = {};
 
-          if ((member_data.life_style_question_exists  === 'Yes' ||
-          member_data.life_style_question_exists === true) && !none_option_selected) {
-            body[backend_key].life_style_question_exists = 'true';
-            body[backend_key].life_style_question = {
-              answer: 'true',
-              answer_description: member_data.life_style_question.answer_description,
-              start_date: member_data.life_style_question.start_date
-            }
-          } else {
-            body[backend_key].life_style_question_exists = 'false';
-            body[backend_key].life_style_question = {}
-          }
-        }
-
-      }
-      this.updateLead(body);
+    let body = {
+      "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
     }
+    this.sendEvents("next", {member_base: member_base});
+ 
+   if (canProceed) {
+     body["answers"] = {}
+     for (var i in member_base) {
+       let member_data = member_base[i];
+       if (member_data.key !== 'none') {
+         let backend_key = member_data.backend_key;
+         if ((member_data.life_style_question_exists === 'Yes' ||
+             member_data.life_style_question_exists === true) && !none_option_selected) {
+           body["answers"][backend_key] = {};
+           let obj = {
+             "yes_no": true,
+             "since_when": member_data.life_style_question.start_date,
+             "description": member_data.life_style_question.answer_description,
+             "question_id": "religare_lsd_smoke"
+           }
+           body["answers"][backend_key] = {
+            "life_style_details": [obj]
+          };
+        } 
+      }
+    }                                            console.log(body)
+      this.updateLead(body);
+   }
   };
 
   handleClose = () => {
@@ -314,6 +361,9 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   render() {
     let { account_type, list } = this.state;
+
+    console.log(list)
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}

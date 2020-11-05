@@ -40,30 +40,26 @@ class GroupHealthPlanSelectPed extends Component {
 
 
     onload = () => {
-console.log("927992799279")
+
         this.setState({
             options: [],
             show_checkbox: false
         })
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
 
-        let {lead, provider} = this.state;    console.log("lead............",lead)
+        let {lead, provider} = this.state;   
         let member_base = lead.insured_people_details; 
         let member_key = this.props.match.params.member_key;
-           console.log(member_base , "......................"  ,member_key,lead)
-        let member_info_index  = member_base.findIndex(data => data.insured_person.relation === member_key); console.log(member_info_index )
+
+        let member_info_index  = member_base.findIndex(data => data.insured_person.relation === member_key);
         let member_info = member_base[member_info_index]
-        console.log( member_info )
-        let backend_key = member_info.insured_person.relation_key;      console.log( member_info.answers.pre_existing_diseases)
+    
+        let backend_key = member_info.insured_person.relation_key;      
         let ped_diseases_name = member_info.answers.pre_existing_diseases; 
 
         // ped_diseases_name = (ped_diseases_name || '').split(',');
 
          
-
-
-
-          console.log(this.state.screenData.ped_list)
         let options = this.state.screenData.ped_list.map((item, index) => {
             item.checked = false;
             item.start_date = '';
@@ -72,7 +68,7 @@ console.log("927992799279")
             item.question_id = item.id
             return item;
         });
-        console.log(options)
+
         if(this.state.provider === 'RELIGARE') {
             let ped_data = member_info.ped_diseases || [];
 
@@ -94,7 +90,6 @@ console.log("927992799279")
 
         if(provider === 'HDFCERGO') {
             for (let disease_name of ped_diseases_name) {
-                  console.log(ped_diseases_name)
                 let matched;
     
                 for (let opt of options) {
@@ -194,11 +189,6 @@ console.log("927992799279")
 
         let current_member = member_base[member_info_index];
 
-
-        // console.log( member_base[member_info_index], ";;;;;;;;;;;;;;;;;;;;;;;;;", current_member)
-
-
-
         if (options[options.length - 1].checked &&
             !this.state.pedOther) {
             toast('Enter details in other or uncheck it');
@@ -215,22 +205,19 @@ console.log("927992799279")
                         }
                     }
                 }
-            }                 console.log(next_state, ".............member_base................",member_base)
-
-
+            }               
             let body = {};
             let pre_existing_diseases = []
             if(provider === 'HDFCERGO') {
                 let ped_diseases_name = '';
 
                 for(var j in options) {
-                    console.log(options,j)
+        
                     if(options[j].checked) {
     
                         let value = options[j].name;
 
-                        console.log("-----------------------------------------",value)
-    
+                      
                         if(options[j].name === 'Other') {
                             value = this.state[this.state.otherInputData.name];
                         }
@@ -273,7 +260,7 @@ console.log("927992799279")
 
 
            body = {
-               "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac", //7d02ff2c-f16d-4daa-8071-c7ae04b36aac
+               "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5", //6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
                "answers": {
                    [this.state.backend_key]: {
                        pre_existing_diseases
@@ -343,7 +330,7 @@ console.log("927992799279")
                 } //to store the member specific info, because we will not hit the api again
             }
 
-            console.log(lead)
+     
             lead.insured_people_details[member_info_index].insured_person = current_member;
 
             this.setState({
@@ -352,7 +339,7 @@ console.log("927992799279")
                 lead: lead
             })
 
-              console.log(body, ".......................................body")
+
             this.updateLead(body);
         }
     }

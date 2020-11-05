@@ -204,7 +204,7 @@ class GroupHealthStarPlanSelectPed extends Component {
       toast("Select atleast one option");
     }
    let body = {
-     "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac"
+     "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5"
    }
    if (canProceed) {
      body.answers = {}

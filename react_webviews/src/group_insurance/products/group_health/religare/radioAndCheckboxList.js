@@ -38,9 +38,9 @@ class radioAndCheckboxList extends Component {
             name="answer_description"
             id="answer_description"
             placeholder="Lorem ipsum lorem ipsum"
-            value={option.life_style_question.answer_description || ""}
-            error={!!option.life_style_question.answer_description_error}
-            helperText={option.life_style_question.answer_description_error}
+            // value={option.life_style_question.answer_description || ""}
+            // error={!!option.life_style_question.answer_description_error}
+            // helperText={option.life_style_question.answer_description_error}
             onChange={(event) => this.props.handleChange(event, index)}
           />
         </div>
@@ -53,9 +53,9 @@ class radioAndCheckboxList extends Component {
             className="date"
             placeholder="MM/YYYY"
             maxLength="7"
-            value={option.life_style_question.start_date || ""}
-            error={!!option.life_style_question.start_date_error}
-            helperText={option.life_style_question.start_date_error}
+            // value={option.life_style_question.start_date || ""}
+            // error={!!option.life_style_question.start_date_error}
+            // helperText={option.life_style_question.start_date_error}
             onChange={(event) => this.props.handleChange(event, index)}
           />
         </div>
@@ -134,6 +134,8 @@ class radioAndCheckboxList extends Component {
               <div>
                 <p>Who is the member?</p>
                 <Grid container spacing={0}>
+                      
+                      
 
                   {item.members.map((member, index_member) => (
                     member.key !== 'applicant' && <div key={index_member}>

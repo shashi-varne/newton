@@ -47,7 +47,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let lead = this.state.lead || {};       
    
-    let occupationOptions = this.state.screenData.occupation_opts;     console.log(occupationOptions)    
+    let occupationOptions = this.state.screenData.occupation_opts;
 
     this.setState({
       occupationOptions: occupationOptions
@@ -79,18 +79,18 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
-    // for (var i = 0; member_base && i < member_base.length; i++) {
-    //   let key = member_base[i].key;
 
-    //   if (member_key === key) {
-    //     backend_key = member_base[i].backend_key;
-    //     if (i !== member_base.length - 1) {
-    //       next_state = member_base[i + 1].key;
-    //       break;
-    //     }
-    //   }
 
-    // }
+    for (var i = 0; member_base && i < member_base.length; i++) {
+      let key = member_base[i].insured_person.relation
+      if (member_key === key) {
+        backend_key = member_base[i].relation_key;
+        if (i !== member_base.length - 1) {
+          next_state = member_base[i + 1].insured_person.relation
+          break;
+        }
+      }
+    }
 
     if (this.props.edit) {
       next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
@@ -111,7 +111,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     });
                   
-                 console.log(form_data, "==--------")
+  
     // let form_data = lead[backend_key] || {};
         let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
@@ -154,16 +154,16 @@ class GroupHealthPlanPersonalDetails extends Component {
       next_state: next_state,
       // member_key: member_key,
       form_data: form_data,
-      // age: age,
+      age: age,
       // lead: lead,
       // backend_key: backend_key,
-      // height_options: height_options,
+      height_options: height_options,
       // show_loader: false,
       // header_title: header_title,
       // header_subtitle: header_subtitle,
       // selectedIndex: selectedIndex,
-      // height: height,
-      // pan_needed: pan_needed,
+      height: height,
+      pan_needed: pan_needed,
       // spouse_relation: spouse_relation,
       // dobNeeded: dobNeeded
     }, () => {
@@ -385,24 +385,10 @@ class GroupHealthPlanPersonalDetails extends Component {
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
       }
 
-      
-
-
-      // let body = {
-      //   [this.state.backend_key]: {
-      //     "name": form_data.name || '',
-      //     "dob": form_data.dob || '',
-      //     "gender": form_data.gender || gender,
-      //     "height": form_data.height || '',
-      //     "weight": form_data.weight || '',
-      //   }
-      // }
-     
-
-
+  
       if (this.state.backend_key === 'self_account_key') {
            var body = {
-          "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",   //7d02ff2c-f16d-4daa-8071-c7ae04b36aac
+          "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",   //6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -423,7 +409,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       } else {
         var body = {
-          "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
+          "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -440,7 +426,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
          var body = {
-          "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",  //7d02ff2c-f16d-4daa-8071-c7ae04b36aac
+          "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",  //6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -454,8 +440,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       }
 
-      
-      console.log(body)
+                                           console.log(body)
       this.updateLead(body);
     }
   }

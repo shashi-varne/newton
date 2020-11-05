@@ -58,7 +58,10 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         let lead = this.state.lead || {}; 
         let form_data = lead.nominee_details || {};
-        let appointee_account_key = lead.appointee_account_key || {}
+        let relation = form_data.relation ;     relation.toUpperCase()
+        console.log(relation)
+
+        let appointee_account_key = lead.nominee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
         if (lead.appointee_account_key) {
@@ -196,7 +199,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
 
         const { name, dob, relation } = form_data;
-        console.log(name, dob, relation)
+
         if (!isEmpty(form_data) && noOfWords(name) < 2) {
             form_data.name_error = 'Enter valid full name';
         } else if (name && !validateAlphabets(name)) {
@@ -257,18 +260,10 @@ class GroupHealthPlanNomineeDetails extends Component {
                 }
             }
         }
-        console.log("canSubmitFormcanSubmitForm : ", canSubmitForm)
-        if (!canSubmitForm) {
-            // let body = {
-            //     nominee_account_key: {
-            //         name: this.state.form_data.name,
-            //         relation: this.state.form_data.relation,
-            //     }
-            // }
 
-
+        if (canSubmitForm) {
             let body = {
-                "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac", // 7d02ff2c-f16d-4daa-8071-c7ae04b36aac
+                "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5", // 6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -284,9 +279,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     //     "relation": this.state.form_data.appointeerelation,
                     //     "DOB": this.state.form_data.appointeedob
                     // }
-    
                 }
-
                 // body = {
                 //     nominee_account_key: {
                 //         name: this.state.form_data.name,
@@ -294,21 +287,19 @@ class GroupHealthPlanNomineeDetails extends Component {
                 //         dob: this.state.form_data.dob
                 //     },
                 //     appointee_account_key: appointee_account_key
-                    
                 // }
 
                 body = {
-                    "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
+                    "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
                     nominee_account_key: {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,
                         // "DOB": this.state.form_data.dob
                     },
-                    // appointee_account_key: appointee_account_key
-                    
+                    // appointee_account_key: appointee_account_key        
                 }
             }
-            console.log(body, "=-------------------------------------------body"  ,this.state.form_data,this.state.form_data.dob)
+
             this.updateLead(body);     
         }
     }
@@ -408,7 +399,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     render() {
         const { showAppointee = false, showdob = false } = this.state.providerConfig.nominee_screen;
-
+                                  console.log(this.state.form_data.relation,"............", this.state.form_data)
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -444,7 +435,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             label="Relationship"
                             error={this.state.form_data.relation_error ? true : false}
                             helperText={this.state.form_data.relation_error}
-                            value={this.state.form_data.relation || ''}
+                            value={ this.state.form_data.relation || ''}
                             name="relation"
                             onChange={this.handleChange('relation')} />
                     </div>

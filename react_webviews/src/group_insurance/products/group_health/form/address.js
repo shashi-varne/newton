@@ -229,8 +229,8 @@ class GroupHealthPlanAddressDetails extends Component {
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
-                    canSubmitForm = false;
-                    toast('Please check all the errors');
+                    // canSubmitForm = false;  -----------------------------> some ERROR TO FIX
+                    // toast('Please check all the errors'); 
                     break;
                 }
             }
@@ -242,21 +242,10 @@ class GroupHealthPlanAddressDetails extends Component {
         });
 
         if (canSubmitForm) {
-
             let body = {};
             if (provider === 'HDFCERGO') {
-                // body = {
-                //     permanent_address: {  //for ergo, in backend we are storing current in permanent_address key
-                //         addressline: form_data.addressline,
-                //         addressline2: form_data.addressline2,
-                //         pincode: form_data.pincode,
-                //         state: form_data.state,
-                //         city: form_data.city
-                //     }
-                // }
-
                 body = {
-                    "application_id": "7d02ff2c-f16d-4daa-8071-c7ae04b36aac",
+                    "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -269,87 +258,30 @@ class GroupHealthPlanAddressDetails extends Component {
                 }
             }
 
-            // }
-
-
-
-            // if (provider === 'RELIGARE') {
-
-                // body = {
-                //     "address_details": {
-                //         "permanent_address": {
-
-
-                //             "state": form_data.state,
-                //             "addr_line1": form_data.addressline,
-
-
-                //             "country": form_data.country || 'INDIA',
-                //             "pincode": form_data.pincode,
-
-                //             "addr_line2": "annapoorneshwari_nagar",
-
-                //             "city": form_data.city
-                //         },
-                //         "correspondence_addr_same": "n",
-                //         "correspondence_address": {
-                //             "state": form_data.state,
-                //             "addr_line1":form_data.addressline,
-                //             "area_id": null,
-                //             "addr_line2":  form_data.addressline2,
-                //             "street": null,
-                //             "city":form_data.city
-                //         }
-                //     }
-
-                // }
-
-            // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             if (provider === 'RELIGARE') {
-
                 body = {
-
-                    correspondence_address: {
-                        addressline: form_data.addressline,
-                        addressline2: form_data.addressline2,
-                        pincode: form_data.pincode,
-                        state: form_data.state,
-                        city: form_data.city
-                    },
-
-                    permanent_address: {
-                        addressline: checked ? form_data.addressline : form_data.p_addressline,
-                        addressline2: checked ? form_data.addressline2 : form_data.p_addressline2,
-                        pincode: checked ? form_data.pincode : form_data.p_pincode,
-                        state: checked ? form_data.state : form_data.p_state,
-                        city: checked ? form_data.city : form_data.p_city
-                    },
-
-                };
-
+                    "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
+                    "address_details": {
+                        "permanent_address": {
+                            "state": form_data.state,
+                            "addr_line1": form_data.addressline,
+                            "pincode": form_data.pincode,
+                            "addr_line2": form_data.addressline2,
+                            "city": form_data.city
+                        },
+                        "correspondence_addr_same": "n",
+                        "correspondence_address": {
+                            "state": checked ? form_data.state : form_data.p_state,
+                            "addr_line1": checked ? form_data.addressline : form_data.p_addressline,
+                            "pincode":checked ? form_data.pincode : form_data.p_pincode,
+                            "addr_line2":  checked ? form_data.addressline2 : form_data.p_addressline2,
+                            "city": checked ? form_data.city : form_data.p_city
+                        }
+                    }
+                }
             }
-console.log(body , form_data, "form_dataform_dataform_dataform_dataform_dataform_data") 
+            
             this.updateLead(body);
         }
     }

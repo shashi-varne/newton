@@ -133,9 +133,9 @@ export async function initialize() {
                 show_loader: true
             });
 
-            let app_id = '7d02ff2c-f16d-4daa-8071-c7ae04b36aac'
+            let app_id = '6d1fd6a3-2cde-4e7d-8456-aa1273e36db5'
 
-            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/star/get_application_details?application_id=${app_id}`;
+            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/get_application_details?application_id=${app_id}`;
 
             if(this.state.screen_name === 'final_summary_screen') {
                 url += `&forms_completed=true`;
@@ -421,7 +421,7 @@ export async function updateLead( body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/update_application_details' , body)
+        const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/update_application_details' , body)
 
         // const res = await Api.post('/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc', body)
 
