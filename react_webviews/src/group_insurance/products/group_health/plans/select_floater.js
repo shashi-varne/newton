@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { nativeCallback } from 'utils/native_callback';
-// import { getConfig } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 
-import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation } from 'utils/validators';
+import {  inrFormatDecimal, numDifferentiationInr, numDifferentiation, calculateAge } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import { childeNameMapper } from '../../../constants';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
+
 class GroupHealthPlanSelectFloater extends Component {
 
     constructor(props) {
@@ -18,6 +20,7 @@ class GroupHealthPlanSelectFloater extends Component {
             ctaWithProvider: true,
             premium_data_floater: [],
             show_loader: true,
+            disableFloaterOption: false,
             screen_name: 'cover_type_screen'
         }
 
@@ -26,7 +29,6 @@ class GroupHealthPlanSelectFloater extends Component {
 
     }
 
-
     componentWillMount() {
         this.initialize();
     }
@@ -34,16 +36,34 @@ class GroupHealthPlanSelectFloater extends Component {
     async componentDidMount() {
 
 
-        let post_body = this.state.groupHealthPlanData.post_body;
-        let selectedIndex = this.state.groupHealthPlanData.selectedIndexFloater || 0;
+        let {groupHealthPlanData} = this.state;
+        // data reset
+        groupHealthPlanData.add_ons_data = '';
+        groupHealthPlanData.net_premium_addons = '';
+
+        groupHealthPlanData.post_body.add_ons = '';
+        groupHealthPlanData.post_body.add_ons_json = '';
+
+        let post_body = groupHealthPlanData.post_body;
+        let selectedIndex = groupHealthPlanData.selectedIndexFloater || 0;
         let total_member = post_body.mem_info.adult + post_body.mem_info.child;
         this.setState({
             selectedIndex: selectedIndex,
-            sum_assured: this.state.groupHealthPlanData.sum_assured || post_body.sum_assured,
+            sum_assured: groupHealthPlanData.sum_assured || post_body.sum_assured,
             total_member: total_member,
             show_ind_mem_premium: this.state.providerConfig.show_ind_mem_premium
         });
 
+        if(post_body.mem_info.child > 0){
+            for(var key in post_body){
+                    if(key.includes('child') && calculateAge(post_body[key].dob, false) < 5){
+                        this.setState({disableFloaterOption: true });
+                    }
+            }
+        }
+
+      
+        
         try {
 
             const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`,
@@ -158,7 +178,10 @@ class GroupHealthPlanSelectFloater extends Component {
         this.navigate(this.state.next_screen || 'plan-select-cover-period');
     }
 
-    choosePlan = (index) => {
+    choosePlan = (index, props) => {
+        if(props.key === "NF" && this.state.disableFloaterOption){
+            return;
+        }
         this.setState({
             selectedIndex: index
         }, () => {
@@ -176,10 +199,11 @@ class GroupHealthPlanSelectFloater extends Component {
     }
 
     renderPlans = (props, index) => {
+        console.log(props);
         return (
 
             <div onClick={() => this.choosePlan(index, props)}
-                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''}`} key={index}>
+                className={`tile ${index === this.state.selectedIndex ? 'tile-selected' : ''} ${this.state.disableFloaterOption && props.key === "NF" ? 'tile-disabled': ''}`} key={index}>
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
@@ -249,38 +273,34 @@ class GroupHealthPlanSelectFloater extends Component {
 
     render() {
 
-
         return (
-            <Container
-                events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
-                title={'Select cover type'}
-                buttonTitle="CONTINUE"
-                withProvider={true}
-                buttonData={this.state.bottomButtonData}
-                handleClick={() => this.handleClick()}
-            >
-
-                <div className="common-top-page-subtitle flex-between-center">
-                    Choose how to use the sum insured across family members
-                 <img 
-                        className="tooltip-icon"
-                        data-tip="1. For entire family -<br />
+          <Container
+            events={this.sendEvents("just_set_events")}
+            showLoader={this.state.show_loader}
+            title={"Select cover type"}
+            buttonTitle="CONTINUE"
+            withProvider={true}
+            buttonData={this.state.bottomButtonData}
+            handleClick={() => this.handleClick()}
+          >
+            <div className="common-top-page-subtitle flex-between-center">
+              Choose how to use the sum insured across family members
+              <GenericTooltip
+                productName={getConfig().productName}
+                content={( <div>1. For entire family 
                         Also called 'Family floater', in this case sum insured is shared amongst the members. For ex- if the sum insured is ₹4 lacs, total claims of all the members together will be covered upto ₹4 lacs.<br />
-                        <br />
-                        2. For each member -<br />
-                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lacs, each member can individually claim upto ₹4 lacs."
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)}
-                        alt="" />
-                </div>
-                
-                <div className="group-health-plan-select-floater">
+                          <br></br>
+                        2. For each member 
+                        Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lacs, each member can individually claim upto ₹4 lacs.</div> )}
+              />
+            </div>
 
-                    <div className="generic-choose-input">
-                        {this.state.premium_data_floater.map(this.renderPlans)}
-                    </div>
-                </div>
-            </Container>
+            <div className="group-health-plan-select-floater">
+              <div className="generic-choose-input">
+                {this.state.premium_data_floater.map(this.renderPlans)}
+              </div>
+            </div>
+          </Container>
         );
     }
 }

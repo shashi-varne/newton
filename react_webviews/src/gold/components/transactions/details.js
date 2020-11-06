@@ -79,6 +79,10 @@ class GoldTransactionDetail extends Component {
       title = 'Bought ' + data.gold_weight + ' gms';
     }
 
+    if(type === 'buy_back') {
+      title = 'By offer ' + data.gold_weight + ' gms'; 
+    }
+
     if (type === 'sell') {
       title = 'Sold ' + data.gold_weight + ' gms';
     }
@@ -443,7 +447,7 @@ class GoldTransactionDetail extends Component {
         <div className="common-hr"></div>
 
         <div>
-          {!this.state.invoiceSent &&
+          {!this.state.invoiceSent && this.state.order.orderType !== 'buy_back' &&
             <div className="send-invoice">
               <SVG
                 preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}

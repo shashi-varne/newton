@@ -8,6 +8,9 @@ import { initialize, updateBottomPremium } from '../common_data';
 
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import { getConfig } from 'utils/functions';
+
 class GroupHealthPlanSelectCoverPeriod extends Component {
 
     constructor(props) {
@@ -77,7 +80,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select cover period',
-                'cover_period' : (this.state.premium_data || [])[(this.state.selectedIndex || 0)].tenure || ''
+                'cover_period' : ((this.state.premium_data || [])[(this.state.selectedIndex || 0)] || {}).tenure || ''
             }
         };
 
@@ -158,31 +161,28 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
 
         return (
-            <Container
-                events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
-                title="Select cover period"
-                buttonTitle="CONTINUE"
-                withProvider={true}
-                buttonData={this.state.bottomButtonData}
-                handleClick={() => this.handleClick()}
-            >
-
-                <div className="common-top-page-subtitle flex-between-center">
-                    Health expenses will be covered for this period
-                 <img 
-                        className="tooltip-icon"
-                        data-tip="As premium increases by insured age, policy with longer cover period reduces the overall premium.<br />70% of our users have taken a cover for 3 years."
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)}
-                        alt="" />
-                </div>
-                <div className="group-health-plan-select-sum-assured">
-
-                    <div className="generic-choose-input">
-                        {this.state.premium_data.map(this.renderPlans)}
-                    </div>
-                </div>
-            </Container>
+          <Container
+            events={this.sendEvents("just_set_events")}
+            showLoader={this.state.show_loader}
+            title="Select cover period"
+            buttonTitle="CONTINUE"
+            withProvider={true}
+            buttonData={this.state.bottomButtonData}
+            handleClick={() => this.handleClick()}
+          >
+            <div className="common-top-page-subtitle flex-between-center">
+              Health expenses will be covered for this period
+              <GenericTooltip
+                productName={getConfig().productName}
+                content="As premium increases by insured age, policy with longer cover period reduces the overall premium.70% of our users have taken a cover for 3 years."
+              />
+            </div>
+            <div className="group-health-plan-select-sum-assured">
+              <div className="generic-choose-input">
+                {this.state.premium_data.map(this.renderPlans)}
+              </div>
+            </div>
+          </Container>
         );
     }
 }

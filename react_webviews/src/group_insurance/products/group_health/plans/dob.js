@@ -113,7 +113,7 @@ class GroupHealthPlanDob extends Component {
 
         this.sendEvents('next');
 
-        let validation_props = this.state.validation_props;
+        let {validation_props, provider} = this.state;
 
         let canProceed = true;
         let final_dob_data = this.state.final_dob_data;
@@ -151,18 +151,19 @@ class GroupHealthPlanDob extends Component {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (age.age > dob_adult.max || age.age < dob_adult.min) {
-                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max} years`;
+                    if (manAgeCheck === key && age.age < dob_married_male.min) {
+                        dob_data.error = `Valid age is between ${dob_married_male.min} - ${dob_married_male.max - 1} years`;
                         canProceed = false;
-                    } else if (manAgeCheck === key && age.age < dob_married_male.min) {
-                        dob_data.error = `Minimum age is ${dob_married_male.min} for married male`;
+                    }
+                    else if(age.age > dob_adult.max || age.age < dob_adult.min) {
+                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max - 1} years`;
                         canProceed = false;
                     }
                     adult_ages.push(age.age);
                 } else {
                     let dob_child = validation_props.dob_child;
                     if (age.age > dob_child.max || (age.days < dob_child.minDays)) {
-                        dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max} years`;
+                        dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max - 1} years`;
                         canProceed = false;
                     }
                     child_ages.push(age.age);
@@ -214,8 +215,13 @@ class GroupHealthPlanDob extends Component {
                 post_body.self_account_key.gender = ui_members.self_gender;
             }
 
-            groupHealthPlanData.post_body = post_body;
+            if(provider === 'RELIGARE') {  //reset
+                post_body.eldest_member = '';
+                post_body.eldest_dob = '';
+            }
 
+            groupHealthPlanData.post_body = post_body;
+            
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
@@ -276,7 +282,7 @@ class GroupHealthPlanDob extends Component {
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
             >
-
+                
                 {this.state.final_dob_data.map(this.renderDobs)}
 
                 <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />

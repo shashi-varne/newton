@@ -5,13 +5,15 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 import { validateAlphabets, calculateAge, isValidDate, 
-    formatDate, dobFormatTest, IsFutureDate} from 'utils/validators';
+    formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import { isEmpty } from '../../../../utils/validators';
 import ReactTooltip from "react-tooltip";
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
+
 class GroupHealthPlanNomineeDetails extends Component {
 
     constructor(props) {
@@ -88,6 +90,10 @@ class GroupHealthPlanNomineeDetails extends Component {
             name = event.target.name;
         }
         var value = event.target ? event.target.value : event;
+
+        if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
+            return;
+        }
         var form_data = this.state.form_data || {};
 
         form_data[name] = value;
@@ -207,8 +213,10 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         
 
-        if (!relation) {
-            form_data.appointeerelation_error = 'please select relation'
+        let relationMap = this.state.relationshipOptions.filter(data => data.value === relation);
+
+        if (!relation || relationMap.length === 0) {
+            form_data.relation_error = 'please select relation'
         }
         
 
@@ -311,62 +319,72 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     renderAppointee = () => {
         return (
-            <React.Fragment>
-                <div className="common-top-page-subtitle flex-between-center" style={{marginTop:'20px'}}>
-                    Please add appointee details as the nominee is a minor (less than 18 yrs)
-                    <img 
-                        className="tooltip-icon"
-                        data-tip="The appointee must be an adult who will take care of the claim amount in case of death of the insured during the period that the nominee is a minor."
-                        src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
-                </div>
-                <div>Appointee details</div>
+          <React.Fragment>
+            <div
+              className="common-top-page-subtitle flex-between-center"
+              style={{ marginTop: "20px" }}
+            >
+              Please add appointee details as the nominee is a minor (less than
+              18 yrs)
+              <GenericTooltip
+                productName={getConfig().productName}
+                content="The appointee must be an adult who will take care of the claim amount in case of death of the insured during the period that the nominee is a minor."
+              />
+            </div>
+            <div>Appointee details</div>
 
-                <FormControl fullWidth>
-                    <div className="InputField">
-                        <Input
-                            type="text"
-                            width="40"
-                            label="Name"
-                            class="AppointeeName"
-                            id="appointeename"
-                            name="appointeename"
-                            error={this.state.form_data.appointeename_error ? true : false}
-                            helperText={this.state.form_data.appointeename_error}
-                            value={this.state.form_data.appointeename || ''}
-                            onChange={this.handleChange()} />
-                    </div>
-                    <div className="InputField">
-                        <DropdownWithoutIcon
-                            width="40"
-                            dataType="AOB"
-                            options={this.state.appointeeRelationOptions}
-                            id="relation"
-                            label="Relationship"
-                            error={this.state.form_data.appointeerelation_error ? true : false}
-                            helperText={this.state.form_data.appointeerelation_error}
-                            value={this.state.form_data.appointeerelation || ''}
-                            onChange={this.handleChange('appointeerelation')} />
-                    </div>
-                    <div className="InputField">
-                        <Input
-                            type="text"
-                            width="40"
-                            label="Date of birth"
-                            class="DOB"
-                            id="appointeedob"
-                            name="appointeedob"
-                            max="10"
-                            error={this.state.form_data.appointeedob_error ? true : false}
-                            helperText={this.state.form_data.appointeedob_error}
-                            value={this.state.form_data.appointeedob || ''}
-                            placeholder="DD/MM/YYYY"
-                            maxLength="10"
-                            onChange={this.handleChangeDob()}
-                        />
-                    </div>
-                </FormControl>
-            </React.Fragment>
-        )
+            <FormControl fullWidth>
+              <div className="InputField">
+                <Input
+                  type="text"
+                  width="40"
+                  label="Name"
+                  class="AppointeeName"
+                  id="appointeename"
+                  name="appointeename"
+                  error={
+                    this.state.form_data.appointeename_error ? true : false
+                  }
+                  helperText={this.state.form_data.appointeename_error}
+                  value={this.state.form_data.appointeename || ""}
+                  onChange={this.handleChange()}
+                />
+              </div>
+              <div className="InputField">
+                <DropdownWithoutIcon
+                  width="40"
+                  dataType="AOB"
+                  options={this.state.appointeeRelationOptions}
+                  id="relation"
+                  label="Relationship"
+                  error={
+                    this.state.form_data.appointeerelation_error ? true : false
+                  }
+                  helperText={this.state.form_data.appointeerelation_error}
+                  value={this.state.form_data.appointeerelation || ""}
+                  onChange={this.handleChange("appointeerelation")}
+                />
+              </div>
+              <div className="InputField">
+                <Input
+                  type="text"
+                  width="40"
+                  label="Date of birth"
+                  class="DOB"
+                  id="appointeedob"
+                  name="appointeedob"
+                  max="10"
+                  error={this.state.form_data.appointeedob_error ? true : false}
+                  helperText={this.state.form_data.appointeedob_error}
+                  value={this.state.form_data.appointeedob || ""}
+                  placeholder="DD/MM/YYYY"
+                  maxLength="10"
+                  onChange={this.handleChangeDob()}
+                />
+              </div>
+            </FormControl>
+          </React.Fragment>
+        );
     }
 
     render() {
@@ -383,16 +401,17 @@ class GroupHealthPlanNomineeDetails extends Component {
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
-
+                
                 <FormControl fullWidth>
                     <div className="InputField">
                         <Input
                             type="text"
                             width="40"
-                            label="Name"
+                            label="Full name"
                             class="NomineeName"
                             id="name"
                             name="name"
+                            maxLength="50"
                             error={this.state.form_data.name_error ? true : false}
                             helperText={this.state.form_data.name_error}
                             value={this.state.form_data.name || ''}

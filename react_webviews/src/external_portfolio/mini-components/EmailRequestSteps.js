@@ -4,12 +4,11 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
-import DoneIcon from '@material-ui/icons/Done';
 import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import RegenerateOptsPopup from './RegenerateOptsPopup';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
+import CAMSLoader from './camsLoader';
 const emailDomain = getConfig().email_domain;
 
 const theme = createMuiTheme({
@@ -64,7 +63,7 @@ const theme = createMuiTheme({
 });
 
 function getSteps() {
-  return ['Wait for CAS email', 'Forward the email', 'View portfolio instantly'];
+  return ['Generate statement and forward to us', 'View portfolio instantly'];
 }
 
 export default class EmailRequestSteps extends Component {
@@ -81,17 +80,44 @@ export default class EmailRequestSteps extends Component {
   }
 
   renderStep1 = () => {
-    const { emailLinkClick } = this.props;
-    if (!emailLinkClick) {
-      return (
-        <span style={{color: 'red'}}>
-          Error: Please provide parent or emailLinkClick function props
-        </span>
-      );
-    }
-    return (<Fragment>
-      In a few minutes, you’ll receive a CAS email on your email ID
+    const {
+      showRegenerateBtn,
+      classes = {},
+      boxStyle = {},
+      emailLinkClick,
+    } = this.props;
 
+    return (<Fragment>
+      <p style={{ margin: '0 0 -15px'}}>
+        Visit CAMS website and generate a CAS (Consolidated Account statement).
+      </p>
+      {showRegenerateBtn &&
+        <Button
+          variant="outlined" color="secondary" fullWidth={true}
+          classes={{
+            root: 'gen-statement-btn-transparent',
+            label: 'gen-statement-btn-label'
+          }}
+          style={{ marginBottom: '10px' }}
+          onClick={this.generateStatement}
+        >
+          Generate Statement
+        </Button>
+      }
+      <p>
+        It takes upto 30 mins to receive a CAS email. Forward the exact same email to our email ID.
+      </p>
+
+      <InfoBox
+        classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
+        isCopiable={true}
+        textToCopy={`cas@${emailDomain}`}
+        boxStyle={boxStyle}
+      >
+        <span className="info-box-body-text">
+          cas@{emailDomain}
+        </span>
+      </InfoBox>
       <div
         className="email_example_link"
         onClick={emailLinkClick}
@@ -102,35 +128,6 @@ export default class EmailRequestSteps extends Component {
   }
 
   renderStep2 = () => {
-    let classes = this.props.classes || {};
-    const { showRegenerateBtn } = this.props;
-    return (<Fragment>
-      Forward the exact email to our email address. Please do not modify the email.
-      <InfoBox
-        classes={{ root: `info-box-cut-out ${classes.emailBox}` }}
-        isCopiable={true}
-        textToCopy={`cas@${emailDomain}`}
-      >
-        <span className="info-box-body-text">
-          cas@{emailDomain}
-        </span>
-      </InfoBox>
-      {showRegenerateBtn &&
-        <Button
-          variant="outlined" color="secondary" fullWidth={true}
-          classes={{
-            root: 'gen-statement-btn',
-            label: 'gen-statement-btn-label'
-          }}
-          onClick={this.generateStatement}
-        >
-          Regenerate Statement
-        </Button>
-      }
-    </Fragment>);
-  }
-
-  renderStep3 = () => {
     return (<Fragment>
       As soon as we receive the email, your portfolio statement will get generated.
     </Fragment>);
@@ -142,8 +139,6 @@ export default class EmailRequestSteps extends Component {
         return this.renderStep1();
       case 1:
         return this.renderStep2();
-      case 2:
-        return this.renderStep3();
       default:
         return 'Unknown step';
     }
@@ -152,12 +147,23 @@ export default class EmailRequestSteps extends Component {
   generateStatement = () => {
     const { parent, emailDetail } = this.props;
     if (parent) {
-      parent.sendEvents('regenerate_stat');
+      parent.sendEvents('generate_stat');
     }
+
     /* Store email detail in LS here so email_not_received and 
     statement_not_received screens can use this data */
     storageService().setObject('email_detail_hni', emailDetail);
-    this.setState({ popupOpen: true });
+    // if (getConfig().app === 'android') {
+    //   parent.setState({
+    //     show_loader: true,
+    //     loadingText: <CAMSLoader />,
+    //   });
+    //   setTimeout(() => {
+    //     parent.navigate('cams_webpage');
+    //   }, 2000);
+    // } else {
+    parent.navigate('cams_request_steps');
+    // }
   }
 
   onPopupClose = () => {
@@ -177,7 +183,7 @@ export default class EmailRequestSteps extends Component {
   render() {
     const steps = getSteps();
     const { activeStep } = this.state;
-    const { emailForwardedHandler } = this.props;
+    // const { emailForwardedHandler } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <div id="hni-stepper">
@@ -188,8 +194,7 @@ export default class EmailRequestSteps extends Component {
               <Step
                 key={label}
                 active={true}
-                completed={index === 0}
-                disabled={[0, 2].includes(index)}
+                disabled={[0, 1].includes(index)}
               >
                 <StepLabel icon={customStepIcon(index)}>{label}</StepLabel>
                 <StepContent>
@@ -198,12 +203,12 @@ export default class EmailRequestSteps extends Component {
               </Step>
             ))}
           </Stepper>
-          <RegenerateOptsPopup
+          {/* <RegenerateOptsPopup
             emailForwardedHandler={() => { this.onPopupClose(); emailForwardedHandler(); }}
             notReceivedClick={this.notReceivedHandler}
             onPopupClose={this.onPopupClose}
             open={this.state.popupOpen}
-          />
+          /> */}
         </div>
       </MuiThemeProvider>
     );
@@ -212,17 +217,16 @@ export default class EmailRequestSteps extends Component {
 
 const customStepIcon = (idx) => {
   const iconMap = {
-    0: (<DoneIcon style={{fontSize: '18px', fontWeight: 'bold'}}/>),
+    0: '1',
     1: '2',
-    2: '3',
   };
   return (
     <div
       id="hni-custom-step-icon"
       style={{
-        color: idx === 2 ? '#767e86' : 'white',
-        background: idx === 2 ? 'white' : 'var(--primary)',
-        lineHeight: idx === 0 ? '28px' : '20px',
+        color: idx === 0 ? 'white' : '#767e86',
+        background: idx === 0 ? 'var(--primary)' : 'white',
+        lineHeight: '20px',
       }}>
       {iconMap[idx]}
     </div>

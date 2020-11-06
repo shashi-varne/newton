@@ -12,6 +12,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
 import { compact } from 'lodash';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 class GroupHealthPlanAddOns extends Component {
 
@@ -92,7 +93,7 @@ class GroupHealthPlanAddOns extends Component {
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
-        let cta_premium = this.state.groupHealthPlanData.net_premium_addons || parseInt(this.state.bottomButtonData.leftSubtitle.substring(1).replace(',', ''));
+        let cta_premium = this.state.groupHealthPlanData.net_premium_addons || this.state.bottomButtonData.leftSubtitleUnformatted;
         this.updateBottomPremium(cta_premium);
         
         this.setState({
@@ -206,7 +207,7 @@ class GroupHealthPlanAddOns extends Component {
                                 className="Checkbox" />
                         </Grid>
                         <Grid item xs={11}>
-                            <span className="flex-between" style={{ alignItems: 'start' }}>
+                            <span className="flex-between" style={{ alignItems: 'start' }} onClick={this.handleChangeCheckboxes(index)}>
                                 <div style={{ color: '#0A1D32' }}>
                                     <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span> 
                                     <div style={{ marginTop: '10px', fontSize: '14px' }}>
@@ -219,11 +220,7 @@ class GroupHealthPlanAddOns extends Component {
                                         <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                     </div>
                                 </div>
-                                <img
-                                    id={index}
-                                    className="tooltip-icon"
-                                    data-tip={item.tooltip_content}
-                                    src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                          <GenericTooltip content={item.tooltip_content} productName={getConfig().productName} />
                             </span>
                             {item.checked && item.options.length !== 0 && <DropdownInModal
                                 parent={this}

@@ -8,6 +8,7 @@ import DotDotLoader from 'common/ui/DotDotLoader';
 import { getConfig } from 'utils/functions';
 import { isEmpty } from '../../../../utils/validators';
 import toast from '../../../../common/ui/Toast';
+import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
 class GroupHealthPlanStarSumInsured extends Component {
     
@@ -198,10 +199,10 @@ class GroupHealthPlanStarSumInsured extends Component {
             >
                 <div className="common-top-page-subtitle flex-between-center">
                     Claim can be made upto the selected amount
-                <img 
-                    className="tooltip-icon"
-                    data-tip="In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Also, this amount will be shared amongst all the insured members; hence, we recommend to have adequate coverage to manage health expenses."
-                    src={require(`assets/${this.state.productName}/info_icon.svg`)} alt="" />
+                <GenericTooltip productName = {
+                    getConfig().productName
+                }
+                content = "In the last 10 years, the average cost per hospitalisation for urban patients has increased by about 176%. Also, this amount will be shared amongst all the insured members; hence, we recommend to have adequate coverage to manage health expenses."/>
                 </div>
                 <div className="group-health-plan-select-sum-assured">
                     <div className="generic-choose-input">

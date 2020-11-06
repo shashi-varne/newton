@@ -357,7 +357,7 @@ class Landing extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Insurance">
-        <div style={{ padding: '20px' }}>
+        <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
             < img  src={ require(`assets/ic_hand_insurance_${this.state.type}.svg`)} alt='' />
