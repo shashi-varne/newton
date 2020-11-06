@@ -49,7 +49,7 @@ class GroupHealthLanding extends Component {
 
   componentWillMount() {
     let { params } = this.props.location || {};
-    let openModuleData = params  ? params.openModuleData : {};
+    let openModuleData = params ? params.openModuleData : {};
 
     let screenData = this.state.providerConfig[screen_name];
 
