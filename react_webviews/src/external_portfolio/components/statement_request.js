@@ -8,7 +8,8 @@ import { nativeCallback } from 'utils/native_callback';
 import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { fetchEmails } from '../common/ApiCalls';
-import { regenTimeLimit } from '../constants';
+import CAMSLoader from '../mini-components/camsLoader';
+// import { regenTimeLimit } from '../constants';
 
 const productType = getConfig().productName;
 class StatementRequest extends Component {
@@ -22,10 +23,10 @@ class StatementRequest extends Component {
       email_detail: '',
       selectedEmail: this.getEmailParam(),
       exitToApp: params.exitToApp || this.cameFromApp(),
+      entry_point: '',
     };
     this.navigate = navigate.bind(this);
     this.emailForwardedHandler = emailForwardedHandler.bind(this);
-    this.setEntryPoint();
     setPlatformAndUser();
   }
 
@@ -34,9 +35,10 @@ class StatementRequest extends Component {
     let entry_point = '';
     if (this.cameFromApp()) entry_point = 'app';
     else if (params.fromRegenerate) entry_point = 'regenerate_stat';
+    else if (params.fromResync) entry_point = 'resync';
     else entry_point = 'email_entry';
     
-    storageService().set('statement-req-entry-point', entry_point);
+   this.setState({ entry_point });
   }
 
   sendEvents(user_action) {
@@ -48,7 +50,7 @@ class StatementRequest extends Component {
         "screen_name": 'statement request sent',
         performed_by: storageService().get('hni-platform') === 'rmapp' ? 'RM' : 'user',
         email_look_clicked: params.comingFrom === 'email_example_view',
-        entry_point: storageService().get('statement-req-entry-point') || null,
+        entry_point: this.state.entry_point || null,
         status: this.state.showRegenerateBtn ? 'mail not recieved in 30 min' : 'before tracker setup',
       }
     };
@@ -76,20 +78,22 @@ class StatementRequest extends Component {
   }
 
   async componentDidMount() {
+    this.setEntryPoint();
     const emailParam = this.getEmailParam();
     if (emailParam) {
       this.setState({ selectedEmail: emailParam });
       try {
         const [email] = await fetchEmails({ email_id: emailParam });
         if (email) {
-          let showRegenerateBtn = false;
-          if (email.latest_statement) {
-            showRegenerateBtn =
-              (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
-          }
+          // Commented below code for https://fisdom.atlassian.net/browse/PROD-2599
+          // let showRegenerateBtn = false;
+          // if (email.latest_statement) {
+          //   showRegenerateBtn =
+          //     (new Date() - new Date(email.latest_statement.dt_updated)) / 60000 >= regenTimeLimit;
+          // }
           this.setState({
             email_detail: email || {},
-            showRegenerateBtn,
+            // showRegenerateBtn,
           });
           // storageService().setObject('email_detail_hni', email);
         }
@@ -112,7 +116,7 @@ class StatementRequest extends Component {
   onInfoCtrlClick = () => {
     this.sendEvents('email_change');
     const params = this.props.location.params || {};
-
+    
     this.navigate('email_entry', {
       comingFrom: 'statement_request',
       fromRegenerate: params.fromRegenerate,
@@ -123,11 +127,34 @@ class StatementRequest extends Component {
     });
   }
 
+  goNext = () => {
+    this.sendEvents('generate_statement');
+    const params = this.props.location.params || {};
+    const navParams = {
+      comingFrom: 'statement_request',
+      fromRegenerate: params.fromRegenerate,
+      navigateBackTo: params.navigateBackTo,
+      exitToApp: this.state.exitToApp,
+      fromApp: this.cameFromApp(),
+      email: this.state.selectedEmail,
+    };
+
+    // if (getConfig().app === 'android') {
+    //   this.setState({ show_loader: true, loadingText: <CAMSLoader /> });
+    //   setTimeout(() => {
+    //     this.navigate('cams_webpage', navParams);
+    //   }, 2000);
+    // } else {
+    this.navigate('cams_request_steps', navParams);
+    // }
+  }
+
   goBack = (params) => {
     storageService().remove('email_detail_hni');
     if (!params || this.state.exitToApp) {
       nativeCallback({ action: 'exit', events: this.sendEvents('back') });
     } else if (params.navigateBackTo) { // available when coming from email_entry
+      nativeCallback({ events: this.sendEvents('back') });
       this.navigate(params.navigateBackTo);
     }
   }
@@ -153,21 +180,22 @@ class StatementRequest extends Component {
       show_loader,
       loadingText,
       selectedEmail,
-      showRegenerateBtn,
     } = this.state;
     const params = this.props.location.params || {};
     const showBack = this.cameFromApp() || params.comingFrom === 'settings';
+    const comingFromEmail = this.state.entry_point === 'email_entry';
     
     return (
       <Container
-        title="Statement request sent"
+        title={comingFromEmail ? 'How to view your portfolio?' : 'Portfolio tracking initiated'}
         showLoader={show_loader}
         loaderData={{
           loadingText,
         }}
         headerData={{ icon: showBack ? 'back' : 'close' }}
-        noFooter={true}
+        buttonTitle="Continue to Generate Statement"
         noHeader={show_loader}
+        handleClick={this.goNext}
         goBack={this.goBack}
       >
         {selectedEmail &&
@@ -182,15 +210,17 @@ class StatementRequest extends Component {
           </InfoBox>
         }
         <div className="ext-pf-subheader">
-          <h4>What's next?</h4>
+          <h4>Steps to follow</h4>
         </div>
-        <EmailRequestSteps
-          emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
-          showRegenerateBtn={showRegenerateBtn}
-          emailLinkClick={() => this.emailLinkClick(params)}
-          emailDetail={email_detail}
-          parent={this}
-        />
+        <div style={{ paddingBottom: '40px' }}>
+          <EmailRequestSteps
+            emailForwardedHandler={() => this.emailForwardedHandler(email_detail.email)}
+            showRegenerateBtn={false}
+            emailLinkClick={() => this.emailLinkClick(params)}
+            emailDetail={email_detail}
+            parent={this}
+          />
+        </div>
       </Container>
     );
   }

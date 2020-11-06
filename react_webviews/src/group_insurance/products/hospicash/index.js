@@ -40,7 +40,7 @@ class HospicashPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': 'Daily cash benefits on hospitalization for 30 days.',
+        'disc': 'Daily cash benefits on hospitalisation for 30 days.',
         'key' : 'daily_cash',
         'icon': this.state.ic_hospicash_b1
       },
@@ -53,7 +53,7 @@ class HospicashPlanDetails extends Component {
 
     var plan_data = {
       'product_name': 'Hospicash',
-      'product_tag_line': 'Cover your expenses for any type of hospitalization.',
+      'product_tag_line': 'Cover your expenses for any type of hospitalisation.',
       'key': 'HOSPICASH',
       'logo': '',
       'premium_details': [
@@ -103,7 +103,7 @@ class HospicashPlanDetails extends Component {
         let benefit_data = {};
         benefit_data = Object.assign(benefit_data, benefit);
         if(index === 0 && benefit_data.key === 'daily_cash') {
-          benefit_data.disc = 'Daily cash benefits on hospitalization for 90 days.';
+          benefit_data.disc = 'Daily cash benefits on hospitalisation for 90 days.';
         }
 
         if (premium.product_benefits_included.indexOf(benefit_data.key) === -1) {
