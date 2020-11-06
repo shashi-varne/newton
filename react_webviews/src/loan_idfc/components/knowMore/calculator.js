@@ -4,7 +4,6 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import SliderWithValues from "../../../common/ui/SilderWithValues"
 import { inrFormatDecimal } from "../../../utils/validators";
-import { getConfig} from 'utils/functions';
 
 class Calculator extends Component {
   constructor(props) {
@@ -77,6 +76,10 @@ class Calculator extends Component {
         headerData={{
           icon: "close",
         }}
+        styleContainer={{
+          backgroundColor: "var(--highlight)"
+        }}
+        noPadding={true}
       >
         <div className="idfc-loan-calculator">
           <SliderWithValues 

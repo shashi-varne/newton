@@ -19,16 +19,20 @@ class KnowMore2 extends Component {
 
     const content1 = {
       "sub-head": "For Salaried Applicants",
-      points: ["Photo Identity Proof", "Address Proof", "Income Proof"],
+      points: [
+          "Must be earning a minimum net monthly salary of Rs. 20,000",
+          "Should at least be 23 years of age",
+          "Maximum age at the time of loan maturity should not be more than 60 years",
+      ],
     };
 
     const content2 = {
       "sub-head": "For Self-employed Applicants",
       points: [
-        "Photo Identity Proof",
-        "Address Proof",
-        "Business Proof",
-        "Income Proof",
+        "Should at least be 23 years of age",
+        "Maximum age at the time of loan maturity should not be more than 65 years",
+        "Business must be in operations for at least 3 years",
+        "You must be managing your business from the same office premises for at least a year",
       ],
     };
 
@@ -63,11 +67,12 @@ class KnowMore2 extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Get an instant personal loan"
-        buttonTitle={this.state.cta_title}
+        buttonTitle="APPLY"
+        arrow={true}
         count={true}
-        current={3}
+        current={2}
         total={4}
-        noFooter={true}
+        // noFooter={true}
         headerData={{
           icon: "close",
         }}
@@ -75,7 +80,8 @@ class KnowMore2 extends Component {
         <div className="check-gold-price">
           <img
             className="img"
-            src={require(`assets/${this.state.productName}/ils_hassle_free.svg`)}
+            src={require(`assets/${this.state.productName}/ils_alternate_gold.svg`)}
+            alt=""
           />
 
           <div className="title">Documents Required</div>

@@ -83,23 +83,95 @@
 }
 
 .idfc-loan-calculator {
-  margin-top: 40px;
+  padding: 40px 20px 0 20px;
+  background-color: #ffffff;
 
   .total-amount {
     text-align: center;
     padding-top: 20px;
     background-color: var(--highlight);
     color: #0a1d32;
-    background-color: yellowgreen;
-    margin-right: -20px;
-    margin-left: -20px;
+    margin: 0 -20px 0 -20px;
+    font-size: 13px;
   }
 
   .total {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--primary);
     font-weight: 600;
-    margin: 9px 0 31px 0;
-    padding-bottom: 20px;
+    margin: 9px 0 0px 0;
+    padding-bottom: 50px;
+  }
+}
+
+.left-right-cta {
+  display: flex;
+  margin: 0 0px 0 -20px;
+}
+
+.income-details {
+  .subtitle {
+    font-size: 13px;
+    color: #979797;
+    font: 400;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .OR {
+    font-size: 13px;
+    font-weight: 500;
+    color: #979797;
+    text-align: center;
+    margin: 30px 0Lower interest rate compared to your existing loan(s);
+  }
+
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #0a1d32;
+    }
+    .sub-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: #979797;
+      line-height: 20px;
+    }
+  }
+}
+
+.bt-info {
+  .head {
+    font-size: 15px;
+    font-weight: 500;
+    color: #0a1d32;
+    margin: 30px 0 10px 0;
+  }
+
+  .sub-head {
+    font-size: 14px;
+    font-weight: 400;
+    color: #767e86;
+    line-height: 24px;
+  }
+
+  .benefits {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    .sub-benefits {
+      font-size: 13px;
+      font-weight: 400;
+      color: #767e86;
+      line-height: 20px;
+      width: 100%;
+      align-items: center;
+    }
   }
 }

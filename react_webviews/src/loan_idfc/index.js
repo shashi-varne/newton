@@ -11,13 +11,15 @@ import NotFound from "../common/components/NotFound";
 
 
 import Landing from "./components/general/landing";
-import MobileVerify from "./components/general/mobile_verify";
-import OtpVerification from "./components/general/otp_verify";
+import MobileVerify from "./components/forms/mobile_verify";
+import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
-import KnowMore1 from "./components/general/know_more1";
-import KnowMore2 from "./components/general/know_more2";
-import KnowMore3 from "./components/general/know_more3";
-import Calculator from "./components/general/calculator";
+import KnowMore1 from "./components/knowMore/know_more1";
+import KnowMore2 from "./components/knowMore/know_more2";
+import KnowMore3 from "./components/knowMore/know_more3";
+import Calculator from "./components/knowMore/calculator";
+import IncomeDetails from "./components/general/income_details";
+import BtInformation from "./components/bt_details/bt_info";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -65,6 +67,8 @@ const Lending = props => {
           <Route path={`${url}/know-more-2`} component={KnowMore2} />
           <Route path={`${url}/know-more-3`} component={KnowMore3} />
           <Route path={`${url}/calculator`} component={Calculator} />
+          <Route path={`${url}/income-details`} component={IncomeDetails} />
+          <Route path={`${url}/bt-info`} component={BtInformation} />
        
           <Route component={NotFound} />
 

@@ -121,7 +121,7 @@ class Container extends Component {
 
     if (this.state.mounted) { 
       return (
-        <div className={`ContainerWrapper loanMainContainer ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
+        <div className={`ContainerWrapper loanMainContainer ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
           {/* Header Block */}
           {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
           <Header

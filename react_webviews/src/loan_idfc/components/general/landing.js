@@ -69,7 +69,7 @@ class Landing extends Component {
 
           <JourneySteps static={true} baseData={this.state.screenData.journeyData} />
 
-          <div style={{margin: '40px 0 40px 0'}}>
+          <div style={{margin: '40px 0 50px 0'}}>
             <div className="generic-hr"></div>
             <div className="Flex faq" onClick={() => this.openFaqs()}>
               <div>

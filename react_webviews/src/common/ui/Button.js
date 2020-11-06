@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
 import arrow from 'assets/next_arrow.png';
+import green_arrow from 'assets/green_arrow.svg';
 import download from 'assets/download.svg';
 import SVG from 'react-inlinesvg';
 import './style.scss';
@@ -10,7 +11,7 @@ import { getConfig } from 'utils/functions';
 class CustomButton extends Component {
   render() {
     const props = this.props;
-    const { button: buttonClass, ...classes } = props.classes || {};
+    const { button: buttonClass, arrowButton, ...classes } = props.classes || {};
     if (props.twoButton) {
       return (
         <div className="FlexButton">
@@ -43,6 +44,44 @@ class CustomButton extends Component {
           </Button>
         </div>
       );
+    } else if(props.leftRightCta) {
+      return (
+        <div style={{display:'flex', width:'100%'}}>
+          <Button
+            onClick={props.handleClickTwo}
+            fullWidth={false}
+            variant="fab"
+            // size="large"
+            color="secondary"
+            className={arrowButton}
+            disabled={props.disable}
+          >
+            <img alt="" src={green_arrow} width={20} />
+          </Button>
+          <Button
+            onClick={props.handleClickTwo}
+            fullWidth={false}
+            variant="raised"
+            // size="large"
+            color="secondary"
+            className={`${buttonClass} filledButton`}
+            disabled={props.disable}
+          >
+            {props.buttonTitle}
+          </Button>
+          <Button
+            onClick={props.handleClickTwo}
+            fullWidth={false}
+            variant="fab"
+            // size="large"
+            color="secondary"
+            className={arrowButton}
+            disabled={props.disable}
+          >
+            <img alt="" src={green_arrow} width={20} />
+          </Button>
+        </div>
+      )
     } else {
       return (
         <div>
@@ -80,6 +119,16 @@ const styles = {
     width: !getConfig().isMobileDevice ? 'auto' : '100% !important'
   },
   label: {},
+  arrowButton: {
+    padding: '25px !important',
+    borderRadius: 6,
+    textTransform: 'capitalize',
+    // fontSize: '16px !important',
+    border: '2px solid #35CB5D',
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    margin: '0 10px 0 10px',
+  },
 }
 
 export default withStyles(styles)(CustomButton);
