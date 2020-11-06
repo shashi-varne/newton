@@ -1,4 +1,6 @@
 $status-text-margin: 20px 0 10px 0;
+$text-color1: #767E86;
+$text-color2: #8D879B;
 
 @mixin status_text {
     font-size: 14px;
@@ -6,7 +8,7 @@ $status-text-margin: 20px 0 10px 0;
 }
 
 .digi-status {
-    color: #767E86;
+    color: $text-color1;
     
     .digi-status-text {
         margin: $status-text-margin;
@@ -18,10 +20,81 @@ $status-text-margin: 20px 0 10px 0;
 }
 
 .nsdl-status {
-    color: #8D879B;
+    color: $text-color2;
 
     .nsdl-status-text {
         margin: $status-text-margin;
         @include status_text();
+    }
+}
+
+.esign-image {
+}
+
+.esign-desc {
+    color: $text-color2;
+    margin: 20px 0 40px 0;
+    @include status_text();
+}
+
+.esign-subtitle {
+    margin-bottom: 21px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 18px;
+    color: #160D2E;
+}
+
+.esign-steps {
+    display: flex;
+    flex-direction: column;
+
+    .step {
+      display: flex;
+      margin-bottom: 20px;
+
+      .icon-container {
+        flex: 3;
+        margin-right: 20px;
+
+        img {
+          width: 80px;
+          height: 60px;
+          border-radius: 3px;
+        }
+      }
+
+      .step-text {
+        display: flex;
+        align-items: center;
+        flex: 9;
+        font-size: 13px;
+        line-height: 22px;
+        color: #8D879B;
+      }
+    }
+}
+
+.esign-bottom {
+    margin-top: 30px;
+    margin-bottom: 20px;
+
+    .bottom-text {
+      display: flex;
+      justify-content: center;
+      min-width: 65px;
+      font-weight: 500;
+      font-size: 8px;
+      line-height: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #767E86;
+    }
+
+    .bottom-image {
+      display: flex;
+      justify-content: center;
+      margin: 10px 0 10px 0;
     }
 }
