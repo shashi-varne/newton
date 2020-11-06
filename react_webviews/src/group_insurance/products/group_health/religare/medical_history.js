@@ -27,9 +27,16 @@ class GroupHealthPlanMedicalHistory extends Component {
   }
 
   onload() {
+    //let { member_base, account_type } = this.state.lead;
+    let { insured_people_details, quotation_details } = this.state.lead;
+    let account_type  =  quotation_details.insurance_type
+    let member_base = []
 
-    let { member_base, account_type } = this.state.lead;
+    insured_people_details.forEach(element => {
+      member_base.push(element.insured_person)
+    });
 
+  
     let radio_options = [
       {
         name: 'Yes',
@@ -51,6 +58,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         event_key: 'hospitalised_last_2_years',
         key: "mand_1",
         input_type: "radio",
+        "question_id": "religare_mhd_file_claim"
       },
       {
         label: account_type === 'self' ? 
@@ -61,6 +69,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         event_key: 'filed_claim_current_insurer',
         key: "mand_2",
         input_type: "radio",
+        "question_id": "religare_mhd_prev_hosp"
       },
       {
         label: account_type === 'self' ? 
@@ -71,6 +80,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         event_key: 'health_insurance_declined',
         key: "mand_3",
         input_type: "radio",
+        "question_id": "religare_mhd_prev_proposal_decline"
       },
       {
         label: "Are you already covered under any other health insurance policy of Care Health Insurance (formerly Religare Health Insurance)?",
@@ -79,6 +89,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         event_key: 'already_covered_in_care',
         key: "mand_4",
         input_type: "radio",
+        "question_id": "religare_mhd_exising_policy_in_religare"
       },
     ];
 
@@ -93,7 +104,7 @@ class GroupHealthPlanMedicalHistory extends Component {
           let mem_q_data = member_data.medical_questions.filter(data => data.key_mapper === q_key);
 
           if (mem_q_data && mem_q_data.length !== 0 && mem_q_data[0].answer) {
-            inputs[member_data.backend_key] = true;
+            inputs[member_data.relation_key] = true;
             list[key].question_value = 'Yes';
           }
         }
@@ -134,7 +145,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     const keyedList = keyBy(this.state.list, 'event_key');
     const [firstListItem = {}] = (this.state.list || []); //take first list item (any list item would be fine, just need the members prop from it)
     const keyedMemberRelations = (firstListItem.members || []).reduce((obj, currMem) => {
-      obj[currMem.backend_key] = currMem.key;
+      obj[currMem.relation_key] = currMem.key;
       return obj;
     }, {});
 
@@ -167,7 +178,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     data.question_value_error = '';
 
     if (this.state.account_type === 'self') {
-      data.inputs[data.members[0].backend_key] = radio_options[event].value === 'Yes' ? true : false;
+      data.inputs[data.members[0].relation_key] = radio_options[event].value === 'Yes' ? true : false;
     }
 
     if(radio_options[event].value === 'No') {
@@ -186,7 +197,7 @@ class GroupHealthPlanMedicalHistory extends Component {
   handleCheckbox = (event, index, member) => {
     let { list } = this.state;
 
-    list[index].inputs[member.backend_key] = event.target.checked;
+    list[index].inputs[member.relation_key] = event.target.checked;  //relation_key
     list[index].question_value_error = '';
 
     this.setState({
@@ -214,40 +225,54 @@ class GroupHealthPlanMedicalHistory extends Component {
       list: list
     });
 
-    let body = {};
+
+    let body = {
+      "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", // 122a096a-a802-4b4d-861b-ba422aabdbc9
+      // "answers": {
+      //   "self_account_key": {
+    }
+
+
 
     if (canProceed) {
-
+      body.answers = {}
       for (var i in member_base) {
         let member_data = member_base[i];
-        let backend_key = member_data.backend_key;
+        let relation_key = member_data.relation_key;
 
-        body[backend_key] = {};
-        member_data.medical_questions = {};
-        body[backend_key].mand_question_exists = 'false';
+        body.answers[relation_key] = {};
+        body.answers[relation_key].medical_history_details = []
 
         for (var q in list) {
           let q_data = list[q];
-          let q_key = q_data.key;
+          console.log(q_data, ".........................................q_data")
+          // let q_key = q_data.key;
           let inputs = q_data.inputs;
-          
-          member_data.medical_questions[q_key] = {};
-          member_data.mand_question_exists='false';
-          member_data.medical_questions[q_key].answer = 'false';
+          let question_id = q_data.question_id
+          // member_data.medical_questions[q_key] = {};
+          // member_data.mand_question_exists='false';
+          // member_data.medical_questions[q_key].answer = 'false';
           for (var mem_key in inputs) {
-            if (mem_key === backend_key && inputs[mem_key]) {
-              body[backend_key].mand_question_exists = 'true'
-              member_data.medical_questions[q_key].answer = 'true';
+            if (mem_key === relation_key && inputs[mem_key]) {
+              // body[relation_key].mand_question_exists = 'true'
+              let obj = {
+                "yes_no": true,
+                "question_id": question_id
+              }
+              body.answers[relation_key].medical_history_details.push(obj)
+              // member_data.medical_questions[q_key].answer = 'true';
+            } else {
+              let obj = {
+                "yes_no": false,
+                "question_id": question_id
+              }
+              body.answers[relation_key].medical_history_details.push(obj)
             }
           }
         }
-
-        member_base[i] = member_data;
-
-        body[backend_key].medical_questions = member_data.medical_questions || {};
       }
       
-      this.sendEvents("next");
+      this.sendEvents("next");             console.log(body)
       this.updateLead(body);
     }
   }

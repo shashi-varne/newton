@@ -58,8 +58,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         let lead = this.state.lead || {}; 
         let form_data = lead.nominee_details || {};
-        let relation = form_data.relation ;     relation.toUpperCase()
-        console.log(relation)
+        // let relation = form_data.relation ;     relation.toUpperCase() console.log(relation)
 
         let appointee_account_key = lead.nominee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
@@ -263,7 +262,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         if (canSubmitForm) {
             let body = {
-                "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5", // 6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
+                "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", // 122a096a-a802-4b4d-861b-ba422aabdbc9
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -290,7 +289,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 // }
 
                 body = {
-                    "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
+                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",
                     nominee_account_key: {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,

@@ -208,7 +208,7 @@ class GroupHealthPlanIsPed extends Component {
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
             let body = {
-                "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5", //6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
+                "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", //122a096a-a802-4b4d-861b-ba422aabdbc9
                 insured_people_details
             }
 

@@ -74,7 +74,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 country: correspondence_address.country || '',
 
                 p_addressline: permanent_address.addr_line1 || '',
-                p_addressline2: permanent_address.addr_line1 || '',
+                p_addressline2: permanent_address.addr_line2 || '',
                 p_pincode: permanent_address.pincode || '',
                 p_city: permanent_address.city || '',
                 p_state: permanent_address.state || '',
@@ -245,7 +245,7 @@ class GroupHealthPlanAddressDetails extends Component {
             let body = {};
             if (provider === 'HDFCERGO') {
                 body = {
-                    "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
+                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -261,27 +261,27 @@ class GroupHealthPlanAddressDetails extends Component {
 
             if (provider === 'RELIGARE') {
                 body = {
-                    "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
+                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
-                            "addr_line1": form_data.addressline,
+                            "addr_line1": form_data.addr_line1,
                             "pincode": form_data.pincode,
-                            "addr_line2": form_data.addressline2,
+                            "addr_line2": form_data.addr_line2,
                             "city": form_data.city
                         },
                         "correspondence_addr_same": "n",
                         "correspondence_address": {
                             "state": checked ? form_data.state : form_data.p_state,
-                            "addr_line1": checked ? form_data.addressline : form_data.p_addressline,
+                            "addr_line1": checked ? form_data.addr_line1 : form_data.p_addressline,
                             "pincode":checked ? form_data.pincode : form_data.p_pincode,
-                            "addr_line2":  checked ? form_data.addressline2 : form_data.p_addressline2,
+                            "addr_line2":  checked ? form_data.addr_line2 : form_data.p_addressline2,
                             "city": checked ? form_data.city : form_data.p_city
                         }
                     }
                 }
             }
-            
+                     console.log(body, "-----------------------------------------------:",checked)
             this.updateLead(body);
         }
     }

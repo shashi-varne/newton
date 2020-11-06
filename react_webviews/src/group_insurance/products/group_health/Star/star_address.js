@@ -202,7 +202,7 @@ class StarAddress extends Component {
       console.log(form_data)
 
       const body = {
-        "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",  // 6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
+        "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",  // 122a096a-a802-4b4d-861b-ba422aabdbc9
         "address_details": {                   
           "permanent_address": {
             "state": form_data.state,

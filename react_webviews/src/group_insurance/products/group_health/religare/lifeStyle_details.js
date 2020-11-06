@@ -168,6 +168,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     if (id === "answer_description") {
+      console.log(member_base, member_base[index])
+      member_base[index].life_style_question = {}
       member_base[index].life_style_question.answer_description = value;
       member_base[index].life_style_question.answer_description_error = '';
     } else {
@@ -317,7 +319,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
 
     let body = {
-      "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5",
+      "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", // 122a096a-a802-4b4d-861b-ba422aabdbc9
     }
     this.sendEvents("next", {member_base: member_base});
  
@@ -326,7 +328,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
      for (var i in member_base) {
        let member_data = member_base[i];
        if (member_data.key !== 'none') {
-         let backend_key = member_data.backend_key;
+         console.log(member_data,"................")
+         let backend_key = member_data.relation_key;
          if ((member_data.life_style_question_exists === 'Yes' ||
              member_data.life_style_question_exists === true) && !none_option_selected) {
            body["answers"][backend_key] = {};

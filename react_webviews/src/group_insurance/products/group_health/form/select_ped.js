@@ -66,6 +66,7 @@ class GroupHealthPlanSelectPed extends Component {
             item.answer_description = '';
             item.description = index === this.state.screenData.ped_list.length - 1 ? '' : item.description;
             item.question_id = item.id
+            item.key = item.key
             return item;
         });
 
@@ -208,17 +209,17 @@ class GroupHealthPlanSelectPed extends Component {
             }               
             let body = {};
             let pre_existing_diseases = []
-            if(provider === 'HDFCERGO') {
+            if (provider === 'HDFCERGO') {
                 let ped_diseases_name = '';
 
-                for(var j in options) {
-        
-                    if(options[j].checked) {
-    
+                for (var j in options) {
+
+                    if (options[j].checked) {
+
                         let value = options[j].name;
 
-                      
-                        if(options[j].name === 'Other') {
+                        console.log(value)
+                        if (options[j].name === 'Other') {
                             value = this.state[this.state.otherInputData.name];
                         }
 
@@ -226,9 +227,7 @@ class GroupHealthPlanSelectPed extends Component {
                             "yes_no": true,
                             "question_id": options[j].id
                         }
-            
                         pre_existing_diseases.push(obj)
-    
                         // if(!ped_diseases_name) {
                         //     ped_diseases_name = value;
 
@@ -240,33 +239,29 @@ class GroupHealthPlanSelectPed extends Component {
                         // else {
                         //     ped_diseases_name += ',' + value;
                         // }
-                    } 
+                    }
                 }
-    
                 // if(!ped_diseases_name) {
                 //     toast('Atleast select one or uncheck this member');
                 //     return;
                 // }
-
-                let body_to_send =  {
+                let body_to_send = {
                     ped_diseases_name: ped_diseases_name,
                     ped_exists: "true"
                 }
-    
+
                 body = {
-                    [this.state.backend_key] :body_to_send
+                    [this.state.backend_key]: body_to_send
                 }
 
-
-
-           body = {
-               "application_id": "6d1fd6a3-2cde-4e7d-8456-aa1273e36db5", //6d1fd6a3-2cde-4e7d-8456-aa1273e36db5
-               "answers": {
-                   [this.state.backend_key]: {
-                       pre_existing_diseases
-                   }
-               }
-           }
+                body = {
+                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", //122a096a-a802-4b4d-861b-ba422aabdbc9
+                    "answers": {
+                        [this.state.backend_key]: {
+                            pre_existing_diseases
+                        }
+                    }
+                }
 
 
                 current_member = {
@@ -274,47 +269,49 @@ class GroupHealthPlanSelectPed extends Component {
                     ...body_to_send
                 } //to store the member specific info, because we will not hit the api again
             }
-            
 
             if(provider === 'RELIGARE') {
                 let ped_diseases = {};
-                
                 let min_one_ped = false;
                 for(var l in options) {
                     if(options[l].checked) {
                         min_one_ped = true;
-                        let data = options[l];
-
-                        ped_diseases[data.id] = {
-                            start_date: data.start_date
+                        let data = options[l], question_id = data.key
+                        // ped_diseases[data.id] = {
+                        //     start_date: data.start_date
+                        // }
+                        let obj = {
+                            "yes_no": true,
+                           "question_id": question_id,
+                          "since_when":  data.start_date
                         }
-
+                        pre_existing_diseases.push(obj)
                         if(options[l].name === 'Other') {
-                            ped_diseases[data.id] = {
-                                start_date: data.start_date,
-                                answer_description: this.state[this.state.otherInputData.name] // other input value
+                            // ped_diseases[data.id] = {
+                            //     start_date: data.start_date,
+                            //     answer_description: this.state[this.state.otherInputData.name] // other input value
+                            // }
+                            let obj = {
+                                "yes_no": false,
+                               "question_id": question_id,
+                              "since_when":  data.start_date
                             }
+                            pre_existing_diseases.push(obj)
                         }
                     } 
                 }
-    
-    
-                // if(!min_one_ped) {
-                //     toast('Atleast select one or uncheck this member');
-                //     return;
-                // }
-
-                // let body_to_send = {
-                //     ped_exists: "true",
-                //     ped_diseases: ped_diseases
-                // }
-    
-                // body = {
-                //     [this.state.backend_key] : body_to_send
-                // }
-
+                if(!min_one_ped) {
+                    toast('Atleast select one or uncheck this member');
+                    return;
+                }
+                let body_to_send = {
+                    [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
+                }
+                body = {
+                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",
+                    "answer" : body_to_send
+                }
                 let data_to_store = [];
-
                 for (var key in ped_diseases) {
                     let d = ped_diseases[key];
                     data_to_store.push({
@@ -322,7 +319,6 @@ class GroupHealthPlanSelectPed extends Component {
                         ...d
                     })
                 }
-
                 current_member = {
                     ...current_member,
                     ped_diseases: data_to_store,
@@ -339,7 +335,7 @@ class GroupHealthPlanSelectPed extends Component {
                 lead: lead
             })
 
-
+                     console.log(body,"........................body")
             this.updateLead(body);
         }
     }

@@ -385,84 +385,98 @@ export const religare = {
                 'name': 'Diabetes',
                 id: 'ped_no_1',
                 tag: 'PEDdiabetesDetails',
+                "key" : 'religare_ped_diabetes',
                 description: 'Diabetes Mellitus type 1 or Diabetes on insulin or Diabetes associated with blindness or chronic foot ulcer',
             },
             {
                 'name': 'Hypertension',
                 id: 'ped_no_2',
                 tag: 'PEDhyperTensionDetails',
+                "key" :  "religare_ped_hypertension",
                 description: 'Hypertension / High blood pressure'
             },
             {
                 'name': 'Liver disease',
                 id: 'ped_no_3',
                 tag: 'PEDliverDetails',
+                "key" : "religare_ped_liver_disease",
                 description: 'Pancreatitis or Liver disease(including but not limited to Cirrhosis / Hepatitis B or C / Willson’s disease) or any other digestive tract disorder(disorders of esophagus or stomach or intestine or any other)'
             },
             {
                 'name': 'Cancer',
                 id: 'ped_no_4',
                 tag: 'PEDcancerDetails',
+                "key" : "religare_ped_cancer",
                 description: 'Cancer'
             },
             {
                 'name': 'Cardiac disorder',
                 id: 'ped_no_5',
                 tag: 'PEDcardiacDetails',
+                "key" :   "religare_ped_cardiac_disorder",
                 description: 'Any cardiovascular / Heart disease(including but not limited to Coronary artery disease / Rheumatic heart disease / Heart attack or Myocardial infarction / Heart failure / Bypass Grafting or CABG / Angioplasty or PTCA / Heart valve diseases / Pacemaker implantation)'
             },
             {
                 'name': 'Blood disorder',
                 id: 'ped_no_6',
                 tag: 'PEDjointpainDetails',
+                "key" : "religare_ped_blood_disorder",
                 description: 'Any disorders of Blood and / or Immunity(including but not limited to bleeding or clotting disorders, Systemic Lupus Erythematosus, Rheumatoid Arthritis, Crohn’s disease, Ulcerative Colitis) '
             },
             {
                 'name': 'Kidney disease',
                 id: 'ped_no_7',
                 tag: 'PEDkidneyDetails',
+                "key" : "religare_ped_kidney_disease",
                 description: 'Any Kidney / urinary tract / reproductive organ disease'
             },
             {
                 'name': 'Paralysis',
                 id: 'ped_no_8',
                 tag: 'PEDparalysisDetails',
+                "key" : "religare_ped_paralysis",
                 description: 'Any Neuromuscular(muscles or nervous system) disorder or Psychiatric disorders(including but not limited to Motor Neuron Disease, Muscular dystrophies, Epilepsy, Paralysis, Parkinsonism, Multiple Sclerosis, stroke, mental illness)'
             },
             {
                 'name': 'Congenital disorder',
                 id: 'ped_no_9',
                 tag: 'PEDcongenitalDetails',
+                "key" :  "religare_ped_congenital_disorder",
                 description: 'Congenital disorder'
             },
             {
                 'name': 'HIV / AIDS',
                 id: 'ped_no_10',
                 tag: 'PEDHivaidsDetails',
+                "key" : "religare_ped_hiv_aids",
                 description: 'HIV / AIDS / STD'
             },
             {
                 'name': 'Respiratory disorders',
                 id: 'ped_no_11',
                 tag: 'PEDRespiratoryDetails',
+                "key" : "religare_ped_respiratory_disorders",
                 description: 'Any Respiratory disease / Disease of Lungs, Pleura, and airway(including but not limited to Asthma / Tuberculosis / Pleural effusion / Bronchitis / Emphysema) '
             },
             {
                 'name': 'Endocrine disorders',
                 id: 'ped_no_12',
                 tag: 'PEDEndoDetails',
+                "key" : "religare_ped_endocrine_disorders",
                 description: 'Any disorders of the endocrine system(including but not limited to Pituitary / Parathyroid / adrenal gland disorders)'
             },
             {
                 'name': 'Any other medication / treatment',
                 id: 'ped_no_13',
                 tag: 'PEDillnessDetails',
+                "key" : "religare_ped_other_med_treatment",
                 description: 'Has any of the proposed to be insured consulted / taken treatment or recommended to take investigations / medication / surgery other than for childbirth / minor injuries ? *'
             },
             {
                 'name': 'Any other surgery',
                 id: 'ped_no_14',
                 tag: 'PEDSurgeryDetails',
+                "key" :  "religare_ped_other_surgery",
                 description: 'Has any of the proposed to be insured been hospitalised or has been under any prolonged treatment for any illness / injury or has undergone surgery other than for childbirth / minor injuries ? *'
             },
             {
@@ -470,6 +484,7 @@ export const religare = {
                 'name': 'Other',
                 id: 'ped_no_15',
                 tag: 'PEDotherDetails',
+                "key" : "religare_ped_other_disease",
                 description: ''
             }
         ]
