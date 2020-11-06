@@ -8,11 +8,13 @@ import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
 import StepsToFollow from '../../../common/ui/stepsToFollow';
+import { storageService} from '../../../utils/validators';
 
 class FyntuneLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      show_loader: true,
       productName: getConfig().productName,
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
@@ -31,44 +33,36 @@ class FyntuneLanding extends Component {
 
   async componentDidMount(){
 
-    // we get resume_data from API call
-    var resume_data = res_resume.pfwresponse.result;
-    this.setState({resume_data: resume_data})
+    this.setState({
+      show_loader: true
+    })
+    //resume api
+    try{
+      var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
+      
+      this.setState({
+        show_loader: false
+      })
+
+      if (res.pfwresponse.status_code === 200) {
+      
+      var resultData = res.pfwresponse.result;
+      this.setState({ resume_data : resultData});
+        
+      } else {
+        toast(resultData.error || resultData.message || "Something went wrong");
+      }
+    }catch(err){
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast("Something went wrong");
+    }
+  
 }
 
-  handleClick = () => {
-    this.sendEvents("next");
   
-  //we get the below data from API call  
-  var res = res_lead.pfwresponse.result;
-  var new_quote_redirection_url = this.state.res.redirection_url;
-
-  if(res.resume_present){
-    toast(`Already payment done for the previous journey`);
-    return;
-
-  }else if(getConfig().Web){
-    nativeCallback({
-      action: 'open_in_browser',
-      message: {
-        url: new_quote_redirection_url,
-      },
-    });
-
-  }else{
-    let back_url = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
-    );
-    nativeCallback({
-      action: 'open_inapp_tab',
-      message: {
-          url: new_quote_redirection_url || '',
-          back_url: back_url || ''
-      }
-    });
-  }
-};
-
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -107,36 +101,55 @@ class FyntuneLanding extends Component {
     }
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
+    var redirectToHDFC = this.state.resume_data.chrome_tab_enable;
 
-    if(getConfig().Web){
-      nativeCallback({
-        action: 'open_in_browser',
-        message: {
-          url: resume_redirection_url,
-        },
-      });
-    }else{
-    let back_url = encodeURIComponent(
+    let intermediateScreenURL = encodeURIComponent(
       window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
+    let landingScreenURL = encodeURIComponent(
+      window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams
+    );
+    var journeyURL = resume_redirection_url + '&back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
-    nativeCallback({
-      action: 'open_inapp_tab',
-      message: {
-          url: resume_redirection_url || '',
-          back_url: back_url || ''
+    if(getConfig().Web){
+      window.location.href = journeyURL;
+    }else{
+      if(redirectToHDFC){
+
+        nativeCallback({
+          action: 'open_inapp_tab',
+          message: {
+              url: resume_redirection_url  || '',
+              back_url: intermediateScreenURL || ''
+          }
+        });
+  
+      }else{
+        if (getConfig().app === 'ios') {
+          nativeCallback({
+              action: 'show_top_bar', message: {
+                  title: 'Insurance' 
+              }
+          });
       }
-    });
+        nativeCallback({
+        action: 'take_control', message: {
+            back_url: landingScreenURL,
+            back_text: 'Are you sure you want to exit the application process?'
+          }
+        });
+        window.location.href = journeyURL;
+      }
     }
-
+    
   };
 
 
   openFaqs = () => {
 
-    // this.setState({ faq_clicked: true}, ()=>{
-    //   this.sendEvents("next");
-    // })
+    this.setState({ faq_clicked: true}, ()=>{
+      this.sendEvents("next");
+    })
     this.sendEvents("next", { faq: "yes" });
     let renderData = this.state.faq_data;
 
@@ -150,16 +163,69 @@ class FyntuneLanding extends Component {
     
   };
 
-  render() {
+  handleClick = async () => {
+    this.sendEvents("next");
+    var body = {}
+    
+    let landingScreenURL = encodeURIComponent(
+      window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams
+    );
+    let intermediateScreenURL = encodeURIComponent(
+      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+    );
+    
+    
+    //create lead api
+    try{
+      var res = await Api.post(`api/ins_service/api/insurance/fyntune/lead/create`, body);
 
+        if (res.pfwresponse.status_code === 200) {
+          var resultData = res.pfwresponse.result;
+          var lead_redirection_url = resultData.redirection_url;
+          var fyntuneRefId = resultData.lead.fyntune_ref_id;
+
+          var journeyURL = lead_redirection_url + '&back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
+          
+          storageService().setObject('fyntune_ref_id', fyntuneRefId);
+          
+          if (getConfig().app === 'ios') {
+            nativeCallback({
+                action: 'show_top_bar', message: {
+                    title: 'Insurance' 
+                }
+            });
+          }
+          nativeCallback({
+          action: 'take_control', message: {
+              back_url: landingScreenURL,
+              back_text: 'Are you sure you want to exit the application process?'
+            }
+          });
+          window.location.href = journeyURL;
+            
+        } else {
+            toast(resultData.error || resultData.message || "Something went wrong");
+        }
+      }catch(err){
+        console.log(err)
+        this.setState({
+          show_loader: false
+        });
+        toast("Something went wrong");
+    }
+
+};
+
+
+  render() {
+    
     return (
       <Container
         events={this.sendEvents('just_set_events')}
-        // showLoader={this.state.show_loader}
+        showLoader={this.state.show_loader}
         title="Insurance Savings Plan"
         fullWidthButton={true}
         buttonTitle="GET INSURED"
-        // hide_header={true}
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
@@ -172,8 +238,8 @@ class FyntuneLanding extends Component {
               />
         </div>
 
-        {/* { this.state.resume_data.resume_present && ( */}
-          { true && (
+        
+          { this.state.resume_data && this.state.resume_data.resume_present && (
             <div className="resume-card" onClick={() => this.handleResume()}>
               <div className="rc-title">Recent activity</div>
 
@@ -187,12 +253,10 @@ class FyntuneLanding extends Component {
                   </div>
                   <div className="rc-tile-premium-data">
                     <div className="rct-title">
-                      {/* {this.state.quoteResume.plan_title} */}
                       Click 2 Invest
                     </div>
                     <div className="rct-subtitle">
-                      {/* {inrFormatDecimal(this.state.quoteResume.total_amount)} */}
-                      Plan Amount / per year
+                      {this.state.resume_data.lead.total_amount}
                     </div>
                   </div>
                 </div>
@@ -203,13 +267,10 @@ class FyntuneLanding extends Component {
               <div className="rc-bottom flex-between">
                 <div className="rcb-content">
                   Sum insured:{" "}
-                  {/* {numDifferentiationInr(this.state.quoteResume.sum_assured)} */}
-                  Sum rupees
+                  {this.state.resume_data.lead.sum_assured}
                 </div>
                 <div className="rcb-content">
-                  {/* Cover period: {this.state.quoteResume.tenure} year */}
-                  Cover period x year
-                  {/* {this.state.quoteResume.tenure > "1" && <span>s</span>} */}
+                  Policy term: {this.state.resume_data.lead.tenure}
                 </div>
               </div>
             </div>
@@ -223,7 +284,6 @@ class FyntuneLanding extends Component {
           </p>
         </div>
 
-          {/* TODO: add event to this carousel */}
         <p className="heading">Major Benifits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
@@ -247,7 +307,7 @@ class FyntuneLanding extends Component {
 
          <p className="heading">Get your plan in 5 easy steps</p>
          {
-           this.state.stepsToFollow.map( (step) =>{
+           this.state.stepsToFollow.map( (step, index) =>{
              return <StepsToFollow key={index + 1} keyId={index + 1} title={step.title} subtitle={step.subtitle} />
            })
          }
