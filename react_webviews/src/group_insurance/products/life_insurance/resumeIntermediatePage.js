@@ -54,17 +54,18 @@ class ResumeIntermeditePage extends Component {
 
     }
     handleClick = () =>{
-        
-        if(this.state.payment_data.lead.status === "pending"){
+
+        if(this.state.payment_data.lead.status === 'success'){
+            this.navigate(`/group-insurance/common/report`)
+        }else if(this.state.payment_data.lead.status === "pending" && this.state.payment_data.lead.fyntune_status === "Underwriting Approval"){
+            this.navigate(`/group-insurance/common/report`)
+         }else {
             this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
-         }else{
-             this.navigate(`/group-insurance/common/report`)
          }
     }
     render() {
         return (
             <Container
-            events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
             fullWidthButton={true}
             buttonTitle="OK"

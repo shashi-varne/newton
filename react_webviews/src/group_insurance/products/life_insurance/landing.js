@@ -128,14 +128,14 @@ class FyntuneLanding extends Component {
         if (getConfig().app === 'ios') {
           nativeCallback({
               action: 'show_top_bar', message: {
-                  title: 'Insurance' 
+                  title: 'Insurance Savings Plan' 
               }
           });
       }
         nativeCallback({
         action: 'take_control', message: {
             back_url: landingScreenURL,
-            back_text: 'Are you sure you want to exit the application process?'
+            back_text: 'You will be redirected to the starting point, are you sure you want to continue?'
           }
         });
         window.location.href = journeyURL;
@@ -191,14 +191,14 @@ class FyntuneLanding extends Component {
           if (getConfig().app === 'ios') {
             nativeCallback({
                 action: 'show_top_bar', message: {
-                    title: 'Insurance' 
+                    title: 'Insurance Savings Plan' 
                 }
             });
           }
           nativeCallback({
           action: 'take_control', message: {
               back_url: landingScreenURL,
-              back_text: 'Are you sure you want to exit the application process?'
+              back_text: 'You will be redirected to the starting point, are you sure you want to continue?'
             }
           });
           window.location.href = journeyURL;
