@@ -149,19 +149,17 @@ class GroupHealthPlanDob extends Component {
                     let dob_adult = validation_props.dob_adult;
                     let dob_married_male = validation_props.dob_married_male;
                     // adult
-                    if (manAgeCheck === key && age.age < dob_married_male.min) {
+                    if (manAgeCheck === key && age.age < dob_married_male.min || age.age > dob_married_male.max) {
                         dob_data.error = `Valid age is between ${dob_married_male.min} - ${dob_married_male.max - 1} years`;
                         canProceed = false;
-                    }
-                    else if(age.age > dob_adult.max || age.age < dob_adult.min) {
-                        let min_age = (ui_members.self_gender === 'MALE' && relation !== 'wife') || relation === 'father' || relation === 'husband' || relation === 'father_in_law' ? dob_married_male.min : dob_adult.min;
-                        dob_data.error = `Valid age is between ${min_age} - ${dob_adult.max - 1} years`;
+                    }else if(age.age > dob_adult.max || age.age < dob_adult.min || manAgeCheck !== key) {
+                        dob_data.error = `Valid age is between ${dob_adult.min} - ${dob_adult.max - 1} years`;
                         canProceed = false;
                     }
                     adult_ages.push(age.age);
                 } else {
                     let dob_child = validation_props.dob_child;
-                    if (age.age > dob_child.max || (age.days < dob_child.minDays) || age.age === 0 ) {
+                    if (age.age > dob_child.max || (age.days < dob_child.minDays || age.age === 0)) {
                         dob_data.error = `Valid age is between ${dob_child.minDays} days - ${dob_child.max - 1} years`;
                         canProceed = false;
                     }
@@ -184,6 +182,7 @@ class GroupHealthPlanDob extends Component {
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData);
 
         let post_body = groupHealthPlanData.post_body;
+
         for(var age in child_ages) {
             for(var adult in adult_ages) {
                 if(child_ages[age] >= adult_ages[adult]) {
