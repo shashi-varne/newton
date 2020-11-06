@@ -6,7 +6,7 @@ import { nativeCallback } from '../../../utils/native_callback'
 
 
 
-class lifeinsurence extends Component {
+class LifeInsuranceEntry extends Component {
 
   constructor(props) {
     super(props);
@@ -25,8 +25,8 @@ class lifeinsurence extends Component {
     let insuranceProducts = [
       {
         key: 'team',
-        title: 'Team Insurence',
-        subtitle: 'Get comprensive life coverage',
+        title: 'Team Insurance',
+        subtitle: 'Get comprehensive life coverage',
         icon: 'ic_term_insurance',
         disabled: false
       },
@@ -59,7 +59,7 @@ class lifeinsurence extends Component {
   handleClick = (data) => {
     this.sendEvents('next', data.key)
     if (data.key === 'lifeinsurencesavings') {
-      this.navigate('/group-insurance/life-insurance/lifeinsurencesavings/landing');
+      this.navigate('/group-insurance/life-insurance/savings-plan/landing');
     } else {
       let fullPath = data.key + '/landing';
       this.navigate('/group-insurance/life-insurance/' + fullPath);
@@ -134,4 +134,4 @@ class lifeinsurence extends Component {
   }
 }
 
-export default lifeinsurence;
+export default LifeInsuranceEntry;

@@ -220,7 +220,6 @@ class GroupHealthLanding extends Component {
   openFaqs = () => {
     this.sendEvents("next", { things_to_know: "faq" });
     let renderData = this.state.screenData.faq_data;
-
     this.props.history.push({
       pathname: "/gold/common/render-faqs",
       search: getConfig().searchParams,

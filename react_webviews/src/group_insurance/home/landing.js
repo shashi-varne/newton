@@ -34,7 +34,7 @@ class Landing extends Component {
     let insuranceProducts = [
       {
         key: 'LIFEINSURANCE',
-        title: 'Life insurance',
+        title: 'Life Insurance',
         subtitle: 'Starts from ₹7,000/year',
         icon: 'life_insurance'
       },
