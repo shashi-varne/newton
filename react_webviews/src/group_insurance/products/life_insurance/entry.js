@@ -32,7 +32,7 @@ class LifeInsuranceEntry extends Component {
       },
       {
         key: 'lifeinsurencesavings',
-        title: 'Insurence Savings plan',
+        title: 'Insurance Savings plan',
         subtitle: 'Life coverage with wealth creation',
         icon: 'money_pig',
         disabled: false

@@ -11,9 +11,6 @@ import toast from '../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 
-import { getCssMapperReport } from '../../constants';
-
-
 
 class FyntuneReportDetails extends Component {
 
@@ -44,7 +41,7 @@ class FyntuneReportDetails extends Component {
             });
             
             var resultData = res.pfwresponse.result;
-            if(true){
+            if(res.pfwresponse.status_code === 200){
                 let policy_data = resultData.policy_data || {};
 
                 this.setState({
