@@ -125,7 +125,6 @@ export async function initialize() {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
     if (this.state.get_lead) {
         try {
 
@@ -133,14 +132,15 @@ export async function initialize() {
                 show_loader: true
             });
 
-            let app_id = '122a096a-a802-4b4d-861b-ba422aabdbc9'
+            let app_id = 'fc304398-26af-4ee5-8dce-3ebdee4d6784' //fc304398-26af-4ee5-8dce-3ebdee4d6784
 
             let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/get_application_details?application_id=${app_id}`;
 
-            if(this.state.screen_name === 'final_summary_screen') {
-                url += `&forms_completed=true`;
-            }
-            const res = await Api.get(url); console.log(res)
+            // if(this.state.screen_name === 'final_summary_screen') {
+            //     url += `&forms_completed=true`;
+            // }
+            const res = await Api.get(url); 
+            console.log(res,'.................................response')
               
             var resultData = res.pfwresponse.result;
             
@@ -148,30 +148,33 @@ export async function initialize() {
                 show_loader: false
             });
             if (res.pfwresponse.status_code === 200) {
-
                 lead = resultData.quotation_details;
-                // lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
+                lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
                 // lead.member_base = ghGetMember(lead, this.state.providerConfig);
-                // lead.member_base = {}
-                lead.member_base = resultData.insured_people_details
-                console.log(  lead.member_base)
+                lead.member_base = resultData.insured_people_details;
+                console.log("_______________________________________START_______________________________________________________")
                 this.setState({
                     lead: resultData || {},
+                    quotation : resultData.quotation_details || {},
                     common_data: {
                         ...resultData.common,
                         tnc: resultData.common.tnc || resultData.tnc
                     },
-                    insured_account_type: lead.account_type || ''
+                    insured_account_type: lead.insurance_type || ''
                 }, () => {
-                    if (this.onload && !this.state.ctaWithProvider) {
+                    console.log("9279")    
+                    if ( this.onload && !this.state.ctaWithProvider) {
                         this.onload();
                     }
 
                 })
+                
             } else {
                 toast(resultData.error || resultData.message
                     || 'Something went wrong');
             }
+
+
         } catch (err) {
             console.log(err);
             this.setState({
@@ -182,11 +185,6 @@ export async function initialize() {
             toast('Something went wrong');
         }
     }
-
-   
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
 
     if (this.state.ctaWithProvider) {
 

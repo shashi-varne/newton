@@ -319,7 +319,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
 
     let body = {
-      "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", // 122a096a-a802-4b4d-861b-ba422aabdbc9
+      "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", // fc304398-26af-4ee5-8dce-3ebdee4d6784
     }
     this.sendEvents("next", {member_base: member_base});
  

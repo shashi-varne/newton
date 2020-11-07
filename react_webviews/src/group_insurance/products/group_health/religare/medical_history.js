@@ -33,6 +33,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     let member_base = []
 
     insured_people_details.forEach(element => {
+      element.insured_person.answers = element.answers
       member_base.push(element.insured_person)
     });
 
@@ -95,22 +96,21 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     for (var key in list) {
       list[key].question_value = 'No';
-      let q_key = list[key].key;
+      let q_key = list[key]['question_id'];
       let inputs = {};
       for (var i in member_base) {
         let member_data = member_base[i];
 
-        if (member_data.medical_questions) {
-          let mem_q_data = member_data.medical_questions.filter(data => data.key_mapper === q_key);
-
-          if (mem_q_data && mem_q_data.length !== 0 && mem_q_data[0].answer) {
+        if (member_data.answers.medical_history_details.length >= 1) {
+          
+          let mem_q_data = member_data.answers.medical_history_details.filter(data => data.front_end_question_id === q_key);
+          if (mem_q_data && mem_q_data.length !== 0 && mem_q_data[0].yes_no) {
             inputs[member_data.relation_key] = true;
             list[key].question_value = 'Yes';
           }
         }
+        list[key].inputs = inputs;
       }
-
-      list[key].inputs = inputs;
     }
 
     this.setState({
@@ -227,7 +227,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
 
     let body = {
-      "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", // 122a096a-a802-4b4d-861b-ba422aabdbc9
+      "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", // fc304398-26af-4ee5-8dce-3ebdee4d6784
       // "answers": {
       //   "self_account_key": {
     }
@@ -245,37 +245,30 @@ class GroupHealthPlanMedicalHistory extends Component {
 
         for (var q in list) {
           let q_data = list[q];
-          console.log(q_data, ".........................................q_data")
-          // let q_key = q_data.key;
           let inputs = q_data.inputs;
           let question_id = q_data.question_id
-          // member_data.medical_questions[q_key] = {};
-          // member_data.mand_question_exists='false';
-          // member_data.medical_questions[q_key].answer = 'false';
+          let obj = {
+            "yes_no": false,
+            "question_id": question_id
+          }
           for (var mem_key in inputs) {
             if (mem_key === relation_key && inputs[mem_key]) {
-              // body[relation_key].mand_question_exists = 'true'
-              let obj = {
-                "yes_no": true,
-                "question_id": question_id
-              }
-              body.answers[relation_key].medical_history_details.push(obj)
-              // member_data.medical_questions[q_key].answer = 'true';
-            } else {
-              let obj = {
-                "yes_no": false,
-                "question_id": question_id
-              }
-              body.answers[relation_key].medical_history_details.push(obj)
+                obj = {
+                  "yes_no": true,
+                  "question_id": question_id
+                }
             }
           }
+          body.answers[relation_key].medical_history_details.push(obj)
         }
       }
-      
-      this.sendEvents("next");             console.log(body)
+
+
+      this.sendEvents("next");     
       this.updateLead(body);
+
     }
-  }
+}
 
   handleClose = () => {
     this.setState({

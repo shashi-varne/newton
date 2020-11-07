@@ -55,7 +55,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     console.log(lead)
 
-    let spouse_relation = lead.quotation_details.member_details.spouse_account_key ? lead.quotation_details.member_details.spouse_account_key.relation : '';
+    // let spouse_relation = lead.quotation_details.member_details.spouse_account_key ? lead.quotation_details.member_details.spouse_account_key.relation : '';
  
     let member_base = lead.insured_people_details || [];
 
@@ -388,7 +388,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   
       if (this.state.backend_key === 'self_account_key') {
            var body = {
-          "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",   //122a096a-a802-4b4d-861b-ba422aabdbc9
+          "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",   //fc304398-26af-4ee5-8dce-3ebdee4d6784
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -409,7 +409,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       } else {
         var body = {
-          "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",
+          "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -426,7 +426,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
          var body = {
-          "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",  //122a096a-a802-4b4d-861b-ba422aabdbc9
+          "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",  //fc304398-26af-4ee5-8dce-3ebdee4d6784
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -440,7 +440,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       }
 
-                                           console.log(body)
+                                           console.log(body, "next_state", this.state.next_state)
       this.updateLead(body);
     }
   }

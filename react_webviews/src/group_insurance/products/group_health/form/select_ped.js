@@ -255,7 +255,7 @@ class GroupHealthPlanSelectPed extends Component {
                 }
 
                 body = {
-                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9", //122a096a-a802-4b4d-861b-ba422aabdbc9
+                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", //fc304398-26af-4ee5-8dce-3ebdee4d6784
                     "answers": {
                         [this.state.backend_key]: {
                             pre_existing_diseases
@@ -308,8 +308,8 @@ class GroupHealthPlanSelectPed extends Component {
                     [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
                 }
                 body = {
-                    "application_id": "122a096a-a802-4b4d-861b-ba422aabdbc9",
-                    "answer" : body_to_send
+                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
+                    "answers" : body_to_send
                 }
                 let data_to_store = [];
                 for (var key in ped_diseases) {
