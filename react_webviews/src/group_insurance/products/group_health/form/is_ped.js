@@ -138,27 +138,8 @@ class GroupHealthPlanIsPed extends Component {
             ped_exists: 'false'
         };
 
-        // {
-        //     "application_id": "ca0162e2-8a98-4cf9-a1fe-dc88b0e1c9b9",
-        //     "insured_people_details": [
-        //         {
-        //              "ped" : true,
-        //             "relation_key": "child_account1_key"
-                  
-        //         },
-        //         {
-        //             "relation_key": "self_account_key",
-        //               "ped" : true
-        //         },
-        //         {
-        //             "relation_key": "spouse_account_key",
-        //              "ped" : true
-        //         }
-        //     ]
-        // }
 
         let insured_people_details = []
-
         for (var i in member_base) {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].insured_person.relation;
@@ -166,7 +147,7 @@ class GroupHealthPlanIsPed extends Component {
             body[backend_key] = {};
           
             if (backend_key !== 'applicant') {
-                if (form_data[key + '_checked']) {
+                if (form_data[key + '_checked'] && this.state.form_data.is_ped === 'YES') {
                     let obj = {
                         "relation_key": backend_key,
                         'ped': true
@@ -185,33 +166,38 @@ class GroupHealthPlanIsPed extends Component {
                 }
             }
         }
+                console.log(this.state.lead, form_data)
+        if (this.state.lead.quotation_details.insurance_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
+            canSubmitForm = false;
+            toast('Please select atleast one');
+        }
 
-        // if (this.state.lead.account_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
-        //     canSubmitForm = false;
-        //     toast('Please select atleast one');
-        // }
+        if (this.state.lead.quotation_details.insurance_type === 'self' && form_data.is_ped === 'YES') {
+            next_state = 'self';
+            body['self_account_key'].ped_exists = 'true';
+        }
 
-        // if (this.state.lead.account_type === 'self' && form_data.is_ped === 'YES') {
-        //     next_state = 'self';
-        //     body['self_account_key'].ped_exists = 'true';
-        // }
-
-        // if(form_data.is_ped === 'YES' && this.props.edit) {
-        //     this.setState({
-        //         force_forward: true
-        //     })
-        //
+        if(form_data.is_ped === 'YES' && this.props.edit) {
+            this.setState({
+                force_forward: true
+            })
+        }
 
         if (canSubmitForm) {
 
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
+
+         
             let body = {
-                "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", //fc304398-26af-4ee5-8dce-3ebdee4d6784
+                "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2", //5c96ee1e-3b1e-4467-82b8-292086a87fb2
                 insured_people_details
             }
 
+
+
+                                             console.log(body)
             this.updateLead(body);
         }
 

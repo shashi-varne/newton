@@ -32,6 +32,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data: {},
       ctaWithProvider: true,
       show_loader: true,
+      quotation : { member_details : {}  },
       get_lead: true,
       openBmiDialog: false,
       pan_needed: false,
@@ -45,19 +46,18 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   onload = () => {
 
-    let lead = this.state.lead || {};       
-   
+    let lead = this.state.lead || {};  
+    let quotation = this.state.quotation || {};     
+    let insured_people_details  = lead.insured_people_details;
     let occupationOptions = this.state.screenData.occupation_opts;
 
     this.setState({
       occupationOptions: occupationOptions
     })
 
-    console.log(lead)
-
-    // let spouse_relation = lead.quotation_details.member_details.spouse_account_key ? lead.quotation_details.member_details.spouse_account_key.relation : '';
+    let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
-    let member_base = lead.insured_people_details || [];
+    let member_base = insured_people_details || [];
 
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
@@ -65,7 +65,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let pan_amount = this.state.pan_amount;
 
     let pan_needed = false;
-    if (lead.quotation_details.total_premium > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
+    if (quotation.total_premium > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
     }
 
@@ -80,11 +80,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
 
-
+    let backend_key, form_data;
     for (var i = 0; member_base && i < member_base.length; i++) {
       let key = member_base[i].insured_person.relation
       if (member_key === key) {
-        backend_key = member_base[i].relation_key;
+        backend_key = member_base[i].insured_person.relation_key;
         if (i !== member_base.length - 1) {
           next_state = member_base[i + 1].insured_person.relation
           break;
@@ -93,12 +93,10 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     if (this.props.edit) {
-      next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
+      next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;
     }
 
-    let form_data, backend_key;
     lead.insured_people_details.forEach(element => {
-
         if(this.state.provider === 'STAR'){
           if(member_key === 'self') {
             member_key = "husband"
@@ -106,14 +104,12 @@ class GroupHealthPlanPersonalDetails extends Component {
         }                                                                 
       if(element.insured_person["relation"] === member_key){
         form_data = element.insured_person,
-        backend_key  =  element.insured_person.relation_key  
-                  
+        backend_key = element.insured_person.relation_key          
       }
     });
-                  
-  
-    // let form_data = lead[backend_key] || {};
-        let dobNeeded = member_key === 'applicant';
+   
+    form_data.pan_number =   lead.buyer_details.pan_no || ""
+    let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob);
 
@@ -141,31 +137,37 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     form_data.selectedIndex = selectedIndex;
 
-    // if (this.state.provider === 'STAR') {
-    //   let occupation = lead[backend_key].occupation;
-    //   let occupationIndex = '';
-  
-    //   occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
-    //   form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
-    // }
+    if (this.state.provider === 'STAR') {
+      var occupation;
+      insured_people_details.forEach((member) => {
+        if (member.insured_person.relation_key === backend_key) {
+           occupation = member.insured_person.occupation
+        }
+      })
+      // let occupation = lead[backend_key].occupation;
+      let occupationIndex = '';
+      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
+      console.log(occupation, occupationOptions, occupationIndex)
+      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+    }
 
     this.setState({
-      // providerData: health_providers[this.state.provider],
+      providerData: health_providers[this.state.provider],
       next_state: next_state,
       // member_key: member_key,
       form_data: form_data,
       age: age,
-      // lead: lead,
-      // backend_key: backend_key,
+      lead: lead,
+      backend_key: backend_key,
       height_options: height_options,
-      // show_loader: false,
-      // header_title: header_title,
-      // header_subtitle: header_subtitle,
-      // selectedIndex: selectedIndex,
+      show_loader: false,
+      header_title: header_title,
+      header_subtitle: header_subtitle,
+      selectedIndex: selectedIndex,
       height: height,
       pan_needed: pan_needed,
-      // spouse_relation: spouse_relation,
-      // dobNeeded: dobNeeded
+      spouse_relation: spouse_relation,
+      dobNeeded: dobNeeded
     }, () => {
       ReactTooltip.rebuild()
     })
@@ -184,7 +186,6 @@ class GroupHealthPlanPersonalDetails extends Component {
  
   handleChange = name => event => {
 
-    
     var input = document.getElementById('dob');
     input.onkeyup = formatDate;
 
@@ -195,9 +196,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     var value = event.target ? event.target.value : event;
-
+     console.log(name, value)
     if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number' && name !== 'weight'){
-      return;
+      // return;
     }
 
     if(name === 'pan_number' && containsSpecialCharacters(value)){
@@ -206,7 +207,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
-    }
+    } console.log(name, value)
 
     if (name === 'height') {
       let index = event;
@@ -223,10 +224,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data[name] = value;
       form_data[name + '_error'] = '';
     }
+    console.log(name, value,form_data[name] )
 
     this.setState({
       form_data: form_data
-    });
+    },() => console.log(form_data , "9279"));
 
   };
 
@@ -298,10 +300,10 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let { provider } = this.state;
-            console.log(  provider )
-    // if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
-    //   form_data.occupation_error = 'please select one occupation';
-    // }
+
+    if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
+      form_data.occupation_error = 'please select one occupation';
+    }
 
     let age = calculateAge((form_data.dob || ''));
 
@@ -334,9 +336,9 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       }
 
-      if (this.state.lead.account_type === 'parents') {
-        let ageParent1 = calculateAge(((this.state.lead.parent_account1_key || {}).dob || ''));
-        let ageParent2 = calculateAge(((this.state.lead.parent_account2_key || {}).dob || ''));
+      if (this.state.quotation.insurance_type === 'parents') {
+        let ageParent1 = calculateAge(((this.state.quotation.parent_account1_key || {}).dob || ''));
+        let ageParent2 = calculateAge(((this.state.quotation.parent_account2_key || {}).dob || ''));
 
         if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
           form_data.dob_error = "Applicant's age should be less than parents'age";
@@ -376,19 +378,29 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       }
                                                    
-      let occupationValue = '';                    console.log(provider , occupationValue )
-      // if (provider === 'STAR') {
-        if(true){
+      let occupationValue = '';     
+      if (provider === 'STAR') {
+        // if(true){
         let { occupationOptions } = this.state;
-                  console.log(occupationOptions)
         let occupation = form_data.occupation || '';
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
       }
-
+      let body = {
+        "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
+        "insured_people_details": [{
+          "name": form_data.name,
+          "height": form_data.height || '',
+          "relation_key": this.state.backend_key,
+          "weight": form_data.weight || '',
+          "relation": this.state.form_data.relation,
+          "dob": form_data.dob || '',
+          "gender": form_data.gender || gender,
+        }]
+      }
   
       if (this.state.backend_key === 'self_account_key') {
-           var body = {
-          "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",   //fc304398-26af-4ee5-8dce-3ebdee4d6784
+             body = {
+          "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",   //5c96ee1e-3b1e-4467-82b8-292086a87fb2
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -407,26 +419,11 @@ class GroupHealthPlanPersonalDetails extends Component {
             "gender": form_data.gender || gender,
           }
         }
-      } else {
-        var body = {
-          "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
-          "insured_people_details": [{
-            "name": form_data.name,
-            "height": form_data.height || '',
-            "relation_key": this.state.backend_key,
-            "weight": form_data.weight || '',
-            "relation": this.state.form_data.relation,
-            "dob": form_data.dob || '',
-            "gender": form_data.gender || gender,
-          }]
-        }
-      }
-
-
+      } 
 
       if (provider === 'STAR') {
-         var body = {
-          "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",  //fc304398-26af-4ee5-8dce-3ebdee4d6784
+          body = {
+          "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",  //5c96ee1e-3b1e-4467-82b8-292086a87fb2
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -439,8 +436,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           }]
         }
       }
-
-                                           console.log(body, "next_state", this.state.next_state)
+                                   console.log(body)
       this.updateLead(body);
     }
   }
@@ -578,7 +574,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   render() {
-    console.log("form_data", this.state.form_data)
+
     let currentDate = new Date().toISOString().slice(0, 10);    
     return (
       <Container

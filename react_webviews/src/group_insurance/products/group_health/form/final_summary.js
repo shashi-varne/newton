@@ -230,13 +230,16 @@ class GroupHealthPlanFinalSummary extends Component {
             obj.data = data;
             accordianData.push(obj);
             if (provider === 'HDFCERGO') {
-
+                let subtitle = []
+                member.answers.pre_existing_diseases.forEach(name => {
+                    subtitle.push(name.front_end_question_id)
+                })
+                    
                 if (member.ped) {
                     let dis_data = {
                         'title': `${member.relation}'s diseases`,
-                        'subtitle': member.ped_diseases_name
+                        'subtitle': subtitle
                     }
-
                     diseases_data_backend.push(dis_data);
                 }
             }
@@ -304,12 +307,11 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'STAR') {
 
                 // for ped
-                if (member.ped_diseases_name) {
+                if (member.answers.pre_existing_diseases.length >= 1) {
                     members_for_life_style.push(member_display);
-
                     diseases_data_backend.push({
                         'title': `${member_display}'s pre-existing disease details`,
-                        'subtitle': member.ped_diseases_name
+                        'subtitle': member.answers.pre_existing_diseases[0].description
                     });
 
                 }

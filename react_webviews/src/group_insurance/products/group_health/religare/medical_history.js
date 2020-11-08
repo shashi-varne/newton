@@ -227,7 +227,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
 
     let body = {
-      "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", // fc304398-26af-4ee5-8dce-3ebdee4d6784
+      "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2", // 5c96ee1e-3b1e-4467-82b8-292086a87fb2
       // "answers": {
       //   "self_account_key": {
     }

@@ -55,6 +55,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     insured_people_details.forEach(element => {
+      element.insured_person.life_style_question = element.answers.life_style_details
       member_base.push(element.insured_person)
     });
 
@@ -65,7 +66,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
     member_base.push({
         key: 'none'
     })
-       console.log(member_base)
 
     let list = [];
    
@@ -290,36 +290,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
 
-    // let body = {};
-
-    // this.sendEvents("next", {member_base: member_base});
-    // if (canProceed) {
-    //   for (var i in member_base) {
-    //     let member_data = member_base[i];
-    //     if (member_data.key !== 'none') {
-    //       let backend_key = member_data.backend_key;
-    //       body[backend_key] = {};
-    //       if ((member_data.life_style_question_exists  === 'Yes' ||
-    //       member_data.life_style_question_exists === true) && !none_option_selected) {
-    //         body[backend_key].life_style_question_exists = 'true';
-    //         body[backend_key].life_style_question = {
-    //           answer: 'true',
-    //           answer_description: member_data.life_style_question.answer_description,
-    //           start_date: member_data.life_style_question.start_date
-    //         }
-    //       } else {
-    //         body[backend_key].life_style_question_exists = 'false';
-    //         body[backend_key].life_style_question = {}
-    //       }
-    //     }
-    //   }
-    //   this.updateLead(body);
-    // }
-
-
-
     let body = {
-      "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", // fc304398-26af-4ee5-8dce-3ebdee4d6784
+      "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2", // 5c96ee1e-3b1e-4467-82b8-292086a87fb2
     }
     this.sendEvents("next", {member_base: member_base});
  
@@ -344,7 +316,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
           };
         } 
       }
-    }                                            console.log(body)
+    }                                            console.log(body,'______________________________________',member_base)
       this.updateLead(body);
    }
   };

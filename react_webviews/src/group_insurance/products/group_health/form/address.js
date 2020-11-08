@@ -58,7 +58,7 @@ class GroupHealthPlanAddressDetails extends Component {
         let form_data =  {
             ...this.state.form_data,
             ...lead.address_details.permanent_address
-        };                                                                          
+        };                                                   console.log(form_data)                                              
 
         let correspondence_address = lead.address_details.correspondence_address || {};
         let permanent_address = lead.address_details.permanent_address || {};
@@ -66,15 +66,15 @@ class GroupHealthPlanAddressDetails extends Component {
         if (this.state.provider === 'RELIGARE') {
             form_data = {
                 ...this.state.form_data,
-                addressline: correspondence_address.addr_line1 || '',
-                addressline2: correspondence_address.addr_line1 || '',
+                addr_line1: correspondence_address.addr_line1 || '',
+                addr_line2: correspondence_address.addr_line2 || '',
                 pincode: correspondence_address.pincode || '',
                 city: correspondence_address.city || '',
                 state: correspondence_address.state || '',
                 country: correspondence_address.country || '',
 
-                p_addressline: permanent_address.addr_line1 || '',
-                p_addressline2: permanent_address.addr_line2 || '',
+                p_addr_line1: permanent_address.addr_line1 || '',
+                p_addr_line2: permanent_address.addr_line2 || '',
                 p_pincode: permanent_address.pincode || '',
                 p_city: permanent_address.city || '',
                 p_state: permanent_address.state || '',
@@ -178,8 +178,8 @@ class GroupHealthPlanAddressDetails extends Component {
             'addr_line2': 'Address line 2',
             'pincode': 'pincode',
             'city': 'city',
-            'p_addressline': 'Address line 1',
-            'p_addressline2': 'Address line 2',
+            'p_addr_line1': 'Address line 1',
+            'p_addr_line2': 'Address line 2',
             'p_pincode': 'pincode',
             'p_city': 'city'
         }
@@ -189,12 +189,12 @@ class GroupHealthPlanAddressDetails extends Component {
             if (checked) {
                 form_data.p_pincode_error = '';
                 form_data.p_city_error = '';
-                form_data.p_addressline_error = '';
-                form_data.p_addressline2_error = '';
-                keys_to_check = ['addressline', 'addressline2', 'pincode', 'city'];
+                form_data.p_addr_line1_error = '';
+                form_data.p_addr_line2_error = '';
+                keys_to_check = ['addr_line1', 'addr_line2', 'pincode', 'city'];
             } else {
-                keys_to_check = ['addressline', 'addressline2', 'pincode', 'city',
-                    'p_addressline', 'p_addressline2', 'p_pincode', 'p_city'];
+                keys_to_check = ['addr_line1', 'addr_line2', 'pincode', 'city',
+                    'p_addr_line1', 'p_addr_line2', 'p_pincode', 'p_city'];
             }
 
         }
@@ -229,8 +229,8 @@ class GroupHealthPlanAddressDetails extends Component {
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
-                    // canSubmitForm = false;  -----------------------------> some ERROR TO FIX
-                    // toast('Please check all the errors'); 
+                    canSubmitForm = false;
+                    toast('Please check all the errors'); 
                     break;
                 }
             }
@@ -245,13 +245,13 @@ class GroupHealthPlanAddressDetails extends Component {
             let body = {};
             if (provider === 'HDFCERGO') {
                 body = {
-                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
+                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
-                            "addr_line1": form_data.addressline,
+                            "addr_line1": form_data.addr_line1,
                             "pincode": form_data.pincode,
-                            "addr_line2": form_data.addressline2,
+                            "addr_line2": form_data.addr_line2,
                             "city": form_data.city
                         }
                     }
@@ -261,7 +261,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
             if (provider === 'RELIGARE') {
                 body = {
-                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
+                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -273,15 +273,15 @@ class GroupHealthPlanAddressDetails extends Component {
                         "correspondence_addr_same": "n",
                         "correspondence_address": {
                             "state": checked ? form_data.state : form_data.p_state,
-                            "addr_line1": checked ? form_data.addr_line1 : form_data.p_addressline,
+                            "addr_line1": checked ? form_data.addr_line1 : form_data.p_addr_line1,
                             "pincode":checked ? form_data.pincode : form_data.p_pincode,
-                            "addr_line2":  checked ? form_data.addr_line2 : form_data.p_addressline2,
+                            "addr_line2":  checked ? form_data.addr_line2 : form_data.p_addr_line2,
                             "city": checked ? form_data.city : form_data.p_city
                         }
                     }
                 }
             }
-                     console.log(body, "-----------------------------------------------:",checked)
+                     console.log(body, "-----------------------------------------------:",form_data)
             this.updateLead(body);
         }
     }
@@ -296,9 +296,9 @@ class GroupHealthPlanAddressDetails extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'address details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'address_entered': this.state.form_data.addressline ? 'yes' : 'no',
+                'address_entered': this.state.form_data.addr_line1 ? 'yes' : 'no',
                 "permanent_current_same": this.state.checked ? 'yes' : 'no',
-                "permanent_address_entered": this.state.form_data.p_addressline ? 'yes' : 'no',
+                "permanent_address_entered": this.state.form_data.p_addr_line1 ? 'yes' : 'no',
             }
         };
 
@@ -534,13 +534,13 @@ class GroupHealthPlanAddressDetails extends Component {
                                 <Input
                                     type="text"
                                     disabled={this.state.checked}
-                                    id="p_addressline"
+                                    id="p_addr_line1"
                                     label="Address line 1"
-                                    name="p_addressline"
+                                    name="p_addr_line1"
                                     placeholder="ex: 16/1 Queens paradise"
-                                    error={(this.state.form_data.p_addressline_error) ? true : false}
-                                    helperText={this.state.form_data.p_addressline_error}
-                                    value={this.state.form_data.p_addressline || ''}
+                                    error={(this.state.form_data.p_addr_line1_error) ? true : false}
+                                    helperText={this.state.form_data.p_addr_line1_error}
+                                    value={this.state.form_data.p_addr_line1 || ''}
                                     onChange={this.handleChange()} />
                             </div>
 
@@ -548,13 +548,13 @@ class GroupHealthPlanAddressDetails extends Component {
                                 <Input
                                     type="text"
                                     disabled={this.state.checked}
-                                    id="p_addressline2"
+                                    id="p_addr_line2"
                                     label="Address line 2"
-                                    name="p_addressline2"
+                                    name="p_addr_line2"
                                     placeholder="ex: 16/1 Queens paradise"
-                                    error={(this.state.form_data.p_addressline2_error) ? true : false}
-                                    helperText={this.state.form_data.p_addressline2_error}
-                                    value={this.state.form_data.p_addressline2 || ''}
+                                    error={(this.state.form_data.p_addr_line2_error) ? true : false}
+                                    helperText={this.state.form_data.p_addr_line2_error}
+                                    value={this.state.form_data.p_addr_line2 || ''}
                                     onChange={this.handleChange()} />
                             </div>
 
@@ -637,8 +637,8 @@ class GroupHealthPlanAddressDetails extends Component {
                             label="Address line 1"
                             name="addr_line1"
                             placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.addressline_error) ? true : false}
-                            helperText={this.state.form_data.addressline_error}
+                            error={(this.state.form_data.addr_line1_error) ? true : false}
+                            helperText={this.state.form_data.addr_line1_error}
                             value={this.state.form_data.addr_line1 || ''}
                             onChange={this.handleChange()} />
                     </div>
@@ -649,8 +649,8 @@ class GroupHealthPlanAddressDetails extends Component {
                             label="Address line 2"
                             name="addr_line2"
                             placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.addressline2_error) ? true : false}
-                            helperText={this.state.form_data.addressline2_error}
+                            error={(this.state.form_data.addr_line2_error) ? true : false}
+                            helperText={this.state.form_data.addr_line2_error}
                             value={this.state.form_data.addr_line2 || ''}
                             onChange={this.handleChange()} />
                     </div>

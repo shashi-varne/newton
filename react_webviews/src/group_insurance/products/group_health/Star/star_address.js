@@ -44,7 +44,7 @@ class StarAddress extends Component {
     }
 
     const { lead = {} } = this.state;                            console.log(lead)
-    lead.permanent_address = lead.permanent_address || {};
+    lead.permanent_address = lead.address_details.permanent_address || {};
     let form_data = lead.address_details.permanent_address || {};
 
     form_data.city = lead.address_details.permanent_address.city;
@@ -155,8 +155,8 @@ class StarAddress extends Component {
 
     this.sendEvents('next');
     const keysMapper = {
-      'addressline': 'Address line 1',
-      'addressline2': 'Address line 2',
+      'addr_line1': 'Address line 1',
+      'addr_line2': 'Address line 2',
       'pincode': 'pincode',
       'city_id': 'city',
       'area_id': 'area',
@@ -165,8 +165,8 @@ class StarAddress extends Component {
 
     
     const keys_to_check = [
-      'addressline',
-      'addressline2',
+      'addr_line1',
+      'addr_line2',
       'pincode',
       'city_id',
       'area_id',
@@ -202,14 +202,15 @@ class StarAddress extends Component {
       console.log(form_data)
 
       const body = {
-        "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",  // fc304398-26af-4ee5-8dce-3ebdee4d6784
+        "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",  // 5c96ee1e-3b1e-4467-82b8-292086a87fb2
         "address_details": {                   
           "permanent_address": {
             "state": form_data.state,
-            "addr_line1": form_data.addressline,
+            "addr_line1": form_data.addr_line1,
             "pincode": form_data.pincode,
-            "addr_line2":form_data.addressline2,
-            "city": form_data.city
+            "addr_line2":form_data.addr_line2,
+            "city": form_data.city,
+            "area" : form_data.area
           }
         }
       }
@@ -232,8 +233,8 @@ class StarAddress extends Component {
         "flow": this.state.insured_account_type || '',
         "screen_name": 'address details',
         'from_edit': this.props.edit ? 'yes' : 'no',
-        'address_entered': this.state.form_data.addressline ? 'yes' : 'no',
-        'address2_entered': this.state.form_data.addressline2 ? 'yes' : 'no',
+        'address_entered': this.state.form_data.addr_line1 ? 'yes' : 'no',
+        'address2_entered': this.state.form_data.addr_line2 ? 'yes' : 'no',
       }
     };
 
@@ -338,25 +339,25 @@ class StarAddress extends Component {
           <div className="InputField">
             <Input
               type="text"
-              id="addressline"
+              id="addr_line1"
               label="Address line 1"
-              name="addressline"
+              name="addr_line1"
               placeholder="ex: 16/1 Queens paradise"
-              error={(this.state.form_data.addressline_error) ? true : false}
-              helperText={this.state.form_data.addressline_error}
-              value={this.state.form_data.addressline || ''}
+              error={(this.state.form_data.addr_line1_error) ? true : false}
+              helperText={this.state.form_data.addr_line1_error}
+              value={this.state.form_data.addr_line1 || ''}
               onChange={this.handleChange()} />
           </div>
           <div className="InputField">
             <Input
               type="text"
-              id="addressline2"
+              id="addr_line2"
               label="Address line 2"
-              name="addressline2"
+              name="addr_line2"
               placeholder="ex: 16/1 Queens paradise"
-              error={(this.state.form_data.addressline2_error) ? true : false}
-              helperText={this.state.form_data.addressline2_error}
-              value={this.state.form_data.addressline2 || ''}
+              error={(this.state.form_data.addr_line2_error) ? true : false}
+              helperText={this.state.form_data.addr_line2_error}
+              value={this.state.form_data.addr_line2 || ''}
               onChange={this.handleChange()} />
           </div>
           <FormControl fullWidth>

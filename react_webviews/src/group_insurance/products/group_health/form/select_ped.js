@@ -47,16 +47,16 @@ class GroupHealthPlanSelectPed extends Component {
         })
         let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
 
-        let {lead, provider} = this.state;   
-        let member_base = lead.insured_people_details; 
+        let {lead, provider} = this.state;
+        let member_base = lead.insured_people_details;   
         let member_key = this.props.match.params.member_key;
 
         let member_info_index  = member_base.findIndex(data => data.insured_person.relation === member_key);
-        let member_info = member_base[member_info_index]
-    
-        let backend_key = member_info.insured_person.relation_key;      
-        let ped_diseases_name = member_info.answers.pre_existing_diseases; 
+        let member_info = member_base[member_info_index];  
+  
 
+        let backend_key = member_info.insured_person.relation_key;
+        let ped_diseases_name = member_info.answers.pre_existing_diseases;
         // ped_diseases_name = (ped_diseases_name || '').split(',');
 
          
@@ -92,9 +92,9 @@ class GroupHealthPlanSelectPed extends Component {
         if(provider === 'HDFCERGO') {
             for (let disease_name of ped_diseases_name) {
                 let matched;
-    
+
                 for (let opt of options) {
-                    if (opt.name === disease_name) {
+                    if (opt.question_id === disease_name.front_end_question_id) {
                         opt.checked = true;
                         matched = true;
                     }
@@ -133,6 +133,8 @@ class GroupHealthPlanSelectPed extends Component {
     }
 
     componentDidUpdate(prevState) {
+        console.log(this.state.member_key , this.state.member_key , this.props.match.params.member_key)
+           console.log(prevState)
         if (this.state.member_key && this.state.member_key !== this.props.match.params.member_key) {
             this.onload();
         }
@@ -218,7 +220,7 @@ class GroupHealthPlanSelectPed extends Component {
 
                         let value = options[j].name;
 
-                        console.log(value)
+
                         if (options[j].name === 'Other') {
                             value = this.state[this.state.otherInputData.name];
                         }
@@ -255,7 +257,7 @@ class GroupHealthPlanSelectPed extends Component {
                 }
 
                 body = {
-                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", //fc304398-26af-4ee5-8dce-3ebdee4d6784
+                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2", //5c96ee1e-3b1e-4467-82b8-292086a87fb2
                     "answers": {
                         [this.state.backend_key]: {
                             pre_existing_diseases
@@ -308,7 +310,7 @@ class GroupHealthPlanSelectPed extends Component {
                     [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
                 }
                 body = {
-                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
+                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
                     "answers" : body_to_send
                 }
                 let data_to_store = [];

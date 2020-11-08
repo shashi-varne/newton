@@ -132,11 +132,11 @@ export async function initialize() {
                 show_loader: true
             });
 
-            let app_id = 'fc304398-26af-4ee5-8dce-3ebdee4d6784' //fc304398-26af-4ee5-8dce-3ebdee4d6784
+            let app_id = '5c96ee1e-3b1e-4467-82b8-292086a87fb2' //5c96ee1e-3b1e-4467-82b8-292086a87fb2
 
-            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/get_application_details?application_id=${app_id}`;
+            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/star/get_application_details?application_id=${app_id}`;
 
-            // if(this.state.screen_name === 'final_summary_screen') {
+            // if(this.state.screen_name === 'final_summary_screen') { religare
             //     url += `&forms_completed=true`;
             // }
             const res = await Api.get(url); 
@@ -152,7 +152,7 @@ export async function initialize() {
                 lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
                 // lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 lead.member_base = resultData.insured_people_details;
-                console.log("_______________________________________START_______________________________________________________")
+               
                 this.setState({
                     lead: resultData || {},
                     quotation : resultData.quotation_details || {},
@@ -162,7 +162,6 @@ export async function initialize() {
                     },
                     insured_account_type: lead.insurance_type || ''
                 }, () => {
-                    console.log("9279")    
                     if ( this.onload && !this.state.ctaWithProvider) {
                         this.onload();
                     }
@@ -282,15 +281,6 @@ export async function initialize() {
         })
     }
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
 
 
 // if (this.state.ctaWithProvider) {
@@ -419,7 +409,7 @@ export async function updateLead( body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/update_application_details' , body)
+        const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/star/update_application_details' , body)
 
         // const res = await Api.post('/api/insurancev2/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=a6e81841-ab66-41a5-a1d4-a80ebaf7d5dc', body)
 

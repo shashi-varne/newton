@@ -63,7 +63,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         let appointee_account_key = lead.nominee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
-        if (lead.appointee_account_key) {
+        if (lead.nominee_details) {
             form_data.appointeename = appointee_account_key.name;
             form_data.appointeerelation = appointee_account_key.relation;
             form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
@@ -254,15 +254,15 @@ class GroupHealthPlanNomineeDetails extends Component {
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
-                    canSubmitForm = false;
+                    // canSubmitForm = false;
                     break;
                 }
             }
-        }
+        }       
 
         if (canSubmitForm) {
             let body = {
-                "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784", // fc304398-26af-4ee5-8dce-3ebdee4d6784
+                "application_id": "2f88a3d5-1a31-48c7-a238-51c4535babf2", // 2f88a3d5-1a31-48c7-a238-51c4535babf2
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -289,7 +289,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 // }
 
                 body = {
-                    "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784",
+                    "application_id": "2f88a3d5-1a31-48c7-a238-51c4535babf2",
                     nominee_account_key: {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,

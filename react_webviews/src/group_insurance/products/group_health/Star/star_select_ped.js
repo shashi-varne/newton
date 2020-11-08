@@ -35,9 +35,14 @@ class GroupHealthStarPlanSelectPed extends Component {
 
 
     insured_people_details.forEach(element => {
+          if (element.answers.pre_existing_diseases.length >= 1) {
+            element.insured_person.ped_diseases_name = element.answers.pre_existing_diseases[0].description;
+            element.insured_person.ped_exists = true;
+            element.insured_person.key = element.insured_person.relation;
+          }
       member_base.push(element.insured_person)
     });
-
+         console.log(member_base)
     member_base.forEach(element => {
       element.key = element.relation
     });
@@ -204,7 +209,7 @@ class GroupHealthStarPlanSelectPed extends Component {
       toast("Select atleast one option");
     }
    let body = {
-     "application_id": "fc304398-26af-4ee5-8dce-3ebdee4d6784"
+     "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2"
    }
    if (canProceed) {
      body.answers = {}
@@ -229,7 +234,7 @@ class GroupHealthStarPlanSelectPed extends Component {
          }
        }
      }
-     console.log(body)
+    //  console.log(body)
      this.updateLead(body);
    }
    };
