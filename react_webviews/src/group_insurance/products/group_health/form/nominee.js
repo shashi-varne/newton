@@ -262,7 +262,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         if (canSubmitForm) {
             let body = {
-                "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd", // 2f88a3d5-1a31-48c7-a238-51c4535babf2
+                "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde", // 2f88a3d5-1a31-48c7-a238-51c4535babf2
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -289,7 +289,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 // }
 
                 body = {
-                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
+                    "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde",
                     nominee_account_key: {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,

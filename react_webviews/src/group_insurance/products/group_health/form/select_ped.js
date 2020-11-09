@@ -71,8 +71,7 @@ class GroupHealthPlanSelectPed extends Component {
         });
 
         if(this.state.provider === 'RELIGARE') {
-            let ped_data = member_info.ped_diseases || [];
-
+            let ped_data = member_info.answers.pre_existing_diseases.length >= 1 ? member_info.answers.pre_existing_diseases : [];
             ped_data.forEach(item => {
 
                 options.forEach((opt, index) => {
@@ -244,7 +243,7 @@ class GroupHealthPlanSelectPed extends Component {
                 // }
 
                 body = {
-                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd", //43b0bba5-a078-468e-ad25-05506022c0dd
+                    "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde", //fe6693d5-6e5c-468c-abd9-16ef34afbcde
                     "answers": {
                         [this.state.backend_key]: {
                             pre_existing_diseases
@@ -290,7 +289,7 @@ class GroupHealthPlanSelectPed extends Component {
                     [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
                 }
                 body = {
-                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
+                    "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde",
                     "answers" : body_to_send
                 }
                 let data_to_store = [];

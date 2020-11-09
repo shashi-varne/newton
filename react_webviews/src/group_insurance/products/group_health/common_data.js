@@ -73,7 +73,7 @@ export async function initialize() {
                 show_loader: true
             });  
 
-            let app_id = '43b0bba5-a078-468e-ad25-05506022c0dd' //43b0bba5-a078-468e-ad25-05506022c0dd
+            let app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801' //1a8b7958-e78d-486f-b7a3-a77c8bcae801
             let url = `/api/insurance/proposal/religare/get_application_details?application_id=${app_id}`;
 
             if(this.state.screen_name === 'final_summary_screen') {

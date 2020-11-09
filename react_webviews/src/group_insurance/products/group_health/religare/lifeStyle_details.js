@@ -55,7 +55,17 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     insured_people_details.forEach(element => {
-      element.insured_person.life_style_question = element.answers.life_style_details
+      if (element.answers.life_style_details.length >= 1) {
+        element.insured_person.life_style_question = element.answers.life_style_details[0]
+        element.insured_person.life_style_question.answer = element.insured_person.life_style_question.yes_no
+        element.insured_person.life_style_question.answer_description = element.insured_person.life_style_question.description
+        let since_when = element.insured_person.life_style_question.since_when.split('/');
+        let since_when_lifestyle = `${since_when[1]}/${since_when[2]}`
+        element.insured_person.life_style_question.start_date = since_when_lifestyle
+        element.insured_person.life_style_question.medical_question = "PEDSmokeDetails"
+        element.insured_person.life_style_question.key_mapper = "lifestylye_no_1"
+        element.insured_person.life_style_question_exists = true
+      }
       member_base.push(element.insured_person)
     });
 
@@ -168,8 +178,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     if (id === "answer_description") {
-      console.log(member_base, member_base[index])
-      member_base[index].life_style_question = {}
       member_base[index].life_style_question.answer_description = value;
       member_base[index].life_style_question.answer_description_error = '';
     } else {
@@ -194,12 +202,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
   handleCheckbox = (event, index) => {
 
     let { member_base, none_option_selected } = this.state;
-
-
-
-
     member_base[index].life_style_question_exists = event.target.checked;
-
     let isNone = member_base[index].key === 'none';
 
     if (isNone) {
@@ -208,7 +211,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
         if (member_base[key].key !== 'none') {
           member_base[key].life_style_question_exists = false;  //setting other to un check other than none
         }
-
       }
     }
 
@@ -291,7 +293,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
 
     let body = {
-      "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd", // 43b0bba5-a078-468e-ad25-05506022c0dd
+      "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801", // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
     }
     this.sendEvents("next", {member_base: member_base});
  
@@ -316,7 +318,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
           };
         } 
       }
-    }                                            console.log(body,'______________________________________',member_base)
+    } 
       this.updateLead(body);
    }
   };

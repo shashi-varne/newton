@@ -74,7 +74,8 @@ class StarAddress extends Component {
     }, async () => {
       try {
         const { pincode, city_id } = form_data;
-        const res = await Api.get(`/api/ins_service/api/insurance/star/get/area?pincode=${pincode}&city_id=${city_id}`);
+        const res = await Api.get(`/api/insurance/proposal/star/area_options?pincode=${pincode}&city_id=${city_id}`);
+        console.log(res,'......response')
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const areaList = this.formatAreaOpts(res.pfwresponse.result.areas);
 
@@ -194,7 +195,7 @@ class StarAddress extends Component {
       
 
       const body = {
-        "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",  // 43b0bba5-a078-468e-ad25-05506022c0dd
+        "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",  // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
         "address_details": {                   
           "permanent_address": {
             "state": form_data.state,
@@ -202,11 +203,12 @@ class StarAddress extends Component {
             "pincode": form_data.pincode,
             "addr_line2":form_data.addr_line2,
             "city": form_data.city,
-            "area" : form_data.area
+            "area" : form_data.area,
+            "area_id" : form_data.area_id
           }
         }
       }
-
+       console.log(body)
       this.updateLead(body);
     }
   };
@@ -260,17 +262,15 @@ class StarAddress extends Component {
     if (pincode.length === 6) {
       try {
         this.setState({ isLoadingCity: true });
-        const res = await Api.get((`/api/ins_service/api/insurance/star/get/city?pincode=${pincode}`));
-
+        const res = await Api.get((`/api/insurance/proposal/star/city_options?pincode=${pincode}`));
+            console.log(res,pincode,'.................................................')
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const cityList = this.formatCityOpts(res.pfwresponse.result.cities);
           form_data.state = res.pfwresponse.result.state;
-
-          let data = cityList.filter(city => city.name === form_data.city);
-          
+          let data = cityList.filter(city => city.city_name === form_data.city);
           if(data.length > 0) {
-            form_data.city = data[0].name;
-            form_data.city_id = data[0].value;
+            form_data.city = data[0].city_name;
+            form_data.city_id = data[0].city_id;
             form_data.city_id_error = '';
 
             // fetch area

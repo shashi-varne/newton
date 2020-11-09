@@ -566,14 +566,14 @@ class GroupHealthPlanFinalSummary extends Component {
             this.redirectToPayment();
             return;
         }
+         const app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801'
         try {
-            let res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/start/payment?lead_id=${this.state.quote_id}`);
-
-
+            let res = await Api.get(`/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${app_id}`);       
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
-            })
+            });
+
             if (res.pfwresponse.status_code === 200) {
 
                 if(resultData.ped_check && data.showMedDialog) {
@@ -600,14 +600,12 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     checkPPC = async () => {
-
+        const app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801'
         this.setState({
             show_loader: true
         });
         try {
-            let res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/ppc/check?quote_id=${this.state.quote_id}`);
-
-
+            let res = await Api.get(`api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${app_id}`);
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 

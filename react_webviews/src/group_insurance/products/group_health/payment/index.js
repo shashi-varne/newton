@@ -41,6 +41,7 @@ class GroupHealthPayment extends Component {
       params: getUrlParams(),
       commonMapper: {},
       lead: {},
+      quotation : {},
       policy_data: {},
       providerData: {},
       productName: getConfig().productName,
@@ -86,8 +87,8 @@ class GroupHealthPayment extends Component {
   }
 
   onload = async() => {
-    console.log(this.state);
-    if(!this.state.get_lead) {
+    console.log(this.state,this.state.get_lead);
+    if(!this.state.get_lead || true) {
       try {
 
         this.setState({
@@ -96,17 +97,17 @@ class GroupHealthPayment extends Component {
   
         let quote_id = storageService().get('ghs_ergo_quote_id');
   
-        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.provider_api}/get/policy/` + quote_id);
+        const res = await Api.get(`api/insurance/health/policy/religare/check_status?application_id=fe6693d5-6e5c-468c-abd9-16ef34afbcde`);
   
         var resultData = res.pfwresponse.result;
-  
+        console.log(resultData, '___________________________+-*/.')
         this.setState({
           show_loader: false
         });
         if (res.pfwresponse.status_code === 200) {
   
-          let lead = resultData.policy_data.insured_lead_details || {};
-          let policy_data = resultData.policy_data || {};
+          let lead = resultData.insured_member_details || {};
+          let policy_data = resultData.policy || {};
   
           this.setState({
             policy_data: policy_data,
@@ -169,7 +170,12 @@ class GroupHealthPayment extends Component {
   }
 
   render() {
-    let {policy_data, screenData, provider} = this.state;
+    let {policy_data, screenData, provider} = this.state;       
+    
+    console.log('o________________________________o',this.state, 'o________________________________o')
+    
+
+
     return (
       <Container
         provider={this.state.provider}
@@ -195,11 +201,11 @@ class GroupHealthPayment extends Component {
           <div className="main-tile">
 
             <div>
-              {this.state.paymentSuccess && provider === 'RELIGARE' &&
+              {!this.state.paymentSuccess && provider === 'RELIGARE' &&
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                  Payment of {inrFormatDecimal2(this.state.quotation.total_premium)} for {this.state.quotation.vendor} {this.state.quotation.insurance_type} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
                 }

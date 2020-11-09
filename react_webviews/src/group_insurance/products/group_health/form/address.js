@@ -243,7 +243,7 @@ class GroupHealthPlanAddressDetails extends Component {
             let body = {};
             if (provider === 'HDFCERGO') {
                 body = {
-                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
+                    "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -259,7 +259,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
             if (provider === 'RELIGARE') {
                 body = {
-                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
+                    "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
