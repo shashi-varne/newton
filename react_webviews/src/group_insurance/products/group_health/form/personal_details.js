@@ -307,11 +307,11 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
       if (provider === 'HDFCERGO') {
-        if (form_data.gender === 'MALE' && age < validation_props.dob_married_male.min || age > validation_props.dob_married_male.max  ) {
+        if (form_data.gender === 'MALE' && (age < validation_props.dob_married_male.min || age > validation_props.dob_married_male.max)) {
           form_data.dob_error = `Valid age is between ${validation_props.dob_married_male.min } - ${validation_props.dob_married_male.max - 1} years`;
         }
 
-        if (form_data.gender === 'FEMALE' && age < validation_props.dob_married_female.min || age > validation_props.dob_married_female.max ) {
+        if (form_data.gender === 'FEMALE' && (age < validation_props.dob_married_female.min || age > validation_props.dob_married_female.max )) {
           form_data.dob_error = `Valid age is between ${validation_props.dob_married_female.min } - ${validation_props.dob_married_female.max - 1} years`;
         }
 

@@ -56,7 +56,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
         if(post_body.mem_info.child > 0){
             for(var key in post_body){
-                    if(key.includes('child') && calculateAge(post_body[key].dob, false) < 5 && this.state.providerConfig.key == "RELIGARE"){
+                    if(key.includes('child') && calculateAge(post_body[key].dob, false) < 5 && this.state.providerConfig.key === "RELIGARE"){
                         this.setState({disableFloaterOption: true });
                     }
             }
