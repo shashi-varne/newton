@@ -43,7 +43,7 @@ class StarAddress extends Component {
       });
     }
 
-    const { lead = {} } = this.state;                            console.log(lead)
+    const { lead = {} } = this.state;
     lead.permanent_address = lead.address_details.permanent_address || {};
     let form_data = lead.address_details.permanent_address || {};
 
@@ -191,15 +191,7 @@ class StarAddress extends Component {
         acc[key] = `${form_data[key]}`;
         return acc;
       }, {});
-      // const body = {
-      //   permanent_address: {
-      //     ...data_to_send,
-      //     'district': '',
-      //   },
-      // };
-
-
-      console.log(form_data)
+      
 
       const body = {
         "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",  // 5c96ee1e-3b1e-4467-82b8-292086a87fb2
@@ -214,10 +206,6 @@ class StarAddress extends Component {
           }
         }
       }
-
-
-
-          console.log(body)
 
       this.updateLead(body);
     }
