@@ -54,7 +54,7 @@ class GroupHealthPlanStarSumInsured extends Component {
 
         try {
             this.setState({ loadingPremium: true, apiError :false });
-            const res = await Api.post('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/star', body);
+            const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_premium/star', body);
 
             this.setState({ loadingPremium: false, premiumData: [] });
             let resultData = res.pfwresponse.result;
@@ -103,7 +103,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 "user_action": user_action,
                 "product": 'star',
                 "flow": this.state.insured_account_type || '',
-                sum_assured:  this.state.sum_assured[this.state.selectedIndex],
+                // sum_assured:  this.state.sum_assured[this.state.selectedIndex],
                 screen_name: 'select sum Insured',
             }
         }
@@ -160,7 +160,7 @@ class GroupHealthPlanStarSumInsured extends Component {
         body['si'] = this.state.premium_data[this.state.selectedIndex].sum_insured;
                 
         try{
-            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/star`, body);
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/star`, body);
 
             var resultData = res.pfwresponse.result;
 
@@ -171,6 +171,7 @@ class GroupHealthPlanStarSumInsured extends Component {
             groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
             groupHealthPlanData.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
             groupHealthPlanData.post_body.sum_assured = this.state.premium_data[this.state.selectedIndex].sum_insured;
+            groupHealthPlanData.post_body.individual_si = this.state.premium_data[this.state.selectedIndex].sum_insured;
             groupHealthPlanData.plan_selected_final = plan_selected_final;
 
             
