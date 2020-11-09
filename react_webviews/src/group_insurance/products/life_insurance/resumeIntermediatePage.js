@@ -5,7 +5,7 @@ import toast from "../../../common/ui/Toast";
 import { storageService} from '../../../utils/validators';
 import Api from "utils/api";
 
-class ResumeIntermeditePage extends Component {
+class ResumeIntermediatePage extends Component {
 
     constructor(props){
         super(props);
@@ -93,4 +93,4 @@ class ResumeIntermeditePage extends Component {
     }
 }
 
-export default ResumeIntermeditePage
+export default ResumeIntermediatePage;

@@ -175,6 +175,9 @@ class FyntuneLanding extends Component {
     );
     
     
+    this.setState({
+      show_loader: true
+    })
     //create lead api
     try{
       var res = await Api.post(`api/ins_service/api/insurance/fyntune/lead/create`, body);
