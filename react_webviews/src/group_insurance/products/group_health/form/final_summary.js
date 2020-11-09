@@ -265,7 +265,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 }
 
-                      console.log(member)
                 // for peds 
                 if (member.ped) {
 
@@ -281,7 +280,6 @@ class GroupHealthPlanFinalSummary extends Component {
                     member.answers.pre_existing_diseases.forEach(ped_option => {
                         
                         // eslint-disable-next-line no-loop-func 
-                        console.log(ped_option)
                         let ped = ped_list.find(item => item.key === ped_option.front_end_question_id);
                         diseases_data_backend.push({
                             'title': ped_option.description || ped.name,
@@ -877,7 +875,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {              console.log(this.state.quotation,"..........___________________")
+    render() {
         return (
             <Container
             provider={this.state.provider}
