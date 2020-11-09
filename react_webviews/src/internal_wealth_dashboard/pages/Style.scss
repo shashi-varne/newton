@@ -1,0 +1,245 @@
+@mixin animatedDelay($n, $delay) {
+  @for $i from 1 through $n {
+    .animated:nth-child(#{$i}) {
+      animation-delay: #{$i * $delay}s;
+    }
+  } 
+}
+.circularExpand {
+  transition: clip-path 0.8s ease-in-out, opacity 1s;
+}
+
+.expand {
+  // opacity: 1;
+  clip-path: circle(100%);
+}
+.shrink {
+  // opacity: 0;
+  clip-path: circle(0% at bottom 100px left 120px);
+}
+
+.animatedFade, .animatedFadeChildren * {
+  @extend .animated, .animatedFadeInUp, .fadeInUp;
+}
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-delay: 1s;
+  -webkit-animation-fill-mode: both
+}
+
+.animatedFadeInUp {
+  opacity: 0;
+}
+
+.fadeInUp {
+  opacity: 0;
+  animation-name: fadeInUp;
+  -webkit-animation-name: fadeInUp;
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translate3d(0,40px,0)
+  }
+
+  to {
+    transform: translate3d(0,0,0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    transform: translate3d(0,40px,0);
+  }
+
+  to {
+    transform: translate3d(0,0,0);
+    opacity: 1;
+  }
+}
+
+.fade {
+  animation: fade 0.6s ease-in-out;
+  animation-name: fade;
+  -webkit-animation-name: fade;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@include animatedDelay(10, 0.6);
+
+.iwd-text-field {
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+  background-color: rgba(255, 255, 255, 0.2);
+  height: 60px !important;
+  box-sizing: border-box !important;
+  border-radius: 4px;
+}
+
+.iwd-text-field-input {
+  font-size: 15px !important;
+  line-height: 24px !important;
+  padding: 18px !important;
+  height: 100% !important;
+  color: white !important;
+  box-sizing: border-box !important;
+}
+
+// #iwd-login * {
+//   @extend .fade;
+// }
+
+#iwd-login {
+
+  *:not(.MuiCircularProgress-root):not(.MuiCircularProgress-circle):not(.MuiTouchRipple-root):not(.MuiTouchRipple-ripple) {
+    @extend .fade;
+  }
+
+  display: flex;
+  height: 100%;
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+
+  .iwd-help-btn {
+    background-color: rgba(79, 45, 166, 0.1);
+    border-radius: 100px;
+
+    .iwd-help-btn-label {
+      color: var(--primary);
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 11px;
+      line-height: 21px;
+      letter-spacing: 2px;
+    }
+  }
+
+  #iwd-login-left {
+    background-color: white;
+    flex: 1;
+    padding: 70px 100px;
+    
+    #iwd-ll-hero-text {
+      font-size: 50px;
+      line-height: 70px;
+      margin-bottom: 30px;
+      margin-top: 130px;
+      color: var(--primary);
+    }
+
+    #iwd-ll-divider {
+      border-bottom: 2px solid #4AD0C0;
+      width: 40px;
+      margin-bottom: 20px;
+    }
+
+    #iwd-ll-subtext {
+      font-size: 15px;
+      line-height: 24px;
+      color: #767E86;
+    }
+
+    .iwd-ll-help {
+      position: absolute;
+      bottom: 70px;
+      left: 100px;
+    }
+  }
+
+  #iwd-login-right {
+    background: linear-gradient(90deg, #4F2DA6, #6A2DA6);
+    width: 44%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 5% 9%;
+    box-sizing: border-box;
+
+    @include animatedDelay(10, 0.3);
+
+    #iwd-ll-login-container {
+      width: 100%;
+    }
+
+    img {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .iwd-lr-help {
+      display: none; 
+    }
+  }
+}
+
+@media only screen and (min-width: 300px) and (max-width: 800px) {
+  #iwd-login {
+    flex-flow: column wrap;
+    height: auto;
+
+    .iwd-help-btn {
+      background-color: rgba(255, 255, 255, 0.3);
+
+      .iwd-help-btn-label {
+        color: white;
+      }
+    }
+
+    #iwd-login-left {
+      display: flex;
+      flex-flow: column wrap;
+      align-items: center;
+      padding: 50px 40px;
+      width: 100%;
+      box-sizing: border-box;
+
+      #iwd-ll-hero-text {
+        font-size: 30px;
+        line-height: 48px;
+        text-align: center;
+        margin-top: 50px;
+      }
+
+      #iwd-ll-divider {
+        margin-bottom: 30px;
+      }
+
+      #iwd-ll-subtext {
+        text-align: center;
+      }
+
+      .iwd-ll-help {
+        display: none;
+      }
+    }
+
+    #iwd-login-right {
+      width: 100%;
+      padding: 20% 10.5% 10%;
+      box-sizing: border-box;
+      border-radius: 20px 20px 0 0;
+      
+      #iwd-ll-login-container {
+        margin-bottom: 240px;
+      }
+
+      .iwd-lr-help {
+        display: block;
+        position: absolute;
+        bottom: 65px;
+      }
+    }
+  }
+}

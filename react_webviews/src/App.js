@@ -21,6 +21,7 @@ import CommonLanding from './common/components/landing';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
+import InternalWealthDashboard from './internal_wealth_dashboard';
 import Loan from './loan';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
@@ -42,6 +43,7 @@ class App extends Component {
           <Route path="/hni/" component={HNI} />
           <Route path="/isip" component={IsipBIller} />
           <Route path="/w-report" component={WealthReport} />
+          <Route path="/iw-dashboard" component={InternalWealthDashboard} />
           <Route path="/help" component={HelpSupport} />
           <Route path="/loan" component={Loan} />
           <Route path="/pg" component={Payment} />
