@@ -44,8 +44,7 @@ class GroupHealthPlanContactDetails extends Component {
             email: lead.buyer_details.email || '',
             mobile_number: lead.buyer_details.phone_number || ''
         };
-          console.log(form_data,"__________________formData....", lead)
-
+        
         this.setState({
             form_data: form_data,
             lead: lead,
