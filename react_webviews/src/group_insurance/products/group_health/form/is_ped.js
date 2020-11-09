@@ -143,7 +143,6 @@ class GroupHealthPlanIsPed extends Component {
         for (var i in member_base) {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].insured_person.relation;
-            // let backend_key = member_base[i].backend_key;
             body[backend_key] = {};
           
             if (backend_key !== 'applicant') {
@@ -153,7 +152,6 @@ class GroupHealthPlanIsPed extends Component {
                         'ped': true
                     }
                     insured_people_details.push(obj)
-                    // body[backend_key].ped_exists = 'true';
                     if (!next_state) {
                         next_state = key;
                     }
@@ -166,7 +164,7 @@ class GroupHealthPlanIsPed extends Component {
                 }
             }
         }
-                console.log(this.state.lead, form_data)
+ 
         if (this.state.lead.quotation_details.insurance_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
             canSubmitForm = false;
             toast('Please select atleast one');
@@ -191,13 +189,11 @@ class GroupHealthPlanIsPed extends Component {
 
          
             let body = {
-                "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2", //5c96ee1e-3b1e-4467-82b8-292086a87fb2
+                "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
                 insured_people_details
             }
 
 
-
-                                             console.log(body)
             this.updateLead(body);
         }
 
