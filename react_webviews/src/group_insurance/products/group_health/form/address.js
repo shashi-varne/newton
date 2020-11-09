@@ -58,7 +58,7 @@ class GroupHealthPlanAddressDetails extends Component {
         let form_data =  {
             ...this.state.form_data,
             ...lead.address_details.permanent_address
-        };                                                   console.log(form_data)                                              
+        };                                            
 
         let correspondence_address = lead.address_details.correspondence_address || {};
         let permanent_address = lead.address_details.permanent_address || {};
@@ -90,11 +90,10 @@ class GroupHealthPlanAddressDetails extends Component {
                 this.getCityListReligare({form_data, name: 'p_pincode'});
             };
         }
-        console.log(permanent_address,"..........................",correspondence_address) 
         if(this.state.provider === 'HDFCERGO') {
             form_data.city = lead.address_details.permanent_address.city;
         }
-        console.log(form_data,".....................",form_data.pincode)
+
         if (form_data.pincode) {
             form_data.pincode_match = true;
         }
@@ -120,7 +119,6 @@ class GroupHealthPlanAddressDetails extends Component {
             name = event.target.name;
         }
 
-        console.log(name)
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
@@ -139,7 +137,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         this.setState({
             form_data: form_data
-        }, () => console.log(form_data))
+        })
 
     };
 
@@ -281,7 +279,7 @@ class GroupHealthPlanAddressDetails extends Component {
                     }
                 }
             }
-                     console.log(body, "-----------------------------------------------:",form_data)
+
             this.updateLead(body);
         }
     }
@@ -330,7 +328,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 isLoadingCity: true
             })
             try {
-                const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${cityName}`));
+                const res = await Api.get((`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
 
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
@@ -373,7 +371,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         this.setState({isLoadingCity: true});
-        const res = await Api.get((`/api/ins_service/api/insurance/religare/pincode/validate?pincode=${form_data[name]}`));
+        const res = await Api.get((`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
         this.setState({isLoadingCity: false});
         let { country } = form_data;
         let pincode_error = '';
@@ -413,7 +411,6 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data.p_country = country || 'India';
         }
 
-        console.log(form_data);
 
         this.setState({
             form_data: form_data
