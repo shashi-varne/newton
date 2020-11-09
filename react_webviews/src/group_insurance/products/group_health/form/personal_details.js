@@ -147,7 +147,6 @@ class GroupHealthPlanPersonalDetails extends Component {
       // let occupation = lead[backend_key].occupation;
       let occupationIndex = '';
       occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
-      console.log(occupation, occupationOptions, occupationIndex)
       form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
     }
 
@@ -196,7 +195,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     var value = event.target ? event.target.value : event;
-     console.log(name, value)
     if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number' && name !== 'weight'){
       // return;
     }
@@ -207,8 +205,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
-    } console.log(name, value)
-
+    }
     if (name === 'height') {
       let index = event;
       const height = `${this.state.height_options[index].value}`;
@@ -224,11 +221,10 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data[name] = value;
       form_data[name + '_error'] = '';
     }
-    console.log(name, value,form_data[name] )
 
     this.setState({
       form_data: form_data
-    },() => console.log(form_data , "9279"));
+    },)
 
   };
 
@@ -423,7 +419,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
           body = {
-          "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",  //5c96ee1e-3b1e-4467-82b8-292086a87fb2
+          "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -436,7 +432,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           }]
         }
       }
-                                   console.log(body)
+
       this.updateLead(body);
     }
   }
