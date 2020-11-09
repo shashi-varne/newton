@@ -237,9 +237,9 @@ export class LeftRightCtaButton extends Component {
     const props = this.props;
     return (
       <div className="FooterDefaultLayout" onClick={() => {
-        if (!props.disable) {
-          props.handleClick();
-        }
+        // if (!props.disable) {
+        //   props.handleClick();
+        // }
       }}>
         {/* <div className="left-right-cta"> */}
           <Button

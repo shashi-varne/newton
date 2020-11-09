@@ -37,7 +37,7 @@
 }
 
 .check-gold-price {
-  margin-top: 10px;
+  margin: 10px 0 60px 0;
 
   .img {
     margin: 0 auto 0 auto;
@@ -123,7 +123,7 @@
     font-weight: 500;
     color: #979797;
     text-align: center;
-    margin: 30px 0Lower interest rate compared to your existing loan(s);
+    margin: 30px 0;
   }
 
   .card-content {
@@ -172,6 +172,23 @@
       line-height: 20px;
       width: 100%;
       align-items: center;
+    }
+  }
+}
+
+.upload-bank-statement {
+  .pdf-upload {
+    color: var(--secondary);
+    font-size: 12px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #F7F6F6 0%, #FFFFFF 98.76%);
+    margin: 0 -20px;
+    padding: 20px 20px;
+    cursor: pointer;
+
+    .plus-sign {
+      background: #FFFFFF;
+      padding: 6px 6px;
     }
   }
 }

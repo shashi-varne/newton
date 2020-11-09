@@ -603,17 +603,17 @@ body[data-device="mobile"] {
     justify-content: space-between;
     margin-bottom: 11px;
     color: #64778d;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 500;
   }
   
   .name {
-    font-size: 15px;
+    font-size: 13px;
     color: #79848f;
   }
   
   .amount {
-    font-size: 16px;
+    font-size: 13px;
     color: #0a1d32;
     font-weight: 400;
   }
@@ -761,4 +761,32 @@ body[data-device="mobile"] {
     }
   }
 
+}
+
+.card-with-tag {
+  font-size: 8px;
+  font-weight: 700;
+  background: var(--primary);
+  padding: 2px 5px 2px 6px;
+  color: #ffffff;
+  width: fit-content;
+  float: right;
+  border-radius: 10px 0 0 10px;
+}
+
+.attention {
+  background-color: #FFF5F6;
+  padding: 15px 20px 15px 15px;
+  font-size: 13px;
+  font-weight: 300;
+  color: #0A1D32;
+  margin: 10px 0 30px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  .content {
+    line-height: 1.5;
+    width: 87%;
+  }
 }

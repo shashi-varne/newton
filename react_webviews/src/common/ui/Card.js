@@ -3,11 +3,14 @@ import Card from "@material-ui/core/Card";
 // import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import "./style.scss";
 
 const theme = createMuiTheme({
   overrides: {
     MuiCard: {
-      root: {},
+      root: {
+        overflow: "visible",
+      },
     },
     MuiPaper: {
       elevation1: {
@@ -33,13 +36,13 @@ class CardInput extends Component {
   }
 
   render() {
-    const { root, paper, container } = this.props.classes || {};
+    const { root } = this.props.classes || {};
+    
     return (
       <MuiThemeProvider theme={theme}>
-        <Card classes={{ root, paper, container }} {...this.props}>
-          <CardContent>
-            {this.props.children}
-          </CardContent>
+        <Card classes={{ root }} {...this.props} style={{ cursor: "pointer" }} onClick={() => console.log("huegusjhghhuj")}>
+          {this.props.withtag && <div className="card-with-tag">Recommended</div>}
+          <CardContent>{this.props.children}</CardContent>
         </Card>
       </MuiThemeProvider>
     );

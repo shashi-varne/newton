@@ -76,10 +76,15 @@ class Calculator extends Component {
         headerData={{
           icon: "close",
         }}
+        styleFooter={{
+          backgroundColor: "var(--highlight)"
+        }}
         styleContainer={{
           backgroundColor: "var(--highlight)"
         }}
         noPadding={true}
+        LeftRightCtaButton={true}
+        no_next_button={true}
       >
         <div className="idfc-loan-calculator">
           <SliderWithValues 

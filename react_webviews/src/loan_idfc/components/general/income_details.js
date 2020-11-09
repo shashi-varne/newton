@@ -51,8 +51,10 @@ class IncomeDetails extends Component {
             Provide bank statements of your salary account for income assessment
             in <b>just 2 clicks!</b>
           </div>
-          <Card>
-            <div className="card-content">
+          <Card
+            withtag="true"
+          >
+            <div className="card-content" style={{padding:"10px 0"}}>
               <img
                 src={require(`assets/${this.state.productName}/mobile_credit_card.svg`)}
                 alt=""

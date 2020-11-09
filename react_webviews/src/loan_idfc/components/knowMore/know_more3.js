@@ -8,7 +8,7 @@ class KnowMore2 extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "knowmore2_screen",
+      cta_title: "APPLY NOW",
     };
 
     this.initialize = initialize.bind(this);
@@ -67,7 +67,7 @@ class KnowMore2 extends Component {
         count={true}
         current={3}
         total={4}
-        noFooter={true}
+        LeftRightCtaButton={true}
         headerData={{
           icon: "close",
         }}

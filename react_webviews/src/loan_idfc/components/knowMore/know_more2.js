@@ -67,12 +67,12 @@ class KnowMore2 extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Get an instant personal loan"
-        buttonTitle="APPLY"
+        buttonTitle="APPLY NOW"
         arrow={true}
         count={true}
         current={2}
         total={4}
-        // noFooter={true}
+        LeftRightCtaButton={true}
         headerData={{
           icon: "close",
         }}

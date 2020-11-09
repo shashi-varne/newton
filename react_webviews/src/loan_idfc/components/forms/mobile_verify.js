@@ -5,13 +5,15 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { validateNumber } from "utils/validators";
 import { FormControl } from "material-ui/Form";
+import Checkbox from "material-ui/Checkbox";
+import Grid from "material-ui/Grid";
 
 class MobileVerification extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      mobile_no: ''
+      mobile_no: "",
     };
 
     this.initialize = initialize.bind(this);
@@ -89,7 +91,7 @@ class MobileVerification extends Component {
                 helperText={this.state.mobile_no_error}
                 type="text"
                 width="40"
-                label="Enter mobile number"
+                label="Mobile number"
                 class="mobile"
                 maxLength={10}
                 id="number"
@@ -108,7 +110,24 @@ class MobileVerification extends Component {
           </div>
 
           <div className="subtitle">
-            I accept <u style={{ color: "#3792FC" }}>Terms and condition</u>
+            <Grid container spacing={16} alignItems="center">
+              <Grid item xs={1} className="TextCenter">
+                <Checkbox
+                  defaultChecked
+                  checked={true}
+                  color="primary"
+                  value="confirm_details_check"
+                  name="confirm_details_check"
+                  className="Checkbox"
+                />
+              </Grid>
+              <Grid item xs={11}>
+                <div>
+                  <span>I accept <u style={{ color: "var(--primary)" }}>Terms and condition</u></span>
+                </div>
+              </Grid>
+            </Grid>
+            {/* I accept <u style={{ color: "#3792FC" }}>Terms and condition</u> */}
           </div>
         </div>
       </Container>
