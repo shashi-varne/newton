@@ -133,8 +133,6 @@ class GroupHealthPlanSelectPed extends Component {
     }
 
     componentDidUpdate(prevState) {
-        console.log(this.state.member_key , this.state.member_key , this.props.match.params.member_key)
-           console.log(prevState)
         if (this.state.member_key && this.state.member_key !== this.props.match.params.member_key) {
             this.onload();
         }
@@ -230,23 +228,12 @@ class GroupHealthPlanSelectPed extends Component {
                             "question_id": options[j].id
                         }
                         pre_existing_diseases.push(obj)
-                        // if(!ped_diseases_name) {
-                        //     ped_diseases_name = value;
-
-                        //     "pre_existing_diseases": [{
-                        //         "yes_no": true,
-                        //         "question_id": "hdfc_ergo_ped_cholesterol"
-                        //     }]
-                        // } 
-                        // else {
-                        //     ped_diseases_name += ',' + value;
-                        // }
                     }
                 }
-                // if(!ped_diseases_name) {
-                //     toast('Atleast select one or uncheck this member');
-                //     return;
-                // }
+                if(!ped_diseases_name) {                 //  fixIT
+                    toast('Atleast select one or uncheck this member');
+                    return;
+                }
                 let body_to_send = {
                     ped_diseases_name: ped_diseases_name,
                     ped_exists: "true"
@@ -279,9 +266,6 @@ class GroupHealthPlanSelectPed extends Component {
                     if(options[l].checked) {
                         min_one_ped = true;
                         let data = options[l], question_id = data.key
-                        // ped_diseases[data.id] = {
-                        //     start_date: data.start_date
-                        // }
                         let obj = {
                             "yes_no": true,
                            "question_id": question_id,
@@ -289,10 +273,6 @@ class GroupHealthPlanSelectPed extends Component {
                         }
                         pre_existing_diseases.push(obj)
                         if(options[l].name === 'Other') {
-                            // ped_diseases[data.id] = {
-                            //     start_date: data.start_date,
-                            //     answer_description: this.state[this.state.otherInputData.name] // other input value
-                            // }
                             let obj = {
                                 "yes_no": false,
                                "question_id": question_id,
@@ -337,7 +317,6 @@ class GroupHealthPlanSelectPed extends Component {
                 lead: lead
             })
 
-                     console.log(body,"........................body")
             this.updateLead(body);
         }
     }
