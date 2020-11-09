@@ -49,7 +49,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }
         
         try {
-            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
             this.setState({
                 show_loader: false
             });
@@ -117,10 +117,10 @@ class GroupHealthPlanSelectSumAssured extends Component {
         let groupHealthPlanData = this.state.groupHealthPlanData;
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
         groupHealthPlanData.sum_assured = selectedPlan.sum_insured;
-        // groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_insured;
+        groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.si = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.base_premium = selectedPlan.sum_insured;
-        groupHealthPlanData.post_body.premium = selectedPlan.sum_insured;
+        groupHealthPlanData.post_body.premium = selectedPlan.premium;
 
 
         if(this.state.provider === 'RELIGARE') {

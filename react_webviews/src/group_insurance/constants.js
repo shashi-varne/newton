@@ -626,10 +626,10 @@ export function ghGetMember(lead, providerConfig) {
     'family': ['spouse_account_key'].concat(backend_child_keys),
     'self_family': ['self_account_key', 'spouse_account_key'].concat(backend_child_keys),
     'parents': ['parent_account1_key', 'parent_account2_key'],
-    'parent_in_law': ['parents_in_law_account1_key', 'parents_in_law_account2_key'],
+    'parents_in_law': ['parents_in_law_account1_key', 'parents_in_law_account2_key'],
   };
   const allowed_mapper = allowed_as_per_account[lead.insurance_type];
-  
+
   let member_base = [];
   // Map all remaining keys
   for (let key of backend_keys) {
@@ -674,8 +674,8 @@ export function ghGetMember(lead, providerConfig) {
     }
   }
   
-  if(['parents', 'parent_in_law', 'family'].includes(lead.insurance_type)) {
-    let obj = lead.member_details['self_account_key'];
+  if(['parents', 'parents_in_law', 'family'].includes(lead.insurance_type)) {
+    let obj = lead.member_details['self_account_key'] || {};
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
     member_base.push(obj);
@@ -733,8 +733,8 @@ export function getCssMapperReport(policy) {
 
   if(['HDFCERGO', 'STAR', 'RELIGARE'].includes(provider)) {
    
-    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || '');
-    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
+    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || policy.dt_created  || '');
+    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.dt_created ||  '');
   }
 
 

@@ -583,7 +583,11 @@ export const star = {
             },
             {
                 'name': 'Parents/Parents-in-law',
-                'value': 'parent_in_law'
+                'value': 'parents_in_law'
+            },
+            {
+                'name': 'Parents',
+                'value': 'parents'
             }
         ]
     },

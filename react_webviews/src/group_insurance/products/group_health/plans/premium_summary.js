@@ -4,6 +4,7 @@ import Container from "../../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { initialize } from "../common_data";
+import { ghGetMember} from "../../../constants";
 import BottomInfo from "../../../../common/ui/BottomInfo";
 import Api from "utils/api";
 import toast from "../../../../common/ui/Toast";
@@ -45,9 +46,10 @@ class GroupHealthPlanPremiumSummary extends Component {
     for(let key of allowed_post_body_keys){
         body[key] = post_body[key];
     }    
+    body['add_ons'] = post_body.add_ons_json;
+    body['total_premium'] = post_body.total_amount;
+    body['total_discount'] = post_body.total_discount;
     
-    
-
     //quote creation api
     if(!this.state.get_lead){
       
@@ -56,10 +58,10 @@ class GroupHealthPlanPremiumSummary extends Component {
       });
 
       try{
-        let res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
+        let res = await Api.post(`api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
         
       let resultData = res.pfwresponse.result;
-      let quote_id = resultData.quotation.id;
+      let quote_id = resultData.quotation.id || '';
   
       groupHealthPlanData.post_body.quotation_id = quote_id;
       this.setLocalProviderData(groupHealthPlanData)
@@ -78,17 +80,13 @@ class GroupHealthPlanPremiumSummary extends Component {
     let groupHealthPlanDataProp = this.state.groupHealthPlanData;
 
     if (this.state.get_lead) {
-      // let add_ons_data = [];
-      // let add_ons = lead.add_ons_json;
-      // for (var key in add_ons) {
-      //   add_ons_data.push({
-      //     title: add_ons[key].title,
-      //     selected_premium: add_ons[key].premium,
-      //     checked: true,
-      //   });
-      // }
-      // properties.add_ons = add_ons_data;
-
+      let add_ons_data = [];
+      let add_ons = lead.add_ons;
+      for(var key in add_ons){
+        add_ons_data.push(add_ons[key])
+      }
+      
+      properties.add_ons = add_ons_data;
       properties.type_of_plan = lead.floater_type === "floater" ? "WF" : "NF";
       properties.sum_assured = lead.individual_sum_insured;
       properties.total_members = lead.no_of_people;
@@ -100,17 +98,36 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.gst_tax = lead.gst;
       properties.total_amount = lead.total_premium;
     } else {
-      properties.add_ons = groupHealthPlanDataProp.add_ons_data || "";
+
+      var add_on_title = {
+        uar: 'Unlimited Automatic Recharge',
+        opd: 'OPD care',
+        ped_wait_period: 'Reduction in PED wait period',
+        ncb: 'No Claim Bonus Super'
+      }
+      var final_add_ons_data = []
+      
+      for(var addOn in post_body.add_ons){
+        if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
+          let temp = {
+            title: add_on_title[addOn],
+            price: post_body.add_ons[addOn]
+          }
+          final_add_ons_data.push(temp);
+        }   
+     }
+
+      properties.add_ons = final_add_ons_data || [];
       properties.type_of_plan = groupHealthPlanDataProp.type_of_plan === 'floater' ? "WF" : "NF"; 
       properties.sum_assured = groupHealthPlanDataProp.sum_assured; 
       properties.total_members = groupHealthPlanDataProp.post_body.adults + groupHealthPlanDataProp.post_body.children; 
       properties.members = groupHealthPlanDataProp.final_dob_data; 
       properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
       properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium;
-      properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.discount.tenure[1] || 0; 
-      properties.net_premium = groupHealthPlanDataProp.plan_selected_final.premium_after_family_discount;
-      properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst[0] || 0; 
-      properties.total_amount = groupHealthPlanDataProp.plan_selected_final.premium_after_family_discount;
+      properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount || 0; 
+      properties.net_premium = groupHealthPlanDataProp.plan_selected_final.premium;
+      properties.gst_tax = groupHealthPlanDataProp.post_body.gst || 0; 
+      properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
     }
 
     properties.total_discount = properties.discount_amount;
@@ -195,10 +212,10 @@ class GroupHealthPlanPremiumSummary extends Component {
         var resultData = res.pfwresponse.result;
         
         if (res.pfwresponse.status_code === 200) {
-          // let lead = resultData.quotation;
-          // lead.member_base = ghGetMember(lead, this.state.providerConfig);
-          // storageService().set("ghs_ergo_quote_id", resultData.quotation.id);
-          // this.navigate("personal-details/" + lead.member_base[0].key);
+          let lead = resultData.quotation_details;
+          lead.member_base = ghGetMember(lead, this.state.providerConfig);
+          storageService().set("ghs_ergo_quote_id", resultData.application_details.id);
+          this.navigate("personal-details/" + lead.member_base[0].key);
         } else {
           this.setState({
             show_loader: false,

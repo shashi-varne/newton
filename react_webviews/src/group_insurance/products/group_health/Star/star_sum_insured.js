@@ -103,7 +103,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                 "user_action": user_action,
                 "product": 'star',
                 "flow": this.state.insured_account_type || '',
-                sum_assured: this.state.sum_assured[this.state.selectedIndex],
+                sum_assured:  this.state.sum_assured[this.state.selectedIndex],
                 screen_name: 'select sum Insured',
             }
         }
@@ -180,14 +180,14 @@ class GroupHealthPlanStarSumInsured extends Component {
             tax_amount: plan_selected_final.gst[1],
             base_premium: plan_selected_final.base_premium,
             premium: plan_selected_final.premium,
-            total_amount: plan_selected_final.premium_after_tax || 0,
-            discount_amount: plan_selected_final.discount.family[1] + plan_selected_final.discount.tenure[1],
+            total_amount: plan_selected_final.total_amount || 0,
+            discount_amount: plan_selected_final.total_discount,
             insured_pattern: plan_selected_final.insured_pattern,
             plan_code: plan_selected_final.plan_code,
             postal_code: body.postal_code,
             total_si: body.si,
             sum_assured: this.state.premium_data[this.state.selectedIndex].sum_insured,
-            gst: plan_selected_final.gst[1]
+            gst: plan_selected_final.gst[1],
         });
         
         }catch(err){

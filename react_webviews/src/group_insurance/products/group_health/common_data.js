@@ -75,7 +75,7 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
 
-            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`;
+            let url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`;
 
             if(this.state.screen_name === 'final_summary_screen') {
                 url += `&forms_completed=true`;

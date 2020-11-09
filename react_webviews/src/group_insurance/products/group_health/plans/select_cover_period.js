@@ -29,16 +29,20 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         let type_of_plan = this.state.groupHealthPlanData.post_body.floater_type;
         let post_body = this.state.groupHealthPlanData.post_body;
         
-        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];        
         let body = {};
         for(let key of allowed_post_body_keys){
             body[key] = post_body[key];
         }
+        body['add_ons'] = post_body.add_ons_array;
 
+        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+            body['floater_type'] = 'non_floater';
+        }
         try {
             // let body = this.state.groupHealthPlanData.post_body;
             // const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`, body);
-            const res = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
             body);
             this.setState({
                 show_loader: false
@@ -95,7 +99,11 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             body[key] = post_body[key];
         }
         body['tenure'] = plan_selected_final.tenure;
-        
+        body['add_ons'] = post_body.add_ons_array;
+
+        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+            body['floater_type'] = 'non_floater';
+        }
 
         this.setState({
             show_loader: true
@@ -108,11 +116,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 var resultData = res.pfwresponse.result;
                 plan_selected_final = resultData.premium_details;
             }else{
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                toast('Something went wrong');
             }
-            
-            
         }catch(err){
             console.log(err);
             this.setState({
@@ -122,18 +127,19 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         }
 
         groupHealthPlanData.plan_selected_final = plan_selected_final;
+        post_body.add_ons = plan_selected_final.add_on_premium;
         post_body.tenure = plan_selected_final.tenure;
-        post_body.tenure_discount = plan_selected_final.discount.tenure[1] || 0;
-        post_body.family_discount = plan_selected_final.discount.family[1] || 0;
+        post_body.total_discount = plan_selected_final.total_discount;
         post_body.gst = plan_selected_final.gst[1] || 0;
         post_body.tax_amount = plan_selected_final.gst[1] || 0;
         post_body.base_premium = plan_selected_final.base_premium;
         post_body.individual_si = plan_selected_final.individual_si;
         post_body.total_si = plan_selected_final.total_si;
         post_body.premium = plan_selected_final.premium;
+        post_body.family_discount = plan_selected_final.discount.family[1] || 0;
+        post_body.tenure_discount = plan_selected_final.discount.tenure[1] || 0;
         post_body.total_amount = plan_selected_final.premium_after_tax;
-        post_body.discount_amount = post_body.tenure_discount + post_body.family_discount ;
-        // post_body.insured_pattern = plan_selected_final.insured_individual_premium[0];
+        post_body.net_premium = plan_selected_final.premium;
         post_body.plan_code = groupHealthPlanData.plan_selected_final.plan_code;
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
         this.setLocalProviderData(groupHealthPlanData);

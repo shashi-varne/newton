@@ -63,7 +63,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
         try {
             
-            const res2 = await Api.post(`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+            const res2 = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
                 body);
             this.setState({
                 show_loader: false
@@ -75,16 +75,16 @@ class GroupHealthPlanSelectFloater extends Component {
                 
                 let premium_data_floater = [{
                         'title': `${numDifferentiationInr(this.state.sum_assured)} for entire family`,
-                        'premium': premium_data_wf.base_premium,
+                        'premium': premium_data_wf.premium,
                         'subtitle': 'in ' + inrFormatDecimal(premium_data_wf.premium),
                         'discount': premium_data_wf.discount.family[0] ? parseFloat(premium_data_wf.discount.family[0]) : '',
                         'key': 'floater'
                     },
                     {
                         'title': `${numDifferentiationInr(this.state.sum_assured)} for each member`,
+                        'premium': premium_data_nf.premium,
                         'subtitle': `${numDifferentiationInr(this.state.sum_assured * total_number)}
                                     sum insured in ${inrFormatDecimal(premium_data_nf.premium)} `,
-                        'premium': premium_data_nf.base_premium,
                         'discount': premium_data_nf.discount.family[0] ? parseFloat(premium_data_nf.discount.family[0]) : '',
                         'key': 'non_floater'
                     }
@@ -94,14 +94,13 @@ class GroupHealthPlanSelectFloater extends Component {
                 let ind_pre_data = [];
                 let final_dob_data = this.state.groupHealthPlanData.final_dob_data;
                 
+                var individual_premiums = premium_data_nf.insured_individual_premium;
                 for (var i in final_dob_data) {
                     let mem = final_dob_data[i];
-                    let backend_key = final_dob_data[i].backend_key;
-                    
-                    if (premium_data_nf[backend_key]) {
+                    if (premium_data_nf['floater_type']) {
                         let obj = {
                             name: numDifferentiation(this.state.sum_assured) + ' for ' + childeNameMapper(mem.key).toLowerCase(),
-                            value: inrFormatDecimal(premium_data_nf[backend_key])
+                            value: inrFormatDecimal(individual_premiums[mem['backend_key']])
                         };
                         ind_pre_data.push(obj);
                     }
@@ -152,8 +151,7 @@ class GroupHealthPlanSelectFloater extends Component {
            groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
            groupHealthPlanData.type_of_plan = type_of_plan;
            groupHealthPlanData.post_body.floater_type = type_of_plan;
-           groupHealthPlanData.post_body.base_premium = this.state.premium_data_floater[this.state.selectedIndex].premium
-           groupHealthPlanData.post_body.premium = selectedPlan.premium;
+           groupHealthPlanData.post_body.premium = this.state.premium_data_floater[this.state.selectedIndex].premium
            this.setLocalProviderData(groupHealthPlanData);
            this.navigate(this.state.next_screen || 'plan-select-cover-period');
        }
@@ -226,7 +224,7 @@ class GroupHealthPlanSelectFloater extends Component {
                            <div className="generic-hr"></div>
                            <div className="flex-between di-tile">
                                <div className="di-tile-left">Total premium</div>
-                               <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.net_premium)}</div>
+                               <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.premium)}</div>
                            </div>
                            <div className="generic-hr"></div>
                        </div>

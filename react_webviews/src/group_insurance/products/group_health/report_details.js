@@ -69,11 +69,17 @@ class GroupHealthReportDetails extends Component {
             });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
+                let lead = {};
+                let member_details = {};
 
-                let policy_data = resultData.policy_data || {};
-                let lead = policy_data.insured_lead_details || {};
+                let policy_data = resultData.policy || {};
+                lead.insurance_type = resultData.quotation_details.insurance_type;
+                let insured_members = resultData.insured_member_details;
+                for(var i = 0; i < insured_members.length; i++){
+                    member_details[insured_members[i].relation_key]  = insured_members[i];
+                }
+                lead.member_details = member_details;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
-
                 let member_base = lead.member_base;
                 let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
 
@@ -82,16 +88,17 @@ class GroupHealthReportDetails extends Component {
                     member_base.splice(applicantIndex, 1);
                     member_base.splice(0, 0, appli_data);
                 }
-
+                policy_data.provider = this.state.providerConfig.key
                 let data = getCssMapperReport(policy_data);
                 policy_data.status = data.status;
                 policy_data.cssMapper = data.cssMapper;
 
                 this.setState({
-                    extra_data: resultData.quote_info,
-                    policy_data: resultData.policy_data,
-                    quote_info: resultData.quote_info,
+                    extra_data: resultData.plan_details,
+                    policy_data: policy_data,
+                    quote_info: resultData.plan_details,
                     lead: lead,
+                    quotation_details: resultData.quotation_details,
                     applicantIndex: applicantIndex
                 })
 
@@ -341,7 +348,7 @@ class GroupHealthReportDetails extends Component {
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
             >
-                <div className="group-health-plan-details group-health-final-summary">
+                 <div className="group-health-plan-details group-health-final-summary">
 
                     <div style={{ margin: '0px 0 40px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
                         <div className="circle"></div>
@@ -371,7 +378,7 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
+                                    {this.state.quotation_details && numDifferentiationInr( this.state.quotation_details.total_sum_insured)}
                                 </div>
                             </div>
                         </div>
@@ -385,7 +392,10 @@ class GroupHealthReportDetails extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
+                                    {
+                                        this.state.quotation_details ? this.state.quotation_details.tenure > 1 ? `${this.state.quotation_details.tenure} years`: `${this.state.quotation_details.tenure} year` : ''
+                                    }
+
                                 </div>
                             </div>
                         </div>
@@ -578,7 +588,7 @@ class GroupHealthReportDetails extends Component {
                                     <span className="special-benefit-text">Special benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.special_benefits.map(this.renderSteps)}
+                                    {this.state.extra_data.benefits.special.map(this.renderSteps)}
                                 </div>
 
                                 <div className="special-benefit"
@@ -599,7 +609,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.waiting_period.map(this.renderSteps)}
+                                    {this.state.extra_data.waiting_periods.map(this.renderSteps)}
                                 </div>
 
                             </div>
@@ -625,7 +635,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                         <div className="generic-hr"></div>
                     </div>
-                </div>
+                </div> 
             </Container>
         );
     }

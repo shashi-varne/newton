@@ -85,7 +85,7 @@ class GroupHealthLanding extends Component {
     const body = {"provider": provider};
     try {
       const res = await Api.post(
-        `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/health/quotation/account_summary`,
+        `api/insurancev2/api/insurance/health/quotation/account_summary`,
         body
       );
         if (!openModuleData.sub_module) {

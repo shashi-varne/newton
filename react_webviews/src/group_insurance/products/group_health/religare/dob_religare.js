@@ -160,8 +160,8 @@ class GroupHealthPlanDobReligare extends Component {
             
             post_body.member_details = member_details;
 
-            if(ui_members.self_gender && post_body.self_account_key) {
-                post_body.self_account_key.gender = ui_members.self_gender;
+            if(ui_members.self_gender && post_body.member_details.self_account_key) {
+                post_body.member_details.self_account_key.gender = ui_members.self_gender;
             }
 
             groupHealthPlanData.eldest_dob = this.state.eldest_dob;

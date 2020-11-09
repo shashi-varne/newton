@@ -43,11 +43,13 @@ class GroupHealthPlanAddOns extends Component {
         for(let key of allowed_post_body_keys){
             body[key] = post_body[key];
         }
-
+        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+            body['floater_type'] = 'non_floater';
+        }
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
-        let cta_premium = this.state.groupHealthPlanData.post_body.base_premium || this.state.bottomButtonData.leftSubtitleUnformatted;
+        let cta_premium = this.state.groupHealthPlanData.post_body.premium || this.state.bottomButtonData.leftSubtitleUnformatted;
         this.updateBottomPremiumAddOns(cta_premium);
         
         this.setState({
@@ -96,7 +98,7 @@ class GroupHealthPlanAddOns extends Component {
                     console.log(add_ons_data)
 
                     add_ons_data[1].price = options;
-                    add_ons_data[1].default_premium = parseInt(add_ons_data[1].price[0].premium);
+                    add_ons_data[1].default_premium = parseInt(add_ons_data[1].price[0].premium, 10);
                     add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].cover_amount;
                     
                 } else {
@@ -136,7 +138,7 @@ class GroupHealthPlanAddOns extends Component {
             }
         });
 
-        let updated_premium = parseInt(cta_premium) + parseInt(total_premium);
+        let updated_premium = parseInt(cta_premium, 10) + parseInt(total_premium, 10);
         
         this.updateBottomPremiumAddOns(updated_premium);
     }
@@ -163,7 +165,7 @@ class GroupHealthPlanAddOns extends Component {
         data.selectedIndexOption = indexOption;
 
         data.selected_cover_amount =  data.price[indexOption].cover_amount;
-        data.selected_premium =  parseInt(data.price[indexOption].premium);
+        data.selected_premium =  parseInt(data.price[indexOption].premium, 10);
 
         add_ons_data[index] = data;
 
@@ -261,35 +263,34 @@ class GroupHealthPlanAddOns extends Component {
         let add_ons_body = [];
         let  add_ons_json = {};
         // eslint-disable-next-line
-
-        this.state.add_ons_data.map((item) => {            
+        console.log(this.state.add_ons_data)
+        this.state.add_ons_data.forEach((item) => {            
             if(item.checked) {
 
                 if (Array.isArray(item.price)) {
-                    add_ons_body.push(`opd-${item.selected_premium || item.default_premium}`)
-                    add_ons_json[item.price[item.selectedIndexOption].id || 'opd'] = {
-                        premium: item.selected_premium || item.default_premium,
+                    add_ons_body.push(`opd-${item.default_cover_amount || item.default_premium}`)
+                    add_ons_json[item.id || 'opd'] = {
+                        price: item.selected_premium || item.default_premium,
                         title: item.name
                     };
                 } else {
                     add_ons_json[item.id] = {
-                        premium: item.price || item.selected_premium || item.default_premium,
+                        price: item.price || item.selected_premium || item.default_premium,
                         title: item.name
                     };
                     add_ons_body.push(item.id);
                 }
             }
-
         })
-        console.log('json', add_ons_json);
-        console.log('arr', add_ons_body);
 
-        groupHealthPlanData.post_body.add_ons = add_ons_body;
+        groupHealthPlanData.post_body.add_ons = add_ons_body; //add ons in array format for get final premium api in the select cover period page
+        groupHealthPlanData.post_body.add_ons_array = add_ons_body;
         groupHealthPlanData.post_body.add_ons_json = add_ons_json;
+
         groupHealthPlanData.add_ons_data = this.state.add_ons_data;
         this.setLocalProviderData(groupHealthPlanData);
 
-        // this.navigate(this.state.next_screen);
+        this.navigate(this.state.next_screen);
 
     }
 
