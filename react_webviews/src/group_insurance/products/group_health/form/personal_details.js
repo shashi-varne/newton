@@ -291,7 +291,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
         if (age < validation_props.dob_adult.min && !isChild) {
-          form_data.dob_error = `Minimum age is ${validation_props.dob_adult.min} for adult`;
+          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min } - ${validation_props.dob_adult.max - 1} years`;
         }
       }
 
@@ -308,7 +308,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'HDFCERGO') {
         if (form_data.gender === 'MALE' && age < validation_props.dob_married_male.min) {
-          form_data.dob_error = `Minimum age is ${validation_props.dob_married_male.min} male applicant`;
+          form_data.dob_error = `Valid age is between ${validation_props.dob_married_male.min } - ${validation_props.dob_married_male.max - 1} years`;
         }
 
         if (form_data.gender === 'FEMALE' && age < validation_props.dob_married_female.min) {

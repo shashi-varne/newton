@@ -139,14 +139,14 @@ class StatementRequest extends Component {
       email: this.state.selectedEmail,
     };
 
-    if (getConfig().app === 'android') {
-      this.setState({ show_loader: true, loadingText: <CAMSLoader /> });
-      setTimeout(() => {
-        this.navigate('cams_webpage', navParams);
-      }, 2000);
-    } else {
-      this.navigate('cams_request_steps', navParams);
-    }
+    // if (getConfig().app === 'android') {
+    //   this.setState({ show_loader: true, loadingText: <CAMSLoader /> });
+    //   setTimeout(() => {
+    //     this.navigate('cams_webpage', navParams);
+    //   }, 2000);
+    // } else {
+    this.navigate('cams_request_steps', navParams);
+    // }
   }
 
   goBack = (params) => {

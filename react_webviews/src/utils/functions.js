@@ -427,10 +427,29 @@ function getPartnerConfig(partner_code) {
       configPrimaryBackgroundColorClass: 'mywayBackColor',
       webAppUrl: 'https://app.mywaywealth.com/#!/',
       email_domain: 'mywaywealth.com',
-    }
+    },
+    'minvest': {
+      primary: '#FF5C34',
+      secondary: '#35cb5d',
+      default: '#4a4a4a',
+      highlight_color: '#f6f2ff',
+      label: '#a2a2a2',
+      type: 'minvest',
+      productName: 'minvest',
+      appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
+      termsLink: 'https://www.fisdom.com/terms/',
+      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
+      askEmail: 'ask@fisdom.com',
+      mobile: '+91-8048093070',
+      configPrimaryColorClass: 'configPrimaryColorClass',
+      configPrimaryBackgroundColorClass: 'fisdomBackColor',
+      webAppUrl: 'https://app.fisdom.com/#!/',
+      email_domain: 'fisdom.com',
+    },
   }
 
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  const isminvest = search.indexOf("my.barodaminvest.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
   if (ismyway || partner_code === 'bfdlmobile' ||
@@ -438,10 +457,14 @@ function getPartnerConfig(partner_code) {
     productType = 'myway';
   }
 
+  if (isminvest) {
+    productType = 'minvest';
+  }
+
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://payment-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -531,10 +554,10 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
+  let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-
   let project = 'insurance';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -574,9 +597,10 @@ export const getConfig = () => {
     project = 'kyc-esign';
   } else if (main_pathname.indexOf('pg') >= 0) {
     project = 'pg';
+    generic_callback = "true";
   }
 
-  
+
 
   let search = window.location.search;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;
@@ -601,6 +625,12 @@ export const getConfig = () => {
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
+  }
+
+  if (sdk_capabilities) {
+    returnConfig.sdk_capabilities = sdk_capabilities;
+    searchParams += `&sdk_capabilities=${sdk_capabilities}`;
+    searchParamsMustAppend += `&sdk_capabilities=${sdk_capabilities}`;
   }
 
   if (checkValidString(partner_code)) {
