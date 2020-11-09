@@ -42,7 +42,7 @@ class GroupHealthStarPlanSelectPed extends Component {
           }
       member_base.push(element.insured_person)
     });
-         console.log(member_base)
+  
     member_base.forEach(element => {
       element.key = element.relation
     });
@@ -234,7 +234,7 @@ class GroupHealthStarPlanSelectPed extends Component {
          }
        }
      }
-    //  console.log(body)
+ 
      this.updateLead(body);
    }
    };
