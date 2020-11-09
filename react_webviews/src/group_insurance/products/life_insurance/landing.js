@@ -109,7 +109,7 @@ class FyntuneLanding extends Component {
     let landingScreenURL = encodeURIComponent(
       window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams
     );
-    var journeyURL = resume_redirection_url + '&back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
+    var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
     if(getConfig().Web){
       window.location.href = journeyURL;
@@ -184,7 +184,7 @@ class FyntuneLanding extends Component {
           var lead_redirection_url = resultData.redirection_url;
           var fyntuneRefId = resultData.lead.fyntune_ref_id;
 
-          var journeyURL = lead_redirection_url + '&back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
+          var journeyURL = lead_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
           
           storageService().setObject('fyntune_ref_id', fyntuneRefId);
           
@@ -276,7 +276,7 @@ class FyntuneLanding extends Component {
             </div>
           )}
         <div>
-          <p className="heading">What are Insurance Savings Plan?</p>
+          <p className="heading">What is Insurance Savings Plan?</p>
           <p className="info">
             This is a plan for your investment cum insurance needs which
             provides you with a chance to create wealth and even gives financial

@@ -24,8 +24,8 @@ class LifeInsuranceEntry extends Component {
 
     let insuranceProducts = [
       {
-        key: 'team',
-        title: 'Team Insurance',
+        key: 'term',
+        title: 'Term Insurance',
         subtitle: 'Get comprehensive life coverage',
         icon: 'ic_term_insurance',
         disabled: false
@@ -79,7 +79,7 @@ class LifeInsuranceEntry extends Component {
        <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
             <div>
               <div className='insurance_plans_logos_text'
-              >{props.title}{props.key === 'team' && !props.resume_flag &&
+              >{props.title}{props.key === 'term' && !props.resume_flag &&
               <span style={{
                 padding: '3px 7px',
                 borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
