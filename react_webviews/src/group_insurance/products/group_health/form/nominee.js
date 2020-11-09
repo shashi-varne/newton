@@ -58,7 +58,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         let lead = this.state.lead || {}; 
         let form_data = lead.nominee_details || {};
-        // let relation = form_data.relation ;     relation.toUpperCase() console.log(relation)
+        // let relation = form_data.relation ; 
 
         let appointee_account_key = lead.nominee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
@@ -254,7 +254,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
-                    // canSubmitForm = false;
+                    canSubmitForm = false;
                     break;
                 }
             }
@@ -398,7 +398,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     render() {
         const { showAppointee = false, showdob = false } = this.state.providerConfig.nominee_screen;
-                                  console.log(this.state.form_data.relation,"............", this.state.form_data)
+
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
