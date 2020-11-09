@@ -230,21 +230,21 @@ class GroupHealthPlanSelectPed extends Component {
                         pre_existing_diseases.push(obj)
                     }
                 }
-                if(!ped_diseases_name) {                 //  fixIT
+                if(pre_existing_diseases.length <= 0) {                 //  fixIT
                     toast('Atleast select one or uncheck this member');
                     return;
                 }
-                let body_to_send = {
-                    ped_diseases_name: ped_diseases_name,
-                    ped_exists: "true"
-                }
+                // let body_to_send = {
+                //     ped_diseases_name: ped_diseases_name,
+                //     ped_exists: "true"
+                // }
+
+                // body = {
+                //     [this.state.backend_key]: body_to_send
+                // }
 
                 body = {
-                    [this.state.backend_key]: body_to_send
-                }
-
-                body = {
-                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2", //5c96ee1e-3b1e-4467-82b8-292086a87fb2
+                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd", //43b0bba5-a078-468e-ad25-05506022c0dd
                     "answers": {
                         [this.state.backend_key]: {
                             pre_existing_diseases
@@ -253,10 +253,10 @@ class GroupHealthPlanSelectPed extends Component {
                 }
 
 
-                current_member = {
-                    ...current_member,
-                    ...body_to_send
-                } //to store the member specific info, because we will not hit the api again
+                // current_member = {
+                //     ...current_member,
+                //     ...body_to_send
+                // } //to store the member specific info, because we will not hit the api again
             }
 
             if(provider === 'RELIGARE') {
@@ -290,7 +290,7 @@ class GroupHealthPlanSelectPed extends Component {
                     [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
                 }
                 body = {
-                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
+                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
                     "answers" : body_to_send
                 }
                 let data_to_store = [];

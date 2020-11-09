@@ -232,6 +232,7 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'HDFCERGO') {
                 let subtitle = []
                 member.answers.pre_existing_diseases.forEach(name => {
+                    console.log(name)
                     subtitle.push(name.front_end_question_id)
                 })
                     

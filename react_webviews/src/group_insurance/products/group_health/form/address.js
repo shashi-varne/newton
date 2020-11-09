@@ -243,7 +243,7 @@ class GroupHealthPlanAddressDetails extends Component {
             let body = {};
             if (provider === 'HDFCERGO') {
                 body = {
-                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
+                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -259,7 +259,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
             if (provider === 'RELIGARE') {
                 body = {
-                    "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
+                    "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -328,7 +328,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 isLoadingCity: true
             })
             try {
-                const res = await Api.get((`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
+                const res = await Api.get((`/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
 
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
@@ -371,7 +371,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         this.setState({isLoadingCity: true});
-        const res = await Api.get((`https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
+        const res = await Api.get((`/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
         this.setState({isLoadingCity: false});
         let { country } = form_data;
         let pincode_error = '';

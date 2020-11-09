@@ -19,7 +19,7 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    let providerConfig = getGhProviderConfig(provider);
+    let providerConfig = getGhProviderConfig(provider);  console.log(provider, providerConfig.provider_api)
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
         screenData = providerConfig[this.state.screen_name];
@@ -53,7 +53,7 @@ export async function initialize() {
         validation_props: validation_props,
         pan_amount: pan_amount,
         claim_settlement_ratio: claim_settlement_ratio
-    }, () => {
+    }, () => {  console.log(this.state.provider_api,"......................provider_api")
         if(!this.state.get_lead && this.state.force_onload_call) {
             this.onload();
         }
@@ -71,16 +71,15 @@ export async function initialize() {
 
             this.setState({
                 show_loader: true
-            });
+            });  
 
-            let app_id = '5c96ee1e-3b1e-4467-82b8-292086a87fb2'
-
-            let url = `https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/star/get_application_details?application_id=${app_id}`;
+            let app_id = '43b0bba5-a078-468e-ad25-05506022c0dd' //43b0bba5-a078-468e-ad25-05506022c0dd
+            let url = `/api/insurance/proposal/religare/get_application_details?application_id=${app_id}`;
 
             if(this.state.screen_name === 'final_summary_screen') {
                 url += `&forms_completed=true`;
             }
-            const res = await Api.get(url); 
+            const res = await Api.get(url);  console.log("get lead" , res)
               
             var resultData = res.pfwresponse.result;
             
@@ -241,8 +240,8 @@ export async function updateLead( body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.put('https://seguro-dot-plutus-staging.appspot.com/api/insurancev2/api/insurance/proposal/star/update_application_details' , body)
-
+        const res = await Api.put(`/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
+             console.log(res,"................res")
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             if(this.props.edit && !this.state.force_forward) {

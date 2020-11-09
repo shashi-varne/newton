@@ -46,7 +46,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   onload = () => {
 
-    let lead = this.state.lead || {};  
+    let lead = this.state.lead || {};   console.log(lead)
     let quotation = this.state.quotation || {};     
     let insured_people_details  = lead.insured_people_details;
     let occupationOptions = this.state.screenData.occupation_opts;
@@ -80,13 +80,15 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
 
-    let backend_key, form_data;
+    let backend_key, form_data; // need to be fixed
     for (var i = 0; member_base && i < member_base.length; i++) {
-      let key = member_base[i].insured_person.relation
+      let key = member_base[i].insured_person.relation;
+           console.log(member_base[i])
       if (member_key === key) {
         backend_key = member_base[i].insured_person.relation_key;
-        if (i !== member_base.length - 1) {
-          next_state = member_base[i + 1].insured_person.relation
+        console.log( next_state,  member_base.length)
+        if (i !== member_base.length - 1) {  console.log("true")
+          next_state = member_base[i + 1].insured_person.relation; 
           break;
         }
       }
@@ -360,7 +362,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     this.setState({
-      form_data: form_data
+      form_data: form_data //
     })
 
 
@@ -382,7 +384,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
       }
       let body = {
-        "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
+        "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
         "insured_people_details": [{
           "name": form_data.name,
           "height": form_data.height || '',
@@ -396,7 +398,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   
       if (this.state.backend_key === 'self_account_key') {
              body = {
-          "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",   //5c96ee1e-3b1e-4467-82b8-292086a87fb2
+          "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",   //43b0bba5-a078-468e-ad25-05506022c0dd
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -419,7 +421,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
           body = {
-          "application_id": "5c96ee1e-3b1e-4467-82b8-292086a87fb2",
+          "application_id": "43b0bba5-a078-468e-ad25-05506022c0dd",
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
