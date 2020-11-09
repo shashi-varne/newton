@@ -426,6 +426,7 @@ class GoldBuyHome extends Component {
         handleClick={this.handleClick}
         updateChild={this.updateChild}
         buttonTitle="PROCEED"
+        skelton={true}
         events={this.sendEvents('just_set_events')}
       >
 

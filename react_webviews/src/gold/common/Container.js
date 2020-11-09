@@ -12,6 +12,8 @@ import { getConfig } from 'utils/functions';
 import {checkStringInString, storageService} from 'utils/validators';
 import {forceBackState, goBackMap} from '../constants';
 
+import UiSkelton from '../../common/ui/Skelton';
+
 class Container extends Component {
   constructor(props) {
     super(props);
@@ -167,10 +169,14 @@ class Container extends Component {
           {/* Below Header Block */}
           <div id="HeaderHeight" style={{ top: 56 }}>
             {/* Loader Block */}
-            {this.renderPageLoader()}
+            {/* {this.renderPageLoader()} */}
           </div>
   
-          {/*  */}
+          { this.props.skelton && 
+            <UiSkelton 
+            type={'test'}
+            />
+          }
   
 
           {!this.state.force_hide_inpage_title && 
@@ -178,11 +184,11 @@ class Container extends Component {
           }
   
           {/* Children Block */}
-          <div
+            <div
             style={this.props.styleContainer}
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
-          >
-            {this.props.children}
+            >
+            {!this.props.skelton && this.props.children}
           </div>
   
           {/* Footer Block */}
