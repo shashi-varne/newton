@@ -904,7 +904,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 <div className='mid-content'>
 
-                    {this.state.lead.member_base.map(this.renderMembertop)}
+                    {this.state.quotation.member_base.map(this.renderMembertop)}
 
                     <div className="member-tile">
                         <div className="mt-left">
