@@ -236,7 +236,7 @@ class FyntuneLanding extends Component {
         <div className="landing-hero-container">
             <img
                 className="landing-hero-img"
-                src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.png`)}
+                src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.svg`)}
                 alt=""
               />
         </div>
