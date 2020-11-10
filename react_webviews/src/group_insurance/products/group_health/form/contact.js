@@ -39,7 +39,7 @@ class GroupHealthPlanContactDetails extends Component {
             })
         }
 
-        let lead = this.state.lead;  console.log(lead.buyer_details)
+        let lead = this.state.lead;
         let form_data = {
             email: lead.buyer_details.email || '',
             mobile_number: lead.buyer_details.phone_number || ''
@@ -150,7 +150,6 @@ class GroupHealthPlanContactDetails extends Component {
                     "email": this.state.form_data.email,
                 }
             }
-                       console.log(body)
             this.updateLead(body);
         }
     }

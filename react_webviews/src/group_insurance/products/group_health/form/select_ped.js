@@ -78,7 +78,6 @@ class GroupHealthPlanSelectPed extends Component {
                     if(opt.key === item.front_end_question_id) {
                         let since_when = item.since_when.length > 4 ?  item.since_when.split('/') : ''
                         let ped_date = `${since_when[1]}/${since_when[2]}`
-                        console.log(item)
                         options[index].checked = true;
                         options[index].start_date = ped_date || ''
                         options[index].description = item.description !== null ? item.description : options[index].description;

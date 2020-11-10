@@ -47,7 +47,6 @@ class GroupHealthPlanPersonalDetails extends Component {
   onload = () => {
 
     let lead = this.state.lead || {};  
-    console.log(lead)
     let quotation = this.state.quotation || {};     
     let insured_people_details  = lead.insured_people_details;
     let occupationOptions = this.state.screenData.occupation_opts;
@@ -106,9 +105,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     });
 
     form_data.pan_number =   lead.buyer_details.pan_no || ""
-    
-    console.log(form_data,insured_people_details)
-   
     let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob);
@@ -370,7 +366,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       let application_id =  storageService().get("application_ID")
 
-     console.log(application_id)
       let gender = '';
       if (this.state.member_key !== 'self') {
         gender = 'FEMALE';
@@ -435,7 +430,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           }]
         }
       }
-              console.log(body, application_id)
+
       this.updateLead(body);
     }
   }

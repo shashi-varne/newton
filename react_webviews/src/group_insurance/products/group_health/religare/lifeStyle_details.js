@@ -296,7 +296,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let application_id =  storageService().get("application_ID")
 
     let body = {
-      "application_id": application_id, // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
+      "application_id": application_id,
     }
     this.sendEvents("next", {member_base: member_base});
  

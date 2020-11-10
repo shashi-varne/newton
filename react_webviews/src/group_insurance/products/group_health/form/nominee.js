@@ -59,7 +59,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         let lead = this.state.lead || {}; 
         let form_data = lead.nominee_details || {};   
         let appointeeBirthDay = lead.appointee_details || {};
-          console.log(lead)
+
         let appointee_account_key = lead.appointee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
         appointeeBirthDay['dob'] = appointeeBirthDay['dob'] ? appointeeBirthDay['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
@@ -261,7 +261,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     break;
                 }
             }
-        }           console.log(canSubmitForm,form_data)
+        }        
 
         if (canSubmitForm) {
             let application_id =  storageService().get("application_ID")
@@ -294,7 +294,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     "appointee_details": appointee_account_key        
                 }
             }
-                                     console.log(body,"<<<<body>>>>")
+
             this.updateLead(body);     
         }
     }
@@ -395,7 +395,6 @@ class GroupHealthPlanNomineeDetails extends Component {
     render() {
         const { showAppointee = false, showDob = false } = this.state.providerConfig.nominee_screen;
 
-        console.log(      this.state.providerConfig.nominee_screen      )
 
         return (
             <Container

@@ -232,7 +232,6 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'HDFCERGO') {
                 let subtitle = []
                 member.answers.pre_existing_diseases.forEach(name => {
-                    console.log(name)
                     subtitle.push(name.front_end_question_id)
                 })
                     
@@ -699,7 +698,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
     renderMembertop = (prop, index) => {
        let props = prop.insured_person;
-        console.log(props, '+_+_+_+_+_+_+_+_+_' ,props.key)
+
         if (props.key === 'applicant') {
             return (
                 <div className="member-tile" key={index}>
