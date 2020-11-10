@@ -40,8 +40,7 @@ class HealthInsuranceEntry extends Component {
         key: 'STAR',
         title: 'Star',
         subtitle: 'Family health optima',
-        icon: star_logo,
-        disabled: true
+        icon: star_logo
       }
     ];
 

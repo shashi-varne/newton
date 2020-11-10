@@ -196,7 +196,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         info.title = 'Applicant name';
                     }
 
-                    if (info.key === 'height' || info.key === 'weight') {
+                    if (['height', 'weight', 'occupation'].indexOf(info.key) !== -1) {
                         continue;
                     }
                 }
@@ -307,7 +307,7 @@ class GroupHealthPlanFinalSummary extends Component {
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-contact`,
             data: [
                 {
-                    'title': 'Email',
+                    'title': 'Email id',
                     'subtitle': lead.email
                 },
                 {
@@ -328,7 +328,7 @@ class GroupHealthPlanFinalSummary extends Component {
         let data = address_data_backend.map((item, index) => {
             return [
                 {
-                    'title': index === 0 ? 'Current address' : 'Permanent address',
+                    'title': `${provider==='RELIGARE'? index === 0 ? 'Current address' : 'Permanent address':''}`,
                     'subtitle': ' ',
                     'key': 'heading'
                 },
@@ -721,7 +721,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
- 
+        
         return (
             <div key={index}>
                 {props.subtitle &&
@@ -764,7 +764,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>}
 
                 {props.open && props.title === 'Address details' &&
-                    <div className="bct-content">
+                    <div className={`bct-content bct-content-address`}>
 
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
@@ -1017,7 +1017,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </Grid>
                         </Grid>
                     </div>
-                    <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
+                      <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
                 </div>
                 {this.state.medical_dialog_data &&
                     <BottomSheet parent={this} data={this.state.medical_dialog_data} />}

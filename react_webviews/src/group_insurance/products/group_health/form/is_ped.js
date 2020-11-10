@@ -264,7 +264,7 @@ class GroupHealthPlanIsPed extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="common-top-page-subtitle">
+                <div className="common-top-page-subtitle" style={{fontSize: '13px'}}>
                     Please disclose correct details to make hassle-free claim later
                 </div>
 
@@ -289,7 +289,7 @@ class GroupHealthPlanIsPed extends Component {
                         <div>
 
 
-                            <div className="plus-minus-input-label">
+                            <div className="plus-minus-input-label" style={{fontSize: '13px'}}>
                                 Who has pre-existing disease?
                             </div>
                             <div className="generic-hr"></div>

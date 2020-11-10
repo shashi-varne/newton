@@ -338,6 +338,19 @@ const partnersConfigBase = {
     close_button: "close_nav_icon.svg",
     search_button: "search.png",
     white_header: true
+  },
+  indb: {
+    logo: "logo_white.png",
+    primary_color: "#173883",
+    secondary_color: "#173883",
+    code: "indb",
+    email: "ask@fisdom.com",
+    mobile: "+80-48-093070",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
   }
 };
 
@@ -414,15 +427,38 @@ function getPartnerConfig(partner_code) {
       configPrimaryBackgroundColorClass: 'mywayBackColor',
       webAppUrl: 'https://app.mywaywealth.com/#!/',
       email_domain: 'mywaywealth.com',
-    }
+    },
+    'minvest': {
+      primary: '#FF5C34',
+      secondary: '#35cb5d',
+      default: '#4a4a4a',
+      highlight_color: '#f6f2ff',
+      label: '#a2a2a2',
+      type: 'minvest',
+      productName: 'minvest',
+      appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
+      termsLink: 'https://www.fisdom.com/terms/',
+      schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
+      askEmail: 'ask@fisdom.com',
+      mobile: '+91-8048093070',
+      configPrimaryColorClass: 'configPrimaryColorClass',
+      configPrimaryBackgroundColorClass: 'fisdomBackColor',
+      webAppUrl: 'https://app.fisdom.com/#!/',
+      email_domain: 'fisdom.com',
+    },
   }
 
   const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  const isminvest = search.indexOf("my.barodaminvest.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
   if (ismyway || partner_code === 'bfdlmobile' ||
     partner_code === 'myway') {
     productType = 'myway';
+  }
+
+  if (isminvest) {
+    productType = 'minvest';
   }
 
   let config_to_return = baseConfig[productType];
@@ -563,7 +599,7 @@ export const getConfig = () => {
     project = 'pg';
   }
 
-  
+
 
   let search = window.location.search;
   const insurance_v2 = generic_callback === "true" ? true : search.indexOf("insurance_v2") >= 0;

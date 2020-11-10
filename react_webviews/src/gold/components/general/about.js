@@ -106,7 +106,7 @@ class About extends Component {
               <div className="FlexRow">
                 <div>24 Karat</div>
                 <div>|</div>
-                <div>99.5% Purity</div>
+                <div>99.99% Purity</div>
               </div>
               <div className="helper" onClick={() => this.navigate("details")}>
                 Know More

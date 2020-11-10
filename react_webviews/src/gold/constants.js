@@ -203,9 +203,9 @@ export const gold_providers = {
     'safegold': {
         key: 'safegold',
         title: 'Safegold',
-        subtitle: '24 Karat | 99.5% pure',
+        subtitle: '24 Karat | 99.99% pure',
         logo: 'logo_safegold.svg',
-        karat: '24K 99.5%'
+        karat: '24K 99.99%'
     }
 }
 
@@ -400,6 +400,10 @@ export function getTransactionStatus(order) {
 
     }
 
+    if(type === 'buy_back') {
+        return 'success';
+    }
+
     return 'init';
 }
 
@@ -456,6 +460,20 @@ const transJourneyData = {
         {
             'title': 'Delivered',
             'status': 'pending'
+        }
+    ],
+    'buy_back': [
+        {
+            'title': 'Gold back initiated',
+            'status': 'init'
+        },
+        {
+            'title': 'Gold back processed',
+            'status': 'pending'
+        },
+        {
+            'title': 'Deposited in Gold Vault',
+            'status': 'success'
         }
     ]
 }
@@ -546,6 +564,14 @@ export function setTransationsSteps(order) {
         } else if (final_status === 'payment_failed') {
             data[1].status = 'failed';
             data[1].title = 'Payment failed';
+        }
+    }
+
+    if (type === 'buy_back') {
+
+        if (final_status === 'success') {
+            data = changeArrayKeyValue(data, 'status', 'success');
+
         }
     }
 
