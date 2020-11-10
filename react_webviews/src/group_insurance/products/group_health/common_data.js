@@ -64,7 +64,6 @@ export async function initialize() {
 
     let lead = {
         member_base: [],
-        member_bases : []
     };
 
     if (this.state.get_lead) {
@@ -121,11 +120,11 @@ export async function initialize() {
                     show_loader: false
                 });
                 if (res.pfwresponse.status_code === 200) {
-                    lead = resultData;
+                    lead = resultData.quotation_details;
                     lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
                     // let member = ghGetMember(lead, this.state.providerConfig); 
                     lead.member_base =  resultData.insured_people_details;
-
+                    console.log(resultData, lead.quotation_details)
                     this.setState({
                         lead: resultData || {},
                         quotation: resultData.quotation_details || {},
@@ -158,8 +157,7 @@ export async function initialize() {
         }
     }
 
-    if (this.state.ctaWithProvider) {
-  let lead = this.state.lead.quotation_details
+    if (this.state.ctaWithProvider) { 
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';

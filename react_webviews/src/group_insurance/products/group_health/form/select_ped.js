@@ -94,14 +94,15 @@ class GroupHealthPlanSelectPed extends Component {
                 let matched;
 
                 for (let opt of options) {
+                           console.log(ped_diseases_name)
                     if (opt.question_id === disease_name.front_end_question_id) {
                         opt.checked = true;
                         matched = true;
                     }
                 }
     
-                if(!matched) {
-                    other_diseases += disease_name;
+                if(disease_name.front_end_question_id === 'hdfc_ergo_ped_other_diseases') {
+                    other_diseases += disease_name.description;
                 }
             }
     
@@ -228,7 +229,9 @@ class GroupHealthPlanSelectPed extends Component {
 
                         let obj = {
                             "yes_no": true,
-                            "question_id": options[j].id
+                            "question_id": options[j].id,
+                            'description' : value
+                            
                         }
                         pre_existing_diseases.push(obj)
                     }
