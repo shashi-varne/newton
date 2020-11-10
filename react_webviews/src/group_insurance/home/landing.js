@@ -35,7 +35,7 @@ class Landing extends Component {
       {
         key: 'LIFEINSURANCE',
         title: 'Life Insurance',
-        subtitle: 'Starts from ₹7,000/year',
+        subtitle: 'Starts from ₹7,700/year',
         icon: 'life_insurance'
       },
       {
