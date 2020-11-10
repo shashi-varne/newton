@@ -8,7 +8,7 @@ import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
 import StepsToFollow from '../../../common/ui/stepsToFollow';
-import { storageService} from '../../../utils/validators';
+import {   inrFormatDecimal, numDifferentiationInr, storageService} from '../../../utils/validators';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -258,8 +258,8 @@ class FyntuneLanding extends Component {
                     <div className="rct-title">
                       Click 2 Invest
                     </div>
-                    <div className="rct-subtitle">
-                      {this.state.resume_data.lead.total_amount}
+                    <div className="rct-subtitle" style={{fontSize: '20px'}}>
+                      {inrFormatDecimal(this.state.resume_data.lead.total_amount)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
                     </div>
                   </div>
                 </div>
@@ -268,12 +268,12 @@ class FyntuneLanding extends Component {
               </div>
 
               <div className="rc-bottom flex-between">
-                <div className="rcb-content">
+                <div className="rcb-content" style={{fontSize: '14px'}}>
                   Sum insured:{" "}
-                  {this.state.resume_data.lead.sum_assured}
+                  {numDifferentiationInr(this.state.resume_data.lead.sum_assured)}
                 </div>
-                <div className="rcb-content">
-                  Policy term: {this.state.resume_data.lead.tenure}
+                <div className="rcb-content" style={{fontSize: '14px'}}>
+                  Policy term: {this.state.resume_data.lead.tenure} years
                 </div>
               </div>
             </div>
