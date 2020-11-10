@@ -5,7 +5,7 @@ import Grid from 'material-ui/Grid';
 import MmYyInModal from 'common/ui/MmYyInModal';
 import InputPopup from './InputPopup';
 import Input from './Input';
-import Checkbox from './Checkbox';
+import CheckBox from './Checkbox';
 
 class CheckboxListClass extends Component {
 
@@ -70,15 +70,15 @@ class CheckboxListClass extends Component {
       >
         <Grid container spacing={16} alignItems="center">
           <Grid item xs={1} className="TextCenter">
-            <Checkbox
+            <CheckBox
               index={index}
               type="checkbox"
-              class="Checkbox"
               handleChange={this.handleClick}
               value="checked"
               checked={props.checked}
               width="18px"
               height="18px"
+              
             />
           </Grid>
 

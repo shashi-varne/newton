@@ -7,10 +7,9 @@ import { FormControl } from 'material-ui/Form';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import DropdownInModal from '../../../../common/ui/DropdownInModal';
-import { initialize, updateBottomPremium } from '../common_data';
+import { initialize, updateBottomPremium, updateBottomPremiumAddOns } from '../common_data';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
-import ReactTooltip from "react-tooltip";
 import { compact } from 'lodash';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
@@ -28,73 +27,30 @@ class GroupHealthPlanAddOns extends Component {
 
         this.initialize = initialize.bind(this);
         this.updateBottomPremium = updateBottomPremium.bind(this);
+        this.updateBottomPremiumAddOns = updateBottomPremiumAddOns.bind(this);
     };
 
     componentWillMount() {
         this.initialize();
     }
 
-    setAmountOptions (add_ons_data) {
-
-        let sum_assured = this.state.groupHealthPlanData.sum_assured;
-    
-            if (add_ons_data.length !== 0) {
-                add_ons_data.forEach((item, index) => {
-                    let default_cover_amount = item.default_cover_amount;
-
-                    let final_data = item;
-
-                    if (item.options.length !== 0) {
-                        let options = item.options.sort((a, b) => a.cover_amount - b.cover_amount);
-                        let selectedIndexOption = item.selectedIndexOption || 0;
-
-                        final_data.options = options.map((opt, index2) => {
-
-                            if((!final_data.selected_cover_amount && opt.cover_amount === default_cover_amount) || 
-                            (final_data.selected_cover_amount && opt.cover_amount === final_data.selected_cover_amount)) {
-                                selectedIndexOption = index2;
-                                final_data.selected_cover_amount = opt.cover_amount;
-                                final_data.selected_premium = opt.premium;
-                                final_data.default_premium = opt.premium;
-                            }
-                            return {
-                                ...opt,
-                                'name': formatAmountInr(opt.cover_amount),
-                                'value': opt.premium,
-                            }
-                        });
-
-                        final_data.selectedIndexOption = selectedIndexOption;
-                    }
-
-                    if(sum_assured === 400000 && item.key === 'CAREWITHNCB') {
-                        final_data.checked = true;
-                        final_data.disabled = true;
-                        final_data.bottom_text = 'This benefit is mandatory with your selected plan';
-                    }
-
-
-                    add_ons_data[index] = final_data;
-                })
-            }
-
-            this.setState({
-                add_ons_data: add_ons_data
-            }, () => {
-                ReactTooltip.rebuild();
-                this.updateCtaPremium();
-            })
-
-    }
-
     async componentDidMount() {
 
-        let body = this.state.groupHealthPlanData.post_body;
+        let post_body = this.state.groupHealthPlanData.post_body;
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+        if(this.state.groupHealthPlanData.account_type === "self" || Object.keys(this.state.groupHealthPlanData.post_body.member_details).length === 1){
+            body['floater_type'] = 'non_floater';
+        }
 
         let add_ons_data = this.state.groupHealthPlanData.add_ons_data || []; 
         // eslint-disable-next-line radix
-        let cta_premium = this.state.groupHealthPlanData.net_premium_addons || this.state.bottomButtonData.leftSubtitleUnformatted;
-        this.updateBottomPremium(cta_premium);
+        let cta_premium = this.state.groupHealthPlanData.post_body.premium || this.state.bottomButtonData.leftSubtitleUnformatted;
+        this.updateBottomPremiumAddOns(cta_premium);
         
         this.setState({
             // add_ons_data: add_ons_data,
@@ -103,15 +59,48 @@ class GroupHealthPlanAddOns extends Component {
         
         if (add_ons_data.length === 0) {
             try {
-
-                const res = await Api.post('/api/ins_service/api/insurance/religare/addons', body);
+                const res = await Api.post('https://seguro-dot-plutus-staging.appspot.com//api/insurance/health/quotation/get_add_ons/religare', body);
 
                 this.setState({
                     show_loader: false
                 });
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
-                    add_ons_data = resultData.premium.add_ons_data || [];
+                    
+                    add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
+
+                    
+                    let options = [];
+                    let opd_data_options = add_ons_data[1].price;
+                    for(var key in opd_data_options){
+                        let opt = {
+                            cover_amount: key,
+                            premium: add_ons_data[1].price[key]
+                        }
+                        options.push(opt);
+                    }
+
+                    let temp = add_ons_data[2];
+                        add_ons_data[2] = add_ons_data[3];
+                        add_ons_data[3] = temp;
+                    
+                    
+                    if(this.state.groupHealthPlanData.post_body.si === "400000"){
+                        
+                        for(var item in add_ons_data){
+                            if(add_ons_data[item].id === "ncb"){
+                                add_ons_data[item].checked = true;
+                                add_ons_data[item].disabled = true;
+                                add_ons_data[item].bottom_text = "This benefit is mandatory with your selected plan";
+                            }
+                        }    
+                    }
+                    console.log(add_ons_data)
+
+                    add_ons_data[1].price = options;
+                    add_ons_data[1].default_premium = parseInt(add_ons_data[1].price[0].premium, 10);
+                    add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].cover_amount;
+                    
                 } else {
                     toast(resultData.error || resultData.message
                         || 'Something went wrong');
@@ -136,7 +125,6 @@ class GroupHealthPlanAddOns extends Component {
             this.updateCtaPremium()
         })
         
-        this.setAmountOptions(add_ons_data);
     }
 
     updateCtaPremium = () => {
@@ -146,13 +134,13 @@ class GroupHealthPlanAddOns extends Component {
 
         add_ons_data.forEach((item, index) => {
             if (item.checked) {
-                total_premium += item.selected_premium || item.default_premium;
+                total_premium += item.selected_premium || item.default_premium || item.price;
             }
         });
 
-        let updated_premium = cta_premium + total_premium;
-
-        this.updateBottomPremium(updated_premium);
+        let updated_premium = parseInt(cta_premium, 10) + parseInt(total_premium, 10);
+        
+        this.updateBottomPremiumAddOns(updated_premium);
     }
 
     handleChangeCheckboxes = index => event => {
@@ -172,13 +160,12 @@ class GroupHealthPlanAddOns extends Component {
          
         let data = add_ons_data[index];
 
+        
         let indexOption = event;
         data.selectedIndexOption = indexOption;
 
-        data.selected_cover_amount =  data.options[indexOption].cover_amount;
-        data.selected_premium =  data.options[indexOption].premium;
-
-
+        data.selected_cover_amount =  data.price[indexOption].cover_amount;
+        data.selected_premium =  parseInt(data.price[indexOption].premium, 10);
 
         add_ons_data[index] = data;
 
@@ -190,6 +177,7 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
+        console.log('in render ', add_ons_data)
         return (
             <div>
                 {add_ons_data.map((item, index) => (
@@ -200,35 +188,33 @@ class GroupHealthPlanAddOns extends Component {
                                 checked={item.checked || false}
                                 color="primary"
                                 disabled={item.disabled}
-                                value={item.key}
-                                name={item.key}
+                                value={item.id}
+                                name={item.id}
                                 disableRipple
                                 onChange={this.handleChangeCheckboxes(index)}
                                 className="Checkbox" />
                         </Grid>
                         <Grid item xs={11}>
-                            <span className="flex-between" style={{ alignItems: 'start' }}>
+                            <span className="flex-between" style={{ alignItems: 'start' }} onClick={this.handleChangeCheckboxes(index)}>
                                 <div style={{ color: '#0A1D32' }}>
-                                    <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.title}</span> 
+                                    <span style={{ fontSize: "16px", fontWeight: '600' }}>{item.name}</span> 
                                     <div style={{ marginTop: '10px', fontSize: '14px' }}>
-                                        in {item.options.length !== 0 ?
-                                            (!item.checked) ? formatAmountInr(item.default_premium) :
-                                                item.selected_premium ? formatAmountInr(item.selected_premium)
-                                                    : formatAmountInr(item.default_premium)
-                                            : formatAmountInr(item.default_premium)
+                                        in { !Array.isArray(item.price) ? formatAmountInr(item.price) : 
+                                             item.checked ? formatAmountInr(item.selected_premium || item.default_premium) :
+                                            formatAmountInr(item.default_premium)
                                         }
-                                        <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                     </div>
+                                    <div id="add_ons_bottom_text">{item.bottom_text}</div>
                                 </div>
-                          <GenericTooltip content={item.tooltip_content} productName={getConfig().productName} />
+                          <GenericTooltip content={item.description} productName={getConfig().productName} />
                             </span>
-                            {item.checked && item.options.length !== 0 && <DropdownInModal
+                            {item.checked && Array.isArray(item.price) && <DropdownInModal
                                 parent={this}
-                                options={item.options}
+                                options={item.price}
                                 header_title="Select amount"
                                 cta_title="SAVE"
                                 selectedIndex={item.selectedIndexOption || 0}
-                                value={item.selected_cover_amount || ''}
+                                value={item.selected_cover_amount || item.default_cover_amount || '' }
                                 width="30"
                                 showInrSymbol={true}
                                 label="Select amount"
@@ -274,35 +260,33 @@ class GroupHealthPlanAddOns extends Component {
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
 
-
         let add_ons_body = [];
         let  add_ons_json = {};
         // eslint-disable-next-line
-        this.state.add_ons_data.map((item) => {
-
-            
+        console.log(this.state.add_ons_data)
+        this.state.add_ons_data.forEach((item) => {            
             if(item.checked) {
 
-                if (item.options.length !== 0) {
-                    add_ons_body.push(item.options[item.selectedIndexOption].key);
-                    add_ons_json[item.options[item.selectedIndexOption].key] = {
-                        premium: item.selected_premium || item.default_premium,
-                        title: item.title
+                if (Array.isArray(item.price)) {
+                    add_ons_body.push(`opd-${item.default_cover_amount || item.default_premium}`)
+                    add_ons_json[item.id || 'opd'] = {
+                        price: item.selected_premium || item.default_premium,
+                        title: item.name
                     };
                 } else {
-                    add_ons_json[item.key] = {
-                        premium: item.selected_premium || item.default_premium,
-                        title: item.title
+                    add_ons_json[item.id] = {
+                        price: item.price || item.selected_premium || item.default_premium,
+                        title: item.name
                     };
-                    add_ons_body.push(item.key);
+                    add_ons_body.push(item.id);
                 }
             }
-
         })
 
-
-        groupHealthPlanData.post_body.add_ons = add_ons_body;
+        groupHealthPlanData.post_body.add_ons = add_ons_body; //add ons in array format for get final premium api in the select cover period page
+        groupHealthPlanData.post_body.add_ons_array = add_ons_body;
         groupHealthPlanData.post_body.add_ons_json = add_ons_json;
+
         groupHealthPlanData.add_ons_data = this.state.add_ons_data;
         this.setLocalProviderData(groupHealthPlanData);
 

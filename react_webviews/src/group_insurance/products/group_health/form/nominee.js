@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-import { validateAlphabets, calculateAge, isValidDate, 
+import { validateAlphabets, calculateAge, isValidDate, storageService,
     formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
@@ -93,7 +93,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
         var value = event.target ? event.target.value : event;
 
-        if(containsSpecialCharactersAndNumbers(value)){
+        if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
             return;
         }
         var form_data = this.state.form_data || {};
@@ -261,8 +261,10 @@ class GroupHealthPlanNomineeDetails extends Component {
         }           console.log(canSubmitForm,form_data)
 
         if (canSubmitForm) {
+            let application_id =  storageService().get("application_ID")
+
             let body = {
-                "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde", // 2f88a3d5-1a31-48c7-a238-51c4535babf2
+                "application_id": application_id, // 2f88a3d5-1a31-48c7-a238-51c4535babf2
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -289,11 +291,11 @@ class GroupHealthPlanNomineeDetails extends Component {
                 // }
 
                 body = {
-                    "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde",
+                    "application_id": application_id,
                     nominee_account_key: {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,
-                        // "DOB": this.state.form_data.dob
+                        "dob": this.state.form_data.dob
                     },
                     // appointee_account_key: appointee_account_key        
                 }
@@ -410,7 +412,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
-
+                
                 <FormControl fullWidth>
                     <div className="InputField">
                         <Input
@@ -420,6 +422,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             class="NomineeName"
                             id="name"
                             name="name"
+                            maxLength="50"
                             error={this.state.form_data.name_error ? true : false}
                             helperText={this.state.form_data.name_error}
                             value={this.state.form_data.name || ''}

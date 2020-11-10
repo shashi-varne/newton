@@ -13,7 +13,7 @@ import {getInsuredMembersUi, resetInsuredMembers} from '../constants';
 const eldMemOptionMapper = {
     'self': ['self'],
     'family': ['spouse', 'husband', 'wife'],
-    'selfandfamily': ['self', 'spouse', 'husband', 'wife'],
+    'self_family': ['self', 'spouse', 'husband', 'wife'],
     'parents': ['father', 'mother']
 }
 
@@ -145,21 +145,23 @@ class GroupHealthPlanDobReligare extends Component {
             let post_body = groupHealthPlanData.post_body || {};
 
             let insured_members = getInsuredMembersUi(groupHealthPlanData);
-    
+            let member_details = {}
             for (var i=0; i < insured_members.length; i++){
                 let data = insured_members[i];
     
-                post_body[data.backend_key] = {
+                member_details[data.backend_key] = {
                     relation: data.relation
                 };
     
                 if(data.key === this.state.eldest_member) {
-                    post_body[data.backend_key].dob = this.state.eldest_dob;
+                    member_details[data.backend_key].dob = this.state.eldest_dob;
                 }
             }
-    
-            if(ui_members.self_gender && post_body.self_account_key) {
-                post_body.self_account_key.gender = ui_members.self_gender;
+            
+            post_body.member_details = member_details;
+
+            if(ui_members.self_gender && post_body.member_details.self_account_key) {
+                post_body.member_details.self_account_key.gender = ui_members.self_gender;
             }
 
             groupHealthPlanData.eldest_dob = this.state.eldest_dob;

@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
-  calculateAge, toFeet, capitalizeFirstLetter,
+  calculateAge, toFeet, capitalizeFirstLetter, storageService,
   formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, containsSpecialCharactersAndNumbers, containsSpecialCharacters
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -57,7 +57,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
-    let member_base = insured_people_details || [];
+    let member_base = lead.lead || [];
 
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
@@ -197,8 +197,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     var value = event.target ? event.target.value : event;
-    if(containsSpecialCharactersAndNumbers(value) && name !== 'pan_number' && name !== 'weight'){
-      // return;
+
+    if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
+      return;
     }
 
     if(name === 'pan_number' && containsSpecialCharacters(value)){
@@ -368,6 +369,10 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (canSubmitForm) {
 
+
+      let application_id =  storageService().get("application_ID")
+
+     console.log(application_id)
       let gender = '';
       if (this.state.member_key !== 'self') {
         gender = 'FEMALE';
@@ -384,7 +389,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
       }
       let body = {
-        "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
+        "application_id": application_id,
         "insured_people_details": [{
           "name": form_data.name,
           "height": form_data.height || '',
@@ -398,7 +403,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   
       if (this.state.backend_key === 'self_account_key') {
              body = {
-          "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",   //1a8b7958-e78d-486f-b7a3-a77c8bcae801
+          "application_id": application_id,   
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -419,7 +424,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
           body = {
-          "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
+          "application_id": application_id,
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -432,7 +437,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           }]
         }
       }
-
+              console.log(body, application_id)
       this.updateLead(body);
     }
   }
@@ -588,6 +593,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             {this.state.header_subtitle}
           </div>
         )}
+        
         <div className="InputField">
           <Input
             type="text"

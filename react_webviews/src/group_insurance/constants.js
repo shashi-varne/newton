@@ -611,8 +611,8 @@ export function ghGetMember(lead, providerConfig) {
     'spouse_account_key',
     'parent_account1_key',
     'parent_account2_key',
-    'parent_inlaw_account1_key',
-    'parent_inlaw_account2_key'
+    'parents_in_law_account1_key',
+    'parents_in_law_account2_key'
   ];
   const { add_members_screen: { son_max, daughter_max }} = providerConfig;
 
@@ -624,16 +624,16 @@ export function ghGetMember(lead, providerConfig) {
   const allowed_as_per_account = {
     'self': ['self_account_key'],
     'family': ['spouse_account_key'].concat(backend_child_keys),
-    'selfandfamily': ['self_account_key', 'spouse_account_key'].concat(backend_child_keys),
+    'self_family': ['self_account_key', 'spouse_account_key'].concat(backend_child_keys),
     'parents': ['parent_account1_key', 'parent_account2_key'],
-    'parentsinlaw': ['parent_inlaw_account1_key', 'parent_inlaw_account2_key'],
+    'parents_in_law': ['parents_in_law_account1_key', 'parents_in_law_account2_key'],
   };
-  const allowed_mapper = allowed_as_per_account[lead.account_type];
+  const allowed_mapper = allowed_as_per_account[lead.insurance_type];
+
   let member_base = [];
-  
   // Map all remaining keys
   for (let key of backend_keys) {
-    let obj = lead[key];
+    let obj = lead.member_details[key];
 
     if (allowed_mapper.includes(key) && obj && !isEmpty(obj)) {
       Object.assign(obj, {
@@ -643,23 +643,21 @@ export function ghGetMember(lead, providerConfig) {
       member_base.push(obj);
     }
   }
-
   let total_son = 0, total_daughter = 0;
 
   for (let i = 1; i <= (son_max + daughter_max); i++) {
-    if (!isEmpty(lead[`child_account${i}_key`])) {
-      if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'SON') {
+    if (!isEmpty(lead.member_details[`child_account${i}_key`])) {
+      if ((lead.member_details[`child_account${i}_key`].relation || '').toUpperCase() === 'SON') {
         total_son++;
-      } else if ((lead[`child_account${i}_key`].relation || '').toUpperCase() === 'DAUGHTER') {
+      } else if ((lead.member_details[`child_account${i}_key`].relation || '').toUpperCase() === 'DAUGHTER') {
         total_daughter++;
       }
     }
   }
-
   let daughter_count = 1, son_count = 1;
   // Map all children keys
   for (let childKey of backend_child_keys) {
-    let obj = lead[childKey];
+    let obj = lead.member_details[childKey];
 
     if (allowed_mapper.includes(childKey) && obj && !isEmpty(obj)) {
       obj.backend_key = childKey;
@@ -675,15 +673,13 @@ export function ghGetMember(lead, providerConfig) {
       member_base.push(obj);
     }
   }
-
   
-  if(['parents', 'parentsinlaw', 'family'].includes(lead.account_type)) {
-    let obj = lead['self_account_key'];
+  if(['parents', 'parents_in_law', 'family'].includes(lead.insurance_type)) {
+    let obj = lead.member_details['self_account_key'] || {};
     obj.backend_key = 'self_account_key';
     obj.key = 'applicant';
     member_base.push(obj);
   }
-  
   return member_base;
 
 }
@@ -822,8 +818,8 @@ export function getCssMapperReport(policy) {
 
   if(['HDFCERGO', 'STAR', 'RELIGARE'].includes(provider)) {
    
-    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || '');
-    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || '');
+    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || policy.dt_created  || '');
+    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.dt_created ||  '');
   }
 
 

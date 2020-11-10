@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import {validateNumber} from 'utils/validators';
+import {validateNumber, validateLengthDynamic, storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
@@ -34,7 +34,8 @@ class GroupHealthPlanAddressDetails extends Component {
             get_lead: true,
             next_state: 'nominee',
             screen_name: 'address_screen',
-            checked: false
+            checked: false,
+            sameAddressCheck: false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -224,6 +225,21 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
 
+        for(let key in form_data){
+            if(key === 'addressline' || key ==="addressline2" || key ==="p_addressline" || key === "p_addressline2"){
+                if(validateLengthDynamic(form_data[key], 4)){
+                    form_data[key+'_error'] = "Please enter at least 4 characters";
+                }
+            }
+        }
+        
+        if(this.state.sameAddressCheck){
+            for(var form_key in form_data){
+                if(form_key.includes('p_') && form_key.includes('_error')){
+                    delete form_data[form_key];
+                }
+            }
+        }
         for (var key in form_data) {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
@@ -241,9 +257,10 @@ class GroupHealthPlanAddressDetails extends Component {
 
         if (canSubmitForm) {
             let body = {};
+            let application_id =  storageService().get("application_ID")
             if (provider === 'HDFCERGO') {
                 body = {
-                    "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
+                    "application_id": application_id,
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -259,7 +276,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
             if (provider === 'RELIGARE') {
                 body = {
-                    "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
+                    "application_id": application_id,
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -472,7 +489,8 @@ class GroupHealthPlanAddressDetails extends Component {
 
     handleCheckBox = name => event => {
         this.setState({
-            [name]: event.target.checked
+            [name]: event.target.checked,
+            sameAddressCheck: !this.state.sameAddressCheck
         }, () => {
             this.setPermAddress();
         })

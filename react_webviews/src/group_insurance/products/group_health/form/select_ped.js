@@ -7,7 +7,7 @@ import { FormControl } from 'material-ui/Form';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import CheckboxList from '../../../../common/ui/CheckboxList';
-import {  capitalizeFirstLetter } from 'utils/validators';
+import {  capitalizeFirstLetter, storageService } from 'utils/validators';
 import { childeNameMapper } from '../../../constants';
 
 class GroupHealthPlanSelectPed extends Component {
@@ -205,7 +205,10 @@ class GroupHealthPlanSelectPed extends Component {
                         }
                     }
                 }
-            }               
+            }             
+            
+
+            let application_id =  storageService().get("application_ID");
             let body = {};
             let pre_existing_diseases = []
             if (provider === 'HDFCERGO') {
@@ -243,7 +246,7 @@ class GroupHealthPlanSelectPed extends Component {
                 // }
 
                 body = {
-                    "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde", //fe6693d5-6e5c-468c-abd9-16ef34afbcde
+                    "application_id": application_id, //fe6693d5-6e5c-468c-abd9-16ef34afbcde
                     "answers": {
                         [this.state.backend_key]: {
                             pre_existing_diseases
@@ -289,7 +292,7 @@ class GroupHealthPlanSelectPed extends Component {
                     [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
                 }
                 body = {
-                    "application_id": "fe6693d5-6e5c-468c-abd9-16ef34afbcde",
+                    "application_id": application_id,
                     "answers" : body_to_send
                 }
                 let data_to_store = [];

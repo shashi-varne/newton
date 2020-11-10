@@ -11,7 +11,7 @@ import PopUp from '../common/PopUp.js';
 
 const productType = getConfig().productName;
 
-class email_entry extends Component {
+class EmailEntry extends Component {
   constructor(props) {
     super(props);
     const params = props.location.params || {};
@@ -118,7 +118,7 @@ class email_entry extends Component {
         noHeader={show_loader}
         classHeader={'bg-highlight'}
         handleClick={this.goNext}
-        buttonTitle="Generate Statement"
+        buttonTitle="Continue"
         showLoader={show_loader}
         goBack={this.goBack}
       >
@@ -166,4 +166,4 @@ class email_entry extends Component {
   }
 }
 
-export default email_entry;
+export default EmailEntry;

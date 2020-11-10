@@ -95,9 +95,9 @@ class GroupHealthPayment extends Component {
           show_loader: true
         });
   
-        let quote_id = storageService().get('ghs_ergo_quote_id');
+        let application_id =  storageService().get("application_ID");
   
-        const res = await Api.get(`api/insurance/health/policy/religare/check_status?application_id=fe6693d5-6e5c-468c-abd9-16ef34afbcde`);
+        const res = await Api.get(`api/insurance/health/policy/hdfc_ergo/check_status?application_id=${application_id}`);
   
         var resultData = res.pfwresponse.result;
         console.log(resultData, '___________________________+-*/.')
@@ -171,11 +171,7 @@ class GroupHealthPayment extends Component {
 
   render() {
     let {policy_data, screenData, provider} = this.state;       
-    
-    console.log('o________________________________o',this.state, 'o________________________________o')
-    
-
-
+  
     return (
       <Container
         provider={this.state.provider}
@@ -222,7 +218,7 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess && provider === 'HDFCERGO' &&
               <div>
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {this.state.providerData.title}  {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                  Payment of {inrFormatDecimal2(this.state.quotation.total_premium)} for {this.state.providerData.title}  {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
 

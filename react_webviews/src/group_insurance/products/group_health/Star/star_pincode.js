@@ -35,9 +35,9 @@ class GroupHealthPlanStarPincode extends Component {
         let header_title, pincode = '';
         if (account_type === 'family') {
             header_title = `Where does your ${ui_members.other_adult_member} live?`;
-        } else if (account_type === 'selfandfamily') {
+        } else if (account_type === 'self_family') {
             header_title = 'Where do you live?';
-        } else if (account_type === 'parentsinlaw') {
+        } else if (account_type === 'parents_in_law') {
             if (ui_members.parents_option === 'parents') {
                 header_title = 'Where do your parents live?';
             } else {
@@ -111,8 +111,9 @@ class GroupHealthPlanStarPincode extends Component {
         let post_body = groupHealthPlanData.post_body;
 
         if (canProceed) {
-            post_body.pincode = this.state.pincode;
+            post_body.postal_code = this.state.pincode;
             groupHealthPlanData.pincode = this.state.pincode;
+            groupHealthPlanData.post_body.postal_code = this.state.pincode;
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
         }
@@ -129,6 +130,7 @@ class GroupHealthPlanStarPincode extends Component {
                 buttonTitle="CONTINUE"
                 handleClick={() => this.handleClick()}
             >
+                
                 <FormControl fullWidth>
                     <div className="InputField">
                         <Input

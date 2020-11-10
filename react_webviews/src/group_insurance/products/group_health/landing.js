@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
 import { getConfig } from "utils/functions";
@@ -21,10 +20,10 @@ import up_arrow from "assets/up_arrow.svg";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from "./common_data";
 import ReactResponsiveCarousel from "../../../common/ui/carousel";
-
 import { getGhProviderConfig } from "./constants";
-
+import {  setLocalProviderData } from "./common_data";
 const screen_name = "landing_screen";
+
 class GroupHealthLanding extends Component {
   constructor(props) {
     super(props);
@@ -43,18 +42,14 @@ class GroupHealthLanding extends Component {
       providerConfig: getGhProviderConfig(this.props.match.params.provider),
       card_swipe_count: 0,
     };
-
     this.openInBrowser = openInBrowser.bind(this);
+    this.setLocalProviderData = setLocalProviderData.bind(this);
   }
-
   componentWillMount() {
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {};
-
     let screenData = this.state.providerConfig[screen_name];
-
     nativeCallback({ action: "take_control_reset" });
-
     let stepsContentMapper = {
       options: [
         {
@@ -74,7 +69,6 @@ class GroupHealthLanding extends Component {
         },
       ],
     };
-
     this.setState({
       stepsContentMapper: stepsContentMapper,
       offerImageData: screenData.offerImageData,
@@ -84,37 +78,34 @@ class GroupHealthLanding extends Component {
       openModuleData: openModuleData,
     });
   }
-
   async componentDidMount() {
     let openModuleData = this.state.openModuleData || {};
-
+    const provider =  this.state.providerConfig.provider_api
+    const body = {"provider": provider};
     try {
-      const res = await Api.get(
-        `api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/get/quoteid`
+      const res = await Api.post(
+        `/api/insurance/health/quotation/account_summary`,
+        body
       );
-
-      console.log(res)
-      if (!openModuleData.sub_module) {
-        this.setState({
+        if (!openModuleData.sub_module) {
+        this.setState({ 
           show_loader: false,
         });
       }
-
-      var resultData = res.pfwresponse.result;
-
+      let resultData =  res.pfwresponse.result;
+      resultData['details_doc'] = res.pfwresponse.result.policy_brochure
+      resultData['tnc'] = res.pfwresponse.result.terms_and_condition
       let lead = {};
-      if (res.pfwresponse.status_code === 200) {
-        lead = resultData.quote || {};
-
+      if (res.pfwstatus_code === 200) {
+        lead = resultData.quotation || {};
+        // lead.id = resultData.application.id || {}
         lead.member_base = [];
-
-        if (resultData.resume_quote) {
+        if (resultData.quotation.id  !== undefined) { 
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
       } else {
         toast(resultData.error || resultData.message || "Something went wrong");
       }
-
       this.setState(
         {
           common: resultData,
@@ -137,20 +128,27 @@ class GroupHealthLanding extends Component {
       toast("Something went wrong");
     }
   }
-
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
     });
   };
-
   handleClick = () => {
+    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {};
+    let post_body = groupHealthPlanData.post_body;
+    if(post_body){
+      delete post_body['quotation_id'];
+      groupHealthPlanData.post_body  = post_body;
+      this.setLocalProviderData(groupHealthPlanData);
+    }
+    
+  
     this.sendEvents("next");
     storageService().setObject("resumeToPremiumHealthInsurance", false);
     this.navigate(this.state.providerConfig.get_next[screen_name]);
   };
-
+  
   sendEvents(user_action, data = {}) {
     let eventObj = {
       event_name: "health_insurance",
@@ -166,14 +164,12 @@ class GroupHealthLanding extends Component {
         resume_clicked: this.state.resume_clicked ? "yes" : "no",
       },
     };
-
     if (user_action === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
   }
-
   renderCoveredPoints = (props, index) => {
     return (
       <div key={index} className="wic-tile">
@@ -182,28 +178,23 @@ class GroupHealthLanding extends Component {
       </div>
     );
   };
-
   handleClickPoints = (key) => {
     this.setState({
       [key + "_open"]: !this.state[key + "_open"],
       [key + "_clicked"]: true,
     });
   };
-
   handleResume = () => {
     if (!this.state.quoteResume || !this.state.quoteResume.id) {
       return;
     }
-
     this.setState(
       {
         resume_clicked: true,
       },
       () => {
         this.sendEvents("next");
-
         let quoteResume = this.state.quoteResume;
-
         storageService().set("ghs_ergo_quote_id", quoteResume.id);
         if (quoteResume.status !== "init" || quoteResume.forms_completed) {
           this.navigate("final-summary");
@@ -214,11 +205,9 @@ class GroupHealthLanding extends Component {
       }
     );
   };
-
   openFaqs = () => {
     this.sendEvents("next", { things_to_know: "faq" });
     let renderData = this.state.screenData.faq_data;
-
     this.props.history.push({
       pathname: "/gold/common/render-faqs",
       search: getConfig().searchParams,
@@ -227,7 +216,6 @@ class GroupHealthLanding extends Component {
       },
     });
   };
-
   carouselSwipe_count = (index) => {
     this.setState({
       selectedIndex: index,
@@ -235,6 +223,7 @@ class GroupHealthLanding extends Component {
       card_swipe_count: this.state.card_swipe_count + 1,
     });
   };
+
 
   render() {
     return (
@@ -251,12 +240,12 @@ class GroupHealthLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
-        <div className="common-top-page-subtitle-dark" style={{marginTop: '-15px'}}>
+        <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
           {this.state.providerConfig.subtitle}
         </div>
 
         <div className="group-health-landing">
-          <div style={{ margin: "15px 0 0 0", cursor: "pointer" }}>
+          <div style={{ margin: "0 0 0 0", cursor: "pointer" }}>
             <ReactResponsiveCarousel
               CarouselImg={this.state.offerImageData}
               callbackFromParent={this.carouselSwipe_count}
@@ -281,7 +270,7 @@ class GroupHealthLanding extends Component {
                       {this.state.quoteResume.plan_title}
                     </div>
                     <div className="rct-subtitle">
-                      {inrFormatDecimal(this.state.quoteResume.total_amount)}
+                      {inrFormatDecimal(this.state.quoteResume.total_premium)}
                     </div>
                   </div>
                 </div>
@@ -292,7 +281,7 @@ class GroupHealthLanding extends Component {
               <div className="rc-bottom flex-between">
                 <div className="rcb-content">
                   Sum insured:{" "}
-                  {numDifferentiationInr(this.state.quoteResume.sum_assured)}
+                  {numDifferentiationInr(this.state.quoteResume.total_sum_insured)}
                 </div>
                 <div className="rcb-content">
                   Cover period: {this.state.quoteResume.tenure} year
@@ -332,7 +321,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 10px 0" }}
+            style={{ margin: "40px 0 20px 0" }}
           >
             Overview
           </div>
@@ -394,7 +383,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="generic-page-title"
-            style={{ margin: "40px 0 15px 0" }}
+            style={{ margin: "40px 0 20px 0" }}
           >
             Benefits of health insurance
           </div>
@@ -425,13 +414,13 @@ class GroupHealthLanding extends Component {
           </div>
 
           <HowToSteps
-            style={{ margin: "10px 0 0 0" }}
+            style={{ margin: "20px 0px 0px 0px" }}
             baseData={this.state.stepsContentMapper}
           />
 
           <div
             className="generic-page-title"
-            style={{ margin: "-10px 0 15px 0" }}
+            style={{ margin: "4px 0 20px 0" }}
           >
             Things to know
           </div>
@@ -446,11 +435,11 @@ class GroupHealthLanding extends Component {
             </div>
             <div>Frequently asked questions</div>
           </div>
-          <div className="generic-hr" style={{ margin: "0px 0 30px 0" }}></div>
+          <div className="generic-hr" style={{ margin: "0px 0 40px 0" }}></div>
 
           <div
             className="accident-plan-read"
-            style={{ padding: 0, margin: "20px 0 0 0" }}
+            style={{ padding: 0, margin: "20px 0 10px 0" }}
             onClick={() =>
               this.openInBrowser(this.state.common.details_doc, "read_document")
             }
@@ -469,7 +458,7 @@ class GroupHealthLanding extends Component {
           </div>
           <div
             className="CheckBlock2 accident-plan-terms"
-            style={{ padding: 0 }}
+            style={{ padding: 0, margin : '10px 0px 34px 0px' }}
           >
            <Grid container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">

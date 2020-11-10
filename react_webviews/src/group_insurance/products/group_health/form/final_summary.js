@@ -35,7 +35,7 @@ class GroupHealthPlanFinalSummary extends Component {
             lead: {
                 member_base: []
             },
-            quotation : {},
+            quotation : {  member_base : []},
             tncChecked: true,
             accordianData: [],
             openDialogReset: false,
@@ -210,7 +210,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         info.title = 'Applicant name';
                     }
 
-                    if (info.key === 'height' || info.key === 'weight') {
+                    if (['height', 'weight', 'occupation'].indexOf(info.key) !== -1) {
                         continue;
                     }
                 }
@@ -511,7 +511,7 @@ class GroupHealthPlanFinalSummary extends Component {
         })
     }
 
-    redirectToPayment = (pg_data) => {
+    redirectToPayment = (pg_data) => {  
         let resultData = pg_data || this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
@@ -566,9 +566,9 @@ class GroupHealthPlanFinalSummary extends Component {
             this.redirectToPayment();
             return;
         }
-         const app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801'
+        let application_id =  storageService().get("application_ID");
         try {
-            let res = await Api.get(`/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${app_id}`);       
+            let res = await Api.get(`/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -600,12 +600,12 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     checkPPC = async () => {
-        const app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801'
+        let application_id =  storageService().get("application_ID");
         this.setState({
             show_loader: true
         });
         try {
-            let res = await Api.get(`api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${app_id}`);
+            let res = await Api.get(`api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
@@ -615,7 +615,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         this.openMedicalDialog('ped');
                     } else if (lead.ppc_check) {
                         this.openMedicalDialog('ppc');
-                    } else if (lead.status === 'ready_to_pay') {
+                    } else if (lead.status === 'ready_to_pay' || true) {
                         this.startPayment();
                     }
                 } else {
@@ -697,7 +697,9 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
 
-    renderMembertop = (props, index) => {
+    renderMembertop = (prop, index) => {
+       let props = prop.insured_person;
+        console.log(props, '+_+_+_+_+_+_+_+_+_' ,props.key)
         if (props.key === 'applicant') {
             return (
                 <div className="member-tile" key={index}>
@@ -780,7 +782,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>}
 
                 {props.open && props.title === 'Address details' &&
-                    <div className="bct-content">
+                    <div className={`bct-content bct-content-address`}>
 
                         {props.data[0].map(this.renderAccordiansubData)}
                         <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
@@ -903,7 +905,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 <div className='mid-content'>
 
-                    {/* {this.state.quotation.member_base.map(this.renderMembertop)} */}
+                    {this.state.quotation.member_base.map(this.renderMembertop)}
 
                     <div className="member-tile">
                         <div className="mt-left">

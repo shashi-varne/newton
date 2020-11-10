@@ -4,6 +4,7 @@ import Container from '../../../common/Container';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import { storageService } from  'utils/validators';
 import { FormControl } from 'material-ui/Form';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
@@ -182,14 +183,14 @@ class GroupHealthPlanIsPed extends Component {
         }
 
         if (canSubmitForm) {
-
+            let application_id =  storageService().get("application_ID")
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
 
          
             let body = {
-                "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",
+                "application_id": application_id,
                 insured_people_details
             }
 
@@ -279,7 +280,7 @@ class GroupHealthPlanIsPed extends Component {
                 handleClick={() => this.handleClick()}
             >
 
-                <div className="common-top-page-subtitle">
+                <div className="common-top-page-subtitle" style={{fontSize: '13px'}}>
                     Please disclose correct details to make hassle-free claim later
                 </div>
 
@@ -304,7 +305,7 @@ class GroupHealthPlanIsPed extends Component {
                         <div>
 
 
-                            <div className="plus-minus-input-label">
+                            <div className="plus-minus-input-label" style={{fontSize: '13px'}}>
                                 Who has pre-existing disease?
                             </div>
                             <div className="generic-hr"></div>

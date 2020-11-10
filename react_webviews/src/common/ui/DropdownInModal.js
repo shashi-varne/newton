@@ -97,7 +97,7 @@ class DropdownInModalClass extends Component {
                 <div>
                     <div className="flex-between">
                         <div className={isSelected ? 'content-selected' : ''}>
-                            <span>{props.name}</span>
+                            <span>{props.name || props.cover_amount}</span>
                         </div>
 
                         {isSelected && <img style={{
@@ -187,7 +187,7 @@ class DropdownInModalClass extends Component {
                         })
                         
                     }}>
-                    <InputLabel htmlFor={this.props.id}>
+                    <InputLabel htmlFor={this.props.id} style={{marginTop: '-25px'}}>
                         <span style={{fontSize: '0.8rem'}}>{this.props.label}</span>
                     </InputLabel>
 

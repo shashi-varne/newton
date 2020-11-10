@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import Container from "../../../common/Container";
 
 import { nativeCallback } from "utils/native_callback";
-import { ghGetMember } from "../../../constants";
 import { storageService } from "utils/validators";
 import { initialize } from "../common_data";
+import { ghGetMember} from "../../../constants";
 import BottomInfo from "../../../../common/ui/BottomInfo";
-
 import Api from "utils/api";
 import toast from "../../../../common/ui/Toast";
 import ReligarePremium from "../religare/religare_premium";
@@ -21,9 +20,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       final_dob_data: [],
       show_loader: true,
       plan_selected: {},
-      get_lead: storageService().getObject("resumeToPremiumHealthInsurance")
-        ? true
-        : false,
+      get_lead: storageService().getObject("resumeToPremiumHealthInsurance") ? true : false,
       force_onload_call: true,
       provider: this.props.match.params.provider,
     };
@@ -35,44 +32,105 @@ class GroupHealthPlanPremiumSummary extends Component {
     this.initialize();
   }
 
-  onload = () => {
+  onload = async () => {
+    let groupHealthPlanData = this.state.groupHealthPlanData || {};
+    let post_body = groupHealthPlanData.post_body;
+
+    let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', 'plan_code','tenure', 'individual_si', 'total_si', 'premium', 'base_premium', 'gst', 'family_discount', 'tenure_discount', 'gst', 'postal_code'];
+    
+    if(post_body.quotation_id){
+      allowed_post_body_keys.push('quotation_id');
+    }
+
+    let body = {};
+    for(let key of allowed_post_body_keys){
+        body[key] = post_body[key];
+    }    
+    body['add_ons'] = post_body.add_ons_json;
+    body['total_premium'] = post_body.total_amount;
+    body['total_discount'] = post_body.total_discount;
+    
+    //quote creation api
+    if(!this.state.get_lead){
+      
+      this.setState({
+        show_loader: true
+      });
+
+      try{
+        let res = await Api.post(`/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
+        
+      let resultData = res.pfwresponse.result;
+      let quote_id = resultData.quotation.id || '';
+  
+      groupHealthPlanData.post_body.quotation_id = quote_id;
+      this.setLocalProviderData(groupHealthPlanData)
+  
+      this.setState({
+        show_loader: false
+      });
+      }catch(error){
+        console.log(error)
+      }
+  
+    }
+    
     let properties = {};
     let lead = this.state.lead;
     let groupHealthPlanDataProp = this.state.groupHealthPlanData;
+
     if (this.state.get_lead) {
       let add_ons_data = [];
-      let add_ons = lead.add_ons_json;
-      for (var key in add_ons) {
-        add_ons_data.push({
-          title: add_ons[key].title,
-          selected_premium: add_ons[key].premium,
-          checked: true,
-        });
+      let add_ons = lead.add_ons;
+      for(var key in add_ons){
+        add_ons_data.push(add_ons[key])
       }
+      
       properties.add_ons = add_ons_data;
-      properties.type_of_plan = lead.cover_type;
-      properties.sum_assured = lead.sum_assured;
-      properties.total_members = lead.member_base.length;
+      properties.type_of_plan = lead.floater_type === "floater" ? "WF" : "NF";
+      properties.sum_assured = lead.individual_sum_insured;
+      properties.total_members = lead.no_of_people;
       properties.members = lead.member_base;
       properties.tenure = lead.tenure;
-      properties.base_premium = lead.base_premium_showable || lead.premium;
-      properties.discount_amount = lead.discount_amount;
-      properties.net_premium = lead.premium;
-      properties.gst_tax = lead.tax_amount;
-      properties.total_amount = lead.total_amount;
+      properties.base_premium = lead.base_premium;
+      properties.discount_amount = lead.total_discount;
+      properties.net_premium = lead.total_premium;
+      properties.gst_tax = lead.gst;
+      properties.total_amount = lead.total_premium;
     } else {
-      properties.add_ons = groupHealthPlanDataProp.add_ons_data || "";
-      properties.type_of_plan = groupHealthPlanDataProp.type_of_plan;
-      properties.sum_assured = groupHealthPlanDataProp.sum_assured;
-      properties.total_members = groupHealthPlanDataProp.post_body.mem_info.adult + groupHealthPlanDataProp.post_body.mem_info.child;
-      properties.members = groupHealthPlanDataProp.final_dob_data;
+
+      var add_on_title = {
+        uar: 'Unlimited Automatic Recharge',
+        opd: 'OPD care',
+        ped_wait_period: 'Reduction in PED wait period',
+        ncb: 'No Claim Bonus Super'
+      }
+      var final_add_ons_data = []
+      
+      for(var addOn in post_body.add_ons){
+        if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
+          let temp = {
+            title: add_on_title[addOn],
+            price: post_body.add_ons[addOn]
+          }
+          final_add_ons_data.push(temp);
+        }   
+     }
+
+      properties.add_ons = final_add_ons_data || [];
+      properties.type_of_plan = groupHealthPlanDataProp.type_of_plan === 'floater' ? "WF" : "NF"; 
+      properties.sum_assured = groupHealthPlanDataProp.sum_assured; 
+      properties.total_members = groupHealthPlanDataProp.post_body.adults + groupHealthPlanDataProp.post_body.children; 
+      properties.members = groupHealthPlanDataProp.final_dob_data; 
       properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
       properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium;
-      properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
-      properties.net_premium = groupHealthPlanDataProp.plan_selected_final.net_premium;
-      properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst_tax;
+      properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount || 0; 
+      properties.net_premium = groupHealthPlanDataProp.plan_selected_final.premium;
+      properties.gst_tax = groupHealthPlanDataProp.post_body.gst || 0; 
       properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
     }
+
+    properties.total_discount = properties.discount_amount;
     this.setState({ properties: properties });
   };
 
@@ -130,6 +188,8 @@ class GroupHealthPlanPremiumSummary extends Component {
         body.base_premium_showable = plan_selected_final.base_premium_showable;
         body.add_ons_amount = plan_selected_final.add_ons_premium || "";
 
+        let post_body = {}
+        post_body['quotation_id'] = body.quotation_id;
         if (
           body.provider === "star" &&
           body.account_type.includes("parents") &&
@@ -138,20 +198,24 @@ class GroupHealthPlanPremiumSummary extends Component {
           body.account_type = groupHealthPlanData.ui_members.parents_option;
         }
 
-        let total_member = body.mem_info.adult + body.mem_info.child;
+        let total_member = body.children + body.adults;
         if (total_member === 1) {
           body.type_of_plan = "NF"; //for backend handlling
         }
-        const res = await Api.post(
-          `/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/quote`,
-          body
-        );
 
+        //application creation
+        const res = await Api.post(
+          `/api/insurance/proposal/hdfc_ergo/create_application`,
+          post_body
+        );
+        
         var resultData = res.pfwresponse.result;
-        if (res.pfwresponse.status_code === 200) {
-          let lead = resultData.lead;
-          lead.member_base = ghGetMember(lead, this.state.providerConfig);
-          storageService().set("ghs_ergo_quote_id", lead.id);
+        
+        if (res.pfwresponse.status_code === 200) {     
+          let lead = resultData.quotation_details;
+          lead.member_base = ghGetMember(lead, this.state.providerConfig); console.log(resultData.application_details.id,"id from api")
+         let application_id = resultData.application_details.id
+          storageService().set("application_ID", application_id);
           this.navigate("personal-details/" + lead.member_base[0].key);
         } else {
           this.setState({
@@ -167,6 +231,10 @@ class GroupHealthPlanPremiumSummary extends Component {
         });
         toast("Something went wrong");
       }
+
+      let application_id =  storageService().get("application_ID")
+      console.log(application_id, "<<<----session key")
+
     }
   };
 
@@ -210,13 +278,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           </div>
           {this.state.properties && this.renderProviderPremium()}
 
-          <BottomInfo
-            baseData={{
-              content:
-                "Complete your details and get quality medical treatments at affordable cost",
-            }}
-          />
-        </div>
+          <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />        </div>
       </Container>
     );
   }

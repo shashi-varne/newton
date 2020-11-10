@@ -9,7 +9,7 @@ import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
-import { isEmpty } from '../../../../utils/validators';
+import { isEmpty , validateLengthDynamic } from '../../../../utils/validators';
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class StarAddress extends Component {
@@ -176,6 +176,15 @@ class StarAddress extends Component {
 
     let canSubmitForm = true;
 
+    for(var key in form_data){
+      if(key === 'addressline' || key ==="addressline2" || key ==="p_addressline" || key === "p_addressline2"){
+          if(validateLengthDynamic(form_data[key], 4)){
+              form_data[key+'_error'] = "Please enter at least 4 characters";
+              canSubmitForm = false;
+          }
+      }
+    }
+
     for (let key_check of keys_to_check) {
       let first_error = 'Please enter ';
       if (!form_data[key_check]) {
@@ -186,6 +195,7 @@ class StarAddress extends Component {
     }
 
     this.setState({ form_data });
+
 
     if (canSubmitForm) {
       const data_to_send = [...keys_to_check, 'city', 'area'].reduce((acc, key) => {

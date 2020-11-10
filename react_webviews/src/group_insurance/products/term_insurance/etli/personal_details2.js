@@ -6,8 +6,7 @@ import { getConfig } from 'utils/functions';
 import { FormControl } from 'material-ui/Form';
 
 import qs from 'qs';
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-import loader_myway from 'assets/loader_gif_myway.gif';
+
 
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import {
@@ -38,7 +37,7 @@ class EtliPersonalDetails2 extends Component {
             provider: 'EDELWEISS',
             params: qs.parse(this.props.history.location.search.slice(1)),
             type: getConfig().productName,
-            loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom,
+            productName: getConfig().productName,
             basic_details_data: {
                 annual_income: '',
                 smoking: ''

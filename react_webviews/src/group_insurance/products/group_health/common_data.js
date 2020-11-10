@@ -71,48 +71,75 @@ export async function initialize() {
 
             this.setState({
                 show_loader: true
-            });  
-
-            let app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801' //1a8b7958-e78d-486f-b7a3-a77c8bcae801
-            let url = `/api/insurance/proposal/religare/get_application_details?application_id=${app_id}`;
-
-            if(this.state.screen_name === 'final_summary_screen') {
-                url += `&forms_completed=true`;
-            }
-            const res = await Api.get(url);  console.log("get lead" , res)
-              
-            var resultData = res.pfwresponse.result;
-            
-             this.setState({
-                show_loader: false
             });
-            if (res.pfwresponse.status_code === 200) {
-                lead = resultData.quotation_details;
-                lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
-                // lead.member_base = ghGetMember(lead, this.state.providerConfig);
-                lead.member_base = resultData.insured_people_details;
-               
-                this.setState({
-                    lead: resultData || {},
-                    quotation : resultData.quotation_details || {},
-                    common_data: {
-                        ...resultData.common,
-                        tnc: resultData.common.tnc || resultData.tnc
-                    },
-                    insured_account_type: lead.insurance_type || ''
-                }, () => {
-                    if ( this.onload && !this.state.ctaWithProvider) {
-                        this.onload();
-                    }
+            let quote_id = storageService().get('ghs_ergo_quote_id');
+            let app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801' //1a8b7958-e78d-486f-b7a3-a77c8bcae801
+            let resume = storageService().getObject("resumeToPremiumHealthInsurance");
+            let url;
 
-                })
-                
+            if (resume) {
+                url = `/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
+                const res = await Api.get(url);
+
+                if (res.pfwresponse.status_code === 200) {
+                    lead = resultData;
+                    lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                    this.setState({
+                        lead: resultData || {},
+                    }, () => {
+                        if (this.onload && !this.state.ctaWithProvider) {
+                            this.onload();
+                        }
+                    })
+                } else {
+                    toast(resultData.error || resultData.message ||
+                        'Something went wrong');
+                }
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                let application_id =  storageService().get("application_ID")
+                // app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801' //1a8b7958-e78d-486f-b7a3-a77c8bcae801
+                  url = `/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=${application_id}`;
+                // let quote_id = storageService().get('ghs_ergo_quote_id');
+
+                // let url = `/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`;
+
+                if (this.state.screen_name === 'final_summary_screen') {
+                    url += `&forms_completed=true`;
+                }
+                const res = await Api.get(url);
+                console.log("get lead", res)
+
+                var resultData = res.pfwresponse.result;
+
+                this.setState({
+                    show_loader: false
+                });
+                if (res.pfwresponse.status_code === 200) {
+                    lead = resultData.quotation_details;
+                    lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
+                    // lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                    lead.member_base = resultData.insured_people_details;
+
+                    this.setState({
+                        lead: resultData || {},
+                        quotation: resultData.quotation_details || {},
+                        common_data: {
+                            ...resultData.common,
+                            tnc: resultData.common.tnc || resultData.tnc
+                        },
+                        insured_account_type: lead.insurance_type || ''
+                    }, () => {
+                        if (this.onload && !this.state.ctaWithProvider) {
+                            this.onload();
+                        }
+
+                    })
+
+                } else {
+                    toast(resultData.error || resultData.message ||
+                        'Something went wrong');
+                }
             }
-
-
         } catch (err) {
             console.log(err);
             this.setState({
@@ -137,7 +164,7 @@ export async function initialize() {
             total_amount = lead.total_premium;
 
         } else {
-            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
+            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
 
             this.setState({
@@ -145,7 +172,9 @@ export async function initialize() {
             })
 
             leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
-            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].net_premium : '';
+            if(selectedIndexSumAssured && premium_data){
+            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].premium : '';
+            }
 
         }
 
@@ -221,13 +250,25 @@ export async function initialize() {
 
 
 export function updateBottomPremium(premium) {
+    if(this.state.premium_data){
+        this.setState({
+            bottomButtonData: {
+                ...this.state.bottomButtonData,
+                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '')
+            }
+        })    
+    }
+}
 
-    this.setState({
-        bottomButtonData: {
-            ...this.state.bottomButtonData,
-            leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].net_premium)
-        }
-    })
+export function updateBottomPremiumAddOns(premium) {
+    if(this.state.add_ons_data){
+        this.setState({
+            bottomButtonData: {
+                ...this.state.bottomButtonData,
+                leftSubtitle: inrFormatDecimal(premium ||'')
+            }
+        })    
+    }
 }
 
 export async function updateLead( body, quote_id) {
