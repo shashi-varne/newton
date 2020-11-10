@@ -14,14 +14,13 @@ import Landing from "./components/general/landing";
 import MobileVerify from "./components/forms/mobile_verify";
 import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
+import Calculator from "./components/general/calculator";
 import KnowMore1 from "./components/knowMore/know_more1";
 import KnowMore2 from "./components/knowMore/know_more2";
 import KnowMore3 from "./components/knowMore/know_more3";
-import Calculator from "./components/knowMore/calculator";
 import IncomeDetails from "./components/general/income_details";
 import BtInformation from "./components/bt_details/bt_info";
 import UploadBankStatements from "./components/forms/upload_bank";
-import pan from "./components/forms/pan";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -72,7 +71,6 @@ const Lending = props => {
           <Route path={`${url}/income-details`} component={IncomeDetails} />
           <Route path={`${url}/bt-info`} component={BtInformation} />
           <Route path={`${url}/upload-bank`} component={UploadBankStatements} />
-          <Route path={`${url}/pan`} component={pan} />
        
           <Route component={NotFound} />
 

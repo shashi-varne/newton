@@ -6,45 +6,6 @@ import { Bar } from "react-chartjs-2";
 import { inrFormatDecimal2 } from "utils/validators";
 import { getConfig } from "utils/functions";
 
-const options = {
-  legend: {
-    display: false,
-  },
-  tooltips: {
-    callbacks: {
-      label: function (tooltipItem, data) {
-        return "PRICE " + inrFormatDecimal2(tooltipItem.yLabel);
-      },
-    },
-  },
-  scales: {
-    xAxes: [
-      {
-        gridLines: {
-          color: "rgba(0, 0, 0, 0)",
-        },
-      },
-    ],
-    yAxes: [
-      {
-        gridLines: {
-          // color: "rgba(0, 0, 0, 0)",
-          color: "#EEEEEE",
-        },
-        ticks: {
-          // Include a dollar sign in the ticks
-          callback: function (value) {
-            return (value / 1000).toFixed(0) + "K";
-          },
-          stepSize: 10000,
-          beginAtZero: false,
-          // display: false
-        },
-      },
-    ],
-  },
-};
-
 class KnowMore1 extends Component {
   constructor(props) {
     super(props);
@@ -108,40 +69,11 @@ class KnowMore1 extends Component {
         count={true}
         current={1}
         total={4}
-        LeftRightCtaButton={true}
-        no_previous_button={true}
         headerData={{
           icon: "close",
         }}
       >
         <div className="check-gold-price">
-          <div className="chart">
-            <div
-              style={{
-                color: "#D3DBE4",
-                fontSize: 10,
-                fontWeight: 700,
-                textAlign: "center",
-              }}
-            >
-              Gold prices since 1975
-            </div>
-            <Bar
-              data={{
-                labels: [1985, 1995, 2005, 2015, 2019],
-                datasets: [
-                  {
-                    label: "Price",
-                    data: [1781.24, 5454.37, 9590.61, 28510.1, 42158.6],
-                    backgroundColor: getConfig().primary,
-                  },
-                ],
-              }}
-              options={options}
-              width={100}
-              height={50}
-            />
-          </div>
 
           <div className="title">Features and Benefits</div>
           <div className="content">

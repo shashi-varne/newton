@@ -185,9 +185,6 @@ class Container extends Component {
               withProvider={this.props.withProvider}
               buttonData={this.props.buttonData}
               style={this.props.styleFooter}
-              LeftRightCtaButton={this.props.LeftRightCtaButton}
-              no_next_button={this.props.no_next_button}
-              no_previous_button={this.props.no_previous_button}
             />
           )}
           {/* No Internet */}

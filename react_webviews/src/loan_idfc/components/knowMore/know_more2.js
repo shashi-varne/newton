@@ -72,17 +72,11 @@ class KnowMore2 extends Component {
         count={true}
         current={2}
         total={4}
-        LeftRightCtaButton={true}
         headerData={{
           icon: "close",
         }}
       >
         <div className="check-gold-price">
-          <img
-            className="img"
-            src={require(`assets/${this.state.productName}/ils_alternate_gold.svg`)}
-            alt=""
-          />
 
           <div className="title">Documents Required</div>
           <div className="content">

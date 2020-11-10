@@ -1,6 +1,6 @@
 import React from "react";
 
-import { DefaultLayout, WithProviderLayout, LeftRightCtaButton } from "./layout";
+import { DefaultLayout, WithProviderLayout } from "./layout";
 
 const Footer = (props) => {
   if (props.withProvider) {
@@ -10,12 +10,6 @@ const Footer = (props) => {
         style={{ border: "1px solid rgb(235, 235, 226)" }}
       >
         <WithProviderLayout type="default" {...props} />
-      </div>
-    );
-  } else if (props.LeftRightCtaButton) {
-    return (
-      <div className="Footer">
-        <LeftRightCtaButton type="default" {...props} />
       </div>
     );
   } else {

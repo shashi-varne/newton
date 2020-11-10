@@ -83,8 +83,6 @@ class Calculator extends Component {
           backgroundColor: "var(--highlight)"
         }}
         noPadding={true}
-        LeftRightCtaButton={true}
-        no_next_button={true}
       >
         <div className="idfc-loan-calculator">
           <SliderWithValues 
