@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "../religare/radioAndCheckboxList";
-import {  validateAlphabets } from "utils/validators";
+import {  validateAlphabets, storageService } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 import { compact } from 'lodash';
@@ -208,10 +208,13 @@ class GroupHealthStarPlanSelectPed extends Component {
       canProceed = false;
       toast("Select atleast one option");
     }
-   let body = {
-     "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801"
-   }
+ 
    if (canProceed) {
+    let application_id =  storageService().get("application_ID")
+    let body = {
+      "application_id": application_id
+    }
+
      body.answers = {}
      for (var i in member_base) {
        let member_data = member_base[i];

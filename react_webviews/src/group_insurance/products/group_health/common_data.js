@@ -19,7 +19,7 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    let providerConfig = getGhProviderConfig(provider);  console.log(provider, providerConfig.provider_api)
+    let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
         screenData = providerConfig[this.state.screen_name];
@@ -53,7 +53,7 @@ export async function initialize() {
         validation_props: validation_props,
         pan_amount: pan_amount,
         claim_settlement_ratio: claim_settlement_ratio
-    }, () => {  console.log(this.state.provider_api,"......................provider_api")
+    }, () => {
         if(!this.state.get_lead && this.state.force_onload_call) {
             this.onload();
         }
@@ -63,17 +63,19 @@ export async function initialize() {
 
 
     let lead = {
-        member_base: []
+        member_base: [],
+        member_bases : []
     };
 
     if (this.state.get_lead) {
+
         try {
 
             this.setState({
                 show_loader: true
             });
+
             let quote_id = storageService().get('ghs_ergo_quote_id');
-            let app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801' //1a8b7958-e78d-486f-b7a3-a77c8bcae801
             let resume = storageService().getObject("resumeToPremiumHealthInsurance");
             let url;
 
@@ -81,7 +83,9 @@ export async function initialize() {
                 url = `/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
 
+
                 if (res.pfwresponse.status_code === 200) {
+                    var resultData = res.pfwresponse.result;
                     lead = resultData;
                     lead.member_base = ghGetMember(lead, this.state.providerConfig);
                     this.setState({
@@ -91,23 +95,25 @@ export async function initialize() {
                             this.onload();
                         }
                     })
+                    
                 } else {
                     toast(resultData.error || resultData.message ||
                         'Something went wrong');
                 }
+                this.setState({
+                    show_loader: false
+                });
             } else {
+
                 let application_id =  storageService().get("application_ID")
-                // app_id = '1a8b7958-e78d-486f-b7a3-a77c8bcae801' //1a8b7958-e78d-486f-b7a3-a77c8bcae801
-                  url = `/api/insurance/proposal/hdfc_ergo/get_application_details?application_id=${application_id}`;
-                // let quote_id = storageService().get('ghs_ergo_quote_id');
-
-                // let url = `/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`;
-
+               
+                  url = `/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
+    
                 if (this.state.screen_name === 'final_summary_screen') {
                     url += `&forms_completed=true`;
                 }
                 const res = await Api.get(url);
-                console.log("get lead", res)
+               
 
                 var resultData = res.pfwresponse.result;
 
@@ -115,10 +121,10 @@ export async function initialize() {
                     show_loader: false
                 });
                 if (res.pfwresponse.status_code === 200) {
-                    lead = resultData.quotation_details;
+                    lead = resultData;
                     lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
-                    // lead.member_base = ghGetMember(lead, this.state.providerConfig);
-                    lead.member_base = resultData.insured_people_details;
+                    // let member = ghGetMember(lead, this.state.providerConfig); 
+                    lead.member_base =  resultData.insured_people_details;
 
                     this.setState({
                         lead: resultData || {},
@@ -129,6 +135,7 @@ export async function initialize() {
                         },
                         insured_account_type: lead.insurance_type || ''
                     }, () => {
+                        console.log(lead)
                         if (this.onload && !this.state.ctaWithProvider) {
                             this.onload();
                         }
@@ -152,7 +159,7 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) {
-
+  let lead = this.state.lead.quotation_details
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
@@ -353,7 +360,8 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/cancel/${quote_id}`);
+
+        const res = await Api.post(`/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {

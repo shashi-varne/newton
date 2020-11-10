@@ -46,7 +46,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   onload = () => {
 
-    let lead = this.state.lead || {};   console.log(lead)
+    let lead = this.state.lead || {};  
+    console.log(lead)
     let quotation = this.state.quotation || {};     
     let insured_people_details  = lead.insured_people_details;
     let occupationOptions = this.state.screenData.occupation_opts;
@@ -57,7 +58,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
-    let member_base = lead.lead || [];
+    let member_base = insured_people_details || [];
 
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
@@ -79,38 +80,48 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
-
-    let backend_key, form_data; // need to be fixed
-    for (var i = 0; member_base && i < member_base.length; i++) {
-      let key = member_base[i].insured_person.relation;
-           console.log(member_base[i])
-      if (member_key === key) {
-        backend_key = member_base[i].insured_person.relation_key;
-        console.log( next_state,  member_base.length)
-        if (i !== member_base.length - 1) {
-          next_state = member_base[i + 1].insured_person.relation; 
-          break;
+    let backend_key, form_data = {}; // need to be fixed
+    for (var i =0; i < member_base.length; i++) {
+        if(member_base[i].insured_person.relation === this.state.member_key && i !== member_base.length -1) {
+            for (var k =i+1; k < member_base.length; k++) {
+                if(member_base[k].insured_person.ped && member_base[k].key !== 'applicant') {
+                    next_state = member_base[k].insured_person.relation;
+                    break;
+                }
+            }
         }
-      }
-    }
+    }    
+    
+    // for (var i = 0; member_base && i < member_base.length; i++) {
+    //   let key = member_base[i].insured_person.relation;
+    //        console.log(member_base[i])
+    //   if (member_key === key) {
+    //     backend_key = member_base[i].insured_person.relation_key;
+    //     console.log( next_state,  member_base.length)
+    //     if (i !== member_base.length - 1) {
+    //       next_state = member_base[i + 1].insured_person.relation; 
+    //       break;
+    //     }
+    //   }
+    // }
 
     if (this.props.edit) {
       next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;
     }
 
-    lead.insured_people_details.forEach(element => {
+      insured_people_details.forEach(element => {
         if(this.state.provider === 'STAR'){
-          if(member_key === 'self') {
-            member_key = "husband"
-          }
         }                                                                 
       if(element.insured_person["relation"] === member_key){
         form_data = element.insured_person,
         backend_key = element.insured_person.relation_key          
       }
     });
-   
+
     form_data.pan_number =   lead.buyer_details.pan_no || ""
+    
+    console.log(form_data,insured_people_details)
+   
     let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob);
@@ -400,7 +411,7 @@ class GroupHealthPlanPersonalDetails extends Component {
           "gender": form_data.gender || gender,
         }]
       }
-  
+   
       if (this.state.backend_key === 'self_account_key') {
              body = {
           "application_id": application_id,   

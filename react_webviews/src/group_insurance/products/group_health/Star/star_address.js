@@ -9,7 +9,7 @@ import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
-import { isEmpty , validateLengthDynamic } from '../../../../utils/validators';
+import { isEmpty , validateLengthDynamic, storageService } from '../../../../utils/validators';
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class StarAddress extends Component {
@@ -203,9 +203,11 @@ class StarAddress extends Component {
         return acc;
       }, {});
       
+      let application_id =  storageService().get("application_ID")
+
 
       const body = {
-        "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801",  // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
+        "application_id":  application_id,  // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
         "address_details": {                   
           "permanent_address": {
             "state": form_data.state,

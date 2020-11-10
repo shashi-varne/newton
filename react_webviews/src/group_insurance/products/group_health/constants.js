@@ -630,105 +630,105 @@ export const star = {
         nominee_opts: [
             {
                 'name': 'FATHER',
-                'value': 'FATHER'
+                'value': 'Father'
             },
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER'
+                'value': 'Mother'
             },
             {
                 'name': 'SISTER',
-                'value': 'SISTER'
+                'value': 'Sister'
             },
             {
                 'name': 'BROTHER',
-                'value': 'BROTHER'
+                'value': 'Brother'
             },
             {
                 'name': 'SON',
-                'value': 'SON'
+                'value': 'Son'
             },
             {
                 'name': 'DAUGHTER',
-                'value': 'DAUGHTER'
+                'value': 'Daughter'
             },
             {
                 'name': 'SPOUSE',
-                'value': 'SPOUSE'
+                'value': 'Spouse'
             },
             {
                 'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
+                'value': 'Grand Father'
             },
             {
                 'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
+                'value': 'Grand Mother'
             },
             {
                 'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
+                'value': 'FatherinLaw'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
+                'value': 'BrotherinLaw'
             },
             {
                 'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'value': 'SoninLaw'
             },
             {
                 'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
+                'value': 'Daughter in Law'
             },
             {
                 'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
+                'value': 'Cousin Son'
             },
             {
                 'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
+                'value': 'Grand Daughter'
             },
             {
                 'name': 'GRAND SON',
-                'value': 'GRANDSON'
+                'value': 'Grand Son'
             },
             {
                 'name': 'OTHERS',
-                'value': 'OTHERS'
+                'value': 'Others'
             }
         ],
         appointee_opts: [
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER'
+                'value': 'Mother'
             },
             {
                 'name': 'FATHER',
-                'value': 'FATHER'
+                'value': 'Father'
             },
             {
                 'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
+                'value': 'Grand Father'
             },
             {
                 'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
+                'value': 'Grand Mother'
             },
             {
                 'name': 'BROTHER',
-                'value': 'BROTHER'
+                'value': 'Brother'
             },
             {
                 'name': 'SISTER',
-                'value': 'SISTER'
+                'value': 'Sister'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
+                'value': 'Brother In Law'
             },
             {
                 'name': 'OTHERS',
-                'value': 'OTHERS'
+                'value': 'Others'
             }
         ],
         showDob: true,

@@ -57,25 +57,28 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
 
         let lead = this.state.lead || {}; 
-        let form_data = lead.nominee_details || {};
-        // let relation = form_data.relation ; 
-
-        let appointee_account_key = lead.nominee_details || {}
+        let form_data = lead.nominee_details || {};   
+        let appointeeBirthDay = lead.appointee_details || {};
+          console.log(lead)
+        let appointee_account_key = lead.appointee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+        appointeeBirthDay['dob'] = appointeeBirthDay['dob'] ? appointeeBirthDay['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
 
-        if (lead.nominee_details) {
+
+        if (lead.appointee_account_key) {
             form_data.appointeename = appointee_account_key.name;
             form_data.appointeerelation = appointee_account_key.relation;
             form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
         }
-        
+    
 
         const { age } = calculateAge(form_data['dob'], 'byMonth');
+        const { appointeeage } = calculateAge(appointeeBirthDay['dob'], 'byMonth');
 
         this.setState({
             form_data: form_data,
             lead: lead,
-            renderAppointee: !!(age && age < 18),
+            renderAppointee: !!(appointeeage && appointeeage < 18),
         });
 
         this.setState({
@@ -264,7 +267,7 @@ class GroupHealthPlanNomineeDetails extends Component {
             let application_id =  storageService().get("application_ID")
 
             let body = {
-                "application_id": application_id, // 2f88a3d5-1a31-48c7-a238-51c4535babf2
+                "application_id": application_id,
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -273,34 +276,25 @@ class GroupHealthPlanNomineeDetails extends Component {
 
             if (this.state.providerConfig.provider_api === 'star') {
 
-                // let appointee_account_key =  {};
+                let appointee_account_key =  {};
                 if(this.state.renderAppointee) {
-                    // appointee_account_key =  {
-                    //     "name": this.state.form_data.appointeename,
-                    //     "relation": this.state.form_data.appointeerelation,
-                    //     "DOB": this.state.form_data.appointeedob
-                    // }
+                    appointee_account_key =  {
+                        "name": this.state.form_data.appointeename,
+                        "relation": this.state.form_data.appointeerelation,
+                        "dob": this.state.form_data.appointeedob
+                    }
                 }
-                // body = {
-                //     nominee_account_key: {
-                //         name: this.state.form_data.name,
-                //         relation: this.state.form_data.relation,
-                //         dob: this.state.form_data.dob
-                //     },
-                //     appointee_account_key: appointee_account_key
-                // }
-
                 body = {
                     "application_id": application_id,
-                    nominee_account_key: {
+                    "nominee_details": {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,
                         "dob": this.state.form_data.dob
                     },
-                    // appointee_account_key: appointee_account_key        
+                    "appointee_details": appointee_account_key        
                 }
             }
-                                          console.log(body)
+                                     console.log(body,"<<<<body>>>>")
             this.updateLead(body);     
         }
     }
@@ -399,7 +393,9 @@ class GroupHealthPlanNomineeDetails extends Component {
     }
 
     render() {
-        const { showAppointee = false, showdob = false } = this.state.providerConfig.nominee_screen;
+        const { showAppointee = false, showDob = false } = this.state.providerConfig.nominee_screen;
+
+        console.log(      this.state.providerConfig.nominee_screen      )
 
         return (
             <Container
@@ -412,7 +408,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
-                
+                <div className="common-title-content-gap"></div>
                 <FormControl fullWidth>
                     <div className="InputField">
                         <Input
@@ -437,16 +433,16 @@ class GroupHealthPlanNomineeDetails extends Component {
                             label="Relationship"
                             error={this.state.form_data.relation_error ? true : false}
                             helperText={this.state.form_data.relation_error}
-                            value={ this.state.form_data.relation || ''}
+                            value={this.state.form_data.relation || ''}
                             name="relation"
                             onChange={this.handleChange('relation')} />
                     </div>
-                    {showdob && <div className="InputField">
+                    {showDob && <div className="InputField">
                         <Input
                             type="text"
                             width="40"
                             label="Date of birth"
-                            class="dob"
+                            class="DOB"
                             id="dob"
                             name="dob"
                             max="10"

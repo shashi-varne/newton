@@ -5,7 +5,7 @@ import { getConfig } from "../../../../utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import ConfirmDialog from './../plans/confirm_dialog';
-import { isEmpty } from 'utils/validators';
+import { isEmpty, storageService } from 'utils/validators';
 import { keyBy } from 'lodash';
 
 class GroupHealthPlanMedicalHistory extends Component {
@@ -226,8 +226,10 @@ class GroupHealthPlanMedicalHistory extends Component {
     });
 
 
+    let application_id =  storageService().get("application_ID")
+
     let body = {
-      "application_id": "1a8b7958-e78d-486f-b7a3-a77c8bcae801", // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
+      "application_id": application_id 
     }
 
 

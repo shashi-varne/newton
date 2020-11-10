@@ -70,6 +70,9 @@ class GroupHealthPlanPremiumSummary extends Component {
         show_loader: false
       });
       }catch(error){
+        this.setState({
+          show_loader: false
+        });
         console.log(error)
       }
   
@@ -205,7 +208,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
         //application creation
         const res = await Api.post(
-          `/api/insurance/proposal/hdfc_ergo/create_application`,
+          `/api/insurance/proposal/${this.state.providerConfig.provider_api}/create_application`,
           post_body
         );
         
@@ -216,6 +219,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           lead.member_base = ghGetMember(lead, this.state.providerConfig); console.log(resultData.application_details.id,"id from api")
          let application_id = resultData.application_details.id
           storageService().set("application_ID", application_id);
+       console.log(lead.member_base,    resultData)
           this.navigate("personal-details/" + lead.member_base[0].key);
         } else {
           this.setState({

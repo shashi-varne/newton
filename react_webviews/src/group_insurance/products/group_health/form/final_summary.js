@@ -876,7 +876,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {
+    render() {              console.log(this.state.quotation, "qwee")
         return (
             <Container
             provider={this.state.provider}
@@ -905,7 +905,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 <div className='mid-content'>
 
-                    {this.state.quotation.member_base.map(this.renderMembertop)}
+                    {this.state.lead.member_base.map(this.renderMembertop)}
 
                     <div className="member-tile">
                         <div className="mt-left">

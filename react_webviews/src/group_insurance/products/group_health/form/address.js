@@ -92,7 +92,8 @@ class GroupHealthPlanAddressDetails extends Component {
             };
         }
         if(this.state.provider === 'HDFCERGO') {
-            form_data.city = lead.address_details.permanent_address.city;
+            form_data.city = lead.address_details.permanent_address.city
+            form_data.pincode = lead.address_details.permanent_address.pincode || ""
         }
 
         if (form_data.pincode) {

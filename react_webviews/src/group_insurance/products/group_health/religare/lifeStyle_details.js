@@ -65,6 +65,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
         element.insured_person.life_style_question.medical_question = "PEDSmokeDetails"
         element.insured_person.life_style_question.key_mapper = "lifestylye_no_1"
         element.insured_person.life_style_question_exists = true
+      }else {
+        element.insured_person.life_style_question = []
       }
       member_base.push(element.insured_person)
     });
