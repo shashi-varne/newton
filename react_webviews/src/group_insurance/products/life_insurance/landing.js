@@ -279,15 +279,15 @@ class FyntuneLanding extends Component {
             </div>
           )}
         <div>
-          <p className="heading">What is Insurance Savings Plan?</p>
-          <p className="info">
+          <p className="fyntune-heading">What is Insurance Savings Plan?</p>
+          <p className="fyntune-info">
             This is a plan for your investment cum insurance needs which
             provides you with a chance to create wealth and even gives financial
             security to your loved ones in case on any unforeseen event.
           </p>
         </div>
 
-        <p className="heading">Major Benifits</p>
+        <p className="fyntune-heading">Major Benifits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
             <img
@@ -308,7 +308,7 @@ class FyntuneLanding extends Component {
           </div>
         </div>
 
-         <p className="heading">Get your plan in 5 easy steps</p>
+         <p className="fyntune-heading">Get your plan in 5 easy steps</p>
          {
            this.state.stepsToFollow.map( (step, index) =>{
              return <StepsToFollow key={index + 1} keyId={index + 1} title={step.title} subtitle={step.subtitle} />
@@ -317,7 +317,7 @@ class FyntuneLanding extends Component {
          
 
         <div style={{ transform: "translateY(-50px)", marginBottom: "0px" }}>
-          <p className="heading" style={{ transform: "translateY(65px)" }}>
+          <p className="fyntune-heading" style={{ transform: "translateY(40px)" }}>
             We make this process easy with
           </p>
           <HowToSteps
@@ -328,7 +328,7 @@ class FyntuneLanding extends Component {
 
         <div className="faq-section" style={{ transform: "translateY(-50px)" }}>
           <div className="generic-hr" style={{ marginBottom: "12px" }}></div>
-          <div className="flex-center faq" onClick={() => this.openFaqs()}>
+          <div className="flex-center fyntune-faq" onClick={() => this.openFaqs()}>
             <div>
               <img
                 className="accident-plan-read-icon"
