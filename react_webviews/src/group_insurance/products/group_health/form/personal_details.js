@@ -80,9 +80,9 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
-    let backend_key, form_data = {}; // need to be fixed
+    let backend_key, form_data = {};
     for (var i =0; i < member_base.length; i++) {
-        if(member_base[i].insured_person.relation === this.state.member_key && i !== member_base.length -1) {
+             if(member_base[i].insured_person.relation === member_key && i !== member_base.length -1) {
             for (var k =i+1; k < member_base.length; k++) {
                 if(member_base[k].insured_person.ped && member_base[k].key !== 'applicant') {
                     next_state = member_base[k].insured_person.relation;
@@ -91,19 +91,6 @@ class GroupHealthPlanPersonalDetails extends Component {
             }
         }
     }    
-    
-    // for (var i = 0; member_base && i < member_base.length; i++) {
-    //   let key = member_base[i].insured_person.relation;
-    //        console.log(member_base[i])
-    //   if (member_key === key) {
-    //     backend_key = member_base[i].insured_person.relation_key;
-    //     console.log( next_state,  member_base.length)
-    //     if (i !== member_base.length - 1) {
-    //       next_state = member_base[i + 1].insured_person.relation; 
-    //       break;
-    //     }
-    //   }
-    // }
 
     if (this.props.edit) {
       next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;
@@ -166,7 +153,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.setState({
       providerData: health_providers[this.state.provider],
       next_state: next_state,
-      // member_key: member_key,
+      member_key: member_key,
       form_data: form_data,
       age: age,
       lead: lead,

@@ -75,11 +75,13 @@ class GroupHealthPlanSelectPed extends Component {
             ped_data.forEach(item => {
 
                 options.forEach((opt, index) => {
-
-                    if(opt.id === item.key_mapper) {
+                    if(opt.key === item.front_end_question_id) {
+                        let since_when = item.since_when.length > 4 ?  item.since_when.split('/') : ''
+                        let ped_date = `${since_when[1]}/${since_when[2]}`
+                        console.log(item)
                         options[index].checked = true;
-                        options[index].start_date = item.start_date || '';
-                        options[index].description = item.answer_description !== null ? item.answer_description : options[index].description;
+                        options[index].start_date = ped_date || ''
+                        options[index].description = item.description !== null ? item.description : options[index].description;
                     }
                 })
 
