@@ -8,7 +8,6 @@ import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
-import CAMSLoader from './camsLoader';
 const emailDomain = getConfig().email_domain;
 
 const theme = createMuiTheme({
