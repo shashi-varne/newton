@@ -15,9 +15,7 @@ import MobileVerify from "./components/forms/mobile_verify";
 import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
 import Calculator from "./components/general/calculator";
-import KnowMore1 from "./components/knowMore/know_more1";
-import KnowMore2 from "./components/knowMore/know_more2";
-import KnowMore3 from "./components/knowMore/know_more3";
+import KnowMore from "./components/general/know_more";
 import IncomeDetails from "./components/general/income_details";
 import BtInformation from "./components/bt_details/bt_info";
 import UploadBankStatements from "./components/forms/upload_bank";
@@ -63,10 +61,8 @@ const Lending = props => {
           <Route path={`${url}/home`} component={Landing} />
           <Route path={`${url}/edit-number`} component={MobileVerify} />
           <Route path={`${url}/otp-verify`} component={OtpVerification} />
-          <Route path={`${url}/journey-map`} component={JourneyMap} />
-          <Route path={`${url}/know-more-1`} component={KnowMore1} />
-          <Route path={`${url}/know-more-2`} component={KnowMore2} />
-          <Route path={`${url}/know-more-3`} component={KnowMore3} />
+          <Route path={`${url}/journey`} component={JourneyMap} />
+          <Route path={`${url}/know-more`} component={KnowMore} />
           <Route path={`${url}/calculator`} component={Calculator} />
           <Route path={`${url}/income-details`} component={IncomeDetails} />
           <Route path={`${url}/bt-info`} component={BtInformation} />

@@ -31,34 +31,42 @@ class JourneyStepsClass extends Component {
 
     return (
       <div className="journey-steps-count" key={index}>
-        <div className="circle-count">
-          <div className="count">{options.step}</div>
-          {/* <div className="count">
-            <img src={require(`assets/check_icon_color.svg`)} alt="" />
-          </div> */}
-        </div>
-        <div className="steps-content">
-          <div className="title flex" style={{ color: "#3792FC" }}>
-            {options.title}
-            <span
-              className="status"
-              onClick={() => {
-                props.handleClick();
-              }}
-            >
-              SUMMARY
-            </span>
-            {/* <img src={require(`assets/Vector.svg`)} alt="" /> */}
+          <div className={`circle-count ${options.status}`}>
+            {options.status !== "completed" && (
+              <div className="count">{options.step}</div>
+            )}
+            {options.status === "completed" && (
+              <div className="count">
+                <img src={require(`assets/check_icon_color.svg`)} alt="" />
+              </div>
+            )}
           </div>
-          <div className="subtitle">{options.subtitle}</div>
-        </div>
+          <div className={`steps-content ${options.status}`}>
+            <div className="title flex">
+              {options.title}
+              {options.status !== "pending" && (
+                <span
+                  className="status"
+                  onClick={() => {
+                    props.handleClick();
+                  }}
+                >
+                  {options.status === "completed" ? "SUMMARY" : "START"}
+                </span>
+              )}
+              {options.status === "pending" && (
+                <img src={require(`assets/Vector.svg`)} alt="" />
+              )}
+            </div>
+            <div className="subtitle">{options.subtitle}</div>
+          </div>
       </div>
     );
   };
 
   render() {
     const props = this.props;
-    
+
     return (
       <div className="journey-steps" style={{ ...this.props.style }}>
         {this.state.baseData.title && (
@@ -66,7 +74,9 @@ class JourneyStepsClass extends Component {
         )}
 
         <div className="steps-count">
-          {this.state.baseData.options.map(props.static ? this.renderStaticList : this.renderList)}
+          {this.state.baseData.options.map(
+            props.static ? this.renderStaticList : this.renderList
+          )}
         </div>
       </div>
     );

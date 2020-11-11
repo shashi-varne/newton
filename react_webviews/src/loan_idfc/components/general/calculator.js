@@ -21,6 +21,19 @@ class Calculator extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Income and loan offer',
+      steps: [
+        {'title': 'Income details', 'status': 'completed'},
+        {'title': 'BT transfer details', 'status': 'init'},
+        {'title': 'Loan offer', 'status': 'pending'}
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
   }
 
   onload = async () => {};
@@ -65,22 +78,19 @@ class Calculator extends Component {
         Loan_Eligibility = 0;
       }
 
-    return (
+      return (
       <Container
         showLoader={this.state.show_loader}
         title="Loan eligibility calculator"
         buttonTitle="APPLY NOW"
-        count={true}
-        current={4}
-        total={4}
-        headerData={{
-          icon: "close",
-        }}
         styleFooter={{
           backgroundColor: "var(--highlight)"
         }}
         styleContainer={{
           backgroundColor: "var(--highlight)"
+        }}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
         }}
         noPadding={true}
       >

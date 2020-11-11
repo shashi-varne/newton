@@ -58,11 +58,11 @@ class JourneyMap extends Component {
         hidePageTitle={true}
       >
         <div className="journey-track">
-          <img
+          {/* <img
             className="center"
             src={require(`assets/${this.state.productName}/journey.svg`)}
             alt=""
-          />
+          /> */}
 
           <JourneySteps
             handleClick={this.handleClick2}
