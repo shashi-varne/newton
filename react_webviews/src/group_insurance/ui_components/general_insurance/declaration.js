@@ -79,7 +79,7 @@ class DeclarationClass extends Component {
         handleClickOne={() => this.handleClick()}
         handleClickTwo={() => this.handleClickback()}
       >
-        <div>
+        <div style={{fontFamily: "SourceSansPro"}}  >
       <h4>I declare that I or any other member proposed to be insured under this policy don’t have or had;</h4>
         <p>1. Any respiratory-related symptoms like severe cough, respiratory diseases, breathlessness in the past 4 weeks</p> 
         <p>2. I/We have not traveled to or from the following places since 31 st December 2019</p> 

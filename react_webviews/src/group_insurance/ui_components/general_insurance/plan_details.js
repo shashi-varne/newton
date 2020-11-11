@@ -459,10 +459,15 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-        this.navigate('declaration', '', final_data);
+            console.log(this.props.parent.state.product_key,"<<<<<<<<<<<<")
+          if(this.props.parent.state.product_key == 'CORONA' ){
+             this.navigate('declaration', '', final_data);
+          }else {
+            this.navigate('form', '', final_data);
       }
+    }
     } catch (err) {
-      toast('Something went wrong');
+      toast('Something went wrong');                                                                                                                                                                          
     }
 
   }
@@ -624,7 +629,7 @@ class PlanDetailsClass extends Component {
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.length} life-threatening diseases covered</div>
                 <div onClick={() => this.openDiseases()} className="round-visible-button">
-                  Diseases covered &nbsp;&nbsp;&nbsp;>
+                  Diseases covered &nbsp;&nbsp;&nbsp;
                 </div>
               </div>
             </div>

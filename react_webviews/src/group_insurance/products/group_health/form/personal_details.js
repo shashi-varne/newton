@@ -55,8 +55,8 @@ class GroupHealthPlanPersonalDetails extends Component {
     let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
 
     let member_base = lead.member_base || [];
-    let member_key = this.props.match.params.member_key;
-    // let member_key = this.props.member_key;
+    // let member_key = this.props.match.params.member_key;
+    let member_key = this.props.member_key;
 
     let pan_amount = this.state.pan_amount;
 

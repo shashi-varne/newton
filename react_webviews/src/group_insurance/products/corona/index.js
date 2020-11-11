@@ -242,9 +242,7 @@ class CoronaPlanDetails extends Component {
   }
 
   handleClick = async (final_data) => {
-
     this.navigate('form', '', final_data);
-
   }
 
   render() {
