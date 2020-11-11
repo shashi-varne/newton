@@ -18,22 +18,13 @@ class RenderDiseasesClass extends Component {
   }
 
   componentWillMount() {
-
     let { params } = this.props.location || {};
-    // this.setState({
-    //   diseasesData: {
-    //     product_diseases_covered: []
-    //   },
-    // })
-  
-
-  this.setState({
+    this.setState({
     diseasesData: params ? params.diseasesData : {
       product_diseases_covered: this.props.parent.state.plan_data
     },
     title : this.props.parent.state.title
   })
-
   }
 
   renderDiseases = (props, index) => {
@@ -65,6 +56,7 @@ class RenderDiseasesClass extends Component {
 
 
   handleClick = () => {
+    console.log("helooooooooooo")
     this.navigate('cover')
   }
 
@@ -78,7 +70,7 @@ class RenderDiseasesClass extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": this.state.diseasesData.key,
+        "screen_name": this.state.diseasesData.key || 'notcover'
       }
     };
 
@@ -97,7 +89,7 @@ class RenderDiseasesClass extends Component {
         onlyButton={true}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        // handleClick={() => this.handleClickCurrent()}
+        handleClick={() => this.handleClickCurrent()}
         handleClick={() => this.handleClick()}
         title={this.state.title}
         classOverRideContainer="accident-plan">

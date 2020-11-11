@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RenderDiseasesClass from '../../ui_components/general_insurance/notcover';
+import RenderDiseasesComponent from '../../ui_components/general_insurance/cover';
 
 import { getConfig } from 'utils/functions';
 
@@ -129,7 +129,7 @@ class Coverpage extends Component {
   render() {
     return (
       <div>
-        <RenderDiseasesClass
+        <RenderDiseasesComponent
           parent={this}
         />
       </div>

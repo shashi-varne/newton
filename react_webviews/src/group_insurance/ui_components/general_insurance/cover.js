@@ -44,16 +44,21 @@ class RenderDiseasesClass extends Component {
   }
 
 
-  handleClick = () => {
-    this.navigate('form')
-  }
 
   navigate = (pathname) => {
-   this.props.parent.props.history.push({
+    console.log(pathname, this.props.parent.props.history )
+    this.props.parent.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
     });
   }
+
+
+
+  handleClick = () => {
+    this.navigate('form')
+  }
+
 
   async handleClickCurrent() {
     this.sendEvents('next');
@@ -65,7 +70,7 @@ class RenderDiseasesClass extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": this.state.diseasesData.key,
+        "screen_name": this.state.diseasesData.key || "cover"
       }
     };
 
@@ -85,6 +90,7 @@ class RenderDiseasesClass extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
+        handleClick={() => this.handleClick()}
         title={this.state.title}
         classOverRideContainer="accident-plan">
 

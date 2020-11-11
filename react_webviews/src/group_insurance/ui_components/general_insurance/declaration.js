@@ -18,11 +18,11 @@ class DeclarationClass extends Component {
   }
 
 
-  handleClick = () => {
+  handleClickback = () => {
     this.navigate('plan')
   }
 
-  handleClick2 = () => {
+  handleClick = () => {
     this.navigate('notcover')
   }
  
@@ -77,7 +77,7 @@ class DeclarationClass extends Component {
         handleClick2={() => this.handleClick()}
         // handleClick={() => this.handleClick()}
         handleClickOne={() => this.handleClick()}
-        handleClickTwo={() => this.handleClick2()}
+        handleClickTwo={() => this.handleClickback()}
       >
         <div>
       <h4>I declare that I or any other member proposed to be insured under this policy don’t have or had;</h4>
