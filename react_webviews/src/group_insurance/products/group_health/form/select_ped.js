@@ -270,22 +270,21 @@ class GroupHealthPlanSelectPed extends Component {
                 let min_one_ped = false;
                 for(var l in options) {
                     if(options[l].checked) {
+
                         min_one_ped = true;
                         let data = options[l], question_id = data.key
+
+                        if(options[l].name === 'Other') {
+                            var value = this.state[this.state.otherInputData.name];
+                        }
+
                         let obj = {
                             "yes_no": true,
                            "question_id": question_id,
-                          "since_when":  data.start_date
+                          "since_when":  data.start_date,
+                          "description" : value || ""
                         }
                         pre_existing_diseases.push(obj)
-                        if(options[l].name === 'Other') {
-                            let obj = {
-                                "yes_no": false,
-                               "question_id": question_id,
-                              "since_when":  data.start_date
-                            }
-                            pre_existing_diseases.push(obj)
-                        }
                     } 
                 }
                 if(!min_one_ped) {
@@ -322,7 +321,7 @@ class GroupHealthPlanSelectPed extends Component {
                 force_forward: !!next_state && this.props.edit,
                 lead: lead
             })
-
+                                         console.log(body)
             this.updateLead(body);
         }
     }

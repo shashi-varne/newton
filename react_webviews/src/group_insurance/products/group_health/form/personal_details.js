@@ -45,7 +45,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   onload = () => {
-
+     console.log(lead)
     let lead = this.state.lead || {};  
     let quotation = this.state.quotation || {};     
     let insured_people_details  = lead.insured_people_details;
@@ -68,7 +68,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (quotation.total_premium > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
     }
-
+ 
 
     let header_title = `${capitalizeFirstLetter(childeNameMapper(member_key))}'s details`;
     let header_subtitle = '';
@@ -80,16 +80,13 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
     let backend_key, form_data = {};
-    for (var i =0; i < member_base.length; i++) {
-             if(member_base[i].insured_person.relation === member_key && i !== member_base.length -1) {
-            for (var k =i+1; k < member_base.length; k++) {
-                if(member_base[k].insured_person.ped && member_base[k].key !== 'applicant') {
-                    next_state = member_base[k].insured_person.relation;
-                    break;
-                }
-            }
-        }
-    }    
+    for (var i = 0; i < member_base.length; i++) {
+      console.log(member_base[i].insured_person.relation, member_key)
+      if (member_base[i].insured_person.relation === member_key && i !== member_base.length - 1) {
+        next_state = member_base[i + 1].insured_person.relation;
+        break;
+      }
+    }
 
     if (this.props.edit) {
       next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;

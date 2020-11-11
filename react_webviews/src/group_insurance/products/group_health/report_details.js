@@ -60,10 +60,10 @@ class GroupHealthReportDetails extends Component {
 
     async componentDidMount() {
 
-        try {
+        try {        console.log(this.state.policy_id, this.state.providerConfig.provider_api)
 
-            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
-
+            const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
+                                           console.log(res)
             this.setState({
                 show_loader: false
             });
@@ -139,8 +139,8 @@ class GroupHealthReportDetails extends Component {
             this.setState({
                 show_loader: true
             });
-            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/policy/download?policy_number=${this.state.policy_data.policy_number}`);
 
+           const res = await Api.get(`/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_data.policy_id}`);
             this.setState({
                 show_loader: false
             });

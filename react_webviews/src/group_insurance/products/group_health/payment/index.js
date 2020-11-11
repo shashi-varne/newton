@@ -97,18 +97,17 @@ class GroupHealthPayment extends Component {
   
         let application_id =  storageService().get("application_ID");
   
-        const res = await Api.get(`api/insurance/health/policy/hdfc_ergo/check_status?application_id=${application_id}`);
+        const res = await Api.get(`api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
   
         var resultData = res.pfwresponse.result;
-        console.log(resultData, '___________________________+-*/.')
         this.setState({
           show_loader: false
         });
         if (res.pfwresponse.status_code === 200) {
   
-          let lead = resultData.insured_member_details || {};
+          let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
-  
+          console.log(lead, '___________________________+-*/.')
           this.setState({
             policy_data: policy_data,
             lead: lead
@@ -150,21 +149,24 @@ class GroupHealthPayment extends Component {
     this.sendEvents('next');
 
     let state = '';
-    if(this.state.paymentFailed) {
-      state =  `/group-insurance/group-health/${this.state.provider}/final-summary`;
-      this.setState({
-        forceClose: true
-      }, ()=> {
-        this.navigate(state);
-      })
+    // if(this.state.paymentFailed && false) {
+    //   state =  `/group-insurance/group-health/${this.state.provider}/final-summary`;
+    //   this.setState({
+    //     forceClose: true
+    //   }, ()=> {
+    //     this.navigate(state);
+    //   })
       
-    } else if(this.state.paymentPending) {
-      state  = `/group-insurance/group-health/${this.state.provider}/landing`;
+    // } else if(!this.state.paymentPending && false) {
+    //   state  = `/group-insurance/group-health/${this.state.provider}/landing`;
+    //   this.navigate(state);
+    // } else {
+      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.application_id}`;
+
+      console.log(state)
+
       this.navigate(state);
-    } else {
-      state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.lead_id}`;
-      this.navigate(state);
-    }
+    // }
 
     
   }
@@ -201,7 +203,7 @@ class GroupHealthPayment extends Component {
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.quotation.total_premium)} for {this.state.quotation.vendor} {this.state.quotation.insurance_type} is successful.
+                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
                 }
@@ -218,7 +220,7 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess && provider === 'HDFCERGO' &&
               <div>
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.quotation.total_premium)} for {this.state.providerData.title}  {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
 
@@ -238,7 +240,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} is pending.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} is pending.
                           </p>
                 </div>
               }
@@ -246,7 +248,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_amount)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} has failed.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
                     If amount has been debited it will be refunded back to you in 5-7 business days.
@@ -283,7 +285,7 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
                     {!policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {policy_data.ergo_payment_id || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {policy_data.payment_id || '-'}</div>
                     }
                      {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
                     <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {policy_data.proposal_number || '-'}</div>
@@ -306,7 +308,7 @@ class GroupHealthPayment extends Component {
                       Basic premium
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.base_premium_showable || this.state.lead.premium)}
+                      {inrFormatDecimal2(this.state.lead.base_premium_showable || this.state.lead.base_premium)}
                     </div>
                   </div>
 
@@ -326,7 +328,7 @@ class GroupHealthPayment extends Component {
                       GST
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.tax_amount)}
+                      {inrFormatDecimal2(this.state.lead.gst)}
                     </div>
                   </div>
                 </div>
@@ -339,7 +341,7 @@ class GroupHealthPayment extends Component {
                       Total amount paid
                               </div>
                     <div className="content2-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.total_amount)}
+                      {inrFormatDecimal2(this.state.lead.total_premium)}
                     </div>
                   </div>
                 </div>

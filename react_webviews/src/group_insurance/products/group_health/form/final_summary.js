@@ -248,11 +248,12 @@ class GroupHealthPlanFinalSummary extends Component {
             let life_style_question = member.answers.life_style_details;
             if (provider === 'RELIGARE') {
                          
-                // for lifestyle
+                // for lifestyle     
+                console.log( member.answers.life_style_details , life_style_question.length,"<<<<<<<<<")
 
-                if (life_style_question.length >= 1 && member.ped) {
+                if (life_style_question.length >=1) {
                     members_for_life_style.push(member_display);
-
+                    console.log(life_style_question, life_style_question[0])
                     life_style_details_data.push({
                         'title': `${member_display}'s consumption details`,
                         'subtitle': life_style_question[0].description
@@ -698,7 +699,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
     renderMembertop = (prop, index) => {
        let props = prop.insured_person;
-
+               console.log(props)
         if (props.key === 'applicant') {
             return (
                 <div className="member-tile" key={index}>
@@ -875,7 +876,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {              console.log(this.state.quotation, "qwee")
+    render() {              console.log(this.state.common_data, "qwee")
         return (
             <Container
             provider={this.state.provider}

@@ -122,7 +122,7 @@ export async function initialize() {
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
                     lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
-                    // let member = ghGetMember(lead, this.state.providerConfig); 
+                    //    lead.member_base = ghGetMember(lead, this.state.providerConfig); 
                     lead.member_base =  resultData.insured_people_details;
                     console.log(resultData, lead.quotation_details)
                     this.setState({
@@ -160,9 +160,12 @@ export async function initialize() {
     if (this.state.ctaWithProvider) { 
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
+
+            console.log(lead)
+
             leftTitle = lead.plan_title || '';
-            leftSubtitle = lead.total_sum_insured;
-            sum_assured = lead.total_premium;
+            leftSubtitle = lead.base_premium;
+            sum_assured = lead.sum_assured;
             tenure = lead.tenure;
             base_premium = lead.total_premium;
             tax_amount = lead.gst;
