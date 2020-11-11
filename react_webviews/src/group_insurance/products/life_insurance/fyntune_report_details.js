@@ -8,33 +8,26 @@ import {
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
-import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-
+import {storageService} from '../../../utils/validators';
 
 class FyntuneReportDetails extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            premium_data: {
-                WF: []
-            },
             policy_data: {
                 cssMapper: {}
             },
             show_loader: false,
-            ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits,
+            fyntune_ref_id: storageService().getObject('fyntune_ref_id') || ''
         }
     }
 
     async componentDidMount() {
 
-        const { policy_id } = this.props.match.params;
         try {
 
-            const res = await Api.get(`api/ins_service/api/insurance/fyntune/get/policy/${policy_id}`);
+            const res = await Api.get(`api/ins_service/api/insurance/fyntune/get/policy/${this.state.fyntune_ref_id}`);
 
             this.setState({
                 show_loader: false
@@ -170,7 +163,7 @@ class FyntuneReportDetails extends Component {
                             </div>
                         </div>
                         
-                        {this.state.policy_data.insurance_type !== "" && (
+                        {this.state.policy_data.add_ons_amount !== "" && (
                             <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
                                 <img src={require(`assets/fisdom/ic_hs_cover_amount.svg`)} alt="" />

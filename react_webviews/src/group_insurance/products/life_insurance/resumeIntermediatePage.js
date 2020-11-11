@@ -36,12 +36,13 @@ class ResumeIntermediatePage extends Component {
                 show_loader: false
             })
 
+            var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-      
-                var resultData = res.pfwresponse.result;
-                this.setState({payment_data: resultData})  
-
+                this.setState({
+                    payment_data: resultData
+                })
             } else {
+                
               toast(resultData.error || resultData.message || "Something went wrong");
             }     
         }catch(err){
@@ -54,14 +55,18 @@ class ResumeIntermediatePage extends Component {
 
     }
     handleClick = () =>{
-
-        if(this.state.payment_data.lead.status === 'success'){
-            this.navigate(`/group-insurance/common/report`)
-        }else if(this.state.payment_data.lead.status === "pending" && this.state.payment_data.lead.fyntune_status === "Underwriting Approval"){
-            this.navigate(`/group-insurance/common/report`)
-         }else {
+        if(!this.state.payment_data){
             this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
-         }
+            return;   
+        }else{
+            if(this.state.payment_data.lead.status === 'success'){
+                this.navigate(`/group-insurance/common/report`)
+            }else if(this.state.payment_data.lead.status === "pending" && this.state.payment_data.lead.fyntune_status === "Underwriting Approval"){
+                this.navigate(`/group-insurance/common/report`)
+             }else {
+                this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
+             }
+        }
     }
     render() {
         return (
