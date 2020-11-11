@@ -22,8 +22,9 @@ class RenderDiseasesClass extends Component {
     let { params } = this.props.location || {};
     this.setState({
       diseasesData: params ? params.diseasesData : {
-        product_diseases_covered: []
+        product_diseases_covered: this.props.parent.state.plan_data
       },
+      title : this.props.parent.state.title
     })
   }
 
@@ -42,8 +43,13 @@ class RenderDiseasesClass extends Component {
     )
   }
 
+
+  handleClick = () => {
+    this.navigate('form')
+  }
+
   navigate = (pathname) => {
-    this.props.history.push({
+   this.props.parent.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
     });
@@ -79,7 +85,7 @@ class RenderDiseasesClass extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
-        title={this.state.diseasesData.dieseasesTitle}
+        title={this.state.title}
         classOverRideContainer="accident-plan">
 
         <div style={{ padding: '0 15px' }}>

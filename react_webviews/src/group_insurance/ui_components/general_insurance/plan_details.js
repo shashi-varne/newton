@@ -459,7 +459,7 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-        this.navigate('form', '', final_data);
+        this.navigate('declaration', '', final_data);
       }
     } catch (err) {
       toast('Something went wrong');

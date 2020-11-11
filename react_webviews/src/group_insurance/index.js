@@ -97,6 +97,9 @@ import DenguePaymentCallback from './products/dengue/payment-callback';
 
 /* Corona */
 import CoronaForm from './products/corona/form';
+import CoronaPlanDeclaration from './products/corona/declaration'
+import CoverePage from './products/corona/cover'
+import NotCoverpage from './products/corona/notcover'
 import CoronaSummary from './products/corona/summary';
 import CoronaFailed from './products/corona/payment-failed';
 import CoronaPaymentSuccess from './products/corona/payment-success';
@@ -290,6 +293,9 @@ const Insurance = (props) => {
 
           {/********** Corona **********/}
           <Route path={`${url}/corona/plan`} component={CoronaPlanDetails} />
+          <Route path={`${url}/corona/declaration`} component={CoronaPlanDeclaration} />
+          <Route path={`${url}/corona/cover`} component={CoverePage} />
+          <Route path={`${url}/corona/notcover`} component={NotCoverpage} />
           <Route path={`${url}/corona/form`} component={CoronaForm} />
           <Route path={`${url}/corona/summary`} component={CoronaSummary} />
           <Route path={`${url}/corona/summary-success`} component={CoronaPlanSuccess} />
