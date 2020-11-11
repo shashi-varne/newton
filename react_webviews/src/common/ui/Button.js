@@ -9,8 +9,39 @@ import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {
   render() {
-    const props = this.props; console.log(props)
+    const props = this.props;        console.log(props)
     const { button: buttonClass, ...classes } = props.classes || {};
+    if (props.twoButton && props.dualbuttonwithouticon) {
+      return (
+        <div className="FlexButton">
+          <Button
+            onClick={props.handleClickOne}
+            fullWidth={false}
+            variant="raised"
+            size="large"
+            className={`${buttonClass} borderButton`}
+            style={{color: getConfig().secondary, borderColor: getConfig().secondary,
+            flex: !getConfig().isMobileDevice ? 'inherit': 2}}
+            disabled={props.disable}
+          >
+            {props.buttonOneTitle}
+          </Button>
+          <Button
+            onClick={props.handleClickTwo}
+            fullWidth={false}
+            variant="raised"
+            size="large"
+            color="secondary"
+            style={{ borderColor: getConfig().secondary, 
+              flex: !getConfig().isMobileDevice ? 'inherit': 2}}
+            className={`${buttonClass} filledButton`}
+            disabled={props.disable}
+          >
+            {props.buttonTwoTitle}
+          </Button>
+        </div>
+      );
+    }
     if (props.twoButton) {
       return (
         <div className="FlexButton">
@@ -24,10 +55,10 @@ class CustomButton extends Component {
             flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             disabled={props.disable}
           >
-            {/* <SVG
+              <SVG
               preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().secondary)}
               src={download}
-            /> */}
+            /> 
             {props.buttonOneTitle}
           </Button>
           <Button
@@ -36,6 +67,8 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
+            style={{ borderColor: getConfig().secondary, 
+              flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
           >

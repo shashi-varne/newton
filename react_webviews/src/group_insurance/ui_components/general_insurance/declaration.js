@@ -65,6 +65,7 @@ class DeclarationClass extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
+        dualbuttonwithouticon={true}
         fullWidthButton={false}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         onlyButton={false}
