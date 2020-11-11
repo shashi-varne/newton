@@ -35,7 +35,7 @@ class RenderDiseasesClass extends Component {
           {props.header &&
             <div className="cover-details-header">{props.header}</div>
           }
-          <div className="cover-details-text" style={{marginTop : "15px"}}> {props.text} </div>
+          <div className="cover-details-text" style={{marginTop : "10px"}}> {props.text} </div>
 
           {props.list &&
             <ul style={{ color: '#767e86', padding: '15px', margin: '0' }}>
@@ -56,7 +56,6 @@ class RenderDiseasesClass extends Component {
 
 
   handleClick = () => {
-    console.log("helooooooooooo")
     this.navigate('cover')
   }
 

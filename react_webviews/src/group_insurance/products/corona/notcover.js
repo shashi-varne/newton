@@ -3,37 +3,20 @@ import RenderDiseasesComponent from '../../ui_components/general_insurance/notco
 
 import { getConfig } from 'utils/functions';
 
-import ic_c_b1_fisdom from 'assets/ic_covid_b_1_fisdom.svg';
-import ic_c_b2_fisdom from 'assets/ic_covid_b_2_fisdom.svg';
-import ic_c_b3_fisdom from 'assets/ic_covid_b_3_fisdom.svg';
-import ic_c_c1_fisdom from 'assets/ic_whats_covered_fisdom.svg';
-import ic_c_c2_fisdom from 'assets/ic_whats_not_covered_fisdom.svg';
-import ic_c_c3_fisdom from 'assets/ic_how_to_claim_fisdom.svg';
-import ic_c_w1_fisdom from 'assets/ic_covid_waiting_period_fisdom.svg';
-import ic_c_d1_fisdom from 'assets/icn_quarantined_covid_fisdom.svg';
-import ic_c_d2_fisdom from 'assets/icn_all_expenses_covid_fisdom.svg';
+import inc_infected_fisdom from '../../../assets/fisdom/inc_infected_fisdom.svg';
+import bacteria_fisdom from '../../../assets/fisdom/bacteria_fisdom.svg';
 import ic_c_e1_fisdom from 'assets/icn_icmr_covid_fisdom.svg';
 import ic_c_e2_fisdom from 'assets/icn_old_age_covid_fisdom.svg';
-import ic_c_e3_fisdom from 'assets/icn_infection_covid_fisdom.svg';
-import ic_c_e4_fisdom from 'assets/icn_outside_india_fisdom.svg';
-import ic_c_e5_fisdom from 'assets/icn_travel_covid_fisdom.svg';
+import ic_c_e3_fisdom from 'assets/icn_infection_covid_fisdom.svg'; 
+import icn_quarantine_fisdom from '../../../assets/fisdom/icn_quarantine_fisdom.svg';
+import inc_outside_india_fisdom from '../../../assets/fisdom/inc_outside_india_fisdom.svg'
+import icn_travel_covid_fisdom from  '../../../assets/fisdom/icn_travel_covid_fisdom.svg'
 
 
 
-import ic_c_b1_myway from 'assets/ic_covid_b_1_myway.svg';
-import ic_c_b2_myway from 'assets/ic_covid_b_2_myway.svg';
-import ic_c_b3_myway from 'assets/ic_covid_b_3_myway.svg';
-import ic_c_c1_myway from 'assets/ic_whats_covered_myway.svg';
-import ic_c_c2_myway from 'assets/ic_whats_not_covered_myway.svg';
-import ic_c_c3_myway from 'assets/ic_how_to_claim_myway.svg';
-import ic_c_w1_myway from 'assets/ic_covid_waiting_period_myway.svg';
-import ic_c_d1_myway from 'assets/icn_quarantined_covid_myway.svg';
-import ic_c_d2_myway from 'assets/icn_all_expenses_covid_myway.svg';
 import ic_c_e1_myway from 'assets/icn_icmr_covid_myway.svg';
 import ic_c_e2_myway from 'assets/icn_old_age_covid_myway.svg';
 import ic_c_e3_myway from 'assets/icn_infection_covid_myway.svg';
-import ic_c_e4_myway from 'assets/icn_outside_india_myway.svg';
-import ic_c_e5_myway from 'assets/icn_travel_covid_myway.svg';
 
 
 class NotCoverpage extends Component {
@@ -48,73 +31,68 @@ class NotCoverpage extends Component {
       recommendedIndex: 0,
       product_key: 'CORONA',
       type: getConfig().productName,
-      ic_c_b1: getConfig().productName !== 'fisdom' ? ic_c_b1_myway : ic_c_b1_fisdom,
-      ic_c_b2: getConfig().productName !== 'fisdom' ? ic_c_b2_myway : ic_c_b2_fisdom,
-      ic_c_b3: getConfig().productName !== 'fisdom' ? ic_c_b3_myway : ic_c_b3_fisdom,
-      ic_c_c1: getConfig().productName !== 'fisdom' ? ic_c_c1_myway : ic_c_c1_fisdom,
-      ic_c_c2: getConfig().productName !== 'fisdom' ? ic_c_c2_myway : ic_c_c2_fisdom,
-      ic_c_c3: getConfig().productName !== 'fisdom' ? ic_c_c3_myway : ic_c_c3_fisdom,
-      ic_c_w1: getConfig().productName !== 'fisdom' ? ic_c_w1_myway : ic_c_w1_fisdom,
-      ic_c_d1: getConfig().productName !== 'fisdom' ? ic_c_d1_myway : ic_c_d1_fisdom,
-      ic_c_d2: getConfig().productName !== 'fisdom' ? ic_c_d2_myway : ic_c_d2_fisdom,
+      inc_outside_india_fisdom: getConfig().productName !== 'fisdom' ? inc_outside_india_fisdom : inc_outside_india_fisdom,
+      inc_infected_fisdom: getConfig().productName !== 'fisdom' ? inc_infected_fisdom : inc_infected_fisdom,
+      icn_travel_covid_fisdom: getConfig().productName !== 'fisdom' ? icn_travel_covid_fisdom : icn_travel_covid_fisdom,
+      bacteria_fisdom: getConfig().productName !== 'fisdom' ? bacteria_fisdom : bacteria_fisdom,
       ic_c_e1: getConfig().productName !== 'fisdom' ? ic_c_e1_myway : ic_c_e1_fisdom,
       ic_c_e2: getConfig().productName !== 'fisdom' ? ic_c_e2_myway : ic_c_e2_fisdom,
       ic_c_e3: getConfig().productName !== 'fisdom' ? ic_c_e3_myway : ic_c_e3_fisdom,
-      ic_c_e4: getConfig().productName !== 'fisdom' ? ic_c_e4_myway : ic_c_e4_fisdom,
-      ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom
+      icn_quarantine_fisdom: getConfig().productName !== 'fisdom' ? icn_quarantine_fisdom : icn_quarantine_fisdom,
     }
   }
 
   componentWillMount() {
+    const countries = (
+      <div>
+      <p>If the insured has traveled to or from the following places since 31st December 2019</p>
+      <ul  style={{  padding: "15px", fontWeight: "normal"}} >
+        <li>China</li>
+        <li>Japan</li>
+        <li>Singapore</li>
+        <li>Hong Kong</li>
+        <li>South Korea</li>
+        <li>Thailand</li>
+        <li>Malaysia</li>
+        <li>Macau</li>
+        <li>Taiwan</li>
+        <li>Italy</li>
+        <li>Iran</li> </ul>
+      </div>
+    );
 
   let plan_data = [
-      {
-        icon : this.state.ic_c_b1,
-        text : "inpatient Hospitalization"
-      },
-      {
-      icon : this.state.ic_c_b2,
-      text : "inpatient Hospitalization",
-      },
-      {
-        icon : this.state.ic_c_b3,
-        text : "inpatient Hospitalization"
-      },
-      {
-        icon : this.state.ic_c_11,
-        text : "inpatient Hospitalization"
-      },
-      {
-      icon : this.state.ic_c_c2,
-      text : "inpatient Hospitalization",
-      },
-      {
-        icon : this.state.ic_c_c3,
-        text : "inpatient Hospitalization"
-      },
-      {
-        icon : this.state.ic_c_w1,
-        text : "inpatient Hospitalization"
-      },
-      {
-      icon : this.state.ic_c_d2,
-      text : "inpatient Hospitalization",
-      },
-      {
-        icon : this.state.ic_c_e1,
-        text : "inpatient Hospitalization"
+    {
+      icon : this.state.ic_c_e3,
+      text : "Individual having any underlying health conditions/Pre-existing disease",
       },
       {
         icon : this.state.ic_c_e2,
         text : "Age group more than 65 years"
       },
       {
-      icon : this.state.ic_c_e3,
-      text : "Individual having any underlying health conditions/Pre-existing disease",
+        icon : this.state.ic_c_e1,
+        text : "Testing done in centers other than the authorized Indian Council of Medical Research centers"
       },
       {
-        icon : this.state.ic_c_e4,
+        icon : this.state.icn_quarantine_fisdom,
+        text : "Any signs or symptoms of the infection present at the time of purchasing the policy"
+      },
+      {
+        icon : this.state.inc_infected_fisdom,
+        text : "The person suffering from the infection or taking treatment or recommended for quarantine at the time of purchasing the policy"
+      },
+      {
+        icon : this.state.bacteria_fisdom,
+        text : "Manifestation of the Coronavirus Infection taken place while the Insured is outside India"
+      }, 
+      {
+        icon : this.state.inc_outside_india_fisdom,
         text : "Treatment taken outside India"
+      },
+      {
+        icon : this.state.icn_travel_covid_fisdom,
+        text :  countries
       }
   ]
    

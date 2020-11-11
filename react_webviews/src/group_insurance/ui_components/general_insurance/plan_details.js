@@ -459,9 +459,8 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-            console.log(this.props.parent.state.product_key,"<<<<<<<<<<<<")
-          if(this.props.parent.state.product_key == 'CORONA' ){
-             this.navigate('declaration', '', final_data);
+          if(this.props.parent.state.product_key == 'CORONA'){
+             this.navigate('declaration');
           }else {
             this.navigate('form', '', final_data);
       }
