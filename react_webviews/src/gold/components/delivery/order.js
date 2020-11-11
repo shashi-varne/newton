@@ -167,6 +167,7 @@ class DeliveryOrder extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Summary"
         handleClick={this.handleClick}
         edit={this.props.edit}

@@ -55,7 +55,7 @@ class GoldSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: 'p',
       openPopup: false,
       popupText: '',
       apiError: '',
@@ -216,7 +216,7 @@ class GoldSummary extends Component {
 
     if(provider === 'safegold') {
       this.setState({
-        show_loader: false
+        skelton: false
       })
     }
 
@@ -252,7 +252,7 @@ class GoldSummary extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false,
+        skelton: false,
       });
       toast('Something went wrong');
     }
@@ -582,9 +582,9 @@ class GoldSummary extends Component {
   render() {
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Gold"
-        noHeader={this.state.show_loader}
+        noHeader={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
         classOverRide="gold-landing-container gold-landing-container-background"

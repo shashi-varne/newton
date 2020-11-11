@@ -305,6 +305,7 @@ class SelectAddressDelivery extends Component {
       <Container
         summarypage={true}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Select address"
         handleClick={this.handleClick}
         handleClick2={this.handleClick2}

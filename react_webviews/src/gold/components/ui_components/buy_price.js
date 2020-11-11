@@ -69,6 +69,7 @@ class BuyPriceClass extends Component {
             this.setState({
                 show_loader: false
             })
+            this.props.parent.updateParent('skelton', false);
 
         } catch (err) {
            this.resetTimer(buyData);

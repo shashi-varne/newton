@@ -285,6 +285,7 @@ class GoldPanDataClass extends Component {
         return (
             <Container
                 showLoader={this.state.show_loader || this.props.parent.state.show_loader}
+                skelton={this.state.skelton}
                 title={this.state.commonMapper.top_title}
                 handleClick={this.handleClick}
                 handleClick2={this.handleClick2}

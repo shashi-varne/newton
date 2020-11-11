@@ -30,7 +30,7 @@ class GoldSellHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       popupText: '',
       apiError: '',
       provider_info: {},
@@ -193,7 +193,7 @@ class GoldSellHome extends Component {
     }
 
     this.setState({
-      show_loader: false
+      skelton: false
     });
   }
 
@@ -417,6 +417,7 @@ class GoldSellHome extends Component {
       <Container
         noFooter={true}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         buttonTitle="PROCEED"
         headerType="provider-filter"
         handleClick={this.handleClick}

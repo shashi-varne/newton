@@ -282,6 +282,7 @@ class SellSelectBank extends Component {
       <Container
         summarypage={true}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Select an account"
         handleClick={this.handleClick}
         handleClick2={this.handleClick2}

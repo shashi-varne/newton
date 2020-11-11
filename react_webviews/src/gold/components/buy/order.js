@@ -142,6 +142,7 @@ class BuyOrder extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Buy Gold"
         handleClick={this.handleClick}
         edit={this.props.edit}

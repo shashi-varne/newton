@@ -309,6 +309,7 @@ class SellAddEditBank extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={`${this.props.edit ? 'Edit' : 'Add'} bank account`}
         edit={this.props.edit}
         handleClick={this.handleClick}

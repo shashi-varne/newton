@@ -169,30 +169,34 @@ class Container extends Component {
           {/* Below Header Block */}
           <div id="HeaderHeight" style={{ top: 56 }}>
             {/* Loader Block */}
-            {/* {this.renderPageLoader()} */}
+            {this.renderPageLoader()}
           </div>
-  
-          { this.props.skelton && 
-            <UiSkelton 
-            type={'test'}
-            />
-          }
   
 
           {!this.state.force_hide_inpage_title && 
             this.new_header_scroll() 
           }
+
+          { this.props.skelton && 
+            <UiSkelton 
+            type={this.props.skelton}
+            />
+          }
   
           {/* Children Block */}
             <div
-            style={this.props.styleContainer}
+            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': '',
+            backgroundImage: this.props.skelton ? 'unset': ''}}
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
             >
-            {!this.props.skelton && this.props.children}
+            <div 
+            className={`${!this.props.skelton ? 'slide-fade-show' : 'slide-fade'}`}
+            style={{display: this.props.skelton ? 'none': ''}}
+            > {this.props.children} </div>
           </div>
   
           {/* Footer Block */}
-          {!this.props.noFooter && (
+          {!this.props.noFooter && !this.props.skelton &&  (
             <Footer
               noFooter={this.props.noFooter}
               fullWidthButton={this.props.fullWidthButton}

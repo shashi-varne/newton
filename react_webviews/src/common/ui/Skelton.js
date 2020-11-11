@@ -58,12 +58,9 @@ class UiSkeltonClass extends Component {
         )
     }
 
-    render() {
-
+    productsSkelton() {
         return (
-            <div className="generic-skelton">
-
-                <div className="products-listing">
+            <div className="products-listing">
 
                     <div className="top">
                         {this.singleImage()}
@@ -73,10 +70,47 @@ class UiSkeltonClass extends Component {
                     <div className="mid">
                         {this.imageAndLines()}
                         {this.imageAndLines()}
+                        {this.imageAndLines()}
+                        {this.imageAndLines()}
+                    </div>
+
+                </div>
+        )
+    }
+
+    genericSkelton() {
+        return (
+            <div className="products-listing">
+
+                    <div className="top">
+                        {this.singleImage()}
+                    </div>
+
+
+                    <div className="mid">
+                        {this.twoLines()}
+                        {this.twoLines()}
+                        {this.twoLines()}
                         {this.twoLines()}
                     </div>
 
                 </div>
+        )
+    }
+
+    render() {
+
+        let type = this.props.type;
+
+        if(type === true) {
+            type = 'g';
+        }
+
+        return (
+            <div className="generic-skelton">
+
+               {type === 'p' && this.productsSkelton()}
+               {type === 'g' && this.genericSkelton()}
 
             </div>
         );

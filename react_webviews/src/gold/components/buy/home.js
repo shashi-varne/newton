@@ -40,7 +40,7 @@ class GoldBuyHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: 'g',
       openPopup: false,
       popupText: '',
       apiError: '',
@@ -140,7 +140,7 @@ class GoldBuyHome extends Component {
       
       } else {
         this.setState({
-          show_loader: false
+          skelton: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
@@ -148,7 +148,7 @@ class GoldBuyHome extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -426,7 +426,7 @@ class GoldBuyHome extends Component {
         handleClick={this.handleClick}
         updateChild={this.updateChild}
         buttonTitle="PROCEED"
-        skelton={true}
+        skelton={this.state.skelton}
         events={this.sendEvents('just_set_events')}
       >
 

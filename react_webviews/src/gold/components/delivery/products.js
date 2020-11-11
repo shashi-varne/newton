@@ -194,6 +194,7 @@ class GoldDeliveryProducts extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
         headerType="provider-filter"

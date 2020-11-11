@@ -326,6 +326,7 @@ class GoldTransactionDetail extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={this.state.order.cssMapper.title}
         noFooter={true}
         events={this.sendEvents('just_set_events')}

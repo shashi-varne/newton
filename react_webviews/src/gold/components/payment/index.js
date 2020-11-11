@@ -383,6 +383,7 @@ class Payment extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         noHeader={this.state.show_loader}
         title={this.state.commonMapper['top_title']}
         handleClick={this.handleClick}

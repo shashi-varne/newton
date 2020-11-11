@@ -384,6 +384,7 @@ class GoldLocker extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Gold locker"
         noFooter={true}
         events={this.sendEvents('just_set_events')}
