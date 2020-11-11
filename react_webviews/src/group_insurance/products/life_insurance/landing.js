@@ -233,7 +233,7 @@ class FyntuneLanding extends Component {
         showLoader={this.state.show_loader}
         title="Insurance Savings Plan"
         fullWidthButton={true}
-        buttonTitle={this.state.resume_data.resume_present ? "GET A NEW QUOTE": "GET INSURED"}
+        buttonTitle={this.state.resume_data && this.state.resume_data.resume_present ?  "GET A NEW QUOTE": "GET INSURED"}
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
