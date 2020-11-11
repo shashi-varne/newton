@@ -70,16 +70,16 @@ class DeclarationClass extends Component {
         onlyButton={false}
         showLoader={this.state.show_loader}
         twoButtons={true}
-        buttonOneTitle="YES I CONFIRM"
-        buttonTwoTitle="NO, I CAN'T CONFIRM"
+        buttonOneTitle="NO, I CAN'T CONFIRM"
+        buttonTwoTitle="YES I CONFIRM"
         classOverRideContainer="payment-success"
         title="Declaration"
         handleClick2={() => this.handleClick()}
         // handleClick={() => this.handleClick()}
-        handleClickOne={() => this.handleClick()}
-        handleClickTwo={() => this.handleClickback()}
+        handleClickOne={() => this.handleClickback()}
+        handleClickTwo={() => this.handleClick()}
       >
-        <div style={{fontFamily: "SourceSansPro"}}  >
+        <div style={{fontFamily: 'Source Sans Pro , sans-serif' }}  >
       <h4>I declare that I or any other member proposed to be insured under this policy don’t have or had;</h4>
         <p>1. Any respiratory-related symptoms like severe cough, respiratory diseases, breathlessness in the past 4 weeks</p> 
         <p>2. I/We have not traveled to or from the following places since 31 st December 2019</p> 

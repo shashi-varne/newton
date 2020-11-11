@@ -9,7 +9,7 @@ import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {
   render() {
-    const props = this.props;
+    const props = this.props; console.log(props)
     const { button: buttonClass, ...classes } = props.classes || {};
     if (props.twoButton) {
       return (
@@ -36,8 +36,6 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            style={{ borderColor: getConfig().secondary, 
-              flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
           >
