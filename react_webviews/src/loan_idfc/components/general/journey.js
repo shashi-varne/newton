@@ -58,11 +58,16 @@ class JourneyMap extends Component {
         hidePageTitle={true}
       >
         <div className="journey-track">
-          {/* <img
+          <img
             className="center"
-            src={require(`assets/${this.state.productName}/journey.svg`)}
+            src={require(`assets/${this.state.productName}/icn_journey_start.svg`)}
             alt=""
-          /> */}
+          />
+
+          <div style={{fontSize:"20px", color:"#0A1D32", fontWeight:"400", margin:"20px 10px 30px", lineHeight:"30px"}}>
+            Awesome! Your loan application is successfully created. Now you're
+            just a step away from finding out your loan offer.
+          </div>
 
           <JourneySteps
             handleClick={this.handleClick2}

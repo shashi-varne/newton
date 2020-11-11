@@ -6,7 +6,8 @@ import HowToSteps from "../../../common/ui/HowToSteps";
 import JourneySteps from "../../../common/ui/JourneySteps";
 import SVG from "react-inlinesvg";
 import { getConfig } from "utils/functions";
-import next_arrow from 'assets/next_arrow.svg';
+import next_arrow from "assets/next_arrow.svg";
+import Button from "material-ui/Button";
 
 class Landing extends Component {
   constructor(props) {
@@ -61,12 +62,35 @@ class Landing extends Component {
         handleClick={this.handleClick}
       >
         <div className="idfc-landing">
-          <div className="loan-landing loan-instant-kyc-home">
+          <div
+            className="infoimage-block1"
+            onClick={() => this.handleClickTopCard("banner")}
+          >
             <img
-              style={{ width: "100%", cursor: "pointer" }}
               src={require(`assets/${this.state.productName}/idfc_card.svg`)}
               alt=""
             />
+            <div className="inner">
+              <div
+                className="title generic-page-title"
+                style={{ color: "white" }}
+              >
+                Get a personal loan up to ₹40 lacs!
+              </div>
+              <div className="button">
+                <Button
+                  variant="raised"
+                  size="large"
+                  color="secondary"
+                  autoFocus
+                >
+                  KNOW MORE
+                </Button>
+              </div>
+              <div className="bottom-content">
+                100% digital | Minimal documentation
+              </div>
+            </div>
           </div>
 
           <div style={{ margin: "40px 0 0px 0" }}>

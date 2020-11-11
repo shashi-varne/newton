@@ -15,11 +15,11 @@ class JourneyStepsClass extends Component {
   renderStaticList = (options, index) => {
     return (
       <div className="journey-steps-count" key={index}>
-        <div className="circle-count">
+        <div className="circle-count init">
           <div className="count">{options.step}</div>
         </div>
-        <div className="steps-content">
-          <div className="title">{options.title}</div>
+        <div className="steps-content init">
+          <div className="title" style={{color:"#767E86"}}>{options.title}</div>
           <div className="subtitle">{options.subtitle}</div>
         </div>
       </div>

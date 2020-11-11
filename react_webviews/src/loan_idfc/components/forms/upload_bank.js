@@ -217,12 +217,6 @@ class UploadBankStatements extends Component {
                 }
                 src={plus}
               />
-              <SVG
-              preProcessor={(code) =>
-                code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
-              }
-              src={right_arrow}
-            />
             </span>
             UPLOAD FILE
           </div>

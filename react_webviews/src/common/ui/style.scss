@@ -716,6 +716,7 @@ body[data-device="mobile"] {
     display: flex;
     align-items: center;
     z-index: 1;
+    border: 1px solid var(--primary);
 
     .count {
       text-align: center;
@@ -759,7 +760,7 @@ body[data-device="mobile"] {
   }
 
   .steps-content {
-    padding: 12px 0px 12px 30px;
+    padding: 12px 0px 20px 30px;
     border-radius: 6px;
     background-color: #ffffff !important;
     width: 95%;
@@ -784,7 +785,7 @@ body[data-device="mobile"] {
     }
 
     .subtitle {
-      padding-right: 50px;
+      padding-right: 30px;
       font-size: 10px;
       font-weight: 300;
       color: #767e86;

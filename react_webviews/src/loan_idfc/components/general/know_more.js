@@ -63,7 +63,7 @@ class KnowMore extends Component {
         buttonTitle={this.state.cta_title}
       >
         <div className="know-more">
-          <div className="know-more">
+          <div className="nav-bar">
             <div id="tab-1" className={`nav-tab ${tab_clicked === 'tab-1' ? 'clicked' : 'unclicked'}`} onClick={this.handleClick}>Features</div>
             <div id="tab-2" className={`nav-tab ${tab_clicked === 'tab-2' ? 'clicked' : 'unclicked'}`} onClick={this.handleClick}>Eligibility</div>
             <div id="tab-3" className={`nav-tab ${tab_clicked === 'tab-3' ? 'clicked' : 'unclicked'}`} onClick={this.handleClick}>Documentation</div>
