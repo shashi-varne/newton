@@ -22,7 +22,9 @@ const Header = ({ classes, title, count, total, current, goBack,
   className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
   style={style}
   >
-    <Toolbar style={{height:'80px', display:'flex', alignItems:'flex-start'}}>
+    <Toolbar
+    //  style={{height:'80px', display:'flex', alignItems:'flex-start'}}
+     >
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
          goBack}>
         {!disableBack && !headerData.hide_icon &&
@@ -36,7 +38,7 @@ const Header = ({ classes, title, count, total, current, goBack,
       </IconButton>
 
       <div className="toolbar-title">
-        <div className="progress-bar">
+        {/* <div className="progress-bar">
           <div className="head">
             {headerData.progressHeaderData.title}
           </div>
@@ -53,15 +55,15 @@ const Header = ({ classes, title, count, total, current, goBack,
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
 
 
-        {/* <div
+        <div
         style={style}
           className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
         >
           {title}
-        </div> */}
+        </div>
       </div>
     </Toolbar>
   </AppBar >

@@ -64,7 +64,7 @@ class Landing extends Component {
           <div className="loan-landing loan-instant-kyc-home">
             <img
               style={{ width: "100%", cursor: "pointer" }}
-              src={require(`assets/${this.state.productName}/card_entry.svg`)}
+              src={require(`assets/${this.state.productName}/idfc_card.svg`)}
               alt=""
             />
           </div>

@@ -27,7 +27,7 @@ class Calculator extends Component {
       steps: [
         {'title': 'Income details', 'status': 'completed'},
         {'title': 'BT transfer details', 'status': 'init'},
-        {'title': 'Loan offer', 'status': 'pending'}
+        // {'title': 'Loan offer', 'status': 'pending'}
       ]
     }
 
@@ -89,9 +89,9 @@ class Calculator extends Component {
         styleContainer={{
           backgroundColor: "var(--highlight)"
         }}
-        headerData={{
-          progressHeaderData: this.state.progressHeaderData
-        }}
+        // headerData={{
+        //   progressHeaderData: this.state.progressHeaderData
+        // }}
         noPadding={true}
       >
         <div className="idfc-loan-calculator">
