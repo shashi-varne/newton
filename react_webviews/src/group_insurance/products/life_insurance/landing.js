@@ -184,9 +184,14 @@ class FyntuneLanding extends Component {
 
         if (res.pfwresponse.status_code === 200) {
           var resultData = res.pfwresponse.result;
+
+          if(resultData.message && resultData.resume_present){
+            toast(resultData.message)
+            return;
+          }
+
           var lead_redirection_url = resultData.redirection_url;
           var fyntuneRefId = resultData.lead.fyntune_ref_id;
-
           var journeyURL = lead_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
           
           storageService().setObject('fyntune_ref_id', fyntuneRefId);
