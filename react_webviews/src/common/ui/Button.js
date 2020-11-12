@@ -9,7 +9,7 @@ import { getConfig } from 'utils/functions';
 
 class CustomButton extends Component {
   render() {
-    const props = this.props;        console.log(props)
+    const props = this.props;
     const { button: buttonClass, ...classes } = props.classes || {};
     if (props.twoButton && props.dualbuttonwithouticon) {
       return (
