@@ -115,31 +115,31 @@ export const hdfc = {
         nominee_opts: [
             {
                 'name': 'SIBLING',
-                'value': 'Sibling'
+                'value': 'SIBLING'
             },
             {
                 'name': 'CHILD',
-                'value': 'Child'
+                'value': 'CHILD'
             },
             {
                 'name': 'NIECE',
-                'value': 'Niece'
+                'value': 'NIECE'
             },
             {
                 'name': 'GRANDPARENT',
-                'value': 'Grand Parent'
+                'value': 'GRAND PARENT'
             },
             {
                 'name': 'GRANDCHILD',
-                'value': 'Grand Child'
+                'value': 'GRAND CHILD'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'Brother In Law'
+                'value': 'BROTHER IN LAW'
             },
             {
                 'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
+                'value': 'SISTER IN LAW'
             },
             {
                 'name': 'NEPHEW',
@@ -152,26 +152,39 @@ export const hdfc = {
             {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
+            },
+            {
+                'name' : 'OTHER RELATIVE',
+                'value': 'OTHER RELATIVE'
             }
         ]
     },
     select_ped_screen: {
         ped_list: [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' ,   "id": "hdfc_ergo_ped_tuberculosis",},
-            { 'name': 'Adenoid/ Adenoidectomy',  "id": "hdfc_ergo_ped_renal_kidneystone_urinary", },
-            { 'name': 'Appendix/Appendicitis/Appendix surgery' , "id" : "hdfc_ergo_ped_hypothyroid"},
+            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' ,   "id": "hdfc_ergo_ped_diarrhoea",},
+            { 'name': 'Adenoid/ Adenoidectomy',  "id": "hdfc_ergo_ped_adenoid_adenoidectomy", },
+            {'name' : 'Tuberculosis', 'id': 'hdfc_ergo_ped_tuberculosis'},
+            { 'name': 'Hypothyroid' , "id" : "hdfc_ergo_ped_hypothyroid"},
             { 'name': 'Asthma' ,  "id": "hdfc_ergo_ped_asthma" },
+            {'name':  'Renal Calculus/Kidney Stone/Urinary Calculus', "id":'hdfc_ergo_ped_renal_kidneystone_urinary'},
             { 'name': 'Cataract - 1 Eye/Both Eyes' ,    "id": "hdfc_ergo_ped_cataract" },
             { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', "id": "hdfc_ergo_ped_cholesterol", },
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' ,  "id": "hdfc_ergo_ped_tonsils_tonsillectomy", },
+            { 'name': 'Tonsil/Tonsillectomy' ,  "id": "hdfc_ergo_ped_tonsils_tonsillectomy", },
             { 'name': 'Diabetes/High Sugar' ,  "id": "hdfc_ergo_ped_diabetes",},
+            { 'name': 'Asthma', 'id': 'hdfc_ergo_ped_asthma'},
             { 'name': 'Fall/Accidental Injury' ,   "id": "hdfc_ergo_ped_fall_accidental_injury"},
-            { 'name': 'Fistula' ,  "id": "hdfc_ergo_ped_uterus_removal",},
-            { 'name': 'Fissure',  "id": "hdfc_ergo_ped_uterus_removal", },
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', "id": "hdfc_ergo_ped_fall_accidental_injury"  },
-            { 'name': 'Fibroid/Myomectomy',  "id": "hdfc_ergo_ped_fall_accidental_injury" },
+            { 'name': 'Fistula' ,  "id": "hdfc_ergo_ped_fistula",},
+            { 'name': 'Fissure',  "id": "hdfc_ergo_ped_fissure", },
+            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', "id": "hdfc_ergo_ped_fever"  },
+            { 'name': 'Fibroid/Myomectomy',  "id": "hdfc_ergo_ped_fibroid_myomectomy" },
             { 'name': 'Fracture with implant/rod/screw/plate' , "id": "hdfc_ergo__ped_fracture_with_implant",},
-            { 'name': 'Other' ,  "id": "hdfc_ergo_ped_other_diseases", }
+            { 'name': 'Fracture without implant/rod/screw/plate' , 'id':'hdfc_ergo_ped_fracture_without_implant'},
+            {'name':  'Hysterectomy/Uterus removal', 'id':'hdfc_ergo_ped_uterus_removal'},
+            {'name':  'Hypertension/Blood pressure', 'id' : 'hdfc_ergo_hypertension_blood_pressure'},
+            {'name': 'Diabetes/High Sugar', 'id': 'hdfc_ergo_ped_diabetes'},
+            {'name' : 'Cholecystectomy/Gall bladder surgery/removal', 'id':'hdfc_ergo_ped_cholesterol'},
+            {'name':'  Piles/Haemorrhoids', 'id' : 'hdfc_ergo_ped_appendix'},
+            { 'name': 'Any other disease' ,  "id": "hdfc_ergo_ped_other_diseases", }
         ]
     },
     payment_screen: {
