@@ -67,8 +67,6 @@ class CustomButton extends Component {
             variant="raised"
             size="large"
             color="secondary"
-            style={{ borderColor: getConfig().secondary, 
-              flex: !getConfig().isMobileDevice ? 'inherit': 2}}
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
           >

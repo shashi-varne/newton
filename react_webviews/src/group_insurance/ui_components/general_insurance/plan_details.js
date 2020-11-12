@@ -459,7 +459,7 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-          if(this.props.parent.state.product_key == 'CORONA'){
+          if(this.props.parent.state.product_key == 'CORONA' && !this.state.lead_id){
              this.navigate('declaration');
           }else {
             this.navigate('form', '', final_data);

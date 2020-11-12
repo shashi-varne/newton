@@ -31,9 +31,9 @@ class NotCoverpage extends Component {
       checked: false,
       title : "What's not covered",
       plan_data: {},
+      productName: getConfig().productName,
       recommendedIndex: 0,
       product_key: 'CORONA',
-      type: getConfig().productName,
       inc_outside_india: getConfig().productName !== 'fisdom' ? inc_outside_india_myway : inc_outside_india_fisdom,
       inc_infected : getConfig().productName !== 'fisdom' ? inc_infected_myway : inc_infected_fisdom,
       icn_travel_covid: getConfig().productName !== 'fisdom' ? icn_travel_covid_myway : icn_travel_covid_fisdom,
@@ -66,7 +66,8 @@ class NotCoverpage extends Component {
 
   let plan_data = [
     {
-      icon : this.state.ic_c_e3,
+      // icon : this.state.ic_c_e3,
+      icon :  require(`../../../assets/icn_infection_covid_${this.state.productName}.svg`),
       text : "Individual having any underlying health conditions/Pre-existing disease",
       },
       {
@@ -74,7 +75,7 @@ class NotCoverpage extends Component {
         text : "Age group more than 65 years"
       },
       {
-        icon : this.state.ic_c_e1,
+        icon : require(`../../../assets/ic_c_e1_${this.state.productName}.svg`),
         text : "Testing done in centers other than the authorized Indian Council of Medical Research centers"
       },
       {
