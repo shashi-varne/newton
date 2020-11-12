@@ -23,7 +23,6 @@ class FyntuneLanding extends Component {
     };
   }
 
-
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -33,6 +32,7 @@ class FyntuneLanding extends Component {
 
   async componentDidMount(){
 
+    nativeCallback({ action: 'take_control_reset' });
     this.setState({
       show_loader: true
     })
@@ -186,7 +186,12 @@ class FyntuneLanding extends Component {
           var resultData = res.pfwresponse.result;
 
           if(resultData.message && resultData.resume_present){
+            
             toast(resultData.message)
+            this.setState({
+              show_loader: false
+            })
+            
             return;
           }
 

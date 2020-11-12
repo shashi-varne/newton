@@ -4,6 +4,7 @@ import { getConfig } from "utils/functions";
 import toast from "../../../common/ui/Toast";
 import { storageService} from '../../../utils/validators';
 import Api from "utils/api";
+import { nativeCallback } from "utils/native_callback";
 
 class ResumeIntermediatePage extends Component {
 
@@ -24,6 +25,7 @@ class ResumeIntermediatePage extends Component {
 
 
     async componentDidMount(){
+        nativeCallback({ action: 'take_control_reset' });
         this.setState({
             show_loader: true
         })
