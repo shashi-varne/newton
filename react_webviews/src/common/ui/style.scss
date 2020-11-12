@@ -700,7 +700,7 @@ body[data-device="mobile"] {
     display: flex;
     justify-content: space-between;
     width: -webkit-fill-available;
-    margin: 30px 0 0 0;
+    margin: 40px 0 0 0;
 
     .mid-right {
       width: inherit;
@@ -710,19 +710,19 @@ body[data-device="mobile"] {
       margin: 0 0 0 20px;
     }
     .mid-left-skelton {
-      width: 50px !important;
-      height: 50px !important;
+      width: 54px !important;
+      height: 54px !important;
       border-radius: 6px;
     }
     .mid-right-skelton1 {
         width: 75% !important;
-        height: 1.8em !important;
+        height: 25px !important;
         margin-top: 0px !important;
         border-radius: 6px;
     }
     .mid-right-skelton2 {
       width: 100% !important;
-      height: 1.3em !important;
+      height: 18px !important;
       margin-top: 0px !important;
       border-radius: 6px;
     }
@@ -733,7 +733,7 @@ body[data-device="mobile"] {
     display: flex;
     justify-content: space-between;
     width: -webkit-fill-available;
-    margin: 30px 0 0 0;
+    margin: 40px 0 0 0;
     flex-direction: column;
 
     .mid-right {
@@ -750,13 +750,13 @@ body[data-device="mobile"] {
     }
     .mid-right-skelton1 {
         width: 100% !important;
-        height: 1.8em !important;
+        height: 18px !important;
         margin-top: 0px !important;
         border-radius: 6px;
     }
     .mid-right-skelton2 {
       width: 75% !important;
-      height: 1.3em !important;
+      height: 18px !important;
       margin-top: 10px !important;
       border-radius: 6px;
     }
