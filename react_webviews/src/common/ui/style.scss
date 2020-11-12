@@ -687,9 +687,13 @@ body[data-device="mobile"] {
 
 .generic-skelton {
   padding: 20px;
-  margin: 40px 0 0 0;
+  margin: 20px 0 0 0;
   background: #fff;
   height: 100%;
+
+  .single-full-image-skelton {
+    border-radius: 6px;
+  }
 
   .image-and-lines {
 

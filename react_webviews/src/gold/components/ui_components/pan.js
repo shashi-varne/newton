@@ -60,7 +60,7 @@ class GoldPanDataClass extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_loader: true,
+            skelton: true,
             pan_number: "",
             pan_number_error: '',
             openConfirmDialog: false,
@@ -123,7 +123,7 @@ class GoldPanDataClass extends Component {
             const res = await Api.get('/api/gold/user/account/' + this.state.provider);
 
             this.setState({
-                show_loader: false
+                skelton: false
             });
             if (res.pfwresponse.status_code === 200) {
                 let result = res.pfwresponse.result;
@@ -143,7 +143,7 @@ class GoldPanDataClass extends Component {
             }
         } catch (err) {
             this.setState({
-                show_loader: false
+                skelton: false
             });
             toast('Something went wrong');
         }

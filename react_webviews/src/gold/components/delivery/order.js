@@ -12,7 +12,7 @@ class DeliveryOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       openResponseDialog: false,
       disabled: false,
       disabledText: 'MAKE PAYMENT',
@@ -48,7 +48,7 @@ class DeliveryOrder extends Component {
       const res = await Api.post('/api/gold/user/redeem/verify/' + this.state.provider, options);
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
         this.setState({
-          show_loader: false
+          skelton: false
         })
         let redeem_body = res.pfwresponse.result.redeem_body || {};
         orderData.transact_id = redeem_body.transact_id;
@@ -63,7 +63,7 @@ class DeliveryOrder extends Component {
 
         let disabledText = res.pfwresponse.result.message || res.pfwresponse.result.error || 'Insufficient Balance';
         this.setState({
-          show_loader: false,
+          skelton: false,
           disabled: true,
           disabledText: disabledText
         });
@@ -73,7 +73,7 @@ class DeliveryOrder extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }

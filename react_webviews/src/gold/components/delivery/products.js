@@ -20,7 +20,7 @@ class GoldDeliveryProducts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       gold_products: [],
       gold_providers: gold_providers,
       orderType: 'delivery',
@@ -50,7 +50,7 @@ class GoldDeliveryProducts extends Component {
         });
       } else {
         this.setState({
-          // show_loader: false,
+          // skelton: false,
           error: true,
           errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
             'Something went wrong'
@@ -62,12 +62,12 @@ class GoldDeliveryProducts extends Component {
       const res4 = await Api.get('/api/gold/delivery/products/' + this.state.provider);
       if (res4.pfwresponse.status_code === 200) {
         this.setState({
-          show_loader: false,
+          skelton: false,
           gold_products: res4.pfwresponse.result.delivery_products
         });
       } else {
         this.setState({
-          // show_loader: false,
+          // skelton: false,
           error: true,
           errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
             'Something went wrong'
@@ -88,7 +88,7 @@ class GoldDeliveryProducts extends Component {
           });
         } else {
           this.setState({
-            // show_loader: false,
+            // skelton: false,
             error: true,
             errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
               'Something went wrong'
@@ -100,7 +100,7 @@ class GoldDeliveryProducts extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false,
+        skelton: false,
         error: true,
         errorMessage: 'Something went wrong'
       });
@@ -108,7 +108,7 @@ class GoldDeliveryProducts extends Component {
     }
 
     this.setState({
-      show_loader: false
+      skelton: false
     });
   }
 

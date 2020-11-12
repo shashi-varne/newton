@@ -19,7 +19,7 @@ class SelectAddressDelivery extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       provider: this.props.match.params.provider,
       openDialogDelete: false,
       openConfirmDialog: false,
@@ -57,7 +57,7 @@ class SelectAddressDelivery extends Component {
     })
      Api.get('/api/gold/address').then(res => {
 
-      this.setState({ show_loader: false });
+      this.setState({ skelton: false, show_loader: false });
 
       if (res.pfwresponse.status_code === 200) {
 
@@ -69,7 +69,7 @@ class SelectAddressDelivery extends Component {
           'Something went wrong');
       }
     }).catch(error => {
-      this.setState({ show_loader: false });
+      this.setState({ skelton: false, show_loader: false });
     });
   }
 

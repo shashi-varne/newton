@@ -17,7 +17,7 @@ class DeliverySelectedProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       product:storageService().getObject('deliveryData') || {},
       openResponseDialog: false,
       disabledText: 'PROCEED TO ADDRESS SELECTION',
@@ -73,7 +73,7 @@ class DeliverySelectedProduct extends Component {
           disabled = false;
         }
         this.setState({
-          show_loader: false,
+          skelton: false,
           maxWeight: maxWeight,
           disabled:disabled,
           disabledText: disabledText
@@ -88,13 +88,13 @@ class DeliverySelectedProduct extends Component {
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
 
     this.setState({
-      show_loader: false
+      skelton: false
     });
   }
 
@@ -197,7 +197,7 @@ class DeliverySelectedProduct extends Component {
         }
       } catch (err) {
         this.setState({
-          show_loader: false
+          pincodeLoading: false
         });
         toast('Something went wrong');
       }

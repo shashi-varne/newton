@@ -22,7 +22,7 @@ class SellAddEditBank extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       openConfirmDialog: false,
       timeAvailable: "",
       ifsc_code: '',
@@ -91,7 +91,7 @@ class SellAddEditBank extends Component {
 
       const res2 = await Api.get('/api/gold/user/account/' + this.state.provider);
       this.setState({
-        show_loader: false
+        skelton: false
       });
 
       if (res2.pfwresponse.status_code === 200) {
@@ -114,7 +114,7 @@ class SellAddEditBank extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }

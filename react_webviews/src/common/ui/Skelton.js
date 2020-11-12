@@ -28,6 +28,7 @@ class UiSkeltonClass extends Component {
             <div className="single-full-image">
                 <ReactPlaceholder type='rect'
                     showLoadingAnimation={true}
+                    className="single-full-image-skelton"
                     ready={false} color={highlight_color} style={{ width: '100%', height: 150 }}>
                 </ReactPlaceholder>
             </div>

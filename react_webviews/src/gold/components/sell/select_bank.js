@@ -18,7 +18,7 @@ class SellSelectBank extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       selectedIndex: -1,
       provider: this.props.match.params.provider,
       openConfirmDialog: false,
@@ -62,7 +62,7 @@ class SellSelectBank extends Component {
   getBankData = async () => {
     Api.get('/api/gold/user/bank/details').then(res => {
 
-      this.setState({ show_loader: false });
+      this.setState({ show_loader: false, skelton: false });
 
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
@@ -75,7 +75,7 @@ class SellSelectBank extends Component {
           'Something went wrong');
       }
     }).catch(error => {
-      this.setState({ show_loader: false });
+      this.setState({ show_loader: false, skelton: false });
     });
 
   }
