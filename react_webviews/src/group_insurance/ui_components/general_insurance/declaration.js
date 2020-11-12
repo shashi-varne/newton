@@ -80,11 +80,11 @@ class DeclarationClass extends Component {
         handleClickOne={() => this.handleClickback()}
         handleClickTwo={() => this.handleClick()}
       >
-        <div style={{fontFamily: 'Source Sans Pro , sans-serif' }}  >
+        <div style={{fontFamily: 'Source Sans Pro , sans-serif' , fontWeight : 'light'}}  >
       <h4>I declare that I or any other member proposed to be insured under this policy don’t have or had;</h4>
         <p>1. Any respiratory-related symptoms like severe cough, respiratory diseases, breathlessness in the past 4 weeks</p> 
         <p>2. I/We have not traveled to or from the following places since 31 st December 2019</p> 
-        <ul  style={{  padding: "15px", fontWeight: "normal"}} >
+        <ul  style={{  padding: "15px"}} >
         <li>China</li>
         <li>Japan</li>
         <li>Singapore</li>
@@ -97,11 +97,10 @@ class DeclarationClass extends Component {
         <li>Italy</li>
         <li>Iran</li>
         </ul>
-        </div>
-
+      
         <p>I / We are neither undergoing nor awaiting any treatment medical or surgical nor attending any follow up for any suspected COVID 19 infection or recommended for Quarantine in any medical facility including Government or Military Hospital or Isolation ward.</p>
         <p>I hereby declare and warrant on my behalf and on behalf of all persons proposed to be insured that the above statements are true and complete in all respects. I agree that this declaration shall be the basis of the decision by Bharti AXA General Insurance Co Ltd. to cover or not cover us under insurance.</p>
-
+        </div>
       </Container>
     );
   }
