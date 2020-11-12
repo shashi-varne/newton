@@ -6,20 +6,30 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Attention from "../../../common/ui/Attention";
 // import { formatDate, dobFormatTest, isValidDate } from "utils/validators";
+import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
-import { getBase64 } from "utils/functions";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import toast from "../../../common/ui/Toast";
-// import "../../../utils/native_listner_otm";
-import $ from 'jquery';
-import right_arrow from "assets/right_arrow.svg";
+import $ from "jquery";
+import Button from "material-ui/Button";
+import { withStyles } from "material-ui/styles";
+
+const styles = (theme) => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: "none",
+  },
+});
 
 class UploadBankStatements extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
+      fileUploaded: false,
     };
 
     this.initialize = initialize.bind(this);
@@ -28,10 +38,6 @@ class UploadBankStatements extends Component {
 
   componentWillMount() {
     this.initialize();
-  }
-
-  componentDidMount() {
-    //
   }
 
   onload = () => {};
@@ -55,16 +61,15 @@ class UploadBankStatements extends Component {
 
   showLoaderNative() {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
   }
-
 
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
-        type: 'doc',
+        type: "doc",
         doc_type: doc_type,
         doc_name: doc_name,
         // callbacks from native
@@ -74,33 +79,23 @@ class UploadBankStatements extends Component {
               docType: this.doc_type,
               docName: this.docName,
               doc_side: this.doc_side,
-              show_loader: true
-            })
+              show_loader: true,
+            });
             switch (file.type) {
-              case 'application/pdf':
+              case "application/pdf":
                 that.mergeDocs(file);
                 break;
               default:
-                alert('Please select image file');
+                alert("Please select image file");
                 that.setState({
                   docType: this.doc_type,
-                  show_loader: false
-                })
+                  show_loader: false,
+                });
             }
           } catch (e) {
-            // 
+            //
           }
-        }
-      });
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
-          that.setState({
-            show_loader: true
-          })
-          that.showLoaderNative();
-        }
+        },
       });
     }
   }
@@ -111,47 +106,44 @@ class UploadBankStatements extends Component {
 
   startUpload(method_name, doc_type, doc_name) {
     this.setState({
-      type: method_name
-    })
+      type: method_name,
+    });
 
     this.openFileExplorer();
-    // this.native_call_handler(method_name, doc_type, doc_name);
   }
 
-  getPhoto = (e) => {
-
+  getPdf = (e) => {
     e.preventDefault();
 
     let file = e.target.files[0];
 
-    let acceptedType = ['application/pdf'];
+    let acceptedType = ["application/pdf"];
 
     if (acceptedType.indexOf(file.type) === -1) {
-      toast('Please select pdf file only');
+      toast("Please select pdf file only");
       return;
     }
 
-    let that = this;
+    // let that = this;
     file.doc_type = file.type;
     this.setState({
-      imageBaseFile: file
-    })
-    getBase64(file, function (img) {
-      that.setState({
-        imageBaseFileShow: img,
-        fileUploaded: true
-      })
+      pdfFile: file,
+      fileUploaded: true,
     });
-
-  }
-
-  uploadFile = () => {
-    // this.native_call_handler("open_file", "bank_statement");
   };
 
-  handleChange = () => {};
+  uploadFile = () => {};
+
+  handleChange = (e) => {
+    console.log(e.target.value);
+    this.setState({
+      password: e.target.value,
+    });
+  };
 
   render() {
+    let { fileUploaded, pdfFile } = this.state;
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -208,9 +200,59 @@ class UploadBankStatements extends Component {
               />
             </div>
           </FormControl>
-          <div className="pdf-upload" onClick={() => this.startUpload('upload_doc', 'pan', 'pan.pdf')}>
+
+          {fileUploaded && (
+            <div className="bank-statement" style={{ marginBottom: "70px" }}>
+              <div className="title">1. Bank statement</div>
+              <div className="sub-title">
+                <img
+                  style={{ margin: "0 5px 0 12px" }}
+                  src={require("assets/tool.svg")}
+                  alt=""
+                />
+                {pdfFile && pdfFile.name}
+                <span className="bytes">
+                  {bytesToSize(
+                    this.state.pdfFile ? this.state.pdfFile.size : ""
+                  )}
+                </span>
+              </div>
+
+              <div className="InputField">
+                <Input
+                  // error={!!this.state.end_date_error}
+                  // helperText="This date must be 3 days before the current date"
+                  type="password"
+                  width="40"
+                  label="Enter password (if any)"
+                  class="password"
+                  id="password"
+                  name="password"
+                  placeholder="XXXXXXX"
+                  value={this.state.password || ""}
+                  onChange={this.handleChange}
+                />
+              </div>
+              <Button variant="raised" size="large" color="secondary" autoFocus>
+                EDIT
+              </Button>
+              <Button variant="raised" size="large" color="secondary" autoFocus>
+                DELETE
+              </Button>
+            </div>
+          )}
+
+          <div
+            className="pdf-upload"
+            onClick={() => this.startUpload("upload_doc", "pan", "pan.pdf")}
+          >
             <span className="plus-sign">
-            <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={this.getPdf}
+                id="myFile"
+              />
               <SVG
                 preProcessor={(code) =>
                   code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
@@ -218,7 +260,7 @@ class UploadBankStatements extends Component {
                 src={plus}
               />
             </span>
-            UPLOAD FILE
+            {fileUploaded ? "ADD FILE" : "UPLOAD FILE"}
           </div>
         </div>
       </Container>
@@ -226,4 +268,4 @@ class UploadBankStatements extends Component {
   }
 }
 
-export default UploadBankStatements;
+export default withStyles(styles)(UploadBankStatements);

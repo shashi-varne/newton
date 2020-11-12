@@ -267,4 +267,28 @@
       padding: 6px 6px;
     }
   }
+
+  .bank-statement {
+    font-weight: 400;
+    color: #0a1d32;
+
+    .title {
+      font-size: 13px;
+    }
+
+    .sub-title {
+      font-size: 12px;
+      margin: 16px 0 20px 0;
+    }
+
+    img {
+      margin: 0 5px 0 12px;
+    }
+
+    .bytes {
+      margin-left: 20px;
+      color: #767E86;
+      text-transform: lowercase;
+    }
+  }
 }
