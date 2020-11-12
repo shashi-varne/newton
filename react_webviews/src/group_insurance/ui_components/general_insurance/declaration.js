@@ -23,7 +23,7 @@ class DeclarationClass extends Component {
   }
 
   handleClick = () => {
-    this.navigate('notcover')
+    this.navigate('form')
   }
  
 

@@ -17,9 +17,19 @@ import ic_c_e2_fisdom from 'assets/icn_old_age_covid_fisdom.svg';
 import ic_c_e3_fisdom from 'assets/icn_infection_covid_fisdom.svg';
 import ic_c_e4_fisdom from 'assets/icn_outside_india_fisdom.svg';
 import ic_c_e5_fisdom from 'assets/icn_travel_covid_fisdom.svg';
+import icn_ongoingcovid_fisdom from '../../../assets/fisdom/icn_ongoingcovid_fisdom.svg';
+import bed_corona_fisdom from '../../../assets/fisdom/bed_corona_fisdom.svg';
+import people_sitting_fisdom from '../../../assets/fisdom/people_sitting_fisdom.svg';
+import singlebed_fisdom from '../../../assets/fisdom/singlebed_fisdom.svg';
+import inc_outside_india_fisdom from '../../../assets/fisdom/inc_outside_india_fisdom.svg';
+import bacteria_fisdom from '../../../assets/fisdom/bacteria_fisdom.svg';
+import inc_infected_fisdom from '../../../assets/fisdom/inc_infected_fisdom.svg';
 
 
-
+import singlebed_myway from '../../../assets/myway/singlebed_myway.svg'
+import bed_corona_myway from '../../../assets/myway/bed_corona_myway.svg'
+import people_sitting_myway  from '../../../assets/myway/people_sitting_myway.svg'
+import icn_ongoingcovid_myway from '../../../assets/myway/icn_ongoingcovid_myway.svg'
 import ic_c_b1_myway from 'assets/ic_covid_b_1_myway.svg';
 import ic_c_b2_myway from 'assets/ic_covid_b_2_myway.svg';
 import ic_c_b3_myway from 'assets/ic_covid_b_3_myway.svg';
@@ -34,6 +44,9 @@ import ic_c_e2_myway from 'assets/icn_old_age_covid_myway.svg';
 import ic_c_e3_myway from 'assets/icn_infection_covid_myway.svg';
 import ic_c_e4_myway from 'assets/icn_outside_india_myway.svg';
 import ic_c_e5_myway from 'assets/icn_travel_covid_myway.svg';
+import inc_outside_india_myway from '../../../assets/myway/inc_outside_india_myway.svg';
+import bacteria_myway from '../../../assets/myway/bacteria_myway.svg'
+import inc_infected_myway from '../../../assets/myway/inc_infected_myway.svg'
 
 
 class CoronaPlanDetails extends Component {
@@ -47,8 +60,7 @@ class CoronaPlanDetails extends Component {
       recommendedIndex: 0,
       product_key: 'CORONA',
       type: getConfig().productName,
-      ic_c_b1 : require(`assets/${this.state.productName}/ic_locker.svg`),
-      // ic_c_b1: getConfig().productName !== 'fisdom' ? ic_c_b1_myway : ic_c_b1_fisdom,
+      ic_c_b1: getConfig().productName !== 'fisdom' ? ic_c_b1_myway : ic_c_b1_fisdom,
       ic_c_b2: getConfig().productName !== 'fisdom' ? ic_c_b2_myway : ic_c_b2_fisdom,
       ic_c_b3: getConfig().productName !== 'fisdom' ? ic_c_b3_myway : ic_c_b3_fisdom,
       ic_c_c1: getConfig().productName !== 'fisdom' ? ic_c_c1_myway : ic_c_c1_fisdom,
@@ -61,7 +73,15 @@ class CoronaPlanDetails extends Component {
       ic_c_e2: getConfig().productName !== 'fisdom' ? ic_c_e2_myway : ic_c_e2_fisdom,
       ic_c_e3: getConfig().productName !== 'fisdom' ? ic_c_e3_myway : ic_c_e3_fisdom,
       ic_c_e4: getConfig().productName !== 'fisdom' ? ic_c_e4_myway : ic_c_e4_fisdom,
-      ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom
+      ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom,
+      icn_ongoingcovid_fisdom: getConfig().productName !== 'fisdom' ? icn_ongoingcovid_myway : icn_ongoingcovid_fisdom,
+      bed_corona_fisdom: getConfig().productName !== 'fisdom' ? bed_corona_myway : bed_corona_fisdom,
+      singlebed: getConfig().productName !== 'fisdom' ? singlebed_myway : singlebed_fisdom,
+      people_sitting: getConfig().productName !== 'fisdom' ? people_sitting_myway : people_sitting_fisdom,
+      inc_outside_india: getConfig().productName !== 'fisdom' ? inc_outside_india_myway : inc_outside_india_fisdom,
+      bacteria: getConfig().productName !== 'fisdom' ? bacteria_myway : bacteria_fisdom,
+      inc_infected : getConfig().productName !== 'fisdom' ? inc_infected_myway : inc_infected_fisdom,
+
     }
   }
 
@@ -106,40 +126,53 @@ class CoronaPlanDetails extends Component {
 
     var product_diseases_covered = [
       {
-        'icon': this.state.ic_c_d2,
-        'header': 'All expenses',
-        'text': 'This plan covers all the kinds of expenses incurred due to COVID-19 infection',
-        'text2': 'Insured will get 100% of the sum assured, if tested positive for COVID-19 specified in the virology report issued by authorised centres of ICMR - National Institute of Virology, Pune'
+        "icon" : this.state.singlebed,
+        "text" : "inpatient Hospitalization"
       },
       {
-        'icon': this.state.ic_c_d1,
-        'header': 'Quarantine period',
-        'text': 'Insured person will get 50% of the sum assured, if quarantined (for consecutive 14 days) in any government  approved quarantine hospitals or centres'
+      "icon" : this.state.bed_corona_fisdom,
+      "text" : "Pre-Post Hospitalization (30/60 Days)",
+      },
+      {
+        "icon" : this.state.icn_ongoingcovid_fisdom,
+        "text" : "Daycare procedures Covers"
+      },
+      {
+        "icon" : this.state.people_sitting,
+        "text" : "Tele/virtual consultation till the first 90 days"
       }
     ]
 
     var product_diseases_not_covered = [
       {
-        'icon': this.state.ic_c_e1,
-        'text': 'Testing done in centres other than the authorized Indian Council of Medical Research centres'
-      },
-      {
-        'icon': this.state.ic_c_e2,
-        'text': 'Age group more than 65 yrs'
-      },
-      {
-        'icon': this.state.ic_c_e3,
-        'text': 'Any signs or symptoms of the infection present at the time of purchasing the policy'
-      },
-      {
-        'icon': this.state.ic_c_d1,
-        'text': 'While buying policy, person should not be suffering from COVID-19 infection or recommended for quarantine'
-      },
-      {
-        'icon': this.state.ic_c_e4,
-        'text': 'Manifestation of the coronavirus infection  taken place while the Insured is outside India'
-      },
-      {
+        icon :  this.state.ic_c_e3,
+        text : "Individual having any underlying health conditions/Pre-existing disease",
+        },
+        {
+          icon : this.state.ic_c_e2,
+          text : "Age group more than 65 years"
+        },
+        {
+          icon : this.state.ic_c_e1,
+          text : "Testing done in centers other than the authorized Indian Council of Medical Research centers"
+        },
+        {
+          icon : this.state.ic_c_d1,
+          text : "Any signs or symptoms of the infection present at the time of purchasing the policy"
+        },
+        {
+          icon : this.state.inc_infected,
+          text : "The person suffering from the infection or taking treatment or recommended for quarantine at the time of purchasing the policy"
+        },
+        {
+          icon :  this.state.bacteria,
+          text : "Manifestation of the Coronavirus Infection taken place while the Insured is outside India"
+        }, 
+        {
+          icon : this.state.inc_outside_india,
+          text : "Treatment taken outside India"
+        },
+         {
         'icon': this.state.ic_c_e5,
         'text': 'If the insured has travelled to or from the following places since 31st December 2019',
         'list': ['China', 'Japan', 'Singapore', 'Hong Kong', 'South Korea', 'Thailand', 'Malaysia', 'Macau', 'Taiwan', 'Italy', 'Iran']

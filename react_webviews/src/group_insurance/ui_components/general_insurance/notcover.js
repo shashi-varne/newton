@@ -18,13 +18,13 @@ class RenderDiseasesClass extends Component {
   }
 
   componentWillMount() {
+
     let { params } = this.props.location || {};
     this.setState({
-    diseasesData: params ? params.diseasesData : {
-      product_diseases_covered: this.props.parent.state.plan_data
-    },
-    title : this.props.parent.state.title
-  })
+      diseasesData: params ? params.diseasesData : {
+        product_diseases_covered: []
+      },
+    })
   }
 
   renderDiseases = (props, index) => {
@@ -35,8 +35,7 @@ class RenderDiseasesClass extends Component {
           {props.header &&
             <div className="cover-details-header">{props.header}</div>
           }
-          <div className="cover-details-text" style={{marginTop : "10px"}}> {props.text} </div>
-
+          <div className="cover-details-text">{props.text}</div>
           {props.list &&
             <ul style={{ color: '#767e86', padding: '15px', margin: '0' }}>
               {props.list.map((list, index) => <li key={index}>{list}</li>)}
@@ -48,15 +47,10 @@ class RenderDiseasesClass extends Component {
   }
 
   navigate = (pathname) => {
-    this.props.parent.props.history.push({
+    this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
     });
-  }
-
-
-  handleClick = () => {
-    this.navigate('cover')
   }
 
   async handleClickCurrent() {
@@ -69,7 +63,7 @@ class RenderDiseasesClass extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": this.state.diseasesData.key || 'notcover'
+        "screen_name": this.state.diseasesData.key,
       }
     };
 
@@ -89,8 +83,7 @@ class RenderDiseasesClass extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         handleClick={() => this.handleClickCurrent()}
-        handleClick={() => this.handleClick()}
-        title={this.state.title}
+        title={this.state.diseasesData.dieseasesTitle}
         classOverRideContainer="accident-plan">
 
         <div style={{ padding: '0 15px' }}>
