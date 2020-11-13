@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
 import { getConfig } from 'utils/functions';
-
+import { insuranceProductTitleMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 
 class DeclarationClass extends Component {
@@ -13,6 +13,8 @@ class DeclarationClass extends Component {
         checked: false,
         parent: this.props.parent,
         show_loader: true,
+        premium_details : {},
+        productTitle : {}
     };
     
   }
@@ -23,9 +25,30 @@ class DeclarationClass extends Component {
   }
 
   handleClick = () => {
-    this.navigate('form')
+
+  
+    var final_data = {
+      "product_plan": this.props.parent.props.location.params.premium_details.product_plan,
+      "premium": this.props.parent.props.location.params.premium_details.premium,
+      "cover_amount": this.props.parent.props.location.params.premium_details.cover_amount,
+      "tax_amount": this.props.parent.props.location.params.premium_details.tax_amount,
+      "productTitle":this.props.parent.props.location.params.premium_details.productTitle
+    } 
+
+
+    this.navigate('form', '' ,final_data )
   }
  
+
+  componentWillMount() {
+    let productTitle = insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : ''];
+ 
+
+    this.setState({
+    productTitle: productTitle,
+  })
+
+  }
 
 
   sendEvents(user_action, insurance_type) {
@@ -46,10 +69,14 @@ class DeclarationClass extends Component {
   }
 
 
-  navigate = (pathname) => {
+  navigate = (pathname, search, premium_details) => {
+
     this.props.parent.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams
+      search: search ? search : getConfig().searchParams,
+      params: {
+        premium_details: premium_details || {}
+      }
     });
   }
 

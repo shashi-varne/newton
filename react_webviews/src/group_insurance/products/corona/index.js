@@ -130,7 +130,7 @@ class CoronaPlanDetails extends Component {
     var product_diseases_covered = [
       {
         "icon" : this.state.singlebed,
-        "text" : "inpatient Hospitalization"
+        "text" : "Inpatient Hospitalization"
       },
       {
       "icon" : this.state.bed_corona_fisdom,
@@ -231,7 +231,8 @@ class CoronaPlanDetails extends Component {
           "waiting_period": waiting_period,
           "premium": "1500",
           "justcost": "1500",
-          "tax_amount": "229"
+          "tax_amount": "229",
+          "sum_assured" :  '50000'
         },
         {
           "sum_assured_text": '25,000',
@@ -242,7 +243,8 @@ class CoronaPlanDetails extends Component {
           "waiting_period": waiting_period,
           "premium": "750",
           "justcost": "750",
-          "tax_amount": "114"
+          "tax_amount": "114",
+          "sum_assured" :  '25000'
         }
       ]
     }

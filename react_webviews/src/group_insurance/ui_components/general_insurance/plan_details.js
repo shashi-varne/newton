@@ -359,7 +359,6 @@ class PlanDetailsClass extends Component {
             {!props.cover_text && this.props.parent.state.product_key !== 'CORONA' && <span>Cover amount</span>}
             {!props.cover_text && this.props.parent.state.product_key === 'CORONA' && <span>Sum assured</span>}
             {props.cover_text && <span>{props.cover_text}</span>}
-            {props.sum_assured_text && <span><br></br>₹{props.sum_assured_text}</span>}
           </div>}
 
         {props.product_plan_title && <div className="accident-plan-item1">
@@ -417,17 +416,17 @@ class PlanDetailsClass extends Component {
     });
   }
 
-  async handleClickCurrent() {
+  async handleClickCurrent() {  
     this.sendEvents('next');
+
     var final_data = {
       "product_plan": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_plan,
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
       "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount,
       "productTitle": this.state.productTitle
-    }
+    } 
     final_data.product_name = this.props.parent.state.product_key;
-
     let group_insurance_plan_final_data = this.state.group_insurance_plan_final_data || {};
     group_insurance_plan_final_data[final_data.product_name] = final_data;
     window.sessionStorage.setItem('group_insurance_plan_final_data',
@@ -460,8 +459,8 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-          if(this.props.parent.state.product_key == 'CORONA' && !this.state.lead_id){
-             this.navigate('declaration');
+          if(this.props.parent.state.product_key === 'CORONA' && !this.state.lead_id){
+             this.navigate('declaration', '', final_data);
           }else {
             this.navigate('form', '', final_data);
       }
