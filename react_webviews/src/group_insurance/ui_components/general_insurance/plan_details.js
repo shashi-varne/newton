@@ -578,7 +578,8 @@ class PlanDetailsClass extends Component {
               <h1 className="accident-plan-title">{this.state.productTitle}</h1>
             }
             {this.props.parent.state.product_key === 'CORONA' &&
-              <h1 className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line}</h1>
+              <h1  style={{fontWeight:'bold'}} className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line} 
+              <span style={{fontWeight:'400'}}>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line2}</span> </h1>
             }
             <img src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
           </div>
