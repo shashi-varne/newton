@@ -90,7 +90,7 @@ export async function initialize() {
             if (res.pfwresponse.status_code === 200) {
 
                 lead = resultData.quote;
-                lead.base_premium = lead.base_premium_showable || lead.premium; // incluesive of addons
+                lead.base_premium = lead.base_premium;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 this.setState({
                     lead: resultData.quote || {},
