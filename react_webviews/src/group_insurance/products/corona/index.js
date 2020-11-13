@@ -17,6 +17,8 @@ import ic_c_e2_fisdom from 'assets/icn_old_age_covid_fisdom.svg';
 import ic_c_e3_fisdom from 'assets/icn_infection_covid_fisdom.svg';
 import ic_c_e4_fisdom from 'assets/icn_outside_india_fisdom.svg';
 import ic_c_e5_fisdom from 'assets/icn_travel_covid_fisdom.svg';
+import icn_b3_fisdom from '../../../assets/fisdom/icn_b3_fisdom.svg';
+import icn_awaiting_fisdom from '../../../assets/fisdom/icn_awaiting_period_fisdom.svg'
 import icn_ongoingcovid_fisdom from '../../../assets/fisdom/icn_ongoingcovid_fisdom.svg';
 import bed_corona_fisdom from '../../../assets/fisdom/bed_corona_fisdom.svg';
 import people_sitting_fisdom from '../../../assets/fisdom/people_sitting_fisdom.svg';
@@ -44,6 +46,8 @@ import ic_c_e2_myway from 'assets/icn_old_age_covid_myway.svg';
 import ic_c_e3_myway from 'assets/icn_infection_covid_myway.svg';
 import ic_c_e4_myway from 'assets/icn_outside_india_myway.svg';
 import ic_c_e5_myway from 'assets/icn_travel_covid_myway.svg';
+import icn_awaiting_myway from '../../../assets/myway/icn_awaiting_period_myway.svg'
+import icn_b3_m_myway from '../../../assets/myway/icn_b3_m_myway.svg'
 import inc_outside_india_myway from '../../../assets/myway/inc_outside_india_myway.svg';
 import bacteria_myway from '../../../assets/myway/bacteria_myway.svg'
 import inc_infected_myway from '../../../assets/myway/inc_infected_myway.svg'
@@ -74,6 +78,7 @@ class CoronaPlanDetails extends Component {
       ic_c_e3: getConfig().productName !== 'fisdom' ? ic_c_e3_myway : ic_c_e3_fisdom,
       ic_c_e4: getConfig().productName !== 'fisdom' ? ic_c_e4_myway : ic_c_e4_fisdom,
       ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom,
+      icn_b3_m: getConfig().productName !== 'fisdom' ? icn_b3_m_myway : icn_b3_fisdom,
       icn_ongoingcovid_fisdom: getConfig().productName !== 'fisdom' ? icn_ongoingcovid_myway : icn_ongoingcovid_fisdom,
       bed_corona_fisdom: getConfig().productName !== 'fisdom' ? bed_corona_myway : bed_corona_fisdom,
       singlebed: getConfig().productName !== 'fisdom' ? singlebed_myway : singlebed_fisdom,
@@ -81,7 +86,7 @@ class CoronaPlanDetails extends Component {
       inc_outside_india: getConfig().productName !== 'fisdom' ? inc_outside_india_myway : inc_outside_india_fisdom,
       bacteria: getConfig().productName !== 'fisdom' ? bacteria_myway : bacteria_fisdom,
       inc_infected : getConfig().productName !== 'fisdom' ? inc_infected_myway : inc_infected_fisdom,
-
+      icn_awaiting : getConfig().productName !== 'fisdom' ? icn_awaiting_myway : icn_awaiting_fisdom,
     }
   }
 
@@ -100,27 +105,25 @@ class CoronaPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': "Assured lump sum payment of ₹ sum_assured_amount if tested positive for COVID-19",
+        'disc': 'Hospitalization expenses up to sum assured',
         'key': 'positive',
-        'icon': this.state.ic_c_b1
-      },
-      {
-        'disc': "Get ₹ quarantined_amount if quarantined in a government /military facility for at least 14 days",
+        'icon': this.state.ic_c_e1,
+      }, {
+        'disc': "No limit on room rent",
         'key': 'quarantined',
-        'icon': this.state.ic_c_b2
-      },
-      {
-        'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
+        'icon':  this.state.ic_c_b2
+      }, {
+        'disc': "Surface Transport Ambulance ₹500/- per hospitalization event",
         'key': 'exclusions',
-        'icon': this.state.ic_c_b3
+        'icon': this.state.icn_b3_m 
       }
     ]
 
     var waiting_period = [
       {
-        'disc': "Policy will be effective after 15 days from date of purchase",
+        'disc': "Policy will be effective after 30 days from the date of purchase",
         'key': 'waiting',
-        'icon': this.state.ic_c_w1
+        'icon': this.state.icn_awaiting
       }
     ]
 
@@ -221,21 +224,23 @@ class CoronaPlanDetails extends Component {
         {
           "sum_assured_text": '50,000',
           "quarantined_text": '25,000',
-          'product_tag_line': 'Guaranteed ₹50,000 sum assured in just ₹1500 to fight with coronavirus',
+          'product_tag_line': '1 lac sum assured in just ₹1799 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
-          "premium": "1271",
+          "premium": "1500",
+          "justcost": "1500",
           "tax_amount": "229"
         },
         {
           "sum_assured_text": '25,000',
           "quarantined_text": '12,500',
-          'product_tag_line': 'Guaranteed ₹25,000 sum assured in just ₹750 to fight with coronavirus',
+          'product_tag_line': '1 lac sum assured in just ₹1799 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
-          "premium": "636",
+          "premium": "750",
+          "justcost": "750",
           "tax_amount": "114"
         }
       ]
