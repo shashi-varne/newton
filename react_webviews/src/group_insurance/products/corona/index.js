@@ -149,7 +149,7 @@ class CoronaPlanDetails extends Component {
     var product_diseases_not_covered = [
       {
         icon :  this.state.ic_c_e3,
-        text : "Individual having any underlying health conditions/Pre-existing disease",
+        text : "Individuals having any underlying health conditions/Pre-existing disease",
         },
         {
           icon : this.state.ic_c_e2,
