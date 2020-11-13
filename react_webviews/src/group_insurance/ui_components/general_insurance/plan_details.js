@@ -359,6 +359,7 @@ class PlanDetailsClass extends Component {
             {!props.cover_text && this.props.parent.state.product_key !== 'CORONA' && <span>Cover amount</span>}
             {!props.cover_text && this.props.parent.state.product_key === 'CORONA' && <span>Sum assured</span>}
             {props.cover_text && <span>{props.cover_text}</span>}
+            {props.sum_assured_text && <span><br></br>₹{props.sum_assured_text}</span>}
           </div>}
 
         {props.product_plan_title && <div className="accident-plan-item1">
@@ -375,16 +376,16 @@ class PlanDetailsClass extends Component {
             {props.plan_title || inrFormatDecimal(props.sum_assured)}
             {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
           </div>}
-
+          {!this.state.isRedirectionModal && this.props.parent.state.product_key === 'CORONA' && <span className="accident-plan-item4" >in</span>}
         <div className="accident-plan-item3" style={{ display: this.state.isRedirectionModal ? 'grid' : 'flex' }}>
-          {!this.state.isRedirectionModal && <span className="accident-plan-item4">in</span>}
+          {!this.state.isRedirectionModal && this.props.parent.state.product_key !== 'CORONA' && <span className="accident-plan-item4">in</span>}
           {this.state.isRedirectionModal && <span className="accident-plan-item4" style={{ marginBottom: 3 }}>starts from</span>}
           {this.props.parent.state.product_key !== 'CORONA' &&
             <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
           {props.premium}/{props.plan_frequency || 'year'}</span>
           }
           {this.props.parent.state.product_key === 'CORONA' &&
-            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
+            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold', marginTop : '-20px'}}>₹
           {props.premium} <span style={{ fontSize: '9px', color: '#6f6f6f' }}>{props.plan_frequency || 'for a year'}</span></span>
           }
         </div>
