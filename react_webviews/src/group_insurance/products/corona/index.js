@@ -226,8 +226,8 @@ class CoronaPlanDetails extends Component {
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
-          "premium": "1500",
-          "tax_amount": "137"
+          "premium": "1271",
+          "tax_amount": "229"
         },
         {
           "sum_assured": 25000,
@@ -237,8 +237,8 @@ class CoronaPlanDetails extends Component {
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
-          "premium": "750",
-          "tax_amount": "70"
+          "premium": "636",
+          "tax_amount": "114"
         }
       ]
     }
