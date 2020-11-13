@@ -219,7 +219,7 @@ class CoronaPlanDetails extends Component {
         //   "tax_amount": "274"
         // },
         {
-          "sum_assured": 50000,
+          "cover_amount": 50000,
           "sum_assured_text": '50,000',
           "quarantined_text": '25,000',
           'product_tag_line': 'Guaranteed ₹50,000 sum assured in just ₹1500 to fight with coronavirus',
@@ -230,7 +230,7 @@ class CoronaPlanDetails extends Component {
           "tax_amount": "229"
         },
         {
-          "sum_assured": 25000,
+          "cover_amount": 25000,
           "sum_assured_text": '25,000',
           "quarantined_text": '12,500',
           'product_tag_line': 'Guaranteed ₹25,000 sum assured in just ₹750 to fight with coronavirus',
