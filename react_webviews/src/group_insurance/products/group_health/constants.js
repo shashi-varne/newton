@@ -19,8 +19,8 @@ export const hdfc = {
     validation_props: {
         'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 21, max: 25 },
-        'dob_married_female': {min: 18}
+        'dob_married_male': { min: 21, max: 90 },
+        'dob_married_female': {min: 18 , max:90}
     },
     applicant_detail_screen: {
         fields: [
@@ -223,7 +223,7 @@ export const religare = {
     validation_props: {
         'dob_adult': { min: 18, max: 99 }, 
         'dob_child': { minDays: 91, minAge: 5, max: 25 },
-        'dob_married_male': { min: 21, max: 25 },
+        'dob_married_male': { min: 18, max: 99 },
         'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {
@@ -535,7 +535,7 @@ export const star = {
     validation_props: {
         'dob_adult': { min: 18, max: 65 },
         'dob_child': { minDays: 16, max: 25 },
-        'dob_married_male': { min: 18, max: 25 },
+        'dob_married_male': { min: 18, max: 65 },
         'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {

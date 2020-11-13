@@ -268,7 +268,7 @@ class GroupHealthPlanAddOns extends Component {
             if(item.checked) {
 
                 if (Array.isArray(item.price)) {
-                    add_ons_body.push(`opd-${item.default_cover_amount || item.default_premium}`)
+                    add_ons_body.push(`opd-${item.selected_cover_amount || item.default_premium}`)
                     add_ons_json[item.id || 'opd'] = {
                         price: item.selected_premium || item.default_premium,
                         title: item.name

@@ -173,12 +173,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
-
-    if (this.state.get_lead) {
-      let member = this.state.lead.member_base[0].relation.toLowerCase();
-      this.navigate(`personal-details/${member}`);
-      return;
-    } else {
+    storageService().setObject("resumeToPremiumHealthInsurance",false);
       try {
         this.setState({
           show_loader: true,
@@ -239,7 +234,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       let application_id =  storageService().get("application_ID")
       console.log(application_id, "<<<----session key")
 
-    }
+    
   };
 
   renderProviderPremium() {

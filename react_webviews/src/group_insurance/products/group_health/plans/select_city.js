@@ -66,9 +66,12 @@ class GroupHealthPlanSelectCity extends Component {
                     );
                     if (res.pfwstatus_code === 200) {
                         var resultData = res.pfwresponse.result;
-                        let city = resultData.result.city_postal_code || '';
+                        let city = resultData.quotation.city_postal_code || '';
                         this.setState({
                             city: city === 'NA' ? '' : city,
+                        });
+                        this.setState({
+                            show_loader: false
                         });
                     } else {
                         toast(

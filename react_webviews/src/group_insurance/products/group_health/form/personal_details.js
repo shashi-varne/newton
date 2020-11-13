@@ -45,7 +45,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   onload = () => {
-     console.log(lead)
+  
     let lead = this.state.lead || {};  
     let quotation = this.state.quotation || {};     
     let insured_people_details  = lead.insured_people_details;
@@ -57,7 +57,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
-    let member_base = insured_people_details || [];
+    let member_base = this.state.member_base || [];
 
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
@@ -80,14 +80,14 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
     let backend_key, form_data = {};
+
     for (var i = 0; i < member_base.length; i++) {
-      console.log(member_base[i].insured_person.relation, member_key)
-      if (member_base[i].insured_person.relation === member_key && i !== member_base.length - 1) {
-        next_state = member_base[i + 1].insured_person.relation;
-        break;
+      if(member_base[i].key === member_key){
+          if(i !== member_base.length - 1){
+            next_state = member_base[i + 1].key;
+          }
       }
     }
-
     if (this.props.edit) {
       next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;
     }

@@ -86,7 +86,7 @@ export async function initialize() {
                 if (res.pfwresponse.status_code === 200) {
                     var resultData = res.pfwresponse.result;
                     lead = resultData;
-                    lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                    lead.member_base = ghGetMember(lead, this.state.providerConfig);               
                     this.setState({
                         lead: resultData || {},
                     }, () => {
@@ -122,11 +122,11 @@ export async function initialize() {
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
                     lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
-                    //    lead.member_base = ghGetMember(lead, this.state.providerConfig); 
-                    lead.member_base =  resultData.insured_people_details;
-                    console.log(resultData, lead.quotation_details)
+                    var member_base = ghGetMember(lead, this.state.providerConfig); 
+                                       
                     this.setState({
                         lead: resultData || {},
+                        member_base: member_base,
                         quotation: resultData.quotation_details || {},
                         common_data: {
                             ...resultData.common,
