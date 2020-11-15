@@ -4,15 +4,18 @@ import Landing from './component/Landing.js';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import {
+  createGenerateClassName,
+  jssPreset,
+  MuiThemeProvider,
+  createMuiTheme,
+} from '@material-ui/core/styles';
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
 import RebalanceSuccessful from './component/RebalanceSuccessful';
 import ErrorPage from './component/ErrorPage';
 import Otp from './component/Otp';
 import SIPDate from './component/SipDate';
-import ErrorBoundaries from './component/ErrorBoundary';
 
 import RebalanceFund from './component/RebalanceFund';
 import ErrorBoundary from './component/ErrorBoundary';
@@ -39,16 +42,16 @@ const PortfolioRebalancing = ({ match }) => {
       <MuiThemeProvider theme={theme}>
         <ToastContainer autoClose={3000} />
         <ScrollToTop />
-        {/* <ErrorBoundary> */}
-        <Switch>
-          <Route exact path={`${url}`} component={Landing} />
-          <Route path={`${url}/rebalance-fund`} component={RebalanceFund} />
-          <Route path={`${url}/rebalance-success`} component={RebalanceSuccessful} />
-          <Route path={`${url}/otp`} component={Otp} />
-          <Route path={`${url}/sip-date`} component={SIPDate} />
-          <Route path={`${url}/error`} component={ErrorPage} />
-        </Switch>
-        {/* </ErrorBoundary> */}
+        <ErrorBoundary>
+          <Switch>
+            <Route exact path={`${url}`} component={Landing} />
+            <Route path={`${url}/rebalance-fund`} component={RebalanceFund} />
+            <Route path={`${url}/rebalance-success`} component={RebalanceSuccessful} />
+            <Route path={`${url}/otp`} component={Otp} />
+            <Route path={`${url}/sip-date`} component={SIPDate} />
+            <Route path={`${url}/error`} component={ErrorPage} />
+          </Switch>
+        </ErrorBoundary>
       </MuiThemeProvider>
     </JssProvider>
   );

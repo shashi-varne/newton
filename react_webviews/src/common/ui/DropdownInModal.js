@@ -209,7 +209,11 @@ class DropdownInModalClass extends Component {
                 //   this.props.parent?.state[this.props.name] ||
                 this.props.value
               )}
+              {this.props.isAppendText && (
+                <span className={this.props.class}>{this.props.isAppendText}</span>
+              )}
             </div>
+
             <SVG
               className='text-block-2-img'
               preProcessor={(code) => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}

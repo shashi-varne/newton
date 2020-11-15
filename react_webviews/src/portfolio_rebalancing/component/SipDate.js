@@ -1,71 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../common/Container';
-import HeaderDataContainer from '../common/HeadDataContainer';
 import Typography from '@material-ui/core/Typography';
 import down_arrow from 'assets/dot_down_arrow.svg';
 import { navigate } from '../common/commonFunction';
 import DropdownInModal from 'common/ui/DropdownInModal';
 import { storageService, dateOrdinal } from 'utils/validators';
-const dates = [{ name: 1 }, { name: 2 }, { name: 3 }, { name: 4 }, { name: 5 }];
-//const SipDateSelect = (props) => {
+import { nativeCallback } from 'utils/native_callback';
 class SipDateSelect extends React.PureComponent {
-  // nextPage = () => {
-  //   navigate(this.props, 'otp');
-  // };
   state = {
-    funds: [],
     selectedIndex: '',
     date: this.props.el.investment_date || '',
-    AllFunds:
-      storageService().getObject('checked_funds').length > 0
-        ? storageService().getObject('checked_funds')
-        : [],
   };
-  // componentDidMount() {
-  //   const sip_funds = storageService().getObject('checked_funds');
-  //   const new_sip = sip_funds?.filter((el) => el.name.includes('SIP'));
-  //   new_sip.forEach((el) => {
-  //     el.allowed_sip_dates.map((date, index) => {
-  //       el.allowed_sip_dates[index] = {
-  //         name: dateOrdinal(date),
-  //       };
-  //     });
-  //   });
-  //   console.log('sip funds', new_sip);
-  //   this.setState({ funds: new_sip });
-  // }
   handleChange = (el) => (index) => {
     this.setState({
-      date: el.allowed_sip_dates_new[index].name,
+      date: el.allowed_sip_dates[index],
     });
     this.props.handleChange(el)(index);
   };
 
-  // handleChange = (el) => (index) => {
-  //   // alert(index);
-  //   // console.log(dates);
-  //   this.setState({
-  //     date: el.allowed_sip_dates_new[index].name,
-  //     selectedIndex: index,
-  //   });
-
-  //   const newData = this.state.AllFunds?.map((fund) => {
-  //     if (fund.id === el.id) {
-  //       console.log('date', el.allowed_sip_dates);
-  //       el.sip_day = el.allowed_sip_dates[index];
-  //       //el.sip_day = this.state.date;
-  //       return el;
-  //     } else {
-  //       return el;
-  //     }
-  //   });
-
-  //   storageService().setObject('checked_funds', newData);
-  // };
   render() {
     const { el } = this.props;
     return (
-      <div className='fund-switch-date-container'>
+      <div className='pr-sip-date'>
         <div key={el.id} className='card '>
           <section className='fund-switch-from'>
             <Typography className='fund-switch-name'>{el.mf.friendly_name}</Typography>
@@ -97,22 +53,17 @@ class SipDateSelect extends React.PureComponent {
               <div>
                 <DropdownInModal
                   parent={this}
-                  // options={el.allowed_sip_dates}
                   options={el.allowed_sip_dates_new}
                   header_title='Select SIP Date'
                   cta_title='SAVE'
                   selectedIndex={this.state.selectedIndex}
+                  // eslint-disable-next-line radix
                   value={dateOrdinal(this.state.date) || dateOrdinal(parseInt(el.recommended_date))}
-                  //error={false}
-                  //helperText='something is wrong'
                   width='40'
-                  // label='Height (cm)'
-                  //class='Education'
-                  //id='height'
                   inputBox
-                  //placeholder='EHllo'
-                  //name='height'
                   onChange={this.handleChange(el)}
+                  isAppendText='of every month'
+                  class='input-append-text'
                 />
               </div>
             </div>
@@ -126,93 +77,104 @@ class SipDateSelect extends React.PureComponent {
 const Date = (props) => {
   const [funds, setFunds] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState('');
-  const [date, setDate] = useState('');
-  const [allFunds, setAllFunds] = useState(
-    storageService().getObject('checked_funds').length > 0
-      ? storageService().getObject('checked_funds')
-      : []
-  );
+  useEffect(() => {
+    const allFunds = storageService().getObject('allFunds');
+    const checkMap = storageService().getObject('checkMap');
+    allFunds.forEach((el) => {
+      if (checkMap[el.id]) {
+        if (el.name.includes('SIP')) {
+          el.allowed_sip_dates_new = [];
+          el.sip_day = '';
+          el.allowed_sip_dates.map((date, index) => {
+            el.allowed_sip_dates_new[index] = {
+              name: dateOrdinal(date) + ' of every month',
+            };
+          });
+          // eslint-disable-next-line radix
+          el.sip_day = parseInt(el.recommended_date);
+        }
+      }
+    });
+    storageService().setObject('allFunds', allFunds);
+    setFunds(allFunds);
+  }, []);
+
+  const sendEvents = (user_action) => {
+    let eventObj = {
+      event_name: 'portfolio_rebalancing',
+      properties: {
+        user_action: user_action,
+        screen_name: 'select sip date',
+      },
+    };
+    if (['just_set_events', 'back'].includes(user_action)) {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  };
   const nextPage = () => {
-    const new_data = storageService().getObject('checked_funds');
-    const remove_additional_date = new_data.map((el) => {
-      delete el.allowed_sip_dates_new;
+    const remove_additional_date = funds.map((el) => {
+      if (el.allowed_sip_dates_new) delete el.allowed_sip_dates_new;
       return el;
     });
-    storageService().setObject('checked_funds', remove_additional_date);
+    storageService().setObject('allFunds', remove_additional_date);
+    sendEvents('next');
     navigate(props, 'otp');
   };
-  useEffect(() => {
-    const sip_funds = storageService().getObject('checked_funds');
-    const new_sip = sip_funds?.filter((el) => el.name.includes('SIP'));
-    console.log('newsip', new_sip);
-    new_sip.forEach((el) => {
-      el.allowed_sip_dates_new = [];
-      el.sip_day = '';
-      el.allowed_sip_dates.map((date, index) => {
-        // el.allowed_sip_dates[index] = {
-        el.allowed_sip_dates_new[index] = {
-          name: dateOrdinal(date),
-        };
-      });
-      el.sip_day = parseInt(el.recommended_date);
-    });
-    // console.log('sip funds', new_sip);
-    // const updated_date = new_sip.map((el) => {
-    //   delete el.allowed_sip_dates_new;
-    //   console.log(el);
-    //   return el;
-    // });
-    storageService().setObject('checked_funds', new_sip);
-    setFunds(new_sip);
-  }, []);
-  const handleChange = (el) => (index) => {
-    // alert(index);
-    // console.log(dates);
-    //setDate(el.allowed_sip_dates_new[index].name);
-    const x = storageService().getObject('checked_funds');
-    setSelectedIndex(index);
-    console.log('newFunds', x);
-    console.log('el', el);
-    const newData = x?.map((fund) => {
-      if (fund.id === el.id) {
-        console.log('date', el.allowed_sip_dates);
-        el.sip_day = el.allowed_sip_dates[index];
-        //el.sip_day = this.state.date;
-        return el;
+  const handleChange = (fundItem) => (index) => {
+    const allFunds = storageService().getObject('allFunds');
+    const newData = allFunds.map((fund) => {
+      if (fund.name.includes('SIP') && fund.sip_day) {
+        if (fund.id === fundItem.id) {
+          fundItem.sip_day = fundItem.allowed_sip_dates[index];
+          return fundItem;
+        } else {
+          return fund;
+        }
       } else {
         return fund;
       }
     });
-    console.log('newData', newData);
+    setSelectedIndex(index);
 
-    storageService().setObject('checked_funds', newData);
+    storageService().setObject('allFunds', newData);
+    setFunds(newData);
   };
+
   const goBack = () => {
+    sendEvents('back');
     navigate(props, 'rebalance-fund');
   };
   return (
-    <Container buttonTitle='Continue' handleClick={nextPage} fullWidthButton goBack={goBack}>
-      <HeaderDataContainer title='Select SIP auto debit  date'>
-        {funds.length > 0 &&
-          funds.map((el) => {
+    <Container
+      buttonTitle='Rebalance Funds'
+      handleClick={nextPage}
+      fullWidthButton
+      goBack={goBack}
+      events={sendEvents('just_set_events')}
+      title='Select SIP auto debit  date'
+    >
+      {funds.length > 0 &&
+        funds.map((el) => {
+          if (el.name.includes('SIP') && el.sip_day) {
             return (
               <SipDateSelect
                 key={el.id}
                 el={el}
                 selectedIndex={selectedIndex}
                 handleChange={handleChange}
-                date={date}
               />
             );
-          })}
-        <section>
-          <Typography className='sip-date-imp-info'>
-            <span className='sip-date-note'>Note:</span> Please note that SIP rebalancing requests
-            placed within 10 days of upcoming SIP debit date will be processed only for the next
-            month.
-          </Typography>
-        </section>
-      </HeaderDataContainer>
+          }
+        })}
+      <section>
+        <Typography className='sip-date-imp-info'>
+          <span className='sip-date-note'>Note:</span> Please note that SIP rebalancing requests
+          placed within 10 days of upcoming SIP debit date will be processed only for the next
+          month.
+        </Typography>
+      </section>
     </Container>
   );
 };

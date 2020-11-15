@@ -1,331 +1,211 @@
-import React, { useState, useEffect } from 'react';
-
+import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
-
-import Footer from './footer';
-
-import loader_fisdom from 'assets/loader_gif_fisdom.gif';
-
-import loader_myway from 'assets/loader_gif_myway.gif';
-
-import { nativeCallback } from 'utils/native_callback';
+import Header from '../../common/components/Header';
+import { didmount } from '../../common/components/container_functions';
 import Typography from '@material-ui/core/Typography';
+import Footer from './footer';
 import Button from '@material-ui/core/Button';
-
 import {
   Dialog,
   DialogActions,
-  DialogTitle,
+  // DialogTitle,
   DialogContent,
   DialogContentText,
 } from '@material-ui/core';
 
+import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner';
-
-import { getConfig, setHeights } from 'utils/functions';
-
-// import {checkStringInString, storageService} from 'utils/validators';
-
+import { getConfig } from 'utils/functions';
 import { isFunction } from '../../utils/validators';
 
-import './Style.scss';
+class Container extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openDialog: false,
+      openPopup: false,
+      popupText: '',
+      callbackType: '',
+      inPageTitle: true,
+      force_hide_inpage_title: this.props.hidePageTitle,
+      new_header: true,
+      project: 'lending', //to use in common functions
+    };
 
-const Container = (props) => {
-  const [openDialog, setOpenDialog] = useState(false);
+    this.didmount = didmount.bind(this);
+  }
 
-  const [openPopup, setOpenPopup] = useState(false);
+  componentDidMount() {
+    this.didmount();
+  }
 
-  const [popupText, setPopupText] = useState('');
+  componentWillUnmount() {
+    this.unmount();
+  }
 
-  const [loaderMain, setLoaderMain] = useState(
-    getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
-  );
-
-  const [inPageTitle, setInPageTitle] = useState(true);
-
-  const x = React.useRef(true);
-
-  const historyGoBack = (backData) => {
-    // let fromHeader = backData ? backData.fromHeader : false;
-
-    // let pathname = this.props.history.location.pathname;
-
-    let { params } = props.location;
+  historyGoBack = (backData) => {
+    let { params } = this.props.location;
 
     if (params && params.disableBack) {
       nativeCallback({ action: 'exit' });
-
       return;
     }
 
-    if (isFunction(props.goBack)) {
-      return props.goBack(params);
+    if (isFunction(this.props.goBack)) {
+      return this.props.goBack(params);
     }
-
-    nativeCallback({ events: getEvents('back') });
-
-    props.history.goBack();
+    nativeCallback({ events: this.getEvents('back') });
+    this.props.history.goBack();
   };
 
-  useEffect(() => {
-    setHeights({ header: true, container: false });
-
-    if (x.current) {
-      x.current = false;
-    } else {
-      if (getConfig().generic_callback) {
-        window.callbackWeb.addEventListener({
-          type: 'back_pressed',
-
-          go_back: () => historyGoBack(),
-        });
-      } else {
-        window.PlutusSdk.addEventListener({
-          type: 'back_pressed',
-
-          go_back: () => historyGoBack(),
-        });
-      }
-    }
-  }, []);
-
-  const getEvents = (user_action) => {
-    if (!this || !props || !props.events) {
-      return;
-    }
-
-    let events = props.events;
-
-    events.properties.user_action = user_action;
-
-    return events;
-  };
-
-  const handleClose = () => {
-    setOpenDialog(false);
-
-    setOpenPopup(false);
-  };
-
-  const renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={openDialog}
-        onClose={handleClose}
-        aria-labelledby='responsive-dialog-title'
-      >
-        <DialogTitle id='form-dialog-title'>No Internet Found</DialogTitle>
-
-        <DialogContent>
-          <DialogContentText>Check your connection and try again.</DialogContentText>
-        </DialogContent>
-
-        <DialogActions>
-          <Button className='DialogButtonFullWidth' onClick={handleClose} color='default' autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
-  const handlePopup = () => {
-    setOpenPopup(false);
-
-    nativeCallback({ action: 'native_back', events: getEvents('back') });
-  };
-
-  const renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={openPopup}
-        onClose={handleClose}
-        aria-labelledby='responsive-dialog-title'
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-
-        <DialogContent>
-          <DialogContentText>{popupText}</DialogContentText>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={handleClose} color='default'>
-            No
-          </Button>
-
-          <Button onClick={handlePopup} color='default' autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
-  const renderPageLoader = () => {
-    if (props.showLoader) {
-      return (
-        <div className={`Loader ${props.loaderData ? props.loaderData.loaderClass : ''}`}>
-          <div className='LoaderOverlay'>
-            <img src={loaderMain} alt='' />
-
-            {props.loaderData && props.loaderData.loadingText && (
-              <div className='LoaderOverlayText'>{props.loaderData.loadingText}</div>
-            )}
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
-
-  const headerGoBack = () => {
-    historyGoBack({ fromHeader: true });
-  };
-  const navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: this.props.location.search,
-    });
-  };
-  let steps = [];
-
-  for (var i = 0; i < props.total; i++) {
-    if (props.current > i) {
-      steps.push(<span className='active' key={i}></span>);
-    } else {
-      steps.push(<span key={i}></span>);
-    }
+  componentDidUpdate(prevProps) {
+    this.didupdate();
   }
 
-  return (
-    <div
-      className={`ContainerWrapper ${props.classOverRide}  ${
-        getConfig().productName !== 'fisdom' ? 'blue' : ''
-      }`}
-    >
-      {/* Header Block */}
+  headerGoBack = () => {
+    this.historyGoBack({ fromHeader: true });
+  };
 
-      {!props.noHeader && !getConfig().hide_header && (
-        <Header
-          disableBack={props.disableBack}
-          title={props.title}
-          smallTitle={props.smallTitle}
-          provider={props.provider}
-          count={props.count}
-          total={props.total}
-          current={props.current}
-          goBack={props.goBack || headerGoBack}
-          edit={props.edit}
-          type={getConfig().productName}
-          rightIcon={props.rightIcon}
-          handleRightIconClick={props.handleRightIconClick}
-          inPageTitle={inPageTitle}
-          force_hide_inpage_title={props.hideInPageTitle}
-          style={props.styleHeader}
-          className={props.classHeader}
-          headerData={props.headerData}
-        />
-      )}
+  handleClose = () => {
+    this.setState({
+      openPopup: false,
+    });
+  };
 
-      {/* Below Header Block */}
+  handlePopup = () => {
+    this.setState({
+      openPopup: false,
+    });
+    nativeCallback({ action: 'native_back', events: this.getEvents('back') });
+  };
 
-      <div id='HeaderHeight' style={{ top: 56 }}>
-        {/* Loader Block */}
-
-        {renderPageLoader()}
-      </div>
-
-      {/*  */}
-
-      {/* {!props.hideInPageTitle && (
-        <div
-          id='header-title-page'
-          style={Object.assign(props.styleHeader || {}, {
-            padding: '0 20px',
-          })}
-          className={`header-title-page ${props.classHeader}`}
-        >
-          {inPageTitle && (
-            <div
-              className={`header-title-text-hni ${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-              style={{ width: props.count ? '75%' : '' }}
-            >
-              {props.title}
-            </div>
-          )}
-
-          {inPageTitle && props.count && (
-            <span
-              color='inherit'
-              className={`${inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-              style={{ fontSize: 10 }}
-            >
-              <span style={{ fontWeight: 600 }}>{props.current}</span>/<span>{props.total}</span>
-            </span>
-          )}
-        </div>
-      )} */}
-
-      {/* Children Block */}
-
-      <div
-        style={props.styleContainer}
-        className={`
-
-            Container 
-
-            ${props.classOverRideContainer}
-
-            ${props.noPadding ? 'no-padding' : ''}
-
-          `}
+  renderPopup = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openPopup}
+        onClose={this.handleClose}
+        aria-labelledby='responsive-dialog-title'
       >
-        {props.children}
-      </div>
-      {props.helpContact && (
-        <section className='help-container '>
-          <Typography className='help-text'>For any help, reach us at</Typography>
-          <div className='help-contact-email flex'>
-            <Typography className='help-contact'>+80-30-408363</Typography>
-            <hr style={{ height: '9px', margin: '0', borderWidth: '0.6px' }} />
-            <Typography className='help-email'>{'ask@fisdom.com'.toUpperCase()}</Typography>
+        <DialogContent>
+          <DialogContentText>{this.state.popupText}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handlePopup} color='default' autoFocus>
+            Yes
+          </Button>
+          <Button onClick={this.handleClose} color='default'>
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  render() {
+    let steps = [];
+    for (var i = 0; i < this.props.total; i++) {
+      if (this.props.current > i) {
+        steps.push(<span className='active' key={i}></span>);
+      } else {
+        steps.push(<span key={i}></span>);
+      }
+    }
+
+    if (this.state.mounted) {
+      return (
+        <div
+          className={`ContainerWrapper pr-main-container ${this.props.classOverRide}  ${
+            getConfig().productName !== 'fisdom' ? 'blue' : ''
+          }`}
+        >
+          {/* Header Block */}
+          {!this.props.noHeader && !getConfig().hide_header && !this.props.showLoader && (
+            <Header
+              disableBack={this.props.disableBack}
+              title={this.props.title}
+              smallTitle={this.props.smallTitle}
+              provider={this.props.provider}
+              count={this.props.count}
+              total={this.props.total}
+              current={this.props.current}
+              goBack={this.headerGoBack}
+              edit={this.props.edit}
+              type={getConfig().productName}
+              resetpage={this.props.resetpage}
+              handleReset={this.props.handleReset}
+              inPageTitle={this.state.inPageTitle}
+              force_hide_inpage_title={this.state.force_hide_inpage_title}
+              style={this.props.styleHeader}
+              className={this.props.classHeader}
+              headerData={this.props.headerData}
+            />
+          )}
+
+          {/* Below Header Block */}
+          <div id='HeaderHeight' style={{ top: 56 }}>
+            {/* Loader Block */}
+            {this.renderPageLoader()}
           </div>
-        </section>
-      )}
-      {!props.noFooter && (
-        <Footer
-          noFooter={props.noFooter}
-          fullWidthButton={props.fullWidthButton}
-          logo={props.logo}
-          buttonTitle={props.buttonTitle}
-          provider={props.provider}
-          premium={props.premium}
-          paymentFrequency={props.paymentFrequency}
-          edit={props.edit}
-          resetpage={props.resetpage}
-          handleClick={props.handleClick}
-          handleClick2={props.handleClick2}
-          handleReset={props.handleReset}
-          onlyButton={props.onlyButton}
-          disable={props.disable}
-          withProvider={props.withProvider}
-          buttonData={props.buttonData}
-          FixedBottomFooter={props.FixedBottomFooter}
-        />
-      )}
 
-      {/* No Internet */}
+          {/*  */}
 
-      {renderDialog()}
+          {!this.state.force_hide_inpage_title &&
+            !this.props.noHeader &&
+            !this.props.hidePageTitle &&
+            this.new_header_scroll()}
 
-      {renderPopup()}
-    </div>
-  );
-};
+          {/* Children Block */}
+          <div
+            style={this.props.styleContainer}
+            className={`Container ${this.props.classOverRideContainer} ${
+              this.props.noPadding ? 'no-padding' : ''
+            }`}
+          >
+            {this.props.children}
+          </div>
+          {this.props.helpContact && (
+            <section className='help-container '>
+              <Typography className='help-text'>For any help, reach us at</Typography>
+              <div className='help-contact-email flex-item'>
+                <Typography className='help-contact'>+80-30-408363</Typography>
+                <hr style={{ height: '9px', margin: '0', borderWidth: '0.6px' }} />
+                <Typography className='help-email'>{'ask@fisdom.com'.toUpperCase()}</Typography>
+              </div>
+            </section>
+          )}
+
+          {/* Footer Block */}
+          {!this.props.noFooter && (
+            <Footer
+              noFooter={this.props.noFooter}
+              fullWidthButton={this.props.fullWidthButton}
+              logo={this.props.logo}
+              buttonTitle={this.props.buttonTitle}
+              provider={this.props.provider}
+              premium={this.props.premium}
+              paymentFrequency={this.props.paymentFrequency}
+              edit={this.props.edit}
+              resetpage={this.props.resetpage}
+              handleClick={this.props.handleClick}
+              handleClick2={this.props.handleClick2}
+              handleReset={this.props.handleReset}
+              onlyButton={this.props.onlyButton}
+              disable={this.props.disable}
+              withProvider={this.props.withProvider}
+              buttonData={this.props.buttonData}
+            />
+          )}
+          {/* No Internet */}
+          {this.renderDialog()}
+          {this.renderPopup()}
+        </div>
+      );
+    }
+
+    return null;
+  }
+}
 
 export default withRouter(Container);

@@ -1,19 +1,13 @@
-import axios from 'axios';
 import Api from '../../utils/api';
 import { storageService, isEmpty } from 'utils/validators';
+import { getConfig } from 'utils/functions';
 const genericErrMsg = 'Something went wrong';
-const sip_only =
-  'https://wreport-dot-plutus-staging.appspot.com/api/rebalance/ahBzfnBsdXR1cy1zdGFnaW5nchcLEgpQbHV0dXNVc2VyGIGAwISbs8ULDA/get_recommendations';
-const new_user =
-  'https://wreport-dot-plutus-staging.appspot.com/api/rebalance/ahBzfnBsdXR1cy1zdGFnaW5nchcLEgpQbHV0dXNVc2VyGIGAgK6GyJMKDA/get_recommendations';
-const corpus =
-  'https://wreport-dot-plutus-staging.appspot.com/api/rebalance/ahBzfnBsdXR1cy1zdGFnaW5nchcLEgpQbHV0dXNVc2VyGIGAwNS--swLDA/get_recommendations';
+
 export const get_recommended_funds = async () => {
+  const pc_urlsafe = getConfig().pc_urlsafe;
+
   try {
-    // const { data: res } = await axios.get(
-    //   'https://wreport-dot-plutus-staging.appspot.com/api/rebalance/ahBzfnBsdXR1cy1zdGFnaW5nchcLEgpQbHV0dXNVc2VyGIGAgIDZ1cYLDA/get_recommendations'
-    // );
-    const { data: res } = await axios.get(corpus);
+    const res = await Api.get(`/api/rebalance/${pc_urlsafe}/get_recommendations`);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
@@ -26,46 +20,39 @@ export const get_recommended_funds = async () => {
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
 
 export const request_order = async () => {
-  const checked_funds = storageService().getObject('checked_funds');
+  const allFunds = storageService().getObject('allFunds');
+  const checkMap = storageService().getObject('checkMap');
+  const switch_orders = allFunds.filter((fund) => checkMap[fund.id]);
+  const pc_urlsafe = getConfig().pc_urlsafe;
+
   try {
-    const { data: res } = await axios.post(
-      'https://wreport-dot-plutus-staging.appspot.com/api/rebalance/action/ahBzfnBsdXR1cy1zdGFnaW5nchcLEgpQbHV0dXNVc2VyGIGAwISbs8ULDA/order',
-      {
-        switch_orders: checked_funds,
-      }
-    );
-    console.log('data', res);
+    const res = await Api.post(`/api/rebalance/action/${pc_urlsafe}/order`, {
+      switch_orders: switch_orders,
+    });
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      console.log('the error is here');
       throw genericErrMsg;
     }
 
     const { result, status_code: status } = res.pfwresponse;
-    console.log(result);
     if (status === 200 || status === 202) {
       return result;
     } else {
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
 
 export const resend_otp = async (link) => {
-  const checked_funds = storageService().getObject('checked_funds');
   try {
-    const { data: res } = await axios.get(`https://wreport-dot-plutus-staging.appspot.com${link}`);
-    console.log('data', res);
+    const res = await Api.get(link);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      console.log('the error is here');
       throw genericErrMsg;
     }
 
@@ -77,36 +64,26 @@ export const resend_otp = async (link) => {
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
-    console.log(err);
     throw err;
   }
 };
 
 export const verify_otp = async (trx, params) => {
-  console.log(params);
   try {
-    const {
-      data: res,
-    } = await axios.post(
-      `https://wreport-dot-plutus-staging.appspot.com/api/rebalance/${trx}/order/verify`,
-      null,
-      { params }
+    const res = await Api.post(
+      `/api/rebalance/${trx}/order/verify?otp=${params.otp}&user_id=${params.user_id}`
     );
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      console.log('the error is here');
       throw genericErrMsg;
     }
 
     const { result, status_code: status } = res.pfwresponse;
-    console.log('result', result);
     if (status === 200) {
       return result;
     } else {
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
-    console.log(err);
-
     throw err;
   }
 };
