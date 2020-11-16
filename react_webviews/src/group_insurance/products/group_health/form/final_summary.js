@@ -69,7 +69,6 @@ class GroupHealthPlanFinalSummary extends Component {
             element.key = element.relation
           });
 
-
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
@@ -81,7 +80,8 @@ class GroupHealthPlanFinalSummary extends Component {
         }
         
         this.setState({
-            applicantIndex: applicantIndex
+            applicantIndex: applicantIndex,
+            member_base: member_base
         });
 
         let pan_amount = this.state.pan_amount;
@@ -697,8 +697,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
 
-    renderMembertop = (prop, index) => {
-       let props = prop.insured_person;
+    renderMembertop = (props, index) => {
                console.log(props)
         if (props.key === 'applicant') {
             return (
@@ -876,7 +875,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {              console.log(this.state.common_data, "qwee")
+    render() {          
         return (
             <Container
             provider={this.state.provider}
@@ -905,7 +904,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 <div className='mid-content'>
 
-                    {this.state.quotation.member_base.map(this.renderMembertop)}
+                    {this.state.member_base && this.state.member_base.map(this.renderMembertop)}
 
                     <div className="member-tile">
                         <div className="mt-left">
