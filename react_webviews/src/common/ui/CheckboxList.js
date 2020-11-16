@@ -227,13 +227,9 @@ class CheckboxListClass extends Component {
   };
 
   render() {
-    let backend_key = this.props.parent.state.backend_key, dob
-    let member_base = this.props.parent.state.lead.insured_people_details
-    member_base.forEach(mem => {
-          if (mem.insured_person.relation_key === backend_key) {
-            dob = mem.insured_person.dob
-          }
-    });
+    let backend_key = this.props.parent.state.backend_key
+    let element = this.props.parent.state.member_base.find(ele => ele.backend_key === backend_key)
+    let dob = element.dob
 
 
     return (

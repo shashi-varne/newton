@@ -231,10 +231,11 @@ class GroupHealthPlanFinalSummary extends Component {
             accordianData.push(obj);
             if (provider === 'HDFCERGO') {
                 let subtitle = []
-                member.answers.pre_existing_diseases.forEach(name => {
-                    subtitle.push(name.front_end_question_id)
+                member.answers.pre_existing_diseases.forEach((name) => {
+                    let ped = ped_list.find(item => item.id === name.front_end_question_id);
+                    subtitle.push(ped.name)
                 })
-                    
+
                 if (member.ped) {
                     let dis_data = {
                         'title': `${member.relation}'s diseases`,
@@ -249,11 +250,10 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'RELIGARE') {
                          
                 // for lifestyle     
-                console.log( member.answers.life_style_details , life_style_question.length,"<<<<<<<<<")
-
-                if (life_style_question.length >=1) {
+              
+                if (life_style_question.length >=1 && life_style_question[0].yes_no) {
                     members_for_life_style.push(member_display);
-                    console.log(life_style_question, life_style_question[0])
+
                     life_style_details_data.push({
                         'title': `${member_display}'s consumption details`,
                         'subtitle': life_style_question[0].description

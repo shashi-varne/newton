@@ -51,7 +51,18 @@ class GroupHealthPlanIsPed extends Component {
 
         let is_ped = 'NO';
 
-        let member_base = lead.insured_people_details;
+        let member_base = this.state.member_base.map((element, index) => {
+            let member = lead.insured_people_details.find(member => member.insured_person.relation === element.relation)
+            console.log(lead.insured_people_details, member)
+            return {
+                ...element,
+                ...member
+            }
+        })
+
+
+       console.log(member_base,":-------------------9279")
+
         let form_data = {};
 
         for (var mem in member_base) {
@@ -131,8 +142,8 @@ class GroupHealthPlanIsPed extends Component {
             form_data: form_data
         })
 
-        let member_base = this.state.lead.insured_people_details;
-
+        let member_base =   this.state.member_base
+        
         let body = {};
         let next_state = '';
         body['self_account_key'] = {
@@ -165,6 +176,8 @@ class GroupHealthPlanIsPed extends Component {
                 }
             }
         }
+
+        console.log(next_state)
  
         if (this.state.lead.quotation_details.insurance_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
             canSubmitForm = false;
@@ -251,14 +264,16 @@ class GroupHealthPlanIsPed extends Component {
 
     renderMembers = (props, index) => {
 
+        console.log(props)
+
         if (props.key === 'applicant') {
             return;
         }
         return (
             <div key={index}>
                 <PlusMinusInput
-                    name={props.insured_person.relation}
-                    label={childeNameMapper(props.insured_person.relation)}
+                    name={props.relation}
+                    label={childeNameMapper(props.relation)}
                     parent={this}
                 />
                 <div className="generic-hr"></div>

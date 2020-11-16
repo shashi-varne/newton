@@ -240,6 +240,10 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
+
+    console.log(form_data)
+
+
     let validation_props = this.state.validation_props;
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
