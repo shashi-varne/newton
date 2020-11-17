@@ -121,7 +121,6 @@ export async function initialize() {
                 });
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
-                    lead.base_premium = lead.base_premium_showable || lead.total_premium; // incluesive of addons
                     var member_base = ghGetMember(lead, this.state.providerConfig);                                       
                     this.setState({
                         lead: resultData || {},
@@ -164,11 +163,11 @@ export async function initialize() {
 
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.base_premium;
-            sum_assured = lead.sum_assured;
+            sum_assured = lead.total_sum_insured;
             tenure = lead.tenure;
-            base_premium = lead.total_premium;
+            base_premium = lead.base_premium;
             tax_amount = lead.gst;
-            total_amount = lead.total_premium;
+            total_amount =  lead.total_premium;
 
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];

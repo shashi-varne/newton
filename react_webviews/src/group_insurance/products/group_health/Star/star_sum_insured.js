@@ -159,6 +159,9 @@ class GroupHealthPlanStarSumInsured extends Component {
         }
         body['si'] = this.state.premium_data[this.state.selectedIndex].sum_insured;
                 
+        this.setState({
+            show_loader: true
+        })
         try{
             const res = await Api.post(`/api/insurance/health/quotation/get_premium/star`, body);
 
@@ -196,7 +199,8 @@ class GroupHealthPlanStarSumInsured extends Component {
             this.setState({
                 premiumAmt: '--',
                 loadingPremium: false,
-                apiError :true
+                apiError :true,
+                show_loader: false
             });
         }        
 

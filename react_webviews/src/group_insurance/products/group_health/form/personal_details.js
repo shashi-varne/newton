@@ -20,7 +20,7 @@ import Dialog, {
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
-import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import GenericTooltip from '../../../../common/ui/GenericTooltip';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -93,8 +93,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
       insured_people_details.forEach(element => {
-        if(this.state.provider === 'STAR'){
-        }                                                                 
       if(element.insured_person["relation"] === member_key){
         form_data = element.insured_person,
         backend_key = element.insured_person.relation_key          
