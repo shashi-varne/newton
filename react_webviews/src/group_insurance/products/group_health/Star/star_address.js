@@ -207,7 +207,7 @@ class StarAddress extends Component {
 
 
       const body = {
-        "application_id":  application_id,  // 1a8b7958-e78d-486f-b7a3-a77c8bcae801
+        "application_id":  application_id,
         "address_details": {                   
           "permanent_address": {
             "state": form_data.state,
@@ -216,11 +216,11 @@ class StarAddress extends Component {
             "addr_line2":form_data.addr_line2,
             "city": form_data.city,
             "area" : form_data.area,
-            "area_id" : form_data.area_id
+            "area_id" : form_data.area_id + ''
           }
         }
       }
-
+        console.log(data_to_send)
       this.updateLead(body);
     }
   };

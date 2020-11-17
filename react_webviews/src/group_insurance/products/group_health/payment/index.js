@@ -87,7 +87,7 @@ class GroupHealthPayment extends Component {
   }
 
   onload = async() => {
-    console.log(this.state,this.state.get_lead);
+ 
     if(!this.state.get_lead || true) {
       try {
 
@@ -107,7 +107,7 @@ class GroupHealthPayment extends Component {
   
           let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
-          console.log(lead, '___________________________+-*/.')
+
           this.setState({
             policy_data: policy_data,
             lead: lead
@@ -162,8 +162,6 @@ class GroupHealthPayment extends Component {
     //   this.navigate(state);
     // } else {
       state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.application_id}`;
-
-      console.log(state)
 
       this.navigate(state);
     // }

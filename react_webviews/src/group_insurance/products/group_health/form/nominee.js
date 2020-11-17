@@ -72,7 +72,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
     
 
-        const { age } = calculateAge(form_data['dob'], 'byMonth');
+        // const { age } = calculateAge(form_data['dob'], 'byMonth');
         const { appointeeage } = calculateAge(appointeeBirthDay['dob'], 'byMonth');
 
         this.setState({

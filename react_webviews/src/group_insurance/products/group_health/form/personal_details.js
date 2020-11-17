@@ -141,6 +141,13 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
     }
 
+    if(member_key === 'applicant'){
+      form_data = lead.buyer_details;
+      form_data.relation = 'self';
+      form_data.relation_key = 'applicant';
+      backend_key = 'self_account_key';
+    }
+
     this.setState({
       providerData: health_providers[this.state.provider],
       next_state: next_state,
@@ -238,6 +245,10 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let form_data = this.state.form_data;
+
+
+
+
     let validation_props = this.state.validation_props;
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
@@ -388,7 +399,24 @@ class GroupHealthPlanPersonalDetails extends Component {
           "gender": form_data.gender || gender,
         }]
       }
-   
+
+         if (provider === 'STAR') {
+          body = {
+          "application_id": application_id,
+          "insured_people_details": [{
+            "name": form_data.name,
+            "height": form_data.height || '',
+            "relation_key": this.state.backend_key,
+            "weight": form_data.weight || '',
+            "relation": this.state.form_data.relation,
+            "dob": form_data.dob || '',
+            "gender": form_data.gender || gender,
+            "occupation" : occupationValue
+          }]
+        }
+      }
+      
+
       if (this.state.backend_key === 'self_account_key') {
              body = {
           "application_id": application_id,   
@@ -410,21 +438,19 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       } 
 
-      if (provider === 'STAR') {
-          body = {
-          "application_id": application_id,
-          "insured_people_details": [{
-            "name": form_data.name,
-            "height": form_data.height || '',
-            "relation_key": this.state.backend_key,
-            "weight": form_data.weight || '',
-            "relation": this.state.form_data.relation,
+
+      if(this.props.member_key === "applicant"){
+        body = {
+          "application_id": application_id,  
+          "buyer_details": {
+            "name": form_data.name || '',
+            "pan_no": form_data.pan_number || "",
             "dob": form_data.dob || '',
             "gender": form_data.gender || gender,
-            "occupation" : occupationValue
-          }]
+          } 
         }
       }
+
 
       this.updateLead(body);
     }

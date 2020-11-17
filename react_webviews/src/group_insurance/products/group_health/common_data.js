@@ -113,7 +113,7 @@ export async function initialize() {
                 }
                 const res = await Api.get(url);
                
-
+                // eslint-disable-next-line
                 var resultData = res.pfwresponse.result;
 
                 this.setState({
@@ -350,7 +350,7 @@ export function navigate(pathname, data = {}) {
 export async function resetQuote() {
 
     this.handleClose();
-    let quote_id = storageService().get('ghs_ergo_quote_id');
+    // let quote_id = storageService().get('ghs_ergo_quote_id');
     this.setState({
         show_loader: true,
         restart_conformation: true

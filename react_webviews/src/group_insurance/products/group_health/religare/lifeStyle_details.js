@@ -36,13 +36,12 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let member_base = [];
 
     let none_option_selected = true;
-    for (var mem in member_base) {
-      if(member_base[mem].answers.life_style_details.length > 0) {
+    for (var mem in insured_people_details) {
+      if(insured_people_details[mem].answers.life_style_details.length >= 0) {
         none_option_selected = false;
         break;
       }
     };
-
     this.setState({
       none_option_selected: none_option_selected
     })
@@ -55,7 +54,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     insured_people_details.forEach(element => {
-      if (element.answers.life_style_details.length >= 1) {
+      console.log(element)
+      if (element.answers.life_style_details.length >= 1 && element.answers.life_style_details[0].yes_no) {
         element.insured_person.life_style_question = element.answers.life_style_details[0]
         element.insured_person.life_style_question.answer = element.insured_person.life_style_question.yes_no
         element.insured_person.life_style_question.answer_description = element.insured_person.life_style_question.description
@@ -65,8 +65,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
         element.insured_person.life_style_question.medical_question = "PEDSmokeDetails"
         element.insured_person.life_style_question.key_mapper = "lifestylye_no_1"
         element.insured_person.life_style_question_exists = true
-      }else {
-        element.insured_person.life_style_question = []
+      } else {
+        element.insured_person.life_style_question = {}
       }
       member_base.push(element.insured_person)
     });
@@ -302,13 +302,22 @@ class GroupHealthPlanLifestyleDetail extends Component {
  
    if (canProceed) {
      body["answers"] = {}
+
+     console.log(member_base, none_option_selected)
+
      for (var i in member_base) {
        let member_data = member_base[i];
        if (member_data.key !== 'none') {
-         console.log(member_data,"................")
          let backend_key = member_data.relation_key;
+
+
+
          if ((member_data.life_style_question_exists === 'Yes' ||
              member_data.life_style_question_exists === true) && !none_option_selected) {
+
+
+              console.log("truee")
+
            body["answers"][backend_key] = {};
            let obj = {
              "yes_no": true,
@@ -319,9 +328,16 @@ class GroupHealthPlanLifestyleDetail extends Component {
            body["answers"][backend_key] = {
             "life_style_details": [obj]
           };
+        }else{
+          body["answers"][backend_key] = {
+            "life_style_details": [{
+              "yes_no": false,
+              "question_id": "religare_lsd_smoke"
+            }]
+          }
         } 
       }
-    } 
+    }                                         console.log(body  )
       this.updateLead(body);
    }
   };
@@ -342,7 +358,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
   render() {
     let { account_type, list } = this.state;
 
-    console.log(list)
 
     return (
       <Container
