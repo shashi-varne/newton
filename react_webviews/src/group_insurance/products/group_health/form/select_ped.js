@@ -110,8 +110,9 @@ class GroupHealthPlanSelectPed extends Component {
                         // matched = true;
                     }
                 }
-
-                if(disease_name.front_end_question_id === 'hdfc_ergo_ped_other_diseases') {
+                console.log(disease_name)
+                if(disease_name.front_end_question_id === 'hdfc_ergo_ped_other_diseases' || disease_name.question_id === 'hdfc_ergo_ped_other_diseases') {
+                    console.log(disease_name)
                     other_diseases += disease_name.description;
                 }
             }

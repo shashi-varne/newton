@@ -59,7 +59,7 @@ class GroupHealthPlanSelectCity extends Component {
         try {
             if(city) {
                 try {
-                    // const res = await Api.get('/api/ins_service/api/insurance/account/summary');
+
                     const res = await Api.post(
                         `/api/insurance/health/quotation/account_summary`,
                         body
@@ -90,12 +90,20 @@ class GroupHealthPlanSelectCity extends Component {
             }
             const res2 = await Api.get('/api/insurance/health/quotation/get_cities/hdfc_ergo');
             
-            var resultData2 = res2.pfwresponse.result 
+            var resultData2 = res2.pfwresponse.result
+            var city_object =  resultData2.map(element => {
+                return {
+                    key: element,
+                    value: element
+                }
+            });
+
             if (res2.pfwresponse.status_code === 200) {
                 this.setState({
-                    suggestions_list: resultData2
+                    suggestions_list: city_object
                 }, () => {
                     this.checkCity(this.state.city);
+                    console.log(this.state.suggestions_list, "suggestions_list")
                 })
 
             this.setState({
