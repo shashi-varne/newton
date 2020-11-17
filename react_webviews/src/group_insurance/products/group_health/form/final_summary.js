@@ -874,7 +874,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {                      console.log(this.state)
+    render() {                      console.log(this.state.quotation, this.state.lead, this.state)
         return (
             <Container
             provider={this.state.provider}
@@ -893,7 +893,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                     <div className="left">
                         <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>
-                        <div className="tc-subtitle">{this.state.quotation.plan_code}</div>
+                        <div className="tc-subtitle">{this.state.common_data.base_plan_title}</div>
                     </div>
 
                     <div className="tc-right">
@@ -1026,7 +1026,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </Grid>
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openInBrowser(this.state.common_data.policy_prospectus,
+                        I agree to the <span onClick={() => this.openInBrowser(this.state.lead.terms_and_condition,
                         'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                             Terms and conditions</span></div>
                     </Grid>

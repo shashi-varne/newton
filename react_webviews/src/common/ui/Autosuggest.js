@@ -8,7 +8,6 @@ class AutosuggestInput extends Component {
       value: this.props.value || '',
       suggestions_list: this.props.suggestions_list || [],
       suggestions: [],
-      options : []
     };
   }
   componentDidUpdate(prevState) {
@@ -22,17 +21,13 @@ class AutosuggestInput extends Component {
   handleChange = (value) => {
     this.props.onChange(value);
   };
+
   componentDidMount(){
-      var object = this.props.options.map(element => {
-         return {
-           key : element,
-           value : element
-         }        
-      });
       this.setState({
-        options : object
+        suggestions : this.props.options
       })
   }
+
   render() {
     return (
       <div className="searchbox">
@@ -41,7 +36,7 @@ class AutosuggestInput extends Component {
         </div>
         <ReactSearchBox
           placeholder={this.props.placeholder}
-          data={this.props.value && this.props.value.length >= 2 ? this.state.options : []}
+          data={this.props.value && this.props.value.length >= 2 ? this.state.suggestions : []}
           // onSelect={record => console.log(record)}
           // onFocus={() => {
           //   console.log('This function is called when is focussed')

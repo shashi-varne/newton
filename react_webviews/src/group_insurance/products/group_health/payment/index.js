@@ -170,7 +170,9 @@ class GroupHealthPayment extends Component {
   }
 
   render() {
-    let {policy_data, screenData, provider} = this.state;       
+    let {policy_data, screenData, provider} = this.state;        
+
+    console.log(this.state)
   
     return (
       <Container
@@ -238,7 +240,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} is pending.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.total_premium} is pending.
                           </p>
                 </div>
               }
