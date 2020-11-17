@@ -60,10 +60,10 @@ class GroupHealthReportDetails extends Component {
 
     async componentDidMount() {
 
-        try {        console.log(this.state.policy_id, this.state.providerConfig.provider_api)
+        try {        
+            
             const res = await Api.get(`/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
-            // const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
-            console.log(res)
+        
             this.setState({
                 show_loader: false
             });
@@ -426,8 +426,7 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.lead.base_premium_showable ||
-                                                 this.state.lead.premium)} </div>
+                                            <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.base_premium)} </div>
                                             <div style={{fontSize:10}}> (Basic premium)</div>
                                         </div>
                                         <div>
@@ -445,14 +444,14 @@ class GroupHealthReportDetails extends Component {
                                             </div>
                                         }
                                         <div>
-                                            <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
+                                            <div>{this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.gst)} </div>
                                             <div style={{fontSize:10}}>(18% GST) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;
                                         </div>
                                         <div>
-                                         {inrFormatDecimal(this.state.lead.total_amount)}
+                                         {this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium)}
                                         </div>
                                 </div>
 
@@ -483,7 +482,7 @@ class GroupHealthReportDetails extends Component {
                                 DATE OF PAYMENT
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.transaction_date || '-'}
+                                {this.state.policy_data.dt_updated || '-'}
                             </div>
                         </div>
                     </div>
