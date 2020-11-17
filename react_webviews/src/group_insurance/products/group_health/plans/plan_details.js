@@ -81,7 +81,7 @@ class GroupHealthPlanDetails extends Component {
         this.setLocalProviderData(groupHealthPlanData);
         try {
 
-            const res = await Api.post(`/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,post_body);
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,post_body);
             this.setState({
                 show_loader: false
             });

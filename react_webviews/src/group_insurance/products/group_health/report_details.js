@@ -61,10 +61,9 @@ class GroupHealthReportDetails extends Component {
     async componentDidMount() {
 
         try {        
-            console.log(this.state.policy_id, this.state.providerConfig.provider_api)
+            
             const res = await Api.get(`/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
-           
-            console.log(res)
+        
             this.setState({
                 show_loader: false
             });

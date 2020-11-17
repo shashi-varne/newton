@@ -116,7 +116,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 var resultData = res.pfwresponse.result;
                 plan_selected_final = resultData.premium_details;
             }else{
-                toast('Something went wrong');
+                toast(res.pfwresponse.result.error || res.pfwresponse.results.message
+                    || 'Something went wrong');
             }
         }catch(err){
             console.log(err);

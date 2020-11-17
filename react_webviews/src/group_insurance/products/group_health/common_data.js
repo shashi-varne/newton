@@ -79,7 +79,7 @@ export async function initialize() {
             let url;
 
             if (resume) {
-                url = `/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
+                url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
 
 
@@ -106,7 +106,7 @@ export async function initialize() {
 
                 let application_id =  storageService().get("application_ID")
                
-                  url = `/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
+                  url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
     
                 if (this.state.screen_name === 'final_summary_screen') {
                     url += `&forms_completed=true`;
@@ -132,7 +132,6 @@ export async function initialize() {
                         },
                         insured_account_type: lead.insurance_type || ''
                     }, () => {
-                        console.log(lead)
                         if (this.onload && !this.state.ctaWithProvider) {
                             this.onload();
                         }
@@ -162,7 +161,7 @@ export async function initialize() {
             console.log(lead)
 
             leftTitle = lead.plan_title || '';
-            leftSubtitle = lead.base_premium;
+            leftSubtitle = lead.total_premium;
             sum_assured = lead.total_sum_insured;
             tenure = lead.tenure;
             base_premium = lead.base_premium;
@@ -288,16 +287,12 @@ export async function updateLead( body, quote_id) {
         });
 
         const res = await Api.put(`/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
-             console.log(res,"................res")
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
                 console.log('if');
             } else {
-                this.setState({
-                    show_loader: false
-                });
                 this.navigate(this.state.next_state);
             }
             
