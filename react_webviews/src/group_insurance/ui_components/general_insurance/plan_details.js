@@ -619,7 +619,7 @@ class PlanDetailsClass extends Component {
                 this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.map(this.renderDiseases)}
             </div>
           </div>
-        }
+        } 
 
         {this.props.parent.state.product_key === 'CRITICAL_HEALTH_INSURANCE' &&
           <div style={{ marginTop: '40px', padding: '0 15px' }}>

@@ -102,11 +102,11 @@ class CoronaPlanDetails extends Component {
     var product_diseases_covered = [
       {
         "icon" :  require(`../../../assets/${this.state.type}/singlebed_${this.state.type}.svg`),
-        "text" : "Inpatient Hospitalization"
+        "text" : "Inpatient Hospitalization                                         "
       },
       {
       "icon" :   require(`../../../assets/${this.state.type}/bed_corona_${this.state.type}.svg`),
-      "text" :  "Pre-Post Hospitalization (30/60 Days)",
+      "text" :  "Pre-Post Hospitalization (30/60 Days)                             ",
       },
       {                  
         "icon" :  require(`../../../assets/${this.state.type}/icn_ongoingcovid_${this.state.type}.svg`),
