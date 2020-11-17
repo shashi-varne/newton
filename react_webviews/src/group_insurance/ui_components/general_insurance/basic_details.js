@@ -230,6 +230,7 @@ class BasicDetailsForm extends Component {
       basic_details_data[name] = event.target.value;
       basic_details_data[name + '_error'] = errorDate;
       let age = this.calculateAge(event.target.value.replace(/\\-/g, '/').split('/').reverse().join('/'));
+      console.log(age)
       this.setState({
         age: age
       })
@@ -425,12 +426,13 @@ class BasicDetailsForm extends Component {
       basic_details_data['dob_error'] = 'Future date is not allowed';
     } else if (this.props.parent.state.product_key === 'PERSONAL_ACCIDENT' && (basic_details_data.cover_amount === 500000 || basic_details_data.cover_amount === 1000000) && (this.state.age > 50 || this.state.age < 18)) {
       basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
-    } else if (this.props.parent.state.product_key !== 'DENGUE' && (this.state.age >= 65 || this.state.age < 18)) {
+    } else if (this.props.parent.state.product_key !== 'DENGUE' && (this.state.age > 65 || this.state.age < 18)) {
         basic_details_data['dob_error'] = 'Valid age is between 18 and 65';
     } else if (this.props.parent.state.product_key === 'DENGUE' && (this.state.age > 50 || this.state.age < 18)) {
       basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
     }
-
+      
+     console.log(basic_details_data)
 
     if (!basic_details_data.email || (basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
 
