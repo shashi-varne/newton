@@ -212,14 +212,10 @@ class GroupHealthPlanPremiumSummary extends Component {
         
         if (res.pfwresponse.status_code === 200) {     
           let lead = resultData.quotation_details;
-          lead.member_base = ghGetMember(lead, this.state.providerConfig); console.log(resultData.application_details.id,"id from api")
-         
-
-        groupHealthPlanData['health_insurance_application_id'] = resultData.application_details.id;
-        this.setLocalProviderData(groupHealthPlanData);
-         
-         storageService().set("application_ID", application_id);
-       console.log(lead.member_base,    resultData)
+          lead.member_base = ghGetMember(lead, this.state.providerConfig);
+          let application_id = resultData.application_details.id
+          storageService().setObject("health_insurance_application_id", application_id);
+       
           this.navigate("personal-details/" + lead.member_base[0].key);
         } else {
           this.setState({
