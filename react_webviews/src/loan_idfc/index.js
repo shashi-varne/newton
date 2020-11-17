@@ -19,6 +19,8 @@ import KnowMore from "./components/general/know_more";
 import IncomeDetails from "./components/general/income_details";
 import BtInformation from "./components/bt_details/bt_info";
 import UploadBankStatements from "./components/forms/upload_bank";
+import BasicDetails from "./components/forms/basic_details";
+import ProfessionalDetails from "./components/forms/professional_details";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -67,6 +69,8 @@ const Lending = props => {
           <Route path={`${url}/income-details`} component={IncomeDetails} />
           <Route path={`${url}/bt-info`} component={BtInformation} />
           <Route path={`${url}/upload-bank`} component={UploadBankStatements} />
+          <Route path={`${url}/basic-details`} component={BasicDetails} />
+          <Route path={`${url}/professional-details`} component={ProfessionalDetails} />
        
           <Route component={NotFound} />
 

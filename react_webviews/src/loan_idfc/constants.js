@@ -129,5 +129,41 @@ export const idfc_config = {
         ],
       }
     }
+  },
+  professional_details_screen: {
+    salaryRecieptOptions: [
+      "Bank account Transfer",
+      "Cash",
+      "Cheque"
+    ],
+    constitutionOptions: [
+      "HUF",
+      "INDIVIDUAL",
+      "INDIVIDUAL-MUTUAL FUND",
+      "PARTNERSHIP",
+      "PRIVATE LIMITED COMPANY",
+      "PRIVATE LTD",
+      "PROPERITOR",
+      "PUBLICLIMITED COMPANY",
+      "SOCIETY",
+      "TRUST"
+    ],
+    organisationTypeOptions: [
+      "Central Govt",
+      "Educational Institute",
+      "Partnership Firm",
+      "Private Limited Company",
+      "Public Limited Company",
+      "Proprietorship Firm",
+      "Public Sector Undertaking",
+      "Society",
+      "State Govt",
+      "Trust"
+    ],
+    departmentOptions: [
+      "PRIVATE",
+      "PUBLIC"
+    ],
+    industryOptions: []
   }
 }
