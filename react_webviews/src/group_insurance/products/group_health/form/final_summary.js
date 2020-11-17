@@ -698,7 +698,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     renderMembertop = (props, index) => {
-               console.log(props)
         if (props.key === 'applicant') {
             return (
                 <div className="member-tile" key={index}>
@@ -875,7 +874,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {          
+    render() {                      console.log(this.state)
         return (
             <Container
             provider={this.state.provider}
@@ -1027,7 +1026,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </Grid>
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openInBrowser(this.state.common_data.tnc,
+                        I agree to the <span onClick={() => this.openInBrowser(this.state.common_data.policy_prospectus,
                         'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                             Terms and conditions</span></div>
                     </Grid>

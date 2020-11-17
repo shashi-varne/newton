@@ -53,15 +53,11 @@ class GroupHealthPlanIsPed extends Component {
 
         let member_base = this.state.member_base.map((element, index) => {
             let member = lead.insured_people_details.find(member => member.insured_person.relation === element.relation)
-            console.log(lead.insured_people_details, member)
             return {
                 ...element,
                 ...member
             }
         })
-
-
-       console.log(member_base,":-------------------9279")
 
         let form_data = {};
 
@@ -176,8 +172,6 @@ class GroupHealthPlanIsPed extends Component {
                 }
             }
         }
-
-        console.log(next_state)
  
         if (this.state.lead.quotation_details.insurance_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
             canSubmitForm = false;
@@ -263,8 +257,6 @@ class GroupHealthPlanIsPed extends Component {
     };
 
     renderMembers = (props, index) => {
-
-        console.log(props)
 
         if (props.key === 'applicant') {
             return;
