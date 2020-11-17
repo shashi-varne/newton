@@ -229,7 +229,7 @@ class GroupHealthPlanSelectPed extends Component {
                     }
                 }
             }                    
-            let application_id =  storageService().get("application_ID");
+            let application_id =  storageService().get("health_insurance_application_id")
             let body = {};
             let pre_existing_diseases = []
             if (provider === 'HDFCERGO') {

@@ -142,7 +142,7 @@ class GroupHealthPlanContactDetails extends Component {
 
 
         if (canSubmitForm) {
-            let application_id =  storageService().get("application_ID")
+            let application_id =  storageService().get("health_insurance_application_id")
             let body = {
                 "application_id": application_id,
                 "buyer_details": {

@@ -210,7 +210,7 @@ class GroupHealthStarPlanSelectPed extends Component {
     }
  
    if (canProceed) {
-    let application_id =  storageService().get("application_ID")
+    let application_id = storageService().get("health_insurance_application_id")
     let body = {
       "application_id": application_id
     }

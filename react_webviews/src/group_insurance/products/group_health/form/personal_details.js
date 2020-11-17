@@ -370,7 +370,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (canSubmitForm) {
 
 
-      let application_id =  storageService().get("application_ID")
+      let application_id =  storageService().get("health_insurance_application_id")
 
       let gender = '';
       if (this.state.member_key !== 'self') {

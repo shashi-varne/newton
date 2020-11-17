@@ -95,9 +95,9 @@ class GroupHealthPayment extends Component {
           show_loader: true
         });
   
-        let application_id =  storageService().get("application_ID");
+        let application_id =  storageService().get("health_insurance_application_id")
   
-        const res = await Api.get(`api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
+        const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
   
         var resultData = res.pfwresponse.result;
         this.setState({

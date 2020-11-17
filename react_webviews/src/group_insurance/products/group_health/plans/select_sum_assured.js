@@ -49,7 +49,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }
         
         try {
-            const res = await Api.post(`/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
             this.setState({
                 show_loader: false
             });

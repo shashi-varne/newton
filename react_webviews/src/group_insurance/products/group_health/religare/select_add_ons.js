@@ -59,7 +59,7 @@ class GroupHealthPlanAddOns extends Component {
         
         if (add_ons_data.length === 0) {
             try {
-                const res = await Api.post('/api/insurance/health/quotation/get_add_ons/religare', body);
+                const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
 
                 this.setState({
                     show_loader: false

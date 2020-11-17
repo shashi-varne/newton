@@ -34,7 +34,8 @@ class GroupHealthPlanSelectCity extends Component {
             }
             return;
         }
-        let data  = this.state.suggestions_list.filter(data => (data).toUpperCase() === (city).toUpperCase());
+        console.log(this.state.suggestions_list)
+        let data  = this.state.suggestions_list.filter(data => (data.key).toUpperCase() === (city).toUpperCase());
         if(data.length === 0) {
             this.setState({
                 city_error: 'Please select city from provided list'
@@ -61,7 +62,7 @@ class GroupHealthPlanSelectCity extends Component {
                 try {
 
                     const res = await Api.post(
-                        `/api/insurance/health/quotation/account_summary`,
+                        `api/insurancev2/api/insurance/health/quotation/account_summary`,
                         body
                     );
                     if (res.pfwstatus_code === 200) {
@@ -88,7 +89,7 @@ class GroupHealthPlanSelectCity extends Component {
                     toast('Something went wrong');
                 }
             }
-            const res2 = await Api.get('/api/insurance/health/quotation/get_cities/hdfc_ergo');
+            const res2 = await Api.get('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo');
             
             var resultData2 = res2.pfwresponse.result
             var city_object =  resultData2.map(element => {

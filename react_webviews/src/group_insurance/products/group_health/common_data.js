@@ -104,15 +104,15 @@ export async function initialize() {
                 });
             } else {
 
-                let application_id =  storageService().get("application_ID")
-               
+                let application_id =  storageService().get("health_insurance_application_id")
+               console.log(application_id, providerConfig.provider_api)
                   url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
-    
+   
                 if (this.state.screen_name === 'final_summary_screen') {
                     url += `&forms_completed=true`;
                 }
                 const res = await Api.get(url);
-               
+               console.log(url,res)
                 // eslint-disable-next-line
                 var resultData = res.pfwresponse.result;
 
@@ -286,7 +286,7 @@ export async function updateLead( body, quote_id) {
             show_loader: true
         });
 
-        const res = await Api.put(`/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
+        const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
             if(this.props.edit && !this.state.force_forward) {
@@ -355,7 +355,7 @@ export async function resetQuote() {
 
     try {
 
-        const res = await Api.post(`/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
+        const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {

@@ -63,7 +63,7 @@ class GroupHealthPlanSelectFloater extends Component {
 
         try {
             
-            const res2 = await Api.post(`/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+            const res2 = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
                 body);
             this.setState({
                 show_loader: false
