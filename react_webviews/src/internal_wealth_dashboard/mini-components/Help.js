@@ -2,7 +2,7 @@ import { Button } from 'material-ui';
 import React, { memo } from 'react';
 // ---------- Image Imports ------------
 import fisdomLogo from 'assets/fisdom/fisdom_logo.png';
-import close from 'assets/ic_close.svg';
+import close from 'assets/ic_close_white.svg';
 // -------------------------------------
 
 const HelpPage = (props) => {
