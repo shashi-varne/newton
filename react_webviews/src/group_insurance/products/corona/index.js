@@ -18,20 +18,20 @@ import ic_c_e3_fisdom from 'assets/icn_infection_covid_fisdom.svg';
 import ic_c_e4_fisdom from 'assets/icn_outside_india_fisdom.svg';
 import ic_c_e5_fisdom from 'assets/icn_travel_covid_fisdom.svg';
 import icn_b3_fisdom from '../../../assets/fisdom/icn_b3_fisdom.svg';
-import icn_awaiting_fisdom from '../../../assets/fisdom/icn_awaiting_period_fisdom.svg'
-import icn_ongoingcovid_fisdom from '../../../assets/fisdom/icn_ongoingcovid_fisdom.svg';
-import bed_corona_fisdom from '../../../assets/fisdom/bed_corona_fisdom.svg';
-import people_sitting_fisdom from '../../../assets/fisdom/people_sitting_fisdom.svg';
-import singlebed_fisdom from '../../../assets/fisdom/singlebed_fisdom.svg';
-import inc_outside_india_fisdom from '../../../assets/fisdom/inc_outside_india_fisdom.svg';
-import bacteria_fisdom from '../../../assets/fisdom/bacteria_fisdom.svg';
+// import bacteria_fisdom from '../../../assets/fisdom/bacteria_fisdom.svg';
 import inc_infected_fisdom from '../../../assets/fisdom/inc_infected_fisdom.svg';
+import bed_corona_fisdom from '../../../assets/fisdom/bed_corona_fisdom.svg';
+// import icn_awaiting_fisdom from '../../../assets/fisdom/icn_awaiting_period_fisdom.svg'
+// import icn_ongoingcovid_fisdom from '../../../assets/fisdom/icn_ongoingcovid_fisdom.svg';
+// import people_sitting_fisdom from '../../../assets/fisdom/people_sitting_fisdom.svg';
+// import singlebed_fisdom from '../../../assets/fisdom/singlebed_fisdom.svg';
+// import inc_outside_india_fisdom from '../../../assets/fisdom/inc_outside_india_fisdom.svg';
 
 
-import singlebed_myway from '../../../assets/myway/singlebed_myway.svg'
+// import singlebed_myway from '../../../assets/myway/singlebed_myway.svg'
 import bed_corona_myway from '../../../assets/myway/bed_corona_myway.svg'
-import people_sitting_myway  from '../../../assets/myway/people_sitting_myway.svg'
-import icn_ongoingcovid_myway from '../../../assets/myway/icn_ongoingcovid_myway.svg'
+// import people_sitting_myway  from '../../../assets/myway/people_sitting_myway.svg'
+// import icn_ongoingcovid_myway from '../../../assets/myway/icn_ongoingcovid_myway.svg'
 import ic_c_b1_myway from 'assets/ic_covid_b_1_myway.svg';
 import ic_c_b2_myway from 'assets/ic_covid_b_2_myway.svg';
 import ic_c_b3_myway from 'assets/ic_covid_b_3_myway.svg';
@@ -46,10 +46,10 @@ import ic_c_e2_myway from 'assets/icn_old_age_covid_myway.svg';
 import ic_c_e3_myway from 'assets/icn_infection_covid_myway.svg';
 import ic_c_e4_myway from 'assets/icn_outside_india_myway.svg';
 import ic_c_e5_myway from 'assets/icn_travel_covid_myway.svg';
-import icn_awaiting_myway from '../../../assets/myway/icn_awaiting_period_myway.svg'
+// import icn_awaiting_myway from '../../../assets/myway/icn_awaiting_period_myway.svg'
 import icn_b3_m_myway from '../../../assets/myway/icn_b3_m_myway.svg'
-import inc_outside_india_myway from '../../../assets/myway/inc_outside_india_myway.svg';
-import bacteria_myway from '../../../assets/myway/bacteria_myway.svg'
+// import inc_outside_india_myway from '../../../assets/myway/inc_outside_india_myway.svg';
+// import bacteria_myway from '../../../assets/myway/bacteria_myway.svg'
 import inc_infected_myway from '../../../assets/myway/inc_infected_myway.svg'
 
 
@@ -79,14 +79,14 @@ class CoronaPlanDetails extends Component {
       ic_c_e4: getConfig().productName !== 'fisdom' ? ic_c_e4_myway : ic_c_e4_fisdom,
       ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom,
       icn_b3_m: getConfig().productName !== 'fisdom' ? icn_b3_m_myway : icn_b3_fisdom,
-      icn_ongoingcovid_fisdom: getConfig().productName !== 'fisdom' ? icn_ongoingcovid_myway : icn_ongoingcovid_fisdom,
+      // icn_ongoingcovid_fisdom: getConfig().productName !== 'fisdom' ? icn_ongoingcovid_myway : icn_ongoingcovid_fisdom,
       bed_corona_fisdom: getConfig().productName !== 'fisdom' ? bed_corona_myway : bed_corona_fisdom,
-      singlebed: getConfig().productName !== 'fisdom' ? singlebed_myway : singlebed_fisdom,
-      people_sitting: getConfig().productName !== 'fisdom' ? people_sitting_myway : people_sitting_fisdom,
-      inc_outside_india: getConfig().productName !== 'fisdom' ? inc_outside_india_myway : inc_outside_india_fisdom,
-      bacteria: getConfig().productName !== 'fisdom' ? bacteria_myway : bacteria_fisdom,
+      // singlebed: getConfig().productName !== 'fisdom' ? singlebed_myway : singlebed_fisdom,
+      // people_sitting: getConfig().productName !== 'fisdom' ? people_sitting_myway : people_sitting_fisdom,
+      // inc_outside_india: getConfig().productName !== 'fisdom' ? inc_outside_india_myway : inc_outside_india_fisdom,
+      // bacteria: getConfig().productName !== 'fisdom' ? bacteria_myway : bacteria_fisdom,
       inc_infected : getConfig().productName !== 'fisdom' ? inc_infected_myway : inc_infected_fisdom,
-      icn_awaiting : getConfig().productName !== 'fisdom' ? icn_awaiting_myway : icn_awaiting_fisdom,
+      // icn_awaiting : getConfig().productName !== 'fisdom' ? icn_awaiting_myway : icn_awaiting_fisdom,
     }
   }
 
@@ -123,25 +123,25 @@ class CoronaPlanDetails extends Component {
       {
         'disc': "Policy will be effective after 30 days from the date of purchase",
         'key': 'waiting',
-        'icon': this.state.icn_awaiting
+        'icon':   require(`../../../assets/${this.state.type}/icn_awaiting_period_${this.state.type}.svg`)   //  this.state.icn_awaiting
       }
     ]
 
     var product_diseases_covered = [
       {
-        "icon" : this.state.singlebed,
+        "icon" :  require(`../../../assets/${this.state.type}/singlebed_${this.state.type}.svg`),//this.state.singlebed,
         "text" : "Inpatient Hospitalization"
       },
       {
-      "icon" : this.state.bed_corona_fisdom,
-      "text" : "Pre-Post Hospitalization (30/60 Days)",
+      "icon" :   require(`../../../assets/${this.state.type}/bed_corona_${this.state.type}.svg`) ,// this.state.bed_corona_fisdom,
+      "text" :  "Pre-Post Hospitalization (30/60 Days)",
       },
-      {
-        "icon" : this.state.icn_ongoingcovid_fisdom,
+      {                  
+        "icon" :  require(`../../../assets/${this.state.type}/icn_ongoingcovid_${this.state.type}.svg`),//this.state.icn_ongoingcovid_fisdom,
         "text" : "Daycare procedures Covers"
       },
       {
-        "icon" : this.state.people_sitting,
+        "icon" :  require(`../../../assets/${this.state.type}/people_sitting_${this.state.type}.svg`),// this.state.people_sitting,
         "text" : "Tele/virtual consultation till the first 90 days"
       }
     ]
@@ -168,11 +168,11 @@ class CoronaPlanDetails extends Component {
           text : "The person suffering from the infection or taking treatment or recommended for quarantine at the time of purchasing the policy"
         },
         {
-          icon :  this.state.bacteria,
+          icon : require(`../../../assets/${this.state.type}/bacteria_${this.state.type}.svg`),//this.state.bacteria,
           text : "Manifestation of the Coronavirus Infection taken place while the Insured is outside India"
         }, 
         {
-          icon : this.state.inc_outside_india,
+          icon : require(`../../../assets/${this.state.type}/inc_outside_india_${this.state.type}.svg`) , //this.state.inc_outside_india, 
           text : "Treatment taken outside India"
         },
          {
