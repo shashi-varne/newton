@@ -31,7 +31,7 @@ class LifeInsuranceEntry extends Component {
         disabled: false
       },
       {
-        key: 'lifeinsurencesavings',
+        key: 'savings plan',
         title: 'Insurance Savings plan',
         subtitle: 'Life coverage with wealth creation',
         icon: 'money_pig',
@@ -57,8 +57,13 @@ class LifeInsuranceEntry extends Component {
 
  
   handleClick = (data) => {
-    this.sendEvents('next', data.key)
-    if (data.key === 'lifeinsurencesavings') {
+    if(data.key === 'term'){
+      this.sendEvents('next', 'term insurance')
+    }else{
+      this.sendEvents('next', data.key)
+    }
+    
+    if (data.key === 'savings plan') {
       this.navigate('/group-insurance/life-insurance/savings-plan/landing');
     } else {
       let fullPath = data.key + '/landing';
@@ -100,9 +105,12 @@ class LifeInsuranceEntry extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'Life Insurance',
-        "insurance_provider": insurance_type ? insurance_type : ''
       }
     };
+
+    if(insurance_type){
+      eventObj.properties['insurance_type'] = insurance_type;
+    }
 
     if (user_action === 'just_set_events') {
       return eventObj;

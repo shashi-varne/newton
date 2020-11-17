@@ -69,12 +69,17 @@ class FyntuneLanding extends Component {
       event_name: "life_insurance_savings",
       properties: {
         user_action: user_action,
-        product: fyntuneConstants.provider_api,
+        // product: fyntuneConstants.provider_api,
         screen_name: "introduction",
-        faq: data.faq ? "yes": "no", 
-        resume_click: data.resume_clicked ? "yes" : "no",
       },
     };
+    
+    if(data.faq){
+      eventObj.properties['faq'] = 'yes';
+    }
+    if(data.resume_clicked){
+      eventObj.properties['resume_click'] = 'yes';
+    }
 
     if (user_action === "just_set_events") {
       return eventObj;

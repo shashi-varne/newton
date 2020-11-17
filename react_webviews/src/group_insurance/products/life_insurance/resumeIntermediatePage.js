@@ -23,6 +23,21 @@ class ResumeIntermediatePage extends Component {
         });
       };
 
+    sendEvents(user_action, data = {}) {
+        let eventObj = {
+          event_name: "life_insurance_savings",
+          properties: {
+            user_action: user_action,
+            screen_name: "resume",
+          },
+        };
+
+        if (user_action === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+    }
 
     async componentDidMount(){
         nativeCallback({ action: 'take_control_reset' });
@@ -57,6 +72,7 @@ class ResumeIntermediatePage extends Component {
 
     }
     handleClick = () =>{
+        this.sendEvents('next')
         if(!this.state.payment_data){
             this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
             return;   
