@@ -196,7 +196,7 @@ class CoronaPlanDetails extends Component {
         {
           "sum_assured_text": '50,000',
           "quarantined_text": '25,000',
-          'product_tag_line': '50,000 thousand sum assured ',
+          'product_tag_line': '₹50,000 sum assured ',
           'product_tag_line2' : 'in just ₹1500 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
@@ -209,7 +209,7 @@ class CoronaPlanDetails extends Component {
         {
           "sum_assured_text": '25,000',
           "quarantined_text": '12,500',
-          'product_tag_line': '25,000 thousand sum assured ',
+          'product_tag_line': '₹25,000 sum assured ',
           'product_tag_line2' : 'in just ₹750 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
