@@ -6,7 +6,7 @@ export var fyntuneConstants = {
         {
           icon: "icn_hs_no_document",
           title: "No document required",
-          subtitle: "Easy and paperless process",
+          subtitle: "Quick and paperless process",
         },
         {
           icon: "icn_hs_assistance",
