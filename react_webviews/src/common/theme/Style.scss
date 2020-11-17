@@ -1070,27 +1070,35 @@ input#pan {
   text-align: center;
   width: 100%;
   color: #0A1D32;
+  font-weight: 400;
+
 
   .indicator {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 
+    .hr {
+      // background-color: green;
+      width: 48.5%;
+    }
+
     .hr1 {
-      border: 1px solid #fff;
-      width: 50%;
+      border: 1px solid #FFFFFF;
+      // width: 46%;
     }
 
     .hr2 {
-      border: 0.5px solid var(--primary);
-      width: 50%;
+      border-top: 1px solid var(--primary);
+      // width: 45%;
     }
 
     .dot {
       height: 8px;
-      width: 9px;
+      width: 8px;
       border: 1px solid var(--primary);
       background-color: #E3EFFF;
+      // background-color: var(--primary);
       border-radius: 50%;
       display: inline-block;
     }

@@ -236,19 +236,8 @@
     line-height: 24px;
   }
 
-  .benefits {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 20px;
-
-    .sub-benefits {
-      font-size: 13px;
-      font-weight: 400;
-      color: #767e86;
-      line-height: 20px;
-      width: 100%;
-      align-items: center;
-    }
+  .generic-page-title {
+    font-size: 15px !important;
   }
 }
 

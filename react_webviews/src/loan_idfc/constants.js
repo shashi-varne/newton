@@ -66,6 +66,23 @@ export const idfc_config = {
       ]
     }
   },
+  bt_info_screen:{
+    benefits: {
+      title: 'What benefits will I get?',
+      options: [
+        { 'icon': 'icn_bt_1', 'subtitle': 'Lower interest rate compared to your existing loan(s)'},
+        { 'icon': 'icn_bt_2', 'subtitle': 'An option to choose a longer loan repayment tenure'},
+        { 'icon': 'icn_bt_3', 'subtitle': 'Possibility of getting a bigger loan offer depending on your profile'}
+      ]
+    },
+    required_info: {
+      title: 'What information do I need to provide for BT?',
+      options: [
+        { 'icon': 'icon_color', 'subtitle': 'Outstanding principal amount of existing loan(s) or credit card(s)'},
+        { 'icon': 'icon_color', 'subtitle': 'Account statement of the existing loan(s) for which you want to avail ‘balance transfer’'}
+      ]
+    }
+  },
   know_more_screen: {
     features: {
       content: [

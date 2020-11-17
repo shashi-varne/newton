@@ -46,9 +46,9 @@ const Header = ({ classes, title, count, total, current, goBack,
             {headerData.progressHeaderData.steps.map((option,index) => (
               <div className="journey-progress" key={index}>
                 <div className="indicator">
-                  <hr className={`${index === 0 ? 'hr1' : 'hr2'}`} />
+                  <div className="hr"><hr className={`${index === 0 ? 'hr1' : 'hr2'}`} /></div>
                   <span className="dot"></span>
-                  <hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'hr1' : 'hr2'}`} />
+                  <div className="hr"><hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'hr1' : 'hr2'}`} /></div>
                 </div>
 
                 <div>{option.title}</div>
@@ -58,7 +58,7 @@ const Header = ({ classes, title, count, total, current, goBack,
         </div> */}
 
 
-        <div
+       <div
         style={style}
           className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
         >

@@ -726,7 +726,7 @@ body[data-device="mobile"] {
   }
 
   .completed {
-    border: 1px solid #d3dbe4;
+    border: 2px solid var(--highlight);
     background-color: var(--primary);
 
     .title {
