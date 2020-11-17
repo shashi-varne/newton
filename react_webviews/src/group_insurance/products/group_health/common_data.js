@@ -19,6 +19,11 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
+    provider = provider.toUpperCase();
+    if(provider === 'HDFC_ERGO'){
+        provider = "HDFCERGO"
+    }
+    console.log(provider);
     let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {

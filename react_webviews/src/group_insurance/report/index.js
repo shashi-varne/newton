@@ -27,7 +27,7 @@ class Report extends Component {
   navigate = (pathname, provider) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&provider=' + provider,
+      search: getConfig().searchParams,
       params: {
         backToState: 'report'
       }
@@ -36,8 +36,20 @@ class Report extends Component {
 
   getProviderObject = (policy) => {
     let provider = policy.provider;
+    let vendor = policy.vendor;
     let obj = policy;
     obj.key = provider;
+
+    if(vendor !== ""){
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: policy.total_amount
+      };
+    }
 
     if (provider === 'HDFCERGO') {
       obj = {
@@ -92,8 +104,7 @@ class Report extends Component {
     return obj;
   }
 
-  setReportData(termData, group_insurance_policies) {
-
+  setReportData(termData, group_insurance_policies, health_insurance_policies) {
 
     let canShowReport = false;
     let application;
@@ -151,15 +162,17 @@ class Report extends Component {
     }
 
 
+    let hs_policies = health_insurance_policies.insurance_apps;
+    for (var i = 0; i < hs_policies.length; i++) {
+      let policy = this.getProviderObject(hs_policies[i]);
+      reportData.push(policy);
+    }
+
     let ins_policies = group_insurance_policies.ins_policies || [];
     for (var i = 0; i < ins_policies.length; i++) {
       let policy = this.getProviderObject(ins_policies[i]);
       reportData.push(policy);
     }
-
-    console.log(reportData);
-
-
     this.setState({
       reportData: reportData,
       termRedirectionPath: fullPath
@@ -185,9 +198,11 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : ''
         })
 
-        let ins_policies = policyData.group_insurance || {};
+        let group_insurance_policies = policyData.group_insurance || {};
+        let health_insurance_policies = policyData.health_insurance || {};
+        let term_insurance_policies = policyData.term_insurance || {};
 
-        this.setReportData(policyData.term_insurance, ins_policies);
+        this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -220,7 +235,8 @@ class Report extends Component {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
-    } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
+    // } else if (['HDFCERGO','RELIGARE','STAR'].indexOf(key) !== -1) {
+    }else if(policy.vendor !== "" && !policy.provider){
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
