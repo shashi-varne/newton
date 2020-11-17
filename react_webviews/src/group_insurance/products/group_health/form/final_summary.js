@@ -566,9 +566,9 @@ class GroupHealthPlanFinalSummary extends Component {
             this.redirectToPayment();
             return;
         }
-        let application_id =  storageService().get("application_ID");
+        let application_id =  storageService().get("health_insurance_application_id")
         try {
-            let res = await Api.get(`/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
+            let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -600,12 +600,12 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     checkPPC = async () => {
-        let application_id =  storageService().get("application_ID");
+        let application_id =  storageService().get("health_insurance_application_id")
         this.setState({
             show_loader: true
         });
         try {
-            let res = await Api.get(`api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
+            let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
@@ -874,7 +874,7 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    render() {                      console.log(this.state.quotation, this.state.lead, this.state)
+    render() {
         return (
             <Container
             provider={this.state.provider}

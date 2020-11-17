@@ -258,7 +258,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         if (canSubmitForm) {
             let body = {};
-            let application_id =  storageService().get("application_ID")
+            let application_id =  storageService().get("health_insurance_application_id")
             if (provider === 'HDFCERGO') {
                 body = {
                     "application_id": application_id,
@@ -346,7 +346,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 isLoadingCity: true
             })
             try {
-                const res = await Api.get((`/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
+                const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
 
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
@@ -389,7 +389,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         this.setState({isLoadingCity: true});
-        const res = await Api.get((`/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
+        const res = await Api.get((`api/insurancev2/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
         this.setState({isLoadingCity: false});
         let { country } = form_data;
         let pincode_error = '';

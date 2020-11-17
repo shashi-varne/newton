@@ -31,7 +31,7 @@ class GroupHealthPlanList extends Component {
 
             let body = this.state.groupHealthPlanData.post_body;
 
-             const res = await Api.post(`/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
+             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
              body);
 
             this.setState({

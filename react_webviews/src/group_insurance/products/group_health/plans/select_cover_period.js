@@ -40,9 +40,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             body['floater_type'] = 'non_floater';
         }
         try {
-            // let body = this.state.groupHealthPlanData.post_body;
-            // const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/premium`, body);
-            const res = await Api.post(`/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
+           
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
             body);
             this.setState({
                 show_loader: false
@@ -110,7 +109,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         });
 
         try{
-            const res = await Api.post(`/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`, body);
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`, body);
 
             if (res.pfwresponse.status_code === 200){
                 var resultData = res.pfwresponse.result;

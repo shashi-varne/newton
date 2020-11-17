@@ -74,7 +74,7 @@ class StarAddress extends Component {
     }, async () => {
       try {
         const { pincode, city_id } = form_data;
-        const res = await Api.get(`/api/insurance/proposal/star/area_options?pincode=${pincode}&city_id=${city_id}`);
+        const res = await Api.get(`api/insurancev2/api/insurance/proposal/star/area_options?pincode=${pincode}&city_id=${city_id}`);
 
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const areaList = this.formatAreaOpts(res.pfwresponse.result.areas);
@@ -203,8 +203,7 @@ class StarAddress extends Component {
         return acc;
       }, {});
       
-      let application_id =  storageService().get("application_ID")
-
+      let application_id =  storageService().get("health_insurance_application_id")
 
       const body = {
         "application_id":  application_id,
@@ -216,7 +215,8 @@ class StarAddress extends Component {
             "addr_line2":form_data.addr_line2,
             "city": form_data.city,
             "area" : form_data.area,
-            "area_id" : form_data.area_id + ''
+            "area_id" : form_data.area_id + '',
+            'country' : 'INDIA'
           }
         }
       }
@@ -274,7 +274,7 @@ class StarAddress extends Component {
     if (pincode.length === 6) {
       try {
         this.setState({ isLoadingCity: true });
-        const res = await Api.get((`/api/insurance/proposal/star/city_options?pincode=${pincode}`));
+        const res = await Api.get((`api/insurancev2/api/insurance/proposal/star/city_options?pincode=${pincode}`));
 
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const cityList = this.formatCityOpts(res.pfwresponse.result.cities);

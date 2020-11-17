@@ -59,7 +59,7 @@ class GroupHealthPlanAddOns extends Component {
         
         if (add_ons_data.length === 0) {
             try {
-                const res = await Api.post('/api/insurance/health/quotation/get_add_ons/religare', body);
+                const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
 
                 this.setState({
                     show_loader: false
@@ -95,7 +95,6 @@ class GroupHealthPlanAddOns extends Component {
                             }
                         }    
                     }
-                    console.log(add_ons_data)
 
                     add_ons_data[1].price = options;
                     add_ons_data[1].default_premium = parseInt(add_ons_data[1].price[0].premium, 10);
@@ -168,7 +167,6 @@ class GroupHealthPlanAddOns extends Component {
         data.selected_premium =  parseInt(data.price[indexOption].premium, 10);
 
         add_ons_data[index] = data;
-
         this.setState({
             add_ons_data: add_ons_data
         }, () => {
@@ -268,7 +266,7 @@ class GroupHealthPlanAddOns extends Component {
             if(item.checked) {
 
                 if (Array.isArray(item.price)) {
-                    add_ons_body.push(`opd-${item.selected_cover_amount || item.default_premium}`)
+                    add_ons_body.push(`opd-${item.selected_cover_amount || item.default_cover_amount}`)
                     add_ons_json[item.id || 'opd'] = {
                         price: item.selected_premium || item.default_premium,
                         title: item.name

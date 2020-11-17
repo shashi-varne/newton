@@ -213,9 +213,8 @@ class GroupHealthPlanPremiumSummary extends Component {
         if (res.pfwresponse.status_code === 200) {     
           let lead = resultData.quotation_details;
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
-          let application_id = resultData.application_details.id
-          storageService().setObject("health_insurance_application_id", application_id);
-       
+          let application_id = resultData.application_details.id;
+          storageService().set('health_insurance_application_id', application_id);
           this.navigate("personal-details/" + lead.member_base[0].key);
         } else {
           this.setState({
@@ -230,12 +229,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           show_loader: false,
         });
         toast("Something went wrong");
-      }
-
-      let application_id =  storageService().get("application_ID")
-      console.log(application_id, "<<<----session key")
-
-    
+      }    
   };
 
   renderProviderPremium() {
