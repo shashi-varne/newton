@@ -235,11 +235,10 @@ class Report extends Component {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
-    // } else if (['HDFCERGO','RELIGARE','STAR'].indexOf(key) !== -1) {
-    }else if(policy.vendor !== "" && !policy.provider){
-      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
+    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
+      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
     } else {
-      path = '/group-insurance/common/reportdetails/' + policy.id;
+      path = '/group-insurance/commonconsole.log(reportData)/reportdetails/' + policy.id;
     }
 
     this.navigate(path, policy.provider);
