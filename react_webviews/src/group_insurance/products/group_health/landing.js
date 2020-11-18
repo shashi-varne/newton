@@ -41,6 +41,7 @@ class GroupHealthLanding extends Component {
       selectedIndex: 0,
       providerConfig: getGhProviderConfig(this.props.match.params.provider),
       card_swipe_count: 0,
+      tncChecked: false
     };
     this.openInBrowser = openInBrowser.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
@@ -135,6 +136,11 @@ class GroupHealthLanding extends Component {
     });
   };
   handleClick = () => {
+    if(!this.state.tncChecked){
+      toast('Please Agree to the Terms and Conditions');
+      return;
+    }
+
     let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {};
     let post_body = groupHealthPlanData.post_body;
     if(post_body){
@@ -224,6 +230,11 @@ class GroupHealthLanding extends Component {
     });
   };
 
+  handleTermsAndConditions = () =>{
+    this.setState({
+      tncChecked : !this.state.tncChecked
+    });
+  }
 
   render() {
     return (
@@ -464,11 +475,11 @@ class GroupHealthLanding extends Component {
               <Grid item xs={1} className="TextCenter">
                 <Checkbox
                   defaultChecked
-                  checked={this.state.checked}
+                  checked={this.state.tncChecked}
                   color="default"
                   value="checked"
                   name="checked"
-                  onChange={() => console.log("Clicked")}
+                  onChange={this.handleTermsAndConditions}
                   className="Checkbox"
                 />
               </Grid>

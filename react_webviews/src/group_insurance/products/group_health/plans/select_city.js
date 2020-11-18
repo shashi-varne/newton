@@ -34,7 +34,7 @@ class GroupHealthPlanSelectCity extends Component {
             }
             return;
         }
-        console.log(this.state.suggestions_list)
+
         let data  = this.state.suggestions_list.filter(data => (data.key).toUpperCase() === (city).toUpperCase());
         if(data.length === 0) {
             this.setState({
@@ -104,7 +104,6 @@ class GroupHealthPlanSelectCity extends Component {
                     suggestions_list: city_object
                 }, () => {
                     this.checkCity(this.state.city);
-                    console.log(this.state.suggestions_list, "suggestions_list")
                 })
 
             this.setState({

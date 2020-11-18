@@ -4,7 +4,6 @@ import { inrFormatDecimal, numDifferentiationInr } from '../../../../utils/valid
 export default class ReligarePremium extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       selectedAddOns: [],
     };

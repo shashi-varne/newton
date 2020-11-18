@@ -61,7 +61,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         let res = await Api.post(`api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
         
       let resultData = res.pfwresponse.result;
-      let quote_id = resultData.quotation.id || '';
+      let quote_id = resultData.quotation ? resultData.quotation.id : '';
   
       groupHealthPlanData.post_body.quotation_id = quote_id;
       this.setLocalProviderData(groupHealthPlanData)

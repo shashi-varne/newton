@@ -245,7 +245,7 @@ class GroupHealthPlanDetails extends Component {
             extra_data,
         } = this.state;
 
-        console.log('ben', benefits)
+        
         return (
           <Container
             events={this.sendEvents("just_set_events")}

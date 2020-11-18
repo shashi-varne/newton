@@ -23,7 +23,7 @@ export async function initialize() {
     if(provider === 'HDFC_ERGO'){
         provider = "HDFCERGO"
     }
-    console.log(provider);
+    
     let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
