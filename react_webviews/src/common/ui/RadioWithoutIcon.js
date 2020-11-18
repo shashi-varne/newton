@@ -43,7 +43,7 @@ class RadioGrp extends Component {
 
   render() {
     const { options } = this.state;
-
+    console.log(options)
     const allOptions = options.map((option, i) => {
       if (this.props.type === 'professional') {
         return (
