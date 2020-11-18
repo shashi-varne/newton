@@ -143,7 +143,7 @@ class GroupHealthPlanSelectFloater extends Component {
            }
        }
        handleClick = () => {
-        //    this.sendEvents('next');
+           this.sendEvents('next');
            let groupHealthPlanData = this.state.groupHealthPlanData;
            let type_of_plan = this.state.premium_data_floater[this.state.selectedIndex].key;
            let selectedPlan = this.state.premium_base[type_of_plan]; //first of WF or NF;

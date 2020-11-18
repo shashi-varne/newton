@@ -175,7 +175,7 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     renderOptions = (add_ons_data) => {
-        console.log('in render ', add_ons_data)
+        
         return (
             <div>
                 {add_ons_data.map((item, index) => (
@@ -234,7 +234,7 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     sendEvents(user_action) {
-        const selected_add_ons = this.state.add_ons_data.map(add_on => add_on.checked ? add_on.title : '');
+        const selected_add_ons = this.state.add_ons_data.map(add_on => add_on.checked ? add_on.name : '');
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
