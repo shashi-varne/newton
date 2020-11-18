@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import {validateNumber, validateLengthDynamic, storageService } from 'utils/validators';
+import {validateNumber, validateLengthDynamic } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
@@ -258,7 +258,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         if (canSubmitForm) {
             let body = {};
-            let application_id =  storageService().get("health_insurance_application_id")
+            let application_id =  this.state.application_id
             if (provider === 'HDFCERGO') {
                 body = {
                     "application_id": application_id,

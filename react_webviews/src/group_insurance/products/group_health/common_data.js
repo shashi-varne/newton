@@ -82,7 +82,7 @@ export async function initialize() {
             let quote_id = storageService().get('ghs_ergo_quote_id');
             let resume = storageService().getObject("resumeToPremiumHealthInsurance");
             let url;
-
+  
             if (resume) {
                 url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
@@ -109,15 +109,14 @@ export async function initialize() {
                 });
             } else {
 
-                let application_id =  storageService().get("health_insurance_application_id")
-               console.log(application_id, providerConfig.provider_api)
+                let application_id = storageService().get('health_insurance_application_id');
+        
                   url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
    
                 if (this.state.screen_name === 'final_summary_screen') {
                     url += `&forms_completed=true`;
                 }
                 const res = await Api.get(url);
-               console.log(url,res)
                 // eslint-disable-next-line
                 var resultData = res.pfwresponse.result;
 
@@ -129,6 +128,7 @@ export async function initialize() {
                     var member_base = ghGetMember(lead, this.state.providerConfig);                                       
                     this.setState({
                         lead: resultData || {},
+                        application_id : application_id,
                         member_base: member_base,
                         quotation: resultData.quotation_details || {},
                         common_data: {
@@ -162,9 +162,6 @@ export async function initialize() {
     if (this.state.ctaWithProvider) { 
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
         if (this.state.get_lead) {
-
-            console.log(lead)
-
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_premium;
             sum_assured = lead.total_sum_insured;
@@ -350,7 +347,6 @@ export function navigate(pathname, data = {}) {
 export async function resetQuote() {
 
     this.handleClose();
-    // let quote_id = storageService().get('ghs_ergo_quote_id');
     this.setState({
         show_loader: true,
         restart_conformation: true

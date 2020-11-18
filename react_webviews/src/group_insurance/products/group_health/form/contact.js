@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
-import {validateEmail, numberShouldStartWith, validateNumber , storageService} from 'utils/validators';
+import {validateEmail, numberShouldStartWith, validateNumber} from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -142,7 +142,7 @@ class GroupHealthPlanContactDetails extends Component {
 
 
         if (canSubmitForm) {
-            let application_id =  storageService().get("health_insurance_application_id")
+            let application_id =  this.state.application_id
             let body = {
                 "application_id": application_id,
                 "buyer_details": {

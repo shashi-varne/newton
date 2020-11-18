@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
-import { isValidMonthYear, storageService } from "utils/validators";
+import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob, containsSpecialCharacters } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -290,7 +290,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
       toast("Select atleast one option");
     }
  
-    let application_id =  storageService().get("health_insurance_application_id")
+    let application_id = this.state.application_id
 
     let body = {
       "application_id": application_id,

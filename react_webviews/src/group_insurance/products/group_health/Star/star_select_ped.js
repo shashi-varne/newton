@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "../religare/radioAndCheckboxList";
-import {  validateAlphabets, storageService } from "utils/validators";
+import {  validateAlphabets } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 import { compact } from 'lodash';
@@ -210,7 +210,7 @@ class GroupHealthStarPlanSelectPed extends Component {
     }
  
    if (canProceed) {
-    let application_id = storageService().get("health_insurance_application_id")
+    let application_id = this.state.application_id
     let body = {
       "application_id": application_id
     }

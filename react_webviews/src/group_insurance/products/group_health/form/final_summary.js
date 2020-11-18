@@ -42,7 +42,6 @@ class GroupHealthPlanFinalSummary extends Component {
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
             screen_name:'final_summary_screen',
-            tncChecked : false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -568,7 +567,7 @@ class GroupHealthPlanFinalSummary extends Component {
             this.redirectToPayment();
             return;
         }
-        let application_id =  storageService().get("health_insurance_application_id")
+        let application_id =  this.state.application_id
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
             var resultData = res.pfwresponse.result;
@@ -602,7 +601,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     checkPPC = async () => {
-        let application_id =  storageService().get("health_insurance_application_id")
+        let application_id =  this.state.application_id
         this.setState({
             show_loader: true
         });

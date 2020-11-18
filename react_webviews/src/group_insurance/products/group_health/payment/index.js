@@ -58,7 +58,6 @@ class GroupHealthPayment extends Component {
     nativeCallback({ action: 'take_control_reset' });
     let { generic_callback } = this.state.params;
 
-    console.log(this.state)
 
    let status = generic_callback.split('=')[1]
 
@@ -103,7 +102,7 @@ class GroupHealthPayment extends Component {
           show_loader: true
         });
   
-        let application_id =  storageService().get("health_insurance_application_id")
+        let application_id = storageService().get('health_insurance_application_id'); 
   
         const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
   

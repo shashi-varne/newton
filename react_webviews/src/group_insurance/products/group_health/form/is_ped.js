@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService } from  'utils/validators';
 import { FormControl } from 'material-ui/Form';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
@@ -190,7 +189,7 @@ class GroupHealthPlanIsPed extends Component {
         }
 
         if (canSubmitForm) {
-            let application_id = storageService().get("health_insurance_application_id")
+            let application_id = this.state.application_id
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })

@@ -5,7 +5,7 @@ import { getConfig } from "../../../../utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
 import ConfirmDialog from './../plans/confirm_dialog';
-import { isEmpty, storageService } from 'utils/validators';
+import { isEmpty } from 'utils/validators';
 import { keyBy } from 'lodash';
 
 class GroupHealthPlanMedicalHistory extends Component {
@@ -226,7 +226,7 @@ class GroupHealthPlanMedicalHistory extends Component {
     });
 
 
-    let application_id = storageService().get("health_insurance_application_id")
+    let application_id = this.state.application_id
 
     let body = {
       "application_id": application_id 

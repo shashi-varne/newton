@@ -9,7 +9,7 @@ import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
-import { isEmpty , validateLengthDynamic, storageService } from '../../../../utils/validators';
+import { isEmpty , validateLengthDynamic } from '../../../../utils/validators';
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class StarAddress extends Component {
@@ -203,7 +203,7 @@ class StarAddress extends Component {
         return acc;
       }, {});
       
-      let application_id =  storageService().get("health_insurance_application_id")
+      let application_id =  this.state.application_id
 
       const body = {
         "application_id":  application_id,

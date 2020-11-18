@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
 import {
-  calculateAge, toFeet, capitalizeFirstLetter, storageService,
+  calculateAge, toFeet, capitalizeFirstLetter,
   formatDate, validatePan, validateAlphabets, dobFormatTest, isValidDate, containsSpecialCharactersAndNumbers, containsSpecialCharacters
 } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -93,6 +93,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       insured_people_details.forEach(element => {
       if(element.insured_person["relation"] === member_key){
+         // eslint-disable-next-line
         form_data = element.insured_person,
         backend_key = element.insured_person.relation_key          
       }
@@ -368,8 +369,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (canSubmitForm) {
 
-
-      let application_id =  storageService().get("health_insurance_application_id")
+      let application_id =   this.state.application_id
 
       let gender = '';
       if (this.state.member_key !== 'self') {
