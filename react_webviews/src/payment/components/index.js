@@ -439,6 +439,7 @@ class PaymentOption extends React.Component {
       "event_name": "pg_payment_option",
       "properties": {
         "user_action": "next",
+        "amount": store.amount,
         "pg_mode": type,
         "flow": store.flow,
         "investor": store.investor,
