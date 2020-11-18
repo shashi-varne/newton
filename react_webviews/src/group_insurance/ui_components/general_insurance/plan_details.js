@@ -375,16 +375,16 @@ class PlanDetailsClass extends Component {
             {props.plan_title || inrFormatDecimal(props.sum_assured)}
             {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
           </div>}
-
+          {!this.state.isRedirectionModal && this.props.parent.state.product_key === 'CORONA' && <span className="accident-plan-item4" >in</span>}
         <div className="accident-plan-item3" style={{ display: this.state.isRedirectionModal ? 'grid' : 'flex' }}>
-          {!this.state.isRedirectionModal && <span className="accident-plan-item4">in</span>}
+          {!this.state.isRedirectionModal && this.props.parent.state.product_key !== 'CORONA' && <span className="accident-plan-item4">in</span>}
           {this.state.isRedirectionModal && <span className="accident-plan-item4" style={{ marginBottom: 3 }}>starts from</span>}
           {this.props.parent.state.product_key !== 'CORONA' &&
             <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
           {props.premium}/{props.plan_frequency || 'year'}</span>
           }
           {this.props.parent.state.product_key === 'CORONA' &&
-            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold' }}>₹
+            <span className="accident-plan-item-color" style={{ color: getConfig().primary, fontWeight: 'bold', marginTop : '-20px'}}>₹
           {props.premium} <span style={{ fontSize: '9px', color: '#6f6f6f' }}>{props.plan_frequency || 'for a year'}</span></span>
           }
         </div>
@@ -416,17 +416,17 @@ class PlanDetailsClass extends Component {
     });
   }
 
-  async handleClickCurrent() {
+  async handleClickCurrent() {  
     this.sendEvents('next');
+
     var final_data = {
       "product_plan": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_plan,
       "premium": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].premium,
       "cover_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].sum_assured,
       "tax_amount": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].tax_amount,
       "productTitle": this.state.productTitle
-    }
+    } 
     final_data.product_name = this.props.parent.state.product_key;
-
     let group_insurance_plan_final_data = this.state.group_insurance_plan_final_data || {};
     group_insurance_plan_final_data[final_data.product_name] = final_data;
     window.sessionStorage.setItem('group_insurance_plan_final_data',
@@ -459,10 +459,14 @@ class PlanDetailsClass extends Component {
             || 'Something went wrong');
         }
       } else {
-        this.navigate('form', '', final_data);
+          if(this.props.parent.state.product_key === 'CORONA' && !this.state.lead_id){
+             this.navigate('declaration', '', final_data);
+          }else {
+            this.navigate('form', '', final_data);
       }
+    }
     } catch (err) {
-      toast('Something went wrong');
+      toast('Something went wrong');                                                                                                                                                                          
     }
 
   }
@@ -573,7 +577,8 @@ class PlanDetailsClass extends Component {
               <h1 className="accident-plan-title">{this.state.productTitle}</h1>
             }
             {this.props.parent.state.product_key === 'CORONA' &&
-              <h1 className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line}</h1>
+              <h1  style={{fontWeight:'bold'}} className="accident-plan-title">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line} 
+              <span style={{fontWeight:'400'}}>{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_tag_line2}</span> </h1>
             }
             <img src={this.state.quoteData.logo || bhartiaxa_logo} alt="" />
           </div>
@@ -614,7 +619,7 @@ class PlanDetailsClass extends Component {
                 this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.map(this.renderDiseases)}
             </div>
           </div>
-        }
+        } 
 
         {this.props.parent.state.product_key === 'CRITICAL_HEALTH_INSURANCE' &&
           <div style={{ marginTop: '40px', padding: '0 15px' }}>
@@ -624,7 +629,7 @@ class PlanDetailsClass extends Component {
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.length} life-threatening diseases covered</div>
                 <div onClick={() => this.openDiseases()} className="round-visible-button">
-                  Diseases covered &nbsp;&nbsp;&nbsp;>
+                  Diseases covered &nbsp;&nbsp;&nbsp;
                 </div>
               </div>
             </div>
