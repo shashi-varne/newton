@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import RadioWithoutIcon from '../../../../common/ui/RadioWithoutIcon';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService } from  'utils/validators';
 import { FormControl } from 'material-ui/Form';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
@@ -55,7 +54,7 @@ class GroupHealthPlanIsPed extends Component {
             let member = lead.insured_people_details.find(member => member.insured_person.relation === element.relation)
             return {
                 ...element,
-                ...member
+                ...member   
             }
         })
 
@@ -63,7 +62,7 @@ class GroupHealthPlanIsPed extends Component {
 
         for (var mem in member_base) {
             let mem_info = member_base[mem];
-            if (mem_info.insured_person.ped) {
+            if (mem_info.insured_person !== undefined  && mem_info.insured_person.ped) {
                 is_ped = 'YES';
                 form_data[mem_info.insured_person.relation + '_checked'] = true;
             }
@@ -139,6 +138,8 @@ class GroupHealthPlanIsPed extends Component {
         })
 
         let member_base =   this.state.member_base
+
+        console.log(member_base)
         
         let body = {};
         let next_state = '';
@@ -149,6 +150,7 @@ class GroupHealthPlanIsPed extends Component {
 
         let insured_people_details = []
         for (var i in member_base) {
+            if(member_base[i].insured_person !== undefined) {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].insured_person.relation;
             body[backend_key] = {};
@@ -171,6 +173,7 @@ class GroupHealthPlanIsPed extends Component {
                     insured_people_details.push(obj)
                 }
             }
+           }
         }
  
         if (this.state.lead.quotation_details.insurance_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {
@@ -190,14 +193,12 @@ class GroupHealthPlanIsPed extends Component {
         }
 
         if (canSubmitForm) {
-            let application_id = storageService().get("health_insurance_application_id")
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
 
          
             let body = {
-                "application_id": application_id,
                 insured_people_details
             }
 

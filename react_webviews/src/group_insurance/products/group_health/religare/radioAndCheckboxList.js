@@ -29,7 +29,7 @@ class radioAndCheckboxList extends Component {
   }
 
   renderInputs = (option, index) => {
-                       console.log(option)
+
     return (
       <FormControl fullWidth>
         <div className="InputField">
@@ -85,7 +85,7 @@ class radioAndCheckboxList extends Component {
   };
 
   render() {
-    let { list, name } = this.state;     console.log(list  )
+    let { list, name } = this.state;
     return (
       <div style={{ marginBottom: "40px" }}>
         {list.map((item, index) => (

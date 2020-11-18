@@ -56,8 +56,15 @@ class GroupHealthPayment extends Component {
   async componentWillMount() {
     
     nativeCallback({ action: 'take_control_reset' });
-    let { status } = this.state.params;
-    let paymentFailed, paymentPending, paymentSuccess = false;
+    let { generic_callback } = this.state.params;
+
+
+   let status = generic_callback.split('=')[1]
+
+    let paymentFailed = false
+    let paymentPending = false
+    let paymentSuccess = false
+
     let get_lead  = false;
 
     if (status === 'success') {
@@ -95,7 +102,7 @@ class GroupHealthPayment extends Component {
           show_loader: true
         });
   
-        let application_id =  storageService().get("health_insurance_application_id")
+        let application_id = storageService().get('health_insurance_application_id'); 
   
         const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
   
@@ -149,22 +156,22 @@ class GroupHealthPayment extends Component {
     this.sendEvents('next');
 
     let state = '';
-    // if(this.state.paymentFailed && false) {
-    //   state =  `/group-insurance/group-health/${this.state.provider}/final-summary`;
-    //   this.setState({
-    //     forceClose: true
-    //   }, ()=> {
-    //     this.navigate(state);
-    //   })
+    if(this.state.paymentFailed) {
+      state =  `/group-insurance/group-health/${this.state.provider}/final-summary`;
+      this.setState({
+        forceClose: true
+      }, ()=> {
+        this.navigate(state);
+      })
       
-    // } else if(!this.state.paymentPending && false) {
-    //   state  = `/group-insurance/group-health/${this.state.provider}/landing`;
-    //   this.navigate(state);
-    // } else {
+    } else if(!this.state.paymentPending) {
+      state  = `/group-insurance/group-health/${this.state.provider}/landing`;
+      this.navigate(state);
+    } else {
       state  = `/group-insurance/group-health/${this.state.provider}/reportdetails/${this.state.policy_data.application_id}`;
 
       this.navigate(state);
-    // }
+    }
 
     
   }
@@ -172,8 +179,7 @@ class GroupHealthPayment extends Component {
   render() {
     let {policy_data, screenData, provider} = this.state;        
 
-    console.log(this.state)
-  
+
     return (
       <Container
         provider={this.state.provider}
@@ -199,11 +205,11 @@ class GroupHealthPayment extends Component {
           <div className="main-tile">
 
             <div>
-              {!this.state.paymentSuccess && provider === 'RELIGARE' &&
+              {this.state.paymentSuccess && provider === 'RELIGARE' &&
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
                 }
@@ -240,7 +246,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.total_premium} is pending.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
                           </p>
                 </div>
               }
@@ -280,7 +286,7 @@ class GroupHealthPayment extends Component {
                   </div>
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
-                    insured {numDifferentiationInr(this.state.lead.sum_assured)} for {this.state.lead.tenure} year</div>
+                    insured {numDifferentiationInr(this.state.lead.total_sum_insured)} for {this.state.lead.tenure} year</div>
                     {policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }

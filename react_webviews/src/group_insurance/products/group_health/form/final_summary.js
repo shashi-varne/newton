@@ -22,6 +22,7 @@ import { childeNameMapper } from '../../../constants';
 import {getCoverageType} from '../constants';
 
 import Checkbox from 'material-ui/Checkbox';
+// import Checkbox from '../../../../common/ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
 class GroupHealthPlanFinalSummary extends Component {
@@ -40,7 +41,7 @@ class GroupHealthPlanFinalSummary extends Component {
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
-            screen_name:'final_summary_screen'
+            screen_name:'final_summary_screen',
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -566,7 +567,7 @@ class GroupHealthPlanFinalSummary extends Component {
             this.redirectToPayment();
             return;
         }
-        let application_id =  storageService().get("health_insurance_application_id")
+        let application_id = storageService().get('health_insurance_application_id');
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
             var resultData = res.pfwresponse.result;
@@ -600,22 +601,26 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     checkPPC = async () => {
-        let application_id =  storageService().get("health_insurance_application_id")
+        let application_id = storageService().get('health_insurance_application_id');
         this.setState({
             show_loader: true
         });
         try {
+           
             let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
+           
+           
+            console.log("yes",res)
+
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-
                 if(this.state.provider === 'HDFCERGO') {
                     let lead = resultData.quote_lead || {};
                     if (lead.ped_check) {
                         this.openMedicalDialog('ped');
                     } else if (lead.ppc_check) {
                         this.openMedicalDialog('ppc');
-                    } else if (lead.status === 'ready_to_pay' || true) {
+                    } else if (lead.status === 'ready_to_pay') {
                         this.startPayment();
                     }
                 } else {
@@ -639,6 +644,13 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     handleClick = async () => {
+
+        console.log('hello')
+
+        if(!this.state.tncChecked){
+            toast('Please Agree to the Terms and Conditions');
+            return;
+          }
         this.sendEvents('next');
         let {lead}  = this.state;
 
@@ -874,6 +886,12 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
+    handleTermsAndConditions = () =>{
+        this.setState({
+          tncChecked : !this.state.tncChecked
+        });
+      }
+      
     render() {
         return (
             <Container
@@ -885,7 +903,7 @@ class GroupHealthPlanFinalSummary extends Component {
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}
-            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_sum_insured)}`}
+            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
             handleClick={() => this.handleClick()}
         >
 
@@ -1014,15 +1032,16 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
                     <Grid container spacing={16} alignItems="center">
-                    <Grid item xs={1} className="TextCenter">
-                        <Checkbox
-                        defaultChecked
-                        checked={true}
-                        color="default"
-                        value="checked"
-                        name="checked"
-                        onChange={(e) => this.setState({ tncChecked: e.target.checked })}
-                        className="Checkbox" />
+                    <Grid item xs={1} className="TextCenter">           
+                    <Checkbox
+                  defaultChecked
+                  checked={this.state.tncChecked}
+                  color="default"
+                  value="checked"
+                  name="checked"
+                  onChange={this.handleTermsAndConditions}
+                  className="Checkbox"
+                />
                     </Grid>
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>

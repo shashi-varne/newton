@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 import { initialize, updateLead } from "../common_data";
 import RadioAndCheckboxList from "./radioAndCheckboxList";
-import { isValidMonthYear, storageService } from "utils/validators";
+import { isValidMonthYear } from "utils/validators";
 import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear, IsPastMonthYearfromDob, containsSpecialCharacters } from "utils/validators";
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -54,7 +54,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
     insured_people_details.forEach(element => {
-      console.log(element)
       if (element.answers.life_style_details.length >= 1 && element.answers.life_style_details[0].yes_no) {
         element.insured_person.life_style_question = element.answers.life_style_details[0]
         element.insured_person.life_style_question.answer = element.insured_person.life_style_question.yes_no
@@ -178,13 +177,12 @@ class GroupHealthPlanLifestyleDetail extends Component {
     if(containsSpecialCharacters(value)){
       return;
     }
-
     if (id === "answer_description") {
       member_base[index].life_style_question.answer_description = value;
       member_base[index].life_style_question.answer_description_error = '';
     } else {
       if (!dobFormatTest(value)) {
-        return;
+        // return;   fixit
       }
 
       let input;
@@ -194,6 +192,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
       member_base[index].life_style_question.start_date = event.target.value;
       member_base[index].life_style_question.start_date_error = '';
+
     }
 
     this.setState({
@@ -231,7 +230,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
   };
 
   validateMonthYear = (date, dob) => {
-
     if (!isValidMonthYear(date)) {
       return "please enter valid month and year";
     } else if (IsFutureMonthYear(date)) {
@@ -259,15 +257,15 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let atlOneOption = none_option_selected || false;
 
-    
     if (!none_option_selected) {
       for (let key in member_base) {
 
         let member_data = member_base[key];
-        if ((member_data.life_style_question_exists  === 'Yes' ||
-         member_data.life_style_question_exists === true) && member_data.key !== 'none') {
+
+        if ((member_data.life_style_question_exists === 'Yes' ||
+            member_data.life_style_question_exists === true) && member_data.key !== 'none') {
           member_data.life_style_question.answer_description_error = this.validateDescription(member_data.life_style_question.answer_description);
-          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date, member_data.dob);
+          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date, member_data.dob.replace(/\//g, "-"))
 
           if (member_data.life_style_question.answer_description_error || member_data.life_style_question.start_date_error) {
             canProceed = false;
@@ -280,7 +278,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
         }
 
       }
-
     }
 
     this.setState({
@@ -293,17 +290,13 @@ class GroupHealthPlanLifestyleDetail extends Component {
       toast("Select atleast one option");
     }
  
-    let application_id =  storageService().get("health_insurance_application_id")
 
     let body = {
-      "application_id": application_id,
     }
     this.sendEvents("next", {member_base: member_base});
  
    if (canProceed) {
      body["answers"] = {}
-
-     console.log(member_base, none_option_selected)
 
      for (var i in member_base) {
        let member_data = member_base[i];
@@ -315,8 +308,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
          if ((member_data.life_style_question_exists === 'Yes' ||
              member_data.life_style_question_exists === true) && !none_option_selected) {
 
-
-              console.log("truee")
 
            body["answers"][backend_key] = {};
            let obj = {
@@ -337,7 +328,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
           }
         } 
       }
-    }                                         console.log(body  )
+    }
       this.updateLead(body);
    }
   };
