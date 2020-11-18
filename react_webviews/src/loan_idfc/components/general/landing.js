@@ -8,6 +8,8 @@ import SVG from "react-inlinesvg";
 import { getConfig } from "utils/functions";
 import next_arrow from "assets/next_arrow.svg";
 import Button from "material-ui/Button";
+import { getUserStatus, getOrCreate } from "../../common/ApiCalls";
+import toast from '../../../common/ui/Toast';
 
 class Landing extends Component {
   constructor(props) {
@@ -28,14 +30,54 @@ class Landing extends Component {
   }
 
   onload = async () => {
-    let screenData = this.state.screenData;
+    try {
+      this.setState({
+        show_loader: true
+      })
+
+      const res = await getUserStatus();
+      
+      this.setState({
+        application_exist: res.application_exists,
+        otp_verified: res.otp_verified,
+        cta_title: res.application_exists && res.otp_verified ? 'RESUME' : 'APPLY NOW'
+      })
+
+    } catch (err) {
+      console.log(err);
+      toast('Something went wrong!')
+    }
 
     this.setState({
-      screenData: screenData,
-    });
+      show_loader: false
+    })
   };
 
-  handleClick = () => {};
+  handleClick = async () => {
+    try {
+      this.setState({
+        show_loader: true
+      })
+
+      let params = {
+        create_new: this.state.application_exist ? false : true
+      }
+
+      await getOrCreate({params});
+      
+      if (!this.state.otp_verified) {
+        this.navigate(this.state.next_state)
+      }
+
+    } catch (err) {
+      console.log(err);
+      toast('Something went wrong!')
+    }
+
+    this.setState({
+      show_loader: false
+    })
+  };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -64,7 +106,7 @@ class Landing extends Component {
         <div className="idfc-landing">
           <div
             className="infoimage-block1"
-            onClick={() => this.handleClickTopCard("banner")}
+            onClick={() => this.navigate('know-more')}
           >
             <img
               src={require(`assets/${this.state.productName}/idfc_card.svg`)}
@@ -105,7 +147,7 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 0px 0" }}>
             <div className="generic-hr"></div>
-            <div className="Flex calculator" onClick={() => this.openFaqs()}>
+            <div className="Flex calculator" onClick={() => this.navigate('calculator')}>
               <div className="title">Loan eligibility calculator</div>
               <SVG
                 className="right"

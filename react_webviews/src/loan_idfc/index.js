@@ -17,13 +17,14 @@ import JourneyMap from "./components/general/journey";
 import Calculator from "./components/general/calculator";
 import KnowMore from "./components/general/know_more";
 import IncomeDetails from "./components/general/income_details";
-import BtInformation from "./components/bt_details/bt_info";
 import UploadBankStatements from "./components/forms/upload_bank";
 import BasicDetails from "./components/forms/basic_details";
 import ProfessionalDetails from "./components/forms/professional_details";
 import PersonalDetails from "./components/forms/personal_details";
 import AddressDetails from "./components/forms/address_details";
 import LoanRequirementDetails from "./components/forms/requirements_details";
+import BtInformation from "./components/bt_details/bt_info";
+import LoanBtDetails from "./components/bt_details/loan_bt";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -70,13 +71,14 @@ const Lending = props => {
           <Route path={`${url}/know-more`} component={KnowMore} />
           <Route path={`${url}/calculator`} component={Calculator} />
           <Route path={`${url}/income-details`} component={IncomeDetails} />
-          <Route path={`${url}/bt-info`} component={BtInformation} />
           <Route path={`${url}/upload-bank`} component={UploadBankStatements} />
           <Route path={`${url}/basic-details`} component={BasicDetails} />
           <Route path={`${url}/professional-details`} component={ProfessionalDetails} />
           <Route path={`${url}/personal-details`} component={PersonalDetails} />
           <Route path={`${url}/address-details`} component={AddressDetails} />
           <Route path={`${url}/loan-requirement-details`} component={LoanRequirementDetails} />
+          <Route path={`${url}/bt-info`} component={BtInformation} />
+          <Route path={`${url}/loan-bt-details`} component={LoanBtDetails} />
        
           <Route component={NotFound} />
 

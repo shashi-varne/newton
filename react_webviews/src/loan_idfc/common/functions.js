@@ -18,6 +18,14 @@ export async function initialize() {
         screenData = idfc_config[this.state.screen_name]
     }
 
+    let next_screen = this.state.next_screen || '';
+    if (this.state.screen_name && idfc_config.get_next[this.state.screen_name]) {
+        next_screen = idfc_config.get_next[this.state.screen_name];
+        this.setState({
+            next_state: next_screen
+        })
+    }
+
     nativeCallback({ action: 'take_control_reset' });
 
     this.setState({

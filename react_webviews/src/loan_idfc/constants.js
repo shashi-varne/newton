@@ -34,6 +34,9 @@ export function getCssMapperReport(vendor_info) {
 
 export const idfc_config = {
   key: 'idfc',
+  get_next: {
+    landing_screen: 'edit-number'
+  },
   landing_screen: {
     stepeContentMapper: {
       title: 'Top features',
