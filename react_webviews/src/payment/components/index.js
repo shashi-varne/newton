@@ -502,13 +502,13 @@ class PaymentOption extends React.Component {
     } else {
       let upi_name = '';
       if (type === 'com.google.android.apps.nbu.paisa.user') {
-        upi_name = gpay
+        upi_name = 'gpay'
       }
       if (type === 'com.phonepe.app') {
-        upi_name = phonepe
+        upi_name = 'phonepe'
       }
       if (type === 'net.one97.paytm') {
-        upi_name = paytm
+        upi_name = 'paytm'
       }
       let eventObj = {
         "event_name": "pg_payment_option",
