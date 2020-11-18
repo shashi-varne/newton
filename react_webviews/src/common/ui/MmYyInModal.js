@@ -62,7 +62,7 @@ class MmYyInModal extends Component {
         let error = '';
         let date = value;
         let name = this.props.name;
-        let dob = this.props.dob;
+        let dob = this.props.dob.replace(/\//g, "-");
 
         if (!date) {
             error = "please enter month and year";

@@ -25,7 +25,7 @@ const commonMapper = {
     'mid_title': 'Premium payment details',
     'button_title': 'OK'
   },
-  'failed': {
+  'failure': {
     'top_icon': 'ils_covid_failed',
     'top_title': 'Payment failed',
     'mid_title': '',
@@ -58,6 +58,7 @@ class GroupHealthPayment extends Component {
     nativeCallback({ action: 'take_control_reset' });
     let { generic_callback } = this.state.params;
 
+    console.log(this.state)
 
    let status = generic_callback.split('=')[1]
 
@@ -69,7 +70,7 @@ class GroupHealthPayment extends Component {
 
     if (status === 'success') {
       paymentSuccess = true;
-    } else if (status === 'failed') {
+    } else if (status === 'failure') {
       paymentFailed = true;
       get_lead = true;
     } else {
@@ -79,6 +80,8 @@ class GroupHealthPayment extends Component {
       }
       get_lead = true;
     }
+
+    console.log(status)
 
     this.setState({
       status: status,
@@ -102,7 +105,7 @@ class GroupHealthPayment extends Component {
           show_loader: true
         });
   
-        let application_id = storageService().get('health_insurance_application_id'); 
+       let application_id = storageService().get('health_insurance_application_id'); 
   
         const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
   

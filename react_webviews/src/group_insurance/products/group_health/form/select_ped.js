@@ -404,4 +404,4 @@ class GroupHealthPlanSelectPed extends Component {
     }
 }
 
-export default GroupHealthPlanSelectPed;
+export default GroupHealthPlanSelectPed;  

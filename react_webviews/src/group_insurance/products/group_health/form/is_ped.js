@@ -201,7 +201,7 @@ class GroupHealthPlanIsPed extends Component {
             let body = {
                 insured_people_details
             }
-
+                          console.log(body)
 
             this.updateLead(body);
         }
