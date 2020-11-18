@@ -41,7 +41,8 @@ class GroupHealthPlanFinalSummary extends Component {
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
-            screen_name:'final_summary_screen'
+            screen_name:'final_summary_screen',
+            tncChecked : false
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -640,6 +641,10 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     handleClick = async () => {
+        if(!this.state.tncChecked){
+            toast('Please Agree to the Terms and Conditions');
+            return;
+          }
         this.sendEvents('next');
         let {lead}  = this.state;
 
@@ -875,6 +880,12 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
+    handleTermsAndConditions = () =>{
+        this.setState({
+          tncChecked : !this.state.tncChecked
+        });
+      }
+      
     render() {
         return (
             <Container
@@ -1016,14 +1027,15 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
                     <Grid container spacing={16} alignItems="center">
                     <Grid item xs={1} className="TextCenter">           
-                        <Checkbox
-                        defaultChecked
-                        // checked={true}
-                        color="default"
-                        value="checked"
-                        name="checked"
-                        onChange={(e) => this.setState({ tncChecked: e.target.checked })}
-                        className="Checkbox" />
+                    <Checkbox
+                  defaultChecked
+                  checked={this.state.tncChecked}
+                  color="default"
+                  value="checked"
+                  name="checked"
+                  onChange={this.handleTermsAndConditions}
+                  className="Checkbox"
+                />
                     </Grid>
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>

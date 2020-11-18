@@ -61,7 +61,7 @@ class GroupHealthPlanSelectPed extends Component {
          let member_info = {
         ...deatils.insured_person,
         ...deatils.answers,
-        ...this.state.member_base[member_info_index], ///fix this
+        ...this.state.member_base[member_info_index],
       }
         
         let backend_key = member_info.relation_key;
@@ -89,7 +89,7 @@ class GroupHealthPlanSelectPed extends Component {
 
                     if(opt.key === item.front_end_question_id || opt.key === item.question_id ) {
                         let since_when = item.since_when.length > 4 ?  item.since_when.split('/') : ''
-                        let ped_date =   since_when[2] ? `${since_when[1]}-${since_when[2]}` : `${since_when[0]}/${since_when[1]}`
+                        let ped_date =   since_when[2] ? `${since_when[1]}/${since_when[2]}` : `${since_when[0]}/${since_when[1]}`
                         options[index].checked = true;
                         options[index].start_date = ped_date || ''
                         options[index].description = item.description !== null ? item.description : options[index].description;
@@ -110,9 +110,8 @@ class GroupHealthPlanSelectPed extends Component {
                         // matched = true;
                     }
                 }
-                console.log(disease_name)
                 if(disease_name.front_end_question_id === 'hdfc_ergo_ped_other_diseases' || disease_name.question_id === 'hdfc_ergo_ped_other_diseases') {
-                    console.log(disease_name)
+    
                     other_diseases += disease_name.description;
                 }
             }
@@ -158,8 +157,8 @@ class GroupHealthPlanSelectPed extends Component {
 
         let {options, dateModalIndex, provider} = this.state;
         if(key === 'startDateModal') {
-            
-            options[dateModalIndex].start_date = value;
+                              console.log(value)
+            options[dateModalIndex].start_date = value.replace(/\//g, "-")
 
             this.setState({
                 options: options
@@ -198,7 +197,6 @@ class GroupHealthPlanSelectPed extends Component {
         this.sendEvents('next');
 
         let {options, provider ,lead, member_info_index} = this.state;
-                   ///fix this
 
     let member_base = this.state.member_base.map((element, index) => {
 
@@ -330,7 +328,7 @@ class GroupHealthPlanSelectPed extends Component {
 
       let appendValue = lead.insured_people_details.findIndex( member => member.insured_person.relation_key === member_base[member_info_index].backend_key)
 
-            lead.insured_people_details[appendValue] = current_member;  // fix it
+            lead.insured_people_details[appendValue] = current_member;
 
             this.setState({
                 next_state: next_state || this.state.next_state,
