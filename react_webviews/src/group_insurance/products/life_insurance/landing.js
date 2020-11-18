@@ -111,9 +111,8 @@ class FyntuneLanding extends Component {
     let intermediateScreenURL = encodeURIComponent(
       window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
-    let landingScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams
-    );
+    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    
     var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
     if(getConfig().Web){
@@ -172,9 +171,8 @@ class FyntuneLanding extends Component {
     this.sendEvents("next");
     var body = {}
     
-    let landingScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams
-    );
+    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    
     let intermediateScreenURL = encodeURIComponent(
       window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
