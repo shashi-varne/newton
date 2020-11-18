@@ -138,6 +138,8 @@ class GroupHealthPlanIsPed extends Component {
         })
 
         let member_base =   this.state.member_base
+
+        console.log(member_base)
         
         let body = {};
         let next_state = '';
@@ -148,6 +150,7 @@ class GroupHealthPlanIsPed extends Component {
 
         let insured_people_details = []
         for (var i in member_base) {
+            if(member_base[i].insured_person !== undefined) {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].insured_person.relation;
             body[backend_key] = {};
@@ -170,6 +173,7 @@ class GroupHealthPlanIsPed extends Component {
                     insured_people_details.push(obj)
                 }
             }
+           }
         }
  
         if (this.state.lead.quotation_details.insurance_type !== 'self' && form_data.is_ped === 'YES' && !next_state) {

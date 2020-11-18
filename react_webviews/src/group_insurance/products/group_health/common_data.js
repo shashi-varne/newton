@@ -125,7 +125,8 @@ export async function initialize() {
                 });
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
-                    var member_base = ghGetMember(lead, this.state.providerConfig);                                       
+                    var member_base = ghGetMember(lead, this.state.providerConfig);  
+                    console.log(member_base)                                     
                     this.setState({
                         lead: resultData || {},
                         member_base: member_base,

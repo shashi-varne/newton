@@ -197,10 +197,10 @@ class GroupHealthPlanSelectPed extends Component {
     handleClick = async () => {
         this.sendEvents('next');
 
-        let {options, provider ,lead, member_info_index} = this.state;
-              
-    let member_base = this.state.member_base.map((element, index) => {
+        let {options, provider ,lead, member_info_index} = this.state;    
+        let member_base = this.state.member_base.filter((mem) => mem.dob !==undefined)
 
+         member_base.map((element, index) => {
         let member = lead.insured_people_details.find((member) => member.insured_person.relation === element.relation)
         return {
             ...element,
