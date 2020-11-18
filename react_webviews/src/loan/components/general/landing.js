@@ -9,7 +9,7 @@ import SVG from 'react-inlinesvg';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import dmi_logo from 'assets/dmi_logo.svg';
 import ic_why_hs_fisdom from 'assets/fisdom/ic_why_hs_loan.svg';
-import ic_why_hs_myway from 'assets/myway/ic_why_hs_loan.svg';
+import ic_why_hs_myway from 'assets/finity/ic_why_hs_loan.svg';
 
 class Landing extends Component {
   constructor(props) {
@@ -137,7 +137,7 @@ class Landing extends Component {
   openFaqs = () => {
 
     let type = this.state.productName;
-    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
+    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Finity';
 
     this.sendEvents('next', {things_to_know: 'faq'})
     let options = [
