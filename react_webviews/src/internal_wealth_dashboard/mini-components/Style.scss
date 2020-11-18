@@ -1,4 +1,20 @@
+$dark: #0A1D32;
+$grey: #767E86;
 $light-grey: #D3DBE4;
+$primary: rgb(79, 45, 167);
+
+.iwd-logout-btn {
+  border-radius: 6px;
+  background-color: rgba($light-grey, 0.3);
+}
+
+.iwd-logout-btn-text {
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 24px;
+  text-transform: uppercase;
+  color: #D3DBE4;
+}
 
 #iwd-help {
   font-family: 'Poppins', 'Roboto', sans-serif !important;
@@ -141,6 +157,7 @@ $light-grey: #D3DBE4;
   color: white;
   transition: height 0.5s;
   overflow-y: scroll;
+  z-index: 3;
   
   #iwd-nm-header {
     display: flex;
@@ -257,16 +274,11 @@ $light-grey: #D3DBE4;
     }
 
     .iwd-nmb-logout {
-      border-radius: 6px;
+      @extend .iwd-logout-btn;
       margin-top: 30px;
-      background-color: rgba($light-grey, 0.3);
 
       .iwd-nmb-logout-text {
-        font-weight: bold;
-        font-size: 13px;
-        line-height: 24px;
-        text-transform: uppercase;
-        color: #D3DBE4;
+        @extend .iwd-logout-btn-text;
       }
     }
   }
@@ -283,6 +295,7 @@ $light-grey: #D3DBE4;
 
   #iwd-ph-right {
     float: right;
+    position: relative;
   }
 }
 
@@ -306,6 +319,87 @@ $light-grey: #D3DBE4;
     line-height: 21px;
     color: #9069D9;
   }
+}
+
+#iwd-profile-icon {
+  width: 40px;
+  height: 40px;
+  padding: 4px 0px;
+  border: 2px solid $light-grey;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: center;
+  margin: auto;
+  cursor: pointer;
+  color: white;
+}
+
+#iwd-profile {
+  padding: 30px 40px 20px;
+  width: 340px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px 1px rgba(black, 0.05);
+  box-sizing: border-box;
+  text-align: center;
+  background-color: white;
+  position: absolute;
+  right: 0;
+  z-index: 3;
+  cursor: pointer;
+
+  #iwd-profile-username {
+    font-size: 15px;
+    line-height: 24px;
+    color: $dark;
+    margin-top: 20px;
+  }
+
+  .iwd-profile-detail {
+    font-size: 13px;
+    line-height: 21px;
+    color: $grey;
+  }
+
+  #pan {
+    margin-bottom: 18px;
+  }
+
+  #iwd-profile-divider {
+    border-bottom: 1px solid rgba($light-grey, 0.3);
+    margin: 20px 0;
+  }
+
+  .iwd-profile-logout {
+    @extend .iwd-logout-btn;
+    background-color: rgba($light-grey, 0.3);
+
+    .iwd-profile-logout-text {
+      @extend .iwd-logout-btn-text;
+      color: $primary;
+    }
+  }
+}
+
+.radial-chart {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease-in;
+  margin-top: 20px;
+}
+.radial-chart.no-progress .radial-chart-progress {
+  opacity: 0;
+}
+.radial-chart-total {
+  opacity: 0.3; 
+}
+.radial-chart-progress {
+  transform: rotate(90deg);
+  transform-origin: center;
+  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14);
+  transition-delay: 0.3s; 
 }
 
 @media only screen and (min-width: 300px) and (max-width: 1200px) {
@@ -349,5 +443,9 @@ $light-grey: #D3DBE4;
     width: 100%;
     height: auto;
     margin-bottom: 30px;
+  }
+
+  .radial-chart {
+    margin-top: 0;
   }
 }

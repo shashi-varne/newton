@@ -145,7 +145,7 @@ const LoginFields = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      navigate('main/overview');
+      navigate('main/dashboard');
     } catch (err) {
       if (err.includes('wrong OTP')) {
         setOtpErr('Incorrect OTP! Please check and try again');
@@ -186,7 +186,7 @@ const LoginFields = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      navigate('main/overview');
+      navigate('main/dashboard');
     } catch (err) {
       console.log(err);
       if (err.includes('registered')) {

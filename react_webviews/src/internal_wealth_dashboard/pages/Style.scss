@@ -332,6 +332,47 @@ $card-padding-mobile: 40px;
     @extend .iwd-card;
     height: 90%;
     width: 40%;
+
+    #iwd-daa-graph {
+      display: flex;
+      align-items: center;
+
+      #iwd-daa-legend {
+        display: flex;
+        flex-direction: column;
+        margin-left: 80px;
+  
+        .iwd-daal-item {
+          margin-bottom: 40px;
+          .label {
+            .dot {
+              height: 8px;
+              width: 8px;
+              background-color: #4AD0C0;
+              display: inline-block;
+              margin-right: 10px;
+            }
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4AD0C0;
+          }
+          .value {
+            font-size: 30px;
+            line-height: 40px;
+            color: $dark;
+            margin-top: 3px;
+          }
+        }
+
+        .iwd-daal-item:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
   }
 
   #iwd-d-risk {
@@ -382,6 +423,7 @@ $card-padding-mobile: 40px;
     width: 40%;
     height: auto;
     padding: 34px 50px;
+    padding-right: 30px;
     box-sizing: border-box;
     border-bottom-right-radius: 70px;
 
@@ -393,6 +435,8 @@ $card-padding-mobile: 40px;
 
     .iwd-dn-btn {
       float: right;
+      border-radius: 50%;
+      height: 48px;
     }
 
     #iwd-dn-gist {
@@ -569,6 +613,32 @@ $card-padding-mobile: 40px;
 
     #iwd-d-asset-alloc {
       flex: 0 0 auto;
+
+      #iwd-daa-graph {
+        flex-direction: column;
+
+        #iwd-daa-legend {
+          flex-direction: row;
+          justify-content: center;
+          margin-left: 0px;
+          margin-top: 30px;
+
+          .iwd-daal-item {
+            margin-bottom: 0px;
+            margin-right: 80px;
+            text-align: center;
+
+            .value {
+              font-size: 17px;
+              line-height: 27px;
+            }
+          }
+
+          .iwd-daal-item:nth-last-child(1) {
+            margin-right: 0;
+          }
+        }
+      }
     }
 
     #iwd-d-risk {

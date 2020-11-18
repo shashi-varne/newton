@@ -18,7 +18,7 @@ const Login = (props) => {
   return (
     <>
       <HelpPage className={`circularExpand ${openHelpPage ? 'expand' : 'shrink'}`} onClose={() => toggleHelpPage(false)}/>
-      {isMobileView && !openHelpPage && <div id="iwd-login">
+      {<div id="iwd-login">
         <div id="iwd-login-left">
           <img src={fisdomLogo} alt="fisdom" height="40" />
           <div id="iwd-ll-hero-text">

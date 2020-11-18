@@ -187,8 +187,9 @@ export const resendOtp = async () => {
 
 export const overview = async (params) => {
   try {
-    const res = await Api.post('/api/invest/reportv4/portfolio/summary', {
+    const res = await Api.get('/api/invest/reportv4/portfolio/summary', {
       ...params,
+      user_id: '4934000205365249',
       platform,
     });
 
@@ -199,7 +200,7 @@ export const overview = async (params) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return result;
+      return result.report;
     } else {
       throw (result.error || result.message || genericErrMsg);
     }
@@ -240,7 +241,7 @@ export const portfolioRisk = async (params = {}) => {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        return result.response || {};
+        return result || {};
       } else {
         throw (result.error || result.message || genericErrMsg);
       }
