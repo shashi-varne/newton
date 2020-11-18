@@ -24,15 +24,15 @@ class LifeInsuranceEntry extends Component {
 
     let insuranceProducts = [
       {
-        key: 'team',
-        title: 'Team Insurance',
+        key: 'term',
+        title: 'Term Insurance',
         subtitle: 'Get comprehensive life coverage',
         icon: 'ic_term_insurance',
         disabled: false
       },
       {
-        key: 'lifeinsurencesavings',
-        title: 'Insurence Savings plan',
+        key: 'savings plan',
+        title: 'Insurance Savings plan',
         subtitle: 'Life coverage with wealth creation',
         icon: 'money_pig',
         disabled: false
@@ -57,8 +57,13 @@ class LifeInsuranceEntry extends Component {
 
  
   handleClick = (data) => {
-    this.sendEvents('next', data.key)
-    if (data.key === 'lifeinsurencesavings') {
+    if(data.key === 'term'){
+      this.sendEvents('next', 'term insurance')
+    }else{
+      this.sendEvents('next', data.key)
+    }
+    
+    if (data.key === 'savings plan') {
       this.navigate('/group-insurance/life-insurance/savings-plan/landing');
     } else {
       let fullPath = data.key + '/landing';
@@ -79,7 +84,7 @@ class LifeInsuranceEntry extends Component {
        <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
             <div>
               <div className='insurance_plans_logos_text'
-              >{props.title}{props.key === 'team' && !props.resume_flag &&
+              >{props.title}{props.key === 'term' && !props.resume_flag &&
               <span style={{
                 padding: '3px 7px',
                 borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
@@ -100,9 +105,12 @@ class LifeInsuranceEntry extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'Life Insurance',
-        "insurance_provider": insurance_type ? insurance_type : ''
       }
     };
+
+    if(insurance_type){
+      eventObj.properties['insurance_type'] = insurance_type;
+    }
 
     if (user_action === 'just_set_events') {
       return eventObj;

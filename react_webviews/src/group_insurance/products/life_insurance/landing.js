@@ -8,7 +8,7 @@ import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
 import StepsToFollow from '../../../common/ui/stepsToFollow';
-import { storageService} from '../../../utils/validators';
+import {   inrFormatDecimal, numDifferentiationInr, storageService} from '../../../utils/validators';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -23,7 +23,6 @@ class FyntuneLanding extends Component {
     };
   }
 
-
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -33,6 +32,7 @@ class FyntuneLanding extends Component {
 
   async componentDidMount(){
 
+    nativeCallback({ action: 'take_control_reset' });
     this.setState({
       show_loader: true
     })
@@ -69,12 +69,17 @@ class FyntuneLanding extends Component {
       event_name: "life_insurance_savings",
       properties: {
         user_action: user_action,
-        product: fyntuneConstants.provider_api,
+        // product: fyntuneConstants.provider_api,
         screen_name: "introduction",
-        faq: data.faq ? "yes": "no", 
-        resume_click: data.resume_clicked ? "yes" : "no",
       },
     };
+    
+    if(data.faq){
+      eventObj.properties['faq'] = 'yes';
+    }
+    if(data.resume_clicked){
+      eventObj.properties['resume_click'] = 'yes';
+    }
 
     if (user_action === "just_set_events") {
       return eventObj;
@@ -109,7 +114,7 @@ class FyntuneLanding extends Component {
     let landingScreenURL = encodeURIComponent(
       window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams
     );
-    var journeyURL = resume_redirection_url + '&back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
+    var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
     if(getConfig().Web){
       window.location.href = journeyURL;
@@ -128,14 +133,14 @@ class FyntuneLanding extends Component {
         if (getConfig().app === 'ios') {
           nativeCallback({
               action: 'show_top_bar', message: {
-                  title: 'Insurance' 
+                  title: 'Insurance Savings Plan' 
               }
           });
       }
         nativeCallback({
         action: 'take_control', message: {
             back_url: landingScreenURL,
-            back_text: 'Are you sure you want to exit the application process?'
+            back_text: 'You will be redirected to the starting point, are you sure you want to continue?'
           }
         });
         window.location.href = journeyURL;
@@ -175,30 +180,43 @@ class FyntuneLanding extends Component {
     );
     
     
+    this.setState({
+      show_loader: true
+    })
     //create lead api
     try{
       var res = await Api.post(`api/ins_service/api/insurance/fyntune/lead/create`, body);
 
         if (res.pfwresponse.status_code === 200) {
           var resultData = res.pfwresponse.result;
+
+          if(resultData.message && resultData.resume_present){
+            
+            toast(resultData.message)
+            this.setState({
+              show_loader: false
+            })
+            
+            return;
+          }
+
           var lead_redirection_url = resultData.redirection_url;
           var fyntuneRefId = resultData.lead.fyntune_ref_id;
-
-          var journeyURL = lead_redirection_url + '&back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
+          var journeyURL = lead_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
           
           storageService().setObject('fyntune_ref_id', fyntuneRefId);
           
           if (getConfig().app === 'ios') {
             nativeCallback({
                 action: 'show_top_bar', message: {
-                    title: 'Insurance' 
+                    title: 'Insurance Savings Plan' 
                 }
             });
           }
           nativeCallback({
           action: 'take_control', message: {
               back_url: landingScreenURL,
-              back_text: 'Are you sure you want to exit the application process?'
+              back_text: 'You will be redirected to the starting point, are you sure you want to continue?'
             }
           });
           window.location.href = journeyURL;
@@ -225,7 +243,7 @@ class FyntuneLanding extends Component {
         showLoader={this.state.show_loader}
         title="Insurance Savings Plan"
         fullWidthButton={true}
-        buttonTitle="GET INSURED"
+        buttonTitle={this.state.resume_data && this.state.resume_data.resume_present ?  "GET A NEW QUOTE": "GET INSURED"}
         onlyButton={true}
         handleClick={() => this.handleClick()}
       >
@@ -233,7 +251,7 @@ class FyntuneLanding extends Component {
         <div className="landing-hero-container">
             <img
                 className="landing-hero-img"
-                src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.png`)}
+                src={require(`assets/${this.state.productName}/fyntune_landing_page_hero.svg`)}
                 alt=""
               />
         </div>
@@ -255,8 +273,8 @@ class FyntuneLanding extends Component {
                     <div className="rct-title">
                       Click 2 Invest
                     </div>
-                    <div className="rct-subtitle">
-                      {this.state.resume_data.lead.total_amount}
+                    <div className="rct-subtitle" style={{fontSize: '20px'}}>
+                      {inrFormatDecimal(this.state.resume_data.lead.total_amount)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
                     </div>
                   </div>
                 </div>
@@ -265,26 +283,26 @@ class FyntuneLanding extends Component {
               </div>
 
               <div className="rc-bottom flex-between">
-                <div className="rcb-content">
+                <div className="rcb-content" style={{fontSize: '14px'}}>
                   Sum insured:{" "}
-                  {this.state.resume_data.lead.sum_assured}
+                  {numDifferentiationInr(this.state.resume_data.lead.sum_assured)}
                 </div>
-                <div className="rcb-content">
-                  Policy term: {this.state.resume_data.lead.tenure}
+                <div className="rcb-content" style={{fontSize: '14px'}}>
+                  Policy term: {this.state.resume_data.lead.tenure} years
                 </div>
               </div>
             </div>
           )}
         <div>
-          <p className="heading">What are Insurance Savings Plan?</p>
-          <p className="info">
+          <p className="fyntune-heading">What is Insurance Savings Plan?</p>
+          <p className="fyntune-info">
             This is a plan for your investment cum insurance needs which
             provides you with a chance to create wealth and even gives financial
             security to your loved ones in case on any unforeseen event.
           </p>
         </div>
 
-        <p className="heading">Major Benifits</p>
+        <p className="fyntune-heading">Major Benifits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
             <img
@@ -305,7 +323,7 @@ class FyntuneLanding extends Component {
           </div>
         </div>
 
-         <p className="heading">Get your plan in 5 easy steps</p>
+         <p className="fyntune-heading">Get your plan in 5 easy steps</p>
          {
            this.state.stepsToFollow.map( (step, index) =>{
              return <StepsToFollow key={index + 1} keyId={index + 1} title={step.title} subtitle={step.subtitle} />
@@ -314,7 +332,7 @@ class FyntuneLanding extends Component {
          
 
         <div style={{ transform: "translateY(-50px)", marginBottom: "0px" }}>
-          <p className="heading" style={{ transform: "translateY(65px)" }}>
+          <p className="fyntune-heading" style={{ transform: "translateY(40px)" }}>
             We make this process easy with
           </p>
           <HowToSteps
@@ -325,7 +343,7 @@ class FyntuneLanding extends Component {
 
         <div className="faq-section" style={{ transform: "translateY(-50px)" }}>
           <div className="generic-hr" style={{ marginBottom: "12px" }}></div>
-          <div className="flex-center faq" onClick={() => this.openFaqs()}>
+          <div className="flex-center fyntune-faq" onClick={() => this.openFaqs()}>
             <div>
               <img
                 className="accident-plan-read-icon"

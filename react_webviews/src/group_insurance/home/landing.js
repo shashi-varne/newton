@@ -33,9 +33,9 @@ class Landing extends Component {
 
     let insuranceProducts = [
       {
-        key: 'LIFEINSURANCE',
+        key: 'LIFE_INSURANCE',
         title: 'Life Insurance',
-        subtitle: 'Starts from ₹7,000/year',
+        subtitle: 'Starts from ₹7,700/year',
         icon: 'life_insurance'
       },
       {
@@ -282,7 +282,7 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else if (product_key === 'LIFEINSURANCE') {
+    } else if (product_key === 'LIFE_INSURANCE') {
       fullPath = 'life-insurance/entry';
     } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';

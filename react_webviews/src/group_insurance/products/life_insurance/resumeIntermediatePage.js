@@ -4,8 +4,9 @@ import { getConfig } from "utils/functions";
 import toast from "../../../common/ui/Toast";
 import { storageService} from '../../../utils/validators';
 import Api from "utils/api";
+import { nativeCallback } from "utils/native_callback";
 
-class ResumeIntermeditePage extends Component {
+class ResumeIntermediatePage extends Component {
 
     constructor(props){
         super(props);
@@ -22,8 +23,24 @@ class ResumeIntermeditePage extends Component {
         });
       };
 
+    sendEvents(user_action, data = {}) {
+        let eventObj = {
+          event_name: "life_insurance_savings",
+          properties: {
+            user_action: user_action,
+            screen_name: "resume",
+          },
+        };
+
+        if (user_action === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+    }
 
     async componentDidMount(){
+        nativeCallback({ action: 'take_control_reset' });
         this.setState({
             show_loader: true
         })
@@ -36,12 +53,13 @@ class ResumeIntermeditePage extends Component {
                 show_loader: false
             })
 
+            var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-      
-                var resultData = res.pfwresponse.result;
-                this.setState({payment_data: resultData})  
-
+                this.setState({
+                    payment_data: resultData
+                })
             } else {
+                
               toast(resultData.error || resultData.message || "Something went wrong");
             }     
         }catch(err){
@@ -54,17 +72,23 @@ class ResumeIntermeditePage extends Component {
 
     }
     handleClick = () =>{
-        
-        if(this.state.payment_data.lead.status === "pending"){
+        this.sendEvents('next')
+        if(!this.state.payment_data){
             this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
-         }else{
-             this.navigate(`/group-insurance/common/report`)
-         }
+            return;   
+        }else{
+            if(this.state.payment_data.lead.status === 'success'){
+                this.navigate(`/group-insurance/common/report`)
+            }else if(this.state.payment_data.lead.status === "pending" && this.state.payment_data.lead.fyntune_status === "Underwriting Approval"){
+                this.navigate(`/group-insurance/common/report`)
+             }else {
+                this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
+             }
+        }
     }
     render() {
         return (
             <Container
-            events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
             fullWidthButton={true}
             buttonTitle="OK"
@@ -92,4 +116,4 @@ class ResumeIntermeditePage extends Component {
     }
 }
 
-export default ResumeIntermeditePage
+export default ResumeIntermediatePage;
