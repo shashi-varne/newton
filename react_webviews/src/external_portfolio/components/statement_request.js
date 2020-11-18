@@ -8,7 +8,6 @@ import { nativeCallback } from 'utils/native_callback';
 import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { fetchEmails } from '../common/ApiCalls';
-import CAMSLoader from '../mini-components/camsLoader';
 // import { regenTimeLimit } from '../constants';
 
 const productType = getConfig().productName;
