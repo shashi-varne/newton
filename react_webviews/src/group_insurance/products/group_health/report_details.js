@@ -257,23 +257,23 @@ class GroupHealthReportDetails extends Component {
 
 
     sendEvents(user_action) {
-        // let eventObj = {
-        //     "event_name": 'health_insurance',
-        //     "properties": {
-        //         "user_action": user_action,
-        //         "product": this.state.providerConfig.provider_api,
-        //         "flow": this.state.insured_account_type || '',
-        //         "screen_name": 'report details',
-        //         "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
-        //         "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
-        //     }
-        // };
+        let eventObj = {
+            "event_name": 'health_insurance',
+            "properties": {
+                "user_action": user_action,
+                "product": this.state.providerConfig.provider_api,
+                "flow": this.state.insured_account_type || '',
+                "screen_name": 'report details',
+                "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
+                "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
+            }
+        };
 
-        // if (user_action === 'just_set_events') {
-        //     return eventObj;
-        // } else {
-        //     nativeCallback({ events: eventObj });
-        // }
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
     }
 
     renderSteps = (option, index) => {
