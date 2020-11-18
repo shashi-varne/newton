@@ -54,7 +54,7 @@ class GroupHealthPlanIsPed extends Component {
             let member = lead.insured_people_details.find(member => member.insured_person.relation === element.relation)
             return {
                 ...element,
-                ...member
+                ...member   
             }
         })
 
@@ -62,7 +62,7 @@ class GroupHealthPlanIsPed extends Component {
 
         for (var mem in member_base) {
             let mem_info = member_base[mem];
-            if (mem_info.insured_person.ped) {
+            if (mem_info.insured_person !== undefined  && mem_info.insured_person.ped) {
                 is_ped = 'YES';
                 form_data[mem_info.insured_person.relation + '_checked'] = true;
             }
