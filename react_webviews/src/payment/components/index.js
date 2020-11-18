@@ -93,6 +93,7 @@ if (urlParams.payment_data) {
   intent_supported = nativeData.intent_supported;
   upi_others = nativeData.upi_others;
 }
+
 window.PlutusInitState = {};
 
 const pushEvent = (eventObj) => {
@@ -260,6 +261,10 @@ class PaymentOption extends React.Component {
       let res = await Api.get(url);
       let resultData = res.pfwresponse.result;
       store = resultData;
+      if (store.sdk_capabilities && store.sdk_capabilities.razorpay) {
+        intent_supported = true;
+        upi_others = false;
+      }
       const supportedBanks = store.banks.filter((item, i) => {
         return item.bank_supported;
       });
