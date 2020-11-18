@@ -609,19 +609,21 @@ class GroupHealthPlanFinalSummary extends Component {
             let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-
-                if(this.state.provider === 'HDFCERGO') {
-                    let lead = resultData.quote_lead || {};
-                    if (lead.ped_check) {
-                        this.openMedicalDialog('ped');
-                    } else if (lead.ppc_check) {
-                        this.openMedicalDialog('ppc');
-                    } else if (lead.status === 'ready_to_pay') {
-                        this.startPayment();
-                    }
-                } else {
+                // if(this.state.provider === 'HDFCERGO') {
+                //     let lead = resultData.quote_lead || {};
+                //     if (lead.ped_check) {
+                //         this.openMedicalDialog('ped');
+                //     } else if (lead.ppc_check) {
+                //         this.openMedicalDialog('ppc');
+                //     } else if (lead.status === 'ready_to_pay') {
+                //         this.startPayment();
+                //     }
+                // } else {
                     this.startPayment({showMedDialog : true});
-                }
+                // }
+                // this.setState({
+                //     show_loader: false
+                // });
                 
             } else {
                 this.setState({

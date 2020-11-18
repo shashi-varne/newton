@@ -369,7 +369,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (canSubmitForm) {
 
-      let application_id =   this.state.application_id
+      // let application_id =   this.state.application_id
 
       let gender = '';
       if (this.state.member_key !== 'self') {
@@ -387,7 +387,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
       }
       let body = {
-        "application_id": application_id,
+    
         "insured_people_details": [{
           "name": form_data.name,
           "height": form_data.height || '',
@@ -401,7 +401,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
          if (provider === 'STAR') {
           body = {
-          "application_id": application_id,
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -425,22 +424,8 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       } 
 
-
-      if(this.props.member_key === "applicant"){
-        body = {
-          "application_id": application_id,  
-          "buyer_details": {
-            "name": form_data.name || '',
-            "pan_no": form_data.pan_no || "",
-            "dob": form_data.dob || '',
-            "gender": form_data.gender || gender,
-          } 
-        }
-      }
-
       if (this.state.backend_key === 'self_account_key' && provider === 'STAR') {
         body = {
-          "application_id": application_id,
           "insured_people_details": [{
             "name": form_data.name,
             "height": form_data.height || '',
@@ -459,7 +444,16 @@ class GroupHealthPlanPersonalDetails extends Component {
           }
         }
       }
-
+      if(this.props.member_key === "applicant"){
+        body = {
+          "buyer_details": {
+            "name": form_data.name || '',
+            "pan_no": form_data.pan_no || "",
+            "dob": form_data.dob || '',
+            "gender": form_data.gender || gender,
+          } 
+        }
+      }
 
       this.updateLead(body);
     }

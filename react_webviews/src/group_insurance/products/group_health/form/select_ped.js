@@ -228,7 +228,6 @@ class GroupHealthPlanSelectPed extends Component {
                     }
                 }
             }                    
-            let application_id =  this.state.application_id
             let body = {};
             let pre_existing_diseases = []
             if (provider === 'HDFCERGO') {
@@ -256,7 +255,7 @@ class GroupHealthPlanSelectPed extends Component {
         
 
                 body = {
-                    "application_id": application_id,
+                    
                     "answers": {
                         [this.state.backend_key]: {
                             pre_existing_diseases
@@ -304,7 +303,7 @@ class GroupHealthPlanSelectPed extends Component {
                     [this.state.backend_key]  : { "pre_existing_diseases":  pre_existing_diseases }
                 }
                 body = {
-                    "application_id": application_id,
+                    
                     "answers" : body_to_send
                 }
                 let data_to_store = [];

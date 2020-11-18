@@ -128,7 +128,6 @@ export async function initialize() {
                     var member_base = ghGetMember(lead, this.state.providerConfig);                                       
                     this.setState({
                         lead: resultData || {},
-                        application_id : application_id,
                         member_base: member_base,
                         quotation: resultData.quotation_details || {},
                         common_data: {
@@ -287,6 +286,8 @@ export async function updateLead( body, quote_id) {
         this.setState({
             show_loader: true
         });
+        let application_id = storageService().get('health_insurance_application_id');
+         body.application_id = application_id
 
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;

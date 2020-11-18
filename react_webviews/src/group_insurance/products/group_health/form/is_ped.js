@@ -189,14 +189,12 @@ class GroupHealthPlanIsPed extends Component {
         }
 
         if (canSubmitForm) {
-            let application_id = this.state.application_id
             this.setState({
                 next_state: next_state ? `${this.props.edit ? 'edit-' : ''}select-ped/` + next_state : this.state.next_state
             })
 
          
             let body = {
-                "application_id": application_id,
                 insured_people_details
             }
 

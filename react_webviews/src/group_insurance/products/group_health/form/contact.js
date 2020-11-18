@@ -142,9 +142,8 @@ class GroupHealthPlanContactDetails extends Component {
 
 
         if (canSubmitForm) {
-            let application_id =  this.state.application_id
             let body = {
-                "application_id": application_id,
+                
                 "buyer_details": {
                     "phone_number": this.state.form_data.phone_number,
                     "email": this.state.form_data.email,

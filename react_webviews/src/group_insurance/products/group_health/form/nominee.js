@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-import { validateAlphabets, calculateAge, isValidDate, storageService,
+import { validateAlphabets, calculateAge, isValidDate,
     formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
@@ -264,10 +264,9 @@ class GroupHealthPlanNomineeDetails extends Component {
         }        
 
         if (canSubmitForm) {
-            let application_id =  this.state.application_id
 
             let body = {
-                "application_id": application_id,
+                
                 "nominee_details": {
                     "name":  this.state.form_data.name,
                     "relation": this.state.form_data.relation,
@@ -285,7 +284,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                     }
                 }
                 body = {
-                    "application_id": application_id,
+                    
                     "nominee_details": {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,

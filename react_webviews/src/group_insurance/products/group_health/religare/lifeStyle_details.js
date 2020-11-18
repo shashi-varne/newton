@@ -290,10 +290,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
       toast("Select atleast one option");
     }
  
-    let application_id = this.state.application_id
 
     let body = {
-      "application_id": application_id,
     }
     this.sendEvents("next", {member_base: member_base});
  

@@ -258,10 +258,9 @@ class GroupHealthPlanAddressDetails extends Component {
 
         if (canSubmitForm) {
             let body = {};
-            let application_id =  this.state.application_id
             if (provider === 'HDFCERGO') {
                 body = {
-                    "application_id": application_id,
+                    
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
@@ -277,7 +276,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
             if (provider === 'RELIGARE') {
                 body = {
-                    "application_id": application_id,
+                    
                     "address_details": {
                         "permanent_address": {
                             "state": form_data.state,
