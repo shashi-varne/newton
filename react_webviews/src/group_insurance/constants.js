@@ -733,8 +733,8 @@ export function getCssMapperReport(policy) {
 
   if(['HDFCERGO', 'STAR', 'RELIGARE'].includes(provider)) {
    
-    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start || policy.dt_created  || '');
-    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.dt_created ||  '');
+    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start  || policy.valid_from || '');
+    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
   }
 
 
