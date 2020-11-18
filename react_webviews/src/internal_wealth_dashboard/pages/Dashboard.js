@@ -116,15 +116,7 @@ const Dashboard = () => {
   useEffect(() => {
     setEventHandler();
     fetchOverview();
-    // fetchPortfolioRisk();
-    setRiskData({
-      "return": 0.2,
-      "information_ratio": 0.0,
-      "sharpe_ratio": -4.0,
-      "alpha": -0.6,
-      "beta": -2.9,
-      "std_dev": 0.3,
-    });
+    fetchPortfolioRisk();
   }, []);
 
   return (

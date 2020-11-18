@@ -1,9 +1,13 @@
 import { Button } from 'material-ui';
 import React, { memo } from 'react';
+import { getConfig } from "utils/functions";
 // ---------- Image Imports ------------
-import fisdomLogo from 'assets/fisdom/fisdom_logo.png';
+import fisdomLogo from 'assets/fisdom/fisdom_logo_white.svg';
 import close from 'assets/ic_close_white.svg';
+import banner from 'assets/fisdom/its_help.svg';
+import bannerMob from 'assets/fisdom/its_help_mob.svg';
 // -------------------------------------
+const isMobileView = getConfig().isMobileDevice;
 
 const HelpPage = (props) => {
   window.scrollTo(0, 0);
@@ -35,7 +39,7 @@ const HelpPage = (props) => {
         </span>
         +91 804 809 3070
       </div>
-      <div id="id-help-banner-img"></div>
+      <img src={isMobileView ? bannerMob : banner} alt="" className="iwd-help-banner" />
       <div id="iwd-help-footer">
         <img src={fisdomLogo} alt="fisdom" id="iwd-help-fisdom-logo" />
         <img src={fisdomLogo} alt="fisdom" />

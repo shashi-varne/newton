@@ -232,7 +232,10 @@ export const hitNextPage = async (next_page, params) => {
 export const portfolioRisk = async (params = {}) => {
   try {
     if (boot) {
-      const res = await Api.get('api/fetch/portfolio-risk', params);
+      const res = await Api.get('api/fetch/portfolio-risk', {
+        ...params,
+        user_id: '4934000205365249',
+      });
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;

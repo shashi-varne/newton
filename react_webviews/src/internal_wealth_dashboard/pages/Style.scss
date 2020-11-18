@@ -14,15 +14,13 @@ $card-padding-mobile: 40px;
   } 
 }
 .circularExpand {
-  transition: clip-path 0.8s ease-in-out, opacity 1s;
+  transition: clip-path 0.8s ease-in-out;
 }
 
 .expand {
-  // opacity: 1;
   clip-path: circle(100%);
 }
 .shrink {
-  // opacity: 0;
   clip-path: circle(0% at bottom 100px left 120px);
 }
 
