@@ -573,9 +573,20 @@ class GroupHealthPlanFinalSummary extends Component {
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
-            });
+            }); 
 
             if (res.pfwresponse.status_code === 200) {
+
+                if(this.state.provider === 'HDFCERGO') {
+                    let lead = resultData.quote_lead || {};
+                    if (lead.ped_check) {
+                        this.openMedicalDialog('ped');
+                    } else if (lead.ppc_check) {
+                        this.openMedicalDialog('ppc');
+                    }
+                }else {
+                    this.redirectToPayment(resultData);
+                }
 
                 if(resultData.ped_check && data.showMedDialog) {
                     this.openMedicalDialog('ped');
@@ -608,9 +619,6 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
            
             let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
-           
-           
-            console.log("yes",res)
 
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
@@ -654,16 +662,16 @@ class GroupHealthPlanFinalSummary extends Component {
         this.sendEvents('next');
         let {lead}  = this.state;
 
-        if(this.state.provider === 'STAR') {
+        // if(this.state.provider === 'STAR') {
             if(lead.ped_check) {
                 this.openMedicalDialog('ped');
                 return;
             } else {
                 this.startPayment();
             }
-        } else {
-            this.checkPPC();
-        }
+        // } else {
+        //     this.checkPPC();
+        // }
         
     }
 

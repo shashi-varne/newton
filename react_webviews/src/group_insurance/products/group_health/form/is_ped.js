@@ -154,9 +154,7 @@ class GroupHealthPlanIsPed extends Component {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].insured_person.relation;
             body[backend_key] = {};
-          
-            if (backend_key !== 'applicant') {
-                if (form_data[key + '_checked'] && this.state.form_data.is_ped === 'YES') {
+                if (form_data[key + '_checked'] || this.state.form_data.is_ped === 'YES') {
                     let obj = {
                         "relation_key": backend_key,
                         'ped': true
@@ -172,7 +170,6 @@ class GroupHealthPlanIsPed extends Component {
                     }
                     insured_people_details.push(obj)
                 }
-            }
            }
         }
  
