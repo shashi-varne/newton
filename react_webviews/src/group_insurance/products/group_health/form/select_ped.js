@@ -61,7 +61,7 @@ class GroupHealthPlanSelectPed extends Component {
          let member_info = {
         ...deatils.insured_person,
         ...deatils.answers,
-        ...this.state.member_base[member_info_index], ///fix this
+        ...this.state.member_base[member_info_index], 
       }
         
         let backend_key = member_info.relation_key;
@@ -110,9 +110,9 @@ class GroupHealthPlanSelectPed extends Component {
                         // matched = true;
                     }
                 }
-                console.log(disease_name)
+             
                 if(disease_name.front_end_question_id === 'hdfc_ergo_ped_other_diseases' || disease_name.question_id === 'hdfc_ergo_ped_other_diseases') {
-                    console.log(disease_name)
+             
                     other_diseases += disease_name.description;
                 }
             }
@@ -198,8 +198,7 @@ class GroupHealthPlanSelectPed extends Component {
         this.sendEvents('next');
 
         let {options, provider ,lead, member_info_index} = this.state;
-                   ///fix this
-
+              
     let member_base = this.state.member_base.map((element, index) => {
 
         let member = lead.insured_people_details.find((member) => member.insured_person.relation === element.relation)
@@ -330,7 +329,7 @@ class GroupHealthPlanSelectPed extends Component {
 
       let appendValue = lead.insured_people_details.findIndex( member => member.insured_person.relation_key === member_base[member_info_index].backend_key)
 
-            lead.insured_people_details[appendValue] = current_member;  // fix it
+            lead.insured_people_details[appendValue] = current_member; 
 
             this.setState({
                 next_state: next_state || this.state.next_state,

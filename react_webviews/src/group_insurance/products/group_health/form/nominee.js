@@ -264,7 +264,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         }        
 
         if (canSubmitForm) {
-            let application_id =  storageService().get("health_insurance_application_id")
+            let application_id =  this.state.application_id
 
             let body = {
                 "application_id": application_id,
