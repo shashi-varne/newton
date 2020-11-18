@@ -150,7 +150,8 @@ class GroupHealthPlanDobReligare extends Component {
                 let data = insured_members[i];
     
                 member_details[data.backend_key] = {
-                    relation: data.relation
+                    relation: data.relation,
+                    gender: 'FEMALE'
                 };
     
                 if(data.key === this.state.eldest_member) {
