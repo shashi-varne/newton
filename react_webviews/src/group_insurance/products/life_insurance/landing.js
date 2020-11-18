@@ -269,7 +269,7 @@ class FyntuneLanding extends Component {
                   </div>
                   <div className="rc-tile-premium-data">
                     <div className="rct-title">
-                      Click 2 Invest
+                      {this.state.resume_data.lead.base_plan_title}
                     </div>
                     <div className="rct-subtitle" style={{fontSize: '20px'}}>
                       {inrFormatDecimal(this.state.resume_data.lead.total_amount)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
