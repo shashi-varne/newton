@@ -21,6 +21,9 @@ import BtInformation from "./components/bt_details/bt_info";
 import UploadBankStatements from "./components/forms/upload_bank";
 import BasicDetails from "./components/forms/basic_details";
 import ProfessionalDetails from "./components/forms/professional_details";
+import PersonalDetails from "./components/forms/personal_details";
+import AddressDetails from "./components/forms/address_details";
+import LoanRequirementDetails from "./components/forms/requirements_details";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -71,6 +74,9 @@ const Lending = props => {
           <Route path={`${url}/upload-bank`} component={UploadBankStatements} />
           <Route path={`${url}/basic-details`} component={BasicDetails} />
           <Route path={`${url}/professional-details`} component={ProfessionalDetails} />
+          <Route path={`${url}/personal-details`} component={PersonalDetails} />
+          <Route path={`${url}/address-details`} component={AddressDetails} />
+          <Route path={`${url}/loan-requirement-details`} component={LoanRequirementDetails} />
        
           <Route component={NotFound} />
 

@@ -12,8 +12,6 @@ class Attention extends Component {
       <div className="attention">
         <img src={require(`assets/attention.svg`)} alt="" />
         <div className="content">
-          {/* Enter correct loan requirements and double-check before you hit the
-          'submit' button! Once submitted, you can't make any changes. */}
           {this.props.content}
         </div>
       </div>

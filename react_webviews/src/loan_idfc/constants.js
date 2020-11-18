@@ -8,7 +8,6 @@ export function goBackMap(path) {
 
 export function getCssMapperReport(vendor_info) {
 
-  
     let cssMapper = {
       'callback_awaited_disbursement_approval': {
         color: 'green',
@@ -165,5 +164,52 @@ export const idfc_config = {
       "PUBLIC"
     ],
     industryOptions: []
+  },
+  personal_details_screen: {
+    maritalOptions: [
+      "Single",
+      "Married"
+    ],
+    religionOptions: [
+      "Hindu",
+      "Muslim",
+      "Sikh"
+    ]
+  },
+  requirement_details_screen: {
+    purposeOfLoanOptions: [
+      "AGRI GOLD LOAN",
+      "ANY OTHER LEGAL PURPOSE",
+      "APPLIANCE/FURNITURE/ELECTRONICS",
+      "BALANCE TRANSFER",
+      "BUSINESS",
+      "CAR REPAIR/PURCHASE",
+      "DEBT CONSOLIDATION",
+      "EDUCATION",
+      "EXPANSION",
+      "EXPANSION AND LONG TERM WORKING CAPITAL",
+      "FAMILY CELEBRATION",
+      "HEALTH AND WELLNESS",
+      "HOLIDAYS",
+      "HOME IMPROVEMENT/LOT DOWNPAYMENT",
+      "INSURANCE PAYMENTS",
+      "INVESTMENTS",
+      "LONG TERM WORKING CAPITAL",
+      "MEDICAL EXPENSE",
+      "MEMORIAL SERVICE",
+      "MULTIPURPOSE",
+      "PAYING COLLEGE FEES OR FOR A PROFESSIONAL COURSE",
+      "RENOVATION OF HOUSE",
+      "VACATION/TRAVEL EXPENSE",
+      "WEDDING",
+      "OTHERS"
+    ],
+    tenorOptions: [
+      "12",
+      "24",
+      "36",
+      "48",
+      "60"
+    ]
   }
 }

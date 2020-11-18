@@ -60,6 +60,7 @@ class BasicDetails extends Component {
     if (name) {
       this.setState({
         [name]: value,
+        [name + "_error"]: ""
       });
     }
 
@@ -73,6 +74,7 @@ class BasicDetails extends Component {
 
       this.setState({
         dob: value,
+        dob_error: ""
       });
     }
   };
@@ -136,8 +138,8 @@ class BasicDetails extends Component {
                 options={this.state.qualification}
                 id="education_qualification"
                 label="Education Qualification"
-                // error={this.state.form_data.purpose_error ? true : false}
-                // helperText={this.state.form_data.purpose_error}
+                error={this.state.education_qualification_error ? true : false}
+                helperText={this.state.education_qualification_error}
                 value={this.state.education_qualification || ""}
                 name="education_qualification"
                 onChange={this.handleChange("education_qualification")}

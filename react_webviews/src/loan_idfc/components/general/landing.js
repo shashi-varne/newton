@@ -93,6 +93,16 @@ class Landing extends Component {
             </div>
           </div>
 
+          <HowToSteps
+            style={{ marginTop: 20, marginBottom: 0 }}
+            baseData={this.state.screenData.stepeContentMapper}
+          />
+
+          <JourneySteps
+            static={true}
+            baseData={this.state.screenData.journeyData}
+          />
+
           <div style={{ margin: "40px 0 0px 0" }}>
             <div className="generic-hr"></div>
             <div className="Flex calculator" onClick={() => this.openFaqs()}>
@@ -107,16 +117,6 @@ class Landing extends Component {
             </div>
             <div className="generic-hr"></div>
           </div>
-
-          <HowToSteps
-            style={{ marginTop: 20, marginBottom: 0 }}
-            baseData={this.state.screenData.stepeContentMapper}
-          />
-
-          <JourneySteps
-            static={true}
-            baseData={this.state.screenData.journeyData}
-          />
 
           <div style={{ margin: "40px 0 50px 0" }}>
             <div className="generic-hr"></div>
