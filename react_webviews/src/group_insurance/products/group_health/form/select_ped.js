@@ -89,7 +89,7 @@ class GroupHealthPlanSelectPed extends Component {
 
                     if(opt.key === item.front_end_question_id || opt.key === item.question_id ) {
                         let since_when = item.since_when.length > 4 ?  item.since_when.split('/') : ''
-                        let ped_date =   since_when[2] ? `${since_when[1]}/${since_when[2]}` : `${since_when[0]}/${since_when[1]}`
+                        let ped_date =   since_when[2] ? `${since_when[1]}-${since_when[2]}` : `${since_when[0]}/${since_when[1]}`
                         options[index].checked = true;
                         options[index].start_date = ped_date || ''
                         options[index].description = item.description !== null ? item.description : options[index].description;

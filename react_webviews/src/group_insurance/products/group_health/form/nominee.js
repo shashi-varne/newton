@@ -289,12 +289,13 @@ class GroupHealthPlanNomineeDetails extends Component {
                     "nominee_details": {
                         "name": this.state.form_data.name,
                         "relation": this.state.form_data.relation,
-                        "dob": this.state.form_data.dob
+                        "dob": this.state.form_data.dob,
+                        "appointee_details": appointee_account_key
                     },
-                    "appointee_details": appointee_account_key        
+                   
                 }
-            }
-                                             console.log(body)
+            }        
+            
             this.updateLead(body);     
         }
     }

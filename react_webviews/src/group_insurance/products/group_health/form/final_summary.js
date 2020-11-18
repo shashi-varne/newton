@@ -22,6 +22,7 @@ import { childeNameMapper } from '../../../constants';
 import {getCoverageType} from '../constants';
 
 import Checkbox from 'material-ui/Checkbox';
+// import Checkbox from '../../../../common/ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
 class GroupHealthPlanFinalSummary extends Component {
@@ -615,7 +616,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         this.openMedicalDialog('ped');
                     } else if (lead.ppc_check) {
                         this.openMedicalDialog('ppc');
-                    } else if (lead.status === 'ready_to_pay' || true) {
+                    } else if (lead.status === 'ready_to_pay') {
                         this.startPayment();
                     }
                 } else {
@@ -885,7 +886,7 @@ class GroupHealthPlanFinalSummary extends Component {
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}
-            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_sum_insured)}`}
+            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
             handleClick={() => this.handleClick()}
         >
 
@@ -1014,10 +1015,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
                     <Grid container spacing={16} alignItems="center">
-                    <Grid item xs={1} className="TextCenter">
+                    <Grid item xs={1} className="TextCenter">           
                         <Checkbox
                         defaultChecked
-                        checked={true}
+                        // checked={true}
                         color="default"
                         value="checked"
                         name="checked"
