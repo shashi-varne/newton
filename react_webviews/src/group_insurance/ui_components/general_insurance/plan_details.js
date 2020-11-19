@@ -624,7 +624,7 @@ class PlanDetailsClass extends Component {
               <div>
                 <div className="plan-details-text">{this.props.parent.state.plan_data.premium_details[this.state.selectedIndex || 0].product_diseases_covered.length} life-threatening diseases covered</div>
                 <div onClick={() => this.openDiseases()} className="round-visible-button">
-                  Diseases covered &nbsp;&nbsp;&nbsp;>
+                  Diseases covered &nbsp;&nbsp;&nbsp;
                 </div>
               </div>
             </div>

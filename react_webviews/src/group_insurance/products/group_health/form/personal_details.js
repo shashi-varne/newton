@@ -92,10 +92,11 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     member_base.forEach(element => {
+      console.log(element, member_key,"member_key")
       if(element["key"] === member_key){
          // eslint-disable-next-line
         form_data = element,
-        backend_key = element.relation_key          
+        backend_key = element.backend_key          
       }
     });
 
