@@ -79,9 +79,16 @@ class GroupHealthPlanDetails extends Component {
         })
 
         this.setLocalProviderData(groupHealthPlanData);
+
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id'];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
         try {
 
-            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,post_body);
+            const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,body);
             this.setState({
                 show_loader: false
             });
