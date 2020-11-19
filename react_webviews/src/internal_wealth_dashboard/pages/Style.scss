@@ -15,15 +15,13 @@ $background: #F9F9F9;
   } 
 }
 .circularExpand {
-  transition: clip-path 0.8s ease-in-out, opacity 1s;
+  transition: clip-path 0.8s ease-in-out;
 }
 
 .expand {
-  // opacity: 1;
   clip-path: circle(100%);
 }
 .shrink {
-  // opacity: 0;
   clip-path: circle(0% at bottom 100px left 120px);
 }
 
@@ -338,6 +336,47 @@ $background: #F9F9F9;
     @extend .iwd-card;
     height: 90%;
     width: 40%;
+
+    #iwd-daa-graph {
+      display: flex;
+      align-items: center;
+
+      #iwd-daa-legend {
+        display: flex;
+        flex-direction: column;
+        margin-left: 80px;
+  
+        .iwd-daal-item {
+          margin-bottom: 40px;
+          .label {
+            .dot {
+              height: 8px;
+              width: 8px;
+              background-color: #4AD0C0;
+              display: inline-block;
+              margin-right: 10px;
+            }
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4AD0C0;
+          }
+          .value {
+            font-size: 30px;
+            line-height: 40px;
+            color: $dark;
+            margin-top: 3px;
+          }
+        }
+
+        .iwd-daal-item:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
   }
 
   #iwd-d-risk {
@@ -388,6 +427,7 @@ $background: #F9F9F9;
     width: 40%;
     height: auto;
     padding: 34px 50px;
+    padding-right: 30px;
     box-sizing: border-box;
     border-bottom-right-radius: 70px;
 
@@ -399,6 +439,8 @@ $background: #F9F9F9;
 
     .iwd-dn-btn {
       float: right;
+      border-radius: 50%;
+      height: 48px;
     }
 
     #iwd-dn-gist {
@@ -575,6 +617,32 @@ $background: #F9F9F9;
 
     #iwd-d-asset-alloc {
       flex: 0 0 auto;
+
+      #iwd-daa-graph {
+        flex-direction: column;
+
+        #iwd-daa-legend {
+          flex-direction: row;
+          justify-content: center;
+          margin-left: 0px;
+          margin-top: 30px;
+
+          .iwd-daal-item {
+            margin-bottom: 0px;
+            margin-right: 80px;
+            text-align: center;
+
+            .value {
+              font-size: 17px;
+              line-height: 27px;
+            }
+          }
+
+          .iwd-daal-item:nth-last-child(1) {
+            margin-right: 0;
+          }
+        }
+      }
     }
 
     #iwd-d-risk {
@@ -632,6 +700,19 @@ $background: #F9F9F9;
 #iwd-analysis, .iwd-analysis {
   background-color: $background;
   font-family: "Poppins";
+
+  & .iwd-profile-icon {
+    color: $primary;
+  }
+
+  & .iwd-page-footer {
+    color: $primary;
+  }
+
+  & .iwd-p-scroll-contain {
+    margin-top: 30px;
+    width: 100%;
+  }
 }
 
 .iwd-header-container-left {
@@ -648,39 +729,33 @@ $background: #F9F9F9;
 .iwd-header-filters {
   @media only screen and (min-width: 800px) {
     flex-direction: column;
-    margin-left: 3rem;
+    margin-left: 50px;
   }
 
-  .iwd-equity-button, .iwd-debt-button {
+  .iwd-analysis-button {
     outline: none;
     border: 0;
     box-sizing: border-box;
     border-radius: 100px;
-    background-color: $primary;
-    color: white;
-    text-transform: uppercase;
-    font-size: 13px;
-    display: inline-block;
-    width: 80px;
-    height: 30px;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .iwd-debt-button {
-    margin-left: 1rem;
     background-color: #F1ECFF;
     color: $primary;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    height: 30px;
+    width: 80px;
+  }
+
+  .iwd-analysis-button__active {
+    color: white;
+    background-color: $primary;
+  }
+
+  .iwd-analysis-button:nth-of-type(2) {
+    margin-left: 20px;
   }
 }
-
-.iwd-sector-allocations {
-  list-style: none;
-  display: block;
-  width: 100%;
-  padding: 0;
-}
-
 .iwd-sector-allocation {
   display: flex;
   justify-content: space-between;
@@ -698,9 +773,65 @@ $background: #F9F9F9;
     color: $dark;
     font-size: 15px;
     line-height: 15px;
-  }
-  
+  } 
+}
+.iwd-analysis-scroll-contain {
+  @extend .iwd-p-scroll-contain;
+  height: 30vh;
+  width: 100;
 }
 
+.iwd-analysis-scroll-child {
+  @extend .iwd-p-scroll-child;
+  display: flex;
+  justify-content: space-between;
+  align-content: space-between;
+}
 
+.iwd-analysis-portfolio-stock {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%;
+  align-items: center;
 
+  @media only screen and (min-width: 300px) and (max-width: 800px) {
+    width: 100%;
+    flex-wrap: nowrap;
+    margin-top: 30px;
+  }
+
+  main {
+    margin-left: 20px;
+  }
+}
+
+.iwd-analysis-portfolio-heading {
+  color: $grey;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.iwd-analysis-card {
+  @extend .iwd-card;
+  margin-top: 30px;
+  width: 100%;
+
+  @media only screen and (min-width: 800px) {
+    margin-top: 100px;
+  }
+}
+
+.iwd-analysis-card-margin {
+  margin-top: 30px;
+}
+
+.iwd-analysis-amc {
+  @extend .iwd-analysis-portfolio-stock;
+
+  .iwd-analysis-amc-name {
+    color: $grey;
+    font-size: 13px;
+  }
+}
