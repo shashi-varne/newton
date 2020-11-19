@@ -52,16 +52,16 @@ const NavBarMobile = (props) => {
             <div id="iwd-nmp-user-icon">U</div>
             <div className="iwd-nmp-user-detail">
               <b>PAN: </b>
-            CXIPP 4122 M
-          </div>
+              CXIPP 4122 M
+            </div>
             <div className="iwd-nmp-user-detail">
               <b>Email: </b>
-            uttam@fisdom.com
-          </div>
+              uttam@fisdom.com
+            </div>
             <div className="iwd-nmp-user-detail">
               <b>Mob.: </b>
-            +91-8800927468
-          </div>
+              +91-8800927468
+            </div>
           </div>
           <Button
             fullWidth={true}

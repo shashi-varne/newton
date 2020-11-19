@@ -52,19 +52,19 @@ const InternalWealthDashboard = (props) => {
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
-        <Switch>
-          <Route exact path={`${url}`} component={Login} />
-          <Route path={`${url}/login/:view`} component={Login} />
-          <Route path={`${url}/login`} component={Login} />
-          <Route path={`${url}/main/:tab`} component={Main} />
-          <Route path={`${url}/dashboard`} component={Dashboard} />
-          <Route path={`${url}/analysis`} component={Analysis} />
-          {/* <Route path={`${url}/no-pan-screen`} component={NoPan} />
-          <Route path={`${url}/transactions`} component={AllTransactions} />
-          <Route path={`${url}/main/:tab`} component={MainPage} />
-          <Route component={NotFound} />*/}
-          <Route component={NotFound} />
-        </Switch>
+          <Switch>
+            <Route exact path={`${url}`} component={Login} />
+            <Route path={`${url}/login/:view`} component={Login} />
+            <Route path={`${url}/login`} component={Login} />
+            <Route path={`${url}/main/:tab`} component={Main} />
+            <Route path={`${url}/dashboard`} component={Dashboard} />
+            <Route path={`${url}/analysis`} component={Analysis} />
+            {/* <Route path={`${url}/no-pan-screen`} component={NoPan} />
+            <Route path={`${url}/transactions`} component={AllTransactions} />
+            <Route path={`${url}/main/:tab`} component={MainPage} />
+            <Route component={NotFound} />*/}
+          </Switch>
+        
       </MuiThemeProvider>
     </JssProvider>
   );

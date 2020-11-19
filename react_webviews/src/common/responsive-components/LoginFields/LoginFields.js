@@ -12,7 +12,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import LoadingScreen from "../../../wealth_report/mini-components/LoadingScreen";
 import { FormControl, TextField, InputAdornment } from "material-ui";
 import { nativeCallback } from 'utils/native_callback';
-import { validateEmail, storageService } from "../../../utils/validators";
+import { validateEmail, storageService, isFunction } from "../../../utils/validators";
 const isMobileView = getConfig().isMobileDevice;
 
 const LoginFields = (props) => {
@@ -66,6 +66,16 @@ const LoginFields = (props) => {
     storageService().set('common-login-password', '');
     setPwd('');
     navigate('login/phone');
+  };
+
+  const forgotPasswordClicked = () => {
+    console.log('ere', props);
+    const { onForgotPasswordClicked } = props;
+    if (onForgotPasswordClicked && isFunction(onForgotPasswordClicked)) {
+      onForgotPasswordClicked();
+    } else {
+      navigate('login/forgot-password');
+    }
   };
 
   const handleOtp = (val) => {
@@ -145,7 +155,7 @@ const LoginFields = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      navigate('main/overview');
+      props.onLoginSuccess();
     } catch (err) {
       if (err.includes('wrong OTP')) {
         setOtpErr('Incorrect OTP! Please check and try again');
@@ -186,7 +196,7 @@ const LoginFields = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      navigate('main/overview');
+      props.onLoginSuccess();
     } catch (err) {
       console.log(err);
       if (err.includes('registered')) {
@@ -386,7 +396,7 @@ const LoginFields = (props) => {
       })}
       <div
         className="cli-forgot-pwd"
-        onClick={() => navigate('login/forgot-password')}>
+        onClick={forgotPasswordClicked}>
         Forgot Password?
       </div>
       <CommonLoginOpts view={view} navigate={navigate} parentProps={parentProps} />

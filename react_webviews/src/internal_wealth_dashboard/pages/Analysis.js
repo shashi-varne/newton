@@ -1,59 +1,86 @@
-import React from 'react';
+import React, { createRef, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
+import PageFooter from '../mini-components/PageFooter';
 
 import { getConfig } from 'utils/functions';
 
+import EquityAnalysis from '../mini-components/EquityAnalysis'
+import DebtAnalysis from '../mini-components/DebtAnalysis'
+
+import TopAMCS from '../mini-components/TopAMCS';
+
 const isMobileView = getConfig().isMobileDevice;
 
-const allocations = [
-  { sector: 'Bank', allocation: 29 },
-  { sector: 'Refineries/marketing', allocation: 17 },
-  { sector: 'Computers-software', allocation: 11 },
-  { sector: 'Engineering, designing, construction', allocation: 10 },
-  { sector: 'Housing finance', allocation: 8 },
-];
+function Analysis(props) {
+  const [pageType, setPageType] = useState('equity')
+  const container = createRef();
+  const parent = createRef();
+  const title = createRef();
+  const [currentPage, setCurrentPage] = useState(1);
 
-const topStocks = [
-  { heading: 'Computer-Software', company: 'Infosys Ltd', percentage: 10.06 },
-  { heading: 'Banks', company: 'HDFC Bank Ltd.', percentage: 9.12 },
-  { heading: 'Refineries/Marketing', company: 'Reliance Industries Ltd', percentage: 9.12 },
-  { heading: 'Computer - Software', company: 'Tata Consultancy Ltd.', percentage: 10.06 },
-  { heading: 'NBFC', company: 'Bajaj Finance Ltd', percentage: 9.12 },
-  { heading: 'Banks', company: 'Kotak Mahindra Bank Ltd.', percentage: 10.06 }, 
+  const setEventHandler = () => {
+    const { current: elem } = container;
+    const { current: father } = parent;
+    const { current: titleOb } = title;
 
-]
+    elem.addEventListener('scroll', function () {
+      console.log(elem.scrollTop, elem.scrollHeight);
+      const htby2 = elem.scrollHeight / 2;
+      if (elem.scrollTop + 40 > htby2) {
+        titleOb.style.color = 'black';
+        father.style.background = '#F9FCFF';
+        setCurrentPage(currentPage < 2 ? currentPage + 1 : 2);
+      } else {
+        titleOb.style.color = 'white';
+        father.style.background = 'var(--primary)';
+        setCurrentPage(currentPage > 1 ? currentPage - 1 : 1);
+      }
+    });
+  };
 
-function Analysis() {
+  const scrollPage = () => {
+    const { current: elem } = container;
+    elem.scroll({
+      top: 500,
+      behavior: 'smooth',
+    });
+  };
+
+  const handlePageType = name => () => {
+    if (['equity', 'debt'].includes(name)) {
+      setPageType(name)
+    }
+  }
+
   return (
-    <section className="iwd-page iwd-analysis" id="iwd-analysis">
-      <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={true}>
+    <section className="iwd-page iwd-page__analysis" id="iwd-analysis" ref={parent}>
+      <PageHeader
+        height={isMobileView ? '7vh' : '9vh'}
+        hideProfile={isMobileView}
+      >
         <div className="iwd-header-container-left">
           <h1 className="iwd-header-title">Analysis</h1>
           <div className="iwd-header-filters">
-            <button className="iwd-equity-button">Equity</button>
-            <button className="iwd-debt-button">Debt</button>
+            <button className={pageType === 'equity' ? 'iwd-analysis-button iwd-analysis-button__active' : 'iwd-analysis-button'} onClick={handlePageType('equity')}>
+              Equity
+            </button>
+            <button  className={pageType === 'debt' ? 'iwd-analysis-button iwd-analysis-button__active' : 'iwd-analysis-button'} onClick={handlePageType('debt')}>Debt</button>
           </div>
         </div>
       </PageHeader>
-      <div className="iwd-card" style={{ marginTop: '50px' }}>
-        <h2 className="iwd-card-header">Top Sector Allocation</h2>
-        <div className="iwd-sector-allocations">
-          {allocations.map(({ sector, allocation}) => (<div className="iwd-sector-allocation">
-            <div className="iwd-sector-name">{sector}</div>
-            <div className="iwd-sector-allocation-percentage">{allocation}</div>
-          </div>))}
-        </div>
+      <div className="iwd-p-scroll-contain added">
+        {pageType === 'equity' ? (<><EquityAnalysis /><TopAMCS /></>) : <><DebtAnalysis /><TopAMCS /></>}
       </div>
-      <div className="iwd-card" style={{ marginTop: '50px' }}>
-        <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
-        <div className="iwd-sector-allocations">
-          {allocations.map(({ sector, allocation}) => (<div className="iwd-sector-allocation">
-            <div className="iwd-sector-name">{sector}</div>
-            <div className="iwd-sector-allocation-percentage">{allocation}</div>
-          </div>))}
-        </div>
-      </div>
+
+      {!isMobileView && (
+        <PageFooter
+          currentPage={currentPage}
+          totalPages="2"
+          direction={currentPage === 2 ? 'up' : 'down'}
+          onClick={scrollPage}
+        />
+      )}
     </section>
   );
 }

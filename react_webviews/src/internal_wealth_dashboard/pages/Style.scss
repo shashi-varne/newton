@@ -15,15 +15,13 @@ $background: #F9F9F9;
   } 
 }
 .circularExpand {
-  transition: clip-path 0.8s ease-in-out, opacity 1s;
+  transition: clip-path 0.8s ease-in-out;
 }
 
 .expand {
-  // opacity: 1;
   clip-path: circle(100%);
 }
 .shrink {
-  // opacity: 0;
   clip-path: circle(0% at bottom 100px left 120px);
 }
 
@@ -212,11 +210,6 @@ $background: #F9F9F9;
   border-radius: $card-border-radius;
   padding: $card-padding;
   box-sizing: border-box;
-
-  @media only screen and (min-width: 800px) {
-    margin: 0 auto;
-    width: 50%;
-  }
 }
 
 .iwd-card-header {
@@ -234,6 +227,7 @@ $background: #F9F9F9;
   padding-right: 25px;
   box-sizing: border-box;
   overflow-y: scroll;
+  width: 100%;
 }
 
 .iwd-p-scroll-contain::-webkit-scrollbar {
@@ -338,6 +332,47 @@ $background: #F9F9F9;
     @extend .iwd-card;
     height: 90%;
     width: 40%;
+
+    #iwd-daa-graph {
+      display: flex;
+      align-items: center;
+
+      #iwd-daa-legend {
+        display: flex;
+        flex-direction: column;
+        margin-left: 80px;
+  
+        .iwd-daal-item {
+          margin-bottom: 40px;
+          .label {
+            .dot {
+              height: 8px;
+              width: 8px;
+              background-color: #4AD0C0;
+              display: inline-block;
+              margin-right: 10px;
+            }
+            font-weight: 600;
+            font-size: 11px;
+            line-height: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4AD0C0;
+          }
+          .value {
+            font-size: 30px;
+            line-height: 40px;
+            color: $dark;
+            margin-top: 3px;
+          }
+        }
+
+        .iwd-daal-item:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
   }
 
   #iwd-d-risk {
@@ -388,6 +423,7 @@ $background: #F9F9F9;
     width: 40%;
     height: auto;
     padding: 34px 50px;
+    padding-right: 30px;
     box-sizing: border-box;
     border-bottom-right-radius: 70px;
 
@@ -399,6 +435,8 @@ $background: #F9F9F9;
 
     .iwd-dn-btn {
       float: right;
+      border-radius: 50%;
+      height: 48px;
     }
 
     #iwd-dn-gist {
@@ -575,6 +613,32 @@ $background: #F9F9F9;
 
     #iwd-d-asset-alloc {
       flex: 0 0 auto;
+
+      #iwd-daa-graph {
+        flex-direction: column;
+
+        #iwd-daa-legend {
+          flex-direction: row;
+          justify-content: center;
+          margin-left: 0px;
+          margin-top: 30px;
+
+          .iwd-daal-item {
+            margin-bottom: 0px;
+            margin-right: 80px;
+            text-align: center;
+
+            .value {
+              font-size: 17px;
+              line-height: 27px;
+            }
+          }
+
+          .iwd-daal-item:nth-last-child(1) {
+            margin-right: 0;
+          }
+        }
+      }
     }
 
     #iwd-d-risk {
@@ -629,56 +693,53 @@ $background: #F9F9F9;
   }
 }
 
-#iwd-analysis, .iwd-analysis {
+
+// IWD Analysis Page
+
+.iwd-page__analysis {
   background-color: $background;
   font-family: "Poppins";
-}
 
-.iwd-header-container-left {
-  display: flex;
-  flex-direction: column;
-  
-
-  @media only screen and (min-width: 800px) {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
-.iwd-header-filters {
-  @media only screen and (min-width: 800px) {
-    flex-direction: column;
-    margin-left: 3rem;
+  & .iwd-profile-icon {
+    color: $primary;
   }
 
-  .iwd-equity-button, .iwd-debt-button {
-    outline: none;
-    border: 0;
-    box-sizing: border-box;
-    border-radius: 100px;
-    background-color: $primary;
-    color: white;
-    text-transform: uppercase;
-    font-size: 13px;
-    display: inline-block;
-    width: 80px;
-    height: 30px;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .iwd-debt-button {
-    margin-left: 1rem;
-    background-color: #F1ECFF;
+  & .iwd-page-footer {
     color: $primary;
   }
 }
 
-.iwd-sector-allocations {
-  list-style: none;
-  display: block;
-  width: 100%;
-  padding: 0;
+.iwd-analysis-header-container-left {
+  display: flex;
+  align-items: center;
+}
+
+.iwd-analysis-header-filters {
+  margin-left: 50px;
+}
+
+.iwd-analysis-button {
+  outline: none;
+  border: 0;
+  box-sizing: border-box;
+  border-radius: 100px;
+  background-color: #F1ECFF;
+  color: $primary;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  height: 30px;
+  width: 80px;
+}
+
+.iwd-analysis-button__active {
+  color: white;
+  background-color: $primary;
+}
+
+.iwd-analysis-button:nth-of-type(2) {
+  margin-left: 20px;
 }
 
 .iwd-sector-allocation {
@@ -698,9 +759,146 @@ $background: #F9F9F9;
     color: $dark;
     font-size: 15px;
     line-height: 15px;
-  }
-  
+  } 
 }
 
+.iwd-analysis-card {
+  @extend .iwd-card;
+  margin-top: 30px;
+  width: 100%;
+}
 
+.iwd-analysis-card-margin {
+  margin-top: 30px;
+}
 
+.iwd-analysis-portfolios-equity {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
+  height: 50vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: hsla(257, 58%, 73%, 0.4);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    background-color: hsla(257, 58%, 73%, 1);
+    border-radius: 5px;
+  }
+}
+
+.iwd-analysis-portfolio-stock {
+  display: flex;
+  width: 50%;
+  margin-top: 50px;
+  align-items: center;
+  main {
+    margin-left: 20px;
+  }
+}
+
+.iwd-analysis-portfolio-heading {
+  color: $grey;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.iwd-analysis-top-amcs {
+  @extend .iwd-analysis-portfolios-equity;
+}
+
+.iwd-analysis-amc-name {
+  color: $grey;
+  font-size: 13px;
+}
+
+.iwd-analysis-amc {
+  width: 33%;
+  display: flex;
+  margin-top: 20px;
+  main {
+    margin-left: 20px;
+  }
+}
+
+.iwd-analysis-debt-holdings {
+  @extend .iwd-analysis-portfolios-equity;
+}
+
+.iwd-analysis-debt-holding {
+  display: flex;
+  width: 50%;
+  height: 49px;
+  margin-top: 50px;
+}
+
+.iwd-analysis-debt-holding-details {
+  margin-left: 20px;
+  vertical-align: text-top;
+}
+
+.iwd-analysis-debt-holding-logo {
+  background: #AEE5DF;
+  color: #488F87;
+  font-size: 20px;
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.iwd-analysis-debt-holding-name {
+  color: $grey;
+  font-size: 17px;
+}
+
+.iwd-analysis-debt-holding-name {
+  color: $grey;
+  font-size: 17px;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 800px) {
+  
+  .iwd-analysis-portfolios-equity {
+    overflow-y: auto;
+    height: auto;
+  }
+  .iwd-analysis-amc {
+    width: 100%;
+  }
+
+  .iwd-analysis-portfolio-stock {
+    width: 100%;
+    margin-top: 30px;
+    justify-content: flex-start;
+  }
+
+  .iwd-analysis-header-container-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .iwd-header-title {
+    padding: 0;
+    margin-top: 70px;
+  }
+
+  .iwd-analysis-header-filters {
+    margin-left: 0;
+  }
+
+  .iwd-analysis-debt-holding {
+    width: 100%;
+  }
+}

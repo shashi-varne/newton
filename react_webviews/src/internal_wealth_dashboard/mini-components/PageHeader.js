@@ -5,7 +5,7 @@ const PageHeader = (props) => {
   const { backgroundColor = 'inherit', height = 'auto', hideProfile = false } = props;
 
   return (
-    <header
+    <div
       id="iwd-page-header"
       style={{
         // backgroundColor,
@@ -20,7 +20,7 @@ const PageHeader = (props) => {
           <IwdProfile />
         </div>
       }
-    </header>
+    </div>
   );
 };
 
