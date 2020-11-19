@@ -21,6 +21,17 @@ class Calculator extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let { params } = this.props.location;
+
+    if (!params) {
+      this.props.history.goBack();
+      return
+    }
+
+    this.setState({
+      ...params
+    })
   }
 
   onload = async () => {};
@@ -69,7 +80,7 @@ class Calculator extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Loan eligibility calculator"
-        buttonTitle="APPLY NOW"
+        buttonTitle={this.state.cta_title}
         styleFooter={{
           backgroundColor: "var(--highlight)"
         }}

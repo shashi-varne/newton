@@ -8,7 +8,6 @@ class KnowMore extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      cta_title: "APPLY NOW",
       screen_name: "know_more_screen",
       tab_clicked: 'tab-1'
     };
@@ -18,15 +17,20 @@ class KnowMore extends Component {
 
   componentWillMount() {
     this.initialize();
-  }
 
-  onload = async () => {
-    let screenData = this.state.screenData;
+    let { params } = this.props.location;
+
+    if (!params) {
+      this.props.history.goBack();
+      return
+    }
 
     this.setState({
-      screenData: screenData
+      ...params
     })
-  };
+  }
+
+  onload = async () => {};
 
   handleClick = (e) => {
     let id = e.target.id;

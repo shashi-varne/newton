@@ -106,7 +106,12 @@ class Landing extends Component {
         <div className="idfc-landing">
           <div
             className="infoimage-block1"
-            onClick={() => this.navigate('know-more')}
+            onClick={() => this.navigate('know-more', {
+              params: {
+                next_state: this.state.next_state,
+                cta_title: this.state.cta_title
+              }
+            })}
           >
             <img
               src={require(`assets/${this.state.productName}/idfc_card.svg`)}
@@ -137,7 +142,7 @@ class Landing extends Component {
 
           <HowToSteps
             style={{ marginTop: 20, marginBottom: 0 }}
-            baseData={this.state.screenData.stepeContentMapper}
+            baseData={this.state.screenData.stepContentMapper}
           />
 
           <JourneySteps
@@ -147,7 +152,12 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 0px 0" }}>
             <div className="generic-hr"></div>
-            <div className="Flex calculator" onClick={() => this.navigate('calculator')}>
+            <div className="Flex calculator" onClick={() => this.navigate('calculator', {
+              params: {
+                next_state: this.state.next_state,
+                cta_title: this.state.cta_title
+              }
+            })}>
               <div className="title">Loan eligibility calculator</div>
               <SVG
                 className="right"

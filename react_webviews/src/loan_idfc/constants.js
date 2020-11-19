@@ -35,10 +35,12 @@ export function getCssMapperReport(vendor_info) {
 export const idfc_config = {
   key: 'idfc',
   get_next: {
-    landing_screen: 'edit-number'
+    landing_screen: 'edit-number',
+    mobile_verification: 'otp-verify',
+    otp_verify: 'basic-details'
   },
   landing_screen: {
-    stepeContentMapper: {
+    stepContentMapper: {
       title: 'Top features',
       options: [
         { 'icon': 'icn_b_1', 'subtitle': 'Interest rates starting as low as 10.75% pa' },

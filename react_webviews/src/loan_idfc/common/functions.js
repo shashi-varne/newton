@@ -1,10 +1,11 @@
-// import { storageService, dobFormatTest, inFormatTest } from "utils/validators";
+import { storageService } from "utils/validators";
 import { getConfig } from 'utils/functions';
 // import Api from 'utils/api';
 // import toast from '../../common/ui/Toast';
 import { openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 import { idfc_config } from '../constants';
+import { getOrCreate } from "./ApiCalls";
 
 export async function initialize() {
 
@@ -30,12 +31,26 @@ export async function initialize() {
 
     this.setState({
         productName: getConfig().productName,
-        screenData: screenData
     }, () => {
-        // if (!this.state.get_lead) {
-            this.onload();
-        // }
+        this.onload();
     })
+
+    this.setState({
+        show_loader: true
+    })
+
+    const result = await getOrCreate();
+    
+    if (result) {
+        this.setState({
+            mobile_no: result.personal_info.mobile_no || "",
+            productName: getConfig().productName,
+            screenData: screenData,
+            show_loader: false
+        }, () => {
+            this.onload();
+        })
+    }
 }
 
 export function openInBrowser(url) {

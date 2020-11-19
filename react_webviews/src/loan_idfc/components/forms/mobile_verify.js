@@ -7,13 +7,16 @@ import { validateNumber } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import Checkbox from "material-ui/Checkbox";
 import Grid from "material-ui/Grid";
+import { updateApplication } from "../../common/ApiCalls";
+import toast from '../../../common/ui/Toast';
 
 class MobileVerification extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      mobile_no: "",
+      screen_name: 'mobile_verification',
+      mobile_no: ""
     };
 
     this.initialize = initialize.bind(this);
@@ -23,7 +26,8 @@ class MobileVerification extends Component {
     this.initialize();
   }
 
-  onload = async () => {};
+  onload = async () => {
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -54,15 +58,46 @@ class MobileVerification extends Component {
     });
   };
 
-  handleClick = () => {
+  handleClick = async () => {
     this.sendEvents("next");
 
     let { mobile_no } = this.state;
 
+    let canSubmitForm = true;
+
     if (mobile_no.length !== 10 || !validateNumber(mobile_no)) {
+      canSubmitForm = false;
       this.setState({
         mobile_no_error: "Please enter valid mobile no.",
       });
+    }
+
+    if (canSubmitForm) {
+      try {
+        this.setState({
+          show_loader: true
+        })
+
+        let params = {
+          mobile_no: mobile_no
+        };
+
+        const resultData = await updateApplication(params);
+
+        if (resultData) {
+          this.navigate(this.state.next_state, {
+            params: {
+              verify_otp_url: resultData.verify_otp_url,
+              resend_otp_url: resultData.resend_otp_url,
+              mobile_no: resultData.mobile_no
+            }
+          })
+        }
+
+      } catch (err) {
+        console.log(err);
+        toast("Something went wrong!");
+      }
     }
   };
 
@@ -123,7 +158,12 @@ class MobileVerification extends Component {
               </Grid>
               <Grid item xs={11}>
                 <div>
-                  <span>I accept <u style={{ color: "var(--primary)" }}>Terms and condition</u></span>
+                  <span>
+                    I accept{" "}
+                    <u style={{ color: "var(--primary)" }}>
+                      Terms and condition
+                    </u>
+                  </span>
                 </div>
               </Grid>
             </Grid>
