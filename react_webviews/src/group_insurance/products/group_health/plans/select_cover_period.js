@@ -162,7 +162,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 <div className="select-tile">
                     <div className="flex-column">
                         <div className="name">
-                            {props.tenure} year{props.tenure !== "1" && <span>s</span>} for {inrFormatDecimal(props.premium)}
+                            {props.tenure} year{props.tenure !== 1 && <span>s</span>} for {inrFormatDecimal(props.premium)}
                         </div>
                        {this.state.type_of_plan === "floater" && props.discount.tenure[1] > 0 && (
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
@@ -173,13 +173,13 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                             }}>save {inrFormatDecimal(props.discount.tenure[1])} </span>
                         </div>)
                         }
-                        {this.state.type_of_plan === "non_floater" && props.discount.family[1] > 0 && 
+                        {this.state.type_of_plan === "non_floater" && props.discount.tenure[1] > 0 && 
                             <div className="flex" style={{margin: '4px 0 0 0'}}>
                             <img style={{ width: 10 }} src={require(`assets/ic_discount.svg`)} alt="" />
                             <span style={{
                                 color: '#4D890D', fontSize: 10,
                                 fontWeight: 400, margin: '0 0 0 4px'
-                            }}>save {inrFormatDecimal(props.discount.family[1])} </span>
+                            }}>save {inrFormatDecimal(props.discount.tenure[1])} </span>
                         </div>
                         }
                     </div>
