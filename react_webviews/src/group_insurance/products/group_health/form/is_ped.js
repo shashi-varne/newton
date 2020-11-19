@@ -149,6 +149,8 @@ class GroupHealthPlanIsPed extends Component {
 
 
         let insured_people_details = []
+        let answers = {}
+
         for (var i in member_base) {
             if(member_base[i].insured_person !== undefined) {
             let backend_key = member_base[i].insured_person.relation_key;
@@ -167,8 +169,9 @@ class GroupHealthPlanIsPed extends Component {
                 } else{
                     let obj = {
                         "relation_key": backend_key,
-                        'ped': false
+                        'ped': false 
                     }
+                    answers[backend_key]  = []
                     insured_people_details.push(obj)
                 }
            }
@@ -197,7 +200,8 @@ class GroupHealthPlanIsPed extends Component {
 
          
             let body = {
-                insured_people_details
+                insured_people_details,
+                'answers' : answers
             }
             this.updateLead(body);
         }
