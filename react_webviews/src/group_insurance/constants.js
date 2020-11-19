@@ -531,7 +531,9 @@ export const back_button_mapper = {
   '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
   '/group-insurance/term/intro' : '/group-insurance',
   '/group-insurance/group-health/entry' : '/group-insurance/health/landing',
-  '/group-insurance/health/landing': '/group-insurance'
+  '/group-insurance/health/landing': '/group-insurance',
+  '/group-insurance/life-insurance/savings-plan/landing': '/group-insurance/life-insurance/entry'
+  
 };
 
 export const insuranceMaritalStatus = [
