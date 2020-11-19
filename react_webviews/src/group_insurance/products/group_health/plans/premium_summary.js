@@ -97,7 +97,7 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.tenure = lead.tenure;
       properties.base_premium = lead.base_premium;
       properties.discount_amount = lead.total_discount;
-      properties.net_premium = lead.total_premium;
+      properties.net_premium = lead.total_premium - lead.gst ;
       properties.gst_tax = lead.gst;
       properties.total_amount = lead.total_premium;
     } else {
