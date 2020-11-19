@@ -133,17 +133,16 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.type_of_plan = 'WF';
             groupHealthPlanData.post_body.type_of_plan = 'WF';
         }
-
-        // data reset
-        groupHealthPlanData.add_ons_data = '';
-        groupHealthPlanData.net_premium_addons = '';
-
-        groupHealthPlanData.post_body.add_ons = '';
-        groupHealthPlanData.post_body.add_ons_json = '';
+        groupHealthPlanData.add_ons_data = [];
+        groupHealthPlanData.post_body.add_ons_json = {};
 
         this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {
+            
+            groupHealthPlanData.post_body.floater_type = 'non_floater';
+            this.setLocalProviderData(groupHealthPlanData);
+
             this.navigate(this.state.next_screen.not_floater || 'plan-select-cover-period');
         } else {
             this.navigate(this.state.next_screen.floater || 'plan-select-floater');

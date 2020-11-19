@@ -27,9 +27,14 @@ class GroupHealthPlanList extends Component {
     }
 
     async componentDidMount() {
-        try {
+        let {groupHealthPlanData : {post_body}} = this.state;
 
-            let body = this.state.groupHealthPlanData.post_body;
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details'];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
+        try {
 
              const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
              body);
