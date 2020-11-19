@@ -49,12 +49,13 @@ class GroupHealthPlanSelectPed extends Component {
        
         let {lead, provider} = this.state;
 
-        let member_base =this.state.member_base;   
+        let member_base =this.state.member_base;   console.log(this.props.match, "mememememememeememeem")
         let member_key = this.props.match.params.member_key;
-
-        let member_info_index = member_base.findIndex(item => item.key === member_key);;   
+        let mem_details = member_base.find(element => element.key === member_key);
+     
+        let member_info_index = member_base.findIndex(item => item.key === member_key);
     
-        let deatils = this.state.lead.insured_people_details.find(element => element.insured_person.relation === member_key);
+        let deatils = this.state.lead.insured_people_details.find(element => element.insured_person.relation_key === mem_details.backend_key);
         
 
         // let member_info = member_base[member_info_index];
@@ -218,14 +219,14 @@ class GroupHealthPlanSelectPed extends Component {
             return;
         } else {
 
-          console.log(member_base)
-            let next_state = '';
-            for (var i =0; i < member_base.length; i++) {
-                if(member_base[i].relation === this.state.member_key && i !== member_base.length -1) {
+            let next_state = '';  console.log(member_base,  "memberkey------------->", this.state.member_key)
+            for (var i =0; i < member_base.length; i++) {  console.log(member_base[i])
+                if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
+                    console.log("am in",member_base[i])
                     for (var k =i+1; k < member_base.length; k++) {
                         if(member_base[k].ped && member_base[k].key !== 'applicant') {
-                            next_state = member_base[k].relation;
-                            break;
+                            next_state = member_base[k].key;  console.log(next_state,"relation<<<<<<<<<");
+                            break; 
                         }
                     }
                 }
