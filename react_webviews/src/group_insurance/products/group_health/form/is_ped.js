@@ -171,7 +171,9 @@ class GroupHealthPlanIsPed extends Component {
                         "relation_key": backend_key,
                         'ped': false 
                     }
-                    answers[backend_key]  = []
+                    answers[backend_key]  =  {
+                        'pre_existing_diseases' : []
+                    }
                     insured_people_details.push(obj)
                 }
            }
