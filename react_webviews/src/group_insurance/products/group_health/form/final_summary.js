@@ -581,15 +581,15 @@ class GroupHealthPlanFinalSummary extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 if(this.state.provider === 'HDFCERGO') {
-                    let lead = resultData.quote_lead || {};
+                    let lead = resultData || {};
                     if (lead.ped_check) {
                         this.openMedicalDialog('ped');
                     } else if (lead.ppc_check) {
                         this.openMedicalDialog('ppc');
+                    } else if (lead.application_status === 'ready_for_payment') {
+                        this.redirectToPayment(resultData);
                     }
-                }else {
-                    this.redirectToPayment(resultData);
-                }
+                } 
 
                 if(resultData.ped_check && data.showMedDialog) {
                     this.openMedicalDialog('ped');
@@ -614,45 +614,45 @@ class GroupHealthPlanFinalSummary extends Component {
         }
     }
 
-    checkPPC = async () => {
-        let application_id = storageService().get('health_insurance_application_id');
-        this.setState({
-            show_loader: true
-        });
-        try {
+    // checkPPC = async () => {
+    //     let application_id = storageService().get('health_insurance_application_id');
+    //     this.setState({
+    //         show_loader: true
+    //     });
+    //     try {
            
-            let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
+    //         let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
 
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-                if(this.state.provider === 'HDFCERGO') {
-                    let lead = resultData.quote_lead || {};
-                    if (lead.ped_check) {
-                        this.openMedicalDialog('ped');
-                    } else if (lead.ppc_check) {
-                        this.openMedicalDialog('ppc');
-                    } else if (lead.status === 'ready_to_pay') {
-                        this.startPayment();
-                    }
-                } else {
-                    this.startPayment({showMedDialog : true});
-                }
+    //         var resultData = res.pfwresponse.result;
+    //         if (res.pfwresponse.status_code === 200) {
+    //             if(this.state.provider === 'HDFCERGO') {
+    //                 let lead = resultData.quote_lead || {};
+    //                 if (lead.ped_check) {
+    //                     this.openMedicalDialog('ped');
+    //                 } else if (lead.ppc_check) {
+    //                     this.openMedicalDialog('ppc');
+    //                 } else if (lead.status === 'ready_to_pay') {
+    //                     this.startPayment();
+    //                 }
+    //             } else {
+    //                 this.startPayment({showMedDialog : true});
+    //             }
                 
-            } else {
-                this.setState({
-                    show_loader: false
-                });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
-        }
-    }
+    //         } else {
+    //             this.setState({
+    //                 show_loader: false
+    //             });
+    //             toast(resultData.error || resultData.message
+    //                 || 'Something went wrong');
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //         this.setState({
+    //             show_loader: false
+    //         });
+    //         toast('Something went wrong');
+    //     }
+    // }
 
     handleClick = async () => {
 
@@ -674,7 +674,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 this.startPayment();
             }
         } else {
-            this.checkPPC();
+            this.startPayment({showMedDialog : true});
         }
         
     }
