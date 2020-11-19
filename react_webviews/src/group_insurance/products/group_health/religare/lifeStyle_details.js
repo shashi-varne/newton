@@ -31,7 +31,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
   onload() {
 
     let { insured_people_details, quotation_details } = this.state.lead;
-    
+
     let account_type  =  quotation_details.insurance_type
     let member_base = [];
 

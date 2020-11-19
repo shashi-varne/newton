@@ -285,7 +285,7 @@ class GroupHealthPlanAddressDetails extends Component {
                             "addr_line2": form_data.addr_line2,
                             "city": form_data.city
                         },
-                        "correspondence_addr_same": "n",
+                        "correspondence_addr_same": checked ? 'y' : 'n',
                         "correspondence_address": {
                             "state": checked ? form_data.state : form_data.p_state,
                             "addr_line1": checked ? form_data.addr_line1 : form_data.p_addr_line1,
