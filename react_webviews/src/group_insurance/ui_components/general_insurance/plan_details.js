@@ -21,7 +21,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { insuranceProductTitleMapper } from '../../constants';
 import {
-  inrFormatDecimal
+  inrFormatDecimal, calculateAge
 } from 'utils/validators';
 
 const coverAmountMapper = {
@@ -450,7 +450,18 @@ class PlanDetailsClass extends Component {
 
 
         if (res2.pfwresponse.status_code === 200) {
-          this.navigate('form', '', final_data);
+          let dt_created = res2.pfwresponse.result.updated_lead.dt_created;
+          dt_created = dt_created.replace(/\\-/g, '/').split('-').join('/');
+          let createdAge = calculateAge(dt_created);
+          let ageRef = calculateAge('18/11/2020');
+          let diffAge = ageRef - createdAge;
+
+
+          if(this.props.parent.state.product_key === 'CORONA' && diffAge <= 0){
+            this.navigate('declaration', '', final_data);
+          } else{
+            this.navigate('form', '', final_data);
+          }
         } else {
           this.setState({
             show_loader: false
