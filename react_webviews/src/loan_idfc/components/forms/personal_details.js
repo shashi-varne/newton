@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import { dobFormatTest, isValidDate, formatDate } from "utils/validators";
+// import { dobFormatTest, isValidDate, formatDate } from "utils/validators";
 
 const gender_options = [
   {

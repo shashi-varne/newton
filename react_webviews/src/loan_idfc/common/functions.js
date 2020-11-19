@@ -1,11 +1,12 @@
-import { storageService } from "utils/validators";
+// import { storageService } from "utils/validators";
 import { getConfig } from 'utils/functions';
 // import Api from 'utils/api';
 // import toast from '../../common/ui/Toast';
 import { openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 import { idfc_config } from '../constants';
-import { getOrCreate } from "./ApiCalls";
+import { getOrCreate, updateApplication } from "./ApiCalls";
+import { validatePan, isValidDate } from "utils/validators";
 
 export async function initialize() {
 
@@ -13,6 +14,7 @@ export async function initialize() {
     this.openPdf = openPdf.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.openInTabApp = openInTabApp.bind(this);
+    this.formCheckUpdate = formCheckUpdate.bind(this);
     
     let screenData = {};
     if(this.state.screen_name) {
@@ -30,6 +32,7 @@ export async function initialize() {
     nativeCallback({ action: 'take_control_reset' });
 
     this.setState({
+        screenData: screenData,
         productName: getConfig().productName,
     }, () => {
         this.onload();
@@ -70,6 +73,63 @@ export function openInTabApp(data = {}) {
             back_url: data.back_url || ''
         }
     });
+}
+
+export async function formCheckUpdate(keys_to_check, form_data) {
+    if (!form_data) {
+        form_data = this.state.form_data;
+    }
+
+    let canSubmitForm = true;
+
+    let keysMapper = {
+        'dob': 'dob',
+        'pan_no': 'pan number',
+        'employment_type': 'employment type',
+        'education_qualification': 'education qualification'
+    }
+
+    let selectTypeInput = ['education_qualification'];
+
+    for (var i=0; i< keys_to_check.length; i++) {
+        let key_check = keys_to_check[i];
+        let first_error =  selectTypeInput.indexOf(key_check) !== -1 ? 'Please select ' : 'Please enter ';
+        if (!form_data[key_check]) {
+            form_data[key_check + '_error'] = first_error + keysMapper[key_check];
+            canSubmitForm = false;
+        }
+    }
+
+    if (form_data.pan_no && !validatePan(form_data.pan_no)) {
+        form_data.pan_no_error = 'Invalid PAN number';
+        canSubmitForm = false;
+      }
+  
+    if (form_data.dob && !isValidDate(form_data.dob)) {
+      form_data.dob_error = 'Invalid dob';
+      canSubmitForm = false;
+    }    
+
+    this.setState({
+        form_data: form_data
+    })
+
+    if (canSubmitForm) {
+        let body = {};
+        this.setState({
+            show_loader: true
+        })
+
+        for (var j in keys_to_check) {
+            let key = keys_to_check[j];
+            body[key] = form_data[key] || '';
+        }
+
+        const result = await updateApplication(body);
+        if (result) {
+            this.navigate(this.state.next_state);
+        }
+    }
 }
 
 export function openPdf(url, type) {

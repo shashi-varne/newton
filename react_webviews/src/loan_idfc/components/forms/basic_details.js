@@ -5,13 +5,15 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { dobFormatTest, isValidDate, formatDate } from "utils/validators";
+import { dobFormatTest, formatDate } from "utils/validators";
 
 class BasicDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
+      form_data: {},
+      screen_name: 'basic_details'
     };
 
     this.initialize = initialize.bind(this);
@@ -25,10 +27,10 @@ class BasicDetails extends Component {
       "ENGINEER",
       "GRADUATE",
       "MATRIC",
-      "OTHERS",
       "POST GRADUATE",
       "PROFESSIONAL",
       "UNDER GRADUATE",
+      "OTHERS"
     ];
 
     this.setState({
@@ -56,12 +58,24 @@ class BasicDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
+    let id = (event.target && event.target.id) || "";
+    let { form_data } = this.state;
+
+    if (id === "salaried" || id === "self-employed") {
+      form_data.employment_type = id;
+
+      this.setState({
+        form_data: form_data
+      })
+    }
+
+    if (name === 'pan_no' && value) {
+      value = value.toUpperCase();
+    }
 
     if (name) {
-      this.setState({
-        [name]: value,
-        [name + "_error"]: ""
-      });
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
     }
 
     if (!name) {
@@ -72,21 +86,20 @@ class BasicDetails extends Component {
       let input = document.getElementById("dob");
       input.onkeyup = formatDate;
 
-      this.setState({
-        dob: value,
-        dob_error: ""
-      });
+      form_data.dob = value;
+      form_data.dob_error = "";
     }
+
+    this.setState({
+      form_data: form_data
+    })
   };
 
-  handleClick = (event) => {
-    let id = event.target.id;
+  handleClick = async () => {
+    let { form_data } = this.state;
+    let keys_to_check = ['dob', 'pan_no', 'education_qualification', 'employment_type'];
 
-    if (id === "salaried" || id === "self-employed") {
-      this.setState({
-        emp_type: id,
-      });
-    }
+    this.formCheckUpdate(keys_to_check, form_data);
   };
 
   render() {
@@ -101,8 +114,8 @@ class BasicDetails extends Component {
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.dob_error}
-                helperText={this.state.dob_error}
+                error={!!this.state.form_data.dob_error}
+                helperText={this.state.form_data.dob_error}
                 type="text"
                 width="40"
                 label="Date of birth"
@@ -111,15 +124,15 @@ class BasicDetails extends Component {
                 maxLength={10}
                 id="dob"
                 name="dob"
-                value={this.state.dob || ""}
+                value={this.state.form_data.dob || ""}
                 onChange={this.handleChange()}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.pan_no_error}
-                helperText={this.state.pan_no_error}
+                error={!!this.state.form_data.pan_no_error}
+                helperText={this.state.form_data.pan_no_error}
                 type="text"
                 width="40"
                 label="PAN number"
@@ -127,7 +140,7 @@ class BasicDetails extends Component {
                 maxLength={10}
                 id="pan"
                 name="pan"
-                value={this.state.pan_no || ""}
+                value={this.state.form_data.pan_no || ""}
                 onChange={this.handleChange("pan_no")}
               />
             </div>
@@ -138,9 +151,9 @@ class BasicDetails extends Component {
                 options={this.state.qualification}
                 id="education_qualification"
                 label="Education Qualification"
-                error={this.state.education_qualification_error ? true : false}
-                helperText={this.state.education_qualification_error}
-                value={this.state.education_qualification || ""}
+                error={this.state.form_data.education_qualification_error ? true : false}
+                helperText={this.state.form_data.education_qualification_error}
+                value={this.state.form_data.education_qualification || ""}
                 name="education_qualification"
                 onChange={this.handleChange("education_qualification")}
               />
@@ -152,10 +165,10 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.emp_type === "salaried" &&
+                  this.state.form_data.employment_type === "salaried" &&
                   "1px solid var(--primary)",
               }}
-              onClick={this.handleClick}
+              onClick={this.handleChange()}
             >
               <img
                 id="salaried"
@@ -167,10 +180,10 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.emp_type === "self-employed" &&
+                  this.state.form_data.employment_type === "self-employed" &&
                   "1px solid var(--primary)",
               }}
-              onClick={this.handleClick}
+              onClick={this.handleChange()}
             >
               <img
                 id="self-employed"

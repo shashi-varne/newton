@@ -21,14 +21,7 @@ class ProfessionalDetails extends Component {
     this.initialize();
   }
 
-  onload = () => {
-    let screenData = this.state.screenData;
-
-
-    this.setState({
-      screenData: screenData
-    })
-  };
+  onload = () => {};
 
   sendEvents(user_action) {
     let eventObj = {

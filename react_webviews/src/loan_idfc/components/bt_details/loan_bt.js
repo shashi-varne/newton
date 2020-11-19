@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import Checkbox from "material-ui/Checkbox";
-import Input from "../../../common/ui/Input";
-import Grid from "material-ui/Grid";
+// import { FormControl } from "material-ui/Form";
+// import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+// import Checkbox from "material-ui/Checkbox";
+// import Input from "../../../common/ui/Input";
+// import Grid from "material-ui/Grid";
 
 class LoanBtDetails extends Component {
   constructor(props) {

@@ -37,7 +37,8 @@ export const idfc_config = {
   get_next: {
     landing_screen: 'edit-number',
     mobile_verification: 'otp-verify',
-    otp_verify: 'basic-details'
+    otp_verify: 'basic-details',
+    basic_details: 'professional-details'
   },
   landing_screen: {
     stepContentMapper: {

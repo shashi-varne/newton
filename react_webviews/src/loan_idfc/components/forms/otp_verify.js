@@ -78,7 +78,6 @@ class OtpVerification extends Component {
       timeAvailable: this.state.totalTime,
       resend_otp_clicked: true,
       openDialog: false,
-      show_loader: true,
     });
 
     const resultData = await retriggerOtp(url);
