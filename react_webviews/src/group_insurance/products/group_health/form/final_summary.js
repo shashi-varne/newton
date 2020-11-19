@@ -233,8 +233,13 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'HDFCERGO') {
                 let subtitle = []
                 member.answers.pre_existing_diseases.forEach((name) => {
+                    console.log(name)
                     let ped = ped_list.find(item => item.id === name.front_end_question_id);
-                    subtitle.push(ped.name)
+                    if (ped.id === 'hdfc_ergo_ped_other_diseases') {
+                        subtitle.push(name.description + "/")
+                    } else {
+                        subtitle.push(ped.name)
+                    }
                 })
 
                 if (member.ped) {
