@@ -28,10 +28,14 @@ const ErrorPage = (props) => {
       navigate(props, 'rebalance-fund');
     }
   };
+  const goBack = () => {
+    sendEvents('back');
+    navigate(props, '');
+  };
   const product_name = getConfig().productName;
   return (
     <Container
-      goBack={retry}
+      goBack={goBack}
       classOverRide='error-container'
       fullWidthButton
       buttonTitle='Retry'

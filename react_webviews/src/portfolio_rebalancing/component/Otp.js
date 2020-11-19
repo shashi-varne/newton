@@ -77,8 +77,7 @@ const Otp = (props) => {
   const nextPage = () => {
     if (otp.toString().length === 4) {
       if (!disable) {
-        const user_id = storageService().getObject('user_id');
-        verifyOtp(trx, { user_id, otp });
+        verifyOtp(trx, { otp });
       }
     } else {
       if (!otp) {

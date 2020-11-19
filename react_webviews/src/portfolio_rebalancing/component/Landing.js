@@ -36,8 +36,13 @@ const Landing = (props) => {
     sendEvents('next');
     navigate(props, 'rebalance-fund');
   };
+
+  const goBack = () => {
+    nativeCallback({ action: 'exit', events: sendEvents('back') });
+  };
   return (
     <Container
+      goBack={goBack}
       buttonTitle='Continue'
       fullWidthButton
       handleClick={nextPage}

@@ -15,12 +15,14 @@ import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
 // import CommonRenderFaqs from './common/components/RenderFaqs';
+
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
 import Loan from './loan';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
+import FundDetails from './fund_details';
 class App extends Component {
   render() {
     return (
@@ -46,6 +48,7 @@ class App extends Component {
           <Route path='/webview/:main_module' component={CommonLanding} />
           {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
+          <Route path='/fund-details' component={FundDetails} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

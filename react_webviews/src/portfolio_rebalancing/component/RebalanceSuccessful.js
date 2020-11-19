@@ -19,7 +19,6 @@ const RebalanceSuccessful = () => {
     setCorpus(corpus_filter?.length + sip_corpusFilter?.length || 0);
     storageService().setObject('allFunds', []);
     storageService().setObject('checkMap', {});
-    storageService().setObject('user_id', null);
   }, []);
   const sendEvents = (user_action) => {
     let eventObj = {

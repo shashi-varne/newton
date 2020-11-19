@@ -11,7 +11,6 @@ export const get_recommended_funds = async () => {
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
-    storageService().setObject('user_id', res.pfwuser_id);
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
@@ -70,9 +69,7 @@ export const resend_otp = async (link) => {
 
 export const verify_otp = async (trx, params) => {
   try {
-    const res = await Api.post(
-      `/api/rebalance/${trx}/order/verify?otp=${params.otp}&user_id=${params.user_id}`
-    );
+    const res = await Api.post(`/api/rebalance/${trx}/order/verify?otp=${params.otp}`);
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
