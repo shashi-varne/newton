@@ -133,13 +133,8 @@ class GroupHealthPlanSelectSumAssured extends Component {
             groupHealthPlanData.type_of_plan = 'WF';
             groupHealthPlanData.post_body.type_of_plan = 'WF';
         }
-
-        // data reset
-        groupHealthPlanData.add_ons_data = '';
-        groupHealthPlanData.net_premium_addons = '';
-
-        groupHealthPlanData.post_body.add_ons = '';
-        groupHealthPlanData.post_body.add_ons_json = '';
+        groupHealthPlanData.add_ons_data = [];
+        groupHealthPlanData.post_body.add_ons_json = {};
 
         this.setLocalProviderData(groupHealthPlanData);
 

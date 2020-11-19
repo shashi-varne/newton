@@ -26,11 +26,8 @@ class GroupHealthPlanSelectFloater extends Component {
     }
     async componentDidMount() {
         let {groupHealthPlanData} = this.state;
-        // data reset
-        groupHealthPlanData.add_ons_data = '';
-        groupHealthPlanData.net_premium_addons = '';
-        groupHealthPlanData.post_body.add_ons = '';
-        groupHealthPlanData.post_body.add_ons_json = '';
+        groupHealthPlanData.add_ons_data = [];
+        groupHealthPlanData.post_body.add_ons_json = {};
         let post_body = groupHealthPlanData.post_body;
         let selectedIndex = groupHealthPlanData.selectedIndexFloater || 0;
         let total_member = post_body.adults + post_body.children;
