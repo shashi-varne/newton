@@ -680,7 +680,7 @@ export function ghGetMember(lead, providerConfig) {
     obj.key = 'applicant';
     member_base.push(obj);
   }
-  return member_base;
+  return member_base; 
 
 }
 

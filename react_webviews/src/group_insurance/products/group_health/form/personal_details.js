@@ -57,7 +57,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
     let member_base = this.state.member_base || [];
-    console.log(member_base)
+  
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
@@ -92,7 +92,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     member_base.forEach(element => {
-      console.log(element, member_key,"member_key")
       if(element["key"] === member_key){
          // eslint-disable-next-line
         form_data = element,
@@ -100,7 +99,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     });
 
-    form_data.pan_no =   lead.buyer_details.pan_no || ""
+    form_data.pan_no =   lead.buyer_details.pan_no || "";
     let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob);
@@ -134,12 +133,23 @@ class GroupHealthPlanPersonalDetails extends Component {
       insured_people_details.forEach((member) => {
         if (member.insured_person.relation_key === backend_key) {
            occupation = member.insured_person.occupation
+           form_data.name = member.insured_person.name
+           form_data.weight = member.insured_person.weight
         }
       })
       // let occupation = lead[backend_key].occupation;
       let occupationIndex = '';
       occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
       form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+    }
+
+    if (this.state.provider !== 'STAR'){
+      insured_people_details.forEach((member) => {
+          if (member.insured_person.relation_key === backend_key) {
+            form_data.name = member.insured_person.name
+            form_data.weight = member.insured_person.weight
+          }
+        })
     }
 
     if(member_key === 'applicant'){
@@ -252,7 +262,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let validation_props = this.state.validation_props;
 
-    console.log(form_data)
 
 
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
