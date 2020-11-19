@@ -50,6 +50,9 @@ class GroupHealthPlanPremiumSummary extends Component {
     if(this.state.providerConfig.provider_api === 'religare'){
       body['add_ons'] = Object.keys(post_body.add_ons_json).length === 0 ? {} : post_body.add_ons_json;
     }
+    if(this.state.providerConfig.provider_api === 'star'){
+      body['floater_type'] = 'floater';
+    }
     body['total_premium'] = post_body.total_amount;
     body['total_discount'] = post_body.total_discount;
     
