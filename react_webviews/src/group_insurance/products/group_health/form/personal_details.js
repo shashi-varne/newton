@@ -57,7 +57,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
     let member_base = this.state.member_base || [];
-
+    console.log(member_base)
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
@@ -91,11 +91,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;
     }
 
-      insured_people_details.forEach(element => {
-      if(element.insured_person["relation"] === member_key){
+    member_base.forEach(element => {
+      if(element["key"] === member_key){
          // eslint-disable-next-line
-        form_data = element.insured_person,
-        backend_key = element.insured_person.relation_key          
+        form_data = element,
+        backend_key = element.relation_key          
       }
     });
 
@@ -250,6 +250,10 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
     let validation_props = this.state.validation_props;
+
+    console.log(form_data)
+
+
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
