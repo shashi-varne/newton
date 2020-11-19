@@ -156,7 +156,7 @@ class GroupHealthPlanIsPed extends Component {
             let key = member_base[i].insured_person.relation;
             body[backend_key] = {};
               console.log(form_data, this.state.form_data)
-                if (form_data[key + '_checked'] && this.state.form_data.is_ped === 'YES' ||  backend_key === 'self_account_key' && this.state.form_data.is_ped === 'YES' ) {
+                if ( (form_data[key + '_checked'] && this.state.form_data.is_ped === 'YES') ||  (backend_key === 'self_account_key' && this.state.form_data.is_ped === 'YES') ) {
                     let obj = {
                         "relation_key": backend_key,
                         'ped': true
