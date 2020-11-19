@@ -31,7 +31,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
   onload() {
 
     let { insured_people_details, quotation_details } = this.state.lead;
-
+ 
     let account_type  =  quotation_details.insurance_type
     let member_base = [];
 
@@ -80,17 +80,25 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let list = [];
    
-    if (account_type === "self") {
-     console.log(member_base)
-      member_base[0].life_style_question_exists = member_base[0].life_style_question.yes_no === 'Yes' ? member_base[0].life_style_question.yes_no  : 'No'
+   if (account_type === "self") {
 
+
+    this.setState({
+      member_base : member_base
+    })
+
+    console.log(member_base)
+      member_base[0].life_style_question_exists =  'Yes'
+      //member_base[0].life_style_question.answer
+
+      // member_base[0].life_style_question_exists =  'No';
       member_base[0].radio_options =  [
         {
-          name: "Yes",
+          // name: "Yes",
           value: "Yes",
         },
         {
-          name: "No",
+          // name: "No",
           value: "No",
         },
       ];
@@ -117,7 +125,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     this.setState({
       account_type: account_type,
       list: list,
-      member_base: member_base
+      member_base: member_base,
     });
 
     this.setState({
