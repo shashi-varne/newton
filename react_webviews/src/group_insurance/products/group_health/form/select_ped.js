@@ -197,10 +197,11 @@ class GroupHealthPlanSelectPed extends Component {
     handleClick = async () => {
         this.sendEvents('next');
 
-        let {options, provider ,lead, member_info_index} = this.state;    
-        let member_base = this.state.member_base.filter((mem) => mem.dob !==undefined)
-
-         member_base.map((element, index) => {
+        let {options, provider ,lead, member_info_index} = this.state;       
+       
+      let memb =  this.state.member_base.filter((mem) => mem.dob !== undefined)
+      console.log(memb)
+       let member_base =  memb.map((element, index) => {
         let member = lead.insured_people_details.find((member) => member.insured_person.relation === element.relation)
         return {
             ...element,
@@ -217,6 +218,7 @@ class GroupHealthPlanSelectPed extends Component {
             return;
         } else {
 
+          console.log(member_base)
             let next_state = '';
             for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].relation === this.state.member_key && i !== member_base.length -1) {
@@ -227,7 +229,8 @@ class GroupHealthPlanSelectPed extends Component {
                         }
                     }
                 }
-            }                    
+            } 
+
             let body = {};
             let pre_existing_diseases = []
             if (provider === 'HDFCERGO') {

@@ -81,8 +81,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
     let list = [];
    
     if (account_type === "self") {
-  
-      member_base[0].life_style_question_exists = member_base[0].answer.life_style_details.length > 0 ? 'Yes' : 'No';
+     console.log(member_base)
+      member_base[0].life_style_question_exists = member_base[0].life_style_question.yes_no === 'Yes' ? member_base[0].life_style_question.yes_no  : 'No'
 
       member_base[0].radio_options =  [
         {

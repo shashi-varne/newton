@@ -56,7 +56,8 @@ class GroupHealthPlanIsPed extends Component {
                 ...element,
                 ...member   
             }
-        })
+        })        
+         console.log(member_base)
 
         let form_data = {};
 
@@ -154,7 +155,8 @@ class GroupHealthPlanIsPed extends Component {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].insured_person.relation;
             body[backend_key] = {};
-                if (form_data[key + '_checked'] || this.state.form_data.is_ped === 'YES') {
+              console.log(form_data, this.state.form_data)
+                if ( (form_data[key + '_checked'] && this.state.form_data.is_ped === 'YES') ||  (backend_key === 'self_account_key' && this.state.form_data.is_ped === 'YES') ) {
                     let obj = {
                         "relation_key": backend_key,
                         'ped': true
@@ -163,7 +165,7 @@ class GroupHealthPlanIsPed extends Component {
                     if (!next_state) {
                         next_state = key;
                     }
-                } else {
+                } else{
                     let obj = {
                         "relation_key": backend_key,
                         'ped': false
@@ -198,8 +200,6 @@ class GroupHealthPlanIsPed extends Component {
             let body = {
                 insured_people_details
             }
-                          console.log(body)
-
             this.updateLead(body);
         }
 
