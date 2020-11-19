@@ -77,6 +77,11 @@ class GroupHealthReportDetails extends Component {
                 for(var i = 0; i < insured_members.length; i++){
                     member_details[insured_members[i].relation_key]  = insured_members[i];
                 }
+
+                if(['parents', 'parents_in_law', 'family'].includes(lead.insurance_type)) {
+                    member_details['self_account_key'] = resultData.buyer_details;
+                }
+
                 lead.member_details = member_details;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 let member_base = lead.member_base;
