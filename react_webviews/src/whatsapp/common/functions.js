@@ -6,9 +6,44 @@ import { nativeCallback } from "utils/native_callback";
 
 export async function initialize() {
 
+  this.navigate = navigate.bind(this);
+
   this.setState({
     productName: getConfig().productName,
   });
+
+  let screen_name = this.state.screen_name || "";
+
+  if (screen_name === 'confirm_number') {
+    try {
+      this.setState({
+        show_loader: true
+      });
+  
+      const res = await Api.get('/api/kyc/ex/contact/verified/mobile');
+  
+      if (res.pfwresponse.status_code === 200) {
+        const resultData = res.pfwresponse.result;
+
+        if (resultData.verification_required) {
+          this.navigate(("edit-number"));
+        }
+        
+      } else {
+  
+        const resultData = res.pfwresponse.result;
+        this.setState({
+          show_loader: false
+        });
+        toast(resultData.error || resultData.message || "Something went wrong");
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast("Something went wrong");
+    }
+  }
 
   try {
     this.setState({
@@ -49,7 +84,7 @@ export async function initialize() {
     toast("Something went wrong");
   }
 
-  this.navigate = navigate.bind(this);
+  
 
   nativeCallback({ action: "take_control_rest" });
 }

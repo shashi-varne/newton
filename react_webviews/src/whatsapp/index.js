@@ -50,7 +50,7 @@ const Whatsapp = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-            <Route path={`${url}/confirm-number`} component={WhastappConfirmNumber} />
+            <Route path={`${url}/mobile-verify`} component={WhastappConfirmNumber} />
             <Route path={`${url}/edit-number`} component={WhatsappEdit} />
             <Route path={`${url}/otp-verify`} component={WhatsappOtpVerification} />
             <Route path={`${url}/otp-success`} component={WhatsappOtpSuccess} />

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize, getContact } from "../common/functions";
+import { initialize, getContact, getUserMobileContact } from "../common/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import {

@@ -10,6 +10,7 @@ class WhastappConfirmNumber extends Component {
     super(props);
     this.state = {
       // show_loader: false,
+      screen_name: "confirm_number"
     };
 
     this.initialize = initialize.bind(this);
