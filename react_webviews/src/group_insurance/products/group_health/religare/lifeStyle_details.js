@@ -87,7 +87,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
       member_base : member_base
     })
 
-    console.log(member_base)
       member_base[0].life_style_question_exists =  'Yes'
       //member_base[0].life_style_question.answer
 
@@ -305,17 +304,14 @@ class GroupHealthPlanLifestyleDetail extends Component {
  
    if (canProceed) {
      body["answers"] = {}
-
+     let insured_people_details = []
      for (var i in member_base) {
        let member_data = member_base[i];
        if (member_data.key !== 'none') {
          let backend_key = member_data.relation_key;
 
-
-
          if ((member_data.life_style_question_exists === 'Yes' ||
              member_data.life_style_question_exists === true) && !none_option_selected) {
-
 
            body["answers"][backend_key] = {};
            let obj = {
@@ -324,10 +320,14 @@ class GroupHealthPlanLifestyleDetail extends Component {
              "description": member_data.life_style_question.answer_description,
              "question_id": "religare_lsd_smoke"
            }
+           insured_people_details.push({"relation_key": backend_key, "life_style_details_flag" : true})
+
            body["answers"][backend_key] = {
             "life_style_details": [obj]
           };
+
         }else{
+          insured_people_details.push({"relation_key": backend_key, "life_style_details_flag" : false})
           body["answers"][backend_key] = {
             "life_style_details": [{
               "yes_no": false,
@@ -336,6 +336,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
           }
         } 
       }
+      body['insured_people_details'] = insured_people_details;
     }
       this.updateLead(body);
    }

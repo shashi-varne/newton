@@ -49,7 +49,7 @@ class GroupHealthPlanSelectPed extends Component {
        
         let {lead, provider} = this.state;
 
-        let member_base =this.state.member_base;   console.log(this.props.match, "mememememememeememeem")
+        let member_base =this.state.member_base;
         let member_key = this.props.match.params.member_key;
         let mem_details = member_base.find(element => element.key === member_key);
      
@@ -208,8 +208,8 @@ class GroupHealthPlanSelectPed extends Component {
             ...element,
             ...member.insured_person,
             ...member.answers
-        }
-    })
+           }
+        })
 
         let current_member = member_base[member_info_index];
 
@@ -219,13 +219,12 @@ class GroupHealthPlanSelectPed extends Component {
             return;
         } else {
 
-            let next_state = '';  console.log(member_base,  "memberkey------------->", this.state.member_key)
-            for (var i =0; i < member_base.length; i++) {  console.log(member_base[i])
+            let next_state = '';
+            for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
-                    console.log("am in",member_base[i])
                     for (var k =i+1; k < member_base.length; k++) {
                         if(member_base[k].ped && member_base[k].key !== 'applicant') {
-                            next_state = member_base[k].key;  console.log(next_state,"relation<<<<<<<<<");
+                            next_state = member_base[k].key; 
                             break; 
                         }
                     }

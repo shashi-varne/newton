@@ -225,14 +225,7 @@ class GroupHealthPlanMedicalHistory extends Component {
       list: list
     });
 
-
-    let application_id = this.state.application_id
-
-    let body = {
-      "application_id": application_id 
-    }
-
-
+    let body = { }
 
     if (canProceed) {
       body.answers = {}
