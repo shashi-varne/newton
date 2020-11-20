@@ -18,6 +18,7 @@ import { getConfig } from "utils/functions";
 import InternalStorage from "../InternalStorage";
 import { fetchEmails } from "../common/ApiCalls";
 import { toast } from "react-toastify";
+import { nativeCallback } from "../../utils/native_callback";
 const isMobileView = getConfig().isMobileDevice;
 
 const MainPage = (props) => {
@@ -32,6 +33,26 @@ const MainPage = (props) => {
       return height;
     }
   }
+
+  const sendEvents = () => {
+    const eventObj = {
+      "event_name": 'portfolio web report',
+      "properties": {
+        "user_action": 'landed',
+        "screen_name": 'Landing page',
+      }
+    };
+
+    const storage_val = storageService().get('wr-link-click-time');
+    const link_click_time = storage_val ? new Date(storage_val) : null;
+    const current_time = new Date();
+
+    // If link is clicked again within 30 mins, will not log/trigger the event
+    if (!link_click_time || (current_time - link_click_time) / 60000 > 30) {
+      storageService().set('wr-link-click-time', current_time);
+      nativeCallback({ events: eventObj });
+    }
+  };
   
   const onScroll = () => {
     if ((getHeightFromTop() < heightThreshold) && headerAnimation !== 'snapUp') {
@@ -97,6 +118,7 @@ const MainPage = (props) => {
   const { params } = props.match;
   const [pan, setPan] = useState('');
   useEffect(() => {
+    sendEvents();
     setScrollEvent(true);
     (async() => {
       try {

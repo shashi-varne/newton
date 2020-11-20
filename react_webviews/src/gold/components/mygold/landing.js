@@ -123,16 +123,18 @@ class GoldSummary extends Component {
 
     
     var gold_offer_terms_safegold_november = [
-      'Offer is only valid till  23:59 hrs 31st October 2020.',
-      'For a customer to be valid for the offer (s)he should purchase gold worth at least 10gm during the offer period.',
+      'Offer is only valid till  23:59 hrs 20th November 2020.',
+      'For a customer to be valid for the offer (s)he should purchase gold worth at least 1gm during the offer period.',
       'This offer can be availed only once ( per device, per user, per account) during the offer period. Highest Goldback applicable will be given to the customer.',
-      'Purchase can be done in a single transaction or multiple transaction but the total gold should be greater than at least 10gm.',
+      'Purchase can be done in a single transaction or multiple transaction but the total gold should be greater than at least 1gm.',
       'Goldback will be allotted as per below mentioned criteria as per the price of Gold on the allocation date as mentioned below.',
       [
+        'Gold purchased greater than 1gm : Rs 100/- for first 500 customers',
         'Gold purchased greater than 10gm : Rs 2500/- for first 30 customers',
         'Gold purchased greater than 20 gm : Rs 5000/- for first 25 customers'
       ],
-      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 20th November 2020.",
+
+      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 5th December 2020.",
       `Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of ${typeCaps} in this regard will be final and the company has the right to change terms and conditions at any time.`,
       "In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
     ]

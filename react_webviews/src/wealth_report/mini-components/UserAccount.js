@@ -8,6 +8,7 @@ import { navigate } from '../common/commonFunctions';
 import { CircularProgress } from "material-ui";
 import WrTooltip from "../common/WrTooltip";
 import { storageService } from "../../utils/validators";
+import { nativeCallback } from "../../utils/native_callback";
 
 export default function UserAccountMobile(props) {
   const username = storageService().get('wr-username');
@@ -17,6 +18,18 @@ export default function UserAccountMobile(props) {
   useEffect(() => {
     toggleUserAccModal(false);
   }, [props.refresh]);
+
+  const sendEvents = () => {
+    const eventObj = {
+      "event_name": 'portfolio web report',
+      "properties": {
+        "user_action": 'logout',
+        "screen_name": 'Landing page',
+      }
+    };
+
+    nativeCallback({ events: eventObj });
+  };
 
   function handleTooltipClose(event, toggleFunction) {
     var path = event.path || (event.composedPath && event.composedPath());
@@ -33,6 +46,7 @@ export default function UserAccountMobile(props) {
   const logoutUser = async() => {
     try {
       setLoggingOut(true);
+      sendEvents();
       await logout();
       navigate(props.parentProps, 'login');
     } catch(err) {

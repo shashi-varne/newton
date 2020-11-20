@@ -466,7 +466,7 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://payment-dot-plutus-web.appspot.com/#!/';
+    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
   }
 
@@ -556,10 +556,10 @@ export const getConfig = () => {
   let { base_url } = main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
+  let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-
   let project = 'insurance';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
@@ -599,6 +599,7 @@ export const getConfig = () => {
     project = 'kyc-esign';
   } else if (main_pathname.indexOf('pg') >= 0) {
     project = 'pg';
+    generic_callback = "true";
   }
 
 
@@ -626,6 +627,12 @@ export const getConfig = () => {
     returnConfig.redirect_url = redirect_url;
     searchParams += `&redirect_url=${redirect_url}`;
     searchParamsMustAppend += `&redirect_url=${redirect_url}`;
+  }
+
+  if (sdk_capabilities) {
+    returnConfig.sdk_capabilities = sdk_capabilities;
+    searchParams += `&sdk_capabilities=${sdk_capabilities}`;
+    searchParamsMustAppend += `&sdk_capabilities=${sdk_capabilities}`;
   }
 
   if (checkValidString(partner_code)) {
