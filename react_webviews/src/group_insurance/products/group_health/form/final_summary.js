@@ -69,8 +69,10 @@ class GroupHealthPlanFinalSummary extends Component {
           });
       
           member_base.forEach(element => {
-            element.key = element.relation
-          });
+            let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+            console.log(relation)
+             element.key = relation.key
+           });
           member_base.push(buyer_details); console.log(member_base)
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         

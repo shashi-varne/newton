@@ -56,7 +56,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
-    let member_base = this.state.member_base || [];
+    let member_base = this.state.member_base || []; console.log(member_base)
   
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;

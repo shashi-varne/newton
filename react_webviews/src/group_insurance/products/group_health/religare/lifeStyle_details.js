@@ -72,7 +72,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     member_base.forEach(element => {
      let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
-     console.log(relation)
       element.key = relation.key
     });
 

@@ -44,12 +44,12 @@ class GroupHealthStarPlanSelectPed extends Component {
     });
   
     member_base.forEach(element => {
-      element.key = element.relation
-    });
+      let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+      console.log(relation,this.state.member_base)
+       element.key = relation.key
+     });
 
-    member_base.push({
-        key: 'none'
-    })
+    member_base.push({ key: 'none' })
 
     let list = [
         {
