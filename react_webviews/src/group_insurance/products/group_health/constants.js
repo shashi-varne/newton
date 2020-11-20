@@ -230,6 +230,12 @@ export const religare = {
             'erg-1'
         ]
     },
+    add_on_title : {
+        uar: 'Unlimited Automatic Recharge',
+        opd: 'OPD care',
+        ped_wait_period: 'Reduction in PED wait period',
+        ncb: 'No Claim Bonus Super'
+    },
     landing_screen: {
         offerImageData: [
             { src: 'religare_icn_landing_card_1.png' },

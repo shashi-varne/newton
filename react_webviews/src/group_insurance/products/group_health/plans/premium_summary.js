@@ -48,7 +48,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     }    
 
     if(this.state.providerConfig.provider_api === 'religare'){
-      body['add_ons'] = Object.keys(post_body.add_ons_json).length === 0 ? {} : post_body.add_ons_json;
+      body['add_ons'] = Object.keys(post_body.add_ons_payload).length === 0 ? {} : post_body.add_ons_payload;
     }
     if(this.state.providerConfig.provider_api === 'star'){
       body['floater_type'] = 'floater';
@@ -111,19 +111,12 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.gst_tax = lead.gst;
       properties.total_amount = lead.total_premium;
     } else {
-
-      var add_on_title = {
-        uar: 'Unlimited Automatic Recharge',
-        opd: 'OPD care',
-        ped_wait_period: 'Reduction in PED wait period',
-        ncb: 'No Claim Bonus Super'
-      }
       var final_add_ons_data = []
       
       for(var addOn in post_body.add_ons){
         if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
           let temp = {
-            title: add_on_title[addOn],
+            title: this.state.providerConfig.add_on_title[addOn],
             price: post_body.add_ons[addOn]
           }
           final_add_ons_data.push(temp);
