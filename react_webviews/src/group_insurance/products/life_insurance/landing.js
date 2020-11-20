@@ -47,8 +47,12 @@ class FyntuneLanding extends Component {
       if (res.pfwresponse.status_code === 200) {
       
       var resultData = res.pfwresponse.result;
-      let fyntuneRefId = resultData.lead.fyntune_ref_id;
-      storageService().setObject('fyntune_ref_id', fyntuneRefId);
+      
+      if(resultData.resume_present){
+        let fyntuneRefId = resultData.lead.fyntune_ref_id;
+        storageService().setObject('fyntune_ref_id', fyntuneRefId);
+      }
+      
       this.setState({ resume_data : resultData});
         
       } else {
@@ -106,6 +110,7 @@ class FyntuneLanding extends Component {
     if (!this.state.resume_data.resume_present) {
       return;
     }
+
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
     var redirectToHDFC = this.state.resume_data.chrome_tab_enable;
