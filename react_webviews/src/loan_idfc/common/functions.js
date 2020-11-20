@@ -188,38 +188,6 @@ export async function updateApplication (params) {
   });
 };
 
-export const verifyOtp = async (url, params) => {
-  try {
-    const res = await Api.post(url, params);
-
-    const { result, status_code: status } = res.pfwresponse;
-
-    if (status === 200) {
-      return result;
-    } else {
-      toast(result.error || result.message || "Something went wrong!");
-    }
-  } catch (e) {
-    throw e;
-  }
-};
-
-export const retriggerOtp = async (url) => {
-  try {
-    const res = await Api.get(url);
-
-    const { result, status_code: status } = res.pfwresponse;
-
-    if (status === 200) {
-      return result;
-    } else {
-      toast(result.error || result.message || "Something went wrong!");
-    }
-  } catch (e) {
-    throw e;
-  }
-};
-
 export function openInBrowser(url) {
   nativeCallback({
     action: "open_in_browser",
@@ -292,10 +260,7 @@ export async function formCheckUpdate(keys_to_check, form_data) {
       body[key] = form_data[key] || "";
     }
 
-    const result = await updateApplication(body);
-    if (result) {
-      this.navigate(this.state.next_state);
-    }
+    this.updateApplication(body);
   }
 }
 

@@ -38,7 +38,8 @@ export const idfc_config = {
     landing_screen: 'edit-number',
     mobile_verification: 'otp-verify',
     otp_verify: 'basic-details',
-    basic_details: 'professional-details'
+    basic_details: 'professional-details',
+    professional_details_screen: 'journey'
   },
   landing_screen: {
     stepContentMapper: {
@@ -139,7 +140,8 @@ export const idfc_config = {
     salaryRecieptOptions: [
       "Bank account Transfer",
       "Cash",
-      "Cheque"
+      "Cheque",
+      "mail"
     ],
     constitutionOptions: [
       "HUF",
@@ -169,7 +171,11 @@ export const idfc_config = {
       "PRIVATE",
       "PUBLIC"
     ],
-    industryOptions: []
+    industryOptions: [
+      "ABRASIVES AND GRINDING",
+      "ADVERTISING",
+      "AGRICULTURAL IMPLEMENTS"
+    ]
   },
   personal_details_screen: {
     maritalOptions: [

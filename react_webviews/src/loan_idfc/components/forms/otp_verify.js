@@ -4,8 +4,8 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import OtpDefault from "../../../common/ui/otp";
 import { getConfig } from "utils/functions";
-import { verifyOtp, retriggerOtp } from "../../common/ApiCalls";
-import toast from '../../../common/ui/Toast';
+import toast from "../../../common/ui/Toast";
+import Api from "utils/api";
 
 class OtpVerification extends Component {
   constructor(props) {
@@ -28,17 +28,30 @@ class OtpVerification extends Component {
   }
 
   componentWillMount() {
-    this.initialize();
 
     let { params } = this.props.location;
 
     if (!params) {
+      params = {};
+    }
+
+    if (!params || !params.resend_otp_url || !params.verify_otp_url) {
       this.props.history.goBack();
       return;
     }
 
+    let otpBaseData = {
+      mobile_no: params.mobile_no || "",
+    };
+
     this.setState({
-      ...params,
+      otpBaseData: otpBaseData,
+      mobile_no: params.mobile_no || "",
+      resend_otp_url: params.resend_otp_url || "",
+      verify_otp_url: params.verify_otp_url || "",
+      next_state: params.next_state || "",
+    }, () => {
+      this.initialize();
     });
   }
 
@@ -78,14 +91,41 @@ class OtpVerification extends Component {
       openDialog: false,
     });
 
-    const resultData = await retriggerOtp(url);
+    try {
+      this.setState({
+        show_loader: true
+      });
 
-      if (resultData) {
-        toast('OTP is resend to your registered mobile number')
+      const res = await Api.get(url);
+  
+      const { result, status_code: status } = res.pfwresponse;
+  
+      if (status === 200) {
+        if (result.resend_otp_url !== '' && result.verify_otp_url !== '') {
+          var message = 'OTP sent to the mobile number ' + this.state.mobile_no + ', please verify.'
+          this.setState({
+            show_loader: false,
+            resend_otp_url: result.resend_otp_url,
+            verify_otp_url: result.verify_otp_url
+          })
+          toast(message || result.message);
+        }
         this.setState({
-          show_loader: false,
+          show_loader: false
         });
+
+      } else {
+        this.setState({
+          show_loader: false
+        });
+        toast(result.error || result.message || "Something went wrong!");
       }
+    } catch (err) {
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   };
 
   handleClick = async () => {
@@ -119,13 +159,35 @@ class OtpVerification extends Component {
         otp: otp,
       };
 
-      const resultData = await verifyOtp(url, params);
+      try {
+        this.setState({
+          show_loader: true,
+        });
 
-      if (resultData) {
+        const res = await Api.post(url, params);
+
+        const { result, status_code: status } = res.pfwresponse;
+
+        if (status === 200) {
+          if (!result.error) {
+            this.navigate(this.state.next_state);
+          } else {
+            this.setState({
+              show_loader: false,
+              otpVerified: false,
+            });
+          }
+        } else {
+          this.setState({
+            show_loader: false,
+          });
+          toast(result.error || result.message || "Something went wrong!");
+        }
+      } catch (err) {
         this.setState({
           show_loader: false,
         });
-        this.navigate(this.state.next_state);
+        toast("Something went wrong");
       }
     }
   };
@@ -141,7 +203,7 @@ class OtpVerification extends Component {
       >
         <div className="otp-verification">
           <div className="subtitle">
-            Enter OTP sent to <b>+91{this.state.mobile_no}</b>
+            Enter OTP sent to <b>+91{this.state.otpBaseData.mobile_no}</b>
           </div>
 
           <OtpDefault parent={this} />
