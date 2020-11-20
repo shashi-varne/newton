@@ -203,24 +203,15 @@ class StarAddress extends Component {
         return acc;
       }, {});
       
-      let application_id =  this.state.application_id
 
+      data_to_send['country'] = 'INDIA'
       const body = {
-        "application_id":  application_id,
         "address_details": {                   
-          "permanent_address": {
-            "state": form_data.state,
-            "addr_line1": form_data.addr_line1,
-            "pincode": form_data.pincode,
-            "addr_line2":form_data.addr_line2,
-            "city": form_data.city,
-            "area" : form_data.area,
-            "area_id" : form_data.area_id + '',
-            'country' : 'INDIA'
-          }
+          "permanent_address": data_to_send,
+          "correspondence_addr_same": 'y'
         }
       }
-        console.log(data_to_send)
+
       this.updateLead(body);
     }
   };

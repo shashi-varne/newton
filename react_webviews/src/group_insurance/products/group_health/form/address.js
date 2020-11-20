@@ -268,7 +268,8 @@ class GroupHealthPlanAddressDetails extends Component {
                             "pincode": form_data.pincode,
                             "addr_line2": form_data.addr_line2,
                             "city": form_data.city
-                        }
+                        },
+                        "correspondence_addr_same": 'y'
                     }
                 }
             }
