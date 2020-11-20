@@ -175,7 +175,8 @@ export async function updateApplication (params) {
       }
       
     } else {
-      toast(result.error || result.message || "Something went wrong!");
+      // toast(result.error || result.message || "Something went wrong!");
+      toast("Something went wrong");
       this.onload();
     }
   } catch (err) {

@@ -169,7 +169,8 @@ export const idfc_config = {
     ],
     departmentOptions: [
       "PRIVATE",
-      "PUBLIC"
+      "PUBLIC",
+      "ACCOUNTS"
     ],
     industryOptions: [
       "ABRASIVES AND GRINDING",

@@ -60,8 +60,8 @@ class ProfessionalDetails extends Component {
     let { form_data } = this.state;
     let keys_to_check = [
       "company_name",
-      "email_id",
-      "salary",
+      "office_mail",
+      "net_monthly_salary",
       "salary_receipt_mode",
       "company_constitution",
       "organisation_type",
@@ -99,34 +99,34 @@ class ProfessionalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.email_id_error}
-                helperText={this.state.form_data.email_id_error}
+                error={!!this.state.form_data.office_mail_error}
+                helperText={this.state.form_data.office_mail_error}
                 type="text"
                 width="40"
                 label="Official email id"
                 class="email-id"
                 id="email-id"
-                name="email_id"
-                value={this.state.form_data.email_id || ""}
-                onChange={this.handleChange("email_id")}
+                name="office_mail"
+                value={this.state.form_data.office_mail || ""}
+                onChange={this.handleChange("office_mail")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.salary_error}
+                error={!!this.state.form_data.net_monthly_salary_error}
                 helperText={
-                  this.state.form_data.salary_error ||
-                  numDifferentiationInr(this.state.form_data.salary)
+                  this.state.form_data.net_monthly_salary_error ||
+                  numDifferentiationInr(this.state.form_data.net_monthly_salary)
                 }
                 type="number"
                 width="40"
                 label="Net monthly salary (in rupees)"
-                class="salary"
-                id="salary"
-                name="salary"
-                value={this.state.form_data.salary || ""}
-                onChange={this.handleChange("salary")}
+                class="net_monthly_salary"
+                id="net_monthly_salary"
+                name="net_monthly_salary"
+                value={this.state.form_data.net_monthly_salary || ""}
+                onChange={this.handleChange("net_monthly_salary")}
               />
             </div>
 
