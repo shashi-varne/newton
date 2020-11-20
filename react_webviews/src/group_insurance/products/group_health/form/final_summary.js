@@ -59,6 +59,8 @@ class GroupHealthPlanFinalSummary extends Component {
         let { lead, provider } = this.state;
 
         let insured_people_details = lead.insured_people_details;
+        let buyer_details = lead.buyer_details;
+        buyer_details.key = 'applicant';
         let member_base = [];
 
         insured_people_details.forEach(element => {
@@ -69,7 +71,7 @@ class GroupHealthPlanFinalSummary extends Component {
           member_base.forEach(element => {
             element.key = element.relation
           });
-
+          member_base.push(buyer_details); console.log(member_base)
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
@@ -230,6 +232,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
             obj.data = data;
             accordianData.push(obj);
+            if(member.key === 'applicant'){
+                continue    
+            }
+
             if (provider === 'HDFCERGO') {
                 let subtitle = []
                 member.answers.pre_existing_diseases.forEach((name) => {
