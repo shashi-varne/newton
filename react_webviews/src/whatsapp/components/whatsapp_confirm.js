@@ -96,7 +96,6 @@ class WhastappConfirmNumber extends Component {
   render() {
     let { show_loader } = this.state;
     let mobile = this.state.mobile || "";
-
     let ui_mobile;
 
     if (!show_loader && mobile) {
