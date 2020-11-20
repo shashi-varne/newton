@@ -24,7 +24,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
     async componentDidMount() {
 
         this.setState({
-            selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0
+            selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0,
+            add_on_title : this.state.providerConfig.add_on_title
         })
         let type_of_plan = this.state.groupHealthPlanData.post_body.floater_type;
         let post_body = this.state.groupHealthPlanData.post_body;
@@ -127,7 +128,28 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         }
 
         groupHealthPlanData.plan_selected_final = plan_selected_final;
+        
+        groupHealthPlanData.selected_opd_cover_amount
+
+        var add_ons_final = {}
+        for(var addOn in plan_selected_final.add_on_premium){
+          if(addOn !== 'total' && plan_selected_final.add_on_premium[addOn] !== 0){
+              if(addOn === 'opd'){
+                  add_ons_final[groupHealthPlanData.selected_opd_cover_amount] = {
+                      title: this.state.add_on_title[addOn],
+                      price: plan_selected_final.add_on_premium[addOn]
+                  }
+              }else{
+                  add_ons_final[`${addOn}`] = {
+                      title: this.state.add_on_title[addOn],
+                      price: plan_selected_final.add_on_premium[addOn]
+                  }
+              }
+          }
+        }
+
         post_body.add_ons = plan_selected_final.add_on_premium;
+        post_body.add_ons_payload = add_ons_final;
         post_body.tenure = plan_selected_final.tenure;
         post_body.total_discount = plan_selected_final.total_discount;
         post_body.gst = plan_selected_final.gst[1] || 0;

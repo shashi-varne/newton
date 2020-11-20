@@ -114,7 +114,7 @@ export async function initialize() {
                   url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
    
                 if (this.state.screen_name === 'final_summary_screen') {
-                    url += `&forms_completed=true`;
+                    url += `&form_submitted=true`;
                 }
                 const res = await Api.get(url);
                 // eslint-disable-next-line

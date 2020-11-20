@@ -261,12 +261,12 @@ class GroupHealthPlanAddOns extends Component {
         let add_ons_body = [];
         let  add_ons_json = {};
         // eslint-disable-next-line
-        console.log(this.state.add_ons_data)
         this.state.add_ons_data.forEach((item) => {            
             if(item.checked) {
 
                 if (Array.isArray(item.price)) {
                     add_ons_body.push(`opd-${item.selected_cover_amount || item.default_cover_amount}`)
+                    groupHealthPlanData.selected_opd_cover_amount = `opd-${item.selected_cover_amount || item.default_cover_amount}`;
                     add_ons_json[item.id || 'opd'] = {
                         price: item.selected_premium || item.default_premium,
                         title: item.name

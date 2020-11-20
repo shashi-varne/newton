@@ -230,6 +230,12 @@ export const religare = {
             'erg-1'
         ]
     },
+    add_on_title : {
+        uar: 'Unlimited Automatic Recharge',
+        opd: 'OPD care',
+        ped_wait_period: 'Reduction in PED wait period',
+        ncb: 'No Claim Bonus Super'
+    },
     landing_screen: {
         offerImageData: [
             { src: 'religare_icn_landing_card_1.png' },
@@ -610,10 +616,6 @@ export const star = {
                 'name': 'Parents/Parents-in-law',
                 'value': 'parents_in_law'
             },
-            {
-                'name': 'Parents',
-                'value': 'parents'
-            }
         ]
     },
     add_members_screen: {
@@ -833,8 +835,11 @@ export function memberKeyMapperFunction(groupHealthPlanData) {
     for (let i = 0; i < dob_data.length; i++) {
         let key = dob_data[i].key;
 
-        if (!ui_members.father && key === 'mother') {
+        if (!ui_members.mohter && key === 'father') {
             dob_data[i].backend_key = 'parent_account1_key';
+        }
+        if (!ui_members.father && key === 'mother') {
+            dob_data[i].backend_key = 'parent_account2_key';
         }
 
         let relation = key;

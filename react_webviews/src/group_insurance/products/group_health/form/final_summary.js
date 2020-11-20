@@ -249,7 +249,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     console.log(name)
                     let ped = ped_list.find(item => item.id === name.front_end_question_id);
                     if (ped.id === 'hdfc_ergo_ped_other_diseases') {
-                        subtitle.push(name.description + "/")
+                        subtitle.push(name.description)
                     } else {
                         subtitle.push(ped.name)
                     }
@@ -257,7 +257,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 if (member.ped) {
                     let dis_data = {
-                        'title': `${member.relation}'s diseases`,
+                        'title': `${(member.relation).toUpperCase()}'s diseases`,
                         'subtitle': subtitle
                     }
                     diseases_data_backend.push(dis_data);
@@ -786,8 +786,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle">
-                            {/* {capitalizeFirstLetter(props.subtitle.toLowerCase())} */}
-              {props.subtitle}
+                            {capitalizeFirstLetter((props.subtitle + "").toLowerCase())}
                              {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">

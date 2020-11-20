@@ -38,24 +38,26 @@ class GroupHealthPlanPremiumSummary extends Component {
 
     let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', 'plan_code','tenure', 'individual_si', 'total_si', 'premium', 'base_premium', 'gst', 'family_discount', 'tenure_discount', 'gst', 'postal_code'];
     
-    if(post_body.quotation_id){
+    if(post_body && post_body.quotation_id){
       allowed_post_body_keys.push('quotation_id');
     }
 
     let body = {};
-    for(let key of allowed_post_body_keys){
+    if(post_body){
+      for(let key of allowed_post_body_keys){
         body[key] = post_body[key];
-    }    
+      }
+      body['total_premium'] = post_body.total_amount;
+      body['total_discount'] = post_body.total_discount;
 
-    if(this.state.providerConfig.provider_api === 'religare'){
-      body['add_ons'] = Object.keys(post_body.add_ons_json).length === 0 ? {} : post_body.add_ons_json;
+      if(this.state.providerConfig.provider_api === 'religare'){
+        body['add_ons'] = Object.keys(post_body.add_ons_payload).length === 0 ? {} : post_body.add_ons_payload;
+      }
+      if(this.state.providerConfig.provider_api === 'star'){
+        body['floater_type'] = 'floater';
+      }
     }
-    if(this.state.providerConfig.provider_api === 'star'){
-      body['floater_type'] = 'floater';
-    }
-    body['total_premium'] = post_body.total_amount;
-    body['total_discount'] = post_body.total_discount;
-    
+
     //quote creation api
     if(!this.state.get_lead){
       
@@ -111,19 +113,12 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.gst_tax = lead.gst;
       properties.total_amount = lead.total_premium;
     } else {
-
-      var add_on_title = {
-        uar: 'Unlimited Automatic Recharge',
-        opd: 'OPD care',
-        ped_wait_period: 'Reduction in PED wait period',
-        ncb: 'No Claim Bonus Super'
-      }
       var final_add_ons_data = []
       
       for(var addOn in post_body.add_ons){
         if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
           let temp = {
-            title: add_on_title[addOn],
+            title: this.state.providerConfig.add_on_title[addOn],
             price: post_body.add_ons[addOn]
           }
           final_add_ons_data.push(temp);
@@ -183,42 +178,29 @@ class GroupHealthPlanPremiumSummary extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
-    
+
     storageService().remove("resumeToPremiumHealthInsurance",false);
       try {
         this.setState({
           show_loader: true,
         });
 
-        let { groupHealthPlanData } = this.state;
-        let plan_selected_final = groupHealthPlanData.plan_selected_final || {};
-        let body = groupHealthPlanData.post_body;
-        body.provider = this.state.providerConfig.provider_api;
-        body.base_premium_showable = plan_selected_final.base_premium_showable;
-        body.add_ons_amount = plan_selected_final.add_ons_premium || "";
-
         let post_body = {}
-        post_body['quotation_id'] = body.quotation_id;
-        if (
-          body.provider === "star" &&
-          body.account_type.includes("parents") &&
-          groupHealthPlanData.ui_members.parents_option
-        ) {
-          body.account_type = groupHealthPlanData.ui_members.parents_option;
-        }
 
-        let total_member = body.children + body.adults;
-        if (total_member === 1) {
-          body.type_of_plan = "NF"; //for backend handlling
-        }
-
+        if(this.state.get_lead){
+          post_body['quotation_id'] = storageService().get('ghs_ergo_quote_id');
+        }else{
       
+          let { groupHealthPlanData } = this.state;
+          let body = groupHealthPlanData.post_body;
+          post_body['quotation_id'] = body.quotation_id;
+        }
         //application creation
         const res = await Api.post(
           `api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/create_application`,
           post_body
         );
-        
+
         var resultData = res.pfwresponse.result;
         
         if (res.pfwresponse.status_code === 200) {     
