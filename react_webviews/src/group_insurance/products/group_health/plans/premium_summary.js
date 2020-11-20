@@ -68,7 +68,11 @@ class GroupHealthPlanPremiumSummary extends Component {
         
       let resultData = res.pfwresponse.result;
       let quote_id = resultData.quotation ? resultData.quotation.id : '';
-  
+      
+      if(res.pfwresponse.status_code === 400 && resultData.error){
+        quote_id =  resultData.error.quotation_id
+      }
+
       groupHealthPlanData.post_body.quotation_id = quote_id;
       this.setLocalProviderData(groupHealthPlanData)
   
@@ -208,6 +212,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           body.type_of_plan = "NF"; //for backend handlling
         }
 
+      
         //application creation
         const res = await Api.post(
           `api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/create_application`,
