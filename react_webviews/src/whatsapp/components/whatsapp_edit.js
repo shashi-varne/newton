@@ -5,7 +5,6 @@ import { initialize, getContact } from "../common/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import {
-  numberShouldStartWith,
   validateNumber,
   storageService,
 } from "utils/validators";
