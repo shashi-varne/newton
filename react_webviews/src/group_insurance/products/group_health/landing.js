@@ -99,7 +99,7 @@ class GroupHealthLanding extends Component {
       let lead = {};
       if (res.pfwstatus_code === 200) {
         lead = resultData.quotation || {};
-        // lead.id = resultData.application.id || {}
+    
         lead.member_base = [];
         if (resultData.quotation.id  !== undefined) { 
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
@@ -111,6 +111,7 @@ class GroupHealthLanding extends Component {
         {
           common: resultData,
           quoteResume: lead,
+          applicationData : resultData.application || {}
         },
         () => {
           if (openModuleData.sub_module === "click-resume") {
@@ -202,7 +203,7 @@ class GroupHealthLanding extends Component {
         this.sendEvents("next");
         let quoteResume = this.state.quoteResume;
         storageService().set("ghs_ergo_quote_id", quoteResume.id);
-        if (quoteResume.status !== "init" || quoteResume.forms_completed) {
+        if(this.state.applicationData.status === 'move_to_payment'){
           this.navigate("final-summary");
         } else {
           storageService().setObject("resumeToPremiumHealthInsurance", true);
