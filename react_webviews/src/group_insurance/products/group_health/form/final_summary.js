@@ -230,11 +230,16 @@ class GroupHealthPlanFinalSummary extends Component {
                 })
             }
 
-            obj.data = data;
-            accordianData.push(obj);
-            if(member.key === 'applicant'){
+            if(member.key === 'applicant' && this.state.insured_account_type === 'self' ){
                 continue    
             }
+            obj.data = data;
+            accordianData.push(obj);
+         
+            if(member.key === 'applicant'){
+                continue
+            }
+
 
             if (provider === 'HDFCERGO') {
                 let subtitle = []

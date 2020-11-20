@@ -71,7 +71,9 @@ class GroupHealthPlanLifestyleDetail extends Component {
     });
 
     member_base.forEach(element => {
-      element.key = element.relation
+     let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+     console.log(relation)
+      element.key = relation.key
     });
 
     member_base.push({
@@ -106,7 +108,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
           label:
             "Do you smoke, consume alcohol, or chew tobacco, ghutka or paan or use any recreational drugs? If ‘Yes’ then please provide the frequency & amount consumed.",
           key: "self",
-          input_type: "radio",
+          input_type: "checkbox",
           options: member_base
         },
       ];
