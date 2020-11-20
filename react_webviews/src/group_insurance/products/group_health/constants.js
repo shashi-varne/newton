@@ -835,8 +835,11 @@ export function memberKeyMapperFunction(groupHealthPlanData) {
     for (let i = 0; i < dob_data.length; i++) {
         let key = dob_data[i].key;
 
-        if (!ui_members.father && key === 'mother') {
+        if (!ui_members.mohter && key === 'father') {
             dob_data[i].backend_key = 'parent_account1_key';
+        }
+        if (!ui_members.father && key === 'mother') {
+            dob_data[i].backend_key = 'parent_account2_key';
         }
 
         let relation = key;
