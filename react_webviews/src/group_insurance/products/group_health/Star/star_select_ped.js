@@ -216,6 +216,7 @@ class GroupHealthStarPlanSelectPed extends Component {
     }
 
      body.answers = {}
+     let insured_people_details = []
      for (var i in member_base) {
        let member_data = member_base[i];
        if (member_data.key !== 'none') {
@@ -226,18 +227,20 @@ class GroupHealthStarPlanSelectPed extends Component {
            let obj = {
              "yes_no": true,
              "question_id": "star_ped_question",
-             "description": member_data.ped_diseases_name
+             "description": member_data.ped_diseases_name,
            }
            pre_existing_diseases_array.push(obj)
            body.answers[backend_key] = {}
            body.answers[backend_key]['pre_existing_diseases'] = pre_existing_diseases_array
+           insured_people_details.push({  "relation_key": backend_key, 'ped': true})
          } else {
            body.answers[backend_key] = {}
            body.answers[backend_key]['pre_existing_diseases'] = pre_existing_diseases_array
+           insured_people_details.push({  "relation_key": backend_key, 'ped': false})
          }
        }
      }
- 
+     body.insured_people_details = insured_people_details;
      this.updateLead(body);
    }
    };
