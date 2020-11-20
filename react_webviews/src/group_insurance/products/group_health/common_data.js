@@ -160,7 +160,8 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
+        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, gst = '';
+
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_premium;
@@ -169,6 +170,8 @@ export async function initialize() {
             base_premium = lead.base_premium;
             tax_amount = lead.gst;
             total_amount =  lead.total_premium;
+            total_premium = lead.total_premium;
+            gst = lead.gst;
 
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
@@ -202,8 +205,8 @@ export async function initialize() {
             buttonTitle: "OK",
             content1: [
                 {
-                    'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(base_premium)
+                    'name': 'Basic premium ', 
+                    'value': inrFormatDecimal(total_premium - gst)
                 },
                 { 'name': 'GST', 'value': inrFormatDecimal(tax_amount) }
             ],
@@ -219,7 +222,7 @@ export async function initialize() {
             confirmDialogData.content1 = [
                 {
                     'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(base_premium)
+                        inrFormatDecimal(total_premium - gst)
                 }
             ]
 

@@ -1019,7 +1019,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                             <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                 <div>
-                                    <div> {inrFormatDecimal(this.state.quotation.base_premium)} </div>
+                                    <div> {inrFormatDecimal(this.state.quotation.total_premium - this.state.quotation.gst)} </div>
                                     <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                 </div>
                                 <div>
