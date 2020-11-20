@@ -20,12 +20,13 @@ export const getUserStatus = async () => {
 };
 
 export const getOrCreate = async (params) => {
-
+    
     let payload = {
         "create_new": (params && params.create_new) || false,
         "reset_application": (params && params.reset) || false,
         "application_info": true,
         "personal_info": true,
+        "professional_info": true,
         "address_info": true,
         "bank_info": true,
         "document_info": true,
@@ -51,23 +52,23 @@ export const getOrCreate = async (params) => {
     }
 }
 
-export const updateApplication = async (params) => {
-    let application_id = storageService().get('loan_application_id') || "";
+// export const updateApplication = async (params) => {
+//     let application_id = storageService().get('loan_application_id') || "";
 
-    try {
-        const res = await Api.post(`relay/api/loan/update/application/idfc/${application_id}`, params);
+//     try {
+//         const res = await Api.post(`relay/api/loan/update/application/idfc/${application_id}`, params);
 
-        const { result, status_code: status } = res.pfwresponse;
+//         const { result, status_code: status } = res.pfwresponse;
 
-        if (status === 200) {
-            return result
-        } else {
-            toast(result.error || result.message || 'Something went wrong!');
-        }
-    } catch (e) {
-        throw e;
-    }
-}
+//         if (status === 200) {
+//             return result
+//         } else {
+//             toast(result.error || result.message || 'Something went wrong!');
+//         }
+//     } catch (e) {
+//         throw e;
+//     }
+// }
 
 export const verifyOtp = async (url, params) => {
 

@@ -21,7 +21,6 @@ class OtpVerification extends Component {
       otpBaseData: {},
       proceedForOrder: false,
       base_url: getConfig().base_url,
-      mobile_no: "",
       screen_name: "otp_verify",
     };
 
@@ -38,13 +37,12 @@ class OtpVerification extends Component {
       return;
     }
 
-    console.log(params);
     this.setState({
       ...params,
     });
   }
 
-  onload = async () => {};
+  onload = () => {};
 
   sendEvents(user_action) {
     let eventObj = {

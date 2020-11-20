@@ -8,8 +8,6 @@ import SVG from "react-inlinesvg";
 import { getConfig } from "utils/functions";
 import next_arrow from "assets/next_arrow.svg";
 import Button from "material-ui/Button";
-import { getUserStatus, getOrCreate } from "../../common/ApiCalls";
-import toast from '../../../common/ui/Toast';
 
 class Landing extends Component {
   constructor(props) {
@@ -29,54 +27,20 @@ class Landing extends Component {
     this.initialize();
   }
 
-  onload = async () => {
-    try {
-      this.setState({
-        show_loader: true
-      })
-
-      const res = await getUserStatus();
-      
-      this.setState({
-        application_exist: res.application_exists,
-        otp_verified: res.otp_verified,
-        cta_title: res.application_exists && res.otp_verified ? 'RESUME' : 'APPLY NOW'
-      })
-
-    } catch (err) {
-      console.log(err);
-      toast('Something went wrong!')
-    }
-
+  onload = () => {
     this.setState({
-      show_loader: false
-    })
+      cta_title:
+        this.state.application_exists && this.state.otp_verified
+          ? "RESUME"
+          : "APPLY NOW",
+    });
   };
 
   handleClick = async () => {
-    try {
-      this.setState({
-        show_loader: true
-      })
-
-      let params = {
-        create_new: this.state.application_exist ? false : true
-      }
-
-      await getOrCreate({params});
-      
-      if (!this.state.otp_verified) {
-        this.navigate(this.state.next_state)
-      }
-
-    } catch (err) {
-      console.log(err);
-      toast('Something went wrong!')
-    }
-
-    this.setState({
-      show_loader: false
-    })
+    let params = {
+      create_new: this.state.application_exists ? false : true,
+    };
+    this.getOrCreate(params);
   };
 
   sendEvents(user_action, data = {}) {
@@ -106,12 +70,14 @@ class Landing extends Component {
         <div className="idfc-landing">
           <div
             className="infoimage-block1"
-            onClick={() => this.navigate('know-more', {
-              params: {
-                next_state: this.state.next_state,
-                cta_title: this.state.cta_title
-              }
-            })}
+            onClick={() =>
+              this.navigate("know-more", {
+                params: {
+                  next_state: this.state.next_state,
+                  cta_title: this.state.cta_title,
+                },
+              })
+            }
           >
             <img
               src={require(`assets/${this.state.productName}/idfc_card.svg`)}
@@ -152,12 +118,17 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 0px 0" }}>
             <div className="generic-hr"></div>
-            <div className="Flex calculator" onClick={() => this.navigate('calculator', {
-              params: {
-                next_state: this.state.next_state,
-                cta_title: this.state.cta_title
+            <div
+              className="Flex calculator"
+              onClick={() =>
+                this.navigate("calculator", {
+                  params: {
+                    next_state: this.state.next_state,
+                    cta_title: this.state.cta_title,
+                  },
+                })
               }
-            })}>
+            >
               <div className="title">Loan eligibility calculator</div>
               <SVG
                 className="right"

@@ -7,8 +7,6 @@ import { validateNumber } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import Checkbox from "material-ui/Checkbox";
 import Grid from "material-ui/Grid";
-import { updateApplication } from "../../common/ApiCalls";
-import toast from '../../../common/ui/Toast';
 
 class MobileVerification extends Component {
   constructor(props) {
@@ -26,8 +24,7 @@ class MobileVerification extends Component {
     this.initialize();
   }
 
-  onload = async () => {
-  };
+  onload = () => {};
 
   sendEvents(user_action) {
     let eventObj = {
@@ -73,31 +70,10 @@ class MobileVerification extends Component {
     }
 
     if (canSubmitForm) {
-      try {
-        this.setState({
-          show_loader: true
-        })
-
-        let params = {
-          mobile_no: mobile_no
-        };
-
-        const resultData = await updateApplication(params);
-
-        if (resultData) {
-          this.navigate(this.state.next_state, {
-            params: {
-              verify_otp_url: resultData.verify_otp_url,
-              resend_otp_url: resultData.resend_otp_url,
-              mobile_no: resultData.mobile_no
-            }
-          })
-        }
-
-      } catch (err) {
-        console.log(err);
-        toast("Something went wrong!");
-      }
+      let params = {
+        mobile_no: mobile_no
+      };
+      this.updateApplication(params)
     }
   };
 
