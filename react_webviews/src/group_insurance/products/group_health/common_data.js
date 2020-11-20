@@ -124,7 +124,7 @@ export async function initialize() {
     if (this.state.ctaWithProvider) {
 
 
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount = '';
+        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, discount_amount, net_premium = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_amount;
@@ -133,6 +133,8 @@ export async function initialize() {
             base_premium = lead.base_premium;
             tax_amount = lead.tax_amount;
             total_amount = lead.total_amount;
+            discount_amount = lead.discount_amount;
+            net_premium = lead.premium;
 
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
@@ -180,8 +182,8 @@ export async function initialize() {
 
             confirmDialogData.content1 = [
                 {
-                    'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(base_premium)
+                    'name': 'Basic premium ', 
+                    'value': inrFormatDecimal(base_premium)
                 }
             ]
 
@@ -201,7 +203,16 @@ export async function initialize() {
             confirmDialogData.content1 = confirmDialogData.content1.concat(data);
 
             confirmDialogData.content1.push({
-                'name': 'GST', 'value': inrFormatDecimal(tax_amount) 
+                'name': 'Total discount', 
+                'value': inrFormatDecimal(discount_amount) 
+            });
+            confirmDialogData.content1.push({
+                'name': 'Net premium', 
+                'value': inrFormatDecimal(net_premium) 
+            });
+            confirmDialogData.content1.push({
+                'name': 'GST', 
+                'value': inrFormatDecimal(tax_amount) 
             })
         }
 
