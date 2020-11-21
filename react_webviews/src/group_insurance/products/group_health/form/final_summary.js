@@ -55,8 +55,9 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize();
     }
 
+ 
     onload = () => {
-        let { lead, provider } = this.state;
+        let { lead, provider } = this.state;  
 
         let insured_people_details = lead.insured_people_details;
         let buyer_details = lead.buyer_details;
@@ -83,7 +84,29 @@ class GroupHealthPlanFinalSummary extends Component {
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
-        
+      
+              let body = {}
+              let pedcase = false;
+              body["insured_people_details"] = []
+              this.state.lead.insured_people_details.forEach((memberData) => {
+                 let relation_key  = memberData.insured_person.relation_key
+                 console.log(memberData.answers.pre_existing_diseases.length,"length..........")
+                 if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
+                    pedcase = true
+                     body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
+                 }else if(memberData.answers.pre_existing_diseases.length === 0 ){
+               body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
+           } else  if(memberData.answers.pre_existing_diseases.length > 0 ){
+            body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
+           }
+             })
+
+
+             if(pedcase){
+                this.updateLead(body); 
+                // window.location.reload();
+             }
+
         this.setState({
             applicantIndex: applicantIndex,
             member_base: member_base

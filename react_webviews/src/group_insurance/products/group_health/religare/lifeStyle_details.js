@@ -53,7 +53,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
       })
     }
 
-    insured_people_details.forEach(element => {
+    insured_people_details.forEach((element, index) => {
       if (element.answers.life_style_details.length >= 1 && element.answers.life_style_details[0].yes_no) {
         element.insured_person.life_style_question = element.answers.life_style_details[0]
         element.insured_person.life_style_question.answer = element.insured_person.life_style_question.yes_no
@@ -75,30 +75,30 @@ class GroupHealthPlanLifestyleDetail extends Component {
       element.key = relation.key
     });
 
+    if(account_type !== "self") {
     member_base.push({
         key: 'none'
     })
+  }
 
     let list = [];
    
    if (account_type === "self") {
 
-
     this.setState({
       member_base : member_base
     })
 
-      member_base[0].life_style_question_exists =  'Yes'
-      //member_base[0].life_style_question.answer
 
-      // member_base[0].life_style_question_exists =  'No';
+      member_base[0].life_style_question_exists =  insured_people_details[0].answers.life_style_details[0].yes_no ? 'Yes' : 'No' 
+    
       member_base[0].radio_options =  [
         {
-          // name: "Yes",
+          name: "Yes",
           value: "Yes",
         },
         {
-          // name: "No",
+          name: "No",
           value: "No",
         },
       ];
@@ -107,7 +107,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
           label:
             "Do you smoke, consume alcohol, or chew tobacco, ghutka or paan or use any recreational drugs? If ‘Yes’ then please provide the frequency & amount consumed.",
           key: "self",
-          input_type: "checkbox",
+          input_type: "radio",
           options: member_base
         },
       ];
