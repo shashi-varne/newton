@@ -276,3 +276,43 @@ export const fetchAnalysis = async (params = {}) => {
   }
 };
 
+export const holdings = async (params = {}) => {
+  try {
+    const res = await Api.get('api/invest/reportv4/portfolio/funds', params);
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result.report || {};
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fundDetail = async (params = {}) => {
+  try {
+    const res = await Api.get('api/fetch/fund-details', params);
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result.report || {};
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+

@@ -5,9 +5,9 @@ class RadialBarChart extends Component {
   state = {}
   componentDidMount() {
     // For initial animation
-    setTimeout(() => {
-      this.setState({ setStrokeLength: true });
-    });
+    // setTimeout(() => {
+    //   this.setState({ setStrokeLength: true });
+    // });
   }
   render() {
     const { setStrokeLength } = this.state;

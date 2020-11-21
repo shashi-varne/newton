@@ -1,6 +1,5 @@
 import { IconButton } from 'material-ui';
 import React, { createRef, useEffect, useState } from 'react';
-import PageFooter from '../mini-components/PageFooter';
 import PageHeader from '../mini-components/PageHeader';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import { getConfig } from "utils/functions";
@@ -9,6 +8,7 @@ import { get } from 'lodash';
 import toast from '../../common/ui/Toast';
 import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
+import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
@@ -69,14 +69,6 @@ const Dashboard = () => {
     // }
   };
 
-  const scrollPage = () => {
-    const { current: elem } = container;
-    elem.scroll({
-      top: 500,
-      behavior: 'smooth'
-    });
-  };
-
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
     return numDifferentiationInr(val);
@@ -114,10 +106,18 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setEventHandler();
+    // setEventHandler();
     fetchOverview();
     fetchPortfolioRisk();
   }, []);
+
+  const pageChanged = (pageNum) => {
+    const page = document.getElementById('iwd-dashboard');
+    console.log(pageNum);
+    if (page && !isEmpty(page)) {
+      page.style.background = pageNum === 1 ? '' : '#F9FCFF';
+    }
+  };
 
   return (
     <div className="iwd-page" id="iwd-dashboard" ref={parent}>
@@ -127,124 +127,122 @@ const Dashboard = () => {
           <div className="iwd-header-subtitle">Welcome back, Uttam</div>
         </>
       </PageHeader>
-      <div className="iwd-p-scroll-contain added" ref={container}>
-        <div className="iwd-p-scroll-child">
-          <div id="iwd-d-numbers">
-            <div className="iwd-dn-box">
-              <div className="iwd-dnb-value">
-                {formatNumVal(overviewData.current_val)}
-              </div>
-              <div className="iwd-dnb-label">
-                Current value
-              </div>
-            </div>
-            <div className="iwd-dn-box">
-              <div className="iwd-dnb-value">
-                {formatNumVal(overviewData.invested_val)}
-              </div>
-              <div className="iwd-dnb-label">
-                Invested value
-              </div>
-            </div>
-            <div className="iwd-dn-box">
-              <div className="iwd-dnb-value">
-                {formatNumVal(overviewData.total_realised)}
-              </div>
-              <div className="iwd-dnb-label">
-                Total Realised Gains
-              </div>
-            </div>
-            <div className="iwd-dn-box">
-              <div className="iwd-dnb-value">
-                {overviewData.xirr}%
-              </div>
-              <div className="iwd-dnb-label">
-                XIRR
-              </div>
-            </div>
-          </div>
-          <div id="iwd-d-asset-alloc">
-            <div className="iwd-card-header">Asset allocation</div>
-            <div id="iwd-daa-graph">
-              <RadialBarChart
-                radius={100}
-                progress={42}
-                strokeWidth={10}
-                dimension={200}
-                color="#4AD0C0"
-                secondaryColor="#3fd9c7"
-              />
-              <div id="iwd-daa-legend">
-                <div className="iwd-daal-item">
-                  <div className="label">
-                    <div className="dot"></div>
-                    Equity
-                  </div>
-                  <div className="value">42%</div>
+      <SnapScrollContainer
+        pages={2}
+        onPageChange={pageChanged}
+        hideFooter={isMobileView}
+      >
+        <>
+          <div className="iwd-scroll-child" data-pgno="1">
+            <div id="iwd-d-numbers">
+              <div className="iwd-dn-box">
+                <div className="iwd-dnb-value">
+                  {formatNumVal(overviewData.current_val)}
                 </div>
-                <div className="iwd-daal-item">
-                  <div className="label">
-                    <div className="dot"></div>
-                    Debt
-                  </div>
-                  <div className="value">58%</div>
+                <div className="iwd-dnb-label">
+                  Current value
+                </div>
+              </div>
+              <div className="iwd-dn-box">
+                <div className="iwd-dnb-value">
+                  {formatNumVal(overviewData.invested_val)}
+                </div>
+                <div className="iwd-dnb-label">
+                  Invested value
+                </div>
+              </div>
+              <div className="iwd-dn-box">
+                <div className="iwd-dnb-value">
+                  {formatNumVal(overviewData.total_realised)}
+                </div>
+                <div className="iwd-dnb-label">
+                  Total Realised Gains
+                </div>
+              </div>
+              <div className="iwd-dn-box">
+                <div className="iwd-dnb-value">
+                  {overviewData.xirr}%
+                </div>
+                <div className="iwd-dnb-label">
+                  XIRR
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="iwd-p-scroll-child">
-          <div id="iwd-d-risk">
-            <div className="iwd-card-header">Risk analysis</div>
-            <div id="iwd-dr-data">
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
-                <div className="iwd-drb-label">Return</div>
-                <div className="iwd-drb-value">{riskData.return}%</div>
-              </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
-                <div className="iwd-drb-label">Alpha</div>
-                <div className="iwd-drb-value">{riskData.alpha}%</div>
-              </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}>
-                <div className="iwd-drb-label">Volatility</div>
-                <div className="iwd-drb-value">{riskData.std_dev}%</div>
-              </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
-                <div className="iwd-drb-label">Beta</div>
-                <div className="iwd-drb-value">{riskData.beta}</div>
-              </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
-                <div className="iwd-drb-label">Sharpe Ratio</div>
-                <div className="iwd-drb-value">{riskData.sharpe_ratio}</div>
-              </div>
-              <div className="iwd-dr-box">
-                <div className="iwd-drb-label">Information Ratio</div>
-                <div className="iwd-drb-value">{riskData.information_ratio}</div>
+            <div id="iwd-d-asset-alloc">
+              <div className="iwd-card-header">Asset allocation</div>
+              <div id="iwd-daa-graph">
+                <RadialBarChart
+                  radius={100}
+                  progress={42}
+                  strokeWidth={10}
+                  dimension={200}
+                  color="#4AD0C0"
+                  secondaryColor="#3fd9c7"
+                />
+                <div id="iwd-daa-legend">
+                  <div className="iwd-daal-item">
+                    <div className="label">
+                      <div className="dot"></div>
+                      Equity
+                    </div>
+                    <div className="value">42%</div>
+                  </div>
+                  <div className="iwd-daal-item">
+                    <div className="label">
+                      <div className="dot"></div>
+                      Debt
+                    </div>
+                    <div className="value">58%</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div id="iwd-d-newsletter">
-            <div className="iwd-card-header">
-              Open source and non-custodial protocol enabling the creation of money markets
+          <div className="iwd-scroll-child" data-pgno="2">
+            <div id="iwd-d-risk">
+              <div className="iwd-card-header">Risk analysis</div>
+              <div id="iwd-dr-data">
+                <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
+                  <div className="iwd-drb-label">Return</div>
+                  <div className="iwd-drb-value">{riskData.return}%</div>
+                </div>
+                <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
+                  <div className="iwd-drb-label">Alpha</div>
+                  <div className="iwd-drb-value">{riskData.alpha}%</div>
+                </div>
+                <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}>
+                  <div className="iwd-drb-label">Volatility</div>
+                  <div className="iwd-drb-value">{riskData.std_dev}%</div>
+                </div>
+                <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
+                  <div className="iwd-drb-label">Beta</div>
+                  <div className="iwd-drb-value">{riskData.beta}</div>
+                </div>
+                <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
+                  <div className="iwd-drb-label">Sharpe Ratio</div>
+                  <div className="iwd-drb-value">{riskData.sharpe_ratio}</div>
+                </div>
+                <div className="iwd-dr-box">
+                  <div className="iwd-drb-label">Information Ratio</div>
+                  <div className="iwd-drb-value">{riskData.information_ratio}</div>
+                </div>
+              </div>
             </div>
-            <IconButton className="iwd-dn-btn">
-              <ChevronRight style={{ color: 'white' }} />
-            </IconButton>
-            <div id="iwd-dn-gist">
-              Equities | Fixed Income | Situational
+            <div id="iwd-d-newsletter">
+              <div className="iwd-card-header">
+                Open source and non-custodial protocol enabling the creation of money markets
+              </div>
+              <IconButton className="iwd-dn-btn">
+                <ChevronRight style={{ color: 'white' }} />
+              </IconButton>
+              <div id="iwd-dn-gist">
+                Equities | Fixed Income | Situational
+              </div>
+              <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
             </div>
-            <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
           </div>
-        </div>
-      </div>
-      {!isMobileView &&
-        <PageFooter
-          currentPage={currentPage}
-          totalPages="2"
-          direction={currentPage === 2 ? "up" : "down"}
-          onClick={scrollPage}
-        />
-      }
+        </>
+      </SnapScrollContainer>
     </div>
   );
 };
