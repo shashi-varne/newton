@@ -299,9 +299,9 @@ export async function updateLead( body, quote_id) {
 
             if(this.state.screen_name === 'final_summary_screen'){
                  window.location.reload();
-                this.setState({
-                    show_loader: false
-                });
+                // this.setState({
+                //     show_loader: false
+                // });
             }
 
             if(this.props.edit && !this.state.force_forward) {

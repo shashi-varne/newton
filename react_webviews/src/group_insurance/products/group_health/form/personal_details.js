@@ -56,7 +56,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
  
-    let member_base = this.state.member_base || []; console.log(member_base)
+    let member_base = this.state.member_base || [];
   
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
@@ -102,7 +102,6 @@ class GroupHealthPlanPersonalDetails extends Component {
       insured_people_details.forEach((member) => {
        if (member.insured_person.relation_key === backend_key) {
          form_data = member.insured_person         
-         console.log(form_data)
        }
      })
  }
