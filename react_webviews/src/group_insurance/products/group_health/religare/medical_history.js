@@ -37,7 +37,12 @@ class GroupHealthPlanMedicalHistory extends Component {
       member_base.push(element.insured_person)
     });
 
-  
+    member_base.forEach(element => {
+      let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+       element.relation = relation.key
+     });
+
+
     let radio_options = [
       {
         name: 'Yes',
@@ -202,7 +207,7 @@ class GroupHealthPlanMedicalHistory extends Component {
 
     this.setState({
       list: list,
-    }, () => console.log(list));
+    });
   };
 
   handleClick = () => {

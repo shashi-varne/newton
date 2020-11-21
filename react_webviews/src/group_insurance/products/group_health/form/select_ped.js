@@ -52,13 +52,15 @@ class GroupHealthPlanSelectPed extends Component {
         let member_base =this.state.member_base;
         let member_key = this.props.match.params.member_key;
         let mem_details = member_base.find(element => element.key === member_key);
-     
         let member_info_index = member_base.findIndex(item => item.key === member_key);
     
         let deatils = this.state.lead.insured_people_details.find(element => element.insured_person.relation_key === mem_details.backend_key);
-        
+        let relation = this.state.member_base.find(mem => mem.backend_key === deatils.insured_person.relation_key)
 
-        // let member_info = member_base[member_info_index];
+
+        deatils.insured_person.relation = relation.key
+        deatils.key = relation.key
+       
          let member_info = {
         ...deatils.insured_person,
         ...deatils.answers,
@@ -201,9 +203,8 @@ class GroupHealthPlanSelectPed extends Component {
         let {options, provider ,lead, member_info_index} = this.state;       
        
       let memb =  this.state.member_base.filter((mem) => mem.dob !== undefined)
-      console.log(memb)
        let member_base =  memb.map((element, index) => {
-        let member = lead.insured_people_details.find((member) => member.insured_person.relation === element.relation)
+        let member = lead.insured_people_details.find((member) => member.insured_person.relation_key === element.backend_key)
         return {
             ...element,
             ...member.insured_person,
@@ -218,7 +219,7 @@ class GroupHealthPlanSelectPed extends Component {
             toast('Enter details in other or uncheck it');
             return;
         } else {
-
+  
             let next_state = '';
             for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
@@ -230,7 +231,6 @@ class GroupHealthPlanSelectPed extends Component {
                     }
                 }
             } 
-
             let body = {};
             let pre_existing_diseases = []
             if (provider === 'HDFCERGO') {

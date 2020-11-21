@@ -71,10 +71,9 @@ class GroupHealthPlanFinalSummary extends Component {
       
           member_base.forEach(element => {
             let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
-            console.log(relation)
              element.key = relation.key
            });
-          member_base.push(buyer_details); console.log(member_base)
+          member_base.push(buyer_details);
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
@@ -90,7 +89,6 @@ class GroupHealthPlanFinalSummary extends Component {
               body["insured_people_details"] = []
               this.state.lead.insured_people_details.forEach((memberData) => {
                  let relation_key  = memberData.insured_person.relation_key
-                 console.log(memberData.answers.pre_existing_diseases.length,"length..........")
                  if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
                     pedcase = true
                      body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
@@ -100,7 +98,6 @@ class GroupHealthPlanFinalSummary extends Component {
             body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
            }
              })
-
 
              if(pedcase){
                 this.updateLead(body); 
@@ -269,7 +266,6 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'HDFCERGO') {
                 let subtitle = []
                 member.answers.pre_existing_diseases.forEach((name) => {
-                    console.log(name)
                     let ped = ped_list.find(item => item.id === name.front_end_question_id);
                     if (ped.id === 'hdfc_ergo_ped_other_diseases') {
                         subtitle.push(name.description)
@@ -612,7 +608,6 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
            
-            console.log(res)
 
             var resultData = res.pfwresponse.result;
             this.setState({
@@ -697,7 +692,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
     handleClick = async () => {
 
-        console.log('hello')
 
         if(!this.state.tncChecked){
             toast('Please Agree to the Terms and Conditions');

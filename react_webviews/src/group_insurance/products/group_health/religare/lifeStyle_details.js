@@ -90,7 +90,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     })
 
 
-      member_base[0].life_style_question_exists =  insured_people_details[0].answers.life_style_details[0].yes_no ? 'Yes' : 'No' 
+      member_base[0].life_style_question_exists = insured_people_details[0].answers.life_style_details.length > 0 && insured_people_details[0].answers.life_style_details[0].yes_no ? 'Yes' : 'No' 
     
       member_base[0].radio_options =  [
         {
