@@ -376,8 +376,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (canSubmitForm) {
 
-      // let application_id =   this.state.application_id
-
       let gender = '';
       if (this.state.member_key !== 'self') {
         gender = 'FEMALE';

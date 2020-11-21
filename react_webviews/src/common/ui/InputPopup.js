@@ -73,7 +73,7 @@ class InputPopupClass extends Component {
             let error = '';
             let date = this.state.startDateModal !== undefined ? this.state.startDateModal : this.props.start_date;
             let value = this.state.value ? this.state.value : this.props.description;
-            let dob = this.props.dob;
+            let dob =  this.props.dob.replace(/\//g, "-");
             let canProceed = true;
 
             if (!isValidMonthYear(date)) {
