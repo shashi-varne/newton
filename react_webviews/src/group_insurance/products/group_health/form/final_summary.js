@@ -98,6 +98,7 @@ class GroupHealthPlanFinalSummary extends Component {
             body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
            }
              })
+         member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
 
              if(pedcase){
                 this.updateLead(body); 

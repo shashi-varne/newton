@@ -74,6 +74,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
      let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
       element.key = relation.key
     });
+    member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
 
     if(account_type !== "self") {
     member_base.push({

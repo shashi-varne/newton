@@ -42,8 +42,9 @@ class GroupHealthPlanMedicalHistory extends Component {
        element.relation = relation.key
      });
 
-
-    let radio_options = [
+     member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+    
+     let radio_options = [
       {
         name: 'Yes',
         value: 'Yes'
