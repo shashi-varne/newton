@@ -253,7 +253,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 })
             }
 
-            if(member.key === 'applicant' && this.state.insured_account_type === 'self' ){
+            if(member.key === 'applicant' && (this.state.insured_account_type === 'self' || this.state.insured_account_type === 'self_family') ){
                 continue    
             }
             obj.data = data;
