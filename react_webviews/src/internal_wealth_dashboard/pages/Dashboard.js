@@ -1,5 +1,8 @@
+// ------------------ Assets --------------------------
+import IlsError from 'assets/fisdom/ils_error.svg';
+// ----------------------------------------------------
+import React, { useEffect, useState } from 'react';
 import { IconButton } from 'material-ui';
-import React, { createRef, useEffect, useState } from 'react';
 import PageHeader from '../mini-components/PageHeader';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import { getConfig } from "utils/functions";
@@ -9,65 +12,13 @@ import toast from '../../common/ui/Toast';
 import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
+import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
-  const container = createRef();
-  const parent = createRef();
-  const title = createRef();
   const [overviewData, setOverviewData] = useState({});
   const [riskData, setRiskData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-
-  const setEventHandler = () => {
-    // if (!isMobileView) {
-    //   const { current: elem } = container;
-    //   const { current: father } = parent;
-    //   const { current: titleOb } = title;
-
-    //   elem.addEventListener('scroll', function () {
-    //     console.log(elem.scrollTop, elem.scrollHeight);
-    //     const htby2 = elem.scrollHeight / 2;
-    //     const val = elem.scrollTop / htby2;
-    //     father.style.background =
-    //       `linear-gradient(
-    //       180deg,
-    //       rgb(79, 45, 167) ${(1 - val) * 100}%,
-    //       #ececec ${(1 - val) * 100}% ${val * 100}% 
-    //     )`;
-    //     // console.log(father);
-    //     if (elem.scrollTop > 500) {
-    //       // elem.classList.remove('added');
-    //       titleOb.style.color = 'black';
-    //       // father.style.background = 'rgba(0, 0, 0, 0)';
-    //       // father.style.opacity = '0';
-    //     } else {
-    //       // elem.classList.add('added');
-    //       titleOb.style.color = 'white';
-    //       // father.style.background = 'var(--primary)';
-    //       // father.style.opacity = '1';
-    //     }
-    //   });
-    // } else {
-      const { current: elem } = container;
-      const { current: father } = parent;
-      const { current: titleOb } = title;
-
-      elem.addEventListener('scroll', function () {
-        console.log(elem.scrollTop, elem.scrollHeight);
-        const htby2 = elem.scrollHeight / 2;
-        if (elem.scrollTop + 40 > htby2) {
-          titleOb.style.color = 'black';
-          father.style.background = '#F9FCFF';
-          setCurrentPage(currentPage < 2 ? currentPage + 1 : 2);
-        } else {
-          titleOb.style.color = 'white';
-          father.style.background = 'var(--primary)';
-          setCurrentPage(currentPage > 1 ? currentPage - 1 : 1);
-        }
-      });
-    // }
-  };
 
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
@@ -120,10 +71,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="iwd-page" id="iwd-dashboard" ref={parent}>
+    <div className="iwd-page" id="iwd-dashboard">
       <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={isMobileView}>
         <>
-          <div className="iwd-header-title" ref={title}>Dashboard</div>
+          <div className="iwd-header-title">Dashboard</div>
           <div className="iwd-header-subtitle">Welcome back, Uttam</div>
         </>
       </PageHeader>
@@ -134,40 +85,49 @@ const Dashboard = () => {
       >
         <>
           <div className="iwd-scroll-child" data-pgno="1">
-            <div id="iwd-d-numbers">
-              <div className="iwd-dn-box">
-                <div className="iwd-dnb-value">
-                  {formatNumVal(overviewData.current_val)}
+            <div id="iwd-d-numbers" style={{ background: 'white' }}>
+              {true ?
+                <ErrorScreen
+                  useTemplate={true}
+                  templateImage={IlsError}
+                  templateErrText="Something went wrong! Please retry after some time or contact your wealth manager"
+                /> :
+                <>
+                  <div className="iwd-dn-box">
+                    <div className="iwd-dnb-value">
+                      {formatNumVal(overviewData.current_val)}
+                    </div>
+                    <div className="iwd-dnb-label">
+                      Current value
                 </div>
-                <div className="iwd-dnb-label">
-                  Current value
+                  </div>
+                  <div className="iwd-dn-box">
+                    <div className="iwd-dnb-value">
+                      {formatNumVal(overviewData.invested_val)}
+                    </div>
+                    <div className="iwd-dnb-label">
+                      Invested value
                 </div>
+                  </div>
+                  <div className="iwd-dn-box">
+                    <div className="iwd-dnb-value">
+                      {formatNumVal(overviewData.total_realised)}
+                    </div>
+                    <div className="iwd-dnb-label">
+                      Total Realised Gains
+                </div>
+                  </div>
+                  <div className="iwd-dn-box">
+                    <div className="iwd-dnb-value">
+                      {overviewData.xirr}%
+                </div>
+                    <div className="iwd-dnb-label">
+                      XIRR
+                </div>
+                  </div>
+
+                </>}
               </div>
-              <div className="iwd-dn-box">
-                <div className="iwd-dnb-value">
-                  {formatNumVal(overviewData.invested_val)}
-                </div>
-                <div className="iwd-dnb-label">
-                  Invested value
-                </div>
-              </div>
-              <div className="iwd-dn-box">
-                <div className="iwd-dnb-value">
-                  {formatNumVal(overviewData.total_realised)}
-                </div>
-                <div className="iwd-dnb-label">
-                  Total Realised Gains
-                </div>
-              </div>
-              <div className="iwd-dn-box">
-                <div className="iwd-dnb-value">
-                  {overviewData.xirr}%
-                </div>
-                <div className="iwd-dnb-label">
-                  XIRR
-                </div>
-              </div>
-            </div>
             <div id="iwd-d-asset-alloc">
               <div className="iwd-card-header">Asset allocation</div>
               <div id="iwd-daa-graph">

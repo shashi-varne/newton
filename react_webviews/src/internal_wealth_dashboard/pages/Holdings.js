@@ -32,11 +32,16 @@ const Holdings = () => {
           <div className="iwd-header-title">Holdings</div>
         </>
       </PageHeader>
-      <div className="iwd-scroll-contain">
-        {holdingsList.map(holding => (
-          <HoldingCard {...holding} />
-        ))}
-      </div>
+      <SnapScrollContainer
+        hideFooter={true}
+        error={true}
+      >
+        <>
+          {holdingsList.map(holding => (
+            <HoldingCard {...holding} />
+          ))}
+        </>
+      </SnapScrollContainer>
     </div>
   );
 };

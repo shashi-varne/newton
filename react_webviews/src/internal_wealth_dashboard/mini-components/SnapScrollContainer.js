@@ -1,17 +1,21 @@
+// -----------------Assets------------------------
+import DownwardIcon from 'assets/ic_down_arrow_purple.svg';
+import UpwardIcon from 'assets/ic_up_arrow_purple.svg';
+import IlsError from 'assets/fisdom/ils_error.svg';
+// -----------------------------------------------
 import React, { useEffect, useState } from 'react';
 import IconButton from 'material-ui/IconButton';
 import { last, get } from 'lodash';
-// -----------------Assets------------------------
-import DownwardIcon from 'assets/ic_down_arrow_white.svg';
-import UpwardIcon from 'assets/ic_up_arrow_white.svg';
 import { isFunction } from '../../utils/validators';
-// -----------------------------------------------
+import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 
 const SnapScrollContainer = ({
   pages = 1,
   children: scrollChildren = '',
   onPageChange = () => {},
   hideFooter = false,
+  error = false,
+  onErrorBtnClick = () => {},
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageHeight, setCurrentPageHeight] = useState(0);
@@ -71,9 +75,19 @@ const SnapScrollContainer = ({
   return (
     <>
       <div className="iwd-scroll-contain">
-        {scrollChildren}
+        {error ?
+          <ErrorScreen
+            useTemplate={true}
+            templateImage={IlsError}
+            templateErrTitle="Oops!"
+            templateErrText="Something went wrong! Please retry after some time or contact your wealth manager"
+            templateBtnText="Retry"
+            clickHandler={onErrorBtnClick}
+          /> :
+          scrollChildren
+        }
       </div>
-      {!hideFooter && Footer}
+      {!hideFooter && !error && Footer}
     </>
   );
 };
