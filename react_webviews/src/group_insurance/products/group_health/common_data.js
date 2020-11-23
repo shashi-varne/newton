@@ -166,7 +166,7 @@ export async function initialize() {
             content1: [
                 {
                     'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(base_premium)
+                        inrFormatDecimal(net_premium)
                 },
                 { 'name': 'GST', 'value': inrFormatDecimal(tax_amount) }
             ],
