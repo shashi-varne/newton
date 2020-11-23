@@ -6,7 +6,7 @@ import { navigate } from '../common/commonFunction';
 import DropdownInModal from 'common/ui/DropdownInModal';
 import { storageService, dateOrdinal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-class SipDateSelect extends React.PureComponent {
+class SipDateSelect extends React.Component {
   state = {
     selectedIndex: '',
     date: this.props.el.investment_date || '',
@@ -120,10 +120,12 @@ const Date = (props) => {
     });
     storageService().setObject('allFunds', remove_additional_date);
     sendEvents('next');
+
     navigate(props, 'otp');
   };
   const handleChange = (fundItem) => (index) => {
     const allFunds = storageService().getObject('allFunds');
+
     const newData = allFunds.map((fund) => {
       if (fund.name.includes('SIP') && fund.sip_day) {
         if (fund.id === fundItem.id) {
@@ -137,7 +139,6 @@ const Date = (props) => {
       }
     });
     setSelectedIndex(index);
-
     storageService().setObject('allFunds', newData);
     setFunds(newData);
   };
@@ -157,7 +158,8 @@ const Date = (props) => {
     >
       {funds.length > 0 &&
         funds.map((el) => {
-          if (el.name.includes('SIP') && el.sip_day) {
+          const checkMap = storageService().getObject('checkMap');
+          if (el.name.includes('SIP') && checkMap[el.id]) {
             return (
               <SipDateSelect
                 key={el.id}

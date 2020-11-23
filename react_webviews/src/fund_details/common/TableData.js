@@ -94,7 +94,7 @@ const TableData = ({
                           fontWeight: '300',
                         }}
                       >
-                        {row?.global_industry || row?.value || 'N/A'}
+                        {row?.global_industry || row?.value || null}
                         {row.value && '%'}
                       </span>
                     </div>

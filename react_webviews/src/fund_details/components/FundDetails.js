@@ -152,14 +152,12 @@ const FundDetails = ({ classes, history }) => {
                   RETURNS ({fundDetails.performance?.primary_return_duration})
                 </Typography>
                 <div className='fund-category-risk'>
-                  <Chip
-                    label={fundDetails.performance.category.toUpperCase()}
-                    className='fund-badge'
-                  />
-                  <Chip
-                    label={fundDetails.performance.ms_risk.toUpperCase()}
-                    className='fund-badge'
-                  />
+                  {fundDetails.performance.category && (
+                    <Chip label={fundDetails.performance.category} className='fund-badge' />
+                  )}
+                  {fundDetails.performance.ms_risk && (
+                    <Chip label={fundDetails.performance.ms_risk} className='fund-badge' />
+                  )}
                 </div>
                 <div className='fund-value-star'>
                   <section className='fund-value-star-section'>
