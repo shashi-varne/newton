@@ -18,7 +18,6 @@ const isMobileView = getConfig().isMobileDevice;
 const Dashboard = () => {
   const [overviewData, setOverviewData] = useState({});
   const [riskData, setRiskData] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
 
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
@@ -72,7 +71,7 @@ const Dashboard = () => {
 
   return (
     <div className="iwd-page" id="iwd-dashboard">
-      <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={isMobileView}>
+      <PageHeader>
         <>
           <div className="iwd-header-title">Dashboard</div>
           <div className="iwd-header-subtitle">Welcome back, Uttam</div>

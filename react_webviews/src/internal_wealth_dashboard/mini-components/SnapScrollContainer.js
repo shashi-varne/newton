@@ -22,13 +22,14 @@ const SnapScrollContainer = ({
 
   useEffect(() => {
     !hideFooter && createObserver();
+    // Todo: Need to unobserve
   }, []);
 
   const createObserver = () => {
     const options = {
       root: document.getElementsByClassName('iwd-scroll-contain')[0],
       // rootMargin: '220px 0px 60px 0px',
-      threshold: 1,
+      threshold: 0.8,
     };
 
     const childElems = document.getElementsByClassName('iwd-scroll-child');

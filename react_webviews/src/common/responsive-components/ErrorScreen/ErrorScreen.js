@@ -56,9 +56,7 @@ const ErrorScreen = ({
 
   return (
     <div className={`fisdom-error-container ${containerClass}`}>
-      <div className={`fisdom-ec-box`}>
-        {useTemplate ? imageTextTemplate : children}
-      </div>
+      {useTemplate ? imageTextTemplate : children}
     </div>
   );
 };

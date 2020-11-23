@@ -37,8 +37,8 @@ const Holdings = () => {
         error={true}
       >
         <>
-          {holdingsList.map(holding => (
-            <HoldingCard {...holding} />
+          {holdingsList.map((holding, idx) => (
+            <HoldingCard {...holding} key={idx} />
           ))}
         </>
       </SnapScrollContainer>
