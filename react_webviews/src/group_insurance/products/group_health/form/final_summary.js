@@ -904,7 +904,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>
 
-                        {this.state.lead.add_ons_amount !== 0 && <div className="member-tile">
+                        {this.state.lead.add_ons_amount > 0 && <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                             </div>
@@ -957,19 +957,20 @@ class GroupHealthPlanFinalSummary extends Component {
                                 </div>
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                     <div>
+                                        
                                         <div> {inrFormatDecimal(this.state.lead.base_premium_showable)} </div>
                                         <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                     </div>
                                     <div>
                                         &nbsp;+&nbsp;
                                     </div>
-                                    {this.state.lead.add_ons_amount !== 0 &&
+                                    {this.state.lead.add_ons_amount > 0 &&
                                         <div>
                                             <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
                                             <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                         </div>
                                     }
-                                    {this.state.lead.add_ons_amount !== 0 &&
+                                    {this.state.lead.add_ons_amount > 0 &&
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>

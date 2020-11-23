@@ -135,7 +135,6 @@ export async function initialize() {
             total_amount = lead.total_amount;
             discount_amount = lead.discount_amount;
             net_premium = lead.premium;
-
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
@@ -202,10 +201,12 @@ export async function initialize() {
 
             confirmDialogData.content1 = confirmDialogData.content1.concat(data);
 
-            confirmDialogData.content1.push({
-                'name': 'Total discount', 
-                'value': inrFormatDecimal(discount_amount) 
-            });
+            if(discount_amount > 0){
+                confirmDialogData.content1.push({
+                    'name': 'Total discount', 
+                    'value': inrFormatDecimal(discount_amount) 
+                });
+            }
             confirmDialogData.content1.push({
                 'name': 'Net premium', 
                 'value': inrFormatDecimal(net_premium) 
