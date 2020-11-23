@@ -121,19 +121,6 @@ class GroupHealthPlanPersonalDetails extends Component {
       height_options.push(data);
     }
 
-    var selectedIndex = 123;
-    let height = form_data.height || height_options[selectedIndex].value;
-    if (form_data.height) {
-      height_options.forEach(function (x, index) {
-        if (x.value === parseInt(form_data.height, 10)) {
-          return selectedIndex = index;
-        }
-      });
-    } else {
-      form_data.height = `${height}`;
-    }
-
-    form_data.selectedIndex = selectedIndex;
 
     if (this.state.provider === 'STAR') {
       var occupation;
@@ -148,6 +135,20 @@ class GroupHealthPlanPersonalDetails extends Component {
       occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
       form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
     }
+
+    var selectedIndex = 123;
+    let height = form_data.height || height_options[selectedIndex].value;
+    if (form_data.height) {
+      height_options.forEach(function (x, index) {
+        if (x.value === parseInt(form_data.height, 10)) {
+          return selectedIndex = index;
+        }
+      });
+    } else {
+      form_data.height = `${height}`;
+    }
+
+    form_data.selectedIndex = selectedIndex;
 
 
     if(member_key === 'applicant'){
