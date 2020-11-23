@@ -1,8 +1,7 @@
 import React from 'react';
 import IwdComputerIcon from '../../assets/fisdom/iwd-computer.svg';
-import SBIIcon from '../../assets/fisdom/sbi.svg';
 
-import { topStocks, topAMCs } from '../constants';
+import { topStocks } from '../constants';
 
 function EquityAnalysis() {
   return (

@@ -5,15 +5,16 @@ import PageFooter from '../mini-components/PageFooter';
 
 import { getConfig } from 'utils/functions';
 
-import EquityAnalysis from '../mini-components/EquityAnalysis'
-import DebtAnalysis from '../mini-components/DebtAnalysis'
+import EquityAnalysis from '../mini-components/EquityAnalysis';
+import DebtAnalysis from '../mini-components/DebtAnalysis';
 
 import TopAMCS from '../mini-components/TopAMCS';
+import Legends from '../mini-components/Legends';
 
 const isMobileView = getConfig().isMobileDevice;
 
 function Analysis(props) {
-  const [pageType, setPageType] = useState('equity')
+  const [pageType, setPageType] = useState('equity');
   const container = createRef();
   const parent = createRef();
   const title = createRef();
@@ -47,14 +48,18 @@ function Analysis(props) {
     });
   };
 
-  const handlePageType = name => () => {
+  const handlePageType = (name) => () => {
     if (['equity', 'debt'].includes(name)) {
-      setPageType(name)
+      setPageType(name);
     }
-  }
+  };
 
   return (
-    <section className="iwd-page iwd-page__analysis" id="iwd-analysis" ref={parent}>
+    <section
+      className="iwd-page iwd-page__analysis"
+      id="iwd-analysis"
+      ref={parent}
+    >
       <PageHeader
         height={isMobileView ? '7vh' : '9vh'}
         hideProfile={isMobileView}
@@ -62,22 +67,50 @@ function Analysis(props) {
         <div className="iwd-header-container-left">
           <h1 className="iwd-header-title">Analysis</h1>
           <div className="iwd-header-filters">
-            <button className={pageType === 'equity' ? 'iwd-analysis-button iwd-analysis-button__active' : 'iwd-analysis-button'} onClick={handlePageType('equity')}>
+            <button
+              className={
+                pageType === 'equity'
+                  ? 'iwd-analysis-button iwd-analysis-button__active'
+                  : 'iwd-analysis-button'
+              }
+              onClick={handlePageType('equity')}
+            >
               Equity
             </button>
-            <button  className={pageType === 'debt' ? 'iwd-analysis-button iwd-analysis-button__active' : 'iwd-analysis-button'} onClick={handlePageType('debt')}>Debt</button>
+            <button
+              className={
+                pageType === 'debt'
+                  ? 'iwd-analysis-button iwd-analysis-button__active'
+                  : 'iwd-analysis-button'
+              }
+              onClick={handlePageType('debt')}
+            >
+              Debt
+            </button>
           </div>
         </div>
       </PageHeader>
-      <div className="iwd-p-scroll-contain added">
-        {pageType === 'equity' ? (<><EquityAnalysis /><TopAMCS /></>) : <><DebtAnalysis /><TopAMCS /></>}
+      <div className="iwd-p-scroll-contain added" ref={container}>
+        {pageType === 'equity' ? (
+          <>
+            <Legends />
+            <EquityAnalysis />
+            <TopAMCS />
+          </>
+        ) : (
+          <>
+            <Legends />
+            <DebtAnalysis />
+            <TopAMCS />
+          </>
+        )}
       </div>
 
       {!isMobileView && (
         <PageFooter
           currentPage={currentPage}
-          totalPages="2"
-          direction={currentPage === 2 ? 'up' : 'down'}
+          totalPages="3"
+          direction={currentPage === 3 ? 'up' : 'down'}
           onClick={scrollPage}
         />
       )}

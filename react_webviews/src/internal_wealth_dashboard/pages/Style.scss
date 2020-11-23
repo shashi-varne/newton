@@ -846,7 +846,7 @@ $background: #F9F9F9;
 }
 
 .iwd-analysis-debt-holding-logo {
-  background: #AEE5DF;
+  background:linear-gradient(135deg,  #AEE5DF, transparent);
   color: #488F87;
   font-size: 20px;
   width: 40px;
@@ -865,6 +865,10 @@ $background: #F9F9F9;
 .iwd-analysis-debt-holding-name {
   color: $grey;
   font-size: 17px;
+}
+
+.iwd-page-analysis-chart {
+  width: 50%;
 }
 
 @media only screen and (min-width: 300px) and (max-width: 800px) {
@@ -898,6 +902,10 @@ $background: #F9F9F9;
   }
 
   .iwd-analysis-debt-holding {
+    width: 100%;
+  }
+
+  .iwd-page-analysis-chart {
     width: 100%;
   }
 }
