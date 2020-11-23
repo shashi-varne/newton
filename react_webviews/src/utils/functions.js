@@ -597,8 +597,11 @@ export const getConfig = () => {
     project = 'kyc-esign';
   } else if (main_pathname.indexOf('pg') >= 0) {
     project = 'pg';
-  }
-
+  } else if (main_pathname.indexOf('portfolio-rebalancing') >= 0) {
+    project = 'portfolio-rebalancing';
+    generic_callback = "true";
+  } 
+  
 
 
   let search = window.location.search;

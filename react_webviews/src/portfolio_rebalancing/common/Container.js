@@ -30,7 +30,7 @@ class Container extends Component {
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
-      project: 'lending', //to use in common functions
+      project: 'portfolio-rebalancing', //to use in common functions
     };
 
     this.didmount = didmount.bind(this);
