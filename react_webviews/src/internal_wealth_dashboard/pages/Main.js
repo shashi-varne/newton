@@ -1,11 +1,11 @@
 import React from 'react';
 import { getConfig } from "utils/functions";
-import { navigate } from '../common/commonFunctions';
 import NavBar from '../mini-components/NavBar';
 import NavBarMobile from '../mini-components/NavBarMobile';
 import Dashboard from './Dashboard';
 import Analysis from './Analysis'
-// import Dashboard from './Dashboard-v2';
+import Holdings from './Holdings';
+import Recommendations from './Recommendations';
 const isMobileView = getConfig().isMobileDevice;
 
 const Main = (props) => {
@@ -16,9 +16,9 @@ const Main = (props) => {
       {isMobileView ? <NavBarMobile /> : <NavBar />}
       {params.tab === 'dashboard' && <Dashboard />}
       {params.tab === 'analysis' && <Analysis />}
-      {params.tab === 'holdings' && <Dashboard />}
+      {params.tab === 'holdings' && <Holdings />}
       {params.tab === 'statements' && <Dashboard />}
-      {params.tab === 'recommendations' && <Dashboard />}
+      {params.tab === 'recommendations' && <Recommendations />}
     </div>
   );
 };

@@ -191,9 +191,7 @@ $background: #F9F9F9;
   font-family: 'Poppins', 'Roboto', sans-serif;
   height: 100%;
   width: 100%;
-  // background-image:
-  //   linear-gradient(90deg, rgba(114, 76, 210, 0.03) 0.49%, rgba(56, 204, 251, 0.03) 100.94%),
-  //   url('../../assets/bg.svg');
+  background: #F9F9F9;
   backdrop-filter: blur(70px);
   background-size: cover;
 }
@@ -220,7 +218,7 @@ $background: #F9F9F9;
   margin-bottom: 40px;
 }
 
-.iwd-p-scroll-contain {
+.iwd-scroll-contain {
   scroll-snap-type: y mandatory;
   height: 65vh;
   margin-right: -25px;
@@ -230,20 +228,20 @@ $background: #F9F9F9;
   width: 100%;
 }
 
-.iwd-p-scroll-contain::-webkit-scrollbar {
+.iwd-scroll-contain::-webkit-scrollbar {
   width: 4px;
   background-color: hsla(257, 58%, 73%, 0.4);
   border-radius: 5px;
   // display: none;
 }
 
-.iwd-p-scroll-contain::-webkit-scrollbar-thumb {
+.iwd-scroll-contain::-webkit-scrollbar-thumb {
   border-radius: 2.5px;
   background-color: hsla(257, 58%, 70%, 1);
   // display: none;
 }
 
-.iwd-p-scroll-child {
+.iwd-scroll-child {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -252,7 +250,7 @@ $background: #F9F9F9;
   margin-bottom: 200px;
 }
 
-.iwd-p-scroll-child:nth-last-child(1) {
+.iwd-scroll-child:nth-last-child(1) {
   margin-bottom: 50px;
 }
 
@@ -459,7 +457,303 @@ $background: #F9F9F9;
   }
 }
 
-@media only screen and (min-width: 300px) and (max-width: 800px) {
+#iwd-holdings {
+  .iwd-scroll-contain {
+    padding-left: 270px;
+    height: 75vh;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+#iwd-holding-detail {
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+  background: white url('../../assets/bg_waves_full_screen.svg') bottom no-repeat;
+  background-size: contain;  
+  padding: 50px 100px;
+  box-sizing: border-box;
+
+  .iwd-hd-header {
+    display: flex;
+    margin-bottom: 30px;
+
+    img {
+      margin-right: 20px;
+    }
+
+    .iwd-hdh-title {
+      font-size: 13px;
+      line-height: 21px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: $dark;
+    }
+
+    .iwd-hdh-fund-name {
+      font-weight: bold;
+      font-size: 30px;
+      line-height: 40px;
+      color: $dark;
+    }
+  }
+
+  .iwd-hd-type {
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $grey;
+    margin: 10px 0 30px;
+    display: flex;
+
+    .iwd-hdt-divider {
+      margin: 0 20px;
+    }
+  }
+
+  .iwd-hd-info-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: -30px;
+
+    .iwd-hd-numbers {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 30px 50px 0 0;
+  
+      .iwd-hdn-item {
+        color: $grey;
+
+        img {
+          margin-right: 20px;
+        }
+  
+        .iwd-hdni-value {
+          font-size: 17px;
+          line-height: 27px;
+        }
+
+        .iwd-hdni-value.current-val {
+          color: $dark;
+        }
+  
+        .iwd-hdni-label {
+          font-weight: 600;
+          font-size: 11px;
+          line-height: 18px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+        }
+      }
+  
+      .iwd-hdn-item-divider {
+        border-right: 1px solid rgba($grey, 0.2);
+        margin: 0 50px;
+        height: 25px;
+      }
+    }
+  
+    .iwd-hd-stats {
+      display: flex;
+      margin-top: 30px;
+  
+      .iwd-hds-item {
+        font-size: 13px;
+        line-height: 21px;
+        color: $grey;
+        display: flex;
+        flex-direction: column;
+        margin-right: 60px;
+      }
+    }
+  }
+
+}
+
+
+
+// IWD Analysis Page
+
+.iwd-page__analysis {
+  background-color: $background;
+  font-family: "Poppins";
+
+  & .iwd-profile-icon {
+    color: $primary;
+  }
+
+  & .iwd-page-footer {
+    color: $primary;
+  }
+}
+
+.iwd-analysis-header-container-left {
+  display: flex;
+  align-items: center;
+}
+
+.iwd-analysis-header-filters {
+  margin-left: 50px;
+}
+
+.iwd-analysis-button {
+  outline: none;
+  border: 0;
+  box-sizing: border-box;
+  border-radius: 100px;
+  background-color: #F1ECFF;
+  color: $primary;
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+  height: 30px;
+  width: 80px;
+}
+
+.iwd-analysis-button__active {
+  color: white;
+  background-color: $primary;
+}
+
+.iwd-analysis-button:nth-of-type(2) {
+  margin-left: 20px;
+}
+.iwd-sector-allocation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+
+  .iwd-sector-name {
+    color: $grey;
+    font-size: 13px;
+    line-height: 15px;
+    max-width: 70%;
+  }
+  
+  .iwd-sector-allocation-percentage {
+    color: $dark;
+    font-size: 15px;
+    line-height: 15px;
+  } 
+}
+
+.iwd-analysis-card {
+  @extend .iwd-card;
+  margin-top: 30px;
+  width: 100%;
+  height: 90%;
+}
+
+.iwd-analysis-card-margin {
+  margin-top: 30px;
+}
+
+.iwd-analysis-portfolios-equity {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
+  height: 80%;
+  overflow-y: scroll;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: hsla(257, 58%, 73%, 0.4);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    background-color: hsla(257, 58%, 73%, 1);
+    border-radius: 5px;
+  }
+}
+
+.iwd-analysis-portfolio-stock {
+  display: flex;
+  width: 50%;
+  margin-top: 50px;
+  align-items: center;
+  main {
+    margin-left: 20px;
+  }
+}
+
+.iwd-analysis-portfolio-heading {
+  color: $grey;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.iwd-analysis-top-amcs {
+  @extend .iwd-analysis-portfolios-equity;
+}
+
+.iwd-analysis-amc-name {
+  color: $grey;
+  font-size: 13px;
+}
+
+.iwd-analysis-amc {
+  width: 33%;
+  display: flex;
+  margin-top: 20px;
+  main {
+    margin-left: 20px;
+  }
+}
+
+.iwd-analysis-debt-holdings {
+  @extend .iwd-analysis-portfolios-equity;
+}
+
+.iwd-analysis-debt-holding {
+  display: flex;
+  width: 50%;
+  height: 49px;
+  margin-top: 50px;
+}
+
+.iwd-analysis-debt-holding-details {
+  margin-left: 20px;
+  vertical-align: text-top;
+}
+
+.iwd-analysis-debt-holding-logo {
+  background:linear-gradient(135deg,  #AEE5DF, transparent);
+  color: #488F87;
+  font-size: 20px;
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.iwd-analysis-debt-holding-name {
+  color: $grey;
+  font-size: 17px;
+}
+
+.iwd-analysis-debt-holding-name {
+  color: $grey;
+  font-size: 17px;
+}
+
+.iwd-page-analysis-chart {
+  width: 50%;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 1200px) {
   #iwd-login {
     flex-flow: column wrap;
     height: auto;
@@ -537,27 +831,27 @@ $background: #F9F9F9;
     text-align: center;
   }
 
-  .iwd-p-scroll-contain {
+  .iwd-scroll-contain {
     scroll-snap-type: none;
     height: 85vh;
     margin-right: 0;
-    padding-right: 0;
+    padding: 0;
   }
 
-  .iwd-p-scroll-contain::-webkit-scrollbar {
+  .iwd-scroll-contain::-webkit-scrollbar {
     // width: 4px;
     // background-color: hsla(257, 58%, 73%, 0.4);
     // border-radius: 5px;
     display: none;
   }
 
-  .iwd-p-scroll-contain::-webkit-scrollbar-thumb {
+  .iwd-scroll-contain::-webkit-scrollbar-thumb {
     // border-radius: 2.5px;
     // background-color: hsla(257, 58%, 70%, 1);
     display: none;
   }
 
-  .iwd-p-scroll-child {
+  .iwd-scroll-child {
     height: auto;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -691,188 +985,7 @@ $background: #F9F9F9;
       }
     }
   }
-}
 
-
-// IWD Analysis Page
-
-.iwd-page__analysis {
-  background-color: $background;
-  font-family: "Poppins";
-
-  & .iwd-profile-icon {
-    color: $primary;
-  }
-
-  & .iwd-page-footer {
-    color: $primary;
-  }
-}
-
-.iwd-analysis-header-container-left {
-  display: flex;
-  align-items: center;
-}
-
-.iwd-analysis-header-filters {
-  margin-left: 50px;
-}
-
-.iwd-analysis-button {
-  outline: none;
-  border: 0;
-  box-sizing: border-box;
-  border-radius: 100px;
-  background-color: #F1ECFF;
-  color: $primary;
-  text-transform: uppercase;
-  font-size: 13px;
-  font-weight: bold;
-  display: inline-block;
-  height: 30px;
-  width: 80px;
-}
-
-.iwd-analysis-button__active {
-  color: white;
-  background-color: $primary;
-}
-
-.iwd-analysis-button:nth-of-type(2) {
-  margin-left: 20px;
-}
-.iwd-sector-allocation {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-
-  .iwd-sector-name {
-    color: $grey;
-    font-size: 13px;
-    line-height: 15px;
-    max-width: 70%;
-  }
-  
-  .iwd-sector-allocation-percentage {
-    color: $dark;
-    font-size: 15px;
-    line-height: 15px;
-  } 
-}
-
-.iwd-analysis-card {
-  @extend .iwd-card;
-  margin-top: 30px;
-  width: 100%;
-}
-
-.iwd-analysis-card-margin {
-  margin-top: 30px;
-}
-
-.iwd-analysis-portfolios-equity {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-content: space-between;
-  height: 50vh;
-  overflow-y: scroll;
-  overflow-x: auto;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-    background-color: hsla(257, 58%, 73%, 0.4);
-    border-radius: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    width: 6px;
-    background-color: hsla(257, 58%, 73%, 1);
-    border-radius: 5px;
-  }
-}
-
-.iwd-analysis-portfolio-stock {
-  display: flex;
-  width: 50%;
-  margin-top: 50px;
-  align-items: center;
-  main {
-    margin-left: 20px;
-  }
-}
-
-.iwd-analysis-portfolio-heading {
-  color: $grey;
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.iwd-analysis-top-amcs {
-  @extend .iwd-analysis-portfolios-equity;
-}
-
-.iwd-analysis-amc-name {
-  color: $grey;
-  font-size: 13px;
-}
-
-.iwd-analysis-amc {
-  width: 33%;
-  display: flex;
-  margin-top: 20px;
-  main {
-    margin-left: 20px;
-  }
-}
-
-.iwd-analysis-debt-holdings {
-  @extend .iwd-analysis-portfolios-equity;
-}
-
-.iwd-analysis-debt-holding {
-  display: flex;
-  width: 50%;
-  height: 49px;
-  margin-top: 50px;
-}
-
-.iwd-analysis-debt-holding-details {
-  margin-left: 20px;
-  vertical-align: text-top;
-}
-
-.iwd-analysis-debt-holding-logo {
-  background:linear-gradient(135deg,  #AEE5DF, transparent);
-  color: #488F87;
-  font-size: 20px;
-  width: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-}
-
-.iwd-analysis-debt-holding-name {
-  color: $grey;
-  font-size: 17px;
-}
-
-.iwd-analysis-debt-holding-name {
-  color: $grey;
-  font-size: 17px;
-}
-
-.iwd-page-analysis-chart {
-  width: 50%;
-}
-
-@media only screen and (min-width: 300px) and (max-width: 800px) {
-  
   .iwd-analysis-portfolios-equity {
     overflow-y: auto;
     height: auto;
@@ -907,5 +1020,125 @@ $background: #F9F9F9;
 
   .iwd-page-analysis-chart {
     width: 100%;
+  }
+
+  #iwd-holdings {
+    .iwd-scroll-contain {
+      padding-left: 0;
+      height: 85vh;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+  }
+
+  #iwd-holding-detail {
+    background: white url('../../assets/bg_waves.svg') bottom no-repeat;
+    padding: 30px 20px;
+    text-align: center;
+    height: 100%;
+    box-sizing: border-box;
+
+    .iwd-hd-header {
+      flex-direction: column;
+      margin-bottom: 30px;
+      margin-top: 90px;
+
+      img {
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+
+      .iwd-hdh-title {
+        font-size: 13px;
+        line-height: 21px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: $grey;
+        font-weight: 600;
+      }
+
+      .iwd-hdh-fund-name {
+        font-size: 17px;
+        line-height: 27px;
+      }
+    }
+
+    .iwd-hd-type {
+      display: flex;
+      justify-content: center;
+
+      .iwd-hdt-invested {
+        order: 3;
+      }
+
+      .iwd-hdt-divider {
+        display: inline-block;
+        margin: 0 30px;
+        order: 2;
+      }
+
+      .iwd-hdt-scheme-type {
+        order: 1;
+      }
+    }
+
+    .iwd-hd-info-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      justify-content: space-between;
+      margin-top: 0;
+      margin-bottom: 40px;
+
+      .iwd-hd-numbers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 0;
+        width: 100%;
+    
+        .iwd-hdn-item {
+          color: $grey;
+          margin-right: 10px;
+
+          img {
+            margin-right: 10px;
+          }
+    
+          .iwd-hdni-value {
+            font-size: 15px;
+            line-height: 24px;
+          }
+        }
+    
+        .iwd-hdn-item-divider {
+          display: none;
+        }
+      }
+    
+      .iwd-hd-stats {
+        margin-top: 40px;
+        flex-direction: column;
+        width: 100%;
+    
+        .iwd-hds-item {
+          font-size: 13px;
+          line-height: 21px;
+          color: $grey;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 10px 20px;
+          margin-right: 0;
+          margin-bottom: 10px;
+          background: linear-gradient(90deg, rgba(154, 211, 204, 0.1) 16.15%, rgba(154, 211, 204, 0) 100%);
+        }
+
+        .iwd-hds-item:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
   }
 }

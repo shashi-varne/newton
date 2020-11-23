@@ -1,7 +1,6 @@
 import React, { createRef, useEffect, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
-import PageFooter from '../mini-components/PageFooter';
 
 import { getConfig } from 'utils/functions';
 
@@ -14,6 +13,7 @@ import { fetchPortfolioAnalysis } from '../common/ApiCalls';
 
 import TopAMCS from '../mini-components/TopAMCS';
 import Legends from '../mini-components/Legends';
+import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -105,7 +105,7 @@ function Analysis(props) {
           </div>
         </div>
       </PageHeader>
-      <div className="iwd-p-scroll-contain added" ref={container}>
+      <SnapScrollContainer pages={3}>
         {pageType === 'equity' ? (
           <>
             <Legends />
@@ -120,16 +120,7 @@ function Analysis(props) {
             <TopAMCS />
           </>
         )}
-      </div>
-
-      {!isMobileView && (
-        <PageFooter
-          currentPage={currentPage}
-          totalPages="3"
-          direction={currentPage === 3 ? 'up' : 'down'}
-          onClick={scrollPage}
-        />
-      )}
+      </SnapScrollContainer>
     </section>
   );
 }

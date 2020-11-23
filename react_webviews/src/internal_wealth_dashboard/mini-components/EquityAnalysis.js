@@ -5,7 +5,7 @@ import { topStocks } from '../constants';
 
 function EquityAnalysis() {
   return (
-    <div className="iwd-p-scroll-child">
+    <div className="iwd-scroll-child" data-pgno="2">
       <div className="iwd-analysis-card iwd-card-margin">
         <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
         <div className="iwd-analysis-portfolios-equity">

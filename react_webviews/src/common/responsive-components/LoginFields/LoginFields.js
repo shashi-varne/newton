@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect, cloneElement } from "react";
-import { getConfig } from "utils/functions";
 import {
   resendOtp,
   login,
@@ -13,7 +12,6 @@ import LoadingScreen from "../../../wealth_report/mini-components/LoadingScreen"
 import { FormControl, TextField, InputAdornment } from "material-ui";
 import { nativeCallback } from 'utils/native_callback';
 import { validateEmail, storageService, isFunction } from "../../../utils/validators";
-const isMobileView = getConfig().isMobileDevice;
 
 const LoginFields = (props) => {
   const { navigateFunction: navigate, parentProps } = props;

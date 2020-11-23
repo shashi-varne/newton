@@ -85,7 +85,7 @@ function Analysis() {
         </div>
       </PageHeader>
       <div className="iwd-p-scroll-contain added" ref={container}>
-        <div className="iwd-p-scroll-child">
+        <div className="iwd-scroll-child">
           <div className="iwd-analysis-card iwd-card-margin">
             <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
             <div className="iwd-analysis-portfolios-equity">
@@ -108,7 +108,7 @@ function Analysis() {
             </div>
           </div>
         </div>
-        <div className="iwd-p-scroll-child">
+        <div className="iwd-scroll-child">
           <div className="iwd-analysis-card iwd-card-margin">
             <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
             <div className="iwd-analysis-top-amcs">
@@ -128,7 +128,7 @@ function Analysis() {
             </div>
           </div>
         </div>
-        <div className="iwd-p-scroll-child">
+        <div className="iwd-scroll-child">
           <div className="iwd-analysis-card iwd-card-margin">
             <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
             <div className="iwd-analysis-portfolios-equity">

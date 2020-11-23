@@ -1,0 +1,61 @@
+.fisdom-error-container {
+  font-family: inherit;
+  text-align: center;
+  max-width: 300px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  width: 100%;
+  height: 60%;
+  clear: both;
+  background: inherit;
+  border-radius: inherit;
+  box-sizing: border-box;
+
+  .fisdom-ecb-error-title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    color: #0A1D32;
+    margin: 40px 0 20px;
+  }
+
+  .fisdom-ecb-error-text {
+    font-size: 13px;
+    line-height: 21px;
+    color: #767E86;
+    margin: 20px 0 50px;
+  }
+
+  .fisdom-ecb-btn {
+    border-radius: 4px;
+    background-color: var(--primary);
+    height: 50px;
+    padding: 13px;
+    box-sizing: border-box;
+
+    .MuiButton-label {
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 24px;
+      color: #FFFFFF;
+    }
+  }
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 600px) {
+  .fisdom-error-container {
+    height: 70%;
+    font-size: 18px;
+    margin-top: 0;
+    max-width: 280px;
+      
+    .fisdom-ecb-error-text {
+      margin-bottom: 30px;
+    }
+  }
+}
