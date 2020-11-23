@@ -1,3 +1,5 @@
+export const genericErrMsg = 'Something went wrong!';
+
 export const allocations = [
   { sector: 'Bank', allocation: 29 },
   { sector: 'Refineries/marketing', allocation: 17 },
@@ -102,5 +104,3 @@ export const topHoldings = [
   { name: 'Mahanagar Telephone Nigam Ltd.', percentage: 2.38 },
   { name: 'Housing & Urban Development Corpn. Ltd.', percentage: 2.2 },
 ];
-
-export const genericErrMsg = 'Oops, something went wrong please try again after sometime';
