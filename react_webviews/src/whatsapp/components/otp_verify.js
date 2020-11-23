@@ -185,7 +185,7 @@ class WhatsappOtpVerification extends Component {
 
   cancelBtn = () => {
     this.sendEvents("back")
-    nativeCallback({ action: "native_back" });
+    nativeCallback({ action: "exit_web" });
   }
 
   renderOtpFailedDialog = () => (

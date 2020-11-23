@@ -42,7 +42,7 @@ class WhatsappOtpSuccess extends Component {
   handleClick = () => {
     this.sendEvents("next");
 
-    nativeCallback({ action: "native_back" });
+    nativeCallback({ action: "exit_web" });
   
   };
 

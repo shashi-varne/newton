@@ -61,7 +61,7 @@ class Container extends Component {
       case "/whatsapp/confirm-number":
       case "/whatsapp/edit-number":
       case "/whatsapp/otp-success":
-        nativeCallback({ action: "native_back" });
+        nativeCallback({ action: "exit_web" });
         break;
       default:
         this.props.history.goBack();
