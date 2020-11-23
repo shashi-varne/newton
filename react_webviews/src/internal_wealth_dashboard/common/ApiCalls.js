@@ -276,3 +276,21 @@ export const fetchAnalysis = async (params = {}) => {
   }
 };
 
+export const fetchPortfolioAnalysis = async (params = {}) => {
+  try {
+    const res = await Api.get('api/fetch/portfolio-analysis', params);
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result
+    }
+
+  } catch(e) {
+    throw e;
+  }
+}

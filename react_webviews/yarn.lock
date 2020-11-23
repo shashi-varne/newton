@@ -8488,6 +8488,11 @@ lodash.cond@^4.3.0:
   resolved "https://registry.yarnpkg.com/lodash.cond/-/lodash.cond-4.5.2.tgz#f471a1da486be60f6ab955d17115523dd1d255d5"
   integrity sha1-9HGh2khr5g9quVXRcRVSPdHSVdU=
 
+lodash.debounce@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
+
 lodash.defaults@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/lodash.defaults/-/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
@@ -8507,6 +8512,16 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
+lodash.reduce@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/lodash.reduce/-/lodash.reduce-4.6.0.tgz#f1ab6b839299ad48f784abbf476596f03b914d3b"
+  integrity sha1-8atrg5KZrUj3hKu/R2WW8DuRTTs=
+
+lodash.startswith@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/lodash.startswith/-/lodash.startswith-4.2.1.tgz#c598c4adce188a27e53145731cdc6c0e7177600c"
+  integrity sha1-xZjErc4YiiflMUVzHNxsDnF3YAw=
 
 lodash.template@^4.4.0, lodash.template@^4.5.0:
   version "4.5.0"
@@ -8961,6 +8976,11 @@ moment@^2.10.2:
   version "2.27.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
   integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
+
+moment@^2.29.0:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -10716,6 +10736,18 @@ react-otp-input@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-otp-input/-/react-otp-input-1.0.1.tgz#b07ded9ecf83bf7e3bced8653084e61eeff6b6ff"
   integrity sha512-N57qZ+kQVgU7W1x/urL5zu6N0+nVqJxWn74ueaKaXl5rF6Pqe05q3WybPFxDg9CRQRisfEUjXyT8Q+1Uzwb8ng==
+
+react-phone-input-2@^2.13.8:
+  version "2.13.9"
+  resolved "https://registry.yarnpkg.com/react-phone-input-2/-/react-phone-input-2-2.13.9.tgz#85df6f64e602fc6d4465a63d80b3161602a7012f"
+  integrity sha512-2sP7fAYBEw30S0FaI5VbuhjLQEdfJ4voq7C3iqWW8RiXxxWBtIQ+0SiQxDjvadbSS3C8P0KHIUIAnrgVOzOz1g==
+  dependencies:
+    classnames "^2.2.6"
+    lodash.debounce "^4.0.8"
+    lodash.memoize "^4.1.2"
+    lodash.reduce "^4.6.0"
+    lodash.startswith "^4.2.1"
+    prop-types "^15.7.2"
 
 react-popper@^0.10.0:
   version "0.10.4"
@@ -12566,6 +12598,11 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
+
+typeface-poppins@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/typeface-poppins/-/typeface-poppins-1.1.13.tgz#a80b6f14a2a70624eb2eb833fe5559507a8f5651"
+  integrity sha512-VLNaET8kK7M3gPGjtKhr4/Iw6aseM2FLdiEGevlqXWD9b8QlzqZC4ro7sP78L9HJnOo2SUVvwJUeCn82gBcNqw==
 
 typeface-roboto@^0.0.54:
   version "0.0.54"

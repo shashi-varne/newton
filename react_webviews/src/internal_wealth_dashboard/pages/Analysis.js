@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
 import PageFooter from '../mini-components/PageFooter';
@@ -7,6 +7,10 @@ import { getConfig } from 'utils/functions';
 
 import EquityAnalysis from '../mini-components/EquityAnalysis';
 import DebtAnalysis from '../mini-components/DebtAnalysis';
+
+import AnalysisError from '../mini-components/AnanlysisError';
+
+import { fetchPortfolioAnalysis } from '../common/ApiCalls';
 
 import TopAMCS from '../mini-components/TopAMCS';
 import Legends from '../mini-components/Legends';
@@ -19,6 +23,17 @@ function Analysis(props) {
   const parent = createRef();
   const title = createRef();
   const [currentPage, setCurrentPage] = useState(1);
+
+  // useEffect(() => {
+  //   setEventHandler();
+  //   fetchPortfolioAnalysis()
+  //     .then((result) => {
+  //       console.log(result);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // }, []);
 
   const setEventHandler = () => {
     const { current: elem } = container;
@@ -94,6 +109,7 @@ function Analysis(props) {
         {pageType === 'equity' ? (
           <>
             <Legends />
+            {/* <AnalysisError /> */}
             <EquityAnalysis />
             <TopAMCS />
           </>

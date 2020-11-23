@@ -3,7 +3,7 @@ import React, { createRef, useEffect, useState } from 'react';
 import PageFooter from '../mini-components/PageFooter';
 import PageHeader from '../mini-components/PageHeader';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import { getConfig } from "utils/functions";
+import { getConfig } from 'utils/functions';
 import { overview, portfolioRisk } from '../common/ApiCalls';
 import { get } from 'lodash';
 import toast from '../../common/ui/Toast';
@@ -33,7 +33,7 @@ const Dashboard = () => {
     //       `linear-gradient(
     //       180deg,
     //       rgb(79, 45, 167) ${(1 - val) * 100}%,
-    //       #ececec ${(1 - val) * 100}% ${val * 100}% 
+    //       #ececec ${(1 - val) * 100}% ${val * 100}%
     //     )`;
     //     // console.log(father);
     //     if (elem.scrollTop > 500) {
@@ -49,6 +49,7 @@ const Dashboard = () => {
     //     }
     //   });
     // } else {
+    if (!isMobileView) {
       const { current: elem } = container;
       const { current: father } = parent;
       const { current: titleOb } = title;
@@ -66,6 +67,8 @@ const Dashboard = () => {
           setCurrentPage(currentPage > 1 ? currentPage - 1 : 1);
         }
       });
+    }
+
     // }
   };
 
@@ -73,7 +76,7 @@ const Dashboard = () => {
     const { current: elem } = container;
     elem.scroll({
       top: 500,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   };
 
@@ -121,9 +124,14 @@ const Dashboard = () => {
 
   return (
     <div className="iwd-page" id="iwd-dashboard" ref={parent}>
-      <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={isMobileView}>
+      <PageHeader
+        height={isMobileView ? '7vh' : '9vh'}
+        hideProfile={isMobileView}
+      >
         <>
-          <div className="iwd-header-title" ref={title}>Dashboard</div>
+          <div className="iwd-header-title" ref={title}>
+            Dashboard
+          </div>
           <div className="iwd-header-subtitle">Welcome back, Uttam</div>
         </>
       </PageHeader>
@@ -134,33 +142,23 @@ const Dashboard = () => {
               <div className="iwd-dnb-value">
                 {formatNumVal(overviewData.current_val)}
               </div>
-              <div className="iwd-dnb-label">
-                Current value
-              </div>
+              <div className="iwd-dnb-label">Current value</div>
             </div>
             <div className="iwd-dn-box">
               <div className="iwd-dnb-value">
                 {formatNumVal(overviewData.invested_val)}
               </div>
-              <div className="iwd-dnb-label">
-                Invested value
-              </div>
+              <div className="iwd-dnb-label">Invested value</div>
             </div>
             <div className="iwd-dn-box">
               <div className="iwd-dnb-value">
                 {formatNumVal(overviewData.total_realised)}
               </div>
-              <div className="iwd-dnb-label">
-                Total Realised Gains
-              </div>
+              <div className="iwd-dnb-label">Total Realised Gains</div>
             </div>
             <div className="iwd-dn-box">
-              <div className="iwd-dnb-value">
-                {overviewData.xirr}%
-              </div>
-              <div className="iwd-dnb-label">
-                XIRR
-              </div>
+              <div className="iwd-dnb-value">{overviewData.xirr}%</div>
+              <div className="iwd-dnb-label">XIRR</div>
             </div>
           </div>
           <div id="iwd-d-asset-alloc">
@@ -197,54 +195,69 @@ const Dashboard = () => {
           <div id="iwd-d-risk">
             <div className="iwd-card-header">Risk analysis</div>
             <div id="iwd-dr-data">
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
+              <div
+                className={`iwd-dr-box ${
+                  !isMobileView ? 'border-bottom border-right' : ''
+                }`}
+              >
                 <div className="iwd-drb-label">Return</div>
                 <div className="iwd-drb-value">{riskData.return}%</div>
               </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
+              <div
+                className={`iwd-dr-box ${
+                  !isMobileView ? 'border-bottom border-right' : ''
+                }`}
+              >
                 <div className="iwd-drb-label">Alpha</div>
                 <div className="iwd-drb-value">{riskData.alpha}%</div>
               </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}>
+              <div
+                className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}
+              >
                 <div className="iwd-drb-label">Volatility</div>
                 <div className="iwd-drb-value">{riskData.std_dev}%</div>
               </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
+              <div
+                className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}
+              >
                 <div className="iwd-drb-label">Beta</div>
                 <div className="iwd-drb-value">{riskData.beta}</div>
               </div>
-              <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
+              <div
+                className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}
+              >
                 <div className="iwd-drb-label">Sharpe Ratio</div>
                 <div className="iwd-drb-value">{riskData.sharpe_ratio}</div>
               </div>
               <div className="iwd-dr-box">
                 <div className="iwd-drb-label">Information Ratio</div>
-                <div className="iwd-drb-value">{riskData.information_ratio}</div>
+                <div className="iwd-drb-value">
+                  {riskData.information_ratio}
+                </div>
               </div>
             </div>
           </div>
           <div id="iwd-d-newsletter">
             <div className="iwd-card-header">
-              Open source and non-custodial protocol enabling the creation of money markets
+              Open source and non-custodial protocol enabling the creation of
+              money markets
             </div>
             <IconButton className="iwd-dn-btn">
               <ChevronRight style={{ color: 'white' }} />
             </IconButton>
-            <div id="iwd-dn-gist">
-              Equities | Fixed Income | Situational
-            </div>
+            <div id="iwd-dn-gist">Equities | Fixed Income | Situational</div>
             <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
           </div>
         </div>
       </div>
-      {!isMobileView &&
+      {!isMobileView && (
         <PageFooter
           currentPage={currentPage}
           totalPages="2"
-          direction={currentPage === 2 ? "up" : "down"}
+          direction={currentPage === 2 ? 'up' : 'down'}
           onClick={scrollPage}
         />
-      }
+      )}
     </div>
   );
 };
