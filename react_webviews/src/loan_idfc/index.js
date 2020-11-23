@@ -16,12 +16,14 @@ import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
 import Calculator from "./components/general/calculator";
 import KnowMore from "./components/general/know_more";
+import Status from "./components/general/status";
 import IncomeDetails from "./components/general/income_details";
 import UploadBankStatements from "./components/forms/upload_bank";
 import BasicDetails from "./components/forms/basic_details";
 import ProfessionalDetails from "./components/forms/professional_details";
 import PersonalDetails from "./components/forms/personal_details";
 import AddressDetails from "./components/forms/address_details";
+import Summary from "./components/forms/summary";
 import LoanRequirementDetails from "./components/forms/requirements_details";
 import BtInformation from "./components/bt_details/bt_info";
 import LoanBtDetails from "./components/bt_details/loan_bt";
@@ -79,6 +81,8 @@ const Lending = props => {
           <Route path={`${url}/loan-requirement-details`} component={LoanRequirementDetails} />
           <Route path={`${url}/bt-info`} component={BtInformation} />
           <Route path={`${url}/loan-bt-details`} component={LoanBtDetails} />
+          <Route path={`${url}/summary`} component={Summary} />
+          <Route path={`${url}/status`} component={Status} />
        
           <Route component={NotFound} />
 

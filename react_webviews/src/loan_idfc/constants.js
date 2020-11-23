@@ -39,7 +39,9 @@ export const idfc_config = {
     mobile_verification: 'otp-verify',
     otp_verify: 'basic-details',
     basic_details: 'professional-details',
-    professional_details_screen: 'journey'
+    professional_details_screen: 'journey',
+    personal_details: 'address_details',
+    address_details: 'journey'
   },
   landing_screen: {
     stepContentMapper: {

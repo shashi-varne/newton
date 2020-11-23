@@ -12,6 +12,7 @@ class LoanRequirementDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      form_data: {},
       screen_name: "requirement_details_screen",
     };
 
@@ -40,9 +41,30 @@ class LoanRequirementDetails extends Component {
     }
   }
 
-  handleChange = () => {};
+  handleChange = name => event => {
+    let value = event.target ? event.target.value : event;
+    let id = event.target ? event.target.id : "";
+    let { form_data } = this.state;
 
-  handleClick = () => {};
+    if (name) {
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
+    }
+    this.setState({
+      form_data: form_data,
+    });
+  };
+
+  handleClick = () => {
+    let { form_data } = this.state;
+    let keys_to_check = [
+      "amount_required",
+      "purpose",
+      "tenor"
+    ];
+
+    this.formCheckUpdate(keys_to_check, form_data, 'point_five', true);
+  };
 
   render() {
     return (
@@ -58,16 +80,16 @@ class LoanRequirementDetails extends Component {
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.loan_amount_error}
-                helperText={this.state.loan_amount_error}
+                error={!!this.state.form_data.amount_required_error}
+                helperText={this.state.form_data.amount_required_error}
                 type="text"
                 width="40"
                 label="Loan amount (in rupees)"
-                class="loan_amount"
-                id="loan_amount"
-                name="loan_amount"
-                value={this.state.loan_amount || ""}
-                onChange={this.handleChange}
+                class="amount_required"
+                id="amount_required"
+                name="amount_required"
+                value={this.state.form_data.amount_required || ""}
+                onChange={this.handleChange("amount_required")}
               />
             </div>
 
@@ -77,9 +99,9 @@ class LoanRequirementDetails extends Component {
                 options={this.state.screenData.purposeOfLoanOptions}
                 id="purpose"
                 label="Purpose of loan"
-                error={this.state.purpose_error ? true : false}
-                helperText={this.state.purpose_error}
-                value={this.state.purpose || ""}
+                error={this.state.form_data.purpose_error ? true : false}
+                helperText={this.state.form_data.purpose_error}
+                value={this.state.form_data.purpose || ""}
                 name="purpose"
                 onChange={this.handleChange("purpose")}
               />
@@ -91,9 +113,9 @@ class LoanRequirementDetails extends Component {
                 options={this.state.screenData.tenorOptions}
                 id="tenor"
                 label="Loan tenure (in months)"
-                error={this.state.tenor_error ? true : false}
-                helperText={this.state.tenor_error}
-                value={this.state.tenor || ""}
+                error={this.state.form_data.tenor_error ? true : false}
+                helperText={this.state.form_data.tenor_error}
+                value={this.state.form_data.tenor || ""}
                 name="tenor"
                 onChange={this.handleChange("tenor")}
               />

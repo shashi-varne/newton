@@ -30,6 +30,7 @@ class PersonalDetails extends Component {
     this.state = {
       show_loader: false,
       screen_name: "personal_details_screen",
+      form_data: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -37,6 +38,24 @@ class PersonalDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Application form',
+      steps: [
+        {
+          'title': 'Personal details',
+          'status': 'init'
+        },
+        {
+          'title': 'Address details',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
   }
 
   onload = () => {};
@@ -46,7 +65,7 @@ class PersonalDetails extends Component {
       event_name: "lending",
       properties: {
         user_action: user_action,
-        screen_name: "personal",
+        screen_name: "personal_details",
       },
     };
 
@@ -57,11 +76,33 @@ class PersonalDetails extends Component {
     }
   }
 
-  handleChange = () => {};
+  handleChange = name => event => {
+    let value = event.target ? event.target.value : event;
+    let id = event.target ? event.target.id : "";
+    let { form_data } = this.state;
 
-  handleClick = () => {};
+    if (name) {
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
+    }
 
-  handleChangeRadio = (name) => {};
+    this.setState({
+      form_data: form_data
+    })
+  };
+
+  handleClick = () => {
+    let { form_data } = this.state;
+    let keys_to_check = ['first_name', 'middle_name', 'last_name', 'dob', 'gender', 'marital_status', 'father_name', 'mother_name','religion', 'email_id'];
+
+    this.formCheckUpdate(keys_to_check, form_data);
+  };
+
+  handleChangeRadio = (event) => {
+    this.setState({
+      gender: gender_options[event].value
+    })
+  };
 
   render() {
     return (
@@ -70,6 +111,9 @@ class PersonalDetails extends Component {
         title="Confirm your personal details"
         buttonTitle="CONFIRM & SUBMIT"
         handleClick={this.handleClick}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
       >
         <div className="personal-details">
           <Attention content="Once submitted, details cannot be changed or modified." />
@@ -77,53 +121,53 @@ class PersonalDetails extends Component {
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.first_name_error}
-                helperText={this.state.first_name_error}
+                error={!!this.state.form_data.first_name_error}
+                helperText={this.state.form_data.first_name_error}
                 type="text"
                 width="40"
                 label="First name"
                 class="first_name"
                 id="name"
                 name="first_name"
-                value={this.state.first_name || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.first_name || ""}
+                onChange={this.handleChange("first_name")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.middle_name_error}
-                helperText={this.state.middle_name_error}
+                error={!!this.state.form_data.middle_name_error}
+                helperText={this.state.form_data.middle_name_error}
                 type="text"
                 width="40"
                 label="Middle name"
                 class="middle_name"
                 id="name"
                 name="middle_name"
-                value={this.state.middle_name || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.middle_name || ""}
+                onChange={this.handleChange("middle_name")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.last_name_error}
-                helperText={this.state.last_name_error}
+                error={!!this.state.form_data.last_name_error}
+                helperText={this.state.form_data.last_name_error}
                 type="text"
                 width="40"
                 label="Last name"
                 class="last_name"
                 id="name"
                 name="last_name"
-                value={this.state.last_name || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.last_name || ""}
+                onChange={this.handleChange("last_name")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.dob_error}
-                helperText={this.state.dob_error}
+                error={!!this.state.form_data.dob_error}
+                helperText={this.state.form_data.dob_error}
                 type="text"
                 width="40"
                 label="Date of birth"
@@ -132,8 +176,8 @@ class PersonalDetails extends Component {
                 maxLength={10}
                 id="dob"
                 name="dob"
-                value={this.state.dob || ""}
-                onChange={this.handleChange()}
+                value={this.state.form_data.dob || ""}
+                onChange={this.handleChange("dob")}
               />
             </div>
 
@@ -145,11 +189,10 @@ class PersonalDetails extends Component {
                 options={gender_options}
                 id="gender"
                 name="gender"
-                error={this.state.gender_error ? true : false}
-                helperText={this.state.gender_error}
-                value={this.state.gender || ""}
-                onChange={this.handleChangeRadio("gender")}
-                canUnSelect={true}
+                error={this.state.form_data.gender_error ? true : false}
+                helperText={this.state.form_data.gender_error}
+                value={this.state.form_data.gender || ""}
+                onChange={this.handleChangeRadio}
               />
             </div>
 
@@ -159,9 +202,9 @@ class PersonalDetails extends Component {
                 options={this.state.screenData.maritalOptions}
                 id="marital_status"
                 label="Marital status"
-                error={this.state.marital_status_error ? true : false}
-                helperText={this.state.marital_status_error}
-                value={this.state.marital_status || ""}
+                error={this.state.form_data.marital_status_error ? true : false}
+                helperText={this.state.form_data.marital_status_error}
+                value={this.state.form_data.marital_status || ""}
                 name="marital_status"
                 onChange={this.handleChange("marital_status")}
               />
@@ -169,31 +212,31 @@ class PersonalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.father_name_error}
-                helperText={this.state.father_name_error}
+                error={!!this.state.form_data.father_name_error}
+                helperText={this.state.form_data.father_name_error}
                 type="text"
                 width="40"
                 label="Father's name"
                 class="father_name"
                 id="name"
                 name="father_name"
-                value={this.state.father_name || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.father_name || ""}
+                onChange={this.handleChange("father_name")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.mother_name_error}
-                helperText={this.state.mother_name_error}
+                error={!!this.state.form_data.mother_name_error}
+                helperText={this.state.form_data.mother_name_error}
                 type="text"
                 width="40"
                 label="Mother's name"
                 class="mother_name"
                 id="name"
                 name="mother_name"
-                value={this.state.mother_name || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.mother_name || ""}
+                onChange={this.handleChange("mother_name")}
               />
             </div>
 
@@ -203,9 +246,9 @@ class PersonalDetails extends Component {
                 options={this.state.screenData.religionOptions}
                 id="religion"
                 label="Religion"
-                error={this.state.religion_error ? true : false}
-                helperText={this.state.religion_error}
-                value={this.state.religion || ""}
+                error={this.state.form_data.religion_error ? true : false}
+                helperText={this.state.form_data.religion_error}
+                value={this.state.form_data.religion || ""}
                 name="religion"
                 onChange={this.handleChange("religion")}
               />
@@ -213,16 +256,16 @@ class PersonalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.email_id_error}
-                helperText={this.state.email_id_error}
+                error={!!this.state.form_data.email_id_error}
+                helperText={this.state.form_data.email_id_error}
                 type="text"
                 width="40"
                 label="Personal email id"
                 class="email_id"
                 id="email"
                 name="email_id"
-                value={this.state.email_id || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.email_id || ""}
+                onChange={this.handleChange("email_id")}
               />
             </div>
           </FormControl>

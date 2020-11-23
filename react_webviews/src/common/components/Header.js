@@ -23,7 +23,7 @@ const Header = ({ classes, title, count, total, current, goBack,
   style={style}
   >
     <Toolbar
-    //  style={{height:'80px', display:'flex', alignItems:'flex-start'}}
+      className={headerData.progressHeaderData && classes.headerWithData}
      >
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
          goBack}>
@@ -38,32 +38,32 @@ const Header = ({ classes, title, count, total, current, goBack,
       </IconButton>
 
       <div className="toolbar-title">
-        {/* <div className="progress-bar">
+        {headerData.progressHeaderData && <div className="progress-bar">
           <div className="head">
             {headerData.progressHeaderData.title}
           </div>
           <div style={{display:'flex', flexFlow:1}}>
             {headerData.progressHeaderData.steps.map((option,index) => (
-              <div className="journey-progress" key={index}>
+              <div className="journey-header-progress" key={index}>
                 <div className="indicator">
                   <div className="hr"><hr className={`${index === 0 ? 'hr1' : 'hr2'}`} /></div>
-                  <span className="dot"></span>
-                  <div className="hr"><hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'hr1' : 'hr2'}`} /></div>
+                  <span className={`dot ${option.status}`}></span>
+                  <div className="hr"><hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'hr1' : `hr2`}`} /></div>
                 </div>
 
                 <div>{option.title}</div>
               </div>
             ))}
           </div>
-        </div> */}
+        </div>}
 
 
-       <div
+       {!headerData.progressHeaderData && <div
         style={style}
           className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
         >
           {title}
-        </div>
+        </div>}
       </div>
     </Toolbar>
   </AppBar >
@@ -81,6 +81,11 @@ const styles = {
     marginLeft: -12,
     // marginRight: 20,
   },
+  headerWithData: {
+    height: '80px',
+    display: 'flex',
+    alignItems: 'flex-start'
+  }
 };
 
 export default withStyles(styles)(Header);

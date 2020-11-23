@@ -14,6 +14,7 @@ export async function initialize() {
   this.openInTabApp = openInTabApp.bind(this);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.updateApplication = updateApplication.bind(this);
+  this.submitApplication = submitApplication.bind(this);
   this.getOrCreate = getOrCreate.bind(this);
   this.getUserStatus = getUserStatus.bind(this);
 
@@ -72,8 +73,12 @@ export async function getOrCreate(params) {
       bt_info: true,
     };
 
+    let lead = {};
+
     const res = await Api.post("relay/api/loan/get/application/idfc", body);
     const { result, status_code: status } = res.pfwresponse;
+
+    lead = result || {};
 
     if (status === 200) {
       let application_id = result.application_id || "";
@@ -81,8 +86,9 @@ export async function getOrCreate(params) {
 
       this.setState(
         {
+          lead: lead,
           application_id: application_id,
-          mobile_no: result.mobile_no || ""
+          mobile_no: result.personal_info.mobile_no || ""
         },
         () => {
           if (this.onload && !this.state.ctaWithProvider) {
@@ -189,6 +195,38 @@ export async function updateApplication (params) {
   });
 };
 
+export async function submitApplication (params, state, update) {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+    const res = await Api.post(
+      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}&update=${update}`,
+      params
+    );
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      if (result.message === 'Success') {
+        this.navigate(this.state.next_state)
+      }
+      
+    } else {
+      // toast(result.error || result.message || "Something went wrong!");
+      toast("Something went wrong");
+      this.onload();
+    }
+  } catch (err) {
+    console.log(err);
+    toast("Something went wrong");
+  }
+
+  this.setState({
+    show_loader: false,
+  });
+}
+
 export function openInBrowser(url) {
   nativeCallback({
     action: "open_in_browser",
@@ -208,7 +246,7 @@ export function openInTabApp(data = {}) {
   });
 }
 
-export async function formCheckUpdate(keys_to_check, form_data) {
+export async function formCheckUpdate(keys_to_check, form_data, state = "", update = "") {
   if (!form_data) {
     form_data = this.state.form_data;
   }
@@ -216,13 +254,36 @@ export async function formCheckUpdate(keys_to_check, form_data) {
   let canSubmitForm = true;
 
   let keysMapper = {
-    dob: "dob",
-    pan_no: "pan number",
-    employment_type: "employment type",
-    education_qualification: "education qualification",
+    "dob": "dob",
+    "pan_no": "pan number",
+    "employment_type": "employment type",
+    "educational_qualification": "educational qualification",
+    "first_name": "first name",
+    "middle_name": "middle name",
+    "last_name": "last name",
+    "gender": "gender",
+    "marital_status": "marital status",
+    "father_name": "father name",
+    "mother_name": "mother name",
+    "religion": "religion",
+    "email_id": "email id",
+    "current_address1": "address line 1",
+    "current_address2": "address line 2",
+    "current_address3": "address line 3",
+    "current_landmark": "landmark",
+    "current_pincode": "pincode",
+    "current_city": "city",
+    "current_state": "state",
+    "permanent_address1": "address line 1",
+    "permanent_address2": "address line 2",
+    "permanent_address3": "address line 3",
+    "permanent_landmark": "landmark",
+    "permanent_pincode": "pincode",
+    "permanent_city": "city",
+    "permanent_state": "state"
   };
 
-  let selectTypeInput = ["education_qualification"];
+  let selectTypeInput = ["educational_qualification"];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -261,7 +322,11 @@ export async function formCheckUpdate(keys_to_check, form_data) {
       body[key] = form_data[key] || "";
     }
 
-    this.updateApplication(body);
+    if (state !== "" || state !== null) {
+      this.submitApplication(body, state, update)
+    } else {
+      this.updateApplication(body);
+    }
   }
 }
 

@@ -38,7 +38,23 @@ class BasicDetails extends Component {
     });
   }
 
-  onload = async () => {};
+  onload = () => {
+    let lead = this.state.lead || {};
+    let personal_info = lead.personal_info || {};
+    let professional_info = lead.professional_info || {};
+    let application_info = lead.application_info || {};
+
+    let form_data = {
+      dob: personal_info.dob || "",
+      pan_no: personal_info.pan_no || "",
+      educational_qualification: professional_info.educational_qualification || "",
+      employment_type: application_info.employment_type || ""
+    }
+
+    this.setState({
+      form_data: form_data
+    })
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -95,9 +111,9 @@ class BasicDetails extends Component {
     })
   };
 
-  handleClick = async () => {
+  handleClick = () => {
     let { form_data } = this.state;
-    let keys_to_check = ['dob', 'pan_no', 'education_qualification', 'employment_type'];
+    let keys_to_check = ['dob', 'pan_no', 'educational_qualification', 'employment_type'];
 
     this.formCheckUpdate(keys_to_check, form_data);
   };
@@ -151,11 +167,11 @@ class BasicDetails extends Component {
                 options={this.state.qualification}
                 id="education_qualification"
                 label="Education Qualification"
-                error={this.state.form_data.education_qualification_error ? true : false}
-                helperText={this.state.form_data.education_qualification_error}
-                value={this.state.form_data.education_qualification || ""}
-                name="education_qualification"
-                onChange={this.handleChange("education_qualification")}
+                error={this.state.form_data.educational_qualification_error ? true : false}
+                helperText={this.state.form_data.educational_qualification_error}
+                value={this.state.form_data.educational_qualification || ""}
+                name="educational_qualification"
+                onChange={this.handleChange("educational_qualification")}
               />
             </div>
           </FormControl>

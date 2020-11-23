@@ -85,7 +85,7 @@ class Container extends Component {
 
 
     switch (pathname) {
-      case "/loan/calculator":
+      case "/loan/home":
         nativeCallback({ action: "native_back"});
         break;
       default:

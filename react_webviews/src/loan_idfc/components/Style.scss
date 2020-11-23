@@ -85,7 +85,15 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 40%;
+  }
+
+  .head-title {
+    font-size: 20px;
+    color: #0A1D32;
+    font-weight: 400;
+    margin: 20px 10px 30px;
+    line-height: 30px;
   }
 }
 
@@ -276,7 +284,7 @@
 
     .bytes {
       margin-left: 20px;
-      color: #767E86;
+      color: #767e86;
       text-transform: lowercase;
     }
   }
@@ -286,7 +294,7 @@
   .sub-head {
     font-size: 13px;
     font-weight: 400;
-    color: #767E86;
+    color: #767e86;
     margin-bottom: 10px;
   }
 
@@ -324,5 +332,17 @@
     font-size: 13px;
     font-weight: 400;
     color: #979797;
+  }
+}
+
+.idfc-loan-status {
+  .subtitle {
+    padding: 0 10px;
+    font-size: 13px;
+    line-height: 24px;
+    color: #0a1d32;
+    opacity: 0.55;
+    width: 90%;
+    margin-top: 20px;
   }
 }

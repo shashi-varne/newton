@@ -64,7 +64,7 @@ class JourneyMap extends Component {
             alt=""
           />
 
-          <div style={{fontSize:"20px", color:"#0A1D32", fontWeight:"400", margin:"20px 10px 30px", lineHeight:"30px"}}>
+          <div className="head-title">
             <b>Awesome!</b> Your loan application is successfully created. Now you're
             just a step away from finding out your loan offer.
           </div>

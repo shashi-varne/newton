@@ -23,7 +23,28 @@ class ProfessionalDetails extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+
+    let lead = this.state.lead || {};
+
+    let professional_info = lead.professional_info || {};
+    let application_info = lead.application_info || {}
+
+    let form_data = {
+      company_name: professional_info.company_name,
+      office_email: professional_info.office_email,
+      net_monthly_salary: application_info.net_monthly_salary,
+      // salary_receipt_mode:
+      // company_constitution,
+      // organisation_type:
+      department: professional_info.department,
+      industry: professional_info.industry
+    }
+
+    this.setState({
+      form_data: form_data
+    })
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -43,7 +64,6 @@ class ProfessionalDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
 
     if (name) {
@@ -60,7 +80,7 @@ class ProfessionalDetails extends Component {
     let { form_data } = this.state;
     let keys_to_check = [
       "company_name",
-      "office_mail",
+      "office_email",
       "net_monthly_salary",
       "salary_receipt_mode",
       "company_constitution",
@@ -99,16 +119,16 @@ class ProfessionalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.office_mail_error}
-                helperText={this.state.form_data.office_mail_error}
+                error={!!this.state.form_data.office_email_error}
+                helperText={this.state.form_data.office_email_error}
                 type="text"
                 width="40"
                 label="Official email id"
                 class="email-id"
                 id="email-id"
-                name="office_mail"
-                value={this.state.form_data.office_mail || ""}
-                onChange={this.handleChange("office_mail")}
+                name="office_email"
+                value={this.state.form_data.office_email || ""}
+                onChange={this.handleChange("office_email")}
               />
             </div>
 
