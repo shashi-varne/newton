@@ -40,7 +40,7 @@ class CardInput extends Component {
     
     return (
       <MuiThemeProvider theme={theme}>
-        <Card classes={{ root }} {...this.props} style={{ cursor: "pointer" }} onClick={() => console.log("huegusjhghhuj")}>
+        <Card classes={{ root }} {...this.props} style={{ cursor: "pointer" }} onClick={this.props.onClick}>
           {this.props.withtag && <div className="card-with-tag">Recommended</div>}
           <CardContent>{this.props.children}</CardContent>
         </Card>

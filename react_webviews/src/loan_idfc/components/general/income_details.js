@@ -21,8 +21,6 @@ class IncomeDetails extends Component {
 
   onload = () => {};
 
-  handleClick = () => {};
-
   sendEvents(user_action, data = {}) {
     let eventObj = {
       event_name: "lending",
@@ -39,6 +37,10 @@ class IncomeDetails extends Component {
     }
   }
 
+  handleClick = (transaction_type) => {
+    this.startTransaction(transaction_type)
+  }
+
   render() {
     return (
       <Container
@@ -53,6 +55,7 @@ class IncomeDetails extends Component {
           </div>
           <Card
             withtag="true"
+            onClick={() => this.handleClick('net banking')}
           >
             <div className="card-content" style={{padding:"10px 0"}}>
               <img
@@ -74,7 +77,9 @@ class IncomeDetails extends Component {
 
             <div className="OR">-- OR --</div>
 
-          <Card>
+          <Card
+            onClick={() => this.handleClick('manual upload')}
+          >
             <div className="card-content">
               <img
                 src={require(`assets/${this.state.productName}/register_icn.svg`)}

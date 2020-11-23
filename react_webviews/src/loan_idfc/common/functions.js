@@ -17,6 +17,7 @@ export async function initialize() {
   this.submitApplication = submitApplication.bind(this);
   this.getOrCreate = getOrCreate.bind(this);
   this.getUserStatus = getUserStatus.bind(this);
+  this.startTransaction = startTransaction.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -322,12 +323,46 @@ export async function formCheckUpdate(keys_to_check, form_data, state = "", upda
       body[key] = form_data[key] || "";
     }
 
-    if (state !== "" || state !== null) {
+    if (state !== "") {
       this.submitApplication(body, state, update)
     } else {
       this.updateApplication(body);
     }
   }
+}
+
+export async function startTransaction(transaction_type) {
+  console.log(transaction_type)
+
+  try {
+    this.setState({
+      show_loader: true
+    })
+
+    const res = await Api.get(`relay/api/loan/idfc/perfios/start/${this.state.application_id}?transaction_type=${transaction_type}`);
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      
+      if (transaction_type === "manual upload") {
+        this.navigate('upload-bank')
+      }
+
+    } else {
+      toast(result.error || result.message || "Something went wrong!");
+      this.onload();
+    }
+
+  } catch (err) {
+    console.log(err);
+    toast("Something went wrong");
+  }
+
+  this.setState({
+    show_loader: false,
+  });
+
 }
 
 export function openPdf(url, type) {

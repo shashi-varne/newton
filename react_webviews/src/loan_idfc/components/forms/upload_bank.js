@@ -5,7 +5,7 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Attention from "../../../common/ui/Attention";
-// import { formatDate, dobFormatTest, isValidDate } from "utils/validators";
+import { formatDate, dobFormatTest } from "utils/validators";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
 import SVG from "react-inlinesvg";
@@ -30,6 +30,7 @@ class UploadBankStatements extends Component {
     this.state = {
       show_loader: false,
       fileUploaded: false,
+      form_data: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -64,6 +65,28 @@ class UploadBankStatements extends Component {
       show_loader: true,
     });
   }
+
+  renderNotes = () => (
+    <div style={{lineHeight: '15px'}}>
+      <div>
+        1. Attach latest bank statements of the same account where your salary
+        gets credited every month
+      </div>
+      <div>
+        2. Ensure the bank statements are of the last 3 months from this month
+      </div>
+      <div>
+        3. Files must be original and should be uploaded in a PDF format
+      </div>
+      <div>
+        4. Share respective passwords if your statements are password protected
+      </div>
+      <div>
+        5. Upload multiple statements of the same bank account with each file
+        not exceeding
+      </div>
+    </div>
+  );
 
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
@@ -124,7 +147,6 @@ class UploadBankStatements extends Component {
       return;
     }
 
-    // let that = this;
     file.doc_type = file.type;
     this.setState({
       pdfFile: file,
@@ -134,12 +156,33 @@ class UploadBankStatements extends Component {
 
   uploadFile = () => {};
 
-  handleChange = (e) => {
-    console.log(e.target.value);
+  // handleChange = (e) => {
+  //   this.setState({
+  //     password: e.target.value,
+  //   });
+  // };
+
+  handleChange = name => event => {
+    let value = event.target ? event.target.value : event;
+    let id = (event.target && event.target.id) || "";
+    let { form_data } = this.state;
+
+    if (!name) {
+      if (!dobFormatTest(value)) {
+        return;
+      }
+
+      let input = document.getElementById(id);
+      input.onkeyup = formatDate;
+    }
+
+    form_data[name || id] = value;
+    form_data[(name || id) + "_error"] = "";
+
     this.setState({
-      password: e.target.value,
+      form_data: form_data,
     });
-  };
+  }
 
   render() {
     let { fileUploaded, pdfFile } = this.state;
@@ -152,51 +195,53 @@ class UploadBankStatements extends Component {
         disable={true}
       >
         <div className="upload-bank-statement">
-          <Attention />
+          <Attention content={this.renderNotes()} />
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.bank_name_error}
-                helperText={this.state.bank_name_error}
+                error={!!this.state.form_data.bank_name_error}
+                helperText={this.state.form_data.bank_name_error}
                 type="text"
                 width="40"
                 label="Bank name"
                 class="bank_name"
                 id="name"
                 name="bank_name"
-                value={this.state.bank_name || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.bank_name || ""}
+                onChange={this.handleChange('bank_name')}
               />
             </div>
             <div className="InputField">
               <Input
-                error={!!this.state.start_date_error}
-                // helperText={this.state.start_date_error}
+                error={!!this.state.form_data.start_date_error}
+                // helperText={this.state.form_data.start_date_error}
                 helperText="This date must be 3 months from the current date"
                 type="text"
                 width="40"
                 label="Start date"
                 class="start_date"
-                id="date"
+                maxLength={10}
+                id="start_date"
                 name="start_date"
                 placeholder="DD/MM/YYYY"
-                value={this.state.start_date || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.start_date || ""}
+                onChange={this.handleChange()}
               />
             </div>
             <div className="InputField">
               <Input
-                error={!!this.state.end_date_error}
+                error={!!this.state.form_data.end_date_error}
                 helperText="This date must be 3 days before the current date"
                 type="text"
                 width="40"
                 label="End date"
                 class="end_date"
-                id="date"
+                maxLength={10}
+                id="end_date"
                 name="end_date"
                 placeholder="DD/MM/YYYY"
-                value={this.state.end_date || ""}
-                onChange={this.handleChange}
+                value={this.state.form_data.end_date || ""}
+                onChange={this.handleChange()}
               />
             </div>
           </FormControl>

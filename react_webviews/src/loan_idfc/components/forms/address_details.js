@@ -108,7 +108,7 @@ class AddressDetails extends Component {
       "permanent_state"
     ];
 
-    this.formCheckUpdate(keys_to_check, form_data, null, true);
+    this.formCheckUpdate(keys_to_check, form_data, "null", true);
   };
 
   handleChangeRadio = (event) => {
