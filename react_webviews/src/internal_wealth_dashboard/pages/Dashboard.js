@@ -39,8 +39,8 @@ const Dashboard = () => {
       });
       console.log(data);
     } catch (e) {
-      console.log(e);
-      toast(e);
+      console.error(e);
+      // toast(e);
     }
   };
 
@@ -51,7 +51,7 @@ const Dashboard = () => {
       console.log(data);
     } catch (e) {
       console.log(e);
-      toast(e);
+      // toast(e);
     }
   };
 

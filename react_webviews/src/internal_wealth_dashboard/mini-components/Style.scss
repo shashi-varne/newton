@@ -433,7 +433,7 @@ $card-padding-mob: 40px;
   }
 }
 
-#iwd-profile-icon {
+.iwd-profile-icon {
   width: 40px;
   height: 40px;
   padding: 4px 0px;
@@ -448,7 +448,11 @@ $card-padding-mob: 40px;
   color: white;
 }
 
-#iwd-profile {
+.iwd-profile-icon__primary {
+  color: $primary;
+}
+
+.iwd-profile {
   padding: 30px 40px 20px;
   width: 340px;
   height: auto;
@@ -462,7 +466,7 @@ $card-padding-mob: 40px;
   z-index: 3;
   cursor: pointer;
 
-  #iwd-profile-username {
+  .iwd-profile-username {
     font-size: 15px;
     line-height: 24px;
     color: $dark;
@@ -698,6 +702,89 @@ $card-padding-mob: 40px;
 
   .radial-chart {
     margin-top: 0;
+  }
+}
+
+// Chart
+
+.iwd-chart {
+  width: 200px;
+}
+
+.iwd-chart-header {
+  font-size: 17px;
+}
+
+// Legends
+
+.iwd-legends-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.iwd-legends {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  list-style: none;
+  background-color: inherit;
+}
+
+
+.iwd-legend {
+  width: 30%;
+}
+
+.iwd-legend-header {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.iwd-legends__column {
+  flex-direction: column;
+}
+
+.iwd-legends__row {
+  flex-direction: row;
+}
+
+.iwd-legend-icon {
+  width: 8px;
+  height: 8px;
+  background: hsla(173, 59, 55, 1);
+}
+
+.iwd-legend-value {
+  color: $grey;
+  font-size: 30px;
+}
+
+.iwd-legend-title {
+  color: hsla(173,59,55,1);
+  margin-left: 10px;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 800px) {
+  .iwd-legend {
+    width: 50%;
+  }
+
+  .iwd-legends-container {
+    flex-direction: column;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .iwd-legend-header {
+    justify-content: center;
+  }
+
+  .iwd-legend-value {
+    text-align: center;
   }
 
   .iwd-holding-card {
