@@ -57,28 +57,23 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
 
         let lead = this.state.lead || {}; 
-        let form_data = lead.nominee_details || {};   
-        let appointeeBirthDay = lead.appointee_details || {};
+        let form_data = lead.nominee_details || {};
 
         let appointee_account_key = lead.appointee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
-        appointeeBirthDay['dob'] = appointeeBirthDay['dob'] ? appointeeBirthDay['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+        
+        const { age } = calculateAge(form_data['dob'], 'byMonth');
 
-
-        if (lead.appointee_account_key) {
-            form_data.appointeename = appointee_account_key.name;
-            form_data.appointeerelation = appointee_account_key.relation;
-            form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
-        }
-    
-
-        // const { age } = calculateAge(form_data['dob'], 'byMonth');
-        const { appointeeage } = calculateAge(appointeeBirthDay['dob'], 'byMonth');
+        if (lead.appointee_details.name) {
+           form_data.appointeename = appointee_account_key.name;
+           form_data.appointeerelation = appointee_account_key.relation;
+           form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
+       }
 
         this.setState({
             form_data: form_data,
             lead: lead,
-            renderAppointee: !!(appointeeage && appointeeage < 18),
+            renderAppointee: !!(age && age < 18),
         });
 
         this.setState({
@@ -115,7 +110,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         if (!name) {
             name = event.target.name;
         }
-        
+
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
@@ -394,7 +389,6 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     render() {
         const { showAppointee = false, showDob = false } = this.state.providerConfig.nominee_screen;
-
 
         return (
             <Container
