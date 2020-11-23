@@ -646,6 +646,7 @@ $background: #F9F9F9;
   @extend .iwd-card;
   margin-top: 30px;
   width: 100%;
+  height: 90%;
 }
 
 .iwd-analysis-card-margin {
@@ -657,7 +658,7 @@ $background: #F9F9F9;
   flex-wrap: wrap;
   justify-content: space-between;
   align-content: space-between;
-  height: 50vh;
+  height: 80%;
   overflow-y: scroll;
   overflow-x: auto;
 
