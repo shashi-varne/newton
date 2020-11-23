@@ -5,7 +5,7 @@ import SBIIcon from '../../assets/fisdom/sbi.svg';
 
 function TopAMCS() {
   return (
-    <div className="iwd-p-scroll-child">
+    <div className="iwd-scroll-child">
     <div className="iwd-analysis-card iwd-card-margin">
       <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
       <div className="iwd-analysis-top-amcs">

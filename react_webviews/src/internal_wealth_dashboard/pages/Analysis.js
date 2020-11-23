@@ -1,7 +1,7 @@
 import React, { createRef, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
-import PageFooter from '../mini-components/PageFooter';
+// import PageFooter from '../mini-components/PageFooter';
 
 import { getConfig } from 'utils/functions';
 
@@ -90,7 +90,7 @@ function Analysis(props) {
           </div>
         </div>
       </PageHeader>
-      <div className="iwd-p-scroll-contain added" ref={container}>
+      <div className="iwd-scroll-contain added" ref={container}>
         {pageType === 'equity' ? (
           <>
             <Legends />
@@ -106,14 +106,14 @@ function Analysis(props) {
         )}
       </div>
 
-      {!isMobileView && (
+      {/* {!isMobileView && (
         <PageFooter
           currentPage={currentPage}
           totalPages="3"
           direction={currentPage === 3 ? 'up' : 'down'}
           onClick={scrollPage}
         />
-      )}
+      )} */}
     </section>
   );
 }

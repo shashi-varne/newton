@@ -2,7 +2,7 @@ import React from 'react';
 
 function Legends() {
   return (
-    <div className="iwd-p-scroll-child">
+    <div className="iwd-scroll-child">
       <div className="iwd-card">
         <header className="iwd-card-header">
           <h2>Rating wise exposure</h2>
