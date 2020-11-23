@@ -18,8 +18,6 @@ import ic_c_e3_fisdom from 'assets/icn_infection_covid_fisdom.svg';
 import ic_c_e4_fisdom from 'assets/icn_outside_india_fisdom.svg';
 import ic_c_e5_fisdom from 'assets/icn_travel_covid_fisdom.svg';
 
-
-
 import ic_c_b1_myway from 'assets/ic_covid_b_1_myway.svg';
 import ic_c_b2_myway from 'assets/ic_covid_b_2_myway.svg';
 import ic_c_b3_myway from 'assets/ic_covid_b_3_myway.svg';
@@ -60,7 +58,7 @@ class CoronaPlanDetails extends Component {
       ic_c_e2: getConfig().productName !== 'fisdom' ? ic_c_e2_myway : ic_c_e2_fisdom,
       ic_c_e3: getConfig().productName !== 'fisdom' ? ic_c_e3_myway : ic_c_e3_fisdom,
       ic_c_e4: getConfig().productName !== 'fisdom' ? ic_c_e4_myway : ic_c_e4_fisdom,
-      ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom
+      ic_c_e5: getConfig().productName !== 'fisdom' ? ic_c_e5_myway : ic_c_e5_fisdom,
     }
   }
 
@@ -79,66 +77,77 @@ class CoronaPlanDetails extends Component {
 
     var product_benefits = [
       {
-        'disc': "Assured lump sum payment of ₹ sum_assured_amount if tested positive for COVID-19",
+        'disc': 'Hospitalization expenses up to sum assured',
         'key': 'positive',
-        'icon': this.state.ic_c_b1
-      },
-      {
-        'disc': "Get ₹ quarantined_amount if quarantined in a government /military facility for at least 14 days",
+        'icon': this.state.ic_c_e1,
+      }, {
+        'disc': "No limit on room rent",
         'key': 'quarantined',
-        'icon': this.state.ic_c_b2
-      },
-      {
-        'disc': "No exclusions for existing diseases. Insured will get sum assured for COVID-19 infection",
+        'icon':  this.state.ic_c_b2
+      }, {
+        'disc': "Surface Transport Ambulance ₹500/- per hospitalization event",
         'key': 'exclusions',
-        'icon': this.state.ic_c_b3
+        'icon': require(`../../../assets/${this.state.type}/icn_b3_${this.state.type}.svg`)
       }
     ]
 
     var waiting_period = [
       {
-        'disc': "Policy will be effective after 15 days from date of purchase",
+        'disc': "Policy will be effective after 30 days from the date of purchase",
         'key': 'waiting',
-        'icon': this.state.ic_c_w1
+        'icon':   require(`../../../assets/${this.state.type}/icn_awaiting_period_${this.state.type}.svg`)
       }
     ]
 
     var product_diseases_covered = [
       {
-        'icon': this.state.ic_c_d2,
-        'header': 'All expenses',
-        'text': 'This plan covers all the kinds of expenses incurred due to COVID-19 infection',
-        'text2': 'Insured will get 100% of the sum assured, if tested positive for COVID-19 specified in the virology report issued by authorised centres of ICMR - National Institute of Virology, Pune'
+        "icon" :  require(`../../../assets/${this.state.type}/singlebed_${this.state.type}.svg`),
+        "text" : "Inpatient Hospitalization                                         "
       },
       {
-        'icon': this.state.ic_c_d1,
-        'header': 'Quarantine period',
-        'text': 'Insured person will get 50% of the sum assured, if quarantined (for consecutive 14 days) in any government  approved quarantine hospitals or centres'
+      "icon" :   require(`../../../assets/${this.state.type}/bed_corona_${this.state.type}.svg`),
+      "text" :  "Pre-Post Hospitalization (30/60 Days)                             "
+      },
+      {                  
+        "icon" :  require(`../../../assets/${this.state.type}/icn_ongoingcovid_${this.state.type}.svg`),
+        "text" : "Daycare procedures Covers"
+      },
+      {
+        "icon" :  require(`../../../assets/${this.state.type}/people_sitting_${this.state.type}.svg`),
+        "text" : "Tele/virtual consultation till the first 90 days"
       }
     ]
 
     var product_diseases_not_covered = [
       {
-        'icon': this.state.ic_c_e1,
-        'text': 'Testing done in centres other than the authorized Indian Council of Medical Research centres'
-      },
-      {
-        'icon': this.state.ic_c_e2,
-        'text': 'Age group more than 65 yrs'
-      },
-      {
-        'icon': this.state.ic_c_e3,
-        'text': 'Any signs or symptoms of the infection present at the time of purchasing the policy'
-      },
-      {
-        'icon': this.state.ic_c_d1,
-        'text': 'While buying policy, person should not be suffering from COVID-19 infection or recommended for quarantine'
-      },
-      {
-        'icon': this.state.ic_c_e4,
-        'text': 'Manifestation of the coronavirus infection  taken place while the Insured is outside India'
-      },
-      {
+        icon :  this.state.ic_c_e3,
+        text : "Individuals having any underlying health conditions/Pre-existing disease",
+        },
+        {
+          icon : this.state.ic_c_e2,
+          text : "Age group more than 65 years"
+        },
+        {
+          icon : this.state.ic_c_e1,
+          text : "Testing done in centers other than the authorized Indian Council of Medical Research centers"
+        },
+        {
+          icon : this.state.ic_c_d1,
+          text : "Any signs or symptoms of the infection present at the time of purchasing the policy"
+        },
+        {
+          icon : require(`../../../assets/${this.state.type}/inc_infected_${this.state.type}.svg`),
+          text : "The person suffering from the infection or taking treatment or recommended for quarantine at the time of purchasing the policy"
+        },
+        {
+          icon : require(`../../../assets/${this.state.type}/bacteria_${this.state.type}.svg`),
+          text : "Manifestation of the Coronavirus Infection taken place while the Insured is outside India"
+        }, 
+        {
+          icon : require(`../../../assets/${this.state.type}/inc_outside_india_${this.state.type}.svg`),
+          text : "Treatment taken outside India"
+        },
+         {
         'icon': this.state.ic_c_e5,
         'text': 'If the insured has travelled to or from the following places since 31st December 2019',
         'list': ['China', 'Japan', 'Singapore', 'Hong Kong', 'South Korea', 'Thailand', 'Malaysia', 'Macau', 'Taiwan', 'Italy', 'Iran']
@@ -185,26 +194,30 @@ class CoronaPlanDetails extends Component {
         //   "tax_amount": "274"
         // },
         {
-          "sum_assured": 50000,
           "sum_assured_text": '50,000',
           "quarantined_text": '25,000',
-          'product_tag_line': 'Guaranteed ₹50,000 sum assured in just ₹899 to fight with coronavirus',
+          'product_tag_line': '₹50,000 sum assured ',
+          'product_tag_line2' : 'in just ₹1500 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
-          "premium": "899",
-          "tax_amount": "137"
+          "premium": "1500",
+          "justcost": "1500",
+          "tax_amount": "229",
+          "sum_assured" :  '50000'
         },
         {
-          "sum_assured": 25000,
           "sum_assured_text": '25,000',
           "quarantined_text": '12,500',
-          'product_tag_line': 'Guaranteed ₹25,000 sum assured in just ₹459 to fight with coronavirus',
+          'product_tag_line': '₹25,000 sum assured ',
+          'product_tag_line2' : 'in just ₹750 to fight with coronavirus',
           "product_benefits_included": ['positive', 'quarantined', 'exclusions'],
           "things_to_know": things_to_know,
           "waiting_period": waiting_period,
-          "premium": "459",
-          "tax_amount": "70"
+          "premium": "750",
+          "justcost": "750",
+          "tax_amount": "114",
+          "sum_assured" :  '25000'
         }
       ]
     }
@@ -242,9 +255,7 @@ class CoronaPlanDetails extends Component {
   }
 
   handleClick = async (final_data) => {
-
     this.navigate('form', '', final_data);
-
   }
 
   render() {

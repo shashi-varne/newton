@@ -10,7 +10,7 @@ class CoronaForm extends Component {
     }
   }
 
-  render() {
+  render() {   console.log(this, this.parent)
     return (
       <div>
         <BasicDetails
