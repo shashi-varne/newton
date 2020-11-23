@@ -176,7 +176,28 @@ export async function initialize() {
             sum_assured: sum_assured,
             tenure: tenure
         }
-
+        if(provider === 'RELIGARE' && !lead.add_ons_amount){
+            confirmDialogData.content1 = [
+                {
+                    'name': 'Basic premium ', 
+                    'value': inrFormatDecimal(base_premium)
+                }
+            ]
+            if(discount_amount > 0){
+                confirmDialogData.content1.push({
+                    'name': 'Total discount', 
+                    'value': inrFormatDecimal(discount_amount) 
+                });
+            }
+            confirmDialogData.content1.push({
+                'name': 'Net premium', 
+                'value': inrFormatDecimal(net_premium) 
+            });
+            confirmDialogData.content1.push({
+                'name': 'GST', 
+                'value': inrFormatDecimal(tax_amount) 
+            })
+        }
         if(provider === 'RELIGARE' && lead.add_ons_amount) {
 
             confirmDialogData.content1 = [
