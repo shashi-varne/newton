@@ -57,9 +57,40 @@ class FormCreateProfile extends Component {
         } else {
 
             let that = this;
-            setTimeout(function(){ 
-              that.getDedupeCallback();
-            }, 3000);
+            var time1 = 5000;
+            var time2 = 3000;
+            var interval = 1;
+            // setTimeout(function(){ 
+            //   that.getDedupeCallback();
+            // }, 3000);
+
+            function callbackLoop() {
+                setTimeout(function() {
+                    that.getDedupeCallback();
+                    interval++;
+
+                    if (interval <= 6) {
+                        if (interval === 6) {
+                            interval++;
+                        }
+                        callbackLoop()
+                    }
+                }, time1)
+
+                if (interval === 7) {
+                    setTimeout(function() {
+                        that.getDedupeCallback();
+                        interval++;
+    
+                        if (interval <= 16) {
+                            callbackLoop()
+                        }
+                    }, time2)
+                }
+            }
+
+            callbackLoop()
+            
         }
 
     }
@@ -95,6 +126,8 @@ class FormCreateProfile extends Component {
                     || 'Something went wrong');
                 this.props.history.goBack();
             }
+
+            return resultData.status;
         } catch (err) {
             console.log(err)
             this.setState({
