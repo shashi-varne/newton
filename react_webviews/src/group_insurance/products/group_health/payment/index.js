@@ -44,6 +44,7 @@ class GroupHealthPayment extends Component {
       quotation : {},
       policy_data: {},
       providerData: {},
+      common : {},
       productName: getConfig().productName,
       force_onload_call: true,
       screen_name: 'payment_screen'
@@ -57,8 +58,6 @@ class GroupHealthPayment extends Component {
     
     nativeCallback({ action: 'take_control_reset' });
     let { generic_callback } = this.state.params;
-
-    console.log(this.state)
 
    let status = generic_callback.split('=')[1]
 
@@ -81,7 +80,6 @@ class GroupHealthPayment extends Component {
       get_lead = true;
     }
 
-    console.log(status)
 
     this.setState({
       status: status,
@@ -120,7 +118,8 @@ class GroupHealthPayment extends Component {
 
           this.setState({
             policy_data: policy_data,
-            lead: lead
+            lead: lead,
+            common: resultData.common
           })
         } else {
           toast(resultData.error || resultData.message
@@ -167,7 +166,7 @@ class GroupHealthPayment extends Component {
         this.navigate(state);
       })
       
-    } else if(!this.state.paymentPending) {
+    } else if(this.state.paymentPending) {
       state  = `/group-insurance/group-health/${this.state.provider}/landing`;
       this.navigate(state);
     } else {
@@ -218,7 +217,7 @@ class GroupHealthPayment extends Component {
                 }
                 {!policy_data.policy_number && 
                 <p className="top-content">
-                  You will soon be contacted by {this.state.lead.base_plan_title} team for a medical review before issuing the policy!
+                  You will soon be contacted by {this.state.common.base_plan_title} team for a medical review before issuing the policy!
                 </p>
                 }
 
@@ -229,7 +228,7 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess && provider === 'HDFCERGO' &&
               <div>
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.lead.base_plan_title} {this.state.lead.plan_title} is successful.
+                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.common.base_plan_title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
 
@@ -249,7 +248,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
                           </p>
                 </div>
               }
@@ -257,7 +256,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.lead.base_plan_title}`  : this.state.lead.base_plan_title} {this.state.lead.plan_title} has failed.
+                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
                     If amount has been debited it will be refunded back to you in 5-7 business days.

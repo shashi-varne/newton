@@ -55,8 +55,9 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize();
     }
 
+ 
     onload = () => {
-        let { lead, provider } = this.state;
+        let { lead, provider } = this.state;  
 
         let insured_people_details = lead.insured_people_details;
         let buyer_details = lead.buyer_details;
@@ -70,10 +71,9 @@ class GroupHealthPlanFinalSummary extends Component {
       
           member_base.forEach(element => {
             let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
-            console.log(relation)
              element.key = relation.key
            });
-          member_base.push(buyer_details); console.log(member_base)
+          member_base.push(buyer_details);
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
@@ -83,7 +83,28 @@ class GroupHealthPlanFinalSummary extends Component {
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
-        
+      
+              let body = {}
+              let pedcase = false;
+              body["insured_people_details"] = []
+              this.state.lead.insured_people_details.forEach((memberData) => {
+                 let relation_key  = memberData.insured_person.relation_key
+                 if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
+                    pedcase = true
+                     body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
+                 }else if(memberData.answers.pre_existing_diseases.length === 0 ){
+               body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
+           } else  if(memberData.answers.pre_existing_diseases.length > 0 ){
+            body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
+           }
+             })
+         member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+
+             if(pedcase){
+                this.updateLead(body); 
+                // window.location.reload();
+             }
+
         this.setState({
             applicantIndex: applicantIndex,
             member_base: member_base
@@ -232,7 +253,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 })
             }
 
-            if(member.key === 'applicant' && this.state.insured_account_type === 'self' ){
+            if(member.key === 'applicant' && (this.state.insured_account_type === 'self' || this.state.insured_account_type === 'self_family') ){
                 continue    
             }
             obj.data = data;
@@ -246,7 +267,6 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'HDFCERGO') {
                 let subtitle = []
                 member.answers.pre_existing_diseases.forEach((name) => {
-                    console.log(name)
                     let ped = ped_list.find(item => item.id === name.front_end_question_id);
                     if (ped.id === 'hdfc_ergo_ped_other_diseases') {
                         subtitle.push(name.description)
@@ -430,8 +450,8 @@ class GroupHealthPlanFinalSummary extends Component {
                 },
             )
 
-            if (lead.appointee_account_key) {
-                let appointee_data_backend = lead.appointee_account_key;
+            if (lead.appointee_details.name) {
+                let appointee_data_backend = lead.appointee_details;
                 nominee_data.data = [
                     ...nominee_data.data,
                     {
@@ -531,7 +551,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     redirectToPayment = (pg_data) => {  
-        let resultData = pg_data || this.state.pg_data;
+        let resultData = this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
 
@@ -581,15 +601,14 @@ class GroupHealthPlanFinalSummary extends Component {
         })
         this.handleClose();
 
-        if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
-            this.redirectToPayment();
-            return;
-        }
+        // if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
+            // this.redirectToPayment();
+        //     return;
+        // }
         let application_id = storageService().get('health_insurance_application_id');
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
            
-            console.log(res)
 
             var resultData = res.pfwresponse.result;
             this.setState({
@@ -597,25 +616,23 @@ class GroupHealthPlanFinalSummary extends Component {
             }); 
 
             if (res.pfwresponse.status_code === 200) {
-
-                if(this.state.provider === 'HDFCERGO') {
-                    let lead = resultData || {};
-                    if (lead.ped_check) {
-                        this.openMedicalDialog('ped');
-                    } else if (lead.ppc_check) {
-                        this.openMedicalDialog('ppc');
-                    } else if (lead.application_status === 'ready_for_payment') {
-                        this.redirectToPayment(resultData);
-                    }
-                } 
-
-                if(resultData.ped_check && data.showMedDialog) {
-                    this.openMedicalDialog('ped');
-                    return;
-                } else {
-                    this.redirectToPayment(resultData);
-                }
-
+                    if (this.state.provider === 'HDFCERGO') {
+                        let lead = resultData || {};
+                        if (lead.ped_check) {
+                            this.openMedicalDialog('ped');
+                        } else if (lead.ppc_check) {
+                            this.openMedicalDialog('ppc');
+                        } else if (lead.status === 'ready_to_pay') {
+                            this.redirectToPayment(resultData);
+                        }
+                    } else {
+                        if(resultData.ped_check && data.showMedDialog) {
+                            this.openMedicalDialog('ppc');
+                            return;
+                        } else {
+                            this.redirectToPayment(resultData);
+                        }
+                    }   
             } else {
                 this.setState({
                     show_loader: false
@@ -674,7 +691,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
     handleClick = async () => {
 
-        console.log('hello')
 
         if(!this.state.tncChecked){
             toast('Please Agree to the Terms and Conditions');
@@ -684,8 +700,9 @@ class GroupHealthPlanFinalSummary extends Component {
         let {lead}  = this.state;
 
         if(this.state.provider === 'STAR') {
-            if(lead.ped_check) {
-                this.openMedicalDialog('ped');
+            if(lead.application_details.ped) {
+                // this.openMedicalDialog('ped');
+                this.startPayment({showMedDialog : true});
                 return;
             }
             else {
@@ -740,7 +757,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     renderMembertop = (props, index) => {
-        if (props.key === 'applicant') {
+        if (props.key === "applicant") {
+           if (this.state.quotation.insurance_type === 'self' || this.state.quotation.insurance_type === 'self_family') {
+               return;
+           }
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
@@ -990,7 +1010,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                 COVERAGE TYPE
                             </div>
                             <div className="mtr-bottom">
-                            {getCoverageType(this.state.quotation)}
+                            {getCoverageType(this.state.lead)}
                             </div>
                         </div>
                     </div>}

@@ -63,23 +63,22 @@ class GroupHealthPlanAddressDetails extends Component {
 
         let correspondence_address = lead.address_details.correspondence_address || {};
         let permanent_address = lead.address_details.permanent_address || {};
- 
         if (this.state.provider === 'RELIGARE') {
             form_data = {
                 ...this.state.form_data,
-                addr_line1: correspondence_address.addr_line1 || '',
-                addr_line2: correspondence_address.addr_line2 || '',
-                pincode: correspondence_address.pincode || '',
-                city: correspondence_address.city || '',
-                state: correspondence_address.state || '',
-                country: correspondence_address.country || '',
+                addr_line1: permanent_address.addr_line1 || '',
+                addr_line2: permanent_address.addr_line2 || '',
+                pincode: permanent_address.pincode || '',
+                city: permanent_address.city || '',
+                state: permanent_address.state || '',
+                country: permanent_address.country || '',
 
-                p_addr_line1: permanent_address.addr_line1 || '',
-                p_addr_line2: permanent_address.addr_line2 || '',
-                p_pincode: permanent_address.pincode || '',
-                p_city: permanent_address.city || '',
-                p_state: permanent_address.state || '',
-                p_country: permanent_address.country || '',
+                p_addr_line1: correspondence_address.addr_line1 || '',
+                p_addr_line2: correspondence_address.addr_line2 || '',
+                p_pincode: correspondence_address.pincode || '',
+                p_city: correspondence_address.city || '',
+                p_state: correspondence_address.state || '',
+                p_country: correspondence_address.country || '',
 
             };
 

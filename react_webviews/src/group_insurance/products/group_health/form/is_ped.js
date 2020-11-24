@@ -138,8 +138,6 @@ class GroupHealthPlanIsPed extends Component {
         })
 
         let member_base =   this.state.member_base
-
-        console.log(member_base)
         
         let body = {};
         let next_state = '';
@@ -156,7 +154,7 @@ class GroupHealthPlanIsPed extends Component {
             let backend_key = member_base[i].insured_person.relation_key;
             let key = member_base[i].key;
             body[backend_key] = {};
-              console.log(form_data, this.state.form_data, this.state.insured_account_type )
+            
                 if ( (form_data[key + '_checked'] && this.state.form_data.is_ped === 'YES') ||  (backend_key === 'self_account_key' && this.state.form_data.is_ped === 'YES' && this.state.insured_account_type === 'self' ) ) {
                     let obj = {
                         "relation_key": backend_key,
@@ -245,7 +243,6 @@ class GroupHealthPlanIsPed extends Component {
 
         if (form_data.is_ped !== 'YES') {
             for (var i in member_base) {
-                console.log(member_base)
                 let key = member_base[i].key;
                 form_data[key + '_checked'] = false;
                 this.setState({
@@ -264,7 +261,7 @@ class GroupHealthPlanIsPed extends Component {
 
         if (props.key === 'applicant') {
             return;
-        }                   console.log(props)
+        }
         return (
             <div key={index}>
                 <PlusMinusInput

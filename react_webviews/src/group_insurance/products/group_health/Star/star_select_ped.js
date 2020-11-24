@@ -45,10 +45,11 @@ class GroupHealthStarPlanSelectPed extends Component {
   
     member_base.forEach(element => {
       let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
-      console.log(relation,this.state.member_base)
        element.key = relation.key
      });
 
+    member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+     
     member_base.push({ key: 'none' })
 
     let list = [

@@ -54,9 +54,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       occupationOptions: occupationOptions
     })
 
-    let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
+    let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation.toUpperCase() : '';
  
-    let member_base = this.state.member_base || []; console.log(member_base)
+    let member_base = this.state.member_base || [];
   
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
@@ -102,7 +102,6 @@ class GroupHealthPlanPersonalDetails extends Component {
       insured_people_details.forEach((member) => {
        if (member.insured_person.relation_key === backend_key) {
          form_data = member.insured_person         
-         console.log(form_data)
        }
      })
  }
@@ -122,19 +121,6 @@ class GroupHealthPlanPersonalDetails extends Component {
       height_options.push(data);
     }
 
-    var selectedIndex = 123;
-    let height = form_data.height || height_options[selectedIndex].value;
-    if (form_data.height) {
-      height_options.forEach(function (x, index) {
-        if (x.value === parseInt(form_data.height, 10)) {
-          return selectedIndex = index;
-        }
-      });
-    } else {
-      form_data.height = `${height}`;
-    }
-
-    form_data.selectedIndex = selectedIndex;
 
     if (this.state.provider === 'STAR') {
       var occupation;
@@ -149,6 +135,20 @@ class GroupHealthPlanPersonalDetails extends Component {
       occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
       form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
     }
+
+    var selectedIndex = 123;
+    let height = form_data.height || height_options[selectedIndex].value;
+    if (form_data.height) {
+      height_options.forEach(function (x, index) {
+        if (x.value === parseInt(form_data.height, 10)) {
+          return selectedIndex = index;
+        }
+      });
+    } else {
+      form_data.height = `${height}`;
+    }
+
+    form_data.selectedIndex = selectedIndex;
 
 
     if(member_key === 'applicant'){
@@ -376,8 +376,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
 
     if (canSubmitForm) {
-
-      // let application_id =   this.state.application_id
 
       let gender = '';
       if (this.state.member_key !== 'self') {

@@ -296,6 +296,14 @@ export async function updateLead( body, quote_id) {
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
+
+            if(this.state.screen_name === 'final_summary_screen'){
+                 window.location.reload();
+                // this.setState({
+                //     show_loader: false
+                // });
+            }
+
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
                 console.log('if');
@@ -499,7 +507,7 @@ export function openMedicalDialog(type) {
         'icon': 'ic_medical_checkup2',
         'dialog_name': 'medical_dialog',
         'cta_title': 'CONTINUE TO PAYMENT',
-        'handleClick': this.startPayment
+        'handleClick': this.redirectToPayment
     };
     let provider = this.state.provider;
 
