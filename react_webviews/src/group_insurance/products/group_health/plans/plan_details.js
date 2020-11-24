@@ -273,7 +273,7 @@ class GroupHealthPlanDetails extends Component {
                     {this.state.providerConfig.title2 ||
                       this.state.providerConfig.title}
                   </div>
-                  <div className="tc-subtitle">{plan_selected.plan_name}</div>
+                  <div className="tc-subtitle">{this.state.plan_data && this.state.plan_data.common.base_plan_title}</div>
                 </div>
 
                 <div className="tc-right">
@@ -379,7 +379,7 @@ class GroupHealthPlanDetails extends Component {
                   <div className="top-title">Waiting period</div>
                 </div>
                 <div className="common-steps-images" style={{ marginTop: 0 }}>
-                  {extra_data.waiting_period.map(this.renderSteps)}
+                  {this.state.plan_data && this.state.plan_data.waiting_periods.map(this.renderSteps)}
                 </div>
               </div>
 

@@ -52,6 +52,7 @@ class GroupHealthLanding extends Component {
     let screenData = this.state.providerConfig[screen_name];
     nativeCallback({ action: "take_control_reset" });
     let stepsContentMapper = {
+      title: `Get insured with ease`,
       options: [
         {
           icon: "icn_hs_no_document",
