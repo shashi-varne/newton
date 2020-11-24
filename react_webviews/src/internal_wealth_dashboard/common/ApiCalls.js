@@ -353,7 +353,7 @@ export const holdings = async (params = {}) => {
   }
 };
 
-export const fundDetail = async (params = {}) => {
+export const getFundDetail = async (params = {}) => {
   try {
     const res = await Api.get('api/fetch/fund-details', params);
 
@@ -573,3 +573,25 @@ const analysisPageApiMockError = {
   pfwutime: '',
   pfwmessage: 'Success',
 };
+export const getTransactions = async (params = {}) => {
+  try {
+    const res = await Api.get('api/invest/transactionv4', params);
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw (result.error || result.message || genericErrMsg);
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+
+
