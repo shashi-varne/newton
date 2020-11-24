@@ -323,7 +323,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       if (provider === 'STAR') {
         if (age > validation_props.dob_adult.max && !isChild) {
-          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min} to ${validation_props.dob_adult.max} year`;
+          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min} to 64 year`;
         }
       }
     }
@@ -353,7 +353,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
 
       if(age < 18){
-        form_data.dob_error = "valid age is between 18 to 65 year";
+        form_data.dob_error = "valid age is between 18 to 64 year";
       }
     }
 
