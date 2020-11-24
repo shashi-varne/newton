@@ -1,0 +1,100 @@
+.center {
+  text-align: center !important;
+}
+
+.whatsapp-content {
+  font-size: 14px;
+  color: #8d879b;
+  margin-bottom: 20px;
+}
+
+.whatsapp-confirm-mobile {
+  .content {
+    font-size: 14px;
+    color: #8d879b;
+    margin-bottom: 20px;
+  }
+
+  .mobile-content {
+    background-color: #f7f6fc;
+    border-width: 1px;
+    border-color: #dfd8ef;
+    border-style: dashed;
+    border-radius: 4px;
+
+    .code {
+      font-size: 15px;
+      padding: 20px 20px;
+
+      .number {
+        font-weight: bold;
+        color: #4f2da7;
+      }
+
+      .edit-number {
+        font-size: 13px;
+        font-weight: bold;
+        color: #00bc32;
+        float: right;
+      }
+    }
+  }
+}
+
+.otp-success {
+    .head {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 40px 0 20px;
+    }
+
+    .sub-head {
+        font-size: 14px;
+        color: #8d879b;
+        line-height: 25px;
+        width: 100%;
+    }
+}
+
+.otp-verify {
+  text-align: center;
+
+  .didnt-rec {
+    margin: 0px 0px !important;
+  }
+
+  .resend-otp {
+    color: #35CB5D !important;
+  }
+}
+
+.otp-failed {
+  .title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .sub-title {
+    font-size: 13px;
+    color: #8D879B;
+  }
+
+  .not-now {
+    .MuiButton-raised {
+      background-color: #f7f6fc !important;
+      color: #8D879B !important;
+    }
+    width: 80%;
+
+  }
+
+
+  .button {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+

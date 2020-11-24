@@ -68,7 +68,7 @@ class OtpDefaultClass extends Component {
 
     render() {
         return (
-            <div>
+            <div className="generic-otp">
                 <div>
                     <OtpInput
                         numInputs={4}
@@ -102,8 +102,8 @@ class OtpDefaultClass extends Component {
                <div style={{ margin: '30px 0 0 -10px' }}>
                         <div onClick={this.resendOtp} 
                         style={{ color: '#4A494A', margin: '0 0 0 10px',
-                        fontSize: 14 }}>
-                        Didn’t receive? <span style={{ color: getConfig().primary, fontWeight: 500}}>Resend OTP</span>
+                        fontSize: 14 }} className="didnt-rec">
+                        Didn’t receive? <span className="resend-otp" style={{ color: getConfig().primary, fontWeight: 500}}>Resend OTP</span>
                     </div>
                 </div>}
             </div>
