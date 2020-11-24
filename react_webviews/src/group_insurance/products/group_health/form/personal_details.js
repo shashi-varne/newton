@@ -352,6 +352,9 @@ class GroupHealthPlanPersonalDetails extends Component {
         }
       }
 
+      if(age < 18){
+        form_data.dob_error = "valid age is between 18 to 65 year";
+      }
     }
 
     if (form_data.name &&
