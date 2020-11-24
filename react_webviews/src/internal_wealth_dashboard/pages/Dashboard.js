@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { IconButton } from 'material-ui';
 import PageHeader from '../mini-components/PageHeader';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import { getConfig } from "utils/functions";
+import { getConfig } from 'utils/functions';
 import { overview, portfolioRisk } from '../common/ApiCalls';
 import { get } from 'lodash';
 import toast from '../../common/ui/Toast';

@@ -1,4 +1,4 @@
-import React, { createRef, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
 
@@ -6,19 +6,46 @@ import { getConfig } from 'utils/functions';
 
 import EquityAnalysis from '../mini-components/EquityAnalysis';
 import DebtAnalysis from '../mini-components/DebtAnalysis';
+import Legends from '../mini-components/Legends'
+
+import { fetchPortfolioAnalysisMock } from '../common/ApiCalls';
 
 import TopAMCS from '../mini-components/TopAMCS';
-import Legends from '../mini-components/Legends';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 
 const isMobileView = getConfig().isMobileDevice;
 
-function Analysis(props) {
+function Analysis() {
   const [pageType, setPageType] = useState('equity');
   const container = createRef();
   const parent = createRef();
   const title = createRef();
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [topSectorAllocations, setTopSectorAllocations] = useState(null);
+  const [ratingWiseExposure, setRatingWiseExposure] = useState(null);
+  const [maturityWiseExposure, setMaturityWiseExposure] = useState(null);
+
+  useEffect(() => {
+    fetchPortfolioAnalysisMock()
+      .then(
+        ({
+          rating_exposure: ratingExposure,
+          top_holdings: topHoldings,
+          top_amcs: topAmcs,
+          sector_alloc: sectorAlloc,
+          market_cap_alloc: marketCapAlloc,
+          maturity_exposure: maturityExposure,
+        }) => {
+          setRatingWiseExposure(ratingExposure);
+          setTopSectorAllocations(sectorAlloc);
+          setMaturityWiseExposure(maturityExposure);
+        }
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const setEventHandler = () => {
     const { current: elem } = container;
@@ -53,6 +80,10 @@ function Analysis(props) {
       setPageType(name);
     }
   };
+
+  if (!ratingWiseExposure || !topSectorAllocations || !maturityWiseExposure) {
+    return <h1>Loading ...</h1>;
+  }
 
   return (
     <section
@@ -93,13 +124,19 @@ function Analysis(props) {
       <SnapScrollContainer pages={3}>
         {pageType === 'equity' ? (
           <>
-            <Legends />
+            <ChartsContainer
+              ratingWiseExposure={ratingWiseExposure}
+              maturityWiseExposure={maturityWiseExposure}
+            />
             <EquityAnalysis />
             <TopAMCS />
           </>
         ) : (
           <>
-            <Legends />
+            <ChartsContainer
+              ratingWiseExposure={ratingWiseExposure}
+              maturityWiseExposure={maturityWiseExposure}
+            />
             <DebtAnalysis />
             <TopAMCS />
           </>
@@ -108,5 +145,55 @@ function Analysis(props) {
     </section>
   );
 }
+
+function TopSectorAllocations({ topSectorAllocations }) {
+  return Object.entries(([key, value]) => (
+    <div>
+      <h1>{key}</h1>
+      <h2>{value}</h2>
+    </div>
+  ));
+}
+
+function RatingWiseExposure({ ratingWiseExposure }) {
+  return (
+    <div className="iwd-card" style={{ width: '100%'}}>
+      <header className="iwd-card-header">
+        <h2>Rating wise exposure</h2>
+      </header>
+      <section className="iwd-analysis-ratings-exposure-container">
+        <div className="iwd-chart"></div>
+        <Legends legends={ratingWiseExposure} />
+      </section>
+    </div>
+  );
+}
+
+function MaturityWiseExposure({ maturityWiseExposure }) {
+  return (
+    <div className="iwd-card" style={{ width: '100%' }}>
+      <header className="iwd-card-header">
+        <h2>Maturity wise exposure</h2>
+      </header>
+      <section className="iwd-analysis-maturity-exposure-container">
+        <div className="iwd-chart"></div>
+        <Legends legends={maturityWiseExposure} />
+      </section>
+    </div>
+  );
+}
+
+function ChartsContainer({ ratingWiseExposure, maturityWiseExposure }) {
+  return (
+    <div className="iwd-scroll-child" data-pgno="1">
+      <div className="iwd-analysis-chart-container">
+        <RatingWiseExposure ratingWiseExposure={ratingWiseExposure} />
+        <MaturityWiseExposure maturityWiseExposure={maturityWiseExposure} />
+      </div>
+    </div>
+  );
+}
+
+
 
 export default Analysis;
