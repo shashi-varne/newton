@@ -584,7 +584,8 @@ class GoldSummary extends Component {
   render() {
     return (
       <Container
-        skelton={this.state.skelton}
+        // skelton={this.state.skelton}
+        skelton={true}
         title="Gold"
         noHeader={this.state.skelton}
         noFooter={true}
