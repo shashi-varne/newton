@@ -1,68 +1,33 @@
-import React from 'react';
+import React from 'react'
 
-function Legends() {
+function Legends({ legends }) {
   return (
-    <div className="iwd-scroll-child" data-pgno="1">
-      <div className="iwd-card">
-        <header className="iwd-card-header">
-          <h2>Rating wise exposure</h2>
-        </header>
-        <section className="iwd-legends-container">
-          <div className="iwd-chart"></div>
-          <ul className="iwd-legends">
-            <li className="iwd-legend">
-              <header className="iwd-legend-header">
-                <div className="iwd-legend-icon" style={{ opacity: 0.5 }}></div>
-                <div className="iwd-legend-title">AAA</div>
-              </header>
-              <div className="iwd-legend-value">20</div>
-            </li>
-            <li className="iwd-legend">
-              <header className="iwd-legend-header">
-                <div
-                  className="iwd-legend-icon"
-                  style={{ opacity: 0.75 }}
-                ></div>
-                <div className="iwd-legend-title">AAA</div>
-              </header>
-              <div className="iwd-legend-value">20</div>
-            </li>
-            <li className="iwd-legend">
-              <header className="iwd-legend-header">
-                <div className="iwd-legend-icon" style={{ opacity: 0.7 }}></div>
-                <div className="iwd-legend-title">AAA</div>
-              </header>
-              <div className="iwd-legend-value">20</div>
-            </li>
-            <li className="iwd-legend">
-              <header className="iwd-legend-header">
-                <div className="iwd-legend-icon" style={{ opacity: 0.5 }}></div>
-                <div className="iwd-legend-title">AAA</div>
-              </header>
-              <div className="iwd-legend-value">20</div>
-            </li>
-            <li className="iwd-legend">
-              <header className="iwd-legend-header">
-                <div
-                  className="iwd-legend-icon"
-                  style={{ opacity: 0.75 }}
-                ></div>
-                <div className="iwd-legend-title">AAA</div>
-              </header>
-              <div className="iwd-legend-value">20</div>
-            </li>
-            <li className="iwd-legend">
-              <header className="iwd-legend-header">
-                <div className="iwd-legend-icon" style={{ opacity: 0.7 }}></div>
-                <div className="iwd-legend-title">AAA</div>
-              </header>
-              <div className="iwd-legend-value">20</div>
-            </li>
-          </ul>
-        </section>
-      </div>
-    </div>
+    <ul className="iwd-legends">
+      {Object.entries(legends).map(([key, share], _, thisArray) => (
+        <li
+          key={key}
+          className="iwd-legend"
+          style={{
+            width:
+              thisArray.length <= 4
+                ? thisArray.length <= 3
+                  ? `${100 / thisArray.length}`
+                  : '50%'
+                : '30%',
+          }}
+        >
+          <header className="iwd-legend-header">
+            <div
+              className="iwd-legend-icon"
+              style={{ opacity: share / 100 }}
+            ></div>
+            <div className="iwd-legend-title">{key}</div>
+          </header>
+          <div className="iwd-legend-value">{share}</div>
+        </li>
+      ))}
+    </ul>
   );
 }
 
-export default Legends;
+export default Legends
