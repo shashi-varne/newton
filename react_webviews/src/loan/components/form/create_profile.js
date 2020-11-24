@@ -127,7 +127,6 @@ class FormCreateProfile extends Component {
                 this.props.history.goBack();
             }
 
-            return resultData.status;
         } catch (err) {
             console.log(err)
             this.setState({
