@@ -64,6 +64,7 @@ class Container extends Component {
     switch (pathname) {
       case "/whatsapp/mobile-verify":
         nativeCallback({ action: "back" });
+        break;
       case "/whatsapp/edit-number":
       case "/whatsapp/otp-success":
         nativeCallback({ action: "exit_web" });
