@@ -450,8 +450,8 @@ class GroupHealthPlanFinalSummary extends Component {
                 },
             )
 
-            if (lead.appointee_account_key) {
-                let appointee_data_backend = lead.appointee_account_key;
+            if (lead.appointee_details.name) {
+                let appointee_data_backend = lead.appointee_details;
                 nominee_data.data = [
                     ...nominee_data.data,
                     {

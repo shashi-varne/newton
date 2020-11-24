@@ -749,8 +749,8 @@ export const star = {
     personal_details_screen: {
         occupation_opts: [
             {
-                'name': 'none',
-                'value': 'none'
+                // 'name': 'none',
+                // 'value': 'none'
             },
             {
                 'name': 'BUSINESS/TRADERS',

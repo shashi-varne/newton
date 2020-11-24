@@ -48,6 +48,8 @@ class GroupHealthStarPlanSelectPed extends Component {
        element.key = relation.key
      });
 
+    member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+     
     member_base.push({ key: 'none' })
 
     let list = [
@@ -58,7 +60,6 @@ class GroupHealthStarPlanSelectPed extends Component {
           input_type: "checkbox",
         },
     ];
-    member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
 
     this.setState({
       account_type: account_type,
