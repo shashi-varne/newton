@@ -551,7 +551,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     redirectToPayment = (pg_data) => {  
-        let resultData = pg_data || this.state.pg_data;
+        let resultData = this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
 
@@ -601,10 +601,10 @@ class GroupHealthPlanFinalSummary extends Component {
         })
         this.handleClose();
 
-        if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
-            this.redirectToPayment();
-            return;
-        }
+        // if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
+            // this.redirectToPayment();
+        //     return;
+        // }
         let application_id = storageService().get('health_insurance_application_id');
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
@@ -616,25 +616,23 @@ class GroupHealthPlanFinalSummary extends Component {
             }); 
 
             if (res.pfwresponse.status_code === 200) {
-
-                if(this.state.provider === 'HDFCERGO') {
-                    let lead = resultData || {};
-                    if (lead.ped_check) {
-                        this.openMedicalDialog('ped');
-                    } else if (lead.ppc_check) {
-                        this.openMedicalDialog('ppc');
-                    } else if (lead.application_status === 'ready_for_payment') {
-                        this.redirectToPayment(resultData);
-                    }
-                } 
-
-                if(resultData.ped_check && data.showMedDialog) {
-                    this.openMedicalDialog('ped');
-                    return;
-                } else {
-                    this.redirectToPayment(resultData);
-                }
-
+                    if (this.state.provider === 'HDFCERGO') {
+                        let lead = resultData || {};
+                        if (lead.ped_check) {
+                            this.openMedicalDialog('ped');
+                        } else if (lead.ppc_check) {
+                            this.openMedicalDialog('ppc');
+                        } else if (lead.status === 'ready_to_pay') {
+                            this.redirectToPayment(resultData);
+                        }
+                    } else {
+                        if(resultData.ped_check && data.showMedDialog) {
+                            this.openMedicalDialog('ppc');
+                            return;
+                        } else {
+                            this.redirectToPayment(resultData);
+                        }
+                    }   
             } else {
                 this.setState({
                     show_loader: false
@@ -702,7 +700,7 @@ class GroupHealthPlanFinalSummary extends Component {
         let {lead}  = this.state;
 
         if(this.state.provider === 'STAR') {
-            if(lead.ped_check) {
+            if(lead.application_details.ped) {
                 this.openMedicalDialog('ped');
                 return;
             }
@@ -758,7 +756,10 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     renderMembertop = (props, index) => {
-        if (props.key === 'applicant') {
+        if (props.key === "applicant") {
+           if (this.state.quotation.insurance_type === 'self' || this.state.quotation.insurance_type === 'self_family') {
+               return;
+           }
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
@@ -1008,7 +1009,7 @@ class GroupHealthPlanFinalSummary extends Component {
                                 COVERAGE TYPE
                             </div>
                             <div className="mtr-bottom">
-                            {getCoverageType(this.state.quotation)}
+                            {getCoverageType(this.state.lead)}
                             </div>
                         </div>
                     </div>}

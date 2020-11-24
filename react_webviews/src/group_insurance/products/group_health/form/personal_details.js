@@ -54,7 +54,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       occupationOptions: occupationOptions
     })
 
-    let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation : '';
+    let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation.toUpperCase() : '';
  
     let member_base = this.state.member_base || [];
   

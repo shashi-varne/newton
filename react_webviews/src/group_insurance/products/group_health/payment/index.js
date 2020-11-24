@@ -59,8 +59,6 @@ class GroupHealthPayment extends Component {
     nativeCallback({ action: 'take_control_reset' });
     let { generic_callback } = this.state.params;
 
-    console.log(this.state)
-
    let status = generic_callback.split('=')[1]
 
     let paymentFailed = false
@@ -82,7 +80,6 @@ class GroupHealthPayment extends Component {
       get_lead = true;
     }
 
-    console.log(status)
 
     this.setState({
       status: status,
@@ -169,7 +166,7 @@ class GroupHealthPayment extends Component {
         this.navigate(state);
       })
       
-    } else if(!this.state.paymentPending) {
+    } else if(this.state.paymentPending) {
       state  = `/group-insurance/group-health/${this.state.provider}/landing`;
       this.navigate(state);
     } else {

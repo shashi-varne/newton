@@ -507,7 +507,7 @@ export function openMedicalDialog(type) {
         'icon': 'ic_medical_checkup2',
         'dialog_name': 'medical_dialog',
         'cta_title': 'CONTINUE TO PAYMENT',
-        'handleClick': this.startPayment
+        'handleClick': this.redirectToPayment
     };
     let provider = this.state.provider;
 
