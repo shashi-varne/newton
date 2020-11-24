@@ -57,39 +57,39 @@ class FormCreateProfile extends Component {
         } else {
 
             let that = this;
-            var time1 = 5000;
-            var time2 = 3000;
             var interval = 1;
             // setTimeout(function(){ 
             //   that.getDedupeCallback();
             // }, 3000);
 
-            function callbackLoop() {
-                setTimeout(function() {
-                    that.getDedupeCallback();
-                    interval++;
-
+            setTimeout(function(){ 
+                function callbackLoop() {
                     if (interval <= 6) {
-                        if (interval === 6) {
-                            interval++;
-                        }
-                        callbackLoop()
-                    }
-                }, time1)
-
-                if (interval === 7) {
-                    setTimeout(function() {
+                        setTimeout(function() {
                         that.getDedupeCallback();
-                        interval++;
     
-                        if (interval <= 16) {
+                        if (interval <= 6) {
+                            interval++;
                             callbackLoop()
                         }
-                    }, time2)
+                    }, 5000)
+                    }
+                    
+    
+                    if (interval > 6) {
+                        setTimeout(function() {
+                            that.getDedupeCallback();
+                            interval++;
+        
+                            if (interval <= 16) {
+                                callbackLoop()
+                            }
+                        }, 3000)
+                    }
                 }
-            }
-
-            callbackLoop()
+    
+                callbackLoop()
+            }, 60000);
             
         }
 
