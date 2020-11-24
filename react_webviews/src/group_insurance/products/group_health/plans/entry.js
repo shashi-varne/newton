@@ -73,10 +73,13 @@ class HealthInsuranceEntry extends Component {
       try {
         const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.key}`);
 
+        let resultData = res.pfwresponse
         if(res.pfwresponse.status_code === 200){
           this.sendEvents('next', data.key)
           let fullPath = data.key + '/landing';
           this.navigate('/group-insurance/group-health/' + fullPath);
+        }else {
+          toast(resultData.error || resultData.message || "Something went wrong");
         }
       } catch (err) {
         this.setState({
