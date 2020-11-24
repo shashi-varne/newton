@@ -62,7 +62,7 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
 
     switch (pathname) {
-      case "/whatsapp/confirm-number":
+      case "/whatsapp/mobile-verify":
       case "/whatsapp/edit-number":
       case "/whatsapp/otp-success":
         nativeCallback({ action: "exit_web" });
