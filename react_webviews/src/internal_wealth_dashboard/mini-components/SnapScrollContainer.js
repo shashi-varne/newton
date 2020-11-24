@@ -46,17 +46,18 @@ const SnapScrollContainer = ({
       setCurrentPage(pageNumber);
       isFunction(onPageChange) && onPageChange(pageNumber);
     }
-
     const pageHeight = get(page, 'boundingClientRect.height', 0);
     setCurrentPageHeight(pageHeight);
   };
 
   const scrollPage = () => {
     const [container] = document.getElementsByClassName('iwd-scroll-contain');
-    container.scroll({
-      top: currentPage < pages ? currentPageHeight : -currentPageHeight,
-      behavior: 'smooth'
-    });
+
+    if (currentPage === pages) {
+      container.scrollTop -= currentPageHeight * pages;
+    } else {
+      container.scrollTop += currentPageHeight;
+    } 
   };
 
   const Footer = (

@@ -398,3 +398,21 @@ export const dummyHoldings = [
     }
   },
 ];
+
+export const dummyBubble = {
+  name: 'main',
+  color: 'hsl(100, 80%, 90%)',
+  children: [{
+    "name": "nivo",
+    "color": "hsl(241, 70%, 50%)",
+    loc: 1234,
+  }, {
+    "name": "nivo2",
+    "color": "hsl(200, 70%, 50%)",
+    loc: 1235,
+  }, {
+    "name": "nivo3",
+    "color": "hsl(191, 10%, 90%)",
+    loc: 5000,
+  }]
+};
