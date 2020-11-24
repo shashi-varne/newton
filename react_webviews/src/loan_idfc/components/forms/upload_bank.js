@@ -30,7 +30,8 @@ class UploadBankStatements extends Component {
     this.state = {
       show_loader: false,
       fileUploaded: false,
-      form_data: {}
+      form_data: {},
+      total_documents_uploaded: 0
     };
 
     this.initialize = initialize.bind(this);
@@ -83,7 +84,7 @@ class UploadBankStatements extends Component {
       </div>
       <div>
         5. Upload multiple statements of the same bank account with each file
-        not exceeding
+        not exceeding 6 MB
       </div>
     </div>
   );
@@ -148,9 +149,11 @@ class UploadBankStatements extends Component {
     }
 
     file.doc_type = file.type;
+    let { total_documents_uploaded } = this.state; 
     this.setState({
       pdfFile: file,
       fileUploaded: true,
+      total_documents_uploaded: total_documents_uploaded + 1
     });
   };
 
