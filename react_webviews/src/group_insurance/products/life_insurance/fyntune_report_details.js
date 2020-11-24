@@ -8,7 +8,6 @@ import {
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
-import {storageService} from '../../../utils/validators';
 
 class FyntuneReportDetails extends Component {
 
@@ -19,23 +18,32 @@ class FyntuneReportDetails extends Component {
                 cssMapper: {}
             },
             show_loader: false,
-            fyntune_ref_id: storageService().getObject('fyntune_ref_id') || ''
+            fyntune_ref_id: this.props.match.params.policy_id
         }
     }
 
     async componentDidMount() {
 
+        this.setState({
+            show_loader: true
+        });
+        
         try {
 
             const res = await Api.get(`api/ins_service/api/insurance/fyntune/get/policy/${this.state.fyntune_ref_id}`);
-
+            
             this.setState({
                 show_loader: false
             });
-            
             var resultData = res.pfwresponse.result;
+
+
             if(res.pfwresponse.status_code === 200){
                 let policy_data = resultData.policy_data || {};
+                
+                policy_data.dt_policy_end = policy_data.dt_policy_end && policy_data.dt_policy_end.substring(0,11);
+                policy_data.dt_policy_start = policy_data.dt_policy_start &&  policy_data.dt_policy_start.substring(0,11);
+                
 
                 this.setState({
                     policy_data: policy_data,
@@ -163,7 +171,7 @@ class FyntuneReportDetails extends Component {
                             </div>
                         </div>
                         
-                        {this.state.policy_data.add_ons_amount !== "" && (
+                        {this.state.policy_data.add_ons_amount && (
                             <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
                                 <img src={require(`assets/fisdom/ic_hs_cover_amount.svg`)} alt="" />
@@ -177,7 +185,7 @@ class FyntuneReportDetails extends Component {
                                 </div>
                             </div>
                         </div>
-                            )
+                        )
                         }
                         
                         { this.state.policy_data.insurance_type === 'ULIPs' && (
@@ -194,7 +202,6 @@ class FyntuneReportDetails extends Component {
                                     </div>
                                 </div>
                             </div>
-                        
                         )}
                     
                         <div className="member-tile-fyntune">
@@ -273,7 +280,7 @@ class FyntuneReportDetails extends Component {
                                     PREMIUM DUE DATE
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data.dt_policy_end}
+                                    {this.state.policy_data && this.state.policy_data.dt_policy_end}
                                 </div>
                             </div>
                         </div>
