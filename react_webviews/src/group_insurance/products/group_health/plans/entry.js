@@ -3,6 +3,8 @@ import Container from '../../../common/Container';
 import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
 import star_logo from '../../../../assets/ic_star_logo.svg'
+import toast from '../../../../common/ui/Toast'
+import Api from 'utils/api'
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -62,13 +64,28 @@ class HealthInsuranceEntry extends Component {
   }
 
  
-  handleClick = (data) => {
+    handleClick = async (data) => {
 
-    this.sendEvents('next', data.key)
+      this.setState({
+        show_loader: true
+      });
 
-    let fullPath = data.key + '/landing';
-    this.navigate('/group-insurance/group-health/' + fullPath);
-  }
+      try {
+        const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.key}`);
+
+        if(res.pfwresponse.status_code === 200){
+          this.sendEvents('next', data.key)
+          let fullPath = data.key + '/landing';
+          this.navigate('/group-insurance/group-health/' + fullPath);
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false,
+        });
+        toast("Something went wrong");
+      }
+
+    }
 
   renderPorducts(props, index) {
     if(!props.disabled) {
