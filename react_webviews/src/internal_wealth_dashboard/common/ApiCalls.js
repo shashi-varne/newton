@@ -379,11 +379,13 @@ export const getFundDetail = async (params = {}) => {
 
 export const fetchPortfolioAnalysis = async (params = {}) => {
   try {
-    const res = await Api.get('api/fetch/portfolio-analysis', params);
+    const res = await Api.post('api/fetch/portfolio-analysis?user_id=4934000205365249', {
+      ...params,
+    });
 
     if (
       res.pfwstatus_code !== 200 ||
-      res.pfwresponse ||
+      !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
       throw genericErrMsg;
@@ -394,7 +396,7 @@ export const fetchPortfolioAnalysis = async (params = {}) => {
     if (status === 200) {
       return result;
     } else {
-      throw result.error;
+      throw result.error || result.message || genericErrMsg;
     }
   } catch (e) {
     throw e;
@@ -408,20 +410,20 @@ export const fetchPortfolioAnalysisMock = async (params = {}) => {
       return new Promise((resolve) => {
         setTimeout(() =>
           resolve(analysisPageApiMockSuccess.pfwresponse.result)
-        );
+        , 1000);
       });
     } else {
       return new Promise((_, reject) => {
         setTimeout(() => {
           reject(analysisPageApiMockError.pfwresponse.result);
-        });
+        }, 1000);
       });
     }
   } catch (e) {
     return new Promise((_, reject) => {
       setTimeout(() => {
         reject(analysisPageApiMockError.pfwresponse.result);
-      });
+      }, 1000);
     });
   }
 };
