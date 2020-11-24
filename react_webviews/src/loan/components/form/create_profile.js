@@ -64,28 +64,14 @@ class FormCreateProfile extends Component {
 
             setTimeout(function(){ 
                 function callbackLoop() {
-                    if (interval <= 6) {
-                        setTimeout(function() {
+                    setTimeout(function() {
                         that.getDedupeCallback();
     
-                        if (interval <= 6) {
+                        if (interval <= 20) {
                             interval++;
                             callbackLoop()
                         }
-                    }, 5000)
-                    }
-                    
-    
-                    if (interval > 6) {
-                        setTimeout(function() {
-                            that.getDedupeCallback();
-                            interval++;
-        
-                            if (interval <= 16) {
-                                callbackLoop()
-                            }
-                        }, 3000)
-                    }
+                    }, 3000)
                 }
     
                 callbackLoop()
