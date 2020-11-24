@@ -49,6 +49,10 @@ class GroupHealthSelectInsureType extends Component {
 
     let post_body = groupHealthPlanData.post_body || {};
 
+    if(post_body && post_body.quotation_id){
+      delete post_body['quotation_id'];
+    }
+
     post_body.account_type = this.state.account_type;
     post_body.insurance_type = this.state.account_type;
     groupHealthPlanData.post_body = post_body;
