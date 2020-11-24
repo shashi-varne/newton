@@ -701,7 +701,8 @@ class GroupHealthPlanFinalSummary extends Component {
 
         if(this.state.provider === 'STAR') {
             if(lead.application_details.ped) {
-                this.openMedicalDialog('ped');
+                // this.openMedicalDialog('ped');
+                this.startPayment({showMedDialog : true});
                 return;
             }
             else {
