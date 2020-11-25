@@ -315,21 +315,6 @@ function TopAMCS({ topAMCs }) {
             ({ amc_logo: logo, amc_name: name, share: percentage }) => (
               <div className="iwd-analysis-amc" key={name}>
                   <img src={logo} alt={name} className="iwd-analysis-amc-logo"/>
-                <div>
-                  <div className="iwd-analysis-amc-name">{name}</div>
-                  <div className="iwd-analysis-amc-percentage">
-                    {percentage}
-                  </div>
-                </div>
-              </div>
-            )
-          )}
-          {/* {amcs.map(
-            ({ name, percentage }) => (
-              <div className="iwd-analysis-amc" key={name}>
-                <picture>
-                  <img src={SBIIcon} alt={name} />
-                </picture>
                 <main>
                   <div className="iwd-analysis-amc-name">{name}</div>
                   <div className="iwd-analysis-amc-percentage">
@@ -338,7 +323,7 @@ function TopAMCS({ topAMCs }) {
                 </main>
               </div>
             )
-          )} */}
+          )}
         </div>
       </div>
     </div>
