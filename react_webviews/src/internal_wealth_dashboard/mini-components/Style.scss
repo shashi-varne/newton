@@ -728,7 +728,7 @@ $card-padding-mob: 40px;
 
 
 .iwd-legend {
-  width: 30%;
+  flex: 1 0 33%;
 }
 
 .iwd-legend-header {
@@ -764,7 +764,7 @@ $card-padding-mob: 40px;
 
 @media only screen and (min-width: 300px) and (max-width: 800px) {
   .iwd-legend {
-    width: 50%;
+    flex: 1 0 50%;
   }
 
   .iwd-legends-container {

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Legends({ legends }) {
+function Legends({ legends, row = 2 }) {
   return (
     <ul className="iwd-legends">
       {Object.entries(legends).map(([key, share], _, thisArray) => (
@@ -8,18 +8,15 @@ function Legends({ legends }) {
           key={key}
           className="iwd-legend"
           style={{
-            width:
-              thisArray.length <= 4
-                ? thisArray.length <= 3
-                  ? `${100 / thisArray.length}`
-                  : '50%'
-                : '30%',
+            flex:
+              row === 2
+                ? '1 0 50%' : '1 0 33.33%'
           }}
         >
           <header className="iwd-legend-header">
             <div
               className="iwd-legend-icon"
-              style={{ opacity: share / 100 }}
+              style={{ opacity: share / 100 + 0.3 }}
             ></div>
             <div className="iwd-legend-title">{key}</div>
           </header>

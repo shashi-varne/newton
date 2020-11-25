@@ -2,6 +2,8 @@ import React, { createRef, useEffect, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
 
+import { topAMCs as amcs } from '../constants';
+
 import { getConfig } from 'utils/functions';
 
 import Legends from '../mini-components/Legends';
@@ -19,17 +21,14 @@ const isMobileView = getConfig().isMobileDevice;
 
 function Analysis() {
   const [pageType, setPageType] = useState('equity');
-  const container = createRef();
-  const parent = createRef();
-  const title = createRef();
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [topSectorAllocations, setTopSectorAllocations] = useState(null);
   const [ratingWiseExposure, setRatingWiseExposure] = useState(null);
   const [maturityWiseExposure, setMaturityWiseExposure] = useState(null);
   const [topHoldings, setTopHoldings] = useState(null);
   const [topAMCs, setTopAMCs] = useState(null);
-  
+  const [marketCapAllocations, setMarketCapAllocations] = useState(null);
+
   const [error, setError] = useState(null);
 
   const getPortfolio = async (pageType) => {
@@ -57,6 +56,7 @@ function Analysis() {
       setMaturityWiseExposure({ ...maturity_exposure });
       setTopAMCs({ ...top_amcs });
       setTopHoldings({ ...top_holdings });
+      setMarketCapAllocations({ ...market_cap_alloc });
     } catch (e) {
       setError(e);
     }
@@ -65,34 +65,6 @@ function Analysis() {
   useEffect(() => {
     getPortfolio();
   }, []);
-
-  const setEventHandler = () => {
-    const { current: elem } = container;
-    const { current: father } = parent;
-    const { current: titleOb } = title;
-
-    elem.addEventListener('scroll', function () {
-      console.log(elem.scrollTop, elem.scrollHeight);
-      const htby2 = elem.scrollHeight / 2;
-      if (elem.scrollTop + 40 > htby2) {
-        titleOb.style.color = 'black';
-        father.style.background = '#F9FCFF';
-        setCurrentPage(currentPage < 2 ? currentPage + 1 : 2);
-      } else {
-        titleOb.style.color = 'white';
-        father.style.background = 'var(--primary)';
-        setCurrentPage(currentPage > 1 ? currentPage - 1 : 1);
-      }
-    });
-  };
-
-  const scrollPage = () => {
-    const { current: elem } = container;
-    elem.scroll({
-      top: 500,
-      behavior: 'smooth',
-    });
-  };
 
   const handlePageType = (name) => () => {
     if (['equity', 'debt'].includes(name)) {
@@ -104,26 +76,21 @@ function Analysis() {
     !ratingWiseExposure ||
     !topSectorAllocations ||
     !maturityWiseExposure ||
-    !topHoldings
+    !topHoldings ||
+    !marketCapAllocations
   ) {
     return <h1>Loading ...</h1>;
   }
 
-
-
   return (
-    <section
-      className="iwd-page iwd-page__analysis"
-      id="iwd-analysis"
-      ref={parent}
-    >
+    <section className="iwd-page iwd-page__analysis" id="iwd-analysis">
       <PageHeader
         height={isMobileView ? '7vh' : '9vh'}
         hideProfile={isMobileView}
       >
-        <div className="iwd-header-container-left">
+        <div className="iwd-analysis-header-container-left">
           <h1 className="iwd-header-title">Analysis</h1>
-          <div className="iwd-header-filters">
+          <div className="iwd-analysis-header-filters">
             <button
               className={
                 pageType === 'equity'
@@ -150,10 +117,20 @@ function Analysis() {
       <SnapScrollContainer pages={3}>
         {pageType === 'equity' ? (
           <>
-            <ChartsContainer
-              ratingWiseExposure={ratingWiseExposure}
-              maturityWiseExposure={maturityWiseExposure}
-            />
+            <div className="iwd-scroll-child" data-pgno="1">
+              <div className="iwd-analysis-chart-container">
+                {/* <RatingWiseExposure ratingWiseExposure={ratingWiseExposure} />
+                <MaturityWiseExposure
+                  maturityWiseExposure={maturityWiseExposure}
+                /> */}
+                <TopSectorAllocations
+                  topSectorAllocations={topSectorAllocations}
+                />
+                <MarketCapAllocations
+                  marketCapAllocations={marketCapAllocations}
+                />
+              </div>
+            </div>
             <TopStocks topStocks={topHoldings.equity} />
             <TopAMCS topAMCs={topAMCs.equity} />
           </>
@@ -173,17 +150,52 @@ function Analysis() {
 }
 
 function TopSectorAllocations({ topSectorAllocations }) {
-  return Object.entries(([key, value]) => (
-    <div>
-      <h1>{key}</h1>
-      <h2>{value}</h2>
+  return (
+    <div className="iwd-analysis-card">
+      <h2 className="iwd-card-header">Top Sector Allocations</h2>
+      <main className="iwd-analysis-top-sector-allocation-chart-container">
+        {Object.entries(topSectorAllocations).map(([_, share]) => (
+          <>
+            <div
+              className="iwd-analysis-top-sector-allocation-chart"
+              style={{ width: `${share}%`, opacity: (share / 100) + 0.3 }}
+            ></div>
+          </>
+        ))}
+      </main>
+      <section className="iwd-analysis-top-sector-allocation-container">
+        <ul className="iwd-analysis-top-sector-allocation-list">
+          {Object.entries(topSectorAllocations).map(([name, share]) => (
+            <li className="iwd-analysis-top-sector-allocation-item" key={name}>
+              <div className="iwd-analysis-top-sector-allocation-name">
+                {name}
+              </div>
+              <div className="iwd-analysis-top-sector-allocation-name">
+                {share}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
-  ));
+  );
+}
+
+function MarketCapAllocations({ marketCapAllocations }) {
+  return (
+    <div className="iwd-analysis-card">
+      <h2 className="iwd-card-header">Market cap allocation</h2>
+      <section className="iwd-analysis-market-cap-allocation-container">
+        <div className="iwd-chart"></div>
+        <Legends legends={marketCapAllocations} row={3} />
+      </section>
+    </div>
+  );
 }
 
 function RatingWiseExposure({ ratingWiseExposure }) {
   return (
-    <div className="iwd-card" style={{ width: '100%' }}>
+    <div className="iwd-card" style={{ flex: '1 0 50%' }}>
       <header className="iwd-card-header">
         <h2 className="iwd-card-header">Rating wise exposure</h2>
       </header>
@@ -197,10 +209,20 @@ function RatingWiseExposure({ ratingWiseExposure }) {
 
 function MaturityWiseExposure({ maturityWiseExposure }) {
   return (
-    <div className="iwd-card" style={{ width: '100%' }}>
+    <div className="iwd-card" style={{ flex: '1 0 50%' }}>
       <header className="iwd-card-header">
         <h2 className="iwd-card-header">Maturity wise exposure</h2>
       </header>
+      <main className="iwd-analysis-top-sector-allocation-chart-container">
+        {Object.entries(maturityWiseExposure).map(([_, share]) => (
+          <>
+            <div
+              className="iwd-analysis-top-sector-allocation-chart"
+              style={{ width: `${share}%`, opacity: (share / 100) + 0.3 }}
+            ></div>
+          </>
+        ))}
+      </main>
       <section className="iwd-analysis-maturity-exposure-container">
         <div className="iwd-chart"></div>
         <Legends legends={maturityWiseExposure} />
@@ -223,7 +245,7 @@ function ChartsContainer({ ratingWiseExposure, maturityWiseExposure }) {
 function TopStocks({ topStocks }) {
   return (
     <div className="iwd-scroll-child" data-pgno="2">
-      <div className="iwd-analysis-card iwd-card-margin">
+      <div className="iwd-analysis-card">
         <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
         <div className="iwd-analysis-portfolios-equity">
           {topStocks.map(
@@ -257,7 +279,7 @@ function TopStocks({ topStocks }) {
 function TopHoldings({ topHoldings }) {
   return (
     <div className="iwd-scroll-child" data-pgno="2">
-      <div className="iwd-analysis-card iwd-card-margin">
+      <div className="iwd-analysis-card">
         <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
         <div className="iwd-analysis-portfolios-equity">
           {topHoldings.map(({ instrument_name: name, share: percentage }) => (
@@ -282,7 +304,7 @@ function TopHoldings({ topHoldings }) {
 function TopAMCS({ topAMCs }) {
   return (
     <div className="iwd-scroll-child" data-pgno="3">
-      <div className="iwd-analysis-card iwd-card-margin">
+      <div className="iwd-analysis-card">
         <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
         <div className="iwd-analysis-top-amcs">
           {topAMCs.map(
@@ -300,6 +322,21 @@ function TopAMCS({ topAMCs }) {
               </div>
             )
           )}
+          {/* {amcs.map(
+            ({ name, percentage }) => (
+              <div className="iwd-analysis-amc" key={name}>
+                <picture>
+                  <img src={SBIIcon} alt={name} />
+                </picture>
+                <main>
+                  <div className="iwd-analysis-amc-name">{name}</div>
+                  <div className="iwd-analysis-amc-percentage">
+                    {percentage}
+                  </div>
+                </main>
+              </div>
+            )
+          )} */}
         </div>
       </div>
     </div>

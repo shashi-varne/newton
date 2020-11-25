@@ -622,25 +622,83 @@ $background: #F9F9F9;
 .iwd-analysis-button:nth-of-type(2) {
   margin-left: 20px;
 }
-.iwd-analysis-sector-allocation {
+
+.iwd-analysis-top-sector-allocation-container {
+  overflow-y: scroll;
+  height: 70%;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: hsla(257, 58%, 73%, 0.4);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 6px;
+    background-color: hsla(257, 58%, 73%, 1);
+    border-radius: 5px;
+  }
+
+  margin-top: 67px;
+}
+
+.iwd-analysis-top-sector-allocation-list {
+  list-style: none;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.iwd-analysis-top-sector-allocation-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 33px;
 }
 
-.iwd-analysis-sector-name {
+.iwd-analysis-top-sector-allocation-name {
   color: $grey;
   font-size: 13px;
   line-height: 15px;
   max-width: 70%;
 }
 
+
+
+.iwd-analysis-top-sector-allocation-item:hover {
+  font-weight: bold;
+}
+
 .iwd-analysis-sector-allocation-percentage {
   color: $dark;
   font-size: 15px;
   line-height: 15px;
-} 
+}
+
+.iwd-analysis-market-cap-allocation-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.iwd-analysis-top-sector-allocation-chart-container {
+  display: flex;
+}
+
+.iwd-analysis-top-sector-allocation-chart {
+  background-color: #49d0c0;
+  height: 10px;
+  margin-left: 2px;
+}
+
+.iwd-analysis-top-sector-allocation-chart:nth-last-of-type(1) {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.iwd-analysis-top-sector-allocation-chart:nth-of-type(1) {
+  margin-left: 0px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
 
 .iwd-analysis-card {
   @extend .iwd-card;
@@ -657,7 +715,6 @@ $background: #F9F9F9;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-content: space-between;
   height: 80%;
   overflow-y: scroll;
   overflow-x: auto;
@@ -756,6 +813,13 @@ $background: #F9F9F9;
 .iwd-analysis-ratings-exposure-container {
   display: flex;
   justify-content: space-between;
+}
+
+.iwd-analysis-maturity-exposure-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 67px;
 }
 
 .iwd-analysis-chart-container {
