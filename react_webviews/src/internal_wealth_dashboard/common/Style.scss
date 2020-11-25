@@ -35,7 +35,8 @@
   background-color: rgba(255, 255, 255, 0.3) !important;
 }
 
-.iwd-phone-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+.iwd-phone-input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: red;
   opacity: 1; /* Firefox */
 }
@@ -72,4 +73,25 @@ div:nth-child(4) > .iwd-otp-input {
 
 input.iwd-otp-input:focus {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.iwd-radio-box-parent {
+  width: 14px;
+  height: 14px;
+  // border-radius: 2px;
+  border: 1px solid #767e86;
+  box-sizing: border-box;
+  position: relative;
+  .iwd-radio-box-child {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: auto;
+    background-color: #767e86;
+    border-radius: 1px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
 }

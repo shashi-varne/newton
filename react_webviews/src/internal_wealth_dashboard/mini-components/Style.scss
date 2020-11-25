@@ -1,6 +1,6 @@
-$dark: #0A1D32;
-$grey: #767E86;
-$light-grey: #D3DBE4;
+$dark: #0a1d32;
+$grey: #767e86;
+$light-grey: #d3dbe4;
 $primary: rgb(79, 45, 167);
 $card-padding-mob: 40px;
 
@@ -14,7 +14,7 @@ $card-padding-mob: 40px;
   font-size: 13px;
   line-height: 24px;
   text-transform: uppercase;
-  color: #D3DBE4;
+  color: #d3dbe4;
 }
 
 .iwd-page-close {
@@ -26,7 +26,7 @@ $card-padding-mob: 40px;
 }
 
 .iwd-pc-btn {
-  border-radius: 5px !important;  
+  border-radius: 5px !important;
 }
 
 #iwd-help {
@@ -108,11 +108,11 @@ $card-padding-mob: 40px;
   padding: 50px 100px;
   box-sizing: border-box;
 
-  #iwd-fp-logo{
+  #iwd-fp-logo {
     float: left;
   }
 
-  #iwd-fp-close{
+  #iwd-fp-close {
     float: right;
     cursor: pointer;
   }
@@ -180,18 +180,19 @@ $card-padding-mob: 40px;
   animation-delay: 0s;
 }
 
-#iwd-nav, #iwd-nav:hover {
+#iwd-nav,
+#iwd-nav:hover {
   height: 100%;
   width: 80px;
   position: absolute;
   z-index: 2;
-  background: #613EB9;
+  background: #613eb9;
   border-radius: 0px 10px 10px 0;
   padding: 15px;
   box-sizing: border-box;
   text-align: center;
   transition: width 0.3s ease-in-out;
-
+  overflow: hidden;
   a {
     text-decoration: none;
   }
@@ -256,12 +257,12 @@ $card-padding-mob: 40px;
   width: 100%;
   border-radius: 0 0 16px 16px;
   box-sizing: border-box;
-  background: #613EB9;
+  background: #613eb9;
   color: white;
   transition: height 0.5s;
   overflow-y: scroll;
   z-index: 3;
-  
+
   #iwd-nm-header {
     display: flex;
     align-items: center;
@@ -301,14 +302,14 @@ $card-padding-mob: 40px;
       text-align: center;
     }
   }
-  
+
   #iwd-nm-body {
     padding: 40px;
-    
+
     a {
       text-decoration: none;
     }
-    
+
     .iwd-nav-close {
       float: right;
       margin-right: -10px;
@@ -363,7 +364,7 @@ $card-padding-mob: 40px;
         padding: 6px;
         text-align: center;
         font-size: 16px;
-        border: 2px solid #FFFFFF;
+        border: 2px solid #ffffff;
         border-radius: 10px;
         box-sizing: border-box;
       }
@@ -429,7 +430,7 @@ $card-padding-mob: 40px;
   #iwd-pf-page-nos {
     font-size: 13px;
     line-height: 21px;
-    color: #9069D9;
+    color: #9069d9;
   }
 }
 
@@ -499,12 +500,12 @@ $card-padding-mob: 40px;
   background: white;
   position: relative;
   border-radius: 8px; //TODO: reuse iwd-card
-  padding: 40px 50px 50px;  //TODO: reuse iwd-card
-  box-sizing: border-box;  //TODO: reuse iwd-card
+  padding: 40px 50px 50px; //TODO: reuse iwd-card
+  box-sizing: border-box; //TODO: reuse iwd-card
   box-shadow: 0px 0px 4px rgba(31, 14, 74, 0.06);
   height: 79%;
   width: 45%;
-  flex: 1 0 45%;
+  flex: 0 1 45%;
   background: white url('../../assets/bg_waves_fund.svg') bottom no-repeat;
   background-size: contain;
   margin-right: 3%;
@@ -584,14 +585,13 @@ $card-padding-mob: 40px;
     .iwd-hcn-item-divider {
       border-right: 1px solid rgba($grey, 0.2);
       margin: 0 30px;
-      height: 25px;;
+      height: 25px;
     }
-
   }
 
   .iwd-hc-more {
     position: absolute;
-    right: 20px;;
+    right: 20px;
     bottom: 50px;
 
     .MuiButton-label {
@@ -610,13 +610,13 @@ $card-padding-mob: 40px;
   opacity: 0;
 }
 .radial-chart-total {
-  opacity: 0.3; 
+  opacity: 0.3;
 }
 .radial-chart-progress {
   transform: rotate(90deg);
   transform-origin: center;
   transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14);
-  transition-delay: 0.3s; 
+  transition-delay: 0.3s;
 }
 
 @media only screen and (min-width: 300px) and (max-width: 1200px) {
@@ -701,7 +701,7 @@ $card-padding-mob: 40px;
   }
 
   .iwd-holding-card {
-    padding: $card-padding-mob;  //TODO: reuse iwd-card
+    padding: $card-padding-mob; //TODO: reuse iwd-card
     height: 460px;
     width: 100%;
     flex: 0 1 48%;
@@ -753,4 +753,109 @@ $card-padding-mob: 40px;
       bottom: 40px;
     }
   }
+}
+
+//Filter Section
+.iwd-filter-section {
+  margin-bottom: 40px;
+  .iwd-filter-type {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: $dark;
+    margin-bottom: 20px;
+  }
+
+  .MuiIconButton-root {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+.iwd-filter-clear {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 2px;
+  text-align: left;
+  color: #4f2da6;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-right: 20px;
+}
+.iwd-filter-head {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 27px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: $dark;
+}
+
+.iwd-filter-section:last-child {
+  margin-bottom: 0px;
+}
+
+.iwd-filter-head-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 450px) {
+  .iwd-filter-mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 10000;
+    background: white;
+  }
+  .iwd-filter-footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    .MuiButtonBase-root {
+      border-radius: 6px;
+      background-color: #4f2da6;
+    }
+  }
+
+  .iwd-filter-mobile-section {
+    margin-top: 40px;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    //padding: $card-padding-mobile;
+    .iwd-filter-head-container {
+      justify-content: center;
+      .iwd-filter-head {
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 27px;
+        letter-spacing: 0em;
+      }
+    }
+    .MuiFormGroup-root {
+      flex-direction: row;
+    }
+    .MuiFormGroup-root > label {
+      flex: 0 50%;
+    }
+  }
+}
+
+.iwd-disable-clear {
+  opacity: 0.2;
+  cursor: not-allowed;
 }
