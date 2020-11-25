@@ -138,8 +138,8 @@ function TopSectorAllocation({ data = {} }) {
           <IwdBarChart data={data} />
         </div>
         <div className="iwd-sector-alloc-legend">
-          {Object.entries(data).map(([key, value]) => (
-            <div className="iwd-sal-item">
+          {Object.entries(data).map(([key, value], idx) => (
+            <div className="iwd-sal-item" key={idx}>
               <span className="iwd-sali-label">{key}</span>
               <span className="iwd-sali-value">{value}</span>
             </div>

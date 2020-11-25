@@ -4,6 +4,21 @@ $light-grey: #D3DBE4;
 $primary: rgb(79, 45, 167);
 $card-padding-mob: 40px;
 
+.iwd-dot-loader {
+  width: auto;
+  text-align: inherit;
+  margin-top: 10px;
+
+  div {
+    margin-left: 5px;
+    background: #c4adff;
+  }
+
+  div.bounce1 {
+    margin-left: 0;
+  }
+}
+
 .iwd-logout-btn {
   border-radius: 6px;
   background-color: rgba($light-grey, 0.3);

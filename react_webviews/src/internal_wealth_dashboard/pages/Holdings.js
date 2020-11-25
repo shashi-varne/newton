@@ -34,7 +34,7 @@ const Holdings = () => {
       </PageHeader>
       <SnapScrollContainer
         hideFooter={true}
-        error={true}
+        error={false}
       >
         <>
           {holdingsList.map((holding, idx) => (

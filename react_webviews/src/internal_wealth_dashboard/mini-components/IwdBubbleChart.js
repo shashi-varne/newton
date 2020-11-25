@@ -10,7 +10,7 @@ const IwdBubbleChart = ({ data = {} }) => {
     for (let [key, val] of Object.entries(data)) {
       list.push({
         name: upperCase(key),
-        value: parseInt(val, 10),
+        value: `${val}`,
         color: `rgba(57, 183, 171, ${val/100})`,
       });
     }

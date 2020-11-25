@@ -9,8 +9,8 @@ function TopAMCS() {
     <div className="iwd-analysis-card iwd-card-margin">
       <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
       <div className="iwd-analysis-top-amcs">
-        {topAMCs.map(({ name, percentage }) => (
-          <div className="iwd-analysis-amc" key={name}>
+        {topAMCs.map(({ name, percentage }, idx) => (
+          <div className="iwd-analysis-amc" key={idx}>
             <picture>
               <img src={SBIIcon} alt={name} />
             </picture>

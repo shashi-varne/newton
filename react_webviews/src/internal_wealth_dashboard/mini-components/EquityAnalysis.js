@@ -9,8 +9,8 @@ function EquityAnalysis() {
       <div className="iwd-analysis-card iwd-card-margin">
         <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
         <div className="iwd-analysis-portfolios-equity">
-          {topStocks.map(({ heading, company, percentage }) => (
-            <div className="iwd-analysis-portfolio-stock" key={company}>
+          {topStocks.map(({ heading, company, percentage }, idx) => (
+            <div className="iwd-analysis-portfolio-stock" key={idx}>
               <picture>
                 <img src={IwdComputerIcon} alt={heading} />
               </picture>
