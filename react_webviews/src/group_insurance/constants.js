@@ -605,7 +605,6 @@ export const health_providers = {
 
 
 export function ghGetMember(lead, providerConfig) {
-  console.log(lead,"lead")
   const backend_keys = [
     'self_account_key',
     'spouse_account_key',

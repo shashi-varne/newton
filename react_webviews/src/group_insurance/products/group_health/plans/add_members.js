@@ -243,6 +243,10 @@ class GroupHealthPlanAddMembers extends Component {
 
         let post_body = this.state.groupHealthPlanData.post_body || {};
          
+        if(post_body && post_body.quotation_id){
+            delete post_body['quotation_id'];
+        }
+        
         post_body.adults = adult_total;
         post_body.children = child_total;
 
@@ -383,10 +387,7 @@ class GroupHealthPlanAddMembers extends Component {
 
             this.setState({
                 parents_option: options[event] ? options[event].value : '',
-                groupHealthPlanData: groupHealthPlanData
-            }, ()=>{
-                this.setLocalProviderData(groupHealthPlanData);
-            })
+            });
         }
         this.setState({
             [name]: options[event] ? options[event].value : '',

@@ -37,12 +37,13 @@ class GroupHealthPlanStarPincode extends Component {
             header_title = `Where does your ${ui_members.other_adult_member} live?`;
         } else if (account_type === 'self_family') {
             header_title = 'Where do you live?';
-        } else if (account_type === 'parents_in_law') {
-            header_title = 'Where do your parents in-law live?';
-        }else if(account_type === 'parents'){
-            header_title = 'Where do your parents live?';
-        }    
-        
+        } else if (account_type === 'parents_in_law' || account_type === 'parents' ) {
+            if (ui_members.parents_option === 'parents') {
+                header_title = 'Where do your parents live?';
+            } else {
+                header_title = 'Where do your parents in-law live?';
+            }
+        }
         pincode = groupHealthPlanData.pincode;
 
         this.setState({
