@@ -754,7 +754,6 @@ $background: #F9F9F9;
     @extend .iwd-card;
     margin-top: 30px;
     width: 100%;
-    height: 90%;
   }
 
   .iwd-analysis-card-margin {
@@ -765,9 +764,8 @@ $background: #F9F9F9;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-content: space-between;
     height: 80%;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: auto;
     
     .iwd-analysis-button {
@@ -795,7 +793,7 @@ $background: #F9F9F9;
     }
     
     .iwd-analysis-top-sector-allocation-container {
-      overflow-y: scroll;
+      overflow-y: auto;
       height: 70%;
       margin-top: 67px;
     }
@@ -851,7 +849,7 @@ $background: #F9F9F9;
       flex-wrap: wrap;
       justify-content: space-between;
       height: 80%;
-      overflow-y: scroll;
+      overflow-y: auto;
       overflow-x: auto;
     }
     
@@ -875,6 +873,7 @@ $background: #F9F9F9;
   }
   .iwd-analysis-top-amcs {
     @extend .iwd-analysis-portfolios-equity;
+    height: '100%'
   }
 
   .iwd-analysis-amc-logo {
