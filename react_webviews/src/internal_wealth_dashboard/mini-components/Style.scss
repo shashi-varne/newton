@@ -455,9 +455,8 @@ ul#iwd-bars {
   padding: 0;
 
   .iwd-bars-li {
-    height: 5px;
-    margin-right: 5px;
-    border-radius: 4px;
+    height: 10px;
+    margin-right: 2px;
     background: turquoise;
     transition: flex-basis 0.2s ease-in-out;
     position: relative;
@@ -473,6 +472,14 @@ ul#iwd-bars {
       transition: all 0.5s ease-in-out;
       opacity: 0;
     }
+  }
+
+  .iwd-bars-li:nth-child(1) {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .iwd-bars-li:nth-last-child(1) {
+    border-radius: 0 8px 8px 0;
   }
   ​
   .iwd-bars-li:hover {

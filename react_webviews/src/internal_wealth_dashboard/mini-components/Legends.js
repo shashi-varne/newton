@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react' 
 
 function Legends({ data = {}, columns = 2, classes = {} }) {
   const {
@@ -22,7 +22,7 @@ function Legends({ data = {}, columns = 2, classes = {} }) {
           <header className="iwd-lc-header">
             <div
               className={`iwd-lc-icon ${iconClass}`}
-              style={{ opacity: share / 100 }}
+              style={{ opacity: (share / 100) + 0.3 }}
             ></div>
             <div className={`iwd-lc-title ${labelClass}`}>{key}</div>
           </header>
