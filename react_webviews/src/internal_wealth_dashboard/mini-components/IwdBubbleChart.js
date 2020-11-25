@@ -37,7 +37,7 @@ const IwdBubbleChart = ({ data = {} }) => {
       padding={6}
       borderWidth={2}
       borderColor={{ from: 'color' }}
-      animate={true}
+      animate={false}
       motionStiffness={90}
       motionDamping={12}
     />
