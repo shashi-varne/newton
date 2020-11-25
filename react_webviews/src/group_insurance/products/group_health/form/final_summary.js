@@ -859,7 +859,6 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     render() {
-        console.log(this.state.lead,';lead')
         return (
             <Container
                 provider={this.state.provider}
