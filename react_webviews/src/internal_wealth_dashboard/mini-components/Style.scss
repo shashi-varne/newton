@@ -4,6 +4,21 @@ $light-grey: #D3DBE4;
 $primary: rgb(79, 45, 167);
 $card-padding-mob: 40px;
 
+.iwd-dot-loader {
+  width: auto;
+  text-align: inherit;
+  margin-top: 10px;
+
+  div {
+    margin-left: 5px;
+    background: #c4adff;
+  }
+
+  div.bounce1 {
+    margin-left: 0;
+  }
+}
+
 .iwd-logout-btn {
   border-radius: 6px;
   background-color: rgba($light-grey, 0.3);
@@ -184,6 +199,7 @@ $card-padding-mob: 40px;
   height: 100%;
   width: 80px;
   position: absolute;
+  overflow: hidden;
   z-index: 2;
   background: #613EB9;
   border-radius: 0px 10px 10px 0;
@@ -430,6 +446,42 @@ $card-padding-mob: 40px;
     font-size: 13px;
     line-height: 21px;
     color: #9069D9;
+  }
+}
+
+ul#iwd-bars {
+  display: flex;
+  list-style: none;
+  padding: 0;
+
+  .iwd-bars-li {
+    height: 5px;
+    margin-right: 5px;
+    border-radius: 4px;
+    background: turquoise;
+    transition: flex-basis 0.2s ease-in-out;
+    position: relative;
+
+    div {
+      position: absolute;
+      top: -38px;
+      right: 50%;
+      border: 1px solid #ececec;
+      padding: 5px;
+      border-radius: 4px;
+      box-shadow: 0px 0px 4px 0px #f6f6f6;
+      transition: all 0.5s ease-in-out;
+      opacity: 0;
+    }
+  }
+  ​
+  .iwd-bars-li:hover {
+    transform: scaleY(1.6);
+    transform: scaleX(1.6);
+
+    div {
+      opacity: 1;
+    }
   }
 }
 
@@ -711,12 +763,7 @@ $card-padding-mob: 40px;
 
 // Legends
 
-.iwd-legends-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.iwd-legends {
+.iwd-legend-container {
   padding: 0;
   margin: 0;
   display: flex;
@@ -724,69 +771,62 @@ $card-padding-mob: 40px;
   flex-wrap: wrap;
   list-style: none;
   background-color: inherit;
+
+  .iwd-legend-child {
+    width: 30%;
+
+    .iwd-lc-header {
+      display: flex;
+      align-items: center;
+
+      .iwd-lc-icon {
+        width: 8px;
+        height: 8px;
+        background: hsla(173, 59, 55, 1);
+      }
+
+      .iwd-lc-title {
+        color: hsla(173,59,55,1);
+        margin-left: 10px;
+      }
+    }
+  
+    .iwd-lc-value {
+      color: $grey;
+      font-size: 30px;
+    }
+  }
 }
 
-
-.iwd-legend {
-  flex: 1 0 33%;
-}
-
-.iwd-legend-header {
-  display: flex;
-  align-items: center;
-}
-
-
-
-.iwd-legends__column {
-  flex-direction: column;
-}
-
-.iwd-legends__row {
-  flex-direction: row;
-}
-
-.iwd-legend-icon {
-  width: 8px;
-  height: 8px;
-  background: hsla(173, 59, 55, 1);
-}
-
-.iwd-legend-value {
-  color: $grey;
-  font-size: 30px;
-}
-
-.iwd-legend-title {
-  color: hsla(173,59,55,1);
-  margin-left: 10px;
-}
 
 @media only screen and (min-width: 300px) and (max-width: 800px) {
-  .iwd-legend {
-    flex: 1 0 50%;
-  }
 
-  .iwd-legends-container {
-    flex-direction: column;
+  .iwd-legend-container {
     margin: 0 auto;
     align-items: center;
-  }
 
-  .iwd-legends {
-    flex-direction: column;
-  }
+    .iwd-legend-child {
+      width: 50%;
 
-  .iwd-legend {
-   flex: 1 0 50% 
-  }
+      .iwd-lc-header {
+        justify-content: center;
 
-  .iwd-legend-header {
-    justify-content: center;
-  }
+        .iwd-lc-icon {
+          width: 8px;
+          height: 8px;
+          background: hsla(173, 59, 55, 1);
+        }
 
-  .iwd-legend-value {
-    text-align: center;
+        .iwd-lc-title {
+          color: hsla(173,59,55,1);
+          margin-left: 10px;
+        }
+      }
+    
+      .iwd-lc-value {
+        text-align: center;
+      }
+    }
   }
 
   .iwd-holding-card {

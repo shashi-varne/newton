@@ -11,7 +11,7 @@ import toast from '../../common/ui/Toast';
 import { getFundDetail, getTransactions } from '../common/ApiCalls';
 
 const HoldingDetail = ({
-  investmentDetail,
+  investmentDetail = {},
   isin,
   ...props
 }) => {

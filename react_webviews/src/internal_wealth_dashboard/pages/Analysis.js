@@ -1,21 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
-
-import PageHeader from '../mini-components/PageHeader';
-
-import { topAMCs as amcs } from '../constants';
-
-import { getConfig } from 'utils/functions';
-
-import Legends from '../mini-components/Legends';
-
-import {
-  fetchPortfolioAnalysisMock,
-  fetchPortfolioAnalysis,
-} from '../common/ApiCalls';
-import SnapScrollContainer from '../mini-components/SnapScrollContainer';
-
-import IwdComputerIcon from '../../assets/fisdom/iwd-computer.svg';
-import SBIIcon from '../../assets/fisdom/sbi.svg';
+// ---------------- Assets ----------------------
 import IcSecFinanceIcon from '../../assets/fisdom/ic_sec_finance.svg';
 import IcSecAutoMobileIcon from '../../assets/fisdom/ic_sec_automobile.svg';
 import IcSecChemicalsIcon from '../../assets/fisdom/ic_sec_chemicals.svg';
@@ -27,6 +10,19 @@ import IcSecFMCGIcon from '../../assets/fisdom/ic_sec_fmcg.svg';
 import IcSecHealthCare from '../../assets/fisdom/ic_sec_healthcare.svg';
 import IcSecServicesIcon from '../../assets/fisdom/ic_sec_services.svg';
 import IcSecTechnologyIcon from '../../assets/fisdom/ic_sec_technology.svg';
+// ----------------------------------------------
+import React, { useEffect, useState } from 'react';
+import PageHeader from '../mini-components/PageHeader'
+import { getConfig } from 'utils/functions';
+import Legends from '../mini-components/Legends';
+import {
+  fetchPortfolioAnalysisMock,
+  fetchPortfolioAnalysis,
+} from '../common/ApiCalls';
+import SnapScrollContainer from '../mini-components/SnapScrollContainer';
+import IwdBubbleChart from '../mini-components/IwdBubbleChart';
+import IwdBarChart from '../mini-components/IwdBarChart';
+import { isEmpty } from '../../utils/validators';
 
 const topStocksIconMappings = {
   'Financial Services': IcSecFinanceIcon,
@@ -45,17 +41,12 @@ const isMobileView = getConfig().isMobileDevice;
 
 function Analysis() {
   const [pageType, setPageType] = useState('equity');
-
-  const [topSectorAllocations, setTopSectorAllocations] = useState(null);
-  const [ratingWiseExposure, setRatingWiseExposure] = useState(null);
-  const [maturityWiseExposure, setMaturityWiseExposure] = useState(null);
+  const [graphData, setGraphData] = useState({});
   const [topHoldings, setTopHoldings] = useState(null);
   const [topAMCs, setTopAMCs] = useState(null);
-  const [marketCapAllocations, setMarketCapAllocations] = useState(null);
-
   const [error, setError] = useState(null);
 
-  const getPortfolio = async (pageType) => {
+  const getPortfolio = async () => {
     try {
       const result = await fetchPortfolioAnalysis({
         scheme_type: null,
@@ -67,20 +58,14 @@ function Analysis() {
         maturity_exposure: true,
       });
       const {
-        rating_exposure,
         top_holdings,
         top_amcs,
-        sector_alloc,
-        market_cap_alloc,
-        maturity_exposure,
+        ...graphDataPoints
       } = result;
 
-      setRatingWiseExposure({ ...rating_exposure });
-      setTopSectorAllocations({ ...sector_alloc });
-      setMaturityWiseExposure({ ...maturity_exposure });
       setTopAMCs({ ...top_amcs });
       setTopHoldings({ ...top_holdings });
-      setMarketCapAllocations({ ...market_cap_alloc });
+      setGraphData(graphDataPoints);
     } catch (e) {
       setError(e);
     }
@@ -97,11 +82,8 @@ function Analysis() {
   };
 
   if (
-    !ratingWiseExposure ||
-    !topSectorAllocations ||
-    !maturityWiseExposure ||
     !topHoldings ||
-    !marketCapAllocations
+    isEmpty(graphData)
   ) {
     return <h1>Loading ...</h1>;
   }
@@ -139,125 +121,124 @@ function Analysis() {
         </div>
       </PageHeader>
       <SnapScrollContainer pages={3}>
-        {pageType === 'equity' ? (
-          <>
-            <div className="iwd-scroll-child" data-pgno="1">
-              <div className="iwd-analysis-chart-container">
-                <TopSectorAllocations
-                  topSectorAllocations={topSectorAllocations}
-                />
-                <MarketCapAllocations
-                  marketCapAllocations={marketCapAllocations}
-                />
-              </div>
-            </div>
-            <TopStocks topStocks={topHoldings.equity} />
-            <TopAMCS topAMCs={topAMCs.equity} />
-          </>
-        ) : (
-          <>
-            <ChartsContainer
-              ratingWiseExposure={ratingWiseExposure}
-              maturityWiseExposure={maturityWiseExposure}
-            />
-            <TopHoldings topHoldings={topHoldings.debt} />
-            <TopAMCS topAMCs={topAMCs.debt} />
-          </>
-        )}
+        <ChartsContainer
+          data={graphData}
+          page={pageType}
+        />
+        {pageType === 'equity' ? 
+          <TopStocks topStocks={topHoldings.equity} /> :
+          <TopHoldings topHoldings={topHoldings.debt} />
+        }
+        <TopAMCS topAMCs={topAMCs[pageType]} />
       </SnapScrollContainer>
     </section>
   );
 }
 
-function TopSectorAllocations({ topSectorAllocations }) {
+function MarketCapAllocation({ data }) {
   return (
-    <div className="iwd-analysis-card">
-      <h2 className="iwd-card-header">Top Sector Allocations</h2>
-      <main className="iwd-analysis-top-sector-allocation-chart-container">
-        {Object.entries(topSectorAllocations).map(([name, share]) => (
-          <Fragment key={name}>
-            <div
-              className="iwd-analysis-top-sector-allocation-chart"
-              style={{ width: `${share}%`, opacity: share / 100 + 0.3 }}
-            ></div>
-          </Fragment>
-        ))}
-      </main>
-      <section className="iwd-analysis-top-sector-allocation-container">
-        <ul className="iwd-analysis-top-sector-allocation-list">
-          {Object.entries(topSectorAllocations).map(([name, share]) => (
-            <li className="iwd-analysis-top-sector-allocation-item" key={name}>
-              <div className="iwd-analysis-top-sector-allocation-name">
-                {name}
-              </div>
-              <div className="iwd-analysis-top-sector-allocation-name">
-                {share}
-              </div>
-            </li>
+    <div className="iwd-analysis-graph-left" id="iwd-market-alloc">
+      <header className="iwd-card-header">
+        Rating wise exposure
+      </header>
+      <section className="iwd-agl-content">
+        <div className="iwd-chart">
+          <IwdBubbleChart data={data} />
+        </div>
+        <Legends
+          data={data}
+          columns={1}
+          classes={{
+            container: 'iwd-aglc-legend',
+            child: 'iwd-aglc-legend-child'
+          }}
+        />
+      </section>
+    </div>
+  );
+}
+
+function TopSectorAllocation({ data = {} }) {
+  return (
+    <div className="iwd-analysis-graph-right" id="iwd-sector-alloc">
+      <header className="iwd-card-header">
+        Top sector allocation
+      </header>
+      <section className="iwd-agr-content">
+        <div className="iwd-chart">
+          <IwdBarChart data={data} />
+        </div>
+        <div className="iwd-sector-alloc-legend">
+          {Object.entries(data).map(([key, value], idx) => (
+            <div className="iwd-sal-item" key={idx}>
+              <span className="iwd-sali-label">{key}</span>
+              <span className="iwd-sali-value">{value}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     </div>
   );
 }
 
-function MarketCapAllocations({ marketCapAllocations }) {
+function RatingWiseExposure({ data }) {
   return (
-    <div className="iwd-analysis-card">
-      <h2 className="iwd-card-header">Market cap allocation</h2>
-      <section className="iwd-analysis-market-cap-allocation-container">
-        <div className="iwd-chart"></div>
-        <Legends legends={marketCapAllocations} row={3} />
-      </section>
-    </div>
-  );
-}
-
-function RatingWiseExposure({ ratingWiseExposure }) {
-  return (
-    <div className="iwd-card" style={{ flex: '1 0 50%' }}>
+    <div className="iwd-analysis-graph-left" id="iwd-rating-exposure">
       <header className="iwd-card-header">
-        <h2 className="iwd-card-header">Rating wise exposure</h2>
+        Rating wise exposure
       </header>
-      <section className="iwd-analysis-ratings-exposure-container">
-        <div className="iwd-chart"></div>
-        <Legends legends={ratingWiseExposure} />
+      <section className="iwd-agl-content">
+        <div className="iwd-chart">
+          <IwdBubbleChart data={data} />
+        </div>
+        <Legends
+          data={data}
+          columns={2}
+          classes={{
+            container: 'iwd-aglc-legend',
+            child: 'iwd-aglc-legend-child'
+          }}
+        />
       </section>
     </div>
   );
 }
 
-function MaturityWiseExposure({ maturityWiseExposure }) {
+function MaturityWiseExposure({ data }) {
   return (
-    <div className="iwd-card" style={{ flex: '1 0 50%' }}>
+    <div className="iwd-analysis-graph-right" id="iwd-maturity-exposure">
       <header className="iwd-card-header">
-        <h2 className="iwd-card-header">Maturity wise exposure</h2>
+        Maturity wise exposure
       </header>
-      <main className="iwd-analysis-top-sector-allocation-chart-container">
-        {Object.entries(maturityWiseExposure).map(([name, share]) => (
-          <Fragment key={name}>
-            <div
-              className="iwd-analysis-top-sector-allocation-chart"
-              style={{ width: `${share}%`, opacity: share / 100 + 0.3 }}
-            ></div>
-          </Fragment>
-        ))}
-      </main>
-      <section className="iwd-analysis-maturity-exposure-container">
-        <div className="iwd-chart"></div>
-        <Legends legends={maturityWiseExposure} />
+      <section className="iwd-agr-content">
+        <div className="iwd-chart">
+          <IwdBarChart data={data} />
+        </div>
+        <Legends
+          data={data}
+          classes={{
+            container: 'iwd-agrc-legend',
+            child: 'iwd-agrc-legend-child'
+          }}
+        />
       </section>
     </div>
   );
 }
 
-function ChartsContainer({ ratingWiseExposure, maturityWiseExposure }) {
+function ChartsContainer({ data, page }) {
   return (
     <div className="iwd-scroll-child" data-pgno="1">
-      <div className="iwd-analysis-chart-container">
-        <RatingWiseExposure ratingWiseExposure={ratingWiseExposure} />
-        <MaturityWiseExposure maturityWiseExposure={maturityWiseExposure} />
-      </div>
+      {page === 'equity' ?
+        <>
+          <MarketCapAllocation data={data.market_cap_alloc} />
+          <TopSectorAllocation data={data.sector_alloc} />
+        </> :
+        <>
+          <RatingWiseExposure data={data.rating_exposure} />
+          <MaturityWiseExposure data={data.maturity_exposure} />
+        </>
+      }
     </div>
   );
 }
