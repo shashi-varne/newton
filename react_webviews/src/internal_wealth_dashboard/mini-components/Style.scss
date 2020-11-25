@@ -773,6 +773,14 @@ $card-padding-mob: 40px;
     align-items: center;
   }
 
+  .iwd-legends {
+    flex-direction: column;
+  }
+
+  .iwd-legend {
+   flex: 1 0 50% 
+  }
+
   .iwd-legend-header {
     justify-content: center;
   }

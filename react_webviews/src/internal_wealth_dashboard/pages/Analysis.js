@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import PageHeader from '../mini-components/PageHeader';
 
@@ -16,6 +16,30 @@ import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 
 import IwdComputerIcon from '../../assets/fisdom/iwd-computer.svg';
 import SBIIcon from '../../assets/fisdom/sbi.svg';
+import IcSecFinanceIcon from '../../assets/fisdom/ic_sec_finance.svg';
+import IcSecAutoMobileIcon from '../../assets/fisdom/ic_sec_automobile.svg';
+import IcSecChemicalsIcon from '../../assets/fisdom/ic_sec_chemicals.svg';
+import IcSecCommunicationIcon from '../../assets/fisdom/ic_sec_communication.svg';
+import IcSecConsDurableIcon from '../../assets/fisdom/ic_sec_cons_durable.svg';
+import IcSecConstructionIcon from '../../assets/fisdom/ic_sec_construction.svg';
+import IcSecEnergyIcon from '../../assets/fisdom/ic_sec_energy.svg';
+import IcSecFMCGIcon from '../../assets/fisdom/ic_sec_fmcg.svg';
+import IcSecHealthCare from '../../assets/fisdom/ic_sec_healthcare.svg';
+import IcSecServicesIcon from '../../assets/fisdom/ic_sec_services.svg';
+import IcSecTechnologyIcon from '../../assets/fisdom/ic_sec_technology.svg';
+
+const topStocksIconMappings = {
+  'Financial Services': IcSecFinanceIcon,
+  Energy: IcSecEnergyIcon,
+  Technology: IcSecTechnologyIcon,
+  'Consumer Defensive': IcSecConsDurableIcon,
+  'Real Estate': IcSecConstructionIcon,
+  'Utilities': IcSecServicesIcon,
+  'Consumer Cyclical': IcSecAutoMobileIcon,
+  'Healthcare': IcSecHealthCare,
+  'Communication Services': IcSecCommunicationIcon,
+  'Others': IcSecChemicalsIcon,
+};
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -85,7 +109,7 @@ function Analysis() {
   return (
     <section className="iwd-page iwd-page__analysis" id="iwd-analysis">
       <PageHeader
-        height={isMobileView ? '7vh' : '9vh'}
+        height={isMobileView ? '16vh' : '9vh'}
         hideProfile={isMobileView}
       >
         <div className="iwd-analysis-header-container-left">
@@ -119,10 +143,6 @@ function Analysis() {
           <>
             <div className="iwd-scroll-child" data-pgno="1">
               <div className="iwd-analysis-chart-container">
-                {/* <RatingWiseExposure ratingWiseExposure={ratingWiseExposure} />
-                <MaturityWiseExposure
-                  maturityWiseExposure={maturityWiseExposure}
-                /> */}
                 <TopSectorAllocations
                   topSectorAllocations={topSectorAllocations}
                 />
@@ -154,13 +174,13 @@ function TopSectorAllocations({ topSectorAllocations }) {
     <div className="iwd-analysis-card">
       <h2 className="iwd-card-header">Top Sector Allocations</h2>
       <main className="iwd-analysis-top-sector-allocation-chart-container">
-        {Object.entries(topSectorAllocations).map(([_, share]) => (
-          <>
+        {Object.entries(topSectorAllocations).map(([name, share]) => (
+          <Fragment key={name}>
             <div
               className="iwd-analysis-top-sector-allocation-chart"
-              style={{ width: `${share}%`, opacity: (share / 100) + 0.3 }}
+              style={{ width: `${share}%`, opacity: share / 100 + 0.3 }}
             ></div>
-          </>
+          </Fragment>
         ))}
       </main>
       <section className="iwd-analysis-top-sector-allocation-container">
@@ -214,13 +234,13 @@ function MaturityWiseExposure({ maturityWiseExposure }) {
         <h2 className="iwd-card-header">Maturity wise exposure</h2>
       </header>
       <main className="iwd-analysis-top-sector-allocation-chart-container">
-        {Object.entries(maturityWiseExposure).map(([_, share]) => (
-          <>
+        {Object.entries(maturityWiseExposure).map(([name, share]) => (
+          <Fragment key={name}>
             <div
               className="iwd-analysis-top-sector-allocation-chart"
-              style={{ width: `${share}%`, opacity: (share / 100) + 0.3 }}
+              style={{ width: `${share}%`, opacity: share / 100 + 0.3 }}
             ></div>
-          </>
+          </Fragment>
         ))}
       </main>
       <section className="iwd-analysis-maturity-exposure-container">
@@ -256,7 +276,10 @@ function TopStocks({ topStocks }) {
             }) => (
               <div className="iwd-analysis-portfolio-stock" key={company}>
                 <picture>
-                  <img src={IwdComputerIcon} alt={heading} />
+                  <img
+                    src={topStocksIconMappings[heading] || IcSecFMCGIcon}
+                    alt={heading}
+                  />
                 </picture>
                 <main>
                   <div className="iwd-analysis-portfolio-heading">
@@ -280,7 +303,7 @@ function TopHoldings({ topHoldings }) {
   return (
     <div className="iwd-scroll-child" data-pgno="2">
       <div className="iwd-analysis-card">
-        <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
+        <h2 className="iwd-card-header">Top holdings in portfolio</h2>
         <div className="iwd-analysis-portfolios-equity">
           {topHoldings.map(({ instrument_name: name, share: percentage }) => (
             <div className="iwd-analysis-debt-holding" key={name}>
@@ -308,11 +331,9 @@ function TopAMCS({ topAMCs }) {
         <h2 className="iwd-card-header">Top Stocks in portfolio</h2>
         <div className="iwd-analysis-top-amcs">
           {topAMCs.map(
-            ({ amc_logo: logo, amc_name: name, amc_share: percentage }) => (
+            ({ amc_logo: logo, amc_name: name, share: percentage }) => (
               <div className="iwd-analysis-amc" key={name}>
-                <picture>
-                  <img src={SBIIcon} alt={name} />
-                </picture>
+                  <img src={logo} alt={name} className="iwd-analysis-amc-logo"/>
                 <main>
                   <div className="iwd-analysis-amc-name">{name}</div>
                   <div className="iwd-analysis-amc-percentage">

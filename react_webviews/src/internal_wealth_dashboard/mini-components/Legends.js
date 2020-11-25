@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react' 
 
 function Legends({ legends, row = 2 }) {
   return (
     <ul className="iwd-legends">
-      {Object.entries(legends).map(([key, share], _, thisArray) => (
+      {Object.entries(legends).map(([key, share]) => (
         <li
           key={key}
           className="iwd-legend"
