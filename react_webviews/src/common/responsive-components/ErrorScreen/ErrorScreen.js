@@ -5,6 +5,7 @@ const ErrorScreen = ({
   classes = {},
   useTemplate, // set this to 'true' to use the image-text template
   templateImage = '', // image for image-text template
+  templateGraphic = '', // for any non-image asset in image-text template
   templateErrTitle, // title text for image-text template
   templateErrText, // sub-text for image-text template
   templateBtnText, // button text for image-text template
@@ -28,6 +29,7 @@ const ErrorScreen = ({
           alt="error"
         />
       }
+      {templateGraphic}
       {templateErrTitle &&
         <div className={`fisdom-ecb-error-title ${titleClass}`}>
           {templateErrTitle}
@@ -56,9 +58,7 @@ const ErrorScreen = ({
 
   return (
     <div className={`fisdom-error-container ${containerClass}`}>
-      <div className={`fisdom-ec-box`}>
-        {useTemplate ? imageTextTemplate : children}
-      </div>
+      {useTemplate ? imageTextTemplate : children}
     </div>
   );
 };

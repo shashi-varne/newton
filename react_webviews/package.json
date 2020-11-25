@@ -14,8 +14,11 @@
     "@material-ui/core": "^1.0.0-rc.0",
     "@material-ui/icons": "^1.0.0-rc.0",
     "@nivo/axes": "^0.62.0",
+    "@nivo/circle-packing": "^0.65.1",
+    "@nivo/core": "^0.65.0",
     "@nivo/line": "^0.62.0",
     "@nivo/pie": "^0.62.0",
+    "@nivo/tooltip": "^0.65.1",
     "acorn": "^6.0.0",
     "acorn-dynamic-import": "^4.0.0",
     "autoprefixer": "7.1.6",
@@ -73,6 +76,7 @@
     "react-input-mask": "^2.0.4",
     "react-jss": "^8.4.0",
     "react-otp-input": "^1.0.1",
+    "react-phone-input-2": "^2.13.8",
     "react-responsive-carousel": "^3.1.49",
     "react-router-dom": "^4.2.2",
     "react-search-box": "^2.0.2",
@@ -93,8 +97,7 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",
     "webpack-manifest-plugin": "^3.0.0-rc.0",
-    "whatwg-fetch": "2.0.3",
-    "react-phone-input-2": "^2.13.8"
+    "whatwg-fetch": "2.0.3"
   },
   "scripts": {
     "start": "NODE_PATH=./src node scripts/start.js",

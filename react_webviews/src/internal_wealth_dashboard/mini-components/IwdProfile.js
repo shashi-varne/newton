@@ -8,9 +8,9 @@ const IwdProfile = () => {
 
   if (expanded) {
     return (
-      <div id="iwd-profile" onClick={toggleExpanded}>
-        <div id="iwd-profile-icon">U</div>
-        <div id="iwd-profile-username">Uttam Paswan</div>
+      <div className="iwd-profile" onClick={toggleExpanded}>
+        <div className="iwd-profile-icon iwd-profile-icon__primary">U</div>
+        <div className="iwd-profile-username">Uttam Paswan</div>
         <div className="iwd-profile-detail" id="pan">
           <b>PAN: </b>
           CXIPP 4122 M
@@ -36,7 +36,7 @@ const IwdProfile = () => {
     );
   }
   return (
-    <div id="iwd-profile-icon" onClick={toggleExpanded}>U</div>
+    <div className="iwd-profile-icon" onClick={toggleExpanded}>U</div>
   );
 };
 

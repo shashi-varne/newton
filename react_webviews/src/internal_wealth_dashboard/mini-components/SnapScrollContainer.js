@@ -22,13 +22,14 @@ const SnapScrollContainer = ({
 
   useEffect(() => {
     !hideFooter && createObserver();
+    // Todo: Need to unobserve
   }, []);
 
   const createObserver = () => {
     const options = {
       root: document.getElementsByClassName('iwd-scroll-contain')[0],
       // rootMargin: '220px 0px 60px 0px',
-      threshold: 1,
+      threshold: 0.8,
     };
 
     const childElems = document.getElementsByClassName('iwd-scroll-child');
@@ -45,17 +46,18 @@ const SnapScrollContainer = ({
       setCurrentPage(pageNumber);
       isFunction(onPageChange) && onPageChange(pageNumber);
     }
-
     const pageHeight = get(page, 'boundingClientRect.height', 0);
     setCurrentPageHeight(pageHeight);
   };
 
   const scrollPage = () => {
     const [container] = document.getElementsByClassName('iwd-scroll-contain');
-    container.scroll({
-      top: currentPage < pages ? currentPageHeight : -currentPageHeight,
-      behavior: 'smooth'
-    });
+
+    if (currentPage === pages) {
+      container.scrollTop -= currentPageHeight * pages;
+    } else {
+      container.scrollTop += currentPageHeight;
+    } 
   };
 
   const Footer = (

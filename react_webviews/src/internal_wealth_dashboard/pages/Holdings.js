@@ -199,8 +199,8 @@ const Holdings = () => {
             <SnapScrollContainer hideFooter={true} error={false}>
               <>
                 {filterVal
-                  ? filterData?.map((holding) => <HoldingCard {...holding} />)
-                  : holdingsList.map((holding) => <HoldingCard {...holding} />)}
+                  ? filterData?.map((holding, idx) => <HoldingCard {...holding} key={idx} />)
+                  : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
               </>
             </SnapScrollContainer>
           </>

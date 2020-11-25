@@ -1,6 +1,3 @@
-// ------------------ Assets --------------------------
-import IlsError from 'assets/fisdom/ils_error.svg';
-// ----------------------------------------------------
 import React, { useEffect, useState } from 'react';
 import { IconButton } from 'material-ui';
 import PageHeader from '../mini-components/PageHeader';
@@ -12,13 +9,14 @@ import toast from '../../common/ui/Toast';
 import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
-import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import IwdCard from '../mini-components/IwdCard';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
   const [overviewData, setOverviewData] = useState({});
+  const [isLoadingOverview, setIsLoadingOverview] = useState(true);
   const [riskData, setRiskData] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoadingRisk, setIsLoadingRisk] = useState(true);
 
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
@@ -27,6 +25,7 @@ const Dashboard = () => {
 
   const fetchOverview = async () => {
     try {
+      setIsLoadingOverview(true);
       const data = await overview();
       setOverviewData({
         current_val: get(data, 'current.current', ''),
@@ -38,26 +37,29 @@ const Dashboard = () => {
         total_realised: get(data, 'past.earnings', ''),
         xirr: get(data, 'earnings_percent', '--'),
       });
-      console.log(data);
     } catch (e) {
-      console.log(e);
+      console.error(e);
+      setOverviewData({});
       toast(e);
     }
+    setIsLoadingOverview(false);
   };
 
   const fetchPortfolioRisk = async () => {
     try {
+      setIsLoadingRisk(true);
       const data = await portfolioRisk({ date_range: 'one_year' });
       setRiskData(data);
       console.log(data);
     } catch (e) {
       console.log(e);
+      setRiskData({});
       toast(e);
     }
+    setIsLoadingRisk(false);
   };
 
   useEffect(() => {
-    // setEventHandler();
     fetchOverview();
     fetchPortfolioRisk();
   }, []);
@@ -71,8 +73,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className='iwd-page' id='iwd-dashboard'>
-      <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={isMobileView}>
+    <div className="iwd-page" id="iwd-dashboard">
+      <PageHeader>
         <>
           <div className='iwd-header-title'>Dashboard</div>
           <div className='iwd-header-subtitle'>Welcome back, Uttam</div>
@@ -80,38 +82,61 @@ const Dashboard = () => {
       </PageHeader>
       <SnapScrollContainer pages={2} onPageChange={pageChanged} hideFooter={isMobileView}>
         <>
-          <div className='iwd-scroll-child' data-pgno='1'>
-            <div id='iwd-d-numbers' style={{ background: 'white' }}>
-              {false ? (
-                <ErrorScreen
-                  useTemplate={true}
-                  templateImage={IlsError}
-                  templateErrText='Something went wrong! Please retry after some time or contact your wealth manager'
-                />
-              ) : (
-                <>
-                  <div className='iwd-dn-box'>
-                    <div className='iwd-dnb-value'>{formatNumVal(overviewData.current_val)}</div>
-                    <div className='iwd-dnb-label'>Current value</div>
+          <div className="iwd-scroll-child" data-pgno="1">
+            <IwdCard
+              id="iwd-d-numbers"
+              error={isEmpty(overviewData)}
+              isLoading={isLoadingOverview}
+              style={{
+                background: isLoadingOverview ? 'white' : ''
+              }}
+            >
+              <>
+                <div className="iwd-dn-box">
+                  <div className="iwd-dnb-value">
+                    {formatNumVal(overviewData.current_val)}
                   </div>
-                  <div className='iwd-dn-box'>
-                    <div className='iwd-dnb-value'>{formatNumVal(overviewData.invested_val)}</div>
-                    <div className='iwd-dnb-label'>Invested value</div>
+                  <div className="iwd-dnb-label">
+                    Current value
+                    </div>
+                      </div>
+                <div className="iwd-dn-box">
+                  <div className="iwd-dnb-value">
+                    {formatNumVal(overviewData.invested_val)}
                   </div>
-                  <div className='iwd-dn-box'>
-                    <div className='iwd-dnb-value'>{formatNumVal(overviewData.total_realised)}</div>
-                    <div className='iwd-dnb-label'>Total Realised Gains</div>
+                  <div className="iwd-dnb-label">
+                    Invested value
                   </div>
-                  <div className='iwd-dn-box'>
-                    <div className='iwd-dnb-value'>{overviewData.xirr}%</div>
-                    <div className='iwd-dnb-label'>XIRR</div>
+                </div>
+                <div className="iwd-dn-box">
+                  <div className="iwd-dnb-value">
+                    {formatNumVal(overviewData.total_realised)}
                   </div>
-                </>
-              )}
-            </div>
-            <div id='iwd-d-asset-alloc'>
-              <div className='iwd-card-header'>Asset allocation</div>
-              <div id='iwd-daa-graph'>
+                  <div className="iwd-dnb-label">
+                    Total Realised Gains
+                  </div>
+                </div>
+                <div className="iwd-dn-box">
+                  <div className="iwd-dnb-value">
+                    {overviewData.xirr}%
+                  </div>
+                  <div className="iwd-dnb-label">
+                    XIRR
+                  </div>
+                </div>
+              </>
+            </IwdCard>
+            <IwdCard
+              id="iwd-d-asset-alloc"
+              headerText="Asset allocation"
+              error={
+                isEmpty(overviewData) ||
+                isEmpty(overviewData.asset_alloc.equity) ||
+                isEmpty(overviewData.asset_alloc.debt)
+              }
+              isLoading={isLoadingOverview}
+            >
+              <div id="iwd-daa-graph">
                 <RadialBarChart
                   radius={100}
                   progress={42}
@@ -137,12 +162,16 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </IwdCard>
           </div>
-          <div className='iwd-scroll-child' data-pgno='2'>
-            <div id='iwd-d-risk'>
-              <div className='iwd-card-header'>Risk analysis</div>
-              <div id='iwd-dr-data'>
+          <div className="iwd-scroll-child" data-pgno="2">
+            <IwdCard
+              id="iwd-d-risk"
+              headerText="Risk analysis"
+              error={isEmpty(riskData)}
+              isLoading={isLoadingRisk}
+            >
+              <div id="iwd-dr-data">
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
                   <div className='iwd-drb-label'>Return</div>
                   <div className='iwd-drb-value'>{riskData.return}%</div>
@@ -168,17 +197,23 @@ const Dashboard = () => {
                   <div className='iwd-drb-value'>{riskData.information_ratio}</div>
                 </div>
               </div>
-            </div>
-            <div id='iwd-d-newsletter'>
-              <div className='iwd-card-header'>
-                Open source and non-custodial protocol enabling the creation of money markets
-              </div>
-              <IconButton className='iwd-dn-btn'>
-                <ChevronRight style={{ color: 'white' }} />
-              </IconButton>
-              <div id='iwd-dn-gist'>Equities | Fixed Income | Situational</div>
-              <div id='iwd-dn-issue'>Fisdom Outlook: July 2020</div>
-            </div>
+            </IwdCard>
+            <IwdCard
+              id="iwd-d-newsletter"
+              headerText="Open source and non-custodial protocol enabling the creation of money markets"
+              error={isEmpty(riskData)}
+              isLoading={isLoadingRisk}
+            >
+              <>
+                <IconButton className="iwd-dn-btn">
+                  <ChevronRight style={{ color: 'white' }} />
+                </IconButton>
+                <div id="iwd-dn-gist">
+                  Equities | Fixed Income | Situational
+                </div>
+                <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
+              </>
+            </IwdCard>
           </div>
         </>
       </SnapScrollContainer>
