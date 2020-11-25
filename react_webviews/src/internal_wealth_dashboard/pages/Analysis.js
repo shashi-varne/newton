@@ -6,12 +6,16 @@ import { getConfig } from 'utils/functions';
 
 import EquityAnalysis from '../mini-components/EquityAnalysis';
 import DebtAnalysis from '../mini-components/DebtAnalysis';
-import Legends from '../mini-components/Legends'
+import Legends from '../mini-components/Legends';
 
 import { fetchPortfolioAnalysisMock } from '../common/ApiCalls';
 
 import TopAMCS from '../mini-components/TopAMCS';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
+import IwdBubbleChart from '../mini-components/IwdBubbleChart';
+import IwdBarChart from '../mini-components/IwdBarChart';
+import LoaderScreen from '../../common/responsive-components/LoaderScreen';
+import { CircularProgress } from 'material-ui';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -21,25 +25,17 @@ function Analysis() {
   const parent = createRef();
   const title = createRef();
   const [currentPage, setCurrentPage] = useState(1);
-
-  const [topSectorAllocations, setTopSectorAllocations] = useState(null);
-  const [ratingWiseExposure, setRatingWiseExposure] = useState(null);
-  const [maturityWiseExposure, setMaturityWiseExposure] = useState(null);
+  const [graphData, setGraphData] = useState({});
 
   useEffect(() => {
     fetchPortfolioAnalysisMock()
       .then(
         ({
-          rating_exposure: ratingExposure,
           top_holdings: topHoldings,
           top_amcs: topAmcs,
-          sector_alloc: sectorAlloc,
-          market_cap_alloc: marketCapAlloc,
-          maturity_exposure: maturityExposure,
+          ...graphDataPoints
         }) => {
-          setRatingWiseExposure(ratingExposure);
-          setTopSectorAllocations(sectorAlloc);
-          setMaturityWiseExposure(maturityExposure);
+          setGraphData(graphDataPoints);
         }
       )
       .catch((err) => {
@@ -47,43 +43,15 @@ function Analysis() {
       });
   }, []);
 
-  const setEventHandler = () => {
-    const { current: elem } = container;
-    const { current: father } = parent;
-    const { current: titleOb } = title;
-
-    elem.addEventListener('scroll', function () {
-      console.log(elem.scrollTop, elem.scrollHeight);
-      const htby2 = elem.scrollHeight / 2;
-      if (elem.scrollTop + 40 > htby2) {
-        titleOb.style.color = 'black';
-        father.style.background = '#F9FCFF';
-        setCurrentPage(currentPage < 2 ? currentPage + 1 : 2);
-      } else {
-        titleOb.style.color = 'white';
-        father.style.background = 'var(--primary)';
-        setCurrentPage(currentPage > 1 ? currentPage - 1 : 1);
-      }
-    });
-  };
-
-  const scrollPage = () => {
-    const { current: elem } = container;
-    elem.scroll({
-      top: 500,
-      behavior: 'smooth',
-    });
-  };
-
   const handlePageType = (name) => () => {
     if (['equity', 'debt'].includes(name)) {
       setPageType(name);
     }
   };
 
-  if (!ratingWiseExposure || !topSectorAllocations || !maturityWiseExposure) {
-    return <h1>Loading ...</h1>;
-  }
+  // if (!ratingWiseExposure || !topSectorAllocations || !maturityWiseExposure) {
+  //   return <h1>Loading ...</h1>;
+  // }
 
   return (
     <section
@@ -122,78 +90,126 @@ function Analysis() {
         </div>
       </PageHeader>
       <SnapScrollContainer pages={3}>
-        {pageType === 'equity' ? (
-          <>
-            <ChartsContainer
-              ratingWiseExposure={ratingWiseExposure}
-              maturityWiseExposure={maturityWiseExposure}
-            />
-            <EquityAnalysis />
-            <TopAMCS />
-          </>
-        ) : (
-          <>
-            <ChartsContainer
-              ratingWiseExposure={ratingWiseExposure}
-              maturityWiseExposure={maturityWiseExposure}
-            />
-            <DebtAnalysis />
-            <TopAMCS />
-          </>
-        )}
+        <ChartsContainer
+          data={graphData}
+          page={pageType}
+        />
+        {pageType === 'equity' ? 
+          <EquityAnalysis /> :
+          <DebtAnalysis />
+        }
+        <TopAMCS />
       </SnapScrollContainer>
     </section>
   );
 }
 
-function TopSectorAllocations({ topSectorAllocations }) {
-  return Object.entries(([key, value]) => (
-    <div>
-      <h1>{key}</h1>
-      <h2>{value}</h2>
-    </div>
-  ));
-}
-
-function RatingWiseExposure({ ratingWiseExposure }) {
+function MarketCapAllocation({ data }) {
   return (
-    <div className="iwd-card" style={{ width: '100%'}}>
+    <div className="iwd-analysis-graph-left" id="iwd-market-alloc">
       <header className="iwd-card-header">
-        <h2>Rating wise exposure</h2>
+        Rating wise exposure
       </header>
-      <section className="iwd-analysis-ratings-exposure-container">
-        <div className="iwd-chart"></div>
-        <Legends legends={ratingWiseExposure} />
+      <section className="iwd-agl-content">
+        <div className="iwd-chart">
+          <IwdBubbleChart data={data} />
+        </div>
+        <Legends
+          data={data}
+          columns={1}
+          classes={{
+            container: 'iwd-aglc-legend',
+            child: 'iwd-aglc-legend-child'
+          }}
+        />
       </section>
     </div>
   );
 }
 
-function MaturityWiseExposure({ maturityWiseExposure }) {
+function TopSectorAllocation({ data = {} }) {
   return (
-    <div className="iwd-card" style={{ width: '100%' }}>
+    <div className="iwd-analysis-graph-right" id="iwd-sector-alloc">
       <header className="iwd-card-header">
-        <h2>Maturity wise exposure</h2>
+        Top sector allocation
       </header>
-      <section className="iwd-analysis-maturity-exposure-container">
-        <div className="iwd-chart"></div>
-        <Legends legends={maturityWiseExposure} />
+      <section className="iwd-agr-content">
+        <div className="iwd-chart">
+          <IwdBarChart data={data} />
+        </div>
+        <div className="iwd-sector-alloc-legend">
+          {Object.entries(data).map(([key, value]) => (
+            <div className="iwd-sal-item">
+              <span className="iwd-sali-label">{key}</span>
+              <span className="iwd-sali-value">{value}</span>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );
 }
 
-function ChartsContainer({ ratingWiseExposure, maturityWiseExposure }) {
+function RatingWiseExposure({ data }) {
+  return (
+    <div className="iwd-analysis-graph-left" id="iwd-rating-exposure">
+      <header className="iwd-card-header">
+        Rating wise exposure
+      </header>
+      <section className="iwd-agl-content">
+        <div className="iwd-chart">
+          <IwdBubbleChart data={data} />
+        </div>
+        <Legends
+          data={data}
+          columns={2}
+          classes={{
+            container: 'iwd-aglc-legend',
+            child: 'iwd-aglc-legend-child'
+          }}
+        />
+      </section>
+    </div>
+  );
+}
+
+function MaturityWiseExposure({ data }) {
+  return (
+    <div className="iwd-analysis-graph-right" id="iwd-maturity-exposure">
+      <header className="iwd-card-header">
+        Maturity wise exposure
+      </header>
+      <section className="iwd-agr-content">
+        <div className="iwd-chart">
+          <IwdBarChart data={data} />
+        </div>
+        <Legends
+          data={data}
+          classes={{
+            container: 'iwd-agrc-legend',
+            child: 'iwd-agrc-legend-child'
+          }}
+        />
+      </section>
+    </div>
+  );
+}
+
+function ChartsContainer({ data, page }) {
   return (
     <div className="iwd-scroll-child" data-pgno="1">
-      <div className="iwd-analysis-chart-container">
-        <RatingWiseExposure ratingWiseExposure={ratingWiseExposure} />
-        <MaturityWiseExposure maturityWiseExposure={maturityWiseExposure} />
-      </div>
+      {page === 'equity' ?
+        <>
+          <MarketCapAllocation data={data.market_cap_alloc} />
+          <TopSectorAllocation data={data.sector_alloc} />
+        </> :
+        <>
+          <RatingWiseExposure data={data.rating_exposure} />
+          <MaturityWiseExposure data={data.maturity_exposure} />
+        </>
+      }
     </div>
   );
 }
-
-
 
 export default Analysis;

@@ -1,29 +1,32 @@
 import React from 'react'
 
-function Legends({ legends }) {
+function Legends({ data = {}, columns = 2, classes = {} }) {
+  const {
+    container: containerClass,
+    child: childClass,
+    label: labelClass,
+    value: valueClass,
+    icon: iconClass,
+  } = classes;
+
   return (
-    <ul className="iwd-legends">
-      {Object.entries(legends).map(([key, share], _, thisArray) => (
+    <ul className={`iwd-legend-container ${containerClass}`}>
+      {Object.entries(data).map(([key, share]) => (
         <li
           key={key}
-          className="iwd-legend"
+          className={`iwd-legend-child ${childClass}`}
           style={{
-            width:
-              thisArray.length <= 4
-                ? thisArray.length <= 3
-                  ? `${100 / thisArray.length}`
-                  : '50%'
-                : '30%',
+            width: `${100/columns}%`,
           }}
         >
-          <header className="iwd-legend-header">
+          <header className="iwd-lc-header">
             <div
-              className="iwd-legend-icon"
+              className={`iwd-lc-icon ${iconClass}`}
               style={{ opacity: share / 100 }}
             ></div>
-            <div className="iwd-legend-title">{key}</div>
+            <div className={`iwd-lc-title ${labelClass}`}>{key}</div>
           </header>
-          <div className="iwd-legend-value">{share}</div>
+          <div className={`iwd-lc-value ${valueClass}`}>{share}</div>
         </li>
       ))}
     </ul>
