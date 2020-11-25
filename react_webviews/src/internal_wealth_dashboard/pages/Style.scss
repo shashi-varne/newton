@@ -870,6 +870,15 @@ $background: #F9F9F9;
       letter-spacing: 2px;
       text-transform: uppercase;
     }
+
+    .iwd-analysis-portfolio-name {
+      color: $grey;
+      font-size: 17px;
+    }
+
+    .iwd-analysis-portfolio-percentage {
+      font-size: 15px;
+    }
   }
   .iwd-analysis-top-amcs {
     @extend .iwd-analysis-portfolios-equity;
@@ -886,6 +895,10 @@ $background: #F9F9F9;
   .iwd-analysis-amc-name {
     color: $grey;
     font-size: 13px;
+  }
+
+  .iwd-analysis-amc-percentage {
+    font-size: 17px;
   }
   
   .iwd-analysis-amc {
@@ -904,6 +917,7 @@ $background: #F9F9F9;
   
   .iwd-analysis-debt-holding {
     display: flex;
+    align-items: center;
     width: 50%;
     height: 49px;
     margin-top: 50px;
@@ -937,6 +951,10 @@ $background: #F9F9F9;
   .iwd-analysis-debt-holding-name {
     color: $grey;
     font-size: 17px;
+  }
+
+  .iwd-analysis-debt-holding-percentage {
+    font-size: 15px;
   }
 }
 
@@ -1176,6 +1194,7 @@ $background: #F9F9F9;
   #iwd-analysis {
     .iwd-analysis-portfolios-equity {
       overflow-y: auto;
+      flex-direction: column;
       height: auto;
     }
     .iwd-analysis-amc {

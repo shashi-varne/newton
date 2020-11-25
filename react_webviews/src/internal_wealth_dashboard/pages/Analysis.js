@@ -268,7 +268,7 @@ function TopStocks({ topStocks }) {
                   </div>
                   <div className="iwd-analysis-portfolio-name">{company}</div>
                   <div className="iwd-analysis-portfolio-percentage">
-                    {percentage}
+                    {percentage}%
                   </div>
                 </main>
               </div>
@@ -318,7 +318,7 @@ function TopAMCS({ topAMCs }) {
                 <main>
                   <div className="iwd-analysis-amc-name">{name}</div>
                   <div className="iwd-analysis-amc-percentage">
-                    {percentage}
+                    {percentage}%
                   </div>
                 </main>
               </div>
