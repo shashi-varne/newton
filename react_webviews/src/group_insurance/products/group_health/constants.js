@@ -153,10 +153,10 @@ export const hdfc = {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
             },
-            {
-                'name' : 'OTHER RELATIVE',
-                'value': 'OTHER RELATIVE'
-            }
+            // {
+            //     'name' : 'OTHER RELATIVE',
+            //     'value': 'OTHER RELATIVE'
+            // }
         ]
     },
     select_ped_screen: {

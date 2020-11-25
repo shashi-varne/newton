@@ -315,7 +315,7 @@ export async function updateLead( body, quote_id) {
             this.setState({
                 show_loader: false
             });
-            if (resultData.bmi_check) {
+            if (resultData.bmi_check|| resultData.error[0]==='BMI check failed.') {
                 this.setState({
                     openBmiDialog: true
                 }, () => {
@@ -323,6 +323,7 @@ export async function updateLead( body, quote_id) {
                 });
             } else {
                 toast(
+                    resultData.error[0] ||
                     resultData.error ||
                     resultData.message ||
                     'Something went wrong'

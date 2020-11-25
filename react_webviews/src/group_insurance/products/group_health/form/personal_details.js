@@ -45,7 +45,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
   onload = () => {
   
-    let lead = this.state.lead || {};  
+    let lead = this.state.lead || {}
     let quotation = this.state.quotation || {};     
     let insured_people_details  = lead.insured_people_details;
     let occupationOptions = this.state.screenData.occupation_opts;
@@ -101,7 +101,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.provider !== 'STAR'){
       insured_people_details.forEach((member) => {
        if (member.insured_person.relation_key === backend_key) {
-         form_data = member.insured_person         
+        form_data = member.insured_person
        }
      })
  }
@@ -126,15 +126,15 @@ class GroupHealthPlanPersonalDetails extends Component {
       var occupation;
       insured_people_details.forEach((member) => {
         if (member.insured_person.relation_key === backend_key) {
-           occupation = member.insured_person.occupation
-           form_data = member.insured_person
+          form_data = member.insured_person   
+          occupation = member.insured_person.occupation
         }
       })
-      // let occupation = lead[backend_key].occupation;
+      
       let occupationIndex = '';
       occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
       form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
-    }
+    };
 
     var selectedIndex = 123;
     let height = form_data.height || height_options[selectedIndex].value;
@@ -362,6 +362,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.name_error = 'Invalid name';
     }
 
+    let weightlimit = form_data.weight.toString();
+
+    if(weightlimit.length > 3){
+      form_data.weight_error = "Invalid weight";
+    }
 
     let canSubmitForm = true;
     for (var key in form_data) {
@@ -374,7 +379,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     this.setState({
-      form_data: form_data //
+      form_data: form_data
     })
 
 
