@@ -748,10 +748,10 @@ export const star = {
     },
     personal_details_screen: {
         occupation_opts: [
-            {
-                // 'name': 'none',
-                // 'value': 'none'
-            },
+            // {
+            //     'name': 'none',
+            //     'value': 'none'
+            // },
             {
                 'name': 'BUSINESS/TRADERS',
                 'value': '1'
@@ -991,12 +991,12 @@ export const avilableMembersToInsured = [
 ];
 
 
-export function getCoverageType(lead) {  console.log(lead)
+export function getCoverageType(lead) {
     let insured_people_details = lead.insured_people_details || [];
     let insurance_type = lead.quotation_details.insurance_type;
-
-    if(insurance_type !== 'self' && insured_people_details.length > 2) { //one extra for applicant
-        if(lead.floater_type === 'floater_type') {
+    console.log( lead    )
+    if(insurance_type !== 'self' && insured_people_details.length >= 2) { //one extra for applicant
+        if(lead.quotation_details.floater_type === 'floater') {
             return 'Family floater';
         }
 
