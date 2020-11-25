@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import {
-  Route,
-  Switch
-} from 'react-router-dom';
-import { withRouter } from "react-router";
+import { Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import '../common/theme/Style.scss';
 import { themeConfig } from 'utils/constants';
@@ -35,7 +32,7 @@ const ScrollToTop = withRouter(
   class ScrollToTopWithoutRouter extends Component {
     componentDidUpdate(prevProps) {
       if (this.props.location !== prevProps.location) {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
       }
     }
 

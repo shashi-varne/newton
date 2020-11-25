@@ -76,15 +76,11 @@ const Dashboard = () => {
     <div className="iwd-page" id="iwd-dashboard">
       <PageHeader>
         <>
-          <div className="iwd-header-title">Dashboard</div>
-          <div className="iwd-header-subtitle">Welcome back, Uttam</div>
+          <div className='iwd-header-title'>Dashboard</div>
+          <div className='iwd-header-subtitle'>Welcome back, Uttam</div>
         </>
       </PageHeader>
-      <SnapScrollContainer
-        pages={2}
-        onPageChange={pageChanged}
-        hideFooter={isMobileView}
-      >
+      <SnapScrollContainer pages={2} onPageChange={pageChanged} hideFooter={isMobileView}>
         <>
           <div className="iwd-scroll-child" data-pgno="1">
             <IwdCard
@@ -146,23 +142,23 @@ const Dashboard = () => {
                   progress={42}
                   strokeWidth={10}
                   dimension={200}
-                  color="#4AD0C0"
-                  secondaryColor="#3fd9c7"
+                  color='#4AD0C0'
+                  secondaryColor='#3fd9c7'
                 />
-                <div id="iwd-daa-legend">
-                  <div className="iwd-daal-item">
-                    <div className="label">
-                      <div className="dot"></div>
+                <div id='iwd-daa-legend'>
+                  <div className='iwd-daal-item'>
+                    <div className='label'>
+                      <div className='dot'></div>
                       Equity
                     </div>
-                    <div className="value">42%</div>
+                    <div className='value'>42%</div>
                   </div>
-                  <div className="iwd-daal-item">
-                    <div className="label">
-                      <div className="dot"></div>
+                  <div className='iwd-daal-item'>
+                    <div className='label'>
+                      <div className='dot'></div>
                       Debt
                     </div>
-                    <div className="value">58%</div>
+                    <div className='value'>58%</div>
                   </div>
                 </div>
               </div>
@@ -177,28 +173,28 @@ const Dashboard = () => {
             >
               <div id="iwd-dr-data">
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
-                  <div className="iwd-drb-label">Return</div>
-                  <div className="iwd-drb-value">{riskData.return}%</div>
+                  <div className='iwd-drb-label'>Return</div>
+                  <div className='iwd-drb-value'>{riskData.return}%</div>
                 </div>
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
-                  <div className="iwd-drb-label">Alpha</div>
-                  <div className="iwd-drb-value">{riskData.alpha}%</div>
+                  <div className='iwd-drb-label'>Alpha</div>
+                  <div className='iwd-drb-value'>{riskData.alpha}%</div>
                 </div>
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}>
-                  <div className="iwd-drb-label">Volatility</div>
-                  <div className="iwd-drb-value">{riskData.std_dev}%</div>
+                  <div className='iwd-drb-label'>Volatility</div>
+                  <div className='iwd-drb-value'>{riskData.std_dev}%</div>
                 </div>
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
-                  <div className="iwd-drb-label">Beta</div>
-                  <div className="iwd-drb-value">{riskData.beta}</div>
+                  <div className='iwd-drb-label'>Beta</div>
+                  <div className='iwd-drb-value'>{riskData.beta}</div>
                 </div>
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
-                  <div className="iwd-drb-label">Sharpe Ratio</div>
-                  <div className="iwd-drb-value">{riskData.sharpe_ratio}</div>
+                  <div className='iwd-drb-label'>Sharpe Ratio</div>
+                  <div className='iwd-drb-value'>{riskData.sharpe_ratio}</div>
                 </div>
-                <div className="iwd-dr-box">
-                  <div className="iwd-drb-label">Information Ratio</div>
-                  <div className="iwd-drb-value">{riskData.information_ratio}</div>
+                <div className='iwd-dr-box'>
+                  <div className='iwd-drb-label'>Information Ratio</div>
+                  <div className='iwd-drb-value'>{riskData.information_ratio}</div>
                 </div>
               </div>
             </IwdCard>
