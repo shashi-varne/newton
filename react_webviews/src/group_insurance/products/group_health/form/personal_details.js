@@ -362,11 +362,11 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.name_error = 'Invalid name';
     }
 
-    let weightlimit = form_data.weight.toString();
+    // let weightlimit = form_data.weight.toString();
 
-    if(weightlimit.length > 3){
-      form_data.weight_error = "Invalid weight";
-    }
+    // if(weightlimit.length > 3){
+    //   form_data.weight_error = "Invalid weight";
+    // }
 
     let canSubmitForm = true;
     for (var key in form_data) {
