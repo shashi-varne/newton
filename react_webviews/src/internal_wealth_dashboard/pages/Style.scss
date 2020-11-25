@@ -835,27 +835,6 @@ $background: #F9F9F9;
       flex-direction: column;
     }
     
-    .iwd-analysis-top-sector-allocation-chart-container {
-      display: flex;
-    }
-    
-    .iwd-analysis-top-sector-allocation-chart {
-      background-color: #49d0c0;
-      height: 10px;
-      margin-left: 2px;
-    }
-    
-    .iwd-analysis-top-sector-allocation-chart:nth-last-of-type(1) {
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
-    }
-    
-    .iwd-analysis-top-sector-allocation-chart:nth-of-type(1) {
-      margin-left: 0px;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-    }
-    
     .iwd-analysis-card {
       @extend .iwd-card;
       margin-top: 30px;
