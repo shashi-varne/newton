@@ -75,7 +75,7 @@ class FormCreateProfile extends Component {
 
                 if (!resultData.callback_status) {
                     
-                    if (count <= 20) {
+                    if (count < 20) {
                         this.setState({
                             count: count + 1
                         })

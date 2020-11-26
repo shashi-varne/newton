@@ -184,14 +184,6 @@ class Landing extends Component {
       {
         'title': 'Are there any prepayment charges ?',
         'subtitle': 'Prepayment not allowed for first 6 months. Prepayment charges of 3% flat on the o/s principal to be applied post this.'
-      },
-      {
-        'title': 'What is the minimum and maximum period for repayment?',
-        'subtitle': 'Minimum tenor is 6 months and maximum is 24 months.'
-      },
-      {
-        'title': 'What is the Processing fee? ',
-        'subtitle': 'Processing fee is 2% of gross disbursement amount plus GST as applicable'
       }
     ];
 
