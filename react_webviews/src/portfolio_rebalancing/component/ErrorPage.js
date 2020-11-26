@@ -43,6 +43,7 @@ const ErrorPage = (props) => {
       disableBack
       handleClick={retry}
       title='Portfolio rebalancing'
+      classOverRideContainer='pr-container'
     >
       <>
         <section className='image-cover'>
@@ -56,6 +57,14 @@ const ErrorPage = (props) => {
         <Typography className='error-text'>
           Something went wrong! Please try again after some time.
         </Typography>
+        <section className='help-container '>
+          <Typography className='help-text'>For any help, reach us at</Typography>
+          <div className='help-contact-email flex-item'>
+            <Typography className='help-contact'>+80-30-408363</Typography>
+            <hr style={{ height: '9px', margin: '0', borderWidth: '0.6px' }} />
+            <Typography className='help-email'>{'ask@fisdom.com'.toUpperCase()}</Typography>
+          </div>
+        </section>
       </>
     </Container>
   );

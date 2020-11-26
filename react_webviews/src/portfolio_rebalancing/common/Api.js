@@ -84,3 +84,23 @@ export const verify_otp = async (trx, params) => {
     throw err;
   }
 };
+
+export const expire_rebalance_switch = async () => {
+  const pc_urlsafe = getConfig().pc_urlsafe;
+
+  try {
+    const res = await Api.get(`api/rebalance/action/${pc_urlsafe}/expire`);
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (err) {
+    throw err;
+  }
+};

@@ -212,7 +212,7 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
               </div>
 
               <div onClick={() => handleFundDetails(data.recommended_mf.isin)}>
-                <KeyboardArrowRightIcon style={{ color: '#35CB5D' }} />
+                <KeyboardArrowRightIcon style={{ color: '#35CB5D', cursor: 'pointer' }} />
               </div>
             </div>
           </section>

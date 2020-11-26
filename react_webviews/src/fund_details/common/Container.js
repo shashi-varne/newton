@@ -163,7 +163,7 @@ const Container = (props) => {
 
   return (
     <div
-      className={`ContainerWrapper fd-container  ${props.classOverRide}  ${
+      className={`ContainerWrapper   ${props.classOverRide}  ${
         getConfig().productName !== 'fisdom' ? 'blue' : ''
       }`}
     >

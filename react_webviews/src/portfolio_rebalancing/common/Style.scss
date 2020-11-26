@@ -1,5 +1,8 @@
+.pr-container {
+  padding-bottom: 100px !important;
+}
 .pr-main-container {
-  padding-bottom: 1em;
+  // padding-bottom: 1em;
   .left-item {
     margin-right: 10px;
   }
@@ -60,13 +63,13 @@
   }
 
   // Footer
-  .Footer {
-    position: relative;
-    margin-bottom: 0;
-  }
-  .footer-position {
-    position: fixed !important;
-  }
+  // .Footer {
+  //   position: relative;
+  //   margin-bottom: 0;
+  // }
+  // .footer-position {
+  //   position: fixed !important;
+  // }
 }
 
 .switch-reason-container {

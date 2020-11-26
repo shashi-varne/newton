@@ -158,14 +158,14 @@ class Container extends Component {
 
           {/* Children Block */}
           <div
-            style={this.props.styleContainer}
+            //style={this.props.styleContainer}
             className={`Container ${this.props.classOverRideContainer} ${
               this.props.noPadding ? 'no-padding' : ''
             }`}
           >
             {this.props.children}
           </div>
-          {this.props.helpContact && (
+          {/* {this.props.helpContact && (
             <section className='help-container '>
               <Typography className='help-text'>For any help, reach us at</Typography>
               <div className='help-contact-email flex-item'>
@@ -174,7 +174,7 @@ class Container extends Component {
                 <Typography className='help-email'>{'ask@fisdom.com'.toUpperCase()}</Typography>
               </div>
             </section>
-          )}
+          )} */}
 
           {/* Footer Block */}
           {!this.props.noFooter && (

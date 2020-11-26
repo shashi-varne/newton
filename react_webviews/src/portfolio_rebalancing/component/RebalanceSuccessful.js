@@ -50,6 +50,7 @@ const RebalanceSuccessful = () => {
       handleClick={handleClick}
       events={sendEvents('just_set_events')}
       title='Portfolio rebalance successful!'
+      classOverRideContainer='pr-container'
     >
       <section className='image-success-cover'>
         <img
@@ -75,6 +76,14 @@ const RebalanceSuccessful = () => {
           You can view the status of your SIP and corpus switch from ‘Existing SIP’ and ‘Pending
           Switch’ section of your Portfolio.
         </Typography>
+      </section>
+      <section className='help-container '>
+        <Typography className='help-text'>For any help, reach us at</Typography>
+        <div className='help-contact-email flex-item'>
+          <Typography className='help-contact'>+80-30-408363</Typography>
+          <hr style={{ height: '9px', margin: '0', borderWidth: '0.6px' }} />
+          <Typography className='help-email'>{'ask@fisdom.com'.toUpperCase()}</Typography>
+        </div>
       </section>
     </Container>
   );

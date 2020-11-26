@@ -258,11 +258,8 @@
 }
 
 .fd-container {
-  // Footer
-  padding-bottom: 1em !important;
-  .Footer {
-    position: relative;
-  }
+  padding-bottom: 100px !important;
+  overflow: hidden;
 }
 .fund-risk-details {
   .fd-risk-divider {

@@ -85,6 +85,7 @@ const RebalanceFund = (props) => {
       goBack={goBack}
       title='Rebalance funds'
       classOverRide='pr-rebalance-fund-container'
+      classOverRideContainer='pr-container'
     >
       {funds?.length > 0 &&
         !isEmpty(checkMap) &&

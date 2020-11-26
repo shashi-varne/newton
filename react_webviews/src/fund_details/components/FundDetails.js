@@ -100,6 +100,7 @@ const FundDetails = ({ classes, history }) => {
         handleClick={goBack}
         buttonTitle='Ok'
         showLoader={isLoading}
+        classOverRideContainer='fd-container'
       >
         {fundDetails && (
           <>

@@ -48,6 +48,7 @@ const Landing = (props) => {
       handleClick={nextPage}
       events={sendEvents('just_set_events')}
       title='Portfolio rebalancing'
+      classOverRideContainer='pr-container'
     >
       <section>
         <div className='common-top-page-subtitle'>

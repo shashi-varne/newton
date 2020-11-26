@@ -1,6 +1,6 @@
 import React from 'react';
 import { DefaultLayout } from './layout';
-
+import Typography from '@material-ui/core/Typography';
 const Footer = (props) => {
   return (
     <div className={'Footer'}>

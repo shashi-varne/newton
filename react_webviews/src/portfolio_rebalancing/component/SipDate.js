@@ -155,6 +155,7 @@ const Date = (props) => {
       goBack={goBack}
       events={sendEvents('just_set_events')}
       title='Select SIP auto debit  date'
+      classOverRideContainer='pr-container'
     >
       {funds.length > 0 &&
         funds.map((el) => {

@@ -3,7 +3,7 @@ import Container from '../common/Container';
 import Typography from '@material-ui/core/Typography';
 import { navigate } from '../common/commonFunction';
 import { storageService } from 'utils/validators';
-import { request_order, resend_otp, verify_otp } from '../common/Api';
+import { request_order, resend_otp, verify_otp, expire_rebalance_switch } from '../common/Api';
 import toast from 'common/ui/Toast';
 import OtpDefault from '../../common/ui/otp';
 import { nativeCallback } from 'utils/native_callback';
@@ -62,6 +62,7 @@ const Otp = (props) => {
       setDisable(true);
       setError(false);
       await verify_otp(trx, params);
+      await expire_rebalance_switch();
       sendEvents('next');
       navigate(props, 'rebalance-success');
     } catch (err) {
@@ -128,6 +129,7 @@ const Otp = (props) => {
       disable={disable}
       events={sendEvents('just_set_events')}
       title='Enter OTP to verify'
+      classOverRideContainer='pr-container'
     >
       <div className='pr-otp-container'>
         <section className='otp-successful-section'>
