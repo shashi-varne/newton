@@ -63,10 +63,8 @@ const SnapScrollContainer = ({
 
     if (currentPage === pages) {
       container.scrollTop -= currentPageHeight * pages;
-      setCurrentPage(1)
     } else {
       container.scrollTop += currentPageHeight;
-      setCurrentPage(page => page + 1)
     }
   };
 
