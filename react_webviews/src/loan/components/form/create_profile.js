@@ -80,9 +80,7 @@ class FormCreateProfile extends Component {
                             count: count + 1
                         })
 
-                        setTimeout(() => {
-                            this.getDedupeCallback();
-                        }, 3000);
+                        this.getDedupeCallback();
                         
                     } else {
                         let searchParams = getConfig().searchParams + '&status=sorry';
