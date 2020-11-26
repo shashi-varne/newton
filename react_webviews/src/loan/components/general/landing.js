@@ -191,7 +191,7 @@ class Landing extends Component {
       },
       {
         'title': 'What is the Processing fee? ',
-        'subtitle': 'Processing fee is 2% of gross disbursement amount plus GST as applicable'
+        'subtitle': 'Processing fee is 2% of gross disbursement amount plus GST as applicable.'
       }
     ];
 
