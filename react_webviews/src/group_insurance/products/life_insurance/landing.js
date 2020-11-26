@@ -27,7 +27,7 @@ class FyntuneLanding extends Component {
       stepsToFollow: fyntuneConstants.stepsToFollow,
       faq_data: fyntuneConstants.faq_data,
       logo_cta: fyntuneConstants.logo_cta,
-      openDialogReset: false
+      openDialogRefresh: false
     };
   }
 
@@ -38,11 +38,11 @@ class FyntuneLanding extends Component {
     });
   };
 
-  async componentDidMount(){
-
+  onload = async() => {
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
-      show_loader: true
+      show_loader: true,
+      openDialogRefresh: false
     })
     //resume api
     try{
@@ -74,7 +74,11 @@ class FyntuneLanding extends Component {
       toast("Something went wrong");
     }
   
-}
+  }
+
+  async componentDidMount(){
+    this.onload();
+  }
 
   
 
@@ -115,14 +119,14 @@ class FyntuneLanding extends Component {
   };
 
   handleDialogOk = () => {
-    window.location.reload();
+    this.onload();
   }
 
   renderDialog = () => {
     return (
         <Dialog
             fullScreen={false}
-            open={this.state.openDialogReset}
+            open={this.state.openDialogRefresh}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
         >
@@ -158,7 +162,7 @@ class FyntuneLanding extends Component {
     if(getConfig().Web){
       open_browser_web(journeyURL, '_blank')
       this.setState({
-        openDialogReset: true
+        openDialogRefresh: true
       });
 
     }else{
@@ -248,20 +252,28 @@ class FyntuneLanding extends Component {
           
           storageService().setObject('fyntune_ref_id', fyntuneRefId);
           
-          if (getConfig().app === 'ios') {
-            nativeCallback({
-                action: 'show_top_bar', message: {
-                    title: 'Insurance Savings Plan' 
-                }
+          if(getConfig().Web) {
+            open_browser_web(journeyURL, '_blank')
+            this.setState({
+              openDialogRefresh: true
             });
-          }
-          nativeCallback({
-          action: 'take_control', message: {
-              back_url: landingScreenURL,
-              back_text: 'You will be redirected to the starting point, are you sure you want to continue?'
+          } else {
+            if (getConfig().app === 'ios') {
+              nativeCallback({
+                  action: 'show_top_bar', message: {
+                      title: 'Insurance Savings Plan' 
+                  }
+              });
             }
-          });
-          window.location.href = journeyURL;
+            nativeCallback({
+            action: 'take_control', message: {
+                back_url: landingScreenURL,
+                back_text: 'You will be redirected to the starting point, are you sure you want to continue?'
+              }
+            });
+
+            window.location.href = journeyURL;
+          }
             
         } else {
             toast(resultData.error || resultData.message || "Something went wrong");
