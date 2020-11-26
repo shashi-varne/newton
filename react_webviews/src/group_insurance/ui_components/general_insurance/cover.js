@@ -86,7 +86,7 @@ class RenderDiseasesClass extends Component {
 
           <div className="plan-details">
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', lineHeight: '20px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', lineHeight: '20px', flexDirection : 'column' }}>
             {this.state.diseasesData && this.state.diseasesData.product_diseases_covered &&
               this.state.diseasesData.product_diseases_covered.map(this.renderDiseases)}
           </div>

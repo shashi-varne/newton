@@ -584,7 +584,7 @@ export function getBhartiaxaStatusToState(policy) {
   let path = '';
   if (status === 'complete') {
     path = 'plan';
-  } else if (status === 'init' && payment_status === 'payment_done') {
+  } else if (status !== 'complete' && payment_status === 'payment_done') {
     path = 'payment-success';
   } else {
     path = 'plan';

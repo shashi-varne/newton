@@ -53,8 +53,6 @@ class GroupHealthLanding extends Component {
 
     let screenData = this.state.providerConfig[screen_name];
 
-    console.log( this.state.providerConfig,"providerConfig")
-
     nativeCallback({ action: "take_control_reset" });
 
     let stepsContentMapper = {

@@ -281,6 +281,7 @@ class Landing extends Component {
         path = 'plan';
       }
 
+
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else if (product_key === 'LIFE_INSURANCE') {
       fullPath = 'life-insurance/entry';
