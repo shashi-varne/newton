@@ -112,6 +112,7 @@ class GroupHealthPlanList extends Component {
         if(provider === 'RELIGARE') {
             groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
             groupHealthPlanData.post_body.eldest_dob = eldest_dict.eldest_dob;
+            groupHealthPlanData.plan_selected.plan_title = 'Care Health';
         }
        
         this.setLocalProviderData(groupHealthPlanData);
