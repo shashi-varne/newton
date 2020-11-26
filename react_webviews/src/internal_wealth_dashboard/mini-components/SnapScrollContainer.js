@@ -2,6 +2,8 @@
 import DownwardIcon from 'assets/ic_down_arrow_purple.svg';
 import UpwardIcon from 'assets/ic_up_arrow_purple.svg';
 import IlsError from 'assets/fisdom/ils_error.svg';
+import IcEncryption from 'assets/fisdom/ic_encryption.svg';
+import IcSebi from 'assets/fisdom/ic_sebi.svg';
 // import IlsErrorMob from 'assets/fisdom/ils_error_mob.svg';
 // -----------------------------------------------
 import React, { useEffect, useState } from 'react';
@@ -24,6 +26,7 @@ const SnapScrollContainer = ({
   isLoading = false,
   loadingText = '',
   onErrorBtnClick = () => {},
+  includeIcons = true,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageHeight, setCurrentPageHeight] = useState(0);
@@ -42,7 +45,7 @@ const SnapScrollContainer = ({
 
     const childElems = document.getElementsByClassName('iwd-scroll-child');
     let observer = new IntersectionObserver(handleIntersect, options);
-    for (let i = childElems.length; i--;) {
+    for (let i = childElems.length; i--; ) {
       observer.observe(childElems[i]);
     }
   };
@@ -65,21 +68,26 @@ const SnapScrollContainer = ({
       container.scrollTop -= currentPageHeight * pages;
     } else {
       container.scrollTop += currentPageHeight;
-    } 
+    }
   };
 
   const Footer = (
-    <div id="iwd-page-footer">
-      <IconButton className="iwd-pf-btn" onClick={scrollPage}>
-        <img
-          src={currentPage < pages ? DownwardIcon : UpwardIcon}
-          alt=""
-        />
-      </IconButton>
-      <div id="iwd-pf-page-nos">
-        <b>{currentPage}</b>|{pages}
+    <>
+      {/* {currentPage === pages && (
+        <div className="iwd-page-icons">
+          <img src={IcEncryption} alt="Encryption" />
+          <img src={IcSebi} alt="Sebi" id="iwd-footer-sebi" />
+        </div>
+      )} */}
+      <div id="iwd-page-footer">
+        <IconButton className="iwd-pf-btn" onClick={scrollPage}>
+          <img src={currentPage < pages ? DownwardIcon : UpwardIcon} alt="" />
+        </IconButton>
+        <div id="iwd-pf-page-nos">
+          <b>{currentPage}</b>|{pages}
+        </div>
       </div>
-    </div>
+    </>
   );
 
   if (isLoading) {
@@ -97,7 +105,7 @@ const SnapScrollContainer = ({
           templateErrTitle="Oops!"
           templateErrText={
             errorText ||
-            "Something went wrong! Please retry after some time or contact your wealth manager"
+            'Something went wrong! Please retry after some time or contact your wealth manager'
           }
           templateBtnText="Retry"
           clickHandler={onErrorBtnClick}
@@ -108,9 +116,7 @@ const SnapScrollContainer = ({
 
   return (
     <>
-      <div className="iwd-scroll-contain">
-        {scrollChildren}
-      </div>
+      <div className="iwd-scroll-contain">{scrollChildren}</div>
       {!hideFooter && !error && Footer}
     </>
   );

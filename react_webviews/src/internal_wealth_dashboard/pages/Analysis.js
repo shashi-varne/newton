@@ -46,7 +46,7 @@ function Analysis() {
   const [graphData, setGraphData] = useState({});
   const [topHoldings, setTopHoldings] = useState({});
   const [topAMCs, setTopAMCs] = useState({});
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const getPortfolio = async () => {
@@ -70,8 +70,11 @@ function Analysis() {
       setTopAMCs(top_amcs);
       setTopHoldings(top_holdings);
       setGraphData(graphDataPoints);
+      setIsLoading(false);
+      setError(false);
     } catch (e) {
       console.log(e);
+      setIsLoading(false);
       setError(true);
       toast(e);
     }
