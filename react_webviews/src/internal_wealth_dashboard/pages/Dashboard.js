@@ -10,6 +10,7 @@ import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdCard from '../mini-components/IwdCard';
+import ScrollTopBtn from '../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
@@ -224,6 +225,7 @@ const Dashboard = () => {
               </>
             </IwdCard>
           </div>
+          {isMobileView && <ScrollTopBtn />}
         </>
       </SnapScrollContainer>
     </div>

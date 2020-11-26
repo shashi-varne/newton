@@ -37,13 +37,13 @@ const Holdings = () => {
   const fetchHoldings = async () => {
     try {
       setIsLoading(true);
-      // const result = await holdings();
-      // if (isEmpty(result)) {
-      //   setHasError(true);
-      // }
-      setHoldingsList(dummyHoldings);
+      const result = await holdings();
+      if (isEmpty(result)) {
+        setHasError(true);
+      }
+      setHoldingsList(result);
       if (filterVal) {
-        filter(dummyHoldings);
+        filter(result);
       }
     } catch (e) {
       console.log(e);
@@ -203,14 +203,14 @@ const Holdings = () => {
           />
         )}
         <div style={{ flex: '1' }}>
-          <>
+          {/* <> */}
             {!open && (
               <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
                 <img src={filter_sign} alt='filter' />
               </div>
             )}
             <SnapScrollContainer
-              hideFooter={isMobileView}
+              hideFooter={true}
               error={hasError}
               onErrorBtnClick={fetchHoldings}
               isLoading={isLoading}
@@ -229,7 +229,7 @@ const Holdings = () => {
                   : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
               </>
             </SnapScrollContainer>
-          </>
+          {/* </> */}
         </div>
       </section>
     </div>

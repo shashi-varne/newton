@@ -3,9 +3,10 @@ import nextArrow from 'assets/fisdom/ic_next_arrow.svg';
 import positive from 'assets/ic_positive.svg';
 import negative from 'assets/ic_negative.svg';
 // -------------------------------------
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Button } from 'material-ui';
 import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
+import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 
@@ -19,8 +20,9 @@ const HoldingCard = ({
   ...props
 }) => {
   const navigate = navigateFunc.bind(props);
+  const [openDetail, setOpenDetail] = useState(false);
   const {
-    amc_logo_small = '',
+    amc_logo_big = '',
     name,
     fisdom_rating,
     isin = 1,
@@ -28,6 +30,21 @@ const HoldingCard = ({
 
   return (
     <div className="iwd-holding-card">
+      {openDetail &&
+        <HoldingDetail
+          isin={isin}
+          investmentDetail={{
+            name,
+            invested_since,
+            scheme_type,
+            current_val: current_val.amount,
+            invested_val,
+            xirr,
+            amcLogo: amc_logo_big,
+          }}
+          onCloseClick={() => setOpenDetail(false)}
+        />
+      }
       <div>stars</div>
       <div className="iwd-hc-type">
         {scheme_type}
@@ -36,7 +53,7 @@ const HoldingCard = ({
       </div>
       <div className="iwd-hc-title">
         <span>{name}</span>
-        <img src={amc_logo_small} alt="" height="40" />
+        <img src={amc_logo_big} alt="" height="80" />
       </div>
       <div className="iwd-hc-numbers">
         <div className="iwd-hcn-item">
@@ -60,7 +77,7 @@ const HoldingCard = ({
         classes={{
           root: 'iwd-hc-more'
         }}
-        onClick={() => navigate(`fund-detail/${isin}`)}
+        onClick={() => setOpenDetail(true)}
       >
         <span>More details</span>
         <img src={nextArrow} alt="" style={{ marginLeft: '20px' }} />

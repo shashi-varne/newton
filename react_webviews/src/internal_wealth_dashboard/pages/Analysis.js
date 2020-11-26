@@ -25,6 +25,7 @@ import IwdBubbleChart from '../mini-components/IwdBubbleChart';
 import IwdBarChart from '../mini-components/IwdBarChart';
 import { isEmpty } from '../../utils/validators';
 import IwdCard from '../mini-components/IwdCard';
+import ScrollTopBtn from '../mini-components/ScrollTopBtn';
 
 const topStocksIconMappings = {
   'Financial Services': IcSecFinanceIcon,
@@ -125,6 +126,7 @@ function Analysis() {
         isLoading={isLoading}
         loadingText="Hold tight! Getting you the good stuff ..."
         error={error}
+        hideFooter={isMobileView}
         onErrorBtnClick={getPortfolio}
       >
         <ChartsContainer
@@ -136,6 +138,7 @@ function Analysis() {
           <TopHoldings topHoldings={topHoldings.debt} />
         }
         <TopAMCS topAMCs={topAMCs[pageType]} />
+        {isMobileView && <ScrollTopBtn />}
       </SnapScrollContainer>
     </section>
   );

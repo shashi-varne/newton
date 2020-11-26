@@ -1,4 +1,4 @@
 import ErrorScreen from "./ErrorScreen";
-require('./Style.scss');
+require('./ErrorScreen.scss');
 
 export default ErrorScreen;

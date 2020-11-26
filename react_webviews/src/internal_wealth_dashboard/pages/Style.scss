@@ -232,6 +232,7 @@ $background: #F9F9F9;
 
 .iwd-scroll-contain {
   scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
   height: 75%;
   margin-right: -25px;
   padding-right: 25px;
@@ -477,6 +478,12 @@ $background: #F9F9F9;
   background-size: contain;
   padding: 50px 100px;
   box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
 
   .iwd-hd-header {
     display: flex;
@@ -499,6 +506,7 @@ $background: #F9F9F9;
       font-size: 30px;
       line-height: 40px;
       color: $dark;
+      max-width: 85%;
     }
   }
 
@@ -575,6 +583,24 @@ $background: #F9F9F9;
       }
     }
   }
+
+  .iwd-hd-transactions {
+    margin-top: 60px;
+
+    .iwd-card-header {
+      margin-bottom: 10px;
+    }
+
+    .iwd-hdt-table-container {
+      max-height: 260px;
+      overflow: auto;
+    }
+  }
+}
+
+#iwd-holding-detail-blank {
+  @extend #iwd-holding-detail;
+  background: white !important;
 }
 
 // IWD Analysis Page
@@ -585,10 +611,6 @@ $background: #F9F9F9;
     font-family: "Poppins";
   
     & .iwd-profile-icon {
-      color: $primary;
-    }
-  
-    & .iwd-page-footer {
       color: $primary;
     }
   }
@@ -754,13 +776,8 @@ $background: #F9F9F9;
   } 
 
   .iwd-analysis-card {
-    margin-top: 30px;
     width: 100%;
     height: 90%;
-  }
-
-  .iwd-analysis-card-margin {
-    margin-top: 30px;
   }
 
   .iwd-analysis-portfolios-equity {
@@ -831,13 +848,8 @@ $background: #F9F9F9;
     }
     
     .iwd-analysis-card {
-      margin-top: 30px;
       width: 100%;
       height: 90%;
-    }
-    
-    .iwd-analysis-card-margin {
-      margin-top: 30px;
     }
     
     .iwd-analysis-portfolios-equity {
@@ -1058,7 +1070,7 @@ $background: #F9F9F9;
     flex-direction: column;
     flex-wrap: nowrap;
     scroll-snap-align: none;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
   }
 
   .iwd-header-title {
@@ -1069,6 +1081,7 @@ $background: #F9F9F9;
 
   #iwd-dashboard {
     #iwd-d-numbers {
+      width: 100%;
       flex: 0 0 auto;
       margin-bottom: 40px;
       flex-direction: column;
@@ -1109,6 +1122,7 @@ $background: #F9F9F9;
 
     #iwd-d-asset-alloc {
       flex: 0 0 auto;
+      width: 100%;
 
       #iwd-daa-graph {
         flex-direction: column;
@@ -1140,6 +1154,7 @@ $background: #F9F9F9;
     #iwd-d-risk {
       margin-right: 0;
       margin-bottom: 40px;
+      width: 100%;
 
       #iwd-dr-data {
         display: flex;
@@ -1168,6 +1183,7 @@ $background: #F9F9F9;
     }
 
     #iwd-d-newsletter {
+      width: 100%;
       padding: 30px 40px;
 
       .iwd-card-header {
@@ -1218,6 +1234,7 @@ $background: #F9F9F9;
     }
 
     .iwd-analysis-graph-left {
+      width: 100%;
       margin-right: 0;
       margin-bottom: 40px;
 
@@ -1257,6 +1274,7 @@ $background: #F9F9F9;
     }
 
     .iwd-analysis-graph-right {
+      width: 100%;
       .iwd-agr-content {
         .iwd-chart {
           margin-bottom: 50px; 
@@ -1315,7 +1333,7 @@ $background: #F9F9F9;
   #iwd-holdings {
     .iwd-scroll-contain {
       padding-left: 0;
-      height: 85vh;
+      height: 78vh;
       flex-direction: column;
       flex-wrap: nowrap;
     }
@@ -1326,12 +1344,14 @@ $background: #F9F9F9;
     padding: 30px 20px;
     text-align: center;
     height: 100%;
+    overflow-y: auto;
     box-sizing: border-box;
 
     .iwd-hd-header {
       flex-direction: column;
       margin-bottom: 30px;
       margin-top: 90px;
+      align-items: center;
 
       img {
         margin-right: 0;
@@ -1350,6 +1370,7 @@ $background: #F9F9F9;
       .iwd-hdh-fund-name {
         font-size: 17px;
         line-height: 27px;
+        max-width: 100%;
       }
     }
 
@@ -1431,6 +1452,12 @@ $background: #F9F9F9;
         .iwd-hds-item:nth-last-child(1) {
           margin-bottom: 0;
         }
+      }
+    }
+
+    .iwd-hd-transactions {
+      .iwd-card-header {
+        text-align: left;
       }
     }
   }
