@@ -70,27 +70,6 @@ class FyntuneReportDetails extends Component {
         });
     }
 
-
-    sendEvents(user_action) {
-        // let eventObj = {
-        //     "event_name": 'health_insurance',
-        //     "properties": {
-        //         "user_action": user_action,
-        //         "product": this.state.providerConfig.provider_api,
-        //         "flow": this.state.insured_account_type || '',
-        //         "screen_name": 'report details',
-        //         "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
-        //         "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
-        //     }
-        // };
-
-        // if (user_action === 'just_set_events') {
-        //     return eventObj;
-        // } else {
-        //     nativeCallback({ events: eventObj });
-        // }
-    }
-
     handleClick = () => {
         this.setState({
             showPlanDetails: false
@@ -101,7 +80,6 @@ class FyntuneReportDetails extends Component {
         
         return (
             <Container
-                events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
                 title={'Insurance Savings Plan'}
                 fullWidthButton={true}
@@ -171,7 +149,7 @@ class FyntuneReportDetails extends Component {
                             </div>
                         </div>
                         
-                        {this.state.policy_data.add_ons_amount && (
+                        {this.state.policy_data.add_ons && (
                             <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
                                 <img src={require(`assets/fisdom/ic_hs_cover_amount.svg`)} alt="" />
@@ -181,7 +159,7 @@ class FyntuneReportDetails extends Component {
                                     ADD ONS
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data.add_ons_amount}
+                                    {this.state.policy_data.add_ons}
                                 </div>
                             </div>
                         </div>

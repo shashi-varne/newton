@@ -9,6 +9,13 @@ import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
 import StepsToFollow from '../../../common/ui/stepsToFollow';
 import {   inrFormatDecimal, numDifferentiationInr, storageService} from '../../../utils/validators';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
+import {open_browser_web} from  'utils/validators';
 
 class FyntuneLanding extends Component {
   constructor(props) {
@@ -19,7 +26,8 @@ class FyntuneLanding extends Component {
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
       faq_data: fyntuneConstants.faq_data,
-      logo_cta: fyntuneConstants.logo_cta
+      logo_cta: fyntuneConstants.logo_cta,
+      openDialogReset: false
     };
   }
 
@@ -106,6 +114,31 @@ class FyntuneLanding extends Component {
     );
   };
 
+  handleDialogOk = () => {
+    window.location.reload();
+  }
+
+  renderDialog = () => {
+    return (
+        <Dialog
+            fullScreen={false}
+            open={this.state.openDialogReset}
+            onClose={this.handleClose}
+            aria-labelledby="responsive-dialog-title"
+        >
+            <DialogContent>
+                <DialogContentText>
+                  Once you complete all the steps on HDFC portal, please click 'OK' to proceed further.
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={this.handleDialogOk} color="default" autoFocus>
+                    OK
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+  }
   handleResume = () => {
     if (!this.state.resume_data.resume_present) {
       return;
@@ -123,7 +156,11 @@ class FyntuneLanding extends Component {
     var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
     if(getConfig().Web){
-      window.location.href = journeyURL;
+      open_browser_web(journeyURL, '_blank')
+      this.setState({
+        openDialogReset: true
+      });
+
     }else{
       if(redirectToHDFC){
 
@@ -361,6 +398,7 @@ class FyntuneLanding extends Component {
           <div className="generic-hr" style={{ marginTop: "12px" }}></div>
         </div>
       </div>
+      {this.renderDialog()}
       </Container>
     );
   }
