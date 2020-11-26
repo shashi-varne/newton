@@ -978,10 +978,10 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                SUM INSURED
+                                SUM INSURED{console.log(this.state.quotation)}
                             </div>
                             <div className="mtr-bottom">
-                                {numDifferentiationInr(this.state.quotation.total_sum_insured)}
+                                {numDifferentiationInr(this.state.quotation.individual_sum_insured)}
                             </div>
                         </div>
                     </div>
