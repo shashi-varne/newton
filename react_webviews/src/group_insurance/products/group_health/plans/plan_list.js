@@ -135,7 +135,7 @@ class GroupHealthPlanList extends Component {
         let plan_data = props;
         return (
             <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
-                <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
+                <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
                         <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.common.base_plan_title :''}</div>
