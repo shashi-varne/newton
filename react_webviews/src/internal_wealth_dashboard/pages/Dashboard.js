@@ -10,6 +10,7 @@ import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdCard from '../mini-components/IwdCard';
+import IwdCommonPageFooter from '../mini-components/IwdCommonPageFooter';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
@@ -223,6 +224,7 @@ const Dashboard = () => {
                 <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
               </>
             </IwdCard>
+            <IwdCommonPageFooter />
           </div>
         </>
       </SnapScrollContainer>

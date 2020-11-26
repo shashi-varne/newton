@@ -25,6 +25,7 @@ import IwdBubbleChart from '../mini-components/IwdBubbleChart';
 import IwdBarChart from '../mini-components/IwdBarChart';
 import { isEmpty } from '../../utils/validators';
 import IwdCard from '../mini-components/IwdCard';
+import IwdCommonPageFooter from '../mini-components/IwdCommonPageFooter'
 
 const topStocksIconMappings = {
   'Financial Services': IcSecFinanceIcon,
@@ -300,6 +301,7 @@ function TopStocks({ topStocks }) {
           )}
         </div>
       </IwdCard>
+
     </div>
   );
 }

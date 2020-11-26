@@ -2,8 +2,6 @@
 import DownwardIcon from 'assets/ic_down_arrow_purple.svg';
 import UpwardIcon from 'assets/ic_up_arrow_purple.svg';
 import IlsError from 'assets/fisdom/ils_error.svg';
-import IcEncryption from 'assets/fisdom/ic_encryption.svg';
-import IcSebi from 'assets/fisdom/ic_sebi.svg';
 // import IlsErrorMob from 'assets/fisdom/ils_error_mob.svg';
 // -----------------------------------------------
 import React, { useEffect, useState } from 'react';
@@ -26,7 +24,6 @@ const SnapScrollContainer = ({
   isLoading = false,
   loadingText = '',
   onErrorBtnClick = () => {},
-  includeIcons = true,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageHeight, setCurrentPageHeight] = useState(0);
@@ -66,28 +63,22 @@ const SnapScrollContainer = ({
 
     if (currentPage === pages) {
       container.scrollTop -= currentPageHeight * pages;
+      setCurrentPage(1)
     } else {
       container.scrollTop += currentPageHeight;
+      setCurrentPage(page => page + 1)
     }
   };
 
   const Footer = (
-    <>
-      {/* {currentPage === pages && (
-        <div className="iwd-page-icons">
-          <img src={IcEncryption} alt="Encryption" />
-          <img src={IcSebi} alt="Sebi" id="iwd-footer-sebi" />
-        </div>
-      )} */}
-      <div id="iwd-page-footer">
-        <IconButton className="iwd-pf-btn" onClick={scrollPage}>
-          <img src={currentPage < pages ? DownwardIcon : UpwardIcon} alt="" />
-        </IconButton>
-        <div id="iwd-pf-page-nos">
-          <b>{currentPage}</b>|{pages}
-        </div>
+    <div id="iwd-page-footer">
+      <IconButton className="iwd-pf-btn" onClick={scrollPage}>
+        <img src={currentPage < pages ? DownwardIcon : UpwardIcon} alt="" />
+      </IconButton>
+      <div id="iwd-pf-page-nos">
+        <b>{currentPage}</b>|{pages}
       </div>
-    </>
+    </div>
   );
 
   if (isLoading) {
