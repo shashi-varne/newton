@@ -31,7 +31,7 @@ class UploadBankStatements extends Component {
       show_loader: false,
       fileUploaded: false,
       form_data: {},
-      total_documents_uploaded: 0
+      total_documents_uploaded: 0,
     };
 
     this.initialize = initialize.bind(this);
@@ -40,6 +40,28 @@ class UploadBankStatements extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: "Application form",
+      steps: [
+        {
+          title: "Income details",
+          status: "init",
+        },
+        {
+          title: "BT transfer details",
+          status: "pending",
+        },
+        {
+          title: "Loan offer",
+          status: "pending",
+        },
+      ],
+    };
+
+    this.setState({
+      progressHeaderData: progressHeaderData,
+    });
   }
 
   onload = () => {};
@@ -67,27 +89,25 @@ class UploadBankStatements extends Component {
     });
   }
 
-  renderNotes = () => (
-    <div style={{lineHeight: '15px'}}>
-      <div>
-        1. Attach latest bank statements of the same account where your salary
-        gets credited every month
+  renderNotes = () => {
+    let notes = [
+      "1. Attach latest bank statements of the same account where your salary gets credited every month",
+      "2. Ensure the bank statements are of the last 3 months from this month",
+      "3. Files must be original and should be uploaded in a PDF format",
+      "4. Share respective passwords if your statements are password protected",
+      "5. Upload multiple statements of the same bank account with each file not exceeding 6 MB",
+    ];
+
+    return (
+      <div style={{ lineHeight: "15px" }}>
+        {notes.map((item, index) => (
+          <div style={{marginTop: '20px', background:'green'}} key={index}>
+            {item}
+          </div>
+        ))}
       </div>
-      <div>
-        2. Ensure the bank statements are of the last 3 months from this month
-      </div>
-      <div>
-        3. Files must be original and should be uploaded in a PDF format
-      </div>
-      <div>
-        4. Share respective passwords if your statements are password protected
-      </div>
-      <div>
-        5. Upload multiple statements of the same bank account with each file
-        not exceeding 6 MB
-      </div>
-    </div>
-  );
+    );
+  };
 
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
@@ -149,11 +169,11 @@ class UploadBankStatements extends Component {
     }
 
     file.doc_type = file.type;
-    let { total_documents_uploaded } = this.state; 
+    let { total_documents_uploaded } = this.state;
     this.setState({
       pdfFile: file,
       fileUploaded: true,
-      total_documents_uploaded: total_documents_uploaded + 1
+      total_documents_uploaded: total_documents_uploaded + 1,
     });
   };
 
@@ -165,7 +185,7 @@ class UploadBankStatements extends Component {
   //   });
   // };
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
@@ -185,7 +205,7 @@ class UploadBankStatements extends Component {
     this.setState({
       form_data: form_data,
     });
-  }
+  };
 
   render() {
     let { fileUploaded, pdfFile } = this.state;
@@ -195,7 +215,10 @@ class UploadBankStatements extends Component {
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        disable={true}
+        // disable={true}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData,
+        }}
       >
         <div className="upload-bank-statement">
           <Attention content={this.renderNotes()} />
@@ -211,7 +234,7 @@ class UploadBankStatements extends Component {
                 id="name"
                 name="bank_name"
                 value={this.state.form_data.bank_name || ""}
-                onChange={this.handleChange('bank_name')}
+                onChange={this.handleChange("bank_name")}
               />
             </div>
             <div className="InputField">
@@ -281,7 +304,12 @@ class UploadBankStatements extends Component {
                   onChange={this.handleChange}
                 />
               </div>
-              <Button variant="raised" size="large" color="secondary" className="upload-button">
+              <Button
+                variant="raised"
+                size="large"
+                color="secondary"
+                className="upload-button"
+              >
                 EDIT
               </Button>
               <Button variant="raised" size="large" color="secondary">

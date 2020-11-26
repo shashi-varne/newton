@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-// import { nativeCallback } from "utils/native_callback";
+import { nativeCallback } from "utils/native_callback";
+import Attention from "../../../common/ui/Attention";
+import { initialize } from "../../common/functions";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
 import SVG from "react-inlinesvg";
@@ -9,6 +11,7 @@ import toast from "../../../common/ui/Toast";
 import $ from "jquery";
 import DotDotLoader from "common/ui/DotDotLoader";
 import Api from "utils/api";
+import Input from "../../../common/ui/Input";
 
 class Upload extends Component {
   constructor(props) {
@@ -19,16 +22,62 @@ class Upload extends Component {
       documents: [],
       confirmed: true,
       editId: null,
-      application_id: 774,
-      count: 1
+      count: 1,
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.initialize();
+
+    let progressHeaderData = {
+      title: "Application form",
+      steps: [
+        {
+          title: "Income details",
+          status: "init",
+        },
+        {
+          title: "BT transfer details",
+          status: "pending",
+        },
+        {
+          title: "Loan offer",
+          status: "pending",
+        },
+      ],
+    };
+
+    this.setState({
+      progressHeaderData: progressHeaderData,
+    });
+  }
 
   onload = () => {};
+
+  renderNotes = () => (
+    <div style={{ lineHeight: "15px" }}>
+      <div>
+        1. Attach latest bank statements of the same account where your salary
+        gets credited every month
+      </div>
+      <div>
+        2. Ensure the bank statements are of the last 3 months from this month
+      </div>
+      <div>
+        3. Files must be original and should be uploaded in a PDF format
+      </div>
+      <div>
+        4. Share respective passwords if your statements are password protected
+      </div>
+      <div>
+        5. Upload multiple statements of the same bank account with each file
+        not exceeding 6 MB
+      </div>
+    </div>
+  );
 
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
@@ -112,9 +161,9 @@ class Upload extends Component {
 
   handleConfirm = async (id) => {
     let { documents, application_id } = this.state;
-    console.log(id)
+    console.log(id);
 
-    var index = documents.findIndex(item => item.id === id)
+    var index = documents.findIndex((item) => item.id === id);
 
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
@@ -175,9 +224,13 @@ class Upload extends Component {
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        disable={true}
+        // disable={true}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData,
+        }}
       >
         <div className="upload-bank-statement">
+          <Attention content={this.renderNotes()} />
           {documents.map((item, index) => (
             <div
               className="bank-statement"
@@ -199,6 +252,22 @@ class Upload extends Component {
                 />
                 {item.name}
                 <span className="bytes">{bytesToSize(item.size)}</span>
+              </div>
+
+              <div className="InputField">
+                <Input
+                  // error={!!this.state.end_date_error}
+                  // helperText="This date must be 3 days before the current date"
+                  type="password"
+                  width="40"
+                  label="Enter password (if any)"
+                  class="password"
+                  id="password"
+                  name="password"
+                  placeholder="XXXXXXX"
+                  value={this.state.password || ""}
+                  // onChange={this.handleChange}
+                />
               </div>
 
               {item.status === "uploaded" && (

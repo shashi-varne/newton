@@ -17,6 +17,28 @@ class IncomeDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Application form',
+      steps: [
+        {
+          'title': 'Income details',
+          'status': 'init'
+        },
+        {
+          'title': 'BT transfer details',
+          'status': 'pending'
+        },
+        {
+          'title': 'Loan offer',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
   }
 
   onload = () => {};
@@ -47,6 +69,9 @@ class IncomeDetails extends Component {
         showLoader={this.state.show_loader}
         title="Income details"
         noFooter={true}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
       >
         <div className="income-details">
           <div className="subtitle">

@@ -379,7 +379,7 @@ export async function startTransaction(transaction_type) {
     if (status === 200) {
       
       if (transaction_type === "manual upload") {
-        this.navigate('upload-bank')
+        this.navigate('upload')
       }
 
       if (transaction_type === "netbanking") {
