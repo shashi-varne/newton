@@ -193,7 +193,7 @@ export const hdfc = {
 export const religare = {
     key: 'RELIGARE',
     provider_api: 'religare',
-    title: 'Care Health (formerly Religare)',
+    title: 'Care Health',
     subtitle: 'Care',
     logo: 'ic_religare_logo.svg',
     logo_card: 'ic_religare_logo_card.svg',
