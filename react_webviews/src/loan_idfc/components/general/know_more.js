@@ -9,7 +9,7 @@ class KnowMore extends Component {
     this.state = {
       show_loader: false,
       screen_name: "know_more_screen",
-      tab_clicked: 'tab-1'
+      tab_clicked: 'tab-1',
     };
 
     this.initialize = initialize.bind(this);
@@ -21,7 +21,7 @@ class KnowMore extends Component {
     let { params } = this.props.location;
 
     if (!params) {
-      this.props.history.goBack();
+      this.navigate('home')
       return
     }
 
@@ -31,14 +31,6 @@ class KnowMore extends Component {
   }
 
   onload = async () => {};
-
-  handleClick = (e) => {
-    let id = e.target.id;
-
-    this.setState({
-      tab_clicked: id
-    })
-  };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -56,6 +48,18 @@ class KnowMore extends Component {
     }
   }
 
+  handleTab = (e) => {
+    let id = e.target.id;
+
+    this.setState({
+      tab_clicked: id
+    })
+  };
+
+  handleClick = () => {
+    this.navigate(this.state.next_state)
+  }
+
   render() {
     let { features, eligibility, documentation } = this.state.screenData;
     let { tab_clicked } = this.state;
@@ -65,12 +69,13 @@ class KnowMore extends Component {
         showLoader={this.state.show_loader}
         title="Know More"
         buttonTitle={this.state.cta_title}
+        handleClick={this.handleClick}
       >
         <div className="know-more">
           <div className="nav-bar">
-            <div id="tab-1" className={`nav-tab ${tab_clicked === 'tab-1' ? 'clicked' : 'unclicked'}`} onClick={this.handleClick}>Features</div>
-            <div id="tab-2" className={`nav-tab ${tab_clicked === 'tab-2' ? 'clicked' : 'unclicked'}`} onClick={this.handleClick}>Eligibility</div>
-            <div id="tab-3" className={`nav-tab ${tab_clicked === 'tab-3' ? 'clicked' : 'unclicked'}`} onClick={this.handleClick}>Documentation</div>
+            <div id="tab-1" className={`nav-tab ${tab_clicked === 'tab-1' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Features</div>
+            <div id="tab-2" className={`nav-tab ${tab_clicked === 'tab-2' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Eligibility</div>
+            <div id="tab-3" className={`nav-tab ${tab_clicked === 'tab-3' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Documentation</div>
           </div>
 
           {tab_clicked === 'tab-1' && <div className="content">

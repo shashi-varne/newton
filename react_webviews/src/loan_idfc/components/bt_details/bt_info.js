@@ -17,11 +17,35 @@ class BtInformation extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Application form',
+      steps: [
+        {
+          'title': 'Income details',
+          'status': 'completed'
+        },
+        {
+          'title': 'BT transfer details',
+          'status': 'init'
+        },
+        {
+          'title': 'Loan offer',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
   }
 
   onload = () => {};
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate(this.state.next_state)
+  };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -45,6 +69,10 @@ class BtInformation extends Component {
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         buttonTitle="OPTING FOR BT"
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
+        handleClick={this.handleClick}
       >
         <div className="bt-info">
           <div className="head">How does BT work?</div>

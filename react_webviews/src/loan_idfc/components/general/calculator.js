@@ -9,11 +9,12 @@ class Calculator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_laoder: false,
+      show_loader: false,
       Net_monthly_Income: 75000,
       Tenor: 18,
       Other_EMIs: 0,
-      Monthly_expenses: 30000
+      Monthly_expenses: 30000,
+      screen_name: "calculator"
     };
 
     this.initialize = initialize.bind(this);
@@ -25,7 +26,7 @@ class Calculator extends Component {
     let { params } = this.props.location;
 
     if (!params) {
-      this.props.history.goBack();
+      this.navigate('home')
       return
     }
 
@@ -36,7 +37,9 @@ class Calculator extends Component {
 
   onload = async () => {};
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate(this.state.next_state)
+  };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -88,6 +91,7 @@ class Calculator extends Component {
           backgroundColor: "var(--highlight)"
         }}
         noPadding={true}
+        handleClick={this.handleClick}
       >
         <div className="idfc-loan-calculator">
           <SliderWithValues 

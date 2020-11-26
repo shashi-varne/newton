@@ -101,7 +101,7 @@ class UploadBankStatements extends Component {
     return (
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
-          <div style={{marginTop: '20px', background:'green'}} key={index}>
+          <div style={{ marginTop: "20px" }} key={index}>
             {item}
           </div>
         ))}
@@ -179,11 +179,11 @@ class UploadBankStatements extends Component {
 
   uploadFile = () => {};
 
-  // handleChange = (e) => {
-  //   this.setState({
-  //     password: e.target.value,
-  //   });
-  // };
+  handleChange = (e) => {
+    this.setState({
+      password: e.target.value,
+    });
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;

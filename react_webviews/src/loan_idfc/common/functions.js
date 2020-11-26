@@ -49,9 +49,17 @@ export async function initialize() {
     show_loader: true,
   });
 
-  if (this.state.screen_name !== "landing_screen") {
+  let screens = ['calculator', 'know_more_screen', 'landing_screen'];
+
+  if (!screens.includes(this.state.screen_name)) {
     this.getOrCreate();
   } else {
+    this.setState({
+      show_loader: false,
+    });
+  }
+  
+  if (this.state.screen_name === "landing_screen") {
     this.getUserStatus();
   }
 }
