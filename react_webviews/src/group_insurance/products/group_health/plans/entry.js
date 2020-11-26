@@ -30,18 +30,21 @@ class HealthInsuranceEntry extends Component {
         key: 'HDFCERGO',
         title: 'HDFC ERGO',
         subtitle: 'my: health Suraksha',
+        Product_name : 'Health_Suraksha',
         icon: hdfc_logo
       },
       {
         key: 'RELIGARE',
         title: 'Care Health',
         subtitle: 'Care',
+        Product_name : 'Care',
         icon: religare_logo
       },
       {
         key: 'STAR',
         title: 'Star',
         subtitle: 'Family health optima',
+        Product_name : 'Star',
         icon: star_logo
       }
     ];
@@ -71,7 +74,7 @@ class HealthInsuranceEntry extends Component {
       });
 
       try {
-        const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.key}`);
+        const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
 
         let resultData = res.pfwresponse
         if(res.pfwresponse.status_code === 200){
