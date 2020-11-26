@@ -15,8 +15,10 @@ const isMobileView = getConfig().isMobileDevice;
 const Dashboard = () => {
   const [overviewData, setOverviewData] = useState({});
   const [isLoadingOverview, setIsLoadingOverview] = useState(true);
+  const [overviewError, setOverviewError] = useState(false);
   const [riskData, setRiskData] = useState({});
   const [isLoadingRisk, setIsLoadingRisk] = useState(true);
+  const [riskError, setRiskError] = useState(false);
 
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
@@ -26,6 +28,7 @@ const Dashboard = () => {
   const fetchOverview = async () => {
     try {
       setIsLoadingOverview(true);
+      setOverviewError(false);
       const data = await overview();
       setOverviewData({
         current_val: get(data, 'current.current', ''),
@@ -39,7 +42,7 @@ const Dashboard = () => {
       });
     } catch (e) {
       console.error(e);
-      setOverviewData({});
+      setOverviewError(true);
       toast(e);
     }
     setIsLoadingOverview(false);
@@ -48,12 +51,13 @@ const Dashboard = () => {
   const fetchPortfolioRisk = async () => {
     try {
       setIsLoadingRisk(true);
+      setRiskError(false);
       const data = await portfolioRisk({ date_range: 'one_year' });
       setRiskData(data);
       console.log(data);
     } catch (e) {
       console.log(e);
-      setRiskData({});
+      setRiskError(true);
       toast(e);
     }
     setIsLoadingRisk(false);
@@ -80,15 +84,20 @@ const Dashboard = () => {
           <div className='iwd-header-subtitle'>Welcome back, Uttam</div>
         </>
       </PageHeader>
-      <SnapScrollContainer pages={2} onPageChange={pageChanged} hideFooter={isMobileView}>
+      <SnapScrollContainer
+        pages={2}
+        onPageChange={pageChanged}
+        hideFooter={isMobileView}
+        error={overviewError && riskError}
+      >
         <>
           <div className="iwd-scroll-child" data-pgno="1">
             <IwdCard
               id="iwd-d-numbers"
-              error={isEmpty(overviewData)}
+              error={isEmpty(overviewData) || overviewError}
               isLoading={isLoadingOverview}
               style={{
-                background: isLoadingOverview ? 'white' : ''
+                background: isLoadingOverview || isEmpty(overviewData) ? 'white' : ''
               }}
             >
               <>
@@ -168,7 +177,7 @@ const Dashboard = () => {
             <IwdCard
               id="iwd-d-risk"
               headerText="Risk analysis"
-              error={isEmpty(riskData)}
+              error={isEmpty(riskData) || riskError}
               isLoading={isLoadingRisk}
             >
               <div id="iwd-dr-data">
@@ -201,7 +210,7 @@ const Dashboard = () => {
             <IwdCard
               id="iwd-d-newsletter"
               headerText="Open source and non-custodial protocol enabling the creation of money markets"
-              error={isEmpty(riskData)}
+              error={isEmpty(riskData) || riskError}
               isLoading={isLoadingRisk}
             >
               <>

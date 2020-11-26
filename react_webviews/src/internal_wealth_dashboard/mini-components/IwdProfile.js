@@ -1,10 +1,28 @@
-import { Button } from 'material-ui';
+import { Button, CircularProgress } from 'material-ui';
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { navigate as navigateFunc } from '../common/commonFunctions';
+import { logout } from '../common/ApiCalls';
+import toast from '../../common/ui/Toast';
 
-const IwdProfile = () => {
+const IwdProfile = (props) => {
+  const navigate = navigateFunc.bind(props);
   const [expanded, setExpanded] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const toggleExpanded = () => setExpanded(!expanded);
+
+  const logoutUser = async () => {
+    try {
+      setLoggingOut(true);
+      await logout();
+      navigate('login');
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
+    setLoggingOut(false);
+  };
 
   if (expanded) {
     return (
@@ -26,11 +44,14 @@ const IwdProfile = () => {
         <div id="iwd-profile-divider"></div>
         <Button
           fullWidth={true}
+          onClick={logoutUser}
           classes={{
             root: 'iwd-profile-logout',
             label: 'iwd-profile-logout-text',
           }}>
-          Logout
+          {loggingOut ?
+            <CircularProgress size={25} /> : 'Logout'
+          }
         </Button>
       </div>
     );
@@ -40,4 +61,4 @@ const IwdProfile = () => {
   );
 };
 
-export default IwdProfile;
+export default withRouter(IwdProfile);

@@ -1,20 +1,32 @@
+// ----------------- Assets ----------------------
+import IlsNoData from 'assets/fisdom/ils_no_data.svg';
+import IlsNoDataMob from 'assets/fisdom/ils_no_data_mob.svg';
+import filter_sign from 'assets/filter_sign.svg';
+// -----------------------------------------------
 import React, { useEffect, useState } from 'react';
 import PageHeader from '../mini-components/PageHeader';
 import { getConfig } from 'utils/functions';
 import HoldingCard from '../mini-components/HoldingCard';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
-
-import filter_sign from 'assets/filter_sign.svg';
 import FilterDesktop from '../mini-components/FilterDesktop';
 import FilterMobile from '../mini-components/FilterMobile';
 import { holdings } from '../common/ApiCalls';
 import { dummyHoldings } from './../constants';
 import toast from '../../common/ui/Toast';
-import { storageService } from '../../utils/validators';
+import { isEmpty, storageService } from '../../utils/validators';
+import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 const isMobileView = getConfig().isMobileDevice;
+const schemeMap = {
+  hybrid: ['hybrid', 'hybrid (c)', 'hybrid (nc)'],
+  equity: ['equity', 'equity(g)', 'balanced', 'fof', 'equity(s)'],
+  debt: ['debt', 'bond', 'income', 'mip', 'gilt', 'liquid'],
+  elss: ['elss'],
+};
 
 const Holdings = () => {
   const [holdingsList, setHoldingsList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [open, isOpen] = useState(false);
   const [filterVal, setFilterVal] = useState(
     storageService().getObject('iwd-filter-options') || null
@@ -24,18 +36,25 @@ const Holdings = () => {
   const [checkSelectedBox, setCheckSelectedBox] = useState(false);
   const fetchHoldings = async () => {
     try {
+      setIsLoading(true);
       // const result = await holdings();
+      // if (isEmpty(result)) {
+      //   setHasError(true);
+      // }
       setHoldingsList(dummyHoldings);
       if (filterVal) {
         filter(dummyHoldings);
       }
     } catch (e) {
       console.log(e);
+      setHasError(true);
       toast(e);
     }
+    setIsLoading(false);
   };
-  const lac = 100000;
+
   const currentValue = (current_value_type) => {
+    const lac = 100000;
     switch (current_value_type) {
       case 1:
         return {
@@ -60,12 +79,6 @@ const Holdings = () => {
     }
   };
 
-  const schemeMap = {
-    hybrid: ['hybrid', 'hybrid (c)', 'hybrid (nc)'],
-    equity: ['equity', 'equity(g)', 'balanced', 'fof', 'equity(s)'],
-    debt: ['debt', 'bond', 'income', 'mip', 'gilt', 'liquid'],
-    elss: ['elss'],
-  };
   useEffect(() => {
     fetchHoldings();
   }, []);
@@ -196,7 +209,20 @@ const Holdings = () => {
                 <img src={filter_sign} alt='filter' />
               </div>
             )}
-            <SnapScrollContainer hideFooter={true} error={false}>
+            <SnapScrollContainer
+              hideFooter={isMobileView}
+              error={hasError}
+              onErrorBtnClick={fetchHoldings}
+              isLoading={isLoading}
+              loadingText="Fetching ..."
+            >
+              {(filterVal && !filterData) &&
+                <ErrorScreen
+                  useTemplate={true}
+                  templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
+                  templateErrText="Oops! We couldn’t find any data for the selected filter. Try removing or changing the filter."
+                />
+              }
               <>
                 {filterVal
                   ? filterData?.map((holding, idx) => <HoldingCard {...holding} key={idx} />)

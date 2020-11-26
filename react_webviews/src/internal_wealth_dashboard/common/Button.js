@@ -33,6 +33,7 @@ export const WhiteButton = withStyles({
       backgroundColor: 'white',
       opacity: 0.9,
     },
+    minHeight: '50px',
   },
   disabled: {
     backgroundColor: 'white !important',
