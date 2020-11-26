@@ -223,8 +223,7 @@ export async function submitApplication (params, state, update) {
       }
       
     } else {
-      // toast(result.error || result.message || "Something went wrong!");
-      toast("Something went wrong");
+      toast(result.error || result.message || "Something went wrong!");
       this.onload();
     }
   } catch (err) {
@@ -373,7 +372,6 @@ export async function netBanking(url) {
 }
 
 export async function startTransaction(transaction_type) {
-  console.log(transaction_type)
 
   try {
     this.setState({
@@ -403,10 +401,6 @@ export async function startTransaction(transaction_type) {
     console.log(err);
     toast("Something went wrong");
   }
-
-  this.setState({
-    // show_loader: false,
-  });
 
 }
 

@@ -19,7 +19,6 @@ import KnowMore from "./components/general/know_more";
 import Status from "./components/general/status";
 import IncomeDetails from "./components/general/income_details";
 import UploadBankStatements from "./components/forms/upload_bank";
-import Upload from "./components/forms/upload";
 import BasicDetails from "./components/forms/basic_details";
 import ProfessionalDetails from "./components/forms/professional_details";
 import PersonalDetails from "./components/forms/personal_details";
@@ -75,7 +74,6 @@ const Lending = props => {
           <Route path={`${url}/calculator`} component={Calculator} />
           <Route path={`${url}/income-details`} component={IncomeDetails} />
           <Route path={`${url}/upload-bank`} component={UploadBankStatements} />
-          <Route path={`${url}/upload`} component={Upload} />
           <Route path={`${url}/basic-details`} component={BasicDetails} />
           <Route path={`${url}/professional-details`} component={ProfessionalDetails} />
           <Route path={`${url}/personal-details`} component={PersonalDetails} />

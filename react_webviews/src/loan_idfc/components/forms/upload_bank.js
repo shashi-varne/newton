@@ -1,41 +1,32 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize } from "../../common/functions";
-import Input from "../../../common/ui/Input";
-import { FormControl } from "material-ui/Form";
 import Attention from "../../../common/ui/Attention";
-import { formatDate, dobFormatTest } from "utils/validators";
+import { initialize } from "../../common/functions";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import toast from "../../../common/ui/Toast";
 import $ from "jquery";
-import Button from "material-ui/Button";
-import { withStyles } from "material-ui/styles";
+import DotDotLoader from "common/ui/DotDotLoader";
+import Api from "utils/api";
+import Input from "../../../common/ui/Input";
 
-const styles = (theme) => ({
-  button: {
-    margin: theme.spacing.unit,
-  },
-  input: {
-    display: "none",
-  },
-});
-
-class UploadBankStatements extends Component {
+class UploadBank extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       fileUploaded: false,
-      form_data: {},
-      total_documents_uploaded: 0,
+      documents: [],
+      confirmed: true,
+      editId: null,
+      count: 1,
     };
 
-    this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
@@ -66,29 +57,6 @@ class UploadBankStatements extends Component {
 
   onload = () => {};
 
-  sendEvents(user_action) {
-    let eventObj = {
-      event_name: "lending",
-      properties: {
-        user_action: user_action,
-        screen_name: "otp",
-        fileUploaded: false,
-      },
-    };
-
-    if (user_action === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
-  showLoaderNative() {
-    this.setState({
-      show_loader: true,
-    });
-  }
-
   renderNotes = () => {
     let notes = [
       "1. Attach latest bank statements of the same account where your salary gets credited every month",
@@ -108,6 +76,23 @@ class UploadBankStatements extends Component {
       </div>
     );
   };
+
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "otp",
+        fileUploaded: false,
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
@@ -148,7 +133,7 @@ class UploadBankStatements extends Component {
     $("input").trigger("click");
   }
 
-  startUpload(method_name, doc_type, doc_name) {
+  startUpload(method_name) {
     this.setState({
       type: method_name,
     });
@@ -168,21 +153,67 @@ class UploadBankStatements extends Component {
       return;
     }
 
+    let { documents, editId, count } = this.state;
     file.doc_type = file.type;
-    let { total_documents_uploaded } = this.state;
+    file.status = "uploaded";
+    file.id = count++;
+
+    if (editId >= 0) {
+      documents[editId] = file;
+    }
+
+    if (editId === undefined || editId === null) {
+      documents.push(file);
+    }
+
     this.setState({
-      pdfFile: file,
       fileUploaded: true,
-      total_documents_uploaded: total_documents_uploaded + 1,
+      documents: documents,
+      confirmed: false,
+      editId: null,
     });
   };
 
-  uploadFile = () => {};
+  handleConfirm = async (id) => {
+    let { documents, application_id } = this.state;
+    console.log(id);
 
-  handleChange = (e) => {
-    this.setState({
-      password: e.target.value,
-    });
+    var index = documents.findIndex((item) => item.id === id);
+
+    const data = new FormData();
+    data.append("doc_type", "perfios_bank_statement");
+    data.append("file", documents[index]);
+    data.append("doc_id", id);
+
+    try {
+      const res = await Api.post(
+        `relay/api/loan/idfc/document/upload/${application_id}`,
+        data
+      );
+
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200 && result.message) {
+        documents[id].status = "confirmed";
+
+        this.setState({
+          confirmed: true,
+          documents: documents,
+        });
+      } else {
+        this.setState({
+          show_loader: false,
+        });
+
+        toast(result.error || result.message || "Something went wrong!");
+      }
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        show_loader: false,
+      });
+      toast("Something went wrong");
+    }
   };
 
   handleChange = (name) => (event) => {
@@ -207,8 +238,23 @@ class UploadBankStatements extends Component {
     });
   };
 
+  handleEdit = (id) => {
+    let { documents } = this.state;
+    this.setState({
+      editId: id,
+    });
+    this.startUpload("upload_doc");
+  };
+
+  handleDelete = (id) => {
+    this.state.documents.splice(id, 1);
+    this.setState({
+      documents: this.state.documents,
+    });
+  };
+
   render() {
-    let { fileUploaded, pdfFile } = this.state;
+    let { documents, confirmed } = this.state;
 
     return (
       <Container
@@ -272,21 +318,27 @@ class UploadBankStatements extends Component {
             </div>
           </FormControl>
 
-          {fileUploaded && (
-            <div className="bank-statement" style={{ marginBottom: "70px" }}>
-              <div className="title">1. Bank statement</div>
+          {documents.map((item, index) => (
+            <div
+              className="bank-statement"
+              key={index + 1}
+              id={item.id}
+              style={{ marginBottom: "30px" }}
+            >
+              <div className="title">
+                {index + 1}. Bank statement
+                {item.status === "uploaded" && item.status !== "confirmed" && (
+                  <DotDotLoader />
+                )}
+              </div>
               <div className="sub-title">
                 <img
                   style={{ margin: "0 5px 0 12px" }}
                   src={require("assets/tool.svg")}
                   alt=""
                 />
-                {pdfFile && pdfFile.name}
-                <span className="bytes">
-                  {bytesToSize(
-                    this.state.pdfFile ? this.state.pdfFile.size : ""
-                  )}
-                </span>
+                {item.name}
+                <span className="bytes">{bytesToSize(item.size)}</span>
               </div>
 
               <div className="InputField">
@@ -301,47 +353,70 @@ class UploadBankStatements extends Component {
                   name="password"
                   placeholder="XXXXXXX"
                   value={this.state.password || ""}
-                  onChange={this.handleChange}
+                  // onChange={this.handleChange}
                 />
               </div>
-              <Button
-                variant="raised"
-                size="large"
-                color="secondary"
-                className="upload-button"
+
+              {item.status === "uploaded" && (
+                <div
+                  disable
+                  onClick={() => this.handleConfirm(item.id)}
+                  className="generic-page-button-small"
+                >
+                  CONFIRM
+                </div>
+              )}
+              {item.status === "confirmed" && (
+                <div className="edit-or-delete">
+                  <div
+                    onClick={() => this.handleEdit(index)}
+                    className="generic-page-button-small"
+                  >
+                    EDIT
+                  </div>
+
+                  <div
+                    onClick={() => this.handleDelete(index)}
+                    className="generic-page-button-small"
+                  >
+                    DELETE
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          {confirmed && (
+            <div className="upload-bank-statement">
+              <div
+                className="pdf-upload"
+                onClick={() => this.startUpload("upload_doc")}
               >
-                EDIT
-              </Button>
-              <Button variant="raised" size="large" color="secondary">
-                DELETE
-              </Button>
+                <span className="plus-sign">
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={this.getPdf}
+                    id="myFile"
+                  />
+                  <SVG
+                    preProcessor={(code) =>
+                      code.replace(
+                        /fill=".*?"/g,
+                        "fill=" + getConfig().secondary
+                      )
+                    }
+                    src={plus}
+                  />
+                </span>
+                {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
+              </div>
             </div>
           )}
-
-          <div
-            className="pdf-upload"
-            onClick={() => this.startUpload("upload_doc", "pan", "pan.pdf")}
-          >
-            <span className="plus-sign">
-              <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={this.getPdf}
-                id="myFile"
-              />
-              <SVG
-                preProcessor={(code) =>
-                  code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
-                }
-                src={plus}
-              />
-            </span>
-            {fileUploaded ? "ADD FILE" : "UPLOAD FILE"}
-          </div>
         </div>
       </Container>
     );
   }
 }
 
-export default withStyles(styles)(UploadBankStatements);
+export default UploadBank;
