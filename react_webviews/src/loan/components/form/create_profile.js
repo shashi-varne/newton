@@ -74,19 +74,20 @@ class FormCreateProfile extends Component {
                 let { count } = this.state;
 
                 if (!resultData.callback_status) {
+                    
+                    if (count <= 20) {
+                        this.setState({
+                            count: count + 1
+                        })
 
-                    this.setState({
-                        count: count + 1
-                    })
-
-                    setTimeout(() => {
-                        this.getDedupeCallback();
-                    }, 3000);
-                }
-
-                if (count === 20) {
-                    let searchParams = getConfig().searchParams + '&status=sorry';
-                    this.navigate('instant-kyc-status', { searchParams: searchParams });
+                        setTimeout(() => {
+                            this.getDedupeCallback();
+                        }, 3000);
+                        
+                    } else {
+                        let searchParams = getConfig().searchParams + '&status=sorry';
+                        this.navigate('instant-kyc-status', { searchParams: searchParams });
+                    }
                 }
                 
                 
