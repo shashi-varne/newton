@@ -250,18 +250,38 @@
 }
 
 .upload-bank-statement {
+  .upload-button {
+    padding: 8px 20px !important;
+    border: 1px solid var(--secondary) !important;
+    border-radius: 6px !important;
+  }
+
+  .edit-or-delete {
+    display: flex;
+  }
+
+  .generic-page-button-small {
+    margin-right: 20px;
+    font-weight: 800 !important;
+    padding: 12px 30px !important;
+    letter-spacing: 1px;
+  }
+
   .pdf-upload {
     color: var(--secondary);
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 800;
     background: linear-gradient(90deg, #f7f6f6 0%, #ffffff 98.76%);
     margin: 0 -20px;
     padding: 20px 20px;
     cursor: pointer;
+    letter-spacing: 1px;
 
     .plus-sign {
       background: #ffffff;
-      padding: 6px 6px;
+      padding: 7px 10px;
+      border-radius: 5px;
+      margin-right: 20px;
     }
   }
 
@@ -271,11 +291,13 @@
 
     .title {
       font-size: 13px;
+      display: flex;
     }
 
     .sub-title {
       font-size: 12px;
       margin: 16px 0 20px 0;
+      color: #0a1d32;
     }
 
     img {

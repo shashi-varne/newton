@@ -55,7 +55,7 @@ class IncomeDetails extends Component {
           </div>
           <Card
             withtag="true"
-            onClick={() => this.handleClick('net banking')}
+            onClick={() => this.handleClick('netbanking')}
           >
             <div className="card-content" style={{padding:"10px 0"}}>
               <img

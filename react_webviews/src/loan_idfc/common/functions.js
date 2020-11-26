@@ -18,6 +18,7 @@ export async function initialize() {
   this.getOrCreate = getOrCreate.bind(this);
   this.getUserStatus = getUserStatus.bind(this);
   this.startTransaction = startTransaction.bind(this);
+  this.netBanking = netBanking.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -331,6 +332,38 @@ export async function formCheckUpdate(keys_to_check, form_data, state = "", upda
   }
 }
 
+export async function netBanking(url) {
+  
+  let back_url = window.location.origin + `/loan/idfc/income-details` + getConfig().searchParams;
+
+  let redirectionUrl = window.location.origin + `/loan/idfc/bt-info` + getConfig().searchParams;
+
+  if (getConfig().web) {
+    redirectionUrl = back_url
+  }
+
+  var netBanking_link = url;
+
+  var pgLink = netBanking_link;
+
+  let app = getConfig().app;
+  // eslint-disable-next-line
+  pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + redirectionUrl +
+    '&app=' + app + '&back_url=' + back_url;
+
+  if (getConfig().generic_callback) {
+    pgLink += '&generic_callback=' + getConfig().generic_callback;
+  }
+
+  this.openInTabApp(
+      {
+          url: pgLink,
+          back_url: back_url
+      }
+  );
+
+}
+
 export async function startTransaction(transaction_type) {
   console.log(transaction_type)
 
@@ -349,6 +382,10 @@ export async function startTransaction(transaction_type) {
         this.navigate('upload-bank')
       }
 
+      if (transaction_type === "netbanking") {
+        this.netBanking(result.netbanking_url || '')
+      }
+
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -360,7 +397,7 @@ export async function startTransaction(transaction_type) {
   }
 
   this.setState({
-    show_loader: false,
+    // show_loader: false,
   });
 
 }

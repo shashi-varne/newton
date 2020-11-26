@@ -281,10 +281,10 @@ class UploadBankStatements extends Component {
                   onChange={this.handleChange}
                 />
               </div>
-              <Button variant="raised" size="large" color="secondary" autoFocus>
+              <Button variant="raised" size="large" color="secondary" className="upload-button">
                 EDIT
               </Button>
-              <Button variant="raised" size="large" color="secondary" autoFocus>
+              <Button variant="raised" size="large" color="secondary">
                 DELETE
               </Button>
             </div>
