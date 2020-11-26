@@ -5,7 +5,7 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { dobFormatTest, formatDate } from "utils/validators";
+import { dobFormatTest, formatDate, timeStampToDate } from "utils/validators";
 
 class BasicDetails extends Component {
   constructor(props) {
@@ -43,16 +43,18 @@ class BasicDetails extends Component {
     let personal_info = lead.personal_info || {};
     let professional_info = lead.professional_info || {};
     let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
 
     let form_data = {
-      dob: personal_info.dob || "",
+      dob: timeStampToDate(personal_info.dob  || ""),
       pan_no: personal_info.pan_no || "",
       educational_qualification: professional_info.educational_qualification || "",
       employment_type: application_info.employment_type || ""
     }
 
     this.setState({
-      form_data: form_data
+      form_data: form_data,
+      pan_state: vendor_info.pan_state
     })
   };
 
@@ -158,6 +160,7 @@ class BasicDetails extends Component {
                 name="pan"
                 value={this.state.form_data.pan_no || ""}
                 onChange={this.handleChange("pan_no")}
+                disabled={this.state.pan_state === "success"}
               />
             </div>
 

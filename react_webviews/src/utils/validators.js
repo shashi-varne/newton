@@ -910,3 +910,10 @@ export function bytesToSize(bytes, decimals = 2) {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }
+
+export function timeStampToDate(timestamp) {
+  let date = timestamp.substring(0, 10);
+
+  let new_date = date.split('-').reverse().join('/')
+  return new_date
+}

@@ -191,8 +191,7 @@ export async function updateApplication (params) {
       }
       
     } else {
-      // toast(result.error || result.message || "Something went wrong!");
-      toast("Something went wrong");
+      toast(result.error || result.message || "Something went wrong!");
       this.onload();
     }
   } catch (err) {
@@ -276,6 +275,14 @@ export async function formCheckUpdate(keys_to_check, form_data, state = "", upda
     "mother_name": "mother name",
     "religion": "religion",
     "email_id": "email id",
+    "company_name": "company name",
+    "office_email": "office email",
+    "net_monthly_salary": "net monthly salary",
+    "salary_mode": "salary receipt mode",
+    "constitution": "constitution",
+    "organisation": "organisation",
+    "department": "department",
+    "industry": "industry",
     "current_address1": "address line 1",
     "current_address2": "address line 2",
     "current_address3": "address line 3",

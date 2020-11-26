@@ -5,7 +5,7 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { numDifferentiationInr } from "utils/validators";
+import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -28,15 +28,15 @@ class ProfessionalDetails extends Component {
     let lead = this.state.lead || {};
 
     let professional_info = lead.professional_info || {};
-    let application_info = lead.application_info || {}
+    let application_info = lead.application_info || {};
 
     let form_data = {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
-      // salary_receipt_mode:
-      // company_constitution,
-      // organisation_type:
+      salary_mode: capitalizeFirstLetter(professional_info.salary_mode),
+      constitution: capitalizeFirstLetter(professional_info.constitution),
+      organisation: capitalizeFirstLetter(professional_info.organisation),
       department: professional_info.department,
       industry: professional_info.industry
     }
@@ -82,9 +82,9 @@ class ProfessionalDetails extends Component {
       "company_name",
       "office_email",
       "net_monthly_salary",
-      "salary_receipt_mode",
-      "company_constitution",
-      "organisation_type",
+      "salary_mode",
+      "constitution",
+      "organisation",
       "department",
       "industry",
     ];
@@ -124,8 +124,8 @@ class ProfessionalDetails extends Component {
                 type="text"
                 width="40"
                 label="Official email id"
-                class="email-id"
-                id="email-id"
+                class="Email"
+                id="office_email"
                 name="office_email"
                 value={this.state.form_data.office_email || ""}
                 onChange={this.handleChange("office_email")}
@@ -154,15 +154,15 @@ class ProfessionalDetails extends Component {
               <DropdownWithoutIcon
                 width="40"
                 options={this.state.screenData.salaryRecieptOptions}
-                id="receipt-mode"
+                id="salary-receipt-mode"
                 label="Salary receipt mode"
                 error={
-                  this.state.form_data.salary_receipt_mode_error ? true : false
+                  this.state.form_data.salary_mode_error ? true : false
                 }
-                helperText={this.state.form_data.salary_receipt_mode_error}
-                value={this.state.form_data.salary_receipt_mode || ""}
-                name="salary_receipt_mode"
-                onChange={this.handleChange("salary_receipt_mode")}
+                helperText={this.state.form_data.salary_mode_error}
+                value={this.state.form_data.salary_mode || ""}
+                name="salary_mode"
+                onChange={this.handleChange("salary_mode")}
               />
             </div>
 
@@ -170,15 +170,15 @@ class ProfessionalDetails extends Component {
               <DropdownWithoutIcon
                 width="40"
                 options={this.state.screenData.constitutionOptions}
-                id="company_constitution"
+                id="constitution"
                 label="Constitution of company"
                 error={
-                  this.state.form_data.company_constitution_error ? true : false
+                  this.state.form_data.constitution_error ? true : false
                 }
-                helperText={this.state.form_data.company_constitution_error}
-                value={this.state.form_data.company_constitution || ""}
-                name="company_constitution"
-                onChange={this.handleChange("company_constitution")}
+                helperText={this.state.form_data.constitution_error}
+                value={this.state.form_data.constitution || ""}
+                name="constitution"
+                onChange={this.handleChange("constitution")}
               />
             </div>
 
@@ -186,15 +186,15 @@ class ProfessionalDetails extends Component {
               <DropdownWithoutIcon
                 width="40"
                 options={this.state.screenData.organisationTypeOptions}
-                id="organisation_type"
+                id="organisation"
                 label="Organisation type"
                 error={
-                  this.state.form_data.organisation_type_error ? true : false
+                  this.state.form_data.organisation_error ? true : false
                 }
-                helperText={this.state.form_data.organisation_type_error}
-                value={this.state.form_data.organisation_type || ""}
-                name="organisation_type"
-                onChange={this.handleChange("organisation_type")}
+                helperText={this.state.form_data.organisation_error}
+                value={this.state.form_data.organisation || ""}
+                name="organisation"
+                onChange={this.handleChange("organisation")}
               />
             </div>
 

@@ -12,6 +12,8 @@ import $ from "jquery";
 import DotDotLoader from "common/ui/DotDotLoader";
 import Api from "utils/api";
 import Input from "../../../common/ui/Input";
+import { formatDate, dobFormatTest } from "utils/validators";
+import { FormControl } from "material-ui/Form";
 
 class UploadBank extends Component {
   constructor(props) {
@@ -239,7 +241,7 @@ class UploadBank extends Component {
   };
 
   handleEdit = (id) => {
-    let { documents } = this.state;
+    // let { documents } = this.state;
     this.setState({
       editId: id,
     });

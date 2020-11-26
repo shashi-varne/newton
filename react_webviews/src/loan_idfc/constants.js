@@ -141,15 +141,14 @@ export const idfc_config = {
   },
   professional_details_screen: {
     salaryRecieptOptions: [
-      "Bank account Transfer",
+      "Bank account transfer",
       "Cash",
       "Cheque",
-      "mail"
     ],
     constitutionOptions: [
-      "HUF",
-      "INDIVIDUAL",
-      "INDIVIDUAL-MUTUAL FUND",
+      "Huf",
+      "Individual",
+      "Individual mutual fund",
       "PARTNERSHIP",
       "PRIVATE LIMITED COMPANY",
       "PRIVATE LTD",
@@ -159,9 +158,9 @@ export const idfc_config = {
       "TRUST"
     ],
     organisationTypeOptions: [
-      "Central Govt",
-      "Educational Institute",
-      "Partnership Firm",
+      "Central govt",
+      "Educational institute",
+      "Partnership firm",
       "Private Limited Company",
       "Public Limited Company",
       "Proprietorship Firm",
