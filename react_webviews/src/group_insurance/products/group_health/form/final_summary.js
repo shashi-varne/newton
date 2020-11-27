@@ -113,12 +113,13 @@ class GroupHealthPlanFinalSummary extends Component {
         let pan_amount = this.state.pan_amount;
 
         let pan_needed = false;
-        if (lead.total_amount > pan_amount) {
+        if (lead.quotation_details.total_premium > pan_amount) {
             pan_needed = true;
         }
 
-        if(lead.add_ons_amount) {
-            let add_ons_backend = lead.add_ons_json;
+        let addon = Object.keys(lead.quotation_details.add_ons).length
+        if( addon !== 0) {
+            let add_ons_backend = lead.quotation_details.add_ons;
             let add_ons_show = '';
             for (var key in add_ons_backend) {
 
@@ -245,7 +246,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
             if (pan_needed && (member.key === 'applicant' || member.key === 'self') &&
-                lead.self_account_key.pan_number) {
+                lead.buyer_details.pan_no) {
                 data.push({
                     'title': 'PAN number',
                     'key': 'pan',
@@ -978,15 +979,15 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                SUM INSURED{console.log(this.state.quotation)}
+                                SUM INSURED
                             </div>
                             <div className="mtr-bottom">
                                 {numDifferentiationInr(this.state.quotation.individual_sum_insured)}
                             </div>
                         </div>
                     </div>
-
-                    {this.state.quotation.add_ons_amount && <div className="member-tile">
+                   
+                    { this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0) && <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                         </div>
@@ -1035,7 +1036,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                TOTAL PREMIUM
+                                TOTAL PREMIUM{console.log(this.state.quotation)}
                             </div>
                             <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                 <div>
@@ -1045,13 +1046,13 @@ class GroupHealthPlanFinalSummary extends Component {
                                 <div>
                                     &nbsp;+&nbsp;
                                 </div>
-                                {this.state.quotation.add_ons_amount &&
+                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  && //fixit
                                     <div>
-                                        <div> {inrFormatDecimal(this.state.quotation.add_ons.ncb.price)} </div>
+                                        <div> {inrFormatDecimal(this.state.quotation.add_on_premium)} </div>
                                         <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                     </div>
                                 }
-                                {this.state.quotation.add_ons_amount &&
+                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  &&  //fixit
                                     <div>
                                         &nbsp;+&nbsp;
                                     </div>

@@ -217,7 +217,7 @@ export async function initialize() {
             tenure: tenure
         }
 
-        if(provider === 'RELIGARE' && lead.add_ons_amount) {
+        if(provider === 'RELIGARE' && lead.add_ons) {
 
             confirmDialogData.content1 = [
                 {
@@ -226,13 +226,13 @@ export async function initialize() {
                 }
             ]
 
-            let add_ons_backend = lead.add_ons_json;
+            let add_ons_backend = lead.add_ons;
             let data = [];
             let heading_added = false;
             for (var key in add_ons_backend) {
                 data.push({
                     name: add_ons_backend[key].title,
-                    value: inrFormatDecimal(add_ons_backend[key].premium),
+                    value: inrFormatDecimal(add_ons_backend[key].price),
                     heading: !heading_added ? 'Add ons' : ''
                 })
 
