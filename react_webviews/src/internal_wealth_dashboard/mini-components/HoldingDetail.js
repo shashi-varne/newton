@@ -1,38 +1,45 @@
 // ---------- Image Imports ------------
-import fisdomIcon from 'assets/fisdom/fisdom_icon.svg';
 import positive from 'assets/ic_positive.svg';
 import negative from 'assets/ic_negative.svg';
 // -------------------------------------
 import React, { useEffect, useState } from 'react';
-import PageCloseBtn from '../mini-components/PageCloseBtn';
-import { navigate as navigateFunc } from '../common/commonFunctions';
+import PageCloseBtn from './PageCloseBtn';
 import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
 import toast from '../../common/ui/Toast';
 import { getFundDetail, getTransactions } from '../common/ApiCalls';
+import IwdScreenLoader from './IwdScreenLoader';
+import IwdCardLoader from './IwdCardLoader';
+import FSTable from '../../common/responsive-components/FSTable';
+import { transactionsHeaderMap } from '../constants';
 
 const HoldingDetail = ({
   investmentDetail = {},
   isin,
+  onCloseClick = () => {},
   ...props
 }) => {
-  const navigate = navigateFunc.bind(props);
   const [fundDetail, setFundDetail] = useState({});
+  const [isLoadingFundDetail, setIsLoadingFundDetail] = useState(true);
   const [transactions, setTransations] = useState([]);
+  const [isLoadingTransactions, setIsLoadingTransactions] = useState(true);
 
-  const fetchHoldingDetail = () => {
+  const fetchHoldingDetail = async () => {
     try {
-      const result = getFundDetail({ isin });
-      setFundDetail(result.fund_attributes);
+      setIsLoadingFundDetail(true);
+      const result = await getFundDetail({ isin });
+      setFundDetail(result.fund_attributes || {});
     } catch (e) {
       console.log(e);
       toast(e);
     }
+    setIsLoadingFundDetail(false);
   };
 
-  const fetchTransactions = () => {
+  const fetchTransactions = async () => {
     try {
-      const result = getTransactions({
-        isin,
+      setIsLoadingTransactions(true);
+      const result = await getTransactions({
+        amfi: isin,
         page_size: 20,
       });
       setTransations(result.transactions);
@@ -40,6 +47,7 @@ const HoldingDetail = ({
       console.log(e);
       toast(e);
     }
+    setIsLoadingTransactions(false);
   };
 
   useEffect(() => {
@@ -47,11 +55,19 @@ const HoldingDetail = ({
     fetchTransactions();
   }, []);
 
+  if (isLoadingFundDetail) {
+    return (
+      <div id="iwd-holding-detail-blank">
+        <IwdScreenLoader />
+      </div>
+    );
+  }
+
   return (
     <div id="iwd-holding-detail">
-      <PageCloseBtn clickHandler={() => navigate('main/holdings')} />
+      <PageCloseBtn clickHandler={onCloseClick} />
       <div className="iwd-hd-header">
-        <img src={fisdomIcon} alt="" />
+        <img src={investmentDetail.amcLogo} alt="" height="80" />
         <div>
           <div className="iwd-hdh-title">Holdings</div>
           <div className="iwd-hdh-fund-name">
@@ -120,6 +136,19 @@ const HoldingDetail = ({
             </div>
             <div className="iwd-hdsi-label">5 yrs return</div>
           </div>
+        </div>
+      </div>
+      <div className="iwd-hd-transactions">
+        <div className="iwd-card-header">Transactions</div>
+        <div className="iwd-hdt-table-container">
+          {isLoadingTransactions ?
+            <IwdCardLoader loadingText="Fetching transactions..." /> :
+            <FSTable
+              headersMap={transactionsHeaderMap}
+              data={transactions}
+              className="iwd-transactions-table"
+            />
+          }
         </div>
       </div>
     </div>

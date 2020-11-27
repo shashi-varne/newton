@@ -331,7 +331,7 @@ export const fetchAnalysis = async (params = {}) => {
 
 export const holdings = async (params = {}) => {
   try {
-    const res = await Api.get('api/invest/reportv4/portfolio/funds', params);
+    const res = await Api.get('api/invest/reportv4/portfolio/funds', { ...params, user_id: '4934000205365249'});
 
     if (
       res.pfwstatus_code !== 200 ||
@@ -344,7 +344,7 @@ export const holdings = async (params = {}) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return result.report || {};
+      return result.report || [];
     } else {
       throw result.error || result.message || genericErrMsg;
     }
@@ -355,7 +355,7 @@ export const holdings = async (params = {}) => {
 
 export const getFundDetail = async (params = {}) => {
   try {
-    const res = await Api.get('api/fetch/fund-details', params);
+    const res = await Api.get('api/fetch/fund-details', { ...params, user_id: '4934000205365249' });
 
     if (
       res.pfwstatus_code !== 200 ||
@@ -368,7 +368,7 @@ export const getFundDetail = async (params = {}) => {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return result.report || {};
+      return result.fund_data || {};
     } else {
       throw result.error || result.message || genericErrMsg;
     }
@@ -575,9 +575,10 @@ const analysisPageApiMockError = {
   pfwutime: '',
   pfwmessage: 'Success',
 };
+
 export const getTransactions = async (params = {}) => {
   try {
-    const res = await Api.get('api/invest/transactionv4', params);
+    const res = await Api.get('api/invest/transactionv4', { ...params, user_id: '4934000205365249' });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;

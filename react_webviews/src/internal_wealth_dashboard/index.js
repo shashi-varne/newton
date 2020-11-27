@@ -16,7 +16,6 @@ import Login from './pages/Login';
 import Main from './pages/Main';
 import Dashboard from './pages/Dashboard';
 import Analysis from './pages/Analysis';
-import HoldingDetail from './pages/HoldingDetail';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -57,7 +56,6 @@ const InternalWealthDashboard = (props) => {
             <Route path={`${url}/main/:tab`} component={Main} />
             <Route path={`${url}/dashboard`} component={Dashboard} />
             <Route path={`${url}/analysis`} component={Analysis} />
-            <Route path={`${url}/fund-detail/:isin`} component={HoldingDetail} />
           </Switch>
         
       </MuiThemeProvider>

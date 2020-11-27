@@ -1,0 +1,27 @@
+.fisdom-table {
+  width: 100%;
+  border-spacing: 0;
+  thead {
+    td {
+      border-bottom: 1px solid rgba(110, 110, 110, 0.05);
+      text-transform: capitalize;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+  tbody {
+    tr:nth-child(1) {
+      td {
+        border-top: none;
+      }
+    }
+    td {
+      border-top: 1px solid rgba(110, 110, 110, 0.05);
+    }
+  }
+  td {
+    padding: 20px 10px;
+    border-collapse: collapse;
+    font-weight: normal;
+    font-size: 15px;
+  }
+}

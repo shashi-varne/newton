@@ -11,6 +11,7 @@ import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdCard from '../mini-components/IwdCard';
 import IwdCommonPageFooter from '../mini-components/IwdCommonPageFooter';
+import ScrollTopBtn from '../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
@@ -226,6 +227,7 @@ const Dashboard = () => {
             </IwdCard>
             <IwdCommonPageFooter />
           </div>
+          {isMobileView && <ScrollTopBtn />}
         </>
       </SnapScrollContainer>
     </div>

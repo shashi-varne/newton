@@ -465,3 +465,20 @@ export const dummyBubble = {
   'mid cap': 30,
   'large cap': 50,
 };
+
+export const transactionsHeaderMap = [{
+  label: 'Date',
+  accessor: 'tdate',
+}, {
+  label: 'Type',
+  accessor: 'ttype',
+}, {
+  label: 'Unit',
+  accessor: 'units',
+}, {
+  label: 'Unit Price',
+  accessor: 'nav',
+}, {
+  label: 'Amount',
+  accessor: 'amount',
+}];
