@@ -129,7 +129,7 @@ class GroupHealthPlanList extends Component {
         this.navigate(this.state.next_screen || 'plan-details');
     }
 
-    renderTileMidData = (props, index, plan_data) => {
+    renderTileMidData = (props, index) => {
         return (
             <div key={index} className="pi-tile">
                 <div className="pi-left">{props.label}</div>
@@ -161,7 +161,7 @@ class GroupHealthPlanList extends Component {
 
                 <div className="plan-info">
                     {(plan_data.display_content || []).map((props, index) => 
-                    this.renderTileMidData(props, index, plan_data))}
+                    this.renderTileMidData(props, index))}
                 </div>
 
                 <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
