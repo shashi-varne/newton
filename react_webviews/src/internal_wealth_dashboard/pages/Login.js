@@ -23,27 +23,22 @@ const Login = (props) => {
   const [openForgotPwd, toggleForgotPwd] = useState(false);
   const navigate = navigateFunc.bind(props);
 
-  const fetchUserProfile = async () => {
+  const onLoginSuccess = async () => {
     try {
       const res = await Api.get('api/whoami');
       if (isEmpty(res) || res.pfwstatus_code !== 200) {
-        navigate(props, 'login')
+        navigate('login', props)
       } else {
         const { user } = res.pfwresponse.result;
         const { email, name } = user
         storageService().set('iwd-user-email', email);
         storageService().set('iwd-user-name', name);
+        navigate('main/dashboard');
       }     
     } catch(err) {
-      navigate('login')
+      navigate('login', props)
     }
   }
-
-  useEffect(() => {
-    if (!storageService().get('ied-user-email') || !storageService.get('iwd-user-name')) {
-      fetchUserProfile() 
-    }
-  }, [])
 
   return (
     <>
@@ -84,7 +79,7 @@ const Login = (props) => {
                 root: 'iwd-text-field',
                 input: 'iwd-text-field-input',
               }}
-              onLoginSuccess={() => navigate('main/dashboard')}
+              onLoginSuccess={onLoginSuccess}
               onForgotPasswordClicked={() => toggleForgotPwd(true)}
               parentProps={props}
             />

@@ -35,7 +35,7 @@ const IwdProfile = (props) => {
   if (expanded) {
     return (
       <div className="iwd-profile" onClick={toggleExpanded}>
-        <div className="iwd-profile-icon iwd-profile-icon__primary">U</div>
+        <div className="iwd-profile-icon iwd-profile-icon__primary">{name.charAt(0)}</div>
         <div className="iwd-profile-username">{name}</div>
         <div className="iwd-profile-detail" id="pan">
           <b>PAN: </b>
@@ -65,7 +65,7 @@ const IwdProfile = (props) => {
     );
   }
   return (
-    <div className={props.secondary ? 'iwd-profile-icon' : 'iwd-profile-icon iwd-profile-icon__primary'} onClick={toggleExpanded}>{name.charAt(0).toUpperCase()}</div>
+    <div className={props.secondary ? 'iwd-profile-icon' : 'iwd-profile-icon iwd-profile-icon__primary'} onClick={toggleExpanded}>{name.charAt(0)}</div>
   );
 };
 
