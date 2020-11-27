@@ -29,16 +29,11 @@ export async function initialize() {
 
         this.setState({
           mobile: (mobile && mobile.slice(3)) || "",
+          contact_id: resultData.contact_id || ""
         });
 
         if (resultData.verification_required || !resultData.mobile_number) {
           this.navigate("edit-number");
-        }
-
-        if (!resultData.verification_required) {
-          this.setState({
-            contact_id: resultData.contact_id
-          })
         }
 
       } else {

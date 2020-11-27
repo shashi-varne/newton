@@ -49,7 +49,7 @@ class WhastappConfirmNumber extends Component {
   handleClick = async () => {
     this.sendEvents("next");
 
-    let id = this.state.id;
+    let id = this.state.contact_id;
 
     if (!id) {
       id = await this.getContact();
