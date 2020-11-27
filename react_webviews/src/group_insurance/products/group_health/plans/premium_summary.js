@@ -261,7 +261,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             </div>
             <div className="left">
               <div className="tc-title">
-                {this.state.providerData.title}
+                {this.state.providerData.title2}
               </div>
               <div className="tc-subtitle">
                 {this.state.plan_selected.plan_title}
