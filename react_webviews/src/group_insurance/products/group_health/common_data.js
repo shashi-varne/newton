@@ -162,7 +162,7 @@ export async function initialize() {
     if (this.state.ctaWithProvider) { 
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, gst = '';
 
-        if (this.state.get_lead) {
+        if (this.state.get_lead) {console.log(lead)
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_premium;
             sum_assured = lead.total_sum_insured;
@@ -222,7 +222,8 @@ export async function initialize() {
             confirmDialogData.content1 = [
                 {
                     'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(total_premium - gst)
+                        // inrFormatDecimal(total_premium - gst)//base_premium
+                        inrFormatDecimal(base_premium)
                 }
             ]
 

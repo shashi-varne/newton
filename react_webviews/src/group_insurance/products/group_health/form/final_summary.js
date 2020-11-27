@@ -630,8 +630,8 @@ class GroupHealthPlanFinalSummary extends Component {
                         if(resultData.ped_check && data.showMedDialog) {
                             this.openMedicalDialog('ppc');
                             return;
-                        } else {
-                            this.redirectToPayment(resultData);
+                        } else { console.log(res)
+                            // this.redirectToPayment(resultData);
                         }
                     }   
             } else {
@@ -959,7 +959,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
             <div className="group-health-final-summary">
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
-                    <div className="left">{console.log(this.state.providerData,"this.state.common_data",this.state.common_data)}
+                    <div className="left">
                         <div className="tc-title">{this.state.providerData.title || this.state.common_data.base_plan_title}</div>
                         <div className="tc-subtitle">{this.state.common_data.base_plan_title}</div>
                     </div>
@@ -1009,7 +1009,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         <div className="mt-right">
                             <div className="mtr-top">
                                 COVERAGE TYPE
-                            </div>
+                            </div>{console.log(this.state.lead)}
                             <div className="mtr-bottom">
                             {getCoverageType(this.state.lead)}
                             </div>
@@ -1036,11 +1036,11 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                TOTAL PREMIUM{console.log(this.state.quotation)}
+                                TOTAL PREMIUM
                             </div>
                             <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                 <div>
-                                    <div> {inrFormatDecimal(this.state.quotation.total_premium - this.state.quotation.gst)} </div>
+                                    <div> {inrFormatDecimal(this.state.quotation.base_premium)} </div>
                                     <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                 </div>
                                 <div>
