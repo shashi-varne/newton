@@ -9,6 +9,12 @@ import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
+const hdfc_plan_title_mapper = {
+    'hdfc_ergo_silver_smart': 'Silver Smart Plan',
+    'hdfc_ergo_gold_smart': 'Gold Smart Plan',
+    'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
+}
+
 class GroupHealthPlanList extends Component {
 
     constructor(props) {
@@ -109,9 +115,13 @@ class GroupHealthPlanList extends Component {
         groupHealthPlanData.post_body.plan = plan.plan_type;
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
 
+        if(provider === 'HDFCERGO'){
+            groupHealthPlanData.plan_selected.plan_title = hdfc_plan_title_mapper[plan.plan_id];
+        }
         if(provider === 'RELIGARE') {
             groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
             groupHealthPlanData.post_body.eldest_dob = eldest_dict.eldest_dob;
+            groupHealthPlanData.plan_selected.plan_title = 'Care';
         }
        
         this.setLocalProviderData(groupHealthPlanData);
@@ -135,7 +145,7 @@ class GroupHealthPlanList extends Component {
         let plan_data = props;
         return (
             <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
-                <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
+                <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
                         <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.common.base_plan_title :''}</div>

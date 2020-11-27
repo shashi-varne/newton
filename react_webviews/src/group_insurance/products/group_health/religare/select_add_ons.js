@@ -52,11 +52,6 @@ class GroupHealthPlanAddOns extends Component {
         let cta_premium = this.state.groupHealthPlanData.post_body.premium || this.state.bottomButtonData.leftSubtitleUnformatted;
         this.updateBottomPremiumAddOns(cta_premium);
         
-        this.setState({
-            // add_ons_data: add_ons_data,
-            cta_premium: cta_premium
-        });
-        
         if (add_ons_data.length === 0) {
             try {
                 const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
@@ -97,7 +92,7 @@ class GroupHealthPlanAddOns extends Component {
                     }
 
                     add_ons_data[1].price = options;
-                    add_ons_data[1].default_premium = parseInt(add_ons_data[1].price[0].premium, 10);
+                    add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
                     add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].cover_amount;
                     
                 } else {
@@ -119,6 +114,7 @@ class GroupHealthPlanAddOns extends Component {
         }
 
         this.setState({
+            cta_premium: cta_premium,
             add_ons_data: add_ons_data
         }, () => {
             this.updateCtaPremium()
@@ -137,7 +133,7 @@ class GroupHealthPlanAddOns extends Component {
             }
         });
 
-        let updated_premium = parseInt(cta_premium, 10) + parseInt(total_premium, 10);
+        let updated_premium = cta_premium + total_premium;
         
         this.updateBottomPremiumAddOns(updated_premium);
     }
@@ -164,7 +160,7 @@ class GroupHealthPlanAddOns extends Component {
         data.selectedIndexOption = indexOption;
 
         data.selected_cover_amount =  data.price[indexOption].cover_amount;
-        data.selected_premium =  parseInt(data.price[indexOption].premium, 10);
+        data.selected_premium =  data.price[indexOption].premium;
 
         add_ons_data[index] = data;
         this.setState({
