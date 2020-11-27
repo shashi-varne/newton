@@ -34,6 +34,13 @@ export async function initialize() {
         if (resultData.verification_required || !resultData.mobile_number) {
           this.navigate("edit-number");
         }
+
+        if (!resultData.verification_required) {
+          this.setState({
+            contact_id: resultData.contact_id
+          })
+        }
+
       } else {
         const resultData = res.pfwresponse.result;
         this.setState({
