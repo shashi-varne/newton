@@ -346,8 +346,8 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
 
       if (this.state.quotation.insurance_type === 'parents') {
-        let ageParent1 = calculateAge(((this.state.quotation.parent_account1_key || {}).dob || ''));
-        let ageParent2 = calculateAge(((this.state.quotation.parent_account2_key || {}).dob || ''));
+        let ageParent1 = calculateAge(((this.state.quotation.member_details.parent_account1_key || {}).dob || ''));
+        let ageParent2 = calculateAge(((this.state.quotation.member_details.parent_account2_key || {}).dob || ''));
 
         if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
           form_data.dob_error = "Applicant's age should be less than parents'age";
