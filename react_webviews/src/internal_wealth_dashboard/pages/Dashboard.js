@@ -21,7 +21,6 @@ const Dashboard = () => {
   const [riskData, setRiskData] = useState({});
   const [isLoadingRisk, setIsLoadingRisk] = useState(true);
   const [riskError, setRiskError] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1)
 
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
@@ -77,12 +76,22 @@ const Dashboard = () => {
     if (page && !isEmpty(page)) {
       page.style.background = pageNum === 1 ? '' : '#F9FCFF';
     }
-    setCurrentPage(pageNum)
+    const profileIcon = document.querySelector("#iwd-dashboard #iwd-ph-right .iwd-profile-icon");
+
+    if (profileIcon && !isEmpty(profileIcon)) {
+      if (pageNum !== 1 && !profileIcon.classList.contains('iwd-profile-icon__primary')) {
+        profileIcon.classList.add('iwd-profile-icon__primary')
+      } else
+      if (pageNum === 1 && profileIcon.classList.contains('iwd-profile-icon__primary')) {
+        profileIcon.classList.remove('iwd-profile-icon__primary')
+      }
+    }
+
   };
 
   return (
     <div className="iwd-page" id="iwd-dashboard">
-      <PageHeader secondary={currentPage % 2 !== 0}>
+      <PageHeader>
         <>
           <div className='iwd-header-title'>Dashboard</div>
           <div className='iwd-header-subtitle'>Welcome back, Uttam</div>
