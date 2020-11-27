@@ -90,7 +90,7 @@
 
   .head-title {
     font-size: 20px;
-    color: #0A1D32;
+    color: #0a1d32;
     font-weight: 400;
     margin: 20px 10px 30px;
     line-height: 30px;
@@ -250,6 +250,7 @@
 }
 
 .upload-bank-statement {
+  margin-bottom: 50px;
   .upload-button {
     padding: 8px 20px !important;
     border: 1px solid var(--secondary) !important;
@@ -366,5 +367,89 @@
     opacity: 0.55;
     width: 90%;
     margin-top: 20px;
+  }
+}
+
+.eligible-loan {
+  .subtitle {
+    font-size: 13px;
+    color: #0a1d32;
+    opacity: 0.55;
+  }
+
+  .offer-checkbox {
+    margin: 40px 0;
+  }
+
+  .title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #0a1d32;
+    margin-top: 20px;
+  }
+
+  .content {
+    display: flex;
+    justify-content: flex-start;
+    background-color: orange;
+    margin-top: 20px;
+
+    .sub-head {
+      font-size: 13px;
+      line-height: 15px;
+      color: #767e86;
+    }
+
+    .sub-title {
+      font-size: 17px;
+      line-height: 16px;
+      text-align: right;
+      color: #0a1d32;
+    }
+  }
+
+  .estimated-emi {
+    text-align: center;
+    background: rgba(216, 216, 216, 0.17);
+    border-radius: 6px;
+
+    .title {
+      font-size: 15px;
+      line-height: 26px;
+      color: #3792fc;
+    }
+
+    .emi {
+      font-size: 17px;
+      line-height: 26px;
+      color: #0a1d32;
+    }
+  }
+}
+
+.loan-bt {
+  .subtitle {
+    font-size: 13px;
+    color: #0a1d32;
+    opacity: 0.55;
+  }
+
+  .loan-bt-checkbox {
+    margin-top: 20px;
+
+    .head {
+      margin-top: 20px;
+      font-size: 13px;
+      line-height: 15px;
+      color: #767e86;
+    }
+
+    .sub-head {
+      margin: 10px 0 20px; 
+      font-size: 13px;
+      line-height: 16px;
+      color: #0a1d32;
+    }
   }
 }

@@ -25,6 +25,7 @@ class UploadBank extends Component {
       confirmed: true,
       editId: null,
       count: 1,
+      form_data: {}
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -71,7 +72,7 @@ class UploadBank extends Component {
     return (
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
-          <div style={{ marginTop: "20px" }} key={index}>
+          <div style={{ marginTop: index !== 0 && "20px" }} key={index}>
             {item}
           </div>
         ))}
@@ -178,7 +179,6 @@ class UploadBank extends Component {
 
   handleConfirm = async (id) => {
     let { documents, application_id } = this.state;
-    console.log(id);
 
     var index = documents.findIndex((item) => item.id === id);
 
@@ -195,20 +195,16 @@ class UploadBank extends Component {
 
       const { result, status_code: status } = res.pfwresponse;
 
-      if (status === 200 && result.message) {
+      if (status === 200) {
         documents[id].status = "confirmed";
-
         this.setState({
-          confirmed: true,
+          // confirmed: true,
           documents: documents,
         });
-      } else {
-        this.setState({
-          show_loader: false,
-        });
-
-        toast(result.error || result.message || "Something went wrong!");
       }
+
+      //   toast(result.error || result.message || "Something went wrong!");
+      // }
     } catch (err) {
       console.log(err);
       this.setState({
@@ -368,6 +364,7 @@ class UploadBank extends Component {
                   CONFIRM
                 </div>
               )}
+
               {item.status === "confirmed" && (
                 <div className="edit-or-delete">
                   <div

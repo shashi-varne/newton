@@ -13,7 +13,7 @@ class BasicDetails extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
-      screen_name: 'basic_details'
+      screen_name: "basic_details",
     };
 
     this.initialize = initialize.bind(this);
@@ -30,7 +30,7 @@ class BasicDetails extends Component {
       "POST GRADUATE",
       "PROFESSIONAL",
       "UNDER GRADUATE",
-      "OTHERS"
+      "OTHERS",
     ];
 
     this.setState({
@@ -46,16 +46,17 @@ class BasicDetails extends Component {
     let vendor_info = lead.vendor_info || {};
 
     let form_data = {
-      dob: timeStampToDate(personal_info.dob  || ""),
+      dob: timeStampToDate(personal_info.dob || ""),
       pan_no: personal_info.pan_no || "",
-      educational_qualification: professional_info.educational_qualification || "",
-      employment_type: application_info.employment_type || ""
-    }
+      educational_qualification:
+        professional_info.educational_qualification || "",
+      employment_type: application_info.employment_type || "",
+    };
 
     this.setState({
       form_data: form_data,
-      pan_state: vendor_info.pan_state
-    })
+      pan_state: vendor_info.pan_state,
+    });
   };
 
   sendEvents(user_action) {
@@ -81,13 +82,14 @@ class BasicDetails extends Component {
 
     if (id === "salaried" || id === "self-employed") {
       form_data.employment_type = id;
+      form_data.employment_type_error = "";
 
       this.setState({
-        form_data: form_data
-      })
+        form_data: form_data,
+      });
     }
 
-    if (name === 'pan_no' && value) {
+    if (name === "pan_no" && value) {
       value = value.toUpperCase();
     }
 
@@ -109,13 +111,16 @@ class BasicDetails extends Component {
     }
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
-    let keys_to_check = ['dob', 'pan_no', 'educational_qualification', 'employment_type'];
+    let { form_data, pan_state } = this.state;
+    let keys_to_check = ["dob", "educational_qualification", "employment_type"];
+    if (pan_state !== "success") {
+      keys_to_check.push("pan_no");
+    }
 
     this.formCheckUpdate(keys_to_check, form_data);
   };
@@ -170,8 +175,14 @@ class BasicDetails extends Component {
                 options={this.state.qualification}
                 id="education_qualification"
                 label="Education Qualification"
-                error={this.state.form_data.educational_qualification_error ? true : false}
-                helperText={this.state.form_data.educational_qualification_error}
+                error={
+                  this.state.form_data.educational_qualification_error
+                    ? true
+                    : false
+                }
+                helperText={
+                  this.state.form_data.educational_qualification_error
+                }
                 value={this.state.form_data.educational_qualification || ""}
                 name="educational_qualification"
                 onChange={this.handleChange("educational_qualification")}
@@ -210,6 +221,9 @@ class BasicDetails extends Component {
                 alt=""
               />
             </div>
+          </div>
+          <div className="error-radiogrp">
+            {this.state.form_data.employment_type_error}
           </div>
         </div>
       </Container>

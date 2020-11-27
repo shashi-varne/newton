@@ -48,7 +48,7 @@ class JourneyStepsClass extends Component {
                 <span
                   className="status"
                   onClick={() => {
-                    props.handleClick();
+                    props.handleClick(options.id);
                   }}
                 >
                   {options.status === "completed" ? "SUMMARY" : "START"}

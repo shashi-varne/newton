@@ -49,7 +49,7 @@ export async function initialize() {
     show_loader: true,
   });
 
-  let screens = ['calculator', 'know_more_screen', 'landing_screen'];
+  let screens = ["calculator", "know_more_screen", "landing_screen"];
 
   if (!screens.includes(this.state.screen_name)) {
     this.getOrCreate();
@@ -58,7 +58,7 @@ export async function initialize() {
       show_loader: false,
     });
   }
-  
+
   if (this.state.screen_name === "landing_screen") {
     this.getUserStatus();
   }
@@ -98,7 +98,7 @@ export async function getOrCreate(params) {
         {
           lead: lead,
           application_id: application_id,
-          mobile_no: result.personal_info.mobile_no || ""
+          mobile_no: result.personal_info.mobile_no || "",
         },
         () => {
           if (this.onload && !this.state.ctaWithProvider) {
@@ -107,10 +107,9 @@ export async function getOrCreate(params) {
         }
       );
 
-      if (this.state.screen_name === 'landing_screen') {
-        this.navigate(this.state.next_state)
+      if (this.state.screen_name === "landing_screen") {
+        this.navigate(this.state.next_state);
       }
-
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -142,9 +141,8 @@ export async function getUserStatus() {
 
     if (status === 200) {
       this.setState({
-        ...result || {}
-      })
-
+        ...(result || {}),
+      });
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -154,15 +152,17 @@ export async function getUserStatus() {
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  }, () => {
-    this.onload()
-  });
+  this.setState(
+    {
+      show_loader: false,
+    },
+    () => {
+      this.onload();
+    }
+  );
 }
 
-export async function updateApplication (params) {
-
+export async function updateApplication(params) {
   try {
     this.setState({
       show_loader: true,
@@ -177,19 +177,18 @@ export async function updateApplication (params) {
 
     if (status === 200) {
       this.setState({
-        ...result || ""
-      })
+        ...(result || ""),
+      });
 
-      if (this.state.screen_name === 'mobile_verification') {
+      if (this.state.screen_name === "mobile_verification") {
         this.navigate(this.state.next_state, {
           params: {
-            ...result || ""
-          }
-        })
+            ...(result || ""),
+          },
+        });
       } else {
-        this.navigate(this.state.next_state)
+        this.navigate(this.state.next_state);
       }
-      
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -202,9 +201,9 @@ export async function updateApplication (params) {
   this.setState({
     show_loader: false,
   });
-};
+}
 
-export async function submitApplication (params, state, update) {
+export async function submitApplication(params, state, update) {
   try {
     this.setState({
       show_loader: true,
@@ -217,10 +216,9 @@ export async function submitApplication (params, state, update) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      if (result.message === 'Success') {
-        this.navigate(this.state.next_state)
+      if (result.message === "Success") {
+        this.navigate(this.state.next_state);
       }
-      
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -254,7 +252,12 @@ export function openInTabApp(data = {}) {
   });
 }
 
-export async function formCheckUpdate(keys_to_check, form_data, state = "", update = "") {
+export async function formCheckUpdate(
+  keys_to_check,
+  form_data,
+  state = "",
+  update = ""
+) {
   if (!form_data) {
     form_data = this.state.form_data;
   }
@@ -262,41 +265,41 @@ export async function formCheckUpdate(keys_to_check, form_data, state = "", upda
   let canSubmitForm = true;
 
   let keysMapper = {
-    "dob": "dob",
-    "pan_no": "pan number",
-    "employment_type": "employment type",
-    "educational_qualification": "educational qualification",
-    "first_name": "first name",
-    "middle_name": "middle name",
-    "last_name": "last name",
-    "gender": "gender",
-    "marital_status": "marital status",
-    "father_name": "father name",
-    "mother_name": "mother name",
-    "religion": "religion",
-    "email_id": "email id",
-    "company_name": "company name",
-    "office_email": "office email",
-    "net_monthly_salary": "net monthly salary",
-    "salary_mode": "salary receipt mode",
-    "constitution": "constitution",
-    "organisation": "organisation",
-    "department": "department",
-    "industry": "industry",
-    "current_address1": "address line 1",
-    "current_address2": "address line 2",
-    "current_address3": "address line 3",
-    "current_landmark": "landmark",
-    "current_pincode": "pincode",
-    "current_city": "city",
-    "current_state": "state",
-    "permanent_address1": "address line 1",
-    "permanent_address2": "address line 2",
-    "permanent_address3": "address line 3",
-    "permanent_landmark": "landmark",
-    "permanent_pincode": "pincode",
-    "permanent_city": "city",
-    "permanent_state": "state"
+    dob: "dob",
+    pan_no: "pan number",
+    employment_type: "employment type",
+    educational_qualification: "educational qualification",
+    first_name: "first name",
+    middle_name: "middle name",
+    last_name: "last name",
+    gender: "gender",
+    marital_status: "marital status",
+    father_name: "father name",
+    mother_name: "mother name",
+    religion: "religion",
+    email_id: "email id",
+    company_name: "company name",
+    office_email: "office email",
+    net_monthly_salary: "net monthly salary",
+    salary_mode: "salary receipt mode",
+    constitution: "constitution",
+    organisation: "organisation",
+    department: "department",
+    industry: "industry",
+    current_address1: "address line 1",
+    current_address2: "address line 2",
+    current_address3: "address line 3",
+    current_landmark: "landmark",
+    current_pincode: "pincode",
+    current_city: "city",
+    current_state: "state",
+    permanent_address1: "address line 1",
+    permanent_address2: "address line 2",
+    permanent_address3: "address line 3",
+    permanent_landmark: "landmark",
+    permanent_pincode: "pincode",
+    permanent_city: "city",
+    permanent_state: "state",
   };
 
   let selectTypeInput = ["educational_qualification"];
@@ -339,7 +342,7 @@ export async function formCheckUpdate(keys_to_check, form_data, state = "", upda
     }
 
     if (state !== "") {
-      this.submitApplication(body, state, update)
+      this.submitApplication(body, state, update);
     } else {
       this.updateApplication(body);
     }
@@ -347,13 +350,16 @@ export async function formCheckUpdate(keys_to_check, form_data, state = "", upda
 }
 
 export async function netBanking(url) {
-  
-  let back_url = window.location.origin + `/loan/idfc/income-details` + getConfig().searchParams;
+  let back_url =
+    window.location.origin +
+    `/loan/idfc/income-details` +
+    getConfig().searchParams;
 
-  let redirectionUrl = window.location.origin + `/loan/idfc/bt-info` + getConfig().searchParams;
+  let redirectionUrl =
+    window.location.origin + `/loan/idfc/bt-info` + getConfig().searchParams;
 
   if (getConfig().web) {
-    redirectionUrl = back_url
+    redirectionUrl = back_url;
   }
 
   var netBanking_link = url;
@@ -362,53 +368,53 @@ export async function netBanking(url) {
 
   let app = getConfig().app;
   // eslint-disable-next-line
-  pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + redirectionUrl +
-    '&app=' + app + '&back_url=' + back_url;
+  pgLink +=
+    (pgLink.match(/[\?]/g) ? "&" : "?") +
+    "plutus_redirect_url=" +
+    redirectionUrl +
+    "&app=" +
+    app +
+    "&back_url=" +
+    back_url;
 
   if (getConfig().generic_callback) {
-    pgLink += '&generic_callback=' + getConfig().generic_callback;
+    pgLink += "&generic_callback=" + getConfig().generic_callback;
   }
 
-  this.openInTabApp(
-      {
-          url: pgLink,
-          back_url: back_url
-      }
-  );
-
+  this.openInTabApp({
+    url: pgLink,
+    back_url: back_url,
+  });
 }
 
 export async function startTransaction(transaction_type) {
-
   try {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
 
-    const res = await Api.get(`relay/api/loan/idfc/perfios/start/${this.state.application_id}?transaction_type=${transaction_type}`);
+    const res = await Api.get(
+      `relay/api/loan/idfc/perfios/start/${this.state.application_id}?transaction_type=${transaction_type}`
+    );
 
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      
       if (transaction_type === "manual upload") {
-        this.navigate('upload')
+        this.navigate("upload");
       }
 
       if (transaction_type === "netbanking") {
-        this.netBanking(result.netbanking_url || '')
+        this.netBanking(result.netbanking_url || "");
       }
-
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
     }
-
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
   }
-
 }
 
 export function openPdf(url, type) {

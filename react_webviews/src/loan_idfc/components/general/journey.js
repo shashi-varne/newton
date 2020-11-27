@@ -4,6 +4,24 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import JourneySteps from "../../../common/ui/JourneySteps";
 
+const journey = [
+  {
+    basic_details_uploaded: false,
+  },
+  {
+    loan_application_created: false,
+  },
+  {
+    income_details_provided: false,
+  },
+  {
+    documents_uploaded: false,
+  },
+  {
+    Sanction_and_disbursal: false,
+  },
+];
+
 class JourneyMap extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +38,69 @@ class JourneyMap extends Component {
   }
 
   onload = async () => {
-    let screenData = this.state.screenData;
+    let lead = this.state.lead || {};
+    let personal_info = lead.personal_info || {};
+    let professional_info = lead.professional_info || {};
+    let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
+
+    let idfc_loan_status = vendor_info.idfc_loan_status || "";
+
+    console.log(idfc_loan_status);
+
+    let journeyData = {
+      options: [
+        {
+          step: "1",
+          title: "Enter basic details",
+          subtitle:
+            "Fill in personal and work details to get started with your loan application.",
+          status: "completed",
+          id: "basic_details"
+        },
+        {
+          step: "2",
+          title: "Create loan application",
+          subtitle:
+            "Check your KYC status to proceed with your loan application.",
+          status: "pending",
+          id: "create_loan_application"
+        },
+        {
+          step: "3",
+          title: "Provide income details",
+          subtitle:
+            "Enter your loan requirements and income details to get the best loan offer.",
+          status: "pending",
+          id: "income_details"
+        },
+        {
+          step: "4",
+          title: "Upload documents",
+          subtitle:
+            "Provide your office address and upload documents to get your loan sanctioned.",
+          status: "pending",
+          id: "document_upload"
+        },
+        {
+          step: "5",
+          title: "Sanction and disbursal",
+          subtitle:
+            "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
+          status: "pending",
+          id: "sanction_and_disbursal"
+        },
+      ],
+    };
 
     this.setState({
-      screenData: screenData,
+      journeyData: journeyData,
     });
   };
 
-  handleClick = () => {};
+  handleClick = (id) => {
+    console.log(id)
+  };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -44,8 +117,6 @@ class JourneyMap extends Component {
       nativeCallback({ events: eventObj });
     }
   }
-
-  handleClick2 = () => {};
 
   render() {
     return (
@@ -65,13 +136,13 @@ class JourneyMap extends Component {
           />
 
           <div className="head-title">
-            <b>Awesome!</b> Your loan application is successfully created. Now you're
-            just a step away from finding out your loan offer.
+            <b>Awesome!</b> Your loan application is successfully created. Now
+            you're just a step away from finding out your loan offer.
           </div>
 
           <JourneySteps
-            handleClick={this.handleClick2}
-            baseData={this.state.screenData.journeyData}
+            handleClick={this.handleClick}
+            baseData={this.state.journeyData}
           />
         </div>
       </Container>

@@ -40,7 +40,7 @@ export const idfc_config = {
     otp_verify: 'basic-details',
     basic_details: 'professional-details',
     professional_details_screen: 'journey',
-    personal_details: 'address_details',
+    personal_details_screen: 'address-details',
     address_details: 'journey',
     bt_info_screen: 'loan-bt-details'
   },
@@ -61,17 +61,6 @@ export const idfc_config = {
         { 'step': '3', 'title': 'Provide income details', 'subtitle': 'Enter your loan requirements and income details to get the best loan offer.' },
         { 'step': '4', 'title': 'Upload documents', 'subtitle': 'Provide your office address and upload documents to get your loan sanctioned.' },
         { 'step': '5', 'title': 'Sanction and disbursal', 'subtitle': 'IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.' }
-      ]
-    }
-  },
-  journey_screen: {
-    journeyData: {
-      options: [
-        { 'step': '1', 'title': 'Enter basic details', 'subtitle': 'Fill in personal and work details to get started with your loan application.', 'status': 'completed'  },
-        { 'step': '2', 'title': 'Create loan application', 'subtitle': 'Check your KYC status to proceed with your loan application.', 'status': 'completed' },
-        { 'step': '3', 'title': 'Provide income details', 'subtitle': 'Enter your loan requirements and income details to get the best loan offer.', 'status': 'init' },
-        { 'step': '4', 'title': 'Upload documents', 'subtitle': 'Provide your office address and upload documents to get your loan sanctioned.', 'status': 'pending' },
-        { 'step': '5', 'title': 'Sanction and disbursal', 'subtitle': 'IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.', 'status': 'pending'  }
       ]
     }
   },
