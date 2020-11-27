@@ -21,6 +21,7 @@ const Dashboard = () => {
   const [riskData, setRiskData] = useState({});
   const [isLoadingRisk, setIsLoadingRisk] = useState(true);
   const [riskError, setRiskError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1)
 
   const formatNumVal = (val) => {
     if (isEmpty(val) || !val) return '--';
@@ -76,11 +77,12 @@ const Dashboard = () => {
     if (page && !isEmpty(page)) {
       page.style.background = pageNum === 1 ? '' : '#F9FCFF';
     }
+    setCurrentPage(pageNum)
   };
 
   return (
     <div className="iwd-page" id="iwd-dashboard">
-      <PageHeader>
+      <PageHeader secondary={currentPage % 2 !== 0}>
         <>
           <div className='iwd-header-title'>Dashboard</div>
           <div className='iwd-header-subtitle'>Welcome back, Uttam</div>

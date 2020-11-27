@@ -57,7 +57,7 @@ const IwdProfile = (props) => {
     );
   }
   return (
-    <div className="iwd-profile-icon" onClick={toggleExpanded}>U</div>
+    <div className={props.secondary ? 'iwd-profile-icon' : 'iwd-profile-icon iwd-profile-icon__primary'} onClick={toggleExpanded}>U</div>
   );
 };
 
