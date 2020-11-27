@@ -280,8 +280,19 @@ class GroupHealthPlanAddOns extends Component {
         groupHealthPlanData.post_body.add_ons = add_ons_body; //add ons in array format for get final premium api in the select cover period page
         groupHealthPlanData.post_body.add_ons_array = add_ons_body;
         groupHealthPlanData.post_body.add_ons_json = add_ons_json || {};
-
         groupHealthPlanData.add_ons_data = this.state.add_ons_data;
+
+        let add_ons_total = 0;
+        this.state.add_ons_data.forEach(addOn =>{
+            if(addOn.checked){
+                if(Array.isArray(addOn.price)){
+                    add_ons_total +=  addOn.selected_premium || addOn.default_premium ;
+                }else{
+                    add_ons_total += addOn.price;
+                }
+            }
+        })
+        groupHealthPlanData.post_body.add_on_premium = add_ons_total;
         this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate(this.state.next_screen);
