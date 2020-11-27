@@ -110,6 +110,7 @@ class GroupHealthPlanList extends Component {
         let eldest_dict  = plan_data.eldest_dict || {};
 
         groupHealthPlanData.plan_selected = plan;
+        groupHealthPlanData.plan_selected.copay = plan.complete_details.copay;
         groupHealthPlanData.post_body.plan_id = plan.plan_id;
         groupHealthPlanData.base_plan_title = common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
