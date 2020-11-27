@@ -98,6 +98,7 @@ class GroupHealthReportDetails extends Component {
                 policy_data.cssMapper = data.cssMapper;
 
                 this.setState({
+                    resultData: resultData,
                     extra_data: resultData.plan_details,
                     policy_data: policy_data,
                     quote_info: resultData.plan_details,
@@ -404,7 +405,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.lead.cover_type && 
+                       {this.state.quotation_details && 
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
@@ -414,7 +415,7 @@ class GroupHealthReportDetails extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {getCoverageType(this.state.lead)}
+                                    {getCoverageType(this.state.resultData)}
                                 </div>
                             </div>
                         </div>}

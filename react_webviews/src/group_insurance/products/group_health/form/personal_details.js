@@ -20,6 +20,7 @@ import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
+import { storageService } from 'utils/validators';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -184,6 +185,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.member_key && this.state.member_key !== this.props.member_key) {
       this.onload();
     }
+    storageService().setObject('applicationPhaseReached', true);
   }
 
   componentWillMount() {

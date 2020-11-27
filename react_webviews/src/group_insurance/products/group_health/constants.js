@@ -194,6 +194,7 @@ export const religare = {
     key: 'RELIGARE',
     provider_api: 'religare',
     title: 'Care Health',
+    title2: 'Care Health',
     subtitle: 'Care',
     logo: 'ic_religare_logo.svg',
     logo_card: 'ic_religare_logo_card.svg',
@@ -994,7 +995,6 @@ export const avilableMembersToInsured = [
 export function getCoverageType(lead) {
     let insured_people_details = lead.insured_people_details || [];
     let insurance_type = lead.quotation_details.insurance_type;
-
     if(insurance_type !== 'self' && insured_people_details.length >= 2) { //one extra for applicant
         if(lead.quotation_details.floater_type === 'floater') {
             return 'Family floater';

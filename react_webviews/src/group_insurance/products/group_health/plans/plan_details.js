@@ -9,7 +9,8 @@ import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import {initialize} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
-import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import GenericTooltip from '../../../../common/ui/GenericTooltip';
+import {formatAmount} from '../../../../utils/validators';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -143,7 +144,8 @@ class GroupHealthPlanDetails extends Component {
 
         let renderData = {
             'header_title': mapper_data.header_title,
-            'header_subtitle': mapper_data.header_subtitle || `${this.state.common_data.base_plan_title} ${this.state.plan_selected.plan_title}`,
+            'header_subtitle': mapper_data.header_subtitle || `${this.state.providerConfig.title2 ||
+              this.state.providerConfig.title} ${this.state.plan_selected.plan_title}`,
             'bottom_title': '*For detailed list, please refer policy prospectus',
             'steps': {
                 'options': mapper_data.steps
@@ -273,7 +275,7 @@ class GroupHealthPlanDetails extends Component {
                     {this.state.providerConfig.title2 ||
                       this.state.providerConfig.title}
                   </div>
-                  <div className="tc-subtitle">{this.state.plan_data && this.state.plan_data.common.base_plan_title}</div>
+                  <div className="tc-subtitle">{this.state.plan_data && this.state.plan_selected.plan_title}</div>
                 </div>
 
                 <div className="tc-right">
@@ -322,7 +324,7 @@ class GroupHealthPlanDetails extends Component {
                       {this.state.plan_data.SI}
                   </div>
                   <div className="sai-left">
-                  {this.state.plan_data.starts_at}
+                  starts at Rs. {formatAmount(this.state.plan_data.starts_at_value)}/year
                   </div>
                </div>
 
@@ -356,7 +358,7 @@ class GroupHealthPlanDetails extends Component {
                 <div
                   className="special-benefit"
                   style={{
-                    // backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
+                    backgroundImage: `url(${this.state.ic_hs_main_benefits})`,
                   }}
                 >
                   <img

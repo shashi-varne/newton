@@ -7,6 +7,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 import { getConfig } from 'utils/functions';
+import { storageService } from '../../../../utils/validators';
 class GroupHealthPlanSelectCoverPeriod extends Component {
     constructor(props) {
         super(props);
@@ -164,6 +165,11 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         post_body.net_premium = plan_selected_final.premium;
         post_body.plan_code = groupHealthPlanData.plan_selected_final.plan_code;
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
+
+        if(storageService().getObject('applicationPhaseReached')){
+            delete groupHealthPlanData.post_body['quotation_id'];
+        }
+
         this.setLocalProviderData(groupHealthPlanData);
         this.navigate('plan-premium-summary');
     }

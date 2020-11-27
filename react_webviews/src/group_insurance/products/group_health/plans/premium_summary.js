@@ -52,6 +52,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 
       if(this.state.providerConfig.provider_api === 'religare'){
         body['add_ons'] = Object.keys(post_body.add_ons_payload).length === 0 ? {} : post_body.add_ons_payload;
+        body['add_on_premium'] = post_body['add_on_premium'];
       }
       if(this.state.providerConfig.provider_api === 'star'){
         body['floater_type'] = 'floater';
@@ -260,7 +261,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             </div>
             <div className="left">
               <div className="tc-title">
-                {this.state.providerData.title}
+                {this.state.providerData.title2}
               </div>
               <div className="tc-subtitle">
                 {this.state.plan_selected.plan_title}

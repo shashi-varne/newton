@@ -110,6 +110,7 @@ class GroupHealthPlanList extends Component {
         let eldest_dict  = plan_data.eldest_dict || {};
 
         groupHealthPlanData.plan_selected = plan;
+        groupHealthPlanData.plan_selected.copay = plan.complete_details.copay;
         groupHealthPlanData.post_body.plan_id = plan.plan_id;
         groupHealthPlanData.base_plan_title = common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
@@ -129,7 +130,7 @@ class GroupHealthPlanList extends Component {
         this.navigate(this.state.next_screen || 'plan-details');
     }
 
-    renderTileMidData = (props, index, plan_data) => {
+    renderTileMidData = (props, index) => {
         return (
             <div key={index} className="pi-tile">
                 <div className="pi-left">{props.label}</div>
@@ -148,8 +149,8 @@ class GroupHealthPlanList extends Component {
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
-                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.common.base_plan_title :''}</div>
-                        <div className="tc-subtitle">{plan_data.plan_name}</div>
+                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.providerConfig.title2 :''}</div>
+                        <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
                         <img
@@ -161,7 +162,7 @@ class GroupHealthPlanList extends Component {
 
                 <div className="plan-info">
                     {(plan_data.display_content || []).map((props, index) => 
-                    this.renderTileMidData(props, index, plan_data))}
+                    this.renderTileMidData(props, index))}
                 </div>
 
                 <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
