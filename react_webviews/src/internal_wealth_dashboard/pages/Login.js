@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import LoginFields from '../../common/responsive-components/LoginFields';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { getConfig } from "utils/functions";
@@ -12,12 +12,38 @@ import bgWaves from 'assets/bg_waves.svg';
 import HelpPage from '../mini-components/Help';
 import ForgotPasswordPage from '../mini-components/ForgotPassword';
 // -------------------------------------
+
+import Api from '../../utils/api';
+import { isEmpty, storageService } from '../../utils/validators';
+
 const isMobileView = getConfig().isMobileDevice;
 
 const Login = (props) => {
   const [openHelpPage, toggleHelpPage] = useState(false);
   const [openForgotPwd, toggleForgotPwd] = useState(false);
   const navigate = navigateFunc.bind(props);
+
+  const fetchUserProfile = async () => {
+    try {
+      const res = await Api.get('api/whoami');
+      if (isEmpty(res) || res.pfwstatus_code !== 200) {
+        navigate(props, 'login')
+      } else {
+        const { user } = res.pfwresponse.result;
+        const { email, name } = user
+        storageService().set('iwd-user-email', email);
+        storageService().set('iwd-user-name', name);
+      }     
+    } catch(err) {
+      navigate('login')
+    }
+  }
+
+  useEffect(() => {
+    if (!storageService().get('ied-user-email') || !storageService.get('iwd-user-name')) {
+      fetchUserProfile() 
+    }
+  }, [])
 
   return (
     <>

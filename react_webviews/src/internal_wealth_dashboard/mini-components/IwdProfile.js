@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { logout } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
+import { storageService } from '../../utils/validators'
 
 const IwdProfile = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -24,18 +25,25 @@ const IwdProfile = (props) => {
     setLoggingOut(false);
   };
 
+  const name = storageService().get('iwd-user-name')
+  const email = storageService().get('iwd-user-email')
+
+  if (!name || !email) {
+    return navigate('login')
+  }
+
   if (expanded) {
     return (
       <div className="iwd-profile" onClick={toggleExpanded}>
         <div className="iwd-profile-icon iwd-profile-icon__primary">U</div>
-        <div className="iwd-profile-username">Uttam Paswan</div>
+        <div className="iwd-profile-username">{name}</div>
         <div className="iwd-profile-detail" id="pan">
           <b>PAN: </b>
           CXIPP 4122 M
         </div>
         <div className="iwd-profile-detail">
           <b>Email: </b>
-          uttam@fisdom.com
+          {email}
         </div>
         <div className="iwd-profile-detail">
           <b>Mob.: </b>
@@ -57,7 +65,7 @@ const IwdProfile = (props) => {
     );
   }
   return (
-    <div className={props.secondary ? 'iwd-profile-icon' : 'iwd-profile-icon iwd-profile-icon__primary'} onClick={toggleExpanded}>U</div>
+    <div className={props.secondary ? 'iwd-profile-icon' : 'iwd-profile-icon iwd-profile-icon__primary'} onClick={toggleExpanded}>{name.charAt(0).toUpperCase()}</div>
   );
 };
 
