@@ -66,19 +66,19 @@ class GroupHealthPlanAddressDetails extends Component {
         if (this.state.provider === 'RELIGARE') {
             form_data = {
                 ...this.state.form_data,
-                addr_line1: permanent_address.addr_line1 || '',
-                addr_line2: permanent_address.addr_line2 || '',
-                pincode: permanent_address.pincode || '',
-                city: permanent_address.city || '',
-                state: permanent_address.state || '',
-                country: permanent_address.country || '',
+                addr_line1: correspondence_address.addr_line1 || '',
+                addr_line2: correspondence_address.addr_line2 || '',
+                pincode: correspondence_address.pincode || '',
+                city: correspondence_address.city || '',
+                state: correspondence_address.state || '',
+                country: correspondence_address.country || '',
 
-                p_addr_line1: correspondence_address.addr_line1 || '',
-                p_addr_line2: correspondence_address.addr_line2 || '',
-                p_pincode: correspondence_address.pincode || '',
-                p_city: correspondence_address.city || '',
-                p_state: correspondence_address.state || '',
-                p_country: correspondence_address.country || '',
+                p_addr_line1: permanent_address.addr_line1 || '',
+                p_addr_line2: permanent_address.addr_line2 || '',
+                p_pincode: permanent_address.pincode || '',
+                p_city: permanent_address.city || '',
+                p_state: permanent_address.state || '',
+                p_country: permanent_address.country || '',
 
             };
 
@@ -278,7 +278,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 body = {
                     
                     "address_details": {
-                        "permanent_address": {
+                        "correspondence_address": {
                             "state": form_data.state,
                             "addr_line1": form_data.addr_line1,
                             "pincode": form_data.pincode,
@@ -286,7 +286,7 @@ class GroupHealthPlanAddressDetails extends Component {
                             "city": form_data.city
                         },
                         "correspondence_addr_same": checked ? 'y' : 'n',
-                        "correspondence_address": {
+                        "permanent_address": { 
                             "state": checked ? form_data.state : form_data.p_state,
                             "addr_line1": checked ? form_data.addr_line1 : form_data.p_addr_line1,
                             "pincode":checked ? form_data.pincode : form_data.p_pincode,
