@@ -148,8 +148,8 @@ class GroupHealthPlanList extends Component {
                 <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
-                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.common.base_plan_title :''}</div>
-                        <div className="tc-subtitle">{plan_data.plan_name}</div>
+                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.providerConfig.title2 :''}</div>
+                        <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
                         <img
