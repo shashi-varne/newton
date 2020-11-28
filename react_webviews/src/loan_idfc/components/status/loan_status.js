@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 
-class ApplicationStatus extends Component {
+class LoanStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,11 +42,8 @@ class ApplicationStatus extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Application rejected"
-        buttonTitle="START NEW APPLICATION"
+        buttonTitle="NEXT"
         handleClick={this.handleClick}
-        headerData={{
-          icon: "close",
-        }}
       >
         <div className="idfc-loan-status">
           <img
@@ -54,20 +51,21 @@ class ApplicationStatus extends Component {
             alt=""
           />
           <div className="subtitle">
-            We’re unable to approve your loan request because as per IDFC’s loan
-            policy your monthly salary does not qualify you for a personal loan
-            at this point.
+            Your profile has been successfully evaluated and basis the checks
+            you're most likely to get a loan offer.
           </div>
 
           <div className="subtitle">
-            We’re unable to approve your loan request because as per IDFC’s loan
-            policy your salary receipt mode does not make you eligible for a
-            personal loan at this point.
+            To view the final loan amount, provide your income details.
           </div>
 
           <div className="subtitle">
-            We're unable to take your loan application forward as you don't fall
-            under the minimum age criteria as per IDFC's loan policy.
+            Oops! Something's not right. Please check back in some time.
+          </div>
+
+          <div className="subtitle">
+            We're so sorry to inform you that IDFC has rejected your loan
+            application as it did not meet their loan policy.
           </div>
         </div>
       </Container>
@@ -75,4 +73,4 @@ class ApplicationStatus extends Component {
   }
 }
 
-export default ApplicationStatus;
+export default LoanStatus;

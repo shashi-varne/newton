@@ -129,8 +129,12 @@ class PersonalDetails extends Component {
   };
 
   handleChangeRadio = (event) => {
+    let { form_data } = this.state;
+
+    form_data.gender = gender_options[event].value;
+
     this.setState({
-      gender: gender_options[event].value
+      form_data: form_data
     })
   };
 

@@ -25,7 +25,7 @@ class UploadBank extends Component {
       confirmed: true,
       editId: null,
       count: 1,
-      form_data: {}
+      form_data: {},
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -58,7 +58,30 @@ class UploadBank extends Component {
     });
   }
 
-  onload = () => {};
+  onload = async () => {
+    // try {
+    //   this.setState({
+    //     show_loader: true,
+    //   });
+
+    //   const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
+
+    //   const { result, status_code: status } = res.pfwresponse;
+
+    //   if (status === 200) {
+    //     console.log(result);
+    //   } else {
+    //     toast(result.error || result.message || "Something went wrong!");
+    //   }
+    // } catch (err) {
+    //   console.log(err);
+    //   toast("Something went wrong");
+    // }
+
+    // this.setState({
+    //   show_loader: false,
+    // });
+  };
 
   renderNotes = () => {
     let notes = [
@@ -161,8 +184,11 @@ class UploadBank extends Component {
     file.status = "uploaded";
     file.id = count++;
 
-    if (editId >= 0) {
-      documents[editId] = file;
+    if (editId !== null) {
+      var index = documents.findIndex((item) => item.id === editId);
+      file.id = editId;
+      file.edited = true;
+      documents[index] = file;
     }
 
     if (editId === undefined || editId === null) {
@@ -174,6 +200,7 @@ class UploadBank extends Component {
       documents: documents,
       confirmed: false,
       editId: null,
+      count: count
     });
   };
 
@@ -182,6 +209,9 @@ class UploadBank extends Component {
 
     var index = documents.findIndex((item) => item.id === id);
 
+    var isedited = documents[index].edited;
+    console.log(documents[index].edited)
+
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
     data.append("file", documents[index]);
@@ -189,16 +219,16 @@ class UploadBank extends Component {
 
     try {
       const res = await Api.post(
-        `relay/api/loan/idfc/document/upload/${application_id}`,
+        `relay/api/loan/idfc/upload/document/${application_id}${isedited ? '?edit=true' : ''}`,
         data
       );
 
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        documents[id].status = "confirmed";
+        documents[index].status = "confirmed";
         this.setState({
-          // confirmed: true,
+          confirmed: true,
           documents: documents,
         });
       }
@@ -245,7 +275,11 @@ class UploadBank extends Component {
   };
 
   handleDelete = (id) => {
-    this.state.documents.splice(id, 1);
+
+    let { documents } = this.state;
+    let index = documents.findIndex((item) => item.id === id);
+
+    documents.splice(index, 1);
     this.setState({
       documents: this.state.documents,
     });
@@ -357,7 +391,6 @@ class UploadBank extends Component {
 
               {item.status === "uploaded" && (
                 <div
-                  disable
                   onClick={() => this.handleConfirm(item.id)}
                   className="generic-page-button-small"
                 >
@@ -368,14 +401,14 @@ class UploadBank extends Component {
               {item.status === "confirmed" && (
                 <div className="edit-or-delete">
                   <div
-                    onClick={() => this.handleEdit(index)}
+                    onClick={() => this.handleEdit(item.id)}
                     className="generic-page-button-small"
                   >
                     EDIT
                   </div>
 
                   <div
-                    onClick={() => this.handleDelete(index)}
+                    onClick={() => this.handleDelete(item.id)}
                     className="generic-page-button-small"
                   >
                     DELETE

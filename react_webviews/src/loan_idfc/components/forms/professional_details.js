@@ -24,7 +24,6 @@ class ProfessionalDetails extends Component {
   }
 
   onload = () => {
-
     let lead = this.state.lead || {};
 
     let professional_info = lead.professional_info || {};
@@ -38,12 +37,12 @@ class ProfessionalDetails extends Component {
       constitution: capitalizeFirstLetter(professional_info.constitution),
       organisation: capitalizeFirstLetter(professional_info.organisation),
       department: professional_info.department,
-      industry: professional_info.industry
-    }
+      industry: professional_info.industry,
+    };
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
   sendEvents(user_action) {
@@ -89,7 +88,7 @@ class ProfessionalDetails extends Component {
       "industry",
     ];
 
-    this.formCheckUpdate(keys_to_check, form_data,  'internal', true);
+    this.formCheckUpdate(keys_to_check, form_data, "internal", true);
   };
 
   render() {
@@ -103,16 +102,15 @@ class ProfessionalDetails extends Component {
         <div className="professional-details">
           <FormControl fullWidth>
             <div className="InputField">
-              <Input
-                error={!!this.state.form_data.company_name_error}
-                helperText={this.state.form_data.company_name_error}
-                type="text"
+              <DropdownWithoutIcon
                 width="40"
+                options={this.state.screenData.companyOptions}
+                id="company_name"
                 label="Company name"
-                class="company-name"
-                id="company-name"
-                name="company_name"
+                error={this.state.form_data.company_name_error ? true : false}
+                helperText={this.state.form_data.company_name_error}
                 value={this.state.form_data.company_name || ""}
+                name="company_name"
                 onChange={this.handleChange("company_name")}
               />
             </div>
@@ -156,9 +154,7 @@ class ProfessionalDetails extends Component {
                 options={this.state.screenData.salaryRecieptOptions}
                 id="salary-receipt-mode"
                 label="Salary receipt mode"
-                error={
-                  this.state.form_data.salary_mode_error ? true : false
-                }
+                error={this.state.form_data.salary_mode_error ? true : false}
                 helperText={this.state.form_data.salary_mode_error}
                 value={this.state.form_data.salary_mode || ""}
                 name="salary_mode"
@@ -172,9 +168,7 @@ class ProfessionalDetails extends Component {
                 options={this.state.screenData.constitutionOptions}
                 id="constitution"
                 label="Constitution of company"
-                error={
-                  this.state.form_data.constitution_error ? true : false
-                }
+                error={this.state.form_data.constitution_error ? true : false}
                 helperText={this.state.form_data.constitution_error}
                 value={this.state.form_data.constitution || ""}
                 name="constitution"
@@ -188,9 +182,7 @@ class ProfessionalDetails extends Component {
                 options={this.state.screenData.organisationTypeOptions}
                 id="organisation"
                 label="Organisation type"
-                error={
-                  this.state.form_data.organisation_error ? true : false
-                }
+                error={this.state.form_data.organisation_error ? true : false}
                 helperText={this.state.form_data.organisation_error}
                 value={this.state.form_data.organisation || ""}
                 name="organisation"

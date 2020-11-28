@@ -16,7 +16,6 @@ import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
 import Calculator from "./components/general/calculator";
 import KnowMore from "./components/general/know_more";
-import ApplicationStatus from "./components/status/application_status";
 import IncomeDetails from "./components/general/income_details";
 import UploadBankStatements from "./components/forms/upload_bank";
 import BasicDetails from "./components/forms/basic_details";
@@ -30,6 +29,11 @@ import LoanBtDetails from "./components/bt_details/loan_bt";
 import CreditBtDetails from "./components/bt_details/credit_bt";
 import EligibleLoan from "./components/forms/eligible_loan";
 import AdditionalDetails from "./components/forms/additional_details";
+import UploadDocuments from "./components/upload_doc/upload_doc";
+import LoanEligible from "./components/general/loan_eligible";
+import ApplicationStatus from "./components/status/application_status";
+import LoanStatus from "./components/status/loan_status";
+import UploadPan from "./components/upload_doc/upload_pan";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -86,9 +90,15 @@ const Lending = props => {
           <Route path={`${url}/loan-bt`} component={LoanBtDetails} />
           <Route path={`${url}/credit-bt`} component={CreditBtDetails} />
           <Route path={`${url}/summary`} component={Summary} />
-          <Route path={`${url}/application-status`} component={ApplicationStatus} />
           <Route path={`${url}/eligible-loan`} component={EligibleLoan} />
           <Route path={`${url}/additional-details`} component={AdditionalDetails} />
+          <Route path={`${url}/upload-documents`} component={UploadDocuments} />
+          <Route path={`${url}/loan-eligible`} component={LoanEligible} />
+
+          <Route path={`${url}/application-status`} component={ApplicationStatus} />
+          <Route path={`${url}/loan-status`} component={LoanStatus} />
+
+          <Route path={`${url}/upload-pan`} component={UploadPan} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-basic-details`} 

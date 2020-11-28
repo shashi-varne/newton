@@ -7,6 +7,7 @@ import { FormControl } from "material-ui/Form";
 // import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
+import Api from 'utils/api';
 
 const yesOrNo_options = [
   {
@@ -54,9 +55,9 @@ class AddressDetails extends Component {
   }
 
   onload = () => {
-    this.setState({
-      isPermanent_address: "No",
-    });
+    // this.setState({
+    //   isPermanent_address: "No",
+    // });
   };
 
   sendEvents(user_action) {
@@ -104,15 +105,82 @@ class AddressDetails extends Component {
       "permanent_landmark",
       "permanent_pincode",
       "permanent_city",
-      "permanent_state"
+      "permanent_state",
     ];
 
     this.formCheckUpdate(keys_to_check, form_data, "null", true);
   };
 
-  handleChangeRadio = (event) => {
+  handlePincode = name => async (event) => {
+    const pincode = event.target.value;
+
+    if (pincode.length > 6) {
+        return;
+    }
+
+    let form_data = this.state.form_data;
+    form_data[name] = pincode;
+    form_data[name + '_error'] = '';
+
     this.setState({
-      isPermanent_address: yesOrNo_options[event].value,
+        form_data: form_data
+    })
+
+    if (pincode.length === 6) {
+        const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
+        let resultData = res.pfwresponse.result[0] || '';
+
+        console.log(resultData)
+
+        // let { city, state, country } = form_data;
+        // let pincode_error = '';
+        // if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+        //     if (resultData.dmi_city_name === 'NA') {
+        //         city = resultData.district_name || resultData.division_name || resultData.taluk;
+        //     } else {
+        //         city = resultData.dmi_city_name;
+        //     }
+        //     state = resultData.state_name;
+        //     country = resultData.country_name;
+        // } else {
+        //     city = '';
+        //     state = '';
+        //     pincode_error = 'Invalid pincode';
+        // }
+        
+        // if (name === 'pincode') {
+        //     form_data.city = city;
+        //     form_data.state = state;
+        //     form_data.pincode_error = pincode_error;
+        //     form_data.country = country || 'India';
+        // } else {
+        //     form_data.p_city = city;
+        //     form_data.p_state = state;
+        //     form_data.p_pincode_error = pincode_error;
+        //     form_data.p_country = country || 'India';
+        // }
+
+    }
+
+    // this.setState({
+    //     form_data: form_data
+    // })
+}
+
+  handleChangeRadio = (event) => {
+    let isPermanent_address = yesOrNo_options[event].value;
+    let { form_data } = this.state;
+
+      form_data.permanent_address1 = isPermanent_address === 'Yes' ? form_data.current_address1 : '';
+      form_data.permanent_address2 = isPermanent_address === 'Yes' ? form_data.current_address2 : '';
+      form_data.permanent_address3 = isPermanent_address === 'Yes' ? form_data.current_address3 : '';
+      form_data.permanent_landmark = isPermanent_address === 'Yes' ? form_data.current_landmark : '';
+      form_data.permanent_pincode = isPermanent_address === 'Yes' ? form_data.current_pincode : '';
+      form_data.permanent_city = isPermanent_address === 'Yes' ? form_data.current_city : '';
+      form_data.permanent_state = isPermanent_address === 'Yes' ? form_data.current_state : '';
+
+    this.setState({
+      isPermanent_address: isPermanent_address
     });
   };
 
@@ -199,7 +267,7 @@ class AddressDetails extends Component {
                 id="current_pincode"
                 name="current_pincode"
                 value={this.state.form_data.current_pincode || ""}
-                onChange={this.handleChange("current_pincode")}
+                onChange={this.handlePincode("current_pincode")}
               />
             </div>
 
@@ -245,109 +313,107 @@ class AddressDetails extends Component {
               />
             </div>
 
-            {isPermanent_address === "No" && (
-              <div>
-                <div className="head-title">Permanent address</div>
+            <div>
+              <div className="head-title">Permanent address</div>
 
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_address1_error}
-                    helperText={this.state.form_data.permanent_address1_error}
-                    type="text"
-                    width="40"
-                    label="Address line 1"
-                    id="address"
-                    name="permanent_address1"
-                    value={this.state.form_data.permanent_address1 || ""}
-                    onChange={this.handleChange("permanent_address1")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_address2_error}
-                    helperText={this.state.form_data.permanent_address2_error}
-                    type="text"
-                    width="40"
-                    label="Address line 2"
-                    id="address"
-                    name="permanent_address2"
-                    value={this.state.form_data.permanent_address2 || ""}
-                    onChange={this.handleChange("permanent_address2")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_address3_error}
-                    helperText={this.state.form_data.permanent_address3_error}
-                    type="text"
-                    width="40"
-                    label="Address line 3"
-                    id="address"
-                    name="permanent_address3"
-                    value={this.state.form_data.permanent_address3 || ""}
-                    onChange={this.handleChange("permanent_address3")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_landmark_error}
-                    helperText={this.state.form_data.permanent_landmark_error}
-                    type="text"
-                    width="40"
-                    label="Landmark"
-                    id="permanent_landmark"
-                    name="permanent_landmark"
-                    value={this.state.form_data.permanent_landmark || ""}
-                    onChange={this.handleChange("permanent_landmark")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_pincode_error}
-                    helperText={this.state.form_data.permanent_pincode_error}
-                    type="text"
-                    width="40"
-                    label="Pincode"
-                    id="permanent_pincode"
-                    name="permanent_pincode"
-                    value={this.state.form_data.permanent_pincode || ""}
-                    onChange={this.handleChange("permanent_pincode")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_city_error}
-                    helperText={this.state.form_data.permanent_city_error}
-                    type="text"
-                    width="40"
-                    label="City"
-                    id="permanent_city"
-                    name="permanent_city"
-                    value={this.state.form_data.permanent_city || ""}
-                    onChange={this.handleChange("permanent_city")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.permanent_state_error}
-                    helperText={this.state.form_data.permanent_state_error}
-                    type="text"
-                    width="40"
-                    label="State"
-                    id="permanent_state"
-                    name="permanent_state"
-                    value={this.state.form_data.permanent_state || ""}
-                    onChange={this.handleChange("permanent_state")}
-                  />
-                </div>
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_address1_error}
+                  helperText={this.state.form_data.permanent_address1_error}
+                  type="text"
+                  width="40"
+                  label="Address line 1"
+                  id="address"
+                  name="permanent_address1"
+                  value={this.state.form_data.permanent_address1 || ""}
+                  onChange={this.handleChange("permanent_address1")}
+                />
               </div>
-            )}
+
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_address2_error}
+                  helperText={this.state.form_data.permanent_address2_error}
+                  type="text"
+                  width="40"
+                  label="Address line 2"
+                  id="address"
+                  name="permanent_address2"
+                  value={this.state.form_data.permanent_address2 || ""}
+                  onChange={this.handleChange("permanent_address2")}
+                />
+              </div>
+
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_address3_error}
+                  helperText={this.state.form_data.permanent_address3_error}
+                  type="text"
+                  width="40"
+                  label="Address line 3"
+                  id="address"
+                  name="permanent_address3"
+                  value={this.state.form_data.permanent_address3 || ""}
+                  onChange={this.handleChange("permanent_address3")}
+                />
+              </div>
+
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_landmark_error}
+                  helperText={this.state.form_data.permanent_landmark_error}
+                  type="text"
+                  width="40"
+                  label="Landmark"
+                  id="permanent_landmark"
+                  name="permanent_landmark"
+                  value={this.state.form_data.permanent_landmark || ""}
+                  onChange={this.handleChange("permanent_landmark")}
+                />
+              </div>
+
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_pincode_error}
+                  helperText={this.state.form_data.permanent_pincode_error}
+                  type="number"
+                  width="40"
+                  label="Pincode"
+                  id="permanent_pincode"
+                  name="permanent_pincode"
+                  value={this.state.form_data.permanent_pincode || ""}
+                  onChange={this.handlePincode("permanent_pincode")}
+                />
+              </div>
+
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_city_error}
+                  helperText={this.state.form_data.permanent_city_error}
+                  type="text"
+                  width="40"
+                  label="City"
+                  id="permanent_city"
+                  name="permanent_city"
+                  value={this.state.form_data.permanent_city || ""}
+                  onChange={this.handleChange("permanent_city")}
+                />
+              </div>
+
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.permanent_state_error}
+                  helperText={this.state.form_data.permanent_state_error}
+                  type="text"
+                  width="40"
+                  label="State"
+                  id="permanent_state"
+                  name="permanent_state"
+                  value={this.state.form_data.permanent_state || ""}
+                  onChange={this.handleChange("permanent_state")}
+                />
+              </div>
+            </div>
           </FormControl>
         </div>
       </Container>

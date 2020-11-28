@@ -129,6 +129,26 @@ export const idfc_config = {
     }
   },
   professional_details_screen: {
+    companyOptions:[
+      'ESSEL MINING & INDUSTRIES LTD',
+      'BERGER PAINTS INDIA LIMITED',
+      'ADANI ENTERPRISES LIMITED',
+      'FALKEN TYRE INDIA PRIVATE LIMITED',
+      'CLASSIC CONCEPTS HOME INDIA PRIVATE LIMITED',
+      'DAMODAR MANGALJI AND COMPANY LIMITED',
+      'NAVAIR INTERNATIONAL PRIVATE LIMITED',
+      'MAGUS IT SOLUTIONS PRIVATE LIMITED',
+      'MEDSOFT (INDIA) PRIVATE LIMITED',
+      'DBS BANK LTD',
+      'ZYDUS WELLNESS LIMITED',
+      'WOCKHARDT LIMITED',
+      'RBL BANK LIMITED',
+      'AEGON LIFE INSURANCE COMPANYLIMITED',
+      'WOLSELEY',
+      'XEROX MODICORP LTD XEROX (I) LTD',
+      'ZURICH FINANCIAL SERVICES',
+      'ZYDUS CADILA'
+    ],
     salaryRecieptOptions: [
       "Bank account transfer",
       "Cash",

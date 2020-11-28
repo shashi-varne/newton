@@ -40,7 +40,12 @@ class Landing extends Component {
     let params = {
       create_new: this.state.application_exists ? false : true,
     };
-    this.getOrCreate(params);
+
+    if (this.state.cta_title === "RESUME") {
+      this.navigate('journey')
+    } else {
+      this.getOrCreate(params);
+    }
   };
 
   sendEvents(user_action, data = {}) {

@@ -4,24 +4,6 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import JourneySteps from "../../../common/ui/JourneySteps";
 
-const journey = [
-  {
-    basic_details_uploaded: false,
-  },
-  {
-    loan_application_created: false,
-  },
-  {
-    income_details_provided: false,
-  },
-  {
-    documents_uploaded: false,
-  },
-  {
-    Sanction_and_disbursal: false,
-  },
-];
-
 class JourneyMap extends Component {
   constructor(props) {
     super(props);

@@ -20,6 +20,7 @@ export async function initialize() {
   this.startTransaction = startTransaction.bind(this);
   this.netBanking = netBanking.bind(this);
   this.setEditTitle = setEditTitle.bind(this);
+  this.getDocumentList = getDocumentList.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -63,6 +64,27 @@ export async function initialize() {
   if (this.state.screen_name === "landing_screen") {
     this.getUserStatus();
   }
+}
+
+export async function getDocumentList() {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.get(`relay/api/loan/idfc/list/document/${this.state.application_id}`);
+    const { result, status_code: status } = res.pfwresponse;
+
+    console.log(result)
+
+  } catch (err) {
+    console.log(err);
+    toast("Something went wrong");
+  }
+
+  this.setState({
+    show_loader: false,
+  });
 }
 
 export async function getOrCreate(params) {
@@ -111,6 +133,11 @@ export async function getOrCreate(params) {
       if (this.state.screen_name === "landing_screen") {
         this.navigate(this.state.next_state);
       }
+
+      if (this.state.screen_name === "document_list") {
+        this.getDocumentList();
+      }
+
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -232,8 +259,13 @@ export async function submitApplication(params, state, update) {
         this.navigate(this.state.next_state);
       }
     } else {
-      toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+
+      if (this.state.screen_name === 'professional_details_screen') {
+        this.navigate('application-status')
+      } else {
+        toast(result.error || result.message || "Something went wrong!");
+        this.onload();
+      }
     }
   } catch (err) {
     console.log(err);
