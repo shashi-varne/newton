@@ -89,7 +89,7 @@ class ProfessionalDetails extends Component {
       "industry",
     ];
 
-    this.formCheckUpdate(keys_to_check, form_data);
+    this.formCheckUpdate(keys_to_check, form_data,  'internal', true);
   };
 
   render() {

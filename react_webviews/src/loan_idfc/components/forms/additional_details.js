@@ -4,7 +4,8 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-// import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import { validateNumber } from "utils/validators";
 
 class AdditionalDetails extends Component {
   constructor(props) {
@@ -18,6 +19,15 @@ class AdditionalDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let mailingAddressPreferenceOptions = [
+      'CURRENT ADDRESS',
+      'PERMANENT ADDRESS'
+    ];
+
+    this.setState({
+      mailingAddressPreferenceOptions: mailingAddressPreferenceOptions
+    })
   }
 
   onload = () => {};
@@ -38,9 +48,34 @@ class AdditionalDetails extends Component {
     }
   }
 
-  handleChange = () => {};
+  handleChange = (name) => (event) => {
+    let value = event.target ? event.target.value : event;
+    let id = (event.target && event.target.id) || "";
+    let { form_data } = this.state;
 
-  handleClick = () => {};
+    if (name === 'pincode' && value && !validateNumber(value)) {
+      return;
+    } else {
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
+    }
+
+    // if (name) {
+      
+    // }
+
+    this.setState({
+      form_data: form_data,
+    });
+  };
+
+  handleClick = () => {
+    let { form_data } = this.state;
+
+    let keys_to_check = ["", "", "", ""]
+
+    this.formCheckUpdate(keys_to_check, form_data);
+  };
 
   render() {
     return (
@@ -94,7 +129,7 @@ class AdditionalDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
+            {/* <div className="InputField">
               <Input
                 error={!!this.state.form_data.mailing_address_preference_error}
                 helperText={this.state.form_data.mailing_address_preference_error}
@@ -103,6 +138,20 @@ class AdditionalDetails extends Component {
                 label="Mailing address preference"
                 id="mailing_address_preference"
                 name="mailing_address_preference"
+                value={this.state.form_data.mailing_address_preference || ""}
+                onChange={this.handleChange("mailing_address_preference")}
+              />
+            </div> */}
+
+            <div className="InputField">
+              <DropdownWithoutIcon
+                width="40"
+                options={this.state.mailingAddressPreferenceOptions}
+                label="Mailing address preference"
+                id="mailing_address_preference"
+                name="mailing_address_preference"
+                error={!!this.state.form_data.mailing_address_preference_error}
+                helperText={this.state.form_data.mailing_address_preference_error}
                 value={this.state.form_data.mailing_address_preference || ""}
                 onChange={this.handleChange("mailing_address_preference")}
               />

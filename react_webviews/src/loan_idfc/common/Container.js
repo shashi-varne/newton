@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 
-import Header from '../../common/components/Header';
-import {didmount} from '../../common/components/container_functions';
+import Header from "../../common/components/Header";
+import { didmount } from "../../common/components/container_functions";
 
 import Footer from "./footer";
 
 import { nativeCallback } from "utils/native_callback";
-import '../../utils/native_listner';
-import { getConfig } from 'utils/functions';
-import {checkStringInString} from 'utils/validators';
-import { goBackMap} from '../constants';
+import "../../utils/native_listner";
+import { getConfig } from "utils/functions";
+import { checkStringInString } from "utils/validators";
+import { goBackMap } from "../constants";
 
 class Container extends Component {
   constructor(props) {
@@ -22,8 +22,8 @@ class Container extends Component {
       callbackType: "",
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
-      new_header:true,
-      project: 'lending' //to use in common functions
+      new_header: true,
+      project: "lending", //to use in common functions
     };
 
     this.didmount = didmount.bind(this);
@@ -38,55 +38,25 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
-    
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
     }
 
-
-    if(this.props.headerData && this.props.headerData.goBack) {
+    if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;
     }
-    
+
     let pathname = this.props.history.location.pathname;
 
-    if (checkStringInString(pathname, "form-summary")) {
-      this.setState({
-        callbackType: 'loan_home',
-        openPopup: true,
-        popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-      })
-      return;
-    }
-
-    if (checkStringInString(pathname, "instant-kyc") && !checkStringInString(pathname, "instant-kyc-status")) {
-      this.setState({
-        callbackType: 'loan_journey',
-        openPopup: true,
-        popupText: 'You are just 2 steps  away from getting money in your account. Do you really want to exit?'
-      })
-      return;
-    }
-
-    if (checkStringInString(pathname, "loan-summary")) {
-      this.setState({
-        callbackType: 'loan_home',
-        openPopup: true,
-        popupText: 'You are just one steps  away from getting money in your account. Do you really want to exit?'
-      })
-      return;
-    }
-
-    if(goBackMap(pathname)) {
+    if (goBackMap(pathname)) {
       this.navigate(goBackMap(pathname));
       return;
     }
 
-
     switch (pathname) {
-      case "/loan/home":
-        nativeCallback({ action: "native_back"});
+      case "/loan/idfc/home":
+        nativeCallback({ action: "native_back" });
         break;
       default:
         this.props.history.goBack();
@@ -98,14 +68,33 @@ class Container extends Component {
   }
 
   headerGoBack = () => {
-    this.historyGoBack({fromHeader: true});
-  }
+    this.historyGoBack({ fromHeader: true });
+  };
 
   handleClose = () => {
     this.setState({
-      openPopup: false
+      openPopup: false,
     });
-  }
+  };
+
+  renderPageLoader2 = () => {
+    if (this.props.showLoader) {
+      return (
+        <div
+          className={`Loader ${
+            this.props.loaderData ? this.props.loaderData.loaderClass : ""
+          }`}
+        >
+          <div className="LoaderOverlay">
+            <div>Hang on, while IDFC finishes analysing your last 3 months bank statements</div>
+            <div>It may take 10 to 15 seconds!</div>
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
 
   render() {
     let steps = [];
@@ -117,52 +106,62 @@ class Container extends Component {
       }
     }
 
-    if (this.state.mounted) { 
+    if (this.state.mounted) {
       return (
-        <div className={`ContainerWrapper loanMainContainer ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+        <div
+          className={`ContainerWrapper loanMainContainer ${
+            this.props.classOverRide
+          }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
+        >
           {/* Header Block */}
-          {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
-          <Header
-            disableBack={this.props.disableBack}
-            title={this.props.title}
-            smallTitle={this.props.smallTitle}
-            provider={this.props.provider}
-            count={this.props.count}
-            total={this.props.total}
-            current={this.props.current}
-            goBack={this.headerGoBack}
-            edit={this.props.edit}
-            type={getConfig().productName}
-            resetpage={this.props.resetpage}
-            handleReset={this.props.handleReset}
-            inPageTitle={this.state.inPageTitle}
-            force_hide_inpage_title={this.state.force_hide_inpage_title}
-            style={this.props.styleHeader}
-            className={this.props.classHeader}
-            headerData={this.props.headerData}
-          />}
-  
+          {!this.props.noHeader &&
+            !getConfig().hide_header &&
+            !this.props.showLoader && (
+              <Header
+                disableBack={this.props.disableBack}
+                title={this.props.title}
+                smallTitle={this.props.smallTitle}
+                provider={this.props.provider}
+                count={this.props.count}
+                total={this.props.total}
+                current={this.props.current}
+                goBack={this.headerGoBack}
+                edit={this.props.edit}
+                type={getConfig().productName}
+                resetpage={this.props.resetpage}
+                handleReset={this.props.handleReset}
+                inPageTitle={this.state.inPageTitle}
+                force_hide_inpage_title={this.state.force_hide_inpage_title}
+                style={this.props.styleHeader}
+                className={this.props.classHeader}
+                headerData={this.props.headerData}
+              />
+            )}
+
           {/* Below Header Block */}
           <div id="HeaderHeight" style={{ top: 56 }}>
             {/* Loader Block */}
             {this.renderPageLoader()}
+            {/* {this.renderPageLoader2()} */}
           </div>
-  
-          {/*  */}
-  
 
-          {!this.state.force_hide_inpage_title &&  !this.props.noHeader && !this.props.hidePageTitle &&
-            this.new_header_scroll() 
-          }
-  
+          {/*  */}
+
+          {!this.state.force_hide_inpage_title &&
+            !this.props.noHeader &&
+            !this.props.hidePageTitle &&
+            this.new_header_scroll()}
+
           {/* Children Block */}
           <div
             style={this.props.styleContainer}
-            className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
+            className={`Container ${this.props.classOverRideContainer} ${
+              this.props.noPadding ? "no-padding" : ""
+            }`}
           >
             {this.props.children}
           </div>
-  
+
           {/* Footer Block */}
           {!this.props.noFooter && (
             <Footer
@@ -191,8 +190,6 @@ class Container extends Component {
     }
 
     return null;
-
-    
   }
 }
 

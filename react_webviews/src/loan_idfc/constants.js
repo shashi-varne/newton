@@ -213,7 +213,6 @@ export const idfc_config = {
       "24",
       "36",
       "48",
-      "60"
     ]
   }
 }

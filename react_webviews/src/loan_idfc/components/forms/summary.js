@@ -27,7 +27,7 @@ class Summary extends Component {
 
     let personal_data = {
       title: "Personal details",
-      edit_state: "/loan/edit-basic-details",
+      edit_state: "/loan/idfc/edit-basic-details",
       data: [
         {
           title: "Date of birth ",
@@ -52,7 +52,7 @@ class Summary extends Component {
 
     let professional_data = {
       title: "Work details",
-      edit_state: "/loan/edit-professional-details",
+      edit_state: "/loan/idfc/edit-professional-details",
       data: [
         {
           title: "Company name",
@@ -120,7 +120,9 @@ class Summary extends Component {
     }
 }
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate('journey')
+  };
 
   renderAccordiansubData = (props, index) => {
     return (

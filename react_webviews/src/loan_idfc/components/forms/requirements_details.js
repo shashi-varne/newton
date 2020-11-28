@@ -6,6 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
+import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
 
 class LoanRequirementDetails extends Component {
   constructor(props) {
@@ -80,8 +81,11 @@ class LoanRequirementDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.amount_required_error}
-                helperText={this.state.form_data.amount_required_error}
-                type="text"
+                helperText={
+                  this.state.form_data.amount_required_error ||
+                  numDifferentiationInr(this.state.form_data.amount_required)
+                }
+                type="number"
                 width="40"
                 label="Loan amount (in rupees)"
                 class="amount_required"

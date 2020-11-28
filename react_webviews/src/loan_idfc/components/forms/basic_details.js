@@ -39,6 +39,12 @@ class BasicDetails extends Component {
   }
 
   onload = () => {
+    if (this.props.edit) {
+      this.setState({
+          next_state: `/loan/idfc/summary`
+      })
+  }
+
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
     let professional_info = lead.professional_info || {};
@@ -129,7 +135,7 @@ class BasicDetails extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Let's start by getting to know you a bit..."
+        title={this.setEditTitle("Let's start by getting to know you a bit...")}
         buttonTitle="NEXT"
         handleClick={this.handleClick}
       >

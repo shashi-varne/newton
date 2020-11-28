@@ -45,8 +45,10 @@ class JourneyMap extends Component {
     let vendor_info = lead.vendor_info || {};
 
     let idfc_loan_status = vendor_info.idfc_loan_status || "";
+    let ckyc_state = vendor_info.ckyc_state || "";
 
     console.log(idfc_loan_status);
+    console.log(ckyc_state)
 
     let journeyData = {
       options: [
@@ -55,7 +57,7 @@ class JourneyMap extends Component {
           title: "Enter basic details",
           subtitle:
             "Fill in personal and work details to get started with your loan application.",
-          status: "completed",
+          status: idfc_loan_status === 'basic_details_uploaded' ? "init" : 'completed',
           id: "basic_details"
         },
         {
@@ -63,7 +65,7 @@ class JourneyMap extends Component {
           title: "Create loan application",
           subtitle:
             "Check your KYC status to proceed with your loan application.",
-          status: "pending",
+          status: "init",
           id: "create_loan_application"
         },
         {
@@ -95,11 +97,27 @@ class JourneyMap extends Component {
 
     this.setState({
       journeyData: journeyData,
+      ckyc_state: ckyc_state
     });
   };
 
   handleClick = (id) => {
     console.log(id)
+    let { ckyc_state } = this.state;
+
+    if (id === 'create_loan_application') {
+      if (ckyc_state === 'init') {
+        console.log(ckyc_state)
+      } else {
+        this.updateApplication({
+          idfc_loan_status: "ckyc"
+        })
+      }
+    }
+
+    if (id === 'basic_details') {
+      this.navigate('summary')
+    }
   };
 
   sendEvents(user_action, data = {}) {

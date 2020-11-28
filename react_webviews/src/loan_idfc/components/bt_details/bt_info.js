@@ -68,7 +68,10 @@ class BtInformation extends Component {
       <Container
         showLoader={this.state.show_loader}
         hidePageTitle={true}
-        buttonTitle="OPTING FOR BT"
+        twoButton={true}
+        dualbuttonwithouticon={true}
+        buttonOneTitle="NOT OPTING FOR BT"
+        buttonTwoTitle="OPTING FOR BT"
         headerData={{
           progressHeaderData: this.state.progressHeaderData
         }}

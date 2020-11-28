@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 
-class Status extends Component {
+class ApplicationStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,13 +45,31 @@ class Status extends Component {
         buttonTitle="START NEW APPLICATION"
         handleClick={this.handleClick}
       >
-        <div className='idfc-loan-status'>
-            <img src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)} alt="" />
-          <div className='subtitle'>We’re unable to approve your loan request because as per IDFC’s loan policy your monthly salary does not qualify you for a personal loan at this point.</div>
+        <div className="idfc-loan-status">
+          <img
+            src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
+            alt=""
+          />
+          <div className="subtitle">
+            We’re unable to approve your loan request because as per IDFC’s loan
+            policy your monthly salary does not qualify you for a personal loan
+            at this point.
+          </div>
+
+          <div className="subtitle">
+            We’re unable to approve your loan request because as per IDFC’s loan
+            policy your salary receipt mode does not make you eligible for a
+            personal loan at this point.
+          </div>
+
+          <div className="subtitle">
+            We're unable to take your loan application forward as you don't fall
+            under the minimum age criteria as per IDFC's loan policy.
+          </div>
         </div>
       </Container>
     );
   }
 }
 
-export default Status;
+export default ApplicationStatus;

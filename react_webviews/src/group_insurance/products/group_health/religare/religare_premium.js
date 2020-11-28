@@ -64,7 +64,7 @@ export default class ReligarePremium extends Component {
             {this.state.selectedAddOns.map((addOn, index) => 
               <div key={index} className="flex-between pi-tile" style={{ marginBottom: '-5px' }}>
                 <div className="pi-tile-left">{addOn.title}</div>
-                <div className="pi-tile-right">{inrFormatDecimal(addOn.selected_premium  || addOn.default_premium)}</div>
+                <div className="pi-tile-right">{inrFormatDecimal(addOn.premium  || addOn.default_premium)}</div>
               </div>
             )}
           </div>

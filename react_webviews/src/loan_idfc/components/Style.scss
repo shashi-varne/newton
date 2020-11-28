@@ -371,6 +371,7 @@
 }
 
 .eligible-loan {
+  padding-top: -100px;
   .subtitle {
     font-size: 13px;
     color: #0a1d32;
@@ -379,6 +380,8 @@
 
   .offer-checkbox {
     margin: 40px 0;
+    padding: 0 0 30px 0;
+    background: var(--highlight);
   }
 
   .title {
@@ -391,9 +394,9 @@
 
   .content {
     display: flex;
-    justify-content: flex-start;
-    background-color: orange;
+    justify-content: space-between;
     margin-top: 20px;
+    width: 80%;
 
     .sub-head {
       font-size: 13px;
@@ -446,10 +449,17 @@
     }
 
     .sub-head {
-      margin: 10px 0 20px; 
+      margin: 10px 0 20px;
       font-size: 13px;
       line-height: 16px;
       color: #0a1d32;
     }
   }
+}
+
+.loader-data {
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: #0a1d32;
 }

@@ -65,7 +65,7 @@ class PersonalDetails extends Component {
     let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
 
-    if (vendor_info.cky_status === 'success') {
+    if (vendor_info.ckyc_state === 'success') {
       confirm_details = true;
     }
 

@@ -5,7 +5,7 @@ import toast from "../../common/ui/Toast";
 import { openPdfCall } from "utils/native_callback";
 import { nativeCallback } from "utils/native_callback";
 import { idfc_config } from "../constants";
-import { validatePan, isValidDate } from "utils/validators";
+import { validatePan, isValidDate, getEditTitle } from "utils/validators";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -19,6 +19,7 @@ export async function initialize() {
   this.getUserStatus = getUserStatus.bind(this);
   this.startTransaction = startTransaction.bind(this);
   this.netBanking = netBanking.bind(this);
+  this.setEditTitle = setEditTitle.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -162,6 +163,15 @@ export async function getUserStatus() {
   );
 }
 
+export function setEditTitle(string) {
+
+  if (this.props.edit) {
+      return getEditTitle(string);
+  }
+
+  return string;
+}
+
 export async function updateApplication(params) {
   try {
     this.setState({
@@ -186,6 +196,8 @@ export async function updateApplication(params) {
             ...(result || ""),
           },
         });
+      } if (params.idfc_loan_status === 'ckyc') { 
+        this.navigate('personal-details');
       } else {
         this.navigate(this.state.next_state);
       }
@@ -400,8 +412,8 @@ export async function startTransaction(transaction_type) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      if (transaction_type === "manual upload") {
-        this.navigate("upload");
+      if (transaction_type === "manual_upload") {
+        this.navigate("upload-bank");
       }
 
       if (transaction_type === "netbanking") {
@@ -415,6 +427,10 @@ export async function startTransaction(transaction_type) {
     console.log(err);
     toast("Something went wrong");
   }
+
+  this.setState({
+    show_loader: false,
+  });
 }
 
 export function openPdf(url, type) {

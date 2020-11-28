@@ -157,7 +157,7 @@ body[data-device="web"] {
   padding-bottom: 20px !important;  */
   background-color: #fff;
   overflow-y: scroll;
-  // margin-bottom: 56px !important;
+  margin-bottom: 56px !important;
   padding-bottom: 56px !important;
 }
 
@@ -1119,5 +1119,8 @@ input#pan {
       border: 1px solid var(--primary);
     }
   }
+}
   
+.OTP-title{
+  justify-content: center !important;
 }
