@@ -213,10 +213,10 @@ class GroupHealthPlanSelectFloater extends Component {
                                <div className="di-tile-left">Base premium</div>
                                <div className="di-tile-right">{inrFormatDecimal(this.state.premium_data_nf.base_premium)}</div>
                            </div>
-                          {this.state.premium_data_nf.account_type_discount > 0  &&
+                          {this.state.premium_data_nf.total_discount > 0  &&
                            <div className="flex-between di-tile" style={{color: 'var(--primary)'}}>
                                <div className="di-tile-left">{this.state.premium_data_nf.account_type_discount_percentage}% discount</div>
-                               <div className="di-tile-right">-{inrFormatDecimal(this.state.premium_data_nf.account_type_discount)}</div>
+                               <div className="di-tile-right">-{inrFormatDecimal(this.state.premium_data_nf.total_discount)}</div>
                            </div>}
                            <div className="generic-hr"></div>
                            <div className="flex-between di-tile">
