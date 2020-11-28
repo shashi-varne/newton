@@ -806,7 +806,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
-                        <div className="subtitle">
+                        <div className="subtitle" style={{margin : '7px 17px 0 0'}}>
                             {capitalizeFirstLetter((props.subtitle + "").toLowerCase())}
                              {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
