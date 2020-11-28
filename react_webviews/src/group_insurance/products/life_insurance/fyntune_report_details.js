@@ -4,7 +4,7 @@ import Container from '../../common/Container';
 import { getConfig } from 'utils/functions';
 
 import {
-    numDifferentiationInr, 
+    numDifferentiationInr, formatAmountInr
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -205,7 +205,7 @@ class FyntuneReportDetails extends Component {
                                     POLICY TERM
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data.tenure}
+                                    {this.state.policy_data.tenure} years
                                 </div>
                             </div>
                         </div>
@@ -219,7 +219,7 @@ class FyntuneReportDetails extends Component {
                                     PREMIUM AMOUNT
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data.premium}
+                                    {formatAmountInr(this.state.policy_data.premium)}
                                 </div>
                             </div>
                         </div>
@@ -232,7 +232,7 @@ class FyntuneReportDetails extends Component {
                                     PREMIUM PAYMENT TERM
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data.premium_payment_term}
+                                    {this.state.policy_data.premium_payment_term} years
                                 </div>
                             </div>
                         </div>

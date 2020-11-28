@@ -51,7 +51,7 @@ class Report extends Component {
     }else if( provider === 'FYNTUNE'){
       obj = {
         ...obj,
-        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        product_name: policy.base_plan_title,
         top_title: 'Health insurance',
         key: 'FYNTUNE',
         id: policy.fyntune_ref_id, 
