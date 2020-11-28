@@ -29,11 +29,13 @@ export async function initialize() {
 
         this.setState({
           mobile: (mobile && mobile.slice(3)) || "",
+          contact_id: resultData.contact_id || ""
         });
 
         if (resultData.verification_required || !resultData.mobile_number) {
           this.navigate("edit-number");
         }
+
       } else {
         const resultData = res.pfwresponse.result;
         this.setState({
