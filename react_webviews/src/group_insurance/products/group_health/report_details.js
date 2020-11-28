@@ -383,7 +383,7 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.quotation_details && numDifferentiationInr( this.state.quotation_details.total_sum_insured)}
+                                    {this.state.quotation_details && numDifferentiationInr( this.state.quotation_details.individual_sum_insured)}
                                 </div>
                             </div>
                         </div>
