@@ -165,6 +165,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         post_body.net_premium = plan_selected_final.premium;
         post_body.plan_code = groupHealthPlanData.plan_selected_final.plan_code;
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
+        groupHealthPlanData.post_body.add_on_premium = plan_selected_final.add_on_premium.total;
 
         if(storageService().getObject('applicationPhaseReached')){
             delete groupHealthPlanData.post_body['quotation_id'];
