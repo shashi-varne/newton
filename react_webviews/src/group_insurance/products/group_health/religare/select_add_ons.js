@@ -140,6 +140,10 @@ class GroupHealthPlanAddOns extends Component {
 
     handleChangeCheckboxes = index => event => {
         let { add_ons_data } = this.state;
+
+        if(add_ons_data[index].id === 'ncb' && this.state.groupHealthPlanData.post_body.si === "400000"){
+            return; 
+        }
         add_ons_data[index].checked = !add_ons_data[index].checked;
 
         this.setState({
