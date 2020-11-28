@@ -630,8 +630,8 @@ class GroupHealthPlanFinalSummary extends Component {
                         if(resultData.ped_check && data.showMedDialog) {
                             this.openMedicalDialog('ppc');
                             return;
-                        } else { console.log(res)
-                            // this.redirectToPayment(resultData);
+                        } else {
+                            this.redirectToPayment(resultData);
                         }
                     }   
             } else {

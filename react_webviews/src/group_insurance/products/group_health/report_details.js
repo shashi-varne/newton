@@ -437,13 +437,13 @@ class GroupHealthReportDetails extends Component {
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
-                                        {this.state.lead.add_ons_amount &&
+                                        {(Object.keys(this.state.quotation.add_ons).length > 0)&&
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
+                                            <div> {inrFormatDecimal(this.state.quotation.add_on_premium)} </div>
                                             <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                         </div>
                                          }
-                                        {this.state.lead.add_ons_amount &&
+                                        {(Object.keys(this.state.quotation.add_ons).length > 0) &&
                                             <div>
                                                 &nbsp;+&nbsp;
                                             </div>
