@@ -29,6 +29,11 @@ export const hdfc = {
             'erg-1'
         ]
     },
+    hdfc_plan_title_mapper : {
+        'hdfc_ergo_silver_smart': 'Silver Smart Plan',
+        'hdfc_ergo_gold_smart': 'Gold Smart Plan',
+        'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
+    },
     landing_screen: {
         offerImageData: [
             { src: 'hdfc_icn_landing_card_1.png' },

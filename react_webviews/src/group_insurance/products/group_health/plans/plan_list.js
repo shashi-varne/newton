@@ -9,11 +9,6 @@ import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
-const hdfc_plan_title_mapper = {
-    'hdfc_ergo_silver_smart': 'Silver Smart Plan',
-    'hdfc_ergo_gold_smart': 'Gold Smart Plan',
-    'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
-}
 
 class GroupHealthPlanList extends Component {
 
@@ -117,7 +112,7 @@ class GroupHealthPlanList extends Component {
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
 
         if(provider === 'HDFCERGO'){
-            groupHealthPlanData.plan_selected.plan_title = hdfc_plan_title_mapper[plan.plan_id];
+            groupHealthPlanData.plan_selected.plan_title = this.state.providerConfig.hdfc_plan_title_mapper[plan.plan_id];
         }
         if(provider === 'RELIGARE') {
             groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
@@ -150,7 +145,7 @@ class GroupHealthPlanList extends Component {
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
                         <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.providerConfig.title2 :''}</div>
-                        <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
+                        <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? this.state.providerConfig.hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
                         <img

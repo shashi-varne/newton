@@ -280,7 +280,7 @@ class GroupHealthLanding extends Component {
                   </div>
                   <div className="rc-tile-premium-data">
                     <div className="rct-title">
-                      {this.state.quoteResume.plan_title}
+                      {this.state.providerConfig.key === "HDFCERGO" ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quoteResume.plan_id]: this.state.providerConfig.subtitle}
                     </div>
                     <div className="rct-subtitle">
                       {inrFormatDecimal(this.state.quoteResume.total_premium)}
