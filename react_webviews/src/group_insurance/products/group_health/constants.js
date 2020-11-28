@@ -998,7 +998,7 @@ export const avilableMembersToInsured = [
 
 
 export function getCoverageType(lead) {
-    let insured_people_details = lead.insured_people_details || [];
+    let insured_people_details = lead.insured_people_details || lead.insured_member_details || [];
     let insurance_type = lead.quotation_details.insurance_type;
     if(insurance_type !== 'self' && insured_people_details.length >= 2) { //one extra for applicant
         if(lead.quotation_details.floater_type === 'floater') {
