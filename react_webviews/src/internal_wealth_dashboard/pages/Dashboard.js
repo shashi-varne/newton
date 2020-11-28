@@ -10,6 +10,7 @@ import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdCard from '../mini-components/IwdCard';
+import IwdCommonPageFooter from '../mini-components/IwdCommonPageFooter';
 import ScrollTopBtn from '../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
 
@@ -75,6 +76,17 @@ const Dashboard = () => {
     if (page && !isEmpty(page)) {
       page.style.background = pageNum === 1 ? '' : '#F9FCFF';
     }
+    const profileIcon = document.querySelector("#iwd-dashboard #iwd-ph-right .iwd-profile-icon");
+
+    if (profileIcon && !isEmpty(profileIcon)) {
+      if (pageNum !== 1 && !profileIcon.classList.contains('iwd-profile-icon__primary')) {
+        profileIcon.classList.add('iwd-profile-icon__primary')
+      } else
+      if (pageNum === 1 && profileIcon.classList.contains('iwd-profile-icon__primary')) {
+        profileIcon.classList.remove('iwd-profile-icon__primary')
+      }
+    }
+
   };
 
   return (
@@ -224,6 +236,7 @@ const Dashboard = () => {
                 <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
               </>
             </IwdCard>
+            <IwdCommonPageFooter />
           </div>
           {isMobileView && <ScrollTopBtn />}
         </>

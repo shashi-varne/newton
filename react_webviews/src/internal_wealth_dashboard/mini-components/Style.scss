@@ -45,6 +45,15 @@ $card-padding-mob: 40px;
   border-radius: 5px !important;
 }
 
+.iwd-common-page-footer {
+  display: flex;
+  align-items: center;
+  margin-top: 31px;
+  img:nth-of-type(2) {
+    margin-left: 46px;
+  }
+}
+
 #iwd-help {
   font-family: 'Poppins', 'Roboto', sans-serif !important;
   position: absolute;
@@ -97,19 +106,51 @@ $card-padding-mob: 40px;
     right: 7%;
   }
 
+  // #iwd-help-footer {
+  //   position: absolute;
+  //   width: 85%;
+  //   bottom: 50px;
+
+  //   img {
+  //     float: right;
+  //     margin-left: 30px;
+  //   }
+
+  //   img#iwd-help-fisdom-logo {
+  //     float: left;
+  //     margin-left: 0;
+  //   }
+  // }
+
   #iwd-help-footer {
     position: absolute;
     width: 85%;
     bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    img {
-      float: right;
-      margin-left: 30px;
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    img#iwd-help-fisdom-logo {
-      float: left;
-      margin-left: 0;
+    div > picture {
+      margin-left: 30px;
+      display: flex;
+      align-items: center;
+      img {
+        display: block;
+        height: 100%;
+        align-self: start;
+      }
+      small {
+        width: 172px;
+        color: white;
+        margin-left: 10px;
+        font-size: 10px;
+      }
     }
   }
 }
@@ -510,6 +551,7 @@ ul#iwd-bars {
   margin: auto;
   cursor: pointer;
   color: white;
+  text-transform: uppercase;
 }
 
 .iwd-profile-icon__primary {
@@ -740,6 +782,12 @@ ul#iwd-bars {
     clip-path: circle(0% at bottom);
   }
 
+  .iwd-common-page-footer {
+    img:nth-of-type(2) {
+      margin-left: 20px;
+    }
+  }
+
   #iwd-help {
     padding: 40px;
     height: auto;
@@ -765,16 +813,36 @@ ul#iwd-bars {
     }
 
     #iwd-help-footer {
-      position: relative;
-      width: 100%;
-      bottom: auto;
-      display: flex;
       flex-direction: column;
+      align-items: flex-start;
 
-      img {
-        margin: 0 0 20px 0;
+      img#iwd-help-fisdom-logo {
+        display: none;
+      }
+
+      div {
+        flex-direction: column;
+        align-items: flex-start;
+
+        picture {
+          margin-left: 0;
+          margin-top: 20px;
+          width: 100%;
+
+          small {
+            width: 100%;
+            text-align: left;
+          }
+        }
       }
     }
+
+    // #iwd-help-footer {
+    //   flex-direction: column;
+    //   div {
+    //     flex-direction: column;
+    //   }
+    // }
   }
 
   #iwd-fgt-pwd {

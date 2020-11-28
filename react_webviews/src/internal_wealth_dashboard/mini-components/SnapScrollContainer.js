@@ -42,7 +42,7 @@ const SnapScrollContainer = ({
 
     const childElems = document.getElementsByClassName('iwd-scroll-child');
     let observer = new IntersectionObserver(handleIntersect, options);
-    for (let i = childElems.length; i--;) {
+    for (let i = childElems.length; i--; ) {
       observer.observe(childElems[i]);
     }
   };
@@ -65,16 +65,13 @@ const SnapScrollContainer = ({
       container.scrollTop -= currentPageHeight * pages;
     } else {
       container.scrollTop += currentPageHeight;
-    } 
+    }
   };
 
   const Footer = (
     <div id="iwd-page-footer">
       <IconButton className="iwd-pf-btn" onClick={scrollPage}>
-        <img
-          src={currentPage < pages ? DownwardIcon : UpwardIcon}
-          alt=""
-        />
+        <img src={currentPage < pages ? DownwardIcon : UpwardIcon} alt="" />
       </IconButton>
       <div id="iwd-pf-page-nos">
         <b>{currentPage}</b>|{pages}
@@ -97,7 +94,7 @@ const SnapScrollContainer = ({
           templateErrTitle="Oops!"
           templateErrText={
             errorText ||
-            "Something went wrong! Please retry after some time or contact your wealth manager"
+            'Something went wrong! Please retry after some time or contact your wealth manager'
           }
           templateBtnText="Retry"
           clickHandler={onErrorBtnClick}
@@ -108,9 +105,7 @@ const SnapScrollContainer = ({
 
   return (
     <>
-      <div className="iwd-scroll-contain">
-        {scrollChildren}
-      </div>
+      <div className="iwd-scroll-contain">{scrollChildren}</div>
       {!hideFooter && !error && Footer}
     </>
   );
