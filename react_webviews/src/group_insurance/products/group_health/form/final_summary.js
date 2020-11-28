@@ -1040,19 +1040,19 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                             <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                 <div>
-                                    <div> {inrFormatDecimal(this.state.quotation.base_premium)} </div>
+                                    <div> {inrFormatDecimal(this.state.quotation.base_premium - this.state.quotation.total_discount)} </div>
                                     <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                 </div>
                                 <div>
                                     &nbsp;+&nbsp;
                                 </div>
-                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  && //fixit
+                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  &&
                                     <div>
                                         <div> {inrFormatDecimal(this.state.quotation.add_on_premium)} </div>
                                         <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                     </div>
                                 }
-                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  &&  //fixit
+                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  &&
                                     <div>
                                         &nbsp;+&nbsp;
                                     </div>

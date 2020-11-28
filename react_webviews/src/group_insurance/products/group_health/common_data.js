@@ -160,7 +160,7 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, gst = '';
+        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, total_discount, gst = '';
 
         if (this.state.get_lead) {console.log(lead)
             leftTitle = lead.plan_title || '';
@@ -171,6 +171,7 @@ export async function initialize() {
             tax_amount = lead.gst;
             total_amount =  lead.total_premium;
             total_premium = lead.total_premium;
+            total_discount = lead.total_discount;
             gst = lead.gst;
 
         } else {
@@ -223,7 +224,7 @@ export async function initialize() {
                 {
                     'name': 'Basic premium ', 'value':
                         // inrFormatDecimal(total_premium - gst)//base_premium
-                        inrFormatDecimal(base_premium)
+                        inrFormatDecimal(base_premium - total_discount)
                 }
             ]
 
