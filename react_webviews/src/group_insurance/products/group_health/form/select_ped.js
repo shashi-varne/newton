@@ -214,7 +214,7 @@ class GroupHealthPlanSelectPed extends Component {
 
         let current_member = member_base[member_info_index];
 
-        if(!isNaN(this.state.pedOther))
+        if(!isNaN(this.state.pedOther)){
             toast('Invalid other pre-existing diseases details');
             return;
         }
