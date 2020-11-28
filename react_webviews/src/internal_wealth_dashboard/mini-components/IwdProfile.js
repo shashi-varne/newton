@@ -1,10 +1,10 @@
-import { Button, CircularProgress } from 'material-ui';
+import { Button, CircularProgress, ClickAwayListener } from 'material-ui';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { logout } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
-import { storageService } from '../../utils/validators'
+import { storageService } from '../../utils/validators';
 
 const IwdProfile = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -32,42 +32,48 @@ const IwdProfile = (props) => {
     return navigate('login');
   }
 
+  const profileIcon = (
+    <div id="iwd-profile-icon" onClick={!expanded && toggleExpanded}>
+      {name.charAt(0)}
+    </div>
+  );
+
   if (expanded) {
     return (
-      <div id="iwd-profile" onClick={toggleExpanded}>
-        <div id="iwd-profile-icon">
-          {name.charAt(0)}
+      <ClickAwayListener onClickAway={toggleExpanded}>
+        <div id="iwd-profile">
+          {profileIcon}
+          <div className="iwd-profile-username">{name}</div>
+          <div className="iwd-profile-detail" id="pan">
+            <b>PAN: </b>
+            CXIPP 4122 M
+          </div>
+          <div className="iwd-profile-detail">
+            <b>Email: </b>
+            {email}
+          </div>
+          <div className="iwd-profile-detail">
+            <b>Mob.: </b>
+            +91-8800927468
+          </div>
+          <div id="iwd-profile-divider"></div>
+          <Button
+            fullWidth={true}
+            onClick={logoutUser}
+            classes={{
+              root: 'iwd-profile-logout',
+              label: 'iwd-profile-logout-text',
+            }}>
+            {loggingOut ?
+              <CircularProgress size={25} /> : 'Logout'
+            }
+          </Button>
         </div>
-        <div className="iwd-profile-username">{name}</div>
-        <div className="iwd-profile-detail" id="pan">
-          <b>PAN: </b>
-          CXIPP 4122 M
-        </div>
-        <div className="iwd-profile-detail">
-          <b>Email: </b>
-          {email}
-        </div>
-        <div className="iwd-profile-detail">
-          <b>Mob.: </b>
-          +91-8800927468
-        </div>
-        <div id="iwd-profile-divider"></div>
-        <Button
-          fullWidth={true}
-          onClick={logoutUser}
-          classes={{
-            root: 'iwd-profile-logout',
-            label: 'iwd-profile-logout-text',
-          }}>
-          {loggingOut ?
-            <CircularProgress size={25} /> : 'Logout'
-          }
-        </Button>
-      </div>
+      </ClickAwayListener>
     );
   }
   return (
-    <div id="iwd-profile-icon" onClick={toggleExpanded}>{name.charAt(0)}</div>
+    profileIcon
   );
 };
 

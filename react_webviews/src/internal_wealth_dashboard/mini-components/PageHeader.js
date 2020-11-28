@@ -6,7 +6,6 @@ import { isUndefined } from 'lodash';
 const isMobileView = getConfig().isMobileDevice;
 
 const PageHeader = (props) => {
-  console.log(props);
   let { height, hideProfile } = props;
 
   if (!height) {

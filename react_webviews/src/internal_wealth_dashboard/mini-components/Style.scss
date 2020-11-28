@@ -481,6 +481,14 @@ $card-padding-mob: 40px;
     transform: translateX(-50%);
     border-radius: 50%;
     transition: box-shadow 0.5s ease-in-out;
+
+    img {
+      transform: rotate(0deg);
+      transition: transform 0.4s ease-in-out;
+    }
+    .rotate-90 {
+      transform: rotate(180deg);
+    }
   }
 
   .iwd-pf-btn:hover {
@@ -544,19 +552,15 @@ ul#iwd-bars {
   padding: 4px 0px;
   margin: auto;
   border-radius: 10px;
+  border: 2px solid #f9fcff;
   box-sizing: border-box;
   background: $primary;
   color: white;
   font-size: 20px;
-  line-height: 34px;
+  line-height: 28px;
   text-align: center;
   cursor: pointer;
   text-transform: uppercase;
-}
-
-.iwd-profile-icon__contrast {
-  border: 2px solid #FFFFFF;
-  line-height: 28px !important;
 }
 
 #iwd-profile {
@@ -723,7 +727,7 @@ ul#iwd-bars {
   opacity: 0;
 }
 .radial-chart-total {
-  opacity: 0.3;
+  opacity: 0.1;
 }
 .radial-chart-progress {
   transform: rotate(90deg);

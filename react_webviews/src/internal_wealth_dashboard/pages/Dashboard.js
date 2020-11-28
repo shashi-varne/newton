@@ -1,3 +1,7 @@
+// ------------------ Assets -----------------------
+import positive from 'assets/ic_positive.svg';
+import negative from 'assets/ic_negative.svg';
+// -------------------------------------------------
 import React, { useEffect, useState } from 'react';
 import { IconButton } from 'material-ui';
 import PageHeader from '../mini-components/PageHeader';
@@ -6,7 +10,7 @@ import { getConfig } from 'utils/functions';
 import { overview, portfolioRisk } from '../common/ApiCalls';
 import { get } from 'lodash';
 import toast from '../../common/ui/Toast';
-import { isEmpty, numDifferentiationInr } from '../../utils/validators';
+import { isEmpty, numDifferentiationInr, storageService } from '../../utils/validators';
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdCard from '../mini-components/IwdCard';
@@ -15,6 +19,7 @@ import ScrollTopBtn from '../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
+  const username = storageService().get('iwd-user-name') || '';
   const [overviewData, setOverviewData] = useState({});
   const [isLoadingOverview, setIsLoadingOverview] = useState(true);
   const [overviewError, setOverviewError] = useState(false);
@@ -76,16 +81,6 @@ const Dashboard = () => {
     if (page && !isEmpty(page)) {
       page.style.background = pageNum === 1 ? '' : '#F9FCFF';
     }
-    const profileIcon = document.getElementById('iwd-profile-icon');
-
-    if (profileIcon && !isEmpty(profileIcon)) {
-      if (pageNum === 1) {
-        profileIcon.classList.add('iwd-profile-icon__contrast');
-      } else {
-        profileIcon.classList.remove('iwd-profile-icon__contrast');
-      }
-    }
-
   };
 
   return (
@@ -93,7 +88,7 @@ const Dashboard = () => {
       <PageHeader>
         <>
           <div className='iwd-header-title'>Dashboard</div>
-          <div className='iwd-header-subtitle'>Welcome back, Uttam</div>
+          <div className='iwd-header-subtitle'>Welcome back, {username}</div>
         </>
       </PageHeader>
       <SnapScrollContainer
@@ -140,6 +135,11 @@ const Dashboard = () => {
                 <div className="iwd-dn-box">
                   <div className="iwd-dnb-value">
                     {overviewData.xirr}%
+                    <img
+                      src={overviewData.xirr > 0 ? positive : negative}
+                      alt=""
+                      style={{ marginLeft: '10px' }}
+                    />
                   </div>
                   <div className="iwd-dnb-label">
                     XIRR
@@ -163,8 +163,7 @@ const Dashboard = () => {
                   progress={42}
                   strokeWidth={10}
                   dimension={200}
-                  color='#4AD0C0'
-                  secondaryColor='#3fd9c7'
+                  color='#39B7A8'
                 />
                 <div id='iwd-daa-legend'>
                   <div className='iwd-daal-item'>

@@ -45,7 +45,7 @@ const RadialBarChart = ({
         />
         <circle
           className="radial-chart-total"
-          stroke={secondaryColor}
+          stroke={color}
           strokeWidth={strokeWidth}
           fill="none"
           cx="100"
@@ -54,11 +54,12 @@ const RadialBarChart = ({
         />
         <circle
           className="radial-chart-progress"
-          stroke={secondaryColor}
+          stroke={color}
           strokeWidth={strokeWidth}
           strokeDasharray={`${strokeLength},${circumference}`}
           strokeLinecap="round"
           fill="none"
+          strokeOpacity={0.6}
           cx="100"
           cy="100"
           r={circleRadius-20}
