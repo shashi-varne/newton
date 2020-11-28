@@ -107,7 +107,7 @@ class GroupHealthPlanDobReligare extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
-        let { groupHealthPlanData } = this.state || {};
+        let {validation_props, groupHealthPlanData } = this.state || {};
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
 
@@ -131,9 +131,9 @@ class GroupHealthPlanDobReligare extends Component {
             canProceed = false;
         }
 
-        if (calculateAge(this.state.eldest_dob) < 18) {
+        if (calculateAge(this.state.eldest_dob) < validation_props.dob_adult.min || calculateAge(this.state.eldest_dob) > validation_props.dob_adult.max ) {
             this.setState({
-                eldest_dob_error: this.state.default_helper_text
+                eldest_dob_error: `valid age is between ${validation_props.dob_adult.min} and ${validation_props.dob_adult.max - 1} years`
             });
 
             canProceed = false;
