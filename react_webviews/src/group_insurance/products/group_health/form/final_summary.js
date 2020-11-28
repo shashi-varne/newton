@@ -1009,7 +1009,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         <div className="mt-right">
                             <div className="mtr-top">
                                 COVERAGE TYPE
-                            </div>{console.log(this.state.lead)}
+                            </div>
                             <div className="mtr-bottom">
                             {getCoverageType(this.state.lead)}
                             </div>
