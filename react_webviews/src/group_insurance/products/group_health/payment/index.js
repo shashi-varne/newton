@@ -308,7 +308,7 @@ class GroupHealthPayment extends Component {
                     </div>
                   </div>
 
-                  {this.state.lead.add_ons_amount && 
+                  {this.state.lead.add_ons_amount > 0 && 
                     <div className="content-points">
                       <div className="content-points-inside-text">
                        Add ons amount

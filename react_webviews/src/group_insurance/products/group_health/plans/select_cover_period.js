@@ -108,7 +108,13 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         post_body.plan_code = groupHealthPlanData.plan_selected_final.plan_code;
         groupHealthPlanData.post_body.tenure  = plan_selected_final.tenure;
         groupHealthPlanData.tenure = plan_selected_final.tenure;
+        groupHealthPlanData.post_body.add_ons_json = plan_selected_final.add_ons_json;
 
+        let add_ons = []
+        for(var key in plan_selected_final.add_ons_json){
+            add_ons.push({...plan_selected_final.add_ons_json[key], checked: true});
+        }
+        groupHealthPlanData.add_ons_array = add_ons;
         groupHealthPlanData.selectedIndexCover = this.state.selectedIndex;
         this.setLocalProviderData(groupHealthPlanData);
 
