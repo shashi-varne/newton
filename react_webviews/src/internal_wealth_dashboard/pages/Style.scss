@@ -173,6 +173,16 @@ $background: #F9F9F9;
 
     #iwd-ll-login-container {
       width: 100%;
+
+      .iwd-phone-input-dropdown {
+        li > span.country-name {
+          color: $grey;
+        }
+
+        li > span.dial-code {
+          color: rgba($dark, 0.8);
+        }
+      }
     }
 
     img {
@@ -609,10 +619,6 @@ $background: #F9F9F9;
   .iwd-page__analysis {
     background-color: $background;
     font-family: "Poppins";
-  
-    & .iwd-profile-icon {
-      color: $primary;
-    }
   }
   
   .iwd-analysis-header-container-left {

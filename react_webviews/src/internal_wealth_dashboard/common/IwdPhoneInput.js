@@ -14,6 +14,7 @@ const IwdPhoneInput = (props) => {
       countryCodeEditable={false}
       enableSearch={true}
       containerClass={props.containerClass}
+      dropdownClass={props.dropdownClass}
       inputClass={`iwd-phone-input ${props.inputClass}`}
       buttonClass={`iwd-phone-btn ${props.buttonClass}`}
       {...props}

@@ -76,14 +76,13 @@ const Dashboard = () => {
     if (page && !isEmpty(page)) {
       page.style.background = pageNum === 1 ? '' : '#F9FCFF';
     }
-    const profileIcon = document.querySelector("#iwd-dashboard #iwd-ph-right .iwd-profile-icon");
+    const profileIcon = document.getElementById('iwd-profile-icon');
 
     if (profileIcon && !isEmpty(profileIcon)) {
-      if (pageNum !== 1 && !profileIcon.classList.contains('iwd-profile-icon__primary')) {
-        profileIcon.classList.add('iwd-profile-icon__primary')
-      } else
-      if (pageNum === 1 && profileIcon.classList.contains('iwd-profile-icon__primary')) {
-        profileIcon.classList.remove('iwd-profile-icon__primary')
+      if (pageNum === 1) {
+        profileIcon.classList.add('iwd-profile-icon__contrast');
+      } else {
+        profileIcon.classList.remove('iwd-profile-icon__contrast');
       }
     }
 

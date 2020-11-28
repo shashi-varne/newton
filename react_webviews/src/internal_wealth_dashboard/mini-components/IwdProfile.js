@@ -25,17 +25,19 @@ const IwdProfile = (props) => {
     setLoggingOut(false);
   };
 
-  const name = storageService().get('iwd-user-name')
-  const email = storageService().get('iwd-user-email')
+  const name = storageService().get('iwd-user-name');
+  const email = storageService().get('iwd-user-email');
 
   if (!name || !email) {
-    return navigate('login')
+    return navigate('login');
   }
 
   if (expanded) {
     return (
-      <div className="iwd-profile" onClick={toggleExpanded}>
-        <div className="iwd-profile-icon iwd-profile-icon__primary">{name.charAt(0)}</div>
+      <div id="iwd-profile" onClick={toggleExpanded}>
+        <div id="iwd-profile-icon">
+          {name.charAt(0)}
+        </div>
         <div className="iwd-profile-username">{name}</div>
         <div className="iwd-profile-detail" id="pan">
           <b>PAN: </b>
@@ -65,7 +67,7 @@ const IwdProfile = (props) => {
     );
   }
   return (
-    <div className="iwd-profile-icon iwd-profile-icon__primary" onClick={toggleExpanded}>{name.charAt(0)}</div>
+    <div id="iwd-profile-icon" onClick={toggleExpanded}>{name.charAt(0)}</div>
   );
 };
 

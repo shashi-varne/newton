@@ -29,7 +29,7 @@ const PageHeader = (props) => {
       </div>
       {!hideProfile &&
         <div id="iwd-ph-right">
-          <IwdProfile secondary={props.secondary} />
+          <IwdProfile />
         </div>
       }
     </div>

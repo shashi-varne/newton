@@ -71,7 +71,7 @@ const Login = (props) => {
         <div id="iwd-login-right">
           <div id="iwd-ll-login-container">
             <LoginFields
-              phoneComponent={<IwdPhoneInput containerClass="fade" />}
+              phoneComponent={<IwdPhoneInput containerClass="fade" dropdownClass="iwd-phone-input-dropdown" />}
               otpComponent={<IwdOtpInput />}
               buttonComponent={<WhiteButton classes={{ root: 'fade' }}>Hello</WhiteButton>}
               navigateFunction={navigate}
