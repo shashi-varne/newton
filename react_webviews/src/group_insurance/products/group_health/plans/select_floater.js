@@ -39,7 +39,7 @@ class GroupHealthPlanSelectFloater extends Component {
         });
         if(post_body.children > 0){
             for(var key in post_body.member_details){
-                    if(key.includes('child') && calculateAge(post_body.member_details[key].dob, false) < 5){
+                    if(key.includes('child') && calculateAge(post_body.member_details[key].dob, false) < 5 && this.state.providerConfig.key === 'RELIGARE'){
                         this.setState({disableFloaterOption: true });
                     }
             }

@@ -56,7 +56,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                     premium_data: resultData.premium_details,
                     type_of_plan: type_of_plan
                 }, () => {
-                    this.updateBottomPremium(this.state.premium_data[0].premium);
+                    this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium || this.state.premium_data[0].premium);
                 })
             } else {
                 toast(resultData.error || resultData.message
