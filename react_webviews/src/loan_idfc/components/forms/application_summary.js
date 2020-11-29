@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 
-class Summary extends Component {
+class ApplicationSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,7 +85,7 @@ class Summary extends Component {
         {
           title: "Industry",
           subtitle: professional_info.industry,
-        }
+        },
       ],
     };
 
@@ -96,32 +96,31 @@ class Summary extends Component {
         accordianData: accordianData,
       },
       () => {
-        if (!this.state.form_submitted) {
+        // if (!this.state.form_submitted) {
           this.handleAccordian(0);
-        }
+        // }
       }
     );
   };
 
   sendEvents(user_action, data = {}) {
-
     let eventObj = {
-        "event_name": 'lending',
-        "properties": {
-            "user_action": user_action,
-            "screen_name": 'application form',
-        }
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "application form",
+      },
     };
 
-    if (user_action === 'just_set_events') {
-        return eventObj;
+    if (user_action === "just_set_events") {
+      return eventObj;
     } else {
-        nativeCallback({ events: eventObj });
+      nativeCallback({ events: eventObj });
     }
-}
+  }
 
   handleClick = () => {
-    this.navigate('journey')
+    this.navigate("application-summary");
   };
 
   renderAccordiansubData = (props, index) => {
@@ -231,4 +230,4 @@ class Summary extends Component {
   }
 }
 
-export default Summary;
+export default ApplicationSummary;

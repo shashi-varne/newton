@@ -14,6 +14,7 @@ import Api from "utils/api";
 import Input from "../../../common/ui/Input";
 import { formatDate, dobFormatTest } from "utils/validators";
 import { FormControl } from "material-ui/Form";
+import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 
 class UploadBank extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class UploadBank extends Component {
       editId: null,
       count: 1,
       form_data: {},
+      bankOptions: []
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -59,28 +61,40 @@ class UploadBank extends Component {
   }
 
   onload = async () => {
-    // try {
-    //   this.setState({
-    //     show_loader: true,
-    //   });
+    try {
+      this.setState({
+        show_loader: true,
+      });
 
-    //   const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
+      const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
 
-    //   const { result, status_code: status } = res.pfwresponse;
+      const { result, status_code: status } = res.pfwresponse;
 
-    //   if (status === 200) {
-    //     console.log(result);
-    //   } else {
-    //     toast(result.error || result.message || "Something went wrong!");
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    //   toast("Something went wrong");
-    // }
+      if (status === 200) {
 
-    // this.setState({
-    //   show_loader: false,
-    // });
+        let banklist = result.data;
+
+        let bankOptions = banklist.map((item) => {
+          return { name: item.institution_name, value: item.institution_id };
+        });
+
+        // console.log(bankOptions)
+
+        this.setState({
+          bankOptions: bankOptions
+        })
+
+      } else {
+        toast(result.error || result.message || "Something went wrong!");
+      }
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+
+    this.setState({
+      show_loader: false,
+    });
   };
 
   renderNotes = () => {
@@ -200,7 +214,7 @@ class UploadBank extends Component {
       documents: documents,
       confirmed: false,
       editId: null,
-      count: count
+      count: count,
     });
   };
 
@@ -210,7 +224,7 @@ class UploadBank extends Component {
     var index = documents.findIndex((item) => item.id === id);
 
     var isedited = documents[index].edited;
-    console.log(documents[index].edited)
+    console.log(documents[index].edited);
 
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
@@ -219,7 +233,9 @@ class UploadBank extends Component {
 
     try {
       const res = await Api.post(
-        `relay/api/loan/idfc/upload/document/${application_id}${isedited ? '?edit=true' : ''}`,
+        `relay/api/loan/idfc/upload/document/${application_id}${
+          isedited ? "?edit=true" : ""
+        }`,
         data
       );
 
@@ -275,7 +291,6 @@ class UploadBank extends Component {
   };
 
   handleDelete = (id) => {
-
     let { documents } = this.state;
     let index = documents.findIndex((item) => item.id === id);
 
@@ -302,19 +317,20 @@ class UploadBank extends Component {
           <Attention content={this.renderNotes()} />
           <FormControl fullWidth>
             <div className="InputField">
-              <Input
-                error={!!this.state.form_data.bank_name_error}
-                helperText={this.state.form_data.bank_name_error}
-                type="text"
+              <DropdownWithoutIcon
                 width="40"
+                options={this.state.bankOptions}
+                id="bank_name"
                 label="Bank name"
-                class="bank_name"
-                id="name"
-                name="bank_name"
+                dataType="AOB"
+                error={this.state.form_data.bank_name_error ? true : false}
+                helperText={this.state.form_data.bank_name_error}
                 value={this.state.form_data.bank_name || ""}
+                name="bank_name"
                 onChange={this.handleChange("bank_name")}
               />
             </div>
+
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.start_date_error}

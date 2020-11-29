@@ -343,11 +343,15 @@
   margin-bottom: 40px;
 }
 
-.address_details {
+.address-details {
   font-size: 13px;
   font-weight: 400;
   color: #0a1d32;
   margin-bottom: 10px;
+
+  .head-title {
+    margin: 10px 0;
+  }
 }
 
 .loan-bt-details {

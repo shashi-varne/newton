@@ -27,6 +27,7 @@ class AddressDetails extends Component {
       show_loader: false,
       screen_name: "address_details",
       form_data: {},
+      confirm_details: false
     };
 
     this.initialize = initialize.bind(this);
@@ -55,9 +56,22 @@ class AddressDetails extends Component {
   }
 
   onload = () => {
-    // this.setState({
-    //   isPermanent_address: "No",
-    // });
+    let lead = this.state.lead || {};
+    let personal_info = lead.personal_info || {};
+    let vendor_info = lead.vendor_info || {};
+    let { confirm_details } = this.state;
+
+    if (vendor_info.ckyc_state === 'success') {
+      confirm_details = true;
+    }
+
+    // let form_data = {
+      
+    // }
+    this.setState({
+      // form_data: form_data,
+      confirm_details: confirm_details
+    })
   };
 
   sendEvents(user_action) {
@@ -130,41 +144,36 @@ class AddressDetails extends Component {
         const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
         let resultData = res.pfwresponse.result[0] || '';
 
-        console.log(resultData)
-
-        // let { city, state, country } = form_data;
-        // let pincode_error = '';
-        // if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-        //     if (resultData.dmi_city_name === 'NA') {
-        //         city = resultData.district_name || resultData.division_name || resultData.taluk;
-        //     } else {
-        //         city = resultData.dmi_city_name;
-        //     }
-        //     state = resultData.state_name;
-        //     country = resultData.country_name;
-        // } else {
-        //     city = '';
-        //     state = '';
-        //     pincode_error = 'Invalid pincode';
-        // }
+        let { city, state, country } = form_data;
+        let pincode_error = '';
+        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
+            if (!resultData.idfc_city_name) {
+                city = resultData.district_name || resultData.division_name || resultData.taluk;
+            } else {
+                city = resultData.idfc_city_name;
+            }
+            state = resultData.state_name;
+        } else {
+            city = '';
+            state = '';
+            pincode_error = 'Invalid pincode';
+        }
         
-        // if (name === 'pincode') {
-        //     form_data.city = city;
-        //     form_data.state = state;
-        //     form_data.pincode_error = pincode_error;
-        //     form_data.country = country || 'India';
-        // } else {
-        //     form_data.p_city = city;
-        //     form_data.p_state = state;
-        //     form_data.p_pincode_error = pincode_error;
-        //     form_data.p_country = country || 'India';
-        // }
+        if (name === 'current_pincode') {
+            form_data.current_city = city;
+            form_data.current_state = state;
+            form_data.current_pincode_error = pincode_error;
+        } else if (name === 'permanent_pincode') {
+            form_data.permanent_city = city;
+            form_data.permanent_state = state;
+            form_data.permanent_pincode_error = pincode_error;
+        }
 
     }
 
-    // this.setState({
-    //     form_data: form_data
-    // })
+    this.setState({
+        form_data: form_data
+    })
 }
 
   handleChangeRadio = (event) => {
@@ -185,18 +194,18 @@ class AddressDetails extends Component {
   };
 
   render() {
-    let { isPermanent_address } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Confirm your personal details"
-        buttonTitle="CONFIRM & SUBMIT"
+        title={`${this.state.confirm_details ? 'Confirm your' : 'Provide'} address details`}
+        buttonTitle={this.state.confirm_details ? 'CONFIRM & SUBMIT' : 'SUBMIT'}
         handleClick={this.handleClick}
+        loaderWithData={this.state.loaderWithData}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
       >
-        <div className="personal-details">
+        <div className="address-details">
           <Attention content="Once submitted, details cannot be changed or modified." />
 
           <div className="head-title">Current address</div>
@@ -282,6 +291,7 @@ class AddressDetails extends Component {
                 name="current_city"
                 value={this.state.form_data.current_city || ""}
                 onChange={this.handleChange("current_city")}
+                disabled={true}
               />
             </div>
 
@@ -296,6 +306,7 @@ class AddressDetails extends Component {
                 name="current_state"
                 value={this.state.form_data.current_state || ""}
                 onChange={this.handleChange("current_state")}
+                disabled={true}
               />
             </div>
 
@@ -397,6 +408,7 @@ class AddressDetails extends Component {
                   name="permanent_city"
                   value={this.state.form_data.permanent_city || ""}
                   onChange={this.handleChange("permanent_city")}
+                  disabled={true}
                 />
               </div>
 
@@ -411,6 +423,7 @@ class AddressDetails extends Component {
                   name="permanent_state"
                   value={this.state.form_data.permanent_state || ""}
                   onChange={this.handleChange("permanent_state")}
+                  disabled={true}
                 />
               </div>
             </div>

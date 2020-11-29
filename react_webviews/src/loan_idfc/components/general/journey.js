@@ -19,7 +19,7 @@ class JourneyMap extends Component {
     this.initialize();
   }
 
-  onload = async () => {
+  onload = () => {
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
     let professional_info = lead.professional_info || {};
@@ -29,8 +29,10 @@ class JourneyMap extends Component {
     let idfc_loan_status = vendor_info.idfc_loan_status || "";
     let ckyc_state = vendor_info.ckyc_state || "";
 
-    console.log(idfc_loan_status);
-    console.log(ckyc_state)
+    let journey = {
+      basic_details_uploaded: "1",
+    };
+    let index = idfc_loan_status && journey[idfc_loan_status];
 
     let journeyData = {
       options: [
@@ -39,66 +41,66 @@ class JourneyMap extends Component {
           title: "Enter basic details",
           subtitle:
             "Fill in personal and work details to get started with your loan application.",
-          status: idfc_loan_status === 'basic_details_uploaded' ? "init" : 'completed',
-          id: "basic_details"
+          status: "completed",
+          id: "basic_details",
         },
         {
           step: "2",
           title: "Create loan application",
           subtitle:
             "Check your KYC status to proceed with your loan application.",
-          status: "init",
-          id: "create_loan_application"
+          status: index && index === "1" ? "init" : "completed",
+          id: "create_loan_application",
         },
         {
           step: "3",
           title: "Provide income details",
           subtitle:
             "Enter your loan requirements and income details to get the best loan offer.",
-          status: "pending",
-          id: "income_details"
+          status: index && index === "1" ? "init" : "completed",
+          id: "income_details",
         },
         {
           step: "4",
           title: "Upload documents",
           subtitle:
             "Provide your office address and upload documents to get your loan sanctioned.",
-          status: "pending",
-          id: "document_upload"
+          status: index && index === "1" ? "init" : "completed",
+          id: "document_upload",
         },
         {
           step: "5",
           title: "Sanction and disbursal",
           subtitle:
             "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
-          status: "pending",
-          id: "sanction_and_disbursal"
+          status: index && index === "1" ? "init" : "completed",
+          id: "sanction_and_disbursal",
         },
       ],
     };
 
     this.setState({
       journeyData: journeyData,
-      ckyc_state: ckyc_state
+      ckyc_state: ckyc_state,
+      idfc_loan_status: idfc_loan_status,
     });
   };
 
   handleClick = (id) => {
-    console.log(id)
     let { ckyc_state } = this.state;
 
-    if (id === 'create_loan_application') {
-      if (ckyc_state === 'init') {
-        console.log(ckyc_state)
+    if (id === "create_loan_application") {
+      if (ckyc_state === "init") {
+        console.log(ckyc_state);
       } else {
         this.updateApplication({
-          idfc_loan_status: "ckyc"
-        })
+          idfc_loan_status: "ckyc",
+        });
       }
     }
 
-    if (id === 'basic_details') {
-      this.navigate('summary')
+    if (id === "basic_details") {
+      this.navigate("application-summary");
     }
   };
 
@@ -119,6 +121,8 @@ class JourneyMap extends Component {
   }
 
   render() {
+    let { idfc_loan_status } = this.state;
+    console.log(idfc_loan_status);
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -135,15 +139,23 @@ class JourneyMap extends Component {
             alt=""
           />
 
-          <div className="head-title">
+          {/* <div className="head-title">
             <b>Awesome!</b> Your loan application is successfully created. Now
             you're just a step away from finding out your loan offer.
-          </div>
+          </div> */}
 
-          <JourneySteps
-            handleClick={this.handleClick}
-            baseData={this.state.journeyData}
-          />
+          {idfc_loan_status === "basic_details_uploaded" && (
+            <div className="head-title">
+              <b>Ta-da! You’ve</b> successfully uploaded your basic details.
+            </div>
+          )}
+
+          {idfc_loan_status && (
+            <JourneySteps
+              handleClick={this.handleClick}
+              baseData={this.state.journeyData}
+            />
+          )}
         </div>
       </Container>
     );

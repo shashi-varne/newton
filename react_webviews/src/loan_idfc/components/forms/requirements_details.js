@@ -6,7 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
-import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
+import { numDifferentiationInr, formatAmount, inrFormatTest } from "utils/validators";
 
 class LoanRequirementDetails extends Component {
   constructor(props) {
@@ -46,6 +46,16 @@ class LoanRequirementDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
+    if (name === 'amount_required') {
+      if (!inrFormatTest(event.target.value)) {
+        return;
+      }
+
+      form_data[name] = event.target.value;
+      form_data[name + "_error"] = '';
+      console.log(formatAmount(event.target.value))
+    }
+
     if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
@@ -72,6 +82,7 @@ class LoanRequirementDetails extends Component {
         showLoader={this.state.show_loader}
         title="Loan requirement details"
         buttonTitle="SUBMIT"
+        loaderWithData={this.state.loaderWithData}
         handleClick={this.handleClick}
       >
         <div className="requirements-details">
@@ -85,7 +96,7 @@ class LoanRequirementDetails extends Component {
                   this.state.form_data.amount_required_error ||
                   numDifferentiationInr(this.state.form_data.amount_required)
                 }
-                type="number"
+                type="text"
                 width="40"
                 label="Loan amount (in rupees)"
                 class="amount_required"

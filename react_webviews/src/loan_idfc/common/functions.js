@@ -5,7 +5,12 @@ import toast from "../../common/ui/Toast";
 import { openPdfCall } from "utils/native_callback";
 import { nativeCallback } from "utils/native_callback";
 import { idfc_config } from "../constants";
-import { validatePan, isValidDate, getEditTitle } from "utils/validators";
+import {
+  validatePan,
+  isValidDate,
+  getEditTitle,
+  IsFutureDate,
+} from "utils/validators";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -72,11 +77,12 @@ export async function getDocumentList() {
       show_loader: true,
     });
 
-    const res = await Api.get(`relay/api/loan/idfc/list/document/${this.state.application_id}`);
+    const res = await Api.get(
+      `relay/api/loan/idfc/list/document/${this.state.application_id}`
+    );
     const { result, status_code: status } = res.pfwresponse;
 
-    console.log(result)
-
+    console.log(result);
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -137,24 +143,18 @@ export async function getOrCreate(params) {
       if (this.state.screen_name === "document_list") {
         this.getDocumentList();
       }
-
     } else {
       toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      // this.onload();
     }
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
   }
 
-  this.setState(
-    {
-      show_loader: false,
-    },
-    () => {
-      this.onload();
-    }
-  );
+  this.setState({
+    show_loader: false,
+  });
 }
 
 export async function getUserStatus() {
@@ -191,9 +191,8 @@ export async function getUserStatus() {
 }
 
 export function setEditTitle(string) {
-
   if (this.props.edit) {
-      return getEditTitle(string);
+    return getEditTitle(string);
   }
 
   return string;
@@ -223,8 +222,9 @@ export async function updateApplication(params) {
             ...(result || ""),
           },
         });
-      } if (params.idfc_loan_status === 'ckyc') { 
-        this.navigate('personal-details');
+      }
+      if (params.idfc_loan_status === "ckyc") {
+        this.navigate("personal-details");
       } else {
         this.navigate(this.state.next_state);
       }
@@ -244,7 +244,9 @@ export async function updateApplication(params) {
 
 export async function submitApplication(params, state, update) {
   try {
+    let screens = ["address_details", "requirement_details_screen"];
     this.setState({
+      loaderWithData: screens.includes(this.state.screen_name),
       show_loader: true,
     });
     const res = await Api.post(
@@ -259,9 +261,8 @@ export async function submitApplication(params, state, update) {
         this.navigate(this.state.next_state);
       }
     } else {
-
-      if (this.state.screen_name === 'professional_details_screen') {
-        this.navigate('application-status')
+      if (this.state.screen_name === "professional_details_screen") {
+        this.navigate("application-status");
       } else {
         toast(result.error || result.message || "Something went wrong!");
         this.onload();
@@ -366,7 +367,10 @@ export async function formCheckUpdate(
   }
 
   if (form_data.dob && !isValidDate(form_data.dob)) {
-    form_data.dob_error = "Invalid dob";
+    form_data.dob_error = "Please enter valid dob";
+    canSubmitForm = false;
+  } else if (form_data.dob && IsFutureDate(form_data.dob)) {
+    form_data.dob_error = "Future date is not allowed";
     canSubmitForm = false;
   }
 
@@ -394,33 +398,67 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-  let back_url =
+  // let back_url =
+  //   window.location.origin +
+  //   `/loan/idfc/income-details` +
+  //   getConfig().searchParams;
+
+  // let redirectionUrl =
+  //   window.location.origin + `/loan/idfc/bt-info` + getConfig().searchParams;
+
+  // if (getConfig().web) {
+  //   redirectionUrl = back_url;
+  // }
+
+  // var netBanking_link = url;
+
+  // var pgLink = netBanking_link;
+
+  // let app = getConfig().app;
+  // // eslint-disable-next-line
+  // pgLink +=
+  //   (pgLink.match(/[\?]/g) ? "&" : "?") +
+  //   "plutus_redirect_url=" +
+  //   redirectionUrl +
+  //   "&app=" +
+  //   app +
+  //   "&back_url=" +
+  //   back_url;
+
+  // if (getConfig().generic_callback) {
+  //   pgLink += "&generic_callback=" + getConfig().generic_callback;
+  // }
+  let paymentRedirectUrl = encodeURIComponent(
     window.location.origin +
-    `/loan/idfc/income-details` +
-    getConfig().searchParams;
+      `/loan/idfc/income-details` +
+      getConfig().searchParams
+  );
 
-  let redirectionUrl =
-    window.location.origin + `/loan/idfc/bt-info` + getConfig().searchParams;
+  let back_url = encodeURIComponent(
+    window.location.origin +
+      `/loan/instant-kyc-status` +
+      getConfig().searchParams +
+      "&flow=kyc&okyc_id=" +
+      this.state.application_id
+  );
 
-  if (getConfig().web) {
-    redirectionUrl = back_url;
+  // for web no issue
+  if (getConfig().Web) {
+    paymentRedirectUrl = back_url;
   }
 
-  var netBanking_link = url;
-
-  var pgLink = netBanking_link;
-
+  var payment_link = url;
+  var pgLink = payment_link;
   let app = getConfig().app;
   // eslint-disable-next-line
   pgLink +=
     (pgLink.match(/[\?]/g) ? "&" : "?") +
     "plutus_redirect_url=" +
-    redirectionUrl +
+    paymentRedirectUrl +
     "&app=" +
     app +
     "&back_url=" +
     back_url;
-
   if (getConfig().generic_callback) {
     pgLink += "&generic_callback=" + getConfig().generic_callback;
   }
@@ -460,9 +498,9 @@ export async function startTransaction(transaction_type) {
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  });
+  // this.setState({
+  //   show_loader: false,
+  // });
 }
 
 export function openPdf(url, type) {

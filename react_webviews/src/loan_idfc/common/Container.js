@@ -9,7 +9,6 @@ import Footer from "./footer";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
 import { getConfig } from "utils/functions";
-import { checkStringInString } from "utils/validators";
 import { goBackMap } from "../constants";
 
 class Container extends Component {
@@ -86,8 +85,12 @@ class Container extends Component {
           }`}
         >
           <div className="LoaderOverlay">
-            <div>Hang on, while IDFC finishes analysing your last 3 months bank statements</div>
-            <div>It may take 10 to 15 seconds!</div>
+            <div style={{fontSize:"14px", lineHeight:"20px", margin: "0 -40px 0 -40px"}}>
+              Hang on, while IDFC finishes analysing your last 3 months bank
+              statements
+            </div>
+            <img style={{width: '20px', margin: "40px 0 30px 0"}} src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
+            <div style={{fontSize:"13px", lineHeight:"22px"}}>It may take 10 to 15 seconds!</div>
           </div>
         </div>
       );
@@ -141,7 +144,10 @@ class Container extends Component {
           {/* Below Header Block */}
           <div id="HeaderHeight" style={{ top: 56 }}>
             {/* Loader Block */}
-            {this.renderPageLoader()}
+            {this.props.loaderWithData
+              ? this.renderPageLoader2()
+              : this.renderPageLoader()}
+            {/* {this.renderPageLoader()} */}
             {/* {this.renderPageLoader2()} */}
           </div>
 

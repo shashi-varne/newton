@@ -22,7 +22,8 @@ import BasicDetails from "./components/forms/basic_details";
 import ProfessionalDetails from "./components/forms/professional_details";
 import PersonalDetails from "./components/forms/personal_details";
 import AddressDetails from "./components/forms/address_details";
-import Summary from "./components/forms/summary";
+import ApplicationSummary from "./components/forms/application_summary";
+import CkycSummary from "./components/forms/ckyc_summary";
 import LoanRequirementDetails from "./components/forms/requirements_details";
 import BtInformation from "./components/bt_details/bt_info";
 import LoanBtDetails from "./components/bt_details/loan_bt";
@@ -89,15 +90,14 @@ const Lending = props => {
           <Route path={`${url}/bt-info`} component={BtInformation} />
           <Route path={`${url}/loan-bt`} component={LoanBtDetails} />
           <Route path={`${url}/credit-bt`} component={CreditBtDetails} />
-          <Route path={`${url}/summary`} component={Summary} />
+          <Route path={`${url}/application-summary`} component={ApplicationSummary} />
+          <Route path={`${url}/ckyc-summary`} component={CkycSummary} />
           <Route path={`${url}/eligible-loan`} component={EligibleLoan} />
           <Route path={`${url}/additional-details`} component={AdditionalDetails} />
           <Route path={`${url}/upload-documents`} component={UploadDocuments} />
           <Route path={`${url}/loan-eligible`} component={LoanEligible} />
-
           <Route path={`${url}/application-status`} component={ApplicationStatus} />
           <Route path={`${url}/loan-status`} component={LoanStatus} />
-
           <Route path={`${url}/upload-pan`} component={UploadPan} />
 
           {/* Edit paths */}

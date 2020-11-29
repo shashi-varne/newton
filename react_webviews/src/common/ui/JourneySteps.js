@@ -31,7 +31,7 @@ class JourneyStepsClass extends Component {
 
     return (
       <div className="journey-steps-count" key={index}>
-          <div className={`circle-count ${options.status}`}>
+          <div className={`circle-count ${options.status || "pending"}`}>
             {options.status !== "completed" && (
               <div className="count">{options.step}</div>
             )}
@@ -41,10 +41,10 @@ class JourneyStepsClass extends Component {
               </div>
             )}
           </div>
-          <div className={`steps-content ${options.status}`}>
+          <div className={`steps-content ${options.status || "pending"}`}>
             <div className="title flex">
               {options.title}
-              {options.status !== "pending" && (
+              {options.status && (
                 <span
                   className="status"
                   onClick={() => {
@@ -54,7 +54,7 @@ class JourneyStepsClass extends Component {
                   {options.status === "completed" ? "SUMMARY" : "START"}
                 </span>
               )}
-              {options.status === "pending" && (
+              {!options.status && (
                 <img src={require(`assets/Vector.svg`)} alt="" />
               )}
             </div>

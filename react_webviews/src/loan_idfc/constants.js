@@ -1,6 +1,6 @@
 export function goBackMap(path) {
     let mapper = {
-
+      '/loan/idfc/journey': '/loan/idfc/home'
     }
 
     return mapper[path] || false;
@@ -179,9 +179,9 @@ export const idfc_config = {
       "Trust"
     ],
     departmentOptions: [
-      "PRIVATE",
-      "PUBLIC",
-      "ACCOUNTS"
+      "ACCOUNTS",
+      "BACKOFFICE",
+      "EDUCATION"
     ],
     industryOptions: [
       "ABRASIVES AND GRINDING",
@@ -195,9 +195,11 @@ export const idfc_config = {
       "Married"
     ],
     religionOptions: [
-      "Hindu",
-      "Muslim",
-      "Sikh"
+      "HINDU",
+      "JAIN",
+      "MUSLIM",
+      "CATHOLIC",
+      "Others"
     ]
   },
   requirement_details_screen: {

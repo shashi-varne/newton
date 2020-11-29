@@ -33,6 +33,7 @@ class Landing extends Component {
         this.state.application_exists && this.state.otp_verified
           ? "RESUME"
           : "APPLY NOW",
+      next_state: this.state.application_exists && this.state.otp_verified ? 'journey' : 'edit-number'
     });
   };
 
@@ -42,7 +43,7 @@ class Landing extends Component {
     };
 
     if (this.state.cta_title === "RESUME") {
-      this.navigate('journey')
+      this.navigate("journey");
     } else {
       this.getOrCreate(params);
     }

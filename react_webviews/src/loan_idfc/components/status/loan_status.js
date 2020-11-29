@@ -50,6 +50,14 @@ class LoanStatus extends Component {
             src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
             alt=""
           />
+          <img
+            src={require(`assets/${this.state.productName}/ils_loan_status.svg`)}
+            alt=""
+          />
+          <img
+            src={require(`assets/${this.state.productName}/error_illustration.svg`)}
+            alt=""
+          />
           <div className="subtitle">
             Your profile has been successfully evaluated and basis the checks
             you're most likely to get a loan offer.
