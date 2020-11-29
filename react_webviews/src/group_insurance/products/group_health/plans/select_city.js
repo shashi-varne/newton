@@ -71,9 +71,9 @@ class GroupHealthPlanSelectCity extends Component {
                         this.setState({
                             city: city === 'NA' ? '' : city,
                         });
-                        this.setState({
-                            show_loader: false
-                        });
+                        // this.setState({
+                        //     show_loader: false
+                        // });
                     } else {
                         toast(
                             resultData.error ||
