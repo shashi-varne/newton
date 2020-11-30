@@ -110,7 +110,7 @@ class GroupHealthPayment extends Component {
         this.setState({
           show_loader: false
         });
-        if (res.pfwresponse.status_code === 200) {console.log(res)
+        if (res.pfwresponse.status_code === 200) {
   
           let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
@@ -228,7 +228,7 @@ class GroupHealthPayment extends Component {
 
             {this.state.paymentSuccess && provider === 'HDFCERGO' &&
               <div>
-                <p className="top-content">{console.log(this.state)}
+                <p className="top-content">
                   Payment of {Math.trunc(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.providerData.title2} {this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
@@ -304,7 +304,7 @@ class GroupHealthPayment extends Component {
                   <span> {getDateBreakup(this.state.payment_details.dt_created).dom }{' '}
                     {getDateBreakup(this.state.payment_details.dt_created).month}{', '}
                    {formatAMPM(this.state.payment_details.dt_created)} </span> }
-                      {console.log(this.state.payment_details)}
+
                       </div>
                   </div>
                 </div>
