@@ -5,7 +5,7 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal2, storageService, numDifferentiationInr } from 'utils/validators';
+import { inrFormatDecimal2, formatAMPM ,storageService, numDifferentiationInr, getDateBreakup } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
@@ -45,6 +45,7 @@ class GroupHealthPayment extends Component {
       policy_data: {},
       providerData: {},
       common : {},
+      payment_details : {},
       productName: getConfig().productName,
       force_onload_call: true,
       screen_name: 'payment_screen'
@@ -109,15 +110,17 @@ class GroupHealthPayment extends Component {
         this.setState({
           show_loader: false
         });
-        if (res.pfwresponse.status_code === 200) {
+        if (res.pfwresponse.status_code === 200) {console.log(res)
   
           let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
+          let payment_details = resultData.payment_details || {};
 
           this.setState({
             policy_data: policy_data,
             lead: lead,
-            common: resultData.common
+            common: resultData.common,
+            payment_details : payment_details
           })
         } else {
           toast(resultData.error || resultData.message
@@ -290,14 +293,18 @@ class GroupHealthPayment extends Component {
                     {policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
-                    {!policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {policy_data.payment_id || '-'}</div>
+                    {!policy_data.policy_number && this.state.provider === 'HDFCERGO' &&
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number : {policy_data.payment_id || '-'}</div>
                     }
                      {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
                     <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {policy_data.proposal_number || '-'}</div>
                     }
                     <div style={{ margin: '5px 0 6px 0' }}>
-                      {this.state.policy_data.payment_success_dt}
+                  { this.state.payment_details.dt_created && 
+                  <span> {getDateBreakup(this.state.payment_details.dt_created).dom }{' '}
+                    {getDateBreakup(this.state.payment_details.dt_created).month}{', '}
+                   {formatAMPM(this.state.payment_details.dt_created)} </span> }
+                      {console.log(this.state.payment_details)}
                       </div>
                   </div>
                 </div>

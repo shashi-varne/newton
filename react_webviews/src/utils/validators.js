@@ -662,9 +662,10 @@ export function dateOrdinal(dom) {
   else return dom + "th";
 };
 
-function formatAMPM(date) {
-  var hours = date.getHours();
+export function formatAMPM(date){
+  var date = new Date(date);
   var minutes = date.getMinutes();
+  var hours = date.getHours();
   var ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
@@ -685,7 +686,7 @@ export function getDateBreakup(date) {
 
   // fix for safari
   // date = date.replace(/ /g,"T");
-  date = date.replace(/-/g, '/');
+  // date = date.replace(/-/g, '/'); fix it not sure
 
   let date2 = new Date(date);
   let plainDate = date2.getDate();
