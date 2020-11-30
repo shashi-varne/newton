@@ -40,34 +40,31 @@ class GroupHealthPlanPremiumSummary extends Component {
     let lead = this.state.lead;
     let groupHealthPlanDataProp = this.state.groupHealthPlanData;
     if (this.state.get_lead) {
-      let add_ons_data = [];
-      let add_ons = lead.add_ons_json;
-      for (var key in add_ons) {
-        add_ons_data.push({
-          title: add_ons[key].title,
-          selected_premium: add_ons[key].premium,
-          checked: true,
-        });
+
+      let add_ons = []
+      for(var key in lead.add_ons_json){
+            add_ons.push({...lead.add_ons_json[key], checked: true});
       }
-      properties.add_ons = add_ons_data;
+
+      properties.add_ons = add_ons;
       properties.type_of_plan = lead.cover_type;
       properties.sum_assured = lead.sum_assured;
       properties.total_members = lead.member_base.length;
       properties.members = lead.member_base;
       properties.tenure = lead.tenure;
-      properties.base_premium = lead.base_premium_showable || lead.premium;
+      properties.base_premium = lead.base_premium
       properties.discount_amount = lead.discount_amount;
       properties.net_premium = lead.premium;
       properties.gst_tax = lead.tax_amount;
       properties.total_amount = lead.total_amount;
     } else {
-      properties.add_ons = groupHealthPlanDataProp.add_ons_data || "";
+      properties.add_ons = groupHealthPlanDataProp.add_ons_array || "";
       properties.type_of_plan = groupHealthPlanDataProp.type_of_plan;
       properties.sum_assured = groupHealthPlanDataProp.sum_assured;
       properties.total_members = groupHealthPlanDataProp.post_body.mem_info.adult + groupHealthPlanDataProp.post_body.mem_info.child;
       properties.members = groupHealthPlanDataProp.final_dob_data;
       properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
-      properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium_showable || groupHealthPlanDataProp.plan_selected_final.base_premium;
+      properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium || groupHealthPlanDataProp.plan_selected_final.base_premium;
       properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount;
       properties.net_premium = groupHealthPlanDataProp.plan_selected_final.net_premium;
       properties.gst_tax = groupHealthPlanDataProp.plan_selected_final.gst_tax;

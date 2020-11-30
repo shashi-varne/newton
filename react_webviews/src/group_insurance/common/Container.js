@@ -545,6 +545,7 @@ class Container extends Component {
         {/* Footer Block */}
         {!this.props.noFooter &&
           <Footer
+            dualbuttonwithouticon={this.props.dualbuttonwithouticon}
             fullWidthButton={this.props.fullWidthButton}
             twoButtons={this.props.twoButtons}
             logo={this.props.logo}
