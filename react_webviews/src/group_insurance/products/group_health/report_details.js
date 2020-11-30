@@ -420,13 +420,13 @@ class GroupHealthReportDetails extends Component {
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
-                                        {this.state.lead.add_ons_amount &&
+                                        {this.state.lead.add_ons_amount > 0 &&
                                         <div>
                                             <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
                                             <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                         </div>
                                          }
-                                        {this.state.lead.add_ons_amount &&
+                                        {this.state.lead.add_ons_amount > 0 &&
                                             <div>
                                                 &nbsp;+&nbsp;
                                             </div>
