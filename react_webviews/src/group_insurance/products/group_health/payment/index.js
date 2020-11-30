@@ -5,7 +5,7 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal2, storageService, numDifferentiationInr } from 'utils/validators';
+import { inrFormatDecimal2, formatAMPM ,storageService, numDifferentiationInr, getDateBreakup } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
@@ -45,6 +45,7 @@ class GroupHealthPayment extends Component {
       policy_data: {},
       providerData: {},
       common : {},
+      payment_details : {},
       productName: getConfig().productName,
       force_onload_call: true,
       screen_name: 'payment_screen'
@@ -113,11 +114,13 @@ class GroupHealthPayment extends Component {
   
           let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
+          let payment_details = resultData.payment_details || {};
 
           this.setState({
             policy_data: policy_data,
             lead: lead,
-            common: resultData.common
+            common: resultData.common,
+            payment_details : payment_details
           })
         } else {
           toast(resultData.error || resultData.message
@@ -209,7 +212,7 @@ class GroupHealthPayment extends Component {
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
+                  Payment of {Math.trunc(this.state.lead.total_premium)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
                 }
@@ -226,7 +229,7 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess && provider === 'HDFCERGO' &&
               <div>
                 <p className="top-content">
-                  Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.common.base_plan_title} {this.state.lead.plan_title} is successful.
+                  Payment of {Math.trunc(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.providerData.title2} {this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
 
@@ -246,7 +249,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
+                    Payment of {Math.trunc(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
                           </p>
                 </div>
               }
@@ -254,7 +257,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal2(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
+                    Payment of {Math.trunc(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
                     If amount has been debited it will be refunded back to you in 5-7 business days.
@@ -290,15 +293,19 @@ class GroupHealthPayment extends Component {
                     {policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
-                    {!policy_data.policy_number && this.state.provider === 'HEFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number. : {policy_data.payment_id || '-'}</div>
+                    {!policy_data.policy_number && this.state.provider === 'HDFCERGO' &&
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number : {policy_data.payment_id || '-'}</div>
                     }
                      {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
                     <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {policy_data.proposal_number || '-'}</div>
                     }
-                    {/* <div style={{ margin: '5px 0 6px 0' }}>
-                      {formatDateAmPm(this.state.policy_data.transaction_date)}
-                      </div> */}
+                    <div style={{ margin: '5px 0 6px 0' }}>
+                  { this.state.payment_details.dt_created && 
+                  <span> {getDateBreakup(this.state.payment_details.dt_created).dom }{' '}
+                    {getDateBreakup(this.state.payment_details.dt_created).month}{', '}
+                   {formatAMPM(this.state.payment_details.dt_created)} </span> }
+
+                      </div>
                   </div>
                 </div>
               </div>
@@ -314,17 +321,17 @@ class GroupHealthPayment extends Component {
                       Basic premium
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.base_premium_showable || this.state.lead.base_premium)}
+                      {(Math.trunc(this.state.lead.base_premium_showable) || Math.trunc(this.state.lead.base_premium))}
                     </div>
                   </div>
 
-                  {this.state.lead.add_ons_amount && 
+                  {this.state.lead.add_on_premium > 0 && 
                     <div className="content-points">
                       <div className="content-points-inside-text">
                        Add ons amount
                       </div>
                       <div className="content-points-inside-text">
-                        {inrFormatDecimal2(this.state.lead.add_ons_amount)}
+                        {Math.trunc(this.state.lead.add_on_premium)}
                       </div>
                     </div>
                   }
@@ -334,7 +341,7 @@ class GroupHealthPayment extends Component {
                       GST
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.gst)}
+                      {(Math.trunc(this.state.lead.gst))}
                     </div>
                   </div>
                 </div>
@@ -347,7 +354,7 @@ class GroupHealthPayment extends Component {
                       Total amount paid
                               </div>
                     <div className="content2-points-inside-text">
-                      {inrFormatDecimal2(this.state.lead.total_premium)}
+                      {Math.trunc(this.state.lead.total_premium)}
                     </div>
                   </div>
                 </div>
