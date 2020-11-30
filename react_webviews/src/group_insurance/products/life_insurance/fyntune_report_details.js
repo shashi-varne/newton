@@ -41,7 +41,7 @@ class FyntuneReportDetails extends Component {
             if(res.pfwresponse.status_code === 200){
                 let policy_data = resultData.policy_data || {};
                 
-                policy_data.dt_policy_end = policy_data.dt_policy_end && policy_data.dt_policy_end.substring(0,11);
+                policy_data.dt_policy_end = policy_data.dt_policy_end && policy_data.dt_policy_end.substring(0,10);
                 policy_data.dt_policy_start = policy_data.dt_policy_start &&  policy_data.dt_policy_start.substring(0,11);
                 
 
