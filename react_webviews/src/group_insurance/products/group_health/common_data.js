@@ -160,9 +160,9 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, total_discount, gst = '';
+        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, net_premium, total_discount, gst = '';
 
-        if (this.state.get_lead) {console.log(lead)
+        if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_premium;
             sum_assured = lead.total_sum_insured;
@@ -173,6 +173,7 @@ export async function initialize() {
             total_premium = lead.total_premium;
             total_discount = lead.total_discount;
             gst = lead.gst;
+            net_premium = lead.total_premium - lead.gst;
 
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
@@ -207,9 +208,8 @@ export async function initialize() {
             content1: [
                 {
                     'name': 'Basic premium ', 
-                    'value': inrFormatDecimal(total_premium - gst)
+                    'value': inrFormatDecimal(base_premium)
                 },
-                { 'name': 'GST', 'value': inrFormatDecimal(tax_amount) }
             ],
             content2: [
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
@@ -217,36 +217,41 @@ export async function initialize() {
             sum_assured: sum_assured,
             tenure: tenure
         }
+        if(provider === 'RELIGARE') {
+            if(lead.add_ons && Object.keys(lead.add_ons).length > 0){
+                let add_ons_backend = lead.add_ons;
+                let data = [];
+                let heading_added = false;
+                for (var key in add_ons_backend) {
+                    data.push({
+                        name: add_ons_backend[key].title,
+                        value: inrFormatDecimal(add_ons_backend[key].price),
+                        heading: !heading_added ? 'Add ons' : ''
+                    })
 
-        if(provider === 'RELIGARE' && lead.add_ons) {
-
-            confirmDialogData.content1 = [
-                {
-                    'name': 'Basic premium ', 'value':
-                        // inrFormatDecimal(total_premium - gst)//base_premium
-                        inrFormatDecimal(base_premium - total_discount)
+                    heading_added = true;
                 }
-            ]
-
-            let add_ons_backend = lead.add_ons;
-            let data = [];
-            let heading_added = false;
-            for (var key in add_ons_backend) {
-                data.push({
-                    name: add_ons_backend[key].title,
-                    value: inrFormatDecimal(add_ons_backend[key].price),
-                    heading: !heading_added ? 'Add ons' : ''
-                })
-
-                heading_added = true;
+                confirmDialogData.content1 = confirmDialogData.content1.concat(data);
             }
-
-            confirmDialogData.content1 = confirmDialogData.content1.concat(data);
-
-            confirmDialogData.content1.push({
-                'name': 'GST', 'value': inrFormatDecimal(tax_amount) 
-            })
         }
+
+        if(total_discount > 0){
+            confirmDialogData.content1.push({
+                'name': 'Total discount', 
+                'value': inrFormatDecimal(total_discount) 
+            });
+        }
+        if(base_premium !== net_premium)
+        confirmDialogData.content1.push({
+            'name': 'Net premium', 
+            'value': inrFormatDecimal(net_premium) 
+        });
+
+        confirmDialogData.content1.push({
+            'name': 'GST',
+            'value': inrFormatDecimal(gst)
+        })
+        
 
 
         this.setState({
