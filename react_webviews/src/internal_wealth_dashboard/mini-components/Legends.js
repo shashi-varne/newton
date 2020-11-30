@@ -26,7 +26,7 @@ function Legends({ data = {}, columns = 2, classes = {}, percentage = true }) {
             ></div>
             <div className={`iwd-lc-title ${labelClass}`}>{key}</div>
           </header>
-          <div className={`iwd-lc-value ${valueClass}`}>{share}%</div>
+          <div className={`iwd-lc-value ${valueClass}`}>{Math.round(share, 0)}%</div>
         </li>
       ))}
     </ul>

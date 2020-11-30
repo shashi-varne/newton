@@ -31,8 +31,15 @@ const Login = (props) => {
       } else {
         const { user } = res.pfwresponse.result;
         const { email, name } = user
+        console.log(email, name)
+        console.log(user.mobile)
         storageService().set('iwd-user-email', email);
         storageService().set('iwd-user-name', name);
+        if (!user.mobile) {
+          storageService().set('iwd-user-mobile', '--')
+        } else {
+          storageService().set('iwd-user-mobile', user.mobile)
+        }
         navigate('main/dashboard');
       }     
     } catch(err) {

@@ -430,7 +430,7 @@ $background: #F9F9F9;
     }
   }
 
-  #iwd-d-newsletter {
+  .iwd-d-newsletter {
 
     align-self: flex-start;
     background: $primary;
@@ -628,6 +628,10 @@ $background: #F9F9F9;
   
   .iwd-analysis-header-filters {
     margin-left: 50px;
+  }
+
+  .iwd-d-newsletter {
+    display: none;
   }
 
   .iwd-analysis-graph-left {
@@ -858,18 +862,18 @@ $background: #F9F9F9;
       height: 90%;
     }
     
-    .iwd-analysis-portfolios-equity {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      height: 80%;
-      overflow-y: auto;
-      overflow-x: auto;
-    }
+    // .iwd-analysis-portfolio-equity {
+    //   display: flex;
+    //   flex-wrap: wrap;
+    //   justify-content: space-between;
+    //   height: 80%;
+    //   overflow-y: auto;
+    //   overflow-x: auto;
+    // }
     
     .iwd-analysis-portfolio-stock {
       display: flex;
-      width: 50%;
+      flex: 1 0 50%;
       margin-top: 50px;
       align-items: center;
       main {
@@ -896,7 +900,7 @@ $background: #F9F9F9;
   }
   .iwd-analysis-top-amcs {
     @extend .iwd-analysis-portfolios-equity;
-    height: '100%';
+    justify-content: flex-start;
   }
 
   .iwd-analysis-amc-logo {
@@ -943,7 +947,9 @@ $background: #F9F9F9;
   }
   
   .iwd-analysis-debt-holding-logo {
-    background:linear-gradient(135deg,  #AEE5DF, transparent);
+    // background: linear-gradient(135deg,  #AEE5DF, transparent);
+    background-image: linear-gradient(43deg, #b5f0ea 30%, #6edacd 70%, #C1EBE6 100%);
+
     color: #488F87;
     font-size: 20px;
     width: 40px;
@@ -1188,7 +1194,7 @@ $background: #F9F9F9;
       }
     }
 
-    #iwd-d-newsletter {
+    .iwd-d-newsletter {
       width: 100%;
       padding: 30px 40px;
 
@@ -1215,9 +1221,17 @@ $background: #F9F9F9;
       overflow-y: auto;
       flex-direction: column;
       height: auto;
+
+      .iwd-analysis-portfolio-name {
+        font-size: 13px;
+      }
     }
     .iwd-analysis-amc {
       width: 100%;
+    }
+
+    .iwd-d-newsletter {
+      display: block;
     }
 
     .iwd-analysis-portfolio-stock {
@@ -1233,6 +1247,7 @@ $background: #F9F9F9;
 
     .iwd-analysis-header-filters {
       margin-left: 0;
+      margin-top: 10px;
     }
 
     .iwd-analysis-debt-holding {
@@ -1291,7 +1306,7 @@ $background: #F9F9F9;
     #iwd-sector-alloc {
       .iwd-agr-content {
         .iwd-sector-alloc-legend {
-          max-height: 265px;
+          max-height: none;
 
           .iwd-sal-item {
             padding: 14px;
