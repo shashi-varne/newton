@@ -416,7 +416,7 @@ export async function netBanking(url) {
   console.log(url2);
 
   let plutusRedirectUrl = encodeURIComponent(
-    window.location.origin  + `/loan/idfc/home` + getConfig().searchParams
+    window.location.origin  + `/loan/idfc/status` + getConfig().searchParams
   )
 
   var payment_link = url2;

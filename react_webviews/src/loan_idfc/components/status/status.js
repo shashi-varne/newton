@@ -80,12 +80,22 @@ class LoanStatus extends Component {
 
   onload = () => {
     let { status, bt_eligible } = this.state.params;
-    console.log(status, bt_eligible);
+
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
     let application_info = lead.application_info || {};
     let idfc_loan_status = vendor_info.idfc_loan_status;
     let application_status = application_info.application_status;
+    let mapperKey = "";
+
+    if (status === false && bt_eligible === false) {
+      mapperKey = "status_bt_eligible_failed"
+    }
+
+    if (status === false && bt_eligible === false) {
+      mapperKey = "status_bt_eligible_failed"
+    }
+
 
     if (application_info === "internally_rejected") {
       this.setState({

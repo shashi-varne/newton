@@ -38,7 +38,8 @@ class JourneyMap extends Component {
       "idfc_0.5_accepted": "3",
       "idfc_0.5_rejected": "3",
     };
-    let index = idfc_loan_status && journey[idfc_loan_status];
+    let index = (idfc_loan_status && journey[idfc_loan_status]) || "0";
+    console.log(index)
 
     let journeyData = {
       options: [
@@ -48,7 +49,7 @@ class JourneyMap extends Component {
           titleCompleted: "Basic details uploaded ",
           subtitle:
             "Fill in personal and work details to get started with your loan application.",
-          status: "completed",
+          status: index && index === '0' ? "init" : "completed",
           id: "basic_details",
         },
         {
