@@ -286,7 +286,8 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   if (!val) {
     val = '';
   }
-
+  const isNegativeVal = val < 0;
+  val = Math.abs(val);
   if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + 'Cr';
   else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + 'L';
   else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + 'K';
@@ -300,6 +301,10 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
 
   if(withSymbol) {
     val = '₹' + val;
+  }
+
+  if (isNegativeVal) {
+    val = '-' + val;
   }
   return val;
 }

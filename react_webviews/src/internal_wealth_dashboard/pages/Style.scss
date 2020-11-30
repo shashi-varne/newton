@@ -18,6 +18,11 @@ $background: #F9F9F9;
   transition: clip-path 0.8s ease-in-out;
 }
 
+.iwd-bg-fixed {
+  position: fixed;
+  width: 100%;
+}
+
 .expand {
   clip-path: circle(100%);
 }
@@ -287,8 +292,21 @@ $background: #F9F9F9;
   .iwd-header-subtitle {
     color: $light-grey;
   }
+  .iwd-dashboard-pg1 {
+    .iwd-header-subtitle {
+      display: none;
+    }
+    .iwd-header-title {
+      color: $dark;
+    }
+  }
   .fisdom-ecb-error-title, .fisdom-ecb-error-text {
     color: white;
+  }
+  .iwd-card {
+    .fisdom-ecb-error-title, .fisdom-ecb-error-text {
+      color: #767E86;
+    }
   }
   .fisdom-ecb-btn {
     background-color: #c0aeea;

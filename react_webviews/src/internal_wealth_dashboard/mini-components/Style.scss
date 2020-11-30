@@ -706,10 +706,19 @@ ul#iwd-bars {
     position: absolute;
     right: 20px;
     bottom: 50px;
+    opacity: 0.9;
 
     .MuiButton-label {
       color: $primary;
     }
+  }
+
+  .iwd-hc-more:hover {
+    background-color: unset;
+    background-image: linear-gradient(to right, rgba(79, 45, 167, 0.7) 33%, rgba(255, 255, 255, 0) 0%);
+    background-position: bottom;
+    background-size: 5px 1.5px;
+    background-repeat: repeat-x;
   }
 }
 

@@ -25,11 +25,11 @@ const IwdProfile = (props) => {
     setLoggingOut(false);
   };
 
-  const name = storageService().get('iwd-user-name');
-  const email = storageService().get('iwd-user-email');
+  const name = storageService().get('iwd-user-name') || '';
+  const email = storageService().get('iwd-user-email') || '';
 
   if (!name || !email) {
-    return navigate('login');
+    navigate('login');
   }
 
   const profileIcon = (

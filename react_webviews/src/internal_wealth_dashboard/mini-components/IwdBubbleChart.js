@@ -35,8 +35,6 @@ const IwdBubbleChart = ({ data = {} }) => {
       enableLabel={false}
       colorBy="name"
       padding={6}
-      borderWidth={2}
-      borderColor={{ from: 'color' }}
       animate={false}
       motionStiffness={90}
       motionDamping={12}
