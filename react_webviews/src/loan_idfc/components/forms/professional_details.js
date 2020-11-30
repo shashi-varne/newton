@@ -129,7 +129,7 @@ class ProfessionalDetails extends Component {
               </div>
             )}
 
-            <div className="InputField">
+            {employment_type === "self_employed" && <div className="InputField">
               <Input
                 error={!!this.state.form_data.business_name_error}
                 helperText={this.state.form_data.business_name_error}
@@ -142,7 +142,7 @@ class ProfessionalDetails extends Component {
                 value={this.state.form_data.business_name || ""}
                 onChange={this.handleChange("business_name")}
               />
-            </div>
+            </div>}
 
             {employment_type === "salaried" && (
               <div className="InputField">

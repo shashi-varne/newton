@@ -45,6 +45,7 @@ class JourneyMap extends Component {
         {
           step: "1",
           title: "Enter basic details",
+          titleCompleted: "Basic details uploaded ",
           subtitle:
             "Fill in personal and work details to get started with your loan application.",
           status: "completed",
@@ -53,6 +54,7 @@ class JourneyMap extends Component {
         {
           step: "2",
           title: "Create loan application",
+          titleCompleted: "Loan application created",
           subtitle:
             "Check your KYC status to proceed with your loan application.",
           status: index && index === "1" ? "init" : "completed",
@@ -61,25 +63,28 @@ class JourneyMap extends Component {
         {
           step: "3",
           title: "Provide income details",
+          titleCompleted: "Provided income details",
           subtitle:
             "Enter your loan requirements and income details to get the best loan offer.",
-          status: index && index === "2" ? "init" : "completed",
+          status: index && index === "2" ? "init" : index < "2" ? "pending" : "completed",
           id: "income_details",
         },
         {
           step: "4",
           title: "Upload documents",
+          titleCompleted: "Documents uploaded",
           subtitle:
             "Provide your office address and upload documents to get your loan sanctioned.",
-          status: index && index === "3" ? "init" : "completed",
+          status: index && index === "3" ? "init" : index < "3" ? "pending" : "completed",
           id: "document_upload",
         },
         {
           step: "5",
           title: "Sanction and disbursal",
+          titleCompleted: "",
           subtitle:
             "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
-          // status: index && index === "1" ? "init" : "completed",
+          status: index && index === "4" ? "init" : index < "4" ? "pending" : "completed",
           id: "sanction_and_disbursal",
         },
       ],

@@ -79,6 +79,8 @@ class LoanStatus extends Component {
   }
 
   onload = () => {
+    let { status, bt_eligible } = this.state.params;
+    console.log(status, bt_eligible)
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
     let application_info = lead.application_info || {};
@@ -109,7 +111,7 @@ class LoanStatus extends Component {
 
   render() {
     let { commonMapper, idfc_loan_status, application_status } = this.state;
-    console.log(application_status)
+
     return (
       <Container
         showLoader={this.state.show_loader}

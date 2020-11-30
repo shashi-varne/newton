@@ -406,76 +406,34 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-  // let back_url =
-  //   window.location.origin +
-  //   `/loan/idfc/income-details` +
-  //   getConfig().searchParams;
+  console.log(url);
+  console.log(this.state.application_id);
+  let url2 = "";
 
-  // let redirectionUrl =
-  //   window.location.origin + `/loan/idfc/bt-info` + getConfig().searchParams;
+  if (url) {
+    url2 = `https://akshay-shri-dot-plutus-staging.appspot.com/relay/page/loan/idfc/perfios/redirect/${this.state.application_id}`;
+  }
+  console.log(url2);
 
-  // if (getConfig().web) {
-  //   redirectionUrl = back_url;
-  // }
+  let plutusRedirectUrl = encodeURIComponent(
+    window.location.origin  + `/loan/idfc/home` + getConfig().searchParams
+  )
 
-  // var netBanking_link = url;
+  var payment_link = url2;
+  var pgLink = payment_link;
+  let app = getConfig().app;
 
-  // var pgLink = netBanking_link;
+  //eslint-disable-next-line
+  pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + plutusRedirectUrl +
+    '&app=' + app;
 
-  // let app = getConfig().app;
-  // // eslint-disable-next-line
-  // pgLink +=
-  //   (pgLink.match(/[\?]/g) ? "&" : "?") +
-  //   "plutus_redirect_url=" +
-  //   redirectionUrl +
-  //   "&app=" +
-  //   app +
-  //   "&back_url=" +
-  //   back_url;
+  if (getConfig().generic_callback) {
+    pgLink += '&generic_callback=' + getConfig().generic_callback;
+  }
 
-  // if (getConfig().generic_callback) {
-  //   pgLink += "&generic_callback=" + getConfig().generic_callback;
-  // }
-  // let paymentRedirectUrl = encodeURIComponent(
-  //   window.location.origin +
-  //     `/loan/idfc/income-details` +
-  //     getConfig().searchParams
-  // );
-
-  // let back_url = encodeURIComponent(
-  //   window.location.origin +
-  //     `/loan/instant-kyc-status` +
-  //     getConfig().searchParams +
-  //     "&flow=kyc&okyc_id=" +
-  //     this.state.application_id
-  // );
-
-  // // for web no issue
-  // if (getConfig().Web) {
-  //   paymentRedirectUrl = back_url;
-  // }
-
-  // var payment_link = url;
-  // var pgLink = payment_link;
-  // let app = getConfig().app;
-
-  // // eslint-disable-next-line
-  // pgLink +=
-  //   (pgLink.match(/[\?]/g) ? "&" : "?") +
-  //   "plutus_redirect_url=" +
-  //   paymentRedirectUrl +
-  //   "&app=" +
-  //   app +
-  //   "&back_url=" +
-  //   back_url;
-  // if (getConfig().generic_callback) {
-  //   pgLink += "&generic_callback=" + getConfig().generic_callback;
-  // }
-
-  // this.openInTabApp({
-  //   url: pgLink,
-  //   back_url: back_url,
-  // });
+  this.openInTabApp({
+    url: pgLink,
+  })
 }
 
 export async function startTransaction(transaction_type) {

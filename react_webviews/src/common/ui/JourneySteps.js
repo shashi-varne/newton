@@ -43,7 +43,7 @@ class JourneyStepsClass extends Component {
           </div>
           <div className={`steps-content ${options.status || "pending"}`}>
             <div className="title flex">
-              {options.title}
+              {options.status === "completed" ? options.titleCompleted : options.title}
               {options.status && (
                 <span
                   className="status"
@@ -51,10 +51,11 @@ class JourneyStepsClass extends Component {
                     props.handleClick(options.id);
                   }}
                 >
-                  {options.status === "completed" ? "SUMMARY" : "START"}
+                  {options.status === "completed" && "SUMMARY"}
+                  {options.status === "init" && "START"}
                 </span>
               )}
-              {!options.status && (
+              {options.status === "pending" && (
                 <img src={require(`assets/Vector.svg`)} alt="" />
               )}
             </div>

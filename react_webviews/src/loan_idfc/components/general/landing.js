@@ -8,6 +8,7 @@ import SVG from "react-inlinesvg";
 import { getConfig } from "utils/functions";
 import next_arrow from "assets/next_arrow.svg";
 import Button from "material-ui/Button";
+import { getUrlParams } from 'utils/validators';
 
 class Landing extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class Landing extends Component {
   }
 
   onload = () => {
+    console.log(getUrlParams())
     this.setState({
       cta_title:
         this.state.application_exists && this.state.otp_verified
