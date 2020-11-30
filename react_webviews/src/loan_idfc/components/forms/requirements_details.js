@@ -53,7 +53,6 @@ class LoanRequirementDetails extends Component {
 
       form_data[name] = event.target.value;
       form_data[name + "_error"] = '';
-      console.log(formatAmount(event.target.value))
     }
 
     if (name) {

@@ -42,7 +42,8 @@ export const idfc_config = {
     professional_details_screen: 'journey',
     personal_details_screen: 'address-details',
     address_details: 'journey',
-    bt_info_screen: 'loan-bt-details'
+    bt_info_screen: 'loan-bt-details',
+    additional_details: 'upload-documents'
   },
   landing_screen: {
     stepContentMapper: {

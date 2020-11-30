@@ -6,6 +6,8 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
+import Api from "utils/api";
+import toast from "../../../common/ui/Toast";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -13,7 +15,9 @@ class LoanBtDetails extends Component {
     this.state = {
       show_loader: false,
       screen_name: "loan_bt",
-      form_data: {},
+      form_data: [],
+      checked: false,
+      total_bt: [1, 2],
     };
 
     this.initialize = initialize.bind(this);
@@ -23,7 +27,36 @@ class LoanBtDetails extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = async () => {
+    try {
+      this.setState({
+        show_loader: true,
+      });
+
+      const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
+
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        let banklist = result.data;
+
+        let bankOptions = banklist.map((item) => item.institution_name);
+
+        this.setState({
+          bankOptions: bankOptions,
+        });
+      } else {
+        toast(result.error || result.message || "Something went wrong!");
+      }
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+
+    this.setState({
+      show_loader: false,
+    });
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -43,71 +76,82 @@ class LoanBtDetails extends Component {
 
   handleChange = () => {};
 
-  hanndleClick = () => {};
+  handleClick = () => {};
+
+  handleCheckbox = (index) => {
+    let checked = this.state.checked;
+    let form_data = {
+      index: index,
+      isSelected: true,
+    };
+
+    this.setState({
+      checked: !checked,
+    });
+  };
 
   render() {
     return (
       <Container
         title="Select for balance transfer"
         buttonTitle="Skip and continue"
-        hanndleClick={this.hanndleClick}
+        hanndleClick={this.handleClick}
       >
         <div className="loan-bt">
           <div className="subtitle">
             Maximum 3 personal loan can be selected fot BT
           </div>
 
-          <div className="loan-bt-checkbox">
-            <Grid container spacing={16}>
-              <Grid item xs={1}>
-                <Checkbox
-                  checked={true}
-                  color="primary"
-                  // value={member}
-                  //   id={member.backend_key}
-                  //   name={member.backend_key}
-                  disableRipple
-                  //   onChange={(event) =>
-                  //     this.props.handleCheckbox(event, index, member)
-                  //   }
-                  className="Checkbox"
-                />
+          {this.state.total_bt.map((item, index) => (
+            <div className="loan-bt-checkbox">
+              <Grid container spacing={16}>
+                <Grid item xs={1}>
+                  <Checkbox
+                    checked={this.state.checked}
+                    color="primary"
+                    id="checkbox"
+                    name="checkbox"
+                    disableRipple
+                    onChange={(event) => this.handleCheckbox(index)}
+                    className="Checkbox"
+                  />
+                </Grid>
+
+                <Grid item xs={11}>
+                  <div className="head">Loan type</div>
+                  <div className="sub-head">Personal loan</div>
+                  <FormControl fullWidth>
+                    <div className="InputField">
+                      <Input
+                        error={!!this.state.form_data.financierName_error}
+                        helperText={this.state.form_data.financierName_error}
+                        type="text"
+                        width="40"
+                        label="Financer name"
+                        id="financierName"
+                        name="financierName"
+                        value={this.state.form_data.financierName || ""}
+                        onChange={this.handleChange("financierName")}
+                      />
+                    </div>
+                    <div className="InputField">
+                      <Input
+                        error={!!this.state.form_data.current_address1_error}
+                        helperText={this.state.form_data.current_address1_error}
+                        type="text"
+                        width="40"
+                        label="Amount outstanding"
+                        id="amount"
+                        name="amount"
+                        value={this.state.form_data.amount || ""}
+                        onChange={this.handleChange("amount")}
+                      />
+                    </div>
+                  </FormControl>
+                </Grid>
               </Grid>
-              
-              <Grid item xs={11}>
-                <div className="head">Loan type</div>
-                <div className="sub-head">Personal loan</div>
-                <FormControl fullWidth>
-                  <div className="InputField">
-                    <Input
-                      //   error={!!this.state.form_data.current_address1_error}
-                      //   helperText={"Min ₹1 lakh to max 40 lakhs"}
-                      type="text"
-                      width="40"
-                      label="Financer name"
-                      id="financer_name"
-                      name="financer_name"
-                      value={this.state.form_data.financer_name || ""}
-                      onChange={this.handleChange("financer_name")}
-                    />
-                  </div>
-                  <div className="InputField">
-                    <Input
-                      //   error={!!this.state.form_data.current_address1_error}
-                      //   helperText={"Min 12 months to max 48 months"}
-                      type="text"
-                      width="40"
-                      label="Amount outstanding"
-                      id="amount"
-                      name="amount"
-                      value={this.state.form_data.amount || ""}
-                      onChange={this.handleChange("amount")}
-                    />
-                  </div>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </div>
+            </div>
+          ))}
         </div>
       </Container>
     );

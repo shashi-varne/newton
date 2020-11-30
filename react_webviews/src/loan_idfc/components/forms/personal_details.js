@@ -150,7 +150,7 @@ class PersonalDetails extends Component {
         }}
       >
         <div className="personal-details">
-          <Attention content="Once submitted, details cannot be changed or modified." />
+          {this.state.confirm_details && <Attention content="Once submitted, details cannot be changed or modified." />}
 
           <FormControl fullWidth>
             <div className="InputField">

@@ -86,7 +86,7 @@ class BasicDetails extends Component {
     let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
 
-    if (id === "salaried" || id === "self-employed") {
+    if (id === "salaried" || id === "self_employed") {
       form_data.employment_type = id;
       form_data.employment_type_error = "";
 
@@ -216,13 +216,13 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "self-employed" &&
+                  this.state.form_data.employment_type === "self_employed" &&
                   "1px solid var(--primary)",
               }}
               onClick={this.handleChange()}
             >
               <img
-                id="self-employed"
+                id="self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
               />

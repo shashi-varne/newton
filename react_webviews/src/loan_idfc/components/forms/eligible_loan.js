@@ -7,6 +7,7 @@ import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import { getConfig } from "utils/functions";
+import { numDifferentiationInr } from "utils/validators";
 
 class EligibleLoan extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class EligibleLoan extends Component {
       show_loader: false,
       screen_name: "eligible_loan",
       form_data: {},
+      checked: "default_tenor",
     };
 
     this.initialize = initialize.bind(this);
@@ -42,9 +44,36 @@ class EligibleLoan extends Component {
     }
   }
 
-  handleChange = () => {};
+  handleChange = (name) => (event) => {
+    let value = event.target ? event.target.value : event;
+    let { form_data } = this.state;
 
-  hanndleClick = () => {};
+    form_data.amount_required = value;
+    form_data.amount_required_error = "";
+
+    this.setState({
+      form_data: form_data,
+    });
+  };
+
+  handleClick = () => {
+    let { form_data } = this.state;
+    
+    if (this.state.checked === "default_tenor") {
+      form_data.amount_required = "4000000";
+      form_data.amount_required_error = "";
+    }
+
+    let keys_to_check = ["amount_required"]
+
+    this.formCheckUpdate(keys_to_check, form_data, 'one_point_oneSalary', true);
+  }
+
+  handleCheckbox = (name) => {
+    this.setState({
+      checked: name,
+    });
+  };
 
   render() {
     return (
@@ -52,25 +81,31 @@ class EligibleLoan extends Component {
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
+        handleClick={this.handleClick}
       >
         <div className="eligible-loan">
           <div className="subtitle">
             Woo-hoo! IDFC is offering you a personal loan of ₹40 lacs
           </div>
 
-          <div className="offer-checkbox">
+          <div
+            className="offer-checkbox"
+            style={{
+              background:
+                this.state.checked === "default_tenor"
+                  ? "var(--highlight)"
+                  : "#ffffff",
+            }}
+          >
             <Grid container spacing={16}>
               <Grid item xs={1}>
                 <Checkbox
-                  checked={true}
+                  checked={this.state.checked === "default_tenor"}
                   color="primary"
-                  // value={member}
-                  //   id={member.backend_key}
-                  //   name={member.backend_key}
+                  id="default_tenor"
+                  name="default_tenor"
                   disableRipple
-                  //   onChange={(event) =>
-                  //     this.props.handleCheckbox(event, index, member)
-                  //   }
+                  onChange={() => this.handleCheckbox("default_tenor")}
                   className="Checkbox"
                 />
               </Grid>
@@ -101,19 +136,24 @@ class EligibleLoan extends Component {
             </Grid>
           </div>
 
-          <div className="offer-checkbox">
+          <div
+            className="offer-checkbox"
+            style={{
+              background:
+                this.state.checked === "custom_tenor"
+                  ? "var(--highlight)"
+                  : "#ffffff",
+            }}
+          >
             <Grid container spacing={16}>
               <Grid item xs={1}>
                 <Checkbox
-                  checked={true}
+                  checked={this.state.checked === "custom_tenor"}
                   color="primary"
-                  // value={member}
-                  //   id={member.backend_key}
-                  //   name={member.backend_key}
+                  id="custom_tenor"
+                  name="custom_tenor"
                   disableRipple
-                  //   onChange={(event) =>
-                  //     this.props.handleCheckbox(event, index, member)
-                  //   }
+                  onChange={() => this.handleCheckbox("custom_tenor")}
                   className="Checkbox"
                 />
               </Grid>
@@ -125,20 +165,26 @@ class EligibleLoan extends Component {
             <FormControl fullWidth>
               <div className="InputField">
                 <Input
-                  //   error={!!this.state.form_data.current_address1_error}
-                  helperText={"Min ₹1 lakh to max 40 lakhs"}
-                  type="text"
+                  error={!!this.state.form_data.amount_required_error}
+                  helperText={
+                    this.state.form_data.amount_required_error ||
+                    numDifferentiationInr(
+                      this.state.form_data.amount_required
+                    ) ||
+                    "Min ₹1 lakh to max 40 lakhs"
+                  }
+                  type="number"
                   width="40"
                   label="Loan amount"
-                  id="loan_amount"
-                  name="loan_amount"
-                  value={this.state.form_data.loan_amount || ""}
-                  onChange={this.handleChange("loan_amount")}
+                  id="amount_required"
+                  name="amount_required"
+                  value={this.state.form_data.amount_required || ""}
+                  onChange={this.handleChange("amount_required")}
+                  disabled={this.state.checked !== "custom_tenor"}
                 />
               </div>
               <div className="InputField">
                 <Input
-                  //   error={!!this.state.form_data.current_address1_error}
                   helperText={"Min 12 months to max 48 months"}
                   type="text"
                   width="40"
@@ -147,6 +193,7 @@ class EligibleLoan extends Component {
                   name="tenure"
                   value={this.state.form_data.tenure || ""}
                   onChange={this.handleChange("tenure")}
+                  disabled={true}
                 />
               </div>
             </FormControl>

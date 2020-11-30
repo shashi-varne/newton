@@ -14,6 +14,7 @@ class ProfessionalDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "professional_details_screen",
+      employment_type: "",
     };
 
     this.initialize = initialize.bind(this);
@@ -29,8 +30,11 @@ class ProfessionalDetails extends Component {
     let professional_info = lead.professional_info || {};
     let application_info = lead.application_info || {};
 
+    let { employment_type } = application_info;
+
     let form_data = {
       company_name: professional_info.company_name,
+      business_name: professional_info.business_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
       salary_mode: capitalizeFirstLetter(professional_info.salary_mode),
@@ -42,6 +46,7 @@ class ProfessionalDetails extends Component {
 
     this.setState({
       form_data: form_data,
+      employment_type: employment_type,
     });
   };
 
@@ -76,22 +81,29 @@ class ProfessionalDetails extends Component {
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
-    let keys_to_check = [
+    let { form_data, employment_type } = this.state;
+    let keys_to_check = ["constitution", "organisation"];
+
+    let salaried = [
       "company_name",
       "office_email",
       "net_monthly_salary",
       "salary_mode",
-      "constitution",
-      "organisation",
       "department",
       "industry",
     ];
+
+    if (employment_type === 'self_employed') {
+      keys_to_check.push('business_name')
+    } else {
+      keys_to_check.push(...salaried)
+    }
 
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
   };
 
   render() {
+    let { employment_type } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -101,66 +113,91 @@ class ProfessionalDetails extends Component {
       >
         <div className="professional-details">
           <FormControl fullWidth>
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.screenData.companyOptions}
-                id="company_name"
-                label="Company name"
-                error={this.state.form_data.company_name_error ? true : false}
-                helperText={this.state.form_data.company_name_error}
-                value={this.state.form_data.company_name || ""}
-                name="company_name"
-                onChange={this.handleChange("company_name")}
-              />
-            </div>
+            {employment_type === "salaried" && (
+              <div className="InputField">
+                <DropdownWithoutIcon
+                  width="40"
+                  options={this.state.screenData.companyOptions}
+                  id="company_name"
+                  label="Company name"
+                  error={this.state.form_data.company_name_error ? true : false}
+                  helperText={this.state.form_data.company_name_error}
+                  value={this.state.form_data.company_name || ""}
+                  name="company_name"
+                  onChange={this.handleChange("company_name")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.office_email_error}
-                helperText={this.state.form_data.office_email_error}
+                error={!!this.state.form_data.business_name_error}
+                helperText={this.state.form_data.business_name_error}
                 type="text"
                 width="40"
-                label="Official email id"
-                class="Email"
-                id="office_email"
-                name="office_email"
-                value={this.state.form_data.office_email || ""}
-                onChange={this.handleChange("office_email")}
+                label="Business name"
+                class="business_name"
+                id="business_name"
+                name="business_name"
+                value={this.state.form_data.business_name || ""}
+                onChange={this.handleChange("business_name")}
               />
             </div>
 
-            <div className="InputField">
-              <Input
-                error={!!this.state.form_data.net_monthly_salary_error}
-                helperText={
-                  this.state.form_data.net_monthly_salary_error ||
-                  numDifferentiationInr(this.state.form_data.net_monthly_salary)
-                }
-                type="number"
-                width="40"
-                label="Net monthly salary (in rupees)"
-                class="net_monthly_salary"
-                id="net_monthly_salary"
-                name="net_monthly_salary"
-                value={this.state.form_data.net_monthly_salary || ""}
-                onChange={this.handleChange("net_monthly_salary")}
-              />
-            </div>
+            {employment_type === "salaried" && (
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.office_email_error}
+                  helperText={this.state.form_data.office_email_error}
+                  type="text"
+                  width="40"
+                  label="Official email id"
+                  class="Email"
+                  id="office_email"
+                  name="office_email"
+                  value={this.state.form_data.office_email || ""}
+                  onChange={this.handleChange("office_email")}
+                />
+              </div>
+            )}
 
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.screenData.salaryRecieptOptions}
-                id="salary-receipt-mode"
-                label="Salary receipt mode"
-                error={this.state.form_data.salary_mode_error ? true : false}
-                helperText={this.state.form_data.salary_mode_error}
-                value={this.state.form_data.salary_mode || ""}
-                name="salary_mode"
-                onChange={this.handleChange("salary_mode")}
-              />
-            </div>
+            {employment_type === "salaried" && (
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.net_monthly_salary_error}
+                  helperText={
+                    this.state.form_data.net_monthly_salary_error ||
+                    numDifferentiationInr(
+                      this.state.form_data.net_monthly_salary
+                    )
+                  }
+                  type="number"
+                  width="40"
+                  label="Net monthly salary (in rupees)"
+                  class="net_monthly_salary"
+                  id="net_monthly_salary"
+                  name="net_monthly_salary"
+                  value={this.state.form_data.net_monthly_salary || ""}
+                  onChange={this.handleChange("net_monthly_salary")}
+                />
+              </div>
+            )}
+
+            {employment_type === "salaried" && (
+              <div className="InputField">
+                <DropdownWithoutIcon
+                  width="40"
+                  options={this.state.screenData.salaryRecieptOptions}
+                  id="salary-receipt-mode"
+                  label="Salary receipt mode"
+                  error={this.state.form_data.salary_mode_error ? true : false}
+                  helperText={this.state.form_data.salary_mode_error}
+                  value={this.state.form_data.salary_mode || ""}
+                  name="salary_mode"
+                  onChange={this.handleChange("salary_mode")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <DropdownWithoutIcon
@@ -190,33 +227,37 @@ class ProfessionalDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.screenData.departmentOptions}
-                id="department"
-                label="Department"
-                error={this.state.form_data.department_error ? true : false}
-                helperText={this.state.form_data.department_error}
-                value={this.state.form_data.department || ""}
-                name="department"
-                onChange={this.handleChange("department")}
-              />
-            </div>
+            {employment_type === "salaried" && (
+              <div className="InputField">
+                <DropdownWithoutIcon
+                  width="40"
+                  options={this.state.screenData.departmentOptions}
+                  id="department"
+                  label="Department"
+                  error={this.state.form_data.department_error ? true : false}
+                  helperText={this.state.form_data.department_error}
+                  value={this.state.form_data.department || ""}
+                  name="department"
+                  onChange={this.handleChange("department")}
+                />
+              </div>
+            )}
 
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.screenData.industryOptions}
-                id="industry"
-                label="Industry type"
-                error={this.state.form_data.industry_error ? true : false}
-                helperText={this.state.form_data.industry_error}
-                value={this.state.form_data.industry || ""}
-                name="industry"
-                onChange={this.handleChange("industry")}
-              />
-            </div>
+            {employment_type === "salaried" && (
+              <div className="InputField">
+                <DropdownWithoutIcon
+                  width="40"
+                  options={this.state.screenData.industryOptions}
+                  id="industry"
+                  label="Industry type"
+                  error={this.state.form_data.industry_error ? true : false}
+                  helperText={this.state.form_data.industry_error}
+                  value={this.state.form_data.industry || ""}
+                  name="industry"
+                  onChange={this.handleChange("industry")}
+                />
+              </div>
+            )}
           </FormControl>
         </div>
       </Container>

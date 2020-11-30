@@ -27,7 +27,7 @@ class UploadBank extends Component {
       editId: null,
       count: 1,
       form_data: {},
-      bankOptions: []
+      bankOptions: [],
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -71,19 +71,15 @@ class UploadBank extends Component {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-
         let banklist = result.data;
 
         let bankOptions = banklist.map((item) => {
           return { name: item.institution_name, value: item.institution_id };
         });
 
-        // console.log(bankOptions)
-
         this.setState({
-          bankOptions: bankOptions
-        })
-
+          bankOptions: bankOptions,
+        });
       } else {
         toast(result.error || result.message || "Something went wrong!");
       }
@@ -283,7 +279,6 @@ class UploadBank extends Component {
   };
 
   handleEdit = (id) => {
-    // let { documents } = this.state;
     this.setState({
       editId: id,
     });
@@ -300,6 +295,32 @@ class UploadBank extends Component {
     });
   };
 
+  handleClick = async () => {
+    let bank_id = this.state.form_data.bank_name;
+
+    try {
+      this.setState({
+        show_loader: true,
+      });
+
+      const res = await Api.get(
+        `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_id}`
+      );
+
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        console.log(result);
+      } else {
+        toast(result.error || result.message || "Something went wrong!");
+        this.onload();
+      }
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+  };
+
   render() {
     let { documents, confirmed } = this.state;
 
@@ -312,6 +333,7 @@ class UploadBank extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        handleClick={this.handleClick}
       >
         <div className="upload-bank-statement">
           <Attention content={this.renderNotes()} />

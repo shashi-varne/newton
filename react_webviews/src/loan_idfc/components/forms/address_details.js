@@ -108,19 +108,21 @@ class AddressDetails extends Component {
     let keys_to_check = [
       "current_address1",
       "current_address2",
-      "current_address3",
       "current_landmark",
       "current_pincode",
       "current_city",
       "current_state",
       "permanent_address1",
       "permanent_address2",
-      "permanent_address3",
       "permanent_landmark",
       "permanent_pincode",
       "permanent_city",
       "permanent_state",
     ];
+
+    if (this.state.confirm_details) {
+      keys_to_check.push(...['current_address3', 'permanent_address3'])
+    }
 
     this.formCheckUpdate(keys_to_check, form_data, "null", true);
   };
@@ -206,7 +208,7 @@ class AddressDetails extends Component {
         }}
       >
         <div className="address-details">
-          <Attention content="Once submitted, details cannot be changed or modified." />
+          {this.state.confirm_details && <Attention content="Once submitted, details cannot be changed or modified." />}
 
           <div className="head-title">Current address</div>
           <FormControl fullWidth>
@@ -238,7 +240,7 @@ class AddressDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
+            {this.state.confirm_details && <div className="InputField">
               <Input
                 error={!!this.state.form_data.current_address3_error}
                 helperText={this.state.form_data.current_address3_error}
@@ -250,7 +252,7 @@ class AddressDetails extends Component {
                 value={this.state.form_data.current_address3 || ""}
                 onChange={this.handleChange("current_address3")}
               />
-            </div>
+            </div>}
 
             <div className="InputField">
               <Input
@@ -355,7 +357,7 @@ class AddressDetails extends Component {
                 />
               </div>
 
-              <div className="InputField">
+              {this.state.confirm_details && <div className="InputField">
                 <Input
                   error={!!this.state.form_data.permanent_address3_error}
                   helperText={this.state.form_data.permanent_address3_error}
@@ -367,7 +369,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address3 || ""}
                   onChange={this.handleChange("permanent_address3")}
                 />
-              </div>
+              </div>}
 
               <div className="InputField">
                 <Input

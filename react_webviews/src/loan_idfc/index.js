@@ -32,9 +32,8 @@ import EligibleLoan from "./components/forms/eligible_loan";
 import AdditionalDetails from "./components/forms/additional_details";
 import UploadDocuments from "./components/upload_doc/upload_doc";
 import LoanEligible from "./components/general/loan_eligible";
-import ApplicationStatus from "./components/status/application_status";
-import LoanStatus from "./components/status/loan_status";
 import UploadPan from "./components/upload_doc/upload_pan";
+import LoanStatus from './components/status/status';
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -96,15 +95,23 @@ const Lending = props => {
           <Route path={`${url}/additional-details`} component={AdditionalDetails} />
           <Route path={`${url}/upload-documents`} component={UploadDocuments} />
           <Route path={`${url}/loan-eligible`} component={LoanEligible} />
-          <Route path={`${url}/application-status`} component={ApplicationStatus} />
-          <Route path={`${url}/loan-status`} component={LoanStatus} />
           <Route path={`${url}/upload-pan`} component={UploadPan} />
+          <Route path={`${url}/loan-status`} component={LoanStatus} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-basic-details`} 
             render={(props) => <BasicDetails {...props} edit={true} />} />
 
           <Route path={`${url}/edit-professional-details`} 
+            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-personal-details`} 
+            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-address-details`} 
+            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/edit-loan-requirement-details`} 
             render={(props) => <ProfessionalDetails {...props} edit={true} />} />
        
           <Route component={NotFound} />

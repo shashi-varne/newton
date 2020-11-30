@@ -261,12 +261,14 @@ export async function submitApplication(params, state, update) {
         this.navigate(this.state.next_state);
       }
     } else {
-      if (this.state.screen_name === "professional_details_screen") {
-        this.navigate("application-status");
-      } else {
-        toast(result.error || result.message || "Something went wrong!");
-        this.onload();
-      }
+      // if (this.state.screen_name === "professional_details_screen") {
+      //   this.navigate("application-status");
+      // } else {
+
+      this.navigate("loan-status");
+      // toast(result.error || result.message || "Something went wrong!");
+      // this.onload();
+      // }
     }
   } catch (err) {
     console.log(err);
@@ -324,6 +326,7 @@ export async function formCheckUpdate(
     religion: "religion",
     email_id: "email id",
     company_name: "company name",
+    business_name: "business name",
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
     salary_mode: "salary receipt mode",
@@ -345,6 +348,11 @@ export async function formCheckUpdate(
     permanent_pincode: "pincode",
     permanent_city: "city",
     permanent_state: "state",
+    amount_reuired: "loan amount",
+    office_address: "office address",
+    pincode: "pincode",
+    city: "city",
+    mailing_address_preference: "mailing address preference",
   };
 
   let selectTypeInput = ["educational_qualification"];
@@ -498,9 +506,9 @@ export async function startTransaction(transaction_type) {
     toast("Something went wrong");
   }
 
-  // this.setState({
-  //   show_loader: false,
-  // });
+  this.setState({
+    show_loader: false,
+  });
 }
 
 export function openPdf(url, type) {

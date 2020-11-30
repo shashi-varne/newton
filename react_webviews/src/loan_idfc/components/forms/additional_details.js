@@ -13,6 +13,8 @@ class AdditionalDetails extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
+      employment_type: "",
+      screen_name: "additional_details"
     };
     this.initialize = initialize.bind(this);
   }
@@ -21,16 +23,24 @@ class AdditionalDetails extends Component {
     this.initialize();
 
     let mailingAddressPreferenceOptions = [
-      'CURRENT ADDRESS',
-      'PERMANENT ADDRESS'
+      "CURRENT ADDRESS",
+      "PERMANENT ADDRESS",
     ];
 
     this.setState({
-      mailingAddressPreferenceOptions: mailingAddressPreferenceOptions
-    })
+      mailingAddressPreferenceOptions: mailingAddressPreferenceOptions,
+    });
   }
 
-  onload = () => {};
+  onload = () => {
+    let lead = this.state.lead || {};
+    let application_info = lead.application_info || {};
+    let employment_type = application_info.employment_type;
+
+    this.setState({
+      employment_type: employment_type,
+    });
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -53,16 +63,12 @@ class AdditionalDetails extends Component {
     let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
 
-    if (name === 'pincode' && value && !validateNumber(value)) {
+    if (name === "pincode" && value && !validateNumber(value)) {
       return;
     } else {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
-
-    // if (name) {
-      
-    // }
 
     this.setState({
       form_data: form_data,
@@ -72,12 +78,18 @@ class AdditionalDetails extends Component {
   handleClick = () => {
     let { form_data } = this.state;
 
-    let keys_to_check = ["", "", "", ""]
+    let keys_to_check = [
+      "office_address",
+      "pincode",
+      "city",
+      "mailing_address_preference",
+    ];
 
-    this.formCheckUpdate(keys_to_check, form_data);
+    this.formCheckUpdate(keys_to_check, form_data, "one_point_seven", true);
   };
 
   render() {
+    let { employment_type } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -86,27 +98,31 @@ class AdditionalDetails extends Component {
         handleClick={this.handleClick}
       >
         <div className="additional-details">
-          <FormControl fullWidth>
+          {employment_type === "self employed" && (
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.office_address_error}
-                helperText={this.state.form_data.office_address_error}
+                error={!!this.state.form_data.nature_of_business_error}
+                helperText={this.state.form_data.nature_of_business_error}
                 type="text"
                 width="40"
-                label="Office address"
-                id="office_address"
-                name="office_address"
-                value={this.state.form_data.office_address || ""}
-                onChange={this.handleChange("office_address")}
+                label="Nature of business"
+                id="nature_of_business"
+                name="nature_of_business"
+                value={this.state.form_data.nature_of_business || ""}
+                onChange={this.handleChange("nature_of_business")}
               />
             </div>
+          )}
 
+          <div className="head-title">Office address</div>
+          <FormControl fullWidth>
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.pincode_error}
                 helperText={this.state.form_data.pincode_error}
                 type="text"
                 width="40"
+                maxLength={6}
                 label="Pincode"
                 id="pincode"
                 name="pincode"
@@ -129,20 +145,6 @@ class AdditionalDetails extends Component {
               />
             </div>
 
-            {/* <div className="InputField">
-              <Input
-                error={!!this.state.form_data.mailing_address_preference_error}
-                helperText={this.state.form_data.mailing_address_preference_error}
-                type="text"
-                width="40"
-                label="Mailing address preference"
-                id="mailing_address_preference"
-                name="mailing_address_preference"
-                value={this.state.form_data.mailing_address_preference || ""}
-                onChange={this.handleChange("mailing_address_preference")}
-              />
-            </div> */}
-
             <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
@@ -151,7 +153,9 @@ class AdditionalDetails extends Component {
                 id="mailing_address_preference"
                 name="mailing_address_preference"
                 error={!!this.state.form_data.mailing_address_preference_error}
-                helperText={this.state.form_data.mailing_address_preference_error}
+                helperText={
+                  this.state.form_data.mailing_address_preference_error
+                }
                 value={this.state.form_data.mailing_address_preference || ""}
                 onChange={this.handleChange("mailing_address_preference")}
               />

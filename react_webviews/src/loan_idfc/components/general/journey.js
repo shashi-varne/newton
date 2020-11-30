@@ -31,6 +31,12 @@ class JourneyMap extends Component {
 
     let journey = {
       basic_details_uploaded: "1",
+      idfc_null_submitted: "2",
+      idfc_null_accepted: "2",
+      idfc_null_rejected: "2",
+      "idfc_0.5_submitted": "3",
+      "idfc_0.5_accepted": "3",
+      "idfc_0.5_rejected": "3",
     };
     let index = idfc_loan_status && journey[idfc_loan_status];
 
@@ -57,7 +63,7 @@ class JourneyMap extends Component {
           title: "Provide income details",
           subtitle:
             "Enter your loan requirements and income details to get the best loan offer.",
-          status: index && index === "1" ? "init" : "completed",
+          status: index && index === "2" ? "init" : "completed",
           id: "income_details",
         },
         {
@@ -65,7 +71,7 @@ class JourneyMap extends Component {
           title: "Upload documents",
           subtitle:
             "Provide your office address and upload documents to get your loan sanctioned.",
-          status: index && index === "1" ? "init" : "completed",
+          status: index && index === "3" ? "init" : "completed",
           id: "document_upload",
         },
         {
@@ -73,7 +79,7 @@ class JourneyMap extends Component {
           title: "Sanction and disbursal",
           subtitle:
             "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
-          status: index && index === "1" ? "init" : "completed",
+          // status: index && index === "1" ? "init" : "completed",
           id: "sanction_and_disbursal",
         },
       ],
@@ -87,9 +93,12 @@ class JourneyMap extends Component {
   };
 
   handleClick = (id) => {
-    let { ckyc_state } = this.state;
+    let { ckyc_state, idfc_loan_status } = this.state;
 
-    if (id === "create_loan_application") {
+    if (
+      id === "create_loan_application" &&
+      idfc_loan_status === "basic_details_uploaded"
+    ) {
       if (ckyc_state === "init") {
         console.log(ckyc_state);
       } else {
@@ -101,6 +110,10 @@ class JourneyMap extends Component {
 
     if (id === "basic_details") {
       this.navigate("application-summary");
+    }
+
+    if (id === "income_details") {
+      this.navigate("loan-requirement-details");
     }
   };
 
@@ -122,7 +135,6 @@ class JourneyMap extends Component {
 
   render() {
     let { idfc_loan_status } = this.state;
-    console.log(idfc_loan_status);
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -139,10 +151,13 @@ class JourneyMap extends Component {
             alt=""
           />
 
-          {/* <div className="head-title">
-            <b>Awesome!</b> Your loan application is successfully created. Now
-            you're just a step away from finding out your loan offer.
-          </div> */}
+          {idfc_loan_status === "idfc_null_accepted" ||
+            (idfc_loan_status === "idfc_null_submitted" && (
+              <div className="head-title">
+                <b>Awesome!</b> Your loan application is successfully created.
+                Now you're just a step away from finding out your loan offer.
+              </div>
+            ))}
 
           {idfc_loan_status === "basic_details_uploaded" && (
             <div className="head-title">

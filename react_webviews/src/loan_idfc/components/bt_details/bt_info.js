@@ -72,6 +72,7 @@ class BtInformation extends Component {
         dualbuttonwithouticon={true}
         buttonOneTitle="NOT OPTING FOR BT"
         buttonTwoTitle="OPTING FOR BT"
+        buttonTitle="OPTING FOR BT"
         headerData={{
           progressHeaderData: this.state.progressHeaderData
         }}
