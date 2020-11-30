@@ -73,7 +73,10 @@ class GroupHealthPlanFinalSummary extends Component {
             let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
              element.key = relation.key
            });
-          member_base.push(buyer_details);
+        if(lead.quotation_details.insurance_type === 'family' || lead.quotation_details.insurance_type === 'parents' || lead.quotation_details.insurance_type === 'parents_in_law'){
+         member_base.push(buyer_details)
+        }
+
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
         let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
@@ -623,7 +626,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             this.openMedicalDialog('ped');
                         } else if (lead.ppc_check) {
                             this.openMedicalDialog('ppc');
-                        } else if (lead.status === 'ready_to_pay') {
+                        } else if (lead.application_status === 'ready_for_payment') {
                             this.redirectToPayment(resultData);
                         }
                     } else {
@@ -759,9 +762,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
     renderMembertop = (props, index) => {
         if (props.key === "applicant") {
-           if (this.state.quotation.insurance_type === 'self' || this.state.quotation.insurance_type === 'self_family') {
-               return;
-           }
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">

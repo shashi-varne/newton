@@ -47,7 +47,7 @@ class Report extends Component {
         top_title: 'Health insurance',
         key: policy.vendor,
         id: policy.application_id,
-        premium: policy.total_amount
+        premium: Math.round(policy.total_amount)
       };
     }
 
@@ -58,7 +58,7 @@ class Report extends Component {
         top_title: 'Health insurance',
         key: 'HDFCERGO',
         id: policy.lead_id,
-        premium: policy.total_amount
+        premium: Math.round(policy.total_amount)
       };
     } else if (provider === 'RELIGARE') {
       obj = {
@@ -67,7 +67,7 @@ class Report extends Component {
         top_title: 'Health insurance',
         key: 'RELIGARE',
         id: policy.lead_id,
-        premium: policy.total_amount
+        premium: Math.round(policy.total_amount)
       };
     }  else if (provider === 'STAR') {
       obj = {
@@ -77,7 +77,7 @@ class Report extends Component {
         key: 'STAR',
         status_title: 'Star Health',
         id: policy.lead_id,
-        premium: policy.total_amount
+        premium: Math.round(policy.total_amount)
       };
     }  else if (provider === 'BHARTIAXA') {
       obj = {

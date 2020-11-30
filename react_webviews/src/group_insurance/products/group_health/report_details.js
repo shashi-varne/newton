@@ -72,6 +72,8 @@ class GroupHealthReportDetails extends Component {
                 let member_details = {};
 
                 let policy_data = resultData.policy || {};
+                policy_data.dt_created = policy_data.dt_created.substring(0,10).replace(/-/g,'/');
+                policy_data.dt_updated = policy_data.dt_updated.substring(0,10).replace(/-/g,'/');
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
                 for(var i = 0; i < insured_members.length; i++){
@@ -86,7 +88,6 @@ class GroupHealthReportDetails extends Component {
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
                 let member_base = lead.member_base;
                 let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-
                 if(applicantIndex >= 0) {
                     let appli_data = member_base[applicantIndex];
                     member_base.splice(applicantIndex, 1);
@@ -206,7 +207,7 @@ class GroupHealthReportDetails extends Component {
     
             let renderData = {
                 'header_title': mapper_data.header_title,
-                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.lead.plan_title}`,
+                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.plan_selected.plan_title}`,
                 'steps': {
                     'options': mapper_data.steps
                 },
@@ -321,7 +322,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                        {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
+                        {this.state.applicantIndex === -1 ? (this.state.lead.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') :dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({childeNameMapper(props.key)})
@@ -362,7 +363,7 @@ class GroupHealthReportDetails extends Component {
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div>
-                            <div className="tc-subtitle">{this.state.lead.plan_title || this.state.providerData.subtitle}</div>
+                            <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
                         </div>
 
                         <div className="tc-right">
@@ -431,7 +432,7 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
-                                            <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
+                                            <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.base_premium - this.state.quotation_details.total_discount)} </div>
                                             <div style={{fontSize:10}}> (Basic premium)</div>
                                         </div>
                                         <div>
@@ -439,7 +440,7 @@ class GroupHealthReportDetails extends Component {
                                         </div>
                                         {this.state.quotation_details && (Object.keys(this.state.quotation_details.add_ons).length > 0)&&
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.quotation.add_on_premium)} </div>
+                                            <div> {inrFormatDecimal(this.state.quotation_details.add_on_premium)} </div>
                                             <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                         </div>
                                          }

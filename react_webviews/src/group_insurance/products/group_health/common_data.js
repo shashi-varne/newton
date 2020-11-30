@@ -174,7 +174,7 @@ export async function initialize() {
             total_discount = lead.total_discount;
             gst = lead.gst;
             net_premium = lead.total_premium - lead.gst;
-
+            leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
