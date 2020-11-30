@@ -622,7 +622,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             this.openMedicalDialog('ped');
                         } else if (lead.ppc_check) {
                             this.openMedicalDialog('ppc');
-                        } else if (lead.status === 'ready_to_pay') {
+                        } else if (lead.application_status === 'ready_for_payment') {
                             this.redirectToPayment(resultData);
                         }
                     } else {
@@ -779,7 +779,7 @@ class GroupHealthPlanFinalSummary extends Component {
         } else {
             return (
                 <div className="member-tile" key={index}>
-                    <div className="mt-left">{console.log(this.state.quotation, this.state.applicantIndex)}
+                    <div className="mt-left">
                         <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                     </div>
                     <div className="mt-right">
@@ -960,7 +960,8 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                     <div className="left">
                           <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>
-                        <div className="tc-subtitle">{this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id]}</div>
+
+                        <div className="tc-subtitle">{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
                     </div>
 
                     <div className="tc-right">
