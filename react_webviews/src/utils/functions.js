@@ -448,7 +448,7 @@ function getPartnerConfig(partner_code) {
     },
   }
 
-  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  const ismyway = search.indexOf("api.mywaywealth.com") >= 0 || search.indexOf("plutus-finwizard-pro.appspot.com") >= 0;
   const isminvest = search.indexOf("my.barodaminvest.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
