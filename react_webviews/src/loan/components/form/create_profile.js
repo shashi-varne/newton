@@ -21,7 +21,8 @@ class FormCreateProfile extends Component {
             step1: '1',
             dmi_loan_status: storageService().get('loan_dmi_loan_status') || '',
             application_id: storageService().get('loan_application_id'),
-            show_loader:true
+            show_loader:true,
+            count: 0
         }
 
         this.initialize = initialize.bind(this);
@@ -55,11 +56,7 @@ class FormCreateProfile extends Component {
         if (this.state.dmi_loan_status === 'contact') {
             this.triggerOtp();
         } else {
-
-            let that = this;
-            setTimeout(function(){ 
-              that.getDedupeCallback();
-            }, 3000);
+            this.getDedupeCallback();
         }
 
     }
@@ -74,6 +71,23 @@ class FormCreateProfile extends Component {
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200 && !resultData.error) {
 
+                let { count } = this.state;
+
+                if (!resultData.callback_status) {
+                    
+                    if (count < 20) {
+                        this.setState({
+                            count: count + 1
+                        })
+
+                        this.getDedupeCallback();
+                        
+                    } else {
+                        let searchParams = getConfig().searchParams + '&status=sorry';
+                        this.navigate('instant-kyc-status', { searchParams: searchParams });
+                    }
+                }
+                
                 
 
                 if (resultData.callback_status) {
@@ -83,9 +97,6 @@ class FormCreateProfile extends Component {
                     } else {
                         this.createContact();
                     }
-                } else {
-                    let searchParams = getConfig().searchParams + '&status=sorry';
-                    this.navigate('instant-kyc-status', { searchParams: searchParams });
                 }
             } else {
                 this.setState({
@@ -95,6 +106,7 @@ class FormCreateProfile extends Component {
                     || 'Something went wrong');
                 this.props.history.goBack();
             }
+
         } catch (err) {
             console.log(err)
             this.setState({
