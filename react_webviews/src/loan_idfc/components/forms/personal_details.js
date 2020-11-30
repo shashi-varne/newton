@@ -7,7 +7,12 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import { dobFormatTest, isValidDate, formatDate, capitalizeFirstLetter } from "utils/validators";
+import {
+  // dobFormatTest,
+  // isValidDate,
+  // formatDate,
+  capitalizeFirstLetter,
+} from "utils/validators";
 
 const gender_options = [
   {
@@ -31,7 +36,7 @@ class PersonalDetails extends Component {
       show_loader: false,
       screen_name: "personal_details_screen",
       form_data: {},
-      confirm_details: false
+      confirm_details: false,
     };
 
     this.initialize = initialize.bind(this);
@@ -41,22 +46,22 @@ class PersonalDetails extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: 'Application form',
+      title: "Application form",
       steps: [
         {
-          'title': 'Personal details',
-          'status': 'init'
+          title: "Personal details",
+          status: "init",
         },
         {
-          'title': 'Address details',
-          'status': 'pending'
-        }
-      ]
-    }
+          title: "Address details",
+          status: "pending",
+        },
+      ],
+    };
 
     this.setState({
-      progressHeaderData: progressHeaderData
-    })
+      progressHeaderData: progressHeaderData,
+    });
   }
 
   onload = () => {
@@ -65,27 +70,27 @@ class PersonalDetails extends Component {
     let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
 
-    if (vendor_info.ckyc_state === 'success') {
+    if (vendor_info.ckyc_state === "success") {
       confirm_details = true;
     }
 
     let form_data = {
-      first_name: personal_info.first_name, 
-      middle_name: confirm_details && personal_info.middle_name, 
-      last_name: personal_info.last_name, 
-      dob: confirm_details && personal_info.dob, 
-      gender: capitalizeFirstLetter(personal_info.gender), 
-      marital_status: capitalizeFirstLetter(personal_info.marital_status), 
-      father_name: personal_info.father_name, 
-      mother_name: confirm_details && personal_info.mother_name, 
-      religion: capitalizeFirstLetter(personal_info.religion), 
-      email_id: personal_info.email_id    
-    }
+      first_name: personal_info.first_name,
+      middle_name: confirm_details && personal_info.middle_name,
+      last_name: personal_info.last_name,
+      dob: confirm_details && personal_info.dob,
+      gender: capitalizeFirstLetter(personal_info.gender),
+      marital_status: capitalizeFirstLetter(personal_info.marital_status),
+      father_name: personal_info.father_name,
+      mother_name: confirm_details && personal_info.mother_name,
+      religion: capitalizeFirstLetter(personal_info.religion),
+      email_id: personal_info.email_id,
+    };
 
     this.setState({
       form_data: form_data,
-      confirm_details: confirm_details
-    })
+      confirm_details: confirm_details,
+    });
   };
 
   sendEvents(user_action) {
@@ -104,7 +109,7 @@ class PersonalDetails extends Component {
     }
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
@@ -114,15 +119,23 @@ class PersonalDetails extends Component {
     }
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
   handleClick = () => {
     let { form_data } = this.state;
-    let keys_to_check = ['first_name', 'last_name', 'gender', 'marital_status', 'father_name','religion', 'email_id'];
+    let keys_to_check = [
+      "first_name",
+      "last_name",
+      "gender",
+      "marital_status",
+      "father_name",
+      "religion",
+      "email_id",
+    ];
     if (this.state.cky_status) {
-      keys_to_check.push(...['middle_name', 'dob', 'mother_name'])
+      keys_to_check.push(...["middle_name", "dob", "mother_name"]);
     }
 
     this.formCheckUpdate(keys_to_check, form_data);
@@ -134,23 +147,27 @@ class PersonalDetails extends Component {
     form_data.gender = gender_options[event].value;
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={`${this.state.confirm_details ? 'Confirm your' : 'Provide'}  personal details`}
-        buttonTitle={this.state.confirm_details ? 'CONFIRM & SUBMIT' : 'SUBMIT'}
+        title={`${
+          this.state.confirm_details ? "Confirm your" : "Provide"
+        }  personal details`}
+        buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
       >
         <div className="personal-details">
-          {this.state.confirm_details && <Attention content="Once submitted, details cannot be changed or modified." />}
+          {this.state.confirm_details && (
+            <Attention content="Once submitted, details cannot be changed or modified." />
+          )}
 
           <FormControl fullWidth>
             <div className="InputField">
@@ -168,20 +185,22 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            {this.state.confirm_details && <div className="InputField">
-              <Input
-                error={!!this.state.form_data.middle_name_error}
-                helperText={this.state.form_data.middle_name_error}
-                type="text"
-                width="40"
-                label="Middle name"
-                class="middle_name"
-                id="name"
-                name="middle_name"
-                value={this.state.form_data.middle_name || ""}
-                onChange={this.handleChange("middle_name")}
-              />
-            </div>}
+            {this.state.confirm_details && (
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.middle_name_error}
+                  helperText={this.state.form_data.middle_name_error}
+                  type="text"
+                  width="40"
+                  label="Middle name"
+                  class="middle_name"
+                  id="name"
+                  name="middle_name"
+                  value={this.state.form_data.middle_name || ""}
+                  onChange={this.handleChange("middle_name")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <Input
@@ -198,22 +217,24 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            {this.state.confirm_details && <div className="InputField">
-              <Input
-                error={!!this.state.form_data.dob_error}
-                helperText={this.state.form_data.dob_error}
-                type="text"
-                width="40"
-                label="Date of birth"
-                placeholder="DD/MM/YYYY"
-                class="dob"
-                maxLength={10}
-                id="dob"
-                name="dob"
-                value={this.state.form_data.dob || ""}
-                onChange={this.handleChange("dob")}
-              />
-            </div>}
+            {this.state.confirm_details && (
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.dob_error}
+                  helperText={this.state.form_data.dob_error}
+                  type="text"
+                  width="40"
+                  label="Date of birth"
+                  placeholder="DD/MM/YYYY"
+                  class="dob"
+                  maxLength={10}
+                  id="dob"
+                  name="dob"
+                  value={this.state.form_data.dob || ""}
+                  onChange={this.handleChange("dob")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <RadioWithoutIcon
@@ -259,20 +280,22 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            {this.state.confirm_details && <div className="InputField">
-              <Input
-                error={!!this.state.form_data.mother_name_error}
-                helperText={this.state.form_data.mother_name_error}
-                type="text"
-                width="40"
-                label="Mother's name"
-                class="mother_name"
-                id="name"
-                name="mother_name"
-                value={this.state.form_data.mother_name || ""}
-                onChange={this.handleChange("mother_name")}
-              />
-            </div>}
+            {this.state.confirm_details && (
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.mother_name_error}
+                  helperText={this.state.form_data.mother_name_error}
+                  type="text"
+                  width="40"
+                  label="Mother's name"
+                  class="mother_name"
+                  id="name"
+                  name="mother_name"
+                  value={this.state.form_data.mother_name || ""}
+                  onChange={this.handleChange("mother_name")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <DropdownWithoutIcon

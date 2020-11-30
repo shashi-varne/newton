@@ -80,9 +80,9 @@ export async function getDocumentList() {
     const res = await Api.get(
       `relay/api/loan/idfc/list/document/${this.state.application_id}`
     );
-    const { result, status_code: status } = res.pfwresponse;
+    // const { result, status_code: status } = res.pfwresponse;
 
-    console.log(result);
+    console.log(res);
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -436,45 +436,46 @@ export async function netBanking(url) {
   // if (getConfig().generic_callback) {
   //   pgLink += "&generic_callback=" + getConfig().generic_callback;
   // }
-  let paymentRedirectUrl = encodeURIComponent(
-    window.location.origin +
-      `/loan/idfc/income-details` +
-      getConfig().searchParams
-  );
+  // let paymentRedirectUrl = encodeURIComponent(
+  //   window.location.origin +
+  //     `/loan/idfc/income-details` +
+  //     getConfig().searchParams
+  // );
 
-  let back_url = encodeURIComponent(
-    window.location.origin +
-      `/loan/instant-kyc-status` +
-      getConfig().searchParams +
-      "&flow=kyc&okyc_id=" +
-      this.state.application_id
-  );
+  // let back_url = encodeURIComponent(
+  //   window.location.origin +
+  //     `/loan/instant-kyc-status` +
+  //     getConfig().searchParams +
+  //     "&flow=kyc&okyc_id=" +
+  //     this.state.application_id
+  // );
 
-  // for web no issue
-  if (getConfig().Web) {
-    paymentRedirectUrl = back_url;
-  }
+  // // for web no issue
+  // if (getConfig().Web) {
+  //   paymentRedirectUrl = back_url;
+  // }
 
-  var payment_link = url;
-  var pgLink = payment_link;
-  let app = getConfig().app;
-  // eslint-disable-next-line
-  pgLink +=
-    (pgLink.match(/[\?]/g) ? "&" : "?") +
-    "plutus_redirect_url=" +
-    paymentRedirectUrl +
-    "&app=" +
-    app +
-    "&back_url=" +
-    back_url;
-  if (getConfig().generic_callback) {
-    pgLink += "&generic_callback=" + getConfig().generic_callback;
-  }
+  // var payment_link = url;
+  // var pgLink = payment_link;
+  // let app = getConfig().app;
 
-  this.openInTabApp({
-    url: pgLink,
-    back_url: back_url,
-  });
+  // // eslint-disable-next-line
+  // pgLink +=
+  //   (pgLink.match(/[\?]/g) ? "&" : "?") +
+  //   "plutus_redirect_url=" +
+  //   paymentRedirectUrl +
+  //   "&app=" +
+  //   app +
+  //   "&back_url=" +
+  //   back_url;
+  // if (getConfig().generic_callback) {
+  //   pgLink += "&generic_callback=" + getConfig().generic_callback;
+  // }
+
+  // this.openInTabApp({
+  //   url: pgLink,
+  //   back_url: back_url,
+  // });
 }
 
 export async function startTransaction(transaction_type) {

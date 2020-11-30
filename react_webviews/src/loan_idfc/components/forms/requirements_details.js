@@ -51,6 +51,8 @@ class LoanRequirementDetails extends Component {
         return;
       }
 
+      console.log(formatAmount(event.target.value))
+
       form_data[name] = event.target.value;
       form_data[name + "_error"] = '';
     }
@@ -59,6 +61,7 @@ class LoanRequirementDetails extends Component {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
+
     this.setState({
       form_data: form_data,
     });

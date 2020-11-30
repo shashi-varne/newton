@@ -6,7 +6,6 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
-import { getConfig } from "utils/functions";
 import { numDifferentiationInr } from "utils/validators";
 
 class EligibleLoan extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { nativeCallback } from "utils/native_callback";
+// import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 
@@ -152,7 +152,7 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {idfc_loan_status === "idfc_0.5_submitted" || idfc_loan_status === "idfc_0.5_accepted" && <div>
+          {(idfc_loan_status === "idfc_0.5_submitted" || idfc_loan_status === "idfc_0.5_accepted") && <div>
             <div className="subtitle">
               Your profile has been successfully evaluated and basis the checks
               you're most likely to get a loan offer.

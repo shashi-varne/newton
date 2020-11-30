@@ -57,7 +57,7 @@ class AddressDetails extends Component {
 
   onload = () => {
     let lead = this.state.lead || {};
-    let personal_info = lead.personal_info || {};
+    // let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
 
@@ -146,7 +146,7 @@ class AddressDetails extends Component {
         const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
         let resultData = res.pfwresponse.result[0] || '';
 
-        let { city, state, country } = form_data;
+        let { city, state } = form_data;
         let pincode_error = '';
         if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
             if (!resultData.idfc_city_name) {

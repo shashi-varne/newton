@@ -80,10 +80,10 @@ class LoanBtDetails extends Component {
 
   handleCheckbox = (index) => {
     let checked = this.state.checked;
-    let form_data = {
-      index: index,
-      isSelected: true,
-    };
+    // let form_data = {
+    //   index: index,
+    //   isSelected: true,
+    // };
 
     this.setState({
       checked: !checked,

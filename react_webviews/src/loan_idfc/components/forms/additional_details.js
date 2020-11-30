@@ -60,7 +60,7 @@ class AdditionalDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let id = (event.target && event.target.id) || "";
+    // let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
 
     if (name === "pincode" && value && !validateNumber(value)) {

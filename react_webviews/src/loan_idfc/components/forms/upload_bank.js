@@ -243,6 +243,7 @@ class UploadBank extends Component {
           confirmed: true,
           documents: documents,
         });
+        console.log(result)
       }
 
       //   toast(result.error || result.message || "Something went wrong!");
