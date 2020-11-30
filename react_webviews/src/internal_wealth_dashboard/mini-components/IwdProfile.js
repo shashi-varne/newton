@@ -55,7 +55,7 @@ const IwdProfile = (props) => {
           </div>
           <div className="iwd-profile-detail">
             <b>Mob.:</b>
-    {''}{mobile}
+    {'  '}{mobile}
           </div>
           <div id="iwd-profile-divider"></div>
           <Button

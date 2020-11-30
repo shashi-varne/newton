@@ -37,7 +37,8 @@ const topStocksIconMappings = {
   'Consumer Cyclical': IcSecAutoMobileIcon,
   Healthcare: IcSecHealthCare,
   'Communication Services': IcSecCommunicationIcon,
-  Others: IcSecChemicalsIcon,
+  'Basic Materials': IcSecFMCGIcon,
+  Others: IcSecFMCGIcon,
 };
 
 const isMobileView = getConfig().isMobileDevice;
@@ -53,7 +54,7 @@ function Analysis() {
   const getPortfolio = async () => {
     try {
       setIsLoading(true);
-      const result = await fetchPortfolioAnalysisMock({
+      const result = await fetchPortfolioAnalysis({
         scheme_type: null,
         market_cap_alloc: true,
         sector_alloc: true,
