@@ -76,8 +76,7 @@ class GroupHealthPlanFinalSummary extends Component {
           member_base.push(buyer_details);
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
-        let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
- 
+        let applicantIndex = this.state.member_base.findIndex(item => item.key === "applicant");
         if(applicantIndex >=0) {
             let appli_data = member_base[applicantIndex];
             member_base.splice(applicantIndex, 1);
@@ -780,7 +779,7 @@ class GroupHealthPlanFinalSummary extends Component {
         } else {
             return (
                 <div className="member-tile" key={index}>
-                    <div className="mt-left">
+                    <div className="mt-left">{console.log(this.state.quotation, this.state.applicantIndex)}
                         <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                     </div>
                     <div className="mt-right">
@@ -960,8 +959,8 @@ class GroupHealthPlanFinalSummary extends Component {
             <div className="group-health-final-summary">
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                     <div className="left">
-                        <div className="tc-title">{this.state.providerData.title || this.state.common_data.base_plan_title}</div>
-                        <div className="tc-subtitle">{this.state.common_data.base_plan_title}</div>
+                          <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>
+                        <div className="tc-subtitle">{this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id]}</div>
                     </div>
 
                     <div className="tc-right">
