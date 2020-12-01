@@ -66,7 +66,7 @@ class PerfiosStatus extends Component {
       commonMapper: commonMapper[perfios_state] || {},
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
-      idfc_07_state: idfc_07_state
+      idfc_07_state: idfc_07_state,
     });
   };
 
@@ -76,44 +76,50 @@ class PerfiosStatus extends Component {
 
   getPointSevenCallback = async () => {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
 
     await this.getOrCreate();
-    
+
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
 
-    if (vendor_info.idfc_07_state === 'success') {
+    if (vendor_info.idfc_07_state === "success") {
       this.submitApplication({}, "one");
     } else {
-      this.getPointSevenCallback()
+      this.getPointSevenCallback();
     }
 
     // this.setState({
     //   show_loader: false
     // })
- 
-  }
+  };
 
   handleClick = () => {
     let { perfios_state, bt_eligible, idfc_07_state } = this.state;
 
-    if (perfios_state === 'bypass' || perfios_state === 'success') {
-      if (!bt_eligible && idfc_07_state === 'success') {
+    if (perfios_state === "success") {
+      if (!bt_eligible && idfc_07_state === "success") {
         this.submitApplication({}, "one");
       }
 
-      if (bt_eligible && (idfc_07_state === 'success' || idfc_07_state === 'triggered')) {
+      if (
+        bt_eligible &&
+        (idfc_07_state === "success" || idfc_07_state === "triggered")
+      ) {
         let body = {
-          idfc_loan_status: 'bt_init'
-        }
-        this.updateApplication(body, 'bt-info')
+          idfc_loan_status: "bt_init",
+        };
+        this.updateApplication(body, "bt-info");
       }
 
-      if (!bt_eligible && idfc_07_state === 'triggered') {
+      if (!bt_eligible && idfc_07_state === "triggered") {
         this.getPointSevenCallback();
       }
+    }
+
+    if (perfios_state === "bypass") {
+      this.submitApplication({}, "one");
     }
   };
 
@@ -134,40 +140,49 @@ class PerfiosStatus extends Component {
             />
           )}
 
-          {perfios_state === 'sucess' && <div className="subtitle">
-            Hey Aamir, IDFC has successfully verified your bank statements and
-            your income details have been safely updated.
-          </div>}
+          {perfios_state === "sucess" && (
+            <div className="subtitle">
+              Hey Aamir, IDFC has successfully verified your bank statements and
+              your income details have been safely updated.
+            </div>
+          )}
           {/* <div className="subtitle">
             Before we move to the final loan offer, we have an option of
             <b> 'Balance Transfer - BT'</b> for you. However, it is up to you
             whether you want to opt for it or not.
           </div> */}
 
-          {perfios_state === 'bypass' && <div className="subtitle">
-            Due to an error your bank statements couldn't be verfied. No
-            worries, you can still go ahead with your loan application. However,
-            do upload your bank statements later.
-          </div>}
+          {perfios_state === "bypass" && (
+            <div className="subtitle">
+              Due to an error your bank statements couldn't be verfied. No
+              worries, you can still go ahead with your loan application.
+              However, do upload your bank statements later.
+            </div>
+          )}
 
-          {bt_eligible && <div className="subtitle">
-            Before we move to the final loan offer, we have an option of
-            'Balance Transfer - BT' for you. However, it is up to you whether
-            you want to opt for it or not.
-          </div>}
+          {bt_eligible && (
+            <div className="subtitle">
+              Before we move to the final loan offer, we have an option of
+              'Balance Transfer - BT' for you. However, it is up to you whether
+              you want to opt for it or not.
+            </div>
+          )}
 
           {/* <div className="subtitle">
             Now all you need to do is hit 'calculate eligibility' to view your
             loan offer.
           </div> */}
 
-          {perfios_state === "failure" && <div className="subtitle">
-            Your <b>statements</b> could not be verified as it <b>exceeds</b>{" "}
-            the <b>maximum allowed file size.</b> We recommend you to{" "}
-            <b>try again</b> by uploading bank statements of{" "}
-            <b>smaller file size</b> to get going/proceed with the verification
-            process.
-          </div>}
+          {perfios_state === "failure" && (
+            <div className="subtitle">
+              Your <b>statements</b> could not be verified as it <b>exceeds</b>{" "}
+              the <b>maximum allowed file size.</b> We recommend you to{" "}
+              <b>try again</b> by uploading bank statements of{" "}
+              <b>smaller file size</b> to get going/proceed with the
+              verification process.
+            </div>
+          )}
+          
         </div>
       </Container>
     );
