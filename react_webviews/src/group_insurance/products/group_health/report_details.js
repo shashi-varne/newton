@@ -74,8 +74,10 @@ class GroupHealthReportDetails extends Component {
                 let policy_data = resultData.policy || {};
                 let application_details = resultData.application_details;
                 
-                policy_data.dt_created = policy_data.dt_created.substring(0,10).replace(/-/g,'/');
-                policy_data.dt_updated = policy_data.dt_updated.substring(0,10).replace(/-/g,'/');
+                policy_data.dt_created = new Date(policy_data.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10);
+                policy_data.dt_updated = new Date(policy_data.dt_updated).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10);
+                policy_data.valid_from = new Date(policy_data.valid_from).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10);
+                
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
                 for(var i = 0; i < insured_members.length; i++){
@@ -359,7 +361,7 @@ class GroupHealthReportDetails extends Component {
             >
                  <div className="group-health-plan-details group-health-final-summary">
 
-                    <div style={{ margin: '0px 0 40px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
+                    <div style={{ margin: '18px 0 18px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
                         <div className="circle"></div>
                         <div className="report-color-state-title">{this.state.policy_data.cssMapper.disc}</div>
                     </div>
