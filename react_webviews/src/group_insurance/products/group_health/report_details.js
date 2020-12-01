@@ -72,6 +72,8 @@ class GroupHealthReportDetails extends Component {
                 let member_details = {};
 
                 let policy_data = resultData.policy || {};
+                let application_details = resultData.application_details;
+                
                 policy_data.dt_created = policy_data.dt_created.substring(0,10).replace(/-/g,'/');
                 policy_data.dt_updated = policy_data.dt_updated.substring(0,10).replace(/-/g,'/');
                 lead.insurance_type = resultData.quotation_details.insurance_type;
@@ -105,7 +107,8 @@ class GroupHealthReportDetails extends Component {
                     quote_info: resultData.plan_details,
                     lead: lead,
                     quotation_details: resultData.quotation_details,
-                    applicantIndex: applicantIndex
+                    applicantIndex: applicantIndex,
+                    application_details: application_details
                 })
 
 
@@ -207,7 +210,7 @@ class GroupHealthReportDetails extends Component {
     
             let renderData = {
                 'header_title': mapper_data.header_title,
-                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.plan_selected.plan_title}`,
+                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO"? this.state.plan_selected.plan_title: ''}`,
                 'steps': {
                     'options': mapper_data.steps
                 },
@@ -362,7 +365,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div>
+                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : ''}</div>
                             <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
                         </div>
 
@@ -508,7 +511,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>}
 
-                    {!this.state.policy_data.policy_number && this.state.policy_data.proposal_number &&
+                    {this.state.policy_data && this.state.policy_data.status === 'pending' &&
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
@@ -518,7 +521,7 @@ class GroupHealthReportDetails extends Component {
                                 PROPOSAL NUMBER
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.proposal_number || '-'}
+                                {this.state.application_details && this.state.application_details.proposal_number || '-'}
                             </div>
                         </div>
                     </div>}

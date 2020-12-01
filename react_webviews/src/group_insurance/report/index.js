@@ -47,7 +47,8 @@ class Report extends Component {
         top_title: 'Health insurance',
         key: policy.vendor,
         id: policy.application_id,
-        premium: Math.round(policy.total_amount)
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
       };
     }
 
@@ -58,7 +59,7 @@ class Report extends Component {
         top_title: 'Health insurance',
         key: 'HDFCERGO',
         id: policy.lead_id,
-        premium: Math.round(policy.total_amount)
+        premium: Math.round(policy.total_amount),
       };
     } else if (provider === 'RELIGARE') {
       obj = {
@@ -67,7 +68,7 @@ class Report extends Component {
         top_title: 'Health insurance',
         key: 'RELIGARE',
         id: policy.lead_id,
-        premium: Math.round(policy.total_amount)
+        premium: Math.round(policy.total_amount),
       };
     }  else if (provider === 'STAR') {
       obj = {
@@ -77,7 +78,7 @@ class Report extends Component {
         key: 'STAR',
         status_title: 'Star Health',
         id: policy.lead_id,
-        premium: Math.round(policy.total_amount)
+        premium: Math.round(policy.total_amount),
       };
     }  else if (provider === 'BHARTIAXA') {
       obj = {
@@ -245,7 +246,7 @@ class Report extends Component {
   }
 
   renderReportCards(props, index) {
-    let health_providers = ['HDFCERGO', 'RELIGARE', 'STAR'];
+    let health_providers = ['hdfc_ergo', 'religare', 'star'];
     return (
       <div className="group-insurance-report card"
         onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
@@ -291,7 +292,7 @@ class Report extends Component {
                     ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                 </div>
                 <div className="report-cover-amount"><span>Premium:
-                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year
+                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}
                   </div>
               </div>
             }
