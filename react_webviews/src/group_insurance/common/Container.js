@@ -354,9 +354,6 @@ class Container extends Component {
         case '/group-insurance/life-insurance/entry': 
         this.navigate(back_button_mapper[pathname]);
         break;
-      case "/group-insurance/life-insurance/app-update":
-        this.navigate(back_button_mapper[pathname]);
-        break;  
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
           this.navigate(back_button_mapper[pathname]);

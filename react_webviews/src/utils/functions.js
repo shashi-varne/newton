@@ -757,14 +757,14 @@ export function isFeatureEnabled(config, feature) {
   }
 
   let mapper = {
-    'open_inapp_tab_hs': {
+    'open_inapp_tab': {
       'fisdom': {
-        'android': '999',
-        'ios': ''
+        'android': '205',
+        'ios': '5.4'
       },
       'myway': {
-        'android': '999',
-        'ios': ''
+        'android': '102',
+        'ios': '5.2'
       }
     }
   }

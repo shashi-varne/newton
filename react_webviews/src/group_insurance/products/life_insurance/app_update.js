@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 
-class AppUpdate extends Component {
+class LifeInsuranceAppUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -77,4 +77,4 @@ class AppUpdate extends Component {
   }
 }
 
-export default AppUpdate;
+export default LifeInsuranceAppUpdate;
