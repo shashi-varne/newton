@@ -352,9 +352,6 @@ class GroupHealthPlanPersonalDetails extends Component {
           form_data.dob_error = "Applicant's age should be less than parents'age";
         }
       }
-      // if(age < 18){
-      //   form_data.dob_error = "valid age is between 18 to 64 year";
-      // }
     }
 
     if (form_data.name &&
