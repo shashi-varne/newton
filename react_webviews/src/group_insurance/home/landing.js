@@ -89,6 +89,44 @@ class Landing extends Component {
     })
   }
 
+  isFeatureEnabled(config, feature) {
+    let partner_code = config.type;
+    let app = config.app;
+    let app_version = config.app_version;
+  
+    if (config.isStaging) {
+      app_version = '999';
+    }
+  
+    if (app === 'web') {
+      return true;
+    }
+  
+    if (feature === 'etli_download' && app === 'android' && parseInt(app_version, 10) >= 999) {
+      return true;
+    }
+  
+    let mapper = {
+      'open_inapp_tab': {
+        'fisdom': {
+          'android': '205',
+          'ios': '5.4'
+        },
+        'myway': {
+          'android': '102',
+          'ios': '5.2'
+        }
+      }
+    }
+  
+    if (mapper[feature] && mapper[feature][partner_code] && mapper[feature][partner_code][app] &&
+      mapper[feature][partner_code][app] === app_version) {
+      return true;
+    }
+  
+    return false;
+  }
+
   async componentDidMount() {
 
     try {
@@ -284,7 +322,11 @@ class Landing extends Component {
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else if (product_key === 'LIFE_INSURANCE') {
-      fullPath = 'life-insurance/entry';
+      if(!getConfig().Web && !this.isFeatureEnabled(getConfig(), 'open_inapp_tab')){
+        fullPath = 'life-insurance/app-update'
+      }else{
+        fullPath = 'life-insurance/entry';
+      }
     } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
     }    

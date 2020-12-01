@@ -177,7 +177,8 @@ import EtliAuthFailed from './products/term_insurance/etli/auth_failed';
 //fyntune
 import FyntuneLanding from './products/life_insurance/landing';
 import ResumeIntermediatePage from './products/life_insurance/resumeIntermediatePage';
-import  FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
+import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
+import AppUpdate from './products/life_insurance/app_update';
 
 // common
 
@@ -335,7 +336,8 @@ const Insurance = (props) => {
            <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
            <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />      
            <Route path={`${url}/life-insurance/resume-intermediate`} component={ResumeIntermediatePage}/>   
-           <Route path={`${url}/life-insurance/savings-plan/report-details/:policy_id`} component={FyntuneReportDetails}/>                                                                                                                                                            
+           <Route path={`${url}/life-insurance/savings-plan/report-details/:policy_id`} component={FyntuneReportDetails}/>
+           <Route path={`${url}/life-insurance/app-update`} component={AppUpdate}/>                                                              
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />
