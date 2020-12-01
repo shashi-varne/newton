@@ -10,6 +10,15 @@ import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 
+/**
+ * 
+ * @param {string} line - Line or the string whose length needs to be calculated.
+ */
+export function countChars(line) {
+  return line.split(' ').filter(word => word !== ' ').reduce((acc, cur) => acc += cur.length, 0)
+}
+
+
 const HoldingCard = ({
   mf: mf_detail = {},
   invested_since,
@@ -52,7 +61,7 @@ const HoldingCard = ({
         Since {formattedDate(invested_since, 'm y')}
       </div>
       <div className="iwd-hc-title">
-        <span>{name}</span>
+        <span>{countChars(name) >= 52 ? name.slice(0, 52) + '...' : name}</span>
         <img src={amc_logo_big} alt="" height="80" />
       </div>
       <div className="iwd-hc-numbers">
