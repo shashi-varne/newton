@@ -212,7 +212,7 @@ class GroupHealthPayment extends Component {
               <div>
                 {policy_data.policy_number && 
                 <p className="top-content">
-                  Payment of {Math.trunc(this.state.lead.total_premium)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
+                  Payment of {Math.round(this.state.lead.total_premium)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
                 }
@@ -229,7 +229,7 @@ class GroupHealthPayment extends Component {
             {this.state.paymentSuccess && provider === 'HDFCERGO' &&
               <div>
                 <p className="top-content">
-                  Payment of {Math.trunc(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.providerData.title2} {this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]} {this.state.lead.plan_title} is successful.
+                  Payment of {Math.round(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.providerData.title2} {this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]} {this.state.lead.plan_title} is successful.
                 {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
 
@@ -249,7 +249,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentPending &&
                 <div>
                   <p className="top-content">
-                    Payment of {Math.trunc(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
+                    Payment of {Math.round(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.providerData.title} {this.state.lead.total_premium} is pending.
                           </p>
                 </div>
               }
@@ -257,7 +257,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {Math.trunc(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
+                    Payment of {Math.round(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
                     If amount has been debited it will be refunded back to you in 5-7 business days.
@@ -321,7 +321,7 @@ class GroupHealthPayment extends Component {
                       Basic premium
                                 </div>
                     <div className="content-points-inside-text">
-                      {(Math.trunc(this.state.lead.base_premium_showable) || Math.trunc(this.state.lead.base_premium))}
+                      {Math.round(this.state.lead.base_premium - this.state.lead.total_discount)}
                     </div>
                   </div>
 
@@ -331,7 +331,7 @@ class GroupHealthPayment extends Component {
                        Add ons amount
                       </div>
                       <div className="content-points-inside-text">
-                        {Math.trunc(this.state.lead.add_on_premium)}
+                        {Math.round(this.state.lead.add_on_premium)}
                       </div>
                     </div>
                   }
@@ -341,7 +341,7 @@ class GroupHealthPayment extends Component {
                       GST
                                 </div>
                     <div className="content-points-inside-text">
-                      {(Math.trunc(this.state.lead.gst))}
+                      {(Math.round(this.state.lead.gst))}
                     </div>
                   </div>
                 </div>
@@ -354,7 +354,7 @@ class GroupHealthPayment extends Component {
                       Total amount paid
                               </div>
                     <div className="content2-points-inside-text">
-                      {Math.trunc(this.state.lead.total_premium)}
+                      {Math.round(this.state.lead.total_premium)}
                     </div>
                   </div>
                 </div>
