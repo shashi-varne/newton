@@ -1082,14 +1082,17 @@ input#pan {
       width: 48.5%;
     }
 
-    .hr1 {
+    .invisible-line {
       border: 1px solid #FFFFFF;
       // width: 46%;
     }
 
-    .hr2 {
+    .line {
+      border-top: 1px solid var(--highlight);
+    }
+
+    .line-completed {
       border-top: 1px solid var(--primary);
-      // width: 45%;
     }
 
     .dot {
@@ -1104,14 +1107,12 @@ input#pan {
 
     .pending {
       background-color: var(--highlight);
-      // border: 1px solid var(--highlight);
+      border: 1px solid var(--highlight);
     }
 
     .init {
       background-color: var(--highlight);
       // border: 1px solid var(--primary);
-
-
     }
 
     .completed {

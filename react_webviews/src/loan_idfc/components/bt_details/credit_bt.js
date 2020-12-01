@@ -21,6 +21,29 @@ class LoanBtDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Income and loan offer',
+      steps: [
+        {
+          'title': 'Income details',
+          'status': 'completed'
+        },
+        {
+          'title': 'BT transfer details',
+          'status': 'init'
+        },
+        {
+          'title': 'Loan offer',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
+
   }
 
   onload = () => {};
@@ -51,6 +74,9 @@ class LoanBtDetails extends Component {
         title="Credit card details"
         buttonTitle="Skip and continue"
         hanndleClick={this.hanndleClick}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
       >
         <div className="loan-bt">
           <div className="subtitle">

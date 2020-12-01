@@ -19,7 +19,7 @@ class BtInformation extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: 'Application form',
+      title: 'Income and loan offer',
       steps: [
         {
           'title': 'Income details',
