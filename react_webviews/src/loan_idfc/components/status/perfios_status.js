@@ -55,6 +55,7 @@ class PerfiosStatus extends Component {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
     let perfios_state = vendor_info.perfios_state;
+    let idfc_07_state = vendor_info.idfc_07_state;
     let bt_eligible = this.state.params
       ? this.state.params.bt_eligible
       : vendor_info.bt_eligible;
@@ -65,6 +66,7 @@ class PerfiosStatus extends Component {
       commonMapper: commonMapper[perfios_state] || {},
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
+      idfc_07_state: idfc_07_state
     });
   };
 
@@ -72,7 +74,48 @@ class PerfiosStatus extends Component {
     this.navigate(this.state.commonMapper.close_state);
   };
 
-  handleClick = () => {};
+  getPointSevenCallback = async () => {
+    this.setState({
+      show_loader: true
+    })
+
+    await this.getOrCreate();
+    
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+
+    if (vendor_info.idfc_07_state === 'success') {
+      this.submitApplication({}, "one");
+    } else {
+      this.getPointSevenCallback()
+    }
+
+    // this.setState({
+    //   show_loader: false
+    // })
+ 
+  }
+
+  handleClick = () => {
+    let { perfios_state, bt_eligible, idfc_07_state } = this.state;
+
+    if (perfios_state === 'bypass' || perfios_state === 'success') {
+      if (!bt_eligible && idfc_07_state === 'success') {
+        this.submitApplication({}, "one");
+      }
+
+      if (bt_eligible && (idfc_07_state === 'success' || idfc_07_state === 'triggered')) {
+        let body = {
+          idfc_loan_status: 'bt_init'
+        }
+        this.updateApplication(body, 'bt-info')
+      }
+
+      if (!bt_eligible && idfc_07_state === 'triggered') {
+        this.getPointSevenCallback();
+      }
+    }
+  };
 
   render() {
     let { commonMapper, perfios_state, bt_eligible } = this.state;

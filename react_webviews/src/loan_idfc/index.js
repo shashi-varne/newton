@@ -30,11 +30,12 @@ import LoanBtDetails from "./components/bt_details/loan_bt";
 import CreditBtDetails from "./components/bt_details/credit_bt";
 import EligibleLoan from "./components/forms/eligible_loan";
 import AdditionalDetails from "./components/forms/additional_details";
-import UploadDocuments from "./components/upload_doc/upload_doc";
+import DocumentList from "./components/upload_doc/doc_list";
 import LoanEligible from "./components/general/loan_eligible";
 import UploadPan from "./components/upload_doc/upload_pan";
 import LoanStatus from './components/status/status';
 import PerfiosStatus from './components/status/perfios_status';
+import DocumentUpload from './components/upload_doc/doc_upload';
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -94,11 +95,12 @@ const Lending = props => {
           <Route path={`${url}/ckyc-summary`} component={CkycSummary} />
           <Route path={`${url}/eligible-loan`} component={EligibleLoan} />
           <Route path={`${url}/additional-details`} component={AdditionalDetails} />
-          <Route path={`${url}/upload-documents`} component={UploadDocuments} />
+          <Route path={`${url}/doc-list`} component={DocumentList} />
           <Route path={`${url}/loan-eligible`} component={LoanEligible} />
           <Route path={`${url}/upload-pan`} component={UploadPan} />
           <Route path={`${url}/loan-status`} component={LoanStatus} />
           <Route path={`${url}/perfios-status`} component={PerfiosStatus} />
+          <Route path={`${url}/doc-upload`} component={DocumentUpload} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-basic-details`} 
