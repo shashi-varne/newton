@@ -257,10 +257,10 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
+                    Payment of {inrFormatDecimal(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title} ${this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
                             </p>
                   <p className="top-content">
-                    If amount has been debited it will be refunded back to you in 3-5 business days.
+                    If amount has been debited it will be refunded back to you in 5-7 business days.
                   </p>
                 </div>
               }
