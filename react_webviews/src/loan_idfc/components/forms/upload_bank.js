@@ -38,7 +38,7 @@ class UploadBank extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: "Application form",
+      title: "Income and loan offer",
       steps: [
         {
           title: "Income details",
@@ -229,8 +229,7 @@ class UploadBank extends Component {
 
     try {
       const res = await Api.post(
-        `relay/api/loan/idfc/upload/document/${application_id}${
-          isedited ? "?edit=true" : ""
+        `relay/api/loan/idfc/upload/document/${application_id}${isedited ? "?edit=true" : ""
         }`,
         data
       );
@@ -315,7 +314,7 @@ class UploadBank extends Component {
       if (result) {
         // console.log(result);
         this.navigate('perfios-status')
-      // } else {
+        // } else {
         // toast(result.error || result.message || "Something went wrong!");
         // this.onload();
       }
@@ -427,7 +426,7 @@ class UploadBank extends Component {
                   name="password"
                   placeholder="XXXXXXX"
                   value={this.state.password || ""}
-                  // onChange={this.handleChange}
+                // onChange={this.handleChange}
                 />
               </div>
 

@@ -45,7 +45,7 @@ class AddressDetails extends Component {
         },
         {
           title: "Address details",
-          status: "pending",
+          status: "init",
         },
       ],
     };

@@ -13,6 +13,7 @@ import DigiStatus from "./components/digilocker";
 import NsdlStatus from "./components/nsdl";
 import AppUpdate from "./components/app_update";
 import ESignInfo from "./components/esign_info";
+import FinityAppUpdateInfo from "./components/finity_app_update";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -54,6 +55,7 @@ const Kyc_Esign = props => {
           <Route path={`${url}/digilocker`} component={DigiStatus} />
           <Route path={`${url}/nsdl`} component={NsdlStatus} />
           <Route path={`${url}/app-update`} component={AppUpdate} />
+          <Route path={`${url}/finity-app-update`} component={FinityAppUpdateInfo} />
           <Route path={`${url}/info`} component={ESignInfo} />
           
           <Route component={NotFound} />

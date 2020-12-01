@@ -24,6 +24,29 @@ class LoanBtDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Income and loan offer',
+      steps: [
+        {
+          'title': 'Income details',
+          'status': 'completed'
+        },
+        {
+          'title': 'BT transfer details',
+          'status': 'init'
+        },
+        {
+          'title': 'Loan offer',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
+
   }
 
   onload = () => {
@@ -39,9 +62,14 @@ class LoanBtDetails extends Component {
       }
     }
 
+    credit_bt.forEach(() => {
+      this.state.form_data.push({});
+    })
+
     this.setState({
       credit_bt: credit_bt,
     });
+
   };
 
   sendEvents(user_action) {
@@ -60,28 +88,31 @@ class LoanBtDetails extends Component {
     }
   }
 
-  handleChange = (name, id) => (event) => {
+  handleChange = (name, index) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    form_data[name] = value;
-    form_data[name + "_error"] = "";
+    form_data[index][name] = value;
+    // form_data[index][name + "_error"] = "";
 
     this.setState({
       form_data: form_data,
     });
   };
 
-  handleCheckbox = (id) => {
-    let checked = this.state.checked;
-
+  handleCheckbox = (checked, index, id) => {
+    let { form_data } = this.state;
+    form_data[index]["is_selected"] = checked;
+    form_data[index]["bt_data_id"] = id;
     this.setState({
-      checked: !checked,
+      form_data: form_data,
     });
   };
 
   handleClick = () => {
-    
+    this.updateApplication({
+      "bt_selection": this.state.form_data.filter(data => data.is_selected)
+    })
   };
 
   render() {
@@ -89,8 +120,11 @@ class LoanBtDetails extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Credit card details"
-        buttonTitle="SKIP AND CONTINUE"
+        buttonTitle="Skip and continue"
         handleClick={this.handleClick}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
       >
         <div className="loan-bt">
           <div className="subtitle">
@@ -107,7 +141,7 @@ class LoanBtDetails extends Component {
                     id="checkbox"
                     name="checkbox"
                     disableRipple
-                    onChange={(event) => this.handleCheckbox(item)}
+                    onChange={(event) => this.handleCheckbox(event.target.checked, index, Object.keys(item)[0])}
                     className="Checkbox"
                   />
                 </Grid>
@@ -123,72 +157,71 @@ class LoanBtDetails extends Component {
                         label="Financer name"
                         id="financierName"
                         name="financierName"
-                        error={!!this.state.form_data.financierName_error}
-                        helperText={this.state.form_data.financierName_error}
+                        // error={!!this.state.form_data[index].financierName_error}
+                        // helperText={this.state.form_data[index].financierName_error}
                         value={
-                          this.state.form_data.financierName ||
-                          item.financierName ||
+                          this.state.form_data[index].financierName || item.financierName ||
                           ""
                         }
-                        onChange={this.handleChange("financierName", item.id)}
+                        onChange={this.handleChange("financierName", index)}
                       />
                     </div>
 
                     <div className="InputField">
                       <Input
-                        error={!!this.state.form_data.creditCardNumber_error}
-                        helperText={
-                          this.state.form_data.creditCardNumber_error
-                        }
+                        // error={!!this.state.form_data[index].creditCardNumber_error}
+                        // helperText={
+                        //   this.state.form_data[index].creditCardNumber_error
+                        // }
                         type="number"
                         width="40"
                         maxLength={4}
                         label="Card number (last four digit)"
                         id="creditCardNumber"
                         name="creditCardNumber"
-                        value={this.state.form_data.creditCardNumber || ""}
-                        onChange={this.handleChange("creditCardNumber")}
+                        value={this.state.form_data[index].creditCardNumber || ""}
+                        onChange={this.handleChange("creditCardNumber", index)}
                       />
                     </div>
 
                     <div className="InputField">
                       <Input
-                        error={!!this.state.form_data.creditCardExpiryDate_error}
-                        helperText={
-                          this.state.form_data.creditCardExpiryDate_error
-                        }
+                        // error={!!this.state.form_data[index].creditCardExpiryDate_error}
+                        // helperText={
+                        //   this.state.form_data[index].creditCardExpiryDate_error
+                        // }
                         type="text"
                         width="40"
                         maxLength={7}
                         label="Expiry date"
                         id="creditCardExpiryDate"
                         name="creditCardExpiryDate"
-                        value={this.state.form_data.creditCardExpiryDate || ""}
-                        onChange={this.handleChange("creditCardExpiryDate")}
+                        value={this.state.form_data[index].creditCardExpiryDate || ""}
+                        onChange={this.handleChange("creditCardExpiryDate", index)}
                       />
                     </div>
 
                     <div className="InputField">
                       <Input
-                        error={
-                          !!this.state.form_data.principalOutstanding_error
-                        }
-                        helperText={
-                          this.state.form_data.principalOutstanding_error
-                        }
+                        // error={
+                        //   !!this.state.form_data[index].principalOutstanding_error
+                        // }
+                        // helperText={
+                        //   this.state.form_data[index].principalOutstanding_error
+                        // }
                         type="text"
                         width="40"
                         label="Amount outstanding"
                         id="principalOutstanding"
                         name="principalOutstanding"
                         value={
-                          this.state.form_data.principalOutstanding ||
+                          this.state.form_data[index].principalOutstanding ||
                           item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(
                           "principalOutstanding",
-                          item.id
+                          index
                         )}
                       />
                     </div>

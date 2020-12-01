@@ -16,9 +16,8 @@ class LoanBtDetails extends Component {
     this.state = {
       show_loader: false,
       screen_name: "loan_bt",
-      form_data: {},
+      form_data: [],
       loan_bt: [],
-      checked: false,
       bankOptions: []
     };
 
@@ -27,6 +26,28 @@ class LoanBtDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let progressHeaderData = {
+      title: 'Income and loan offer',
+      steps: [
+        {
+          'title': 'Income details',
+          'status': 'completed'
+        },
+        {
+          'title': 'BT transfer details',
+          'status': 'init'
+        },
+        {
+          'title': 'Loan offer',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
   }
 
   onload = async () => {
@@ -48,7 +69,6 @@ class LoanBtDetails extends Component {
           bankOptions: bankOptions,
         });
 
-        // console.log(bankOptions)
       } else {
         toast(result.error || result.message || "Something went wrong!");
       }
@@ -57,10 +77,6 @@ class LoanBtDetails extends Component {
       toast("Something went wrong");
     }
 
-    // this.setState({
-    //   show_loader: false,
-    // });
-
     let lead = this.state.lead || {};
 
     let bt_info = lead.bt_info;
@@ -68,18 +84,18 @@ class LoanBtDetails extends Component {
     let loan_bt = [];
 
     for (var item in bt_info) {
+      console.log(bt_info)
       if (bt_info[item].typeOfLoan === "PersonalLoan") {
-        bt_info[item].id = item;
-        loan_bt.push(bt_info[item]);
+        loan_bt.push({ [item]: bt_info[item].typeOfLoan });
       }
     }
 
-    // this.setState({
-    // });
+    loan_bt.forEach(() => {
+      this.state.form_data.push({});
+    })
 
     this.setState({
       loan_bt: loan_bt,
-      // show_loader: false,
     });
   };
 
@@ -99,12 +115,12 @@ class LoanBtDetails extends Component {
     }
   }
 
-  handleChange = (name, id) => (event) => {
+  handleChange = (name, index) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    form_data[name] = value;
-    form_data[name + "_error"] = "";
+    form_data[index][name] = value;
+    // form_data[index][name + "_error"] = "";
 
     this.setState({
       form_data: form_data,
@@ -112,14 +128,17 @@ class LoanBtDetails extends Component {
   };
 
   handleClick = () => {
-    console.log(this.state.form_data)
+    this.updateApplication({
+      "bt_selection": this.state.form_data.filter(data => data.is_selected)
+    })
   };
 
-  handleCheckbox = (id) => {
-    let checked = this.state.checked;
-
+  handleCheckbox = (checked, index, id) => {
+    let { form_data } = this.state;
+    form_data[index]["is_selected"] = checked;
+    form_data[index]["bt_data_id"] = id;
     this.setState({
-      checked: !checked,
+      form_data: form_data,
     });
   };
 
@@ -128,8 +147,11 @@ class LoanBtDetails extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Select for balance transfer"
-        buttonTitle="SKIP AND CONTINUE"
+        buttonTitle="Skip and continue"
         handleClick={this.handleClick}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
       >
         <div className="loan-bt">
           <div className="subtitle">
@@ -146,7 +168,7 @@ class LoanBtDetails extends Component {
                     id="checkbox"
                     name="checkbox"
                     disableRipple
-                    onChange={(event) => this.handleCheckbox(item)}
+                    onChange={(event) => this.handleCheckbox(event.target.checked, index, Object.keys(item)[0])}
                     className="Checkbox"
                   />
                 </Grid>
@@ -162,38 +184,37 @@ class LoanBtDetails extends Component {
                         label="Financer name"
                         id="financierName"
                         name="financierName"
-                        error={!!this.state.form_data.financierName_error}
-                        helperText={this.state.form_data.financierName_error}
+                        // error={!!this.state.form_data.financierName_error}
+                        // helperText={this.state.form_data.financierName_error}
                         value={
-                          this.state.form_data.financierName ||
-                          item.financierName ||
+                          this.state.form_data[index].financierName || item.financierName ||
                           ""
                         }
-                        onChange={this.handleChange("financierName", item.id)}
+                        onChange={this.handleChange("financierName", index)}
                       />
                     </div>
-                    
+
                     <div className="InputField">
                       <Input
-                        error={
-                          !!this.state.form_data.principalOutstanding_error
-                        }
-                        helperText={
-                          this.state.form_data.principalOutstanding_error
-                        }
+                        // error={
+                        //   !!this.state.form_data.principalOutstanding_error
+                        // }
+                        // helperText={
+                        //   this.state.form_data.principalOutstanding_error
+                        // }
                         type="text"
                         width="40"
                         label="Amount outstanding"
                         id="principalOutstanding"
                         name="principalOutstanding"
                         value={
-                          this.state.form_data.principalOutstanding ||
+                          this.state.form_data[index].principalOutstanding ||
                           item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(
                           "principalOutstanding",
-                          item.id
+                          index
                         )}
                       />
                     </div>

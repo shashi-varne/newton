@@ -156,6 +156,10 @@ class GroupHealthPlanAddOns extends Component {
     }
 
     handleChangeCheckboxes = index => event => {
+
+        if(this.state.groupHealthPlanData.sum_assured === 400000 && this.state.add_ons_data[index].key === "CAREWITHNCB"){
+            return;
+        }
         let { add_ons_data } = this.state;
         add_ons_data[index].checked = !add_ons_data[index].checked;
 

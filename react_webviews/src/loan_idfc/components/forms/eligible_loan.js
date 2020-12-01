@@ -23,6 +23,27 @@ class EligibleLoan extends Component {
 
   componentWillMount() {
     this.initialize();
+    let progressHeaderData = {
+      title: 'Income and loan offer',
+      steps: [
+        {
+          'title': 'Income details',
+          'status': 'completed'
+        },
+        {
+          'title': 'BT transfer details',
+          'status': 'init'
+        },
+        {
+          'title': 'Loan offer',
+          'status': 'pending'
+        }
+      ]
+    }
+
+    this.setState({
+      progressHeaderData: progressHeaderData
+    })
   }
 
   onload = () => {};
@@ -81,6 +102,9 @@ class EligibleLoan extends Component {
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
         handleClick={this.handleClick}
+        headerData={{
+          progressHeaderData: this.state.progressHeaderData
+        }}
       >
         <div className="eligible-loan">
           <div className="subtitle">

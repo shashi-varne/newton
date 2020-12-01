@@ -30,7 +30,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
-import gold_pattern_myway from 'assets/myway/gold_pattern.png';
+import gold_pattern_myway from 'assets/finity/gold_pattern.png';
 import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
@@ -89,7 +89,7 @@ class GoldSummary extends Component {
     nativeCallback({ action: 'take_control_reset' });
     storageService().remove('gold_provider');
     let type = getConfig().productName;
-    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
+    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Finity';
     
     var gold_offer_terms1 = [
       'For a transaction to be valid, there must be a minimum purchase of Rs 1,000 for each offer.',
@@ -156,7 +156,7 @@ class GoldSummary extends Component {
       },
       {
         src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
-        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://mywaywealth.com/candere-gold-2019/',
+        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://finity.in/candere-gold-2019/',
         terms: '',
         key: 'candere',
         canShow: false
