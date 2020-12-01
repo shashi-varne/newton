@@ -38,7 +38,7 @@ class Container extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
-    if (pathname.indexOf('group-health') >= 0) {
+    if (pathname.indexOf('group-insurance') >= 0) {
       this.setState({
         new_header: true,
         inPageTitle: true,
