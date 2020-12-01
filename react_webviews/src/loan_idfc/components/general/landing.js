@@ -137,7 +137,7 @@ class Landing extends Component {
                 })
               }
             >
-              <div className="title">Loan eligibility calculator</div>
+              <div className="title">EMI calculator</div>
               <SVG
                 className="right"
                 preProcessor={(code) =>

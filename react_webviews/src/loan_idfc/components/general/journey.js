@@ -39,7 +39,7 @@ class JourneyMap extends Component {
       "idfc_0.5_rejected": "3",
     };
     let index = (idfc_loan_status && journey[idfc_loan_status]) || "0";
-    console.log(index)
+    console.log(index);
 
     let journeyData = {
       options: [
@@ -49,7 +49,7 @@ class JourneyMap extends Component {
           titleCompleted: "Basic details uploaded ",
           subtitle:
             "Fill in personal and work details to get started with your loan application.",
-          status: index && index === '0' ? "init" : "completed",
+          status: index && index === "0" ? "init" : "completed",
           id: "basic_details",
         },
         {
@@ -67,7 +67,12 @@ class JourneyMap extends Component {
           titleCompleted: "Provided income details",
           subtitle:
             "Enter your loan requirements and income details to get the best loan offer.",
-          status: index && index === "2" ? "init" : index < "2" ? "pending" : "completed",
+          status:
+            index && index === "2"
+              ? "init"
+              : index < "2"
+              ? "pending"
+              : "completed",
           id: "income_details",
         },
         {
@@ -76,7 +81,12 @@ class JourneyMap extends Component {
           titleCompleted: "Documents uploaded",
           subtitle:
             "Provide your office address and upload documents to get your loan sanctioned.",
-          status: index && index === "3" ? "init" : index < "3" ? "pending" : "completed",
+          status:
+            index && index === "3"
+              ? "init"
+              : index < "3"
+              ? "pending"
+              : "completed",
           id: "document_upload",
         },
         {
@@ -85,7 +95,12 @@ class JourneyMap extends Component {
           titleCompleted: "",
           subtitle:
             "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
-          status: index && index === "4" ? "init" : index < "4" ? "pending" : "completed",
+          status:
+            index && index === "4"
+              ? "init"
+              : index < "4"
+              ? "pending"
+              : "completed",
           id: "sanction_and_disbursal",
         },
       ],
@@ -157,13 +172,13 @@ class JourneyMap extends Component {
             alt=""
           />
 
-          {idfc_loan_status === "idfc_null_accepted" ||
-            (idfc_loan_status === "idfc_null_submitted" && (
-              <div className="head-title">
-                <b>Awesome!</b> Your loan application is successfully created.
-                Now you're just a step away from finding out your loan offer.
-              </div>
-            ))}
+          {(idfc_loan_status === "idfc_null_accepted" ||
+            idfc_loan_status === "idfc_null_submitted") && (
+            <div className="head-title">
+              <b>Awesome!</b> Your loan application is successfully created. Now
+              you're just a step away from finding out your loan offer.
+            </div>
+          )}
 
           {idfc_loan_status === "basic_details_uploaded" && (
             <div className="head-title">

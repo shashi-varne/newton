@@ -34,6 +34,7 @@ import UploadDocuments from "./components/upload_doc/upload_doc";
 import LoanEligible from "./components/general/loan_eligible";
 import UploadPan from "./components/upload_doc/upload_pan";
 import LoanStatus from './components/status/status';
+import PerfiosStatus from './components/status/perfios_status';
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -97,6 +98,7 @@ const Lending = props => {
           <Route path={`${url}/loan-eligible`} component={LoanEligible} />
           <Route path={`${url}/upload-pan`} component={UploadPan} />
           <Route path={`${url}/loan-status`} component={LoanStatus} />
+          <Route path={`${url}/perfios-status`} component={PerfiosStatus} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-basic-details`} 

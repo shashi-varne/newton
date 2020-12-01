@@ -239,11 +239,13 @@ class UploadBank extends Component {
 
       if (status === 200) {
         documents[index].status = "confirmed";
+        documents[index].document_id = result.document_id;
         this.setState({
           confirmed: true,
           documents: documents,
         });
-        console.log(result)
+        console.log(result.document_id)
+        console.log(documents[index].document_id)
       }
 
       //   toast(result.error || result.message || "Something went wrong!");
@@ -310,11 +312,12 @@ class UploadBank extends Component {
 
       const { result, status_code: status } = res.pfwresponse;
 
-      if (status === 200) {
-        console.log(result);
-      } else {
-        toast(result.error || result.message || "Something went wrong!");
-        this.onload();
+      if (result) {
+        // console.log(result);
+        this.navigate('perfios-status')
+      // } else {
+        // toast(result.error || result.message || "Something went wrong!");
+        // this.onload();
       }
     } catch (err) {
       console.log(err);
@@ -440,7 +443,7 @@ class UploadBank extends Component {
               {item.status === "confirmed" && (
                 <div className="edit-or-delete">
                   <div
-                    onClick={() => this.handleEdit(item.id)}
+                    onClick={() => this.handleEdit(item.document_id)}
                     className="generic-page-button-small"
                   >
                     EDIT

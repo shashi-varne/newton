@@ -198,7 +198,7 @@ export function setEditTitle(string) {
   return string;
 }
 
-export async function updateApplication(params) {
+export async function updateApplication(params, next_state = '') {
   try {
     this.setState({
       show_loader: true,
@@ -226,7 +226,7 @@ export async function updateApplication(params) {
       if (params.idfc_loan_status === "ckyc") {
         this.navigate("personal-details");
       } else {
-        this.navigate(this.state.next_state);
+        this.navigate(next_state || this.state.next_state);
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
@@ -416,7 +416,7 @@ export async function netBanking(url) {
   console.log(url2);
 
   let plutusRedirectUrl = encodeURIComponent(
-    window.location.origin  + `/loan/idfc/status` + getConfig().searchParams
+    window.location.origin  + `/loan/idfc/loan-status` + getConfig().searchParams
   )
 
   var payment_link = url2;

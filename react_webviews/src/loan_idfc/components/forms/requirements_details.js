@@ -24,7 +24,20 @@ class LoanRequirementDetails extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    let lead = this.state.lead || {};
+    let application_info = lead.application_info || {};
+
+    let form_data = {
+      amount_required: application_info.amount_required,
+      purpose: application_info.purpose,
+      tenor: String(application_info.tenor)
+    }
+
+    this.setState({
+      form_data: form_data
+    })
+  };
 
   sendEvents(user_action) {
     let eventObj = {

@@ -82,7 +82,7 @@ class Calculator extends Component {
       return (
       <Container
         showLoader={this.state.show_loader}
-        title="Loan eligibility calculator"
+        title="EMI calculator"
         buttonTitle={this.state.cta_title}
         styleFooter={{
           backgroundColor: "var(--highlight)"
