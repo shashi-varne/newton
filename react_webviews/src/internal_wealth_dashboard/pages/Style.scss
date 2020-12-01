@@ -701,6 +701,14 @@ $background: #F9F9F9;
     }
   }
 
+  #iwd-rating-exposure.iwd-analysis-graph-left {
+    height: 80%;
+  }
+
+  #iwd-maturity-exposure.iwd-analysis-graph-right {
+    height: 80%;
+  }
+
   #iwd-sector-alloc {
     .iwd-agr-content {
       .iwd-sector-alloc-legend {
@@ -724,6 +732,14 @@ $background: #F9F9F9;
         }
       }
     }
+  }
+
+  #iwd-market-alloc.iwd-analysis-graph-left {
+    height: 80%;
+  }
+
+  #iwd-sector-alloc.iwd-analysis-graph-right {
+    height: 80%;
   }
 
   #iwd-maturity-exposure {
@@ -1334,6 +1350,7 @@ $background: #F9F9F9;
   
             .iwd-lc-value {
               text-align: center;
+              margin-left: 0;
             }
           }
         }
@@ -1390,6 +1407,11 @@ $background: #F9F9F9;
             justify-content: center;
             align-items: center;
             margin-bottom: 40px;
+
+            .iwd-lc-value {
+              margin-left: 0;
+              text-align: center;
+            }
           }
 
           // .iwd-agrc-legend-child:nth-child(n) {
