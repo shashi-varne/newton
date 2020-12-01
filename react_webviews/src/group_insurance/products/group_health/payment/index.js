@@ -183,8 +183,8 @@ class GroupHealthPayment extends Component {
 
   render() {
     let {policy_data, screenData, provider} = this.state;        
-
-
+    var s = new Date('2020-01-14T17:43:37.000Z').toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
+    console.log(s,"ssssssssssssssssssssssssss")
     return (
       <Container
         provider={this.state.provider}
@@ -291,7 +291,7 @@ class GroupHealthPayment extends Component {
                   </div>
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
-                    insured {numDifferentiationInr(this.state.lead.total_sum_insured)} for {this.state.lead.tenure} year</div>
+                    insured {numDifferentiationInr(this.state.lead.total_sum_insured)} for {this.state.lead.tenure > 1 ? this.state.lead.tenure + ' years' : this.state.lead.tenure + ' year'}</div>
                     {policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
@@ -303,10 +303,12 @@ class GroupHealthPayment extends Component {
                     }
                     <div style={{ margin: '5px 0 6px 0' }}>
                   { this.state.payment_details.dt_created && 
-                  <span> {getDateBreakup(this.state.payment_details.dt_created).dom }{' '}
-                    {getDateBreakup(this.state.payment_details.dt_created).month}{', '}
-                   {formatAMPM(this.state.payment_details.dt_created)} </span> }
+                  <span> 
+                    {(getDateBreakup((this.state.payment_details.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})).dom) }{' '}
+                    {(getDateBreakup((this.state.payment_details.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})).month)  }{', '}
+                   {formatAMPM(this.state.payment_details.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})}
 
+                    </span> }
                       </div>
                   </div>
                 </div>
