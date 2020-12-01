@@ -19,7 +19,7 @@ class IncomeDetails extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: 'Application form',
+      title: 'Income and loan offer',
       steps: [
         {
           'title': 'Income details',
@@ -41,7 +41,7 @@ class IncomeDetails extends Component {
     })
   }
 
-  onload = () => {};
+  onload = () => { };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -82,7 +82,7 @@ class IncomeDetails extends Component {
             withtag="true"
             onClick={() => this.handleClick('netbanking')}
           >
-            <div className="card-content" style={{padding:"10px 0"}}>
+            <div className="card-content" style={{ padding: "10px 0" }}>
               <img
                 src={require(`assets/${this.state.productName}/mobile_credit_card.svg`)}
                 alt=""
@@ -100,7 +100,7 @@ class IncomeDetails extends Component {
             </div>
           </Card>
 
-            <div className="OR">-- OR --</div>
+          <div className="OR">-- OR --</div>
 
           <Card
             onClick={() => this.handleClick('manual_upload')}
