@@ -245,10 +245,10 @@ class GroupHealthPlanSelectFloater extends Component {
                  <GenericTooltip
                    productName={getConfig().productName}
                    content={( <div>1. For entire family 
-                           Also called 'Family floater', in this case sum insured is shared amongst the members. For ex- if the sum insured is ₹4 lacs, total claims of all the members together will be covered upto ₹4 lacs.<br />
+                           Also called 'Family floater', in this case sum insured is shared amongst the members. For ex- if the sum insured is ₹4 lakhs, total claims of all the members together will be covered upto ₹4 lakhs.<br />
                              <br></br>
                            2. For each member 
-                           Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lacs, each member can individually claim upto ₹4 lacs.</div> )}
+                           Sum insured limit is applicable for each member individually. For ex- if the sum insured is ₹4 lakhs, each member can individually claim upto ₹4 lakhs.</div> )}
                  />
                </div>
                <div className="group-health-plan-select-floater">
