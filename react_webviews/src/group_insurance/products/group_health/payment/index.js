@@ -115,12 +115,14 @@ class GroupHealthPayment extends Component {
           let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
           let payment_details = resultData.payment_details || {};
+          let application_details = resultData.application_details;
 
           this.setState({
             policy_data: policy_data,
             lead: lead,
             common: resultData.common,
-            payment_details : payment_details
+            payment_details : payment_details,
+            application_details: application_details
           })
         } else {
           toast(resultData.error || resultData.message
@@ -294,10 +296,10 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
                     {!policy_data.policy_number && this.state.provider === 'HDFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number : {policy_data.payment_id || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number : {this.state.application_details && this.state.application_details.proposal_number || '-'}</div>
                     }
                      {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {policy_data.proposal_number || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {this.state.application_details && this.state.application_details.proposal_number || '-'}</div>
                     }
                     <div style={{ margin: '5px 0 6px 0' }}>
                   { this.state.payment_details.dt_created && 
