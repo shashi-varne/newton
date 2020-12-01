@@ -318,14 +318,14 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (this.state.dobNeeded) {
       if (provider === 'RELIGARE') {
-        if (age < validation_props.dob_adult.min && !isChild) {
-          form_data.dob_error = `Minimum age is ${validation_props.dob_adult.min} for adult`;
+        if ((age < validation_props.dob_adult.min || age > validation_props.dob_adult.max) && !isChild) {
+          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min } - ${validation_props.dob_adult.max - 1} years`;
         }
       }
 
       if (provider === 'STAR') {
-        if (age > validation_props.dob_adult.max && !isChild) {
-          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min} to 64 year`;
+        if ((age < validation_props.dob_adult.min || age > validation_props.dob_adult.max) && !isChild) {
+          form_data.dob_error = `Valid age is between ${validation_props.dob_adult.min} to ${validation_props.dob_adult.max - 1} year`;
         }
       }
     }
@@ -333,14 +333,13 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (this.state.member_key === 'applicant') {
 
-
       if (provider === 'HDFCERGO') {
-        if (form_data.gender === 'MALE' && age < validation_props.dob_married_male.min) {
-          form_data.dob_error = `Minimum age is ${validation_props.dob_married_male.min} male applicant`;
+        if (form_data.gender === 'MALE' && (age < validation_props.dob_married_male.min || age > validation_props.dob_married_male.max)) {
+          form_data.dob_error = `Valid age is between ${validation_props.dob_married_male.min } - ${validation_props.dob_married_male.max - 1} years`;
         }
 
-        if (form_data.gender === 'FEMALE' && age < validation_props.dob_married_female.min) {
-          form_data.dob_error = `Minimum age is ${validation_props.dob_married_female.min} female applicant`;
+        if (form_data.gender === 'FEMALE' && (age < validation_props.dob_married_female.min || age > validation_props.dob_married_female.max )) {
+          form_data.dob_error = `Valid age is between ${validation_props.dob_married_female.min } - ${validation_props.dob_married_female.max - 1} years`;
         }
 
       }
@@ -353,10 +352,9 @@ class GroupHealthPlanPersonalDetails extends Component {
           form_data.dob_error = "Applicant's age should be less than parents'age";
         }
       }
-
-      if(age < 18){
-        form_data.dob_error = "valid age is between 18 to 64 year";
-      }
+      // if(age < 18){
+      //   form_data.dob_error = "valid age is between 18 to 64 year";
+      // }
     }
 
     if (form_data.name &&
