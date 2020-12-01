@@ -9,6 +9,7 @@ import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
 import { navigate as navigateFunc } from '../common/commonFunctions';
+import { countChars } from '../../utils/validators';
 
 
 const HoldingCard = ({
@@ -30,7 +31,7 @@ const HoldingCard = ({
   } = mf_detail;
 
   const ellipsify = (line) =>  {
-    const characters = line.split(' ').filter(word => word !== ' ').reduce((acc, cur) => acc += cur.length, 0)
+    const characters = countChars(line)
     if (characters >= 52) {
       return `${line.split('0, 52')}...`
     }
