@@ -80,7 +80,9 @@ class LoanBtDetails extends Component {
     });
   };
 
-  handleClick = () => {};
+  handleClick = () => {
+    
+  };
 
   render() {
     return (
