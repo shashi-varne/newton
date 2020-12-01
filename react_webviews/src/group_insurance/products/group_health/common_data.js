@@ -163,6 +163,7 @@ export async function initialize() {
         let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, net_premium, total_discount, gst = '';
 
         if (this.state.get_lead) {
+            
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_premium;
             sum_assured = lead.total_sum_insured;
@@ -174,7 +175,16 @@ export async function initialize() {
             total_discount = lead.total_discount;
             gst = lead.gst;
             net_premium = lead.total_premium - lead.gst;
-            leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
+            
+            if(provider === 'HDFCERGO'){
+                leftTitle = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
+            }else if(provider === 'RELIGARE'){
+                leftTitle = 'Care'
+            }else{
+                leftTitle = 'Star health'
+            }
+
+
         } else {
             let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;

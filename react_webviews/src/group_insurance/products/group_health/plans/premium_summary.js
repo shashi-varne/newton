@@ -241,6 +241,8 @@ class GroupHealthPlanPremiumSummary extends Component {
   }
 
   render() {
+    console.log(this.state.lead)
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -264,7 +266,7 @@ class GroupHealthPlanPremiumSummary extends Component {
                 {this.state.providerData.title2}
               </div>
               <div className="tc-subtitle">
-                {this.state.plan_selected.plan_title}
+                {this.state.provider !== 'HDFCERGO' ? this.state.providerConfig.subtitle : this.state.get_lead ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.lead && this.state.lead.plan_id]:  this.state.plan_selected.plan_title}
               </div>
             </div>
           </div>
