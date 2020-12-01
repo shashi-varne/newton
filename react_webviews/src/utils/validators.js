@@ -907,3 +907,6 @@ export function containsSpecialCharactersAndNumbers(value){
   return format.test(value);
 }
 
+export function countChars(line) {
+  return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
+}
