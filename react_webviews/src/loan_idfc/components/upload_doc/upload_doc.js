@@ -9,9 +9,10 @@ class UploadDocuments extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // show_loader: false,
+      show_loader: false,
       screen_name: "document_list",
       cards: [],
+      docList: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -21,42 +22,7 @@ class UploadDocuments extends Component {
     this.initialize();
   }
 
-  onload = () => {
-    let cards = [
-      {
-        title: "PAN proof",
-        img: "pan",
-      },
-      {
-        title: "Identity proof",
-        img: "identity",
-      },
-      {
-        title: "Address proof",
-        img: "address",
-      },
-      {
-        title: "Bank statement proof",
-        img: "bank",
-      },
-      {
-        title: "Salary proof",
-        img: "salary",
-      },
-      {
-        title: "Residence proof",
-        img: "residence",
-      },
-      {
-        title: "Statement of account",
-        img: "account",
-      },
-    ];
-
-    this.setState({
-      cards: cards,
-    });
-  };
+  onload = () => {};
 
   handleClick = () => {};
 
@@ -86,8 +52,12 @@ class UploadDocuments extends Component {
         handleClick={this.handleClick}
       >
         <div className="upload-documents">
-          {this.state.cards.map((item, index) => (
-            <Card style={{ marginTop: "20px" }} key={index}>
+          {this.state.docList.map((item, index) => (
+            <Card
+              style={{ marginTop: "20px" }}
+              key={index}
+              onClick={() => this.handleClick(item)}
+            >
               <div
                 style={{
                   display: "flex",
@@ -98,7 +68,7 @@ class UploadDocuments extends Component {
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
                   <img
                     style={{ margin: "-15px 0 -15px -15px" }}
-                    src={require(`assets/${this.state.productName}/${item.img}.svg`)}
+                    src={require(`assets/${this.state.productName}/account.svg`)}
                     alt=""
                   />
                   <img
@@ -107,7 +77,13 @@ class UploadDocuments extends Component {
                     alt=""
                   />
                 </div>
-                <div style={{width: `${getConfig().isMobileDevice ? "60%" : "70%"}`}}>{item.title}</div>
+                <div
+                  style={{
+                    width: `${getConfig().isMobileDevice ? "60%" : "70%"}`,
+                  }}
+                >
+                  {item.category_name}
+                </div>
 
                 <img src={require(`assets/edit_green.svg`)} alt="" />
               </div>

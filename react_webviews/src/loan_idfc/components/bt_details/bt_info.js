@@ -19,32 +19,36 @@ class BtInformation extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: 'Application form',
+      title: "Application form",
       steps: [
         {
-          'title': 'Income details',
-          'status': 'completed'
+          title: "Income details",
+          status: "completed",
         },
         {
-          'title': 'BT transfer details',
-          'status': 'init'
+          title: "BT transfer details",
+          status: "init",
         },
         {
-          'title': 'Loan offer',
-          'status': 'pending'
-        }
-      ]
-    }
+          title: "Loan offer",
+          status: "pending",
+        },
+      ],
+    };
 
     this.setState({
-      progressHeaderData: progressHeaderData
-    })
+      progressHeaderData: progressHeaderData,
+    });
   }
 
   onload = () => {};
 
   handleClick = () => {
-    this.navigate(this.state.next_state)
+    let body = {
+      idfc_loan_status: "bt_init",
+      bt_selected: true,
+    };
+    this.updateApplication(body, "loan-bt");
   };
 
   sendEvents(user_action, data = {}) {
@@ -74,7 +78,7 @@ class BtInformation extends Component {
         buttonTwoTitle="OPTING FOR BT"
         buttonTitle="OPTING FOR BT"
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
         handleClick={this.handleClick}
       >
@@ -87,12 +91,12 @@ class BtInformation extends Component {
           </div>
 
           <HowToSteps
-            style={{ marginTop: '10px', marginBottom: 0 }}
+            style={{ marginTop: "10px", marginBottom: 0 }}
             baseData={this.state.screenData.benefits}
           />
 
           <HowToSteps
-            style={{ marginTop: '-20px', marginBottom: '30px' }}
+            style={{ marginTop: "-20px", marginBottom: "30px" }}
             baseData={this.state.screenData.required_info}
           />
         </div>

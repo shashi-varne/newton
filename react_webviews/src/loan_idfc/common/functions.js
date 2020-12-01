@@ -26,6 +26,7 @@ export async function initialize() {
   this.netBanking = netBanking.bind(this);
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
+  this.getInstitutionList = getInstitutionList.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -71,6 +72,34 @@ export async function initialize() {
   }
 }
 
+export async function getInstitutionList() {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      let banklist = result.data;
+
+      let bankOptions = banklist.map((item) => item.institution_name);
+
+      this.setState({
+        bankOptions: bankOptions,
+      });
+
+    } else {
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    console.log(err);
+    toast("Something went wrong");
+  }
+}
+
 export async function getDocumentList() {
   try {
     this.setState({
@@ -80,9 +109,12 @@ export async function getDocumentList() {
     const res = await Api.get(
       `relay/api/loan/idfc/list/document/${this.state.application_id}`
     );
-    // const { result, status_code: status } = res.pfwresponse;
+    const { result, status_code: status } = res.pfwresponse;
+console.log(result.doc_list)
 
-    console.log(res);
+    this.setState({
+      docList: result.doc_list
+    })
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -140,13 +172,18 @@ export async function getOrCreate(params) {
         this.navigate(this.state.next_state);
       }
 
+      if (this.state.screen_name === 'loan_bt' || this.state.screen_name === 'credit_bt') {
+        this.getInstitutionList();
+      }
+
       if (this.state.screen_name === "document_list") {
-        this.getDocumentList();
+        await this.getDocumentList();
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
-      // this.onload();
+      this.onload();
     }
+
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -242,7 +279,7 @@ export async function updateApplication(params, next_state = '') {
   });
 }
 
-export async function submitApplication(params, state, update) {
+export async function submitApplication(params, state, update = "") {
   try {
     let screens = ["address_details", "requirement_details_screen"];
     this.setState({
