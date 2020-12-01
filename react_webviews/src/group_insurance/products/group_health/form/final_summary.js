@@ -280,7 +280,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 if (member.ped) {
                     let dis_data = {
-                        'title': `${(member.relation).toUpperCase()}'s diseases`,
+                        'title': `${(childeNameMapper(member.key)).toUpperCase()}'s diseases`,
                         'subtitle': subtitle
                     }
                     diseases_data_backend.push(dis_data);
