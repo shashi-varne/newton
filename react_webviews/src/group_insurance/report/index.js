@@ -49,6 +49,7 @@ class Report extends Component {
         id: policy.application_id,
         premium: Math.round(policy.total_amount),
         provider: policy.vendor,
+        valid_from: new Date(policy.valid_from).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10)
       };
     }
 

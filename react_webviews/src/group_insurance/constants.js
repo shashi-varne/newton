@@ -732,11 +732,12 @@ export function getCssMapperReport(policy) {
     }
   }
 
-  if(['HDFCERGO', 'STAR', 'RELIGARE'].includes(provider)) {
+  if(['HDFCERGO','hdfc_ergo', 'STAR','star', 'RELIGARE','religare'].includes(provider)) {
    
     cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start  || policy.valid_from || '');
     cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
     cssMapper.policy_issued.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
+    console.log(policy.valid_from)
   }
 
 

@@ -130,8 +130,6 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
         groupHealthPlanData.plan_selected_final = plan_selected_final;
         
-        groupHealthPlanData.selected_opd_cover_amount
-
         var add_ons_final = {}
         for(var addOn in plan_selected_final.add_on_premium){
           if(addOn !== 'total' && plan_selected_final.add_on_premium[addOn] !== 0){

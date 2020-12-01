@@ -254,7 +254,6 @@ class GroupHealthPlanDetails extends Component {
             plan_selected,
             providerData,
             productName,
-            extra_data,
         } = this.state;
 
         

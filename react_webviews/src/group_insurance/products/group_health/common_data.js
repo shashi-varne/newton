@@ -160,7 +160,7 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, total_premium, net_premium, total_discount, gst = '';
+        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
 
         if (this.state.get_lead) {
             
@@ -169,9 +169,8 @@ export async function initialize() {
             sum_assured = lead.total_sum_insured;
             tenure = lead.tenure;
             base_premium = lead.base_premium;
-            tax_amount = lead.gst;
             total_amount =  lead.total_premium;
-            total_premium = lead.total_premium;
+            
             total_discount = lead.total_discount;
             gst = lead.gst;
             net_premium = lead.total_premium - lead.gst;
