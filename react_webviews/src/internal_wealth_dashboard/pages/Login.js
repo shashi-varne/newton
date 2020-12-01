@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import LoginFields from '../../common/responsive-components/LoginFields';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { getConfig } from "utils/functions";
@@ -12,6 +12,10 @@ import bgWaves from 'assets/bg_waves.svg';
 import HelpPage from '../mini-components/Help';
 import ForgotPasswordPage from '../mini-components/ForgotPassword';
 // -------------------------------------
+
+import Api from '../../utils/api';
+import { isEmpty, storageService } from '../../utils/validators';
+
 const isMobileView = getConfig().isMobileDevice;
 
 const Login = (props) => {
@@ -19,13 +23,30 @@ const Login = (props) => {
   const [openForgotPwd, toggleForgotPwd] = useState(false);
   const navigate = navigateFunc.bind(props);
 
+  const onLoginSuccess = async () => {
+    try {
+      const res = await Api.get('api/whoami');
+      if (isEmpty(res) || res.pfwstatus_code !== 200) {
+        navigate('login', props)
+      } else {
+        const { user } = res.pfwresponse.result;
+        const { email, name } = user
+        storageService().set('iwd-user-email', email);
+        storageService().set('iwd-user-name', name);
+        navigate('main/dashboard');
+      }     
+    } catch(err) {
+      navigate('login', props)
+    }
+  }
+
   return (
     <>
       {openForgotPwd && <ForgotPasswordPage onClose={() => toggleForgotPwd(false)} />}
       <HelpPage className={`circularExpand ${openHelpPage ? 'expand' : 'shrink'}`} onClose={() => toggleHelpPage(false)}/>
       <div
         id="iwd-login"
-        style={{ position: (openHelpPage || openForgotPwd) ? 'fixed' : ''}}
+        className={(openHelpPage || openForgotPwd) ? 'iwd-bg-fixed' : ''}
       >
         <div id="iwd-login-left">
           <img src={fisdomLogo} alt="fisdom" height="40" />
@@ -50,7 +71,7 @@ const Login = (props) => {
         <div id="iwd-login-right">
           <div id="iwd-ll-login-container">
             <LoginFields
-              phoneComponent={<IwdPhoneInput containerClass="fade" />}
+              phoneComponent={<IwdPhoneInput containerClass="fade" dropdownClass="iwd-phone-input-dropdown" />}
               otpComponent={<IwdOtpInput />}
               buttonComponent={<WhiteButton classes={{ root: 'fade' }}>Hello</WhiteButton>}
               navigateFunction={navigate}
@@ -58,7 +79,7 @@ const Login = (props) => {
                 root: 'iwd-text-field',
                 input: 'iwd-text-field-input',
               }}
-              onLoginSuccess={() => navigate('main/dashboard')}
+              onLoginSuccess={onLoginSuccess}
               onForgotPasswordClicked={() => toggleForgotPwd(true)}
               parentProps={props}
             />

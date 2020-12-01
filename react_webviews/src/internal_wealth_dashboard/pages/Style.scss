@@ -5,6 +5,7 @@ $primary: rgb(79, 45, 167);
 $card-border-radius: 8px;
 $card-padding: 50px;
 $card-padding-mobile: 40px;
+$background: #f9f9f9;
 
 @mixin animatedDelay($n, $delay) {
   @for $i from 1 through $n {
@@ -15,6 +16,11 @@ $card-padding-mobile: 40px;
 }
 .circularExpand {
   transition: clip-path 0.8s ease-in-out;
+}
+
+.iwd-bg-fixed {
+  position: fixed;
+  width: 100%;
 }
 
 .expand {
@@ -172,6 +178,16 @@ $card-padding-mobile: 40px;
 
     #iwd-ll-login-container {
       width: 100%;
+
+      .iwd-phone-input-dropdown {
+        li > span.country-name {
+          color: $grey;
+        }
+
+        li > span.dial-code {
+          color: rgba($dark, 0.8);
+        }
+      }
     }
 
     img {
@@ -190,11 +206,21 @@ $card-padding-mobile: 40px;
   font-family: 'Poppins', 'Roboto', sans-serif;
   height: 100%;
   width: 100%;
-  // background-image:
-  //   linear-gradient(90deg, rgba(114, 76, 210, 0.03) 0.49%, rgba(56, 204, 251, 0.03) 100.94%),
-  //   url('../../assets/bg.svg');
+  background: #f9f9f9;
   backdrop-filter: blur(70px);
   background-size: cover;
+
+  *::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    background-color: hsla(257, 58%, 73%, 0.4);
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    border-radius: 2.5px;
+    background-color: hsla(257, 58%, 70%, 1);
+  }
 }
 
 .iwd-page {
@@ -219,29 +245,18 @@ $card-padding-mobile: 40px;
   margin-bottom: 40px;
 }
 
-.iwd-p-scroll-contain {
+.iwd-scroll-contain {
   scroll-snap-type: y mandatory;
-  height: 65vh;
+  scroll-behavior: smooth;
+  height: 75%;
   margin-right: -25px;
   padding-right: 25px;
   box-sizing: border-box;
-  overflow-y: scroll;
+  overflow-y: auto;
+  width: 100%;
 }
 
-.iwd-p-scroll-contain::-webkit-scrollbar {
-  width: 4px;
-  background-color: hsla(257, 58%, 73%, 0.4);
-  border-radius: 5px;
-  // display: none;
-}
-
-.iwd-p-scroll-contain::-webkit-scrollbar-thumb {
-  border-radius: 2.5px;
-  background-color: hsla(257, 58%, 70%, 1);
-  // display: none;
-}
-
-.iwd-p-scroll-child {
+.iwd-scroll-child {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -250,7 +265,7 @@ $card-padding-mobile: 40px;
   margin-bottom: 200px;
 }
 
-.iwd-p-scroll-child:nth-last-child(1) {
+.iwd-scroll-child:nth-last-child(1) {
   margin-bottom: 50px;
 }
 
@@ -277,9 +292,33 @@ $card-padding-mobile: 40px;
   .iwd-header-subtitle {
     color: $light-grey;
   }
+  .iwd-dashboard-pg1 {
+    .iwd-header-subtitle {
+      display: none;
+    }
+    .iwd-header-title {
+      color: $dark;
+    }
+  }
+  .fisdom-ecb-error-title,
+  .fisdom-ecb-error-text {
+    color: white;
+  }
+  .iwd-card {
+    .fisdom-ecb-error-title,
+    .fisdom-ecb-error-text {
+      color: #767e86;
+    }
+  }
+  .fisdom-ecb-btn {
+    background-color: #c0aeea;
+
+    .MuiButton-label {
+      color: $primary;
+    }
+  }
 
   #iwd-d-numbers {
-    @extend .iwd-card;
     height: 90%;
     width: 55%;
     flex: 1 0 55%;
@@ -328,7 +367,6 @@ $card-padding-mobile: 40px;
   }
 
   #iwd-d-asset-alloc {
-    @extend .iwd-card;
     height: 90%;
     width: 40%;
 
@@ -374,7 +412,6 @@ $card-padding-mobile: 40px;
   }
 
   #iwd-d-risk {
-    @extend .iwd-card;
     width: 55%;
     margin-right: 3%;
 
@@ -414,8 +451,6 @@ $card-padding-mobile: 40px;
   }
 
   #iwd-d-newsletter {
-    @extend .iwd-card;
-
     align-self: flex-start;
     background: $primary;
     width: 40%;
@@ -457,7 +492,508 @@ $card-padding-mobile: 40px;
   }
 }
 
-@media only screen and (min-width: 300px) and (max-width: 800px) {
+#iwd-holdings {
+  .iwd-scroll-contain {
+    //padding-left: 270px;
+    height: 75vh;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+#iwd-holding-detail {
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+  background: white url('../../assets/bg_waves_full_screen.svg') bottom no-repeat;
+  background-size: contain;
+  padding: 50px 100px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+
+  .iwd-hd-header {
+    display: flex;
+    margin-bottom: 30px;
+
+    img {
+      margin-right: 20px;
+    }
+
+    .iwd-hdh-title {
+      font-size: 13px;
+      line-height: 21px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: $dark;
+    }
+
+    .iwd-hdh-fund-name {
+      font-weight: bold;
+      font-size: 30px;
+      line-height: 40px;
+      color: $dark;
+      max-width: 85%;
+    }
+  }
+
+  .iwd-hd-type {
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $grey;
+    margin: 10px 0 30px;
+    display: flex;
+
+    .iwd-hdt-divider {
+      margin: 0 20px;
+    }
+  }
+
+  .iwd-hd-info-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: -30px;
+
+    .iwd-hd-numbers {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 30px 50px 0 0;
+
+      .iwd-hdn-item {
+        color: $grey;
+
+        img {
+          margin-right: 20px;
+        }
+
+        .iwd-hdni-value {
+          font-size: 17px;
+          line-height: 27px;
+        }
+
+        .iwd-hdni-value.current-val {
+          color: $dark;
+        }
+
+        .iwd-hdni-label {
+          font-weight: 600;
+          font-size: 11px;
+          line-height: 18px;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+        }
+      }
+
+      .iwd-hdn-item-divider {
+        border-right: 1px solid rgba($grey, 0.2);
+        margin: 0 50px;
+        height: 25px;
+      }
+    }
+
+    .iwd-hd-stats {
+      display: flex;
+      margin-top: 30px;
+
+      .iwd-hds-item {
+        font-size: 13px;
+        line-height: 21px;
+        color: $grey;
+        display: flex;
+        flex-direction: column;
+        margin-right: 60px;
+      }
+    }
+  }
+
+  .iwd-hd-transactions {
+    margin-top: 60px;
+
+    .iwd-card-header {
+      margin-bottom: 10px;
+    }
+
+    .iwd-hdt-table-container {
+      max-height: 260px;
+      overflow: auto;
+    }
+  }
+}
+
+#iwd-holding-detail-blank {
+  @extend #iwd-holding-detail;
+  background: white !important;
+}
+
+// IWD Analysis Page
+
+#iwd-analysis {
+  .iwd-page__analysis {
+    background-color: $background;
+    font-family: 'Poppins';
+  }
+
+  .iwd-analysis-header-container-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .iwd-analysis-header-filters {
+    margin-left: 50px;
+  }
+
+  .iwd-analysis-graph-left {
+    width: 45%;
+    height: 90%;
+    margin-right: 2%;
+
+    .iwd-agl-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+
+      .iwd-chart {
+        height: 200px;
+        width: 200px;
+        margin-right: 5px;
+        flex: 0 1 40%;
+      }
+
+      .iwd-aglc-legend {
+        flex: 1 0 30%;
+
+        .iwd-aglc-legend-child {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 40px;
+        }
+
+        .iwd-aglc-legend-child:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  #iwd-rating-exposure {
+    width: 55%;
+
+    .iwd-agl-content {
+      .iwd-aglc-legend {
+        .iwd-aglc-legend-child:nth-last-child(1),
+        .iwd-aglc-legend-child:nth-last-child(2) {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .iwd-analysis-graph-right {
+    height: 90%;
+    width: 53%;
+
+    .iwd-agr-content {
+      .iwd-chart {
+        margin-bottom: 50px;
+      }
+    }
+  }
+
+  #iwd-sector-alloc {
+    .iwd-agr-content {
+      .iwd-sector-alloc-legend {
+        max-height: 220px;
+        overflow-y: auto;
+
+        .iwd-sal-item {
+          display: flex;
+          justify-content: space-between;
+          padding: 16px;
+
+          span {
+            display: inline-block;
+            font-size: 15px;
+            color: $grey;
+          }
+
+          .iwd-sali-label {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+
+  #iwd-maturity-exposure {
+    width: 43%;
+
+    .iwd-agr-content {
+      .iwd-agrc-legend {
+        flex: 1 0 30%;
+
+        .iwd-agrc-legend-child {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 40px;
+        }
+
+        .iwd-agrc-legend-child:nth-last-child(1),
+        .iwd-agrc-legend-child:nth-last-child(2) {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .iwd-analysis-button {
+    outline: none;
+    border: 0;
+    box-sizing: border-box;
+    border-radius: 100px;
+    background-color: #f1ecff;
+    color: $primary;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: bold;
+    display: inline-block;
+    height: 30px;
+    width: 80px;
+    cursor: pointer;
+  }
+
+  .iwd-analysis-button__active {
+    color: white;
+    background-color: $primary;
+  }
+
+  .iwd-analysis-button:nth-of-type(2) {
+    margin-left: 20px;
+  }
+
+  .iwd-analysis-sector-allocation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .iwd-analysis-sector-name {
+    color: $grey;
+    font-size: 13px;
+    line-height: 15px;
+    max-width: 70%;
+  }
+
+  .iwd-analysis-sector-allocation-percentage {
+    color: $dark;
+    font-size: 15px;
+    line-height: 15px;
+  }
+
+  .iwd-analysis-card {
+    width: 100%;
+    height: 90%;
+  }
+
+  .iwd-analysis-portfolios-equity {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    height: 80%;
+    overflow-y: auto;
+    overflow-x: auto;
+
+    .iwd-analysis-button {
+      outline: none;
+      border: 0;
+      box-sizing: border-box;
+      border-radius: 100px;
+      background-color: #f1ecff;
+      color: $primary;
+      text-transform: uppercase;
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-block;
+      height: 30px;
+      width: 80px;
+    }
+
+    .iwd-analysis-button__active {
+      color: white;
+      background-color: $primary;
+    }
+
+    .iwd-analysis-button:nth-of-type(2) {
+      margin-left: 20px;
+    }
+
+    .iwd-analysis-top-sector-allocation-list {
+      list-style: none;
+      width: 70%;
+      margin: 0 auto;
+    }
+
+    .iwd-analysis-top-sector-allocation-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 33px;
+    }
+
+    .iwd-analysis-top-sector-allocation-name {
+      color: $grey;
+      font-size: 13px;
+      line-height: 15px;
+      max-width: 70%;
+    }
+
+    .iwd-analysis-top-sector-allocation-item:hover {
+      font-weight: bold;
+    }
+
+    .iwd-analysis-sector-allocation-percentage {
+      color: $dark;
+      font-size: 15px;
+      line-height: 15px;
+    }
+
+    .iwd-analysis-market-cap-allocation-container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .iwd-analysis-card {
+      width: 100%;
+      height: 90%;
+    }
+
+    .iwd-analysis-portfolios-equity {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      height: 80%;
+      overflow-y: auto;
+      overflow-x: auto;
+    }
+
+    .iwd-analysis-portfolio-stock {
+      display: flex;
+      width: 50%;
+      margin-top: 50px;
+      align-items: center;
+      main {
+        margin-left: 20px;
+      }
+    }
+
+    .iwd-analysis-portfolio-heading {
+      color: $grey;
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .iwd-analysis-portfolio-name {
+      color: $grey;
+      font-size: 17px;
+    }
+
+    .iwd-analysis-portfolio-percentage {
+      font-size: 15px;
+    }
+  }
+  .iwd-analysis-top-amcs {
+    @extend .iwd-analysis-portfolios-equity;
+    height: '100%';
+  }
+
+  .iwd-analysis-amc-logo {
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    display: block;
+  }
+
+  .iwd-analysis-amc-name {
+    color: $grey;
+    font-size: 13px;
+  }
+
+  .iwd-analysis-amc-percentage {
+    font-size: 17px;
+  }
+
+  .iwd-analysis-amc {
+    width: 33%;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    main {
+      margin-left: 20px;
+    }
+  }
+
+  .iwd-analysis-debt-holdings {
+    @extend .iwd-analysis-portfolios-equity;
+  }
+
+  .iwd-analysis-debt-holding {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    height: 49px;
+    margin-top: 50px;
+  }
+
+  .iwd-analysis-debt-holding-details {
+    margin-left: 20px;
+    vertical-align: text-top;
+  }
+
+  .iwd-analysis-debt-holding-logo {
+    background: linear-gradient(135deg, #aee5df, transparent);
+    color: #488f87;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 8px 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  .iwd-analysis-debt-holding-name {
+    color: $grey;
+    font-size: 17px;
+  }
+
+  .iwd-analysis-debt-holding-name {
+    color: $grey;
+    font-size: 17px;
+  }
+
+  .iwd-analysis-debt-holding-percentage {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (min-width: 300px) and (max-width: 1200px) {
   #iwd-login {
     flex-flow: column wrap;
     height: auto;
@@ -518,6 +1054,7 @@ $card-padding-mobile: 40px;
 
   .iwd-page {
     padding: 20px;
+    padding-top: 90px;
   }
 
   .iwd-card {
@@ -535,32 +1072,32 @@ $card-padding-mobile: 40px;
     text-align: center;
   }
 
-  .iwd-p-scroll-contain {
+  .iwd-scroll-contain {
     scroll-snap-type: none;
-    height: 85vh;
+    height: 85%;
     margin-right: 0;
-    padding-right: 0;
+    padding: 0;
   }
 
-  .iwd-p-scroll-contain::-webkit-scrollbar {
+  .iwd-scroll-contain::-webkit-scrollbar {
     // width: 4px;
     // background-color: hsla(257, 58%, 73%, 0.4);
     // border-radius: 5px;
     display: none;
   }
 
-  .iwd-p-scroll-contain::-webkit-scrollbar-thumb {
+  .iwd-scroll-contain::-webkit-scrollbar-thumb {
     // border-radius: 2.5px;
     // background-color: hsla(257, 58%, 70%, 1);
     display: none;
   }
 
-  .iwd-p-scroll-child {
+  .iwd-scroll-child {
     height: auto;
     flex-direction: column;
     flex-wrap: nowrap;
     scroll-snap-align: none;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
   }
 
   .iwd-header-title {
@@ -571,6 +1108,7 @@ $card-padding-mobile: 40px;
 
   #iwd-dashboard {
     #iwd-d-numbers {
+      width: 100%;
       flex: 0 0 auto;
       margin-bottom: 40px;
       flex-direction: column;
@@ -611,6 +1149,7 @@ $card-padding-mobile: 40px;
 
     #iwd-d-asset-alloc {
       flex: 0 0 auto;
+      width: 100%;
 
       #iwd-daa-graph {
         flex-direction: column;
@@ -642,6 +1181,7 @@ $card-padding-mobile: 40px;
     #iwd-d-risk {
       margin-right: 0;
       margin-bottom: 40px;
+      width: 100%;
 
       #iwd-dr-data {
         display: flex;
@@ -670,6 +1210,7 @@ $card-padding-mobile: 40px;
     }
 
     #iwd-d-newsletter {
+      width: 100%;
       padding: 30px 40px;
 
       .iwd-card-header {
@@ -706,4 +1247,445 @@ $card-padding-mobile: 40px;
   -ms-flex-align: center;
   align-items: center;
   margin-left: -15px;
+
+  #iwd-analysis {
+    .iwd-analysis-portfolios-equity {
+      overflow-y: auto;
+      flex-direction: column;
+      height: auto;
+    }
+    .iwd-analysis-amc {
+      width: 100%;
+    }
+
+    .iwd-analysis-portfolio-stock {
+      width: 100%;
+      margin-top: 30px;
+      justify-content: flex-start;
+    }
+
+    .iwd-analysis-header-container-left {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .iwd-analysis-header-filters {
+      margin-left: 0;
+    }
+
+    .iwd-analysis-debt-holding {
+      width: 100%;
+    }
+
+    .iwd-analysis-graph-left {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 40px;
+
+      .iwd-agl-content {
+        flex-wrap: nowrap;
+        flex-direction: column;
+        justify-content: unset;
+        align-items: unset;
+
+        .iwd-chart {
+          width: 100%;
+          margin-right: 0;
+          margin-bottom: 30px;
+        }
+
+        .iwd-aglc-legend {
+          flex: 1 0 auto;
+          width: 100%;
+
+          .iwd-aglc-legend-child:nth-last-child(n) {
+            margin-bottom: 20px;
+          }
+        }
+      }
+    }
+
+    #iwd-rating-exposure {
+      width: 100%;
+
+      .iwd-agl-content {
+        .iwd-aglc-legend {
+          .iwd-aglc-legend-child:nth-child(n) {
+            margin-bottom: 20px;
+          }
+        }
+      }
+    }
+
+    .iwd-analysis-graph-right {
+      width: 100%;
+      .iwd-agr-content {
+        .iwd-chart {
+          margin-bottom: 50px;
+        }
+      }
+    }
+
+    #iwd-sector-alloc {
+      .iwd-agr-content {
+        .iwd-sector-alloc-legend {
+          max-height: 265px;
+
+          .iwd-sal-item {
+            padding: 14px;
+
+            span {
+              font-size: 13px;
+              line-height: 21px;
+            }
+
+            .iwd-sali-label {
+              font-weight: 400;
+            }
+
+            .iwd-sali-value {
+              color: $dark;
+            }
+          }
+        }
+      }
+    }
+
+    #iwd-maturity-exposure {
+      width: 100%;
+
+      .iwd-agr-content {
+        .iwd-agrc-legend {
+          justify-content: center;
+
+          .iwd-agrc-legend-child {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+          }
+
+          .iwd-agrc-legend-child:nth-child(n) {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+
+  #iwd-holdings {
+    .iwd-scroll-contain {
+      padding-left: 0;
+      height: 78vh;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+  }
+
+  #iwd-holding-detail {
+    background: white url('../../assets/bg_waves.svg') bottom no-repeat;
+    padding: 30px 20px;
+    text-align: center;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    .iwd-hd-header {
+      flex-direction: column;
+      margin-bottom: 30px;
+      margin-top: 90px;
+      align-items: center;
+
+      img {
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+
+      .iwd-hdh-title {
+        font-size: 13px;
+        line-height: 21px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: $grey;
+        font-weight: 600;
+      }
+
+      .iwd-hdh-fund-name {
+        font-size: 17px;
+        line-height: 27px;
+        max-width: 100%;
+      }
+    }
+
+    .iwd-hd-type {
+      display: flex;
+      justify-content: center;
+
+      .iwd-hdt-invested {
+        order: 3;
+      }
+
+      .iwd-hdt-divider {
+        display: inline-block;
+        margin: 0 30px;
+        order: 2;
+      }
+
+      .iwd-hdt-scheme-type {
+        order: 1;
+      }
+    }
+
+    .iwd-hd-info-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      justify-content: space-between;
+      margin-top: 0;
+      margin-bottom: 40px;
+
+      .iwd-hd-numbers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 0;
+        width: 100%;
+
+        .iwd-hdn-item {
+          color: $grey;
+          margin-right: 10px;
+
+          img {
+            margin-right: 10px;
+          }
+
+          .iwd-hdni-value {
+            font-size: 15px;
+            line-height: 24px;
+          }
+        }
+
+        .iwd-hdn-item-divider {
+          display: none;
+        }
+      }
+
+      .iwd-hd-stats {
+        margin-top: 40px;
+        flex-direction: column;
+        width: 100%;
+
+        .iwd-hds-item {
+          font-size: 13px;
+          line-height: 21px;
+          color: $grey;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 10px 20px;
+          margin-right: 0;
+          margin-bottom: 10px;
+          background: linear-gradient(
+            90deg,
+            rgba(154, 211, 204, 0.1) 16.15%,
+            rgba(154, 211, 204, 0) 100%
+          );
+        }
+
+        .iwd-hds-item:nth-last-child(1) {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .iwd-hd-transactions {
+      .iwd-card-header {
+        text-align: left;
+      }
+    }
+  }
+}
+
+//Statement capital-gain-tax
+.iwd-statement-report-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  height: 100%;
+  .iwd-statement-title {
+    font-family: Poppins;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 27px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+  .iwd-statement-reports {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-left: -15px;
+  }
+}
+/////////////////////////////
+//media screen for bigger screens
+
+.iwd-filter-button {
+  display: none;
+}
+
+// Statement Transaction
+.iwd-statement-transaction {
+  width: 100%;
+  display: flex;
+}
+
+.iwd-transaction-container {
+  height: 75vh;
+  flex: 1;
+  overflow: auto;
+
+  .iwd-transaction-search-container {
+    display: flex;
+    justify-content: space-between;
+    .iwd-transaction-search {
+      z-index: 10;
+      flex: 0.6;
+      height: 40px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .iwd-transaction-date {
+      z-index: 10;
+      text-align: center;
+      margin-left: 30px;
+      flex: 0.4;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .iwd-transaction-table-container {
+    margin-top: 30px;
+    position: relative;
+    margin-bottom: 20px;
+    padding: 30px 50px 10px 50px;
+    min-height: calc(100vh - 42vh);
+    .iwd-transaction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      .iwd-transaction-title {
+        font-family: Poppins;
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 27px;
+        letter-spacing: 0em;
+        text-align: left;
+      }
+      .iwd-transaction-download-report {
+        font-family: Poppins;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 21px;
+        letter-spacing: 1px;
+        text-align: center;
+        text-transform: uppercase;
+        color: $primary;
+        border: 1px solid $primary;
+        box-sizing: border-box;
+        border-radius: 100px;
+        padding: 10px 17px 9px 17px;
+        cursor: pointer;
+        transition: all 350ms ease-in-out;
+      }
+      .iwd-transaction-download-report:hover {
+        background-color: $primary;
+        color: white;
+      }
+      .iwd-trasaction-download-icon {
+        display: none;
+      }
+    }
+    .iwd-transaction-table-data {
+      height: 100%;
+      overflow: auto;
+      margin-left: -50px;
+      margin-right: -50px;
+    }
+  }
+  .iwd-transaction-pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.iwd-transaction-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.iwd-transaction-container {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+@media only screen and (max-width: 450px) {
+  .iwd-filter-desktop {
+    display: none;
+  }
+
+  .iwd-filter-clear {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+  }
+
+  .iwd-filter-button {
+    position: fixed;
+    z-index: 2;
+    bottom: 15%;
+    right: 30px;
+    display: block;
+    width: 60px;
+    height: 60px;
+  }
+
+  .iwd-statement-report-container {
+    .iwd-statement-title {
+      display: none;
+    }
+  }
+  .iwd-statement-report-container .iwd-statement-reports {
+    margin-left: 0px;
+    justify-content: center;
+  }
+
+  // Statements Page
+  .iwd-transaction-container .iwd-transaction-search-container .iwd-transaction-date {
+    display: none;
+  }
+
+  .iwd-transaction-container .iwd-transaction-table-container .iwd-transaction-header {
+    .iwd-transaction-download-report {
+      display: none;
+    }
+
+    .iwd-trasaction-download-icon {
+      display: block;
+      width: 60px;
+      height: 26px;
+      img {
+        width: 100%;
+      }
+    }
+  }
 }

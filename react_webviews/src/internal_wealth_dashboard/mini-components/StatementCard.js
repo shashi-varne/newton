@@ -10,7 +10,7 @@ const StatementCard = () => {
       </div>
       <div className='iwd-statement-file-container'>
         <img src={pdf_icon} className='iwd-statement-icon' alt='pdf_icon' />
-        <img src={xls_icon} className='iwd-statement-icon' alt='pdf_icon' />
+        {/* <img src={xls_icon} className='iwd-statement-icon' alt='pdf_icon' /> */}
       </div>
     </div>
   );

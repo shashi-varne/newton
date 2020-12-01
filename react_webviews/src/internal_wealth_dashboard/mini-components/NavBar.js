@@ -42,7 +42,7 @@ const NavBar = (props) => {
         style={{ marginBottom: '50px' }}
       />
       {tabs.map(({label, icon}) =>
-        <Link to={label} key={label}>
+        <Link to={`${label}${props.location.search}`} key={label}>
           <div
             className={`
               iwd-nav-item

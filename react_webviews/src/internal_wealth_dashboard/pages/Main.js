@@ -1,11 +1,13 @@
 import React from 'react';
+
+import Statements from './Statements';
 import { getConfig } from 'utils/functions';
-import { navigate } from '../common/commonFunctions';
 import NavBar from '../mini-components/NavBar';
 import NavBarMobile from '../mini-components/NavBarMobile';
 import Dashboard from './Dashboard';
-import Statements from './Statements';
-// import Dashboard from './Dashboard-v2';
+import Analysis from './Analysis';
+import Holdings from './Holdings';
+import Recommendations from './Recommendations';
 const isMobileView = getConfig().isMobileDevice;
 
 const Main = (props) => {
@@ -17,10 +19,10 @@ const Main = (props) => {
     <div id='iwd-main'>
       {isMobileView ? <NavBarMobile /> : <NavBar />}
       {params.tab === 'dashboard' && <Dashboard />}
-      {params.tab === 'analysis' && <Dashboard />}
-      {params.tab === 'holdings' && <Dashboard />}
+      {params.tab === 'analysis' && <Analysis />}
+      {params.tab === 'holdings' && <Holdings />}
       {params.tab === 'statements' && <Statements />}
-      {params.tab === 'recommendations' && <Dashboard />}
+      {params.tab === 'recommendations' && <Recommendations />}
     </div>
   );
 };

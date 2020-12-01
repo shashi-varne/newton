@@ -1,5 +1,4 @@
 import React, { Fragment, useState, useEffect, cloneElement } from "react";
-import { getConfig } from "utils/functions";
 import {
   resendOtp,
   login,
@@ -13,7 +12,6 @@ import LoadingScreen from "../../../wealth_report/mini-components/LoadingScreen"
 import { FormControl, TextField, InputAdornment } from "material-ui";
 import { nativeCallback } from 'utils/native_callback';
 import { validateEmail, storageService, isFunction } from "../../../utils/validators";
-const isMobileView = getConfig().isMobileDevice;
 
 const LoginFields = (props) => {
   const { navigateFunction: navigate, parentProps } = props;
@@ -124,6 +122,13 @@ const LoginFields = (props) => {
     }
   };
 
+  const formatNumber = () => {
+    if (number.length > 10 && number.slice(0, 2)) {
+      return number.slice(2);
+    }
+    return number;
+  };
+
   const triggerOtp = async () => {
     try {
       const err = validatePhone();
@@ -132,7 +137,7 @@ const LoginFields = (props) => {
         return setPhoneErr(err);
       }
       setOpLoading(true);
-      await login({ mobileNo: number.slice(2), countryCode });
+      await login({ mobileNo: formatNumber(), countryCode });
       navigate('login/otp');
     } catch (err) {
       sendEvents('login', {
@@ -149,7 +154,7 @@ const LoginFields = (props) => {
   const verify = async (otpVal) => {
     try {
       setOpLoading(true);
-      const res = await verifyOtp({ mobileNo: number, countryCode, otp: otpVal });
+      const res = await verifyOtp({ mobileNo: formatNumber(), countryCode, otp: otpVal });
       sendEvents('login', {
         screen_name: 'login',
         status: 'success',

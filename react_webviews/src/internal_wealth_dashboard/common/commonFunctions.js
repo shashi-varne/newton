@@ -1,5 +1,6 @@
 import { getConfig } from 'utils/functions';
-
+import { subDays, startOfMonth, addMonths, endOfMonth, startOfYear } from 'date-fns';
+import moment from 'moment';
 export function navigate(pathname, params, replace) {
   if (!replace) {
     this.history.push({
@@ -25,10 +26,14 @@ export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) =>
     current_amount: [],
     invested_amount: [],
   };
-  let max = current_amt_arr[0].value, min = current_amt_arr[0].value, curr_val, inv_val;
+  let max = current_amt_arr[0].value,
+    min = current_amt_arr[0].value,
+    curr_val,
+    inv_val;
 
   for (let i = 0; i < current_amt_arr.length; i++) {
-    curr_val = current_amt_arr[i]; inv_val = invested_amt_arr[i];
+    curr_val = current_amt_arr[i];
+    inv_val = invested_amt_arr[i];
     max = Math.max(max, Number(curr_val.value), Number(inv_val.value));
     min = Math.min(min, Number(curr_val.value), Number(inv_val.value));
     obj.current_amount.push({
@@ -46,12 +51,20 @@ export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) =>
   return {
     min: min * 0.7, // Multiplying by a factor to provide some padding area
     max: max * 1.2, // Multiplying by a factor to provide some padding area
-    data: [{
-      id: 'current_amount',
-      data: obj.current_amount,
-    }, {
-      id: 'invested_amount',
-      data: obj.invested_amount,
-    }],
+    data: [
+      {
+        id: 'current_amount',
+        data: obj.current_amount,
+      },
+      {
+        id: 'invested_amount',
+        data: obj.invested_amount,
+      },
+    ],
   };
 };
+
+export const dateFormater = (date) => {
+  return moment(date).format('YYYY-MM-DD');
+};
+export const past_seven_days = () => [subDays(new Date(), 6), new Date()];

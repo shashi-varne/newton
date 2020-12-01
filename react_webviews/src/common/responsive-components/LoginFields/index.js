@@ -1,6 +1,4 @@
-// import LoginFields from 'LoginFields';
-
 import LoginFields from "./LoginFields";
-require('./Style.scss');
+require('./LoginFields.scss');
 
 export default LoginFields;
