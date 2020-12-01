@@ -95,7 +95,7 @@ function Analysis() {
   return (
     <section className="iwd-page iwd-page__analysis" id="iwd-analysis">
       <PageHeader
-        height="10vh"
+        height="9vh"
         hideProfile={isMobileView}
       >
         <div className="iwd-analysis-header-container-left">

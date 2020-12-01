@@ -58,8 +58,8 @@ const NavBarMobile = (props) => {
           >
             <img src={close} alt="close" />
           </Button>
-          {allTabs.map(tab =>
-            <Link to={`${tab}${props.location.search}`} onClick={() => setExpanded(false)}>
+          {allTabs.map((tab, idx) =>
+            <Link to={`${tab}${props.location.search}`} onClick={() => setExpanded(false)} key={idx}>
               <div
                 className={`
                 iwd-nmb-link

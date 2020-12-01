@@ -500,20 +500,19 @@ $background: #F9F9F9;
   }
 }
 
-#iwd-holding-detail {
+.iwd-holding-detail {
   font-family: 'Poppins', 'Roboto', sans-serif !important;
-  background: white url('../../assets/bg_waves_full_screen.svg') bottom no-repeat;
-  background-size: contain;
-  padding: 50px 100px;
-  box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 10;
+  background: white;
+  scroll-behavior: smooth;
+  margin: 0 !important;
 
-  .iwd-hd-header {
+  .iwd-hd-content {
+    padding: 50px 100px;
+    box-sizing: border-box;
+    height: 100vh;
+  }
+
+  .iwd-hdc-header {
     display: flex;
     margin-bottom: 30px;
 
@@ -521,7 +520,7 @@ $background: #F9F9F9;
       margin-right: 20px;
     }
 
-    .iwd-hdh-title {
+    .iwd-hdch-title {
       font-size: 13px;
       line-height: 21px;
       letter-spacing: 1px;
@@ -529,7 +528,7 @@ $background: #F9F9F9;
       color: $dark;
     }
 
-    .iwd-hdh-fund-name {
+    .iwd-hdch-fund-name {
       font-weight: bold;
       font-size: 30px;
       line-height: 40px;
@@ -538,7 +537,7 @@ $background: #F9F9F9;
     }
   }
 
-  .iwd-hd-type {
+  .iwd-hdc-type {
     font-weight: 600;
     font-size: 11px;
     line-height: 18px;
@@ -548,40 +547,40 @@ $background: #F9F9F9;
     margin: 10px 0 30px;
     display: flex;
 
-    .iwd-hdt-divider {
+    .iwd-hdct-divider {
       margin: 0 20px;
     }
   }
 
-  .iwd-hd-info-row {
+  .iwd-hdc-info-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     margin-top: -30px;
 
-    .iwd-hd-numbers {
+    .iwd-hdc-numbers {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       margin: 30px 50px 0 0;
 
-      .iwd-hdn-item {
+      .iwd-hdcn-item {
         color: $grey;
 
         img {
           margin-right: 20px;
         }
 
-        .iwd-hdni-value {
+        .iwd-hdcni-value {
           font-size: 17px;
           line-height: 27px;
         }
 
-        .iwd-hdni-value.current-val {
+        .iwd-hdcni-value.current-val {
           color: $dark;
         }
 
-        .iwd-hdni-label {
+        .iwd-hdcni-label {
           font-weight: 600;
           font-size: 11px;
           line-height: 18px;
@@ -590,18 +589,18 @@ $background: #F9F9F9;
         }
       }
 
-      .iwd-hdn-item-divider {
+      .iwd-hdcn-item-divider {
         border-right: 1px solid rgba($grey, 0.2);
         margin: 0 50px;
         height: 25px;
       }
     }
 
-    .iwd-hd-stats {
+    .iwd-hdc-stats {
       display: flex;
       margin-top: 30px;
 
-      .iwd-hds-item {
+      .iwd-hdcs-item {
         font-size: 13px;
         line-height: 21px;
         color: $grey;
@@ -612,25 +611,24 @@ $background: #F9F9F9;
     }
   }
 
-  .iwd-hd-transactions {
+  .iwd-hdc-transactions {
     margin-top: 60px;
 
     .iwd-card-header {
       margin-bottom: 10px;
     }
 
-    .iwd-hdt-table-container {
+    .iwd-hdct-table-container {
       max-height: 260px;
       overflow: auto;
     }
   }
-}
 
-#iwd-holding-detail-blank {
-  @extend #iwd-holding-detail;
-  background: white !important;
+  .iwd-hd-banner-img {
+    width: 100%;
+    margin-bottom: -5px;
+  }
 }
-
 // IWD Analysis Page
 
 #iwd-analysis {
@@ -712,6 +710,8 @@ $background: #F9F9F9;
       .iwd-sector-alloc-legend {
         max-height: 220px;
         overflow-y: auto;
+        margin-right: -20px;
+        padding-right: 20px;
 
         .iwd-sal-item {
           display: flex;
@@ -1061,7 +1061,7 @@ $background: #F9F9F9;
     margin-bottom: 40px;
   }
 
-  .iwd-card:nth-last-child(1) {
+  .iwd-card:nth-last-of-type(1) {
     margin-bottom: 0;
   }
 
@@ -1071,7 +1071,7 @@ $background: #F9F9F9;
 
   .iwd-scroll-contain {
     scroll-snap-type: none;
-    height: 85%;
+    height: 90%;
     margin-right: 0;
     padding: 0;
   }
@@ -1183,17 +1183,19 @@ $background: #F9F9F9;
       #iwd-dr-data {
         display: flex;
         flex-wrap: wrap;
+        justify-content: space-between;
 
         .iwd-dr-box {
-          padding: 35px 40px;
-          flex: 1 0 50%;
-          width: 50%;
+          padding: 35px 0;
+          flex: 1 0 45%;
+          width: 45%;
 
           .iwd-drb-label {
             font-size: 13px;
             line-height: 21px;
             color: $grey;
             text-align: center;
+            margin-bottom: 5px;
           }
 
           .iwd-drb-value {
@@ -1229,6 +1231,10 @@ $background: #F9F9F9;
   }
   
   #iwd-analysis {
+    .iwd-scroll-contain {
+      height: 86%;
+    }
+
     .iwd-analysis-portfolios-equity {
       overflow-y: auto;
       flex-direction: column;
@@ -1363,15 +1369,17 @@ $background: #F9F9F9;
     }
   }
 
-  #iwd-holding-detail {
-    background: white url('../../assets/bg_waves.svg') bottom no-repeat;
-    padding: 30px 20px;
-    text-align: center;
-    height: 100%;
-    overflow-y: auto;
-    box-sizing: border-box;
+  .iwd-holding-detail {
+    background: white;
 
-    .iwd-hd-header {
+    .iwd-hd-content {
+      padding: 30px 20px;
+      text-align: center;
+      box-sizing: border-box;
+      height: auto;
+    }
+
+    .iwd-hdc-header {
       flex-direction: column;
       margin-bottom: 30px;
       margin-top: 90px;
@@ -1382,7 +1390,7 @@ $background: #F9F9F9;
         margin-bottom: 20px;
       }
 
-      .iwd-hdh-title {
+      .iwd-hdch-title {
         font-size: 13px;
         line-height: 21px;
         letter-spacing: 1px;
@@ -1391,33 +1399,33 @@ $background: #F9F9F9;
         font-weight: 600;
       }
 
-      .iwd-hdh-fund-name {
+      .iwd-hdch-fund-name {
         font-size: 17px;
         line-height: 27px;
         max-width: 100%;
       }
     }
 
-    .iwd-hd-type {
+    .iwd-hdc-type {
       display: flex;
       justify-content: center;
 
-      .iwd-hdt-invested {
+      .iwd-hdct-invested {
         order: 3;
       }
 
-      .iwd-hdt-divider {
+      .iwd-hdct-divider {
         display: inline-block;
         margin: 0 30px;
         order: 2;
       }
 
-      .iwd-hdt-scheme-type {
+      .iwd-hdct-scheme-type {
         order: 1;
       }
     }
 
-    .iwd-hd-info-row {
+    .iwd-hdc-info-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
@@ -1425,14 +1433,14 @@ $background: #F9F9F9;
       margin-top: 0;
       margin-bottom: 40px;
 
-      .iwd-hd-numbers {
+      .iwd-hdc-numbers {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
         margin: 0;
         width: 100%;
 
-        .iwd-hdn-item {
+        .iwd-hdcn-item {
           color: $grey;
           margin-right: 10px;
 
@@ -1440,23 +1448,23 @@ $background: #F9F9F9;
             margin-right: 10px;
           }
 
-          .iwd-hdni-value {
+          .iwd-hdcni-value {
             font-size: 15px;
             line-height: 24px;
           }
         }
 
-        .iwd-hdn-item-divider {
+        .iwd-hdcn-item-divider {
           display: none;
         }
       }
 
-      .iwd-hd-stats {
+      .iwd-hdc-stats {
         margin-top: 40px;
         flex-direction: column;
         width: 100%;
 
-        .iwd-hds-item {
+        .iwd-hdcs-item {
           font-size: 13px;
           line-height: 21px;
           color: $grey;
@@ -1473,13 +1481,15 @@ $background: #F9F9F9;
           );
         }
 
-        .iwd-hds-item:nth-last-child(1) {
+        .iwd-hdcs-item:nth-last-child(1) {
           margin-bottom: 0;
         }
       }
     }
 
-    .iwd-hd-transactions {
+    .iwd-hdc-transactions {
+      margin-bottom: 50px;
+
       .iwd-card-header {
         text-align: left;
       }
@@ -1492,17 +1502,10 @@ $background: #F9F9F9;
 .iwd-filter-button {
   display: none;
 }
+
 @media only screen and (max-width: 450px) {
   .iwd-filter-desktop {
     display: none;
-  }
-
-  .iwd-filter-clear {
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: 0em;
-    text-align: center;
   }
 
   .iwd-filter-button {
