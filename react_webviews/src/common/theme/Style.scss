@@ -1051,6 +1051,76 @@ input#pan {
   margin-top: 10px;
 }
 
+.toolbar-title {
+  width: 100%;
+
+  .progress-bar {
+    margin: 20px -5px 0 -40px;
+    .head {
+      text-align: center;
+      font-size: 13px;
+      color: #767E86;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.journey-header-progress {
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+  color: #0A1D32;
+  font-weight: 400;
+
+
+  .indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .hr {
+      width: 48.5%;
+    }
+
+    .hr1 {
+      border: 1px solid #FFFFFF;
+      // width: 46%;
+    }
+
+    .hr2 {
+      border-top: 1px solid var(--primary);
+      // width: 45%;
+    }
+
+    .dot {
+      height: 8px;
+      width: 8px;
+      border: 1px solid var(--primary);
+      background-color: #E3EFFF;
+      // background-color: var(--primary);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .pending {
+      background-color: var(--highlight);
+      // border: 1px solid var(--highlight);
+    }
+
+    .init {
+      background-color: var(--highlight);
+      // border: 1px solid var(--primary);
+
+
+    }
+
+    .completed {
+      background-color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+  }
+}
+  
 .OTP-title{
   justify-content: center !important;
 }
