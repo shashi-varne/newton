@@ -280,7 +280,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                 if (member.ped) {
                     let dis_data = {
-                        'title': `${(member.relation).toUpperCase()}'s diseases`,
+                        'title': `${(childeNameMapper(member.key)).toUpperCase()}'s diseases`,
                         'subtitle': subtitle
                     }
                     diseases_data_backend.push(dis_data);
@@ -805,7 +805,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
-                        <div className="subtitle" style={{margin : '7px 0 0 0',whiteSpace: 'pre-wrap', overflowWrap: 'break-word'}}>
+                        <div className="subtitle" style={{margin : '7px 0 0 0', overflowWrap: 'break-word'}}>
                           {capitalizeFirstLetter((props.subtitle + "").toLowerCase())}
                              {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
