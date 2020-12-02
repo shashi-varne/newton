@@ -560,8 +560,9 @@ class GoldSummary extends Component {
     return(
       <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
             <Imgc 
-            style={{width:'100%',cursor:'pointer', minHeight: 233}} 
+            style={{width:'inherit',cursor:'pointer', minHeight: 233}} 
             src={crd_gold_info} alt="" />
+           
             <div className="inner">
               <div className="title generic-page-title">
                 Buy 24K gold to create long term wealth
