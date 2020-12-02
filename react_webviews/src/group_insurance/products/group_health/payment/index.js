@@ -304,9 +304,9 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>
                   { this.state.payment_details.dt_created && 
                   <span> 
-                    {(getDateBreakup((this.state.payment_details.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})).dom) }{' '}
-                    {(getDateBreakup((this.state.payment_details.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})).month)  }{', '}
-                   {formatAMPM(this.state.payment_details.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'})}
+                    {(getDateBreakup(this.state.payment_details.dt_created).dom)}{' '}
+                    {(getDateBreakup(this.state.payment_details.dt_created).month)}{', '}
+                   {formatAMPM(this.state.payment_details.dt_created)}
                     </span> }
                       </div>
                   </div>
