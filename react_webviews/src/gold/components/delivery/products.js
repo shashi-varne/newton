@@ -155,7 +155,7 @@ class GoldDeliveryProducts extends Component {
 
   renderDeliveryProducts =(props, index)  =>{
     return (
-      <div key={index} className="delivery-tile">
+      <div key={index} className="delivery-tile" onClick={() => this.selectGoldProduct(index)} >
         {props.media.images && 
         <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
 
@@ -168,7 +168,7 @@ class GoldDeliveryProducts extends Component {
 
   renderDeliverySkelton =(props, index)  =>{
     return (
-      <div key={index} onClick={() => this.selectGoldProduct(index)} 
+      <div key={index} 
       className="delivery-tile skelton-tile">
 
         <SkeltonRect className="delivery-icon st1" />
