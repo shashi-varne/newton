@@ -157,7 +157,7 @@ body[data-device="web"] {
   padding-bottom: 20px !important;  */
   background-color: #fff;
   overflow-y: scroll;
-  margin-bottom: 56px !important;
+  // margin-bottom: 56px !important;
   padding-bottom: 56px !important;
 }
 
@@ -1049,4 +1049,8 @@ input#pan {
   font-size: 13px;
   color: #767E86;
   margin-top: 10px;
+}
+
+.OTP-title{
+  justify-content: center !important;
 }

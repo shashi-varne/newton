@@ -3,17 +3,16 @@ import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
 import "../common/theme/Style.scss";
-import { themeConfig } from 'utils/constants';
-import { ToastContainer } from 'react-toastify';
+import { themeConfig } from "utils/constants";
+import { ToastContainer } from "react-toastify";
 
 import "./components/Style.scss";
 import NotFound from "../common/components/NotFound";
 
-import DigiStatus from "./components/digilocker";
-import NsdlStatus from "./components/nsdl";
-import AppUpdate from "./components/app_update";
-import ESignInfo from "./components/esign_info";
-import FinityAppUpdateInfo from "./components/finity_app_update";
+import WhastappConfirmNumber from "./components/whatsapp_confirm";
+import WhatsappEdit from "./components/whatsapp_edit";
+import WhatsappOtpVerification from "./components/otp_verify";
+import WhatsappOtpSuccess from "./components/otp_success";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -21,11 +20,9 @@ import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
-  productionPrefix: "f"
+  productionPrefix: "f",
 });
 const jss = create(jssPreset());
-// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-// jss.options.insertionPoint = 'jss-insertion-point';
 
 const theme = createMuiTheme(themeConfig);
 
@@ -43,7 +40,7 @@ const ScrollToTop = withRouter(
   }
 );
 
-const Kyc_Esign = props => {
+const Whatsapp = (props) => {
   const { url } = props.match;
 
   return (
@@ -52,17 +49,16 @@ const Kyc_Esign = props => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route path={`${url}/digilocker`} component={DigiStatus} />
-          <Route path={`${url}/nsdl`} component={NsdlStatus} />
-          <Route path={`${url}/app-update`} component={AppUpdate} />
-          <Route path={`${url}/finity-app-update`} component={FinityAppUpdateInfo} />
-          <Route path={`${url}/info`} component={ESignInfo} />
-          
-          <Route component={NotFound} />
+
+            <Route path={`${url}/mobile-verify`} component={WhastappConfirmNumber} />
+            <Route path={`${url}/edit-number`} component={WhatsappEdit} />
+            <Route path={`${url}/otp-verify`} component={WhatsappOtpVerification} />
+            <Route path={`${url}/otp-success`} component={WhatsappOtpSuccess} />
+            <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
   );
 };
 
-export default Kyc_Esign;
+export default Whatsapp;

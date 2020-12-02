@@ -62,11 +62,11 @@ const partnersConfigBase = {
       fhc: true
     }
   },
-  myway: {
-    logo: "myway_white_logo.png",
+  finity: {
+    logo: "finity_white_logo.png",
     primary_color: "#3792FC",
-    code: "myway",
-    email: "ask@mywaywealth.com",
+    code: "finity",
+    email: "ask@finity.in",
     mobile: "+91-9916149111",
     message: "",
     banner: "obc_banner.png",
@@ -108,7 +108,7 @@ const partnersConfigBase = {
     secondary_color: "#ff5928",
     cta_disabled_color: "#ffffff",
     code: "bfdlmobile",
-    email: "bajajfinserv@mywaywealth.com",
+    email: "bajajfinserv@finity.in",
     mobile: "+91-7829331118",
     message: "",
     banner: "bfdl_banner.png",
@@ -410,25 +410,25 @@ function getPartnerConfig(partner_code) {
       webAppUrl: 'https://app.fisdom.com/#!/',
       email_domain: 'fisdom.com',
     },
-    'myway': {
+    'finity': {
       primary: '#3792fc',
       secondary: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#F0F7FF',
       skelton_color: '#F0F7FF',
       label: '#a2a2a2',
-      type: 'myway',
+      type: 'finity',
       // inputFocusedColor: '#3792fc',
-      productName: 'myway',
+      productName: 'finity',
       mobile: '+91-8048039999',
       appLink: 'https://myway.onelink.me/W4GN/1f539fd2',
-      termsLink: 'https://mywaywealth.com/terms/',
-      schemeLink: 'https://mywaywealth.com/scheme/',
-      askEmail: 'ask@mywaywealth.com',
+      termsLink: 'https://finity.in/terms/',
+      schemeLink: 'https://finity.in/scheme/',
+      askEmail: 'ask@finity.in',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'mywayBackColor',
-      webAppUrl: 'https://app.mywaywealth.com/#!/',
-      email_domain: 'mywaywealth.com',
+      webAppUrl: 'https://app.finity.in/#!/',
+      email_domain: 'finity.in',
     },
     'minvest': {
       primary: '#FF5C34',
@@ -450,13 +450,13 @@ function getPartnerConfig(partner_code) {
     },
   }
 
-  const ismyway = search.indexOf("api.mywaywealth.com") >= 0;
+  const ismyway = search.indexOf("api.mywaywealth.com") >= 0 || search.indexOf("plutus-finwizard-pro.appspot.com") >= 0;
   const isminvest = search.indexOf("my.barodaminvest.com") >= 0;
   const isStaging = search.indexOf("staging") >= 0;
   let productType = 'fisdom';
   if (ismyway || partner_code === 'bfdlmobile' ||
-    partner_code === 'myway') {
-    productType = 'myway';
+    partner_code === 'finity') {
+    productType = 'finity';
   }
 
   if (isminvest) {
@@ -489,7 +489,7 @@ function getPartnerConfig(partner_code) {
   config_to_return.isFinwiz = true;
 
   if (checkValidString(partner_code) && partner_code !== 'fisdom' &&
-    partner_code !== 'myway' && partner_code !== 'test') {
+    partner_code !== 'finity' && partner_code !== 'test') {
     if (partner_code === 'bfdl') {
       partner_code = 'bfdlmobile';
     }
@@ -764,7 +764,7 @@ export function isFeatureEnabled(config, feature) {
         'android': '999',
         'ios': ''
       },
-      'myway': {
+      'finity': {
         'android': '999',
         'ios': ''
       }
