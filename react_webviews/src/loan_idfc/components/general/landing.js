@@ -37,13 +37,19 @@ class Landing extends Component {
     });
   };
 
-  handleClick = async () => {
+  handleClick = () => {
     let params = {
       create_new: this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
+    let { vendor_application_status } = this.state;
+
+    let failed_cases = ["idfc_null_rejected", "idfc_0.5_rejected", "idfc_1.0_rejected", "idfc_1.7_rejected", "idfc_4_rejected"];
+
     if (this.state.cta_title === "RESUME") {
       this.navigate("journey");
+    } else if (failed_cases.includes(vendor_application_status)) {
+      this.navigate("loan-status");
     } else {
       this.getOrCreate(params);
     }
