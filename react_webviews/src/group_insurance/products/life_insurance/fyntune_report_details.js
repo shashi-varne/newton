@@ -8,6 +8,7 @@ import {
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
+import {fyntuneConstants} from './constants';
 
 class FyntuneReportDetails extends Component {
 
@@ -45,6 +46,10 @@ class FyntuneReportDetails extends Component {
                 policy_data.dt_policy_end = policy_data.dt_policy_end && policy_data.dt_policy_end.substring(0,10);
                 policy_data.dt_policy_start = policy_data.dt_policy_start &&  policy_data.dt_policy_start.substring(0,11);
                 
+                let final_status = fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status]
+                policy_data.final_status = final_status; 
+                let subtitle = policy_data.product_name.match(/\(([^)]+)\)/)[1];
+                policy_data.subtitle = subtitle;
 
                 this.setState({
                     policy_data: policy_data,
@@ -92,13 +97,13 @@ class FyntuneReportDetails extends Component {
                 <div className="group-health-plan-details group-health-final-summary group-health-life-insurance">
 
                     <div className={`report-color-state`}>
-                        <div className="circle" style={{backgroundColor: '#78CE5D'}}></div>
-                        <div className="report-color-state-title" style={{color: '#78CE5D'}}>ISSUED ON {this.state.policy_data.dt_policy_start}</div>
-                    </div>
+                        <div className="circle" style={{background:this.state.policy_data.final_status && this.state.policy_data.final_status.color }} ></div>
+        <div className="report-color-state-title" style={{color: this.state.policy_data.final_status && this.state.policy_data.final_status.color}}>{this.state.policy_data.final_status && this.state.policy_data.final_status.text }</div>
+                    </div> 
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <h2 style={{margin: "0px 0px"}}>Sanchay Plus</h2>
-                            <p style={{margin: "5px 0px"}}>(Gauranteed Income)</p>
+                            <p style={{margin: "5px 0px"}}>({this.state.policy_data.subtitle})</p>
                         </div>
 
                         <div className="tc-right">

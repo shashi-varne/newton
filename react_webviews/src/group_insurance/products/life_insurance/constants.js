@@ -20,6 +20,24 @@ export var fyntuneConstants = {
         },
       ] 
     },
+    fyntune_policy_report_status_mapper: {
+      issued: {
+        text: 'ISSUED',
+        color: '#78CE5D'
+      },
+      pending: {
+        text: 'PENDING',
+        color: '#d3bd13'
+      },
+      expired: {
+        text: 'EXPIRED',
+        color: 'orange'
+      },
+      rejected: {
+        text: 'EXPIRED',
+        color: 'red'
+      }
+    },
     stepsToFollow : [
       {
         title: "Get free quotes",
