@@ -185,8 +185,9 @@ class Container extends Component {
   
           {/* Children Block */}
             <div
-            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': '',
-            backgroundImage: this.props.skelton ? 'unset': ''}}
+            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial',
+            // backgroundImage: this.props.skelton ? 'unset': 'initial'
+          }}
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
             >
             <div 

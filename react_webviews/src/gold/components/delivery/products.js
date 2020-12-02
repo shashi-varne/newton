@@ -10,6 +10,7 @@ import GoldProviderFilter from '../ui_components/provider_filter';
 import { default_provider, gold_providers, isUserRegistered } from '../../constants';
 import { storageService, inrFormatDecimal2} from 'utils/validators';
 import {SkeltonRect} from '../../../common/ui/Skelton';
+import {Imgc} from '../../../common/ui/Imgc';
 
 const stepsContentMapper = [
   { 'icon': 'ic_gold_provider', 'content': 'Select gold coin' },
@@ -193,7 +194,7 @@ class GoldDeliveryProducts extends Component {
   renderInfoSteps =(props, index) => {
     return(
       <div key={index} className="tile">
-        <img className="icon" 
+         <Imgc className="icon gold-common-stepes-icon" 
         src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
           {index + 1}.  {props.content}

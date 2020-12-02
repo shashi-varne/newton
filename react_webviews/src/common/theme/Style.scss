@@ -753,6 +753,7 @@ input#pan {
     // color: #767e86;
     // font-size: 13px;
     margin: 0 0 0 20px;
+    width: -webkit-fill-available;
   }
 
   .content_step{
@@ -782,6 +783,8 @@ input#pan {
     font-weight: 400;
     line-height: 1.6;
   }
+
+ 
 }
 
 .his {
@@ -988,7 +991,7 @@ input#pan {
   position: absolute;
 }
 
-.generic-page-button-small {
+@mixin generic-page-button-small {
   color: var(--secondary);
   font-size: 12px;
   font-weight: 700;
@@ -999,6 +1002,11 @@ input#pan {
   cursor: pointer;
   display: flex;
   align-items: center;
+}
+
+.generic-page-button-small-withoutborder {
+  @include generic-page-button-small();
+  border: unset;
 }
 
 .generic-page-button-small-with-back {

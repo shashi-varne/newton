@@ -220,7 +220,7 @@ class GoldSummary extends Component {
     });
 
 
-    if(provider === 'safegold') {
+    if(provider === 'mmtc') {
       this.setState({
         skelton: false
       })
@@ -259,18 +259,27 @@ class GoldSummary extends Component {
       console.log(err);
       this.setState({
         skelton: false,
+        onloadError: true
       });
       toast('Something went wrong');
     }
   }
 
 
-  async componentDidMount() {
+  onload = async () => {
+    this.setState({
+      skelton: 'p',
+      onloadError: false
+    })
     storageService().remove('forceBackState');
     storageService().remove('buyData');
     storageService().remove('sellData');
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
+  }
+
+  async componentDidMount() {
+    this.onload(); 
   }
 
 
@@ -299,6 +308,16 @@ class GoldSummary extends Component {
         url: url
       }
     });
+  }
+
+  handleClickBlock2 = () => {
+    if(!this.state.skelton) {
+      if(this.state.onloadError) {
+        this.onload();
+      } else {
+        this.navigate('gold-locker');
+      }
+    }
   }
 
   handleClickOffer(offer, index) {
@@ -416,9 +435,9 @@ class GoldSummary extends Component {
   renderBlock2() {
     return(
       <div className="block2">
-      <div onClick={() => this.navigate('gold-locker')}
+      <div onClick={() => this.handleClickBlock2()}
        className="highlight-text highlight-color-info">
-        <img 
+        <Imgc 
           src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
         <div style={{display: 'grid', margin: '0 0 0 10px'}}>
           <div className="highlight-text12">
@@ -426,9 +445,18 @@ class GoldSummary extends Component {
             <img  style={{margin: '0 0 0 8px', width: 11}}
           src={ require(`assets/lock_icn.svg`)} alt="Gold" />
           </div>
-          {!this.state.skelton && <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
+
+          {!this.state.skelton && !this.state.onloadError && <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
           {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
           </div>}
+
+          {!this.state.skelton && this.state.onloadError && 
+            <div className="highlight-text2 onload-error"
+            style={{margin: '4px 0 0 8px'}}>
+            Something went wrong. <div className="generic-page-button-small-withoutborder">RETRY</div>
+            </div>
+          }
+
           <SkeltonRect className="balance-skelton" 
             hide={!this.state.skelton} 
           />
@@ -596,7 +624,7 @@ class GoldSummary extends Component {
       <Container
         // skelton={this.state.skelton}
         title="Gold"
-        noHeader={this.state.skelton}
+        // noHeader={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
         classOverRide="gold-landing-container gold-landing-container-background"

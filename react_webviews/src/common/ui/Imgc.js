@@ -8,9 +8,6 @@ export const Imgc = (props) => {
         return (
             <SVG
             src={props.src}
-            // onLoad={() => {
-            //     console.log("loaded")
-            // }}
             className={props.className}
             alt={props.alt}
             style={props.style}

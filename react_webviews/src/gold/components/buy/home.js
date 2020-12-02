@@ -20,6 +20,7 @@ import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+import {Imgc} from '../../../common/ui/Imgc';
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -407,7 +408,7 @@ class GoldBuyHome extends Component {
   renderInfoSteps =(props, index) => {
     return(
       <div key={index} className="tile">
-        <img className="icon" 
+        <Imgc className="icon gold-common-stepes-icon" 
         src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
           {props.content}
