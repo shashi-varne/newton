@@ -9,6 +9,7 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import GoldProviderFilter from '../ui_components/provider_filter';
 import { default_provider, gold_providers, isUserRegistered } from '../../constants';
 import { storageService, inrFormatDecimal2} from 'utils/validators';
+import {SkeltonRect} from '../../../common/ui/Skelton';
 
 const stepsContentMapper = [
   { 'icon': 'ic_gold_provider', 'content': 'Select gold coin' },
@@ -153,13 +154,25 @@ class GoldDeliveryProducts extends Component {
 
   renderDeliveryProducts =(props, index)  =>{
     return (
-      <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
+      <div key={index} className="delivery-tile">
         {props.media.images && 
         <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
 
         <div className="disc">{props.description}</div>
         <div className="making-charges">Making charges</div>
         <div className="making-cost">{inrFormatDecimal2(props.delivery_minting_cost)}</div>
+      </div>
+    )
+  }
+
+  renderDeliverySkelton =(props, index)  =>{
+    return (
+      <div key={index} onClick={() => this.selectGoldProduct(index)} 
+      className="delivery-tile skelton-tile">
+
+        <SkeltonRect className="delivery-icon st1" />
+        <SkeltonRect className="disc st2" />
+        <SkeltonRect className="making-charges st3" />
       </div>
     )
   }
@@ -194,7 +207,7 @@ class GoldDeliveryProducts extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        skelton={this.state.skelton}
+        // skelton={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
         headerType="provider-filter"
@@ -208,9 +221,15 @@ class GoldDeliveryProducts extends Component {
         <div className="generic-page-title">
         Select gold coin
         </div>
-        <div className="delivery-products-tiles">
+
+       {!this.state.skelton && <div className="delivery-products-tiles">
             {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
-        </div>
+        </div>}
+
+        {this.state.skelton &&
+         <div className="delivery-products-tiles skelton-tiles">
+            {['a', 'b', 'c', 'd'].map(this.renderDeliverySkelton)}
+        </div>}
 
         {/* <div className="show-more">
           SHOW MORE

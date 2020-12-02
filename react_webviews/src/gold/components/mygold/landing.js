@@ -41,6 +41,9 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import {SkeltonRect} from '../../../common/ui/Skelton';
+import {Imgc} from '../../../common/ui/Imgc';
+
 let eventToStateMapper = {
   'check-how1': 'check-how',
   '/gold/buy': 'buy_gold',
@@ -49,6 +52,7 @@ let eventToStateMapper = {
   'gold-locker': 'gold_locker',
   'marketing_banner': 'marketing_banner'
 };
+
 
 
 class GoldSummary extends Component {
@@ -422,9 +426,12 @@ class GoldSummary extends Component {
             <img  style={{margin: '0 0 0 8px', width: 11}}
           src={ require(`assets/lock_icn.svg`)} alt="Gold" />
           </div>
-          <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
+          {!this.state.skelton && <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
           {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
-          </div>
+          </div>}
+          <SkeltonRect className="balance-skelton" 
+            hide={!this.state.skelton} 
+          />
         </div>
 
       </div>
@@ -477,6 +484,7 @@ class GoldSummary extends Component {
       <div className="benefites">
 
         <div className="tile">
+          
             <img 
             src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
           <div className="benefit-tile">
@@ -523,7 +531,9 @@ class GoldSummary extends Component {
   rendertopInfoImage() {
     return(
       <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
-            <img style={{width:'100%',cursor:'pointer'}} src={crd_gold_info} alt="" />
+            <Imgc 
+            style={{width:'100%',cursor:'pointer', minHeight: 233}} 
+            src={crd_gold_info} alt="" />
             <div className="inner">
               <div className="title generic-page-title">
                 Buy 24K gold to create long term wealth
@@ -585,7 +595,6 @@ class GoldSummary extends Component {
     return (
       <Container
         // skelton={this.state.skelton}
-        skelton={true}
         title="Gold"
         noHeader={this.state.skelton}
         noFooter={true}

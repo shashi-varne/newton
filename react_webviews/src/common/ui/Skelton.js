@@ -11,6 +11,7 @@ import './style.scss';
 
 // let highlight_color = '#D0E6ff';
 let highlight_color = getConfig().skelton_color;
+// let highlight_color = 'red';
 
 
 
@@ -44,8 +45,8 @@ class UiSkeltonClass extends Component {
                 </div>
 
                 <div className="mid-right">
-                    <ReactPlaceholder type='rect' color={highlight_color} showLoadingAnimation={true} className="mid-right-skelton1" />
-                    <ReactPlaceholder type='rect' color={highlight_color} showLoadingAnimation={true} className="mid-right-skelton2" />
+                    <SkeltonRect className="mid-right-skelton1" />
+                    <SkeltonRect className="mid-right-skelton2" />
                 </div>
             </div>
         )
@@ -54,8 +55,8 @@ class UiSkeltonClass extends Component {
     twoLines = () => {
         return (
             <div className="two-lines">
-                    <ReactPlaceholder type='rect' color={highlight_color} showLoadingAnimation={true} className="mid-right-skelton1" />
-                    <ReactPlaceholder type='rect' color={highlight_color} showLoadingAnimation={true} className="mid-right-skelton2" />
+                <SkeltonRect className="mid-right-skelton1" />
+                <SkeltonRect className="mid-right-skelton2" />
             </div>
         )
     }
@@ -64,19 +65,19 @@ class UiSkeltonClass extends Component {
         return (
             <div className="products-listing">
 
-                    <div className="top">
-                        {this.singleImage()}
-                    </div>
-
-
-                    <div className="mid">
-                        {this.imageAndLines()}
-                        {this.imageAndLines()}
-                        {this.imageAndLines()}
-                        {this.imageAndLines()}
-                    </div>
-
+                <div className="top">
+                    {this.singleImage()}
                 </div>
+
+
+                <div className="mid">
+                    {this.imageAndLines()}
+                    {this.imageAndLines()}
+                    {this.imageAndLines()}
+                    {this.imageAndLines()}
+                </div>
+
+            </div>
         )
     }
 
@@ -84,19 +85,19 @@ class UiSkeltonClass extends Component {
         return (
             <div className="products-listing">
 
-                    <div className="top">
-                        {this.singleImage()}
-                    </div>
-
-
-                    <div className="mid">
-                        {this.twoLines()}
-                        {this.twoLines()}
-                        {this.twoLines()}
-                        {this.twoLines()}
-                    </div>
-
+                <div className="top">
+                    {this.singleImage()}
                 </div>
+
+
+                <div className="mid">
+                    {this.twoLines()}
+                    {this.twoLines()}
+                    {this.twoLines()}
+                    {this.twoLines()}
+                </div>
+
+            </div>
         )
     }
 
@@ -104,15 +105,15 @@ class UiSkeltonClass extends Component {
 
         let type = this.props.type;
 
-        if(type === true) {
+        if (type === true) {
             type = 'g';
         }
 
         return (
             <div className="generic-skelton">
 
-               {type === 'p' && this.productsSkelton()}
-               {type === 'g' && this.genericSkelton()}
+                {type === 'p' && this.productsSkelton()}
+                {type === 'g' && this.genericSkelton()}
 
             </div>
         );
@@ -123,5 +124,19 @@ const UiSkelton = (props) => (
     <UiSkeltonClass
         {...props} />
 );
+
+export const SkeltonRect = (props) => {
+    if (!props.hide) {
+        return (
+            <ReactPlaceholder type='rect' color={highlight_color}
+                showLoadingAnimation={true} className={props.className} 
+                style={props.style}
+                />
+        );
+    }
+
+    return null;
+
+};
 
 export default UiSkelton;

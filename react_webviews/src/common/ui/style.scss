@@ -685,6 +685,10 @@ body[data-device="mobile"] {
   }
 }
 
+.show-loading-animation.rect-shape, .show-loading-animation.round-shape, .show-loading-animation.text-row, .show-loading-animation .rect-shape, .show-loading-animation .round-shape, .show-loading-animation .text-row {
+  border-radius: 6px;
+}
+
 .generic-skelton {
   padding: 20px;
   margin: 20px 0 0 0;
