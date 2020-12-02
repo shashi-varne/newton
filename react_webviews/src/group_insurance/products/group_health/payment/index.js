@@ -285,7 +285,7 @@ class GroupHealthPayment extends Component {
 
                     <div className="highlight-text12" style={{ display: 'flex' }}>
                       <div>
-                        {this.state.providerData.subtitle}
+                        { this.state.provider === 'STAR'? this.state.providerData.title +' '+ this.state.providerData.subtitle : this.state.providerData.title2}
                       </div>
                     </div>
                   </div>
