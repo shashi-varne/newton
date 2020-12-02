@@ -33,22 +33,37 @@ class Landing extends Component {
         this.state.application_exists && this.state.otp_verified
           ? "RESUME"
           : "APPLY NOW",
-      next_state: this.state.application_exists && this.state.otp_verified ? 'journey' : 'edit-number'
+      next_state:
+        this.state.application_exists && this.state.otp_verified
+          ? "journey"
+          : "edit-number",
     });
   };
 
   handleClick = () => {
     let params = {
-      create_new: this.state.application_exists && this.state.otp_verified ? false : true,
+      create_new:
+        this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
     let { vendor_application_status } = this.state;
 
-    let failed_cases = ["idfc_null_rejected", "idfc_0.5_rejected", "idfc_1.0_rejected", "idfc_1.7_rejected", "idfc_4_rejected"];
+    let rejection_cases = [
+      "idfc_null_rejected",
+      "idfc_0.5_rejected",
+      "idfc_1.0_rejected",
+      "idfc_1.7_rejected",
+      "idfc_4_rejected",
+      "idfc_null_failed",
+      "idfc_0.5_failed",
+      "idfc_1.0_failed",
+      "idfc_1.7_failed",
+      "idfc_4_failed",
+    ];
 
-    if (this.state.cta_title === "RESUME") {
+    if (this.state.cta_title === "RESUME" && rejection_cases.indexOf(vendor_application_status) === -1) {
       this.navigate("journey");
-    } else if (failed_cases.includes(vendor_application_status)) {
+    } else if (rejection_cases.indexOf(vendor_application_status) !== -1) {
       this.navigate("loan-status");
     } else {
       this.getOrCreate(params);
@@ -155,7 +170,8 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 50px 0" }}>
             <div className="generic-hr"></div>
-            <div className="Flex faq" 
+            <div
+              className="Flex faq"
               // onClick={() => this.openFaqs()}
             >
               <div>
