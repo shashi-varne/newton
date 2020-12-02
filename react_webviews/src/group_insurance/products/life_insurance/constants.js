@@ -48,7 +48,7 @@ export var fyntuneConstants = {
           'options': [
               {
                   'title': 'What are the products available?',
-                  'subtitle': 'Currently we are offering HDFC Life Sanchay Plus, HDFC Life Click 2 Invest and HDFC Life Sanchay Par Advantage'
+                  'subtitle': 'Currently we are offering HDFC Life Sanchay Plus.'
               },
               {
                   'title': 'What are bonuses and how do the Cash Bonus work?',

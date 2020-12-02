@@ -5,7 +5,7 @@ import { insuranceStateMapper } from '../constants';
 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
-import { getConfig, isFeatureEnabled } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../constants';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -284,11 +284,7 @@ class Landing extends Component {
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else if (product_key === 'LIFE_INSURANCE') {
-      if(!getConfig().Web && !isFeatureEnabled(getConfig(), 'open_inapp_tab')){
-        fullPath = 'life-insurance/app-update'
-      }else{
         fullPath = 'life-insurance/entry';
-      }
     } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
     }    

@@ -338,7 +338,7 @@ class FyntuneLanding extends Component {
 
               <div className="rc-bottom flex-between">
                 <div className="rcb-content" style={{fontSize: '14px'}}>
-                  Sum insured:{" "}
+                  Sum assured:{" "}
                   {numDifferentiationInr(this.state.resume_data.lead.sum_assured)}
                 </div>
                 <div className="rcb-content" style={{fontSize: '14px'}}>
@@ -349,7 +349,7 @@ class FyntuneLanding extends Component {
           )}
         <div>
           <p className="fyntune-heading">What is Insurance Savings Plan?</p>
-          <p className="fyntune-info">
+          <p className="fyntune-info" style={{textAlign: 'justify'}}>
             This is a plan for your investment cum insurance needs which
             provides you with a chance to create wealth and even gives financial
             security to your loved ones in case on any unforeseen event.

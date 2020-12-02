@@ -52,7 +52,7 @@ class Report extends Component {
       obj = {
         ...obj,
         product_name: policy.base_plan_title,
-        top_title: 'Health insurance',
+        top_title: 'Life Insurance',
         key: 'FYNTUNE',
         id: policy.fyntune_ref_id, 
         premium: policy.total_amount
