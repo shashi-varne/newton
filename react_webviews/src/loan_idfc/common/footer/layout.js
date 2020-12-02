@@ -97,7 +97,6 @@ export class TwoButtonLayout extends Component {
   }
 
   componentDidMount() {
-
   }
 
   clickHandler = () => {
@@ -142,18 +141,18 @@ export class TwoButtonLayout extends Component {
   render() {
     const props = this.props;
     return (
-      <div className="FooterDefaultLayout" onClick={() => {
+      <div className="" onClick={() => {
         if (!props.disable) {
           props.handleClick();
         }
       }}>
-        <div className="FlexItem2">
+        {/* <div className="FlexButton"> */}
           <Button
             type={props.type}
             disable={props.disable}
             // arrow={(props.edit) ? false : true}
             {...props} />
-        </div>
+        {/* </div> */}
         {this.renderDialog()}
       </div>
     );

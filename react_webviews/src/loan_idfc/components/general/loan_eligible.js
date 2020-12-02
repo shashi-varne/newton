@@ -81,8 +81,8 @@ class LoanEligible extends Component {
 
 
   handleClick = () => {
-      this.sendEvents('next');
-      this.triggerConversion();
+    this.sendEvents('next');
+    this.triggerConversion();
   }
 
   render() {

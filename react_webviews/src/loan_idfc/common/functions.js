@@ -171,6 +171,10 @@ export async function getOrCreate(params) {
         this.navigate(this.state.next_state);
       }
 
+      if (params.reset) {
+        this.navigate('home')
+      }
+
       if (this.state.screen_name === 'loan_bt' || this.state.screen_name === 'credit_bt') {
         this.getInstitutionList();
       }
@@ -265,8 +269,9 @@ export async function updateApplication(params, next_state = '') {
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      // toast(result.error || result.message || "Something went wrong!");
+      // this.onload();
+      this.navigate('loan-status');
     }
   } catch (err) {
     console.log(err);
@@ -282,8 +287,8 @@ export async function submitApplication(params, state, update = "") {
   try {
     let screens = ["address_details", "requirement_details_screen"];
     this.setState({
-      loaderWithData: screens.includes(this.state.screen_name),
       show_loader: true,
+      loaderWithData: screens.includes(this.state.screen_name)
     });
     const res = await Api.post(
       `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('?update=' + update)}`,
@@ -339,7 +344,7 @@ export async function formCheckUpdate(
   keys_to_check,
   form_data,
   state = "",
-  update = ""
+  update = "",
 ) {
   if (!form_data) {
     form_data = this.state.form_data;

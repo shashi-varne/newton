@@ -76,7 +76,7 @@ class Container extends Component {
     });
   };
 
-  renderPageLoader2 = () => {
+  renderPageLoader2 = (data) => {
     if (this.props.showLoader) {
       return (
         <div
@@ -86,11 +86,10 @@ class Container extends Component {
         >
           <div className="LoaderOverlay">
             <div style={{fontSize:"14px", lineHeight:"20px", margin: "0 -40px 0 -40px"}}>
-              Hang on, while IDFC finishes analysing your last 3 months bank
-              statements
+              {data.title}
             </div>
             <img style={{width: '20px', margin: "40px 0 30px 0"}} src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
-            <div style={{fontSize:"13px", lineHeight:"22px"}}>It may take 10 to 15 seconds!</div>
+            <div style={{fontSize:"13px", lineHeight:"22px"}}>{data.subtitle}</div>
           </div>
         </div>
       );
@@ -145,7 +144,7 @@ class Container extends Component {
           <div id="HeaderHeight" style={{ top: 56 }}>
             {/* Loader Block */}
             {this.props.loaderWithData
-              ? this.renderPageLoader2()
+              ? this.renderPageLoader2(this.props.loaderData)
               : this.renderPageLoader()}
             {/* {this.renderPageLoader()} */}
             {/* {this.renderPageLoader2()} */}
@@ -188,6 +187,10 @@ class Container extends Component {
               withProvider={this.props.withProvider}
               buttonData={this.props.buttonData}
               style={this.props.styleFooter}
+              twoButton={this.props.twoButton}
+              dualbuttonwithouticon={this.props.dualbuttonwithouticon}
+              buttonOneTitle={this.props.buttonOneTitle}
+              buttonTwoTitle={this.props.buttonTwoTitle}
             />
           )}
           {/* No Internet */}

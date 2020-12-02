@@ -149,7 +149,9 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 50px 0" }}>
             <div className="generic-hr"></div>
-            <div className="Flex faq" onClick={() => this.openFaqs()}>
+            <div className="Flex faq" 
+              // onClick={() => this.openFaqs()}
+            >
               <div>
                 <img
                   className="accident-plan-read-icon"

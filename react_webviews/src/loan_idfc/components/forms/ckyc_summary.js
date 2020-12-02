@@ -25,25 +25,51 @@ class ApplicationSummary extends Component {
     let personal_info = lead.personal_info || {};
     let professional_info = lead.professional_info || {};
     let application_info = lead.application_info || {};
+    let current_address_data = lead.current_address_data || {};
+    let permanent_address_data = lead.permanent_address_data || {};
 
     let personal_data = {
       title: "Personal details",
       edit_state: "/loan/idfc/edit-basic-details",
       data: [
         {
-          title: "Date of birth ",
+          title: "First name",
           subtitle: personal_info.dob,
         },
         {
-          title: "PAN number",
+          title: "Middle name",
           subtitle: personal_info.pan_no,
         },
         {
-          title: "Education qualification",
+          title: "Last name",
           subtitle: professional_info.educational_qualification,
         },
         {
-          title: "Employment type",
+          title: "Date of birth",
+          subtitle: application_info.employment_type,
+        },
+        {
+          title: "Gender",
+          subtitle: application_info.employment_type,
+        },
+        {
+          title: "Marital status",
+          subtitle: application_info.employment_type,
+        },
+        {
+          title: "Father name",
+          subtitle: application_info.employment_type,
+        },
+        {
+          title: "Mother name",
+          subtitle: application_info.employment_type,
+        },
+        {
+          title: "Religion",
+          subtitle: application_info.employment_type,
+        },
+        {
+          title: "Email id",
           subtitle: application_info.employment_type,
         },
       ],
@@ -52,40 +78,64 @@ class ApplicationSummary extends Component {
     accordianData.push(personal_data);
 
     let professional_data = {
-      title: "Work details",
+      title: "Address details",
       edit_state: "/loan/idfc/edit-professional-details",
       data: [
         {
-          title: "Company name",
-          subtitle: professional_info.company_name,
+          title: "Current address 1",
+          subtitle: current_address_data.address1,
         },
         {
-          title: "Official email",
-          subtitle: professional_info.office_email,
+          title: "Current address 2",
+          subtitle: current_address_data.address2,
         },
         {
-          title: "Net monthly salary",
-          subtitle: application_info.net_monthly_salary,
+          title: "Current address 3",
+          subtitle: current_address_data.address3,
         },
         {
-          title: "Salary receipt mode",
-          subtitle: "",
+          title: "Current landmark",
+          subtitle: current_address_data.landmark,
         },
         {
-          title: "Company constitution",
-          subtitle: "",
+          title: "Current pincode",
+          subtitle: current_address_data.pincode,
         },
         {
-          title: "Organisation",
-          subtitle: "",
+          title: "Current city",
+          subtitle: current_address_data.city,
         },
         {
-          title: "Department",
-          subtitle: professional_info.department,
+          title: "Current state",
+          subtitle: current_address_data.state,
         },
         {
-          title: "Industry",
-          subtitle: professional_info.industry,
+          title: "Permanent address 1",
+          subtitle: permanent_address_data.address1,
+        },
+        {
+          title: "Permanent address 2",
+          subtitle: permanent_address_data.address2,
+        },
+        {
+          title: "Permanent address 3",
+          subtitle: permanent_address_data.address3,
+        },
+        {
+          title: "Permanent landmark",
+          subtitle: permanent_address_data.landmark,
+        },
+        {
+          title: "Permanent pincode",
+          subtitle: permanent_address_data.pincode,
+        },
+        {
+          title: "Permanent city",
+          subtitle: permanent_address_data.city,
+        },
+        {
+          title: "Permanent state",
+          subtitle: permanent_address_data.state,
         },
       ],
     };

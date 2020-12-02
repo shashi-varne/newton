@@ -172,6 +172,14 @@ class LoanStatus extends Component {
       };
 
       this.updateApplication(body, "income-details");
+    } if (commonMapper.button_title === "START NEW APPLICATION") {
+      let params = {
+        create_new: true,
+        reset: true
+      };
+
+      this.getOrCreate(params);
+      
     } else {
       this.navigate(this.state.commonMapper.cta_state);
     }

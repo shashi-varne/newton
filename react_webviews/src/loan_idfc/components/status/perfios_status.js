@@ -56,11 +56,12 @@ class PerfiosStatus extends Component {
     let vendor_info = lead.vendor_info || {};
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-    let bt_eligible = this.state.params
-      ? this.state.params.bt_eligible
-      : vendor_info.bt_eligible;
+    let bt_eligible = lead.bt_info !== undefined ? true : false 
+    // let bt_eligible = this.state.params
+    //   ? this.state.params.bt_eligible
+    //   : vendor_info.bt_eligible;
 
-    let { status } = this.state.params;
+    // let { status, bt_eligible } = this.state.params;
 
     this.setState({
       commonMapper: commonMapper[perfios_state] || {},
@@ -89,10 +90,6 @@ class PerfiosStatus extends Component {
     } else {
       this.getPointSevenCallback();
     }
-
-    // this.setState({
-    //   show_loader: false
-    // })
   };
 
   handleClick = () => {
@@ -118,7 +115,7 @@ class PerfiosStatus extends Component {
       }
     }
 
-    if (perfios_state === "bypass") {
+    if (perfios_state === "bypass" && bt_eligible) {
       this.submitApplication({}, "one");
     }
   };

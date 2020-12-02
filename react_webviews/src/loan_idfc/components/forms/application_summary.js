@@ -68,15 +68,15 @@ class ApplicationSummary extends Component {
         },
         {
           title: "Salary receipt mode",
-          subtitle: "",
+          subtitle: professional_info.salary_mode,
         },
         {
           title: "Company constitution",
-          subtitle: "",
+          subtitle: professional_info.constitution,
         },
         {
           title: "Organisation",
-          subtitle: "",
+          subtitle: professional_info.organisation,
         },
         {
           title: "Department",
@@ -96,9 +96,7 @@ class ApplicationSummary extends Component {
         accordianData: accordianData,
       },
       () => {
-        // if (!this.state.form_submitted) {
-          this.handleAccordian(0);
-        // }
+        this.handleAccordian(0);
       }
     );
   };
