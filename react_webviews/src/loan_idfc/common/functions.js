@@ -291,7 +291,7 @@ export async function submitApplication(params, state, update = "") {
       loaderWithData: screens.includes(this.state.screen_name)
     });
     const res = await Api.post(
-      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('?update=' + update)}`,
+      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('&update=' + update)}`,
       params
     );
 
@@ -302,14 +302,7 @@ export async function submitApplication(params, state, update = "") {
         this.navigate(this.state.next_state);
       }
     } else {
-      // if (this.state.screen_name === "professional_details_screen") {
-      //   this.navigate("application-status");
-      // } else {
-
       this.navigate("loan-status");
-      // toast(result.error || result.message || "Something went wrong!");
-      // this.onload();
-      // }
     }
   } catch (err) {
     console.log(err);
