@@ -737,7 +737,6 @@ export function getCssMapperReport(policy) {
     cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start  || policy.valid_from || '');
     cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
     cssMapper.policy_issued.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
-    console.log(policy.valid_from)
   }
 
 

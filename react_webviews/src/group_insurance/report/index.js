@@ -4,7 +4,7 @@ import Container from '../common/Container';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-
+import { getDateBreakup } from 'utils/validators';
 import {
   inrFormatDecimalWithoutIcon
 } from '../../utils/validators';
@@ -40,7 +40,12 @@ class Report extends Component {
     let obj = policy;
     obj.key = provider;
 
+    
     if(vendor !== ""){
+      let valid_from = obj.valid_from ? getDateBreakup(obj.valid_from): '';
+      let formatted_day = valid_from && valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
+      let formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+      
       obj = {
         ...obj,
         product_name: policy.base_plan_title + ' ' + policy.product_title,
@@ -49,7 +54,7 @@ class Report extends Component {
         id: policy.application_id,
         premium: Math.round(policy.total_amount),
         provider: policy.vendor,
-        valid_from: new Date(policy.valid_from).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10)
+        valid_from: formatted_valid_from
       };
     }
 

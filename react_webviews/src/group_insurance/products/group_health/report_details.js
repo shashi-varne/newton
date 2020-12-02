@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal
+    numDifferentiationInr, dateOrdinal, getDateBreakup
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -74,9 +74,14 @@ class GroupHealthReportDetails extends Component {
                 let policy_data = resultData.policy || {};
                 let application_details = resultData.application_details;
                 
-                policy_data.dt_created = new Date(policy_data.dt_created).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10);
-                policy_data.dt_updated = new Date(policy_data.dt_updated).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10);
-                policy_data.valid_from = new Date(policy_data.valid_from).toLocaleString(undefined, {timeZone: 'Asia/Kolkata'}).substring(0,10);
+                let dt_created = new Date(policy_data.dt_created);
+                let dt_updated = new Date(policy_data.dt_updated);
+                let valid_from = getDateBreakup(policy_data.valid_from)
+                let formatted_day = valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
+
+                policy_data.dt_created = dt_created.getDate()+'/'+ (dt_created.getMonth()+1) +'/'+ dt_created.getFullYear();
+                policy_data.dt_updated = dt_updated.getDate()+'/'+ (dt_updated.getMonth()+1) +'/'+ dt_updated.getFullYear();
+                policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
                 
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
