@@ -8,7 +8,6 @@ import { nativeCallback } from 'utils/native_callback';
 import { storageService, getUrlParams } from '../../utils/validators';
 import toast from '../../common/ui/Toast';
 import { fetchEmails } from '../common/ApiCalls';
-import CAMSLoader from '../mini-components/camsLoader';
 // import { regenTimeLimit } from '../constants';
 
 const productType = getConfig().productName;
@@ -139,14 +138,14 @@ class StatementRequest extends Component {
       email: this.state.selectedEmail,
     };
 
-    if (getConfig().app === 'android') {
-      this.setState({ show_loader: true, loadingText: <CAMSLoader /> });
-      setTimeout(() => {
-        this.navigate('cams_webpage', navParams);
-      }, 2000);
-    } else {
-      this.navigate('cams_request_steps', navParams);
-    }
+    // if (getConfig().app === 'android') {
+    //   this.setState({ show_loader: true, loadingText: <CAMSLoader /> });
+    //   setTimeout(() => {
+    //     this.navigate('cams_webpage', navParams);
+    //   }, 2000);
+    // } else {
+    this.navigate('cams_request_steps', navParams);
+    // }
   }
 
   goBack = (params) => {

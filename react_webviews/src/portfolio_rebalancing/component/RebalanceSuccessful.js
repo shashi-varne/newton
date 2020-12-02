@@ -77,7 +77,7 @@ const RebalanceSuccessful = () => {
           Switch’ section of your Portfolio.
         </Typography>
       </section>
-      <section className='help-container '>
+      <section className='pr-help-container '>
         <Typography className='help-text'>For any help, reach us at</Typography>
         <div className='help-contact-email flex-item'>
           <Typography className='help-contact'>+80-30-408363</Typography>

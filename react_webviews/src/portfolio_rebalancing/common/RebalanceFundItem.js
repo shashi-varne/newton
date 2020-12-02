@@ -8,8 +8,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import Chip from '@material-ui/core/Chip';
 
-import infoIcon from 'assets/info_icon.svg';
-
 import './Style.scss';
 
 import Typography from '@material-ui/core/Typography';
@@ -39,7 +37,7 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
   const color = getConfig().primary;
 
   const [open, setOpen] = useState(false);
-
+  const product_name = getConfig().productName;
   React.useEffect(() => {
     const checkMap = storageService().getObject('checkMap');
 
@@ -76,26 +74,26 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
           <span className='fund-type-head'>Corpus switch</span>
 
           <span>
-            : Redeem the money invested in low performing fund & re-invest in a better fund
+            : Redeem the money invested in low performing fund & re-invest in recommended funds.
           </span>
         </>
       );
     } else if (data.sip_only) {
       return (
         <>
-          <span className='fund-type-head'>Sip switch</span>
+          <span className='fund-type-head'>SIP switch</span>
 
-          <span>
-            : Redeem accumulated investments from risky low performing funds to recommended funds
-          </span>
+          <span>: Stop SIP in low performing funds & re start in recommended funds.</span>
         </>
       );
     } else if (!data.sip_only && data.is_sip) {
       return (
         <>
-          <span className='fund-type-head'>Sip Corpus switch</span>
+          <span className='fund-type-head'>SIP + Corpus switch</span>
 
-          <span>: Shift both low performing Corpus and Sip to the recommended funds</span>
+          <span>
+            : Shift SIP & accumulated corpus from low performing funds to recommended funds.
+          </span>
         </>
       );
     }
@@ -129,12 +127,12 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
                     background='#f0f7ff'
                     direction='down'
                     backgroundArrow='#f0f7ff'
-                    className='tooltip-container'
+                    className='fd-tooltip-container'
                     isOpen={toolTip}
                     onClickAway={() => setToolTip(false)}
                   >
                     <img
-                      src={infoIcon}
+                      src={require(`assets/${product_name}/info_icon.svg`)}
                       className='info-tip'
                       alt='info'
                       onClick={() => setToolTip(!toolTip)}

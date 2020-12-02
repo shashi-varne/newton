@@ -62,7 +62,7 @@ const RebalanceFund = (props) => {
     if (checked.length === 0) {
       toast('Please select atleast one fund to proceed');
     } else {
-      const sip_exist = funds.filter((el) => el.name.includes('SIP') && checkMap[el.id]);
+      const sip_exist = funds.filter((el) => el.is_sip && checkMap[el.id]);
       if (sip_exist?.length > 0) {
         navigate(props, 'sip-date');
       } else {

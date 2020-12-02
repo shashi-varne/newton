@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 
 import Header from '../../common/components/Header';
 import { didmount } from '../../common/components/container_functions';
-import Typography from '@material-ui/core/Typography';
 import Footer from './footer';
 import Button from '@material-ui/core/Button';
 import {
@@ -38,6 +37,25 @@ class Container extends Component {
 
   componentDidMount() {
     this.didmount();
+    let that = this;
+    if (getConfig().generic_callback) {
+      if (getConfig().iOS) {
+        nativeCallback({ action: 'hide_top_bar' });
+      }
+      window.callbackWeb.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          that.historyGoBack();
+        },
+      });
+    } else {
+      window.PaymentCallback.add_listener({
+        type: 'back_pressed',
+        go_back: function () {
+          that.historyGoBack();
+        },
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -165,16 +183,6 @@ class Container extends Component {
           >
             {this.props.children}
           </div>
-          {/* {this.props.helpContact && (
-            <section className='help-container '>
-              <Typography className='help-text'>For any help, reach us at</Typography>
-              <div className='help-contact-email flex-item'>
-                <Typography className='help-contact'>+80-30-408363</Typography>
-                <hr style={{ height: '9px', margin: '0', borderWidth: '0.6px' }} />
-                <Typography className='help-email'>{'ask@fisdom.com'.toUpperCase()}</Typography>
-              </div>
-            </section>
-          )} */}
 
           {/* Footer Block */}
           {!this.props.noFooter && (

@@ -9,7 +9,7 @@ import { nativeCallback } from 'utils/native_callback';
 class SipDateSelect extends React.Component {
   state = {
     selectedIndex: '',
-    date: this.props.el.investment_date || '',
+    date: this.props.el.recommended_date || '',
   };
   handleChange = (el) => (index) => {
     this.setState({
@@ -63,7 +63,7 @@ class SipDateSelect extends React.Component {
                   inputBox
                   onChange={this.handleChange(el)}
                   isAppendText='of every month'
-                  class='input-append-text'
+                  class='pr-input-append-text'
                 />
               </div>
             </div>
@@ -82,7 +82,7 @@ const Date = (props) => {
     const checkMap = storageService().getObject('checkMap');
     allFunds.forEach((el) => {
       if (checkMap[el.id]) {
-        if (el.name.includes('SIP')) {
+        if (el.is_sip) {
           el.allowed_sip_dates_new = [];
           el.sip_day = '';
           el.allowed_sip_dates.map((date, index) => {
@@ -127,7 +127,7 @@ const Date = (props) => {
     const allFunds = storageService().getObject('allFunds');
 
     const newData = allFunds.map((fund) => {
-      if (fund.name.includes('SIP') && fund.sip_day) {
+      if (fund.is_sip && fund.sip_day) {
         if (fund.id === fundItem.id) {
           fundItem.sip_day = fundItem.allowed_sip_dates[index];
           return fundItem;
@@ -157,10 +157,13 @@ const Date = (props) => {
       title='Select SIP auto debit  date'
       classOverRideContainer='pr-container'
     >
+      <Typography className='pr-sip-transaction' align='left'>
+        SIP switch transactions
+      </Typography>
       {funds.length > 0 &&
         funds.map((el) => {
           const checkMap = storageService().getObject('checkMap');
-          if (el.name.includes('SIP') && checkMap[el.id]) {
+          if (el.is_sip && checkMap[el.id]) {
             return (
               <SipDateSelect
                 key={el.id}
@@ -172,7 +175,7 @@ const Date = (props) => {
           }
         })}
       <section>
-        <Typography className='sip-date-imp-info'>
+        <Typography className='pr-sip-date-imp-info'>
           <span className='sip-date-note'>Note:</span> Please note that SIP rebalancing requests
           placed within 10 days of upcoming SIP debit date will be processed only for the next
           month.

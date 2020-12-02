@@ -92,7 +92,7 @@ const Landing = (props) => {
           3. Tap on “Rebalance funds” and you are all set
         </RebalanceSteps>
       </section>
-      <p className='note-text'>
+      <p className='pr-note-text'>
         <span className='note-bold-text'>Note:</span> The exercise is done based on fisdom’s
         proprietary research methodology and rebalancing algorithms.
       </p>
@@ -109,7 +109,7 @@ const Landing = (props) => {
 
 const RebalanceSteps = ({ svg_file, children }) => {
   return (
-    <div className='rebalance-steps'>
+    <div className='pr-rebalance-steps'>
       <img src={svg_file} alt={svg_file} className='rebalance-steps-img' />
       <Typography className='rebalance-steps-text'>{children}</Typography>
     </div>

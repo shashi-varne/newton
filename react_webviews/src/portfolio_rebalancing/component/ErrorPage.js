@@ -36,7 +36,7 @@ const ErrorPage = (props) => {
   return (
     <Container
       goBack={goBack}
-      classOverRide='error-container'
+      classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Retry'
       helpContact
@@ -57,7 +57,7 @@ const ErrorPage = (props) => {
         <Typography className='error-text'>
           Something went wrong! Please try again after some time.
         </Typography>
-        <section className='help-container '>
+        <section className='pr-help-container '>
           <Typography className='help-text'>For any help, reach us at</Typography>
           <div className='help-contact-email flex-item'>
             <Typography className='help-contact'>+80-30-408363</Typography>

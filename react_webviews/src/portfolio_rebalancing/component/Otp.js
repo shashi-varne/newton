@@ -69,6 +69,8 @@ const Otp = (props) => {
       setDisable(false);
       if (err?.includes('wrong OTP')) {
         toast('Incorrect OTP! Please check and try again', 'error');
+      } else if (err?.includes('switch order has expired')) {
+        toast(`${err} Please try again.`);
       } else {
         toast(err);
       }
@@ -106,8 +108,11 @@ const Otp = (props) => {
       }
     } catch (err) {
       setError(true);
-
-      toast(err);
+      if (err?.includes('switch order has expired')) {
+        toast(`${err} Please try again.`);
+      } else {
+        toast(err);
+      }
     }
   };
 

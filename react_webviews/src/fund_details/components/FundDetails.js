@@ -277,25 +277,24 @@ const FundDetails = ({ classes, history }) => {
                   <Divider classes={{ root: classes.root }} />
                 </List>
               </section>
-              <section>
-                <Typography
-                  style={{
-                    width: '100%',
-                    paddingLeft: '15px',
-                    fontSize: '14px',
-                    color: '#878787',
-                    display: 'flex',
-                  }}
-                  align='left'
-                >
-                  <span>*</span>
-                  <img
-                    style={{ width: '50px', objectFit: 'contain', marginLeft: '1.2px' }}
-                    src={morning_star_logo}
-                    alt='mr rating'
-                  />
-                  <span style={{ fontSize: '12px', fontWeight: '400' }}>Disclaimer</span>
-                </Typography>
+              <section
+                style={{
+                  width: '100%',
+                  paddingLeft: '15px',
+                  fontSize: '14px',
+                  color: '#878787',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}
+              >
+                <div>*</div>
+                <img
+                  style={{ width: '50px', objectFit: 'contain', marginLeft: '1.2px' }}
+                  src={morning_star_logo}
+                  alt='mr rating'
+                />
+                <div style={{ fontSize: '12px', fontWeight: '400' }}>Disclaimer</div>
               </section>
             </div>
           </>
