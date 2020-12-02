@@ -1,0 +1,35 @@
+.return-table-header {
+  padding-left: 15px;
+  font-weight: 300;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+// Report Page
+.fd-report-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(135, 135, 135);
+  margin-left: 10px;
+  position: relative;
+}
+
+.fd-report-subtitle::before {
+  position: absolute;
+  content: '-';
+  top: 50;
+  left: -5%;
+  transform: translateX(-50%);
+  margin-right: 30px;
+}
+
+// Report Page End
+
+.fd-progress-bar-container {
+  position: relative;
+  height: 12px;
+  min-width: 100px;
+  width: 40%;
+  transform: rotate(180deg);
+  margin-left: auto;
+}
