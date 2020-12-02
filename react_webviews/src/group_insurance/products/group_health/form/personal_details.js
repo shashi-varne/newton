@@ -552,7 +552,7 @@ class GroupHealthPlanPersonalDetails extends Component {
                 src={require(`assets/${this.state.productName}/ic_medical_checkup.svg`)} alt="" />
             </div>
             <div className="content-mid">
-          {this.state.provider === 'HDFCERGO' ? 'We are not able to proceed with this application as the insured BMI* is greater than 40.' : 'We are not able to proceed with this application as the insured BMI does not fall under permissible limits for this product'}
+          {this.state.provider === 'HDFCERGO' ? 'We are not able to proceed with this application as the insured BMI* is greater than 40.' : 'We are not able to proceed with this application as the insured BMI does not fall under permissible limits for this product.'}
             </div>
 
             <div className="content-bottom">
