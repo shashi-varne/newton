@@ -271,10 +271,10 @@ class GroupHealthPlanDetails extends Component {
               <div className="group-health-top-content-plan-logo">
                 <div className="left">
                   <div className="tc-title">
-                    {this.state.providerConfig.title2 ||
-                      this.state.providerConfig.title}
+                    {this.state.provider !== 'RELIGARE'? this.state.providerConfig.title2 ||
+                      this.state.providerConfig.title: ''}
                   </div>
-                  <div className="tc-subtitle">{this.state.plan_data && this.state.plan_selected.plan_title}</div>
+                  <div className="tc-subtitle">{this.state.plan_data && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title: this.state.providerConfig.subtitle}</div>
                 </div>
 
                 <div className="tc-right">
