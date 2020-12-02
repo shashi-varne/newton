@@ -37,6 +37,14 @@ const commonMapper = {
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
   },
+  "idfc_0.5_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
   "idfc_1.1_accepted": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
@@ -148,7 +156,7 @@ class LoanStatus extends Component {
       this.setState({
         commonMapper: commonMapper[rejection_reason] || {},
         application_status: application_status,
-        rejection_reason: rejection_reason
+        rejection_reason: rejection_reason,
       });
     } else {
       this.setState({
@@ -195,14 +203,17 @@ class LoanStatus extends Component {
   };
 
   render() {
-    let { commonMapper, idfc_loan_status, application_status, rejection_reason } = this.state;
+    let {
+      commonMapper,
+      idfc_loan_status,
+      application_status,
+      rejection_reason,
+    } = this.state;
 
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={
-          commonMapper.top_title || `Congratulations, ${this.state.first_name}!`
-        }
+        title={commonMapper.top_title}
         buttonTitle={commonMapper.button_title}
         handleClick={this.handleClick}
         headerData={{
@@ -266,7 +277,7 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {commonMapper["failed"] && (
+          {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
                 Oops! Something's not right. Please check back in some time.
