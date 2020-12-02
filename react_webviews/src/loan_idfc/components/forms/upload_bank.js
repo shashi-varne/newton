@@ -229,7 +229,8 @@ class UploadBank extends Component {
 
     try {
       const res = await Api.post(
-        `relay/api/loan/idfc/upload/document/${application_id}${isedited ? "?edit=true" : ""
+        `relay/api/loan/idfc/upload/document/${application_id}${
+          isedited ? "?edit=true" : ""
         }`,
         data
       );
@@ -243,8 +244,8 @@ class UploadBank extends Component {
           confirmed: true,
           documents: documents,
         });
-        console.log(result.document_id)
-        console.log(documents[index].document_id)
+        console.log(result.document_id);
+        console.log(documents[index].document_id);
       }
 
       //   toast(result.error || result.message || "Something went wrong!");
@@ -298,29 +299,59 @@ class UploadBank extends Component {
   };
 
   handleClick = async () => {
-    let bank_id = this.state.form_data.bank_name;
+    let { form_data } = this.state;
+    console.log(form_data)
+    let { bank_id, start_date, end_date } = this.state.form_data;
+    let keys_to_check = ["bank_name", "start_date", "end_date"];
 
-    try {
-      this.setState({
-        show_loader: true,
-      });
+    let keysMapper = {
+      bank_name: "bank name",
+      start_date: "start date",
+      end_date: "end date",
+    };
+    let canSubmit = true;
 
-      const res = await Api.get(
-        `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_id}`
-      );
+    let selectTypeInput = ["bank_name"];
 
-      const { result, status_code: status } = res.pfwresponse;
-
-      if (result) {
-        // console.log(result);
-        this.navigate('perfios-status')
-        // } else {
-        // toast(result.error || result.message || "Something went wrong!");
-        // this.onload();
+    for (var i = 0; i < keys_to_check.length; i++) {
+      let key_check = keys_to_check[i];
+      let first_error =
+        selectTypeInput.indexOf(key_check) !== -1
+          ? "Please select "
+          : "Please enter ";
+      if (!form_data[key_check]) {
+        form_data[key_check + "_error"] = first_error + keysMapper[key_check];
+        canSubmit = false;
       }
-    } catch (err) {
-      console.log(err);
-      toast("Something went wrong");
+    }
+
+    this.setState({
+      form_data: form_data
+    })
+
+    if (canSubmit) {
+      try {
+        this.setState({
+          show_loader: true,
+        });
+
+        const res = await Api.get(
+          `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_id}`
+        );
+
+        const { result, status_code: status } = res.pfwresponse;
+
+        if (result) {
+          // console.log(result);
+          this.navigate("perfios-status");
+          // } else {
+          // toast(result.error || result.message || "Something went wrong!");
+          // this.onload();
+        }
+      } catch (err) {
+        console.log(err);
+        toast("Something went wrong");
+      }
     }
   };
 
@@ -426,7 +457,7 @@ class UploadBank extends Component {
                   name="password"
                   placeholder="XXXXXXX"
                   value={this.state.password || ""}
-                // onChange={this.handleChange}
+                  // onChange={this.handleChange}
                 />
               </div>
 
