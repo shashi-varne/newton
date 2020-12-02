@@ -76,7 +76,7 @@ class AddPolicy extends Component {
     console.log(this.state.form_data)
     console.log('handleClick')
     this.setState({
-      openBmiDialog: false
+      openBmiDialog: true
     })
 
     var form_data = this.state.form_data
@@ -181,7 +181,7 @@ class AddPolicy extends Component {
               <div className="generic-page-button-large" onClick={this.handleClose}>
               NO
               </div>
-              <div className="generic-page-button-small-with-back" onClick={() => {
+              <div className="generic-page-button-small-with-green" onClick={() => {
                 this.handleClose();
                 this.handleClick2();
               }}>

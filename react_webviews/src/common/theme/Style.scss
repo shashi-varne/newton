@@ -1014,13 +1014,27 @@ input#pan {
   align-items: center;
 }
 
-.generic-page-button-small-with-back {
+.generic-page-button-small-with-green {
   background: var(--secondary);
   font-size: 12px;
   font-weight: 700;
   border: 1px solid;
   width: fit-content;
   padding: 15px 60px 15px 60px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.generic-page-button-small-with-back {
+  background: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 7px 20px 7px 20px;
   border-radius: 4px;
   cursor: pointer;
   display: flex;
