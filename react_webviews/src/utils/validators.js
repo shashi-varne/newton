@@ -897,6 +897,11 @@ export function containsSpecialCharacters(value){
   return format.test(value);
 }
 
+export function charsNotAllowedHDFC(value){
+  var format = /[$&+:;=?@|\\_[\]{\}'<>^*()%!"-]/g;
+  return format.test(value);
+}
+
 export function containsSpecialCharactersAndNumbers(value){
   var format = /[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
   return format.test(value);

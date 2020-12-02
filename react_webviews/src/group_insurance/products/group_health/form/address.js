@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import {validateNumber, validateLengthDynamic } from 'utils/validators';
+import {validateNumber, validateLengthDynamic, charsNotAllowedHDFC } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
@@ -123,8 +123,14 @@ class GroupHealthPlanAddressDetails extends Component {
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
-        if(name.includes('addr_line1')){
+        if(name.includes('addr_line1') || name.includes('addr_line2')){
             value = event.target ? event.target.value.substr(0, 60) : event;
+        }
+
+        if(this.state.provider === 'HDFCERGO' && (name.includes('addr_line1') || name.includes('addr_line2'))){
+            if(charsNotAllowedHDFC(event.target.value)){
+                return;
+            }   
         }
         if (name === 'mobile_number') {
             if (value.length <= 10) {
