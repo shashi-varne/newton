@@ -86,10 +86,6 @@ class AddPolicy extends Component {
         form_data : form_data
     })
 
-
-
-
-
     // this.navigate('form', '' ,final_data )
   }
 
@@ -264,17 +260,6 @@ class AddPolicy extends Component {
               onChange={this.handleChange("Vendor")}
             />
           </div>
-            <DropdownWithoutIcon
-                  width="40"
-                  dataType="AOB"
-                  options={this.state.company}
-                  id="relation"
-                  label="Insurance Company"
-                  error={ false}
-                  // helperText={'Insurance Company'}
-                  value={this.state.form_data.Vendor || 'CARE'}
-                  onChange={this.handleChange("Vendor")}
-                />
             <div className="InputField" style={{marginBottom : '20px'}}>
                         <Input
                             type="text"
