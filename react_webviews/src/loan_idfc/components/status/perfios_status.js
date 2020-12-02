@@ -122,6 +122,10 @@ class PerfiosStatus extends Component {
     if (perfios_state === "bypass" && bt_eligible) {
       this.submitApplication({}, "one");
     }
+
+    if (perfios_state === "failure") {
+      this.navigate(this.state.commonMapper.cta_state);
+    }
   };
 
   render() {
