@@ -41,15 +41,34 @@ class BtInformation extends Component {
     });
   }
 
-  onload = () => {};
+  onload = () => {
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
 
-  handleClick = () => {
+    this.setState({
+      "idfc_07_state": vendor_info.idfc_07_state
+    })
+  };
+
+  handleClickTwo = () => {
     let body = {
       idfc_loan_status: "bt_init",
       bt_selected: true,
     };
     this.updateApplication(body, "loan-bt");
   };
+
+  handleClickOne = async () => {
+    let body = {
+      idfc_loan_status: "bypass",
+    };
+
+    await this.updateApplication(body)
+
+    if (this.state.idfc_07_state !== 'success') {
+      this.update("one", 'eligible-loan');
+    }
+  }
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -76,7 +95,8 @@ class BtInformation extends Component {
         dualbuttonwithouticon={true}
         buttonOneTitle="NOT OPTING FOR BT"
         buttonTwoTitle="OPTING FOR BT"
-        buttonTitle="OPTING FOR BT"
+        handleClickOne={this.handleClickOne}
+        handleClickTwo={this.handleClickTwo}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}

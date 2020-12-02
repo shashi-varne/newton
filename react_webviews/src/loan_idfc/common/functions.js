@@ -110,7 +110,6 @@ export async function getDocumentList() {
       `relay/api/loan/idfc/list/document/${this.state.application_id}`
     );
     const { result, status_code: status } = res.pfwresponse;
-console.log(result.doc_list)
 
     this.setState({
       docList: result.doc_list
@@ -170,6 +169,10 @@ export async function getOrCreate(params) {
 
       if (this.state.screen_name === "landing_screen") {
         this.navigate(this.state.next_state);
+      }
+
+      if (params.reset) {
+        this.navigate('home')
       }
 
       if (this.state.screen_name === 'loan_bt' || this.state.screen_name === 'credit_bt') {
@@ -266,8 +269,9 @@ export async function updateApplication(params, next_state = '') {
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      // toast(result.error || result.message || "Something went wrong!");
+      // this.onload();
+      this.navigate('loan-status');
     }
   } catch (err) {
     console.log(err);
@@ -283,11 +287,11 @@ export async function submitApplication(params, state, update = "") {
   try {
     let screens = ["address_details", "requirement_details_screen"];
     this.setState({
-      loaderWithData: screens.includes(this.state.screen_name),
       show_loader: true,
+      loaderWithData: screens.includes(this.state.screen_name)
     });
     const res = await Api.post(
-      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}&update=${update}`,
+      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('?update=' + update)}`,
       params
     );
 
@@ -340,7 +344,7 @@ export async function formCheckUpdate(
   keys_to_check,
   form_data,
   state = "",
-  update = ""
+  update = "",
 ) {
   if (!form_data) {
     form_data = this.state.form_data;
@@ -453,7 +457,7 @@ export async function netBanking(url) {
   console.log(url2);
 
   let plutusRedirectUrl = encodeURIComponent(
-    window.location.origin  + `/loan/idfc/loan-status` + getConfig().searchParams
+    window.location.origin  + `/loan/idfc/perfios-status` + getConfig().searchParams
   )
 
   var payment_link = url2;
@@ -494,8 +498,9 @@ export async function startTransaction(transaction_type) {
         this.netBanking(result.netbanking_url || "");
       }
     } else {
-      toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      // toast(result.error || result.message || "Something went wrong!");
+      // this.onload();
+      this.navigate('perfios-status')
     }
   } catch (err) {
     console.log(err);

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
-import { initialize } from "../../common/functions";
+import { getOrCreate, initialize } from "../../common/functions";
 import JourneySteps from "../../../common/ui/JourneySteps";
 
 class JourneyMap extends Component {
@@ -113,6 +113,25 @@ class JourneyMap extends Component {
     });
   };
 
+  getCkycState = async () => {
+    this.setState({
+      show_loader: true
+    })
+
+    await this.getOrCreate();
+
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+
+    if (vendor_info.ckyc_state !== "init") {
+      this.updateApplication({
+        idfc_loan_status: "ckyc",
+      });
+    } else {
+      this.getCkycState();
+    }
+  }
+
   handleClick = (id) => {
     let { ckyc_state, idfc_loan_status } = this.state;
 
@@ -121,7 +140,7 @@ class JourneyMap extends Component {
       idfc_loan_status === "basic_details_uploaded"
     ) {
       if (ckyc_state === "init") {
-        console.log(ckyc_state);
+        this.getCkycState()
       } else {
         this.updateApplication({
           idfc_loan_status: "ckyc",

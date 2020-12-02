@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 // import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
+import ContactUs from '../../../common/components/contact_us';
 
 const commonMapper = {
   "idfc_0.5_rejected": {
@@ -87,6 +88,14 @@ const commonMapper = {
     // cta_state: "/loan/idfc/home",
     // close_state: "/loan/idfc/home",
   },
+  "idfc_1.0_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
 };
 
 class LoanStatus extends Component {
@@ -159,9 +168,18 @@ class LoanStatus extends Component {
     ) {
       let body = {
         perfios_state: "init",
+        idfc_loan_status: "perfios",
       };
 
       this.updateApplication(body, "income-details");
+    } if (commonMapper.button_title === "START NEW APPLICATION") {
+      let params = {
+        create_new: true,
+        reset: true
+      };
+
+      this.getOrCreate(params);
+      
     } else {
       this.navigate(this.state.commonMapper.cta_state);
     }
@@ -187,6 +205,7 @@ class LoanStatus extends Component {
           {commonMapper["top_icon"] && (
             <img
               src={require(`assets/${this.state.productName}/${commonMapper["top_icon"]}.svg`)}
+              className="center"
               alt=""
             />
           )}
@@ -237,6 +256,11 @@ class LoanStatus extends Component {
               </div>
             </div>
           )}
+
+          {/* <div className="subtitle">
+            Oops! Something's not right. Please check back in some time.
+          </div>
+          <ContactUs /> */}
         </div>
       </Container>
     );

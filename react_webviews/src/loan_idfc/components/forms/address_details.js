@@ -57,7 +57,7 @@ class AddressDetails extends Component {
 
   onload = () => {
     let lead = this.state.lead || {};
-    // let personal_info = lead.personal_info || {};
+    let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};
     let { confirm_details } = this.state;
 
@@ -65,12 +65,14 @@ class AddressDetails extends Component {
       confirm_details = true;
     }
 
-    // let form_data = {
-      
-    // }
+    let loaderData = {
+      title: `${personal_info.first_name}, hang on while we create your loan application`,
+      subtitle: 'It may take 10 to 15 seconds!'
+    }
     this.setState({
       // form_data: form_data,
-      confirm_details: confirm_details
+      confirm_details: confirm_details,
+      loaderData: loaderData
     })
   };
 
@@ -104,7 +106,7 @@ class AddressDetails extends Component {
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, loaderData } = this.state;
     let keys_to_check = [
       "current_address1",
       "current_address2",
@@ -124,7 +126,7 @@ class AddressDetails extends Component {
       keys_to_check.push(...['current_address3', 'permanent_address3'])
     }
 
-    this.formCheckUpdate(keys_to_check, form_data, "null", true);
+    this.formCheckUpdate(keys_to_check, form_data, "null", true, loaderData);
   };
 
   handlePincode = name => async (event) => {
@@ -206,6 +208,7 @@ class AddressDetails extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        loaderData={this.state.loaderData}
       >
         <div className="address-details">
           {this.state.confirm_details && <Attention content="Once submitted, details cannot be changed or modified." />}
@@ -284,8 +287,8 @@ class AddressDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.current_city_error}
-                helperText={this.state.form_data.current_city_error}
+                // error={!!this.state.form_data.current_city_error}
+                // helperText={this.state.form_data.current_city_error}
                 type="text"
                 width="40"
                 label="City"
@@ -299,8 +302,8 @@ class AddressDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.current_state_error}
-                helperText={this.state.form_data.current_state_error}
+                // error={!!this.state.form_data.current_state_error}
+                // helperText={this.state.form_data.current_state_error}
                 type="text"
                 width="40"
                 label="State"
@@ -401,8 +404,8 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_city_error}
-                  helperText={this.state.form_data.permanent_city_error}
+                  // error={!!this.state.form_data.permanent_city_error}
+                  // helperText={this.state.form_data.permanent_city_error}
                   type="text"
                   width="40"
                   label="City"
@@ -416,8 +419,8 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  error={!!this.state.form_data.permanent_state_error}
-                  helperText={this.state.form_data.permanent_state_error}
+                  // error={!!this.state.form_data.permanent_state_error}
+                  // helperText={this.state.form_data.permanent_state_error}
                   type="text"
                   width="40"
                   label="State"

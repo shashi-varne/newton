@@ -32,11 +32,11 @@ class EligibleLoan extends Component {
         },
         {
           'title': 'BT transfer details',
-          'status': 'init'
+          'status': 'completed'
         },
         {
           'title': 'Loan offer',
-          'status': 'pending'
+          'status': 'init'
         }
       ]
     }
@@ -86,7 +86,7 @@ class EligibleLoan extends Component {
 
     let keys_to_check = ["amount_required"]
 
-    this.formCheckUpdate(keys_to_check, form_data, 'one_point_oneSalary', true);
+    this.formCheckUpdate(keys_to_check, form_data, 'one_point_one', true);
   }
 
   handleCheckbox = (name) => {
@@ -138,7 +138,7 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content">
                     <div className="sub-head">Loan amount</div>
-                    <div className="sub-title"> ₹40 lakhs</div>
+                    <div className="sub-title">₹40 lakhs</div>
                   </div>
                   <div className="sub-content">
                     <div className="sub-head">Tenure</div>
@@ -147,12 +147,12 @@ class EligibleLoan extends Component {
                 </div>
                 <div className="content">
                   <div className="sub-content">
-                    <div className="sub-head">Loan amount</div>
-                    <div className="sub-title"> ₹40 lakhs</div>
+                    <div className="sub-head">EMI amount</div>
+                    <div className="sub-title">₹33,000/month</div>
                   </div>
                   <div className="sub-content">
-                    <div className="sub-head">Tenure</div>
-                    <div className="sub-title">40 months</div>
+                    <div className="sub-head">Rate of interest</div>
+                    <div className="sub-title">24%</div>
                   </div>
                 </div>
               </Grid>

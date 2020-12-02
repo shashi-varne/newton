@@ -24,6 +24,7 @@ class DocumentUpload extends Component {
       docListOptions: [],
       form_data: {},
       totalUpload: "",
+      fileUploaded: ""
     };
   }
 
@@ -151,7 +152,9 @@ class DocumentUpload extends Component {
     });
   };
 
-  renderHtmlCamera(id) {
+  renderHtmlCamera(index) {
+    console.log(index)
+    console.log(this.state.fileUploaded)
     return (
       <div>
         {!this.state.fileUploaded && (
@@ -178,7 +181,7 @@ class DocumentUpload extends Component {
                   type="file"
                   style={{ display: "none" }}
                   onChange={this.getPhoto}
-                  id={id}
+                  id={index}
                 />
                 <img src={camera_green} alt="PAN"></img>
                 <div style={{ color: "#28b24d" }}>Click here to upload</div>
@@ -186,7 +189,7 @@ class DocumentUpload extends Component {
             </div>
           </div>
         )}
-        {this.state.fileUploaded && (
+        {this.state.fileUploaded[index] && (
           <div
             style={{
               border: "1px dashed #e1e1e1",
@@ -197,28 +200,9 @@ class DocumentUpload extends Component {
             <div>
               <img
                 style={{ width: "100%", height: 300 }}
-                src={this.state.imageBaseFileShow || this.state.document_url}
+                src={this.state.imageBaseFileShow[index] || this.state.document_url}
                 alt="PAN"
               />
-            </div>
-            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
-              <div
-                onClick={() =>
-                  this.startUpload("open_camera", "pan", "pan.jpg")
-                }
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={this.getPhoto}
-                  id={id}
-                />
-                <img src={camera_grey} alt="PAN"></img>
-                <div style={{ color: "#b4b4b4" }}>Click here to upload new</div>
-              </div>
             </div>
           </div>
         )}
@@ -389,8 +373,7 @@ class DocumentUpload extends Component {
     e.preventDefault();
 
     let file = e.target.files[0];
-    let id = e.target.id;
-    console.log(id)
+    var id = e.target.id;
 
     let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
 
@@ -404,10 +387,19 @@ class DocumentUpload extends Component {
     this.setState({
       imageBaseFile: file,
     });
+
     getBase64(file, function (img) {
+      let fileUploaded = {
+        [id]: true
+      }
+  
+      let imageBaseFile = {
+        [id]: img
+      }
+
       that.setState({
-        imageBaseFileShow: img,
-        fileUploaded: true,
+        imageBaseFileShow: imageBaseFile,
+        fileUploaded: fileUploaded,
       });
     });
   };
@@ -415,7 +407,7 @@ class DocumentUpload extends Component {
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
 
-    let { form_data, totalUpload } = this.state;
+    let { form_data } = this.state;
 
     form_data[name] = value;
     form_data[name + "_error"] = "";
@@ -441,7 +433,6 @@ class DocumentUpload extends Component {
 
   render() {
     let { doc_list, selectedIndex, docs, totalUpload } = this.state;
-    console.log(this.state.doc_list)
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -464,25 +455,12 @@ class DocumentUpload extends Component {
             />
           </div>
 
-          {totalUpload === "2" && (
-            <div className="loan-mandate-pan">
-              {getConfig().html_camera && this.renderHtmlCamera()}
+          {totalUpload < "3" && Array.apply(null, { length: 1 }).map((e, index) => (
+            <div className="loan-mandate-pan" key={index} style={{marginBottom: "50px"}}>
+              {getConfig().html_camera && this.renderHtmlCamera(index)}
               {!getConfig().html_camera && this.renderNativeCamera()}
             </div>
-          )}
-
-          {totalUpload === "3" && (
-            <div>
-              <div className="loan-mandate-pan">
-                {getConfig().html_camera && this.renderHtmlCamera(1)}
-                {!getConfig().html_camera && this.renderNativeCamera(1)}
-              </div>
-              <div className="loan-mandate-pan">
-                {getConfig().html_camera && this.renderHtmlCamera(2)}
-                {!getConfig().html_camera && this.renderNativeCamera(2)}
-              </div>
-            </div>
-          )}
+          ))}
 
           {totalUpload === "3" && (
             <div className="upload-bank-statement">
