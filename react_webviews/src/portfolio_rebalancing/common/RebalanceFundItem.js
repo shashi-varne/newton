@@ -92,7 +92,7 @@ const RebalanceFundItem = ({ classes, data, ...props }) => {
           <span className='fund-type-head'>SIP + Corpus switch</span>
 
           <span>
-            : Shift SIP & accumulated corpus from low performing funds to recommended funds.
+            : Switch SIP & accumulated corpus from low performing funds to recommended funds.
           </span>
         </>
       );

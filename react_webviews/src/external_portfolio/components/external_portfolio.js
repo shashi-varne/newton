@@ -39,7 +39,7 @@ const doughnutConfigOpts = {
 
 const colorsMap = {
   fisdom: ['#DFD8EF', '#7F66BF', '#5F40AF'],
-  myway: ['#dbebff', '#94c5ff', '#68aeff'],
+  finity: ['#dbebff', '#94c5ff', '#68aeff'],
 };
 
 export default class ExternalPortfolio extends Component {
