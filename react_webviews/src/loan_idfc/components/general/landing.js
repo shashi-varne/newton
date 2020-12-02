@@ -39,7 +39,7 @@ class Landing extends Component {
 
   handleClick = async () => {
     let params = {
-      create_new: this.state.application_exists ? false : true,
+      create_new: this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
     if (this.state.cta_title === "RESUME") {

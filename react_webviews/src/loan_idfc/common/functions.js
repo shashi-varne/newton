@@ -171,7 +171,7 @@ export async function getOrCreate(params) {
         this.navigate(this.state.next_state);
       }
 
-      if (params.reset) {
+      if (params && params.reset) {
         this.navigate('home')
       }
 
