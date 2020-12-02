@@ -153,6 +153,7 @@ export async function getOrCreate(params) {
     if (status === 200) {
       let application_id = result.application_id || "";
       storageService().set("loan_application_id", application_id);
+      let { application_status } = result.application_info;
 
       this.setState(
         {
@@ -173,6 +174,10 @@ export async function getOrCreate(params) {
 
       if (params && params.reset) {
         this.navigate('home')
+      }
+
+      if (application_status === "internally_rejected") {
+        this.navigate('loan-status')
       }
 
       if (this.state.screen_name === 'loan_bt' || this.state.screen_name === 'credit_bt') {
@@ -440,20 +445,12 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-  console.log(url);
-  console.log(this.state.application_id);
-  let url2 = "";
-
-  if (url) {
-    url2 = `https://akshay-shri-dot-plutus-staging.appspot.com/relay/page/loan/idfc/perfios/redirect/${this.state.application_id}`;
-  }
-  console.log(url2);
 
   let plutusRedirectUrl = encodeURIComponent(
     window.location.origin  + `/loan/idfc/perfios-status` + getConfig().searchParams
   )
 
-  var payment_link = url2;
+  var payment_link = url;
   var pgLink = payment_link;
   let app = getConfig().app;
 

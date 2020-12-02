@@ -153,8 +153,6 @@ class DocumentUpload extends Component {
   };
 
   renderHtmlCamera(index) {
-    console.log(index)
-    console.log(this.state.fileUploaded)
     return (
       <div>
         {!this.state.fileUploaded && (
@@ -455,7 +453,7 @@ class DocumentUpload extends Component {
             />
           </div>
 
-          {totalUpload < "3" && Array.apply(null, { length: 1 }).map((e, index) => (
+          {totalUpload < "3" && Array.apply(null, { length: totalUpload }).map((e, index) => (
             <div className="loan-mandate-pan" key={index} style={{marginBottom: "50px"}}>
               {getConfig().html_camera && this.renderHtmlCamera(index)}
               {!getConfig().html_camera && this.renderNativeCamera()}
