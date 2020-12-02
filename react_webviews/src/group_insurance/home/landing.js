@@ -248,6 +248,10 @@ class Landing extends Component {
     });
   }
 
+  policymove = ()=> {
+    this.navigate('/group-insurance/group-insurance/add-policy');
+  }
+
   getLeadId(product_key) {
     let id = ''
     if (product_key !== 'term_insurance') {
@@ -433,10 +437,12 @@ class Landing extends Component {
             Instant policy issuance
             </div>
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
-          <div className='products' style={{ marginTop: '50px' }}>
+           <div className='products' style={{ marginTop: '50px' }}>
+           <div onClick={this.policymove}>
+           <img style={{ margin: '-15px 5px 15px 0' }} src={ require(`../../assets/offline_group.svg`)} alt="" />
+           </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
-
               {this.state.insuranceProducts.map(this.renderPorducts)}
 
             </div>

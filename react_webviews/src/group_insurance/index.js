@@ -165,6 +165,9 @@ import GroupHealthPlanStarHealthDetails from './products/group_health/Star/healt
 import GroupHealthPlanStarSumInsured from './products/group_health/Star/star_sum_insured';
 import GroupHealthStarPlanSelectPed from './products/group_health/Star/star_select_ped';
 
+/*****************offline to online ********/
+import GroupPolicy from './offline_policy/landing'
+
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
@@ -525,6 +528,9 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
           <Route path={`${url}/group-health/:provider/how-to-claim-star`} component={GroupHealthPlanHowToClaimStar} />
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
+
+          {/****    offline to online  ******/}
+          <Route path={`${url}/group-insurance/add-policy`} component={GroupPolicy} />
 
           <Route component={NotFound} />
         </Switch>
