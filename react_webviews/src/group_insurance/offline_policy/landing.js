@@ -10,7 +10,7 @@ import Input from '../../common/ui/Input'
 import Dialog, { DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
-class DeclarationClass extends Component {
+class AddPolicy extends Component {
 
   constructor(props) {
     super(props);
@@ -50,11 +50,6 @@ class DeclarationClass extends Component {
 
 
 
-
-  handleClickback = () => {
-    this.navigate('plan')
-  }
-
   handleChange = name  => event => { 
 
     if (!name) {
@@ -81,8 +76,20 @@ class DeclarationClass extends Component {
     console.log(this.state.form_data)
     console.log('handleClick')
     this.setState({
-      openBmiDialog: true
+      openBmiDialog: false
     })
+
+    var form_data = this.state.form_data
+    form_data.notfound = true
+  
+    this.setState({
+        form_data : form_data
+    })
+
+
+
+
+
     // this.navigate('form', '' ,final_data )
   }
 
@@ -156,9 +163,9 @@ class DeclarationClass extends Component {
 
             <div className="top-content flex-between">
               <div className="generic-page-title">
-                Policy Found!
+               <h2>Policy Found!</h2>
               </div>
-              {/* <img className=""  src={require(`assets/${this.state.productName}/ic_medical_checkup.svg`)} alt="" /> */}
+              <img className=""  src={require(`assets/ic_sip_mandate_attention.svg`)} alt="" />
             </div>
             <div className="content-mid">
             We have found one policy with the following details:
@@ -188,30 +195,30 @@ class DeclarationClass extends Component {
   }
 
 
-  renderResetDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialogReset || false}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogContent>
-          <DialogContentText>
-            By continuing, you will reset your application.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.resetQuote} color="default">
-            CONTINUE
-          </Button>
-          <Button onClick={this.handleClose} color="default" autoFocus>
-            CANCEL
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
+  // renderResetDialog = () => {
+  //   return (
+  //     <Dialog
+  //       fullScreen={false}
+  //       open={this.state.openDialogReset || false}
+  //       onClose={this.handleClose}
+  //       aria-labelledby="responsive-dialog-title"
+  //     >
+  //       <DialogContent>
+  //         <DialogContentText>
+  //           By continuing, you will reset your application.
+  //         </DialogContentText>
+  //       </DialogContent>
+  //       <DialogActions>
+  //         <Button onClick={this.resetQuote} color="default">
+  //           CONTINUE
+  //         </Button>
+  //         <Button onClick={this.handleClose} color="default" autoFocus>
+  //           CANCEL
+  //         </Button>
+  //       </DialogActions>
+  //     </Dialog>
+  //   );
+  // }
 
 
   render() {
@@ -282,14 +289,19 @@ class DeclarationClass extends Component {
                             value={this.state.form_data.name || ''}
                             onChange={this.handleChange('name')} />
                     </div>
+                    <div>
+
+                   {this.state.form_data.notfound &&  <span><p style={{color : 'red'}}> Sorry! Couldn’t find your policy details! </p>
+                    <p style={{color : 'blue'}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
+                    </div>
                 </div>
                 {/* <ConfirmDialog parent={this} /> */}
         {this.renderBmiDialog()}
-        {this.renderResetDialog()}
+        {/* {this.renderResetDialog()} */}
       </Container>
     );
   }
 }
 
 
-export default DeclarationClass;
+export default AddPolicy;
