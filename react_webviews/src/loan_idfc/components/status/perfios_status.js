@@ -9,7 +9,7 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "RETRY",
     icon: "close",
-    cta_state: "/loan/idfc/income-details",
+    // cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
   },
   success: {
@@ -60,7 +60,8 @@ class PerfiosStatus extends Component {
     let vendor_info = lead.vendor_info || {};
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-    let bt_eligible = lead.bt_info !== undefined ? true : false;
+    
+    let bt_eligible = Object.keys(lead.bt_info || {}).length !== 0 ? true : false;
     // let bt_eligible = this.state.params
     //   ? this.state.params.bt_eligible
     //   : vendor_info.bt_eligible;
@@ -119,12 +120,15 @@ class PerfiosStatus extends Component {
       }
     }
 
-    if (perfios_state === "bypass" && bt_eligible) {
+    if (perfios_state === "bypass") {
       this.submitApplication({}, "one");
     }
 
     if (perfios_state === "failure") {
-      this.navigate(this.state.commonMapper.cta_state);
+      let body = {
+        perfios_state: 'init',
+      };
+      this.updateApplication(body, "income-details");
     }
   };
 
