@@ -80,16 +80,15 @@ class Container extends Component {
     if (this.props.showLoader) {
       return (
         <div
-          className={`Loader ${
-            this.props.loaderData ? this.props.loaderData.loaderClass : ""
-          }`}
+          className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ""
+            }`}
         >
           <div className="LoaderOverlay">
-            <div style={{fontSize:"14px", lineHeight:"20px", margin: "0 -40px 0 -40px"}}>
+            <div style={{ fontSize: "14px", lineHeight: "20px", margin: "0 -40px 0 -40px" }}>
               {data.title}
             </div>
-            <img style={{width: '20px', margin: "40px 0 30px 0"}} src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
-            <div style={{fontSize:"13px", lineHeight:"22px"}}>{data.subtitle}</div>
+            <img style={{ width: '40px', height: '54px', margin: "40px 0 30px 0" }} src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
+            <div style={{ fontSize: "13px", lineHeight: "22px", color: "#767E86" }}>{data.subtitle}</div>
           </div>
         </div>
       );
@@ -111,9 +110,8 @@ class Container extends Component {
     if (this.state.mounted) {
       return (
         <div
-          className={`ContainerWrapper loanMainContainer ${
-            this.props.classOverRide
-          }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
+          className={`ContainerWrapper loanMainContainer ${this.props.classOverRide
+            }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
         >
           {/* Header Block */}
           {!this.props.noHeader &&
@@ -160,9 +158,8 @@ class Container extends Component {
           {/* Children Block */}
           <div
             style={this.props.styleContainer}
-            className={`Container ${this.props.classOverRideContainer} ${
-              this.props.noPadding ? "no-padding" : ""
-            }`}
+            className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""
+              }`}
           >
             {this.props.children}
           </div>
