@@ -212,7 +212,7 @@ class GroupHealthReportDetails extends Component {
     
             let renderData = {
                 'header_title': mapper_data.header_title,
-                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO"? this.state.plan_selected.plan_title: ''}`,
+                'header_subtitle': `${this.state.provider === 'STAR'? this.state.providerConfig.title2 :this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO"? this.state.plan_selected.plan_title: this.state.provider === 'STAR' ? this.state.providerConfig.subtitle : ''}`,
                 'steps': {
                     'options': mapper_data.steps
                 },
@@ -361,14 +361,14 @@ class GroupHealthReportDetails extends Component {
             >
                  <div className="group-health-plan-details group-health-final-summary">
 
-                    <div style={{ margin: '18px 0 18px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
+                    <div style={{ margin: '18px 0 12px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
                         <div className="circle"></div>
                         <div className="report-color-state-title">{this.state.policy_data.cssMapper.disc}</div>
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : ''}</div>
-                            <div className="tc-subtitle">{this.state.plan_selected.plan_title}</div>
+                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.provider === 'STAR' ? this.state.providerConfig.title: ''}</div>
+                            <div className="tc-subtitle">{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
