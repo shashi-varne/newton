@@ -926,6 +926,7 @@ ul#iwd-bars {
   height: 224px;
   width: 279px;
   margin: 15px;
+  cursor: pointer;
 }
 .iwd-statement-text-container {
   color: #767e86;
@@ -1298,4 +1299,13 @@ ul#iwd-bars {
 .react-select-container {
   border: none;
   outline: none;
+}
+
+// Date Range Picker
+
+.iwd-date-range-picker {
+  .rs-picker-daterange {
+    background-color: rgba(31, 18, 65, 0.05);
+    border-radius: 4px;
+  }
 }

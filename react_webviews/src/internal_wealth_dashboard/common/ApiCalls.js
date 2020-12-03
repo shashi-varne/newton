@@ -1,6 +1,7 @@
 import Api from '../../utils/api';
 import { storageService, isEmpty } from '../../utils/validators';
 import { genericErrMsg } from '../constants';
+import axios from 'axios';
 import { remove } from 'lodash';
 // function resetBootFlag() {
 //   boot = false;
@@ -538,6 +539,71 @@ export const getTransactions = async (params = {}) => {
 export const fetchPortfolioNames = async () => {
   try {
     const res = await Api.get('api/fetch/portfolio-fund-names', { user_id: '4934000205365249' });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchGainsElssYears = async () => {
+  try {
+    const res = await Api.get('api/iam/myaccount', { user_id: '4934000205365249' });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const downloadReport = async (sType, year) => {
+  try {
+    const res = await Api.get(`printpage/invest/export/4934000205365249/${sType}`, {
+      year,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const downloadTransactionReport = async (type, params = {}) => {
+  try {
+    const res = await Api.get(`api/rta/download/account/summary/${type}`, {
+      ...params,
+      user_id: '4934000205365249',
+    });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;

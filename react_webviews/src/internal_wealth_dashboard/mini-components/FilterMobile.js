@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import PageCloseBtn from './PageCloseBtn';
 import Filters from './FilterSection';
 import { PrimaryButton as Button } from '../common/Button';
-import { isEmpty, storageService } from '../../utils/validators';
+import { storageService } from '../../utils/validators';
 import TextField from '@material-ui/core/TextField';
 import { dateFormater, date_range_selector } from '../common/commonFunctions';
+import toast from '../../common/ui/Toast';
+import isEmpty from 'lodash/isEmpty';
 const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterData }) => {
   const storedFilterVal = storageService().getObject(filter_key);
   const [startDate, setStartDate] = useState(storedFilterVal['from_tdate'] || '');
@@ -41,12 +43,14 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   };
 
   const applyFilters = () => {
-    storageService().setObject(filter_key, filterState);
-    handleFilterData(filterState);
+    if (!isEmpty(clearCheck)) {
+      storageService().setObject(filter_key, filterState);
+      handleFilterData(filterState);
+    }
     clickHandler();
   };
   const clearFilters = () => {
-    if (filterState) {
+    if (!isEmpty(clearCheck)) {
       if (filter_key === 'iwd-holding-filters') {
         setFilterState(null);
         setClearFilter(true);

@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import FilterDesktop from '../../mini-components/FilterDesktop';
 import FilterMobile from '../../mini-components/FilterMobile';
-import { getTransactions, hitNextPage, fetchPortfolioNames } from '../../common/ApiCalls';
+import {
+  getTransactions,
+  hitNextPage,
+  fetchPortfolioNames,
+  downloadTransactionReport,
+} from '../../common/ApiCalls';
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
 import FSTable from 'common/responsive-components/FSTable';
 import { transactionsHeaderMap } from '../../constants';
@@ -37,6 +42,7 @@ const Transactions = () => {
   useEffect(() => {
     const filterData = storageService().getObject(filter_key);
     fetch_fund_names();
+
     if (filterData) {
       get_transactions(filterData);
     } else {
@@ -93,6 +99,19 @@ const Transactions = () => {
     isOpen(false);
   };
 
+  const downloadTransactions = async () => {
+    if (transactions?.length > 0) {
+      try {
+        const filterData = storageService().getObject(filter_key);
+        await downloadTransactionReport('pdf', filterData);
+      } catch (err) {
+        toast(err);
+        console.log(err);
+      }
+    } else {
+      toast('No transaction to download');
+    }
+  };
   return (
     <div className='iwd-statement-transaction'>
       {isMobileView && open ? (
@@ -119,7 +138,7 @@ const Transactions = () => {
           <div className='iwd-transaction-search'>
             {fundNames && (
               <AutoSuggestSearch
-                placeholder='Search for a transaction'
+                placeholder='Which fund are you looking for?'
                 fundNames={fundNames}
                 handleFilterData={handleFilterData}
                 filter_key={filter_key}
@@ -137,9 +156,11 @@ const Transactions = () => {
           <div className='iwd-transaction-header'>
             <div className='iwd-transaction-title'>Transactions</div>
 
-            <div className='iwd-transaction-download-report'>Download Report</div>
+            <div className='iwd-transaction-download-report' onClick={downloadTransactions}>
+              Download Report
+            </div>
 
-            <div className='iwd-trasaction-download-icon'>
+            <div className='iwd-trasaction-download-icon' onClick={downloadTransactions}>
               <img alt='download' src={download_icon} />
             </div>
           </div>

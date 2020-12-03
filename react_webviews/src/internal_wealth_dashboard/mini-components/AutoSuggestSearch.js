@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Select, { components } from 'react-select';
 import SearchIcon from '@material-ui/icons/Search';
+
+import CheckIcon from '@material-ui/icons/Check';
 import { isEmpty, storageService } from '../../utils/validators';
 const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterData }) => {
   const filterVal = storageService().getObject(filter_key);
@@ -10,9 +12,7 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
   }));
 
   const getStoredFundName = () => {
-    console.log('filter val', filterVal['amfi']);
     const data = suggestions.find((el) => el.value === filterVal['amfi']);
-    console.log('storedfund name', data);
     return data;
   };
   const [fundName, setFundName] = useState(
@@ -29,50 +29,78 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
     return (
       components.ValueContainer && (
         <components.ValueContainer {...props}>
-          {!!children && <SearchIcon style={{ position: 'absolute', left: 6 }} />}
+          {!!children && (
+            <SearchIcon style={{ position: 'absolute', left: 16, color: '#4F2DA6' }} />
+          )}
           {children}
         </components.ValueContainer>
       )
     );
   };
 
+  const DropdownIndicator = () => null;
+  const Option = (props) => {
+    return (
+      components.Option && (
+        <components.Option {...props}>
+          {props.data.label}
+          {props.isSelected && (
+            <CheckIcon style={{ position: 'absolute', right: 10, color: '#4F2DA6' }} />
+          )}
+        </components.Option>
+      )
+    );
+  };
   const customStyles = {
     valueContainer: (base) => ({
       ...base,
       paddingLeft: 30,
+      textAlign: 'left',
     }),
-    // indicatorsContainer: (base) => ({
-    //   ...base,
-    //   display: 'none',
-    // }),
-    // option: (provided, state) => ({
-    //   ...provided,
-    //   color: state.isSelected ? '#1F041E' : '#0A1D32',
-    //   textAlign: 'left',
-    //   '&:hover': { backgroundColor: '#4F2DA6', opacity: '0.05', color: '#1F041E' },
-    // }),
+    indicatorSeparator: (base) => ({
+      ...base,
+      display: 'none',
+    }),
 
-    // singleValue: (provided, state) => {
-    //   const opacity = state.isDisabled ? 0.5 : 1;
-    //   const transition = 'opacity 300ms';
-
-    //   return { ...provided, opacity, transition };
-    // },
     control: (base, state) => ({
       ...base,
-      //background: '#4F2DA6',
       border: 'none',
       color: 'black',
+      boxShadow: 'none',
+      background: 'rgba(31,18,65,0.05)',
+      cursor: 'pointer',
+    }),
+    placeholder: (base) => ({
+      marginLeft: '20px',
+      color: '#0A1D32',
+      opacity: '0.3',
+    }),
+    singleValue: (base) => ({
+      ...base,
+      marginLeft: '20px',
+      color: '#0A1D32',
+      overflow: 'hidden',
+      position: 'absolute',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      maxWidth: 'calc(100% - 47px)',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      boxSizing: 'border-box',
+    }),
+    option: (base, state) => ({
+      ...base,
+      '&:hover': { backgroundColor: 'rgba(31,18,65,0.05)', color: '#1F041E' },
+      backgroundColor: state.isSelected ? 'rgba(31,18,65,0.05)' : 'white',
+      color: '#1F041E',
+      alignItems: 'left',
     }),
   };
-  const DropdownIndicator = () => null;
-
   return (
     <div>
       <Select
         placeholder={placeholder}
-        //className='react-select-container'
-        components={{ DropdownIndicator, ValueContainer }}
+        components={{ DropdownIndicator, ValueContainer, Option }}
         styles={customStyles}
         options={suggestions}
         isSearchable
