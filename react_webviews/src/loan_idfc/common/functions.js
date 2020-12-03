@@ -48,9 +48,9 @@ export async function initialize() {
       screenData: screenData,
       productName: getConfig().productName,
     },
-    () => {
-      this.onload();
-    }
+    // () => {
+    //   this.onload();
+    // }
   );
 
   this.setState({

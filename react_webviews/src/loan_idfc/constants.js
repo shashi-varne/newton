@@ -1,6 +1,8 @@
 export function goBackMap(path) {
     let mapper = {
-      '/loan/idfc/journey': '/loan/idfc/home'
+      '/loan/idfc/journey': '/loan/idfc/home',
+      '/loan/idfc/application-summary': '/loan/idfc/journey',
+      '/loan/idfc/personal-details': '/loan/idfc/home'
     }
 
     return mapper[path] || false;

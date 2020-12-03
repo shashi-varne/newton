@@ -5,7 +5,12 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { dobFormatTest, formatDate, timeStampToDate } from "utils/validators";
+import {
+  dobFormatTest,
+  formatDate,
+  timeStampToDate,
+  capitalizeFirstLetter,
+} from "utils/validators";
 
 class BasicDetails extends Component {
   constructor(props) {
@@ -41,9 +46,9 @@ class BasicDetails extends Component {
   onload = () => {
     if (this.props.edit) {
       this.setState({
-          next_state: `/loan/idfc/summary`
-      })
-  }
+        next_state: `/loan/idfc/application-summary`,
+      });
+    }
 
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
@@ -56,7 +61,8 @@ class BasicDetails extends Component {
       pan_no: personal_info.pan_no || "",
       educational_qualification:
         professional_info.educational_qualification || "",
-      employment_type: application_info.employment_type || "",
+      employment_type:
+        capitalizeFirstLetter(application_info.employment_type) || "",
     };
 
     this.setState({

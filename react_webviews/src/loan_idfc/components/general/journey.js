@@ -31,6 +31,7 @@ class JourneyMap extends Component {
 
     let journey = {
       basic_details_uploaded: "1",
+      ckyc: "1",
       idfc_null_submitted: "2",
       idfc_null_accepted: "2",
       idfc_null_rejected: "2",
@@ -39,7 +40,6 @@ class JourneyMap extends Component {
       "idfc_0.5_rejected": "3",
     };
     let index = (idfc_loan_status && journey[idfc_loan_status]) || "0";
-    console.log(index);
 
     let journeyData = {
       options: [
@@ -51,6 +51,7 @@ class JourneyMap extends Component {
             "Fill in personal and work details to get started with your loan application.",
           status: index && index === "0" ? "init" : "completed",
           id: "basic_details",
+          cta: "SUMMARY",
         },
         {
           step: "2",
@@ -60,6 +61,12 @@ class JourneyMap extends Component {
             "Check your KYC status to proceed with your loan application.",
           status: index && index === "1" ? "init" : "completed",
           id: "create_loan_application",
+          cta:
+            idfc_loan_status === "ckyc"
+              ? "RESUME"
+              : index > "1"
+              ? "SUMMARY"
+              : "START",
         },
         {
           step: "3",
@@ -110,13 +117,14 @@ class JourneyMap extends Component {
       journeyData: journeyData,
       ckyc_state: ckyc_state,
       idfc_loan_status: idfc_loan_status,
+      index: index,
     });
   };
 
   getCkycState = async () => {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
 
     await this.getOrCreate();
 
@@ -130,17 +138,14 @@ class JourneyMap extends Component {
     } else {
       this.getCkycState();
     }
-  }
+  };
 
   handleClick = (id) => {
     let { ckyc_state, idfc_loan_status } = this.state;
 
-    if (
-      id === "create_loan_application" &&
-      idfc_loan_status === "basic_details_uploaded"
-    ) {
+    if (id === "create_loan_application") {
       if (ckyc_state === "init") {
-        this.getCkycState()
+        this.getCkycState();
       } else {
         this.updateApplication({
           idfc_loan_status: "ckyc",
@@ -174,7 +179,7 @@ class JourneyMap extends Component {
   }
 
   render() {
-    let { idfc_loan_status } = this.state;
+    let { idfc_loan_status, index } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -191,17 +196,16 @@ class JourneyMap extends Component {
             alt=""
           />
 
-          {(idfc_loan_status === "idfc_null_accepted" ||
-            idfc_loan_status === "idfc_null_submitted") && (
+          {index === "1" && (
             <div className="head-title">
-              <b>Awesome!</b> Your loan application is successfully created. Now
-              you're just a step away from finding out your loan offer.
+              <b>Ta-da! You’ve</b> successfully uploaded your basic details.
             </div>
           )}
 
-          {idfc_loan_status === "basic_details_uploaded" && (
+          {index === "2" && (
             <div className="head-title">
-              <b>Ta-da! You’ve</b> successfully uploaded your basic details.
+              <b>Awesome!</b> Your loan application is successfully created. Now
+              you're just a step away from finding out your loan offer.
             </div>
           )}
 
