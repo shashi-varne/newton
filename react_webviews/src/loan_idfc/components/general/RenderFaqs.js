@@ -3,9 +3,6 @@ import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import Faqs from '../../../common/ui/Faqs';
-// import color from 'material-ui/colors/amber';
-
-import { initialize } from "../../common/functions";
 class CommonRenderFaqs extends Component {
 
     constructor(props) {
@@ -21,11 +18,9 @@ class CommonRenderFaqs extends Component {
             show_loader: true,
             selectedIndex: '',
         };
-        // this.initialize = initialize.bind(this);
     }
 
     componentWillMount() {
-        // this.initialize();
         window.scrollTo(0, 0);
         let { params } = this.props.location || {};
         if (!params || !params.renderData) {
@@ -43,7 +38,6 @@ class CommonRenderFaqs extends Component {
     }
 
     showHideSteps = (index) => {
-
         if (this.state.selectedIndex === index) {
             this.setState({
                 selectedIndex: -1

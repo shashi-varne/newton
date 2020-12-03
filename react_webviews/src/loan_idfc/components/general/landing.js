@@ -96,7 +96,6 @@ class Landing extends Component {
         'options': this.state.screenData.faqsInfo.faqs
       },
       'cta_title': this.state.screenData.faqsInfo.cta_title,
-      'multiple_sections': true
     }
 
     this.props.history.push({
