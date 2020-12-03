@@ -8,6 +8,7 @@ import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import {formatAmount} from '../../../../utils/validators';
 
 
 class GroupHealthPlanList extends Component {
@@ -161,7 +162,7 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
-                    {props.starts_at}
+                    STARTS AT ₹ {formatAmount(props.starts_at_value)}/YEAR
                 </div>
             </div>
         );

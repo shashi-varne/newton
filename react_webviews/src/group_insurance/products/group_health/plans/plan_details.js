@@ -323,7 +323,7 @@ class GroupHealthPlanDetails extends Component {
                       {this.state.plan_data.SI}
                   </div>
                   <div className="sai-left">
-                  starts at ₹ {formatAmount(this.state.plan_data.starts_at_value)}/year
+                  starts at ₹{formatAmount(this.state.plan_data.starts_at_value)}/year
                   </div>
                </div>
 
