@@ -36,6 +36,7 @@ import UploadPan from "./components/upload_doc/upload_pan";
 import LoanStatus from './components/status/status';
 import PerfiosStatus from './components/status/perfios_status';
 import DocumentUpload from './components/upload_doc/doc_upload';
+import CommonRenderFaqs from "./components/general/RenderFaqs";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -101,6 +102,7 @@ const Lending = props => {
           <Route path={`${url}/loan-status`} component={LoanStatus} />
           <Route path={`${url}/perfios-status`} component={PerfiosStatus} />
           <Route path={`${url}/doc-upload`} component={DocumentUpload} />
+          <Route path={`${url}/faq`} component={CommonRenderFaqs} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-basic-details`} 

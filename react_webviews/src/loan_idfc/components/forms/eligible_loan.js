@@ -46,7 +46,7 @@ class EligibleLoan extends Component {
     })
   }
 
-  onload = () => {};
+  onload = () => { };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -78,7 +78,7 @@ class EligibleLoan extends Component {
 
   handleClick = () => {
     let { form_data } = this.state;
-    
+
     if (this.state.checked === "default_tenor") {
       form_data.amount_required = "4000000";
       form_data.amount_required_error = "";
@@ -136,21 +136,21 @@ class EligibleLoan extends Component {
               <Grid item xs={11}>
                 <div className="title">I want to proceed with this offer</div>
                 <div className="content">
-                  <div className="sub-content">
+                  <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
                     <div className="sub-title">₹40 lakhs</div>
                   </div>
-                  <div className="sub-content">
+                  <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
                     <div className="sub-title">40 months</div>
                   </div>
                 </div>
                 <div className="content">
-                  <div className="sub-content">
+                  <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
                     <div className="sub-title">₹33,000/month</div>
                   </div>
-                  <div className="sub-content">
+                  <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
                     <div className="sub-title">24%</div>
                   </div>
