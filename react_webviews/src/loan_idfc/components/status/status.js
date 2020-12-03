@@ -3,9 +3,18 @@ import Container from "../../common/Container";
 // import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
-import ContactUs from '../../../common/components/contact_us';
+import ContactUs from "../../../common/components/contact_us";
 
 const commonMapper = {
+  idfc_null_failed: {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+    failed: true,
+  },
   "idfc_0.5_rejected": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
@@ -26,6 +35,14 @@ const commonMapper = {
     top_title: "Congratulations, Aamir!",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
+    close_state: "/loan/idfc/home",
+  },
+  "idfc_0.5_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
   "idfc_1.1_accepted": {
@@ -123,7 +140,7 @@ class LoanStatus extends Component {
     let application_info = lead.application_info || {};
     let personal_info = lead.personal_info || {};
     let idfc_loan_status = vendor_info.idfc_loan_status;
-    let application_status = application_info.application_status;
+    let { application_status, rejection_reason } = application_info;
     let perfios_state = vendor_info.perfios_state;
     let bt_eligible = vendor_info.bt_eligible;
     // let mapperKey = "";
@@ -135,11 +152,11 @@ class LoanStatus extends Component {
     // if (status === false && bt_eligible === false) {
     //   mapperKey = "status_bt_eligible_failed"
     // }
-
-    if (application_info === "internally_rejected") {
+    if (application_status === "internally_rejected") {
       this.setState({
-        commonMapper: commonMapper[application_status] || {},
+        commonMapper: commonMapper[rejection_reason] || {},
         application_status: application_status,
+        rejection_reason: rejection_reason,
       });
     } else {
       this.setState({
@@ -172,28 +189,31 @@ class LoanStatus extends Component {
       };
 
       this.updateApplication(body, "income-details");
-    } if (commonMapper.button_title === "START NEW APPLICATION") {
+    }
+    if (commonMapper.button_title === "START NEW APPLICATION") {
       let params = {
         create_new: true,
-        reset: true
+        reset: true,
       };
 
       this.getOrCreate(params);
-      
     } else {
       this.navigate(this.state.commonMapper.cta_state);
     }
   };
 
   render() {
-    let { commonMapper, idfc_loan_status, application_status } = this.state;
+    let {
+      commonMapper,
+      idfc_loan_status,
+      application_status,
+      rejection_reason,
+    } = this.state;
 
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={
-          commonMapper.top_title || `Congratulations, ${this.state.first_name}!`
-        }
+        title={commonMapper.top_title}
         buttonTitle={commonMapper.button_title}
         handleClick={this.handleClick}
         headerData={{
@@ -209,7 +229,7 @@ class LoanStatus extends Component {
               alt=""
             />
           )}
-          {application_status === "Salary receipt mode" && (
+          {rejection_reason === "Salary receipt mode" && (
             <div className="subtitle">
               We’re unable to approve your loan request because as per IDFC’s
               loan policy your monthly salary does not qualify you for a
@@ -217,7 +237,7 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {application_status === "Salary" && (
+          {rejection_reason === "Salary" && (
             <div className="subtitle">
               We’re unable to approve your loan request because as per IDFC’s
               loan policy your salary receipt mode does not make you eligible
@@ -225,7 +245,7 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {application_status === "Age" && (
+          {rejection_reason === "Age" && (
             <div className="subtitle">
               We're unable to take your loan application forward as you don't
               fall under the minimum age criteria as per IDFC's loan policy.
@@ -257,10 +277,14 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {/* <div className="subtitle">
-            Oops! Something's not right. Please check back in some time.
-          </div>
-          <ContactUs /> */}
+          {commonMapper.top_title === "System error" && (
+            <div>
+              <div className="subtitle">
+                Oops! Something's not right. Please check back in some time.
+              </div>
+              <ContactUs />
+            </div>
+          )}
         </div>
       </Container>
     );

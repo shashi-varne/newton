@@ -15,6 +15,7 @@ class LoanRequirementDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "requirement_details_screen",
+      loaderData: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -34,8 +35,14 @@ class LoanRequirementDetails extends Component {
       tenor: String(application_info.tenor)
     }
 
+    let loaderData = {
+      title: 'Please wait while IDFC evaluates your profile',
+      subtitle: 'This may take 10 - 15 seconds!'
+    }
+
     this.setState({
-      form_data: form_data
+      form_data: form_data,
+      loaderData: loaderData
     })
   };
 
@@ -98,6 +105,7 @@ class LoanRequirementDetails extends Component {
         title="Loan requirement details"
         buttonTitle="SUBMIT"
         loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
         handleClick={this.handleClick}
       >
         <div className="requirements-details">

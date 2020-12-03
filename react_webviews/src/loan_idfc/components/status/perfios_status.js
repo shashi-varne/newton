@@ -7,26 +7,30 @@ const commonMapper = {
   failure: {
     top_icon: "ils_loan_failed",
     top_title: "Bank statement verification failed",
-    id: "bank",
     button_title: "RETRY",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
+    // cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
   },
   success: {
     top_icon: "ils_loan_failed",
-    top_title: "Bank statement verification suucessful",
-    id: "bank",
+    top_title: "Bank statement verification successful",
     button_title: "NEXT",
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
-  blocked: {},
+  blocked: {
+    top_icon: "ils_loan_failed",
+    top_title: "Bank statement verification failed",
+    button_title: "OK",
+    icon: "close",
+    // cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
   bypass: {
     top_icon: "ils_loan_failed",
     top_title: "Bank statement verification failed",
-    id: "bank",
     button_title: "NEXT",
     icon: "close",
     // cta_state: "/loan/idfc/home",
@@ -56,7 +60,8 @@ class PerfiosStatus extends Component {
     let vendor_info = lead.vendor_info || {};
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-    let bt_eligible = lead.bt_info !== undefined ? true : false 
+    
+    let bt_eligible = Object.keys(lead.bt_info || {}).length !== 0 ? true : false;
     // let bt_eligible = this.state.params
     //   ? this.state.params.bt_eligible
     //   : vendor_info.bt_eligible;
@@ -115,8 +120,15 @@ class PerfiosStatus extends Component {
       }
     }
 
-    if (perfios_state === "bypass" && bt_eligible) {
+    if (perfios_state === "bypass") {
       this.submitApplication({}, "one");
+    }
+
+    if (perfios_state === "failure") {
+      let body = {
+        perfios_state: 'init',
+      };
+      this.updateApplication(body, "income-details");
     }
   };
 
@@ -128,6 +140,10 @@ class PerfiosStatus extends Component {
         title={commonMapper.top_title}
         buttonTitle={commonMapper.button_title}
         handleClick={this.handleClick}
+        headerData={{
+          icon: commonMapper.icon || "",
+          goBack: this.goBack,
+        }}
       >
         <div className="idfc-loan-status">
           {commonMapper["top_icon"] && (
@@ -137,7 +153,7 @@ class PerfiosStatus extends Component {
             />
           )}
 
-          {perfios_state === "sucess" && (
+          {perfios_state === "success" && (
             <div className="subtitle">
               Hey Aamir, IDFC has successfully verified your bank statements and
               your income details have been safely updated.
@@ -157,6 +173,14 @@ class PerfiosStatus extends Component {
             </div>
           )}
 
+          {perfios_state === "blocked" && (
+            <div className="subtitle">
+              Due to an error your bank statements couldn't be verfied. No
+              worries, you can still go ahead with your loan application.
+              However, do upload your bank statements later.
+            </div>
+          )}
+
           {bt_eligible && (
             <div className="subtitle">
               Before we move to the final loan offer, we have an option of
@@ -164,11 +188,6 @@ class PerfiosStatus extends Component {
               you want to opt for it or not.
             </div>
           )}
-
-          {/* <div className="subtitle">
-            Now all you need to do is hit 'calculate eligibility' to view your
-            loan offer.
-          </div> */}
 
           {perfios_state === "failure" && (
             <div className="subtitle">
@@ -179,7 +198,6 @@ class PerfiosStatus extends Component {
               verification process.
             </div>
           )}
-          
         </div>
       </Container>
     );

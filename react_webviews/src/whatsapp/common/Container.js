@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 
-import Header from "../../common/components/Header";
-import { didmount } from "../../common/components/container_functions";
+import Header from '../../common/components/Header';
+import { didmount } from '../../common/components/container_functions';
 
-import Footer from "./footer";
+import Footer from './footer';
 
-import { nativeCallback } from "utils/native_callback";
-import "../../utils/native_listner";
-import { getConfig } from "utils/functions";
+import { nativeCallback } from 'utils/native_callback';
+import '../../utils/native_listner';
+import { getConfig } from 'utils/functions';
 
 class Container extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class Container extends Component {
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
-      project: "whatsapp",
+      project: 'whatsapp',
     };
 
     this.didmount = didmount.bind(this);
@@ -36,8 +36,8 @@ class Container extends Component {
   }
 
   historyGoBack = (backData) => {
-    if (this.getEvents("back")) {
-      nativeCallback({ events: this.getEvents("back") });
+    if (this.getEvents('back')) {
+      nativeCallback({ events: this.getEvents('back') });
     }
   };
 
@@ -50,8 +50,8 @@ class Container extends Component {
   };
 
   historyGoBack = (backData) => {
-    if (this.getEvents("back")) {
-      nativeCallback({ events: this.getEvents("back") });
+    if (this.getEvents('back')) {
+      nativeCallback({ events: this.getEvents('back') });
     }
 
     if (this.props.headerData && this.props.headerData.goBack) {
@@ -62,12 +62,12 @@ class Container extends Component {
     let pathname = this.props.history.location.pathname;
 
     switch (pathname) {
-      case "/whatsapp/mobile-verify":
-        nativeCallback({ action: "native_back"});
+      case '/whatsapp/mobile-verify':
+        nativeCallback({ action: 'native_back' });
         break;
-      case "/whatsapp/edit-number":
-      case "/whatsapp/otp-success":
-        nativeCallback({ action: "exit_web" });
+      case '/whatsapp/edit-number':
+      case '/whatsapp/otp-success':
+        nativeCallback({ action: 'exit_web' });
         break;
       default:
         this.props.history.goBack();
@@ -75,45 +75,42 @@ class Container extends Component {
   };
 
   headerGoBack = () => {
-    this.historyGoBack({fromHeader: true});
-  }
+    this.historyGoBack({ fromHeader: true });
+  };
 
   render() {
-
     if (this.state.mounted) {
       return (
         <div
-          className={`ContainerWrapper loanMainContainer ${
-            this.props.classOverRide
-          }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
+          className={`ContainerWrapper loanMainContainer ${this.props.classOverRide}  ${
+            getConfig().productName !== 'fisdom' ? 'blue' : ''
+          }`}
         >
           {/* Header Block */}
-          {!this.props.noHeader &&
-            !getConfig().hide_header &&
-            !this.props.showLoader && (
-              <Header
-                disableBack={this.props.disableBack}
-                title={this.props.title}
-                smallTitle={this.props.smallTitle}
-                provider={this.props.provider}
-                count={this.props.count}
-                total={this.props.total}
-                current={this.props.current}
-                goBack={this.headerGoBack}
-                edit={this.props.edit}
-                type={getConfig().productName}
-                resetpage={this.props.resetpage}
-                handleReset={this.props.handleReset}
-                inPageTitle={this.state.inPageTitle}
-                force_hide_inpage_title={this.state.force_hide_inpage_title}
-                style={this.props.styleHeader}
-                className={this.props.classHeader}
-                headerData={this.props.headerData}
-              />
-            )}
+          {!this.props.noHeader && !getConfig().hide_header && !this.props.showLoader && (
+            <Header
+              disableBack={this.props.disableBack}
+              title={this.props.title}
+              smallTitle={this.props.smallTitle}
+              provider={this.props.provider}
+              count={this.props.count}
+              total={this.props.total}
+              current={this.props.current}
+              goBack={this.headerGoBack}
+              edit={this.props.edit}
+              type={getConfig().productName}
+              resetpage={this.props.resetpage}
+              handleReset={this.props.handleReset}
+              inPageTitle={this.state.inPageTitle}
+              force_hide_inpage_title={this.state.force_hide_inpage_title}
+              style={this.props.styleHeader}
+              className={this.props.classHeader}
+              headerData={this.props.headerData}
+            />
+          )}
 
           {/* Below Header Block */}
-          <div id="HeaderHeight" style={{ top: 56 }}>
+          <div id='HeaderHeight' style={{ top: 56 }}>
             {/* Loader Block */}
             {this.renderPageLoader()}
           </div>
@@ -129,7 +126,7 @@ class Container extends Component {
           <div
             style={this.props.styleContainer}
             className={`Container ${this.props.classOverRideContainer} ${
-              this.props.noPadding ? "no-padding" : ""
+              this.props.noPadding ? 'no-padding' : ''
             }`}
           >
             {this.props.children}

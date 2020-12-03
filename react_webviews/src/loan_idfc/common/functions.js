@@ -48,9 +48,9 @@ export async function initialize() {
       screenData: screenData,
       productName: getConfig().productName,
     },
-    () => {
-      this.onload();
-    }
+    // () => {
+    //   this.onload();
+    // }
   );
 
   this.setState({
@@ -153,6 +153,7 @@ export async function getOrCreate(params) {
     if (status === 200) {
       let application_id = result.application_id || "";
       storageService().set("loan_application_id", application_id);
+      let { application_status } = result.application_info;
 
       this.setState(
         {
@@ -171,8 +172,12 @@ export async function getOrCreate(params) {
         this.navigate(this.state.next_state);
       }
 
-      if (params.reset) {
+      if (params && params.reset) {
         this.navigate('home')
+      }
+
+      if (application_status === "internally_rejected") {
+        this.navigate('loan-status')
       }
 
       if (this.state.screen_name === 'loan_bt' || this.state.screen_name === 'credit_bt') {
@@ -291,7 +296,7 @@ export async function submitApplication(params, state, update = "") {
       loaderWithData: screens.includes(this.state.screen_name)
     });
     const res = await Api.post(
-      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('?update=' + update)}`,
+      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('&update=' + update)}`,
       params
     );
 
@@ -302,14 +307,7 @@ export async function submitApplication(params, state, update = "") {
         this.navigate(this.state.next_state);
       }
     } else {
-      // if (this.state.screen_name === "professional_details_screen") {
-      //   this.navigate("application-status");
-      // } else {
-
       this.navigate("loan-status");
-      // toast(result.error || result.message || "Something went wrong!");
-      // this.onload();
-      // }
     }
   } catch (err) {
     console.log(err);
@@ -447,20 +445,12 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-  console.log(url);
-  console.log(this.state.application_id);
-  let url2 = "";
-
-  if (url) {
-    url2 = `https://akshay-shri-dot-plutus-staging.appspot.com/relay/page/loan/idfc/perfios/redirect/${this.state.application_id}`;
-  }
-  console.log(url2);
 
   let plutusRedirectUrl = encodeURIComponent(
     window.location.origin  + `/loan/idfc/perfios-status` + getConfig().searchParams
   )
 
-  var payment_link = url2;
+  var payment_link = url;
   var pgLink = payment_link;
   let app = getConfig().app;
 
