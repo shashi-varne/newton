@@ -509,3 +509,38 @@ export const transactionFilterOptions = [
     ],
   },
 ];
+
+const ViewForOptions = [
+  {
+    id: 'viewFor',
+    category: 'View For',
+    filters: [
+      {
+        label: 'Past 7 days',
+        value: 'past_seven_days',
+      },
+      {
+        label: 'Past 2 weeks',
+        value: 'past_two_weeks',
+      },
+      {
+        label: 'Past months',
+        value: 'past_month',
+      },
+      {
+        label: 'Month to date',
+        value: 'month_to_date',
+      },
+      {
+        label: 'Year to date',
+        value: 'year_to_date',
+      },
+      {
+        label: 'Select dates',
+        value: 'select_dates',
+      },
+    ],
+  },
+];
+
+export const mobileFilterOptions = [...transactionFilterOptions, ...ViewForOptions];

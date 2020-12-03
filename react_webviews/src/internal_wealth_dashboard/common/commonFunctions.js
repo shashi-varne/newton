@@ -67,4 +67,14 @@ export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) =>
 export const dateFormater = (date) => {
   return moment(date).format('YYYY-MM-DD');
 };
-export const past_seven_days = () => [subDays(new Date(), 6), new Date()];
+
+export const date_range_selector = {
+  past_seven_days: () => [subDays(new Date(), 6), new Date()],
+  past_two_weeks: () => [subDays(new Date(), 13), new Date()],
+  past_month: () => [
+    startOfMonth(addMonths(new Date(), -1)),
+    endOfMonth(addMonths(new Date(), -1)),
+  ],
+  month_to_date: () => [startOfMonth(new Date()), subDays(new Date(), 1)],
+  year_to_date: () => [startOfYear(new Date()), subDays(new Date(), 1)],
+};

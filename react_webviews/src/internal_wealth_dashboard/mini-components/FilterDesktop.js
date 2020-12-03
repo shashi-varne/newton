@@ -1,16 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Filters from './FilterSection';
 import { storageService } from '../../utils/validators';
 
 import isEmpty from 'lodash/isEmpty';
-const FilterDesktop = ({
-  clearFilters,
-  clearFilter,
-  handleFilterSelect,
-  filterOptions,
-  filter_key,
-}) => {
-  const filterData = storageService().getObject(filter_key);
+const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
+  const storedFilterVal = storageService().getObject(filter_key);
+  const [filterState, setFilterState] = useState(
+    !isEmpty(storedFilterVal) ? storedFilterVal : null
+  );
+  const [clearFilter, setClearFilter] = useState(false);
+  const clearCheck = filter_key === 'iwd-holding-filters' ? filterState : filterState?.ttype;
+
+  const handleFilterSelect = (id, value) => {
+    const filterData = { ...storedFilterVal, [id]: value };
+    console.log('filter data is ', filterData);
+    setFilterState(filterData);
+    storageService().setObject(filter_key, filterData);
+    handleFilterData(filterData);
+    setClearFilter(false);
+  };
+
+  const clearFilters = () => {
+    const filterData = { ...storedFilterVal, ttype: '' };
+    if (filterState) {
+      if (filter_key === 'iwd-holding-filters') {
+        handleFilterData(null);
+        setFilterState(null);
+        setClearFilter(true);
+        storageService().setObject(filter_key, null);
+      } else {
+        handleFilterData(filterData);
+        setFilterState(null);
+        setClearFilter(true);
+        storageService().setObject(filter_key, filterData);
+      }
+    }
+  };
   const renderFilters = () => (
     <div>
       {filterOptions?.map((type) => {
@@ -36,7 +61,7 @@ const FilterDesktop = ({
       <section className='iwd-filter-head-container'>
         <div className='iwd-filter-head'>Filters</div>
         <div
-          className={`iwd-filter-clear ${isEmpty(filterData) && 'iwd-disable-clear'}`}
+          className={`iwd-filter-clear ${isEmpty(clearCheck) && 'iwd-disable-clear'}`}
           onClick={clearFilters}
         >
           Clear All

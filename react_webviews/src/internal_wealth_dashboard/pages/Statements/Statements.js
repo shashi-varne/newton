@@ -27,13 +27,14 @@ const Statements = () => {
   };
   return (
     <div className='iwd-page'>
-      <PageHeader height='10vh' hideProfile={isMobileView}>
+      <PageHeader height='auto' hideProfile={isMobileView}>
         <HeaderNavBar
           title='Statements'
           tabs={Object.keys(pageTypeMapper).map((key) => key)}
           handlePageType={handlePageType}
         />
       </PageHeader>
+
       <section className='iwd-statements-container'>{pageTypeMapper[pageType].component}</section>
     </div>
   );

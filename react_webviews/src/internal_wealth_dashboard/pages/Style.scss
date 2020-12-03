@@ -1550,14 +1550,12 @@ $background: #f9f9f9;
     display: flex;
     justify-content: space-between;
     .iwd-transaction-search {
-      z-index: 10;
       flex: 0.6;
       height: 40px;
       border-radius: 10px;
       text-align: center;
     }
     .iwd-transaction-date {
-      z-index: 10;
       text-align: center;
       margin-left: 30px;
       flex: 0.4;
@@ -1636,6 +1634,33 @@ $background: #f9f9f9;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.iwd-transactions-table.iwd-statement-trasaction-table {
+  width: 100% !important;
+  thead {
+    width: 100%;
+    tr {
+      height: 40px;
+      td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 40px;
+        white-space: nowrap;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 40px;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 450px) {
   .iwd-filter-desktop {
     display: none;
@@ -1670,6 +1695,21 @@ $background: #f9f9f9;
   }
 
   // Statements Page
+
+  .iwd-transaction-container {
+    margin-left: -20px;
+    margin-right: -20px;
+    height: 70vh;
+    //height: auto;
+    padding-bottom: 50px;
+    .iwd-transaction-table-container {
+      border-radius: 0px;
+    }
+    .iwd-transaction-search-container {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
   .iwd-transaction-container .iwd-transaction-search-container .iwd-transaction-date {
     display: none;
   }

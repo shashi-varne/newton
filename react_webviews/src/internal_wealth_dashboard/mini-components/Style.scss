@@ -1229,6 +1229,63 @@ ul#iwd-bars {
       }
     }
   }
+
+  .iwd-transaction-date-filter {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    .iwd-transaction-date {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 10px;
+
+      .iwd-date-text {
+        font-family: Poppins;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #767e86;
+        flex: 0.3;
+        width: max-content;
+      }
+      .iwd-date-selector {
+        flex: 1;
+        max-width: 300px;
+        color: #767e86;
+        border-radius: 100px;
+        background-color: rgba($primary, 0.05);
+        .MuiFormControl-root {
+          .MuiInput-underline:before {
+            border: none;
+          }
+          .MuiInput-input {
+            text-align: left;
+            padding-left: 20px;
+            padding-right: 12px;
+            color: #767e86;
+          }
+        }
+      }
+    }
+  }
+  #iwd-page-header {
+    #iwd-ph-left {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #iwd-ph-right {
+      // float: right;
+      position: relative;
+    }
+  }
 }
 
 .iwd-disable-clear {

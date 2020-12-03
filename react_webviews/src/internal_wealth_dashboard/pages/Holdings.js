@@ -11,7 +11,6 @@ import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import FilterDesktop from '../mini-components/FilterDesktop';
 import FilterMobile from '../mini-components/FilterMobile';
 import { holdings } from '../common/ApiCalls';
-import { dummyHoldings } from './../constants';
 import toast from '../../common/ui/Toast';
 import { isEmpty, storageService } from '../../utils/validators';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
@@ -31,8 +30,6 @@ const Holdings = () => {
   const [open, isOpen] = useState(false);
   const [filterVal, setFilterVal] = useState(storageService().getObject(filter_key) || null);
   const [filterData, setFilterData] = useState(null);
-  const [clearFilter, setClearFilter] = useState(false);
-  const [checkSelectedBox, setCheckSelectedBox] = useState(false);
   const fetchHoldings = async () => {
     try {
       setIsLoading(true);
@@ -71,9 +68,14 @@ const Holdings = () => {
           max: 10 * lac,
         };
 
-      default:
+      case 4:
         return {
           max: 10 * lac,
+        };
+      default:
+        return {
+          min: '',
+          max: '',
         };
     }
   };
@@ -82,6 +84,9 @@ const Holdings = () => {
     fetchHoldings();
   }, []);
 
+  useEffect(() => {
+    filter(holdingsList);
+  }, [filterVal]);
   const checkSchemeType = (filterSchemeType, currentSchemeType) => {
     return schemeMap[filterSchemeType].includes(currentSchemeType);
   };
@@ -101,37 +106,16 @@ const Holdings = () => {
       }
       if (bool && filterVal?.current_value_type) {
         let currentValueType = parseInt(filterVal?.current_value_type);
-        bool =
-          el.current >= currentValue(currentValueType).min &&
-          el.current <= currentValue(currentValueType).max;
+        if (currentValueType === 4) {
+          bool = el.current > currentValue(currentValueType).max;
+        } else {
+          bool =
+            el.current >= currentValue(currentValueType).min &&
+            el.current <= currentValue(currentValueType).max;
+        }
       }
       return bool;
     });
-
-    //let newData = dummy;
-    // if (filterVal?.scheme_type) {
-    //   newData = newData.filter((el) => {
-    //     const scheme = setSchemeType(
-    //       el.scheme_type.toLowerCase(),
-    //       filterVal?.scheme_type.toLowerCase()
-    //     );
-    //     return scheme.toLowerCase() === filterVal?.scheme_type.toLowerCase();
-    //   });
-    // }
-    // if (filterVal?.fisdom_rating) {
-    //   let fisdomRating = parseInt(filterVal?.fisdom_rating);
-    //   newData = newData.filter((el) =>
-    //     fisdomRating === 1 ? el.mf.fisdom_rating <= 3 : el.mf.fisdom_rating >= 4
-    //   );
-    // }
-    // if (filterVal?.current_value_type) {
-    //   let currentValueType = parseInt(filterVal?.current_value_type);
-    //   newData = newData.filter(
-    //     (el) =>
-    //       el.current >= currentValue(currentValueType).min &&
-    //       el.current <= currentValue(currentValueType).max
-    //   );
-    // }
     if (newData?.length > 0) {
       setFilterData(newData);
     } else {
@@ -139,44 +123,12 @@ const Holdings = () => {
     }
   };
 
-  useEffect(() => {
-    if (filterVal && holdingsList?.length > 0) {
-      filter(holdingsList);
-    }
-  }, [filterVal]);
-  const applyFilters = (value) => {
-    if (!open) {
-      storageService().setObject(filter_key, value);
-    } else {
-      storageService().setObject(filter_key, filterVal);
-      console.log(value);
-    }
-    isOpen(false);
-  };
-  const clearFilters = () => {
-    if (filterVal) {
-      setFilterVal(null);
-      setClearFilter(true);
-      setCheckSelectedBox(false);
-      storageService().setObject(filter_key, null);
-    }
-  };
-  const handleFilterSelect = (id, value) => {
-    setFilterVal((prevState) => {
-      if (!open) {
-        applyFilters({ ...prevState, [id]: value });
-      }
-      return { ...prevState, [id]: value };
-    });
-    if (clearFilter) {
-      setClearFilter(false);
-    }
-    setCheckSelectedBox(true);
-  };
   const clickHandler = () => {
     isOpen(false);
   };
-
+  const handleFilterData = (filterData) => {
+    setFilterVal(filterData);
+  };
   return (
     <div className='iwd-page' id='iwd-holdings'>
       <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={isMobileView}>
@@ -186,22 +138,16 @@ const Holdings = () => {
       </PageHeader>
       {open && (
         <FilterMobile
-          clearFilters={clearFilters}
-          clearFilter={clearFilter}
-          handleFilterSelect={handleFilterSelect}
           clickHandler={clickHandler}
-          applyFilters={applyFilters}
           filterOptions={HoldingFilterOptions}
-          checkSelectedBox={checkSelectedBox}
           filter_key={filter_key}
+          handleFilterData={handleFilterData}
         />
       )}
       <section style={{ display: 'flex', width: '100%' }}>
         {!open && (
           <FilterDesktop
-            clearFilters={clearFilters}
-            clearFilter={clearFilter}
-            handleFilterSelect={handleFilterSelect}
+            handleFilterData={handleFilterData}
             filterOptions={HoldingFilterOptions}
             filter_key={filter_key}
           />

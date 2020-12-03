@@ -1,14 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select, { components } from 'react-select';
 import SearchIcon from '@material-ui/icons/Search';
-const AutoSuggestSearch = ({ fundNames, handleChange, placeholder }) => {
-  if (!fundNames) {
-    return <Select options={[]} />;
-  }
+import { isEmpty, storageService } from '../../utils/validators';
+const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterData }) => {
+  const filterVal = storageService().getObject(filter_key);
   const suggestions = Object.keys(fundNames).map((key) => ({
     label: key,
     value: fundNames[key],
   }));
+
+  const getStoredFundName = () => {
+    console.log('filter val', filterVal['amfi']);
+    const data = suggestions.find((el) => el.value === filterVal['amfi']);
+    console.log('storedfund name', data);
+    return data;
+  };
+  const [fundName, setFundName] = useState(
+    !isEmpty(getStoredFundName()) ? getStoredFundName() : ''
+  );
+  const handleChange = (data) => {
+    setFundName(data?.value);
+    const filterData = { ...filterVal, amfi: data?.value ? data?.value : '' };
+    storageService().setObject(filter_key, filterData);
+    handleFilterData(filterData);
+  };
+
   const ValueContainer = ({ children, ...props }) => {
     return (
       components.ValueContainer && (
@@ -19,28 +35,16 @@ const AutoSuggestSearch = ({ fundNames, handleChange, placeholder }) => {
       )
     );
   };
-  const styles = {
-    valueContainer: (base) => ({
-      ...base,
-      paddingLeft: 24,
-    }),
-  };
-  const customTheme = (theme) => {
-    return {
-      ...theme,
-      colors: {
-        ...theme.colors,
-        primary25: 'red',
-        primary: 'yellow',
-        opacity: '0.05',
-      },
-    };
-  };
+
   const customStyles = {
     valueContainer: (base) => ({
       ...base,
       paddingLeft: 30,
     }),
+    // indicatorsContainer: (base) => ({
+    //   ...base,
+    //   display: 'none',
+    // }),
     // option: (provided, state) => ({
     //   ...provided,
     //   color: state.isSelected ? '#1F041E' : '#0A1D32',
@@ -74,6 +78,7 @@ const AutoSuggestSearch = ({ fundNames, handleChange, placeholder }) => {
         isSearchable
         isClearable
         onChange={handleChange}
+        defaultValue={fundName}
       />
     </div>
   );

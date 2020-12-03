@@ -35,16 +35,19 @@ const FilterSection = ({
   filter_key,
 }) => {
   const [value, setValue] = useState(null);
-  const ref = React.useRef(filter_key);
   const handleChange = (id, value) => {
     setValue(value);
     onFilterChange(id, value);
   };
+
   useEffect(() => {
     const data = storageService().getObject(filter_key);
     if (!isEmpty(data)) {
       setValue(data[id]);
     }
+  }, []);
+  useEffect(() => {
+    console.log('clear running');
     if (clearFilter) {
       setValue(null);
     }

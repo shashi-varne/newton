@@ -14,9 +14,13 @@ const Pagination = ({ per_page, totalCount, more, nextPage }) => {
   };
   return (
     <div className='iwd-pagination-container'>
-      <div className='iwd-pagination-box'>&laquo;</div>
-      <div className='iwd-page-number-container'>{renderPageNumbers()}</div>
-      <div className='iwd-pagination-box'>&raquo;</div>
+      {totalCount > 10 && (
+        <>
+          <div className='iwd-pagination-box'>&laquo;</div>
+          <div className='iwd-page-number-container'>{renderPageNumbers()}</div>
+          <div className='iwd-pagination-box'>&raquo;</div>
+        </>
+      )}
     </div>
   );
 };
