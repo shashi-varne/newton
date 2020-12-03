@@ -21,9 +21,6 @@ class JourneyMap extends Component {
 
   onload = () => {
     let lead = this.state.lead || {};
-    // let personal_info = lead.personal_info || {};
-    // let professional_info = lead.professional_info || {};
-    // let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
 
     let idfc_loan_status = vendor_info.idfc_loan_status || "";
@@ -32,7 +29,7 @@ class JourneyMap extends Component {
     let journey = {
       basic_details_uploaded: "1",
       ckyc: "1",
-      idfc_null_submitted: "2",
+      // idfc_null_submitted: "2",
       idfc_null_accepted: "2",
       idfc_null_rejected: "2",
       "idfc_0.5_submitted": "3",
@@ -81,6 +78,13 @@ class JourneyMap extends Component {
               ? "pending"
               : "completed",
           id: "income_details",
+          cta:
+            idfc_loan_status === "idfc_0.5_accepted" ||
+            idfc_loan_status === "idfc_0.5_failed"
+              ? "RESUME"
+              : index > "2"
+              ? "SUMMARY"
+              : "START",
         },
         {
           step: "4",
@@ -146,6 +150,12 @@ class JourneyMap extends Component {
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
         this.getCkycState();
+      }
+      if (
+        idfc_loan_status === "idfc_null_accepted" ||
+        idfc_loan_status === "idfc_null_submitted"
+      ) {
+        this.navigate("ckyc-summary");
       } else {
         this.updateApplication({
           idfc_loan_status: "ckyc",

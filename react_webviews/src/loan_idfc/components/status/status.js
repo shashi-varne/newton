@@ -143,15 +143,7 @@ class LoanStatus extends Component {
     let { application_status, rejection_reason } = application_info;
     let perfios_state = vendor_info.perfios_state;
     let bt_eligible = vendor_info.bt_eligible;
-    // let mapperKey = "";
-
-    // if (status === false && bt_eligible === false) {
-    //   mapperKey = "status_bt_eligible_failed"
-    // }
-
-    // if (status === false && bt_eligible === false) {
-    //   mapperKey = "status_bt_eligible_failed"
-    // }
+   
     if (application_status === "internally_rejected") {
       this.setState({
         commonMapper: commonMapper[rejection_reason] || {},
