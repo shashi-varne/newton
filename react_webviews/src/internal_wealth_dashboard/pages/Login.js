@@ -53,7 +53,7 @@ const Login = (props) => {
       <HelpPage className={`circularExpand ${openHelpPage ? 'expand' : 'shrink'}`} onClose={() => toggleHelpPage(false)}/>
       <div
         id="iwd-login"
-        style={{ position: (openHelpPage || openForgotPwd) ? 'fixed' : ''}}
+        className={(openHelpPage || openForgotPwd) ? 'iwd-bg-fixed' : ''}
       >
         <div id="iwd-login-left">
           <img src={fisdomLogo} alt="fisdom" height="40" />

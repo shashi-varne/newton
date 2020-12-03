@@ -77,9 +77,16 @@ const Dashboard = () => {
 
   const pageChanged = (pageNum) => {
     const page = document.getElementById('iwd-dashboard');
-    console.log(pageNum);
+    const header = document.getElementById('iwd-ph-left');
+
     if (page && !isEmpty(page)) {
-      page.style.background = pageNum === 1 ? '' : '#F9FCFF';
+      if (pageNum !== 1) {
+        page.style.background = '#f9f9f9';
+        header.classList.add('iwd-dashboard-pg1');
+      } else {
+        page.style.background = '';
+        header.classList.remove('iwd-dashboard-pg1');
+      }
     }
   };
 
@@ -102,6 +109,7 @@ const Dashboard = () => {
             <IwdCard
               id="iwd-d-numbers"
               error={isEmpty(overviewData) || overviewError}
+              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
               isLoading={isLoadingOverview}
               style={{
                 background: isLoadingOverview || isEmpty(overviewData) ? 'white' : ''
@@ -155,6 +163,7 @@ const Dashboard = () => {
                 isEmpty(overviewData.asset_alloc.equity) ||
                 isEmpty(overviewData.asset_alloc.debt)
               }
+              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
               isLoading={isLoadingOverview}
             >
               <div id="iwd-daa-graph">
@@ -189,6 +198,7 @@ const Dashboard = () => {
               id="iwd-d-risk"
               headerText="Risk analysis"
               error={isEmpty(riskData) || riskError}
+              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
               isLoading={isLoadingRisk}
             >
               <div id="iwd-dr-data">
@@ -221,6 +231,7 @@ const Dashboard = () => {
             <IwdCard
               headerText="Open source and non-custodial protocol enabling the creation of money markets"
               error={isEmpty(riskData) || riskError}
+              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
               isLoading={isLoadingRisk}
               className="iwd-d-newsletter"
             >

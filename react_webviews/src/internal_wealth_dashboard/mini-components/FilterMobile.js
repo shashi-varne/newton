@@ -3,7 +3,7 @@ import PageCloseBtn from './PageCloseBtn';
 import Filters from './FilterSection';
 import { HoldingFilterOptions } from './../constants';
 import { PrimaryButton as Button } from '../common/Button';
-import isEmpty from 'lodash/isEmpty';
+import { Dialog } from 'material-ui';
 const FilterMobile = ({
   handleFilterSelect,
   clearFilter,
@@ -29,8 +29,8 @@ const FilterMobile = ({
     </div>
   );
   return (
-    <section className='iwd-filter-mobile-overlay'>
-      <div style={{ position: 'relative', height: '100%', padding: '30px' }}>
+    <Dialog fullScreen={true} classes={{ paper: 'iwd-filter-mobile'}} open={true}>
+      <div className="iwd-filter-mobile-container">
         <PageCloseBtn clickHandler={clickHandler} />
         <div className='iwd-filter-mobile-section'>
           <section className='iwd-filter-head-container'>
@@ -45,12 +45,11 @@ const FilterMobile = ({
             >
               Clear All
             </div>
-
             <Button onClick={() => applyFilters(null)}>Apply</Button>
           </div>
         </div>
       </div>
-    </section>
+    </Dialog>
   );
 };
 

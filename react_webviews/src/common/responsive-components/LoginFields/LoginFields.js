@@ -122,6 +122,13 @@ const LoginFields = (props) => {
     }
   };
 
+  const formatNumber = () => {
+    if (number.length > 10 && number.slice(0, 2)) {
+      return number.slice(2);
+    }
+    return number;
+  };
+
   const triggerOtp = async () => {
     try {
       const err = validatePhone();
@@ -130,7 +137,7 @@ const LoginFields = (props) => {
         return setPhoneErr(err);
       }
       setOpLoading(true);
-      await login({ mobileNo: number.slice(2), countryCode });
+      await login({ mobileNo: formatNumber(), countryCode });
       navigate('login/otp');
     } catch (err) {
       sendEvents('login', {
@@ -147,7 +154,7 @@ const LoginFields = (props) => {
   const verify = async (otpVal) => {
     try {
       setOpLoading(true);
-      const res = await verifyOtp({ mobileNo: number, countryCode, otp: otpVal });
+      const res = await verifyOtp({ mobileNo: formatNumber(), countryCode, otp: otpVal });
       sendEvents('login', {
         screen_name: 'login',
         status: 'success',
