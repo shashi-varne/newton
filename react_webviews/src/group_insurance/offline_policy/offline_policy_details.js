@@ -12,11 +12,10 @@ import toast from  '../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import { initialize } from '../products/group_health/common_data'
-import { ghGetMember, getCssMapperReport } from '../constants';
-import download from 'assets/download.svg';
-import text_error_icon from 'assets/text_error_icon.svg';
+// import { ghGetMember, getCssMapperReport } from '../constants';
+// import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
-import { childeNameMapper } from '../constants';
+// import { childeNameMapper } from '../constants';
 import {getCoverageType} from '../products/group_health/constants';
 
 class GroupHealthReportDetails extends Component {
@@ -61,36 +60,52 @@ class GroupHealthReportDetails extends Component {
     async componentDidMount() {
 
         try {
-            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
+            // const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
+
+        const res ={
+            "pfwmessage": "Success",
+            "pfwstatus_code": 200,
+            "pfwutime": "",
+            "pfwtime": "2020-11-30 23:08:59.567507",
+            "pfwresponse": {
+              "requestapi": "",
+              "status_code": 200,
+              "result": [{
+                "message": "success",
+                "id": "",
+                "product_name": "CARE",
+                "provider": "",
+                "name": "FISDOM",
+                "cover_amount": "10,000",
+                "cover_period": "3",
+                "term": "",
+                "policy_type": "INDIVIDUAL",
+                "policy_number": "XXXXX1234567",
+                "application_number": "XXXXX123457",
+                "dt_policy_issued": "25/02/2020",
+                "dt_policy_start_date": "25/02/2020",
+                "dt_policy_end_date": "05/02/2029",
+                "premium": "100000",
+                "tax": "1345",
+                "total_premium": "1,50,000",
+                "mobile_no": "9738950664",
+                "email": "FISDOM@FISDOM.COM",
+                "status": "pending",
+                "is_group_customer": "",
+                "frequency": "MONTHLY",
+                "dt_next_renewal": "25/02/2025",
+                "product_category": ""
+              }]
+            }
+          }
+
             this.setState({
                 show_loader: false
             });
-            var resultData = res.pfwresponse.result;
+            var resultData = res.pfwresponse.result[0];
             if (res.pfwresponse.status_code === 200) {
-
-                let policy_data = resultData.policy_data || {};
-                let lead = policy_data.insured_lead_details || {};
-                lead.member_base = ghGetMember(lead, this.state.providerConfig);
-
-                let member_base = lead.member_base;
-                let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-
-                if(applicantIndex >= 0) {
-                    let appli_data = member_base[applicantIndex];
-                    member_base.splice(applicantIndex, 1);
-                    member_base.splice(0, 0, appli_data);
-                }
-
-                let data = getCssMapperReport(policy_data);
-                policy_data.status = data.status;
-                policy_data.cssMapper = data.cssMapper;
-
                 this.setState({
-                    extra_data: resultData.quote_info,
-                    policy_data: resultData.policy_data,
-                    quote_info: resultData.quote_info,
-                    lead: lead,
-                    applicantIndex: applicantIndex
+                    lead: resultData,
                 })
 
 
@@ -106,60 +121,6 @@ class GroupHealthReportDetails extends Component {
             toast('Something went wrong');
         }
     }
-
-    downloadPolicy(url) {
-
-
-        if (this.state.download_link || url) {
-            this.sendEvents('download');
-            nativeCallback({
-                action: 'open_in_browser',
-                message: {
-                    url: url
-                }
-            });
-        } else {
-            this.getDownloadLink();
-        }
-
-    }
-
-    // getDownloadLink = async () => {
-    //     try {
-
-    //         this.setState({
-    //             show_loader: true
-    //         });
-    //         const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/policy/download?policy_number=${this.state.policy_data.policy_number}`);
-    //         this.setState({
-    //             show_loader: false
-    //         });
-    //         var resultData = res.pfwresponse.result;
-    //         if (res.pfwresponse.status_code === 200) {
-
-
-    //             let download_link = resultData.download_link;
-    //             this.setState({
-    //                 download_link: download_link
-    //             })
-
-    //             this.downloadPolicy(download_link);
-
-
-    //         } else {
-    //             toast(resultData.error || resultData.message
-    //                 || 'Something went wrong');
-    //         }
-    //     } catch (err) {
-    //         console.log(err)
-    //         this.setState({
-    //             show_loader: false
-    //         });
-    //         toast('Something went wrong');
-    //     }
-    // }
-
-
 
     navigate = (pathname) => {
         this.props.history.push({
@@ -240,14 +201,70 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
+                            <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    SUM INSURED
+                                INSURED NAME
                                 </div>
                                 <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
+                                    {this.state.lead.name}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                PROPOSER NAME
+                                </div>
+                                <div className="mtr-bottom">
+                                {this.state.lead.name}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/icn_phn_no_1.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                MOBILE NUMBER
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.mobile_no}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/icn_mail_id_1.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                EMAIL ID
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.email}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                POLICY NUMBER 
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.policy_number}
                                 </div>
                             </div>
                         </div>
@@ -261,49 +278,7 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    SUM INSURED
-                                </div>
-                                <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    SUM INSURED
-                                </div>
-                                <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    SUM INSURED
-                                </div>
-                                <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
+                                    {this.state.lead.sum_assured} 
                                 </div>
                             </div>
                         </div>
@@ -322,14 +297,30 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
 
-                       {this.state.lead.cover_type && 
+                       {this.state.lead && 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/icn_plan_type_1.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    COVERAGE TYPE
+                                PLAN TYPE
+                                </div>
+                                <div className="mtr-bottom">
+                                    {getCoverageType(this.state.lead)}
+                                </div>
+                            </div>
+                        </div>}
+
+
+                       {this.state.lead.cover_type || 
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/icn_time_1.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                PREMIUM PAYMENT TERM
                                 </div>
                                 <div className="mtr-bottom">
                                     {getCoverageType(this.state.lead)}
@@ -367,14 +358,14 @@ class GroupHealthReportDetails extends Component {
                                             </div>
                                         }
                                         <div>
-                                            <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
+                                            <div>{inrFormatDecimal(this.state.lead.tax)} </div>
                                             <div style={{fontSize:10}}>(18% GST) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;
                                         </div>
                                         <div>
-                                         {inrFormatDecimal(this.state.lead.total_amount)}
+                                         {inrFormatDecimal(this.state.lead.total_premium)}
                                         </div>
                                 </div>
 
@@ -388,10 +379,10 @@ class GroupHealthReportDetails extends Component {
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                Purchased on
+                            Payment frequency
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.dt_created}
+                                {this.state.lead.frequency}
                             </div>
                         </div>
                     </div>
@@ -401,41 +392,42 @@ class GroupHealthReportDetails extends Component {
                             <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
-                            <div className="mtr-top">
-                                DATE OF PAYMENT
+                            <div className="mtr-top"> 
+                             POLICY ISSUED DATE
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.transaction_date || '-'}
+                                {this.state.lead.dt_policy_issued || '-'}
                             </div>
                         </div>
                     </div>
 
-                    {this.state.policy_data.policy_number && 
+                    {this.state.lead.dt_policy_start_date && 
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                            <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                POLICY NUMBER
+                            POLICY START DATE
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.policy_number || '-'}
+                                {this.state.lead.dt_policy_start_date || '-'}
                             </div>
                         </div>
                     </div>}
 
-                    {!this.state.policy_data.policy_number && this.state.policy_data.proposal_number &&
+
+                    {this.state.lead.dt_policy_end_date && 
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
-                                PROPOSAL NUMBER
+                            Policy End date
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.proposal_number || '-'}
+                                {this.state.lead.dt_policy_end_date || '-'}
                             </div>
                         </div>
                     </div>}
