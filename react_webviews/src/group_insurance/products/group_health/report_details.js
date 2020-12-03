@@ -217,7 +217,7 @@ class GroupHealthReportDetails extends Component {
     
             let renderData = {
                 'header_title': mapper_data.header_title,
-                'header_subtitle': `${this.state.provider === 'STAR'? this.state.providerConfig.title2 :this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO"? this.state.plan_selected.plan_title: this.state.provider === 'STAR' ? this.state.providerConfig.subtitle : ''}`,
+                'header_subtitle': `${this.state.provider === 'STAR'? this.state.providerData.title2 : this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO" ? this.state.plan_selected.plan_title: this.state.provider === 'STAR'? this.state.providerConfig.subtitle:''}`,
                 'steps': {
                     'options': mapper_data.steps
                 },
