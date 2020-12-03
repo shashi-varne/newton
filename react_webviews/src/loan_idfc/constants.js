@@ -1,38 +1,41 @@
+import { getConfig } from "utils/functions";
+import { capitalizeFirstLetter } from "../utils/validators"
+let productName = capitalizeFirstLetter(getConfig().productName);
 export function goBackMap(path) {
-    let mapper = {
-      '/loan/idfc/journey': '/loan/idfc/home',
-      '/loan/idfc/application-summary': '/loan/idfc/journey',
-      '/loan/idfc/personal-details': '/loan/idfc/home'
-    }
+  let mapper = {
+    '/loan/idfc/journey': '/loan/idfc/home',
+    '/loan/idfc/application-summary': '/loan/idfc/journey',
+    '/loan/idfc/personal-details': '/loan/idfc/home',
+  }
 
-    return mapper[path] || false;
+  return mapper[path] || false;
 }
 
 export function getCssMapperReport(vendor_info) {
 
-    let cssMapper = {
-      'callback_awaited_disbursement_approval': {
-        color: 'green',
-        disc: 'Approved'
-      },
-      'disbursement_approved': {
-        color: 'yellow',
-        disc: 'Pending For Disbursal'
-      },
-      'complete': {
-        color: 'green',
-        disc: 'Disbursed'
-      }
+  let cssMapper = {
+    'callback_awaited_disbursement_approval': {
+      color: 'green',
+      disc: 'Approved'
+    },
+    'disbursement_approved': {
+      color: 'yellow',
+      disc: 'Pending For Disbursal'
+    },
+    'complete': {
+      color: 'green',
+      disc: 'Disbursed'
     }
-  
-  
-    let obj = {}
-    obj.status = vendor_info.dmi_loan_status;
-  
-    obj.cssMapper = cssMapper[obj.status] || cssMapper['callback_awaited_disbursement_approval'];
-  
-    return obj;
   }
+
+
+  let obj = {}
+  obj.status = vendor_info.dmi_loan_status;
+
+  obj.cssMapper = cssMapper[obj.status] || cssMapper['callback_awaited_disbursement_approval'];
+
+  return obj;
+}
 
 export const idfc_config = {
   key: 'idfc',
@@ -66,24 +69,136 @@ export const idfc_config = {
         { 'step': '4', 'title': 'Upload documents', 'subtitle': 'Provide your office address and upload documents to get your loan sanctioned.' },
         { 'step': '5', 'title': 'Sanction and disbursal', 'subtitle': 'IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.' }
       ]
+    },
+    faqsInfo: {
+      'header_title': 'Frequently asked questions',
+      'cta_title': 'OK',
+      faqs: [
+        {
+          'header_title': 'Personal Loan from IDFC FIRST Bank',
+          options: [
+            {
+              'title': `Is ${productName} the lender?`,
+              'subtitle': `No, ${productName} is not the lender. It is IDFC FIRST Bank who is offering credit to the users of our app. We have a contractual partnership with IDFC FIRST Bank and we will only facilitate your loan application for availing credit.
+              <br> <br> <b>Note</b>: Any credit facility offered to you by IDFC FIRST Bank on the ${productName} app shall be governed by Terms and Conditions agreed between you and IDFC FIRST Bank, and ${productName} shall not be a party to the same.`
+            },
+            {
+              'title': 'How long does it usually take for a loan to get disbursed?',
+              'subtitle': `Usually, loans get sanctioned in less than four hours. If all your documents are in order then the loan amount gets disbursed in 1 to 2 days.
+              <br> <br> <b>Note</b>: All loan approvals and disbursals are at the sole discretion of IDFC FIRST Bank.`
+            },
+            {
+              'title': `Can I cancel my loan application post-approval?`,
+              'subtitle': `Yes, you can and it is free of cost. Give us a call on xxxxxxxxxx or write to xxx@xxxx.com should you wish to cancel your loan.`
+            },
+            {
+              'title': `The interest rate of my personal loan will be flat or reducing?`,
+              'subtitle': `The interest rate that will apply will be reducing in nature. This means as the outstanding principal amount will reduce -- the interest payable will also come down.`
+            },
+          ]
+        },
+        {
+          'header_title': 'Eligibility',
+          options: [
+            {
+              'title': 'What is the maximum and minimum loan amount that I can get if I apply for a personal loan?',
+              'subtitle': 'For salaried professionals, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs 40 lakhs. For self-employed, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs. 9 lakhs.'
+            },
+            {
+              'title': 'On what criteria will the loan be sanctioned to me ?',
+              'subtitle': 'The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.'
+            },
+            {
+              'title': `Loan sanction depends on what factors?`,
+              'subtitle': `The final amount sanctioned will depend on your income and other factors like credit score, repayment ability, age, employer, etc.`
+            },
+            {
+              'title': `Is it necessary for me to have a salary account with IDFC FIRST Bank for getting a personal loan?`,
+              'subtitle': `No, it is not mandatory to have a salary account with IDFC FIRST Bank.`
+            },
+          ]
+        },
+
+        {
+          'header_title': 'Fees and charges',
+          'is_table' : true,
+          options: [
+            {
+              'title': 'EMI Bounce charges per presentation',
+              'subtitle': 'Rs. 400'
+            },
+            {
+              'title': 'Late payment/Penal charges/ Default interest/Overdue (per month)',
+              'subtitle': '2% of the unpaid EMI or Rs. 300 whichever is higher'
+            },
+            {
+              'title': `Cheque Swap charges (per swap)`,
+              'subtitle': `Rs. 500`
+            },
+            {
+              'title': `Foreclosure / Prepayment charges`,
+              'subtitle': `You can foreclose personal loan after a lock-in period of 6 months by paying a foreclosure charge of 5% on the outstanding principal amount`
+            },
+            {
+              'title': 'Duplicate No Objection Certificate Issuance Charges',
+              'subtitle': 'Rs. 500'
+            },
+            {
+              'title': 'Physical Repayment Schedule',
+              'subtitle': 'Rs. 500'
+            },
+            {
+              'title': `Physical Statement of Account`,
+              'subtitle': `Rs. 500`
+            },
+            {
+              'title': `Document retrieval charges (per retrieval)`,
+              'subtitle': 'Rs. 500'
+            },
+            {
+              'title': 'Processing fees',
+              'subtitle': 'Up to 3% of the loan amount'
+            },
+            {
+              'title': `Part Payment charges`,
+              'subtitle': `Part-payment is not allowed`
+            },
+            {
+              'title': `EMI Pickup / Collection Charges`,
+              'subtitle': 'Rs. 350'
+            },
+          ]
+        },
+        {
+          'header_title': 'Others',
+          options: [
+            {
+              'title': 'I have a question that is not listed here, what do I do?',
+              'subtitle': `We will be glad to help you with any questions regarding the personal loan from IDFC FIRST
+              Bank. Please feel free to contact our customer care representative at xxxxxxxxxx or email us at
+              xxx@fisdom.com`
+            },
+          ]
+        },
+      ],
     }
   },
-  bt_info_screen:{
+  bt_info_screen: {
     benefits: {
       title: 'What benefits will I get?',
       options: [
-        { 'icon': 'icn_bt_1', 'subtitle': 'Lower interest rate compared to your existing loan(s)'},
-        { 'icon': 'icn_bt_2', 'subtitle': 'An option to choose a longer loan repayment tenure'},
-        { 'icon': 'icn_bt_3', 'subtitle': 'Possibility of getting a bigger loan offer depending on your profile'}
+        { 'icon': 'icn_bt_1', 'subtitle': 'Lower interest rate compared to your existing loan(s)' },
+        { 'icon': 'icn_bt_2', 'subtitle': 'An option to choose a longer loan repayment tenure' },
+        { 'icon': 'icn_bt_3', 'subtitle': 'Possibility of getting a bigger loan offer depending on your profile' }
       ]
     },
     required_info: {
       title: 'What information do I need to provide for BT?',
       options: [
-        { 'icon': 'icon_color', 'subtitle': 'Outstanding principal amount of existing loan(s) or credit card(s)'},
-        { 'icon': 'icon_color', 'subtitle': 'Account statement of the existing loan(s) for which you want to avail ‘balance transfer’'}
+        { 'icon': 'icon_color', 'subtitle': 'Outstanding principal amount of existing loan(s) or credit card(s)' },
+        { 'icon': 'icon_color', 'subtitle': 'Account statement of the existing loan(s) for which you want to avail ‘balance transfer’' }
       ]
-    }
+    },
   },
   know_more_screen: {
     features: {
@@ -101,9 +216,9 @@ export const idfc_config = {
       content1: {
         "sub-head": "For Salaried Applicants",
         points: [
-            "Must be earning a minimum net monthly salary of Rs. 20,000",
-            "Should at least be 23 years of age",
-            "Maximum age at the time of loan maturity should not be more than 60 years",
+          "Must be earning a minimum net monthly salary of Rs. 20,000",
+          "Should at least be 23 years of age",
+          "Maximum age at the time of loan maturity should not be more than 60 years",
         ],
       },
       content2: {
@@ -133,7 +248,7 @@ export const idfc_config = {
     }
   },
   professional_details_screen: {
-    companyOptions:[
+    companyOptions: [
       'ESSEL MINING & INDUSTRIES LTD',
       'BERGER PAINTS INDIA LIMITED',
       'ADANI ENTERPRISES LIMITED',
@@ -169,7 +284,7 @@ export const idfc_config = {
       "PUBLICLIMITED COMPANY",
       "SOCIETY",
       "TRUST",
-  ],
+    ],
     organisationTypeOptions: [
       "central govt.",
       "educational institute",
@@ -181,7 +296,7 @@ export const idfc_config = {
       "society",
       "state govt.",
       "trust",
-  ],
+    ],
     departmentOptions: [
       "ACCOUNTS",
       "BACKOFFICE",

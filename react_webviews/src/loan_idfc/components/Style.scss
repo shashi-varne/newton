@@ -407,7 +407,15 @@
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-    width: 80%;
+    width: 90%;
+
+    .sub-content-left {
+      width: 50%;
+    }
+
+    .sub-content-right {
+      width: 40%;
+    }
 
     .sub-head {
       font-size: 13px;
@@ -418,7 +426,7 @@
     .sub-title {
       font-size: 17px;
       line-height: 16px;
-      text-align: right;
+      text-align: left;
       color: #0a1d32;
     }
   }
@@ -489,4 +497,52 @@
   font-size: 14px;
   line-height: 17px;
   color: #0a1d32;
+}
+
+.render-faqs-title {
+  color: #767E86; 
+  padding: 13px 0; 
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 21px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.render-faqs-table {
+  border: 1px solid;
+  text-align: center;
+  border-collapse: collapse;
+
+  .render-faqs-table-title {
+    border: 1px solid;
+    padding: 10px 5px;
+    width: 40%;
+  }
+
+  .render-faqs-table-subtitle {
+    border: 1px solid;
+    padding: 10px 5px;
+    width: 60%;
+  }
+}
+
+.LoaderOverlay {
+  .LoaderOverlay-title {
+    font-size: 14px, ;
+    line-height: 20px;
+    margin: 0 -40px 0 -40px;
+  }
+
+  .LoaderOverlay-image {
+    width: 40px;
+    height: 54px; 
+    margin: 40px 0 30px 0;
+  }
+
+  .LoaderOverlay-subtitle {
+    font-size: 13px; 
+    line-height: 22px; 
+    color: #767E86; 
+  }
 }
