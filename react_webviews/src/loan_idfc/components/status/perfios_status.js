@@ -13,7 +13,7 @@ const commonMapper = {
     close_state: "/loan/idfc/home",
   },
   success: {
-    top_icon: "ils_loan_failed",
+    top_icon: "ils_loan_status",
     top_title: "Bank statement verification successful",
     button_title: "NEXT",
     icon: "close",
@@ -58,6 +58,8 @@ class PerfiosStatus extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let personal_info = lead.personal_info || {};
+    let name = personal_info.first_name;
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
     
@@ -73,6 +75,7 @@ class PerfiosStatus extends Component {
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
+      name: name
     });
   };
 
@@ -133,7 +136,7 @@ class PerfiosStatus extends Component {
   };
 
   render() {
-    let { commonMapper, perfios_state, bt_eligible } = this.state;
+    let { commonMapper, perfios_state, bt_eligible, name } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -155,7 +158,7 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "success" && (
             <div className="subtitle">
-              Hey Aamir, IDFC has successfully verified your bank statements and
+              Hey {name}, IDFC has successfully verified your bank statements and
               your income details have been safely updated.
             </div>
           )}
