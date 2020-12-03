@@ -58,7 +58,7 @@ class GroupHealthPlanSelectCity extends Component {
             "provider": "hdfc_ergo"
           };
         try {
-            if(city) {
+            if(!city) {
                 try {
 
                     const res = await Api.post(
