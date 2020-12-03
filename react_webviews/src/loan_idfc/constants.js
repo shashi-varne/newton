@@ -1,11 +1,11 @@
 import { getConfig } from "utils/functions";
-let type = getConfig().productName;
-let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Finity';
+import { capitalizeFirstLetter } from "../utils/validators"
+let productName = capitalizeFirstLetter(getConfig().productName);
 export function goBackMap(path) {
   let mapper = {
     '/loan/idfc/journey': '/loan/idfc/home',
     '/loan/idfc/application-summary': '/loan/idfc/journey',
-    '/loan/idfc/personal-details': '/loan/idfc/home'
+    '/loan/idfc/personal-details': '/loan/idfc/home',
   }
 
   return mapper[path] || false;
@@ -78,9 +78,9 @@ export const idfc_config = {
           'header_title': 'Personal Loan from IDFC FIRST Bank',
           options: [
             {
-              'title': `Is ${typeCaps} the lender?`,
-              'subtitle': `No, ${typeCaps} is not the lender. It is IDFC FIRST Bank who is offering credit to the users of our app. We have a contractual partnership with IDFC FIRST Bank and we will only facilitate your loan application for availing credit.
-              <br> <br> <b>Note</b>: Any credit facility offered to you by IDFC FIRST Bank on the ${typeCaps} app shall be governed by Terms and Conditions agreed between you and IDFC FIRST Bank, and ${typeCaps} shall not be a party to the same.`
+              'title': `Is ${productName} the lender?`,
+              'subtitle': `No, ${productName} is not the lender. It is IDFC FIRST Bank who is offering credit to the users of our app. We have a contractual partnership with IDFC FIRST Bank and we will only facilitate your loan application for availing credit.
+              <br> <br> <b>Note</b>: Any credit facility offered to you by IDFC FIRST Bank on the ${productName} app shall be governed by Terms and Conditions agreed between you and IDFC FIRST Bank, and ${productName} shall not be a party to the same.`
             },
             {
               'title': 'How long does it usually take for a loan to get disbursed?',
