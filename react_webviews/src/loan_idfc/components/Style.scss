@@ -498,3 +498,31 @@
   line-height: 17px;
   color: #0a1d32;
 }
+
+.render-faqs-title {
+  color: #767E86; 
+  padding: 13px 0; 
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 21px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.render-faqs-table {
+  border: 1px solid;
+  text-align: center;
+  border-collapse: collapse;
+
+  .render-faqs-table-title {
+    border: 1px solid;
+    padding: 10px 5px;
+    width: 40%;
+  }
+
+  .render-faqs-table-subtitle {
+    border: 1px solid;
+    padding: 10px 5px;
+    width: 60%;
+  }
+}

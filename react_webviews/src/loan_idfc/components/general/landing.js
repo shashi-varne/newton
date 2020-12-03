@@ -87,6 +87,27 @@ class Landing extends Component {
     }
   }
 
+  openFaqs = () => {
+    this.sendEvents('next', { things_to_know: 'faq' })
+    let renderData = {
+      'header_title': this.state.screenData.faqsInfo.header_title,
+      'header_subtitle': '',
+      'steps': {
+        'options': this.state.screenData.faqsInfo.faqs
+      },
+      'cta_title': this.state.screenData.faqsInfo.cta_title,
+      'multiple_sections': true
+    }
+
+    this.props.history.push({
+      pathname: '/loan/idfc/faq',
+      search: getConfig().searchParams,
+      params: {
+        renderData: renderData
+      }
+    });
+  }
+
   render() {
     return (
       <Container
@@ -173,7 +194,7 @@ class Landing extends Component {
             <div className="generic-hr"></div>
             <div
               className="Flex faq"
-              // onClick={() => this.openFaqs()}
+              onClick={() => this.openFaqs()}
             >
               <div>
                 <img
@@ -187,7 +208,7 @@ class Landing extends Component {
             <div className="generic-hr"></div>
           </div>
         </div>
-      </Container>
+      </Container >
     );
   }
 }
