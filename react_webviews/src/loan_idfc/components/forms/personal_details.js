@@ -11,6 +11,7 @@ import {
   // dobFormatTest,
   // isValidDate,
   // formatDate,
+  capitalize,
   capitalizeFirstLetter,
 } from "utils/validators";
 
@@ -83,10 +84,10 @@ class PersonalDetails extends Component {
       marital_status: capitalizeFirstLetter(personal_info.marital_status),
       father_name: personal_info.father_name,
       mother_name: confirm_details && personal_info.mother_name,
-      religion: capitalizeFirstLetter(personal_info.religion),
+      religion: personal_info.religion.toUpperCase(),
       email_id: personal_info.email_id,
     };
-
+console.log(form_data)
     this.setState({
       form_data: form_data,
       confirm_details: confirm_details,

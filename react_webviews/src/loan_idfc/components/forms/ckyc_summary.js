@@ -142,6 +142,7 @@ class ApplicationSummary extends Component {
 
     accordianData.push(professional_data);
 
+
     this.setState(
       {
         accordianData: accordianData,

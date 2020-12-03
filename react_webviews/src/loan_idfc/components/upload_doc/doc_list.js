@@ -14,7 +14,6 @@ class DocumentList extends Component {
       screen_name: "document_list",
       cards: [],
       docList: [],
-      doc_liist: []
     };
 
     this.initialize = initialize.bind(this);
@@ -24,72 +23,7 @@ class DocumentList extends Component {
     this.initialize();
   }
 
-  onload = () => {
-    let doc_liist = [
-      {
-        category: "Cat1",
-        category_name: "Address Proof",
-        docs: [
-          "Latest Bank Statement",
-          "Driving License",
-          "Aadhaar Card",
-          "Pension or Family Pension Payment Orders (PPOs)",
-          "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
-          "Property or Municipal Tax Receipt",
-          "Latest Passbook of scheduled commercial Bank",
-          "Rent Agreement",
-        ],
-        doc_checklist: [
-          // {
-          //     "subtype": "Aadhaar card",
-          //     docs:[
-          //         {
-          //             "doc_id": <doc_id>,
-          //             "doc_url": <doc_url>,
-          //             "extension": <extension>
-          //             "doc_type": <doc_type>
-          //         },
-          //         {
-          //             "doc_id": <doc_id>,
-          //             "doc_url": <doc_url>,
-          //             "extension": <extension>,
-          //             "doc_type": <doc_type>
-          //         }
-          //     ]
-          // }
-          null,
-        ],
-      },
-      {
-        category: "Cat2",
-        category_name: "Identity Proof (PAN)",
-        docs: ["PAN"],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat3",
-        category_name: "Salary Slip / Employment Proof",
-        docs: ["3 Months Salary Slip"],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat4",
-        category_name: "Bank Account Statement",
-        docs: ["Last 3 months Bank Account Statement"],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat5",
-        category_name: "Ownership Proof (Either Home Or Office)",
-        docs: ["Electricity Bill", "Sale Deed"],
-        doc_checklist: [null],
-      },
-    ];
-
-    this.setState({
-      doc_liist: doc_liist,
-    })
-  };
+  onload = () => {};
 
   handleClick = () => {};
 
@@ -111,11 +45,6 @@ class DocumentList extends Component {
 
   handleCard = (category) => {
     storageService().set("category", category);
-    // this.navigate("doc-upload", {
-    //   params: {
-    //     document_list: doc
-    //   }
-    // })
     this.navigate("doc-upload");
   };
 
@@ -129,7 +58,7 @@ class DocumentList extends Component {
         handleClick={this.handleClick}
       >
         <div className="upload-documents">
-          {this.state.doc_liist.map((item, index) => (
+          {this.state.docList.map((item, index) => (
             <Card
               style={{ marginTop: "20px" }}
               key={index}

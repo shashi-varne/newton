@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
+import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators"
 
 class ApplicationSummary extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class ApplicationSummary extends Component {
     let personal_info = lead.personal_info || {};
     let professional_info = lead.professional_info || {};
     let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
 
     let personal_data = {
       title: "Personal details",
@@ -31,7 +33,7 @@ class ApplicationSummary extends Component {
       data: [
         {
           title: "Date of birth ",
-          subtitle: personal_info.dob,
+          subtitle: timeStampToDate(personal_info.dob || ""),
         },
         {
           title: "PAN number",
@@ -43,7 +45,7 @@ class ApplicationSummary extends Component {
         },
         {
           title: "Employment type",
-          subtitle: application_info.employment_type,
+          subtitle: capitalizeFirstLetter(application_info.employment_type || ""),
         },
       ],
     };
@@ -64,27 +66,27 @@ class ApplicationSummary extends Component {
         },
         {
           title: "Net monthly salary",
-          subtitle: application_info.net_monthly_salary,
+          subtitle: formatAmountInr(application_info.net_monthly_salary || ""),
         },
         {
           title: "Salary receipt mode",
-          subtitle: professional_info.salary_mode,
+          subtitle: capitalize(professional_info.salary_mode || ""),
         },
         {
           title: "Company constitution",
-          subtitle: professional_info.constitution,
+          subtitle: capitalize(professional_info.constitution || ""),
         },
         {
           title: "Organisation",
-          subtitle: professional_info.organisation,
+          subtitle: capitalize(professional_info.organisation || ""),
         },
         {
           title: "Department",
-          subtitle: professional_info.department,
+          subtitle: capitalize(professional_info.department || ""),
         },
         {
           title: "Industry",
-          subtitle: professional_info.industry,
+          subtitle: capitalize(professional_info.industry || ""),
         },
       ],
     };
@@ -94,6 +96,7 @@ class ApplicationSummary extends Component {
     this.setState(
       {
         accordianData: accordianData,
+        idfc_loan_status: vendor_info.idfc_loan_status
       },
       () => {
         this.handleAccordian(0);
@@ -156,7 +159,7 @@ class ApplicationSummary extends Component {
         {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
-            {!this.state.form_submitted && (
+            {this.state.idfc_loan_status === "basic_details_uploaded" && (
               <div
                 onClick={() => {
                   this.sendEvents("next", {
@@ -178,7 +181,6 @@ class ApplicationSummary extends Component {
   handleAccordian = (index) => {
     let accordianData = this.state.accordianData;
     let selectedIndex = this.state.selectedIndex;
-
     if (index === this.state.selectedIndex) {
       accordianData[index].open = false;
       selectedIndex = -1;
@@ -212,10 +214,7 @@ class ApplicationSummary extends Component {
         showLoader={this.state.show_loader}
         title="Basic detail Summary"
         buttonTitle="OKAY"
-        handleClick={() => this.handleClick()}
-        headerData={{
-          icon: "close",
-        }}
+        handleClick={() => this.navigate('journey')}
       >
         <div className="loan-form-summary">
           <div className="bottom-content">

@@ -33,17 +33,39 @@ class Landing extends Component {
         this.state.application_exists && this.state.otp_verified
           ? "RESUME"
           : "APPLY NOW",
-      next_state: this.state.application_exists && this.state.otp_verified ? 'journey' : 'edit-number'
+      next_state:
+        this.state.application_exists && this.state.otp_verified
+          ? "journey"
+          : "edit-number",
     });
   };
 
-  handleClick = async () => {
+  handleClick = () => {
     let params = {
-      create_new: this.state.application_exists ? false : true,
+      create_new:
+        this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
+    let { vendor_application_status, pan_status, ckyc_status } = this.state;
+
+    let rejection_cases = [
+      "idfc_null_rejected",
+      "idfc_0.5_rejected",
+      "idfc_1.0_rejected",
+      "idfc_1.7_rejected",
+      "idfc_4_rejected",
+    ];
+
     if (this.state.cta_title === "RESUME") {
-      this.navigate("journey");
+      if (rejection_cases.indexOf(vendor_application_status) !== -1) {
+        this.navigate("loan-status");
+      }
+
+      if (pan_status === "" || ckyc_status === "") {
+        this.navigate("basic-details");
+      } else if (rejection_cases.indexOf(vendor_application_status) === -1) {
+        this.navigate("journey");
+      }
     } else {
       this.getOrCreate(params);
     }
@@ -149,7 +171,8 @@ class Landing extends Component {
 
           <div style={{ margin: "40px 0 50px 0" }}>
             <div className="generic-hr"></div>
-            <div className="Flex faq" 
+            <div
+              className="Flex faq"
               // onClick={() => this.openFaqs()}
             >
               <div>

@@ -51,8 +51,7 @@ class JourneyStepsClass extends Component {
                     props.handleClick(options.id);
                   }}
                 >
-                  {options.status === "completed" && "SUMMARY"}
-                  {options.status === "init" && "START"}
+                  {options.cta}
                 </span>
               )}
               {options.status === "pending" && (

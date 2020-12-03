@@ -3,7 +3,7 @@ import toast from "../../../common/ui/Toast";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { storageService } from "utils/validators";
+import { StorageService } from "utils/validators";
 import { getConfig } from "../../../utils/functions";
 import camera_green from "assets/take_pic_green.svg";
 import gallery_green from "assets/go_to_gallery_green.svg";
@@ -15,130 +15,39 @@ import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import camera_grey from "assets/take_pic_grey.svg";
 import $ from "jquery";
+import { storageService } from "../../../utils/validators";
+import { bytesToSize } from "utils/validators";
+import Input from "../../../common/ui/Input";
 
 class DocumentUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      docListOptions: [],
       form_data: {},
       totalUpload: "",
-      fileUploaded: ""
+      docList: [],
+      documents: [],
+      count: 1,
     };
+
+    this.native_call_handler = this.native_call_handler.bind(this);
   }
 
   componentWillMount() {
-    // this.initialize();
     this.onload();
   }
 
-  componentDidMount() {
-    let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: "native_receiver_image",
-        show_loader: function (show_loader) {
-          that.showLoaderNative();
-        },
-      });
-    }
-  }
-
   onload = () => {
-    let doc_list = [
-      {
-        category: "Cat1",
-        category_name: "Address Proof",
-        docs: [
-          {
-            doc_display_name: "Latest Bank Statement",
-            pages: null,
-          },
-          {
-            doc_display_name: "Driving License",
-            pages: null,
-          },
-          {
-            doc_display_name: "Aadhaar Card",
-            pages: "2",
-          },
-          {
-            doc_display_name: "Pension or Family Pension Payment Orders (PPOs)",
-            pages: null,
-          },
-          {
-            doc_display_name:
-              "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
-            pages: null,
-          },
-          {
-            doc_display_name: "Property or Municipal Tax Receipt",
-            pages: null,
-          },
-          {
-            doc_display_name: "Latest Passbook of scheduled commercial Bank",
-            pages: null,
-          },
-          {
-            doc_display_name: "Rent Agreement",
-            pages: null,
-          },
-        ],
-        doc_checklist: [
-          // {
-          //     "subtype": "Aadhaar card",
-          //     docs:[
-          //         {
-          //             "doc_id": <doc_id>,
-          //             "doc_url": <doc_url>,
-          //             "extension": <extension>
-          //             "doc_type": <doc_type>
-          //         },
-          //         {
-          //             "doc_id": <doc_id>,
-          //             "doc_url": <doc_url>,
-          //             "extension": <extension>,
-          //             "doc_type": <doc_type>
-          //         }
-          //     ]
-          // }
-          null,
-        ],
-      },
-      {
-        category: "Cat2",
-        category_name: "Identity Proof (PAN)",
-        docs: ["PAN"],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat3",
-        category_name: "Salary Slip / Employment Proof",
-        docs: ["3 Months Salary Slip"],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat4",
-        category_name: "Bank Account Statement",
-        docs: ["Last 3 months Bank Account Statement"],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat5",
-        category_name: "Ownership Proof (Either Home Or Office)",
-        docs: ["Electricity Bill", "Sale Deed"],
-        doc_checklist: [null],
-      },
-    ];
+    let docList = this.state.docList;
 
     let category = storageService().get("category");
 
-    let selectedIndex = doc_list.findIndex(
+    let selectedIndex = docList.findIndex(
       (item) => item.category === category
     );
 
-    let docs = doc_list[selectedIndex].docs.map((item) => {
+    let docs = docList[selectedIndex].docs.map((item) => {
       return {
         name: item.doc_display_name,
         value: item.pages || "3",
@@ -146,172 +55,18 @@ class DocumentUpload extends Component {
     });
 
     this.setState({
-      selectedIndex: selectedIndex,
-      doc_list: doc_list[selectedIndex],
+      docList: docList[selectedIndex],
       docs: docs,
     });
   };
 
-  renderHtmlCamera(index) {
-    console.log(index)
-    console.log(this.state.fileUploaded)
-    return (
-      <div>
-        {!this.state.fileUploaded && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "10px 0px 0px 0px",
-              textAlign: "center",
-              fontWeight: 600,
-            }}
-          >
-            <div>Upload PAN card</div>
-            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
-              <div
-                onClick={() =>
-                  this.startUpload("open_camera", "pan", "pan.jpg")
-                }
-                style={{
-                  textAlign: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={this.getPhoto}
-                  id={index}
-                />
-                <img src={camera_green} alt="PAN"></img>
-                <div style={{ color: "#28b24d" }}>Click here to upload</div>
-              </div>
-            </div>
-          </div>
-        )}
-        {this.state.fileUploaded[index] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "0px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <img
-                style={{ width: "100%", height: 300 }}
-                src={this.state.imageBaseFileShow[index] || this.state.document_url}
-                alt="PAN"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  conversionCallBack = async () => {
-    let body = {
-      request_type: "conversion",
-    };
-
-    let resultData = await this.callBackApi(body);
-    if (resultData.callback_status) {
-      this.navigate("upload-documents", {
-        params: {
-          fromPanScreen: true,
-        },
-      });
-    } else {
-      let searchParams = getConfig().searchParams + "&status=sorry";
-      this.navigate("instant-kyc-status", { searchParams: searchParams });
-    }
-  };
-
-  checkNextState = () => {
-    if (this.state.vendor_info.dmi_loan_status === "opportunity") {
-      this.navigate("upload-documents", {
-        params: {
-          fromPanScreen: true,
-        },
-      });
-    } else {
-      this.conversionCallBack();
-    }
-  };
-
-  async uploadDocs(file) {
-    this.setState({
-      show_loader: true,
-    });
-    this.sendEvents("next");
-
-    var uploadurl = "/relay/api/loan/document/upload";
-    const data = new FormData();
-    data.append("res", file);
-    data.append("doc_type", "pan");
-    data.append("application_id", this.state.application_id);
-
-    try {
-      const res = await Api.post(uploadurl, data);
-
-      var resultData = res.pfwresponse.result || {};
-      if (res.pfwresponse.status_code === 200 && resultData.message) {
-        this.checkNextState();
-      } else {
-        this.setState({
-          show_loader: false,
-        });
-
-        toast(resultData.error || "Something went wrong");
-      }
-    } catch (err) {
-      console.log(err);
-      this.setState({
-        show_loader: false,
-      });
-      toast("Something went wrong");
-    }
-  }
-
-  mergeDocs(file) {
-    this.setState({
-      imageBaseFile: file,
-      fileUploaded: true,
-      show_loader: true,
-    });
-
-    let that = this;
-    getBase64(file, function (img) {
-      that.setState({
-        imageBaseFileShow: img,
-      });
-    });
-
-    setTimeout(
-      function () {
-        this.setState({
-          show_loader: false,
-        });
-      }.bind(this),
-      1000
-    );
-  }
-
-  showLoaderNative() {
-    this.setState({
-      show_loader: true,
-    });
-  }
-
-  native_call_handler(method_name, doc_type, doc_name, doc_side) {
+  native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: "doc",
         doc_type: doc_type,
         doc_name: doc_name,
-        doc_side: doc_side,
         // callbacks from native
         upload: function upload(file) {
           try {
@@ -322,6 +77,7 @@ class DocumentUpload extends Component {
               show_loader: true,
             });
             switch (file.type) {
+              case "application/pdf":
               case "image/jpeg":
               case "image/jpg":
               case "image/png":
@@ -340,69 +96,8 @@ class DocumentUpload extends Component {
           }
         },
       });
-
-      window.callbackWeb.add_listener({
-        type: "native_receiver_image",
-        show_loader: function (show_loader) {
-          that.setState({
-            show_loader: true,
-          });
-          that.showLoaderNative();
-        },
-      });
     }
   }
-
-  openCameraWeb() {
-    $("input").trigger("click");
-  }
-
-  startUpload(method_name, doc_type, doc_name, doc_side) {
-    this.setState({
-      type: method_name,
-    });
-
-    if (getConfig().html_camera) {
-      this.openCameraWeb();
-    } else {
-      this.native_call_handler(method_name, doc_type, doc_name, doc_side);
-    }
-  }
-
-  getPhoto = (e) => {
-    e.preventDefault();
-
-    let file = e.target.files[0];
-    var id = e.target.id;
-
-    let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
-
-    if (acceptedType.indexOf(file.type) === -1) {
-      toast("Please select image file only");
-      return;
-    }
-
-    let that = this;
-    file.doc_type = file.type;
-    this.setState({
-      imageBaseFile: file,
-    });
-
-    getBase64(file, function (img) {
-      let fileUploaded = {
-        [id]: true
-      }
-  
-      let imageBaseFile = {
-        [id]: img
-      }
-
-      that.setState({
-        imageBaseFileShow: imageBaseFile,
-        fileUploaded: fileUploaded,
-      });
-    });
-  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -418,25 +113,67 @@ class DocumentUpload extends Component {
     });
   };
 
-  handleClick = () => {
-    this.sendEvents("next");
+  openCameraWeb() {
+    $("input").trigger("click");
+  }
+
+  startUpload(method_name) {
     this.setState({
-      show_loader: true,
+      type: method_name,
     });
 
-    if (this.state.imageBaseFile) {
-      this.uploadDocs(this.state.imageBaseFile);
-    } else {
-      this.checkNextState();
+    this.openCameraWeb();
+  }
+
+  getPdf = (e) => {
+    e.preventDefault();
+
+    let file = e.target.files[0] || {};
+    console.log(file);
+
+    let acceptedType = [
+      "application/pdf",
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/bmp",
+    ];
+
+    if (
+      Object.keys(file).length !== "0" &&
+      acceptedType.indexOf(file.type) === -1
+    ) {
+      toast("Please select pdf file only");
+      return;
+    }
+    
+    let { documents, count } = this.state;
+    if (Object.keys(file).length !== "0") {
+      file.doc_type = file.type;
+      file.status = "uploaded";
+      file.id = count++;
+
+      getBase64(file, function (img) {
+        file.imageBaseFile = img;
+        documents.push(file);
+
+        this.setState({
+          fileUploaded: true,
+          documents: documents,
+          count: count,
+        });
+      });
     }
   };
 
   render() {
-    let { doc_list, selectedIndex, docs, totalUpload } = this.state;
+    let { docList, selectedIndex, documents, docs, totalUpload } = this.state;
+    console.log(documents.length);
+    console.log(totalUpload)
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={this.state.doc_list.category_name}
+        title={this.state.docList.category_name}
         buttonTitle="CONTINUE"
       >
         <div className="idfc-document-upload">
@@ -455,41 +192,80 @@ class DocumentUpload extends Component {
             />
           </div>
 
-          {totalUpload < "3" && Array.apply(null, { length: 1 }).map((e, index) => (
-            <div className="loan-mandate-pan" key={index} style={{marginBottom: "50px"}}>
-              {getConfig().html_camera && this.renderHtmlCamera(index)}
-              {!getConfig().html_camera && this.renderNativeCamera()}
-            </div>
-          ))}
-
-          {totalUpload === "3" && (
-            <div className="upload-bank-statement">
+          {totalUpload < "3" &&
+            Array.apply(null, { length: totalUpload }).map((e, index) => (
               <div
-                className="pdf-upload"
-                onClick={() => this.startUpload("upload_doc")}
+                className="loan-mandate-pan"
+                key={index}
+                style={{ marginBottom: "50px" }}
               >
-                <span className="plus-sign">
-                  <input
-                    type="file"
-                    style={{ display: "none" }}
-                    onChange={this.getPdf}
-                    id="myFile"
-                  />
-                  <SVG
-                    preProcessor={(code) =>
-                      code.replace(
-                        /fill=".*?"/g,
-                        "fill=" + getConfig().secondary
-                      )
-                    }
-                    src={plus}
-                  />
-                </span>
-                {/* {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"} */}
-                UPLOAD FILE
+                {getConfig().html_camera && this.renderHtmlCamera(index)}
+                {!getConfig().html_camera && this.renderNativeCamera()}
               </div>
-            </div>
-          )}
+            ))}
+
+          {totalUpload === "3" && (<div>
+        {documents.map((item, index) => (
+          <div>
+           {item.doc_type === "application/pdf" && <div
+              className="bank-statement"
+              key={index + 1}
+              style={{ marginBottom: "30px" }}
+            >
+              <div className="title">{index + 1}. Bank statement</div>
+              <div className="sub-title">
+                <img
+                  style={{ margin: "0 5px 0 12px" }}
+                  src={require("assets/tool.svg")}
+                  alt=""
+                />
+                {item.name}
+                <span className="bytes">{bytesToSize(item.size)}</span>
+              </div>
+            </div>}
+            {item.doc_type !== "application/pdf" && <div
+              style={{
+                border: "1px dashed #e1e1e1",
+                padding: "0px 0px 0px 0px",
+                textAlign: "center",
+              }}
+              key={index}
+            >
+              <div>
+                <img
+                  style={{ width: "100%", height: 300 }}
+                  src={item.imageBaseFile || this.state.document_url}
+                  alt="PAN"
+                />
+              </div>
+            </div>}
+          </div>
+        ))}
+
+        {documents.length <= 3 && <div className="upload-bank-statement">
+          <div
+            className="pdf-upload"
+            onClick={() => this.startUpload("upload_doc")}
+          >
+            <span className="plus-sign">
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={this.getPdf}
+                id="myFile"
+              />
+              <SVG
+                preProcessor={(code) =>
+                  code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
+                }
+                src={plus}
+              />
+            </span>
+            {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
+          </div>
+        </div>}
+      </div>)}
+
         </div>
       </Container>
     );

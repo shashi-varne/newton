@@ -25,8 +25,13 @@ class ProfessionalDetails extends Component {
   }
 
   onload = () => {
-    let lead = this.state.lead || {};
+    if (this.props.edit) {
+      this.setState({
+        next_state: `/loan/idfc/application-summary`,
+      });
+    }
 
+    let lead = this.state.lead || {};
     let professional_info = lead.professional_info || {};
     let application_info = lead.application_info || {};
 
@@ -38,12 +43,12 @@ class ProfessionalDetails extends Component {
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
       salary_mode: capitalizeFirstLetter(professional_info.salary_mode),
-      constitution: capitalizeFirstLetter(professional_info.constitution),
-      organisation: capitalizeFirstLetter(professional_info.organisation),
+      constitution: professional_info.constitution.toUpperCase(),
+      organisation: professional_info.organisation,
       department: professional_info.department,
       industry: professional_info.industry,
     };
-
+console.log(form_data)
     this.setState({
       form_data: form_data,
       employment_type: employment_type,

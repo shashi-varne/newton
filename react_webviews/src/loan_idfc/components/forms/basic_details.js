@@ -5,7 +5,12 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { dobFormatTest, formatDate, timeStampToDate } from "utils/validators";
+import {
+  dobFormatTest,
+  formatDate,
+  timeStampToDate,
+  capitalizeFirstLetter,
+} from "utils/validators";
 
 class BasicDetails extends Component {
   constructor(props) {
@@ -41,9 +46,9 @@ class BasicDetails extends Component {
   onload = () => {
     if (this.props.edit) {
       this.setState({
-          next_state: `/loan/idfc/summary`
-      })
-  }
+        next_state: `/loan/idfc/application-summary`,
+      });
+    }
 
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
@@ -56,7 +61,8 @@ class BasicDetails extends Component {
       pan_no: personal_info.pan_no || "",
       educational_qualification:
         professional_info.educational_qualification || "",
-      employment_type: application_info.employment_type || "",
+      employment_type:
+        capitalizeFirstLetter(application_info.employment_type) || "",
     };
 
     this.setState({
@@ -86,7 +92,7 @@ class BasicDetails extends Component {
     let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
 
-    if (id === "salaried" || id === "self_employed") {
+    if (id === "Salaried" || id === "Self_employed") {
       form_data.employment_type = id;
       form_data.employment_type_error = "";
 
@@ -201,13 +207,13 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "salaried" &&
+                  this.state.form_data.employment_type === "Salaried" &&
                   "1px solid var(--primary)",
               }}
               onClick={this.handleChange()}
             >
               <img
-                id="salaried"
+                id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
               />
@@ -216,13 +222,13 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "self_employed" &&
+                  this.state.form_data.employment_type === "Self_employed" &&
                   "1px solid var(--primary)",
               }}
               onClick={this.handleChange()}
             >
               <img
-                id="self_employed"
+                id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
               />
