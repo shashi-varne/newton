@@ -893,6 +893,7 @@ export function isEmpty(value) {
 }
 
 export function nonRoundingToFixed(val, decimalPlaces) {
+  if (!val) return '';
   return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }
 
@@ -906,3 +907,6 @@ export function containsSpecialCharactersAndNumbers(value){
   return format.test(value);
 }
 
+export function countChars(line) {
+  return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
+}

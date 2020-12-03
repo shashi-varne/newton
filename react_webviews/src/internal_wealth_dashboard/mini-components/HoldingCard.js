@@ -9,17 +9,17 @@ import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
 import { navigate as navigateFunc } from '../common/commonFunctions';
+import { countChars } from '../../utils/validators';
+
 
 const HoldingCard = ({
   mf: mf_detail = {},
   invested_since,
   scheme_type,
-  current_earnings: current_val = {},
+  current_earnings: { amount: current_val = 0, percent: xirr = 0 },
   current_invested: invested_val = 0,
-  xirr,
   ...props
 }) => {
-  const navigate = navigateFunc.bind(props);
   const [openDetail, setOpenDetail] = useState(false);
   const {
     amc_logo_big = '',
@@ -27,6 +27,15 @@ const HoldingCard = ({
     fisdom_rating,
     isin = 1,
   } = mf_detail;
+
+  const ellipsify = (line) =>  {
+    const characters = countChars(line)
+    if (characters >= 52) {
+      return `${line.split('0, 52')}...`
+    }
+    return line
+  }
+  
 
   return (
     <div className="iwd-holding-card">
@@ -37,7 +46,7 @@ const HoldingCard = ({
             name,
             invested_since,
             scheme_type,
-            current_val: current_val.amount,
+            current_val,
             invested_val,
             xirr,
             amcLogo: amc_logo_big,
@@ -52,12 +61,12 @@ const HoldingCard = ({
         Since {formattedDate(invested_since, 'm y')}
       </div>
       <div className="iwd-hc-title">
-        <span>{name}</span>
+        <span>{ellipsify(name)}</span>
         <img src={amc_logo_big} alt="" height="80" />
       </div>
       <div className="iwd-hc-numbers">
         <div className="iwd-hcn-item">
-          <div className="iwd-hcni-value">{numDifferentiationInr(current_val.amount)}</div>
+          <div className="iwd-hcni-value">{numDifferentiationInr(current_val)}</div>
           <div className="iwd-hcni-label">Current</div>
         </div>
         <div className="iwd-hcn-item-divider"></div>
@@ -68,7 +77,7 @@ const HoldingCard = ({
         <div className="iwd-hcn-item">
           <img src={true ? positive : negative} alt="" />
           <div>
-            <div className="iwd-hcni-value">{xirr}%</div>
+            <div className="iwd-hcni-value">{(xirr ? xirr + '%' : '--')}</div>
             <div className="iwd-hcni-label">XIRR</div>
           </div>
         </div>
@@ -80,7 +89,7 @@ const HoldingCard = ({
         onClick={() => setOpenDetail(true)}
       >
         <span>More details</span>
-        <img src={nextArrow} alt="" style={{ marginLeft: '20px' }} />
+        <img src={nextArrow} alt="" style={{ marginLeft: '15px' }} />
       </Button>
     </div>
   );

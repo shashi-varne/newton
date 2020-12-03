@@ -131,7 +131,7 @@ const Holdings = () => {
   };
   return (
     <div className='iwd-page' id='iwd-holdings'>
-      <PageHeader height={isMobileView ? '7vh' : '9vh'} hideProfile={isMobileView}>
+      <PageHeader>
         <>
           <div className='iwd-header-title'>Holdings</div>
         </>

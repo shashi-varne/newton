@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import { dateFormater, date_range_selector } from '../common/commonFunctions';
 import toast from '../../common/ui/Toast';
 import isEmpty from 'lodash/isEmpty';
+import { Dialog } from 'material-ui';
+
 const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterData }) => {
   const storedFilterVal = storageService().getObject(filter_key);
   const [startDate, setStartDate] = useState(storedFilterVal['from_tdate'] || '');
@@ -104,8 +106,8 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   );
 
   return (
-    <section className='iwd-filter-mobile-overlay'>
-      <div style={{ position: 'relative', height: '100%', padding: '30px' }}>
+    <Dialog fullScreen={true} classes={{ paper: 'iwd-filter-mobile'}} open={true}>
+      <div className="iwd-filter-mobile-container">
         <PageCloseBtn clickHandler={clickHandler} />
         <div className='iwd-filter-mobile-section'>
           <section className='iwd-filter-head-container'>
@@ -160,7 +162,7 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
           </div>
         </div>
       </div>
-    </section>
+    </Dialog>
   );
 };
 
