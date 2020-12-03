@@ -197,7 +197,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
         const { name, dob, relation } = form_data;
 
-        if (!isEmpty(form_data) && noOfWords(name) < 2) {
+        if (form_data && (name || '').split(" ").filter(e => e).length < 2) {
             form_data.name_error = 'Enter valid full name';
         } else if (name && !validateAlphabets(name)) {
             form_data.name_error = 'Invalid name';
@@ -223,7 +223,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         if (this.state.renderAppointee) {
             const { appointeename, appointeedob, appointeerelation } = form_data;
 
-            if (noOfWords(appointeename) < 2) {
+            if (form_data && (appointeename || '').split(" ").filter(e => e).length < 2) {
                 form_data.appointeename_error = 'Enter valid full name';
             } else if (appointeename && !validateAlphabets(appointeename)) {
                 form_data.appointeename_error = 'Invalid name';
