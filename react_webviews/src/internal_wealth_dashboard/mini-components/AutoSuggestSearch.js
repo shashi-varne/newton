@@ -10,9 +10,7 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
   }));
 
   const getStoredFundName = () => {
-    console.log('filter val', filterVal['amfi']);
     const data = suggestions.find((el) => el.value === filterVal['amfi']);
-    console.log('storedfund name', data);
     return data;
   };
   const [fundName, setFundName] = useState(

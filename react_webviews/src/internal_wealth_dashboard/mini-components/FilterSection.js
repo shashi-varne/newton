@@ -47,7 +47,6 @@ const FilterSection = ({
     }
   }, []);
   useEffect(() => {
-    console.log('clear running');
     if (clearFilter) {
       setValue(null);
     }

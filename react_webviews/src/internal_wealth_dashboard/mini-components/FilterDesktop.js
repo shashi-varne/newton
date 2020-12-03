@@ -13,7 +13,6 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
 
   const handleFilterSelect = (id, value) => {
     const filterData = { ...storedFilterVal, [id]: value };
-    console.log('filter data is ', filterData);
     setFilterState(filterData);
     storageService().setObject(filter_key, filterData);
     handleFilterData(filterData);
