@@ -374,10 +374,10 @@ class GroupHealthPlanDetails extends Component {
 
               <div
                 className="common-how-steps"
-                style={{ border: "none", marginTop: -30, marginBottom: 0 }}
+                style={{ border: "none", marginTop: '-45px', marginBottom: 0 }}
               >
                 <div className="top-tile">
-                  <div className="top-title">Waiting period</div>
+                  <div className="top-title" style={{marginBottom: '-10px'}}>Waiting period</div>
                 </div>
                 <div className="common-steps-images" style={{ marginTop: 0 }}>
                   {this.state.plan_data && this.state.plan_data.waiting_periods.map(this.renderSteps)}
