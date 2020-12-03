@@ -441,7 +441,7 @@ function getPartnerConfig(partner_code) {
       askEmail: 'ask@finity.in',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'mywayBackColor',
-      webAppUrl: 'https://app.finity.in/#!/',
+      webAppUrl: 'https://app.mywaywealth.com/#!/',
       email_domain: 'finity.in',
     },
     minvest: {
