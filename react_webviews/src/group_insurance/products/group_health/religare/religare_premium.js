@@ -21,7 +21,7 @@ export default class ReligarePremium extends Component {
           </div>
         </div>
 
-        {this.props.type_of_plan === 'NF' &&
+        {this.props.type_of_plan === 'NF' && this.props.account_type !== 'self' &&
           <div className="nf-info">
             {(`${numDifferentiationInr(this.props.sum_assured)} x ${this.props.total_members}`)}
           </div>
