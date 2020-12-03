@@ -174,6 +174,9 @@ export const hdfc = {
             { 'name': 'Cataract - 1 Eye/Both Eyes' ,    "id": "hdfc_ergo_ped_cataract" },
             { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', "id": "hdfc_ergo_ped_cholesterol", },
             { 'name': 'Tonsil/Tonsillectomy' ,  "id": "hdfc_ergo_ped_tonsils_tonsillectomy", },
+            {'name' : 'Fistula', 'id' : 'hdfc_ergo_ped_fistula'},
+            { 'name': 'Piles/Haemorrhoids', 'id': 'hdfc_ergo_ped_piles_haemorrhoids'},
+            {'name' : 'Hernia/Inguinal Hernia/Umbilical Hernia' , 'id': 'hdfc_ergo_ped_hernia'},
             { 'name': 'Asthma', 'id': 'hdfc_ergo_ped_asthma'},
             { 'name': 'Fall/Accidental Injury' ,   "id": "hdfc_ergo_ped_fall_accidental_injury"},
             { 'name': 'Fissure',  "id": "hdfc_ergo_ped_fissure", },
@@ -184,8 +187,8 @@ export const hdfc = {
             {'name':  'Hysterectomy/Uterus removal', 'id':'hdfc_ergo_ped_uterus_removal'},
             {'name':  'Hypertension/Blood pressure', 'id' : 'hdfc_ergo_hypertension_blood_pressure'},
             {'name':  'Diabetes/High Sugar', 'id': 'hdfc_ergo_ped_diabetes'},
-            {'name' : 'Cholecystectomy/Gall bladder surgery/removal', 'id':'hdfc_ergo_ped_cholesterol'},
-            {'name':'  Piles/Haemorrhoids', 'id' : 'hdfc_ergo_ped_appendix'},
+            {'name' : 'Cholecystectomy/Gall bladder surgery/removal', 'id':'hdfc_ergo_ped_gall_bladder_removal'},
+            {'name':  'Piles/Haemorrhoids', 'id' : 'hdfc_ergo_ped_appendix'},
             { 'name': 'Other' ,  "id": "hdfc_ergo_ped_other_diseases", }
         ]
     },

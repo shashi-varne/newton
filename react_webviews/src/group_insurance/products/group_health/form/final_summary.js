@@ -452,8 +452,8 @@ class GroupHealthPlanFinalSummary extends Component {
                     'subtitle': nominee_data_backend.dob
                 },
             )
-
-            if (lead.appointee_details.name) {
+console.log(lead)
+            if (lead.appointee_details.name && lead.nominee_details.dob) {
                 let appointee_data_backend = lead.appointee_details;
                 nominee_data.data = [
                     ...nominee_data.data,
