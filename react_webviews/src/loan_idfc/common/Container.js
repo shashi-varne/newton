@@ -84,11 +84,11 @@ class Container extends Component {
             }`}
         >
           <div className="LoaderOverlay">
-            <div style={{ fontSize: "14px", lineHeight: "20px", margin: "0 -40px 0 -40px" }}>
+            <div className="LoaderOverlay-title">
               {data.title}
             </div>
-            <img style={{ width: '40px', height: '54px', margin: "40px 0 30px 0" }} src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
-            <div style={{ fontSize: "13px", lineHeight: "22px", color: "#767E86" }}>{data.subtitle}</div>
+            <img className="LoaderOverlay-image" src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
+            <div className="LoaderOverlay-subtitle" >{data.subtitle}</div>
           </div>
         </div>
       );
