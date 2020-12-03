@@ -195,7 +195,8 @@ export async function getOrCreate(params) {
         }
       );
 
-      if (this.state.screen_name === "landing_screen") {
+      let screens = ["landing_screen", "calculator", "know_more_screen"]
+      if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       }
 

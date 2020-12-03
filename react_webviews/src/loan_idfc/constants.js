@@ -43,6 +43,8 @@ export const idfc_config = {
   key: 'idfc',
   get_next: {
     landing_screen: 'edit-number',
+    know_more_screen: 'edit-number',
+    calculator: 'edit-number',
     mobile_verification: 'otp-verify',
     otp_verify: 'basic-details',
     basic_details: 'professional-details',
