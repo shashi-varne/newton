@@ -503,7 +503,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                    {this.state.policy_data.policy_number &&
+                    {this.state.policy_data.status && this.state.policy_data.status !== 'rejected' &&
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
@@ -568,7 +568,7 @@ class GroupHealthReportDetails extends Component {
                             }}>
                                 Plan Details
                             </div>
-                            {this.state.policy_data.policy_number &&
+                            {this.state.policy_data && this.state.policy_data.status !== 'rejected' &&
                                 <div className="flex">
                                     <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
                                         |
