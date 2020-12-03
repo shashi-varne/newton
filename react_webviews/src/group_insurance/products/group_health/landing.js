@@ -205,6 +205,7 @@ class GroupHealthLanding extends Component {
         let quoteResume = this.state.quoteResume;
         storageService().set("ghs_ergo_quote_id", quoteResume.id);
         if(this.state.applicationData.status === 'move_to_payment' || this.state.applicationData.status === 'ready_for_payment'){
+          storageService().set("health_insurance_application_id", this.state.applicationData.id);
           this.navigate("final-summary");
         } else {
           storageService().setObject("resumeToPremiumHealthInsurance", true);
