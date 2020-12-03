@@ -17,7 +17,6 @@ import { getConfig } from 'utils/functions';
 import Legends from '../mini-components/Legends';
 import toast from '../../common/ui/Toast';
 import {
-  fetchPortfolioAnalysisMock,
   fetchPortfolioAnalysis,
 } from '../common/ApiCalls';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
@@ -133,26 +132,6 @@ function Analysis() {
           <TopHoldings topHoldings={topHoldings.debt} />
         )}
         <TopAMCS topAMCs={topAMCs[pageType]} />
-        {!error && !isLoading && pageType === 'equity' && (
-          <IwdCard
-          headerText="Check the analysis of your debt allocations"
-          error={error}
-          isLoading={isLoading}
-          className="iwd-d-newsletter"
-        >
-          <div id="iwd-dn-issue" className="iwd-cursor__pointer" onClick={() => setPageType('debt')}>Next</div>
-        </IwdCard>
-        )}
-        {!error && !isLoading && pageType === 'debt' && (
-          <IwdCard
-          headerText="Check the analysis of your equity allocations"
-          error={error}
-          isLoading={isLoading}
-          className="iwd-d-newsletter"
-        >
-          <div id="iwd-dn-issue" className="iwd-cursor__pointer" onClick={() => setPageType('equity')}>Previous</div>
-        </IwdCard>
-        )}
         {isMobileView && <ScrollTopBtn />}
       </SnapScrollContainer>
     </section>

@@ -635,7 +635,7 @@ $background: #F9F9F9;
   }
 
   .iwd-analysis-graph-left {
-    width: 45%;
+    width: 40%;
     height: 90%;
     margin-right: 2%;
 
@@ -648,12 +648,11 @@ $background: #F9F9F9;
       .iwd-chart {
         height: 200px;
         width: 200px;
-        margin-right: 5px;
-        flex: 0 1 40%;
+        margin-right: 10px;
       }
 
       .iwd-aglc-legend {
-        flex: 1 0 30%;
+        flex: 0 0 50%;
 
         .iwd-aglc-legend-child {
           display: flex;
@@ -692,21 +691,13 @@ $background: #F9F9F9;
 
   .iwd-analysis-graph-right {
     height: 90%;
-    width: 53%;
+    width: 58%;
 
     .iwd-agr-content {
       .iwd-chart {
         margin-bottom: 50px; 
       }
     }
-  }
-
-  #iwd-rating-exposure.iwd-analysis-graph-left {
-    height: 80%;
-  }
-
-  #iwd-maturity-exposure.iwd-analysis-graph-right {
-    height: 80%;
   }
 
   #iwd-sector-alloc {
@@ -732,14 +723,6 @@ $background: #F9F9F9;
         }
       }
     }
-  }
-
-  #iwd-market-alloc.iwd-analysis-graph-left {
-    height: 80%;
-  }
-
-  #iwd-sector-alloc.iwd-analysis-graph-right {
-    height: 80%;
   }
 
   #iwd-maturity-exposure {
@@ -916,15 +899,6 @@ $background: #F9F9F9;
       width: 100%;
       height: 90%;
     }
-    
-    // .iwd-analysis-portfolio-equity {
-    //   display: flex;
-    //   flex-wrap: wrap;
-    //   justify-content: space-between;
-    //   height: 80%;
-    //   overflow-y: auto;
-    //   overflow-x: auto;
-    // }
     
     .iwd-analysis-portfolio-stock {
       display: flex;
