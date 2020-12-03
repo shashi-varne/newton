@@ -5,7 +5,7 @@ import { getTransactions, hitNextPage, fetchPortfolioNames } from '../../common/
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
 import FSTable from 'common/responsive-components/FSTable';
 import { transactionsHeaderMap } from '../../constants';
-import Pagination from '../../mini-components/Pagination';
+import { Pagination } from 'rsuite';
 import { storageService } from '../../../utils/validators';
 import IWdScreenLoader from '../../mini-components/IwdScreenLoader';
 import 'rsuite/dist/styles/rsuite-default.css';
@@ -23,48 +23,53 @@ transactionsHeaderMap.splice(1, 0, {
 
 const filter_key = 'iwd-transaction-filters';
 const Transactions = () => {
-  const [transactions, setTransactions] = useState(null);
-  const [perPage, setPerPage] = useState(10);
-  const [totalCount, setTotalCount] = useState(null);
-  const [more, setMore] = useState(false);
-  const [nextPageLink, setNextPageLink] = useState('');
+  const [transactions, setTransactions] = useState([]);
+  const [activePage, setActivePage] = useState(1);
   const [filterVal, setFilterVal] = useState(storageService().getObject(filter_key) || '');
   const [open, isOpen] = useState(false);
   const [fundNames, setFundNames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageMap, setPageMap] = useState([null, null]);
   const isMobileView = getConfig().isMobileDevice;
 
+  const pushToPageMap = (url) => {
+    if (!url) return;
+    setPageMap([...pageMap, url]);
+  };
+
   useEffect(() => {
-    const filterData = storageService().getObject(filter_key);
     fetch_fund_names();
-    if (filterData) {
-      get_transactions(filterData);
-    } else {
-      get_transactions();
-    }
   }, []);
 
   useEffect(() => {
     get_transactions();
-  }, [filterVal]);
+  }, [filterVal, activePage]);
 
-  const get_transactions = async (params = {}) => {
+  const get_transactions = async () => {
     try {
       setIsLoading(true);
-      const response = await getTransactions({
-        page_size: perPage,
-        count: true,
-        ...filterVal,
-      });
+      let response;
+      if (activePage === 1) {
+        response = await getTransactions({
+          page_size: 10,
+          count: false,
+          ...filterVal,
+        });
+        pushToPageMap(response.next_page);
+      } else {
+        const urlToHit = pageMap[activePage];
+        response = await hitNextPage(urlToHit);
+      }
       setTransactions(response.transactions);
-      setIsLoading(false);
-      setTotalCount(response.total_count);
-      setMore(response.more);
-      setNextPageLink(response.next_page);
     } catch (err) {
       toast(err);
       console.log(err);
     }
+    setIsLoading(false);
+  };
+
+  const onPageSelect = (page) => {
+    setActivePage(page);
   };
 
   const fetch_fund_names = async () => {
@@ -89,6 +94,7 @@ const Transactions = () => {
     2000,
     { trailing: true }
   );
+
   const clickHandler = () => {
     isOpen(false);
   };
@@ -148,6 +154,7 @@ const Transactions = () => {
               <FSTable
                 className='iwd-transactions-table iwd-statement-trasaction-table'
                 serializeData
+                serialOffset={(activePage - 1) * 10}
                 headersMap={transactionsHeaderMap}
                 data={transactions}
               />
@@ -156,15 +163,13 @@ const Transactions = () => {
             )}
           </div>
         </section>
-        {perPage && totalCount > 0 && !isLoading && (
+        {!isLoading && (
           <div className='iwd-transaction-pagination'>
-            <Pagination
-              per_page={perPage}
-              totalCount={totalCount}
-              more={more}
-              nextPageApi={hitNextPage}
-              // nextPage={nextPage}
-            />
+            <Pagination first prev next
+              pages={pageMap.length - 1}
+              activePage={activePage}
+              onSelect={onPageSelect}
+            ></Pagination>
           </div>
         )}
       </div>
