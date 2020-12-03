@@ -100,7 +100,6 @@ class BtInformation extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
-        handleClick={this.handleClick}
       >
         <div className="bt-info">
           <div className="head">How does BT work?</div>

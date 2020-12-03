@@ -27,6 +27,7 @@ export async function initialize() {
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
+  this.getIndustryList = getIndustryList.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -89,6 +90,32 @@ export async function getInstitutionList() {
 
       this.setState({
         bankOptions: bankOptions,
+      });
+
+    } else {
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    console.log(err);
+    toast("Something went wrong");
+  }
+}
+
+export async function getIndustryList() {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.get("relay/api/loan/idfc/list/industry");
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      let industryOptions = result.data;
+
+      this.setState({
+        industryOptions: industryOptions,
       });
 
     } else {
@@ -186,6 +213,10 @@ export async function getOrCreate(params) {
 
       if (this.state.screen_name === "document_list") {
         await this.getDocumentList();
+      }
+
+      if (this.state.screen_name === "professional_details_screen") {
+        this.getIndustryList();
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");

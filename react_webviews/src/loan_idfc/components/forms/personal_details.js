@@ -11,8 +11,8 @@ import {
   // dobFormatTest,
   // isValidDate,
   // formatDate,
-  capitalize,
   capitalizeFirstLetter,
+  timeStampToDate
 } from "utils/validators";
 
 const gender_options = [
@@ -79,12 +79,12 @@ class PersonalDetails extends Component {
       first_name: personal_info.first_name,
       middle_name: confirm_details && personal_info.middle_name,
       last_name: personal_info.last_name,
-      dob: confirm_details && personal_info.dob,
+      dob: confirm_details && timeStampToDate(personal_info.dob || ""),
       gender: capitalizeFirstLetter(personal_info.gender),
-      marital_status: capitalizeFirstLetter(personal_info.marital_status),
+      marital_status: (personal_info.marital_status || "").toUpperCase(),
       father_name: personal_info.father_name,
       mother_name: confirm_details && personal_info.mother_name,
-      religion: personal_info.religion.toUpperCase(),
+      religion: (personal_info.religion || "").toUpperCase(),
       email_id: personal_info.email_id,
     };
 

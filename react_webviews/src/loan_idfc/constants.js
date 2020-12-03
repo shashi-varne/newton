@@ -2,7 +2,8 @@ export function goBackMap(path) {
     let mapper = {
       '/loan/idfc/journey': '/loan/idfc/home',
       '/loan/idfc/application-summary': '/loan/idfc/journey',
-      '/loan/idfc/personal-details': '/loan/idfc/home'
+      '/loan/idfc/personal-details': '/loan/idfc/home',
+      '/loan/idfc/professional-details': '/loan/idfc/basic-details'
     }
 
     return mapper[path] || false;
@@ -154,9 +155,9 @@ export const idfc_config = {
       'ZYDUS CADILA'
     ],
     salaryRecieptOptions: [
-      "Bank account transfer",
-      "Cash",
-      "Cheque",
+      "BANK ACCOUNT TRANSFER",
+      "CASH",
+      "CHEQUE",
     ],
     constitutionOptions: [
       "HUF",
@@ -171,32 +172,27 @@ export const idfc_config = {
       "TRUST",
   ],
     organisationTypeOptions: [
-      "central govt.",
-      "educational institute",
-      "partnership firm",
-      "private limited company",
-      "public limited company",
-      "proprietorship firm",
-      "public sector undertaking.",
-      "society",
-      "state govt.",
-      "trust",
+      "CENTRAL GOVT.",
+      "EDUCATIONAl INSTITUTE",
+      "PARTNERSHIP FIRM",
+      "PRIVATE LIMITED COMPANY",
+      "PUBLIC LIMITED COMPANY",
+      "PROPRIETORSHIP FIRM",
+      "PUBLIC SECTOR UNDERTAKING.",
+      "SOCIETY",
+      "STATE GOVT.",
+      "TRUST",
   ],
     departmentOptions: [
       "ACCOUNTS",
       "BACKOFFICE",
       "EDUCATION"
     ],
-    industryOptions: [
-      "ABRASIVES AND GRINDING",
-      "ADVERTISING",
-      "AGRICULTURAL IMPLEMENTS"
-    ]
   },
   personal_details_screen: {
     maritalOptions: [
-      "Single",
-      "Married"
+      "SINGLE",
+      "MARRIED"
     ],
     religionOptions: [
       "HINDU",

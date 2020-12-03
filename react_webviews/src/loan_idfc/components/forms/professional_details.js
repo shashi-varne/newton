@@ -5,7 +5,7 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
+import { numDifferentiationInr, capitalizeFirstLetter, capitalize } from "utils/validators";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class ProfessionalDetails extends Component {
       form_data: {},
       screen_name: "professional_details_screen",
       employment_type: "",
+      industryOptions: []
     };
 
     this.initialize = initialize.bind(this);
@@ -42,13 +43,13 @@ class ProfessionalDetails extends Component {
       business_name: professional_info.business_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
-      salary_mode: capitalizeFirstLetter(professional_info.salary_mode),
-      constitution: professional_info.constitution.toUpperCase(),
+      salary_mode: capitalize(professional_info.salary_mode || ""),
+      constitution: professional_info.constitution,
       organisation: professional_info.organisation,
       department: professional_info.department,
       industry: professional_info.industry,
     };
-console.log(form_data)
+
     this.setState({
       form_data: form_data,
       employment_type: employment_type,
@@ -212,7 +213,7 @@ console.log(form_data)
                 label="Constitution of company"
                 error={this.state.form_data.constitution_error ? true : false}
                 helperText={this.state.form_data.constitution_error}
-                value={this.state.form_data.constitution || ""}
+                value={(this.state.form_data.constitution || "").toUpperCase()}
                 name="constitution"
                 onChange={this.handleChange("constitution")}
               />
@@ -252,7 +253,7 @@ console.log(form_data)
               <div className="InputField">
                 <DropdownWithoutIcon
                   width="40"
-                  options={this.state.screenData.industryOptions}
+                  options={this.state.industryOptions}
                   id="industry"
                   label="Industry type"
                   error={this.state.form_data.industry_error ? true : false}

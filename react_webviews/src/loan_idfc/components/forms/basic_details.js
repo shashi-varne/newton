@@ -67,7 +67,7 @@ class BasicDetails extends Component {
 
     this.setState({
       form_data: form_data,
-      pan_state: vendor_info.pan_state,
+      pan_state: application_info.is_pan_disabled,
     });
   };
 
@@ -177,7 +177,7 @@ class BasicDetails extends Component {
                 name="pan"
                 value={this.state.form_data.pan_no || ""}
                 onChange={this.handleChange("pan_no")}
-                disabled={this.state.pan_state === "success"}
+                disabled={this.state.pan_state}
               />
             </div>
 

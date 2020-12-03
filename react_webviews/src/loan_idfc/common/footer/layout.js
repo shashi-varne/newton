@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-// import Button from "../../../common/ui/Button";
-import Button from "material-ui/Button";
+import Button from "../../../common/ui/Button";
+import CustomButton from "material-ui/Button";
 // import { capitalize } from 'utils/validators';
 import Dialog, {
   DialogActions,
@@ -153,27 +153,20 @@ export class TwoButtonLayout extends Component {
   render() {
     const props = this.props;
     return (
-      <div
-        className="FooterDefaultLayout"
-        onClick={() => {
-          if (!props.disable) {
-            props.handleClick();
-          }
-        }}
-      >
+      <div className="FooterDefaultLayout">
         <div className="button">
           <div className="not-now">
-            <Button
+            <CustomButton
               variant="raised"
               size="large"
               fullWidth={true}
               onClick={props.handleClickOne}
             >
               {props.buttonOneTitle}
-            </Button>
+            </CustomButton>
           </div>
 
-          <Button
+          <CustomButton
             variant="raised"
             size="large"
             color="secondary"
@@ -181,7 +174,7 @@ export class TwoButtonLayout extends Component {
             onClick={props.handleClickTwo}
           >
             {props.buttonTwoTitle}
-          </Button>
+          </CustomButton>
         </div>
         {this.renderDialog()}
       </div>

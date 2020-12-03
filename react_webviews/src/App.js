@@ -44,7 +44,7 @@ class App extends Component {
           <Route path='/isip' component={IsipBIller} />
           <Route path='/w-report' component={WealthReport} />
           <Route path='/help' component={HelpSupport} />
-          <Route path='/loan' component={Loan} />
+          <Route path='/loan/idfc' component={Loan_idfc} />
           <Route path='/pg' component={Payment} />
           <Route path='/kyc-esign' component={KycEsign} />
           <Route path='/whatsapp/' component={Whatsapp} />
