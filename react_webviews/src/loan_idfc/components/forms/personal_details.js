@@ -87,7 +87,7 @@ class PersonalDetails extends Component {
       religion: personal_info.religion.toUpperCase(),
       email_id: personal_info.email_id,
     };
-console.log(form_data)
+
     this.setState({
       form_data: form_data,
       confirm_details: confirm_details,

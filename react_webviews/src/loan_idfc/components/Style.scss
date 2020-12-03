@@ -490,3 +490,48 @@
   line-height: 17px;
   color: #0a1d32;
 }
+
+.idfc-document-upload {
+  .multiple-upload {
+    .sub-title {
+      font-size: 12px;
+      margin: 16px 0 20px 0;
+      color: #0a1d32;
+    }
+
+    img {
+      margin: 0 5px 0 12px;
+    }
+
+    .bytes {
+      margin-left: 20px;
+      color: #767e86;
+      text-transform: lowercase;
+    }
+  }
+}
+
+.FooterDefaultLayout {
+  .not-now {
+    .MuiButton-raised {
+      background-color: #f7f6fc !important;
+      color: var(--secondary) !important;
+      border: 1px solid var(--secondary);
+    }
+    width: 100%;
+  }
+
+  .MuiButton-raised {
+    padding: 16px 0 !important;
+    width: 90%;
+    border-radius: 6px;
+    font-size: 14px !important;
+    font-weight: 600;
+  }
+
+  .button {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+}
