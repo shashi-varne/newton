@@ -3,6 +3,8 @@ import Container from '../../../common/Container';
 import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
 import star_logo from '../../../../assets/ic_star_logo.svg'
+import toast from '../../../../common/ui/Toast'
+import Api from 'utils/api'
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -28,18 +30,21 @@ class HealthInsuranceEntry extends Component {
         key: 'HDFCERGO',
         title: 'HDFC ERGO',
         subtitle: 'my: health Suraksha',
+        Product_name : 'Health_Suraksha',
         icon: hdfc_logo
       },
       {
         key: 'RELIGARE',
         title: 'Care Health',
         subtitle: 'Care',
+        Product_name : 'Care',
         icon: religare_logo
       },
       {
         key: 'STAR',
         title: 'Star',
         subtitle: 'Family health optima',
+        Product_name : 'Star',
         icon: star_logo
       }
     ];
@@ -62,13 +67,31 @@ class HealthInsuranceEntry extends Component {
   }
 
  
-  handleClick = (data) => {
+    handleClick = async (data) => {
 
-    this.sendEvents('next', data.key)
+      this.setState({
+        show_loader: true
+      });
 
-    let fullPath = data.key + '/landing';
-    this.navigate('/group-insurance/group-health/' + fullPath);
-  }
+      try {
+        const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+
+        let resultData = res.pfwresponse
+        if(res.pfwresponse.status_code === 200){
+          this.sendEvents('next', data.key)
+          let fullPath = data.key + '/landing';
+          this.navigate('/group-insurance/group-health/' + fullPath);
+        }else {
+          toast(resultData.error || resultData.message || "Something went wrong");
+        }
+      } catch (err) {
+        this.setState({
+          show_loader: false,
+        });
+        toast("Something went wrong");
+      }
+
+    }
 
   renderPorducts(props, index) {
     if(!props.disabled) {

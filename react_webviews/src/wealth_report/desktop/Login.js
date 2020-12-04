@@ -54,21 +54,8 @@ const Login = (props) => {
         ...props,
       }
     };
-    console.log('Event:', eventObj);
     nativeCallback({ events: eventObj });
   };
-
-  useEffect(() => {
-    const storage_val = storageService().get('wr-link-click-time');
-    const link_click_time = storage_val ? new Date(storage_val) : null;
-    const current_time = new Date();
-
-    // If link is clicked again within 30 mins, will not log/trigger the event
-    if (!link_click_time || (current_time - link_click_time)/60000 > 30) {
-      storageService().set('wr-link-click-time', current_time);
-      sendEvents('link clicked', { screen_name: 'link clicked' });
-    }
-  }, []);
 
   useEffect(() => {
     if (params.view) {
@@ -179,11 +166,6 @@ const Login = (props) => {
       await login({ mobileNo: number, countryCode });
       navigate(props, 'login/otp');
     } catch(err) {
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'fail',
-        error_message: err,
-      });
       console.log(err);
       toast(err);
     }
@@ -207,11 +189,6 @@ const Login = (props) => {
         console.log(err);
         toast(err);
       }
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'fail',
-        error_message: err,
-      });
     }
     setOpLoading(false);
   };
@@ -250,11 +227,6 @@ const Login = (props) => {
       } else {
         toast(err);
       }
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'fail',
-        error_message: err,
-      });
     }
     setOpLoading(false);
   };
@@ -298,11 +270,6 @@ const Login = (props) => {
       } else {
         toast(err);
       }
-      sendEvents('register', {
-        screen_name: 'register',
-        status: 'fail',
-        error_message: err,
-      });
     }
     setOpLoading(false);
   };
@@ -319,11 +286,6 @@ const Login = (props) => {
     } catch (err) {
       console.log(err);
       toast(genericErrMsg);
-      sendEvents('verify-email', {
-        screen_name: 'verify-email',
-        status: 'fail',
-        error_message: err,
-      });
     }
     setResendLoading(false);
   };

@@ -1,0 +1,291 @@
+.pr-container {
+  padding-bottom: 100px !important;
+  margin-bottom: 0px !important;
+}
+.pr-main-container {
+  // padding-bottom: 1em;
+  .left-item {
+    margin-right: 10px;
+  }
+
+  .right-item {
+    flex: 1;
+  }
+
+  .flex-item {
+    display: flex;
+    align-items: center;
+  }
+
+  //.MuiChip-root.badge {
+  .badge {
+    height: 16px !important;
+    width: max-content !important;
+    border-radius: 8px !important;
+    text-transform: uppercase !important ;
+    background-color: #fff6ce !important;
+    margin-right: 10px !important;
+    padding: 0.1em 0.4em !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    .MuiChip-label {
+      padding: 0px !important;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 12px;
+      letter-spacing: 0px;
+      color: #767e86;
+      align-items: center;
+    }
+  }
+
+  .info-tip {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+  }
+
+  .fund-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+  }
+
+  .fund-container {
+    justify-content: space-between;
+  }
+  .divider {
+    width: 100% !important;
+    height: 2px !important;
+    margin-top: 30px !important;
+    margin-bottom: 0px !important;
+  }
+
+  // Footer
+  // .Footer {
+  //   position: relative;
+  //   margin-bottom: 0;
+  // }
+  // .footer-position {
+  //   position: fixed !important;
+  // }
+}
+
+.switch-reason-container {
+  height: auto;
+  width: 100%;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #eaf4ff;
+
+  .switch-reason-heading {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15px;
+    letter-spacing: 0px;
+    text-align: left;
+    margin-bottom: 7px;
+  }
+  .switch-reason-message {
+    font-size: 10px;
+    font-weight: 300;
+    line-height: 15px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: #767e86;
+  }
+}
+
+.pr-recommended-text {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  line-height: 12px !important;
+  letter-spacing: 0px !important;
+  text-align: left !important;
+  text-transform: uppercase !important;
+  color: #767e86 !important;
+}
+
+.switch-reason-section {
+  margin-top: 30px;
+}
+
+.pr-rebalance-fund-item {
+  margin-top: 30px;
+}
+.pr-rebalance-fund-item:nth-child(1) {
+  margin-top: 0px;
+}
+
+// Rebalance Fund Item
+.fund-type-head {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0px;
+}
+.switch-folio-container {
+  width: 100%;
+  height: 30px;
+}
+
+.switch-badge {
+  justify-content: space-between;
+  width: 100%;
+  margin-left: -24px;
+}
+.folio-number-text {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 13px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #767e86;
+}
+.fund-type-tooltip {
+  margin-right: 3px;
+  position: relative;
+
+  .fd-tooltip-container {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: 0px;
+    color: #767e86;
+  }
+}
+.fund-detail-container {
+  align-items: flex-start;
+  .fund-title {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: 0px;
+    text-align: left;
+    color: #0a1d32;
+    margin: 0;
+    padding: 0px 16px 0px 0px;
+  }
+  .fund-status {
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    letter-spacing: 0px;
+    text-align: left;
+    color: #767e86;
+    margin: 0;
+    margin-top: 6px;
+  }
+  .image-container.from-fund {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    object-fit: cover;
+    // z-index: 2;
+  }
+  .image-container.from-fund::after {
+    position: absolute;
+    content: '';
+    top: -8%;
+    left: 50%;
+    width: 35px;
+    height: 38px;
+    background-color: white;
+    z-index: 3;
+    transform: translateX(-50%);
+  }
+  .expert-status-negative {
+    color: tomato;
+    margin-left: 0.5px;
+  }
+}
+
+.pr-arrow-container {
+  width: 30px;
+  height: 30px;
+  align-items: flex-start !important;
+  transition: height 350ms;
+  .arrow {
+    position: relative;
+  }
+  .bigger-arrow {
+    position: absolute;
+    left: 37%;
+    bottom: -41%;
+    z-index: 1;
+  }
+  .arrow-image {
+    transition: all 350ms ease;
+    position: relative;
+    width: 30px;
+    height: 30px;
+  }
+}
+.pr-expand-arrow {
+  height: 70px;
+  .arrow-image {
+    height: 50px;
+  }
+}
+.sip-amount-details {
+  margin-top: 10px;
+  .sip-amount-text,
+  .sip-amount-num {
+    font-size: 10px !important;
+    font-weight: 400 !important;
+    line-height: 17px !important;
+    letter-spacing: 0px !important;
+    text-align: left !important;
+  }
+  .sip-amount-text {
+    color: #767e86 !important;
+  }
+}
+.fund-type-info:before {
+  position: absolute;
+  border: 12px solid #f0f7ff;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+
+  border-top: 12px solid transparent;
+  top: -23px;
+  right: 10px;
+  content: '';
+}
+
+.expert-status-positive {
+  color: #35cb5d;
+  margin-left: 1px;
+}
+
+.pr-rebalance-fund-container {
+  .MuiButtonBase-root {
+    border-radius: 6px;
+  }
+  .MuiIconButton-root {
+    margin-left: -12px !important;
+  }
+}
+.fund-select-checkbox {
+  .checkbox {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    margin-right: 16px;
+    margin-left: 25px !important;
+  }
+}
+// Rebalance Fund Item End
+
+///just fot check
+
+// dropdown in modal part fix
+// .common-dialog-dropdown-button {
+//   position: fixed;
+//   width: 100%;
+//   left: 0;
+//   bottom: 0;
+//   margin-bottom: 15px;
+// }
