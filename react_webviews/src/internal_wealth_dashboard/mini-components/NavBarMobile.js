@@ -9,9 +9,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { logout } from '../common/ApiCalls';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import toast from '../../common/ui/Toast';
+import { storageService } from '../../utils/validators';
 const allTabs = ['dashboard', 'analysis', 'holdings', 'recommendations', 'statements'];
 
 const NavBarMobile = (props) => {
+  const name = storageService().get('iwd-user-name') || '';
+  const email = storageService().get('iwd-user-email') || '';
+  const mobile = storageService().get('iwd-user-mobile') || '';
   const { match = {} } = props;
   const navigate = navigateFunc.bind(props);
   const [expanded, setExpanded] = useState(false);
@@ -30,6 +34,7 @@ const NavBarMobile = (props) => {
     setLoggingOut(false);
   };
 
+
   return (
     <div
       id="iwd-nav-mob"
@@ -45,7 +50,7 @@ const NavBarMobile = (props) => {
             <span id="iwd-nmhm-text">Menu</span>
           </Button>
           <div id="iwd-nmh-profile" onClick={() => setExpanded(true)}>
-            U
+            {name.charAt(0)}
           </div>
         </div> :
         <div id="iwd-nm-body">
@@ -72,19 +77,19 @@ const NavBarMobile = (props) => {
           )}
           <div id="iwd-nmb-divider" />
           <div id="iwd-nmb-profile">
-            <div id="iwd-nmp-user-name">Uttam Paswan</div>
-            <div id="iwd-nmp-user-icon">U</div>
+            <div id="iwd-nmp-user-name">{name}</div>
+            <div id="iwd-nmp-user-icon">{name.charAt(0)}</div>
             <div className="iwd-nmp-user-detail">
               <b>PAN: </b>
               CXIPP 4122 M
             </div>
             <div className="iwd-nmp-user-detail">
               <b>Email: </b>
-              uttam@fisdom.com
+              {email}
             </div>
             <div className="iwd-nmp-user-detail">
               <b>Mob.: </b>
-              +91-8800927468
+              {'  '}{mobile || '--'}
             </div>
           </div>
           <Button
@@ -96,7 +101,7 @@ const NavBarMobile = (props) => {
             }}
           >
             {loggingOut ?
-              <CircularProgress size={25} /> : 'Logout'
+              <CircularProgress size={25} color="white" /> : 'Logout'
             }
         </Button>
         </div>

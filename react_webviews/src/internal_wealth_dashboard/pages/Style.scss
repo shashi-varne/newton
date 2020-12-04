@@ -853,6 +853,7 @@ $background: #F9F9F9;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    align-content: baseline;
     height: 80%;
     overflow-y: auto;
     
@@ -972,7 +973,7 @@ $background: #F9F9F9;
     width: 33%;
     display: flex;
     align-items: center;
-    margin-top: 20px;
+    margin-bottom: 50px;
     main {
       margin-left: 20px;
     }
@@ -1283,6 +1284,7 @@ $background: #F9F9F9;
     }
     .iwd-analysis-amc {
       width: 100%;
+      margin-bottom: 40px;
     }
 
     .iwd-d-newsletter {
@@ -1445,7 +1447,7 @@ $background: #F9F9F9;
             .iwd-lc-title {
               margin-top: 10px;
               text-align: center;
-              width: 5ch;
+              width: 7ch;
             }
           }
         }

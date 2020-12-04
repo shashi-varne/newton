@@ -1,45 +1,16 @@
-// ---------------- Assets ----------------------
-import IcSecFinanceIcon from '../../assets/fisdom/ic_sec_finance.svg';
-import IcSecAutoMobileIcon from '../../assets/fisdom/ic_sec_automobile.svg';
-import IcSecChemicalsIcon from '../../assets/fisdom/ic_sec_chemicals.svg';
-import IcSecCommunicationIcon from '../../assets/fisdom/ic_sec_communication.svg';
-import IcSecConsDurableIcon from '../../assets/fisdom/ic_sec_cons_durable.svg';
-import IcSecConstructionIcon from '../../assets/fisdom/ic_sec_construction.svg';
-import IcSecEnergyIcon from '../../assets/fisdom/ic_sec_energy.svg';
-import IcSecFMCGIcon from '../../assets/fisdom/ic_sec_fmcg.svg';
-import IcSecHealthCare from '../../assets/fisdom/ic_sec_healthcare.svg';
-import IcSecServicesIcon from '../../assets/fisdom/ic_sec_services.svg';
-import IcSecTechnologyIcon from '../../assets/fisdom/ic_sec_technology.svg';
-// ----------------------------------------------
 import React, { useEffect, useState } from 'react';
 import PageHeader from '../mini-components/PageHeader';
 import { getConfig } from 'utils/functions';
 import Legends from '../mini-components/Legends';
 import toast from '../../common/ui/Toast';
-import {
-  fetchPortfolioAnalysis, fetchPortfolioAnalysisMock,
-} from '../common/ApiCalls';
+import { fetchPortfolioAnalysis } from '../common/ApiCalls';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdBubbleChart from '../mini-components/IwdBubbleChart';
 import IwdBarChart from '../mini-components/IwdBarChart';
 import { isEmpty } from '../../utils/validators';
 import IwdCard from '../mini-components/IwdCard';
 import ScrollTopBtn from '../mini-components/ScrollTopBtn';
-
-const topStocksIconMappings = {
-  'Financial Services': IcSecFinanceIcon,
-  Energy: IcSecEnergyIcon,
-  Technology: IcSecTechnologyIcon,
-  'Consumer Defensive': IcSecConsDurableIcon,
-  'Real Estate': IcSecConstructionIcon,
-  Utilities: IcSecServicesIcon,
-  'Consumer Cyclical': IcSecAutoMobileIcon,
-  Healthcare: IcSecHealthCare,
-  'Communication Services': IcSecCommunicationIcon,
-  'Basic Materials': IcSecFMCGIcon,
-  Others: IcSecFMCGIcon,
-};
-
+import { topStocksIconMappings } from '../constants';
 const isMobileView = getConfig().isMobileDevice;
 
 function Analysis() {
@@ -53,7 +24,7 @@ function Analysis() {
   const getPortfolio = async () => {
     try {
       setIsLoading(true);
-      const result = await fetchPortfolioAnalysisMock({
+      const result = await fetchPortfolioAnalysis({
         scheme_type: null,
         market_cap_alloc: true,
         sector_alloc: true,
@@ -289,7 +260,7 @@ function TopStocks({ topStocks }) {
               <div className="iwd-analysis-portfolio-stock" key={company}>
                 <picture>
                   <img
-                    src={topStocksIconMappings[heading] || IcSecFMCGIcon}
+                    src={topStocksIconMappings[heading]}
                     alt={heading}
                   />
                 </picture>

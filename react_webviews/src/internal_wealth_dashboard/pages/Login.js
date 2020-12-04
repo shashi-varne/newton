@@ -1,7 +1,6 @@
 import React, { memo, useState, useEffect } from 'react';
 import LoginFields from '../../common/responsive-components/LoginFields';
 import { navigate as navigateFunc } from '../common/commonFunctions';
-import { getConfig } from "utils/functions";
 import { WhiteButton } from '../common/Button';
 import IwdPhoneInput from '../common/IwdPhoneInput';
 import IwdOtpInput from '../common/IwdOtpInput';
@@ -13,39 +12,14 @@ import HelpPage from '../mini-components/Help';
 import ForgotPasswordPage from '../mini-components/ForgotPassword';
 // -------------------------------------
 
-import Api from '../../utils/api';
-import { isEmpty, storageService } from '../../utils/validators';
-
-const isMobileView = getConfig().isMobileDevice;
-
 const Login = (props) => {
   const [openHelpPage, toggleHelpPage] = useState(false);
   const [openForgotPwd, toggleForgotPwd] = useState(false);
   const navigate = navigateFunc.bind(props);
 
   const onLoginSuccess = async () => {
-    try {
-      const res = await Api.get('api/whoami');
-      if (isEmpty(res) || res.pfwstatus_code !== 200) {
-        navigate('login', props)
-      } else {
-        const { user } = res.pfwresponse.result;
-        const { email, name } = user
-        console.log(email, name)
-        console.log(user.mobile)
-        storageService().set('iwd-user-email', email);
-        storageService().set('iwd-user-name', name);
-        if (!user.mobile) {
-          storageService().set('iwd-user-mobile', '--')
-        } else {
-          storageService().set('iwd-user-mobile', user.mobile)
-        }
-        navigate('main/dashboard');
-      }     
-    } catch(err) {
-      navigate('login', props)
-    }
-  }
+    navigate('main/dashboard');
+  };
 
   return (
     <>
