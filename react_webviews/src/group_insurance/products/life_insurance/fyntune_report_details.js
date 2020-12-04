@@ -48,7 +48,7 @@ class FyntuneReportDetails extends Component {
                 
                 let final_status = fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status]
                 policy_data.final_status = final_status; 
-                let subtitle = policy_data.product_name.match(/\(([^)]+)\)/)[1];
+                let subtitle = policy_data.product_name ? policy_data.product_name.match(/\(([^)]+)\)/)[1] : '';
                 policy_data.subtitle = subtitle;
 
                 this.setState({
@@ -103,7 +103,7 @@ class FyntuneReportDetails extends Component {
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <h2 style={{margin: "0px 0px"}}>Sanchay Plus</h2>
-                            <p style={{margin: "5px 0px"}}>({this.state.policy_data.subtitle})</p>
+                            {this.state.policy_data.product_name && <p style={{margin: "5px 0px"}}>({this.state.policy_data.subtitle})</p> }
                         </div>
 
                         <div className="tc-right">

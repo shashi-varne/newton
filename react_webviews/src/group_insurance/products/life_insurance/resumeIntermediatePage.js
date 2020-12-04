@@ -77,10 +77,11 @@ class ResumeIntermediatePage extends Component {
             this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
             return;   
         }else{
+            let fyntune_ref_id = this.state.payment_data.lead.fyntune_ref_id;
             if(this.state.payment_data.lead.status === 'success'){
-                this.navigate(`/group-insurance/common/report`)
+                this.navigate(`/group-insurance/life-insurance/savings-plan/report-details/${fyntune_ref_id}`)
             }else if(this.state.payment_data.lead.status === "pending" && this.state.payment_data.lead.fyntune_status === "Underwriting Approval"){
-                this.navigate(`/group-insurance/common/report`)
+                this.navigate(`/group-insurance/life-insurance/savings-plan/report-details/${fyntune_ref_id}`)
              }else {
                 this.navigate(`/group-insurance/life-insurance/savings-plan/landing`);
              }
