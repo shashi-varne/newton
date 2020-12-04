@@ -104,23 +104,23 @@ class PerfiosStatus extends Component {
     let { perfios_state, bt_eligible, idfc_07_state } = this.state;
 
     if (perfios_state === "success") {
-      if (!bt_eligible && idfc_07_state === "success") {
-        this.submitApplication({}, "one");
-      }
+      // if (!bt_eligible && idfc_07_state === "success") {
+      //   this.submitApplication({}, "one");
+      // }
 
-      if (
-        bt_eligible &&
-        (idfc_07_state === "success" || idfc_07_state === "triggered")
-      ) {
+      // if (
+      //   bt_eligible &&
+      //   (idfc_07_state === "success" || idfc_07_state === "triggered")
+      // ) {
         let body = {
           idfc_loan_status: "bt_init",
         };
         this.updateApplication(body, "bt-info");
-      }
+      // }
 
-      if (!bt_eligible && idfc_07_state === "triggered") {
-        this.getPointSevenCallback();
-      }
+      // if (!bt_eligible && idfc_07_state === "triggered") {
+      //   this.getPointSevenCallback();
+      // }
     }
 
     if (perfios_state === "bypass") {

@@ -30,6 +30,13 @@ const gender_options = [
   },
 ];
 
+const genderMapper = {
+  "M": "Male",
+  "F": "Female",
+  "Male": "Male",
+  "Female": "Female"
+}
+
 class PersonalDetails extends Component {
   constructor(props) {
     super(props);
@@ -80,12 +87,12 @@ class PersonalDetails extends Component {
       middle_name: confirm_details && personal_info.middle_name,
       last_name: personal_info.last_name,
       dob: confirm_details && timeStampToDate(personal_info.dob || ""),
-      gender: capitalizeFirstLetter(personal_info.gender),
+      gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
       marital_status: (personal_info.marital_status || "").toUpperCase(),
       father_name: personal_info.father_name,
       mother_name: confirm_details && personal_info.mother_name,
       religion: (personal_info.religion || "").toUpperCase(),
-      email_id: personal_info.email_id,
+      email_id: (personal_info.email_id || "").toLowerCase(),
     };
 
     this.setState({
@@ -135,8 +142,9 @@ class PersonalDetails extends Component {
       "religion",
       "email_id",
     ];
-    if (this.state.cky_status) {
-      keys_to_check.push(...["middle_name", "dob", "mother_name"]);
+    
+    if (this.state.confirm_details) {
+      keys_to_check.push(...["dob", "mother_name"]);
     }
 
     this.formCheckUpdate(keys_to_check, form_data);
@@ -153,6 +161,7 @@ class PersonalDetails extends Component {
   };
 
   render() {
+    console.log(this.state.form_data)
     return (
       <Container
         showLoader={this.state.show_loader}

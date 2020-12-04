@@ -300,8 +300,8 @@ class UploadBank extends Component {
 
   handleClick = async () => {
     let { form_data } = this.state;
-    console.log(form_data)
-    let { bank_id, start_date, end_date } = this.state.form_data;
+
+    let { bank_name, start_date, end_date } = this.state.form_data;
     let keys_to_check = ["bank_name", "start_date", "end_date"];
 
     let keysMapper = {
@@ -336,13 +336,13 @@ class UploadBank extends Component {
         });
 
         const res = await Api.get(
-          `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_id}`
+          `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_name}`
         );
 
         const { result, status_code: status } = res.pfwresponse;
 
         if (result) {
-          // console.log(result);
+          console.log(result);
           this.navigate("perfios-status");
           // } else {
           // toast(result.error || result.message || "Something went wrong!");

@@ -66,7 +66,7 @@ class BtInformation extends Component {
     await this.updateApplication(body)
 
     if (this.state.idfc_07_state !== 'success') {
-      this.update("one", 'eligible-loan');
+      this.submitApplication({}, "one");
     }
   }
 

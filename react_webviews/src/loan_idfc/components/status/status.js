@@ -45,6 +45,22 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
+  "idfc_1.1_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
+  "idfc_1.7_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
   "idfc_1.1_accepted": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
@@ -53,7 +69,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
-  "salary reciept mode": {
+  "Salary receipt mode": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -182,6 +198,7 @@ class LoanStatus extends Component {
 
       this.updateApplication(body, "income-details");
     }
+    
     if (commonMapper.button_title === "START NEW APPLICATION") {
       let params = {
         create_new: true,

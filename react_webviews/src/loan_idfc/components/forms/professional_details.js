@@ -46,9 +46,9 @@ class ProfessionalDetails extends Component {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
-      salary_mode: capitalize(professional_info.salary_mode || ""),
+      salary_mode: (professional_info.salary_mode || "").toUpperCase(),
       constitution: professional_info.constitution,
-      organisation: professional_info.organisation,
+      organisation: (professional_info.organisation || "").toUpperCase(),
       department: professional_info.department,
       industry: professional_info.industry,
     };

@@ -7,7 +7,13 @@ export function goBackMap(path) {
       '/loan/idfc/journey': '/loan/idfc/home',
       '/loan/idfc/application-summary': '/loan/idfc/journey',
       '/loan/idfc/personal-details': '/loan/idfc/home',
-      '/loan/idfc/professional-details': '/loan/idfc/basic-details'
+      '/loan/idfc/basic-details': '/loan/idfc/home',
+      '/loan/idfc/professional-details': '/loan/idfc/basic-details',
+      '/loan/idfc/loan-requirement-details': '/loan/idfc/home',
+      '/loan/idfc/income-details': '/loan/idfc/home',
+      '/loan/idfc/upload-bank': '/loan/idfc/income-details',
+      '/loan/idfc/eligible-loan': '/loan/idfc/home',
+      '/loan/idfc/loan-eligible': '/loan/idfc/home',
     }
 
   return mapper[path] || false;
@@ -53,7 +59,8 @@ export const idfc_config = {
     address_details: 'journey',
     bt_info_screen: 'loan-bt-details',
     additional_details: 'upload-documents',
-    requirement_details_screen: 'loan-status'
+    requirement_details_screen: 'loan-status',
+    loan_eligible: 'additional-details'
   },
   landing_screen: {
     stepContentMapper: {
