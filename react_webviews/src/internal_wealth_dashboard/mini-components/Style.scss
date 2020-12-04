@@ -698,11 +698,46 @@ ul#iwd-bars {
     justify-content: space-between;
     margin-bottom: 30px;
 
+    // span {
+    //   // display: -webkit-box;
+    //   // -webkit-line-clamp: 3;
+    //   // -webkit-box-orient: vertical;
+    //   font-weight: 600;
+    //   position: relative;
+    //   font-size: 30px;
+    //   line-height: 40px;
+    //   max-height: calc(40px * 3);
+    //   overflow: hidden;
+    //   padding-right: 5px;
+    //   color: $dark;
+    // }
+
+    // span::before {
+    //   position: absolute;
+    //   content: "...";
+    //   bottom: 0;
+    //   right: 0;
+    // }
+
+    // span::after {
+    //   position: absolute;
+    //   content: "";
+    //   bottom: 0;
+    //   right: 0;
+    //   width: 5px;
+    //   height: 5px;
+    //   background: white;
+    // }
+
     span {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
       font-weight: 600;
       font-size: 30px;
       line-height: 40px;
-      color: $dark;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 
