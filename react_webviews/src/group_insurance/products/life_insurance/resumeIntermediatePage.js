@@ -105,8 +105,8 @@ class ResumeIntermediatePage extends Component {
                             />
                         </div>
                         <div className="resume-page-content">
-                            <p>You have not completed all the steps of the application process.</p>
-                            <p>You can complete the same by resuming your recent activity from 'Insurance Savings Plan' page.</p>
+                            <p>It seems you may not have completed the application process.</p>
+                            <p>You can do so by resuming your application from the ‘Insurance Savings Plan’ page should you see the ‘Resume’ button there.</p>
                         </div>
 
                 </div>
