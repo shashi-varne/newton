@@ -17,6 +17,7 @@ class AddPolicy extends Component {
     this.state = {
         checked: false,
         parent: this.props.parent,
+        type: getConfig().productName,
         show_loader: true,
         premium_details : {},
         productTitle : {},
@@ -85,8 +86,6 @@ class AddPolicy extends Component {
     this.setState({
         form_data : form_data
     })
-
-    // this.navigate('form', '' ,final_data )
   }
 
   handleClick2 = () => {
@@ -161,7 +160,7 @@ class AddPolicy extends Component {
               <div className="generic-page-title">
                <h2>Policy Found!</h2>
               </div>
-              <img className=""  src={require(`assets/ic_sip_mandate_attention.svg`)} alt="" />
+              <img className=""  src={require(`assets/${this.state.type}/icn_policy_found_f.svg`)} alt="" />
             </div>
             <div className="content-mid">
             We have found one policy with the following details:
@@ -190,33 +189,6 @@ class AddPolicy extends Component {
     );
   }
 
-
-  // renderResetDialog = () => {
-  //   return (
-  //     <Dialog
-  //       fullScreen={false}
-  //       open={this.state.openDialogReset || false}
-  //       onClose={this.handleClose}
-  //       aria-labelledby="responsive-dialog-title"
-  //     >
-  //       <DialogContent>
-  //         <DialogContentText>
-  //           By continuing, you will reset your application.
-  //         </DialogContentText>
-  //       </DialogContent>
-  //       <DialogActions>
-  //         <Button onClick={this.resetQuote} color="default">
-  //           CONTINUE
-  //         </Button>
-  //         <Button onClick={this.handleClose} color="default" autoFocus>
-  //           CANCEL
-  //         </Button>
-  //       </DialogActions>
-  //     </Dialog>
-  //   );
-  // }
-
-
   render() {
     return (
       <Container
@@ -227,21 +199,6 @@ class AddPolicy extends Component {
       buttonTitle={'CONTINUE'}
       onlyButton={true}
       handleClick={() => this.handleClick()}
-        // events={this.sendEvents('just_set_events')}
-        // // dualbuttonwithouticon={false}
-        // fullWidthButton={false}
-        // product_key={this.props.parent ? this.props.parent.state.product_key : ''}
-        // // onlyButton={false}
-        // showLoader={this.state.show_loader}
-        // // twoButtons={false}
-        // // buttonOneTitle="NO, I CAN'T CONFIRM"
-        // // buttonTwoTitle="YES I CONFIRM"
-        // classOverRideContainer="payment-success"
-        // title="Declaration"
-        // handleClick2={() => this.handleClick()}
-        // // handleClick={() => this.handleClick()}
-        // handleClickOne={() => this.handleClickback()}
-        // handleClickTwo={() => this.handleClick()}
       >
             <div className="InputField" style={{marginTop : '10px'}}>
             <div>

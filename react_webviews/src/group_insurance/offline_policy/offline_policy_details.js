@@ -316,7 +316,7 @@ class GroupHealthReportDetails extends Component {
                        {this.state.lead.cover_type || 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/icn_time_1.svg`)} alt="" />
+                                {/* <img src={require(`assets/${this.state.productName}/icn_time_1.svg`)} alt="" /> */}
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -375,7 +375,7 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="" />
+                            {/* <img src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="" /> */}
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -389,7 +389,7 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
+                            {/* <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" /> */}
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top"> 
@@ -404,7 +404,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.lead.dt_policy_start_date && 
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
+                            {/* <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" /> */}
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -420,7 +420,7 @@ class GroupHealthReportDetails extends Component {
                     {this.state.lead.dt_policy_end_date && 
                       <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                            {/* <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" /> */}
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">

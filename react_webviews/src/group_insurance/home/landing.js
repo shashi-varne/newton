@@ -439,7 +439,7 @@ class Landing extends Component {
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
            <div className='products' style={{ marginTop: '50px' }}>
            <div onClick={this.policymove}>
-           <img onClick={this.policymove} style={{ margin: '-15px 5px 15px 0' }} src={ require(`../../assets/offline_group.svg`)} alt="" />
+           <img onClick={this.policymove} style={{ margin: '-15px 5px 15px 0' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
