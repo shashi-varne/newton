@@ -47,7 +47,8 @@ class GroupHealthPlanAddressDetails extends Component {
         this.initialize();
     }
 
-    onload = () => {
+  
+    onload = async () => {
 
         if (this.props.edit) {
             this.setState({
@@ -112,6 +113,41 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         })
 
+        
+        if (this.state.provider === 'HDFCERGO' && form_data.pincode && form_data.pincode.length === 6 && permanent_address.city) {
+            let pincode = form_data.pincode;
+            let cityName = permanent_address.city
+            this.setState({
+                form_data: form_data,
+                isLoadingCity: true
+            })
+            try {
+                const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
+
+                this.setState({isLoadingCity: false});
+                if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
+                    form_data.state = res.pfwresponse.result.state;
+                    form_data.pincode_match = true;
+                    form_data['pincode' + '_error'] = '';
+                } else {
+                    form_data.state = '';
+                    form_data.pincode_match = false;
+                    form_data['pincode' + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
+                }
+
+            } catch (err) {
+                this.setState({
+                    show_loader: false
+                });
+                toast('Something went wrong');
+            }
+
+        } else {
+            form_data.state = '';
+        }
+        this.setState({
+            form_data: form_data
+        })
     }
 
     handleChange = name => event => {
