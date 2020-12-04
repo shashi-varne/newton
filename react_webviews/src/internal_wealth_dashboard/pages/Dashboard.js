@@ -229,11 +229,11 @@ const Dashboard = () => {
               </div>
             </IwdCard>
             <IwdCard
-              id="iwd-d-newsletter"
               headerText="Open source and non-custodial protocol enabling the creation of money markets"
               error={isEmpty(riskData) || riskError}
               errorText="Something went wrong! Please retry after some time or contact your wealth manager"
               isLoading={isLoadingRisk}
+              className="iwd-d-newsletter"
             >
               <>
                 <IconButton className="iwd-dn-btn">

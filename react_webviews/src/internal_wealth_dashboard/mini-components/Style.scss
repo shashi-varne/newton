@@ -5,6 +5,52 @@ $primary: rgb(79, 45, 167);
 $light-green:  rgb(154, 211, 204); //9AD3CC
 $card-padding-mob: 40px;
 
+.iwd-cursor__pointer {
+  cursor: pointer;
+}
+
+.iwd-d-newsletter {
+
+  align-self: flex-start;
+  background: $primary;
+  width: 40%;
+  height: auto;
+  padding: 34px 50px;
+  padding-right: 30px;
+  box-sizing: border-box;
+  border-bottom-right-radius: 70px;
+
+  .iwd-card-header {
+    color: white;
+    width: 85%;
+    float: left;
+  }
+
+  .iwd-dn-btn {
+    float: right;
+    border-radius: 50%;
+    height: 48px;
+  }
+
+  #iwd-dn-gist {
+    font-size: 15px;
+    line-height: 24px;
+    color: $light-grey;
+    margin-top: 47px;
+    clear: both;
+  }
+
+  #iwd-dn-issue {
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: $light-grey;
+    margin-top: 10px;
+  }
+}
+
 .iwd-dot-loader {
   width: auto;
   text-align: inherit;
@@ -59,11 +105,16 @@ $card-padding-mob: 40px;
   position: absolute;
   width: 100%;
   height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: $primary;
   z-index: 1000;
   padding: 50px 100px;
   box-sizing: border-box;
   color: white;
+  overflow-y: auto;
 
   h1 {
     font-size: 30px;
@@ -134,22 +185,24 @@ $card-padding-mob: 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 60%;
     }
 
     div > picture {
       margin-left: 30px;
       display: flex;
       align-items: center;
-      img {
-        display: block;
-        height: 100%;
-        align-self: start;
-      }
       small {
-        width: 172px;
         color: white;
         margin-left: 10px;
         font-size: 10px;
+        opacity: 0.6;
+      }
+    }
+
+    div > picture:nth-of-type(1), div > picture:nth-of-type(2) {
+      img {
+        width: 20px;
       }
     }
   }
@@ -780,7 +833,7 @@ ul#iwd-bars {
   transition-delay: 0.3s;
 }
 
-.iwd-transactions-table {
+table.iwd-transactions-table {
   thead {
     tr {
       background: linear-gradient(90deg, rgba($light-green, 0.06) 16.15%, rgba($light-green, 0) 100%);
@@ -810,7 +863,7 @@ ul#iwd-bars {
     }
   }
   td {
-    padding: 15px;
+    padding: 10px 15px;
     border-collapse: collapse;
     font-size: 13px;
     line-height: 21px;
@@ -824,11 +877,136 @@ ul#iwd-bars {
   td:nth-last-child(1) {
     padding-right: 60px;
   }
+  td:nth-last-child(-n+3) { // for last 3 columns
+    text-align: right;
+  }
+}
+
+//Filter Section
+.iwd-filter-section {
+  margin-bottom: 40px;
+  .iwd-filter-type {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: $dark;
+    margin-bottom: 30px;
+  }
+
+  .MuiIconButton-root {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+.iwd-filter-clear {
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #4f2da6;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.iwd-filter-head {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 27px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: $dark;
+}
+
+.iwd-filter-section:last-child {
+  margin-bottom: 0px;
+}
+
+.iwd-filter-head-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.iwd-disable-clear {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.iwd-chart-header {
+  font-size: 17px;
+}
+
+// Legends
+.iwd-legend-container {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  list-style: none;
+  background-color: inherit;
+
+  .iwd-legend-child {
+    width: 30%;
+
+    .iwd-lc-header {
+      display: flex;
+      align-items: center;
+
+      .iwd-lc-icon {
+        width: 8px;
+        height: 8px;
+        background: hsla(173, 59, 55, 1);
+      }
+
+      .iwd-lc-title {
+        color: hsla(173,59,55,1);
+        margin-left: 10px;
+        letter-spacing: 2px;
+        line-height: 18px;
+      }
+    }
+  
+    .iwd-lc-value {
+      color: $grey;
+      font-size: 30px;
+      line-height: 27px;
+      margin-top: 10px;
+      color: $grey;
+    }
+  }
 }
 
 @media only screen and (min-width: 300px) and (max-width: 1200px) {
   .shrink {
     clip-path: circle(0% at bottom);
+  }
+
+  .iwd-d-newsletter {
+    width: 100%;
+    padding: 30px 40px;
+
+    .iwd-card-header {
+      text-align: left;
+      width: 100%;
+      float: none;
+    }
+
+    .iwd-dn-btn {
+      display: none;
+    }
+
+    #iwd-dn-gist {
+      font-size: 13px;
+      line-height: 21px;
+      margin-top: 30px;
+    }
   }
 
   .iwd-common-page-footer {
@@ -862,6 +1040,8 @@ ul#iwd-bars {
     }
 
     #iwd-help-footer {
+      position: static;
+      width: 100%;
       flex-direction: column;
       align-items: flex-start;
 
@@ -872,6 +1052,7 @@ ul#iwd-bars {
       div {
         flex-direction: column;
         align-items: flex-start;
+        width: 100%;
 
         picture {
           margin-left: 0;
@@ -926,7 +1107,7 @@ ul#iwd-bars {
   #iwd-page-header {
     width: 100%;
     height: auto;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .radial-chart {
@@ -977,19 +1158,21 @@ ul#iwd-bars {
       .iwd-lc-title {
         color: hsla(173,59,55,1);
         margin-left: 10px;
+        text-transform: uppercase;
+        font-weight: 600;
       }
     }
   
     .iwd-lc-value {
-      color: $grey;
+      color:  $dark;
       font-size: 30px;
+      text-align: center;
     }
   }
 }
 
 
 @media only screen and (min-width: 300px) and (max-width: 800px) {
-
   .iwd-legend-container {
     margin: 0 auto;
     align-items: center;
@@ -1011,11 +1194,13 @@ ul#iwd-bars {
         .iwd-lc-title {
           color: hsla(173,59,55,1);
           margin-left: 0;
+          font-size: 11px;
           text-transform: uppercase;
         }
       }
     
       .iwd-lc-value {
+        font-size: 17px;
         text-align: center;
       }
     }
@@ -1043,11 +1228,17 @@ ul#iwd-bars {
       }
     }
 
+    .iwd-hc-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .iwd-hc-numbers {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      width: 70%;
+      width: 100%;
       height: 45%;
 
       .iwd-hcn-item {
@@ -1071,112 +1262,93 @@ ul#iwd-bars {
     }
 
     .iwd-hc-more {
-      bottom: 40px;
+      right: 25px;
+      bottom: 30px;
     }
   }
 }
 
-//Filter Section
-.iwd-filter-section {
-  margin-bottom: 40px;
-  .iwd-filter-type {
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: $dark;
-    margin-bottom: 20px;
-  }
-
-  .MuiIconButton-root {
-    width: 14px !important;
-    height: 14px !important;
-  }
-}
-
-.iwd-filter-clear {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: 2px;
-  text-align: left;
-  color: #4f2da6;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-right: 20px;
-}
-.iwd-filter-head {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 27px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: $dark;
-}
-
-.iwd-filter-section:last-child {
-  margin-bottom: 0px;
-}
-
-.iwd-filter-head-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px;
-  width: 100%;
-}
 
 @media only screen and (max-width: 450px) {
-  .iwd-filter-mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  .iwd-filter-mobile {
     overflow-y: auto;
-    z-index: 10000;
     background: white;
-  }
-  .iwd-filter-footer {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    .MuiButtonBase-root {
-      border-radius: 6px;
-      background-color: #4f2da6;
+    margin: 0 !important;
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    
+    .iwd-filter-mobile-container {
+      position: relative;
+      height: 100%;
+      padding: 40px; 
     }
-  }
 
-  .iwd-filter-mobile-section {
-    margin-top: 40px;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    //padding: $card-padding-mobile;
-    .iwd-filter-head-container {
-      justify-content: center;
-      .iwd-filter-head {
-        font-size: 17px;
-        font-weight: 700;
-        line-height: 27px;
-        letter-spacing: 0em;
+    .iwd-filter-footer {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: auto;
+
+      .MuiButtonBase-root {
+        border-radius: 6px;
+        background-color: #4f2da6;
+        height: 50px;
+        padding: 13px 46px;
+        box-sizing: border-box;
+
+        .MuiButton-label {
+          font-weight: bold;
+          font-size: 15px;
+          line-height: 24px;
+          color: white;
+        }
       }
     }
-    .MuiFormGroup-root {
-      flex-direction: row;
-    }
-    .MuiFormGroup-root > label {
-      flex: 0 50%;
+
+    .iwd-filter-mobile-section {
+      margin-top: 40px;
+      height: 95%;
+      display: flex;
+      flex-direction: column;
+      //padding: $card-padding-mobile;
+
+      .iwd-filter-head-container {
+        justify-content: center;
+        margin-top: 40px;
+
+        .iwd-filter-head {
+          font-size: 17px;
+          font-weight: 700;
+          line-height: 27px;
+          letter-spacing: 0em;
+        }
+      }
+
+      .iwd-filter-footer {
+        justify-content: space-evenly;
+        align-items: center;
+        width: 100%;
+
+        .iwd-filter-clear {
+          font-size: 15px;
+          line-height: 24px;
+          font-weight: normal;
+          letter-spacing: unset;
+          text-align: center;
+          margin-right: 0;
+          width: 40%;
+        }
+      }
+
+      .MuiFormGroup-root {
+        flex-direction: row;
+      }
+
+      .MuiFormGroup-root > label {
+        flex: 0 50%;
+      }
     }
   }
-}
-
-.iwd-disable-clear {
-  opacity: 0.2;
-  cursor: not-allowed;
 }

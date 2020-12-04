@@ -27,6 +27,7 @@ const IwdProfile = (props) => {
 
   const name = storageService().get('iwd-user-name') || '';
   const email = storageService().get('iwd-user-email') || '';
+  const mobile = storageService().get('iwd-user-mobile') || '';
 
   if (!name || !email) {
     navigate('login');
@@ -53,8 +54,8 @@ const IwdProfile = (props) => {
             {email}
           </div>
           <div className="iwd-profile-detail">
-            <b>Mob.: </b>
-            +91-8800927468
+            <b>Mob.:</b>
+    {'  '}{mobile}
           </div>
           <div id="iwd-profile-divider"></div>
           <Button

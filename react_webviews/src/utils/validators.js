@@ -893,6 +893,7 @@ export function isEmpty(value) {
 }
 
 export function nonRoundingToFixed(val, decimalPlaces) {
+  if (!val) return '';
   return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }
 

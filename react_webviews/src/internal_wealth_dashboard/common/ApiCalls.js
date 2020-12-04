@@ -440,6 +440,8 @@ const analysisPageApiMockSuccess = {
         '1-5': 20,
         '5-10': 20,
         '10-20': 10,
+        '20-30': 10,
+        '30-40': 20,
       },
       sector_alloc: {
         Healthcare: 5.81,
@@ -455,9 +457,9 @@ const analysisPageApiMockSuccess = {
         'Consumer Defensive': 2.69,
       },
       market_cap_alloc: {
-        small_cap_alloc: 4.62,
-        mid_cap_alloc: 19.77,
-        large_cap_alloc: 75.61,
+        'small cap': 4.62,
+        'mid cap': 19.77,
+        'large cap': 75.61,
       },
       top_amcs: {
         equity: [
@@ -481,6 +483,8 @@ const analysisPageApiMockSuccess = {
         AA: 18.7,
         A: 18.17,
         Others: 51.1,
+        'AAAA+': 18.17,
+        'Others++': 51.1,
       },
       top_holdings: {
         equity: [
@@ -536,6 +540,38 @@ const analysisPageApiMockSuccess = {
           },
         ],
         debt: [
+          {
+            instrument_name: 'HDFC Ltd.',
+            share: 51.1,
+          },
+          {
+            instrument_name: 'Muthoot Finance Limited',
+            share: 18.7,
+          },
+          {
+            instrument_name: 'Punjab National Bank',
+            share: 18.17,
+          },
+          {
+            instrument_name: '182 DTB 12112020',
+            share: 12.03,
+          },
+          {
+            instrument_name: 'HDFC Ltd.',
+            share: 51.1,
+          },
+          {
+            instrument_name: 'Muthoot Finance Limited',
+            share: 18.7,
+          },
+          {
+            instrument_name: 'Punjab National Bank',
+            share: 18.17,
+          },
+          {
+            instrument_name: '182 DTB 12112020',
+            share: 12.03,
+          },
           {
             instrument_name: 'HDFC Ltd.',
             share: 51.1,

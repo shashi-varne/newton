@@ -16,12 +16,10 @@ const HoldingCard = ({
   mf: mf_detail = {},
   invested_since,
   scheme_type,
-  current_earnings: current_val = {},
+  current_earnings: { amount: current_val = 0, percent: xirr = 0 },
   current_invested: invested_val = 0,
-  xirr,
   ...props
 }) => {
-  const navigate = navigateFunc.bind(props);
   const [openDetail, setOpenDetail] = useState(false);
   const {
     amc_logo_big = '',
@@ -48,7 +46,7 @@ const HoldingCard = ({
             name,
             invested_since,
             scheme_type,
-            current_val: current_val.amount,
+            current_val,
             invested_val,
             xirr,
             amcLogo: amc_logo_big,
@@ -68,7 +66,7 @@ const HoldingCard = ({
       </div>
       <div className="iwd-hc-numbers">
         <div className="iwd-hcn-item">
-          <div className="iwd-hcni-value">{numDifferentiationInr(current_val.amount)}</div>
+          <div className="iwd-hcni-value">{numDifferentiationInr(current_val)}</div>
           <div className="iwd-hcni-label">Current</div>
         </div>
         <div className="iwd-hcn-item-divider"></div>
@@ -79,7 +77,7 @@ const HoldingCard = ({
         <div className="iwd-hcn-item">
           <img src={true ? positive : negative} alt="" />
           <div>
-            <div className="iwd-hcni-value">{xirr}%</div>
+            <div className="iwd-hcni-value">{(xirr ? xirr + '%' : '--')}</div>
             <div className="iwd-hcni-label">XIRR</div>
           </div>
         </div>
@@ -91,7 +89,7 @@ const HoldingCard = ({
         onClick={() => setOpenDetail(true)}
       >
         <span>More details</span>
-        <img src={nextArrow} alt="" style={{ marginLeft: '20px' }} />
+        <img src={nextArrow} alt="" style={{ marginLeft: '15px' }} />
       </Button>
     </div>
   );
