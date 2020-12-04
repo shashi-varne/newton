@@ -1,6 +1,6 @@
 import React from 'react' 
 
-function Legends({ data = {}, columns = 2, classes = {}, percentage = true }) {
+function Legends({ data = {}, columns = 2, classes = {}, percentage = true, round = 0 }) {
   const {
     container: containerClass,
     child: childClass,
@@ -26,7 +26,7 @@ function Legends({ data = {}, columns = 2, classes = {}, percentage = true }) {
             ></div>
             <div className={`iwd-lc-title ${labelClass}`}>{key}</div>
           </header>
-          <div className={`iwd-lc-value ${valueClass}`}>{Math.round(share, 0)}%</div>
+        <div className={`iwd-lc-value ${valueClass}`}>{Math.round(share, round)}{percentage ? '%': ''}</div>
         </li>
       ))}
     </ul>

@@ -17,7 +17,7 @@ import { getConfig } from 'utils/functions';
 import Legends from '../mini-components/Legends';
 import toast from '../../common/ui/Toast';
 import {
-  fetchPortfolioAnalysis,
+  fetchPortfolioAnalysis, fetchPortfolioAnalysisMock,
 } from '../common/ApiCalls';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdBubbleChart from '../mini-components/IwdBubbleChart';
@@ -53,7 +53,7 @@ function Analysis() {
   const getPortfolio = async () => {
     try {
       setIsLoading(true);
-      const result = await fetchPortfolioAnalysis({
+      const result = await fetchPortfolioAnalysisMock({
         scheme_type: null,
         market_cap_alloc: true,
         sector_alloc: true,

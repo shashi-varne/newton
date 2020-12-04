@@ -733,6 +733,8 @@ $background: #F9F9F9;
             display: inline-block;
             font-size: 15px;
             color: $grey;
+            line-height: 27px;
+            font-weight: 500;
           }
 
           .iwd-sali-label {
@@ -1373,11 +1375,14 @@ $background: #F9F9F9;
           max-height: none;
 
           .iwd-sal-item {
+            display: flex;
+            align-items: center;
             padding: 14px;
 
             span {
               font-size: 13px;
               line-height: 21px;
+              font-weight: normal;
             }
 
             .iwd-sali-label {
@@ -1385,6 +1390,7 @@ $background: #F9F9F9;
             }
 
             .iwd-sali-value {
+              margin-left: 10px;
               color: $dark;
             }
           }
@@ -1422,7 +1428,7 @@ $background: #F9F9F9;
     #iwd-market-alloc {
       .iwd-agl-content {
         .iwd-aglc-legend {
-          flex: 1 0 30%;
+          flex: 0 0 30%;
           flex-direction: row;
   
           .iwd-aglc-legend-child {
@@ -1430,6 +1436,16 @@ $background: #F9F9F9;
   
             .iwd-lc-value {
               margin-left: 0;
+            }
+
+            .iwd-lc-icon {
+              margin: 0 auto;
+            }
+
+            .iwd-lc-title {
+              margin-top: 10px;
+              text-align: center;
+              width: 5ch;
             }
           }
         }

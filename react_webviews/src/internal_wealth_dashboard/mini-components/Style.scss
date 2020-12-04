@@ -933,12 +933,17 @@ table.iwd-transactions-table {
       .iwd-lc-title {
         color: hsla(173,59,55,1);
         margin-left: 10px;
+        letter-spacing: 2px;
+        line-height: 18px;
       }
     }
   
     .iwd-lc-value {
       color: $grey;
       font-size: 30px;
+      line-height: 27px;
+      margin-top: 10px;
+      color: $grey;
     }
   }
 }
@@ -1186,6 +1191,12 @@ table.iwd-transactions-table {
         top: 20px;
         right: 20px;
       }
+    }
+
+    .iwd-hc-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .iwd-hc-numbers {
