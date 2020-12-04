@@ -51,10 +51,9 @@ class FyntuneLanding extends Component {
       this.setState({
         show_loader: false
       })
+      var resultData = res.pfwresponse.result;
 
       if (res.pfwresponse.status_code === 200) {
-      
-      var resultData = res.pfwresponse.result;
       
       if(resultData.resume_present){
         let fyntuneRefId = resultData.lead.fyntune_ref_id;
