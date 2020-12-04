@@ -48,6 +48,15 @@ class Report extends Component {
         id: policy.lead_id,
         premium: policy.total_amount
       };
+    }else if( provider === 'FYNTUNE'){
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title,
+        top_title: 'Life Insurance',
+        key: 'FYNTUNE',
+        id: policy.fyntune_ref_id, 
+        premium: policy.total_amount
+      };
     } else if (provider === 'RELIGARE') {
       obj = {
         ...obj,
@@ -123,7 +132,7 @@ class Report extends Component {
         pathname = 'intro';
       }
 
-    }
+    } 
 
     let fullPath = '/group-insurance/term/' + pathname;
 
@@ -222,7 +231,9 @@ class Report extends Component {
       }
     } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
-    } else {
+    } else if(key === 'FYNTUNE'){
+      path =`/group-insurance/life-insurance/savings-plan/report-details/${policy.id}`;
+    }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
