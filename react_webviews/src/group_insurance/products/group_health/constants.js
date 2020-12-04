@@ -393,10 +393,10 @@ export const religare = {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
             },
-            {
-                'name': 'WIFE',
-                'value': 'WIFE'
-            },
+            // {
+            //     'name': 'WIFE',
+            //     'value': 'WIFE'
+            // },
             {
                 'name': 'HUSBAND',
                 'value': 'HUSBAND'
