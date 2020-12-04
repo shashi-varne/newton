@@ -64,11 +64,11 @@ class LifeInsuranceEntry extends Component {
     }
     
     if (data.key === 'savings plan') {
-      // if(!getConfig().Web && !isFeatureEnabled(getConfig(), 'open_inapp_tab')){
-        // this.navigate('/group-insurance/life-insurance/app-update')
-      // }else{
+      if(!getConfig().Web && !isFeatureEnabled(getConfig(), 'open_inapp_tab')){
+        this.navigate('/group-insurance/life-insurance/app-update')
+      }else{
         this.navigate('/group-insurance/life-insurance/savings-plan/landing');
-      // }
+      }
     } else {
       let fullPath = data.key + '/landing';
       this.navigate('/group-insurance/life-insurance/' + fullPath);
