@@ -48,10 +48,8 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
     if (!isEmpty(clearCheck)) {
       storageService().setObject(filter_key, filterState);
       handleFilterData(filterState);
-      clickHandler();
-    } else {
-      toast('Please select one of the filter');
     }
+    clickHandler();
   };
   const clearFilters = () => {
     if (!isEmpty(clearCheck)) {
@@ -106,8 +104,8 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   );
 
   return (
-    <Dialog fullScreen={true} classes={{ paper: 'iwd-filter-mobile'}} open={true}>
-      <div className="iwd-filter-mobile-container">
+    <Dialog fullScreen={true} classes={{ paper: 'iwd-filter-mobile' }} open={true}>
+      <div className='iwd-filter-mobile-container'>
         <PageCloseBtn clickHandler={clickHandler} />
         <div className='iwd-filter-mobile-section'>
           <section className='iwd-filter-head-container'>

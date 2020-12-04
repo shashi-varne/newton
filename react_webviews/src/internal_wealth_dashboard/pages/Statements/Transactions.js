@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import FilterDesktop from '../../mini-components/FilterDesktop';
 import FilterMobile from '../../mini-components/FilterMobile';
-import { getTransactions, hitNextPage, fetchPortfolioNames } from '../../common/ApiCalls';
+import {
+  getTransactions,
+  hitNextPage,
+  fetchPortfolioNames,
+  downloadTransactionReport,
+} from '../../common/ApiCalls';
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
 import FSTable from 'common/responsive-components/FSTable';
 import { transactionsHeaderMap } from '../../constants';
@@ -16,7 +21,8 @@ import AutoSuggestSearch from '../../mini-components/AutoSuggestSearch';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-transactionsHeaderMap.splice(1, 0, {
+const transactionMapper = [...transactionsHeaderMap];
+transactionMapper.splice(1, 0, {
   label: 'Fund Name',
   accessor: 'mf_name',
 });
@@ -30,6 +36,7 @@ const Transactions = () => {
   const [fundNames, setFundNames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pageMap, setPageMap] = useState([null, null]);
+  const [hasError, setHasError] = useState(false);
   const isMobileView = getConfig().isMobileDevice;
 
   const pushToPageMap = (url) => {
@@ -39,6 +46,12 @@ const Transactions = () => {
 
   useEffect(() => {
     fetch_fund_names();
+    const filterData = storageService().getObject(filter_key);
+    if (filterData) {
+      get_transactions(filterData);
+    } else {
+      get_transactions();
+    }
   }, []);
 
   useEffect(() => {
@@ -62,10 +75,12 @@ const Transactions = () => {
         const urlToHit = pageMap[activePage];
         response = await hitNextPage(urlToHit);
       }
+
       setTransactions(response.transactions);
     } catch (err) {
       toast(err);
       console.log(err);
+      setHasError(true);
     }
     setIsLoading(false);
   };
@@ -85,13 +100,13 @@ const Transactions = () => {
   };
 
   const handleFilterData = (val) => {
+    setPageMap([null, null]); // reset pagination everytime filter is changed
     setFilterVal({ ...filterVal, ...val });
   };
 
   const handleDesktopFilterData = debounce(
     (val) => {
       handleFilterData(val);
-      //setFilterVal({ ...filterVal, ...val });
     },
     2000,
     { trailing: true }
@@ -99,6 +114,20 @@ const Transactions = () => {
 
   const clickHandler = () => {
     isOpen(false);
+  };
+
+  const downloadTransactions = async () => {
+    if (transactions?.length > 0) {
+      try {
+        const filterData = storageService().getObject(filter_key);
+        await downloadTransactionReport('pdf', filterData);
+      } catch (err) {
+        toast(err);
+        console.log(err);
+      }
+    } else {
+      toast('No transaction to download');
+    }
   };
 
   return (
@@ -117,37 +146,37 @@ const Transactions = () => {
           handleFilterData={handleDesktopFilterData}
         />
       )}
-      {!open && (
+      {!open && !hasError && (
         <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
           <img src={filter_sign} alt='filter' />
         </div>
       )}
+
       <div className='iwd-transaction-container'>
         <section className='iwd-transaction-search-container'>
           <div className='iwd-transaction-search'>
             {fundNames && (
               <AutoSuggestSearch
-                placeholder='Search for a transaction'
+                placeholder='Which fund are you looking for?'
                 fundNames={fundNames}
                 handleFilterData={handleFilterData}
                 filter_key={filter_key}
               />
             )}
           </div>
-
           <div className='iwd-transaction-date'>
-            <div>
-              <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
-            </div>
+            <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
           </div>
         </section>
         <section className='iwd-card iwd-transaction-table-container'>
           <div className='iwd-transaction-header'>
             <div className='iwd-transaction-title'>Transactions</div>
 
-            <div className='iwd-transaction-download-report'>Download Report</div>
+            <div className='iwd-transaction-download-report' onClick={downloadTransactions}>
+              Download Report
+            </div>
 
-            <div className='iwd-trasaction-download-icon'>
+            <div className='iwd-trasaction-download-icon' onClick={downloadTransactions}>
               <img alt='download' src={download_icon} />
             </div>
           </div>
@@ -157,7 +186,7 @@ const Transactions = () => {
                 className='iwd-transactions-table iwd-statement-transaction-table'
                 serializeData
                 serialOffset={(activePage - 1) * 10}
-                headersMap={transactionsHeaderMap}
+                headersMap={transactionMapper}
                 data={transactions}
               />
             ) : (
@@ -167,7 +196,10 @@ const Transactions = () => {
         </section>
         {!isLoading && (
           <div className='iwd-transaction-pagination'>
-            <Pagination first prev next
+            <Pagination
+              first
+              prev
+              next
               pages={pageMap.length - 1}
               activePage={activePage}
               onSelect={onPageSelect}

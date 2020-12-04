@@ -28,7 +28,7 @@ const DateRangeSelector = ({ filter_key, handleFilterData }) => {
     handleFilterData(filterData);
   };
   return (
-    <div>
+    <div className='iwd-date-range-picker'>
       <DateRangePicker
         appearance='subtle'
         placement='bottomEnd'

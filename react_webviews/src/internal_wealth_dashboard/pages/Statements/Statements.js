@@ -19,14 +19,14 @@ const Statements = () => {
       component: <Transactions />,
     },
     'capital gain tax': {
-      component: <CapitalGainTax name='Capital gain tax' />,
+      component: <CapitalGainTax />,
     },
     'elss report': {
-      component: <Elss name='ELSS report' />,
+      component: <Elss />,
     },
   };
   return (
-    <div className='iwd-page'>
+    <div className='iwd-page iwd-statements'>
       <PageHeader height='auto' hideProfile={isMobileView}>
         <HeaderNavBar
           title='Statements'

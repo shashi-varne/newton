@@ -1248,7 +1248,8 @@ $background: #f9f9f9;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-left: -15px;
+  height: 80vh;
+  // margin-left: -15px;
 
 }
 
@@ -1524,6 +1525,7 @@ $background: #f9f9f9;
   flex-direction: column;
   min-height: 100%;
   height: 100%;
+  width: 100%;
   .iwd-statement-title {
     font-family: Poppins;
     font-size: 17px;
@@ -1559,11 +1561,12 @@ $background: #f9f9f9;
     .iwd-transaction-search-container {
       display: flex;
       justify-content: space-between;
+      
       .iwd-transaction-search {
         flex: 0.6;
         height: 40px;
         border-radius: 10px;
-        text-align: center;
+        //text-align: center;
       }
       .iwd-transaction-date {
         text-align: center;
@@ -1573,6 +1576,11 @@ $background: #f9f9f9;
         border-radius: 10px;
         display: flex;
         justify-content: flex-end;
+
+        .rs-picker-toolbar-option {
+          border: 1px solid $primary !important;
+          background-color: red;
+        }
       }
     }
 
@@ -1581,12 +1589,14 @@ $background: #f9f9f9;
       position: relative;
       margin-bottom: 20px;
       padding: 30px 50px 10px 50px;
-      min-height: calc(100vh - 42vh);
+      min-height: 65vh;
+
       .iwd-transaction-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
+
         .iwd-transaction-title {
           font-family: Poppins;
           font-size: 17px;
@@ -1596,6 +1606,7 @@ $background: #f9f9f9;
           letter-spacing: 0em;
           text-align: left;
         }
+
         .iwd-transaction-download-report {
           font-family: Poppins;
           font-size: 13px;
@@ -1613,14 +1624,17 @@ $background: #f9f9f9;
           cursor: pointer;
           transition: all 350ms ease-in-out;
         }
+
         .iwd-transaction-download-report:hover {
-          background-color: $primary;
-          color: white;
+          background-color: $primary !important;
+          color: white !important;
         }
+
         .iwd-trasaction-download-icon {
           display: none;
         }
       }
+
       .iwd-transaction-table-data {
         height: 100%;
         overflow: auto;
@@ -1628,6 +1642,7 @@ $background: #f9f9f9;
         margin-right: -50px;
       }
     }
+
     .iwd-transaction-pagination {
       display: flex;
       justify-content: center;
@@ -1686,7 +1701,53 @@ $background: #f9f9f9;
   }
 }
 
+.iwd-table-type-container {
+  display: flex;
+  .iwd-table-type {
+    font-family: Poppins;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    margin-left: 5px;
+  }
+}
+
 @media only screen and (max-width: 450px) {
+  .iwd-statements-container {
+    align-items: flex-start;
+    
+    .iwd-transaction-pagination {
+      margin-bottom: 2.5em;
+    }
+
+    // Statements Page
+
+    .iwd-transaction-container {
+      height: 75vh;
+    }
+    .iwd-transaction-container .iwd-transaction-search-container .iwd-transaction-date {
+      display: none;
+    }
+
+    .iwd-transaction-container .iwd-transaction-table-container .iwd-transaction-header {
+      .iwd-transaction-download-report {
+        display: none;
+      }
+
+      .iwd-trasaction-download-icon {
+        display: block;
+        width: 60px;
+        height: 26px;
+        img {
+          width: 100%;
+        }
+      }
+    }
+
+  }
+
   .iwd-filter-desktop {
     display: none;
   }
@@ -1706,43 +1767,9 @@ $background: #f9f9f9;
       display: none;
     }
   }
+
   .iwd-statement-report-container .iwd-statement-reports {
     margin-left: 0px;
     justify-content: center;
-  }
-
-  // Statements Page
-
-  .iwd-transaction-container {
-    margin-left: -20px;
-    margin-right: -20px;
-    height: 70vh;
-    //height: auto;
-    padding-bottom: 50px;
-    .iwd-transaction-table-container {
-      border-radius: 0px;
-    }
-    .iwd-transaction-search-container {
-      margin-left: 20px;
-      margin-right: 20px;
-    }
-  }
-  .iwd-transaction-container .iwd-transaction-search-container .iwd-transaction-date {
-    display: none;
-  }
-
-  .iwd-transaction-container .iwd-transaction-table-container .iwd-transaction-header {
-    .iwd-transaction-download-report {
-      display: none;
-    }
-
-    .iwd-trasaction-download-icon {
-      display: block;
-      width: 60px;
-      height: 26px;
-      img {
-        width: 100%;
-      }
-    }
   }
 }
