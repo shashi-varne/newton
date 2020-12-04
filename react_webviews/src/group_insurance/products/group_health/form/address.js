@@ -124,7 +124,7 @@ class GroupHealthPlanAddressDetails extends Component {
         var form_data = this.state.form_data || {};
 
         if(name.includes('addr_line1') || name.includes('addr_line2')){
-            value = event.target ? event.target.value.substr(0, 60) : event;
+            value = event.target ? event.target.value.substr(0, 270) : event;
         }
 
         if(this.state.provider === 'HDFCERGO' && (name.includes('addr_line1') || name.includes('addr_line2'))){
