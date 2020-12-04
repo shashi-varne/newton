@@ -69,8 +69,8 @@ const journeyMapper2 = {
     index: "2",
     next_state: "loan-requirement-details"
   },
-  // "offer_accepted": {
-  "idfc_1.1_failed": {
+  "offer_accepted": {
+  // "idfc_1.1_failed": {
     index: "3",
     next_state: "additional-details"
   },
@@ -156,7 +156,7 @@ class JourneyMap extends Component {
             "Provide your office address and upload documents to get your loan sanctioned.",
           status: index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",
-          cta: idfc_loan_status === "idfc_1.1_failed" ? 'START' : index === "3" ? "RESUME" : index > "3" && "SUMMARY"
+          cta: idfc_loan_status === "offer_accepted" ? 'START' : index === "3" ? "RESUME" : index > "3" && "SUMMARY"
         },
         {
           step: "5",
