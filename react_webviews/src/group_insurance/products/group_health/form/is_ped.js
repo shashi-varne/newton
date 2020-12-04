@@ -310,9 +310,7 @@ class GroupHealthPlanIsPed extends Component {
 
                     {this.state.account_type !== 'self' &&
                         this.state.form_data.is_ped === 'YES' &&
-                        <div>
-
-
+                        <div style={{marginBottom: this.state.member_base.length >= 5 ? '50px': ''}}>
                             <div className="plus-minus-input-label" style={{fontSize: '13px'}}>
                                 Who has pre-existing disease?
                             </div>

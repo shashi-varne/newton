@@ -160,7 +160,7 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
+        let leftTitle, leftSubtitle, sum_assured, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
 
         if (this.state.get_lead) {
             
@@ -170,7 +170,7 @@ export async function initialize() {
             tenure = lead.tenure;
             base_premium = lead.base_premium;
             total_amount =  lead.total_premium;
-            
+            individual_sum_insured = lead.individual_sum_insured;
             total_discount = lead.total_discount;
             gst = lead.gst;
             net_premium = lead.total_premium - lead.gst;
@@ -223,7 +223,7 @@ export async function initialize() {
             content2: [
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
             ],
-            sum_assured: sum_assured,
+            sum_assured: individual_sum_insured,
             tenure: tenure
         }
         if(provider === 'RELIGARE') {

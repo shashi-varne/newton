@@ -72,6 +72,7 @@ class GroupHealthReportDetails extends Component {
                 let member_details = {};
 
                 let policy_data = resultData.policy || {};
+                let common_data = resultData.common;
                 let application_details = resultData.application_details;
                 
                 let dt_created = new Date(policy_data.dt_created);
@@ -109,6 +110,7 @@ class GroupHealthReportDetails extends Component {
 
                 this.setState({
                     resultData: resultData,
+                    common_data: common_data,
                     extra_data: resultData.plan_details,
                     policy_data: policy_data,
                     quote_info: resultData.plan_details,
@@ -195,13 +197,13 @@ class GroupHealthReportDetails extends Component {
 
             let data_mapper = {
                 'whats_included': {
-                    'header_title': "What's included?",
+                    'header_title': "What is covered?",
                     'header_subtitle': 'These are some of the benefits that are covered under this policy',
                     'steps': this.state.extra_data.whats_included,
                     'pathname': '/gold/common/render-benefits'
                 },
                 'whats_not_included': {
-                    'header_title': "What's not included?",
+                    'header_title': "What is not covered?",
                     'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
                     'steps': this.state.extra_data.whats_not_included,
                     'pathname': '/gold/common/render-benefits'
@@ -217,7 +219,8 @@ class GroupHealthReportDetails extends Component {
     
             let renderData = {
                 'header_title': mapper_data.header_title,
-                'header_subtitle': `${this.state.provider === 'STAR'? this.state.providerData.title2 : this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO" ? this.state.plan_selected.plan_title: this.state.provider === 'STAR'? this.state.providerConfig.subtitle:''}`,
+                'header_subtitle': mapper_data.header_subtitle || `${this.state.provider === 'STAR'? this.state.providerData.title2 : this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO" ? this.state.plan_selected.plan_title: this.state.provider === 'STAR'? this.state.providerConfig.subtitle:''}`,
+                'bottom_title': '*For detailed list, please refer policy prospectus',
                 'steps': {
                     'options': mapper_data.steps
                 },
@@ -503,7 +506,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                    {this.state.policy_data.status && this.state.policy_data.status !== 'rejected' &&
+                    {this.state.policy_data.status && this.state.policy_data.status === 'policy_issued' &&
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
@@ -568,7 +571,7 @@ class GroupHealthReportDetails extends Component {
                             }}>
                                 Plan Details
                             </div>
-                            {this.state.policy_data && this.state.policy_data.status !== 'rejected' &&
+                            {this.state.policy_data && this.state.policy_data.status === 'policy_issued' &&
                                 <div className="flex">
                                     <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
                                         |
@@ -617,9 +620,9 @@ class GroupHealthReportDetails extends Component {
                                 </div>
                             </div>
 
-                            <div className="common-how-steps" style={{ border: 'none', marginTop: 0, marginBottom: 0 }}>
+                            <div className="common-how-steps" style={{ border: 'none', marginTop: '-45px', marginBottom: 0 }}>
                                 <div className="top-tile">
-                                    <div className="top-title">
+                                    <div className="top-title" style={{marginBottom: '-10px'}}>
                                         Waiting period
                             </div>
                                 </div>
@@ -629,6 +632,24 @@ class GroupHealthReportDetails extends Component {
 
                             </div>
 
+                            <div className="accident-plan-read" style={{ padding: 0 }}>
+                        
+                           <div className="accident-plan-read-text">
+                             *For detailed list of all terms and conditions, please refer
+                             <span
+                               style={{ color: getConfig().primary }}
+                               onClick={() =>
+                                 this.openInBrowser(
+                                   this.state.common_data.policy_prospectus,
+                                   "read_document"
+                                 )
+                               }
+                             >
+                               &nbsp;policy prospectus
+                             </span>
+                           </div>
+                         </div>
+
                         </div>}
 
                     <div className="bototm-design">
@@ -636,12 +657,12 @@ class GroupHealthReportDetails extends Component {
                             <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
                                 <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
                                     alt="" />
-                                <div className="bd-content">What's included?</div>
+                                <div className="bd-content">What is covered?</div>
                             </div>}
                         {this.state.showPlanDetails && <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
                                 alt="" />
-                            <div className="bd-content">What's not included?</div>
+                            <div className="bd-content">What is not covered?</div>
                         </div>}
                         <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
