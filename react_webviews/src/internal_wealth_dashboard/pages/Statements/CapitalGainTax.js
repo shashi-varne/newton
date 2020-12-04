@@ -2,12 +2,18 @@ import React, { useEffect, useState } from 'react';
 import StatementCard from '../../mini-components/StatementCard';
 import { fetchGainsElssYears } from '../../common/ApiCalls';
 import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
+import IlsNoData from 'assets/fisdom/ils_no_data.svg';
+import IlsNoDataMob from 'assets/fisdom/ils_no_data_mob.svg';
+import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
-import isEmpty from 'lodash';
+import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
+import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
+const isMobileView = getConfig().isMobileDevice;
 const CapitalGainTax = () => {
   const title = 'Capital gain tax';
   const [years, setYears] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
   const fetchCapitalYears = async () => {
     try {
       setIsLoading(true);
@@ -17,6 +23,7 @@ const CapitalGainTax = () => {
       setIsLoading(false);
     } catch (err) {
       toast(err);
+      setHasError(true);
     }
   };
 
@@ -32,16 +39,22 @@ const CapitalGainTax = () => {
         onErrorBtnClick={fetchCapitalYears}
         isLoading={isLoading}
         loadingText='Fetching ...'
+        error={hasError}
       >
-        {!isEmpty(years) ? (
+        {years?.length > 0 ? (
           <div className='iwd-statement-reports'>
             {years.map((el, idx) => (
               <StatementCard key={idx} year={el} sType='capital_gains' />
             ))}
           </div>
         ) : (
-          <div>No data to display</div>
+          <ErrorScreen
+            useTemplate={true}
+            templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
+            templateErrText='No Tax report to display'
+          />
         )}
+        {isMobileView && years?.length > 0 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>
   );

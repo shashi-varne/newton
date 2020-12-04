@@ -15,6 +15,8 @@ const FSTable = ({
   errorMsg = '',
   className = '',
   style = {},
+  serialOffset = 0,
+  serializeData = false,
 }) => {
   const [columnHeaders, setColumnHeaders] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -35,6 +37,7 @@ const FSTable = ({
     <table className={`fisdom-table ${className}`} style={style || {}}>
       <thead>
         <tr>
+          {serializeData && <td>No.</td>}
           {columnHeaders.map(col => (
             <td key={col.label}>{col.label}</td>
           ))}
@@ -43,6 +46,7 @@ const FSTable = ({
       <tbody>
         {tableData.map((row, idx) => (
           <tr key={idx}>
+            {serializeData && <td>{serialOffset + idx + 1}.</td>}
             {columnHeaders.map(({ accessor, formatter }) => (
               <td key={accessor}>
                 {isFunction(formatter) ? formatter(row[accessor]) : row[accessor]}</td>

@@ -26,7 +26,7 @@ const Statements = () => {
     },
   };
   return (
-    <div className='iwd-page'>
+    <div className='iwd-page iwd-statements'>
       <PageHeader height='auto' hideProfile={isMobileView}>
         <HeaderNavBar
           title='Statements'

@@ -752,7 +752,7 @@ ul#iwd-bars {
   transition-delay: 0.3s;
 }
 
-.iwd-transactions-table {
+table.iwd-transactions-table {
   thead {
     tr {
       background: linear-gradient(
@@ -790,7 +790,7 @@ ul#iwd-bars {
     }
   }
   td {
-    padding: 15px;
+    padding: 10px 15px;
     border-collapse: collapse;
     font-size: 13px;
     line-height: 21px;
@@ -803,6 +803,106 @@ ul#iwd-bars {
   }
   td:nth-last-child(1) {
     padding-right: 60px;
+  }
+  td:nth-last-child(-n + 3) {
+    // for last 3 columns
+    text-align: right;
+  }
+}
+
+//Filter Section
+.iwd-filter-section {
+  margin-bottom: 40px;
+  .iwd-filter-type {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 21px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: $dark;
+    margin-bottom: 30px;
+  }
+
+  .MuiIconButton-root {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+.iwd-filter-clear {
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #4f2da6;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.iwd-filter-head {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 27px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: $dark;
+}
+
+.iwd-filter-section:last-child {
+  margin-bottom: 0px;
+}
+
+.iwd-filter-head-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.iwd-disable-clear {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.iwd-chart-header {
+  font-size: 17px;
+}
+
+// Legends
+.iwd-legend-container {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  list-style: none;
+  background-color: inherit;
+
+  .iwd-legend-child {
+    width: 30%;
+
+    .iwd-lc-header {
+      display: flex;
+      align-items: center;
+
+      .iwd-lc-icon {
+        width: 8px;
+        height: 8px;
+        background: hsla(173, 59, 55, 1);
+      }
+
+      .iwd-lc-title {
+        color: hsla(173, 59, 55, 1);
+        margin-left: 10px;
+      }
+    }
+
+    .iwd-lc-value {
+      color: $grey;
+      font-size: 30px;
+    }
   }
 }
 
@@ -906,7 +1006,7 @@ ul#iwd-bars {
   #iwd-page-header {
     width: 100%;
     height: auto;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .radial-chart {
@@ -914,9 +1014,15 @@ ul#iwd-bars {
   }
 }
 
-@media only screen and (min-width: 300px) and (max-width: 800px) {
-  .iwd-statement-card {
-    // flex: 1;
+.iwd-transactions-table {
+  width: 800px !important;
+
+  td:nth-child(1) {
+    padding-left: 10px;
+  }
+
+  td:nth-last-child(1) {
+    padding-right: 10px;
   }
 }
 
@@ -959,24 +1065,11 @@ ul#iwd-bars {
   }
 }
 
-.iwd-transactions-table {
-  width: 800px !important;
-
-  td:nth-child(1) {
-    padding-left: 10px;
-  }
-
-  td:nth-last-child(1) {
-    padding-right: 10px;
-  }
-}
-
 .iwd-chart-header {
   font-size: 17px;
 }
 
 // Legends
-
 .iwd-legend-container {
   padding: 0;
   margin: 0;
@@ -1033,6 +1126,17 @@ ul#iwd-bars {
     justify-content: center;
     border-right: 1px solid rgba(118, 126, 134, 0.1);
   }
+}
+
+.iwd-disable-clear {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+//Autosuggest
+.react-select-container {
+  border: none;
+  outline: none;
 }
 
 @media only screen and (min-width: 300px) and (max-width: 800px) {
@@ -1093,7 +1197,7 @@ ul#iwd-bars {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      width: 70%;
+      width: 100%;
       height: 45%;
 
       .iwd-hcn-item {
@@ -1117,107 +1221,104 @@ ul#iwd-bars {
     }
 
     .iwd-hc-more {
-      bottom: 40px;
+      right: 25px;
+      bottom: 30px;
     }
   }
-}
-
-//Filter Section
-.iwd-filter-section {
-  margin-bottom: 40px;
-  .iwd-filter-type {
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 21px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: $dark;
-    margin-bottom: 20px;
-  }
-
-  .MuiIconButton-root {
-    width: 14px !important;
-    height: 14px !important;
-  }
-}
-
-.iwd-filter-clear {
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: 2px;
-  text-align: left;
-  color: #4f2da6;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-right: 20px;
-}
-.iwd-filter-head {
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 27px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: $dark;
-}
-
-.iwd-filter-section:last-child {
-  margin-bottom: 0px;
-}
-
-.iwd-filter-head-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 50px;
-  width: 100%;
 }
 
 @media only screen and (max-width: 450px) {
-  .iwd-filter-mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    z-index: 10000;
-    background: white;
-  }
-  .iwd-filter-footer {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    .MuiButtonBase-root {
-      border-radius: 6px;
-      background-color: #4f2da6;
-    }
+  .iwd-statement-reports {
+    margin-bottom: 40px;
   }
 
-  .iwd-filter-mobile-section {
-    margin-top: 40px;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    //padding: $card-padding-mobile;
-    .iwd-filter-head-container {
-      justify-content: center;
-      .iwd-filter-head {
-        font-size: 17px;
-        font-weight: 700;
-        line-height: 27px;
-        letter-spacing: 0em;
+  .iwd-page.iwd-statements {
+    overflow: hidden;
+  }
+  .iwd-statement-card {
+    //flex: 1;
+    width: 100%;
+    margin: 0px;
+    margin-bottom: 40px;
+    padding: 40px;
+  }
+  .iwd-filter-mobile {
+    overflow-y: auto;
+    background: white;
+    margin: 0 !important;
+    font-family: 'Poppins', 'Roboto', sans-serif;
+
+    .iwd-filter-mobile-container {
+      position: relative;
+      height: 100%;
+      padding: 40px;
+    }
+
+    .iwd-filter-footer {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 80%;
+
+      margin: 30px auto 20px auto;
+      .MuiButtonBase-root {
+        border-radius: 6px;
+        background-color: #4f2da6;
+        height: 50px;
+        padding: 13px 46px;
+        box-sizing: border-box;
+
+        .MuiButton-label {
+          font-weight: bold;
+          font-size: 15px;
+          line-height: 24px;
+          color: white;
+        }
       }
     }
-    .MuiFormGroup-root {
-      flex-direction: row;
-    }
-    .MuiFormGroup-root > label {
-      flex: 0 50%;
+
+    .iwd-filter-mobile-section {
+      margin-top: 40px;
+      height: 95%;
+      display: flex;
+      flex-direction: column;
+      //padding: $card-padding-mobile;
+
+      .iwd-filter-head-container {
+        justify-content: center;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        .iwd-filter-head {
+          font-size: 17px;
+          font-weight: 700;
+          line-height: 27px;
+          letter-spacing: 0em;
+        }
+      }
+
+      .iwd-filter-footer {
+        justify-content: space-evenly;
+        align-items: center;
+        width: 100%;
+
+        .iwd-filter-clear {
+          font-size: 15px;
+          line-height: 24px;
+          font-weight: normal;
+          letter-spacing: unset;
+          text-align: center;
+          margin-right: 0;
+          width: 40%;
+        }
+      }
+
+      .MuiFormGroup-root {
+        flex-direction: row;
+      }
+
+      .MuiFormGroup-root > label {
+        flex: 0 50%;
+      }
     }
   }
 
@@ -1263,14 +1364,16 @@ ul#iwd-bars {
         border-radius: 100px;
         background-color: rgba($primary, 0.05);
         .MuiFormControl-root {
-          .MuiInput-underline:before {
-            border: none;
-          }
           .MuiInput-input {
             text-align: left;
             padding-left: 20px;
             padding-right: 12px;
             color: #767e86;
+          }
+
+          .MuiInput-root.MuiInput-formControl.MuiInput-underline::before,
+          .MuiInput-root.MuiInput-formControl.MuiInput-underline::after {
+            border: none;
           }
         }
       }
