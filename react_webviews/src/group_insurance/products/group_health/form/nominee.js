@@ -332,7 +332,7 @@ class GroupHealthPlanNomineeDetails extends Component {
               />
             </div>
             <div>Appointee details</div>
-
+            <div style={{marginBottom: this.state.renderAppointee ? '50px': ''}}>
             <FormControl fullWidth>
               <div className="InputField">
                 <Input
@@ -383,6 +383,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 />
               </div>
             </FormControl>
+            </div>
           </React.Fragment>
         );
     }
