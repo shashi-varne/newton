@@ -396,7 +396,7 @@ class FyntuneLanding extends Component {
         </div>
 
         <div className="faq-section" style={{ transform: "translateY(-50px)" }}>
-          <div className="generic-hr" style={{ marginBottom: "12px" }}></div>
+          <div className="generic-hr" style={{marginBottom: "12px" }}></div>
           <div className="flex-center fyntune-faq" onClick={() => this.openFaqs()}>
             <div>
               <img
@@ -405,7 +405,7 @@ class FyntuneLanding extends Component {
                 alt=""
               />
             </div>
-            <div>Frequently asked questions</div>
+            <div style={{fontSize: '17px'}}>Frequently asked questions</div>
           </div>
           <div className="generic-hr" style={{ marginTop: "12px" }}></div>
         </div>
