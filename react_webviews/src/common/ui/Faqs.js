@@ -45,7 +45,7 @@ class FaqsClass extends Component {
         let isSelected = this.state.selectedIndex === index;
         return (
             <div key={index} className="common-faqs-tile"
-               style={{borderTop: index === 0 ? '1px solid #d7d4d4' : '', marginBottom: this.state.options.length - 1 === index ? '50px': ''}}
+               style={{borderTop: index === 0 ? '1px solid #d7d4d4' : ''}}
                 onClick={() => this.showHideSteps(index)}>
                 <div className="top-tile">
                     <div className="top-title">
