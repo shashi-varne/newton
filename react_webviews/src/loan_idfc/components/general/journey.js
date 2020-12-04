@@ -6,7 +6,7 @@ import JourneySteps from "../../../common/ui/JourneySteps";
 
 const journeyMapper2 = {
   basic_details_uploaded: {
-    index: "0",
+    index: "1",
   },
   ckyc: {
     index: "1",
@@ -146,7 +146,7 @@ class JourneyMap extends Component {
             "Enter your loan requirements and income details to get the best loan offer.",
           status: index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
-          cta: idfc_loan_status === "offer_accepted" ? 'START' : index === "2" ? "RESUME" : index > "2" && "SUMMARY"
+          cta: idfc_loan_status === "idfc_null_accepted" ? 'START' : index === "2" ? "RESUME" : index > "2" && "SUMMARY"
         },
         {
           step: "4",

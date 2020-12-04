@@ -308,7 +308,7 @@ export async function updateApplication(params, next_state = '') {
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      toast(result.error || result.message || "Something went wrong!");
+      toast(result.error[0] || result.message || "Something went wrong!");
     }
   } catch (err) {
     console.log(err);
