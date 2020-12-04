@@ -528,7 +528,7 @@ export const transactionFilterOptions = [
         value: 'invest',
       },
       {
-        label: 'Withdrawl',
+        label: 'Withdrawal',
         value: 'withdraw',
       },
       {

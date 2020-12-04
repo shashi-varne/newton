@@ -100,6 +100,7 @@ const Transactions = () => {
   };
 
   const handleFilterData = (val) => {
+    setPageMap([null, null]); // reset pagination everytime filter is changed
     setFilterVal({ ...filterVal, ...val });
   };
 
