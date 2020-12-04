@@ -68,7 +68,9 @@ const Transactions = () => {
           count: false,
           ...filterVal,
         });
-        pushToPageMap(response.next_page);
+        if (!pageMap[2]) {
+          pushToPageMap(response.next_page);
+        }
       } else {
         const urlToHit = pageMap[activePage];
         response = await hitNextPage(urlToHit);
@@ -200,6 +202,7 @@ const Transactions = () => {
               pages={pageMap.length - 1}
               activePage={activePage}
               onSelect={onPageSelect}
+              classPrefix="iwd-rs-pagination rs-pagination"
             ></Pagination>
           </div>
         )}
