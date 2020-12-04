@@ -294,6 +294,8 @@ class GroupHealthPlanFinalSummary extends Component {
                 // for lifestyle     
               
                 if (life_style_question.length >=1 && life_style_question[0].yes_no) {
+                    let date = life_style_question[0].since_when
+                     date = date.split('/')
                     members_for_life_style.push(member_display);
 
                     life_style_details_data.push({
@@ -303,7 +305,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
                     life_style_details_data.push({
                         'title': `Since when`,
-                        'subtitle': life_style_question[0].since_when
+                        'subtitle': `${date[1]}/${date[2]}`
                     });
 
                 }
@@ -324,9 +326,12 @@ class GroupHealthPlanFinalSummary extends Component {
                         
                         // eslint-disable-next-line no-loop-func 
                         let ped = ped_list.find(item => item.key === ped_option.front_end_question_id);
+                        let ped_data = ped_option.since_when.split('/')
+                        let date = new Date(ped_option.since_when)
                         diseases_data_backend.push({
                             'title': ped_option.description || ped.name,
-                            'subtitle': 'Since - ' + ped_option.since_when
+                            'subtitle': 'Since - ' + `${ped_data[1]}/${ped_data[2]}`
+                            // 'subtitle': 'Since - ' + `${date.getMonth() + 1}/${date.getFullYear()}`
                         })
                     })
                     
