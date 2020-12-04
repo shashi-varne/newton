@@ -52,7 +52,7 @@ class GroupHealthPlanSelectCity extends Component {
         
         let body = {
             "user_id": "plutus_user2",
-            "provider": "hdfc_ergo"
+            "provider": this.state.providerConfig.provider_api
           };
         try {
                 try {

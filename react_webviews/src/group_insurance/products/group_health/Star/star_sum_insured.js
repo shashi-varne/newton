@@ -196,6 +196,7 @@ class GroupHealthPlanStarSumInsured extends Component {
             total_si: plan_selected_final.total_si,
             sum_assured: this.state.sum_assured_data[this.state.selectedIndex],
             gst: plan_selected_final.gst[1],
+            floater_type: plan_selected_final.floater_type
         });
 
 

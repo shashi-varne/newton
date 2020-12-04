@@ -55,7 +55,6 @@ class GroupHealthPlanPremiumSummary extends Component {
         body['add_on_premium'] = post_body['add_on_premium'];
       }
       if(this.state.providerConfig.provider_api === 'star'){
-        body['floater_type'] = 'floater';
 
         if ( post_body.account_type.includes("parents") && groupHealthPlanData.ui_members.parents_option ) {
           body.account_type = groupHealthPlanData.ui_members.parents_option;
