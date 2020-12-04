@@ -796,7 +796,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
     }
 
-    renderAccordiansubData = (props, index) => {
+    renderAccordiansubData = (props, index) => { console.log(props)
 
         return (
             <div key={index}>
@@ -806,7 +806,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {props.title}
                         </div>
                         <div className="subtitle" style={{margin : '7px 0 0 0', overflowWrap: 'break-word'}}>
-                          {capitalizeFirstLetter((props.subtitle + "").toLowerCase())}
+                          {capitalizeFirstLetter(props.subtitle + "")}
                              {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
