@@ -133,7 +133,6 @@ class GroupHealthPlanDob extends Component {
         let adult_ages = [];
         let child_ages = [];
 
-
         for (let dob_data of final_dob_data) {
             const { value: dob, age, key, relation } = dob_data;
 
