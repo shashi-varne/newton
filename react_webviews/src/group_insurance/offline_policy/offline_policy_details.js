@@ -375,7 +375,7 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="" />  
+                            <img src={require(`assets/${this.state.productName}/icn_payment_frequency.svg`)} alt="" />  
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -389,7 +389,7 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            {/* <img src={require(`assets/${this.state.productName}/icn_issue_date.svg`)} alt="" /> */}
+                            <img src={require(`assets/${this.state.productName}/icn_issue_date.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top"> 

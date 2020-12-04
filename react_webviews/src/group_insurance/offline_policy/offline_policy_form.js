@@ -56,7 +56,7 @@ class AddPolicy extends Component {
     if (!name) {
         name = event.target.name;
     }
-
+  console.log(name,event)
     var value = event.target ? event.target.value : event;
 
     let form_data = this.state.form_data 
@@ -212,8 +212,9 @@ class AddPolicy extends Component {
               id="relation"
               label="Insurance Company"
               error={ false}
+              name="Vendor"
             //   helperText={'Insurance Company'}
-              value={this.state.form_data.Vendor || 'CARE'}
+              value={this.state.form_data.Vendor}
               onChange={this.handleChange("Vendor")}
             />
           </div>
