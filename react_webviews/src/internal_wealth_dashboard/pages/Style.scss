@@ -448,7 +448,7 @@ $background: #F9F9F9;
     }
   }
 
-  #iwd-d-newsletter {
+  .iwd-d-newsletter {
 
     align-self: flex-start;
     background: $primary;
@@ -646,8 +646,12 @@ $background: #F9F9F9;
     margin-left: 50px;
   }
 
+  .iwd-d-newsletter {
+    display: none;
+  }
+
   .iwd-analysis-graph-left {
-    width: 45%;
+    width: 40%;
     height: 90%;
     margin-right: 2%;
 
@@ -660,12 +664,11 @@ $background: #F9F9F9;
       .iwd-chart {
         height: 200px;
         width: 200px;
-        margin-right: 5px;
-        flex: 0 1 40%;
+        margin-right: 10px;
       }
 
       .iwd-aglc-legend {
-        flex: 1 0 30%;
+        flex: 0 0 50%;
 
         .iwd-aglc-legend-child {
           display: flex;
@@ -690,13 +693,21 @@ $background: #F9F9F9;
         .iwd-aglc-legend-child:nth-last-child(1), .iwd-aglc-legend-child:nth-last-child(2) {
           margin-bottom: 0;
         }
+        .iwd-aglc-legend-child {
+          align-items: flex-start;
+
+          .iwd-lc-value {
+            text-align: left;
+            margin-left: 18px;
+          }
+        }
       }
     }
   }
 
   .iwd-analysis-graph-right {
     height: 90%;
-    width: 53%;
+    width: 58%;
 
     .iwd-agr-content {
       .iwd-chart {
@@ -722,6 +733,8 @@ $background: #F9F9F9;
             display: inline-block;
             font-size: 15px;
             color: $grey;
+            line-height: 27px;
+            font-weight: 500;
           }
 
           .iwd-sali-label {
@@ -745,10 +758,42 @@ $background: #F9F9F9;
           justify-content: center;
           align-items: center;
           margin-bottom: 40px;
+
+          .iwd-lc-header {
+            flex-direction: column;
+            align-items: center;
+
+            .iwd-lc-icon {
+              margin: 0 auto;
+            }
+
+            .iwd-lc-title {
+              margin-top: 5px;
+              margin-left: 0px;
+              text-align: center;
+            }
+          }
         }
 
         .iwd-agrc-legend-child:nth-last-child(1), .iwd-agrc-legend-child:nth-last-child(2) {
           margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  #iwd-market-alloc {
+    .iwd-agl-content {
+      .iwd-aglc-legend {
+        flex: none;
+        flex-direction: column;
+
+        .iwd-aglc-legend-child {
+          align-items: flex-start;
+
+          .iwd-lc-value {
+            margin-left: 18px;
+          }
         }
       }
     }
@@ -810,7 +855,6 @@ $background: #F9F9F9;
     justify-content: space-between;
     height: 80%;
     overflow-y: auto;
-    overflow-x: auto;
     
     .iwd-analysis-button {
       outline: none;
@@ -876,18 +920,9 @@ $background: #F9F9F9;
       height: 90%;
     }
     
-    .iwd-analysis-portfolios-equity {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      height: 80%;
-      overflow-y: auto;
-      overflow-x: auto;
-    }
-    
     .iwd-analysis-portfolio-stock {
       display: flex;
-      width: 50%;
+      flex: 1 0 50%;
       margin-top: 50px;
       align-items: center;
       main {
@@ -914,7 +949,7 @@ $background: #F9F9F9;
   }
   .iwd-analysis-top-amcs {
     @extend .iwd-analysis-portfolios-equity;
-    height: '100%';
+    justify-content: flex-start;
   }
 
   .iwd-analysis-amc-logo {
@@ -961,7 +996,9 @@ $background: #F9F9F9;
   }
   
   .iwd-analysis-debt-holding-logo {
-    background:linear-gradient(135deg,  #AEE5DF, transparent);
+    // background: linear-gradient(135deg,  #AEE5DF, transparent);
+    background-image: linear-gradient(30deg, #C1EBE6 0%, #b5f0ea 30%, #6edacd 60%, #C1EBE6 80%);
+
     color: #488F87;
     font-size: 20px;
     width: 40px;
@@ -1208,7 +1245,7 @@ $background: #F9F9F9;
       }
     }
 
-    #iwd-d-newsletter {
+    .iwd-d-newsletter {
       width: 100%;
       padding: 30px 40px;
 
@@ -1239,9 +1276,17 @@ $background: #F9F9F9;
       overflow-y: auto;
       flex-direction: column;
       height: auto;
+
+      .iwd-analysis-portfolio-name {
+        font-size: 13px;
+      }
     }
     .iwd-analysis-amc {
       width: 100%;
+    }
+
+    .iwd-d-newsletter {
+      display: block;
     }
 
     .iwd-analysis-portfolio-stock {
@@ -1257,6 +1302,7 @@ $background: #F9F9F9;
 
     .iwd-analysis-header-filters {
       margin-left: 0;
+      margin-top: 10px;
     }
 
     .iwd-analysis-debt-holding {
@@ -1299,6 +1345,14 @@ $background: #F9F9F9;
           .iwd-aglc-legend-child:nth-child(n) {
             margin-bottom: 20px;
           }
+          .iwd-aglc-legend-child {
+            align-items: center;
+  
+            .iwd-lc-value {
+              text-align: center;
+              margin-left: 0;
+            }
+          }
         }
       }
     }
@@ -1314,15 +1368,21 @@ $background: #F9F9F9;
 
     #iwd-sector-alloc {
       .iwd-agr-content {
+        .iwd-chart > div > ul#iwd-bars {
+          display: none;
+        }
         .iwd-sector-alloc-legend {
-          max-height: 265px;
+          max-height: none;
 
           .iwd-sal-item {
+            display: flex;
+            align-items: center;
             padding: 14px;
 
             span {
               font-size: 13px;
               line-height: 21px;
+              font-weight: normal;
             }
 
             .iwd-sali-label {
@@ -1330,6 +1390,7 @@ $background: #F9F9F9;
             }
 
             .iwd-sali-value {
+              margin-left: 10px;
               color: $dark;
             }
           }
@@ -1350,10 +1411,42 @@ $background: #F9F9F9;
             justify-content: center;
             align-items: center;
             margin-bottom: 40px;
+
+            .iwd-lc-value {
+              margin-left: 0;
+              text-align: center;
+            }
           }
 
-          .iwd-agrc-legend-child:nth-child(n) {
-            margin-bottom: 0;
+          // .iwd-agrc-legend-child:nth-child(n) {
+          //   margin-bottom: 0;
+          // }
+        }
+      }
+    }
+
+    #iwd-market-alloc {
+      .iwd-agl-content {
+        .iwd-aglc-legend {
+          flex: 0 0 30%;
+          flex-direction: row;
+  
+          .iwd-aglc-legend-child {
+            align-items: center;
+  
+            .iwd-lc-value {
+              margin-left: 0;
+            }
+
+            .iwd-lc-icon {
+              margin: 0 auto;
+            }
+
+            .iwd-lc-title {
+              margin-top: 10px;
+              text-align: center;
+              width: 5ch;
+            }
           }
         }
       }
