@@ -55,7 +55,9 @@ const Transactions = () => {
           count: false,
           ...filterVal,
         });
-        pushToPageMap(response.next_page);
+        if (!pageMap[2]) {
+          pushToPageMap(response.next_page);
+        }
       } else {
         const urlToHit = pageMap[activePage];
         response = await hitNextPage(urlToHit);
@@ -152,7 +154,7 @@ const Transactions = () => {
           <div className='iwd-transaction-table-data'>
             {!isLoading ? (
               <FSTable
-                className='iwd-transactions-table iwd-statement-trasaction-table'
+                className='iwd-transactions-table iwd-statement-transaction-table'
                 serializeData
                 serialOffset={(activePage - 1) * 10}
                 headersMap={transactionsHeaderMap}
@@ -169,6 +171,7 @@ const Transactions = () => {
               pages={pageMap.length - 1}
               activePage={activePage}
               onSelect={onPageSelect}
+              classPrefix="iwd-rs-pagination rs-pagination"
             ></Pagination>
           </div>
         )}
