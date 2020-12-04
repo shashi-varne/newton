@@ -184,7 +184,7 @@ class GroupHealthPayment extends Component {
   render() {
     let {policy_data, screenData, provider} = this.state;        
     var s = new Date('2020-01-14T17:43:37.000Z').toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
-    console.log(s,"ssssssssssssssssssssssssss")
+    
     return (
       <Container
         provider={this.state.provider}

@@ -524,9 +524,17 @@ class Container extends Component {
           <div id="header-title-page"
             style={this.props.styleHeader} 
             className={`header-title-page  ${this.props.classHeader}`}>
-                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
-                  {this.props.title}
-                </div>
+              {this.props.provider !== 'RELIGARE' ? 
+               <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+               {this.props.title}
+              </div>
+              : 
+              <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+               {this.props.title} <span style={{fontWeight: '500', fontSize: '17.5px'}}> (formerly Religare)</span>
+              </div>
+              
+              }
+                
               
               {this.state.inPageTitle && this.props.count &&
                 <span color="inherit" 
