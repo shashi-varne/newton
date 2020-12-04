@@ -71,7 +71,7 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
       cursor: 'pointer',
     }),
     placeholder: (base) => ({
-      marginLeft: '20px',
+      marginLeft: '1em',
       color: '#0A1D32',
       opacity: '0.3',
     }),
@@ -90,10 +90,11 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
     }),
     option: (base, state) => ({
       ...base,
-      '&:hover': { backgroundColor: 'rgba(31,18,65,0.05)', color: '#1F041E' },
+      '&:hover': { backgroundColor: 'rgba(31,18,65,0.05)', color: '#1F041E', cursor: 'pointer' },
       backgroundColor: state.isSelected ? 'rgba(31,18,65,0.05)' : 'white',
       color: '#1F041E',
       alignItems: 'left',
+      padding: '20px 15px',
     }),
   };
   return (

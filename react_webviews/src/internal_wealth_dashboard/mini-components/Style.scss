@@ -1412,3 +1412,53 @@ table.iwd-transactions-table {
     border-radius: 4px;
   }
 }
+.rs-picker-toggle-value,
+.rs-picker-toggle-placeholder,
+.rs-picker-toggle-caret {
+  color: $primary !important;
+}
+.rs-calendar-table-cell-content {
+  border-radius: 50% !important;
+}
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+  border: 1px solid $primary;
+}
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  border-color: $primary !important;
+  background-color: $primary !important;
+}
+.rs-picker-toolbar-option:not(:last-child)::before {
+  display: none;
+}
+.rs-picker-toolbar {
+  .rs-picker-toolbar-ranges {
+    padding: 0px 20px;
+    .rs-picker-toolbar-option {
+      border: 1px solid $primary;
+      border-radius: 10px;
+      margin: 5px;
+      background-color: rgba(31, 18, 65, 0.05);
+
+      color: $primary;
+      text-decoration: none !important;
+    }
+  }
+}
+.rs-picker-toolbar-right {
+  min-width: 100px;
+  .rs-picker-toolbar-right-btn-ok {
+    width: 100%;
+    background-color: $primary;
+    color: white;
+  }
+  .rs-picker-toolbar-right-btn-ok:hover {
+    background-color: $primary !important;
+    color: white !important;
+  }
+  .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled {
+    background-color: $primary;
+  }
+}
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+  border-color: $primary !important;
+}

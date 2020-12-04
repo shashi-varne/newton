@@ -22,8 +22,9 @@ const Elss = () => {
       setYears(tax_statement?.elss);
       setIsLoading(false);
     } catch (err) {
-      toast(err);
+      //toast(err);
       setHasError(true);
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +54,7 @@ const Elss = () => {
             templateErrText='No Tax report to display'
           />
         )}
-        {isMobileView && years?.length > 0 && <ScrollTopBtn />}
+        {isMobileView && years?.length > 3 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>
   );

@@ -1,8 +1,6 @@
 import Api from '../../utils/api';
 import { storageService, isEmpty } from '../../utils/validators';
 import { genericErrMsg } from '../constants';
-import axios from 'axios';
-import { remove } from 'lodash';
 // function resetBootFlag() {
 //   boot = false;
 //   storageService().remove('wr-boot');

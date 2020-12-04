@@ -1,5 +1,6 @@
-export const genericErrMsg = 'Something went wrong!';
+import React from 'react';
 
+export const genericErrMsg = 'Something went wrong!';
 export const allocations = [
   { sector: 'Bank', allocation: 29 },
   { sector: 'Refineries/marketing', allocation: 17 },
@@ -465,7 +466,32 @@ export const dummyBubble = {
   'mid cap': 30,
   'large cap': 50,
 };
+const data = {
+  Investment: {
+    val: ['purchase', 'divreinvest', 'transferin'],
+    img: <img src={require('assets/incr_arrow.svg')} alt={'invest'} />,
+  },
+  Withdrawal: {
+    val: ['redemption', 'divpayout', 'transferout'],
+    img: <img src={require('assets/decr_arrow.svg')} alt={'invest'} />,
+  },
+  Switch: {
+    val: ['switchin', 'switchout'],
+    img: <img src={require('assets/switch_arrow.svg')} alt={'invest'} />,
+  },
+};
 
+const invest_type_mapper = (type) => {
+  const ttype = Object.keys(data).find((key) => data[key].val.includes(type));
+  if (ttype) {
+    return (
+      <div className='iwd-table-type-container'>
+        {data[ttype].img}
+        <div className='iwd-table-type'>{ttype}</div>
+      </div>
+    );
+  }
+};
 export const transactionsHeaderMap = [
   {
     label: 'Date',
@@ -474,6 +500,9 @@ export const transactionsHeaderMap = [
   {
     label: 'Type',
     accessor: 'ttype',
+    formatter: (type) => {
+      return invest_type_mapper(type);
+    },
   },
   {
     label: 'Unit',

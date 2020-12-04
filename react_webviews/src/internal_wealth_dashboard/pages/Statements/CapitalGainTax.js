@@ -5,7 +5,6 @@ import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
 import IlsNoData from 'assets/fisdom/ils_no_data.svg';
 import IlsNoDataMob from 'assets/fisdom/ils_no_data_mob.svg';
 import { getConfig } from 'utils/functions';
-import toast from '../../../common/ui/Toast';
 import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
 import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
@@ -22,8 +21,9 @@ const CapitalGainTax = () => {
       setYears(tax_statement?.capital_gains);
       setIsLoading(false);
     } catch (err) {
-      toast(err);
+      //toast(err);
       setHasError(true);
+      setIsLoading(false);
     }
   };
 
@@ -54,7 +54,7 @@ const CapitalGainTax = () => {
             templateErrText='No Tax report to display'
           />
         )}
-        {isMobileView && years?.length > 0 && <ScrollTopBtn />}
+        {isMobileView && years?.length > 3 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>
   );

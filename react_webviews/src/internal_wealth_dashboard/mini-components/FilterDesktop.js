@@ -54,7 +54,12 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
   );
   return (
     <div
-      style={{ flex: '0.2', marginRight: '30px', borderRight: '2px solid #f0f1f5' }}
+      style={{
+        // flex: '0.2',
+        marginRight: '30px',
+        borderRight: '2px solid #f0f1f5',
+        minWidth: '200px',
+      }}
       className='iwd-filter-desktop'
     >
       <section className='iwd-filter-head-container'>

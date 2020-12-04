@@ -21,7 +21,8 @@ import AutoSuggestSearch from '../../mini-components/AutoSuggestSearch';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-transactionsHeaderMap.splice(1, 0, {
+const transactionMapper = [...transactionsHeaderMap];
+transactionMapper.splice(1, 0, {
   label: 'Fund Name',
   accessor: 'mf_name',
 });
@@ -35,6 +36,7 @@ const Transactions = () => {
   const [fundNames, setFundNames] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pageMap, setPageMap] = useState([null, null]);
+  const [hasError, setHasError] = useState(false);
   const isMobileView = getConfig().isMobileDevice;
 
   const pushToPageMap = (url) => {
@@ -71,10 +73,12 @@ const Transactions = () => {
         const urlToHit = pageMap[activePage];
         response = await hitNextPage(urlToHit);
       }
+
       setTransactions(response.transactions);
     } catch (err) {
       toast(err);
       console.log(err);
+      setHasError(true);
     }
     setIsLoading(false);
   };
@@ -100,7 +104,6 @@ const Transactions = () => {
   const handleDesktopFilterData = debounce(
     (val) => {
       handleFilterData(val);
-      //setFilterVal({ ...filterVal, ...val });
     },
     2000,
     { trailing: true }
@@ -123,6 +126,7 @@ const Transactions = () => {
       toast('No transaction to download');
     }
   };
+
   return (
     <div className='iwd-statement-transaction'>
       {isMobileView && open ? (
@@ -139,11 +143,12 @@ const Transactions = () => {
           handleFilterData={handleDesktopFilterData}
         />
       )}
-      {!open && (
+      {!open && !hasError && (
         <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
           <img src={filter_sign} alt='filter' />
         </div>
       )}
+
       <div className='iwd-transaction-container'>
         <section className='iwd-transaction-search-container'>
           <div className='iwd-transaction-search'>
@@ -156,7 +161,6 @@ const Transactions = () => {
               />
             )}
           </div>
-
           <div className='iwd-transaction-date'>
             <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
           </div>
@@ -176,10 +180,10 @@ const Transactions = () => {
           <div className='iwd-transaction-table-data'>
             {!isLoading ? (
               <FSTable
-                className='iwd-transactions-table iwd-statement-trasaction-table'
+                className='iwd-transactions-table iwd-statement-transaction-table'
                 serializeData
                 serialOffset={(activePage - 1) * 10}
-                headersMap={transactionsHeaderMap}
+                headersMap={transactionMapper}
                 data={transactions}
               />
             ) : (
