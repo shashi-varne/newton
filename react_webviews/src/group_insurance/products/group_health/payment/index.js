@@ -291,7 +291,7 @@ class GroupHealthPayment extends Component {
                   </div>
                   <div className="highlight-text2" style={{ color: '#767E86', marginLeft: 7 }}>
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
-                    insured {numDifferentiationInr(this.state.lead.total_sum_insured)} for {this.state.lead.tenure > 1 ? this.state.lead.tenure + ' years' : this.state.lead.tenure + ' year'}</div>
+                    insured {numDifferentiationInr(this.state.lead.individual_sum_insured)} for {this.state.lead.tenure > 1 ? this.state.lead.tenure + ' years' : this.state.lead.tenure + ' year'}</div>
                     {policy_data.policy_number && 
                     <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
                     }
