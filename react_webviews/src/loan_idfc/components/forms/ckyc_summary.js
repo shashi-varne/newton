@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
+import { capitalizeFirstLetter, timeStampToDate } from "../../../utils/validators";
 
 class ApplicationSummary extends Component {
   constructor(props) {
@@ -23,124 +24,128 @@ class ApplicationSummary extends Component {
     let lead = this.state.lead || {};
     let accordianData = [];
     let personal_info = lead.personal_info || {};
-    let professional_info = lead.professional_info || {};
-    let application_info = lead.application_info || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
 
     let personal_data = {
       title: "Personal details",
-      edit_state: "/loan/idfc/edit-basic-details",
+      edit_state: "/loan/idfc/edit-personal-details",
       data: [
         {
           title: "First name",
-          subtitle: personal_info.dob,
+          subtitle: capitalizeFirstLetter(personal_info.first_name),
         },
         {
           title: "Middle name",
-          subtitle: personal_info.pan_no,
+          subtitle: personal_info.middle_name,
         },
         {
           title: "Last name",
-          subtitle: professional_info.educational_qualification,
+          subtitle: capitalizeFirstLetter(personal_info.last_name),
         },
         {
           title: "Date of birth",
-          subtitle: application_info.employment_type,
+          subtitle: timeStampToDate(personal_info.dob),
         },
         {
           title: "Gender",
-          subtitle: application_info.employment_type,
+          subtitle: capitalizeFirstLetter(personal_info.gender),
         },
         {
           title: "Marital status",
-          subtitle: application_info.employment_type,
+          subtitle: capitalizeFirstLetter(personal_info.marital_status),
         },
         {
           title: "Father name",
-          subtitle: application_info.employment_type,
+          subtitle: capitalizeFirstLetter(personal_info.father_name),
         },
         {
           title: "Mother name",
-          subtitle: application_info.employment_type,
+          subtitle: capitalizeFirstLetter(personal_info.mother_name),
         },
         {
           title: "Religion",
-          subtitle: application_info.employment_type,
+          subtitle: capitalizeFirstLetter(personal_info.religion),
         },
         {
           title: "Email id",
-          subtitle: application_info.employment_type,
+          subtitle: personal_info.email_id,
         },
       ],
     };
 
     accordianData.push(personal_data);
 
-    let professional_data = {
+    let address_data = {
       title: "Address details",
-      edit_state: "/loan/idfc/edit-professional-details",
+      edit_state: "/loan/idfc/edit-address-details",
       data: [
         {
-          title: "Current address 1",
+          sub_header_title: "Current address"
+        },
+        {
+          title: "Address 1",
           subtitle: current_address_data.address1,
         },
         {
-          title: "Current address 2",
+          title: "Address 2",
           subtitle: current_address_data.address2,
         },
         {
-          title: "Current address 3",
+          title: "Address 3",
           subtitle: current_address_data.address3,
         },
         {
-          title: "Current landmark",
+          title: "Landmark",
           subtitle: current_address_data.landmark,
         },
         {
-          title: "Current pincode",
+          title: "Pincode",
           subtitle: current_address_data.pincode,
         },
         {
-          title: "Current city",
+          title: "City",
           subtitle: current_address_data.city,
         },
         {
-          title: "Current state",
+          title: "State",
           subtitle: current_address_data.state,
         },
         {
-          title: "Permanent address 1",
+          sub_header_title: "Permanent address"
+        },
+        {
+          title: "Address 1",
           subtitle: permanent_address_data.address1,
         },
         {
-          title: "Permanent address 2",
+          title: "Address 2",
           subtitle: permanent_address_data.address2,
         },
         {
-          title: "Permanent address 3",
+          title: "Address 3",
           subtitle: permanent_address_data.address3,
         },
         {
-          title: "Permanent landmark",
+          title: "Landmark",
           subtitle: permanent_address_data.landmark,
         },
         {
-          title: "Permanent pincode",
+          title: "Pincode",
           subtitle: permanent_address_data.pincode,
         },
         {
-          title: "Permanent city",
+          title: "City",
           subtitle: permanent_address_data.city,
         },
         {
-          title: "Permanent state",
+          title: "State",
           subtitle: permanent_address_data.state,
         },
       ],
     };
 
-    accordianData.push(professional_data);
+    accordianData.push(address_data);
 
 
     this.setState(
@@ -183,6 +188,9 @@ class ApplicationSummary extends Component {
             <div className="title">{props.title}</div>
             <div className="subtitle">{props.subtitle}</div>
           </div>
+        )}
+        {props.sub_header_title && (
+            <div className="sub-header-title">{props.sub_header_title}</div>
         )}
       </div>
     );
@@ -264,7 +272,7 @@ class ApplicationSummary extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Basic detail Summary"
+        title="Loan application Summary"
         buttonTitle="OKAY"
         handleClick={() => this.handleClick()}
         headerData={{
