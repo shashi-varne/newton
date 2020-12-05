@@ -239,12 +239,10 @@ class GroupHealthPlanLifestyleDetail extends Component {
   };
 
   validateMonthYear = (date, dob) => {
-   var date_vaildity = date
-   date_vaildity = date_vaildity.replace('/','');
-    if(isNaN(date_vaildity)){
+
+    if(!date){
       return 'please enter the valid date'
     }
-
     if (!isValidMonthYear(date)) {
       return "please enter valid month and year";
     } else if (IsFutureMonthYear(date)) {
