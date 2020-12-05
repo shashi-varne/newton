@@ -14,6 +14,7 @@ export function goBackMap(path) {
       '/loan/idfc/upload-bank': '/loan/idfc/income-details',
       '/loan/idfc/eligible-loan': '/loan/idfc/home',
       '/loan/idfc/loan-eligible': '/loan/idfc/home',
+      '/loan/idfc/bt-info': '/loan/idfc/home',
     }
 
   return mapper[path] || false;

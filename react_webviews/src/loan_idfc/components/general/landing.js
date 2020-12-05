@@ -46,7 +46,7 @@ class Landing extends Component {
         this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
-    let { vendor_application_status, pan_status, ckyc_status } = this.state;
+    let { vendor_application_status, pan_status, ckyc_status, is_dedupe } = this.state;
 
     let rejection_cases = [
       "idfc_null_rejected",
@@ -57,15 +57,16 @@ class Landing extends Component {
     ];
 
     if (this.state.cta_title === "RESUME") {
-      if (rejection_cases.indexOf(vendor_application_status) !== -1) {
+      if (rejection_cases.indexOf(vendor_application_status) !== -1 || is_dedupe) {
         this.navigate("loan-status");
       }
 
       if (pan_status === "" || ckyc_status === "") {
         this.navigate("basic-details");
-      } else if (rejection_cases.indexOf(vendor_application_status) === -1) {
+      } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe) {
         this.navigate("journey");
       }
+
     } else {
       this.getOrCreate(params);
     }

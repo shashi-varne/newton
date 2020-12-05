@@ -49,6 +49,7 @@ export async function initialize() {
     {
       screenData: screenData,
       productName: getConfig().productName,
+      count: 0
     },
     // () => {
     //   this.onload();
@@ -327,10 +328,18 @@ export async function get05Callback() {
 
   await this.getUserStatus();
 
-  if (this.state.idfc_05_callback) {
-    this.navigate('loan-status')
+  let { count } = this.state;
+  
+  if (this.state.is_dedupe || this.state.idfc_05_callback) {
+    this.navigate("loan-status")
   } else {
-    this.get05Callback();
+    if (count < 20) {
+      this.setState({
+        count: count + 1
+      })
+
+      this.get05Callback()
+    }
   }
 }
 
@@ -355,11 +364,11 @@ export async function submitApplication(params, state, update = "") {
     if (status === 200) {
       if (result.message === "Success") {
 
-        // if (state === "point_five") {
-        //   this.get05Callback()
-        // } else {
+        if (state === "point_five") {
+          this.get05Callback()
+        } else {
           this.navigate(this.state.next_state);
-        // }
+        }
       }
     } else {
       if (result.error === "Create loan null failed") {
@@ -374,9 +383,9 @@ export async function submitApplication(params, state, update = "") {
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  });
+  // this.setState({
+  //   show_loader: false,
+  // });
 }
 
 export function openInBrowser(url) {
@@ -557,9 +566,9 @@ export async function startTransaction(transaction_type) {
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  });
+  // this.setState({
+  //   show_loader: false,
+  // });
 }
 
 export function openPdf(url, type) {

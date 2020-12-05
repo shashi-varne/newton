@@ -97,6 +97,7 @@ class JourneyMap extends Component {
     this.state = {
       show_loader: false,
       screen_name: "journey_screen",
+      count: 0
     };
 
     this.initialize = initialize.bind(this);
@@ -225,12 +226,19 @@ class JourneyMap extends Component {
     }
 
     if (id === "income_details") {
-      
-      if (journeyMapper2[idfc_loan_status] === "perfios" && pefios_state === "success") {
-        next_state = "perfios-status"
+
+      if (idfc_loan_status === "idfc_0.5_accepted") {
+        this.get05Callback();
+
+      } else {
+        if (journeyMapper2[idfc_loan_status] === "perfios" && pefios_state === "success") {
+          next_state = "perfios-status"
+        }
+
+        this.navigate(next_state);
       }
       
-      this.navigate(next_state);
+      
     }
 
     if (id === "document_upload") {
