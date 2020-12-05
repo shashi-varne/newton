@@ -270,7 +270,7 @@ class StarAddress extends Component {
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const cityList = this.formatCityOpts(res.pfwresponse.result.cities);
           form_data.state = res.pfwresponse.result.state;
-          let data = cityList.filter(city => city.name === form_data.city);console.log(cityList,data,"data")
+          let data = cityList.filter(city => city.name === form_data.city);
           if(data.length > 0) {
             form_data.city = data[0].name;
             form_data.city_id = data[0].value;
@@ -305,7 +305,7 @@ class StarAddress extends Component {
     this.setState({
       form_data: form_data,
       isLoadingCity: false,
-    }); console.log(this.state.form_data)
+    });
   };
 
   render() {
