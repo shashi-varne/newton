@@ -21,7 +21,8 @@ class GroupHealthPlanIsPed extends Component {
             ctaWithProvider: true,
             relationshipOptions: [],
             onlycheckbox: true,
-            get_lead: true
+            get_lead: true,
+            screen_name: 'is_ped'
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);

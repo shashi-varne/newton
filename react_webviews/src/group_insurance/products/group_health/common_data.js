@@ -357,7 +357,7 @@ export async function updateLead( body, quote_id) {
 
 export function navigate(pathname, data = {}) {
 
-    if (this.props.edit || data.edit) {
+    if ((this.props.edit || data.edit) && ['select_ped_screen', 'is_ped'].indexOf(this.state.screen_name) === -1) {
         this.props.history.replace({
             pathname: pathname,
             search: getConfig().searchParams
