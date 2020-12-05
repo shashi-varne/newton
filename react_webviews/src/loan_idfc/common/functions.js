@@ -24,7 +24,7 @@ export async function initialize() {
   this.getUserStatus = getUserStatus.bind(this);
   this.startTransaction = startTransaction.bind(this);
   this.netBanking = netBanking.bind(this);
-  this.net = net.bind(this);
+  this.net1 = net1.bind(this);
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
@@ -612,6 +612,19 @@ export async function netBanking(url) {
   });
 }
 
+export async function net1(url) {
+  let plutus_redirect_url = encodeURIComponent(
+    window.location.origin +
+      `/loan/idfc/perfios-status` +
+      getConfig().searchParams
+  );
+
+  var pgLink = url;
+    // eslint-disable-next-line
+    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + plutus_redirect_url;
+    window.location.href = pgLink;
+}
+
 export async function net(url) {
   let plutus_redirect_url = encodeURIComponent(
     window.location.origin +
@@ -621,7 +634,6 @@ export async function net(url) {
 
   var pgLink = url;
   let app = getConfig().app;
-  // let redirect_url = getConfig().redirect_url;
   // eslint-disable-next-line
   pgLink +=
     (pgLink.match(/[\?]/g) ? "&" : "?") +
@@ -665,6 +677,8 @@ export async function net(url) {
   window.location.href = pgLink;
 }
 
+
+
 export async function startTransaction(transaction_type) {
   try {
     this.setState({
@@ -683,7 +697,7 @@ export async function startTransaction(transaction_type) {
       }
 
       if (transaction_type === "netbanking") {
-        this.net(result.netbanking_url || "");
+        this.net1(result.netbanking_url || "");
       }
     } else {
       // toast(result.error || result.message || "Something went wrong!");
