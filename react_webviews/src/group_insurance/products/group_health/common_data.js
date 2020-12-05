@@ -310,10 +310,8 @@ export async function updateLead( body, quote_id) {
         if (res.pfwresponse.status_code === 200) {
 
             if(this.state.screen_name === 'final_summary_screen'){
-                 window.location.reload();
-                // this.setState({
-                //     show_loader: false
-                // });
+                //  window.location.reload();
+                initialize()
             }
 
             if(this.props.edit && !this.state.force_forward) {
@@ -327,15 +325,17 @@ export async function updateLead( body, quote_id) {
             this.setState({
                 show_loader: false
             });
-            if (resultData.bmi_check|| resultData.error[0]==='BMI check failed.') {
+            if (resultData.error && resultData.error.length > 0 && resultData.error[0]==='BMI check failed.') {
                 this.setState({
                     openBmiDialog: true
                 }, () => {
                     this.sendEvents('next', {bmi_check: true});
                 });
             } else {
+                if(resultData.error && resultData.error.length > 0 && resultData.error[0]){
+                    resultData.error = resultData.error[0]
+                }
                 toast(
-                    resultData.error[0] ||
                     resultData.error ||
                     resultData.message ||
                     'Something went wrong'

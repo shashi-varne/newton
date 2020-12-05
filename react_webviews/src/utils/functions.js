@@ -419,7 +419,7 @@ function getPartnerConfig(partner_code) {
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
-      mobile: '+91-8048093070',
+      mobile: '+91-7829228886',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
       webAppUrl: 'https://app.fisdom.com/#!/',

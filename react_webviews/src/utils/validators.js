@@ -686,8 +686,29 @@ export function getDateBreakup(date) {
 
   // fix for safari
   // date = date.replace(/ /g,"T");
-  // date = date.replace(/-/g, '/'); fix it not sure
+  date = date.replace(/-/g, '/');
+  let date2 = new Date(date);
+  let plainDate = date2.getDate();
+  let dom = dateOrdinal(plainDate); // converts 16 to 16th, 2 to 2nd, etc.
 
+  let month = monthNames[date2.getMonth()];
+  let year = date2.getFullYear();
+  let time = formatAMPM(date2);
+
+  return { plainDate, dom, month, time, year };
+}
+
+export function getDateBreakupWithTime(date) {
+
+  let monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+
+  if (!date) {
+    return '';
+  }
+  // fix for safari
+  // date = date.replace(/ /g,"T");
   let date2 = new Date(date);
   let plainDate = date2.getDate();
   let dom = dateOrdinal(plainDate); // converts 16 to 16th, 2 to 2nd, etc.

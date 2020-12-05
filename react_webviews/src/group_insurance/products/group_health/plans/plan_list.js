@@ -161,7 +161,7 @@ class GroupHealthPlanList extends Component {
                     this.renderTileMidData(props, index))}
                 </div>
 
-                <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
+                <div className="bottom-cta">
                     STARTS AT ₹ {formatAmount(props.starts_at_value)}/YEAR
                 </div>
             </div>

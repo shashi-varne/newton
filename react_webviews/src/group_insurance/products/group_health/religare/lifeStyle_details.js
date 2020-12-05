@@ -9,6 +9,7 @@ import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 import { compact } from 'lodash';
+import { number } from "prop-types";
 
 class GroupHealthPlanLifestyleDetail extends Component {
   constructor(props) {
@@ -191,7 +192,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
       member_base[index].life_style_question.answer_description_error = '';
     } else {
       if (!dobFormatTest(value)) {
-        // return;   fixit
+        return;  //
       }
 
       let input;
@@ -232,13 +233,19 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
 
-    this.setState({
+    this.setState({ 
       member_base: member_base,
       none_option_selected: none_option_selected
     });
   };
 
   validateMonthYear = (date, dob) => {
+   var date_vaildity = date
+   date_vaildity = date_vaildity.replace('/','');
+    if(isNaN(date_vaildity)){
+      return 'please enter the valid date'
+    }
+
     if (!isValidMonthYear(date)) {
       return "please enter valid month and year";
     } else if (IsFutureMonthYear(date)) {
