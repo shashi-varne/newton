@@ -358,7 +358,8 @@ export async function get05Callback() {
         count: count + 1,
       });
 
-      this.get05Callback();
+      setTimeout(this.get05Callback(), 2000)
+      
     }
   }
 }
