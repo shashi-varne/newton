@@ -156,13 +156,12 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
+        let leftTitle, leftSubtitle, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
 
         if (this.state.get_lead) {
             
             leftTitle = lead.plan_title || '';
             leftSubtitle = lead.total_premium;
-            sum_assured = lead.total_sum_insured;
             tenure = lead.tenure;
             base_premium = lead.base_premium;
             total_amount =  lead.total_premium;

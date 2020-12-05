@@ -531,7 +531,7 @@ class GroupHealthReportDetails extends Component {
                                 PROPOSAL NUMBER
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.application_details && this.state.application_details.proposal_number || '-'}
+                                {this.state.application_details && (this.state.application_details.proposal_number || '-')}
                             </div>
                         </div>
                     </div>}
