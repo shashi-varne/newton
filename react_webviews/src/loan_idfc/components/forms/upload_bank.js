@@ -363,7 +363,7 @@ class UploadBank extends Component {
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        // disable={true}
+        disable={documents.length === 0}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
