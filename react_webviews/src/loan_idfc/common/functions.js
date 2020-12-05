@@ -565,10 +565,11 @@ export async function netBanking(url) {
   var payment_link = url;
   var pgLink = payment_link;
   let app = getConfig().app;
+  let back_url = plutusRedirectUrl;
 
   //eslint-disable-next-line
   pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + plutusRedirectUrl +
-    '&app=' + app;
+    '&app=' + app + '&back_url=' + back_url;
 
   if (getConfig().generic_callback) {
     pgLink += '&generic_callback=' + getConfig().generic_callback;
@@ -576,6 +577,7 @@ export async function netBanking(url) {
 
   this.openInTabApp({
     url: pgLink,
+    back_url: back_url
   })
 }
 
