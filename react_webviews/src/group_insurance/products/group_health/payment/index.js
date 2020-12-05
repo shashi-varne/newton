@@ -5,7 +5,7 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal, formatAMPM ,storageService, numDifferentiationInr, getDateBreakup } from 'utils/validators';
+import { inrFormatDecimal, formatAMPM ,storageService, numDifferentiationInr, getDateBreakupWithTime } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
@@ -304,8 +304,8 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>
                   { this.state.payment_details.dt_created && 
                   <span> 
-                    {(getDateBreakup(this.state.payment_details.dt_created).dom)}{' '}
-                    {(getDateBreakup(this.state.payment_details.dt_created).month)}{', '}
+                    {(getDateBreakupWithTime(this.state.payment_details.dt_created).dom)}{' '}
+                    {(getDateBreakupWithTime(this.state.payment_details.dt_created).month)}{', '}
                    {formatAMPM(this.state.payment_details.dt_created)}
                     </span> }
                       </div>
