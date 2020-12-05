@@ -1245,12 +1245,12 @@ $background: #f9f9f9;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  height: 80vh;
+  //-webkit-box-align: center;
+  //-ms-flex-align: center;
+  // align-items: center;
+  height: 75vh;
   // margin-left: -15px;
-
+  overflow-y: auto;
 }
 
 #iwd-analysis {
@@ -1561,7 +1561,7 @@ $background: #f9f9f9;
     .iwd-transaction-search-container {
       display: flex;
       justify-content: space-between;
-      
+
       .iwd-transaction-search {
         flex: 0.6;
         height: 40px;
@@ -1671,8 +1671,6 @@ $background: #f9f9f9;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
-
-
 }
 
 .iwd-transactions-table.iwd-statement-transaction-table {
@@ -1713,11 +1711,23 @@ $background: #f9f9f9;
     margin-left: 5px;
   }
 }
-
+.iwd-statement-trans-error {
+  position: absolute;
+  left: 56%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 @media only screen and (max-width: 450px) {
+  .iwd-statement-trans-error {
+    top: 55%;
+    left: 50%;
+    width: 100%;
+    z-index: -1;
+  }
   .iwd-statements-container {
     align-items: flex-start;
-    
+    margin-top: 35px;
+
     .iwd-transaction-pagination {
       margin-bottom: 2.5em;
     }
@@ -1726,6 +1736,12 @@ $background: #f9f9f9;
 
     .iwd-transaction-container {
       height: 75vh;
+    }
+    .iwd-statement-transaction
+      .iwd-transaction-container
+      .iwd-transaction-search-container
+      .iwd-transaction-search {
+      flex: 1;
     }
     .iwd-transaction-container .iwd-transaction-search-container .iwd-transaction-date {
       display: none;
@@ -1745,7 +1761,6 @@ $background: #f9f9f9;
         }
       }
     }
-
   }
 
   .iwd-filter-desktop {

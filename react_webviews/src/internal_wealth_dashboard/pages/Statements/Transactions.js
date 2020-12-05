@@ -10,6 +10,7 @@ import {
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
 import FSTable from 'common/responsive-components/FSTable';
 import { transactionsHeaderMap } from '../../constants';
+import IlsError from 'assets/fisdom/ils_error.svg';
 import { Pagination } from 'rsuite';
 import { storageService } from '../../../utils/validators';
 import IWdScreenLoader from '../../mini-components/IwdScreenLoader';
@@ -18,6 +19,7 @@ import debounce from 'lodash/debounce';
 import filter_sign from 'assets/filter_sign.svg';
 import DateRangeSelector from '../../mini-components/DateRangeSelector';
 import AutoSuggestSearch from '../../mini-components/AutoSuggestSearch';
+import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
@@ -78,11 +80,9 @@ const Transactions = () => {
 
       setTransactions(response.transactions);
     } catch (err) {
-      toast(err);
-      console.log(err);
       setHasError(true);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const onPageSelect = (page) => {
@@ -129,7 +129,11 @@ const Transactions = () => {
       toast('No transaction to download');
     }
   };
-
+  const retry = () => {
+    setHasError(false);
+    get_transactions();
+    fetch_fund_names();
+  };
   return (
     <div className='iwd-statement-transaction'>
       {isMobileView && open ? (
@@ -151,63 +155,76 @@ const Transactions = () => {
           <img src={filter_sign} alt='filter' />
         </div>
       )}
-
-      <div className='iwd-transaction-container'>
-        <section className='iwd-transaction-search-container'>
-          <div className='iwd-transaction-search'>
-            {fundNames && (
-              <AutoSuggestSearch
-                placeholder='Which fund are you looking for?'
-                fundNames={fundNames}
-                handleFilterData={handleFilterData}
-                filter_key={filter_key}
-              />
-            )}
-          </div>
-          <div className='iwd-transaction-date'>
-            <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
-          </div>
-        </section>
-        <section className='iwd-card iwd-transaction-table-container'>
-          <div className='iwd-transaction-header'>
-            <div className='iwd-transaction-title'>Transactions</div>
-
-            <div className='iwd-transaction-download-report' onClick={downloadTransactions}>
-              Download Report
+      {hasError && (
+        <div className='iwd-statement-trans-error'>
+          <ErrorScreen
+            templateErrTitle='Oops!'
+            useTemplate={true}
+            templateImage={IlsError}
+            templateErrText='Something went wrong! Please retry.'
+            templateBtnText='Retry'
+            clickHandler={retry}
+          />
+        </div>
+      )}
+      {!hasError && (
+        <div className='iwd-transaction-container'>
+          <section className='iwd-transaction-search-container'>
+            <div className='iwd-transaction-search'>
+              {fundNames && (
+                <AutoSuggestSearch
+                  placeholder='Which fund are you looking for?'
+                  fundNames={fundNames}
+                  handleFilterData={handleFilterData}
+                  filter_key={filter_key}
+                />
+              )}
             </div>
-
-            <div className='iwd-trasaction-download-icon' onClick={downloadTransactions}>
-              <img alt='download' src={download_icon} />
+            <div className='iwd-transaction-date'>
+              <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
             </div>
-          </div>
-          <div className='iwd-transaction-table-data'>
-            {!isLoading ? (
-              <FSTable
-                className='iwd-transactions-table iwd-statement-transaction-table'
-                serializeData
-                serialOffset={(activePage - 1) * 10}
-                headersMap={transactionMapper}
-                data={transactions}
-              />
-            ) : (
-              <IWdScreenLoader loadingText='Fetching...' />
-            )}
-          </div>
-        </section>
-        {!isLoading && (
-          <div className='iwd-transaction-pagination'>
-            <Pagination
-              first
-              prev
-              next
-              pages={pageMap.length - 1}
-              activePage={activePage}
-              onSelect={onPageSelect}
-              classPrefix="iwd-rs-pagination rs-pagination"
-            ></Pagination>
-          </div>
-        )}
-      </div>
+          </section>
+          <section className='iwd-card iwd-transaction-table-container'>
+            <div className='iwd-transaction-header'>
+              <div className='iwd-transaction-title'>Transactions</div>
+
+              <div className='iwd-transaction-download-report' onClick={downloadTransactions}>
+                Download Report
+              </div>
+
+              <div className='iwd-trasaction-download-icon' onClick={downloadTransactions}>
+                <img alt='download' src={download_icon} />
+              </div>
+            </div>
+            <div className='iwd-transaction-table-data'>
+              {!isLoading ? (
+                <FSTable
+                  className='iwd-transactions-table iwd-statement-transaction-table'
+                  serializeData
+                  serialOffset={(activePage - 1) * 10}
+                  headersMap={transactionMapper}
+                  data={transactions}
+                />
+              ) : (
+                <IWdScreenLoader loadingText='Fetching...' />
+              )}
+            </div>
+          </section>
+          {!isLoading && (
+            <div className='iwd-transaction-pagination'>
+              <Pagination
+                first
+                prev
+                next
+                pages={pageMap.length - 1}
+                activePage={activePage}
+                onSelect={onPageSelect}
+                classPrefix='iwd-rs-pagination rs-pagination'
+              ></Pagination>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

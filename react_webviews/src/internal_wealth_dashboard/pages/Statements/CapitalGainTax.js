@@ -17,7 +17,6 @@ const CapitalGainTax = () => {
     try {
       setIsLoading(true);
       const { tax_statement } = await fetchGainsElssYears();
-      console.log('tax', tax_statement?.capital_gains);
       setYears(tax_statement?.capital_gains);
       setIsLoading(false);
     } catch (err) {
