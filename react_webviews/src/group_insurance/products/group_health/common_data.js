@@ -7,7 +7,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-
+import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
@@ -19,10 +19,6 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    provider = provider.toUpperCase();
-    if(provider === 'HDFC_ERGO'){
-        provider = "HDFCERGO"
-    }
     
     let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
@@ -227,7 +223,7 @@ export async function initialize() {
             tenure: tenure
         }
         if(provider === 'RELIGARE') {
-            if(lead.add_ons && Object.keys(lead.add_ons).length > 0){
+            if(lead.add_ons && !isEmpty(lead.add_ons)){
                 let add_ons_backend = lead.add_ons;
                 let data = [];
                 let heading_added = false;
@@ -250,11 +246,12 @@ export async function initialize() {
                 'value': inrFormatDecimal(total_discount) 
             });
         }
-        if(base_premium !== net_premium)
-        confirmDialogData.content1.push({
-            'name': 'Net premium', 
-            'value': inrFormatDecimal(net_premium) 
-        });
+        if(base_premium !== net_premium){
+            confirmDialogData.content1.push({
+                'name': 'Net premium', 
+                'value': inrFormatDecimal(net_premium) 
+            });
+        }
 
         confirmDialogData.content1.push({
             'name': 'GST',

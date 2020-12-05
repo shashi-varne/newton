@@ -238,11 +238,19 @@ class Report extends Component {
     this.sendEvents('next', policy.key);
     let path = '';
     let key = policy.key;
+
     if (key === 'TERM_INSURANCE') {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
     } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
+      if(key === 'hdfc_ergo'){
+        key = 'HDFCERGO';
+      }else if(key === 'star'){
+        key = 'STAR';
+      }else if(key === 'religare'){
+        key = 'RELIGARE';
+      }
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
     } else {
       path = '/group-insurance/commonconsole.log(reportData)/reportdetails/' + policy.id;

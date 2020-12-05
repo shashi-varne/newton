@@ -872,6 +872,7 @@
 }
 
 .group-health-plan-premium-summary {
+  margin-bottom: 30px;
   .group-health-top-content-plan-logo {
     justify-content: flex-start;
     .tc-right {
@@ -879,7 +880,13 @@
       max-width: 140px;
     }
   }
-
+.premium-summary-disclaimer{
+  color: rgb(17, 173, 224);
+  font-weight: 500;
+  text-align: justify;
+  line-height: 18px;
+  
+}
   .pi-tile {
     color: #0A1D32;
     font-size: 14px;
