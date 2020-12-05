@@ -314,10 +314,8 @@ export async function updateLead( body, quote_id) {
         if (res.pfwresponse.status_code === 200) {
 
             if(this.state.screen_name === 'final_summary_screen'){
-                 window.location.reload();
-                // this.setState({
-                //     show_loader: false
-                // });
+                //  window.location.reload();
+                initialize()
             }
 
             if(this.props.edit && !this.state.force_forward) {
