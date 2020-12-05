@@ -309,10 +309,7 @@ export async function updateLead( body, quote_id) {
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
 
-            if(this.state.screen_name === 'final_summary_screen'){
-                 window.location.reload();
-                // initialize()
-            }
+            if (body.pedcase) { this.initialize(); this.setState({ show_loader: true });return}
 
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();

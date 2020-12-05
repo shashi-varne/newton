@@ -51,6 +51,27 @@ class GroupHealthPlanIsPed extends Component {
 
         let is_ped = 'NO';
 
+        let body = {}
+        let pedcase = false;
+        body["insured_people_details"] = [];
+ 
+        this.state.lead.insured_people_details.forEach((memberData) => {
+           let relation_key  = memberData.insured_person.relation_key
+           if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
+              pedcase = true
+              body.pedcase = true
+              memberData.insured_person.ped = false
+               body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
+           }else if(memberData.answers.pre_existing_diseases.length === 0 ){
+            memberData.insured_person.ped = false
+         body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
+     } else  if(memberData.answers.pre_existing_diseases.length > 0 ){
+      body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
+     }
+     })
+
+       if (pedcase) { this.updateLead(body)}
+
         let member_base = this.state.member_base.map((element, index) => {
             let member = lead.insured_people_details.find(member => member.insured_person.relation_key === element.backend_key)
             return {
@@ -58,40 +79,39 @@ class GroupHealthPlanIsPed extends Component {
                 ...member   
             }
         })        
- 
-        let form_data = {};
 
-        for (var mem in member_base) {
-            let mem_info = member_base[mem];
-            if (mem_info.insured_person !== undefined  && mem_info.insured_person.ped) {
-                is_ped = 'YES';
-                form_data[mem_info.key + '_checked'] = true;
-            }
+       let form_data = {};
+
+       for (var mem in member_base) {
+           let mem_info = member_base[mem];
+           if (mem_info.insured_person !== undefined  && mem_info.insured_person.ped) {
+               is_ped = 'YES';
+               form_data[mem_info.key + '_checked'] = true;
+           }
+       }
+
+       form_data.is_ped = is_ped;
+
+       for (var key in form_data) {
+           this.setState({
+               [key]: form_data[key]
+           });
+       }
+
+       this.setState({
+        form_data: form_data,
+        lead: lead,
+        radio_title: radio_title,
+        account_type: account_type,
+        member_base: member_base
+    });
+
+    this.setState({
+        bottomButtonData: {
+            ...this.state.bottomButtonData,
+            handleClick: this.handleClick
         }
-
-        form_data.is_ped = is_ped;
-
-        for (var key in form_data) {
-            this.setState({
-                [key]: form_data[key]
-            });
-        }
-
-        this.setState({
-            form_data: form_data,
-            lead: lead,
-            radio_title: radio_title,
-            account_type: account_type,
-            member_base: member_base
-        })
-
-
-        this.setState({
-            bottomButtonData: {
-                ...this.state.bottomButtonData,
-                handleClick: this.handleClick
-            }
-        })
+    });
     }
 
     updateParent = (key, value) => {

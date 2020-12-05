@@ -85,26 +85,8 @@ class GroupHealthPlanFinalSummary extends Component {
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
-      
-              let body = {}
-              let pedcase = false;
-              body["insured_people_details"] = []
-              this.state.lead.insured_people_details.forEach((memberData) => {
-                 let relation_key  = memberData.insured_person.relation_key
-                 if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
-                    pedcase = true
-                     body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
-                 }else if(memberData.answers.pre_existing_diseases.length === 0 ){
-               body["insured_people_details"].push( { 'ped': false, "relation_key" : relation_key} )
-           } else  if(memberData.answers.pre_existing_diseases.length > 0 ){
-            body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
-           }
-             })
          member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
 
-             if(pedcase){
-                this.updateLead(body); 
-             }
 
         this.setState({
             applicantIndex: applicantIndex,
