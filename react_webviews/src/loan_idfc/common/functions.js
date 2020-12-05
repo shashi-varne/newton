@@ -362,7 +362,12 @@ export async function submitApplication(params, state, update = "") {
         // }
       }
     } else {
-      this.navigate("loan-status");
+      if (result.error === "Create loan null failed") {
+        this.navigate("loan-status");
+      } else {
+        toast(result.error[0] || result.message || "Something went wrong!");
+      }
+      
     }
   } catch (err) {
     console.log(err);

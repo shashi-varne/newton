@@ -23,6 +23,7 @@ class ApplicationSummary extends Component {
     let lead = this.state.lead || {};
     let accordianData = [];
     let personal_info = lead.personal_info || {};
+    let vendor_info = lead.vendor_info || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
 
