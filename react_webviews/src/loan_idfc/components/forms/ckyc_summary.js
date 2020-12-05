@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators"
+import { capitalizeFirstLetter, timeStampToDate } from "../../../utils/validators";
 
 class ApplicationSummary extends Component {
   constructor(props) {
@@ -23,75 +23,128 @@ class ApplicationSummary extends Component {
     let lead = this.state.lead || {};
     let accordianData = [];
     let personal_info = lead.personal_info || {};
-    let professional_info = lead.professional_info || {};
-    let application_info = lead.application_info || {};
-    let vendor_info = lead.vendor_info || {};
+    let current_address_data = lead.current_address_data || {};
+    let permanent_address_data = lead.permanent_address_data || {};
 
     let personal_data = {
       title: "Personal details",
       edit_state: "/loan/idfc/edit-personal-details",
       data: [
         {
-          title: "Date of birth ",
-          subtitle: timeStampToDate(personal_info.dob || ""),
+          title: "First name",
+          subtitle: capitalizeFirstLetter(personal_info.first_name),
         },
         {
-          title: "PAN number",
-          subtitle: personal_info.pan_no,
+          title: "Middle name",
+          subtitle: personal_info.middle_name,
         },
         {
-          title: "Education qualification",
-          subtitle: professional_info.educational_qualification,
+          title: "Last name",
+          subtitle: capitalizeFirstLetter(personal_info.last_name),
         },
         {
-          title: "Employment type",
-          subtitle: capitalizeFirstLetter(application_info.employment_type || ""),
+          title: "Date of birth",
+          subtitle: timeStampToDate(personal_info.dob),
+        },
+        {
+          title: "Gender",
+          subtitle: capitalizeFirstLetter(personal_info.gender),
+        },
+        {
+          title: "Marital status",
+          subtitle: capitalizeFirstLetter(personal_info.marital_status),
+        },
+        {
+          title: "Father name",
+          subtitle: capitalizeFirstLetter(personal_info.father_name),
+        },
+        {
+          title: "Mother name",
+          subtitle: capitalizeFirstLetter(personal_info.mother_name),
+        },
+        {
+          title: "Religion",
+          subtitle: capitalizeFirstLetter(personal_info.religion),
+        },
+        {
+          title: "Email id",
+          subtitle: personal_info.email_id,
         },
       ],
     };
 
     accordianData.push(personal_data);
 
-    let professional_data = {
-      title: "Work details",
-      edit_state: "/loan/idfc/edit-professional-details",
+    let address_data = {
+      title: "Address details",
+      edit_state: "/loan/idfc/edit-address-details",
       data: [
         {
-          title: "Company name",
-          subtitle: professional_info.company_name,
+          sub_header_title: "Current address"
         },
         {
-          title: "Official email",
-          subtitle: professional_info.office_email,
+          title: "Address 1",
+          subtitle: current_address_data.address1,
         },
         {
-          title: "Net monthly salary",
-          subtitle: formatAmountInr(application_info.net_monthly_salary || ""),
+          title: "Address 2",
+          subtitle: current_address_data.address2,
         },
         {
-          title: "Salary receipt mode",
-          subtitle: capitalize(professional_info.salary_mode || ""),
+          title: "Address 3",
+          subtitle: current_address_data.address3,
         },
         {
-          title: "Company constitution",
-          subtitle: capitalize(professional_info.constitution || ""),
+          title: "Landmark",
+          subtitle: current_address_data.landmark,
         },
         {
-          title: "Organisation",
-          subtitle: capitalize(professional_info.organisation || ""),
+          title: "Pincode",
+          subtitle: current_address_data.pincode,
         },
         {
-          title: "Department",
-          subtitle: capitalize(professional_info.department || ""),
+          title: "City",
+          subtitle: current_address_data.city,
         },
         {
-          title: "Industry",
-          subtitle: capitalize(professional_info.industry || ""),
+          title: "State",
+          subtitle: current_address_data.state,
+        },
+        {
+          sub_header_title: "Permanent address"
+        },
+        {
+          title: "Address 1",
+          subtitle: permanent_address_data.address1,
+        },
+        {
+          title: "Address 2",
+          subtitle: permanent_address_data.address2,
+        },
+        {
+          title: "Address 3",
+          subtitle: permanent_address_data.address3,
+        },
+        {
+          title: "Landmark",
+          subtitle: permanent_address_data.landmark,
+        },
+        {
+          title: "Pincode",
+          subtitle: permanent_address_data.pincode,
+        },
+        {
+          title: "City",
+          subtitle: permanent_address_data.city,
+        },
+        {
+          title: "State",
+          subtitle: permanent_address_data.state,
         },
       ],
     };
 
-    accordianData.push(professional_data);
+    accordianData.push(address_data);
 
     this.setState(
       {
@@ -132,6 +185,9 @@ class ApplicationSummary extends Component {
             <div className="title">{props.title}</div>
             <div className="subtitle">{props.subtitle}</div>
           </div>
+        )}
+        {props.sub_header_title && (
+            <div className="sub-header-title">{props.sub_header_title}</div>
         )}
       </div>
     );
@@ -212,7 +268,7 @@ class ApplicationSummary extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title=" Summary"
+        title="Loan application Summary"
         buttonTitle="OKAY"
         handleClick={() => this.navigate('journey')}
       >
