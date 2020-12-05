@@ -62,8 +62,8 @@ class PerfiosStatus extends Component {
     let name = personal_info.first_name;
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-    
-    let bt_eligible = Object.keys(lead.bt_info || {}).length !== 0 ? true : false;
+
+    let bt_eligible = vendor_info.bt_eligible;
     // let bt_eligible = this.state.params
     //   ? this.state.params.bt_eligible
     //   : vendor_info.bt_eligible;
@@ -75,7 +75,7 @@ class PerfiosStatus extends Component {
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
-      name: name
+      name: name,
     });
   };
 
@@ -104,23 +104,27 @@ class PerfiosStatus extends Component {
     let { perfios_state, bt_eligible, idfc_07_state } = this.state;
 
     if (perfios_state === "success") {
-      // if (!bt_eligible && idfc_07_state === "success") {
-      //   this.submitApplication({}, "one");
-      // }
+      if (!bt_eligible && idfc_07_state === "success") {
+        this.submitApplication({}, "one");
+      }
 
-      // if (
-      //   bt_eligible &&
-      //   (idfc_07_state === "success" || idfc_07_state === "triggered")
-      // ) {
+      if (!bt_eligible && idfc_07_state === "triggered") {
+        this.getPointSevenCallback();
+      }
+
+      if (bt_eligible && idfc_07_state === "success") {
         let body = {
           idfc_loan_status: "bt_init",
         };
         this.updateApplication(body, "bt-info");
-      // }
+      }
 
-      // if (!bt_eligible && idfc_07_state === "triggered") {
-      //   this.getPointSevenCallback();
-      // }
+      if (bt_eligible && idfc_07_state === "triggered") {
+        let body = {
+          idfc_loan_status: "bt_init",
+        };
+        this.updateApplication(body, "bt-info");
+      }
     }
 
     if (perfios_state === "bypass") {
@@ -129,7 +133,7 @@ class PerfiosStatus extends Component {
 
     if (perfios_state === "failure") {
       let body = {
-        perfios_state: 'init',
+        perfios_state: "init",
       };
       this.updateApplication(body, "income-details");
     }
@@ -158,8 +162,8 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "success" && (
             <div className="subtitle">
-              Hey {name}, IDFC has successfully verified your bank statements and
-              your income details have been safely updated.
+              Hey {name}, IDFC has successfully verified your bank statements
+              and your income details have been safely updated.
             </div>
           )}
           {/* <div className="subtitle">

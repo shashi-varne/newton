@@ -309,7 +309,12 @@ export async function updateApplication(params, next_state = '') {
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      toast(result.error[0] || result.message || "Something went wrong!");
+      if (typeof result.error === 'string') {
+        toast(result.error || result.message || "Something went wrong!");
+      }else {
+        toast(result.error[0] || result.message || "Something went wrong!");
+      }
+      
     }
   } catch (err) {
     console.log(err);
@@ -343,7 +348,29 @@ export async function get05Callback() {
   }
 }
 
-export async function submitApplication(params, state, update = "") {
+export async function get10Callback(state) {
+  this.setState({
+    show_loader: true
+  })
+
+  await this.getUserStatus();
+
+  let { count } = this.state;
+  
+  if (this.state.idfc_10_callback) {
+    this.navigate(state)
+  } else {
+    if (count < 20) {
+      this.setState({
+        count: count + 1
+      })
+
+      this.get05Callback()
+    }
+  }
+}
+
+export async function submitApplication(params, state, update = "", next_state = "") {
   try {
     this.setState({
       show_loader: true
@@ -366,13 +393,23 @@ export async function submitApplication(params, state, update = "") {
 
         if (state === "point_five") {
           this.get05Callback()
+        } if(state === "one") {
+          this.get10Callback(state)
         } else {
-          this.navigate(this.state.next_state);
+          this.navigate(next_state || this.state.next_state);
         }
       }
     } else {
-      if (result.error === "Create loan null failed") {
-        this.navigate("loan-status");
+
+      let rejection_cases = [
+        "CreateLoan null API Failed",
+        "CreateLoan 0.5 API Failed",
+        "CreateLoan 1.0 API Failed",
+      ];
+      if (typeof result.error === 'string' && rejection_cases.indexOf(result.error) === -1 ) {
+        toast(result.error || result.message || "Something went wrong!");
+      } else if (typeof result.error === 'string' && rejection_cases.indexOf(result.error) !== -1 ) {
+        this.navigate('loan-status')
       } else {
         toast(result.error[0] || result.message || "Something went wrong!");
       }

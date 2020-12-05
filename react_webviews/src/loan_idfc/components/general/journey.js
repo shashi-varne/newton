@@ -205,14 +205,14 @@ class JourneyMap extends Component {
   };
 
   handleClick = (id) => {
-    let { ckyc_state, pefios_state, idfc_loan_status } = this.state;
+    let { ckyc_state, pefios_state, idfc_loan_status, index } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
         this.getCkycState();
       }
-      if (idfc_loan_status === "idfc_null_accepted") {
+      if (index > "1") {
         this.navigate("ckyc-summary");
       } else {
         this.updateApplication({
@@ -237,8 +237,6 @@ class JourneyMap extends Component {
 
         this.navigate(next_state);
       }
-      
-      
     }
 
     if (id === "document_upload") {
