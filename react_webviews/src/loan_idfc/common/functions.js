@@ -252,6 +252,10 @@ export async function getUserStatus(state = "") {
         ...(result || {}),
       });
 
+      if (this.state.screen_name === "requirement_details_screen") {
+        return result;
+      }
+
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -333,11 +337,11 @@ export async function get05Callback() {
     show_loader: true
   })
 
-  await this.getUserStatus();
+  let result = await this.getUserStatus();
 
   let { count } = this.state;
   
-  if (this.state.is_dedupe || this.state.idfc_05_callback) {
+  if (result.is_dedupe || result.idfc_05_callback) {
     this.navigate("loan-status")
   } else {
     if (count < 20) {
@@ -355,11 +359,11 @@ export async function get10Callback(state) {
     show_loader: true
   })
 
-  await this.getUserStatus();
+  let result = await this.getUserStatus();
 
   let { count } = this.state;
   
-  if (this.state.idfc_10_callback) {
+  if (result.idfc_10_callback) {
     this.navigate(state)
   } else {
     if (count < 20) {
