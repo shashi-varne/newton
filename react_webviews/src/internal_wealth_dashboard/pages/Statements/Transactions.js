@@ -81,8 +81,8 @@ const Transactions = () => {
       setTransactions(response.transactions);
     } catch (err) {
       setHasError(true);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   const onPageSelect = (page) => {
@@ -95,7 +95,6 @@ const Transactions = () => {
       setFundNames(funds);
     } catch (err) {
       toast(err);
-      console.log(err);
     }
   };
 
@@ -123,7 +122,6 @@ const Transactions = () => {
         await downloadTransactionReport('pdf', filterData);
       } catch (err) {
         toast(err);
-        console.log(err);
       }
     } else {
       toast('No transaction to download');

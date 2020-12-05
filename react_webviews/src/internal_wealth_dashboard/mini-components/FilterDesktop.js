@@ -21,7 +21,7 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
 
   const clearFilters = () => {
     const filterData = { ...storedFilterVal, ttype: '' };
-    if (filterState) {
+    if (!isEmpty(clearCheck)) {
       if (filter_key === 'iwd-holding-filters') {
         handleFilterData(null);
         setFilterState(null);
