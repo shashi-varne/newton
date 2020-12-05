@@ -326,9 +326,9 @@ class GroupHealthPlanFinalSummary extends Component {
                         // eslint-disable-next-line no-loop-func 
                         let ped = ped_list.find(item => item.key === ped_option.front_end_question_id);
                         let ped_data = ped_option.since_when.split('/')
-                        let date = new Date(ped_option.since_when)
                         diseases_data_backend.push({
                             'title': ped_option.description || ped.name,
+                            // eslint-disable-next-line
                             'subtitle': 'Since - ' + `${ped_data[1]}/${ped_data[2]}`
                         })
                     })
@@ -799,7 +799,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
     }
 
-    renderAccordiansubData = (props, index) => { console.log(props)
+    renderAccordiansubData = (props, index) => {
 
         return (
             <div key={index}>

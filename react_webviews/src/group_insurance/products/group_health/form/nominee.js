@@ -161,7 +161,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     handleClick = async () => {
         this.sendEvents('next');
         let { provider } = this.state;
-        const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
+        // const noOfWords = (val = '') => val ? val.split(' ').length : 0;
         const keysMapper = {
             'name': 'name',
             'relation': 'relation',
@@ -295,6 +295,7 @@ class GroupHealthPlanNomineeDetails extends Component {
 
 
     sendEvents(user_action) {
+        let formName = (this.state.form_data.name || '').split(" ").filter(e => e).length === 2
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -304,7 +305,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 "screen_name": 'nominee details',
                 'dob': this.state.form_data.dob ? 'yes' : 'no',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'nominee_name': this.state.form_data.name ? 'yes' : 'no',
+                'nominee_name': formName? 'yes' : 'no',
                 'nominee_relation': this.state.form_data.relation ? 'yes' : 'no',
             }
         };

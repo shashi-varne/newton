@@ -385,18 +385,18 @@ export const religare = {
                 'name': 'SON',
                 'value': 'SON'
             },
-            {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
+            // {
+            //     'name': 'SPOUSE',
+            //     'value': 'SPOUSE'
+            // },
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
             },
-            // {
-            //     'name': 'WIFE',
-            //     'value': 'WIFE'
-            // },
+            {
+                'name': 'WIFE',
+                'value': 'WIFE'
+            },
             {
                 'name': 'HUSBAND',
                 'value': 'HUSBAND'

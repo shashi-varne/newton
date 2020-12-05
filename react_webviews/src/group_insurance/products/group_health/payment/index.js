@@ -182,8 +182,7 @@ class GroupHealthPayment extends Component {
   }
 
   render() {
-    let {policy_data, screenData, provider} = this.state;        
-    var s = new Date('2020-01-14T17:43:37.000Z').toLocaleString(undefined, {timeZone: 'Asia/Kolkata'});
+    let {policy_data, screenData, provider} = this.state;
     
     return (
       <Container
@@ -293,13 +292,13 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>Sum 
                     insured {numDifferentiationInr(this.state.lead.individual_sum_insured)} for {this.state.lead.tenure > 1 ? this.state.lead.tenure + ' years' : this.state.lead.tenure + ' year'}</div>
                     {policy_data.policy_number && 
-                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Policy number: {policy_data.policy_number}</div>
                     }
                     {!policy_data.policy_number && this.state.provider === 'HDFCERGO' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number : {this.state.application_details && this.state.application_details.proposal_number || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Transaction number : {this.state.application_details && this.state.application_details.proposal_number}</div>
                     }
                      {!policy_data.policy_number && this.state.provider === 'RELIGARE' &&
-                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {this.state.application_details && this.state.application_details.proposal_number || '-'}</div>
+                    <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {this.state.application_details && this.state.application_details.proposal_number}</div>
                     }
                     <div style={{ margin: '5px 0 6px 0' }}>
                   { this.state.payment_details.dt_created && 

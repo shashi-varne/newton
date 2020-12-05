@@ -9,7 +9,6 @@ import { formatMonthandYear, dobFormatTest, validateAlphabets, IsFutureMonthYear
 import toast from "../../../../common/ui/Toast";
 import ConfirmDialog from './../plans/confirm_dialog';
 import { compact } from 'lodash';
-import { number } from "prop-types";
 
 class GroupHealthPlanLifestyleDetail extends Component {
   constructor(props) {
