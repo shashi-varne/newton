@@ -475,7 +475,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   sendEvents(user_action, data = {}) {  
-    let formName = (this.state.form_data.name || '').split(" ").filter(e => e).length === 2
+    let formName = (this.state.form_data.name || '').split(" ").filter(e => e).length >= 2;
     let eventObj = {
       "event_name": 'health_insurance',
       "properties": {
