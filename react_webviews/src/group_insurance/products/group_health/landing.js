@@ -16,7 +16,7 @@ import Grid from "material-ui/Grid";
 import SVG from "react-inlinesvg";
 import down_arrow from "assets/down_arrow.svg";
 import up_arrow from "assets/up_arrow.svg";
-// import { Carousel } from 'react-responsive-carousel';
+import scrollIntoView from 'scroll-into-view-if-needed';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from "./common_data";
 import ReactResponsiveCarousel from "../../../common/ui/carousel";
@@ -140,6 +140,7 @@ class GroupHealthLanding extends Component {
   handleClick = () => {
     if(!this.state.tncChecked){
       toast('Please Agree to the Terms and Conditions');
+      this.handleScroll();
       return;
     }
 
@@ -237,6 +238,22 @@ class GroupHealthLanding extends Component {
     this.setState({
       tncChecked : !this.state.tncChecked
     });
+  }
+
+  handleScroll = () => {
+    setTimeout(function () {
+        let element = document.getElementById('agreeScroll');
+        if (!element || element === null) {
+            return;
+        }
+
+        scrollIntoView(element, {
+            block: 'start',
+            inline: 'nearest',
+            behavior: 'smooth'
+        })
+
+    }, 50);
   }
 
   render() {
@@ -475,6 +492,7 @@ class GroupHealthLanding extends Component {
             className="CheckBlock2 accident-plan-terms"
             style={{ padding: 0, margin : '10px 0px 34px 0px' }}
           >
+          <div id="agreeScroll">
            <Grid container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">
                 <Checkbox
@@ -502,6 +520,7 @@ class GroupHealthLanding extends Component {
                 </div>
               </Grid>
             </Grid>
+          </div>
           </div>
         </div>
       </Container>
