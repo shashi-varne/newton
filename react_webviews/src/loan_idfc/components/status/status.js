@@ -146,7 +146,7 @@ class LoanStatus extends Component {
       show_loader: false,
       params: getUrlParams(),
       commonMapper: {},
-      idfc_loan_status: "",
+      vendor_application_status: "",
       screen_name: "loan_status",
     };
 
@@ -161,16 +161,30 @@ class LoanStatus extends Component {
     // let { status, bt_eligible } = this.state.params;
 
     let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
-    let application_info = lead.application_info || {};
-    let personal_info = lead.personal_info || {};
-    let idfc_loan_status = vendor_info.idfc_loan_status;
-    let { application_status, rejection_reason } = application_info;
-    let perfios_state = vendor_info.perfios_state;
-    let bt_eligible = vendor_info.bt_eligible;
-    let is_dedupe = vendor_info.is_dedupe || "";
+    // let vendor_info = lead.vendor_info || {};
+    // let application_info = lead.application_info || {};
+    // let personal_info = lead.personal_info || {};
+    // let vendor_application_status = vendor_info.vendor_application_status;
+    // let { application_status, rejection_reason } = application_info;
+    // let perfios_state = vendor_info.perfios_state;
+    // let bt_eligible = vendor_info.bt_eligible;
+    // let is_dedupe = vendor_info.is_dedupe || "";
 
-    if (application_status === "internally_rejected") {
+    let vendor_application_status = lead.vendor_application_status;
+    let application_status = lead.application_status;
+    let pan_status = lead.pan_status;
+    let ckyc_status = lead.ckyc_status;
+    let idfc_05_callback = lead.idfc_05_callback;
+    let perfios_status = lead.perfios_status;
+    let otp_verified = lead.otp_verified;
+    let idfc_07_state = lead.idfc_07_state;
+    let bt_selected = lead.bt_selected;
+    let idfc_10_callback = lead.idfc_10_callback;
+    let rejection_reason = lead.rejection_reason;idfc_05_callback
+    let first_name = lead.first_name;
+    let is_dedupe = lead.is_dedupe;
+
+    if (rejection_reason) {
       this.setState({
         commonMapper: commonMapper[rejection_reason] || {},
         application_status: application_status,
@@ -182,18 +196,18 @@ class LoanStatus extends Component {
         application_status: application_status,
       });
     } else {
-      if (idfc_loan_status === "idfc_0.5_accepted") {
-        commonMapper[idfc_loan_status].top_title =
-          commonMapper[idfc_loan_status].top_title +
+      if (vendor_application_status === "idfc_0.5_accepted") {
+        commonMapper[vendor_application_status].top_title =
+          commonMapper[vendor_application_status].top_title +
           " " +
-          personal_info.first_name +
+          first_name +
           "!";
       }
 
       this.setState({
-        commonMapper: commonMapper[idfc_loan_status] || {},
-        idfc_loan_status: idfc_loan_status,
-        first_name: personal_info.first_name,
+        commonMapper: commonMapper[vendor_application_status] || {},
+        vendor_application_status: vendor_application_status,
+        first_name: first_name,
       });
     }
   };
@@ -205,18 +219,18 @@ class LoanStatus extends Component {
   handleClick = () => {
     let {
       commonMapper,
-      idfc_loan_status,
+      vendor_application_status,
       application_status,
       bt_eligible,
       perfios_state,
     } = this.state;
     if (
-      idfc_loan_status === "idfc_0.5_submitted" ||
-      idfc_loan_status === "idfc_0.5_accepted"
+      vendor_application_status === "idfc_0.5_submitted" ||
+      vendor_application_status === "idfc_0.5_accepted"
     ) {
       let body = {
         perfios_state: "init",
-        idfc_loan_status: "perfios",
+        vendor_application_status: "perfios",
       };
 
       this.updateApplication(body, "income-details");
@@ -237,7 +251,7 @@ class LoanStatus extends Component {
   render() {
     let {
       commonMapper,
-      idfc_loan_status,
+      vendor_application_status,
       application_status,
       rejection_reason,
       first_name,
@@ -285,15 +299,15 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {idfc_loan_status === "idfc_0.5_rejected" && (
+          {vendor_application_status === "idfc_0.5_rejected" && (
             <div className="subtitle">
               We're so sorry to inform you that IDFC has rejected your loan
               application as it did not meet their loan policy.
             </div>
           )}
 
-          {(idfc_loan_status === "idfc_0.5_submitted" ||
-            idfc_loan_status === "idfc_0.5_accepted") && (
+          {(vendor_application_status === "idfc_0.5_submitted" ||
+            vendor_application_status === "idfc_0.5_accepted") && (
             <div>
               <div className="subtitle">
                 Your profile has been successfully evaluated and basis the

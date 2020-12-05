@@ -24,6 +24,7 @@ export async function initialize() {
   this.getUserStatus = getUserStatus.bind(this);
   this.startTransaction = startTransaction.bind(this);
   this.netBanking = netBanking.bind(this);
+  this.net = net.bind(this);
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
@@ -49,8 +50,8 @@ export async function initialize() {
     {
       screenData: screenData,
       productName: getConfig().productName,
-      count: 0
-    },
+      count: 0,
+    }
     // () => {
     //   this.onload();
     // }
@@ -60,7 +61,12 @@ export async function initialize() {
     show_loader: true,
   });
 
-  let screens = ["calculator", "know_more_screen", "landing_screen"];
+  let screens = [
+    "calculator",
+    "know_more_screen",
+    "landing_screen",
+    "loan_status",
+  ];
 
   if (!screens.includes(this.state.screen_name)) {
     this.getOrCreate();
@@ -71,6 +77,10 @@ export async function initialize() {
   }
 
   if (this.state.screen_name === "landing_screen") {
+    this.getUserStatus();
+  }
+
+  if (this.state.screen_name === "loan_status") {
     this.getUserStatus();
   }
 }
@@ -93,7 +103,6 @@ export async function getInstitutionList() {
       this.setState({
         bankOptions: bankOptions,
       });
-
     } else {
       toast(result.error || result.message || "Something went wrong!");
     }
@@ -119,7 +128,6 @@ export async function getIndustryList() {
       this.setState({
         industryOptions: industryOptions,
       });
-
     } else {
       toast(result.error || result.message || "Something went wrong!");
     }
@@ -141,8 +149,8 @@ export async function getDocumentList() {
     const { result, status_code: status } = res.pfwresponse;
 
     this.setState({
-      docList: result.doc_list
-    })
+      docList: result.doc_list,
+    });
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -197,20 +205,23 @@ export async function getOrCreate(params) {
         }
       );
 
-      let screens = ["landing_screen", "calculator", "know_more_screen"]
+      let screens = ["landing_screen", "calculator", "know_more_screen"];
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       }
 
       if (params && params.reset) {
-        this.navigate('home')
+        this.navigate("home");
       }
 
       if (application_status === "internally_rejected") {
-        this.navigate('loan-status')
+        this.navigate("loan-status");
       }
 
-      if (this.state.screen_name === 'loan_bt' || this.state.screen_name === 'credit_bt') {
+      if (
+        this.state.screen_name === "loan_bt" ||
+        this.state.screen_name === "credit_bt"
+      ) {
         this.getInstitutionList();
       }
 
@@ -221,12 +232,9 @@ export async function getOrCreate(params) {
       if (this.state.screen_name === "professional_details_screen") {
         this.getIndustryList();
       }
-
-      
     } else {
       toast(result.error || result.message || "Something went wrong!");
     }
-
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -252,10 +260,12 @@ export async function getUserStatus(state = "") {
         ...(result || {}),
       });
 
-      if (this.state.screen_name === "requirement_details_screen" || this.state.screen_name === "journey_screen") {
+      if (
+        this.state.screen_name === "requirement_details_screen" ||
+        this.state.screen_name === "journey_screen"
+      ) {
         return result;
       }
-
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -283,7 +293,7 @@ export function setEditTitle(string) {
   return string;
 }
 
-export async function updateApplication(params, next_state = '') {
+export async function updateApplication(params, next_state = "") {
   try {
     this.setState({
       show_loader: true,
@@ -315,12 +325,11 @@ export async function updateApplication(params, next_state = '') {
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      if (typeof result.error === 'string') {
+      if (typeof result.error === "string") {
         toast(result.error || result.message || "Something went wrong!");
-      }else {
+      } else {
         toast(result.error[0] || result.message || "Something went wrong!");
       }
-      
     }
   } catch (err) {
     console.log(err);
@@ -334,61 +343,68 @@ export async function updateApplication(params, next_state = '') {
 
 export async function get05Callback() {
   this.setState({
-    show_loader: true
-  })
+    show_loader: true,
+  });
 
   let result = await this.getUserStatus();
 
   let { count } = this.state;
-  console.log(result.is_dedupe === true || result.idfc_05_callback === true)
+  console.log(result.is_dedupe === true || result.idfc_05_callback === true);
   if (result.is_dedupe === true || result.idfc_05_callback === true) {
-    this.navigate("loan-status")
+    this.navigate("loan-status");
   } else {
     if (count < 20) {
       this.setState({
-        count: count + 1
-      })
+        count: count + 1,
+      });
 
-      this.get05Callback()
+      this.get05Callback();
     }
   }
 }
 
 export async function get10Callback(state) {
   this.setState({
-    show_loader: true
-  })
+    show_loader: true,
+  });
 
   let result = await this.getUserStatus();
 
   let { count } = this.state;
-  
+
   if (result.idfc_10_callback) {
-    this.navigate(state)
+    this.navigate(state);
   } else {
     if (count < 20) {
       this.setState({
-        count: count + 1
-      })
+        count: count + 1,
+      });
 
-      this.get05Callback()
+      this.get05Callback();
     }
   }
 }
 
-export async function submitApplication(params, state, update = "", next_state = "") {
+export async function submitApplication(
+  params,
+  state,
+  update = "",
+  next_state = ""
+) {
   try {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
 
     let screens = ["address_details", "requirement_details_screen"];
     this.setState({
       show_loader: true,
-      loaderWithData: screens.includes(this.state.screen_name)
+      loaderWithData: screens.includes(this.state.screen_name),
     });
     const res = await Api.post(
-      `relay/api/loan/submit/application/idfc/${this.state.application_id}?state=${state}${update && ('&update=' + update)}`,
+      `relay/api/loan/submit/application/idfc/${
+        this.state.application_id
+      }?state=${state}${update && "&update=" + update}`,
       params
     );
 
@@ -396,11 +412,10 @@ export async function submitApplication(params, state, update = "", next_state =
 
     if (status === 200) {
       if (result.message === "Success") {
-
         if (state === "point_five") {
-          this.get05Callback()
-        } else if(state === "one") {
-          this.get10Callback(state)
+          this.get05Callback();
+        } else if (state === "one") {
+          this.get10Callback(state);
         } else {
           this.navigate(next_state || this.state.next_state);
         }
@@ -415,14 +430,19 @@ export async function submitApplication(params, state, update = "", next_state =
         "CreateLoan 3 API Failed",
         "CreateLoan 4 API Failed",
       ];
-      if (typeof result.error === 'string' && rejection_cases.indexOf(result.error) === -1 ) {
+      if (
+        typeof result.error === "string" &&
+        rejection_cases.indexOf(result.error) === -1
+      ) {
         toast(result.error || result.message || "Something went wrong!");
-      } else if (typeof result.error === 'string' && rejection_cases.indexOf(result.error) !== -1 ) {
-        this.navigate('loan-status')
+      } else if (
+        typeof result.error === "string" &&
+        rejection_cases.indexOf(result.error) !== -1
+      ) {
+        this.navigate("loan-status");
       } else {
         toast(result.error[0] || result.message || "Something went wrong!");
       }
-      
     }
   } catch (err) {
     console.log(err);
@@ -457,7 +477,7 @@ export async function formCheckUpdate(
   keys_to_check,
   form_data,
   state = "",
-  update = "",
+  update = ""
 ) {
   if (!form_data) {
     form_data = this.state.form_data;
@@ -560,10 +580,11 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-
   let plutusRedirectUrl = encodeURIComponent(
-    window.location.origin  + `/loan/idfc/perfios-status` + getConfig().searchParams
-  )
+    window.location.origin +
+      `/loan/idfc/perfios-status` +
+      getConfig().searchParams
+  );
 
   var payment_link = url;
   var pgLink = payment_link;
@@ -571,17 +592,76 @@ export async function netBanking(url) {
   let back_url = plutusRedirectUrl;
 
   //eslint-disable-next-line
-  pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + plutusRedirectUrl +
-    '&app=' + app + '&back_url=' + back_url;
+  pgLink +=
+    (pgLink.match(/[\?]/g) ? "&" : "?") +
+    "plutus_redirect_url=" +
+    plutusRedirectUrl +
+    "&app=" +
+    app +
+    "&back_url=" +
+    back_url;
 
   if (getConfig().generic_callback) {
-    pgLink += '&generic_callback=' + getConfig().generic_callback;
+    pgLink += "&generic_callback=" + getConfig().generic_callback;
   }
 
   this.openInTabApp({
     url: pgLink,
-    back_url: back_url
-  })
+    back_url: back_url,
+  });
+}
+
+export async function net(url) {
+  let plutus_redirect_url = encodeURIComponent(
+    window.location.origin +
+      `/loan/idfc/perfios-status` +
+      getConfig().searchParams
+  );
+
+  var pgLink = url;
+  let app = getConfig().app;
+  // let redirect_url = getConfig().redirect_url;
+  // eslint-disable-next-line
+  pgLink +=
+    (pgLink.match(/[\?]/g) ? "&" : "?") +
+    "plutus_redirect_url=" +
+    plutus_redirect_url +
+    "&app=" +
+    app +
+    "&back_url=" +
+    plutus_redirect_url;
+
+  if (getConfig().generic_callback) {
+    pgLink += "&generic_callback=" + getConfig().generic_callback;
+  }
+
+  if (getConfig().app === "ios") {
+    nativeCallback({
+      action: "show_top_bar",
+      message: {
+        title: "Payment",
+      },
+    });
+  }
+  if (!getConfig().redirect_url) {
+    nativeCallback({
+      action: "take_control",
+      message: {
+        back_url: plutus_redirect_url,
+        back_text: "Are you sure you want to exit the payment process?",
+      },
+    });
+  } else {
+    nativeCallback({
+      action: "take_control",
+      message: {
+        back_url: plutus_redirect_url,
+        back_text: "",
+      },
+    });
+  }
+
+  window.location.href = pgLink;
 }
 
 export async function startTransaction(transaction_type) {
@@ -602,12 +682,12 @@ export async function startTransaction(transaction_type) {
       }
 
       if (transaction_type === "netbanking") {
-        this.netBanking(result.netbanking_url || "");
+        this.net(result.netbanking_url || "");
       }
     } else {
       // toast(result.error || result.message || "Something went wrong!");
       // this.onload();
-      this.navigate('perfios-status')
+      this.navigate("perfios-status");
     }
   } catch (err) {
     console.log(err);
