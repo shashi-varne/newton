@@ -67,6 +67,15 @@ class Report extends Component {
         id: policy.lead_id,
         premium: Math.round(policy.total_amount),
       };
+    }else if( provider === 'FYNTUNE'){
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title,
+        top_title: 'Life Insurance',
+        key: 'FYNTUNE',
+        id: policy.fyntune_ref_id, 
+        premium: policy.total_amount
+      };
     } else if (provider === 'RELIGARE') {
       obj = {
         ...obj,
@@ -141,7 +150,7 @@ class Report extends Component {
         pathname = 'intro';
       }
 
-    }
+    } 
 
     let fullPath = '/group-insurance/term/' + pathname;
 
@@ -252,8 +261,10 @@ class Report extends Component {
         key = 'RELIGARE';
       }
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
-    } else {
-      path = '/group-insurance/commonconsole.log(reportData)/reportdetails/' + policy.id;
+    }else if(key === 'FYNTUNE'){
+      path =`/group-insurance/life-insurance/savings-plan/report-details/${policy.id}`;
+    }else {
+      path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
     this.navigate(path, policy.provider);

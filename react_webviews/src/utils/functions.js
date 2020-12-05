@@ -768,17 +768,17 @@ export function isFeatureEnabled(config, feature) {
   }
 
   let mapper = {
-    open_inapp_tab_hs: {
-      fisdom: {
-        android: '999',
-        ios: '',
+    'open_inapp_tab': {
+      'fisdom': {
+        'android': '205',
+        'ios': '5.4'
       },
-      finity: {
-        android: '999',
-        ios: '',
-      },
-    },
-  };
+      'myway': {
+        'android': '102',
+        'ios': '5.2'
+      }
+    }
+  }
 
   if (
     mapper[feature] &&

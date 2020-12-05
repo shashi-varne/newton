@@ -531,7 +531,10 @@ export const back_button_mapper = {
   '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
   '/group-insurance/term/intro' : '/group-insurance',
   '/group-insurance/group-health/entry' : '/group-insurance/health/landing',
-  '/group-insurance/health/landing': '/group-insurance'
+  '/group-insurance/health/landing': '/group-insurance',
+  '/group-insurance/life-insurance/savings-plan/landing': '/group-insurance/life-insurance/entry',
+  '/group-insurance/life-insurance/entry': '/group-insurance',
+  '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry'
 };
 
 export const insuranceMaritalStatus = [
@@ -563,7 +566,7 @@ export const insuranceStateMapper = {
   'HOSPICASH': 'hospicash',
   'term_insurance': 'term',
   'DENGUE': 'dengue',
-  'CORONA': 'corona'
+  'CORONA': 'corona',
 }
 
 export const insuranceProductTitleMapper = {
@@ -736,7 +739,7 @@ export function getCssMapperReport(policy) {
     }
   }
 
-  if(['HDFCERGO','hdfc_ergo', 'STAR','star', 'RELIGARE','religare'].includes(provider)) {
+  if(['HDFCERGO','hdfc_ergo', 'STAR','star', 'RELIGARE','religare', 'FYNTUNE'].includes(provider)) {
    
     cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start  || policy.valid_from || '');
     cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
