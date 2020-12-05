@@ -5,6 +5,7 @@ import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { initialize } from "../common_data";
 import { ghGetMember} from "../../../constants";
+import { getConfig } from "utils/functions";
 import BottomInfo from "../../../../common/ui/BottomInfo";
 import Api from "utils/api";
 import toast from "../../../../common/ui/Toast";
@@ -270,7 +271,7 @@ class GroupHealthPlanPremiumSummary extends Component {
             </div>
           </div>
           {this.state.properties && this.renderProviderPremium()}
-          <div className="premium-summary-disclaimer">
+          <div className="premium-summary-disclaimer" style={{ color: getConfig().primary }}>
             <p>Premium values are being rounded of for ease of representation, there may be a small difference in final payable value.</p>
           </div>
           <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />

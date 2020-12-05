@@ -77,12 +77,13 @@ class GroupHealthReportDetails extends Component {
                 
                 let dt_created = new Date(policy_data.dt_created);
                 let dt_updated = new Date(policy_data.dt_updated);
-                let valid_from = getDateBreakup(policy_data.valid_from)
-                let formatted_day = valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
+                
+                // let valid_from = getDateBreakup(policy_data.valid_from)
+                // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
 
                 policy_data.dt_created = dt_created.getDate()+'/'+ (dt_created.getMonth()+1) +'/'+ dt_created.getFullYear();
                 policy_data.dt_updated = dt_updated.getDate()+'/'+ (dt_updated.getMonth()+1) +'/'+ dt_updated.getFullYear();
-                policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+                // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
                 
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
@@ -487,7 +488,8 @@ class GroupHealthReportDetails extends Component {
                                 Purchased on
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.dt_created}
+                                {this.state.policy_data.dt_created} 
+                                {/* use payment_success_date in payment_details */}
                             </div>
                         </div>
                     </div>
