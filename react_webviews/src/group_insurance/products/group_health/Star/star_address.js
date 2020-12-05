@@ -108,8 +108,12 @@ class StarAddress extends Component {
     if (!name) {
       name = event.target.name;
     }
-    const value = event.target ? event.target.value : event;
+    var value = event.target ? event.target.value : event;
     let form_data = this.state.form_data || {};
+
+    if(this.state.provider === 'STAR' && (name.includes('addr_line1') || name.includes('addr_line2'))){
+      value = event.target ? event.target.value.substr(0, 240) : event;
+    }
 
     if (name === 'city_id') {
       form_data.city_id = value;

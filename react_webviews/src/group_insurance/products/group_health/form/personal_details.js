@@ -633,7 +633,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             width="40"
             label="Full name"
             class="Name"
-            maxLength="50"
+            maxLength={this.state.provider === 'STAR' ? "100": "50"}
             id="name"
             name="name"
             error={this.state.form_data.name_error ? true : false}
