@@ -241,7 +241,6 @@ class GroupHealthPlanPremiumSummary extends Component {
   }
 
   render() {
-    console.log(this.state.lead)
 
     return (
       <Container

@@ -920,7 +920,7 @@ export function containsSpecialCharacters(value){
 }
 
 export function charsNotAllowedHDFC(value){
-  var format = /[$&+:;=?@|\\_[\]{\}'<>^*()%!"-]/g;
+  var format = /[$&+:;=?@|\\_[\]{}'<>^*()%!"-]/g;
   return format.test(value);
 }
 
