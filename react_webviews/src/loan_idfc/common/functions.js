@@ -252,7 +252,7 @@ export async function getUserStatus(state = "") {
         ...(result || {}),
       });
 
-      if (this.state.screen_name === "requirement_details_screen") {
+      if (this.state.screen_name === "requirement_details_screen" || this.state.screen_name === "journey_screen") {
         return result;
       }
 
@@ -340,8 +340,8 @@ export async function get05Callback() {
   let result = await this.getUserStatus();
 
   let { count } = this.state;
-  
-  if (result.is_dedupe || result.idfc_05_callback) {
+  console.log(result.is_dedupe === true || result.idfc_05_callback === true)
+  if (result.is_dedupe === true || result.idfc_05_callback === true) {
     this.navigate("loan-status")
   } else {
     if (count < 20) {
@@ -399,14 +399,13 @@ export async function submitApplication(params, state, update = "", next_state =
 
         if (state === "point_five") {
           this.get05Callback()
-        } if(state === "one") {
+        } else if(state === "one") {
           this.get10Callback(state)
         } else {
           this.navigate(next_state || this.state.next_state);
         }
       }
     } else {
-
       let rejection_cases = [
         "CreateLoan null API Failed",
         "CreateLoan 05 API Failed",

@@ -159,7 +159,6 @@ class LoanStatus extends Component {
 
   onload = () => {
     // let { status, bt_eligible } = this.state.params;
-    console.log(this.state);
 
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
