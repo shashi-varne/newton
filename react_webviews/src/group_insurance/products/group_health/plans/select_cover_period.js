@@ -71,6 +71,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         }
     }
     sendEvents(user_action) {
+        let cover_period = ((this.state.premium_data || [])[(this.state.selectedIndex || 0)] || {}).tenure + ' year' || '';
+        cover_period = cover_period > 1 ? cover_period + ' years': cover_period;  
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -78,7 +80,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select cover period',
-                'cover_period' : ((this.state.premium_data || [])[(this.state.selectedIndex || 0)] || {}).tenure || ''
+                'cover_period' : cover_period
             }
         };
         if (user_action === 'just_set_events') {

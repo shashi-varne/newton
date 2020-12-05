@@ -872,6 +872,7 @@
 }
 
 .group-health-plan-premium-summary {
+  margin-bottom: 30px;
   .group-health-top-content-plan-logo {
     justify-content: flex-start;
     .tc-right {
@@ -879,7 +880,13 @@
       max-width: 140px;
     }
   }
-
+.premium-summary-disclaimer{
+  color: rgb(17, 173, 224);
+  font-weight: 500;
+  text-align: justify;
+  line-height: 18px;
+  
+}
   .pi-tile {
     color: #0A1D32;
     font-size: 14px;
@@ -1007,6 +1014,36 @@
   }
 }
 
+.group-health-life-insurance{
+  .member-tile-fyntune {
+    display: flex;
+    margin: 15px 0 15px 0;
+    .mt-right-fyntune {
+      margin: 0 0 10px 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+  
+  .mtr-top-fyntune {
+      color: #0A1D32;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      letter-spacing: 1px;
+  }
+  
+  .mtr-bottom-fyntune {
+      color: #767E86;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+      text-transform: capitalize;
+   }
+  }
+}
+
 .group-health-bmi-dialog {
   .top-content {
     align-items: center;
@@ -1061,8 +1098,10 @@
   }
   
   .insurance_plans_logos_subtext{
-   color: #160D2E; 
-   font-size:13px;
+   color: #757474;
+   font-weight: 400; 
+   font-size: 13.6px;
+   margin-top: 8px;
   }
   .health_insurance{
     font-weight: 500;

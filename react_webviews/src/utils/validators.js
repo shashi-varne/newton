@@ -663,6 +663,7 @@ export function dateOrdinal(dom) {
 };
 
 export function formatAMPM(date){
+   // eslint-disable-next-line 
   var date = new Date(date);
   var minutes = date.getMinutes();
   var hours = date.getHours();

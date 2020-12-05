@@ -7,7 +7,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-
+import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
@@ -19,10 +19,6 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
-    provider = provider.toUpperCase();
-    if(provider === 'HDFC_ERGO'){
-        provider = "HDFCERGO"
-    }
     
     let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
@@ -160,11 +156,10 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, sum_assured, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
-
+        let leftTitle, leftSubtitle,sum_assured, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
         if (this.state.get_lead) {
-            
             leftTitle = lead.plan_title || '';
+            // eslint-disable-next-line 
             sum_assured = lead.total_sum_insured;
             leftSubtitle = lead.total_premium;
             tenure = lead.tenure;
@@ -227,7 +222,7 @@ export async function initialize() {
             tenure: tenure
         }
         if(provider === 'RELIGARE') {
-            if(lead.add_ons && Object.keys(lead.add_ons).length > 0){
+            if(lead.add_ons && !isEmpty(lead.add_ons)){
                 let add_ons_backend = lead.add_ons;
                 let data = [];
                 let heading_added = false;
@@ -250,11 +245,12 @@ export async function initialize() {
                 'value': inrFormatDecimal(total_discount) 
             });
         }
-        if(base_premium !== net_premium)
-        confirmDialogData.content1.push({
-            'name': 'Net premium', 
-            'value': inrFormatDecimal(net_premium) 
-        });
+        if(base_premium !== net_premium){
+            confirmDialogData.content1.push({
+                'name': 'Net premium', 
+                'value': inrFormatDecimal(net_premium) 
+            });
+        }
 
         confirmDialogData.content1.push({
             'name': 'GST',
@@ -357,7 +353,7 @@ export async function updateLead( body, quote_id) {
 
 export function navigate(pathname, data = {}) {
 
-    if (this.props.edit || data.edit) {
+    if ((this.props.edit || data.edit) && ['select_ped_screen', 'is_ped'].indexOf(this.state.screen_name) === -1) {
         this.props.history.replace({
             pathname: pathname,
             search: getConfig().searchParams

@@ -51,7 +51,6 @@ class GroupHealthPlanSelectCity extends Component {
     async componentDidMount() {
         
         let body = {
-            "user_id": "plutus_user2",
             "provider": this.state.providerConfig.provider_api
           };
         try {

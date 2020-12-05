@@ -38,7 +38,7 @@ class Container extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
-    if (pathname.indexOf('group-health') >= 0) {
+    if (pathname.indexOf('group-health') >= 0 || pathname.indexOf('life-insurance') >= 0 ) {
       this.setState({
         new_header: true,
         inPageTitle: true,
@@ -347,6 +347,12 @@ class Container extends Component {
         break;
       case '/group-insurance/term/intro':
         this.navigate('/group-insurance');
+        break;
+      case '/group-insurance/life-insurance/savings-plan/landing': 
+        this.navigate(back_button_mapper[pathname]);
+        break;
+        case '/group-insurance/life-insurance/entry': 
+        this.navigate(back_button_mapper[pathname]);
         break;
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {

@@ -10,7 +10,6 @@ import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-// import { isEmpty } from '../../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 

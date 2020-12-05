@@ -87,7 +87,7 @@ class GroupHealthPlanList extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select plan',
-                'plan_type': plan.plan_name || '',
+                'plan_type':this.state.provider === 'HDFCERGO' ? this.state.providerConfig.hdfc_plan_title_mapper[plan.plan_id] : plan.plan_name,
                 'recommendation_tag': plan.recommedation_tag || ''
             }
         };
