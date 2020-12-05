@@ -10,7 +10,7 @@ import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-import { isEmpty } from '../../../../utils/validators';
+// import { isEmpty } from '../../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
@@ -162,7 +162,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     handleClick = async () => {
         this.sendEvents('next');
         let { provider } = this.state;
-        const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
+        // const noOfWords = (val = '') => val ? val.split(' ').length : 0;
         const keysMapper = {
             'name': 'name',
             'relation': 'relation',

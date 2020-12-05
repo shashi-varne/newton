@@ -128,10 +128,12 @@ class GroupHealthPlanAddressDetails extends Component {
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
                     form_data.state = res.pfwresponse.result.state;
                     form_data.pincode_match = true;
+                    // eslint-disable-next-line 
                     form_data['pincode' + '_error'] = '';
                 } else {
                     form_data.state = '';
                     form_data.pincode_match = false;
+                    // eslint-disable-next-line 
                     form_data['pincode' + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
                 }
 
