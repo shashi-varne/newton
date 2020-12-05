@@ -62,7 +62,11 @@ export const idfc_config = {
     additional_details: 'upload-documents',
     requirement_details_screen: 'loan-status',
     loan_eligible: 'additional-details',
-    loan_bt: 'credit-bt'
+    loan_bt: 'credit-bt',
+    credit_bt: 'eligible-loan',
+    eligible_loan: 'loan-eligible',
+    loan_eligible: 'additional-details',
+    additional_details: 'doc-list'
   },
   landing_screen: {
     stepContentMapper: {

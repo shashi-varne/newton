@@ -184,6 +184,19 @@ export async function getOrCreate(params) {
       storageService().set("loan_application_id", application_id);
       let { application_status } = result.application_info;
 
+      this.setState(
+        {
+          lead: lead,
+          application_id: application_id,
+          mobile_no: result.personal_info.mobile_no || "",
+        },
+        () => {
+          if (this.onload && !this.state.ctaWithProvider) {
+            this.onload();
+          }
+        }
+      );
+
       let screens = ["landing_screen", "calculator", "know_more_screen"]
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
@@ -209,18 +222,7 @@ export async function getOrCreate(params) {
         this.getIndustryList();
       }
 
-      this.setState(
-        {
-          lead: lead,
-          application_id: application_id,
-          mobile_no: result.personal_info.mobile_no || "",
-        },
-        () => {
-          if (this.onload && !this.state.ctaWithProvider) {
-            this.onload();
-          }
-        }
-      );
+      
     } else {
       toast(result.error || result.message || "Something went wrong!");
     }
@@ -302,6 +304,7 @@ export async function updateApplication(params, next_state = '') {
           },
         });
       }
+
       if (params.idfc_loan_status === "ckyc") {
         this.navigate("personal-details");
       } else {
@@ -404,6 +407,7 @@ export async function submitApplication(params, state, update = "", next_state =
         "CreateLoan null API Failed",
         "CreateLoan 05 API Failed",
         "CreateLoan 10 API Failed",
+        "CreateLoan 11 API Failed",
         "CreateLoan 17 API Failed",
         "CreateLoan 3 API Failed",
         "CreateLoan 4 API Failed",

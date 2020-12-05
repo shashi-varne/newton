@@ -28,6 +28,7 @@ class DocumentUpload extends Component {
       totalUpload: "",
       docList: [],
       documents: [],
+      screen_name: 'document_upload',
       count: 1,
     };
 
@@ -40,112 +41,112 @@ class DocumentUpload extends Component {
 
   onload = () => {
     // let docList = this.state.docList;
-    let docList = [
-      {
-        category: "Cat1",
-        category_name: "Address Proof",
-        docs: [
-          {
-            doc_display_name: "Latest Bank Statement",
-            pages: null,
-          },
-          {
-            doc_display_name: "Driving License",
-            pages: null,
-          },
-          {
-            doc_display_name: "Aadhaar Card",
-            pages: "2",
-          },
-          {
-            doc_display_name: "Pension or Family Pension Payment Orders (PPOs)",
-            pages: null,
-          },
-          {
-            doc_display_name:
-              "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
-            pages: null,
-          },
-          {
-            doc_display_name: "Property or Municipal Tax Receipt",
-            pages: null,
-          },
-          {
-            doc_display_name: "Latest Passbook of scheduled commercial Bank",
-            pages: null,
-          },
-          {
-            doc_display_name: "Rent Agreement",
-            pages: null,
-          },
-        ],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat2",
-        category_name: "Identity Proof (PAN)",
-        docs: [
-          {
-            doc_display_name: "PAN",
-            pages: "1",
-          },
-        ],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat3",
-        category_name: "Salary Slip / Employment Proof",
-        docs: [
-          {
-            doc_display_name: "3 Months Salary Slip",
-            pages: null,
-          },
-        ],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat4",
-        category_name: "Bank Account Statement",
-        docs: [
-          {
-            doc_display_name: "Last 3 months Bank Account Statement",
-            pages: null,
-          },
-        ],
-        doc_checklist: [null],
-      },
-      {
-        category: "Cat5",
-        category_name: "Ownership Proof (Either Home Or Office)",
-        docs: [
-          {
-            doc_display_name: "Electricity Bill",
-            pages: null,
-          },
-          {
-            doc_display_name: "Sale Deed",
-            pages: null,
-          },
-        ],
-        doc_checklist: [null],
-      },
-    ];
+    // let docList = [
+    //   {
+    //     category: "Cat1",
+    //     category_name: "Address Proof",
+    //     docs: [
+    //       {
+    //         doc_display_name: "Latest Bank Statement",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name: "Driving License",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name: "Aadhaar Card",
+    //         pages: "2",
+    //       },
+    //       {
+    //         doc_display_name: "Pension or Family Pension Payment Orders (PPOs)",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name:
+    //           "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name: "Property or Municipal Tax Receipt",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name: "Latest Passbook of scheduled commercial Bank",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name: "Rent Agreement",
+    //         pages: null,
+    //       },
+    //     ],
+    //     doc_checklist: [null],
+    //   },
+    //   {
+    //     category: "Cat2",
+    //     category_name: "Identity Proof (PAN)",
+    //     docs: [
+    //       {
+    //         doc_display_name: "PAN",
+    //         pages: "1",
+    //       },
+    //     ],
+    //     doc_checklist: [null],
+    //   },
+    //   {
+    //     category: "Cat3",
+    //     category_name: "Salary Slip / Employment Proof",
+    //     docs: [
+    //       {
+    //         doc_display_name: "3 Months Salary Slip",
+    //         pages: null,
+    //       },
+    //     ],
+    //     doc_checklist: [null],
+    //   },
+    //   {
+    //     category: "Cat4",
+    //     category_name: "Bank Account Statement",
+    //     docs: [
+    //       {
+    //         doc_display_name: "Last 3 months Bank Account Statement",
+    //         pages: null,
+    //       },
+    //     ],
+    //     doc_checklist: [null],
+    //   },
+    //   {
+    //     category: "Cat5",
+    //     category_name: "Ownership Proof (Either Home Or Office)",
+    //     docs: [
+    //       {
+    //         doc_display_name: "Electricity Bill",
+    //         pages: null,
+    //       },
+    //       {
+    //         doc_display_name: "Sale Deed",
+    //         pages: null,
+    //       },
+    //     ],
+    //     doc_checklist: [null],
+    //   },
+    // ];
 
-    let category = storageService().get("category");
+    // let category = storageService().get("category");
 
-    let selectedIndex = docList.findIndex((item) => item.category === category);
+    // let selectedIndex = docList.findIndex((item) => item.category === category);
 
-    let docs = docList[selectedIndex].docs.map((item) => {
-      return {
-        name: item.doc_display_name,
-        value: item.pages || "3",
-      };
-    });
+    // let docs = docList[selectedIndex].docs.map((item) => {
+    //   return {
+    //     name: item.doc_display_name,
+    //     value: item.pages || "3",
+    //   };
+    // });
 
-    this.setState({
-      docList: docList[selectedIndex],
-      docs: docs,
-    });
+    // this.setState({
+    //   docList: docList[selectedIndex],
+    //   docs: docs,
+    // });
   };
 
   native_call_handler(method_name, doc_type, doc_name) {
