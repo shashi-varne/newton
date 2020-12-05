@@ -101,7 +101,7 @@ class PerfiosStatus extends Component {
   };
 
   handleClick = () => {
-    let { perfios_state, bt_eligible, idfc_07_state } = this.state;
+    let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
       if (!bt_eligible && idfc_07_state === "success") {

@@ -13,7 +13,7 @@ class LoanBtDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "loan_bt",
+      screen_name: "credit_bt",
       form_data: [],
       credit_bt: [],
       bankOptions: []
@@ -116,11 +116,17 @@ class LoanBtDetails extends Component {
   };
 
   render() {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
+
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Credit card details"
-        buttonTitle="Skip and continue"
+        buttonTitle={
+          form_checked.length === 0 ? "SKIP AND CONTINUE" : "CONTINUE"
+        }
         handleClick={this.handleClick}
         headerData={{
           progressHeaderData: this.state.progressHeaderData

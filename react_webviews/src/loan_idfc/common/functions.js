@@ -184,19 +184,6 @@ export async function getOrCreate(params) {
       storageService().set("loan_application_id", application_id);
       let { application_status } = result.application_info;
 
-      this.setState(
-        {
-          lead: lead,
-          application_id: application_id,
-          mobile_no: result.personal_info.mobile_no || "",
-        },
-        () => {
-          if (this.onload && !this.state.ctaWithProvider) {
-            this.onload();
-          }
-        }
-      );
-
       let screens = ["landing_screen", "calculator", "know_more_screen"]
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
@@ -221,9 +208,21 @@ export async function getOrCreate(params) {
       if (this.state.screen_name === "professional_details_screen") {
         this.getIndustryList();
       }
+
+      this.setState(
+        {
+          lead: lead,
+          application_id: application_id,
+          mobile_no: result.personal_info.mobile_no || "",
+        },
+        () => {
+          if (this.onload && !this.state.ctaWithProvider) {
+            this.onload();
+          }
+        }
+      );
     } else {
       toast(result.error || result.message || "Something went wrong!");
-      this.onload();
     }
 
   } catch (err) {
@@ -403,8 +402,11 @@ export async function submitApplication(params, state, update = "", next_state =
 
       let rejection_cases = [
         "CreateLoan null API Failed",
-        "CreateLoan 0.5 API Failed",
-        "CreateLoan 1.0 API Failed",
+        "CreateLoan 05 API Failed",
+        "CreateLoan 10 API Failed",
+        "CreateLoan 17 API Failed",
+        "CreateLoan 3 API Failed",
+        "CreateLoan 4 API Failed",
       ];
       if (typeof result.error === 'string' && rejection_cases.indexOf(result.error) === -1 ) {
         toast(result.error || result.message || "Something went wrong!");
