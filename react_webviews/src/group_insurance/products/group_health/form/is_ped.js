@@ -54,7 +54,7 @@ class GroupHealthPlanIsPed extends Component {
         let body = {}
         let pedcase = false;
         body["insured_people_details"] = [];
-        console.log(this.state)
+ 
         this.state.lead.insured_people_details.forEach((memberData) => {
            let relation_key  = memberData.insured_person.relation_key
            if(memberData.answers.pre_existing_diseases.length === 0 && memberData.insured_person.ped === true){
@@ -69,7 +69,7 @@ class GroupHealthPlanIsPed extends Component {
       body["insured_people_details"].push( { 'ped': true, "relation_key" : relation_key} )
      }
      })
-console.log(pedcase)
+
        if (pedcase) { this.updateLead(body)}
 
         let member_base = this.state.member_base.map((element, index) => {
@@ -104,7 +104,7 @@ console.log(pedcase)
         radio_title: radio_title,
         account_type: account_type,
         member_base: member_base
-    }, console.log(this.state.form_data));
+    });
 
     this.setState({
         bottomButtonData: {
