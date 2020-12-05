@@ -35,17 +35,18 @@ class Report extends Component {
   }
 
   getProviderObject = (policy) => {
-    let provider = policy.provider;
-    let vendor = policy.vendor;
+    let provider = policy.vendor || policy.provider;
     let obj = policy;
+    let formatted_valid_from = ''
     obj.key = provider;
 
-    
-    if(vendor !== ""){
+    if(['hdfc_ergo','star','religare'].indexOf(provider) !== -1 ){
       let valid_from = obj.valid_from ? getDateBreakup(obj.valid_from): '';
       let formatted_day = valid_from && valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
-      let formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
-      
+      formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+    }
+    
+    if (provider === 'hdfc_ergo') {
       obj = {
         ...obj,
         product_name: policy.base_plan_title + ' ' + policy.product_title,
@@ -56,17 +57,6 @@ class Report extends Component {
         provider: policy.vendor,
         valid_from: formatted_valid_from
       };
-    }
-
-    if (provider === 'HDFCERGO') {
-      obj = {
-        ...obj,
-        product_name: policy.base_plan_title + ' ' + policy.product_title,
-        top_title: 'Health insurance',
-        key: 'HDFCERGO',
-        id: policy.lead_id,
-        premium: Math.round(policy.total_amount),
-      };
     }else if( provider === 'FYNTUNE'){
       obj = {
         ...obj,
@@ -76,24 +66,27 @@ class Report extends Component {
         id: policy.fyntune_ref_id, 
         premium: policy.total_amount
       };
-    } else if (provider === 'RELIGARE') {
+    } else if (provider === 'religare') {
       obj = {
         ...obj,
-        product_name: policy.product_title,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'RELIGARE',
-        id: policy.lead_id,
+        key: policy.vendor,
+        id: policy.application_id,
         premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
-    }  else if (provider === 'STAR') {
+    }  else if (provider === 'star') {
       obj = {
         ...obj,
-        product_name: 'Star Family Health Optima',
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'STAR',
-        status_title: 'Star Health',
-        id: policy.lead_id,
+        key: policy.vendor,
+        id: policy.application_id,
         premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
     }  else if (provider === 'BHARTIAXA') {
       obj = {
