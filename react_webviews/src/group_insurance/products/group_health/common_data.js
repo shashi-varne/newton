@@ -132,7 +132,7 @@ export async function initialize() {
                             tnc: resultData.common.tnc || resultData.tnc
                         },
                         insured_account_type: lead.insurance_type || ''
-                    }, () => {
+                    }, () => { console.log(lead,member_base)
                         if (this.onload && !this.state.ctaWithProvider) {
                             this.onload();
                         }
@@ -309,10 +309,7 @@ export async function updateLead( body, quote_id) {
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
 
-            if(this.state.screen_name === 'final_summary_screen'){
-                 window.location.reload();
-                // initialize()
-            }
+            if (body.pedcase) { this.initialize(); this.setState({ show_loader: true });return}
 
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
