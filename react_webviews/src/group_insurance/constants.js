@@ -740,10 +740,12 @@ export function getCssMapperReport(policy) {
   }
 
   if(['HDFCERGO','hdfc_ergo', 'STAR','star', 'RELIGARE','religare', 'FYNTUNE'].includes(provider)) {
-   
-    cssMapper.complete.disc = 'Issued on ' + (policy.dt_policy_start  || policy.valid_from || '');
-    cssMapper.success.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
-    // cssMapper.policy_issued.disc = 'Issued on ' + (policy.dt_policy_start || policy.valid_from || '');
+    let policy_start = policy.dt_policy_start;
+    let valid_from = policy.valid_from;
+
+    cssMapper.complete.disc = 'Issued on ' + (policy_start  || valid_from || '');
+    cssMapper.success.disc = 'Issued on ' + (policy_start || valid_from || '');
+    // cssMapper.policy_issued.disc = 'Issued on ' + (policy_start || valid_from || '');
     cssMapper.policy_issued.disc = 'Issued';
   }
 
