@@ -145,6 +145,14 @@ class GroupHealthPlanSelectPed extends Component {
                 show_loader: false,
             })
         })
+
+        lead = this.state.lead;
+        this.state.member_base.forEach((ele) => {if (ele.backend_key === backend_key){
+        lead[backend_key] = {};
+        lead[backend_key].dob = ele.dob.replace(/\//g, "-");}})
+        this.setState({
+            lead: lead
+        })
     }
 
     componentDidUpdate(prevState) {
@@ -385,8 +393,12 @@ class GroupHealthPlanSelectPed extends Component {
         }
     }
 
-    render() {
 
+
+
+
+
+    render() {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}

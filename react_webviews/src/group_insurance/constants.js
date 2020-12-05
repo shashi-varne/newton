@@ -729,6 +729,10 @@ export function getCssMapperReport(policy) {
     'cancelled': {
       color: 'red',
       disc: 'Policy Cancelled'
+    },
+    'pending_from_vendor': {
+      color: 'yellow',
+      disc: 'Status awaited from star health'
     }
   }
 

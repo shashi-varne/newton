@@ -215,7 +215,7 @@ class GroupHealthPayment extends Component {
                 {policy_data.policy_number && 
                 <p className="top-content">
                   Payment of {inrFormatDecimal(this.state.lead.total_premium)} for {this.state.providerData.title} {this.state.lead.plan_title} is successful.
-                {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
+                {policy_data.policy_number && <span> Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
                 }
                 {!policy_data.policy_number && 
@@ -232,7 +232,7 @@ class GroupHealthPayment extends Component {
               <div>
                 <p className="top-content">
                   Payment of {inrFormatDecimal(this.state.lead.total_premium)} for {this.state.providerData.title}  {this.state.providerData.title2} {this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]} {this.state.lead.plan_title} is successful.
-                {policy_data.policy_number && <span>Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
+                {policy_data.policy_number && <span> Now you have access to {screenData.total_cities}+ cashless hospitals.</span>}
                 </p>
 
                 </div>

@@ -49,16 +49,12 @@ class GroupHealthPlanSelectCity extends Component {
         }
     }
     async componentDidMount() {
-        let city = this.state.groupHealthPlanData.city || '';
-        this.setState({
-            city: this.state.groupHealthPlanData.city || ''
-        });
+        
         let body = {
             "user_id": "plutus_user2",
-            "provider": "hdfc_ergo"
+            "provider": this.state.providerConfig.provider_api
           };
         try {
-            if(!city) {
                 try {
 
                     const res = await Api.post(
@@ -66,14 +62,20 @@ class GroupHealthPlanSelectCity extends Component {
                         body
                     );
                     if (res.pfwstatus_code === 200) {
+                        
                         var resultData = res.pfwresponse.result;
-                        let city = resultData.quotation.city_postal_code || '';
+                        let city = ''
+                        
+                        if(this.state.groupHealthPlanData.city){
+                            city = this.state.groupHealthPlanData.city || '';
+                        }else if(Object.keys(resultData.quotation).length > 0 && resultData.quotation.city_postal_code){
+                            city = resultData.quotation.city_postal_code || '';
+                        }else if(Object.keys(resultData.address_details).length > 0 && resultData.address_details.city){
+                            city = resultData.address_details.city || '';
+                        }
                         this.setState({
-                            city: city === 'NA' ? '' : city,
+                            city: city
                         });
-                        // this.setState({
-                        //     show_loader: false
-                        // });
                     } else {
                         toast(
                             resultData.error ||
@@ -88,7 +90,6 @@ class GroupHealthPlanSelectCity extends Component {
                     });
                     toast('Something went wrong');
                 }
-            }
             const res2 = await Api.get('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo');
             
             var resultData2 = res2.pfwresponse.result
