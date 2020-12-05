@@ -474,7 +474,8 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
   }
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action, data = {}) {  
+    let formName = (this.state.form_data.name || '').split(" ").filter(e => e).length === 2
     let eventObj = {
       "event_name": 'health_insurance',
       "properties": {
@@ -482,7 +483,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         "product": this.state.providerConfig.provider_api,
         "flow": this.state.insured_account_type || '',
         "screen_name": 'personal details',
-        'full_name': this.state.form_data.name ? 'yes' : 'no',
+        'full_name': formName ?  'yes' : 'no',
         'dob': this.state.form_data.dob,
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
