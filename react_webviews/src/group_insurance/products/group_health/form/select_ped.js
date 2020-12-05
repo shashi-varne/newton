@@ -51,9 +51,9 @@ class GroupHealthPlanSelectPed extends Component {
 
         let member_base =this.state.member_base;
         let member_key = this.props.match.params.member_key;
-        let mem_details = member_base.find(element => element.key === member_key);
         let member_info_index = member_base.findIndex(item => item.key === member_key);
-    
+
+        let mem_details = member_base[member_info_index]
         let deatils = this.state.lead.insured_people_details.find(element => element.insured_person.relation_key === mem_details.backend_key);
         let relation = this.state.member_base.find(mem => mem.backend_key === deatils.insured_person.relation_key)
 
@@ -77,7 +77,6 @@ class GroupHealthPlanSelectPed extends Component {
             item.answer_description = '';
             item.description = index === this.state.screenData.ped_list.length - 1 ? '' : item.description;
             item.question_id = item.id
-            item.key = item.key
             return item;
         });
 
@@ -210,9 +209,9 @@ class GroupHealthPlanSelectPed extends Component {
 
         let {options, provider ,lead, member_info_index} = this.state;       
        
-      let memb =  this.state.member_base.filter((mem) => mem.dob !== undefined)
+       let memb =  this.state.member_base.filter(mem => mem.dob !== undefined)
        let member_base =  memb.map((element, index) => {
-        let member = lead.insured_people_details.find((member) => member.insured_person.relation_key === element.backend_key)
+       let member = lead.insured_people_details.find((member) => member.insured_person.relation_key === element.backend_key)
         return {
             ...element,
             ...member.insured_person,
@@ -223,7 +222,7 @@ class GroupHealthPlanSelectPed extends Component {
         let current_member = member_base[member_info_index];
 
         if(!isNaN(this.state.pedOther)){
-             if(this.state.pedOther.length > 0) {
+            if(this.state.pedOther.length > 0) {
             toast('Invalid other pre-existing diseases details');
             return;
         }

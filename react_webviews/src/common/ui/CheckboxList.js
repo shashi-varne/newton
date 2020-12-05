@@ -229,9 +229,6 @@ class CheckboxListClass extends Component {
   render() {
     let backend_key = this.props.parent.state.backend_key;
     let dob = this.props.parent.state.lead[backend_key] ? this.props.parent.state.lead[backend_key].dob : '';
-    // let backend_key = this.props.parent.state.backend_key
-    // let element = this.props.parent.state.member_base.find(ele => ele.backend_key === backend_key)
-    // let dob = element.dob.replace(/\//g, "-");
 
     return (
       <div>

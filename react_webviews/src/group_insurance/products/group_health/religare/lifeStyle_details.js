@@ -192,7 +192,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
       member_base[index].life_style_question.answer_description_error = '';
     } else {
       if (!dobFormatTest(value)) {
-        // return;   fixit
+        return;  //
       }
 
       let input;

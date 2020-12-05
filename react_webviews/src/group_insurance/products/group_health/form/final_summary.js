@@ -104,7 +104,6 @@ class GroupHealthPlanFinalSummary extends Component {
 
              if(pedcase){
                 this.updateLead(body); 
-                // window.location.reload();
              }
 
         this.setState({
@@ -331,7 +330,6 @@ class GroupHealthPlanFinalSummary extends Component {
                         diseases_data_backend.push({
                             'title': ped_option.description || ped.name,
                             'subtitle': 'Since - ' + `${ped_data[1]}/${ped_data[2]}`
-                            // 'subtitle': 'Since - ' + `${date.getMonth() + 1}/${date.getFullYear()}`
                         })
                     })
                     

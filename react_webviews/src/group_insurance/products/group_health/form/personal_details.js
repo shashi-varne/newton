@@ -89,7 +89,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       }
     }
     if (this.props.edit) {
-      next_state = `/group-insurance/group--health/${this.state.provider}/final-summary`;
+      next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
     }
 
     member_base.forEach(element => {   
@@ -239,7 +239,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     this.setState({
       form_data: form_data
-    },)
+    });
 
   };
 
@@ -363,10 +363,10 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.name_error = 'Invalid name';
     }
 
-    let weightlimit = form_data.weight ? form_data.weight.toString() : ''
+    let weight_limit = form_data.weight ? form_data.weight.toString() : ''
     // .weight.toString()
 
-    if(weightlimit.length > 3 || weightlimit > 442){
+    if(weight_limit.length > 3){
       form_data.weight_error = "Invalid weight";
     }
 
@@ -397,7 +397,6 @@ class GroupHealthPlanPersonalDetails extends Component {
                                                    
       let occupationValue = '';     
       if (provider === 'STAR') {
-        // if(true){
         let { occupationOptions } = this.state;
         let occupation = form_data.occupation || '';
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;

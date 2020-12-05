@@ -211,10 +211,7 @@ class GroupHealthStarPlanSelectPed extends Component {
     }
  
    if (canProceed) {
-    let application_id = this.state.application_id
-    let body = {
-      "application_id": application_id
-    }
+    let body = {}
 
      body.answers = {}
      let insured_people_details = []

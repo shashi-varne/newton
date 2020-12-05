@@ -337,7 +337,7 @@ export function IsFutureMonthYear(input) {
   return false;
 }
 
-export function IsPastMonthYearfromDob(input, dob) { console.log(dob)
+export function IsPastMonthYearfromDob(input, dob) {
   dob = dob.split('-');
 
   var dobMonth = dob[1]; 
