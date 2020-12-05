@@ -73,14 +73,16 @@ class GroupHealthReportDetails extends Component {
 
                 let policy_data = resultData.policy || {};
                 let common_data = resultData.common;
+                let payment_details = resultData.payment_details;
                 let application_details = resultData.application_details;
                 
                 let dt_created = new Date(policy_data.dt_created);
                 let dt_updated = new Date(policy_data.dt_updated);
-                
+                let payment_success_dt = new Date(payment_details.payment_success_dt);
+
                 // let valid_from = getDateBreakup(policy_data.valid_from)
                 // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
-
+                payment_details.payment_success_dt = payment_success_dt.getDate()+'/'+ (payment_success_dt.getMonth()+1) +'/'+ payment_success_dt.getFullYear();
                 policy_data.dt_created = dt_created.getDate()+'/'+ (dt_created.getMonth()+1) +'/'+ dt_created.getFullYear();
                 policy_data.dt_updated = dt_updated.getDate()+'/'+ (dt_updated.getMonth()+1) +'/'+ dt_updated.getFullYear();
                 // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
@@ -118,7 +120,8 @@ class GroupHealthReportDetails extends Component {
                     lead: lead,
                     quotation_details: resultData.quotation_details,
                     applicantIndex: applicantIndex,
-                    application_details: application_details
+                    application_details: application_details,
+                    payment_details: payment_details
                 })
 
 
@@ -481,21 +484,6 @@ class GroupHealthReportDetails extends Component {
 
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="" />
-                        </div>
-                        <div className="mt-right">
-                            <div className="mtr-top">
-                                Purchased on
-                                </div>
-                            <div className="mtr-bottom">
-                                {this.state.policy_data.dt_created} 
-                                {/* use payment_success_date in payment_details */}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="member-tile">
-                        <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
@@ -503,7 +491,7 @@ class GroupHealthReportDetails extends Component {
                                 DATE OF PAYMENT
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.dt_updated || '-'}
+                            {this.state.payment_details && this.state.payment_details.payment_success_dt} 
                             </div>
                         </div>
                     </div>
