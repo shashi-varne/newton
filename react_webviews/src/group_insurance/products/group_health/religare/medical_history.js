@@ -149,9 +149,9 @@ class GroupHealthPlanMedicalHistory extends Component {
       return selectedInputs.map(input => keyedMemberRelations[input]).join(', ');
     };
     const keyedList = keyBy(this.state.list, 'event_key');
-    const [firstListItem = {}] = (this.state.list || []); //take first list item (any list item would be fine, just need the members prop from it)
-    const keyedMemberRelations = (firstListItem.members || []).reduce((obj, currMem) => {
-      obj[currMem.relation_key] = currMem.key;
+    const [firstListItem = {}] = (this.state.list || []);  //take first list item (any list item would be fine, just need the members prop from it)
+    const keyedMemberRelations = (firstListItem.members || []).reduce((obj, currMem) => { 
+      obj[currMem.relation_key] = currMem.relation;
       return obj;
     }, {});
 
@@ -165,7 +165,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         'hospitalised_last_2_years': findSelectedMembersForKey('hospitalised_last_2_years') || 'no',
         'filed_claim_current_insurer': findSelectedMembersForKey('filed_claim_current_insurer') || 'no',
         'health_insurance_declined': findSelectedMembersForKey('health_insurance_declined') || 'no',
-        'already_covered_in_religare': findSelectedMembersForKey('already_covered_in_religare') || 'no',
+        'already_covered_in_religare': findSelectedMembersForKey('already_covered_in_care') || 'no',
       },
     };
 
