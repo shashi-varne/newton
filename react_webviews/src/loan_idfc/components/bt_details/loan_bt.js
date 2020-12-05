@@ -147,7 +147,7 @@ class LoanBtDetails extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Select for balance transfer"
-        buttonTitle="Skip and continue"
+        buttonTitle="SKIP AND CONTINUE"
         handleClick={this.handleClick}
         headerData={{
           progressHeaderData: this.state.progressHeaderData

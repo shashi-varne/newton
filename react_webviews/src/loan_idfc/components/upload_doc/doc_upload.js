@@ -39,13 +39,101 @@ class DocumentUpload extends Component {
   }
 
   onload = () => {
-    let docList = this.state.docList;
+    // let docList = this.state.docList;
+    let docList = [
+      {
+        category: "Cat1",
+        category_name: "Address Proof",
+        docs: [
+          {
+            doc_display_name: "Latest Bank Statement",
+            pages: null,
+          },
+          {
+            doc_display_name: "Driving License",
+            pages: null,
+          },
+          {
+            doc_display_name: "Aadhaar Card",
+            pages: "2",
+          },
+          {
+            doc_display_name: "Pension or Family Pension Payment Orders (PPOs)",
+            pages: null,
+          },
+          {
+            doc_display_name:
+              "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
+            pages: null,
+          },
+          {
+            doc_display_name: "Property or Municipal Tax Receipt",
+            pages: null,
+          },
+          {
+            doc_display_name: "Latest Passbook of scheduled commercial Bank",
+            pages: null,
+          },
+          {
+            doc_display_name: "Rent Agreement",
+            pages: null,
+          },
+        ],
+        doc_checklist: [null],
+      },
+      {
+        category: "Cat2",
+        category_name: "Identity Proof (PAN)",
+        docs: [
+          {
+            doc_display_name: "PAN",
+            pages: "1",
+          },
+        ],
+        doc_checklist: [null],
+      },
+      {
+        category: "Cat3",
+        category_name: "Salary Slip / Employment Proof",
+        docs: [
+          {
+            doc_display_name: "3 Months Salary Slip",
+            pages: null,
+          },
+        ],
+        doc_checklist: [null],
+      },
+      {
+        category: "Cat4",
+        category_name: "Bank Account Statement",
+        docs: [
+          {
+            doc_display_name: "Last 3 months Bank Account Statement",
+            pages: null,
+          },
+        ],
+        doc_checklist: [null],
+      },
+      {
+        category: "Cat5",
+        category_name: "Ownership Proof (Either Home Or Office)",
+        docs: [
+          {
+            doc_display_name: "Electricity Bill",
+            pages: null,
+          },
+          {
+            doc_display_name: "Sale Deed",
+            pages: null,
+          },
+        ],
+        doc_checklist: [null],
+      },
+    ];
 
     let category = storageService().get("category");
 
-    let selectedIndex = docList.findIndex(
-      (item) => item.category === category
-    );
+    let selectedIndex = docList.findIndex((item) => item.category === category);
 
     let docs = docList[selectedIndex].docs.map((item) => {
       return {
@@ -146,18 +234,19 @@ class DocumentUpload extends Component {
       toast("Please select pdf file only");
       return;
     }
-    
+
     let { documents, count } = this.state;
     if (Object.keys(file).length !== "0") {
       file.doc_type = file.type;
       file.status = "uploaded";
       file.id = count++;
 
+      let that = this;
       getBase64(file, function (img) {
         file.imageBaseFile = img;
         documents.push(file);
 
-        this.setState({
+        that.setState({
           fileUploaded: true,
           documents: documents,
           count: count,
@@ -169,7 +258,7 @@ class DocumentUpload extends Component {
   render() {
     let { docList, selectedIndex, documents, docs, totalUpload } = this.state;
     console.log(documents.length);
-    console.log(totalUpload)
+    console.log(totalUpload);
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -204,68 +293,79 @@ class DocumentUpload extends Component {
               </div>
             ))}
 
-          {totalUpload === "3" && (<div>
-        {documents.map((item, index) => (
-          <div>
-           {item.doc_type === "application/pdf" && <div
-              className="bank-statement"
-              key={index + 1}
-              style={{ marginBottom: "30px" }}
-            >
-              <div className="title">{index + 1}. Bank statement</div>
-              <div className="sub-title">
-                <img
-                  style={{ margin: "0 5px 0 12px" }}
-                  src={require("assets/tool.svg")}
-                  alt=""
-                />
-                {item.name}
-                <span className="bytes">{bytesToSize(item.size)}</span>
-              </div>
-            </div>}
-            {item.doc_type !== "application/pdf" && <div
-              style={{
-                border: "1px dashed #e1e1e1",
-                padding: "0px 0px 0px 0px",
-                textAlign: "center",
-              }}
-              key={index}
-            >
-              <div>
-                <img
-                  style={{ width: "100%", height: 300 }}
-                  src={item.imageBaseFile || this.state.document_url}
-                  alt="PAN"
-                />
-              </div>
-            </div>}
-          </div>
-        ))}
+          {totalUpload === "3" && (
+            <div>
+              {documents.map((item, index) => (
+                <div>
+                  
+                    <div
+                      className="multiple-upload"
+                      key={index + 1}
+                      style={{ marginBottom: "30px" }}
+                    >
+                      <div className="sub-title">
+                        <img
+                          style={{ margin: "0 5px 0 12px" }}
+                          src={require("assets/tool.svg")}
+                          alt=""
+                        />
+                        {item.name}
+                        <span className="bytes">{bytesToSize(item.size)}</span>
+                      </div>
+                    </div>
+                  
 
-        {documents.length <= 3 && <div className="upload-bank-statement">
-          <div
-            className="pdf-upload"
-            onClick={() => this.startUpload("upload_doc")}
-          >
-            <span className="plus-sign">
-              <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={this.getPdf}
-                id="myFile"
-              />
-              <SVG
-                preProcessor={(code) =>
-                  code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
-                }
-                src={plus}
-              />
-            </span>
-            {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
-          </div>
-        </div>}
-      </div>)}
+                  {/* {item.doc_type !== "application/pdf" && (
+                    <div
+                      style={{
+                        border: "1px dashed #e1e1e1",
+                        padding: "0px 0px 0px 0px",
+                        textAlign: "center",
+                        marginBottom: "30px",
+                      }}
+                      key={index}
+                    >
+                      <div>
+                        <img
+                          style={{ width: "100%", height: 200 }}
+                          src={item.imageBaseFile || this.state.document_url}
+                          alt="PAN"
+                        />
+                      </div>
+                    </div>
+                  )} */}
+                </div>
+              ))}
 
+              {documents.length < 3 && (
+                <div className="upload-bank-statement">
+                  <div
+                    className="pdf-upload"
+                    onClick={() => this.startUpload("upload_doc")}
+                  >
+                    <span className="plus-sign">
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={this.getPdf}
+                        id="myFile"
+                      />
+                      <SVG
+                        preProcessor={(code) =>
+                          code.replace(
+                            /fill=".*?"/g,
+                            "fill=" + getConfig().secondary
+                          )
+                        }
+                        src={plus}
+                      />
+                    </span>
+                    {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </Container>
     );

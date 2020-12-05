@@ -45,6 +45,22 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
+  "idfc_1.1_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
+  "idfc_1.7_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
   "idfc_1.1_accepted": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
@@ -53,7 +69,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
-  "salary reciept mode": {
+  "Salary receipt mode": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -143,15 +159,7 @@ class LoanStatus extends Component {
     let { application_status, rejection_reason } = application_info;
     let perfios_state = vendor_info.perfios_state;
     let bt_eligible = vendor_info.bt_eligible;
-    // let mapperKey = "";
-
-    // if (status === false && bt_eligible === false) {
-    //   mapperKey = "status_bt_eligible_failed"
-    // }
-
-    // if (status === false && bt_eligible === false) {
-    //   mapperKey = "status_bt_eligible_failed"
-    // }
+   
     if (application_status === "internally_rejected") {
       this.setState({
         commonMapper: commonMapper[rejection_reason] || {},
@@ -190,6 +198,7 @@ class LoanStatus extends Component {
 
       this.updateApplication(body, "income-details");
     }
+    
     if (commonMapper.button_title === "START NEW APPLICATION") {
       let params = {
         create_new: true,

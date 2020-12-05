@@ -57,8 +57,35 @@ class KnowMore extends Component {
   };
 
   handleClick = () => {
-    this.navigate(this.state.next_state)
-  }
+    let params = {
+      create_new:
+        this.state.application_exists && this.state.otp_verified ? false : true,
+    };
+
+    let { vendor_application_status, pan_status, ckyc_status } = this.state;
+
+    let rejection_cases = [
+      "idfc_null_rejected",
+      "idfc_0.5_rejected",
+      "idfc_1.0_rejected",
+      "idfc_1.7_rejected",
+      "idfc_4_rejected",
+    ];
+
+    if (this.state.cta_title === "RESUME") {
+      if (rejection_cases.indexOf(vendor_application_status) !== -1) {
+        this.navigate("loan-status");
+      }
+
+      if (pan_status === "" || ckyc_status === "") {
+        this.navigate("basic-details");
+      } else if (rejection_cases.indexOf(vendor_application_status) === -1) {
+        this.navigate("journey");
+      }
+    } else {
+      this.getOrCreate(params);
+    }
+  };
 
   render() {
     let { features, eligibility, documentation } = this.state.screenData;

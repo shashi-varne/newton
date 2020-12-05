@@ -59,7 +59,10 @@ class AddressDetails extends Component {
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};
+    let current_address_data = lead.current_address_data || {};
+    let permanent_address_data = lead.permanent_address_data || {};
     let { confirm_details } = this.state;
+    let { form_data } = this.state; 
 
     if (vendor_info.ckyc_state === 'success') {
       confirm_details = true;
@@ -69,8 +72,25 @@ class AddressDetails extends Component {
       title: `${personal_info.first_name}, hang on while we create your loan application`,
       subtitle: 'It may take 10 to 15 seconds!'
     }
+
+    form_data.current_address1 = current_address_data.address1;
+    form_data.current_address2 = current_address_data.address2;
+    form_data.current_address3 = current_address_data.address3;
+    form_data.current_landmark = current_address_data.landmark;
+    form_data.current_pincode = current_address_data.pincode;
+    form_data.current_city = current_address_data.city;
+    form_data.current_state = current_address_data.state;
+
+    form_data.permanent_address1 = permanent_address_data.address1;
+    form_data.permanent_address2 = permanent_address_data.address2;
+    form_data.permanent_address3 = permanent_address_data.address3;
+    form_data.permanent_landmark = permanent_address_data.landmark;
+    form_data.permanent_pincode = permanent_address_data.pincode;
+    form_data.permanent_city = permanent_address_data.city;
+    form_data.permanent_state = permanent_address_data.state;
+
     this.setState({
-      // form_data: form_data,
+      form_data: form_data,
       confirm_details: confirm_details,
       loaderData: loaderData
     })
@@ -123,7 +143,7 @@ class AddressDetails extends Component {
     ];
 
     if (this.state.confirm_details) {
-      keys_to_check.push(...['current_address3', 'permanent_address3'])
+      // keys_to_check.push(...['current_address3', 'permanent_address3'])
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "null", true, loaderData);
@@ -184,16 +204,21 @@ class AddressDetails extends Component {
     let isPermanent_address = yesOrNo_options[event].value;
     let { form_data } = this.state;
 
-      form_data.permanent_address1 = isPermanent_address === 'Yes' ? form_data.current_address1 : '';
-      form_data.permanent_address2 = isPermanent_address === 'Yes' ? form_data.current_address2 : '';
-      form_data.permanent_address3 = isPermanent_address === 'Yes' ? form_data.current_address3 : '';
-      form_data.permanent_landmark = isPermanent_address === 'Yes' ? form_data.current_landmark : '';
-      form_data.permanent_pincode = isPermanent_address === 'Yes' ? form_data.current_pincode : '';
-      form_data.permanent_city = isPermanent_address === 'Yes' ? form_data.current_city : '';
-      form_data.permanent_state = isPermanent_address === 'Yes' ? form_data.current_state : '';
+    form_data.permanent_address1 = isPermanent_address === 'Yes' ? form_data.current_address1 : '';
+    form_data.permanent_address2 = isPermanent_address === 'Yes' ? form_data.current_address2 : '';
+    form_data.permanent_address3 = isPermanent_address === 'Yes' ? form_data.current_address3 : '';
+    form_data.permanent_landmark = isPermanent_address === 'Yes' ? form_data.current_landmark : '';
+    form_data.permanent_pincode = isPermanent_address === 'Yes' ? form_data.current_pincode : '';
+    form_data.permanent_city = isPermanent_address === 'Yes' ? form_data.current_city : '';
+    form_data.permanent_state = isPermanent_address === 'Yes' ? form_data.current_state : '';
+
+    for (var i in form_data) {
+      form_data[i + "_error"] = ""
+    }
 
     this.setState({
-      isPermanent_address: isPermanent_address
+      isPermanent_address: isPermanent_address,
+      form_data: form_data
     });
   };
 

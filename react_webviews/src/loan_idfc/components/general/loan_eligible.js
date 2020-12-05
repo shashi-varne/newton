@@ -11,7 +11,7 @@ class LoanEligible extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      get_lead: true,
+      screen_name: 'loan_eligible'
     }
 
     this.initialize = initialize.bind(this);
@@ -50,44 +50,21 @@ class LoanEligible extends Component {
     }
   }
 
-  triggerConversion= async () => {
-
-    this.setState({
-      show_loader: true
-    });
-    try {
-
-      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}`);
-
-      var resultData = res.pfwresponse.result;
-      if (res.pfwresponse.status_code === 200 && !resultData.error) {
-        this.navigate('journey');
-
-      } else {
-        this.setState({
-          show_loader: false
-        });
-        toast(resultData.error || resultData.message
-          || 'Something went wrong');
-      }
-    } catch (err) {
-      console.log(err)
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
-  }
-
 
   handleClick = () => {
     this.sendEvents('next');
-    this.triggerConversion();
+    let body = {
+      idfc_loan_status: "offer_accepted"
+    }
+
+    this.updateApplication(body);
   }
 
   render() {
 
     let vendor_info = this.state.vendor_info || {};
+    let application_info = this.state.application_info || {};
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -96,9 +73,6 @@ class LoanEligible extends Component {
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
         hidePageTitle={true}
-        headerData={{
-          icon: 'close'
-        }}
       >
         <div className="loan-status">
           <img
@@ -112,21 +86,21 @@ class LoanEligible extends Component {
           </div>
 
           <div className="loan-amount">
-            {formatAmountInr(vendor_info.approved_amount_decision)}
+            {formatAmountInr(application_info.approved_amount)}
           </div>
 
           <div className="loan-value">
             <div>
               <div>EMI amount</div>
-              <div className="values">{formatAmountInr(vendor_info.approved_emi)}</div>
+              <div className="values">{formatAmountInr(application_info.approved_emi)}</div>
             </div>
             <div>
               <div>Tenure</div>
-              <div className="values">{vendor_info.tenor} months</div>
+              <div className="values">{application_info.tenor} months</div>
             </div>
             <div>
               <div>Rate of interest</div>
-                <div className="values">{vendor_info.loan_rate}%</div>
+                <div className="values">{vendor_info.ROI}%</div>
             </div>
           </div>
         </div>

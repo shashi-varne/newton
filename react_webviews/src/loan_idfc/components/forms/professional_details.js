@@ -5,7 +5,11 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
+import {
+  numDifferentiationInr,
+  capitalizeFirstLetter,
+  capitalize,
+} from "utils/validators";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -15,6 +19,7 @@ class ProfessionalDetails extends Component {
       form_data: {},
       screen_name: "professional_details_screen",
       employment_type: "",
+      industryOptions: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -39,16 +44,15 @@ class ProfessionalDetails extends Component {
 
     let form_data = {
       company_name: professional_info.company_name,
-      business_name: professional_info.business_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
-      salary_mode: capitalizeFirstLetter(professional_info.salary_mode),
-      constitution: professional_info.constitution.toUpperCase(),
-      organisation: professional_info.organisation,
+      salary_mode: (professional_info.salary_mode || "").toUpperCase(),
+      constitution: professional_info.constitution,
+      organisation: (professional_info.organisation || "").toUpperCase(),
       department: professional_info.department,
       industry: professional_info.industry,
     };
-console.log(form_data)
+
     this.setState({
       form_data: form_data,
       employment_type: employment_type,
@@ -98,10 +102,10 @@ console.log(form_data)
       "industry",
     ];
 
-    if (employment_type === 'self_employed') {
-      keys_to_check.push('business_name')
+    if (employment_type === "self_employed") {
+      keys_to_check.push("business_name");
     } else {
-      keys_to_check.push(...salaried)
+      keys_to_check.push(...salaried);
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
@@ -134,20 +138,22 @@ console.log(form_data)
               </div>
             )}
 
-            {employment_type === "self_employed" && <div className="InputField">
-              <Input
-                error={!!this.state.form_data.business_name_error}
-                helperText={this.state.form_data.business_name_error}
-                type="text"
-                width="40"
-                label="Business name"
-                class="business_name"
-                id="business_name"
-                name="business_name"
-                value={this.state.form_data.business_name || ""}
-                onChange={this.handleChange("business_name")}
-              />
-            </div>}
+            {employment_type === "self_employed" && (
+              <div className="InputField">
+                <Input
+                  type="text"
+                  width="40"
+                  label="Business name"
+                  class="business_name"
+                  id="business_name"
+                  name="business_name"
+                  error={this.state.form_data.company_name_error ? true : false}
+                  helperText={this.state.form_data.company_name_error}
+                  value={this.state.form_data.company_name || ""}
+                  onChange={this.handleChange("business_name")}
+                />
+              </div>
+            )}
 
             {employment_type === "salaried" && (
               <div className="InputField">
@@ -212,7 +218,7 @@ console.log(form_data)
                 label="Constitution of company"
                 error={this.state.form_data.constitution_error ? true : false}
                 helperText={this.state.form_data.constitution_error}
-                value={this.state.form_data.constitution || ""}
+                value={(this.state.form_data.constitution || "").toUpperCase()}
                 name="constitution"
                 onChange={this.handleChange("constitution")}
               />
@@ -252,7 +258,7 @@ console.log(form_data)
               <div className="InputField">
                 <DropdownWithoutIcon
                   width="40"
-                  options={this.state.screenData.industryOptions}
+                  options={this.state.industryOptions}
                   id="industry"
                   label="Industry type"
                   error={this.state.form_data.industry_error ? true : false}

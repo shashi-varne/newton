@@ -27,6 +27,8 @@ export async function initialize() {
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
+  this.getIndustryList = getIndustryList.bind(this);
+  this.get05Callback = get05Callback.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -89,6 +91,32 @@ export async function getInstitutionList() {
 
       this.setState({
         bankOptions: bankOptions,
+      });
+
+    } else {
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    console.log(err);
+    toast("Something went wrong");
+  }
+}
+
+export async function getIndustryList() {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.get("relay/api/loan/idfc/list/industry");
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      let industryOptions = result.data;
+
+      this.setState({
+        industryOptions: industryOptions,
       });
 
     } else {
@@ -168,7 +196,8 @@ export async function getOrCreate(params) {
         }
       );
 
-      if (this.state.screen_name === "landing_screen") {
+      let screens = ["landing_screen", "calculator", "know_more_screen"]
+      if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       }
 
@@ -187,6 +216,10 @@ export async function getOrCreate(params) {
       if (this.state.screen_name === "document_list") {
         await this.getDocumentList();
       }
+
+      if (this.state.screen_name === "professional_details_screen") {
+        this.getIndustryList();
+      }
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -202,7 +235,7 @@ export async function getOrCreate(params) {
   });
 }
 
-export async function getUserStatus() {
+export async function getUserStatus(state = "") {
   try {
     this.setState({
       show_loader: true,
@@ -216,6 +249,7 @@ export async function getUserStatus() {
       this.setState({
         ...(result || {}),
       });
+
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.onload();
@@ -274,9 +308,7 @@ export async function updateApplication(params, next_state = '') {
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      // toast(result.error || result.message || "Something went wrong!");
-      // this.onload();
-      this.navigate('loan-status');
+      toast(result.error || result.message || "Something went wrong!");
     }
   } catch (err) {
     console.log(err);
@@ -288,8 +320,26 @@ export async function updateApplication(params, next_state = '') {
   });
 }
 
+export async function get05Callback() {
+  this.setState({
+    show_loader: true
+  })
+
+  await this.getUserStatus();
+
+  if (this.state.idfc_05_callback) {
+    this.navigate('loan-status')
+  } else {
+    this.get05Callback();
+  }
+}
+
 export async function submitApplication(params, state, update = "") {
   try {
+    this.setState({
+      show_loader: true
+    })
+
     let screens = ["address_details", "requirement_details_screen"];
     this.setState({
       show_loader: true,
@@ -304,7 +354,12 @@ export async function submitApplication(params, state, update = "") {
 
     if (status === 200) {
       if (result.message === "Success") {
-        this.navigate(this.state.next_state);
+
+        // if (state === "point_five") {
+        //   this.get05Callback()
+        // } else {
+          this.navigate(this.state.next_state);
+        // }
       }
     } else {
       this.navigate("loan-status");
