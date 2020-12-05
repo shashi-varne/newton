@@ -132,7 +132,7 @@ export async function initialize() {
                             tnc: resultData.common.tnc || resultData.tnc
                         },
                         insured_account_type: lead.insurance_type || ''
-                    }, () => { console.log(lead,member_base)
+                    }, () => {
                         if (this.onload && !this.state.ctaWithProvider) {
                             this.onload();
                         }
