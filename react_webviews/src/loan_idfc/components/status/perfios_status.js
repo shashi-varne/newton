@@ -66,11 +66,6 @@ class PerfiosStatus extends Component {
     let idfc_07_state = vendor_info.idfc_07_state;
 
     let bt_eligible = vendor_info.bt_eligible;
-    // let bt_eligible = this.state.params
-    //   ? this.state.params.bt_eligible
-    //   : vendor_info.bt_eligible;
-
-    // let { status, bt_eligible } = this.state.params;
 
     this.setState({
       commonMapper: commonMapper[perfios_state] || {},
@@ -97,7 +92,7 @@ class PerfiosStatus extends Component {
 
     setTimeout(function () {
       if (result.idfc_07_state === "success") {
-        this.setState(
+        that.setState(
           {
             next_state: "eligible-loan",
           },

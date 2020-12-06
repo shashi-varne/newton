@@ -32,6 +32,7 @@ export async function initialize() {
   this.getIndustryList = getIndustryList.bind(this);
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
+  this.get07State = get07State.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -271,9 +272,15 @@ export async function getUserStatus(state = "") {
         ...(result || {}),
       });
 
-      let screens = ["requirement_details_screen", "journey_screen", "perfios_state", "bt_info_screen", "credit_bt"];
+      let screens = [
+        "requirement_details_screen",
+        "journey_screen",
+        "perfios_state",
+        "bt_info_screen",
+        "credit_bt",
+      ];
 
-      if (screens.indexOf(this.state.screen_name) !== "-1") {
+      if (screens.indexOf(this.state.screen_name) !== -1) {
         return result;
       }
     } else {
@@ -330,7 +337,7 @@ export async function updateApplication(params, next_state = "") {
       }
 
       if (params.idfc_loan_status === "bt_bypass") {
-        this.get10Callback(next_state);
+        await this.get07State();
       } else if (params.idfc_loan_status === "ckyc") {
         this.navigate("personal-details");
       } else {
@@ -348,9 +355,9 @@ export async function updateApplication(params, next_state = "") {
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  });
+  // this.setState({
+  //   show_loader: false,
+  // });
 }
 
 export async function get05Callback() {
@@ -374,7 +381,7 @@ export async function get05Callback() {
 
         that.get05Callback();
       } else {
-        this.navigate("error")
+        this.navigate("error");
       }
     }
   }, 3000);
@@ -390,23 +397,48 @@ export async function get10Callback(next_state) {
   let { count } = this.state;
   let that = this;
 
-  console.log(result)
+  setTimeout(function () {
+    if (result.idfc_10_callback === true) {
+      that.navigate(next_state);
+    } else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
 
-  // setTimeout(function () {
-  //   if (result.idfc_10_callback === true) {
-  //     that.navigate(next_state);
-  //   } else {
-  //     if (count < 20) {
-  //       that.setState({
-  //         count: count + 1,
-  //       });
+        that.get10Callback(next_state);
+      } else {
+        this.navigate("error");
+      }
+    }
+  }, 3000);
+}
 
-  //       that.get10Callback(next_state);
-  //     } else {
-  //       this.navigate("error")
-  //     }
-  //   }
-  // }, 3000);
+export async function get07State() {
+  this.setState({
+    show_loader: true,
+  });
+
+  // setTimeout(, 3000)
+  let result = await this.getUserStatus();
+  let { count } = this.state;
+  let that = this;
+
+  setTimeout(function () {
+    if (result.idfc_07_state === "success") {
+      that.submitApplication({}, "one", "", "eligible-loan");
+    } else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
+
+        that.get07State();
+      } else {
+        this.navigate("error");
+      }
+    }
+  }, 3000);
 }
 
 export async function submitApplication(

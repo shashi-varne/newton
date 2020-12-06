@@ -8,6 +8,7 @@ import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { formatMonthandYear, dobFormatTest } from "utils/validators";
+import toast from "../../../common/ui/Toast";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class LoanBtDetails extends Component {
       form_data: [],
       credit_bt: [],
       bankOptions: [],
+      form_checked: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -103,7 +105,7 @@ class LoanBtDetails extends Component {
         return;
       }
 
-      let input = document.getElementById('creditCardExpiryDate');
+      let input = document.getElementById(`card-expiry-${index + 1}`);
       input.onkeyup = formatMonthandYear;
 
       form_data[index][name] = value;
@@ -120,6 +122,7 @@ class LoanBtDetails extends Component {
 
   handleCheckbox = (checked, index, id) => {
     let { form_data } = this.state;
+
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
     this.setState({
@@ -128,13 +131,22 @@ class LoanBtDetails extends Component {
   };
 
   handleClick = () => {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
+
+    if (form_checked.length > 3) {
+      toast("more than 3 bt are not allowed");
+      return;
+    }
+
     this.submitApplication(
       {
         bt_selection: this.state.form_data.filter((data) => data.is_selected),
       },
       "one",
       true,
-      "eligible_loan"
+      "eligible-loan"
     );
   };
 
@@ -228,11 +240,11 @@ class LoanBtDetails extends Component {
                         // helperText={
                         //   this.state.form_data[index].creditCardExpiryDate_error
                         // }
-                        type="number"
+                        type="text"
                         width="40"
                         maxLength={7}
                         label="Expiry date"
-                        id="creditCardExpiryDate"
+                        id={`card-expiry-${index + 1}`}
                         name="creditCardExpiryDate"
                         value={
                           this.state.form_data[index].creditCardExpiryDate || ""

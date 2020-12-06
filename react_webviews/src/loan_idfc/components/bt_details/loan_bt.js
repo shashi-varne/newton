@@ -63,7 +63,6 @@ class LoanBtDetails extends Component {
     let loan_bt = [];
 
     for (var item in bt_info) {
-      console.log(bt_info);
       if (bt_info[item].typeOfLoan === "PersonalLoan") {
         loan_bt.push({ [item]: bt_info[item].typeOfLoan });
       }

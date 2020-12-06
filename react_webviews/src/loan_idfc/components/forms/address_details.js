@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 // import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import Api from 'utils/api';
+import Api from "utils/api";
 
 const yesOrNo_options = [
   {
@@ -27,7 +27,7 @@ class AddressDetails extends Component {
       show_loader: false,
       screen_name: "address_details",
       form_data: {},
-      confirm_details: false
+      confirm_details: false,
     };
 
     this.initialize = initialize.bind(this);
@@ -62,16 +62,16 @@ class AddressDetails extends Component {
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
     let { confirm_details } = this.state;
-    let { form_data } = this.state; 
+    let { form_data } = this.state;
 
-    if (vendor_info.ckyc_state === 'success') {
+    if (vendor_info.ckyc_state === "success") {
       confirm_details = true;
     }
 
     let loaderData = {
       title: `${personal_info.first_name}, hang on while we create your loan application`,
-      subtitle: 'It may take 10 to 15 seconds!'
-    }
+      subtitle: "It may take 10 to 15 seconds!",
+    };
 
     form_data.current_address1 = current_address_data.address1;
     form_data.current_address2 = current_address_data.address2;
@@ -92,8 +92,8 @@ class AddressDetails extends Component {
     this.setState({
       form_data: form_data,
       confirm_details: confirm_details,
-      loaderData: loaderData
-    })
+      loaderData: loaderData,
+    });
   };
 
   sendEvents(user_action) {
@@ -149,76 +149,88 @@ class AddressDetails extends Component {
     this.formCheckUpdate(keys_to_check, form_data, "null", true, loaderData);
   };
 
-  handlePincode = name => async (event) => {
+  handlePincode = (name) => async (event) => {
     const pincode = event.target.value;
 
     if (pincode.length > 6) {
-        return;
+      return;
     }
 
     let form_data = this.state.form_data;
     form_data[name] = pincode;
-    form_data[name + '_error'] = '';
+    form_data[name + "_error"] = "";
 
     this.setState({
-        form_data: form_data
-    })
+      form_data: form_data,
+    });
 
     if (pincode.length === 6) {
-        const res = await Api.get('/relay/api/loan/pincode/get/' + pincode);
-        let resultData = res.pfwresponse.result[0] || '';
+      const res = await Api.get("/relay/api/loan/pincode/get/" + pincode);
+      let resultData = res.pfwresponse.result[0] || "";
 
-        let { city, state } = form_data;
-        let pincode_error = '';
-        if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.length > 0) {
-            if (!resultData.idfc_city_name) {
-                city = resultData.district_name || resultData.division_name || resultData.taluk;
-            } else {
-                city = resultData.idfc_city_name;
-            }
-            state = resultData.state_name;
+      let { city, state } = form_data;
+      let pincode_error = "";
+      if (
+        res.pfwresponse.status_code === 200 &&
+        res.pfwresponse.result.length > 0
+      ) {
+        if (!resultData.idfc_city_name) {
+          city =
+            resultData.district_name ||
+            resultData.division_name ||
+            resultData.taluk;
         } else {
-            city = '';
-            state = '';
-            pincode_error = 'Invalid pincode';
+          city = resultData.idfc_city_name;
         }
-        
-        if (name === 'current_pincode') {
-            form_data.current_city = city;
-            form_data.current_state = state;
-            form_data.current_pincode_error = pincode_error;
-        } else if (name === 'permanent_pincode') {
-            form_data.permanent_city = city;
-            form_data.permanent_state = state;
-            form_data.permanent_pincode_error = pincode_error;
-        }
+        state = resultData.state_name;
+      } else {
+        city = "";
+        state = "";
+        pincode_error = "Invalid pincode";
+      }
 
+      if (name === "current_pincode") {
+        form_data.current_city = city;
+        form_data.current_state = state;
+        form_data.current_pincode_error = pincode_error;
+      } else if (name === "permanent_pincode") {
+        form_data.permanent_city = city;
+        form_data.permanent_state = state;
+        form_data.permanent_pincode_error = pincode_error;
+      }
     }
 
     this.setState({
-        form_data: form_data
-    })
-}
+      form_data: form_data,
+    });
+  };
 
   handleChangeRadio = (event) => {
     let isPermanent_address = yesOrNo_options[event].value;
     let { form_data } = this.state;
 
-    form_data.permanent_address1 = isPermanent_address === 'Yes' ? form_data.current_address1 : '';
-    form_data.permanent_address2 = isPermanent_address === 'Yes' ? form_data.current_address2 : '';
-    form_data.permanent_address3 = isPermanent_address === 'Yes' ? form_data.current_address3 : '';
-    form_data.permanent_landmark = isPermanent_address === 'Yes' ? form_data.current_landmark : '';
-    form_data.permanent_pincode = isPermanent_address === 'Yes' ? form_data.current_pincode : '';
-    form_data.permanent_city = isPermanent_address === 'Yes' ? form_data.current_city : '';
-    form_data.permanent_state = isPermanent_address === 'Yes' ? form_data.current_state : '';
+    form_data.permanent_address1 =
+      isPermanent_address === "Yes" ? form_data.current_address1 : "";
+    form_data.permanent_address2 =
+      isPermanent_address === "Yes" ? form_data.current_address2 : "";
+    form_data.permanent_address3 =
+      isPermanent_address === "Yes" ? form_data.current_address3 : "";
+    form_data.permanent_landmark =
+      isPermanent_address === "Yes" ? form_data.current_landmark : "";
+    form_data.permanent_pincode =
+      isPermanent_address === "Yes" ? form_data.current_pincode : "";
+    form_data.permanent_city =
+      isPermanent_address === "Yes" ? form_data.current_city : "";
+    form_data.permanent_state =
+      isPermanent_address === "Yes" ? form_data.current_state : "";
 
     for (var i in form_data) {
-      form_data[i + "_error"] = ""
+      form_data[i + "_error"] = "";
     }
 
     this.setState({
       isPermanent_address: isPermanent_address,
-      form_data: form_data
+      form_data: form_data,
     });
   };
 
@@ -226,8 +238,10 @@ class AddressDetails extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={`${this.state.confirm_details ? 'Confirm your' : 'Provide'} address details`}
-        buttonTitle={this.state.confirm_details ? 'CONFIRM & SUBMIT' : 'SUBMIT'}
+        title={`${
+          this.state.confirm_details ? "Confirm your" : "Provide"
+        } address details`}
+        buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}
         headerData={{
@@ -236,7 +250,9 @@ class AddressDetails extends Component {
         loaderData={this.state.loaderData}
       >
         <div className="address-details">
-          {this.state.confirm_details && <Attention content="Once submitted, details cannot be changed or modified." />}
+          {this.state.confirm_details && (
+            <Attention content="Once submitted, details cannot be changed or modified." />
+          )}
 
           <div className="head-title">Current address</div>
           <FormControl fullWidth>
@@ -268,19 +284,21 @@ class AddressDetails extends Component {
               />
             </div>
 
-            {this.state.confirm_details && <div className="InputField">
-              <Input
-                error={!!this.state.form_data.current_address3_error}
-                helperText={this.state.form_data.current_address3_error}
-                type="text"
-                width="40"
-                label="Address line 3"
-                id="address"
-                name="fcurrent_address3"
-                value={this.state.form_data.current_address3 || ""}
-                onChange={this.handleChange("current_address3")}
-              />
-            </div>}
+            {this.state.confirm_details && (
+              <div className="InputField">
+                <Input
+                  error={!!this.state.form_data.current_address3_error}
+                  helperText={this.state.form_data.current_address3_error}
+                  type="text"
+                  width="40"
+                  label="Address line 3"
+                  id="address"
+                  name="fcurrent_address3"
+                  value={this.state.form_data.current_address3 || ""}
+                  onChange={this.handleChange("current_address3")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <Input
@@ -312,8 +330,8 @@ class AddressDetails extends Component {
 
             <div className="InputField">
               <Input
-                // error={!!this.state.form_data.current_city_error}
-                // helperText={this.state.form_data.current_city_error}
+                error={!!this.state.form_data.current_city_error}
+                helperText={this.state.form_data.current_city_error}
                 type="text"
                 width="40"
                 label="City"
@@ -327,8 +345,8 @@ class AddressDetails extends Component {
 
             <div className="InputField">
               <Input
-                // error={!!this.state.form_data.current_state_error}
-                // helperText={this.state.form_data.current_state_error}
+                error={!!this.state.form_data.current_state_error}
+                helperText={this.state.form_data.current_state_error}
                 type="text"
                 width="40"
                 label="State"
@@ -385,19 +403,21 @@ class AddressDetails extends Component {
                 />
               </div>
 
-              {this.state.confirm_details && <div className="InputField">
-                <Input
-                  error={!!this.state.form_data.permanent_address3_error}
-                  helperText={this.state.form_data.permanent_address3_error}
-                  type="text"
-                  width="40"
-                  label="Address line 3"
-                  id="address"
-                  name="permanent_address3"
-                  value={this.state.form_data.permanent_address3 || ""}
-                  onChange={this.handleChange("permanent_address3")}
-                />
-              </div>}
+              {this.state.confirm_details && (
+                <div className="InputField">
+                  <Input
+                    error={!!this.state.form_data.permanent_address3_error}
+                    helperText={this.state.form_data.permanent_address3_error}
+                    type="text"
+                    width="40"
+                    label="Address line 3"
+                    id="address"
+                    name="permanent_address3"
+                    value={this.state.form_data.permanent_address3 || ""}
+                    onChange={this.handleChange("permanent_address3")}
+                  />
+                </div>
+              )}
 
               <div className="InputField">
                 <Input
@@ -429,8 +449,8 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  // error={!!this.state.form_data.permanent_city_error}
-                  // helperText={this.state.form_data.permanent_city_error}
+                  error={!!this.state.form_data.permanent_city_error}
+                  helperText={this.state.form_data.permanent_city_error}
                   type="text"
                   width="40"
                   label="City"
@@ -444,8 +464,8 @@ class AddressDetails extends Component {
 
               <div className="InputField">
                 <Input
-                  // error={!!this.state.form_data.permanent_state_error}
-                  // helperText={this.state.form_data.permanent_state_error}
+                  error={!!this.state.form_data.permanent_state_error}
+                  helperText={this.state.form_data.permanent_state_error}
                   type="text"
                   width="40"
                   label="State"

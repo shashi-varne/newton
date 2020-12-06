@@ -21,6 +21,10 @@ const journeyMapper2 = {
     index: "2",
     next_state: "loan-requirement-details"
   },
+  "idfc_0.5_failed": {
+    index: "2",
+    next_state: "loan-requirement-details"
+  },
   "idfc_0.5_submitted": {
     index: "2",
     next_state: "loan-requirement-details"
@@ -227,7 +231,7 @@ class JourneyMap extends Component {
         this.get05Callback();
 
       } else {
-        if (journeyMapper2[idfc_loan_status] === "perfios" && pefios_state === "success") {
+        if (idfc_loan_status === "perfios" && pefios_state !== "init") {
           next_state = "perfios-status"
         }
 

@@ -58,16 +58,16 @@ class BtInformation extends Component {
     this.updateApplication(body, "loan-bt");
   };
 
-  handleClickOne = async () => {
+  handleClickOne = () => {
     let body = {
       idfc_loan_status: "bt_bypass",
     };
 
-    await this.updateApplication(body)
+    this.updateApplication(body)
 
-    if (this.state.idfc_07_state !== 'success') {
-      this.submitApplication({}, "one", "", "eligible-loan");
-    }
+    // if (this.state.idfc_07_state !== 'success') {
+    //   this.submitApplication({}, "one", "", "eligible-loan");
+    // }
   }
 
   sendEvents(user_action, data = {}) {

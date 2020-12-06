@@ -161,7 +161,6 @@ class PersonalDetails extends Component {
   };
 
   render() {
-    console.log(this.state.form_data)
     return (
       <Container
         showLoader={this.state.show_loader}

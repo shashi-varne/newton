@@ -216,7 +216,7 @@ class ApplicationSummary extends Component {
         {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
-            {this.state.idfc_loan_status === "basic_details_uploaded" && (
+            {this.state.idfc_loan_status === "idfc_null_accepted" && (
               <div
                 onClick={() => {
                   this.sendEvents("next", {
@@ -274,7 +274,7 @@ class ApplicationSummary extends Component {
         handleClick={() => this.navigate('journey')}
       >
         <div className="loan-form-summary">
-          <div className="bottom-content">
+          <div className="bottom-content" style={{marginBottom: "40px"}}>
             <div className="generic-hr"></div>
             {this.state.accordianData.map(this.renderAccordian)}
           </div>

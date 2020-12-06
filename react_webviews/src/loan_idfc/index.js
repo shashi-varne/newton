@@ -32,7 +32,6 @@ import EligibleLoan from "./components/forms/eligible_loan";
 import AdditionalDetails from "./components/forms/additional_details";
 import DocumentList from "./components/upload_doc/doc_list";
 import LoanEligible from "./components/general/loan_eligible";
-import UploadPan from "./components/upload_doc/upload_pan";
 import LoanStatus from './components/status/status';
 import PerfiosStatus from './components/status/perfios_status';
 import SystemError from './components/status/system_error';
@@ -101,7 +100,6 @@ const Lending = props => {
           <Route path={`${url}/additional-details`} component={AdditionalDetails} />
           <Route path={`${url}/doc-list`} component={DocumentList} />
           <Route path={`${url}/loan-eligible`} component={LoanEligible} />
-          <Route path={`${url}/upload-pan`} component={UploadPan} />
           <Route path={`${url}/loan-status`} component={LoanStatus} />
           <Route path={`${url}/perfios-status`} component={PerfiosStatus} />
           <Route path={`${url}/doc-upload`} component={DocumentUpload} />
