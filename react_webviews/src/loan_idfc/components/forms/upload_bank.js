@@ -151,41 +151,14 @@ class UploadBank extends Component {
     }
   }
 
-  mergeDocs(file) {
+  
 
-    this.setState({
-      imageBaseFile: file,
-      fileUploaded: true,
-      show_loader: true
-    })
-
-    let that = this
-    getBase64(file, function (img) {
-      that.setState({
-        imageBaseFileShow: img
-      })
-    });
-
-    setTimeout(
-      function () {
-        this.setState({
-          show_loader: false
-        })
-      }
-        .bind(this),
-      1000
-    );
-
-  };
-
-  native_call_handler(method_name, doc_type, doc_name, doc_side) {
+  native_call_handler(method_name, doc_type) {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: "doc",
         doc_type: doc_type,
-        doc_name: doc_name,
-        doc_side: doc_side,
         // callbacks from native
         upload: function upload(file) {
           try {
@@ -197,7 +170,7 @@ class UploadBank extends Component {
             });
             switch (file.type) {
               case "application/pdf":
-                that.mergeDocs(file);
+                that.save(file);
                 break;
               default:
                 alert("Please select pdf file");
@@ -211,16 +184,6 @@ class UploadBank extends Component {
           }
         },
       });
-
-      window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
-        show_loader: function (show_loader) {
-          that.setState({
-            show_loader: true
-          })
-          that.showLoaderNative();
-        }
-      });
     }
   }
 
@@ -228,7 +191,8 @@ class UploadBank extends Component {
     $("input").trigger("click");
   }
 
-  startUpload(method_name, doc_type, doc_name, doc_side) {
+  startUpload(method_name, doc_type) {
+    console.log(doc_type)
     this.setState({
       type: method_name,
     });
@@ -236,7 +200,7 @@ class UploadBank extends Component {
     if (getConfig().html_camera) {
       this.openFileExplorer();
     } else {
-      this.native_call_handler(method_name, doc_type, doc_name, doc_side);
+      this.native_call_handler(method_name, doc_type);
     }
     
   }
@@ -277,6 +241,39 @@ class UploadBank extends Component {
       count: count,
     });
   };
+
+  saveFile(file) {
+    let acceptedType = ["application/pdf"];
+
+    if (acceptedType.indexOf(file.type) === -1) {
+      toast("Please select pdf file only");
+      return;
+    }
+
+    let { documents, editId, count } = this.state;
+    file.doc_type = file.type;
+    file.status = "uploaded";
+    file.id = count++;
+
+    if (editId !== null) {
+      var index = documents.findIndex((item) => item.id === editId);
+      file.id = editId;
+      file.edited = true;
+      documents[index] = file;
+    }
+
+    if (editId === undefined || editId === null) {
+      documents.push(file);
+    }
+
+    this.setState({
+      fileUploaded: true,
+      documents: documents,
+      confirmed: false,
+      editId: null,
+      count: count,
+    });
+  }
 
   handleConfirm = async (id) => {
     let { documents, application_id } = this.state;
@@ -567,7 +564,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("open_gallery", 'bank', 'bank.pdf')}
+                onClick={() => this.startUpload("open_file", 'perfios_bank_statement')}
               >
                 <span className="plus-sign">
                   <input
