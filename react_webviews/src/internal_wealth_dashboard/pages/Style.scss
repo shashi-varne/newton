@@ -1456,59 +1456,6 @@ $background: #f9f9f9;
       }
     }
   }
-  .iwd-statements-container {
-    justify-content: center;
-    flex: 1;
-  }
-}
-
-// Statements Page
-.iwd-statements-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  //-webkit-box-align: center;
-  //-ms-flex-align: center;
-  // align-items: center;
-  height: 75vh;
-  // margin-left: -15px;
-  overflow-y: auto;
-}
-
-#iwd-analysis {
-  .iwd-scroll-contain {
-    height: 86%;
-  }
-
-  .iwd-analysis-portfolios-equity {
-    overflow-y: auto;
-    flex-direction: column;
-    height: auto;
-  }
-  .iwd-analysis-amc {
-    width: 100%;
-  }
-
-  .iwd-analysis-portfolio-stock {
-    width: 100%;
-    margin-top: 30px;
-    justify-content: flex-start;
-  }
-
-  .iwd-analysis-header-container-left {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .iwd-analysis-header-filters {
-    margin-left: 0;
-  }
-
-  .iwd-analysis-debt-holding {
-    width: 100%;
-  }
 
   #iwd-analysis {
     .iwd-scroll-contain {
@@ -1858,7 +1805,24 @@ $background: #f9f9f9;
   .iwd-transaction-container {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+    justify-content: center;
+    flex: 1;
   }
+}
+
+// Statements Page
+.iwd-statements-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  //-webkit-box-align: center;
+  //-ms-flex-align: center;
+  // align-items: center;
+  height: 75vh;
+  // margin-left: -15px;
+  overflow-y: auto;
 }
 
 .iwd-transactions-table.iwd-statement-transaction-table {
