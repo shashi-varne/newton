@@ -80,39 +80,39 @@ class PerfiosStatus extends Component {
     this.navigate(this.state.commonMapper.close_state);
   };
 
-  getPointSevenCallback = async () => {
-    this.setState({
-      show_loader: true,
-    });
+  // getPointSevenCallback = async () => {
+  //   this.setState({
+  //     show_loader: true,
+  //   });
 
-    // setTimeout(, 3000)
-    let result = await this.getUserStatus();
-    let { count } = this.state;
-    let that = this;
+  //   // setTimeout(, 3000)
+  //   let result = await this.getUserStatus();
+  //   let { count } = this.state;
+  //   let that = this;
 
-    setTimeout(function () {
-      if (result.idfc_07_state === "success") {
-        that.setState(
-          {
-            next_state: "eligible-loan",
-          },
-          () => {
-            that.submitApplication({}, "one", "", "eligible-loan");
-          }
-        );
-      } else {
-        if (count < 20) {
-          that.setState({
-            count: count + 1,
-          });
+  //   setTimeout(function () {
+  //     if (result.idfc_07_state === "success") {
+  //       that.setState(
+  //         {
+  //           next_state: "eligible-loan",
+  //         },
+  //         () => {
+  //           that.submitApplication({}, "one", "", "eligible-loan");
+  //         }
+  //       );
+  //     } else {
+  //       if (count < 20) {
+  //         that.setState({
+  //           count: count + 1,
+  //         });
 
-          that.getPointSevenCallback();
-        } else {
-          that.navigate("error");
-        }
-      }
-    }, 3000);
-  };
+  //         that.getPointSevenCallback();
+  //       } else {
+  //         that.navigate("error");
+  //       }
+  //     }
+  //   }, 3000);
+  // };
 
   handleClick = () => {
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
@@ -130,7 +130,7 @@ class PerfiosStatus extends Component {
       }
 
       if (!bt_eligible && idfc_07_state === "triggered") {
-        this.getPointSevenCallback();
+        this.get07State();
       }
 
       if (bt_eligible && idfc_07_state === "success") {

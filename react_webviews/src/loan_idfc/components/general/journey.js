@@ -47,7 +47,7 @@ const journeyMapper2 = {
   },
   bt_bypass: {
     index: "2",
-    next_state: "eligible-loan"
+    next_state: "bt-info"
   },
   // bt_processing: {
   //   index: "2",
