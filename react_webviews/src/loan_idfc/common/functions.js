@@ -11,6 +11,7 @@ import {
   getEditTitle,
   IsFutureDate,
 } from "utils/validators";
+import { param } from "jquery";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -270,11 +271,9 @@ export async function getUserStatus(state = "") {
         ...(result || {}),
       });
 
-      if (
-        this.state.screen_name === "requirement_details_screen" ||
-        this.state.screen_name === "journey_screen" ||
-        this.state.screen_name === "perfios_state"
-      ) {
+      let screens = ["requirement_details_screen", "journey_screen", "perfios_state", "bt_info_screen", "credit_bt"];
+
+      if (screens.indexOf(this.state.screen_name) !== "-1") {
         return result;
       }
     } else {
@@ -330,7 +329,9 @@ export async function updateApplication(params, next_state = "") {
         });
       }
 
-      if (params.idfc_loan_status === "ckyc") {
+      if (params.idfc_loan_status === "bt_bypass") {
+        this.get10Callback(next_state);
+      } else if (params.idfc_loan_status === "ckyc") {
         this.navigate("personal-details");
       } else {
         this.navigate(next_state || this.state.next_state);
@@ -389,21 +390,23 @@ export async function get10Callback(next_state) {
   let { count } = this.state;
   let that = this;
 
-  setTimeout(function () {
-    if (result.idfc_10_callback === true) {
-      that.navigate(next_state);
-    } else {
-      if (count < 20) {
-        that.setState({
-          count: count + 1,
-        });
+  console.log(result)
 
-        that.get10Callback(next_state);
-      } else {
-        this.navigate("error")
-      }
-    }
-  }, 3000);
+  // setTimeout(function () {
+  //   if (result.idfc_10_callback === true) {
+  //     that.navigate(next_state);
+  //   } else {
+  //     if (count < 20) {
+  //       that.setState({
+  //         count: count + 1,
+  //       });
+
+  //       that.get10Callback(next_state);
+  //     } else {
+  //       this.navigate("error")
+  //     }
+  //   }
+  // }, 3000);
 }
 
 export async function submitApplication(

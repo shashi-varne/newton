@@ -90,24 +90,6 @@ class PerfiosStatus extends Component {
       show_loader: true,
     });
 
-    // await this.getOrCreate();
-
-    // let lead = this.state.lead || {};
-    // let vendor_info = lead.vendor_info || {};
-
-    // if (vendor_info.idfc_07_state === "success") {
-    //   this.setState(
-    //     {
-    //       next_state: "eligible-loan",
-    //     },
-    //     () => {
-    //       this.submitApplication({}, "one", "", "eligible-loan");
-    //     }
-    //   );
-    // } else {
-    //   this.getPointSevenCallback();
-    // }
-
     // setTimeout(, 3000)
     let result = await this.getUserStatus();
     let { count } = this.state;
@@ -120,7 +102,7 @@ class PerfiosStatus extends Component {
             next_state: "eligible-loan",
           },
           () => {
-            this.submitApplication({}, "one", "", "eligible-loan");
+            that.submitApplication({}, "one", "", "eligible-loan");
           }
         );
       } else {
@@ -131,7 +113,7 @@ class PerfiosStatus extends Component {
 
           that.getPointSevenCallback();
         } else {
-          this.navigate("error");
+          that.navigate("error");
         }
       }
     }, 3000);

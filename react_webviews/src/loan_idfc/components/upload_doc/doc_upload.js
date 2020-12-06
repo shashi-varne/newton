@@ -26,6 +26,7 @@ class DocumentUpload extends Component {
       show_loader: false,
       screen_name: "document_upload",
       form_data: {},
+      image_data: {},
       totalUpload: "",
       docList: [],
       documents: [],
@@ -42,97 +43,6 @@ class DocumentUpload extends Component {
   }
 
   onload = () => {
-    // let docList = this.state.docList;
-    // let docList = [
-    //   {
-    //     category: "Cat1",
-    //     category_name: "Address Proof",
-    //     docs: [
-    //       {
-    //         doc_display_name: "Latest Bank Statement",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name: "Driving License",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name: "Aadhaar Card",
-    //         pages: "2",
-    //       },
-    //       {
-    //         doc_display_name: "Pension or Family Pension Payment Orders (PPOs)",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name:
-    //           "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name: "Property or Municipal Tax Receipt",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name: "Latest Passbook of scheduled commercial Bank",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name: "Rent Agreement",
-    //         pages: null,
-    //       },
-    //     ],
-    //     doc_checklist: [null],
-    //   },
-    //   {
-    //     category: "Cat2",
-    //     category_name: "Identity Proof (PAN)",
-    //     docs: [
-    //       {
-    //         doc_display_name: "PAN",
-    //         pages: "1",
-    //       },
-    //     ],
-    //     doc_checklist: [null],
-    //   },
-    //   {
-    //     category: "Cat3",
-    //     category_name: "Salary Slip / Employment Proof",
-    //     docs: [
-    //       {
-    //         doc_display_name: "3 Months Salary Slip",
-    //         pages: null,
-    //       },
-    //     ],
-    //     doc_checklist: [null],
-    //   },
-    //   {
-    //     category: "Cat4",
-    //     category_name: "Bank Account Statement",
-    //     docs: [
-    //       {
-    //         doc_display_name: "Last 3 months Bank Account Statement",
-    //         pages: null,
-    //       },
-    //     ],
-    //     doc_checklist: [null],
-    //   },
-    //   {
-    //     category: "Cat5",
-    //     category_name: "Ownership Proof (Either Home Or Office)",
-    //     docs: [
-    //       {
-    //         doc_display_name: "Electricity Bill",
-    //         pages: null,
-    //       },
-    //       {
-    //         doc_display_name: "Sale Deed",
-    //         pages: null,
-    //       },
-    //     ],
-    //     doc_checklist: [null],
-    //   },
-    // ];
 
     let category = storageService().get("category");
     let docList = this.state.docList;
@@ -143,11 +53,6 @@ class DocumentUpload extends Component {
       );
 
       let docs = docList[selectedIndex].docs.map((item) => {
-        // return {
-        //   name: item.doc_display_name,
-        //   value: item.pages || "3",
-        // };
-
         return item.doc_display_name;
       });
 
@@ -288,9 +193,10 @@ class DocumentUpload extends Component {
   getPhoto = (e) => {
 
     e.preventDefault();
-    console.log(e)
+    
+    let image_data = this.state.image_data;
     let id = e.target.id;
-    console.log(id)
+    image_data[id] = {};
 
     let file = e.target.files[0];
 
@@ -303,24 +209,30 @@ class DocumentUpload extends Component {
 
     let that = this;
     file.doc_type = file.type;
-    this.setState({
-      imageBaseFile: file
-    })
+
     getBase64(file, function (img) {
+      image_data[id].img = img;
+      image_data[id].uploaded = true;
+      
+      
       that.setState({
-        imageBaseFileShow: img,
-        fileUploaded: true
+        image_data: image_data
       })
     });
+  }
+
+  uploadDocument = async () => {
 
   }
 
 
-  renderHtmlCamera(side = "") {
-    console.log(this.state.documents)
+  renderHtmlCamera(side) {
+    console.log(this.state.image_data[side])
+    let { image_data } = this.state;
+
     return (
       <div>
-        {<div style={{
+        {!image_data[side] && <div style={{
           border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
           textAlign: 'center', fontWeight: 600
         }}>
@@ -335,23 +247,23 @@ class DocumentUpload extends Component {
             </div>
           </div>
         </div>}
-        {/* {this.state.documents.status === 'uploaded' && <div style={{
+        {image_data[side] && image_data[side].uploaded && <div style={{
           border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
           textAlign: 'center'
         }}>
           <div>
-            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow || this.state.document_url} alt="PAN" />
+            <img style={{ width: '100%', height: 150 }} src={image_data[side].img || this.state.document_url || ""} alt="PAN" />
           </div>
           <div style={{ margin: '20px 0 20px 0', cursor: 'pointer' }}>
-            <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+            <div onClick={() => this.startUpload('open_camera', side)} style={{
               textAlign: 'center'
             }}>
-              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id={side ? side : "myFile"}  />
               <img src={camera_grey} alt="PAN"></img>
               <div style={{ color: '#b4b4b4' }}>Click here to upload new</div>
             </div>
           </div>
-        </div>} */}
+        </div>}
       </div>
     );
   }
@@ -383,7 +295,7 @@ class DocumentUpload extends Component {
 
           {totalUpload === "1" && (
             <div className="loan-mandate-pan" style={{ marginBottom: "50px" }}>
-              {getConfig().html_camera && this.renderHtmlCamera()}
+              {getConfig().html_camera && this.renderHtmlCamera('single')}
               {!getConfig().html_camera && this.renderNativeCamera()}
             </div>
           )}
