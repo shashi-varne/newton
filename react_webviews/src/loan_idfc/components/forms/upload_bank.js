@@ -240,7 +240,7 @@ class UploadBank extends Component {
     });
   };
 
-  saveFile(file) {
+  save(file) {
     let acceptedType = ["application/pdf"];
     console.log(file)
 
@@ -251,6 +251,7 @@ class UploadBank extends Component {
 
     let { documents, editId, count } = this.state;
     file.doc_type = file.type;
+    file.name = `Bank_statement_${count}.pdf`
     file.status = "uploaded";
     file.id = count++;
 
@@ -426,7 +427,7 @@ class UploadBank extends Component {
   };
 
   render() {
-    let { documents, confirmed } = this.state;
+    let { documents, confirmed, count } = this.state;
 
     return (
       <Container
@@ -564,7 +565,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("open_file", 'perfios_bank_statement')}
+                onClick={() => this.startUpload("open_file", 'perfios_bank_statement'+count)}
               >
                 <span className="plus-sign">
                   <input
