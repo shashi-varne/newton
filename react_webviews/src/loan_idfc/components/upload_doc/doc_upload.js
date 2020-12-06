@@ -24,19 +24,21 @@ class DocumentUpload extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      screen_name: "document_upload",
       form_data: {},
       totalUpload: "",
       docList: [],
       documents: [],
-      screen_name: 'document_upload',
       count: 1,
+      docs: [],
     };
 
+    this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
   }
 
   componentWillMount() {
-    this.onload();
+    this.initialize();
   }
 
   onload = () => {
@@ -132,21 +134,36 @@ class DocumentUpload extends Component {
     //   },
     // ];
 
-    // let category = storageService().get("category");
+    let category = storageService().get("category");
+    let docList = this.state.docList;
 
-    // let selectedIndex = docList.findIndex((item) => item.category === category);
+    if (docList.length !== 0) {
+      let selectedIndex = docList.findIndex(
+        (item) => item.category === category
+      );
 
-    // let docs = docList[selectedIndex].docs.map((item) => {
-    //   return {
-    //     name: item.doc_display_name,
-    //     value: item.pages || "3",
-    //   };
-    // });
+      let docs = docList[selectedIndex].docs.map((item) => {
+        // return {
+        //   name: item.doc_display_name,
+        //   value: item.pages || "3",
+        // };
 
-    // this.setState({
-    //   docList: docList[selectedIndex],
-    //   docs: docs,
-    // });
+        return item.doc_display_name;
+      });
+
+      let docsMap = docList[selectedIndex].docs.map((item) => {
+        return {
+          name: item.doc_display_name,
+          value: item.pages || "3",
+        };
+      });
+
+      this.setState({
+        docList: docList[selectedIndex],
+        docs: docs,
+        docsMap: docsMap,
+      });
+    }
   };
 
   native_call_handler(method_name, doc_type, doc_name) {
@@ -189,16 +206,23 @@ class DocumentUpload extends Component {
   }
 
   handleChange = (name) => (event) => {
-    let value = event.target ? event.target.value : event;
+    let value = event.target ? event.target : event;
 
-    let { form_data } = this.state;
+    let { form_data, docsMap, totalUpload } = this.state;
 
     form_data[name] = value;
     form_data[name + "_error"] = "";
 
+    docsMap.forEach((item) => {
+      if (item.name === value) {
+        totalUpload = item.value
+      }
+
+    });
+
     this.setState({
       form_data: form_data,
-      totalUpload: value,
+      totalUpload: totalUpload,
     });
   };
 
@@ -216,9 +240,8 @@ class DocumentUpload extends Component {
 
   getPdf = (e) => {
     e.preventDefault();
-
+    console.log('hi')
     let file = e.target.files[0] || {};
-    console.log(file);
 
     let acceptedType = [
       "application/pdf",
@@ -256,10 +279,78 @@ class DocumentUpload extends Component {
     }
   };
 
+  getPhoto = (e) => {
+
+    e.preventDefault();
+    console.log(e)
+
+    let file = e.target.files[0];
+
+    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+
+    if (acceptedType.indexOf(file.type) === -1) {
+      toast('Please select image file only');
+      return;
+    }
+
+    let that = this;
+    file.doc_type = file.type;
+    this.setState({
+      imageBaseFile: file
+    })
+    getBase64(file, function (img) {
+      that.setState({
+        imageBaseFileShow: img,
+        fileUploaded: true
+      })
+    });
+
+  }
+
+
+  renderHtmlCamera(index) {
+    console.log(this.state.documents)
+    return (
+      <div>
+        {<div style={{
+          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
+          textAlign: 'center', fontWeight: 600
+        }}>
+          <div>Upload PAN card</div>
+          <div style={{ margin: '20px 0 20px 0', cursor: 'pointer'  }}>
+            <div onClick={() => this.startUpload('open_camera', index)} style={{
+              textAlign: 'center', cursor: 'pointer'
+            }}>
+              <input id={"input"+index} type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <img src={camera_green} alt="PAN"></img>
+              <div style={{ color: '#28b24d' }}>Click here to upload</div>
+            </div>
+          </div>
+        </div>}
+        {/* {this.state.documents.status === 'uploaded' && <div style={{
+          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
+          textAlign: 'center'
+        }}>
+          <div>
+            <img style={{ width: '100%', height: 300 }} src={this.state.imageBaseFileShow || this.state.document_url} alt="PAN" />
+          </div>
+          <div style={{ margin: '20px 0 20px 0', cursor: 'pointer' }}>
+            <div onClick={() => this.startUpload('open_camera', 'pan', 'pan.jpg')} style={{
+              textAlign: 'center'
+            }}>
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <img src={camera_grey} alt="PAN"></img>
+              <div style={{ color: '#b4b4b4' }}>Click here to upload new</div>
+            </div>
+          </div>
+        </div>} */}
+      </div>
+    );
+  }
+
   render() {
     let { docList, selectedIndex, documents, docs, totalUpload } = this.state;
-    console.log(documents.length);
-    console.log(totalUpload);
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -277,64 +368,65 @@ class DocumentUpload extends Component {
               helperText={this.state.form_data.doc_name_error}
               value={this.state.form_data.doc_name || ""}
               name="doc_name"
-              dataType="AOB"
+              // dataType="AOB"
               onChange={this.handleChange("doc_name")}
             />
           </div>
 
-          {totalUpload < "3" &&
-            Array.apply(null, { length: totalUpload }).map((e, index) => (
+          {totalUpload === "1" && (
+            <div className="loan-mandate-pan" style={{ marginBottom: "50px" }}>
+              {getConfig().html_camera && this.renderHtmlCamera()}
+              {!getConfig().html_camera && this.renderNativeCamera()}
+            </div>
+          )}
+
+          {totalUpload === "2" && (
+            <div>
               <div
                 className="loan-mandate-pan"
-                key={index}
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera(index)}
-                {!getConfig().html_camera && this.renderNativeCamera()}
+                {getConfig().html_camera && this.renderHtmlCamera('1')}
+                {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
               </div>
-            ))}
+
+              <div
+                className="loan-mandate-pan"
+                style={{ marginBottom: "50px" }}
+              >
+                {getConfig().html_camera && this.renderHtmlCamera('2')}
+                {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
+              </div>
+
+              <div
+                className="loan-mandate-pan"
+                style={{ display: 'none' }}
+              >
+                {getConfig().html_camera && this.renderHtmlCamera()}
+                {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
+              </div>
+            </div>
+          )}
 
           {totalUpload === "3" && (
             <div>
               {documents.map((item, index) => (
                 <div>
-                  
-                    <div
-                      className="multiple-upload"
-                      key={index + 1}
-                      style={{ marginBottom: "30px" }}
-                    >
-                      <div className="sub-title">
-                        <img
-                          style={{ margin: "0 5px 0 12px" }}
-                          src={require("assets/tool.svg")}
-                          alt=""
-                        />
-                        {item.name}
-                        <span className="bytes">{bytesToSize(item.size)}</span>
-                      </div>
+                  <div
+                    className="multiple-upload"
+                    key={index + 1}
+                    style={{ marginBottom: "30px" }}
+                  >
+                    <div className="sub-title">
+                      <img
+                        style={{ margin: "0 5px 0 12px" }}
+                        src={require("assets/tool.svg")}
+                        alt=""
+                      />
+                      {item.name}
+                      <span className="bytes">{bytesToSize(item.size)}</span>
                     </div>
-                  
-
-                  {/* {item.doc_type !== "application/pdf" && (
-                    <div
-                      style={{
-                        border: "1px dashed #e1e1e1",
-                        padding: "0px 0px 0px 0px",
-                        textAlign: "center",
-                        marginBottom: "30px",
-                      }}
-                      key={index}
-                    >
-                      <div>
-                        <img
-                          style={{ width: "100%", height: 200 }}
-                          src={item.imageBaseFile || this.state.document_url}
-                          alt="PAN"
-                        />
-                      </div>
-                    </div>
-                  )} */}
+                  </div>
                 </div>
               ))}
 

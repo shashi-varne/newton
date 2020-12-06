@@ -6,6 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
+import { numDifferentiationInr } from 'utils/validators';
 
 class AdditionalDetails extends Component {
   constructor(props) {
@@ -35,10 +36,17 @@ class AdditionalDetails extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let application_info = lead.application_info || {};
+    let vendor_info = lead.vendor_info || {};
     let employment_type = application_info.employment_type;
+
+    let bottomButtonData = {
+      leftTitle: 'Personal loan',
+      leftSubtitle: numDifferentiationInr(vendor_info.loanAmount)
+    }
 
     this.setState({
       employment_type: employment_type,
+      bottomButtonData: bottomButtonData
     });
   };
 
@@ -94,8 +102,10 @@ class AdditionalDetails extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Additional details"
-        buttonTitle="NEXT"
+        buttonTitle="CONTINUE"
         handleClick={this.handleClick}
+        withProvider={true}
+        buttonData={this.state.bottomButtonData}
       >
         <div className="additional-details">
           {employment_type === "self employed" && (

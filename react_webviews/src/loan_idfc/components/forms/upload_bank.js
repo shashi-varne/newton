@@ -23,6 +23,7 @@ class UploadBank extends Component {
       show_loader: false,
       fileUploaded: false,
       documents: [],
+      password: "",
       confirmed: true,
       editId: null,
       count: 1,
@@ -262,7 +263,7 @@ class UploadBank extends Component {
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data } = this.state;
+    let { form_data, password } = this.state;
 
     if (!name) {
       if (!dobFormatTest(value)) {
@@ -273,15 +274,24 @@ class UploadBank extends Component {
       input.onkeyup = formatDate;
     }
 
-    form_data[name || id] = value;
-    form_data[(name || id) + "_error"] = "";
+    if (name === "password") {
+      password = value;
 
-    this.setState({
-      form_data: form_data,
-    });
+      this.setState({
+        password: password,
+      });
+    } else {
+      form_data[name || id] = value;
+      form_data[(name || id) + "_error"] = "";
+
+      this.setState({
+        form_data: form_data,
+      });
+    }
   };
 
   handleEdit = (id) => {
+    console.log(id)
     this.setState({
       editId: id,
     });
@@ -326,8 +336,8 @@ class UploadBank extends Component {
     }
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
 
     if (canSubmit) {
       try {
@@ -447,8 +457,8 @@ class UploadBank extends Component {
 
               <div className="InputField">
                 <Input
-                  // error={!!this.state.end_date_error}
-                  // helperText="This date must be 3 days before the current date"
+                  // error={!!this.state.password_error}
+                  // helperText={this.state.password}
                   type="password"
                   width="40"
                   label="Enter password (if any)"
@@ -457,7 +467,7 @@ class UploadBank extends Component {
                   name="password"
                   placeholder="XXXXXXX"
                   value={this.state.password || ""}
-                  // onChange={this.handleChange}
+                  onChange={this.handleChange("password")}
                 />
               </div>
 
@@ -473,7 +483,7 @@ class UploadBank extends Component {
               {item.status === "confirmed" && (
                 <div className="edit-or-delete">
                   <div
-                    onClick={() => this.handleEdit(item.document_id)}
+                    onClick={() => this.handleEdit(item.id)}
                     className="generic-page-button-small"
                   >
                     EDIT

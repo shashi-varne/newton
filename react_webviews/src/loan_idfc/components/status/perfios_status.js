@@ -44,6 +44,7 @@ class PerfiosStatus extends Component {
     this.state = {
       show_loader: false,
       params: getUrlParams(),
+      screen_name: "perfios_state",
       commonMapper: {},
       perfios_state: "",
     };
@@ -94,7 +95,11 @@ class PerfiosStatus extends Component {
     let vendor_info = lead.vendor_info || {};
 
     if (vendor_info.idfc_07_state === "success") {
-      this.submitApplication({}, "one");
+      this.setState({
+        next_state: 'eligible-loan'
+      }, () => {
+        this.submitApplication({}, "one", "", 'eligible-loan');
+      })
     } else {
       this.getPointSevenCallback();
     }
@@ -105,7 +110,12 @@ class PerfiosStatus extends Component {
 
     if (perfios_state === "success") {
       if (!bt_eligible && idfc_07_state === "success") {
-        this.submitApplication({}, "one");
+        this.setState({
+          next_state: 'eligible-loan'
+        }, () => {
+          this.submitApplication({}, "one", "", 'eligible-loan');
+        })
+        
       }
 
       if (!bt_eligible && idfc_07_state === "triggered") {

@@ -53,21 +53,13 @@ const journeyMapper2 = {
     index: "2",
     next_state: "eligible-loan"
   },
-  "idfc_1.1_submitted": {
-    index: "2",
-    next_state: "loan-requirement-details"
-  },
+  // "idfc_1.1_submitted": {
+  //   index: "2",
+  //   next_state: "loan-requirement-details"
+  // },
   "idfc_1.1_accepted": {
     index: "2",
     next_state: "loan-eligible"
-  },
-  "idfc_1.1_submitted": {
-    index: "2",
-    next_state: "loan-requirement-details"
-  },
-  "idfc_1.1_accepted": {
-    index: "2",
-    next_state: "loan-requirement-details"
   },
   "offer_accepted": {
   // "idfc_1.1_failed": {

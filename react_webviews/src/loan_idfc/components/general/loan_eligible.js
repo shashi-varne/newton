@@ -86,7 +86,7 @@ class LoanEligible extends Component {
           </div>
 
           <div className="loan-amount">
-            {formatAmountInr(vendor_info.displayOffer)}
+            {formatAmountInr(vendor_info.displayOffer || vendor_info.loanAmount)}
           </div>
 
           <div className="loan-value">

@@ -30,6 +30,7 @@ export async function initialize() {
   this.getInstitutionList = getInstitutionList.bind(this);
   this.getIndustryList = getIndustryList.bind(this);
   this.get05Callback = get05Callback.bind(this);
+  this.get10Callback = get10Callback.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -150,6 +151,8 @@ export async function getDocumentList() {
 
     this.setState({
       docList: result.doc_list,
+    }, () => {
+      this.onload()
     });
   } catch (err) {
     console.log(err);
@@ -229,6 +232,10 @@ export async function getOrCreate(params) {
         await this.getDocumentList();
       }
 
+      if (this.state.screen_name === "document_upload") {
+        await this.getDocumentList();
+      }
+
       if (this.state.screen_name === "professional_details_screen") {
         this.getIndustryList();
       }
@@ -262,7 +269,8 @@ export async function getUserStatus(state = "") {
 
       if (
         this.state.screen_name === "requirement_details_screen" ||
-        this.state.screen_name === "journey_screen"
+        this.state.screen_name === "journey_screen" ||
+        this.state.screen_name === "perfios_state"
       ) {
         return result;
       }
@@ -346,10 +354,12 @@ export async function get05Callback() {
     show_loader: true,
   });
 
-  let result = await this.getUserStatus();
+  let result = ""
+  
+  setTimeout(result = await this.getUserStatus(), 3000)
 
   let { count } = this.state;
-  console.log(result.is_dedupe === true || result.idfc_05_callback === true);
+  
   if (result.is_dedupe === true || result.idfc_05_callback === true) {
     this.navigate("loan-status");
   } else {
@@ -358,30 +368,32 @@ export async function get05Callback() {
         count: count + 1,
       });
 
-      setTimeout(this.get05Callback(), 3000)
+      this.get05Callback()
       
     }
   }
 }
 
-export async function get10Callback(state) {
+export async function get10Callback(next_state) {
   this.setState({
     show_loader: true,
   });
 
-  let result = await this.getUserStatus();
+  let result = ""
+  
+  setTimeout(result = await this.getUserStatus(), 3000)
 
   let { count } = this.state;
 
   if (result.idfc_10_callback) {
-    this.navigate(state);
+    this.navigate(next_state);
   } else {
     if (count < 20) {
       this.setState({
         count: count + 1,
       });
 
-      this.get05Callback();
+      this.get10Callback(next_state);
     }
   }
 }
@@ -416,7 +428,7 @@ export async function submitApplication(
         if (state === "point_five") {
           this.get05Callback();
         } else if (state === "one") {
-          this.get10Callback(state);
+          this.get10Callback(next_state);
         } else {
           this.navigate(next_state || this.state.next_state);
         }
