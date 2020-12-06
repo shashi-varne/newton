@@ -5,6 +5,7 @@ import Attention from "../../../common/ui/Attention";
 import { initialize } from "../../common/functions";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
+import { getBase64 } from 'utils/functions';
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import toast from "../../../common/ui/Toast";
@@ -59,6 +60,25 @@ class UploadBank extends Component {
     this.setState({
       progressHeaderData: progressHeaderData,
     });
+  }
+
+  componentDidMount() {
+    let that = this;
+    if (getConfig().generic_callback) {
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+
+          that.showLoaderNative();
+        }
+      });
+    }
+  }
+
+  showLoaderNative() {
+    this.setState({
+      show_loader: true
+    })
   }
 
   onload = async () => {
@@ -131,20 +151,47 @@ class UploadBank extends Component {
     }
   }
 
-  native_call_handler(method_name, doc_type, doc_name) {
+  mergeDocs(file) {
+
+    this.setState({
+      imageBaseFile: file,
+      fileUploaded: true,
+      show_loader: true
+    })
+
+    let that = this
+    getBase64(file, function (img) {
+      that.setState({
+        imageBaseFileShow: img
+      })
+    });
+
+    setTimeout(
+      function () {
+        this.setState({
+          show_loader: false
+        })
+      }
+        .bind(this),
+      1000
+    );
+
+  };
+
+  native_call_handler(method_name) {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: "doc",
-        doc_type: doc_type,
-        doc_name: doc_name,
+        // doc_type: doc_type,
+        // doc_name: doc_name,
         // callbacks from native
         upload: function upload(file) {
           try {
             that.setState({
-              docType: this.doc_type,
-              docName: this.docName,
-              doc_side: this.doc_side,
+              // docType: this.doc_type,
+              // docName: this.docName,
+              // doc_side: this.doc_side,
               show_loader: true,
             });
             switch (file.type) {
@@ -152,9 +199,9 @@ class UploadBank extends Component {
                 that.mergeDocs(file);
                 break;
               default:
-                alert("Please select image file");
+                alert("Please select pdf file");
                 that.setState({
-                  docType: this.doc_type,
+                  // docType: this.doc_type,
                   show_loader: false,
                 });
             }
@@ -162,6 +209,16 @@ class UploadBank extends Component {
             //
           }
         },
+      });
+
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+          that.setState({
+            show_loader: true
+          })
+          that.showLoaderNative();
+        }
       });
     }
   }
