@@ -244,6 +244,7 @@ class UploadBank extends Component {
 
   saveFile(file) {
     let acceptedType = ["application/pdf"];
+    console.log(file)
 
     if (acceptedType.indexOf(file.type) === -1) {
       toast("Please select pdf file only");
@@ -269,6 +270,7 @@ class UploadBank extends Component {
     this.setState({
       fileUploaded: true,
       documents: documents,
+      show_loader: false,
       confirmed: false,
       editId: null,
       count: count,
