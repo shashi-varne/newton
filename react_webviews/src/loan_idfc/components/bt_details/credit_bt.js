@@ -112,7 +112,7 @@ class LoanBtDetails extends Component {
   handleClick = () => {
     this.submitApplication({
       "bt_selection": this.state.form_data.filter(data => data.is_selected)
-    }, "one", true)
+    }, "one", true, "eligible_loan")
   };
 
   render() {
