@@ -52,7 +52,7 @@ class BtInformation extends Component {
 
   handleClickTwo = () => {
     let body = {
-      idfc_loan_status: "bt_init",
+      idfc_loan_status: "bt_processing",
       bt_selected: true,
     };
     this.updateApplication(body, "loan-bt");
