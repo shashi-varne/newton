@@ -30,8 +30,10 @@ class DocumentUpload extends Component {
       totalUpload: "",
       docList: [],
       documents: [],
-      count: 1,
+      disbableButton: true,
       docs: [],
+      category: "",
+      doc_type: "",
     };
 
     this.initialize = initialize.bind(this);
@@ -43,7 +45,6 @@ class DocumentUpload extends Component {
   }
 
   onload = () => {
-
     let category = storageService().get("category");
     let docList = this.state.docList;
 
@@ -67,6 +68,7 @@ class DocumentUpload extends Component {
         docList: docList[selectedIndex],
         docs: docs,
         docsMap: docsMap,
+        category: category,
       });
     }
   };
@@ -120,9 +122,8 @@ class DocumentUpload extends Component {
 
     docsMap.forEach((item) => {
       if (item.name === value) {
-        totalUpload = item.value
+        totalUpload = item.value;
       }
-
     });
 
     this.setState({
@@ -132,7 +133,6 @@ class DocumentUpload extends Component {
   };
 
   openCameraWeb(id = "") {
-
     if (!id) {
       $("input").trigger("click");
     } else {
@@ -140,10 +140,10 @@ class DocumentUpload extends Component {
     }
   }
 
-  startUpload(method_name, id) {
-
+  startUpload(method_name, id, type = "") {
     this.setState({
       type: method_name,
+      doc_type: type,
     });
 
     this.openCameraWeb(id);
@@ -151,8 +151,14 @@ class DocumentUpload extends Component {
 
   getPdf = (e) => {
     e.preventDefault();
-    console.log('hi')
     let file = e.target.files[0] || {};
+    let doc_name = this.state.form_data.doc_name;
+
+    let { category, doc_type } = this.state;
+
+    file.doc_name = doc_name;
+    file.category_id = category;
+    file.checklist_doc_type = doc_type;
 
     let acceptedType = [
       "application/pdf",
@@ -179,31 +185,37 @@ class DocumentUpload extends Component {
       let that = this;
       getBase64(file, function (img) {
         file.imageBaseFile = img;
+        that.uploadDocument(file);
         documents.push(file);
 
         that.setState({
           fileUploaded: true,
           documents: documents,
-          count: count,
+          disbableButton: true
         });
       });
     }
   };
 
   getPhoto = (e) => {
-
     e.preventDefault();
-    
-    let image_data = this.state.image_data;
+
+    let { image_data, category, doc_type } = this.state;
     let id = e.target.id;
     image_data[id] = {};
+    let doc_name =
+      this.state.form_data.doc_name;
 
     let file = e.target.files[0];
 
-    let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+    file.doc_name = doc_name;
+    file.category_id = category;
+    file.checklist_doc_type = doc_type;
+
+    let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
 
     if (acceptedType.indexOf(file.type) === -1) {
-      toast('Please select image file only');
+      toast("Please select image file only");
       return;
     }
 
@@ -211,71 +223,159 @@ class DocumentUpload extends Component {
     file.doc_type = file.type;
 
     getBase64(file, function (img) {
-      image_data[id].img = img;
-      image_data[id].uploaded = true;
-      
-      
+      file.img = img;
+      file.uploaded = true;
+      image_data[id] = file;
+
+      that.uploadDocument(image_data[id], id);
+
       that.setState({
-        image_data: image_data
-      })
+        image_data: image_data,
+      });
     });
-  }
+  };
 
-  uploadDocument = async () => {
+  uploadDocument = async (file, id) => {
+    let { image_data, totalUpload, disbableButton } = this.state;
 
-  }
+    const data = new FormData();
+    data.append("doc_type", file.doc_name);
+    data.append("file", file);
+    data.append("category_id", file.category_id);
+    data.append("checklist_doc_type", file.checklist_doc_type);
 
+    try {
+      const res = await Api.post(
+        `relay/api/loan/idfc/upload/document/${this.state.application_id}`,
+        data
+      );
 
-  renderHtmlCamera(side) {
-    console.log(this.state.image_data[side])
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        if (totalUpload < 3) {
+          image_data[id].integrated = true;
+        } else {
+          disbableButton = false
+        }
+        
+
+        this.setState({
+          image_data: image_data,
+          disbableButton: disbableButton
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+  };
+
+  renderHtmlCamera(side, type) {
     let { image_data } = this.state;
 
     return (
       <div>
-        {!image_data[side] && <div style={{
-          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
-          textAlign: 'center', fontWeight: 600
-        }}>
-          <div>Upload PAN card</div>
-          <div style={{ margin: '20px 0 20px 0', cursor: 'pointer'  }}>
-            <div onClick={() => this.startUpload('open_camera', side)} style={{
-              textAlign: 'center', cursor: 'pointer'
-            }}>
-              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id={side ? side : "myFile"} />
-              <img src={camera_green} alt="PAN"></img>
-              <div style={{ color: '#28b24d' }}>Click here to upload</div>
+        {!image_data[side] && (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "10px 0px 0px 0px",
+              textAlign: "center",
+              fontWeight: 600,
+            }}
+          >
+            <div>Upload PAN card</div>
+            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
+              <div
+                onClick={() => this.startUpload("open_camera", side, type)}
+                style={{
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={this.getPhoto}
+                  id={side ? side : "myFile"}
+                />
+                <img src={camera_green} alt="PAN"></img>
+                <div style={{ color: "#28b24d" }}>Click here to upload</div>
+              </div>
             </div>
           </div>
-        </div>}
-        {image_data[side] && image_data[side].uploaded && <div style={{
-          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
-          textAlign: 'center'
-        }}>
-          <div>
-            <img style={{ width: '100%', height: 150 }} src={image_data[side].img || this.state.document_url || ""} alt="PAN" />
-          </div>
-          <div style={{ margin: '20px 0 20px 0', cursor: 'pointer' }}>
-            <div onClick={() => this.startUpload('open_camera', side)} style={{
-              textAlign: 'center'
-            }}>
-              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id={side ? side : "myFile"}  />
-              <img src={camera_grey} alt="PAN"></img>
-              <div style={{ color: '#b4b4b4' }}>Click here to upload new</div>
+        )}
+        {image_data[side] && image_data[side].uploaded && (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "0px 0px 0px 0px",
+              textAlign: "center",
+            }}
+          >
+            <div>
+              <img
+                style={{ width: "100%", height: 150 }}
+                src={image_data[side].img || this.state.document_url || ""}
+                alt="PAN"
+              />
+            </div>
+            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
+              <div
+                onClick={() => this.startUpload("open_camera", side, type)}
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={this.getPhoto}
+                  id={side ? side : "myFile"}
+                />
+                <img src={camera_grey} alt="PAN"></img>
+                <div style={{ color: "#b4b4b4" }}>Click here to upload new</div>
+              </div>
             </div>
           </div>
-        </div>}
+        )}
       </div>
     );
   }
 
+  handleClick = () => {
+    this.navigate("doc-list");
+  };
+
   render() {
-    let { docList, selectedIndex, documents, docs, totalUpload } = this.state;
+    let {
+      docList,
+      selectedIndex,
+      image_data,
+      documents,
+      docs,
+      totalUpload,
+      disbableButton
+    } = this.state;
+
+    if (totalUpload < 3 && Object.keys(image_data).length !== totalUpload) {
+      for (var i in image_data) {
+        if (!image_data[i].integrated) {
+          disbableButton = true;
+        } else {
+          disbableButton = false;
+        }
+      }
+    }
 
     return (
       <Container
         showLoader={this.state.show_loader}
         title={this.state.docList.category_name}
         buttonTitle="CONTINUE"
+        disable={disbableButton}
+        handleClick={this.handleClick}
       >
         <div className="idfc-document-upload">
           <div className="InputField">
@@ -288,14 +388,14 @@ class DocumentUpload extends Component {
               helperText={this.state.form_data.doc_name_error}
               value={this.state.form_data.doc_name || ""}
               name="doc_name"
-              // dataType="AOB"
               onChange={this.handleChange("doc_name")}
             />
           </div>
 
           {totalUpload === "1" && (
             <div className="loan-mandate-pan" style={{ marginBottom: "50px" }}>
-              {getConfig().html_camera && this.renderHtmlCamera('single')}
+              {getConfig().html_camera &&
+                this.renderHtmlCamera("single", "doc1")}
               {!getConfig().html_camera && this.renderNativeCamera()}
             </div>
           )}
@@ -306,7 +406,8 @@ class DocumentUpload extends Component {
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera('front')}
+                {getConfig().html_camera &&
+                  this.renderHtmlCamera("front", "doc1")}
                 {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
               </div>
 
@@ -314,14 +415,12 @@ class DocumentUpload extends Component {
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera('back')}
+                {getConfig().html_camera &&
+                  this.renderHtmlCamera("back", "doc2")}
                 {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
               </div>
 
-              <div
-                className="loan-mandate-pan"
-                style={{ display: 'none' }}
-              >
+              <div style={{ display: "none" }}>
                 {getConfig().html_camera && this.renderHtmlCamera()}
                 {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
               </div>
@@ -331,7 +430,7 @@ class DocumentUpload extends Component {
           {totalUpload === "3" && (
             <div>
               {documents.map((item, index) => (
-                <div>
+                <div key={index}>
                   <div
                     className="multiple-upload"
                     key={index + 1}
@@ -354,7 +453,7 @@ class DocumentUpload extends Component {
                 <div className="upload-bank-statement">
                   <div
                     className="pdf-upload"
-                    onClick={() => this.startUpload("upload_doc")}
+                    onClick={() => this.startUpload("upload_doc", '', `doc${documents.length + 1}`)}
                   >
                     <span className="plus-sign">
                       <input

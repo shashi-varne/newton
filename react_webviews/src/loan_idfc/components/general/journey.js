@@ -81,7 +81,7 @@ const journeyMapper2 = {
     index: "3",
   },
   docs_uploaded: {
-    index: "3",
+    index: "4",
   },
   idfc_4_submitted: {
     index: "3",
@@ -242,6 +242,10 @@ class JourneyMap extends Component {
     if (id === "document_upload") {
       this.navigate(next_state);
     }  
+
+    if (id === "sanction_and_disbursal") {
+      this.navigate('reports')
+    }
   };
 
   sendEvents(user_action, data = {}) {

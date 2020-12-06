@@ -400,16 +400,19 @@ export async function get10Callback(next_state) {
   setTimeout(function () {
     if (result.idfc_10_callback === true) {
       that.navigate(next_state);
-    } else {
-      if (count < 20) {
-        that.setState({
-          count: count + 1,
-        });
+    } else if (
+      result.vendor_application_status === "idfc_cancelled" ||
+      result.is_cancelled === true
+    ) {
+      that.navigate("loan-status");
+    } else if (count < 20) {
+      that.setState({
+        count: count + 1,
+      });
 
-        that.get10Callback(next_state);
-      } else {
-        this.navigate("error");
-      }
+      that.get10Callback(next_state);
+    } else {
+      this.navigate("error");
     }
   }, 3000);
 }
@@ -500,8 +503,14 @@ export async function submitApplication(
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
+    this.setState({
+      show_loader: false,
+    });
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
 

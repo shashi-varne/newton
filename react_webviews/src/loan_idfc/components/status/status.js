@@ -37,6 +37,14 @@ const commonMapper = {
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
   },
+  "idfc_cancelled": {
+    top_icon: "ils_loan_failed",
+    top_title: "Application Rejected",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
   "idfc_0.5_failed": {
     top_icon: "error_illustration",
     top_title: "System error",
@@ -158,17 +166,6 @@ class LoanStatus extends Component {
   }
 
   onload = () => {
-    // let { status, bt_eligible } = this.state.params;
-
-    // let lead = this.state.lead || {};
-    // let vendor_info = lead.vendor_info || {};
-    // let application_info = lead.application_info || {};
-    // let personal_info = lead.personal_info || {};
-    // let vendor_application_status = vendor_info.vendor_application_status;
-    // let { application_status, rejection_reason } = application_info;
-    // let perfios_state = vendor_info.perfios_state;
-    // let bt_eligible = vendor_info.bt_eligible;
-    // let is_dedupe = vendor_info.is_dedupe || "";
 
     let vendor_application_status = this.state.vendor_application_status;
     let application_status = this.state.application_status;
@@ -211,7 +208,7 @@ class LoanStatus extends Component {
         first_name: first_name,
       });
     }
-    console.log(this.state.commonMapper);
+    
   };
 
   goBack = () => {
