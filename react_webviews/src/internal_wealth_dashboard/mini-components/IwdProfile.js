@@ -7,6 +7,9 @@ import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 
 const IwdProfile = (props) => {
+  const name = storageService().get('iwd-user-name') || '';
+  const email = storageService().get('iwd-user-email') || '';
+  const mobile = storageService().get('iwd-user-mobile') || '';
   const navigate = navigateFunc.bind(props);
   const [expanded, setExpanded] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -24,9 +27,6 @@ const IwdProfile = (props) => {
     }
     setLoggingOut(false);
   };
-
-  const name = storageService().get('iwd-user-name') || '';
-  const email = storageService().get('iwd-user-email') || '';
 
   if (!name || !email) {
     navigate('login');
@@ -52,9 +52,9 @@ const IwdProfile = (props) => {
             <b>Email: </b>
             {email}
           </div>
-          <div className='iwd-profile-detail'>
-            <b>Mob.: </b>
-            +91-8800927468
+          <div className="iwd-profile-detail">
+            <b>Mob.:</b>
+            {'  '}{mobile || '--'}
           </div>
           <div id='iwd-profile-divider'></div>
           <Button

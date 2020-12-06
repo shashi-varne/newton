@@ -1,6 +1,35 @@
 import React from 'react';
+// ---------------- Assets ----------------------
+import IcSecFinanceIcon from '../assets/fisdom/ic_sec_finance.svg';
+import IcSecAutoMobileIcon from '../assets/fisdom/ic_sec_automobile.svg';
+// import IcSecChemicalsIcon from '../assets/fisdom/ic_sec_chemicals.svg';
+import IcSecCommunicationIcon from '../assets/fisdom/ic_sec_communication.svg';
+import IcSecConsDurableIcon from '../assets/fisdom/ic_sec_cons_durable.svg';
+import IcSecConstructionIcon from '../assets/fisdom/ic_sec_construction.svg';
+import IcSecEnergyIcon from '../assets/fisdom/ic_sec_energy.svg';
+import IcSecFMCGIcon from '../assets/fisdom/ic_sec_fmcg.svg';
+import IcSecHealthCare from '../assets/fisdom/ic_sec_healthcare.svg';
+import IcSecServicesIcon from '../assets/fisdom/ic_sec_services.svg';
+import IcSecTechnologyIcon from '../assets/fisdom/ic_sec_technology.svg';
+// ----------------------------------------------
+
+export const topStocksIconMappings = {
+  'Financial Services': IcSecFinanceIcon,
+  Energy: IcSecEnergyIcon,
+  Technology: IcSecTechnologyIcon,
+  'Consumer Defensive': IcSecConsDurableIcon,
+  'Real Estate': IcSecConstructionIcon,
+  Utilities: IcSecServicesIcon,
+  'Consumer Cyclical': IcSecAutoMobileIcon,
+  Healthcare: IcSecHealthCare,
+  'Communication Services': IcSecCommunicationIcon,
+  'Basic Materials': IcSecFMCGIcon,
+  Others: IcSecFMCGIcon,
+};
+
 
 export const genericErrMsg = 'Something went wrong!';
+
 export const allocations = [
   { sector: 'Bank', allocation: 29 },
   { sector: 'Refineries/marketing', allocation: 17 },

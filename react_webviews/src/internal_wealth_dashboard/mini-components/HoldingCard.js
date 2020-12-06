@@ -61,7 +61,7 @@ const HoldingCard = ({
         Since {formattedDate(invested_since, 'm y')}
       </div>
       <div className="iwd-hc-title">
-        <span>{ellipsify(name)}</span>
+        <span>{name}</span>
         <img src={amc_logo_big} alt="" height="80" />
       </div>
       <div className="iwd-hc-numbers">

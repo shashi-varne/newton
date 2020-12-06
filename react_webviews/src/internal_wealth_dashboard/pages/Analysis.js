@@ -1,42 +1,16 @@
-// ---------------- Assets ----------------------
-import IcSecFinanceIcon from '../../assets/fisdom/ic_sec_finance.svg';
-import IcSecAutoMobileIcon from '../../assets/fisdom/ic_sec_automobile.svg';
-import IcSecChemicalsIcon from '../../assets/fisdom/ic_sec_chemicals.svg';
-import IcSecCommunicationIcon from '../../assets/fisdom/ic_sec_communication.svg';
-import IcSecConsDurableIcon from '../../assets/fisdom/ic_sec_cons_durable.svg';
-import IcSecConstructionIcon from '../../assets/fisdom/ic_sec_construction.svg';
-import IcSecEnergyIcon from '../../assets/fisdom/ic_sec_energy.svg';
-import IcSecFMCGIcon from '../../assets/fisdom/ic_sec_fmcg.svg';
-import IcSecHealthCare from '../../assets/fisdom/ic_sec_healthcare.svg';
-import IcSecServicesIcon from '../../assets/fisdom/ic_sec_services.svg';
-import IcSecTechnologyIcon from '../../assets/fisdom/ic_sec_technology.svg';
-// ----------------------------------------------
 import React, { useEffect, useState } from 'react';
 import PageHeader from '../mini-components/PageHeader';
 import { getConfig } from 'utils/functions';
 import Legends from '../mini-components/Legends';
 import toast from '../../common/ui/Toast';
-import { fetchPortfolioAnalysisMock, fetchPortfolioAnalysis } from '../common/ApiCalls';
+import { fetchPortfolioAnalysis } from '../common/ApiCalls';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdBubbleChart from '../mini-components/IwdBubbleChart';
 import IwdBarChart from '../mini-components/IwdBarChart';
 import { isEmpty } from '../../utils/validators';
 import IwdCard from '../mini-components/IwdCard';
 import ScrollTopBtn from '../mini-components/ScrollTopBtn';
-
-const topStocksIconMappings = {
-  'Financial Services': IcSecFinanceIcon,
-  Energy: IcSecEnergyIcon,
-  Technology: IcSecTechnologyIcon,
-  'Consumer Defensive': IcSecConsDurableIcon,
-  'Real Estate': IcSecConstructionIcon,
-  Utilities: IcSecServicesIcon,
-  'Consumer Cyclical': IcSecAutoMobileIcon,
-  Healthcare: IcSecHealthCare,
-  'Communication Services': IcSecCommunicationIcon,
-  Others: IcSecChemicalsIcon,
-};
-
+import { topStocksIconMappings } from '../constants';
 const isMobileView = getConfig().isMobileDevice;
 
 function Analysis() {
@@ -141,7 +115,7 @@ function MarketCapAllocation({ data = {}, isLoading }) {
       className='iwd-analysis-graph-left'
       id='iwd-market-alloc'
       isLoading={isLoading}
-      headerText='Rating wise exposure'
+      headerText="Market cap allocation"
       error={isEmpty(data)}
     >
       <section className='iwd-agl-content'>
@@ -176,9 +150,9 @@ function TopSectorAllocation({ data = {}, isLoading }) {
         </div>
         <div className='iwd-sector-alloc-legend'>
           {Object.entries(data).map(([key, value], idx) => (
-            <div className='iwd-sal-item' key={idx}>
-              <span className='iwd-sali-label'>{key}</span>
-              <span className='iwd-sali-value'>{value}</span>
+            <div className="iwd-sal-item" key={idx}>
+              <span className="iwd-sali-label">{key}</span>
+              <span className="iwd-sali-value">{value}%</span>
             </div>
           ))}
         </div>
@@ -240,16 +214,25 @@ function MaturityWiseExposure({ data = {}, isLoading }) {
 
 function ChartsContainer({ data, page, isLoading }) {
   return (
-    <div className='iwd-scroll-child' data-pgno='1'>
+    <div className="iwd-scroll-child" data-pgno="1">
       {page === 'equity' ? (
         <>
-          <MarketCapAllocation data={data.market_cap_alloc} isLoading={isLoading} />
+          <MarketCapAllocation
+            data={data.market_cap_alloc}
+            isLoading={isLoading}
+          />
           <TopSectorAllocation data={data.sector_alloc} isLoading={isLoading} />
         </>
       ) : (
         <>
-          <RatingWiseExposure data={data.rating_exposure} isLoading={isLoading} />
-          <MaturityWiseExposure data={data.maturity_exposure} isLoading={isLoading} />
+          <RatingWiseExposure
+            data={data.rating_exposure}
+            isLoading={isLoading}
+          />
+          <MaturityWiseExposure
+            data={data.maturity_exposure}
+            isLoading={isLoading}
+          />
         </>
       )}
     </div>
@@ -260,8 +243,8 @@ function TopStocks({ topStocks }) {
   return (
     <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard
-        className='iwd-analysis-card'
-        headerText='Top Stocks in portfolio'
+        className="iwd-analysis-card"
+        headerText="Top stocks in portfolio"
         error={isEmpty(topStocks)}
       >
         <div className='iwd-analysis-portfolios-equity'>
@@ -269,7 +252,10 @@ function TopStocks({ topStocks }) {
             ({ holding_sector_name: heading, instrument_name: company, share: percentage }) => (
               <div className='iwd-analysis-portfolio-stock' key={company}>
                 <picture>
-                  <img src={topStocksIconMappings[heading] || IcSecFMCGIcon} alt={heading} />
+                  <img
+                    src={topStocksIconMappings[heading]}
+                    alt={heading}
+                  />
                 </picture>
                 <main>
                   <div className='iwd-analysis-portfolio-heading'>{heading}</div>
@@ -289,8 +275,8 @@ function TopHoldings({ topHoldings }) {
   return (
     <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard
-        className='iwd-analysis-card'
-        headerText='Top holdings in portfolio'
+        className="iwd-analysis-card"
+        headerText="Top holdings"
         error={isEmpty(topHoldings)}
       >
         <div className='iwd-analysis-portfolios-equity'>
@@ -317,16 +303,20 @@ function TopAMCS({ topAMCs }) {
         headerText='Top Stocks in portfolio'
         error={isEmpty(topAMCs)}
       >
-        <div className='iwd-analysis-top-amcs'>
-          {topAMCs.map(({ amc_logo: logo, amc_name: name, share: percentage }) => (
-            <div className='iwd-analysis-amc' key={name}>
-              <img src={logo} alt={name} className='iwd-analysis-amc-logo' />
-              <main>
-                <div className='iwd-analysis-amc-name'>{name}</div>
-                <div className='iwd-analysis-amc-percentage'>{percentage}%</div>
-              </main>
-            </div>
-          ))}
+        <div className="iwd-analysis-top-amcs">
+          {topAMCs.map(
+            ({ amc_logo: logo, amc_name: name, share: percentage }) => (
+              <div className="iwd-analysis-amc" key={name}>
+                <img src={logo} alt={name} className="iwd-analysis-amc-logo" />
+                <main>
+                  <div className="iwd-analysis-amc-name">{name}</div>
+                  <div className="iwd-analysis-amc-percentage">
+                    {percentage}%
+                  </div>
+                </main>
+              </div>
+            )
+          )}
         </div>
       </IwdCard>
     </div>
