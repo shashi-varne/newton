@@ -47,6 +47,7 @@ class PerfiosStatus extends Component {
       screen_name: "perfios_state",
       commonMapper: {},
       perfios_state: "",
+      count: 0
     };
 
     this.initialize = initialize.bind(this);
@@ -89,20 +90,51 @@ class PerfiosStatus extends Component {
       show_loader: true,
     });
 
-    await this.getOrCreate();
+    // await this.getOrCreate();
 
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
+    // let lead = this.state.lead || {};
+    // let vendor_info = lead.vendor_info || {};
 
-    if (vendor_info.idfc_07_state === "success") {
-      this.setState({
-        next_state: 'eligible-loan'
-      }, () => {
-        this.submitApplication({}, "one", "", 'eligible-loan');
-      })
-    } else {
-      this.getPointSevenCallback();
-    }
+    // if (vendor_info.idfc_07_state === "success") {
+    //   this.setState(
+    //     {
+    //       next_state: "eligible-loan",
+    //     },
+    //     () => {
+    //       this.submitApplication({}, "one", "", "eligible-loan");
+    //     }
+    //   );
+    // } else {
+    //   this.getPointSevenCallback();
+    // }
+
+    // setTimeout(, 3000)
+    let result = await this.getUserStatus();
+    let { count } = this.state;
+    let that = this;
+
+    setTimeout(function () {
+      if (result.idfc_07_state === "success") {
+        this.setState(
+          {
+            next_state: "eligible-loan",
+          },
+          () => {
+            this.submitApplication({}, "one", "", "eligible-loan");
+          }
+        );
+      } else {
+        if (count < 20) {
+          that.setState({
+            count: count + 1,
+          });
+
+          that.getPointSevenCallback();
+        } else {
+          this.navigate("error");
+        }
+      }
+    }, 3000);
   };
 
   handleClick = () => {
@@ -110,12 +142,14 @@ class PerfiosStatus extends Component {
 
     if (perfios_state === "success") {
       if (!bt_eligible && idfc_07_state === "success") {
-        this.setState({
-          next_state: 'eligible-loan'
-        }, () => {
-          this.submitApplication({}, "one", "", 'eligible-loan');
-        })
-        
+        this.setState(
+          {
+            next_state: "eligible-loan",
+          },
+          () => {
+            this.submitApplication({}, "one", "", "eligible-loan");
+          }
+        );
       }
 
       if (!bt_eligible && idfc_07_state === "triggered") {
@@ -138,7 +172,7 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "bypass") {
-      this.submitApplication({}, "one");
+      this.submitApplication({}, "one", "", "eligible-loan");
     }
 
     if (perfios_state === "failure") {

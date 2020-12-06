@@ -60,7 +60,7 @@ class BtInformation extends Component {
 
   handleClickOne = async () => {
     let body = {
-      idfc_loan_status: "bypass",
+      idfc_loan_status: "bt_bypass",
     };
 
     await this.updateApplication(body)
