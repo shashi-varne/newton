@@ -382,24 +382,6 @@ export async function get10Callback(next_state) {
     show_loader: true,
   });
 
-  // let result = "";
-
-  // setTimeout((result = await this.getUserStatus()), 3000);
-
-  // let { count } = this.state;
-
-  // if (result.idfc_10_callback) {
-  //   this.navigate(next_state);
-  // } else {
-  //   if (count < 20) {
-  //     this.setState({
-  //       count: count + 1,
-  //     });
-
-  //     this.get10Callback(next_state);
-  //   }
-  // }
-
   // setTimeout(, 3000)
   let result = await this.getUserStatus();
   let { count } = this.state;

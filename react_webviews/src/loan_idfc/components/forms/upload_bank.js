@@ -175,7 +175,12 @@ class UploadBank extends Component {
       type: method_name,
     });
 
-    this.openFileExplorer();
+    if (getConfig().html_camera) {
+      this.openFileExplorer();
+    } else {
+      this.native_call_handler(method_name);
+    }
+    
   }
 
   getPdf = (e) => {
