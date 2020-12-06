@@ -178,20 +178,21 @@ class UploadBank extends Component {
 
   };
 
-  native_call_handler(method_name) {
+  native_call_handler(method_name, doc_type, doc_name, doc_side) {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: "doc",
-        // doc_type: doc_type,
-        // doc_name: doc_name,
+        doc_type: doc_type,
+        doc_name: doc_name,
+        doc_side: doc_side,
         // callbacks from native
         upload: function upload(file) {
           try {
             that.setState({
-              // docType: this.doc_type,
-              // docName: this.docName,
-              // doc_side: this.doc_side,
+              docType: this.doc_type,
+              docName: this.docName,
+              doc_side: this.doc_side,
               show_loader: true,
             });
             switch (file.type) {
@@ -201,7 +202,7 @@ class UploadBank extends Component {
               default:
                 alert("Please select pdf file");
                 that.setState({
-                  // docType: this.doc_type,
+                  docType: this.doc_type,
                   show_loader: false,
                 });
             }
@@ -227,7 +228,7 @@ class UploadBank extends Component {
     $("input").trigger("click");
   }
 
-  startUpload(method_name) {
+  startUpload(method_name, doc_type, doc_name, doc_side) {
     this.setState({
       type: method_name,
     });
@@ -235,7 +236,7 @@ class UploadBank extends Component {
     if (getConfig().html_camera) {
       this.openFileExplorer();
     } else {
-      this.native_call_handler(method_name);
+      this.native_call_handler(method_name, doc_type, doc_name, doc_side);
     }
     
   }
@@ -566,7 +567,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("open_gallery")}
+                onClick={() => this.startUpload("open_gallery", 'bank', 'bank.pdf')}
               >
                 <span className="plus-sign">
                   <input
