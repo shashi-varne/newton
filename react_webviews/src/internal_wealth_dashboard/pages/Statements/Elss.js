@@ -18,7 +18,6 @@ const Elss = () => {
     try {
       setIsLoading(true);
       const { tax_statement } = await fetchGainsElssYears();
-      console.log('tax', tax_statement?.elss);
       setYears(tax_statement?.elss);
       setIsLoading(false);
     } catch (err) {

@@ -27,7 +27,7 @@ const Statements = () => {
   };
   return (
     <div className='iwd-page iwd-statements'>
-      <PageHeader height='auto' hideProfile={isMobileView}>
+      <PageHeader height='9vh' hideProfile={isMobileView}>
         <HeaderNavBar
           title='Statements'
           tabs={Object.keys(pageTypeMapper).map((key) => key)}

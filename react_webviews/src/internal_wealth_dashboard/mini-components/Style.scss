@@ -1411,7 +1411,15 @@ table.iwd-transactions-table {
   .rs-picker-daterange {
     background-color: rgba(31, 18, 65, 0.05);
     border-radius: 4px;
+    width: 100%;
+    a {
+      .rs-picker-toggle-clean {
+        margin-right: 5px;
+        margin-left: 5px;
+      }
+    }
   }
+  width: 250px;
 }
 .rs-picker-toggle-value,
 .rs-picker-toggle-placeholder,
