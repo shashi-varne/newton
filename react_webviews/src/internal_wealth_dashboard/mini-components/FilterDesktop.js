@@ -1,13 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Filters from './FilterSection';
 import { storageService } from '../../utils/validators';
-import { HoldingFilterOptions } from './../constants';
+
 import isEmpty from 'lodash/isEmpty';
-const FilterDesktop = ({ clearFilters, clearFilter, handleFilterSelect }) => {
-  const filterData = storageService().getObject('iwd-filter-options');
+const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
+  const storedFilterVal = storageService().getObject(filter_key);
+  const [filterState, setFilterState] = useState(
+    !isEmpty(storedFilterVal) ? storedFilterVal : null
+  );
+  const [clearFilter, setClearFilter] = useState(false);
+  const clearCheck = filter_key === 'iwd-holding-filters' ? filterState : filterState?.ttype;
+
+  const handleFilterSelect = (id, value) => {
+    const filterData = { ...storedFilterVal, [id]: value };
+    setFilterState(filterData);
+    storageService().setObject(filter_key, filterData);
+    handleFilterData(filterData);
+    setClearFilter(false);
+  };
+
+  const clearFilters = () => {
+    const filterData = { ...storedFilterVal, ttype: '' };
+    if (!isEmpty(clearCheck)) {
+      if (filter_key === 'iwd-holding-filters') {
+        handleFilterData(null);
+        setFilterState(null);
+        setClearFilter(true);
+        storageService().setObject(filter_key, null);
+      } else {
+        handleFilterData(filterData);
+        setFilterState(null);
+        setClearFilter(true);
+        storageService().setObject(filter_key, filterData);
+      }
+    }
+  };
   const renderFilters = () => (
     <div>
-      {HoldingFilterOptions?.map((type) => {
+      {filterOptions?.map((type) => {
         return (
           <Filters
             key={type.id}
@@ -16,6 +46,7 @@ const FilterDesktop = ({ clearFilters, clearFilter, handleFilterSelect }) => {
             filterList={type.filters}
             onFilterChange={handleFilterSelect}
             clearFilter={clearFilter}
+            filter_key={filter_key}
           />
         );
       })}
@@ -23,13 +54,18 @@ const FilterDesktop = ({ clearFilters, clearFilter, handleFilterSelect }) => {
   );
   return (
     <div
-      style={{ flex: '0.2', marginRight: '30px', borderRight: '2px solid #f0f1f5' }}
+      style={{
+        // flex: '0.2',
+        marginRight: '30px',
+        borderRight: '2px solid #f0f1f5',
+        minWidth: '200px',
+      }}
       className='iwd-filter-desktop'
     >
       <section className='iwd-filter-head-container'>
         <div className='iwd-filter-head'>Filters</div>
         <div
-          className={`iwd-filter-clear ${isEmpty(filterData) && 'iwd-disable-clear'}`}
+          className={`iwd-filter-clear ${isEmpty(clearCheck) && 'iwd-disable-clear'}`}
           onClick={clearFilters}
         >
           Clear All

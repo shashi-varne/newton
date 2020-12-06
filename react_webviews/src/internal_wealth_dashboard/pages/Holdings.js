@@ -11,10 +11,10 @@ import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import FilterDesktop from '../mini-components/FilterDesktop';
 import FilterMobile from '../mini-components/FilterMobile';
 import { holdings } from '../common/ApiCalls';
-import { dummyHoldings } from './../constants';
 import toast from '../../common/ui/Toast';
 import { isEmpty, storageService } from '../../utils/validators';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import { HoldingFilterOptions } from './../constants';
 const isMobileView = getConfig().isMobileDevice;
 const schemeMap = {
   hybrid: ['hybrid', 'hybrid (c)', 'hybrid (nc)'],
@@ -22,18 +22,14 @@ const schemeMap = {
   debt: ['debt', 'bond', 'income', 'mip', 'gilt', 'liquid'],
   elss: ['elss'],
 };
-
+const filter_key = 'iwd-holding-filters';
 const Holdings = () => {
   const [holdingsList, setHoldingsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [open, isOpen] = useState(false);
-  const [filterVal, setFilterVal] = useState(
-    storageService().getObject('iwd-filter-options') || null
-  );
+  const [filterVal, setFilterVal] = useState(storageService().getObject(filter_key) || null);
   const [filterData, setFilterData] = useState(null);
-  const [clearFilter, setClearFilter] = useState(false);
-  const [checkSelectedBox, setCheckSelectedBox] = useState(false);
   const fetchHoldings = async () => {
     try {
       setIsLoading(true);
@@ -72,9 +68,14 @@ const Holdings = () => {
           max: 10 * lac,
         };
 
-      default:
+      case 4:
         return {
           max: 10 * lac,
+        };
+      default:
+        return {
+          min: '',
+          max: '',
         };
     }
   };
@@ -83,6 +84,9 @@ const Holdings = () => {
     fetchHoldings();
   }, []);
 
+  useEffect(() => {
+    filter(holdingsList);
+  }, [filterVal]);
   const checkSchemeType = (filterSchemeType, currentSchemeType) => {
     return schemeMap[filterSchemeType].includes(currentSchemeType);
   };
@@ -102,37 +106,16 @@ const Holdings = () => {
       }
       if (bool && filterVal?.current_value_type) {
         let currentValueType = parseInt(filterVal?.current_value_type);
-        bool =
-          el.current >= currentValue(currentValueType).min &&
-          el.current <= currentValue(currentValueType).max;
+        if (currentValueType === 4) {
+          bool = el.current > currentValue(currentValueType).max;
+        } else {
+          bool =
+            el.current >= currentValue(currentValueType).min &&
+            el.current <= currentValue(currentValueType).max;
+        }
       }
       return bool;
     });
-
-    //let newData = dummy;
-    // if (filterVal?.scheme_type) {
-    //   newData = newData.filter((el) => {
-    //     const scheme = setSchemeType(
-    //       el.scheme_type.toLowerCase(),
-    //       filterVal?.scheme_type.toLowerCase()
-    //     );
-    //     return scheme.toLowerCase() === filterVal?.scheme_type.toLowerCase();
-    //   });
-    // }
-    // if (filterVal?.fisdom_rating) {
-    //   let fisdomRating = parseInt(filterVal?.fisdom_rating);
-    //   newData = newData.filter((el) =>
-    //     fisdomRating === 1 ? el.mf.fisdom_rating <= 3 : el.mf.fisdom_rating >= 4
-    //   );
-    // }
-    // if (filterVal?.current_value_type) {
-    //   let currentValueType = parseInt(filterVal?.current_value_type);
-    //   newData = newData.filter(
-    //     (el) =>
-    //       el.current >= currentValue(currentValueType).min &&
-    //       el.current <= currentValue(currentValueType).max
-    //   );
-    // }
     if (newData?.length > 0) {
       setFilterData(newData);
     } else {
@@ -140,43 +123,12 @@ const Holdings = () => {
     }
   };
 
-  useEffect(() => {
-    if (filterVal && holdingsList?.length > 0) {
-      filter(holdingsList);
-    }
-  }, [filterVal]);
-  const applyFilters = (value) => {
-    if (value) {
-      storageService().setObject('iwd-filter-options', value);
-    } else {
-      storageService().setObject('iwd-filter-options', filterVal);
-    }
-    isOpen(false);
-  };
-  const clearFilters = () => {
-    if (filterVal) {
-      setFilterVal(null);
-      setClearFilter(true);
-      setCheckSelectedBox(false);
-      storageService().setObject('iwd-filter-options', null);
-    }
-  };
-  const handleFilterSelect = (id, value) => {
-    setFilterVal((prevState) => {
-      if (!open) {
-        applyFilters({ ...prevState, [id]: value });
-      }
-      return { ...prevState, [id]: value };
-    });
-    if (clearFilter) {
-      setClearFilter(false);
-    }
-    setCheckSelectedBox(true);
-  };
   const clickHandler = () => {
     isOpen(false);
   };
-
+  const handleFilterData = (filterData) => {
+    setFilterVal(filterData);
+  };
   return (
     <div className='iwd-page' id='iwd-holdings'>
       <PageHeader>
@@ -186,49 +138,47 @@ const Holdings = () => {
       </PageHeader>
       {open && (
         <FilterMobile
-          clearFilters={clearFilters}
-          clearFilter={clearFilter}
-          handleFilterSelect={handleFilterSelect}
           clickHandler={clickHandler}
-          applyFilters={applyFilters}
-          checkSelectedBox={checkSelectedBox}
+          filterOptions={HoldingFilterOptions}
+          filter_key={filter_key}
+          handleFilterData={handleFilterData}
         />
       )}
       <section style={{ display: 'flex', width: '100%' }}>
         {!open && (
           <FilterDesktop
-            clearFilters={clearFilters}
-            clearFilter={clearFilter}
-            handleFilterSelect={handleFilterSelect}
+            handleFilterData={handleFilterData}
+            filterOptions={HoldingFilterOptions}
+            filter_key={filter_key}
           />
         )}
         <div style={{ flex: '1' }}>
           {/* <> */}
-            {!open && (
-              <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
-                <img src={filter_sign} alt='filter' />
-              </div>
+          {!open && (
+            <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
+              <img src={filter_sign} alt='filter' />
+            </div>
+          )}
+          <SnapScrollContainer
+            hideFooter={true}
+            error={hasError}
+            onErrorBtnClick={fetchHoldings}
+            isLoading={isLoading}
+            loadingText='Fetching ...'
+          >
+            {filterVal && !filterData && (
+              <ErrorScreen
+                useTemplate={true}
+                templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
+                templateErrText='Oops! We couldn’t find any data for the selected filter. Try removing or changing the filter.'
+              />
             )}
-            <SnapScrollContainer
-              hideFooter={true}
-              error={hasError}
-              onErrorBtnClick={fetchHoldings}
-              isLoading={isLoading}
-              loadingText="Fetching ..."
-            >
-              {(filterVal && !filterData) &&
-                <ErrorScreen
-                  useTemplate={true}
-                  templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
-                  templateErrText="Oops! We couldn’t find any data for the selected filter. Try removing or changing the filter."
-                />
-              }
-              <>
-                {filterVal
-                  ? filterData?.map((holding, idx) => <HoldingCard {...holding} key={idx} />)
-                  : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
-              </>
-            </SnapScrollContainer>
+            <>
+              {filterVal
+                ? filterData?.map((holding, idx) => <HoldingCard {...holding} key={idx} />)
+                : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
+            </>
+          </SnapScrollContainer>
           {/* </> */}
         </div>
       </section>

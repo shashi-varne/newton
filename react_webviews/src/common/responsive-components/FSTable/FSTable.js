@@ -15,6 +15,7 @@ const FSTable = ({
   errorMsg = '',
   className = '',
   style = {},
+  serialOffset = 0,
   serializeData = false,
 }) => {
   const [columnHeaders, setColumnHeaders] = useState([]);
@@ -45,7 +46,7 @@ const FSTable = ({
       <tbody>
         {tableData.map((row, idx) => (
           <tr key={idx}>
-            {serializeData && <td>{idx + 1}.</td>}
+            {serializeData && <td>{serialOffset + idx + 1}.</td>}
             {columnHeaders.map(({ accessor, formatter }) => (
               <td key={accessor}>
                 {isFunction(formatter) ? formatter(row[accessor]) : row[accessor]}</td>

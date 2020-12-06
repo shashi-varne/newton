@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
-import StopTwoToneIcon from '@material-ui/icons/Stop';
 import FormControl from '@material-ui/core/FormControl';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -26,19 +25,28 @@ const styles = {
     marginLeft: '20px',
   },
 };
-const FilterSection = ({ type, filterList, id, classes, onFilterChange, clearFilter }) => {
+const FilterSection = ({
+  type,
+  filterList,
+  id,
+  classes,
+  onFilterChange,
+  clearFilter,
+  filter_key,
+}) => {
   const [value, setValue] = useState(null);
   const handleChange = (id, value) => {
-    console.log(value);
     setValue(value);
     onFilterChange(id, value);
   };
+
   useEffect(() => {
-    const data = storageService().getObject('iwd-filter-options');
+    const data = storageService().getObject(filter_key);
     if (!isEmpty(data)) {
-      console.log('data is ', data[id]);
       setValue(data[id]);
     }
+  }, []);
+  useEffect(() => {
     if (clearFilter) {
       setValue(null);
     }

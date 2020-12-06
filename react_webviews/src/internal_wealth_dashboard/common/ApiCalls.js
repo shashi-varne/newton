@@ -1,7 +1,6 @@
 import Api from '../../utils/api';
 import { storageService, isEmpty } from '../../utils/validators';
 import { genericErrMsg } from '../constants';
-import { remove } from 'lodash';
 // function resetBootFlag() {
 //   boot = false;
 //   storageService().remove('wr-boot');
@@ -23,11 +22,7 @@ export const login = async (params) => {
       ...rest,
     });
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -47,11 +42,7 @@ export const emailLogin = async (params) => {
   try {
     const res = await Api.post('api/user/login', params);
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -73,11 +64,7 @@ export const emailRegister = async (params) => {
       `api/user/register?email=${params.email}&password=${params.password}`
     );
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -97,11 +84,7 @@ export const resendVerification = async (params) => {
   try {
     const res = await Api.get('/api/resendverfication', params);
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -121,11 +104,7 @@ export const forgotPassword = async (params) => {
   try {
     const res = await Api.get('/api/forgotpassword', params);
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -145,11 +124,7 @@ export const logout = async (params) => {
   try {
     const res = await Api.get('api/logout');
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -175,11 +150,7 @@ export const verifyOtp = async (params) => {
       ...rest,
     });
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -199,11 +170,7 @@ export const resendOtp = async () => {
   try {
     const res = await Api.get('api/resendotp', {});
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -227,11 +194,7 @@ export const overview = async (params) => {
       platform,
     });
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -251,11 +214,7 @@ export const hitNextPage = async (next_page, params) => {
   try {
     const res = await Api.get(next_page, params);
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -279,11 +238,7 @@ export const portfolioRisk = async (params = {}) => {
         user_id: '4934000205365249',
       });
 
-      if (
-        res.pfwstatus_code !== 200 ||
-        !res.pfwresponse ||
-        isEmpty(res.pfwresponse)
-      ) {
+      if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
         throw genericErrMsg;
       }
 
@@ -304,16 +259,9 @@ export const portfolioRisk = async (params = {}) => {
 
 export const fetchAnalysis = async (params = {}) => {
   try {
-    const res = await Api.get(
-      'api/external_portfolio/report/fetch/analysis',
-      params
-    );
+    const res = await Api.get('api/external_portfolio/report/fetch/analysis', params);
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -331,13 +279,12 @@ export const fetchAnalysis = async (params = {}) => {
 
 export const holdings = async (params = {}) => {
   try {
-    const res = await Api.get('api/invest/reportv4/portfolio/funds', { ...params, user_id: '4934000205365249'});
+    const res = await Api.get('api/invest/reportv4/portfolio/funds', {
+      ...params,
+      user_id: '4934000205365249',
+    });
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -357,11 +304,7 @@ export const getFundDetail = async (params = {}) => {
   try {
     const res = await Api.get('api/fetch/fund-details', { ...params, user_id: '4934000205365249' });
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -383,11 +326,7 @@ export const fetchPortfolioAnalysis = async (params = {}) => {
       ...params,
     });
 
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
     }
 
@@ -408,9 +347,7 @@ export const fetchPortfolioAnalysisMock = async (params = {}) => {
   try {
     if (isSuccess) {
       return new Promise((resolve) => {
-        setTimeout(() =>
-          resolve(analysisPageApiMockSuccess.pfwresponse.result)
-        , 1000);
+        setTimeout(() => resolve(analysisPageApiMockSuccess.pfwresponse.result), 1000);
       });
     } else {
       return new Promise((_, reject) => {
@@ -464,14 +401,12 @@ const analysisPageApiMockSuccess = {
       top_amcs: {
         equity: [
           {
-            amc_logo:
-              'http://localhost/static/img/amc-logo/high-res/hdfc_new.png',
+            amc_logo: 'http://localhost/static/img/amc-logo/high-res/hdfc_new.png',
             share: 53.02,
             amc_name: 'HDFC Mutual Fund',
           },
           {
-            amc_logo:
-              'http://localhost/static/img/amc-logo/high-res/icici_new.png',
+            amc_logo: 'http://localhost/static/img/amc-logo/high-res/icici_new.png',
             share: 46.98,
             amc_name: 'ICICI Prudential Mutual Fund',
           },
@@ -614,7 +549,10 @@ const analysisPageApiMockError = {
 
 export const getTransactions = async (params = {}) => {
   try {
-    const res = await Api.get('api/invest/transactionv4', { ...params, user_id: '4934000205365249' });
+    const res = await Api.get('api/invest/transactionv4', {
+      ...params,
+      user_id: '4934000205365249',
+    });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -625,12 +563,94 @@ export const getTransactions = async (params = {}) => {
     if (status === 200) {
       return result || {};
     } else {
-      throw (result.error || result.message || genericErrMsg);
+      throw result.error || result.message || genericErrMsg;
     }
   } catch (e) {
     throw e;
   }
 };
 
+export const fetchPortfolioNames = async () => {
+  try {
+    const res = await Api.get('api/fetch/portfolio-fund-names', { user_id: '4934000205365249' });
 
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
 
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const fetchGainsElssYears = async () => {
+  try {
+    const res = await Api.get('api/iam/myaccount', { user_id: '4934000205365249' });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const downloadReport = async (sType, year) => {
+  try {
+    const res = await Api.get(`printpage/invest/export/4934000205365249/${sType}`, {
+      year,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const downloadTransactionReport = async (type, params = {}) => {
+  try {
+    const res = await Api.get(`api/rta/download/account/summary/${type}`, {
+      ...params,
+      user_id: '4934000205365249',
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};

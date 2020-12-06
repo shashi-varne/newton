@@ -14,8 +14,8 @@ import { isEmpty, numDifferentiationInr, storageService } from '../../utils/vali
 import RadialBarChart from '../mini-components/RadialBarChart';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import IwdCard from '../mini-components/IwdCard';
-import IwdCommonPageFooter from '../mini-components/IwdCommonPageFooter';
 import ScrollTopBtn from '../mini-components/ScrollTopBtn';
+import IwdCommonPageFooter from '../mini-components/IwdCommonPageFooter';
 const isMobileView = getConfig().isMobileDevice;
 
 const Dashboard = () => {
@@ -91,7 +91,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="iwd-page" id="iwd-dashboard">
+    <div className='iwd-page' id='iwd-dashboard'>
       <PageHeader>
         <>
           <div className='iwd-header-title'>Dashboard</div>
@@ -105,68 +105,54 @@ const Dashboard = () => {
         error={overviewError && riskError}
       >
         <>
-          <div className="iwd-scroll-child" data-pgno="1">
+          <div className='iwd-scroll-child' data-pgno='1'>
             <IwdCard
-              id="iwd-d-numbers"
+              id='iwd-d-numbers'
               error={isEmpty(overviewData) || overviewError}
-              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+              errorText='Something went wrong! Please retry after some time or contact your wealth manager'
               isLoading={isLoadingOverview}
               style={{
-                background: isLoadingOverview || isEmpty(overviewData) ? 'white' : ''
+                background: isLoadingOverview || isEmpty(overviewData) ? 'white' : '',
               }}
             >
               <>
-                <div className="iwd-dn-box">
-                  <div className="iwd-dnb-value">
-                    {formatNumVal(overviewData.current_val)}
-                  </div>
-                  <div className="iwd-dnb-label">
-                    Current value
-                    </div>
-                      </div>
-                <div className="iwd-dn-box">
-                  <div className="iwd-dnb-value">
-                    {formatNumVal(overviewData.invested_val)}
-                  </div>
-                  <div className="iwd-dnb-label">
-                    Invested value
-                  </div>
+                <div className='iwd-dn-box'>
+                  <div className='iwd-dnb-value'>{formatNumVal(overviewData.current_val)}</div>
+                  <div className='iwd-dnb-label'>Current value</div>
                 </div>
-                <div className="iwd-dn-box">
-                  <div className="iwd-dnb-value">
-                    {formatNumVal(overviewData.total_realised)}
-                  </div>
-                  <div className="iwd-dnb-label">
-                    Total Realised Gains
-                  </div>
+                <div className='iwd-dn-box'>
+                  <div className='iwd-dnb-value'>{formatNumVal(overviewData.invested_val)}</div>
+                  <div className='iwd-dnb-label'>Invested value</div>
                 </div>
-                <div className="iwd-dn-box">
-                  <div className="iwd-dnb-value">
+                <div className='iwd-dn-box'>
+                  <div className='iwd-dnb-value'>{formatNumVal(overviewData.total_realised)}</div>
+                  <div className='iwd-dnb-label'>Total Realised Gains</div>
+                </div>
+                <div className='iwd-dn-box'>
+                  <div className='iwd-dnb-value'>
                     {overviewData.xirr}%
                     <img
                       src={overviewData.xirr > 0 ? positive : negative}
-                      alt=""
+                      alt=''
                       style={{ marginLeft: '10px' }}
                     />
                   </div>
-                  <div className="iwd-dnb-label">
-                    XIRR
-                  </div>
+                  <div className='iwd-dnb-label'>XIRR</div>
                 </div>
               </>
             </IwdCard>
             <IwdCard
-              id="iwd-d-asset-alloc"
-              headerText="Asset allocation"
+              id='iwd-d-asset-alloc'
+              headerText='Asset allocation'
               error={
                 isEmpty(overviewData) ||
                 isEmpty(overviewData.asset_alloc.equity) ||
                 isEmpty(overviewData.asset_alloc.debt)
               }
-              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+              errorText='Something went wrong! Please retry after some time or contact your wealth manager'
               isLoading={isLoadingOverview}
             >
-              <div id="iwd-daa-graph">
+              <div id='iwd-daa-graph'>
                 <RadialBarChart
                   radius={100}
                   progress={42}
@@ -193,15 +179,15 @@ const Dashboard = () => {
               </div>
             </IwdCard>
           </div>
-          <div className="iwd-scroll-child" data-pgno="2">
+          <div className='iwd-scroll-child' data-pgno='2'>
             <IwdCard
-              id="iwd-d-risk"
-              headerText="Risk analysis"
+              id='iwd-d-risk'
+              headerText='Risk analysis'
               error={isEmpty(riskData) || riskError}
-              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+              errorText='Something went wrong! Please retry after some time or contact your wealth manager'
               isLoading={isLoadingRisk}
             >
-              <div id="iwd-dr-data">
+              <div id='iwd-dr-data'>
                 <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
                   <div className='iwd-drb-label'>Return</div>
                   <div className='iwd-drb-value'>{riskData.return}%</div>
@@ -231,18 +217,16 @@ const Dashboard = () => {
             <IwdCard
               headerText="Open source and non-custodial protocol enabling the creation of money markets"
               error={isEmpty(riskData) || riskError}
-              errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+              errorText='Something went wrong! Please retry after some time or contact your wealth manager'
               isLoading={isLoadingRisk}
               className="iwd-d-newsletter"
             >
               <>
-                <IconButton className="iwd-dn-btn">
+                <IconButton className='iwd-dn-btn'>
                   <ChevronRight style={{ color: 'white' }} />
                 </IconButton>
-                <div id="iwd-dn-gist">
-                  Equities | Fixed Income | Situational
-                </div>
-                <div id="iwd-dn-issue">Fisdom Outlook: July 2020</div>
+                <div id='iwd-dn-gist'>Equities | Fixed Income | Situational</div>
+                <div id='iwd-dn-issue'>Fisdom Outlook: July 2020</div>
               </>
             </IwdCard>
             <IwdCommonPageFooter />

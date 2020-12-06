@@ -11,7 +11,7 @@ const IwdBubbleChart = ({ data = {} }) => {
       list.push({
         name: upperCase(key),
         value: `${val}`,
-        color: `rgba(57, 183, 171, ${val/100})`,
+        color: `rgba(57, 183, 171, ${val / 100})`,
       });
     }
     setDataList(list);
@@ -25,15 +25,15 @@ const IwdBubbleChart = ({ data = {} }) => {
     <ResponsiveBubble
       root={{
         name: 'main',
-        children: dataList
+        children: dataList,
       }}
       // margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-      identity="name"
-      value="value"
+      identity='name'
+      value='value'
       leavesOnly={true}
-      colors={item => item.color}
+      colors={(item) => item.color}
       enableLabel={false}
-      colorBy="name"
+      colorBy='name'
       padding={6}
       animate={false}
       motionStiffness={90}

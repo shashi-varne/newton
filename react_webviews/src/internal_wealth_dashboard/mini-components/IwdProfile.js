@@ -33,7 +33,7 @@ const IwdProfile = (props) => {
   }
 
   const profileIcon = (
-    <div id="iwd-profile-icon" onClick={!expanded && toggleExpanded}>
+    <div id='iwd-profile-icon' onClick={!expanded && toggleExpanded}>
       {name.charAt(0)}
     </div>
   );
@@ -41,14 +41,14 @@ const IwdProfile = (props) => {
   if (expanded) {
     return (
       <ClickAwayListener onClickAway={toggleExpanded}>
-        <div id="iwd-profile">
+        <div id='iwd-profile'>
           {profileIcon}
-          <div className="iwd-profile-username">{name}</div>
-          <div className="iwd-profile-detail" id="pan">
+          <div className='iwd-profile-username'>{name}</div>
+          <div className='iwd-profile-detail' id='pan'>
             <b>PAN: </b>
             CXIPP 4122 M
           </div>
-          <div className="iwd-profile-detail">
+          <div className='iwd-profile-detail'>
             <b>Email: </b>
             {email}
           </div>
@@ -56,25 +56,22 @@ const IwdProfile = (props) => {
             <b>Mob.:</b>
             {'  '}{mobile || '--'}
           </div>
-          <div id="iwd-profile-divider"></div>
+          <div id='iwd-profile-divider'></div>
           <Button
             fullWidth={true}
             onClick={logoutUser}
             classes={{
               root: 'iwd-profile-logout',
               label: 'iwd-profile-logout-text',
-            }}>
-            {loggingOut ?
-              <CircularProgress size={25} /> : 'Logout'
-            }
+            }}
+          >
+            {loggingOut ? <CircularProgress size={25} /> : 'Logout'}
           </Button>
         </div>
       </ClickAwayListener>
     );
   }
-  return (
-    profileIcon
-  );
+  return profileIcon;
 };
 
 export default withRouter(IwdProfile);

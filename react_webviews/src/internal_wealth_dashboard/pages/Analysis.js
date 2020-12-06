@@ -60,14 +60,11 @@ function Analysis() {
   };
 
   return (
-    <section className="iwd-page iwd-page__analysis" id="iwd-analysis">
-      <PageHeader
-        height="9vh"
-        hideProfile={isMobileView}
-      >
-        <div className="iwd-analysis-header-container-left">
-          <div className="iwd-header-title">Analysis</div>
-          <div className="iwd-analysis-header-filters">
+    <section className='iwd-page iwd-page__analysis' id='iwd-analysis'>
+      <PageHeader height='9vh' hideProfile={isMobileView}>
+        <div className='iwd-analysis-header-container-left'>
+          <div className='iwd-header-title'>Analysis</div>
+          <div className='iwd-analysis-header-filters'>
             <button
               className={
                 pageType === 'equity'
@@ -94,7 +91,7 @@ function Analysis() {
       <SnapScrollContainer
         pages={3}
         isLoading={isLoading}
-        loadingText="Hold tight! Getting you the good stuff ..."
+        loadingText='Hold tight! Getting you the good stuff ...'
         error={error}
         hideFooter={isMobileView}
         onErrorBtnClick={getPortfolio}
@@ -115,14 +112,14 @@ function Analysis() {
 function MarketCapAllocation({ data = {}, isLoading }) {
   return (
     <IwdCard
-      className="iwd-analysis-graph-left"
-      id="iwd-market-alloc"
+      className='iwd-analysis-graph-left'
+      id='iwd-market-alloc'
       isLoading={isLoading}
       headerText="Market cap allocation"
       error={isEmpty(data)}
     >
-      <section className="iwd-agl-content">
-        <div className="iwd-chart">
+      <section className='iwd-agl-content'>
+        <div className='iwd-chart'>
           <IwdBubbleChart data={data} />
         </div>
         <Legends
@@ -141,17 +138,17 @@ function MarketCapAllocation({ data = {}, isLoading }) {
 function TopSectorAllocation({ data = {}, isLoading }) {
   return (
     <IwdCard
-      className="iwd-analysis-graph-right"
-      id="iwd-sector-alloc"
+      className='iwd-analysis-graph-right'
+      id='iwd-sector-alloc'
       isLoading={isLoading}
       error={isEmpty(data)}
-      headerText="Top sector allocation"
+      headerText='Top sector allocation'
     >
-      <section className="iwd-agr-content">
-        <div className="iwd-chart">
+      <section className='iwd-agr-content'>
+        <div className='iwd-chart'>
           <IwdBarChart data={data} />
         </div>
-        <div className="iwd-sector-alloc-legend">
+        <div className='iwd-sector-alloc-legend'>
           {Object.entries(data).map(([key, value], idx) => (
             <div className="iwd-sal-item" key={idx}>
               <span className="iwd-sali-label">{key}</span>
@@ -167,14 +164,14 @@ function TopSectorAllocation({ data = {}, isLoading }) {
 function RatingWiseExposure({ data = {}, isLoading }) {
   return (
     <IwdCard
-      className="iwd-analysis-graph-left"
-      id="iwd-rating-exposure"
+      className='iwd-analysis-graph-left'
+      id='iwd-rating-exposure'
       error={isEmpty(data)}
       isLoading={isLoading}
-      headerText="Rating wise exposure"
+      headerText='Rating wise exposure'
     >
-      <section className="iwd-agl-content">
-        <div className="iwd-chart">
+      <section className='iwd-agl-content'>
+        <div className='iwd-chart'>
           <IwdBubbleChart data={data} />
         </div>
         <Legends
@@ -193,14 +190,14 @@ function RatingWiseExposure({ data = {}, isLoading }) {
 function MaturityWiseExposure({ data = {}, isLoading }) {
   return (
     <IwdCard
-      className="iwd-analysis-graph-right"
-      id="iwd-maturity-exposure"
+      className='iwd-analysis-graph-right'
+      id='iwd-maturity-exposure'
       error={isEmpty(data)}
       isLoading={isLoading}
-      headerText="Maturity wise exposure"
+      headerText='Maturity wise exposure'
     >
-      <section className="iwd-agr-content">
-        <div className="iwd-chart">
+      <section className='iwd-agr-content'>
+        <div className='iwd-chart'>
           <IwdBarChart data={data} />
         </div>
         <Legends
@@ -244,20 +241,16 @@ function ChartsContainer({ data, page, isLoading }) {
 
 function TopStocks({ topStocks }) {
   return (
-    <div className="iwd-scroll-child" data-pgno="2">
+    <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard
         className="iwd-analysis-card"
         headerText="Top stocks in portfolio"
         error={isEmpty(topStocks)}
       >
-        <div className="iwd-analysis-portfolios-equity">
+        <div className='iwd-analysis-portfolios-equity'>
           {topStocks.map(
-            ({
-              holding_sector_name: heading,
-              instrument_name: company,
-              share: percentage,
-            }) => (
-              <div className="iwd-analysis-portfolio-stock" key={company}>
+            ({ holding_sector_name: heading, instrument_name: company, share: percentage }) => (
+              <div className='iwd-analysis-portfolio-stock' key={company}>
                 <picture>
                   <img
                     src={topStocksIconMappings[heading]}
@@ -265,13 +258,9 @@ function TopStocks({ topStocks }) {
                   />
                 </picture>
                 <main>
-                  <div className="iwd-analysis-portfolio-heading">
-                    {heading}
-                  </div>
-                  <div className="iwd-analysis-portfolio-name">{company}</div>
-                  <div className="iwd-analysis-portfolio-percentage">
-                    {percentage}%
-                  </div>
+                  <div className='iwd-analysis-portfolio-heading'>{heading}</div>
+                  <div className='iwd-analysis-portfolio-name'>{company}</div>
+                  <div className='iwd-analysis-portfolio-percentage'>{percentage}%</div>
                 </main>
               </div>
             )
@@ -284,23 +273,19 @@ function TopStocks({ topStocks }) {
 
 function TopHoldings({ topHoldings }) {
   return (
-    <div className="iwd-scroll-child" data-pgno="2">
+    <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard
         className="iwd-analysis-card"
         headerText="Top holdings"
         error={isEmpty(topHoldings)}
       >
-        <div className="iwd-analysis-portfolios-equity">
+        <div className='iwd-analysis-portfolios-equity'>
           {topHoldings.map(({ instrument_name: name, share: percentage }) => (
-            <div className="iwd-analysis-debt-holding" key={name}>
-              <div className="iwd-analysis-debt-holding-logo">
-                {name.charAt(0).toUpperCase()}
-              </div>
-              <div className="iwd-analysis-debt-holding-details">
-                <div className="iwd-analysis-debt-holding-name">{name}</div>
-                <div className="iwd-analysis-debt-holding-percentage">
-                  {percentage}%
-                </div>
+            <div className='iwd-analysis-debt-holding' key={name}>
+              <div className='iwd-analysis-debt-holding-logo'>{name.charAt(0).toUpperCase()}</div>
+              <div className='iwd-analysis-debt-holding-details'>
+                <div className='iwd-analysis-debt-holding-name'>{name}</div>
+                <div className='iwd-analysis-debt-holding-percentage'>{percentage}%</div>
               </div>
             </div>
           ))}
@@ -312,10 +297,10 @@ function TopHoldings({ topHoldings }) {
 
 function TopAMCS({ topAMCs }) {
   return (
-    <div className="iwd-scroll-child" data-pgno="3">
+    <div className='iwd-scroll-child' data-pgno='3'>
       <IwdCard
-        className="iwd-analysis-card"
-        headerText="Top Stocks in portfolio"
+        className='iwd-analysis-card'
+        headerText='Top Stocks in portfolio'
         error={isEmpty(topAMCs)}
       >
         <div className="iwd-analysis-top-amcs">

@@ -2,8 +2,9 @@ $dark: #0a1d32;
 $grey: #767e86;
 $light-grey: #d3dbe4;
 $primary: rgb(79, 45, 167);
-$light-green:  rgb(154, 211, 204); //9AD3CC
+$light-green: rgb(154, 211, 204); //9AD3CC
 $card-padding-mob: 40px;
+$card-padding: 50px;
 
 .iwd-cursor__pointer {
   cursor: pointer;
@@ -590,8 +591,7 @@ ul#iwd-bars {
   .iwd-bars-li:nth-last-child(1) {
     border-radius: 0 8px 8px 0;
   }
-  ​
-  .iwd-bars-li:hover {
+  ​ .iwd-bars-li:hover {
     transform: scaleY(1.6);
     transform: scaleX(1.6);
 
@@ -616,6 +616,10 @@ ul#iwd-bars {
   text-align: center;
   cursor: pointer;
   text-transform: uppercase;
+}
+
+.iwd-profile-icon__primary {
+  color: $primary;
 }
 
 #iwd-profile {
@@ -805,14 +809,18 @@ ul#iwd-bars {
 
   .iwd-hc-more:hover {
     background-color: unset;
-    background-image: linear-gradient(to right, rgba(79, 45, 167, 0.7) 33%, rgba(255, 255, 255, 0) 0%);
+    background-image: linear-gradient(
+      to right,
+      rgba(79, 45, 167, 0.7) 33%,
+      rgba(255, 255, 255, 0) 0%
+    );
     background-position: bottom;
     background-size: 5px 1.5px;
     background-repeat: repeat-x;
   }
 }
 
-.iwd-holding-card:nth-child(2n+1) {
+.iwd-holding-card:nth-child(2n + 1) {
   margin-right: 3%;
 }
 
@@ -838,7 +846,11 @@ ul#iwd-bars {
 table.iwd-transactions-table {
   thead {
     tr {
-      background: linear-gradient(90deg, rgba($light-green, 0.06) 16.15%, rgba($light-green, 0) 100%);
+      background: linear-gradient(
+        90deg,
+        rgba($light-green, 0.06) 16.15%,
+        rgba($light-green, 0) 100%
+      );
     }
     td {
       border-bottom: none !important;
@@ -857,7 +869,11 @@ table.iwd-transactions-table {
       }
     }
     tr:nth-child(2n) {
-      background: linear-gradient(90deg, rgba($light-green, 0.06) 16.15%, rgba($light-green, 0) 100%);
+      background: linear-gradient(
+        90deg,
+        rgba($light-green, 0.06) 16.15%,
+        rgba($light-green, 0) 100%
+      );
     }
     td {
       height: 50px;
@@ -879,7 +895,8 @@ table.iwd-transactions-table {
   td:nth-last-child(1) {
     padding-right: 60px;
   }
-  td:nth-last-child(-n+3) { // for last 3 columns
+  td:nth-last-child(-n + 3) {
+    // for last 3 columns
     text-align: right;
   }
 }
@@ -968,13 +985,13 @@ table.iwd-transactions-table {
       }
 
       .iwd-lc-title {
-        color: hsla(173,59,55,1);
+        color: hsla(173, 59, 55, 1);
         margin-left: 10px;
         letter-spacing: 2px;
         line-height: 18px;
       }
     }
-  
+
     .iwd-lc-value {
       color: $grey;
       font-size: 30px;
@@ -1115,20 +1132,132 @@ table.iwd-transactions-table {
   .radial-chart {
     margin-top: 0;
   }
+}
 
-  .iwd-transactions-table {
-    width: 800px !important;
+.iwd-transactions-table {
+  width: 800px !important;
 
-    td:nth-child(1) {
-      padding-left: 10px;
+  td:nth-child(1) {
+    padding-left: 10px;
+  }
+
+  td:nth-last-child(1) {
+    padding-right: 10px;
+  }
+}
+
+// Statement Card
+.iwd-statement-card {
+  padding: $card-padding;
+  height: 224px;
+  width: 279px;
+  margin: 15px;
+  cursor: pointer;
+}
+.iwd-statement-text-container {
+  color: #767e86;
+
+  .iwd-statement-year-heading {
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 27px;
+  }
+  .iwd-statement-year-value {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 27px;
+  }
+}
+.iwd-statement-file-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 20px;
+
+  .iwd-statement-icon {
+    width: 55px;
+    height: 70px;
+    margin-left: 30px;
+  }
+
+  .iwd-statement-icon:nth-child(1) {
+    margin: 0px;
+  }
+}
+
+.iwd-chart-header {
+  font-size: 17px;
+}
+
+// Legends
+.iwd-legend-container {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  list-style: none;
+  background-color: inherit;
+
+  .iwd-legend-child {
+    width: 30%;
+
+    .iwd-lc-header {
+      display: flex;
+      align-items: center;
+
+      .iwd-lc-icon {
+        width: 8px;
+        height: 8px;
+        background: hsla(173, 59, 55, 1);
+      }
+
+      .iwd-lc-title {
+        color: hsla(173, 59, 55, 1);
+        margin-left: 10px;
+      }
     }
 
-    td:nth-last-child(1) {
-      padding-right: 10px;
+    .iwd-lc-value {
+      color: $grey;
+      font-size: 30px;
     }
   }
 }
 
+// Pagination
+.iwd-pagination-container {
+  display: flex;
+  border: 1px solid rgba(118, 126, 134, 0.1);
+  width: max-content;
+  background-color: white;
+  border-radius: 4px;
+  .iwd-page-number-container {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+  }
+  .iwd-pagination-box {
+    height: 30px;
+    width: 40px;
+    color: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(118, 126, 134, 0.1);
+  }
+}
+
+.iwd-disable-clear {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+//Autosuggest
+.react-select-container {
+  border: none;
+  outline: none;
+}
 .iwd-chart-header {
   font-size: 17px;
 }
@@ -1194,13 +1323,13 @@ table.iwd-transactions-table {
         }
 
         .iwd-lc-title {
-          color: hsla(173,59,55,1);
+          color: hsla(173, 59, 55, 1);
           margin-left: 0;
           font-size: 11px;
           text-transform: uppercase;
         }
       }
-    
+
       .iwd-lc-value {
         font-size: 17px;
         text-align: center;
@@ -1270,18 +1399,31 @@ table.iwd-transactions-table {
   }
 }
 
-
 @media only screen and (max-width: 450px) {
+  .iwd-statement-reports {
+    margin-bottom: 40px;
+  }
+
+  .iwd-page.iwd-statements {
+    overflow: hidden;
+  }
+  .iwd-statement-card {
+    //flex: 1;
+    width: 100%;
+    margin: 0px;
+    margin-bottom: 40px;
+    padding: 40px;
+  }
   .iwd-filter-mobile {
     overflow-y: auto;
     background: white;
     margin: 0 !important;
     font-family: 'Poppins', 'Roboto', sans-serif;
-    
+
     .iwd-filter-mobile-container {
       position: relative;
-      height: 100%;
-      padding: 40px; 
+      height: auto;
+      padding: 40px;
     }
 
     .iwd-filter-footer {
@@ -1289,10 +1431,8 @@ table.iwd-transactions-table {
       justify-content: space-around;
       align-items: center;
       width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: auto;
 
+      margin: 30px auto 20px auto;
       .MuiButtonBase-root {
         border-radius: 6px;
         background-color: #4f2da6;
@@ -1319,7 +1459,7 @@ table.iwd-transactions-table {
       .iwd-filter-head-container {
         justify-content: center;
         margin-top: 40px;
-
+        margin-bottom: 40px;
         .iwd-filter-head {
           font-size: 17px;
           font-weight: 700;
@@ -1332,6 +1472,7 @@ table.iwd-transactions-table {
         justify-content: space-evenly;
         align-items: center;
         width: 100%;
+        margin-top: 140px;
 
         .iwd-filter-clear {
           font-size: 15px;
@@ -1353,4 +1494,152 @@ table.iwd-transactions-table {
       }
     }
   }
+
+  // Statements Page
+  .iwd-statements-container {
+    margin-left: 0px;
+    .iwd-transaction-search-container {
+      .iwd-transaction-search {
+        flex: 1;
+      }
+    }
+  }
+
+  .iwd-transaction-date-filter {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    .iwd-transaction-date {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 10px;
+
+      .iwd-date-text {
+        font-family: Poppins;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 24px;
+        letter-spacing: 0em;
+        text-align: left;
+        color: #767e86;
+        flex: 0.3;
+        width: max-content;
+      }
+      .iwd-date-selector {
+        flex: 1;
+        max-width: 300px;
+        color: #767e86;
+        border-radius: 100px;
+        background-color: rgba($primary, 0.05);
+        .MuiFormControl-root {
+          .MuiInput-input {
+            text-align: left;
+            padding-left: 20px;
+            padding-right: 12px;
+            color: #767e86;
+          }
+
+          .MuiInput-root.MuiInput-formControl.MuiInput-underline::before,
+          .MuiInput-root.MuiInput-formControl.MuiInput-underline::after {
+            border: none;
+          }
+        }
+      }
+    }
+  }
+  #iwd-page-header {
+    #iwd-ph-left {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #iwd-ph-right {
+      // float: right;
+      position: relative;
+    }
+  }
+}
+
+.iwd-disable-clear {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+//Autosuggest
+
+.react-select-container {
+  border: none;
+  outline: none;
+}
+
+// Date Range Picker
+
+.iwd-date-range-picker {
+  .rs-picker-daterange {
+    background-color: rgba(31, 18, 65, 0.05);
+    border-radius: 4px;
+    width: 100%;
+    a {
+      .rs-picker-toggle-clean {
+        margin-right: 5px;
+        margin-left: 5px;
+      }
+    }
+  }
+  width: 250px;
+}
+.rs-picker-toggle-value,
+.rs-picker-toggle-placeholder,
+.rs-picker-toggle-caret {
+  color: $primary !important;
+}
+.rs-calendar-table-cell-content {
+  border-radius: 50% !important;
+}
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+  border: 1px solid $primary;
+}
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+  border-color: $primary !important;
+  background-color: $primary !important;
+}
+.rs-picker-toolbar-option:not(:last-child)::before {
+  display: none;
+}
+.rs-picker-toolbar {
+  .rs-picker-toolbar-ranges {
+    padding: 0px 20px;
+    .rs-picker-toolbar-option {
+      border: 1px solid $primary;
+      border-radius: 10px;
+      margin: 5px;
+      background-color: rgba(31, 18, 65, 0.05);
+
+      color: $primary;
+      text-decoration: none !important;
+    }
+  }
+}
+.rs-picker-toolbar-right {
+  min-width: 100px;
+  .rs-picker-toolbar-right-btn-ok {
+    width: 100%;
+    background-color: $primary;
+    color: white;
+  }
+  .rs-picker-toolbar-right-btn-ok:hover {
+    background-color: $primary !important;
+    color: white !important;
+  }
+  .rs-picker-toolbar-right-btn-ok.rs-picker-toolbar-btn-disabled {
+    background-color: $primary;
+  }
+}
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+  border-color: $primary !important;
 }
