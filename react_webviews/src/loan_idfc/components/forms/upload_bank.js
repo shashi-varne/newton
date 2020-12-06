@@ -161,7 +161,6 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
-          console.log(file)
           try {
             that.setState({
               docType: this.doc_type,
