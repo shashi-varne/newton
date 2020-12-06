@@ -288,6 +288,7 @@ class UploadBank extends Component {
     data.append("doc_type", "perfios_bank_statement");
     data.append("file", documents[index]);
     data.append("doc_id", id);
+    data.append("password", this)
 
     try {
       const res = await Api.post(
@@ -321,10 +322,10 @@ class UploadBank extends Component {
     }
   };
 
-  handleChange = (name) => (event) => {
+  handleChange = (name, doc_id = "") => (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, password } = this.state;
+    let { form_data, password, documents } = this.state;
 
     if (!name) {
       if (!dobFormatTest(value)) {
@@ -336,10 +337,12 @@ class UploadBank extends Component {
     }
 
     if (name === "password") {
-      password = value;
+      var index = documents.findIndex((item) => item.id === doc_id);
+
+      documents[index].password = value
 
       this.setState({
-        password: password,
+        documents: documents,
       });
     } else {
       form_data[name || id] = value;
@@ -527,8 +530,8 @@ class UploadBank extends Component {
                   id="password"
                   name="password"
                   placeholder="XXXXXXX"
-                  value={this.state.password || ""}
-                  onChange={this.handleChange("password")}
+                  value={item.password || ""}
+                  onChange={this.handleChange("password", item.id)}
                 />
               </div>
 
