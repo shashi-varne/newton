@@ -149,11 +149,14 @@ export async function getDocumentList() {
     );
     const { result, status_code: status } = res.pfwresponse;
 
-    this.setState({
-      docList: result.doc_list,
-    }, () => {
-      this.onload()
-    });
+    this.setState(
+      {
+        docList: result.doc_list,
+      },
+      () => {
+        this.onload();
+      }
+    );
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
@@ -354,24 +357,24 @@ export async function get05Callback() {
     show_loader: true,
   });
 
-  let result = ""
-  
-  setTimeout(result = await this.getUserStatus(), 3000)
-
+  // setTimeout(, 3000)
+  let result = await this.getUserStatus();
   let { count } = this.state;
-  
-  if (result.is_dedupe === true || result.idfc_05_callback === true) {
-    this.navigate("loan-status");
-  } else {
-    if (count < 20) {
-      this.setState({
-        count: count + 1,
-      });
+  let that = this;
 
-      this.get05Callback()
-      
+  setTimeout(function () {
+    if (result.is_dedupe === true || result.idfc_05_callback === true) {
+      that.navigate("loan-status");
+    } else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
+
+        that.get05Callback();
+      }
     }
-  }
+  }, 3000);
 }
 
 export async function get10Callback(next_state) {
@@ -379,23 +382,42 @@ export async function get10Callback(next_state) {
     show_loader: true,
   });
 
-  let result = ""
-  
-  setTimeout(result = await this.getUserStatus(), 3000)
+  // let result = "";
 
+  // setTimeout((result = await this.getUserStatus()), 3000);
+
+  // let { count } = this.state;
+
+  // if (result.idfc_10_callback) {
+  //   this.navigate(next_state);
+  // } else {
+  //   if (count < 20) {
+  //     this.setState({
+  //       count: count + 1,
+  //     });
+
+  //     this.get10Callback(next_state);
+  //   }
+  // }
+
+  // setTimeout(, 3000)
+  let result = await this.getUserStatus();
   let { count } = this.state;
+  let that = this;
 
-  if (result.idfc_10_callback) {
-    this.navigate(next_state);
-  } else {
-    if (count < 20) {
-      this.setState({
-        count: count + 1,
-      });
+  setTimeout(function () {
+    if (result.idfc_10_callback === true) {
+      that.navigate(next_state);
+    } else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
 
-      this.get10Callback(next_state);
+        that.get10Callback(next_state);
+      }
     }
-  }
+  }, 3000);
 }
 
 export async function submitApplication(
@@ -632,9 +654,12 @@ export async function net1(url) {
   );
 
   var pgLink = url;
-    // eslint-disable-next-line
-    pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + plutus_redirect_url;
-    window.location.href = pgLink;
+  // eslint-disable-next-line
+  pgLink +=
+    (pgLink.match(/[\?]/g) ? "&" : "?") +
+    "plutus_redirect_url=" +
+    plutus_redirect_url;
+  window.location.href = pgLink;
 }
 
 export async function net(url) {
@@ -688,8 +713,6 @@ export async function net(url) {
 
   window.location.href = pgLink;
 }
-
-
 
 export async function startTransaction(transaction_type) {
   try {

@@ -226,16 +226,22 @@ class DocumentUpload extends Component {
     });
   };
 
-  openCameraWeb() {
-    $("input").trigger("click");
+  openCameraWeb(id = "") {
+
+    if (!id) {
+      $("input").trigger("click");
+    } else {
+      $(`#${id}`).trigger("click");
+    }
   }
 
-  startUpload(method_name) {
+  startUpload(method_name, id) {
+
     this.setState({
       type: method_name,
     });
 
-    this.openCameraWeb();
+    this.openCameraWeb(id);
   }
 
   getPdf = (e) => {
@@ -283,6 +289,8 @@ class DocumentUpload extends Component {
 
     e.preventDefault();
     console.log(e)
+    let id = e.target.id;
+    console.log(id)
 
     let file = e.target.files[0];
 
@@ -308,7 +316,7 @@ class DocumentUpload extends Component {
   }
 
 
-  renderHtmlCamera(index) {
+  renderHtmlCamera(side = "") {
     console.log(this.state.documents)
     return (
       <div>
@@ -318,10 +326,10 @@ class DocumentUpload extends Component {
         }}>
           <div>Upload PAN card</div>
           <div style={{ margin: '20px 0 20px 0', cursor: 'pointer'  }}>
-            <div onClick={() => this.startUpload('open_camera', index)} style={{
+            <div onClick={() => this.startUpload('open_camera', side)} style={{
               textAlign: 'center', cursor: 'pointer'
             }}>
-              <input id={"input"+index} type="file" style={{ display: 'none' }} onChange={this.getPhoto} id="myFile" />
+              <input type="file" style={{ display: 'none' }} onChange={this.getPhoto} id={side ? side : "myFile"} />
               <img src={camera_green} alt="PAN"></img>
               <div style={{ color: '#28b24d' }}>Click here to upload</div>
             </div>
@@ -386,7 +394,7 @@ class DocumentUpload extends Component {
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera('1')}
+                {getConfig().html_camera && this.renderHtmlCamera('front')}
                 {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
               </div>
 
@@ -394,7 +402,7 @@ class DocumentUpload extends Component {
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera('2')}
+                {getConfig().html_camera && this.renderHtmlCamera('back')}
                 {/* {!getConfig().html_camera && this.renderNativeCamera()} */}
               </div>
 
