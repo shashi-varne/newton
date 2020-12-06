@@ -233,7 +233,7 @@ class LoanStatus extends Component {
     ) {
       let body = {
         perfios_state: "init",
-        vendor_application_status: "perfios",
+        idfc_loan_status: "perfios",
       };
 
       this.updateApplication(body, "income-details");

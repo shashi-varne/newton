@@ -357,7 +357,7 @@ class UploadBank extends Component {
     this.setState({
       editId: id,
     });
-    this.startUpload("upload_doc");
+    this.startUpload("open_gallery");
   };
 
   handleDelete = (id) => {
@@ -566,7 +566,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("upload_doc")}
+                onClick={() => this.startUpload("open_gallery")}
               >
                 <span className="plus-sign">
                   <input
