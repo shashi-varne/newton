@@ -1250,7 +1250,7 @@ table.iwd-transactions-table {
 
     .iwd-filter-mobile-container {
       position: relative;
-      height: 100%;
+      height: auto;
       padding: 40px;
     }
 
@@ -1300,6 +1300,7 @@ table.iwd-transactions-table {
         justify-content: space-evenly;
         align-items: center;
         width: 100%;
+        margin-top: 140px;
 
         .iwd-filter-clear {
           font-size: 15px;
