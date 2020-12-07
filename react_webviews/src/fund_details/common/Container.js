@@ -23,13 +23,9 @@ import './Style.scss';
 
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
-  const [openPopup, setOpenPopup] = useState(false);
-  const [popupText, setPopupText] = useState('');
-  const [loaderMain, setLoaderMain] = useState(
-    getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
-  );
-  const [inPageTitle, setInPageTitle] = useState(true);
   const x = React.useRef(true);
+  const loaderMain  = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;;
+  const inPageTitle = true;
 
   const historyGoBack = (backData) => {
     // let fromHeader = backData ? backData.fromHeader : false;
@@ -77,7 +73,6 @@ const Container = (props) => {
 
   const handleClose = () => {
     setOpenDialog(false);
-    setOpenPopup(false);
   };
 
   const renderDialog = () => {
@@ -95,36 +90,6 @@ const Container = (props) => {
         <DialogActions>
           <Button className='DialogButtonFullWidth' onClick={handleClose} color='default' autoFocus>
             OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  };
-
-  const handlePopup = () => {
-    setOpenPopup(false);
-
-    nativeCallback({ action: 'native_back', events: getEvents('back') });
-  };
-
-  const renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={openPopup}
-        onClose={handleClose}
-        aria-labelledby='responsive-dialog-title'
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-        <DialogContent>
-          <DialogContentText>{popupText}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color='default'>
-            No
-          </Button>
-          <Button onClick={handlePopup} color='default' autoFocus>
-            Yes
           </Button>
         </DialogActions>
       </Dialog>
@@ -254,7 +219,6 @@ const Container = (props) => {
       )}
       {/* No Internet */}
       {renderDialog()}
-      {renderPopup()}
     </div>
   );
 };
