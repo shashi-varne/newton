@@ -69,7 +69,7 @@ class GroupHealthPlanAddOns extends Component {
                     let opd_data_options = add_ons_data[1].price;
                     for(var key in opd_data_options){
                         let opt = {
-                            cover_amount: key,
+                            name: key,
                             premium: add_ons_data[1].price[key]
                         }
                         options.push(opt);
@@ -93,7 +93,7 @@ class GroupHealthPlanAddOns extends Component {
 
                     add_ons_data[1].price = options;
                     add_ons_data[1].default_premium = add_ons_data[1].price[0].premium;
-                    add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].cover_amount;
+                    add_ons_data[1].default_cover_amount = add_ons_data[1].price[0].name;
                     
                 } else {
                     toast(resultData.error || resultData.message
@@ -167,7 +167,7 @@ class GroupHealthPlanAddOns extends Component {
         let indexOption = event;
         data.selectedIndexOption = indexOption;
 
-        data.selected_cover_amount =  data.price[indexOption].cover_amount;
+        data.selected_cover_amount =  data.price[indexOption].name; //name means cover amount
         data.selected_premium =  data.price[indexOption].premium;
 
         add_ons_data[index] = data;
