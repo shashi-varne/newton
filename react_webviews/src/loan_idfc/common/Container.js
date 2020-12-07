@@ -188,6 +188,8 @@ class Container extends Component {
               dualbuttonwithouticon={this.props.dualbuttonwithouticon}
               buttonOneTitle={this.props.buttonOneTitle}
               buttonTwoTitle={this.props.buttonTwoTitle}
+              handleClickOne={this.props.handleClickOne}
+              handleClickTwo={this.props.handleClickTwo}
             />
           )}
           {/* No Internet */}

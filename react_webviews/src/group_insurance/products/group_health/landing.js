@@ -61,7 +61,7 @@ class GroupHealthLanding extends Component {
         {
           icon: "icn_hs_no_document",
           title: "No document required",
-          subtitle: "Easy and paperless process",
+          subtitle: "Quick and paperless process",
         },
         {
           icon: "icn_hs_assistance",
@@ -218,7 +218,6 @@ class GroupHealthLanding extends Component {
   openFaqs = () => {
     this.sendEvents("next", { things_to_know: "faq" });
     let renderData = this.state.screenData.faq_data;
-
     this.props.history.push({
       pathname: "/gold/common/render-faqs",
       search: getConfig().searchParams,

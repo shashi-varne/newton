@@ -8,6 +8,11 @@ import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
+import {
+  numDifferentiationInr,
+  formatAmount,
+  inrFormatTest,
+} from "utils/validators";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 
 class LoanBtDetails extends Component {
@@ -18,7 +23,7 @@ class LoanBtDetails extends Component {
       screen_name: "loan_bt",
       form_data: [],
       loan_bt: [],
-      bankOptions: []
+      bankOptions: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -28,55 +33,29 @@ class LoanBtDetails extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: 'Income and loan offer',
+      title: "Income and loan offer",
       steps: [
         {
-          'title': 'Income details',
-          'status': 'completed'
+          title: "Income details",
+          status: "completed",
         },
         {
-          'title': 'BT transfer details',
-          'status': 'init'
+          title: "BT transfer details",
+          status: "init",
         },
         {
-          'title': 'Loan offer',
-          'status': 'pending'
-        }
-      ]
-    }
+          title: "Loan offer",
+          status: "pending",
+        },
+      ],
+    };
 
     this.setState({
-      progressHeaderData: progressHeaderData
-    })
+      progressHeaderData: progressHeaderData,
+    });
   }
 
   onload = async () => {
-    try {
-      this.setState({
-        show_loader: true,
-      });
-
-      const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
-
-      const { result, status_code: status } = res.pfwresponse;
-
-      if (status === 200) {
-        let banklist = result.data;
-
-        let bankOptions = banklist.map((item) => item.institution_name);
-
-        this.setState({
-          bankOptions: bankOptions,
-        });
-
-      } else {
-        toast(result.error || result.message || "Something went wrong!");
-      }
-    } catch (err) {
-      console.log(err);
-      toast("Something went wrong");
-    }
-
     let lead = this.state.lead || {};
 
     let bt_info = lead.bt_info;
@@ -84,7 +63,6 @@ class LoanBtDetails extends Component {
     let loan_bt = [];
 
     for (var item in bt_info) {
-      console.log(bt_info)
       if (bt_info[item].typeOfLoan === "PersonalLoan") {
         loan_bt.push({ [item]: bt_info[item].typeOfLoan });
       }
@@ -92,7 +70,7 @@ class LoanBtDetails extends Component {
 
     loan_bt.forEach(() => {
       this.state.form_data.push({});
-    })
+    });
 
     this.setState({
       loan_bt: loan_bt,
@@ -129,8 +107,8 @@ class LoanBtDetails extends Component {
 
   handleClick = () => {
     this.updateApplication({
-      "bt_selection": this.state.form_data.filter(data => data.is_selected)
-    })
+      bt_selection: this.state.form_data.filter((data) => data.is_selected),
+    });
   };
 
   handleCheckbox = (checked, index, id) => {
@@ -143,14 +121,20 @@ class LoanBtDetails extends Component {
   };
 
   render() {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
+
     return (
       <Container
         showLoader={this.state.show_loader}
         title="Select for balance transfer"
-        buttonTitle="Skip and continue"
+        buttonTitle={
+          form_checked.length === 0 ? "SKIP AND CONTINUE" : "CONTINUE"
+        }
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
       >
         <div className="loan-bt">
@@ -168,7 +152,13 @@ class LoanBtDetails extends Component {
                     id="checkbox"
                     name="checkbox"
                     disableRipple
-                    onChange={(event) => this.handleCheckbox(event.target.checked, index, Object.keys(item)[0])}
+                    onChange={(event) =>
+                      this.handleCheckbox(
+                        event.target.checked,
+                        index,
+                        Object.keys(item)[0]
+                      )
+                    }
                     className="Checkbox"
                   />
                 </Grid>
@@ -187,7 +177,8 @@ class LoanBtDetails extends Component {
                         // error={!!this.state.form_data.financierName_error}
                         // helperText={this.state.form_data.financierName_error}
                         value={
-                          this.state.form_data[index].financierName || item.financierName ||
+                          this.state.form_data[index].financierName ||
+                          item.financierName ||
                           ""
                         }
                         onChange={this.handleChange("financierName", index)}
@@ -199,9 +190,12 @@ class LoanBtDetails extends Component {
                         // error={
                         //   !!this.state.form_data.principalOutstanding_error
                         // }
-                        // helperText={
-                        //   this.state.form_data.principalOutstanding_error
-                        // }
+                        helperText={
+                          this.state.form_data.principalOutstanding_error ||
+                          numDifferentiationInr(
+                            this.state.form_data[index].principalOutstanding
+                          )
+                        }
                         type="text"
                         width="40"
                         label="Amount outstanding"

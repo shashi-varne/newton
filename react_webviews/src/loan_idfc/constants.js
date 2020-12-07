@@ -1,12 +1,21 @@
 import { getConfig } from "utils/functions";
 import { capitalizeFirstLetter } from "../utils/validators"
 let productName = capitalizeFirstLetter(getConfig().productName);
+
 export function goBackMap(path) {
-  let mapper = {
-    '/loan/idfc/journey': '/loan/idfc/home',
-    '/loan/idfc/application-summary': '/loan/idfc/journey',
-    '/loan/idfc/personal-details': '/loan/idfc/home',
-  }
+    let mapper = {
+      '/loan/idfc/journey': '/loan/idfc/home',
+      '/loan/idfc/application-summary': '/loan/idfc/journey',
+      '/loan/idfc/personal-details': '/loan/idfc/home',
+      '/loan/idfc/basic-details': '/loan/idfc/home',
+      '/loan/idfc/professional-details': '/loan/idfc/basic-details',
+      '/loan/idfc/loan-requirement-details': '/loan/idfc/home',
+      '/loan/idfc/income-details': '/loan/idfc/home',
+      '/loan/idfc/upload-bank': '/loan/idfc/income-details',
+      '/loan/idfc/eligible-loan': '/loan/idfc/home',
+      '/loan/idfc/loan-eligible': '/loan/idfc/home',
+      '/loan/idfc/bt-info': '/loan/idfc/home',
+    }
 
   return mapper[path] || false;
 }
@@ -41,6 +50,8 @@ export const idfc_config = {
   key: 'idfc',
   get_next: {
     landing_screen: 'edit-number',
+    know_more_screen: 'edit-number',
+    calculator: 'edit-number',
     mobile_verification: 'otp-verify',
     otp_verify: 'basic-details',
     basic_details: 'professional-details',
@@ -49,7 +60,13 @@ export const idfc_config = {
     address_details: 'journey',
     bt_info_screen: 'loan-bt-details',
     additional_details: 'upload-documents',
-    requirement_details_screen: 'loan-status'
+    requirement_details_screen: 'loan-status',
+    loan_eligible: 'additional-details',
+    loan_bt: 'credit-bt',
+    credit_bt: 'eligible-loan',
+    eligible_loan: 'loan-eligible',
+    loan_eligible: 'additional-details',
+    additional_details: 'doc-list'
   },
   landing_screen: {
     stepContentMapper: {
@@ -269,9 +286,9 @@ export const idfc_config = {
       'ZYDUS CADILA'
     ],
     salaryRecieptOptions: [
-      "Bank account transfer",
-      "Cash",
-      "Cheque",
+      "BANK ACCOUNT TRANSFER",
+      "CASH",
+      "CHEQUE",
     ],
     constitutionOptions: [
       "HUF",
@@ -286,32 +303,27 @@ export const idfc_config = {
       "TRUST",
     ],
     organisationTypeOptions: [
-      "central govt.",
-      "educational institute",
-      "partnership firm",
-      "private limited company",
-      "public limited company",
-      "proprietorship firm",
-      "public sector undertaking.",
-      "society",
-      "state govt.",
-      "trust",
-    ],
+      "CENTRAL GOVT.",
+      "EDUCATIONAl INSTITUTE",
+      "PARTNERSHIP FIRM",
+      "PRIVATE LIMITED COMPANY",
+      "PUBLIC LIMITED COMPANY",
+      "PROPRIETORSHIP FIRM",
+      "PUBLIC SECTOR UNDERTAKING.",
+      "SOCIETY",
+      "STATE GOVT.",
+      "TRUST",
+  ],
     departmentOptions: [
       "ACCOUNTS",
       "BACKOFFICE",
       "EDUCATION"
     ],
-    industryOptions: [
-      "ABRASIVES AND GRINDING",
-      "ADVERTISING",
-      "AGRICULTURAL IMPLEMENTS"
-    ]
   },
   personal_details_screen: {
     maritalOptions: [
-      "Single",
-      "Married"
+      "SINGLE",
+      "MARRIED"
     ],
     religionOptions: [
       "HINDU",

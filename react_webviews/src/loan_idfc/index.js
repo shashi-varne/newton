@@ -32,11 +32,13 @@ import EligibleLoan from "./components/forms/eligible_loan";
 import AdditionalDetails from "./components/forms/additional_details";
 import DocumentList from "./components/upload_doc/doc_list";
 import LoanEligible from "./components/general/loan_eligible";
-import UploadPan from "./components/upload_doc/upload_pan";
 import LoanStatus from './components/status/status';
 import PerfiosStatus from './components/status/perfios_status';
+import SystemError from './components/status/system_error';
 import DocumentUpload from './components/upload_doc/doc_upload';
 import CommonRenderFaqs from "./components/general/RenderFaqs";
+import FinalOffer from "./components/general/final_loan";
+import Reports from "./components/general/reports";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -98,11 +100,13 @@ const Lending = props => {
           <Route path={`${url}/additional-details`} component={AdditionalDetails} />
           <Route path={`${url}/doc-list`} component={DocumentList} />
           <Route path={`${url}/loan-eligible`} component={LoanEligible} />
-          <Route path={`${url}/upload-pan`} component={UploadPan} />
           <Route path={`${url}/loan-status`} component={LoanStatus} />
           <Route path={`${url}/perfios-status`} component={PerfiosStatus} />
           <Route path={`${url}/doc-upload`} component={DocumentUpload} />
           <Route path={`${url}/faq`} component={CommonRenderFaqs} />
+          <Route path={`${url}/final-offer`} component={FinalOffer} />
+          <Route path={`${url}/reports`} component={Reports} />
+          <Route path={`${url}/error`} component={SystemError} />
 
           {/* Edit paths */}
           <Route path={`${url}/edit-basic-details`} 

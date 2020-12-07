@@ -52,22 +52,22 @@ class BtInformation extends Component {
 
   handleClickTwo = () => {
     let body = {
-      idfc_loan_status: "bt_init",
+      idfc_loan_status: "bt_processing",
       bt_selected: true,
     };
     this.updateApplication(body, "loan-bt");
   };
 
-  handleClickOne = async () => {
+  handleClickOne = () => {
     let body = {
-      idfc_loan_status: "bypass",
+      idfc_loan_status: "bt_bypass",
     };
 
-    await this.updateApplication(body)
+    this.updateApplication(body)
 
-    if (this.state.idfc_07_state !== 'success') {
-      this.update("one", 'eligible-loan');
-    }
+    // if (this.state.idfc_07_state !== 'success') {
+    //   this.submitApplication({}, "one", "", "eligible-loan");
+    // }
   }
 
   sendEvents(user_action, data = {}) {
@@ -100,7 +100,6 @@ class BtInformation extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
-        handleClick={this.handleClick}
       >
         <div className="bt-info">
           <div className="head">How does BT work?</div>

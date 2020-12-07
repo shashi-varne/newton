@@ -25,19 +25,43 @@ const commonMapper = {
   },
   "idfc_0.5_submitted": {
     top_icon: "ils_loan_status",
-    top_title: "Congratulations, Aamir!",
+    top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
   },
   "idfc_0.5_accepted": {
     top_icon: "ils_loan_status",
-    top_title: "Congratulations, Aamir!",
+    top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
   },
+  "idfc_cancelled": {
+    top_icon: "ils_loan_failed",
+    top_title: "Application Rejected",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
   "idfc_0.5_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
+  "idfc_1.1_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OK",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
+  "idfc_1.7_failed": {
     top_icon: "error_illustration",
     top_title: "System error",
     button_title: "OK",
@@ -53,7 +77,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
-  "salary reciept mode": {
+  "Salary receipt mode": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -73,6 +97,14 @@ const commonMapper = {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+  },
+  is_dedupe: {
+    top_icon: "ils_loan_failed",
+    top_title: "Application Rejected",
+    button_title: "OK",
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
@@ -122,7 +154,8 @@ class LoanStatus extends Component {
       show_loader: false,
       params: getUrlParams(),
       commonMapper: {},
-      idfc_loan_status: "",
+      vendor_application_status: "",
+      screen_name: "loan_status",
     };
 
     this.initialize = initialize.bind(this);
@@ -133,38 +166,49 @@ class LoanStatus extends Component {
   }
 
   onload = () => {
-    // let { status, bt_eligible } = this.state.params;
 
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
-    let application_info = lead.application_info || {};
-    let personal_info = lead.personal_info || {};
-    let idfc_loan_status = vendor_info.idfc_loan_status;
-    let { application_status, rejection_reason } = application_info;
-    let perfios_state = vendor_info.perfios_state;
-    let bt_eligible = vendor_info.bt_eligible;
-    // let mapperKey = "";
+    let vendor_application_status = this.state.vendor_application_status;
+    let application_status = this.state.application_status;
+    let pan_status = this.state.pan_status;
+    let ckyc_status = this.state.ckyc_status;
+    let idfc_05_callback = this.state.idfc_05_callback;
+    let perfios_status = this.state.perfios_status;
+    let otp_verified = this.state.otp_verified;
+    let idfc_07_state = this.state.idfc_07_state;
+    let bt_selected = this.state.bt_selected;
+    let idfc_10_callback = this.state.idfc_10_callback;
+    let rejection_reason = this.state.rejection_reason;
+    idfc_05_callback;
+    let first_name = this.state.first_name;
+    let is_dedupe = this.state.is_dedupe;
 
-    // if (status === false && bt_eligible === false) {
-    //   mapperKey = "status_bt_eligible_failed"
-    // }
-
-    // if (status === false && bt_eligible === false) {
-    //   mapperKey = "status_bt_eligible_failed"
-    // }
-    if (application_status === "internally_rejected") {
+    if (rejection_reason) {
       this.setState({
         commonMapper: commonMapper[rejection_reason] || {},
         application_status: application_status,
         rejection_reason: rejection_reason,
       });
-    } else {
+    } else if (is_dedupe) {
       this.setState({
-        commonMapper: commonMapper[idfc_loan_status] || {},
-        idfc_loan_status: idfc_loan_status,
-        first_name: personal_info.first_name,
+        commonMapper: commonMapper["is_dedupe"] || {},
+        application_status: application_status,
+      });
+    } else {
+      if (vendor_application_status === "idfc_0.5_accepted") {
+        commonMapper[vendor_application_status].top_title =
+          commonMapper[vendor_application_status].top_title +
+          " " +
+          first_name +
+          "!";
+      }
+
+      this.setState({
+        commonMapper: commonMapper[vendor_application_status] || {},
+        vendor_application_status: vendor_application_status,
+        first_name: first_name,
       });
     }
+    
   };
 
   goBack = () => {
@@ -174,14 +218,15 @@ class LoanStatus extends Component {
   handleClick = () => {
     let {
       commonMapper,
-      idfc_loan_status,
+      vendor_application_status,
       application_status,
       bt_eligible,
       perfios_state,
+      is_dedupe
     } = this.state;
     if (
-      idfc_loan_status === "idfc_0.5_submitted" ||
-      idfc_loan_status === "idfc_0.5_accepted"
+      !is_dedupe &&
+      vendor_application_status === "idfc_0.5_accepted"
     ) {
       let body = {
         perfios_state: "init",
@@ -190,6 +235,7 @@ class LoanStatus extends Component {
 
       this.updateApplication(body, "income-details");
     }
+
     if (commonMapper.button_title === "START NEW APPLICATION") {
       let params = {
         create_new: true,
@@ -205,9 +251,9 @@ class LoanStatus extends Component {
   render() {
     let {
       commonMapper,
-      idfc_loan_status,
-      application_status,
+      vendor_application_status,
       rejection_reason,
+      is_dedupe,
     } = this.state;
 
     return (
@@ -252,15 +298,14 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {idfc_loan_status === "idfc_0.5_rejected" && (
+          {vendor_application_status === "idfc_0.5_rejected" && (
             <div className="subtitle">
               We're so sorry to inform you that IDFC has rejected your loan
               application as it did not meet their loan policy.
             </div>
           )}
 
-          {(idfc_loan_status === "idfc_0.5_submitted" ||
-            idfc_loan_status === "idfc_0.5_accepted") && (
+          {!is_dedupe && vendor_application_status === "idfc_0.5_accepted" && (
             <div>
               <div className="subtitle">
                 Your profile has been successfully evaluated and basis the
@@ -274,6 +319,13 @@ class LoanStatus extends Component {
                   To view the final loan amount, provide your income details.
                 </b>
               </div>
+            </div>
+          )}
+
+          {commonMapper.top_title === "Application Rejected" && (
+            <div className="subtitle">
+              We're so sorry to inform you that IDFC has rejected your loan
+              application as it did not meet their loan policy.
             </div>
           )}
 

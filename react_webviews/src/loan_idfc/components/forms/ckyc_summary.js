@@ -11,7 +11,6 @@ class ApplicationSummary extends Component {
       show_loader: false,
       accordianData: [],
       detail_clicked: [],
-      selectedIndex: 0
     };
     this.initialize = initialize.bind(this);
   }
@@ -24,6 +23,7 @@ class ApplicationSummary extends Component {
     let lead = this.state.lead || {};
     let accordianData = [];
     let personal_info = lead.personal_info || {};
+    let vendor_info = lead.vendor_info || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
 
@@ -147,15 +147,13 @@ class ApplicationSummary extends Component {
 
     accordianData.push(address_data);
 
-
     this.setState(
       {
         accordianData: accordianData,
+        idfc_loan_status: vendor_info.idfc_loan_status
       },
       () => {
-        // if (!this.state.form_submitted) {
-          this.handleAccordian(0);
-        // }
+        this.handleAccordian(0);
       }
     );
   };
@@ -218,7 +216,7 @@ class ApplicationSummary extends Component {
         {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
-            {!this.state.form_submitted && (
+            {this.state.idfc_loan_status === "idfc_null_accepted" && (
               <div
                 onClick={() => {
                   this.sendEvents("next", {
@@ -240,7 +238,6 @@ class ApplicationSummary extends Component {
   handleAccordian = (index) => {
     let accordianData = this.state.accordianData;
     let selectedIndex = this.state.selectedIndex;
-
     if (index === this.state.selectedIndex) {
       accordianData[index].open = false;
       selectedIndex = -1;
@@ -274,13 +271,10 @@ class ApplicationSummary extends Component {
         showLoader={this.state.show_loader}
         title="Loan application Summary"
         buttonTitle="OKAY"
-        handleClick={() => this.handleClick()}
-        headerData={{
-          icon: "close",
-        }}
+        handleClick={() => this.navigate('journey')}
       >
         <div className="loan-form-summary">
-          <div className="bottom-content">
+          <div className="bottom-content" style={{marginBottom: "40px"}}>
             <div className="generic-hr"></div>
             {this.state.accordianData.map(this.renderAccordian)}
           </div>

@@ -13,7 +13,7 @@ const commonMapper = {
     close_state: "/loan/idfc/home",
   },
   success: {
-    top_icon: "ils_loan_failed",
+    top_icon: "ils_loan_status",
     top_title: "Bank statement verification successful",
     button_title: "NEXT",
     icon: "close",
@@ -44,8 +44,10 @@ class PerfiosStatus extends Component {
     this.state = {
       show_loader: false,
       params: getUrlParams(),
+      screen_name: "perfios_state",
       commonMapper: {},
       perfios_state: "",
+      count: 0
     };
 
     this.initialize = initialize.bind(this);
@@ -58,21 +60,19 @@ class PerfiosStatus extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let personal_info = lead.personal_info || {};
+    let name = personal_info.first_name;
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-    
-    let bt_eligible = Object.keys(lead.bt_info || {}).length !== 0 ? true : false;
-    // let bt_eligible = this.state.params
-    //   ? this.state.params.bt_eligible
-    //   : vendor_info.bt_eligible;
 
-    // let { status, bt_eligible } = this.state.params;
+    let bt_eligible = vendor_info.bt_eligible;
 
     this.setState({
       commonMapper: commonMapper[perfios_state] || {},
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
+      name: name,
     });
   };
 
@@ -80,60 +80,88 @@ class PerfiosStatus extends Component {
     this.navigate(this.state.commonMapper.close_state);
   };
 
-  getPointSevenCallback = async () => {
-    this.setState({
-      show_loader: true,
-    });
+  // getPointSevenCallback = async () => {
+  //   this.setState({
+  //     show_loader: true,
+  //   });
 
-    await this.getOrCreate();
+  //   // setTimeout(, 3000)
+  //   let result = await this.getUserStatus();
+  //   let { count } = this.state;
+  //   let that = this;
 
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
+  //   setTimeout(function () {
+  //     if (result.idfc_07_state === "success") {
+  //       that.setState(
+  //         {
+  //           next_state: "eligible-loan",
+  //         },
+  //         () => {
+  //           that.submitApplication({}, "one", "", "eligible-loan");
+  //         }
+  //       );
+  //     } else {
+  //       if (count < 20) {
+  //         that.setState({
+  //           count: count + 1,
+  //         });
 
-    if (vendor_info.idfc_07_state === "success") {
-      this.submitApplication({}, "one");
-    } else {
-      this.getPointSevenCallback();
-    }
-  };
+  //         that.getPointSevenCallback();
+  //       } else {
+  //         that.navigate("error");
+  //       }
+  //     }
+  //   }, 3000);
+  // };
 
   handleClick = () => {
-    let { perfios_state, bt_eligible, idfc_07_state } = this.state;
+    let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
       if (!bt_eligible && idfc_07_state === "success") {
-        this.submitApplication({}, "one");
+        this.setState(
+          {
+            next_state: "eligible-loan",
+          },
+          () => {
+            this.submitApplication({}, "one", "", "eligible-loan");
+          }
+        );
       }
 
-      if (
-        bt_eligible &&
-        (idfc_07_state === "success" || idfc_07_state === "triggered")
-      ) {
+      if (!bt_eligible && idfc_07_state === "triggered") {
+        this.get07State();
+      }
+
+      if (bt_eligible && idfc_07_state === "success") {
         let body = {
           idfc_loan_status: "bt_init",
         };
         this.updateApplication(body, "bt-info");
       }
 
-      if (!bt_eligible && idfc_07_state === "triggered") {
-        this.getPointSevenCallback();
+      if (bt_eligible && idfc_07_state === "triggered") {
+        let body = {
+          idfc_loan_status: "bt_init",
+        };
+        this.updateApplication(body, "bt-info");
       }
     }
 
     if (perfios_state === "bypass") {
-      this.submitApplication({}, "one");
+      this.submitApplication({}, "one", "", "eligible-loan");
     }
 
     if (perfios_state === "failure") {
       let body = {
-        perfios_state: 'init',
+        perfios_state: "init",
       };
       this.updateApplication(body, "income-details");
     }
   };
 
   render() {
-    let { commonMapper, perfios_state, bt_eligible } = this.state;
+    let { commonMapper, perfios_state, bt_eligible, name } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -155,8 +183,8 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "success" && (
             <div className="subtitle">
-              Hey Aamir, IDFC has successfully verified your bank statements and
-              your income details have been safely updated.
+              Hey {name}, IDFC has successfully verified your bank statements
+              and your income details have been safely updated.
             </div>
           )}
           {/* <div className="subtitle">
