@@ -379,7 +379,7 @@ export async function get05Callback() {
 
         that.get05Callback();
       } else {
-        this.navigate("error");
+        that.navigate("error");
       }
     }
   }, 3000);
@@ -410,7 +410,7 @@ export async function get10Callback(next_state) {
 
       that.get10Callback(next_state);
     } else {
-      this.navigate("error");
+      that.navigate("error");
     }
   }, 3000);
 }
@@ -436,7 +436,7 @@ export async function get07State() {
 
         that.get07State();
       } else {
-        this.navigate("error");
+        that.navigate("error");
       }
     }
   }, 3000);
