@@ -271,21 +271,15 @@ class GroupHealthPlanAddressDetails extends Component {
         }
 
         for(let key in form_data){ 
-            if(key === 'addr_line1' || key ==="addr_line2" || key ==="p_addr_line1" || key === "p_addr_line2"){
-                if(validateLengthDynamic(form_data[key], 4)){
-                    form_data[key+'_error'] = "Please enter at least 4 characters";
+            if(form_data[key]){
+                if(key === 'addr_line1' || key ==="addr_line2" || key ==="p_addr_line1" || key === "p_addr_line2"){
+                    if(validateLengthDynamic(form_data[key], 4)){
+                        form_data[key+'_error'] = "Please enter at least 4 characters";
+                    }
                 }
             }
         }
 
-        for(let key in form_data){ 
-            if(key === 'addr_line1' || key ==="addr_line2" || key ==="p_addr_line1" || key === "p_addr_line2"){
-                if(!validateLengthDynamic(form_data[key], 270)){
-                    form_data[key+'_error'] = "Please enter at max 270 characters";
-                }
-            }
-        }
-        
         if(this.state.sameAddressCheck){
             for(var form_key in form_data){
                 if(form_key.includes('p_') && form_key.includes('_error')){
