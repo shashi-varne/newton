@@ -186,6 +186,23 @@ class JourneyMap extends Component {
     });
   };
 
+  sendEvents(user_action,  data = {}) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "jifkjd",
+        stage: data.stage
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   getCkycState = async () => {
     this.setState({
       show_loader: true,
@@ -223,6 +240,7 @@ class JourneyMap extends Component {
     }
 
     if (id === "basic_details") {
+      this.sendEvents("summary", {stage: "basic-details"});
       this.navigate("application-summary");
     }
 
@@ -249,21 +267,21 @@ class JourneyMap extends Component {
     }
   };
 
-  sendEvents(user_action, data = {}) {
-    let eventObj = {
-      event_name: "lending",
-      properties: {
-        user_action: user_action,
-        screen_name: "introduction",
-      },
-    };
+  // sendEvents(user_action, data = {}) {
+  //   let eventObj = {
+  //     event_name: "lending",
+  //     properties: {
+  //       user_action: user_action,
+  //       screen_name: "introduction",
+  //     },
+  //   };
 
-    if (user_action === "just_set_events") {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
+  //   if (user_action === "just_set_events") {
+  //     return eventObj;
+  //   } else {
+  //     nativeCallback({ events: eventObj });
+  //   }
+  // }
 
   render() {
     let { idfc_loan_status, index } = this.state;
