@@ -55,7 +55,7 @@ class PersonalDetails1 extends Component {
     }
 
     let provider = this.state.params.provider;
-    let current_url = window.location.origin + '/group-insurance/term/intro' + getConfig().searchParams;
+    let current_url = window.location.origin + '/group-insurance/life-insurance/term/landing' + getConfig().searchParams;
     this.setState({
       current_url: current_url,
       provider: provider,

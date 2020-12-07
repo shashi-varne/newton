@@ -63,11 +63,23 @@ class Landing extends Component {
         icon: 'ic_hospicash'
       },
       {
+        key: 'DENGUE',
+        title: 'Dengue insurance',
+        subtitle: 'Starts from ₹ 50/year',
+        icon: 'dengue_icon'
+      },
+      {
         key: 'SMART_WALLET',
         title: 'Smart Wallet(fraud protection)',
         subtitle: 'Starts from ₹250/year',
         icon: 'ic_wallet'
-      }
+      },
+      {
+        key: 'HOME_INSURANCE',
+        title: 'Home insurance',
+        subtitle: 'Secure your home and interiors',
+        icon: 'home_insurance_icon'
+      },
     ];
 
     if (this.state.partner_code === 'hbl') {
