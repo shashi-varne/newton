@@ -204,6 +204,7 @@ class JourneyMap extends Component {
   };
 
   handleClick = (id) => {
+    this.sendEvents('next');
     let { ckyc_state, pefios_state, idfc_loan_status } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
@@ -240,10 +241,10 @@ class JourneyMap extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "introduction",
+        screen_name: "journey_map",
       },
     };
 
@@ -258,6 +259,7 @@ class JourneyMap extends Component {
     let { idfc_loan_status, index } = this.state;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         noFooter={true}
         headerData={{

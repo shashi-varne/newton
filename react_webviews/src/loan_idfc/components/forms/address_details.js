@@ -101,7 +101,7 @@ class AddressDetails extends Component {
       event_name: "lending",
       properties: {
         user_action: user_action,
-        screen_name: "address",
+        screen_name: "kyc_address_details",
       },
     };
 
@@ -126,6 +126,7 @@ class AddressDetails extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data, loaderData } = this.state;
     let keys_to_check = [
       "current_address1",
@@ -225,6 +226,7 @@ class AddressDetails extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title={`${this.state.confirm_details ? 'Confirm your' : 'Provide'} address details`}
         buttonTitle={this.state.confirm_details ? 'CONFIRM & SUBMIT' : 'SUBMIT'}

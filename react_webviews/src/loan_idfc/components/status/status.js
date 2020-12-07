@@ -77,7 +77,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
-  salary: {
+  Salary: {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",

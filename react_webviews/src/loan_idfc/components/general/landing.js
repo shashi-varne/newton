@@ -41,6 +41,7 @@ class Landing extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     let params = {
       create_new:
         this.state.application_exists && this.state.otp_verified ? false : true,
@@ -73,7 +74,7 @@ class Landing extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "introduction",
@@ -88,7 +89,7 @@ class Landing extends Component {
   }
 
   openFaqs = () => {
-    this.sendEvents('next', { things_to_know: 'faq' })
+    this.sendEvents('faq')
     let renderData = {
       'header_title': this.state.screenData.faqsInfo.header_title,
       'header_subtitle': '',
@@ -110,6 +111,7 @@ class Landing extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Personal loan"
         buttonTitle={this.state.cta_title}
@@ -119,12 +121,13 @@ class Landing extends Component {
           <div
             className="infoimage-block1"
             onClick={() =>
-              this.navigate("know-more", {
+              {this.sendEvents('know-more'); 
+                this.navigate("know-more", {
                 params: {
                   next_state: this.state.next_state,
                   cta_title: this.state.cta_title,
                 },
-              })
+              })}
             }
           >
             <img
@@ -169,12 +172,13 @@ class Landing extends Component {
             <div
               className="Flex calculator"
               onClick={() =>
+                {this.sendEvents('eligibility_calculator'); 
                 this.navigate("calculator", {
                   params: {
                     next_state: this.state.next_state,
                     cta_title: this.state.cta_title,
                   },
-                })
+                })}
               }
             >
               <div className="title">EMI calculator</div>
@@ -193,7 +197,7 @@ class Landing extends Component {
             <div className="generic-hr"></div>
             <div
               className="Flex faq"
-              onClick={() => this.openFaqs()}
+              onClick={() => this.openFaqs() }
             >
               <div>
                 <img

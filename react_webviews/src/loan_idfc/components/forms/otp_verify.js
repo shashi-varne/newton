@@ -59,10 +59,10 @@ class OtpVerification extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "otp",
+        screen_name: "otp_screen",
       },
     };
 
@@ -195,6 +195,7 @@ class OtpVerification extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Otp verification"
         buttonTitle="VERIFY & PROCEED"

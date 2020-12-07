@@ -38,6 +38,7 @@ class Calculator extends Component {
   onload = async () => {};
 
   handleClick = () => {
+    this.sendEvents('next');
     let params = {
       create_new:
         this.state.application_exists && this.state.otp_verified ? false : true,
@@ -70,10 +71,10 @@ class Calculator extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "know_more",
+        screen_name: "eligibility_calculator",
       },
     };
 
@@ -108,6 +109,7 @@ class Calculator extends Component {
 
       return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="EMI calculator"
         buttonTitle={this.state.cta_title}
