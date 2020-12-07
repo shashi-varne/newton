@@ -1,0 +1,159 @@
+
+@mixin iwd-animatedDelay($n, $delay) {
+  @for $i from 1 through $n {
+    .iwd-animated:nth-child(#{$i}) {
+      animation-delay: #{$i * $delay}s;
+    }
+  }
+}
+.circularExpand {
+  transition: clip-path 0.8s ease-in-out;
+}
+
+.iwd-bg-fixed {
+  position: fixed;
+  width: 100%;
+}
+
+.expand {
+  clip-path: circle(100%);
+}
+.shrink {
+  clip-path: circle(0% at bottom 100px left 120px);
+}
+
+.circularExpand-enter {
+  clip-path: circle(0% at bottom 100px left 120px);
+}
+.circularExpand-enter-active {
+  clip-path: circle(100%);
+  transition: clip-path 0.8s ease-in-out 0.1s;
+}
+.circularExpand-exit {
+  clip-path: circle(100%);
+}
+.circularExpand-exit-active {
+  clip-path: circle(0% at bottom 100px left 120px);
+  transition: clip-path 0.8s ease-in-out 0.1s;
+}
+
+.iwd-animatedFade,
+.iwd-animatedFadeChildrenIwd * {
+  @extend .iwd-animated, .iwd-animatedFadeInUp, .iwd-fadeInUp;
+}
+
+.iwd-animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-delay: 0.2s;
+  -webkit-animation-fill-mode: both;
+}
+
+.iwd-animatedFadeInUp {
+  opacity: 0;
+}
+
+.iwd-fadeInUp {
+  opacity: 0;
+  animation-name: iwd-fadeInUp;
+  -webkit-animation-name: iwd-fadeInUp;
+}
+
+@keyframes iwd-fadeInUp {
+  from {
+    transform: translate3d(0, 20px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes iwd-fadeInUp {
+  from {
+    transform: translate3d(0, 20px, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+.iwd-fade {
+  animation: iwd-fade 0.6s ease-in-out;
+  animation-name: iwd-fade;
+  -webkit-animation-name: iwd-fade;
+}
+
+@keyframes iwd-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes iwd-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.iwd-fadeFromLeft {
+  animation: iwd-fadeFromLeft 0.6s ease-out;
+  // cubic-bezier(0.29, 0.83, 0.51, 0.97)
+  animation-name: iwd-fadeFromLeft;
+  -webkit-animation-name: iwd-fadeFromLeft;
+}
+
+@keyframes iwd-fadeFromLeft{
+  from {
+    opacity: 0;
+    left: -80px;
+  }
+  to {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+@-webkit-keyframes iwd-fadeFromLeft{
+  from {
+    opacity: 0;
+    left: -80px;
+  }
+  to {
+    opacity: 1;
+    left: 0;
+  }
+}
+
+.example-appear, .example-enter {
+  @extend .iwd-animatedFade;
+}
+
+.example-appear-active, .example-enter-active {
+  animation-name: iwd-fadeInUp;
+  -webkit-animation-name: iwd-fadeInUp;
+}
+
+.example-exit {
+  opacity: 0;
+}
+
+.example-exit-active {
+  animation-name: iwd-fadeInUp;
+  animation-direction: reverse;
+}
+
+// .iwd-card-animate-leave {
+//   @extend .animatedFadeReverse;
+
+// }

@@ -6,91 +6,8 @@ $card-border-radius: 8px;
 $card-padding: 50px;
 $card-padding-mobile: 40px;
 $background: #f9f9f9;
-
-@mixin animatedDelay($n, $delay) {
-  @for $i from 1 through $n {
-    .animated:nth-child(#{$i}) {
-      animation-delay: #{$i * $delay}s;
-    }
-  }
-}
-.circularExpand {
-  transition: clip-path 0.8s ease-in-out;
-}
-
-.iwd-bg-fixed {
-  position: fixed;
-  width: 100%;
-}
-
-.expand {
-  clip-path: circle(100%);
-}
-.shrink {
-  clip-path: circle(0% at bottom 100px left 120px);
-}
-
-.animatedFade,
-.animatedFadeChildren * {
-  @extend .animated, .animatedFadeInUp, .fadeInUp;
-}
-
-.animated {
-  animation-duration: 1s;
-  animation-fill-mode: both;
-  -webkit-animation-duration: 1s;
-  animation-delay: 1s;
-  -webkit-animation-fill-mode: both;
-}
-
-.animatedFadeInUp {
-  opacity: 0;
-}
-
-.fadeInUp {
-  opacity: 0;
-  animation-name: fadeInUp;
-  -webkit-animation-name: fadeInUp;
-}
-
-@keyframes fadeInUp {
-  from {
-    transform: translate3d(0, 40px, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes fadeInUp {
-  from {
-    transform: translate3d(0, 40px, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
-.fade {
-  animation: fade 0.6s ease-in-out;
-  animation-name: fade;
-  -webkit-animation-name: fade;
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@include animatedDelay(10, 0.6);
+@import '../animate.scss';
+@include iwd-animatedDelay(10, 0.6);
 
 .iwd-text-field {
   font-family: 'Poppins', 'Roboto', sans-serif !important;
@@ -111,7 +28,7 @@ $background: #f9f9f9;
 
 #iwd-login {
   *:not(.MuiCircularProgress-root):not(.MuiCircularProgress-circle):not(.MuiTouchRipple-root):not(.MuiTouchRipple-ripple) {
-    @extend .fade;
+    @extend .iwd-fade;
   }
 
   display: flex;
@@ -174,7 +91,7 @@ $background: #f9f9f9;
     padding: 5% 9%;
     box-sizing: border-box;
 
-    @include animatedDelay(10, 0.3);
+    @include iwd-animatedDelay(10, 0.3);
 
     #iwd-ll-login-container {
       width: 100%;

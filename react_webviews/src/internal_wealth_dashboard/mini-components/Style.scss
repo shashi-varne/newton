@@ -5,6 +5,7 @@ $primary: rgb(79, 45, 167);
 $light-green: rgb(154, 211, 204); //9AD3CC
 $card-padding-mob: 40px;
 $card-padding: 50px;
+@import '../animate.scss';
 
 .iwd-cursor__pointer {
   cursor: pointer;
@@ -102,6 +103,7 @@ $card-padding: 50px;
 }
 
 #iwd-help {
+  transition: clip-path 0.8s ease-in-out;
   font-family: 'Poppins', 'Roboto', sans-serif !important;
   position: absolute;
   width: 100%;
@@ -349,6 +351,10 @@ $card-padding: 50px;
   }
 }
 
+#iwd-nav {
+  @extend .iwd-fadeFromLeft;
+}
+
 #iwd-nav:hover {
   .iwd-nav-item {
     .iwd-ni-label {
@@ -509,6 +515,8 @@ $card-padding: 50px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  @extend .iwd-animatedFade;
+  animation-delay: 0.4s;
 
   #iwd-ph-left {
     // float: left;
