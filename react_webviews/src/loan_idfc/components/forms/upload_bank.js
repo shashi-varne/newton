@@ -154,6 +154,7 @@ class UploadBank extends Component {
   
 
   native_call_handler(method_name, doc_type) {
+    console.log(doc_type)
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
@@ -307,12 +308,8 @@ class UploadBank extends Component {
           confirmed: true,
           documents: documents,
         });
-        console.log(result.document_id);
-        console.log(documents[index].document_id);
       }
 
-      //   toast(result.error || result.message || "Something went wrong!");
-      // }
     } catch (err) {
       console.log(err);
       this.setState({
@@ -568,7 +565,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("open_file", 'perfios_bank_statement'+count)}
+                onClick={() => this.startUpload("open_file", 'bank_statement'+count)}
               >
                 <span className="plus-sign">
                   <input

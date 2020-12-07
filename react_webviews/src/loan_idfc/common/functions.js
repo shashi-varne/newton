@@ -503,9 +503,7 @@ export async function submitApplication(
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
-    this.setState({
-      show_loader: false,
-    });
+
   } catch (err) {
     console.log(err);
     this.setState({
@@ -514,9 +512,9 @@ export async function submitApplication(
     toast("Something went wrong");
   }
 
-  // this.setState({
-  //   show_loader: false,
-  // });
+  this.setState({
+    show_loader: false,
+  });
 }
 
 export function openInBrowser(url) {

@@ -103,7 +103,7 @@ class ProfessionalDetails extends Component {
     ];
 
     if (employment_type === "self_employed") {
-      keys_to_check.push("business_name");
+      keys_to_check.push("company_name");
     } else {
       keys_to_check.push(...salaried);
     }
@@ -150,7 +150,7 @@ class ProfessionalDetails extends Component {
                   error={this.state.form_data.company_name_error ? true : false}
                   helperText={this.state.form_data.company_name_error}
                   value={this.state.form_data.company_name || ""}
-                  onChange={this.handleChange("business_name")}
+                  onChange={this.handleChange("company_name")}
                 />
               </div>
             )}
