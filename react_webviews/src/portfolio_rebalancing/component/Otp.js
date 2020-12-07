@@ -13,6 +13,7 @@ const Otp = (props) => {
   const [trx, settrx] = useState('');
   const [resend, setResend] = useState('');
   const [timeAvailable, setTimeAvailable] = useState(30);
+  // eslint-disable-next-line no-unused-vars
   const [totalTime, setTotalTime] = useState(30);
   const [mobile, setMobile] = useState(storageService().getObject('mobile') || '');
   const [disable, setDisable] = useState(false);

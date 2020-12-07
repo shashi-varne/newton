@@ -24,10 +24,13 @@ import './Style.scss';
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [popupText, setPopupText] = useState('');
+  // eslint-disable-next-line no-unused-vars
   const [loaderMain, setLoaderMain] = useState(
     getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
   );
+  // eslint-disable-next-line no-unused-vars
   const [inPageTitle, setInPageTitle] = useState(true);
   const x = React.useRef(true);
 
