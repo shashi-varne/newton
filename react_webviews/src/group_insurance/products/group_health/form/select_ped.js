@@ -236,7 +236,7 @@ class GroupHealthPlanSelectPed extends Component {
             return;
         } else {
   
-            let next_state = '';
+            let next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
             for (var i =0; i < member_base.length; i++) {
                 if(member_base[i].key === this.state.member_key && i !== member_base.length -1) {
                     for (var k =i+1; k < member_base.length; k++) {
