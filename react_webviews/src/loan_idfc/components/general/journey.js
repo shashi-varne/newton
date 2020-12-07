@@ -113,7 +113,7 @@ class JourneyMap extends Component {
 
     let idfc_loan_status = vendor_info.idfc_loan_status || "";
     let ckyc_state = vendor_info.ckyc_state || "";
-    let pefios_state = vendor_info.pefios_state || "";
+    let perfios_state = vendor_info.perfios_state || "";
 
     let index = (idfc_loan_status && journeyMapper2[idfc_loan_status].index) || "0";
 
@@ -181,7 +181,7 @@ class JourneyMap extends Component {
       journeyData: journeyData,
       ckyc_state: ckyc_state,
       idfc_loan_status: idfc_loan_status,
-      pefios_state: pefios_state,
+      perfios_state: perfios_state,
       index: index,
     });
   };
@@ -223,9 +223,16 @@ class JourneyMap extends Component {
   };
 
   handleClick = (id) => {
-    let { ckyc_state, pefios_state, idfc_loan_status, index } = this.state;
+    let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
+    // ---step-1
+    if (id === "basic_details") {
+      this.sendEvents("summary", {stage: "basic-details"});
+      this.navigate("application-summary");
+    }
+
+    // ---step-2
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
         this.getCkycState();
@@ -239,21 +246,16 @@ class JourneyMap extends Component {
       }
     }
 
-    if (id === "basic_details") {
-      this.sendEvents("summary", {stage: "basic-details"});
-      this.navigate("application-summary");
-    }
-
+    // ---step-3
     if (id === "income_details") {
 
       if (idfc_loan_status === "idfc_0.5_accepted") {
         this.get05Callback();
 
       } else {
-        if (idfc_loan_status === "perfios" && pefios_state !== "init") {
+        if (idfc_loan_status === "perfios" && (perfios_state !== "failure" && perfios_state !== "init")) {
           next_state = "perfios-status"
         }
-
         this.navigate(next_state);
       }
     }
@@ -266,22 +268,6 @@ class JourneyMap extends Component {
       this.navigate('reports')
     }
   };
-
-  // sendEvents(user_action, data = {}) {
-  //   let eventObj = {
-  //     event_name: "lending",
-  //     properties: {
-  //       user_action: user_action,
-  //       screen_name: "introduction",
-  //     },
-  //   };
-
-  //   if (user_action === "just_set_events") {
-  //     return eventObj;
-  //   } else {
-  //     nativeCallback({ events: eventObj });
-  //   }
-  // }
 
   render() {
     let { idfc_loan_status, index } = this.state;

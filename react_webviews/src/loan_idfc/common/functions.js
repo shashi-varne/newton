@@ -98,8 +98,15 @@ export async function getInstitutionList() {
 
     if (status === 200) {
       let banklist = result.data;
+      let bankOptions = [];
 
-      let bankOptions = banklist.map((item) => item.institution_name);
+      if (this.state.screen_name === "bank_upload") {
+        bankOptions = banklist.map((item) => {
+          return { name: item.institution_name, value: item.institution_id };
+        });
+      } else {
+        bankOptions = banklist.map((item) => item.institution_name);
+      }
 
       this.setState({
         bankOptions: bankOptions,
@@ -226,7 +233,8 @@ export async function getOrCreate(params) {
 
       if (
         this.state.screen_name === "loan_bt" ||
-        this.state.screen_name === "credit_bt"
+        this.state.screen_name === "credit_bt" ||
+        this.state.screen_name === "bank_upload"
       ) {
         this.getInstitutionList();
       }
@@ -343,6 +351,9 @@ export async function updateApplication(params, next_state = "") {
       }
     } else {
       if (typeof result.error === "string") {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error || result.message || "Something went wrong!");
       } else {
         toast(result.error[0] || result.message || "Something went wrong!");
@@ -350,12 +361,11 @@ export async function updateApplication(params, next_state = "") {
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
-
-  // this.setState({
-  //   show_loader: false,
-  // });
 }
 
 export async function get05Callback() {
@@ -501,7 +511,6 @@ export async function submitApplication(
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
-
   } catch (err) {
     console.log(err);
     this.setState({
@@ -510,9 +519,9 @@ export async function submitApplication(
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  });
+  // this.setState({
+  //   show_loader: false,
+  // });
 }
 
 export function openInBrowser(url) {
@@ -590,7 +599,12 @@ export async function formCheckUpdate(
     mailing_address_preference: "mailing address preference",
   };
 
-  let selectTypeInput = ["educational_qualification"];
+  let selectTypeInput = [
+    "educational_qualification",
+    "gender",
+    "marital_status",
+    "religion",
+  ];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];

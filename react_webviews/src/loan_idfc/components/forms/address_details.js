@@ -4,9 +4,9 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-// import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
+import scrollIntoView from 'scroll-into-view-if-needed';
 import Api from "utils/api";
 
 const yesOrNo_options = [
@@ -31,6 +31,7 @@ class AddressDetails extends Component {
     };
 
     this.initialize = initialize.bind(this);
+    this.addressRef = React.createRef();
   }
 
   componentWillMount() {
@@ -124,6 +125,22 @@ class AddressDetails extends Component {
       form_data: form_data,
     });
   };
+
+  handleScroll = (value) => {
+    setTimeout(function () {
+        let element = document.getElementById('addressScroll');
+        if (!element || element === null) {
+            return;
+        }
+
+        scrollIntoView(element, {
+            block: 'start',
+            inline: 'nearest',
+            behavior: 'smooth'
+        })
+
+    }, 50);
+}
 
   handleClick = () => {
     let { form_data, loaderData } = this.state;
@@ -231,6 +248,10 @@ class AddressDetails extends Component {
     this.setState({
       isPermanent_address: isPermanent_address,
       form_data: form_data,
+    }, () => {
+      if (isPermanent_address === "Yes") {
+        this.handleScroll();
+      }
     });
   };
 
@@ -462,7 +483,7 @@ class AddressDetails extends Component {
                 />
               </div>
 
-              <div className="InputField">
+              <div id="addressScroll" ref={this.addressRef} className="InputField">
                 <Input
                   error={!!this.state.form_data.permanent_state_error}
                   helperText={this.state.form_data.permanent_state_error}

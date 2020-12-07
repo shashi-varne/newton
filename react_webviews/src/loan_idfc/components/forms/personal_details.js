@@ -7,13 +7,7 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import {
-  // dobFormatTest,
-  // isValidDate,
-  // formatDate,
-  capitalizeFirstLetter,
-  timeStampToDate
-} from "utils/validators";
+import { capitalizeFirstLetter, timeStampToDate } from "utils/validators";
 
 const gender_options = [
   {
@@ -31,11 +25,11 @@ const gender_options = [
 ];
 
 const genderMapper = {
-  "M": "Male",
-  "F": "Female",
-  "Male": "Male",
-  "Female": "Female"
-}
+  M: "Male",
+  F: "Female",
+  Male: "Male",
+  Female: "Female",
+};
 
 class PersonalDetails extends Component {
   constructor(props) {
@@ -154,6 +148,7 @@ class PersonalDetails extends Component {
     let { form_data } = this.state;
 
     form_data.gender = gender_options[event].value;
+    form_data.gender_error = "";
 
     this.setState({
       form_data: form_data,

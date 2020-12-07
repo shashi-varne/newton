@@ -5,6 +5,7 @@ let productName = capitalizeFirstLetter(getConfig().productName);
 export function goBackMap(path) {
     let mapper = {
       '/loan/idfc/journey': '/loan/idfc/home',
+      '/loan/idfc/edit-number': '/loan/idfc/home',
       '/loan/idfc/application-summary': '/loan/idfc/journey',
       '/loan/idfc/personal-details': '/loan/idfc/home',
       '/loan/idfc/basic-details': '/loan/idfc/home',

@@ -35,6 +35,8 @@ class OtpVerification extends Component {
       params = {};
     }
 
+    console.log(params)
+
     if (!params || !params.resend_otp_url || !params.verify_otp_url) {
       this.props.history.goBack();
       return;
@@ -50,8 +52,8 @@ class OtpVerification extends Component {
       resend_otp_url: params.resend_otp_url || "",
       verify_otp_url: params.verify_otp_url || "",
       next_state: params.next_state || "",
-    }, () => {
-      this.initialize();
+    // }, () => {
+    //   this.initialize();
     });
   }
 
