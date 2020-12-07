@@ -333,6 +333,7 @@ const Insurance = (props) => {
 
            {/********** Life Insurance **********/}
            <Route path={`${url}/life-insurance/entry`} component={LifeInsuranceEntry} />
+           <Route path={`${url}/life-insurance/term/personal-details-redirect`} component={PersonalDetailsRedirect} />
            <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
            <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />      
            <Route path={`${url}/life-insurance/resume-intermediate`} component={ResumeIntermediatePage}/>   
