@@ -11,7 +11,6 @@ import {
   getEditTitle,
   IsFutureDate,
 } from "utils/validators";
-import { param } from "jquery";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -25,7 +24,6 @@ export async function initialize() {
   this.getUserStatus = getUserStatus.bind(this);
   this.startTransaction = startTransaction.bind(this);
   this.netBanking = netBanking.bind(this);
-  this.net1 = net1.bind(this);
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
@@ -643,38 +641,6 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-  let plutusRedirectUrl = encodeURIComponent(
-    window.location.origin +
-      `/loan/idfc/perfios-status` +
-      getConfig().searchParams
-  );
-
-  var payment_link = url;
-  var pgLink = payment_link;
-  let app = getConfig().app;
-  let back_url = plutusRedirectUrl;
-
-  //eslint-disable-next-line
-  pgLink +=
-    (pgLink.match(/[\?]/g) ? "&" : "?") +
-    "plutus_redirect_url=" +
-    plutusRedirectUrl +
-    "&app=" +
-    app +
-    "&back_url=" +
-    back_url;
-
-  if (getConfig().generic_callback) {
-    pgLink += "&generic_callback=" + getConfig().generic_callback;
-  }
-
-  this.openInTabApp({
-    url: pgLink,
-    back_url: back_url,
-  });
-}
-
-export async function net1(url) {
   let plutus_redirect_url = encodeURIComponent(
     window.location.origin +
       `/loan/idfc/perfios-status` +
@@ -687,58 +653,6 @@ export async function net1(url) {
     (pgLink.match(/[\?]/g) ? "&" : "?") +
     "plutus_redirect_url=" +
     plutus_redirect_url;
-  window.location.href = pgLink;
-}
-
-export async function net(url) {
-  let plutus_redirect_url = encodeURIComponent(
-    window.location.origin +
-      `/loan/idfc/perfios-status` +
-      getConfig().searchParams
-  );
-
-  var pgLink = url;
-  let app = getConfig().app;
-  // eslint-disable-next-line
-  pgLink +=
-    (pgLink.match(/[\?]/g) ? "&" : "?") +
-    "plutus_redirect_url=" +
-    plutus_redirect_url +
-    "&app=" +
-    app +
-    "&back_url=" +
-    plutus_redirect_url;
-
-  if (getConfig().generic_callback) {
-    pgLink += "&generic_callback=" + getConfig().generic_callback;
-  }
-
-  if (getConfig().app === "ios") {
-    nativeCallback({
-      action: "show_top_bar",
-      message: {
-        title: "Payment",
-      },
-    });
-  }
-  if (!getConfig().redirect_url) {
-    nativeCallback({
-      action: "take_control",
-      message: {
-        back_url: plutus_redirect_url,
-        back_text: "Are you sure you want to exit the payment process?",
-      },
-    });
-  } else {
-    nativeCallback({
-      action: "take_control",
-      message: {
-        back_url: plutus_redirect_url,
-        back_text: "",
-      },
-    });
-  }
-
   window.location.href = pgLink;
 }
 
@@ -760,7 +674,7 @@ export async function startTransaction(transaction_type) {
       }
 
       if (transaction_type === "netbanking") {
-        this.net1(result.netbanking_url || "");
+        this.netBanking(result.netbanking_url || "");
       }
     } else {
       // toast(result.error || result.message || "Something went wrong!");
