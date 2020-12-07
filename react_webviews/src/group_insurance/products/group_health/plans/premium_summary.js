@@ -30,6 +30,7 @@ class GroupHealthPlanPremiumSummary extends Component {
   }
 
   componentWillMount() {
+    storageService().remove("health_insurance_application_id");
     this.initialize();
   }
 
@@ -120,28 +121,29 @@ class GroupHealthPlanPremiumSummary extends Component {
       properties.total_amount = lead.total_premium;
     } else {
       var final_add_ons_data = []
-      
-      for(var addOn in post_body.add_ons){
-        if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
-          let temp = {
-            title: this.state.providerConfig.add_on_title[addOn],
-            price: post_body.add_ons[addOn]
-          }
-          final_add_ons_data.push(temp);
-        }   
-     }
-
-      properties.add_ons = final_add_ons_data || [];
-      properties.type_of_plan = groupHealthPlanDataProp.type_of_plan === 'floater' ? "WF" : "NF"; 
-      properties.sum_assured = groupHealthPlanDataProp.sum_assured; 
-      properties.total_members = groupHealthPlanDataProp.post_body.adults + groupHealthPlanDataProp.post_body.children; 
-      properties.members = groupHealthPlanDataProp.final_dob_data; 
-      properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
-      properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium;
-      properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount || 0; 
-      properties.net_premium = groupHealthPlanDataProp.plan_selected_final.premium;
-      properties.gst_tax = groupHealthPlanDataProp.post_body.gst || 0; 
-      properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
+      if(post_body){
+        for(var addOn in post_body.add_ons){
+          if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
+            let temp = {
+              title: this.state.providerConfig.add_on_title[addOn],
+              price: post_body.add_ons[addOn]
+            }
+            final_add_ons_data.push(temp);
+          } 
+       }
+  
+        properties.add_ons = final_add_ons_data || [];
+        properties.type_of_plan = groupHealthPlanDataProp.type_of_plan === 'floater' ? "WF" : "NF";
+        properties.sum_assured = groupHealthPlanDataProp.sum_assured;
+        properties.total_members = groupHealthPlanDataProp.post_body.adults + groupHealthPlanDataProp.post_body.children;
+        properties.members = groupHealthPlanDataProp.final_dob_data;
+        properties.tenure = groupHealthPlanDataProp.plan_selected_final.tenure;
+        properties.base_premium = groupHealthPlanDataProp.plan_selected_final.base_premium;
+        properties.discount_amount = groupHealthPlanDataProp.plan_selected_final.total_discount || 0;
+        properties.net_premium = groupHealthPlanDataProp.plan_selected_final.premium;
+        properties.gst_tax = groupHealthPlanDataProp.post_body.gst || 0;
+        properties.total_amount = groupHealthPlanDataProp.plan_selected_final.total_amount;
+      }
     }
 
     properties.total_discount = properties.discount_amount;
@@ -185,7 +187,6 @@ class GroupHealthPlanPremiumSummary extends Component {
   handleClick = async () => {
     this.sendEvents("next");
 
-    storageService().remove("resumeToPremiumHealthInsurance",false);
       try {
         this.setState({
           show_loader: true,

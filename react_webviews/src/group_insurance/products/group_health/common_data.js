@@ -77,9 +77,10 @@ export async function initialize() {
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
             let resume = storageService().getObject("resumeToPremiumHealthInsurance");
+            let application_id = storageService().get('health_insurance_application_id');
             let url;
   
-            if (resume) {
+            if (resume && !application_id) {
                 url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
 
@@ -103,11 +104,8 @@ export async function initialize() {
                 this.setState({
                     show_loader: false
                 });
-            } else {
-
-                let application_id = storageService().get('health_insurance_application_id');
-        
-                  url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
+            } else if(application_id) {
+                url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
    
                 if (this.state.screen_name === 'final_summary_screen') {
                     url += `&form_submitted=true`;
