@@ -6,7 +6,7 @@ import JourneySteps from "../../../common/ui/JourneySteps";
 
 const journeyMapper2 = {
   basic_details_uploaded: {
-    index: "0",
+    index: "1",
   },
   ckyc: {
     index: "1",
@@ -18,6 +18,10 @@ const journeyMapper2 = {
     index: "1",
   },
   idfc_null_accepted: {
+    index: "2",
+    next_state: "loan-requirement-details"
+  },
+  "idfc_0.5_failed": {
     index: "2",
     next_state: "loan-requirement-details"
   },
@@ -37,9 +41,13 @@ const journeyMapper2 = {
     index: "2",
     next_state: "bt-info"
   },
+  bt_processing: {
+    index: "2",
+    next_state: "bt-info"
+  },
   bt_bypass: {
     index: "2",
-    next_state: "eligible-loan"
+    next_state: "bt-info"
   },
   // bt_processing: {
   //   index: "2",
@@ -53,24 +61,16 @@ const journeyMapper2 = {
     index: "2",
     next_state: "eligible-loan"
   },
-  "idfc_1.1_submitted": {
-    index: "2",
-    next_state: "loan-requirement-details"
-  },
+  // "idfc_1.1_submitted": {
+  //   index: "2",
+  //   next_state: "loan-requirement-details"
+  // },
   "idfc_1.1_accepted": {
     index: "2",
     next_state: "loan-eligible"
   },
-  "idfc_1.1_submitted": {
-    index: "2",
-    next_state: "loan-requirement-details"
-  },
-  "idfc_1.1_accepted": {
-    index: "2",
-    next_state: "loan-requirement-details"
-  },
-  // "offer_accepted": {
-  "idfc_1.1_failed": {
+  "offer_accepted": {
+  // "idfc_1.1_failed": {
     index: "3",
     next_state: "additional-details"
   },
@@ -80,8 +80,8 @@ const journeyMapper2 = {
   "idfc_1.7_accepted": {
     index: "3",
   },
-  docs_uploaded: {
-    index: "3",
+  doc_uploaded: {
+    index: "4",
   },
   idfc_4_submitted: {
     index: "3",
@@ -97,6 +97,7 @@ class JourneyMap extends Component {
     this.state = {
       show_loader: false,
       screen_name: "journey_screen",
+      count: 0
     };
 
     this.initialize = initialize.bind(this);
@@ -146,7 +147,7 @@ class JourneyMap extends Component {
             "Enter your loan requirements and income details to get the best loan offer.",
           status: index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
-          cta: idfc_loan_status === "offer_accepted" ? 'START' : index === "2" ? "RESUME" : index > "2" && "SUMMARY"
+          cta: idfc_loan_status === "idfc_null_accepted" ? 'START' : index === "2" ? "RESUME" : index > "2" && "SUMMARY"
         },
         {
           step: "4",
@@ -156,7 +157,7 @@ class JourneyMap extends Component {
             "Provide your office address and upload documents to get your loan sanctioned.",
           status: index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",
-          cta: idfc_loan_status === "idfc_1.1_failed" ? 'START' : index === "3" ? "RESUME" : index > "3" && "SUMMARY"
+          cta: idfc_loan_status === "offer_accepted" ? 'START' : index === "3" ? "RESUME" : index > "3" && "SUMMARY"
         },
         {
           step: "5",
@@ -170,6 +171,7 @@ class JourneyMap extends Component {
               : index < "4"
               ? "pending"
               : "completed",
+          cta: idfc_loan_status === "doc_uploaded" && "CHECK",
           id: "sanction_and_disbursal",
         },
       ],
@@ -204,17 +206,19 @@ class JourneyMap extends Component {
   };
 
   handleClick = (id) => {
-    this.sendEvents('next');
-    let { ckyc_state, pefios_state, idfc_loan_status } = this.state;
+    let { ckyc_state, pefios_state, idfc_loan_status, index } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
+        this.sendEvents('next');
         this.getCkycState();
       }
-      if (idfc_loan_status === "idfc_null_accepted") {
+      if (index > "1") {
+        this.sendEvents('summary');
         this.navigate("ckyc-summary");
       } else {
+        this.sendEvents('next');
         this.updateApplication({
           idfc_loan_status: "ckyc",
         });
@@ -222,21 +226,31 @@ class JourneyMap extends Component {
     }
 
     if (id === "basic_details") {
+      this.sendEvents('summary');
       this.navigate("application-summary");
     }
 
     if (id === "income_details") {
-      
-      if (journeyMapper2[idfc_loan_status] === "perfios" && pefios_state === "success") {
-        next_state = "perfios-status"
+      this.sendEvents('next');
+      if (idfc_loan_status === "idfc_0.5_accepted") {
+        this.get05Callback();
+
+      } else {
+        if (idfc_loan_status === "perfios" && pefios_state !== "init") {
+          next_state = "perfios-status"
+        }
+
+        this.navigate(next_state);
       }
-      
-      this.navigate(next_state);
     }
 
     if (id === "document_upload") {
       this.navigate(next_state);
     }  
+
+    if (id === "sanction_and_disbursal") {
+      this.navigate('reports')
+    }
   };
 
   sendEvents(user_action, data = {}) {
@@ -245,6 +259,7 @@ class JourneyMap extends Component {
       properties: {
         user_action: user_action,
         screen_name: "journey_map",
+        stage: this.state.idfc_loan_status,
       },
     };
 

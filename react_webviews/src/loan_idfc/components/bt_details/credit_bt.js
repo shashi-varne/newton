@@ -7,16 +7,19 @@ import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import { formatMonthandYear, dobFormatTest } from "utils/validators";
+import toast from "../../../common/ui/Toast";
 
 class LoanBtDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "loan_bt",
+      screen_name: "credit_bt",
       form_data: [],
       credit_bt: [],
-      bankOptions: []
+      bankOptions: [],
+      form_checked: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -26,27 +29,26 @@ class LoanBtDetails extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: 'Income and loan offer',
+      title: "Income and loan offer",
       steps: [
         {
-          'title': 'Income details',
-          'status': 'completed'
+          title: "Income details",
+          status: "completed",
         },
         {
-          'title': 'BT transfer details',
-          'status': 'init'
+          title: "BT transfer details",
+          status: "init",
         },
         {
-          'title': 'Loan offer',
-          'status': 'pending'
-        }
-      ]
-    }
+          title: "Loan offer",
+          status: "pending",
+        },
+      ],
+    };
 
     this.setState({
-      progressHeaderData: progressHeaderData
-    })
-
+      progressHeaderData: progressHeaderData,
+    });
   }
 
   onload = () => {
@@ -64,20 +66,21 @@ class LoanBtDetails extends Component {
 
     credit_bt.forEach(() => {
       this.state.form_data.push({});
-    })
+    });
 
     this.setState({
       credit_bt: credit_bt,
     });
-
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "address",
+        screen_name: "credit_card_details", 
+        no_of_cards_entered: data.no_of_cards_entered,
+        skipped_screen: data.no_of_cards_entered !==0 ? "no" : "yes",
       },
     };
 
@@ -92,7 +95,26 @@ class LoanBtDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    form_data[index][name] = value;
+    if (
+      name === "creditCardNumber" &&
+      (form_data[index][name] || "").length >= 4
+    ) {
+      return;
+    }
+
+    if (name === "creditCardExpiryDate") {
+      if (!dobFormatTest(value)) {
+        return;
+      }
+
+      let input = document.getElementById(`card-expiry-${index + 1}`);
+      input.onkeyup = formatMonthandYear;
+
+      form_data[index][name] = value;
+    } else {
+      form_data[index][name] = value;
+    }
+
     // form_data[index][name + "_error"] = "";
 
     this.setState({
@@ -102,6 +124,7 @@ class LoanBtDetails extends Component {
 
   handleCheckbox = (checked, index, id) => {
     let { form_data } = this.state;
+
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
     this.setState({
@@ -110,20 +133,42 @@ class LoanBtDetails extends Component {
   };
 
   handleClick = () => {
-    this.updateApplication({
-      "bt_selection": this.state.form_data.filter(data => data.is_selected)
-    })
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
+
+    if (form_checked.length > 3) {
+      toast("more than 3 bt are not allowed");
+      return;
+    }
+
+    this.sendEvents('next', {no_of_cards_entered: form_checked.length, });
+    this.submitApplication(
+      {
+        bt_selection: form_checked,
+      },
+      "one",
+      true,
+      "eligible-loan"
+    );
   };
 
   render() {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
+
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Credit card details"
-        buttonTitle="Skip and continue"
+        buttonTitle={
+          form_checked.length === 0 ? "SKIP AND CONTINUE" : "CONTINUE"
+        }
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
       >
         <div className="loan-bt">
@@ -141,7 +186,13 @@ class LoanBtDetails extends Component {
                     id="checkbox"
                     name="checkbox"
                     disableRipple
-                    onChange={(event) => this.handleCheckbox(event.target.checked, index, Object.keys(item)[0])}
+                    onChange={(event) =>
+                      this.handleCheckbox(
+                        event.target.checked,
+                        index,
+                        Object.keys(item)[0]
+                      )
+                    }
                     className="Checkbox"
                   />
                 </Grid>
@@ -160,7 +211,8 @@ class LoanBtDetails extends Component {
                         // error={!!this.state.form_data[index].financierName_error}
                         // helperText={this.state.form_data[index].financierName_error}
                         value={
-                          this.state.form_data[index].financierName || item.financierName ||
+                          this.state.form_data[index].financierName ||
+                          item.financierName ||
                           ""
                         }
                         onChange={this.handleChange("financierName", index)}
@@ -179,7 +231,9 @@ class LoanBtDetails extends Component {
                         label="Card number (last four digit)"
                         id="creditCardNumber"
                         name="creditCardNumber"
-                        value={this.state.form_data[index].creditCardNumber || ""}
+                        value={
+                          this.state.form_data[index].creditCardNumber || ""
+                        }
                         onChange={this.handleChange("creditCardNumber", index)}
                       />
                     </div>
@@ -194,10 +248,15 @@ class LoanBtDetails extends Component {
                         width="40"
                         maxLength={7}
                         label="Expiry date"
-                        id="creditCardExpiryDate"
+                        id={`card-expiry-${index + 1}`}
                         name="creditCardExpiryDate"
-                        value={this.state.form_data[index].creditCardExpiryDate || ""}
-                        onChange={this.handleChange("creditCardExpiryDate", index)}
+                        value={
+                          this.state.form_data[index].creditCardExpiryDate || ""
+                        }
+                        onChange={this.handleChange(
+                          "creditCardExpiryDate",
+                          index
+                        )}
                       />
                     </div>
 
@@ -209,7 +268,7 @@ class LoanBtDetails extends Component {
                         // helperText={
                         //   this.state.form_data[index].principalOutstanding_error
                         // }
-                        type="text"
+                        type="number"
                         width="40"
                         label="Amount outstanding"
                         id="principalOutstanding"

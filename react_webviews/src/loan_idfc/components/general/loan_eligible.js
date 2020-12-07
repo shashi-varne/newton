@@ -35,11 +35,10 @@ class LoanEligible extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'lending',
+      "event_name": 'idfc_lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan eligibility',
-        "stage": 'eligible'
+        "screen_name": 'final_offer',
       }
     };
 
@@ -86,13 +85,13 @@ class LoanEligible extends Component {
           </div>
 
           <div className="loan-amount">
-            {formatAmountInr(application_info.approved_amount)}
+            {formatAmountInr(vendor_info.loanAmount)}
           </div>
 
           <div className="loan-value">
             <div>
               <div>EMI amount</div>
-              <div className="values">{formatAmountInr(application_info.approved_emi)}</div>
+              <div className="values">{formatAmountInr(vendor_info.EMIAmount)}</div>
             </div>
             <div>
               <div>Tenure</div>

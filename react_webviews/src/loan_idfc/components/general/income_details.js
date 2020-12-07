@@ -43,12 +43,13 @@ class IncomeDetails extends Component {
 
   onload = () => { };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action, transaction_type, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "income_details",
+        option_selected: transaction_type,
       },
     };
 
@@ -60,12 +61,14 @@ class IncomeDetails extends Component {
   }
 
   handleClick = (transaction_type) => {
+    this.sendEvents("next",transaction_type);
     this.startTransaction(transaction_type)
   }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Income details"
         noFooter={true}

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { timeStampToDate, capitalize, capitalizeFirstLetter, formatAmountInr } from "utils/validators"
+import { capitalizeFirstLetter, timeStampToDate } from "../../../utils/validators";
 
 class ApplicationSummary extends Component {
   constructor(props) {
@@ -23,11 +23,9 @@ class ApplicationSummary extends Component {
     let lead = this.state.lead || {};
     let accordianData = [];
     let personal_info = lead.personal_info || {};
+    let vendor_info = lead.vendor_info || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
-    let professional_info = lead.professional_info || {};
-    let application_info = lead.application_info || {};
-    let vendor_info = lead.vendor_info || {};
 
     let personal_data = {
       title: "Personal details",
@@ -72,22 +70,6 @@ class ApplicationSummary extends Component {
         {
           title: "Email id",
           subtitle: personal_info.email_id,
-        },
-        {
-          title: "Date of birth ",
-          subtitle: timeStampToDate(personal_info.dob || ""),
-        },
-        {
-          title: "PAN number",
-          subtitle: personal_info.pan_no,
-        },
-        {
-          title: "Education qualification",
-          subtitle: professional_info.educational_qualification,
-        },
-        {
-          title: "Employment type",
-          subtitle: capitalizeFirstLetter(application_info.employment_type || ""),
         },
       ],
     };
@@ -159,52 +141,11 @@ class ApplicationSummary extends Component {
         {
           title: "State",
           subtitle: permanent_address_data.state,
-        }
-      ]
-    };
-
-    accordianData.push(address_data);
-
-    let professional_data = {
-      title: "Work details",
-      edit_state: "/loan/idfc/edit-professional-details",
-      data: [
-        {
-          title: "Company name",
-          subtitle: professional_info.company_name,
-        },
-        {
-          title: "Official email",
-          subtitle: professional_info.office_email,
-        },
-        {
-          title: "Net monthly salary",
-          subtitle: formatAmountInr(application_info.net_monthly_salary || ""),
-        },
-        {
-          title: "Salary receipt mode",
-          subtitle: capitalize(professional_info.salary_mode || ""),
-        },
-        {
-          title: "Company constitution",
-          subtitle: capitalize(professional_info.constitution || ""),
-        },
-        {
-          title: "Organisation",
-          subtitle: capitalize(professional_info.organisation || ""),
-        },
-        {
-          title: "Department",
-          subtitle: capitalize(professional_info.department || ""),
-        },
-        {
-          title: "Industry",
-          subtitle: capitalize(professional_info.industry || ""),
         },
       ],
     };
 
-    accordianData.push(professional_data);
+    accordianData.push(address_data);
 
     this.setState(
       {
@@ -219,10 +160,11 @@ class ApplicationSummary extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "application form",
+        screen_name: "summary",
+        stage: "loan application",
       },
     };
 
@@ -234,6 +176,7 @@ class ApplicationSummary extends Component {
   }
 
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate("application-summary");
   };
 
@@ -275,12 +218,10 @@ class ApplicationSummary extends Component {
         {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
-            {this.state.idfc_loan_status === "basic_details_uploaded" && (
+            {this.state.idfc_loan_status === "idfc_null_accepted" && (
               <div
                 onClick={() => {
-                  this.sendEvents("next", {
-                    edit_clicked: props.title.split(" ")[0],
-                  });
+                  this.sendEvents("edit");
                   this.openEdit(props.edit_state);
                 }}
                 className="generic-page-button-small"
@@ -327,13 +268,15 @@ class ApplicationSummary extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title=" Summary"
+        title="Loan application Summary"
         buttonTitle="OKAY"
-        handleClick={() => this.navigate('journey')}
+        handleClick={() => {this.sendEvents('next');
+        this.navigate('journey')}}
       >
         <div className="loan-form-summary">
-          <div className="bottom-content">
+          <div className="bottom-content" style={{marginBottom: "40px"}}>
             <div className="generic-hr"></div>
             {this.state.accordianData.map(this.renderAccordian)}
           </div>

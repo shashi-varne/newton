@@ -5,6 +5,9 @@ import { initialize } from "../../common/functions";
 import Card from "../../../common/ui/Card";
 import { getConfig } from "utils/functions";
 import { storageService } from "utils/validators";
+import { numDifferentiationInr } from "utils/validators";
+import Api from "utils/api";
+import toast from "../../../common/ui/Toast";
 
 class DocumentList extends Component {
   constructor(props) {
@@ -14,6 +17,7 @@ class DocumentList extends Component {
       screen_name: "document_list",
       cards: [],
       docList: [],
+      disableButton: true,
     };
 
     this.initialize = initialize.bind(this);
@@ -24,119 +28,45 @@ class DocumentList extends Component {
   }
 
   onload = () => {
-    let docList = [
-      {
-          "category": "Cat1",
-          "category_name": "Address Proof",
-          "docs": [
-              {
-                  "doc_display_name": "Latest Bank Statement",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Driving License",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Aadhaar Card",
-                  "pages": "2"
-              },
-              {
-                  "doc_display_name": "Pension or Family Pension Payment Orders (PPOs)",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Letter of Allotment of Accommodation from Employer - issued by State Government or Central Government Departments",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Property or Municipal Tax Receipt",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Latest Passbook of scheduled commercial Bank",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Rent Agreement",
-                  "pages": null
-              }
-          ],
-          "doc_checklist": [
-              null
-          ]
-      },
-      {
-          "category": "Cat2",
-          "category_name": "Identity Proof (PAN)",
-          "docs": [
-              {
-                  "doc_display_name": "PAN",
-                  "pages": "1"
-              }
-          ],
-          "doc_checklist": [
-              null
-          ]
-      },
-      {
-          "category": "Cat3",
-          "category_name": "Salary Slip / Employment Proof",
-          "docs": [
-              {
-                  "doc_display_name": "3 Months Salary Slip",
-                  "pages": null
-              }
-          ],
-          "doc_checklist": [
-              null
-          ]
-      },
-      {
-          "category": "Cat4",
-          "category_name": "Bank Account Statement",
-          "docs": [
-              {
-                  "doc_display_name": "Last 3 months Bank Account Statement",
-                  "pages": null
-              }
-          ],
-          "doc_checklist": [
-              null
-          ]
-      },
-      {
-          "category": "Cat5",
-          "category_name": "Ownership Proof (Either Home Or Office)",
-          "docs": [
-              {
-                  "doc_display_name": "Electricity Bill",
-                  "pages": null
-              },
-              {
-                  "doc_display_name": "Sale Deed",
-                  "pages": null
-              }
-          ],
-          "doc_checklist": [
-              null
-          ]
-      }
-  ]
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+    let bottomButtonData = {
+      leftTitle: "Personal loan",
+      leftSubtitle: numDifferentiationInr(vendor_info.loanAmount),
+    };
 
-  this.setState({
-    docList: docList
-  })
+    this.setState({
+      bottomButtonData: bottomButtonData,
+    });
   };
 
-  handleClick = () => {};
+  handleClick = async () => {
+    this.sendEvents('next');
+    try {
+      const res = await Api.get(
+        `relay/api/loan/idfc/document/submit/${this.state.application_id}`
+      );
 
-  sendEvents(user_action, data = {}) {
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        this.navigate('reports')
+      }
+
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+  };
+
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "upload_doc",
+        screen_name: "upload_docs",
+        docs_list : this.state.docList.map((category) => category.category_name),
+        doc_card_selected: data.doc_card_selected,
       },
     };
 
@@ -153,26 +83,45 @@ class DocumentList extends Component {
   };
 
   render() {
+    let { docList, disableButton } = this.state;
+
+    docList.forEach((item) => {
+      if (item.doc_checklist.length === 0) {
+        disableButton = true;
+      } else {
+        disableButton = false;
+      }
+    });
+
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Upload documents"
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick={this.handleClick}
+        withProvider={true}
+        buttonData={this.state.bottomButtonData}
+        disable={disableButton}
       >
         <div className="upload-documents">
           {this.state.docList.map((item, index) => (
             <Card
               style={{ marginTop: "20px" }}
               key={index}
-              onClick={() => this.handleCard(item.category)}
+              onClick={() => {
+                this.sendEvents('card_clicked', {doc_card_selected : item.category_name}); 
+                this.handleCard(item.category)
+              }}
             >
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: `${
+                    item.doc_checklist.length === 0 ? "right" : "space-between"
+                  }`,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
@@ -181,21 +130,31 @@ class DocumentList extends Component {
                     src={require(`assets/${this.state.productName}/account.svg`)}
                     alt=""
                   />
-                  <img
-                    style={{ margin: "-2px 0 -10px -22px" }}
-                    src={require(`assets/done.svg`)}
-                    alt=""
-                  />
+                  {item.doc_checklist.length !== 0 && (
+                    <img
+                      style={{ margin: "-2px 0 -10px -22px" }}
+                      src={require(`assets/done.svg`)}
+                      alt=""
+                    />
+                  )}
                 </div>
                 <div
                   style={{
                     width: `${getConfig().isMobileDevice ? "60%" : "70%"}`,
+                    marginLeft: `${item.doc_checklist.length === 0 && "15px"}`,
                   }}
                 >
                   {item.category_name}
+                  {item.doc_checklist.length !== 0 && (
+                    <div className="subtitle">
+                      {item.doc_checklist[0].subtype}
+                    </div>
+                  )}
                 </div>
 
-                <img src={require(`assets/edit_green.svg`)} alt="" />
+                {item.doc_checklist.length !== 0 && (
+                  <img src={require(`assets/edit_green.svg`)} alt="" />
+                )}
               </div>
             </Card>
           ))}

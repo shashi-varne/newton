@@ -162,7 +162,6 @@ class PersonalDetails extends Component {
   };
 
   render() {
-    console.log(this.state.form_data)
     return (
       <Container
         events={this.sendEvents('just_set_events')}

@@ -5,6 +5,7 @@ import Attention from "../../../common/ui/Attention";
 import { initialize } from "../../common/functions";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
+import { getBase64 } from 'utils/functions';
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import toast from "../../../common/ui/Toast";
@@ -23,6 +24,7 @@ class UploadBank extends Component {
       show_loader: false,
       fileUploaded: false,
       documents: [],
+      password: "",
       confirmed: true,
       editId: null,
       count: 1,
@@ -58,6 +60,25 @@ class UploadBank extends Component {
     this.setState({
       progressHeaderData: progressHeaderData,
     });
+  }
+
+  componentDidMount() {
+    let that = this;
+    if (getConfig().generic_callback) {
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+
+          that.showLoaderNative();
+        }
+      });
+    }
+  }
+
+  showLoaderNative() {
+    this.setState({
+      show_loader: true
+    })
   }
 
   onload = async () => {
@@ -115,11 +136,11 @@ class UploadBank extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "otp",
-        fileUploaded: false,
+        screen_name: "upload bank statement",
+        files_uploaded: this.state.documents.length,
       },
     };
 
@@ -130,28 +151,28 @@ class UploadBank extends Component {
     }
   }
 
-  native_call_handler(method_name, doc_type, doc_name) {
+  
+
+  native_call_handler(method_name, doc_type) {
+    console.log(doc_type)
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: "doc",
         doc_type: doc_type,
-        doc_name: doc_name,
         // callbacks from native
         upload: function upload(file) {
           try {
             that.setState({
               docType: this.doc_type,
-              docName: this.docName,
-              doc_side: this.doc_side,
               show_loader: true,
             });
             switch (file.type) {
               case "application/pdf":
-                that.mergeDocs(file);
+                that.save(file);
                 break;
               default:
-                alert("Please select image file");
+                alert("Please select pdf file");
                 that.setState({
                   docType: this.doc_type,
                   show_loader: false,
@@ -169,12 +190,18 @@ class UploadBank extends Component {
     $("input").trigger("click");
   }
 
-  startUpload(method_name) {
+  startUpload(method_name, doc_type) {
+    console.log(doc_type)
     this.setState({
       type: method_name,
     });
 
-    this.openFileExplorer();
+    if (getConfig().html_camera) {
+      this.openFileExplorer();
+    } else {
+      this.native_call_handler(method_name, doc_type);
+    }
+    
   }
 
   getPdf = (e) => {
@@ -214,6 +241,42 @@ class UploadBank extends Component {
     });
   };
 
+  save(file) {
+    let acceptedType = ["application/pdf"];
+    console.log(file)
+
+    if (acceptedType.indexOf(file.type) === -1) {
+      toast("Please select pdf file only");
+      return;
+    }
+
+    let { documents, editId, count } = this.state;
+    file.doc_type = file.type;
+    file.name = `Bank_statement_${count}.pdf`
+    file.status = "uploaded";
+    file.id = count++;
+
+    if (editId !== null) {
+      var index = documents.findIndex((item) => item.id === editId);
+      file.id = editId;
+      file.edited = true;
+      documents[index] = file;
+    }
+
+    if (editId === undefined || editId === null) {
+      documents.push(file);
+    }
+
+    this.setState({
+      fileUploaded: true,
+      documents: documents,
+      show_loader: false,
+      confirmed: false,
+      editId: null,
+      count: count,
+    });
+  }
+
   handleConfirm = async (id) => {
     let { documents, application_id } = this.state;
 
@@ -226,6 +289,7 @@ class UploadBank extends Component {
     data.append("doc_type", "perfios_bank_statement");
     data.append("file", documents[index]);
     data.append("doc_id", id);
+    data.append("password", this)
 
     try {
       const res = await Api.post(
@@ -244,12 +308,8 @@ class UploadBank extends Component {
           confirmed: true,
           documents: documents,
         });
-        console.log(result.document_id);
-        console.log(documents[index].document_id);
       }
 
-      //   toast(result.error || result.message || "Something went wrong!");
-      // }
     } catch (err) {
       console.log(err);
       this.setState({
@@ -259,10 +319,10 @@ class UploadBank extends Component {
     }
   };
 
-  handleChange = (name) => (event) => {
+  handleChange = (name, doc_id = "") => (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data } = this.state;
+    let { form_data, password, documents } = this.state;
 
     if (!name) {
       if (!dobFormatTest(value)) {
@@ -273,19 +333,30 @@ class UploadBank extends Component {
       input.onkeyup = formatDate;
     }
 
-    form_data[name || id] = value;
-    form_data[(name || id) + "_error"] = "";
+    if (name === "password") {
+      var index = documents.findIndex((item) => item.id === doc_id);
 
-    this.setState({
-      form_data: form_data,
-    });
+      documents[index].password = value
+
+      this.setState({
+        documents: documents,
+      });
+    } else {
+      form_data[name || id] = value;
+      form_data[(name || id) + "_error"] = "";
+
+      this.setState({
+        form_data: form_data,
+      });
+    }
   };
 
   handleEdit = (id) => {
+    console.log(id)
     this.setState({
       editId: id,
     });
-    this.startUpload("upload_doc");
+    this.startUpload("open_gallery");
   };
 
   handleDelete = (id) => {
@@ -299,6 +370,7 @@ class UploadBank extends Component {
   };
 
   handleClick = async () => {
+    this.sendEvents("next");
     let { form_data } = this.state;
 
     let { bank_name, start_date, end_date } = this.state.form_data;
@@ -326,8 +398,8 @@ class UploadBank extends Component {
     }
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
 
     if (canSubmit) {
       try {
@@ -356,14 +428,15 @@ class UploadBank extends Component {
   };
 
   render() {
-    let { documents, confirmed } = this.state;
+    let { documents, confirmed, count } = this.state;
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        // disable={true}
+        disable={documents.length === 0}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
@@ -447,8 +520,8 @@ class UploadBank extends Component {
 
               <div className="InputField">
                 <Input
-                  // error={!!this.state.end_date_error}
-                  // helperText="This date must be 3 days before the current date"
+                  // error={!!this.state.password_error}
+                  // helperText={this.state.password}
                   type="password"
                   width="40"
                   label="Enter password (if any)"
@@ -456,8 +529,8 @@ class UploadBank extends Component {
                   id="password"
                   name="password"
                   placeholder="XXXXXXX"
-                  value={this.state.password || ""}
-                  // onChange={this.handleChange}
+                  value={item.password || ""}
+                  onChange={this.handleChange("password", item.id)}
                 />
               </div>
 
@@ -473,7 +546,7 @@ class UploadBank extends Component {
               {item.status === "confirmed" && (
                 <div className="edit-or-delete">
                   <div
-                    onClick={() => this.handleEdit(item.document_id)}
+                    onClick={() => this.handleEdit(item.id)}
                     className="generic-page-button-small"
                   >
                     EDIT
@@ -494,7 +567,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("upload_doc")}
+                onClick={() => this.startUpload("open_file", 'bank_statement'+count)}
               >
                 <span className="plus-sign">
                   <input

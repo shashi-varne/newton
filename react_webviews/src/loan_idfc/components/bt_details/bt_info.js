@@ -51,31 +51,33 @@ class BtInformation extends Component {
   };
 
   handleClickTwo = () => {
+    this.sendEvents('opt_for_bt');
     let body = {
-      idfc_loan_status: "bt_init",
+      idfc_loan_status: "bt_processing",
       bt_selected: true,
     };
     this.updateApplication(body, "loan-bt");
   };
 
-  handleClickOne = async () => {
+  handleClickOne = () => {
+    this.sendEvents('not_opt_for_bt');
     let body = {
-      idfc_loan_status: "bypass",
+      idfc_loan_status: "bt_bypass",
     };
 
-    await this.updateApplication(body)
+    this.updateApplication(body)
 
-    if (this.state.idfc_07_state !== 'success') {
-      this.submitApplication({}, "one");
-    }
+    // if (this.state.idfc_07_state !== 'success') {
+    //   this.submitApplication({}, "one", "", "eligible-loan");
+    // }
   }
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "income_details",
+        screen_name: "bt_transfer_details",
       },
     };
 
@@ -89,6 +91,7 @@ class BtInformation extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         twoButton={true}

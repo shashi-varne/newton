@@ -243,7 +243,7 @@ export class WithProviderLayout extends Component {
     };
 
     return (
-      <div className="FooterDefaultLayout" style={{ padding: "10px 0 10px 0" }}>
+      <div className="FooterDefaultLayout" style={{ padding: "5px 0 5px 0" }}>
         {props.buttonData && (
           <div
             className="FlexItem1 FlexItem1-withProvider-footer"

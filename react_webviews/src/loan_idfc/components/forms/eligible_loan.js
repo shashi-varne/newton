@@ -16,6 +16,7 @@ class EligibleLoan extends Component {
       screen_name: "eligible_loan",
       form_data: {},
       checked: "default_tenor",
+      vendor_info: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -46,14 +47,22 @@ class EligibleLoan extends Component {
     })
   }
 
-  onload = () => { };
+  onload = () => { 
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+
+    this.setState({
+      vendor_info: vendor_info
+    })
+  };
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "address",
+        "screen_name": 'eligible_loan',
+        offer_selected: this.state.checked=== 'default_tenor' ? 'default' : 'customised',
       },
     };
 
@@ -77,6 +86,7 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data } = this.state;
 
     if (this.state.checked === "default_tenor") {
@@ -96,8 +106,10 @@ class EligibleLoan extends Component {
   };
 
   render() {
+    let { vendor_info } = this.state;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
@@ -138,7 +150,7 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
-                    <div className="sub-title">₹40 lakhs</div>
+                    <div className="sub-title">₹{vendor_info.displayOffer}</div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
