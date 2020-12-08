@@ -48,6 +48,9 @@ const CapitalGainTax = () => {
           </div>
         ) : (
           <ErrorScreen
+            classes={{
+              container: 'iwd-fade'
+            }}
             useTemplate={true}
             templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
             templateErrText='No Tax report to display'

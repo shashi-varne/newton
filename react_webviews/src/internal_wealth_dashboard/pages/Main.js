@@ -11,6 +11,7 @@ import Recommendations from './Recommendations';
 import { isEmpty, storageService } from '../../utils/validators';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import Api from '../../utils/api';
+import { CSSTransition } from 'react-transition-group';
 const isMobileView = getConfig().isMobileDevice;
 
 const Main = (props) => {
@@ -40,15 +41,32 @@ const Main = (props) => {
     fetchUserCreds();
   }, []);
 
+  const renderTab = () => {
+    const tabMap = {
+      'dashboard': <Dashboard />,
+      'analysis': <Analysis />,
+      'holdings': <Holdings />,
+      'statements': <Statements />,
+      'recommendations': <Recommendations />,
+    };
+
+    return tabMap[params.tab] || <></>;
+  }
+
   return (
-    <div id='iwd-main'>
-      {isMobileView ? <NavBarMobile /> : <NavBar />}
-      {params.tab === 'dashboard' && <Dashboard />}
-      {params.tab === 'analysis' && <Analysis />}
-      {params.tab === 'holdings' && <Holdings />}
-      {params.tab === 'statements' && <Statements />}
-      {params.tab === 'recommendations' && <Recommendations />}
-    </div>
+      <div id='iwd-main'>
+        {isMobileView ? <NavBarMobile /> : <NavBar />}
+        <CSSTransition
+          in={true}
+          appear
+          enter={false}
+          exit={false}
+          classNames='iwd-entry-animate'
+          timeout={30000}
+        >
+          {renderTab()}
+        </CSSTransition>
+      </div>
   );
 };
 

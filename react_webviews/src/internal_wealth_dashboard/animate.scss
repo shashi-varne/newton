@@ -6,6 +6,14 @@
     }
   }
 }
+@mixin iwd-fadeCreator($time, $timingFunc, $delay) {
+  opacity: 0;
+  animation: iwd-fade #{$time}s #{$timingFunc} #{$delay}s;
+  animation-name: iwd-fade;
+  -webkit-animation-name: iwd-fade;
+  -webkit-animation-fill-mode: both;
+}
+
 .circularExpand {
   transition: clip-path 0.8s ease-in-out;
 }
@@ -37,8 +45,23 @@
   transition: clip-path 0.8s ease-in-out 0.1s;
 }
 
+.circularExpandFilter-enter {
+  clip-path: circle(0% at bottom 18% right 10%);
+}
+.circularExpandFilter-enter-active {
+  clip-path: circle(100%);
+  transition: clip-path 0.8s ease-in-out 0.1s;
+}
+.circularExpandFilter-exit {
+  clip-path: circle(100%);
+}
+.circularExpandFilter-exit-active {
+  clip-path: circle(0% at bottom 18% right 10%);
+  transition: clip-path 0.8s ease-in-out 0.1s;
+}
+
 .iwd-animatedFade,
-.iwd-animatedFadeChildrenIwd * {
+.iwd-animatedFadeChildren * {
   @extend .iwd-animated, .iwd-animatedFadeInUp, .iwd-fadeInUp;
 }
 
@@ -83,9 +106,7 @@
 }
 
 .iwd-fade {
-  animation: iwd-fade 0.6s ease-in-out;
-  animation-name: iwd-fade;
-  -webkit-animation-name: iwd-fade;
+  @include iwd-fadeCreator(0.6, ease-out, 0);
 }
 
 @keyframes iwd-fade {
@@ -106,6 +127,38 @@
   }
 }
 
+.iwd-fade-entrance {
+  animation: iwd-fade-entrance 2s 
+  cubic-bezier(1, 0.03, 0.9, 0.75);
+  // cubic-bezier(0.63, 0.07, 0, 0.63);
+  // cubic-bezier(0.78, 0.01, 0.24, 1.01);
+  // cubic-bezier(0.82, 0.07, 0.64, 0.95);
+  // cubic-bezier(0.82, 0.07, 0.85, 0.68);
+  
+  animation-name: iwd-fade-entrance;
+  -webkit-animation-name: iwd-fade-entrance;
+}
+
+@keyframes iwd-fade-entrance {
+  0% {
+    transform: scale(1.05);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes iwd-fade-entrance {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .iwd-fadeFromLeft {
   animation: iwd-fadeFromLeft 0.6s ease-out;
   // cubic-bezier(0.29, 0.83, 0.51, 0.97)
@@ -116,11 +169,11 @@
 @keyframes iwd-fadeFromLeft{
   from {
     opacity: 0;
-    left: -80px;
+    transform: translate3d(-80px, 0, 0);
   }
   to {
     opacity: 1;
-    left: 0;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -139,7 +192,7 @@
   @extend .iwd-animatedFade;
 }
 
-.example-appear-active, .example-enter-active {
+.example-appear-active, .example-enter-active { //TODO: change names
   animation-name: iwd-fadeInUp;
   -webkit-animation-name: iwd-fadeInUp;
 }
@@ -153,7 +206,12 @@
   animation-direction: reverse;
 }
 
-// .iwd-card-animate-leave {
-//   @extend .animatedFadeReverse;
+.iwd-entry-animate-appear-active {
+  @extend .iwd-fade-entrance;
+}
 
-// }
+.iwd-card-data-animate-enter-active {
+  * {
+    @include iwd-fadeCreator(1, ease-in-out, 0);
+  }
+}

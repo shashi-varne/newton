@@ -8,9 +8,7 @@ import { Button } from 'material-ui';
 import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
-import { navigate as navigateFunc } from '../common/commonFunctions';
-import { countChars } from '../../utils/validators';
-
+import IwdCard from '../mini-components/IwdCard';
 
 const HoldingCard = ({
   mf: mf_detail = {},
@@ -26,19 +24,10 @@ const HoldingCard = ({
     name,
     fisdom_rating,
     isin = 1,
-  } = mf_detail;
-
-  const ellipsify = (line) =>  {
-    const characters = countChars(line)
-    if (characters >= 52) {
-      return `${line.split('0, 52')}...`
-    }
-    return line
-  }
-  
+  } = mf_detail;  
 
   return (
-    <div className="iwd-holding-card">
+    <IwdCard className="iwd-holding-card">
       {openDetail &&
         <HoldingDetail
           isin={isin}
@@ -91,7 +80,7 @@ const HoldingCard = ({
         <span>More details</span>
         <img src={nextArrow} alt="" style={{ marginLeft: '15px' }} />
       </Button>
-    </div>
+    </IwdCard>
   );
 };
 

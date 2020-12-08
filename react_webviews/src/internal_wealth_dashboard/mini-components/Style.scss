@@ -103,7 +103,6 @@ $card-padding: 50px;
 }
 
 #iwd-help {
-  transition: clip-path 0.8s ease-in-out;
   font-family: 'Poppins', 'Roboto', sans-serif !important;
   position: absolute;
   width: 100%;
@@ -299,7 +298,7 @@ $card-padding: 50px;
   width: 80px;
   position: absolute;
   overflow: hidden;
-  z-index: 2;
+  z-index: 3;
   background: #613eb9;
   border-radius: 0px 10px 10px 0;
   padding: 15px;
@@ -515,8 +514,10 @@ $card-padding: 50px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  @extend .iwd-animatedFade;
+  @extend .iwd-fade;
   animation-delay: 0.4s;
+  position: relative;
+  z-index: 2;
 
   #iwd-ph-left {
     // float: left;
@@ -642,7 +643,6 @@ ul#iwd-bars {
   position: absolute;
   right: 0;
   z-index: 3;
-  cursor: pointer;
 
   .iwd-profile-username {
     font-size: 15px;
@@ -835,7 +835,7 @@ ul#iwd-bars {
 .radial-chart {
   position: relative;
   display: inline-block;
-  transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in 1s;
   margin-top: 20px;
 }
 .radial-chart.no-progress .radial-chart-progress {
@@ -847,8 +847,7 @@ ul#iwd-bars {
 .radial-chart-progress {
   transform: rotate(90deg);
   transform-origin: center;
-  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14);
-  transition-delay: 0.3s;
+  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14) 1s;
 }
 
 table.iwd-transactions-table {
@@ -919,7 +918,7 @@ table.iwd-transactions-table {
     letter-spacing: 0em;
     text-align: left;
     color: $dark;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .MuiIconButton-root {
@@ -1426,6 +1425,7 @@ table.iwd-transactions-table {
     overflow-y: auto;
     background: white;
     margin: 0 !important;
+    transition: clip-path 0.8s ease-in-out 0.1s;
     font-family: 'Poppins', 'Roboto', sans-serif;
 
     .iwd-filter-mobile-container {
@@ -1589,7 +1589,7 @@ table.iwd-transactions-table {
 
 .iwd-date-range-picker {
   .rs-picker-daterange {
-    background-color: rgba(31, 18, 65, 0.05);
+    background-color: rgba($primary, 0.05);
     border-radius: 4px;
     width: 100%;
     a {
@@ -1600,6 +1600,10 @@ table.iwd-transactions-table {
     }
   }
   width: 250px;
+}
+.rs-picker-toggle:hover {
+  background-color: rgba($primary, 0.03) !important;
+  background: rgba($primary, 0.03) !important;
 }
 .rs-picker-toggle-value,
 .rs-picker-toggle-placeholder,

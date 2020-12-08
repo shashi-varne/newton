@@ -96,6 +96,9 @@ const SnapScrollContainer = ({
       <div className='iwd-scroll-contain' ref={container}>
         <ErrorScreen
           useTemplate={true}
+          classes={{
+            container: 'iwd-fade'
+          }}
           templateImage={IlsError}
           templateErrTitle='Oops!'
           templateErrText={

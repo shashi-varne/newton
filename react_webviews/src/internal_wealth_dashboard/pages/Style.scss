@@ -171,6 +171,7 @@ $background: #f9f9f9;
   box-sizing: border-box;
   overflow-y: auto;
   width: 100%;
+  scroll-padding-top: 20px;
 }
 
 .iwd-scroll-child {
@@ -411,6 +412,7 @@ $background: #f9f9f9;
 }
 
 #iwd-holdings {
+  @include iwd-animatedDelay(30, 0.6);
   .iwd-scroll-contain {
     //padding-left: 270px;
     height: 75vh;
@@ -426,6 +428,7 @@ $background: #f9f9f9;
   margin: 0 !important;
 
   .iwd-hd-content {
+    @extend .iwd-fade-entrance;
     padding: 50px 100px;
     box-sizing: border-box;
     height: 100vh;
@@ -965,6 +968,8 @@ $background: #f9f9f9;
     .iwd-transaction-search-container {
       display: flex;
       justify-content: space-between;
+      position: relative;
+      z-index: 2;
 
       .iwd-transaction-search {
         flex: 0.6;
