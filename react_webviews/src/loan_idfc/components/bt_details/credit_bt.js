@@ -73,12 +73,14 @@ class LoanBtDetails extends Component {
     });
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "address",
+        screen_name: "credit_card_details", 
+        no_of_cards_entered: data.no_of_cards_entered,
+        skipped_screen: data.no_of_cards_entered !==0 ? "no" : "yes",
       },
     };
 
@@ -113,7 +115,7 @@ class LoanBtDetails extends Component {
       form_data[index][name] = value;
     }
 
-    // form_data[index][name + "_error"] = "";
+    form_data[index][name + "_error"] = "";
 
     this.setState({
       form_data: form_data,
@@ -128,6 +130,20 @@ class LoanBtDetails extends Component {
     this.setState({
       form_data: form_data,
     });
+    let keysToCheck = [
+      {key: "financierName", name: "financier name"}, 
+      {key: "creditCardNumber", name: "credit card number"},
+      {key: "creditCardExpiryDate", name: "credit card expiry date"}, 
+      {key: "principalOutstanding", name: "principal outstanding"},
+    ]
+    if(checked) {
+      keysToCheck.forEach(item => {
+        if(!form_data[index][item.key]) {
+          form_data[index][`${item.key}_error`] = `Please enter ${item.name}`;
+        }
+      })
+      this.setState({form_data : form_data});
+    }
   };
 
   handleClick = () => {
@@ -140,9 +156,10 @@ class LoanBtDetails extends Component {
       return;
     }
 
+    this.sendEvents('next', {no_of_cards_entered: form_checked.length, });
     this.submitApplication(
       {
-        bt_selection: this.state.form_data.filter((data) => data.is_selected),
+        bt_selection: form_checked,
       },
       "one",
       true,
@@ -157,6 +174,7 @@ class LoanBtDetails extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Credit card details"
         buttonTitle={
@@ -204,8 +222,8 @@ class LoanBtDetails extends Component {
                         label="Financer name"
                         id="financierName"
                         name="financierName"
-                        // error={!!this.state.form_data[index].financierName_error}
-                        // helperText={this.state.form_data[index].financierName_error}
+                        error={!!this.state.form_data[index].financierName_error}
+                        helperText={this.state.form_data[index].financierName_error}
                         value={
                           this.state.form_data[index].financierName ||
                           item.financierName ||
@@ -217,10 +235,10 @@ class LoanBtDetails extends Component {
 
                     <div className="InputField">
                       <Input
-                        // error={!!this.state.form_data[index].creditCardNumber_error}
-                        // helperText={
-                        //   this.state.form_data[index].creditCardNumber_error
-                        // }
+                        error={!!this.state.form_data[index].creditCardNumber_error}
+                        helperText={
+                          this.state.form_data[index].creditCardNumber_error
+                        }
                         type="number"
                         width="40"
                         maxLength={4}
@@ -236,10 +254,10 @@ class LoanBtDetails extends Component {
 
                     <div className="InputField">
                       <Input
-                        // error={!!this.state.form_data[index].creditCardExpiryDate_error}
-                        // helperText={
-                        //   this.state.form_data[index].creditCardExpiryDate_error
-                        // }
+                        error={!!this.state.form_data[index].creditCardExpiryDate_error}
+                        helperText={
+                          this.state.form_data[index].creditCardExpiryDate_error
+                        }
                         type="text"
                         width="40"
                         maxLength={7}
@@ -258,12 +276,12 @@ class LoanBtDetails extends Component {
 
                     <div className="InputField">
                       <Input
-                        // error={
-                        //   !!this.state.form_data[index].principalOutstanding_error
-                        // }
-                        // helperText={
-                        //   this.state.form_data[index].principalOutstanding_error
-                        // }
+                        error={
+                          this.state.form_data[index].principalOutstanding_error
+                        }
+                        helperText={
+                          this.state.form_data[index].principalOutstanding_error
+                        }
                         type="number"
                         width="40"
                         label="Amount outstanding"
