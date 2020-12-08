@@ -196,7 +196,7 @@ class DocumentUpload extends Component {
       } else {
         documents.push(file);
       }
-  
+
       that.setState({
         documents: documents,
         image_data: image_data,
@@ -300,7 +300,7 @@ class DocumentUpload extends Component {
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
-    data.append("file", file, (file.name + ext));
+    data.append("file", file, file.name + ext);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
 
@@ -380,7 +380,11 @@ class DocumentUpload extends Component {
             <div>
               <img
                 style={{ width: "100%", height: 150 }}
-                src={image_data[side].imageBaseFile || this.state.document_url || ""}
+                src={
+                  image_data[side].imageBaseFile ||
+                  this.state.document_url ||
+                  ""
+                }
                 alt="PAN"
               />
             </div>
@@ -464,7 +468,11 @@ class DocumentUpload extends Component {
             <div>
               <img
                 style={{ width: "100%", height: 150 }}
-                src={image_data[side].imageBaseFile || this.state.document_url || ""}
+                src={
+                  image_data[side].imageBaseFile ||
+                  this.state.document_url ||
+                  ""
+                }
                 alt="PAN"
               />
             </div>
@@ -555,7 +563,8 @@ class DocumentUpload extends Component {
             <div className="loan-mandate-pan" style={{ marginBottom: "50px" }}>
               {getConfig().html_camera &&
                 this.renderHtmlCamera("single", "doc1")}
-              {!getConfig().html_camera && this.renderNativeCamera()}
+              {!getConfig().html_camera &&
+                this.renderNativeCamera("single", "doc1")}
             </div>
           )}
 
