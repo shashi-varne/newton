@@ -51,25 +51,19 @@ class AddPolicy extends Component {
 
 
 
-  handleChange = name  => event => { 
+  handleChange = name  => event => { console.log(name, event)
 
-    if (!name) {
-        name = event.target.name;
-    }
-  console.log(name,event)
-    var value = event.target ? event.target.value : event;
+    let company = this.state.company
+    var value = company[event].name
 
     let form_data = this.state.form_data 
     form_data[name] = value;
+    form_data.index = event
     form_data[name + '_error'] = '';
 
     this.setState({
         form_data : form_data
-    })
-
-
-    console.log(name)
-    
+    })    
 }
 
 
@@ -206,6 +200,7 @@ class AddPolicy extends Component {
               parent={this}
               header_title="Insurance Company"
               cta_title="SAVE"
+              selectedIndex = { this.state.form_data.index || 0}
               width="40"
               dataType="AOB"
               options={this.state.company}
