@@ -24,7 +24,7 @@ import './Style.scss';
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
   const x = React.useRef(true);
-  const loaderMain  = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;;
+  const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;
 
   const historyGoBack = (backData) => {

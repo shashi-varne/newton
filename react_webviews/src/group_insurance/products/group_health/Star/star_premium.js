@@ -15,15 +15,9 @@ export default class StarPremium extends Component {
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Sum insured</div>
           <div className="pi-tile-right">
-            {numDifferentiationInr(this.props.type_of_plan === 'NF' ? this.props.sum_assured * this.props.total_members :
-              this.props.sum_assured)}
+            {numDifferentiationInr(this.props.sum_assured)}
           </div>
         </div>
-        {this.props.type_of_plan === 'NF' &&
-          <div className="nf-info">
-            {(`${numDifferentiationInr(this.props.sum_assured)} x ${this.props.total_members}`)}
-          </div>
-        }
 
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Cover period</div>
@@ -36,15 +30,6 @@ export default class StarPremium extends Component {
           Premium details
         </div>
 
-        {/* {this.props.type_of_plan === 'NF' &&
-          <div>
-            <div className="flex-between pi-tile">
-              <div className="pi-tile-left">Individual premium</div>
-            </div>
-            {this.props.final_dob_data.map(this.renderIndPremium)}
-            <div className="generic-hr"></div>
-          </div>
-        } */}
         <div className="flex-between pi-tile">
           <div className="pi-tile-left">Base premium</div>
           <div className="pi-tile-right">{inrFormatDecimal(this.props.base_premium)}</div>

@@ -4,17 +4,9 @@ import { inrFormatDecimal, numDifferentiationInr } from '../../../../utils/valid
 export default class ReligarePremium extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       selectedAddOns: [],
     };
-  }
-
-  componentDidMount() {
-    if (this.props.add_ons.length) {
-      const selectedAddOns = this.props.add_ons.filter(addOn => addOn.checked);
-      this.setState({ selectedAddOns: selectedAddOns || [] });
-    }
   }
 
   render() {
@@ -29,7 +21,7 @@ export default class ReligarePremium extends Component {
           </div>
         </div>
 
-        {this.props.type_of_plan === 'NF' &&
+        {this.props.type_of_plan === 'NF' && this.props.account_type !== 'self' &&
           <div className="nf-info">
             {(`${numDifferentiationInr(this.props.sum_assured)} x ${this.props.total_members}`)}
           </div>
@@ -53,7 +45,7 @@ export default class ReligarePremium extends Component {
         </div>
 
         {/* TODO: move inline styles to stylesheet */}
-        {this.state.selectedAddOns && this.state.selectedAddOns.length !==0 &&
+        {this.props.add_ons && this.props.add_ons.length !==0 &&
           <div className="premium-addons" style={{margin: '30px 0 25px'}}>
             <div className="premium-addon-title" style={{
               fontSize: '13px',
@@ -61,10 +53,10 @@ export default class ReligarePremium extends Component {
               lineHeight: '15px',
               marginBottom: '-10px',
             }}>Add on</div>
-            {this.state.selectedAddOns.map((addOn, index) => 
+            {this.props.add_ons.map((addOn, index) => 
               <div key={index} className="flex-between pi-tile" style={{ marginBottom: '-5px' }}>
                 <div className="pi-tile-left">{addOn.title}</div>
-                <div className="pi-tile-right">{inrFormatDecimal(addOn.premium  || addOn.default_premium)}</div>
+                <div className="pi-tile-right">{inrFormatDecimal(addOn.price  || addOn.default_premium)}</div>
               </div>
             )}
           </div>
