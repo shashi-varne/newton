@@ -872,6 +872,7 @@
 }
 
 .group-health-plan-premium-summary {
+  margin-bottom: 30px;
   .group-health-top-content-plan-logo {
     justify-content: flex-start;
     .tc-right {
@@ -879,7 +880,11 @@
       max-width: 140px;
     }
   }
-
+.premium-summary-disclaimer{
+  font-weight: 400;
+  text-align: center;
+  line-height: 18px;
+}
   .pi-tile {
     color: #0A1D32;
     font-size: 14px;
@@ -924,7 +929,7 @@
   .contact-email {
     color: #767E86;
     font-size: 14px;
-    margin: 40px 0 0 0;
+    margin: 40px 0 40px 0;
     font-weight: 400;
   }
 }

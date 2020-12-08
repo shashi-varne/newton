@@ -4,13 +4,12 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
-import { validateAlphabets, calculateAge, isValidDate, 
+import { validateAlphabets, calculateAge, isValidDate,
     formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-import { isEmpty } from '../../../../utils/validators';
 import ReactTooltip from "react-tooltip";
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
 
@@ -56,19 +55,19 @@ class GroupHealthPlanNomineeDetails extends Component {
             })
         }
 
-        let lead = this.state.lead || {};
-        let form_data = lead.nominee_account_key || {};
-        let appointee_account_key = lead.appointee_account_key || {}
+        let lead = this.state.lead || {}; 
+        let form_data = lead.nominee_details || {};
+
+        let appointee_account_key = lead.appointee_details || {}
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
-
-        if (lead.appointee_account_key) {
-            form_data.appointeename = appointee_account_key.name;
-            form_data.appointeerelation = appointee_account_key.relation;
-            form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
-        }
         
-
         const { age } = calculateAge(form_data['dob'], 'byMonth');
+
+        if (lead.appointee_details.name) {
+           form_data.appointeename = appointee_account_key.name;
+           form_data.appointeerelation = appointee_account_key.relation;
+           form_data['appointeedob'] = appointee_account_key['dob'].replace(/\\-/g, '/').split('-').join('/');
+       }
 
         this.setState({
             form_data: form_data,
@@ -105,12 +104,12 @@ class GroupHealthPlanNomineeDetails extends Component {
 
     };
 
-    handleChangeDob = name => event => {
+    handleChangedob = name => event => {
         
         if (!name) {
             name = event.target.name;
         }
-        
+
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
@@ -162,7 +161,7 @@ class GroupHealthPlanNomineeDetails extends Component {
     handleClick = async () => {
         this.sendEvents('next');
         let { provider } = this.state;
-        const noOfWords = (val = '') => val ? val.split(' ').length : 0; 
+        // const noOfWords = (val = '') => val ? val.split(' ').length : 0;
         const keysMapper = {
             'name': 'name',
             'relation': 'relation',
@@ -174,8 +173,8 @@ class GroupHealthPlanNomineeDetails extends Component {
         
         const keys_to_check = ['name', 'relation'];
 
-        let isNomineeDobNeeded = provider === 'STAR';
-        if(isNomineeDobNeeded) {
+        let isNomineedobNeeded = provider === 'STAR';
+        if(isNomineedobNeeded) {
             keys_to_check.push('dob');
         }
 
@@ -196,15 +195,15 @@ class GroupHealthPlanNomineeDetails extends Component {
         }
 
         const { name, dob, relation } = form_data;
-       
-        if (!isEmpty(form_data) && noOfWords(name) < 2) {
+
+        if (form_data && (name || '').split(" ").filter(e => e).length < 2) {
             form_data.name_error = 'Enter valid full name';
         } else if (name && !validateAlphabets(name)) {
             form_data.name_error = 'Invalid name';
         }
 
 
-        if(isNomineeDobNeeded) {
+        if(isNomineedobNeeded) {
             if ((new Date(dob) > new Date()) || !isValidDate(dob)) {
                 form_data.dob_error = 'Please enter valid date';
             } else if (IsFutureDate(dob)) {
@@ -223,7 +222,7 @@ class GroupHealthPlanNomineeDetails extends Component {
         if (this.state.renderAppointee) {
             const { appointeename, appointeedob, appointeerelation } = form_data;
 
-            if (noOfWords(appointeename) < 2) {
+            if (form_data && (appointeename || '').split(" ").filter(e => e).length < 2) {
                 form_data.appointeename_error = 'Enter valid full name';
             } else if (appointeename && !validateAlphabets(appointeename)) {
                 form_data.appointeename_error = 'Invalid name';
@@ -256,13 +255,15 @@ class GroupHealthPlanNomineeDetails extends Component {
                     break;
                 }
             }
-        }
-        
+        }        
+
         if (canSubmitForm) {
+
             let body = {
-                nominee_account_key: {
-                    name: this.state.form_data.name,
-                    relation: this.state.form_data.relation,
+                
+                "nominee_details": {
+                    "name":  this.state.form_data.name,
+                    "relation": this.state.form_data.relation,
                 }
             }
 
@@ -271,31 +272,30 @@ class GroupHealthPlanNomineeDetails extends Component {
                 let appointee_account_key =  {};
                 if(this.state.renderAppointee) {
                     appointee_account_key =  {
-                        name: this.state.form_data.appointeename,
-                        relation: this.state.form_data.appointeerelation,
-                        dob: this.state.form_data.appointeedob
+                        "name": this.state.form_data.appointeename,
+                        "relation": this.state.form_data.appointeerelation,
+                        "dob": this.state.form_data.appointeedob
                     }
-    
                 }
-
                 body = {
-                    nominee_account_key: {
-                        name: this.state.form_data.name,
-                        relation: this.state.form_data.relation,
-                        dob: this.state.form_data.dob
-                    },
-                    appointee_account_key: appointee_account_key
                     
+                    "nominee_details": {
+                        "name": this.state.form_data.name,
+                        "relation": this.state.form_data.relation,
+                        "dob": this.state.form_data.dob,
+                        "appointee_details": appointee_account_key
+                    },
+                   
                 }
-            }
+            }        
             
-            
-            this.updateLead(body);
+            this.updateLead(body);     
         }
     }
 
 
     sendEvents(user_action) {
+        let formName = (this.state.form_data.name || '').split(" ").filter(e => e).length === 2
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
@@ -305,7 +305,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 "screen_name": 'nominee details',
                 'dob': this.state.form_data.dob ? 'yes' : 'no',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'nominee_name': this.state.form_data.name ? 'yes' : 'no',
+                'nominee_name': formName? 'yes' : 'no',
                 'nominee_relation': this.state.form_data.relation ? 'yes' : 'no',
             }
         };
@@ -332,7 +332,7 @@ class GroupHealthPlanNomineeDetails extends Component {
               />
             </div>
             <div>Appointee details</div>
-
+            <div style={{marginBottom: this.state.renderAppointee ? '50px': ''}}>
             <FormControl fullWidth>
               <div className="InputField">
                 <Input
@@ -370,7 +370,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                   type="text"
                   width="40"
                   label="Date of birth"
-                  class="DOB"
+                  class="dob"
                   id="appointeedob"
                   name="appointeedob"
                   max="10"
@@ -379,10 +379,11 @@ class GroupHealthPlanNomineeDetails extends Component {
                   value={this.state.form_data.appointeedob || ""}
                   placeholder="DD/MM/YYYY"
                   maxLength="10"
-                  onChange={this.handleChangeDob()}
+                  onChange={this.handleChangedob()}
                 />
               </div>
             </FormControl>
+            </div>
           </React.Fragment>
         );
     }
@@ -401,7 +402,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 buttonData={this.state.bottomButtonData}
                 handleClick={() => this.handleClick()}
             >
-                
+                <div className="common-title-content-gap"></div>
                 <FormControl fullWidth>
                     <div className="InputField">
                         <Input
@@ -444,7 +445,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             value={this.state.form_data.dob || ''}
                             placeholder="DD/MM/YYYY"
                             maxLength="10"
-                            onChange={this.handleChangeDob()} />
+                            onChange={this.handleChangedob()} />
                     </div>}
                 </FormControl>
 

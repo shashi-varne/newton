@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
-import {validateEmail, numberShouldStartWith, validateNumber } from 'utils/validators';
+import {validateEmail, numberShouldStartWith, validateNumber} from 'utils/validators';
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -41,11 +41,10 @@ class GroupHealthPlanContactDetails extends Component {
 
         let lead = this.state.lead;
         let form_data = {
-            email: lead.email || '',
-            mobile_number: lead.mobile_number || ''
+            email: lead.buyer_details.email || '',
+            phone_number: lead.buyer_details.phone_number || ''
         };
-
-
+        
         this.setState({
             form_data: form_data,
             lead: lead,
@@ -67,7 +66,7 @@ class GroupHealthPlanContactDetails extends Component {
         var value = event.target ? event.target.value : '';
         var form_data = this.state.form_data || {};
 
-        if (name === 'mobile_number') {
+        if (name === 'phone_number') {
             if (value.length <= 10) {
                 form_data[name] = value;
                 form_data[name + '_error'] = '';
@@ -101,10 +100,10 @@ class GroupHealthPlanContactDetails extends Component {
         this.sendEvents('next');
         let keysMapper = {
             'email': 'email',
-            'mobile_number': 'mobile number',
+            'phone_number': 'mobile number',
         }
 
-        let keys_to_check = ['email', 'mobile_number']
+        let keys_to_check = ['email', 'phone_number']
 
         let form_data = this.state.form_data;
         for (var i = 0; i < keys_to_check.length; i++) {
@@ -121,9 +120,9 @@ class GroupHealthPlanContactDetails extends Component {
             form_data['email_error'] = 'Please enter valid email';
         }
 
-        if (this.state.form_data.mobile_number.length !== 10 || !validateNumber(this.state.form_data.mobile_number) ||
-            !numberShouldStartWith(this.state.form_data.mobile_number)) {
-            form_data['mobile_number_error'] = 'Please enter valid mobile no';
+        if (this.state.form_data.phone_number.length !== 10 || !validateNumber(this.state.form_data.phone_number) ||
+            !numberShouldStartWith(this.state.form_data.phone_number)) {
+            form_data['phone_number_error'] = 'Please enter valid mobile no';
 
         }
 
@@ -143,12 +142,13 @@ class GroupHealthPlanContactDetails extends Component {
 
 
         if (canSubmitForm) {
-
             let body = {
-                "email": this.state.form_data.email,
-                "mobile_number": this.state.form_data.mobile_number
+                
+                "buyer_details": {
+                    "phone_number": this.state.form_data.phone_number,
+                    "email": this.state.form_data.email,
+                }
             }
-            
             this.updateLead(body);
         }
     }
@@ -162,8 +162,8 @@ class GroupHealthPlanContactDetails extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'contact details',
-                'email_id': this.state.form_data.email,
-                'mobile_number': this.state.form_data.mobile_number,
+                'email': this.state.form_data.email,
+                'phone_number': this.state.form_data.phone_number,
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };
@@ -193,16 +193,16 @@ class GroupHealthPlanContactDetails extends Component {
 
                     <div className="InputField">
                         <MobileInputWithoutIcon
-                            error={(this.state.form_data.mobile_number_error) ? true : false}
-                            helperText={this.state.form_data.mobile_number_error}
+                            error={(this.state.form_data.phone_number_error) ? true : false}
+                            helperText={this.state.form_data.phone_number_error}
                             type="number"
                             width="40"
                             label="Mobile number"
                             class="Mobile"
                             maxLength="10"
                             id="number"
-                            name="mobile_number"
-                            value={this.state.form_data.mobile_number || ''}
+                            name="phone_number"
+                            value={this.state.form_data.phone_number || ''}
                             onChange={this.handleChange()} />
                     </div>
                     <div className="InputField">
@@ -213,7 +213,7 @@ class GroupHealthPlanContactDetails extends Component {
                             width="40"
                             label="Email id"
                             class="Email"
-                            maxLength="55"
+                            maxLength={this.state.provider === 'STAR' ? "40": "55"}
                             id="email"
                             name="email"
                             value={this.state.form_data.email || ''}
