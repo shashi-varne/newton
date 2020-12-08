@@ -12,6 +12,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
+    status: "verification failed 1",
   },
   success: {
     top_icon: "ils_loan_status",
@@ -20,6 +21,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    status: "success",
   },
   blocked: {
     top_icon: "ils_loan_failed",
@@ -28,6 +30,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    status: "verification failed 2",
   },
   bypass: {
     top_icon: "ils_loan_failed",
@@ -36,6 +39,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    status: "verification failed",
   },
 };
 
@@ -78,6 +82,7 @@ class PerfiosStatus extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   };
 
@@ -121,7 +126,7 @@ class PerfiosStatus extends Component {
       properties: {
         user_action: user_action,
         screen_name: "bank_statement_verification",
-        status: this.getStatus(this.state.perfios_state),
+        status: this.state.commonMapper.status,
       },
     };
 
@@ -129,20 +134,6 @@ class PerfiosStatus extends Component {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
-    }
-  }
-
-  getStatus(perfios_state) {
-    switch(perfios_state) {
-      case "success" :
-        return "success";
-      case "failure" :
-        return "failed due to file size";
-      case "blocked" :
-      case "bypass" :
-        return "could not be verified";
-      default :
-        return perfios_state;
     }
   }
 
@@ -200,7 +191,6 @@ class PerfiosStatus extends Component {
     let { commonMapper, perfios_state, bt_eligible, name } = this.state;
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title={commonMapper.top_title}
         buttonTitle={commonMapper.button_title}

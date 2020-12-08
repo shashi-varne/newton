@@ -15,6 +15,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     failed: true,
+    screenName: "system_error",
   },
   "idfc_0.5_rejected": {
     top_icon: "ils_loan_failed",
@@ -23,6 +24,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   "idfc_0.5_submitted": {
     top_icon: "ils_loan_status",
@@ -30,6 +32,7 @@ const commonMapper = {
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
+    screenName: "profile_success",
   },
   "idfc_0.5_accepted": {
     top_icon: "ils_loan_status",
@@ -37,6 +40,7 @@ const commonMapper = {
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
+    screenName: "profile_success",
   },
   "idfc_cancelled": {
     top_icon: "ils_loan_failed",
@@ -45,6 +49,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   "idfc_0.5_failed": {
     top_icon: "error_illustration",
@@ -53,6 +58,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after loan requirement details",
   },
   "idfc_1.1_failed": {
     top_icon: "error_illustration",
@@ -61,6 +68,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after loan offer",
   },
   "idfc_1.7_failed": {
     top_icon: "error_illustration",
@@ -69,6 +78,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after loan requirement details",
   },
   "idfc_1.1_accepted": {
     top_icon: "ils_loan_failed",
@@ -77,6 +88,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   "Salary receipt mode": {
     top_icon: "ils_loan_failed",
@@ -85,6 +97,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   Salary: {
     top_icon: "ils_loan_failed",
@@ -93,6 +106,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   Age: {
     top_icon: "ils_loan_failed",
@@ -101,6 +115,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   is_dedupe: {
     top_icon: "ils_loan_failed",
@@ -109,6 +124,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   failure: {
     top_icon: "ils_loan_failed",
@@ -145,6 +161,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after credit card details",
   },
 };
 
@@ -217,8 +235,9 @@ class LoanStatus extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: !this.state.is_dedupe && this.state.vendor_application_status === "idfc_0.5_accepted" ? "profile_success" : this.state.commonMapper.top_title || "status",
+        screen_name: this.state.commonMapper.screenName,
         rejection_reason: this.state.rejection_reason || "",
+        stage: this.state.commonMapper.stage || "",
       },
     };
 
@@ -230,6 +249,7 @@ class LoanStatus extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   };
 
@@ -277,7 +297,6 @@ class LoanStatus extends Component {
 
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title={commonMapper.top_title}
         buttonTitle={commonMapper.button_title}
