@@ -251,7 +251,8 @@ class JourneyMap extends Component {
 
       if (idfc_loan_status === "idfc_0.5_accepted") {
         this.get05Callback();
-
+      } else if (idfc_loan_status === "idfc_1.0_accepted") {
+        this.get10Callback();
       } else {
         if (idfc_loan_status === "perfios" && (perfios_state !== "failure" && perfios_state !== "init")) {
           next_state = "perfios-status"

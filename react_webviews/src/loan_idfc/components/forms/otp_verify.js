@@ -176,11 +176,11 @@ class OtpVerification extends Component {
         //       otpVerified: false,
         //     });
         //   }
-        // } else {
-        //   this.setState({
-        //     show_loader: false,
-        //   });
-        //   toast(result.error || result.message || "Something went wrong!");
+        } else {
+          this.setState({
+            show_loader: false,
+          });
+          toast(result.error || result.message || "Something went wrong!");
         }
       } catch (err) {
         console.log(err)
