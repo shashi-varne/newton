@@ -9,6 +9,8 @@ import DropdownInModal from '../../common/ui/DropdownInModal'
 import Input from '../../common/ui/Input'
 import Dialog, { DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
+import Api from '../../../src/utils/api';
+import toast from '../../common/ui/Toast'
 
 class AddPolicy extends Component {
 
@@ -23,7 +25,9 @@ class AddPolicy extends Component {
         productTitle : {},
         company : {},
         form_data : {},
-        openBmiDialog : false
+        openBmiDialog : false,
+        searching : true,
+        lock : false
     };
     
   }
@@ -66,19 +70,6 @@ class AddPolicy extends Component {
     })    
 }
 
-
-  handleClick = () => {
-    this.setState({
-      openBmiDialog: true
-    })
-
-    var form_data = this.state.form_data
-    form_data.notfound = true
-  
-    this.setState({
-        form_data : form_data
-    })
-  }
 
   handleClick2 = () => {
   let  state  = `/group-insurance/common/report`;
@@ -136,6 +127,65 @@ class AddPolicy extends Component {
   }
 
 
+  handleClick = () => {
+    this.setState({
+      show_loader: true,
+      searching : false,
+      lock : true
+    });
+
+    try {
+      // const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+      const res = {
+        pfwresponse : {
+          status_code : 200
+        }
+      };console.log(res)
+      let resultData = res.pfwresponse
+      if(res.pfwresponse.status_code === 200 && false ){
+     this.setState({
+      openBmiDialog: true,
+      show_loader: false,
+    },() => console.log(this.state.openBmiDialog))
+
+    var form_data = this.state.form_data
+    form_data.notfound = true
+    this.setState({
+        form_data : form_data
+    })
+        // this.sendEvents('next', data.key)
+        this.renderBmiDialog();
+      }
+      else {
+
+        this.state({
+          show_loader: false,
+        })
+
+
+
+        toast(resultData.error || resultData.message || "Something went wrong");
+      }
+    } catch (err) {
+      this.setState({
+        show_loader: false,
+      });
+      toast("Something went wrong");
+    }
+
+  }
+
+  renderlockDialog = () => {
+    return ( 
+            <div  style={{display: "flex", flexDirection : 'column',justifyContent: "center",alignItems : 'center', minHeight : '100vh' }}>
+            <p  className="generic-page-title">Please wait while confirm your policy details</p>
+            <br></br>
+            <img className=""  src={require(`assets/Bitmap.svg`)} alt="" />
+            <br></br>
+            <p>It may take 10 to 15 seconds!</p>
+            </div>
+    )}
+
   renderBmiDialog = () => {
     return (
       <Dialog
@@ -183,6 +233,8 @@ class AddPolicy extends Component {
 
   render() {
     return (
+      <div>
+           {this.state.searching  && <div>
       <Container
       events={this.sendEvents("just_set_events")}
       showLoader={this.state.show_loader}
@@ -235,6 +287,10 @@ class AddPolicy extends Component {
         {this.renderBmiDialog()}
         {/* {this.renderResetDialog()} */}
       </Container>
+         </div>}
+
+      { this.state.lock && this.renderlockDialog()}
+       </div>
     );
   }
 }
