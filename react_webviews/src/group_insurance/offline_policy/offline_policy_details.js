@@ -5,17 +5,13 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from  '../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import { initialize } from '../products/group_health/common_data'
-// import { ghGetMember, getCssMapperReport } from '../constants';
-// import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
-// import { childeNameMapper } from '../constants';
 import {getCoverageType} from '../products/group_health/constants';
 
 class GroupHealthReportDetails extends Component {

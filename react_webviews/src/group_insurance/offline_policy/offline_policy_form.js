@@ -4,11 +4,9 @@ import '../common/Style.css';
 import { getConfig } from 'utils/functions';
 // import { insuranceProductTitleMapper } from '/constants';
 import { nativeCallback } from 'utils/native_callback';
-import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon'
 import DropdownInModal from '../../common/ui/DropdownInModal'
 import Input from '../../common/ui/Input'
 import Dialog, { DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
 import Api from '../../../src/utils/api';
 import toast from '../../common/ui/Toast'
 
@@ -56,18 +54,29 @@ class AddPolicy extends Component {
 
 
   handleChange = name  => event => {
-
     let company = this.state.company
     var value = company[event].name
-
     let form_data = this.state.form_data 
     form_data[name] = value;
     form_data.index = event
     form_data[name + '_error'] = '';
-
     this.setState({
         form_data : form_data
     })    
+}
+
+handleChange2 = name =>  event =>{
+  if (!name) {
+    name = event.target.number;
+  }
+  var value = event.target ? event.target.value : event;
+  let form_data = this.state.form_data 
+  form_data[name] = value;
+  form_data.index = event
+  form_data[name + '_error'] = '';
+  this.setState({
+    form_data : form_data
+})  
 }
 
 
@@ -127,43 +136,34 @@ class AddPolicy extends Component {
   }
 
 
-  handleClick = () => {
+  handleClick = async () => {
     this.setState({
-      show_loader: true,
       searching : false,
       lock : true
     });
 
     try {
-      // const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
-      const res = {
-        pfwresponse : {
-          status_code : 200
-        }
-      };console.log(res)
+      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=STAR`);
+      // const res = {pfwresponse : { status_code : 200}};
       let resultData = res.pfwresponse
-      if(res.pfwresponse.status_code === 200 && false ){
+      if(res.pfwresponse.status_code === 200 && true ){
      this.setState({
       openBmiDialog: true,
-      show_loader: false,
-    },() => console.log(this.state.openBmiDialog))
+      searching : true,
+    })
 
     var form_data = this.state.form_data
     form_data.notfound = true
     this.setState({
+        lock : false,
         form_data : form_data
     })
-        // this.sendEvents('next', data.key)
         this.renderBmiDialog();
       }
       else {
-
         this.state({
           show_loader: false,
         })
-
-
-
         toast(resultData.error || resultData.message || "Something went wrong");
       }
     } catch (err) {
@@ -172,7 +172,6 @@ class AddPolicy extends Component {
       });
       toast("Something went wrong");
     }
-
   }
 
   renderlockDialog = () => {
@@ -265,17 +264,17 @@ class AddPolicy extends Component {
           </div>
             <div className="InputField" style={{marginBottom : '20px'}}>
                         <Input
-                            type="text"
+                            type="number"
                             width="40"
-                            class="NomineeName"
+                            class="ProposalNumber"
                             label="Policy / Proposal number"
                             id="name"
                             name="name"
                             maxLength="50"
                             // error={this.state.form_data.name_error ? true : false}
                             // helperText={this.state.form_data.name_error}
-                            value={this.state.form_data.name || ''}
-                            onChange={this.handleChange('name')} />
+                            value={this.state.form_data.number || ''}
+                            onChange={this.handleChange2('number')} />
                     </div>
                     <div>
 
@@ -283,9 +282,7 @@ class AddPolicy extends Component {
                     <p style={{color : 'blue'}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
                     </div>
                 </div>
-                {/* <ConfirmDialog parent={this} /> */}
         {this.renderBmiDialog()}
-        {/* {this.renderResetDialog()} */}
       </Container>
          </div>}
 
