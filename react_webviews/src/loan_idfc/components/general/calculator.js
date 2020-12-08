@@ -111,7 +111,7 @@ class Calculator extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="EMI calculator"
+        title="Loan eligibility calculator"
         buttonTitle={this.state.cta_title}
         styleFooter={{
           backgroundColor: "var(--highlight)"

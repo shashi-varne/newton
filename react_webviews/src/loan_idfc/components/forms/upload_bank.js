@@ -23,13 +23,16 @@ class UploadBank extends Component {
     this.state = {
       show_loader: false,
       fileUploaded: false,
+      screen_name: "bank_upload",
       documents: [],
       password: "",
       confirmed: true,
-      editId: null,
+      editId: "",
       count: 1,
       form_data: {},
       bankOptions: [],
+      doc_id: "",
+      isApiRunning: false
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -81,38 +84,7 @@ class UploadBank extends Component {
     })
   }
 
-  onload = async () => {
-    try {
-      this.setState({
-        show_loader: true,
-      });
-
-      const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
-
-      const { result, status_code: status } = res.pfwresponse;
-
-      if (status === 200) {
-        let banklist = result.data;
-
-        let bankOptions = banklist.map((item) => {
-          return { name: item.institution_name, value: item.institution_id };
-        });
-
-        this.setState({
-          bankOptions: bankOptions,
-        });
-      } else {
-        toast(result.error || result.message || "Something went wrong!");
-      }
-    } catch (err) {
-      console.log(err);
-      toast("Something went wrong");
-    }
-
-    this.setState({
-      show_loader: false,
-    });
-  };
+  onload = () => {};
 
   renderNotes = () => {
     let notes = [
@@ -208,6 +180,7 @@ class UploadBank extends Component {
     e.preventDefault();
 
     let file = e.target.files[0];
+    console.log(file);
 
     let acceptedType = ["application/pdf"];
 
@@ -216,27 +189,26 @@ class UploadBank extends Component {
       return;
     }
 
-    let { documents, editId, count } = this.state;
+    let { documents, editId, doc_id, count } = this.state;
     file.doc_type = file.type;
     file.status = "uploaded";
+    file.uploaded = true;
     file.id = count++;
 
-    if (editId !== null) {
-      var index = documents.findIndex((item) => item.id === editId);
-      file.id = editId;
-      file.edited = true;
-      documents[index] = file;
-    }
-
-    if (editId === undefined || editId === null) {
+    if (editId === "") {
       documents.push(file);
+    } else {
+      var index = documents.findIndex((item) => item.id === editId);
+      file.curr_status = "edit";
+      file.document_id = doc_id;
+      documents[index] = file;
     }
 
     this.setState({
       fileUploaded: true,
       documents: documents,
       confirmed: false,
-      editId: null,
+      editId: "",
       count: count,
     });
   };
@@ -277,39 +249,66 @@ class UploadBank extends Component {
     });
   }
 
-  handleConfirm = async (id) => {
+  handleConfirm = async (id, curr_status = {}) => {
     let { documents, application_id } = this.state;
 
     var index = documents.findIndex((item) => item.id === id);
 
-    var isedited = documents[index].edited;
-    console.log(documents[index].edited);
+    documents[index].showDotLoader = true;
+    this.setState({
+      documents: documents,
+      isApiRunning: true
+    });
+
+    console.log(documents[index]);
+
+    if (curr_status.status === "delete") {
+      documents[index].curr_status = "delete";
+    }
 
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
-    data.append("file", documents[index]);
-    data.append("doc_id", id);
-    data.append("password", this)
+
+    if (curr_status.status !== "delete") {
+      data.append("file", documents[index]);
+      data.append("password", documents[index].password);
+    }
+
+    if (
+      documents[index].curr_status === "edit" ||
+      curr_status.status === "delete"
+    ) {
+      data.append("doc_id", documents[index].document_id);
+    }
 
     try {
       const res = await Api.post(
-        `relay/api/loan/idfc/upload/document/${application_id}${
-          isedited ? "?edit=true" : ""
-        }`,
+        `relay/api/loan/idfc/upload/document/${application_id}
+        ${documents[index].curr_status === "edit" ? "?edit=true" : ""}
+        ${documents[index].curr_status === "delete" ? "?delete=true" : ""}`,
         data
       );
 
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
+        documents[index].showDotLoader = false;
         documents[index].status = "confirmed";
         documents[index].document_id = result.document_id;
+        if (documents[index].curr_status === "edit") {
+          documents[index].showButton = false;
+        } else if (documents[index].curr_status === "delete") {
+          documents.splice(index, 1);
+        } else {
+          documents[index].showButton = true;
+        }
+
         this.setState({
           confirmed: true,
+          isApiRunning: false,
           documents: documents,
         });
       }
-
     } catch (err) {
       console.log(err);
       this.setState({
@@ -317,6 +316,19 @@ class UploadBank extends Component {
       });
       toast("Something went wrong");
     }
+  };
+
+  handleEdit = (id, doc_id) => {
+    this.setState({
+      editId: id,
+      doc_id: doc_id,
+    });
+
+    this.startUpload("open_gallery");
+  };
+
+  handleDelete = (id) => {
+    this.handleConfirm(id, { status: "delete" });
   };
 
   handleChange = (name, doc_id = "") => (event) => {
@@ -349,24 +361,6 @@ class UploadBank extends Component {
         form_data: form_data,
       });
     }
-  };
-
-  handleEdit = (id) => {
-    console.log(id)
-    this.setState({
-      editId: id,
-    });
-    this.startUpload("open_gallery");
-  };
-
-  handleDelete = (id) => {
-    let { documents } = this.state;
-    let index = documents.findIndex((item) => item.id === id);
-
-    documents.splice(index, 1);
-    this.setState({
-      documents: this.state.documents,
-    });
   };
 
   handleClick = async () => {
@@ -428,7 +422,7 @@ class UploadBank extends Component {
   };
 
   render() {
-    let { documents, confirmed, count } = this.state;
+    let { documents, confirmed, count, isApiRunning } = this.state;
 
     return (
       <Container
@@ -436,7 +430,7 @@ class UploadBank extends Component {
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        disable={documents.length === 0}
+        disable={documents.length === 0 || isApiRunning}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
@@ -504,9 +498,7 @@ class UploadBank extends Component {
             >
               <div className="title">
                 {index + 1}. Bank statement
-                {item.status === "uploaded" && item.status !== "confirmed" && (
-                  <DotDotLoader />
-                )}
+                {item.showDotLoader && <DotDotLoader />}
               </div>
               <div className="sub-title">
                 <img
@@ -531,29 +523,39 @@ class UploadBank extends Component {
                   placeholder="XXXXXXX"
                   value={item.password || ""}
                   onChange={this.handleChange("password", item.id)}
+                  disabled={item.showButton}
                 />
               </div>
 
               {item.status === "uploaded" && (
                 <div
-                  onClick={() => this.handleConfirm(item.id)}
+                  onClick={() =>
+                    !item.showDotLoader && this.handleConfirm(item.id)
+                  }
                   className="generic-page-button-small"
+                  style={{
+                    opacity: `${item.showDotLoader ? "0.5" : "1"}`,
+                  }}
                 >
                   CONFIRM
                 </div>
               )}
-
-              {item.status === "confirmed" && (
-                <div className="edit-or-delete">
+              {item.showButton && (
+                <div
+                  className="edit-or-delete"
+                  style={{
+                    opacity: `${item.showDotLoader ? "0.5" : "1"}`,
+                  }}
+                >
                   <div
-                    onClick={() => this.handleEdit(item.id)}
+                    onClick={() => !item.showDotLoader && this.handleEdit(item.id, item.document_id)}
                     className="generic-page-button-small"
                   >
                     EDIT
                   </div>
 
                   <div
-                    onClick={() => this.handleDelete(item.id)}
+                    onClick={() => !item.showDotLoader && this.handleDelete(item.id)}
                     className="generic-page-button-small"
                   >
                     DELETE

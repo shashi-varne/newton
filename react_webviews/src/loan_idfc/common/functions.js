@@ -11,7 +11,6 @@ import {
   getEditTitle,
   IsFutureDate,
 } from "utils/validators";
-import { param } from "jquery";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -25,7 +24,6 @@ export async function initialize() {
   this.getUserStatus = getUserStatus.bind(this);
   this.startTransaction = startTransaction.bind(this);
   this.netBanking = netBanking.bind(this);
-  this.net1 = net1.bind(this);
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
@@ -100,8 +98,15 @@ export async function getInstitutionList() {
 
     if (status === 200) {
       let banklist = result.data;
+      let bankOptions = [];
 
-      let bankOptions = banklist.map((item) => item.institution_name);
+      if (this.state.screen_name === "bank_upload") {
+        bankOptions = banklist.map((item) => {
+          return { name: item.institution_name, value: item.institution_id };
+        });
+      } else {
+        bankOptions = banklist.map((item) => item.institution_name);
+      }
 
       this.setState({
         bankOptions: bankOptions,
@@ -228,7 +233,8 @@ export async function getOrCreate(params) {
 
       if (
         this.state.screen_name === "loan_bt" ||
-        this.state.screen_name === "credit_bt"
+        this.state.screen_name === "credit_bt" ||
+        this.state.screen_name === "bank_upload"
       ) {
         this.getInstitutionList();
       }
@@ -345,6 +351,9 @@ export async function updateApplication(params, next_state = "") {
       }
     } else {
       if (typeof result.error === "string") {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error || result.message || "Something went wrong!");
       } else {
         toast(result.error[0] || result.message || "Something went wrong!");
@@ -352,12 +361,11 @@ export async function updateApplication(params, next_state = "") {
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
-
-  // this.setState({
-  //   show_loader: false,
-  // });
 }
 
 export async function get05Callback() {
@@ -412,7 +420,7 @@ export async function get10Callback(next_state) {
 
       that.get10Callback(next_state);
     } else {
-      this.navigate("error");
+      that.navigate("error");
     }
   }, 3000);
 }
@@ -438,7 +446,7 @@ export async function get07State() {
 
         that.get07State();
       } else {
-        this.navigate("error");
+        that.navigate("error");
       }
     }
   }, 3000);
@@ -503,7 +511,6 @@ export async function submitApplication(
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
-
   } catch (err) {
     console.log(err);
     this.setState({
@@ -512,9 +519,9 @@ export async function submitApplication(
     toast("Something went wrong");
   }
 
-  this.setState({
-    show_loader: false,
-  });
+  // this.setState({
+  //   show_loader: false,
+  // });
 }
 
 export function openInBrowser(url) {
@@ -592,7 +599,12 @@ export async function formCheckUpdate(
     mailing_address_preference: "mailing address preference",
   };
 
-  let selectTypeInput = ["educational_qualification"];
+  let selectTypeInput = [
+    "educational_qualification",
+    "gender",
+    "marital_status",
+    "religion",
+  ];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -643,38 +655,6 @@ export async function formCheckUpdate(
 }
 
 export async function netBanking(url) {
-  let plutusRedirectUrl = encodeURIComponent(
-    window.location.origin +
-      `/loan/idfc/perfios-status` +
-      getConfig().searchParams
-  );
-
-  var payment_link = url;
-  var pgLink = payment_link;
-  let app = getConfig().app;
-  let back_url = plutusRedirectUrl;
-
-  //eslint-disable-next-line
-  pgLink +=
-    (pgLink.match(/[\?]/g) ? "&" : "?") +
-    "plutus_redirect_url=" +
-    plutusRedirectUrl +
-    "&app=" +
-    app +
-    "&back_url=" +
-    back_url;
-
-  if (getConfig().generic_callback) {
-    pgLink += "&generic_callback=" + getConfig().generic_callback;
-  }
-
-  this.openInTabApp({
-    url: pgLink,
-    back_url: back_url,
-  });
-}
-
-export async function net1(url) {
   let plutus_redirect_url = encodeURIComponent(
     window.location.origin +
       `/loan/idfc/perfios-status` +
@@ -687,58 +667,6 @@ export async function net1(url) {
     (pgLink.match(/[\?]/g) ? "&" : "?") +
     "plutus_redirect_url=" +
     plutus_redirect_url;
-  window.location.href = pgLink;
-}
-
-export async function net(url) {
-  let plutus_redirect_url = encodeURIComponent(
-    window.location.origin +
-      `/loan/idfc/perfios-status` +
-      getConfig().searchParams
-  );
-
-  var pgLink = url;
-  let app = getConfig().app;
-  // eslint-disable-next-line
-  pgLink +=
-    (pgLink.match(/[\?]/g) ? "&" : "?") +
-    "plutus_redirect_url=" +
-    plutus_redirect_url +
-    "&app=" +
-    app +
-    "&back_url=" +
-    plutus_redirect_url;
-
-  if (getConfig().generic_callback) {
-    pgLink += "&generic_callback=" + getConfig().generic_callback;
-  }
-
-  if (getConfig().app === "ios") {
-    nativeCallback({
-      action: "show_top_bar",
-      message: {
-        title: "Payment",
-      },
-    });
-  }
-  if (!getConfig().redirect_url) {
-    nativeCallback({
-      action: "take_control",
-      message: {
-        back_url: plutus_redirect_url,
-        back_text: "Are you sure you want to exit the payment process?",
-      },
-    });
-  } else {
-    nativeCallback({
-      action: "take_control",
-      message: {
-        back_url: plutus_redirect_url,
-        back_text: "",
-      },
-    });
-  }
-
   window.location.href = pgLink;
 }
 
@@ -760,7 +688,7 @@ export async function startTransaction(transaction_type) {
       }
 
       if (transaction_type === "netbanking") {
-        this.net1(result.netbanking_url || "");
+        this.netBanking(result.netbanking_url || "");
       }
     } else {
       // toast(result.error || result.message || "Something went wrong!");
