@@ -51,7 +51,7 @@ class AddPolicy extends Component {
 
 
 
-  handleChange = name  => event => { console.log(name, event)
+  handleChange = name  => event => {
 
     let company = this.state.company
     var value = company[event].name
@@ -68,8 +68,6 @@ class AddPolicy extends Component {
 
 
   handleClick = () => {
-    console.log(this.state.form_data)
-    console.log('handleClick')
     this.setState({
       openBmiDialog: true
     })
@@ -209,7 +207,7 @@ class AddPolicy extends Component {
               error={ false}
               name="Vendor"
             //   helperText={'Insurance Company'}
-              value={this.state.form_data.Vendor}
+              value={this.state.form_data.Vendor || 'CARE'}
               onChange={this.handleChange("Vendor")}
             />
           </div>
