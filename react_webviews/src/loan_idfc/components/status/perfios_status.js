@@ -147,7 +147,10 @@ class PerfiosStatus extends Component {
   }
 
   handleClick = () => {
-    this.sendEvents('next');
+    if(this.state.commonMapper.button_title === 'RETRY')
+      this.sendEvents('retry');
+    else
+      this.sendEvents('next');
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {

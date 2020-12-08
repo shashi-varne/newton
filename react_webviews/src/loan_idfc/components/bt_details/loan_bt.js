@@ -14,7 +14,6 @@ import {
   inrFormatTest,
 } from "utils/validators";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { data } from "jquery";
 
 class LoanBtDetails extends Component {
   constructor(props) {
