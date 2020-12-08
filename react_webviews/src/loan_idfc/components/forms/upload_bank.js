@@ -546,14 +546,14 @@ class UploadBank extends Component {
                   }}
                 >
                   <div
-                    onClick={() => this.handleEdit(item.id, item.document_id)}
+                    onClick={() => !item.showDotLoader && this.handleEdit(item.id, item.document_id)}
                     className="generic-page-button-small"
                   >
                     EDIT
                   </div>
 
                   <div
-                    onClick={() => this.handleDelete(item.id)}
+                    onClick={() => !item.showDotLoader && this.handleDelete(item.id)}
                     className="generic-page-button-small"
                   >
                     DELETE
