@@ -146,7 +146,7 @@ class GroupHealthReportDetails extends Component {
             nativeCallback({
                 action: 'open_in_browser',
                 message: {
-                    url: url
+                    url: this.state.download_link || url
                 }
             });
         } else {
