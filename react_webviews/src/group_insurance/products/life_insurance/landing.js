@@ -353,7 +353,7 @@ class FyntuneLanding extends Component {
           </p>
         </div>
 
-        <p className="fyntune-heading">Major Benifits</p>
+        <p className="fyntune-heading">Major benefits</p>
         <div className="his" >
           <div className="horizontal-images-scroll">
             <img
