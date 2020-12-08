@@ -31,8 +31,8 @@ class MobileVerification extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "mobile_number_verification",
-        't&c': "yes",
+        screen_name: "mobile number verification",
+        't&c_clicked': "yes",
       },
     };
 

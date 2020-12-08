@@ -65,6 +65,7 @@ class OtpVerification extends Component {
       properties: {
         user_action: user_action,
         screen_name: "otp_screen",
+        resend_clicked: this.state.resend_otp_clicked && "yes" || "no",
       },
     };
 
