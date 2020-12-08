@@ -168,7 +168,6 @@ class DocumentUpload extends Component {
         type: "doc",
         doc_type: doc_type,
         doc_name: doc_name,
-        // doc_side: side,
         // callbacks from native
         upload: function upload(file) {
           try {
