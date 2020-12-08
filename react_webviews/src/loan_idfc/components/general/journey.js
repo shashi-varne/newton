@@ -147,7 +147,7 @@ class JourneyMap extends Component {
             "Enter your loan requirements and income details to get the best loan offer.",
           status: index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
-          cta: idfc_loan_status === "idfc_null_accepted" ? 'START' : index === "2" ? "RESUME" : index > "2" && "SUMMARY"
+          cta: idfc_loan_status === "idfc_null_accepted" ? 'START' : index === "2" ? "RESUME" : index > "2" && "COMPLETED"
         },
         {
           step: "4",
@@ -157,7 +157,7 @@ class JourneyMap extends Component {
             "Provide your office address and upload documents to get your loan sanctioned.",
           status: index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",
-          cta: idfc_loan_status === "offer_accepted" ? 'START' : index === "3" ? "RESUME" : index > "3" && "SUMMARY"
+          cta: idfc_loan_status === "offer_accepted" ? 'START' : index === "3" ? "RESUME" : index > "3" && "COMPLETED"
         },
         {
           step: "5",
@@ -171,7 +171,7 @@ class JourneyMap extends Component {
               : index < "4"
               ? "pending"
               : "completed",
-          cta: idfc_loan_status === "doc_uploaded" && "CHECK",
+          cta: (idfc_loan_status === "doc_uploaded" || idfc_loan_status === "idfc_4_accepted") && "CHECK",
           id: "sanction_and_disbursal",
         },
       ],
@@ -261,10 +261,12 @@ class JourneyMap extends Component {
       }
     }
 
+    // ---step-4
     if (id === "document_upload") {
       this.navigate(next_state);
     }  
 
+    // ---step-5
     if (id === "sanction_and_disbursal") {
       this.navigate('reports')
     }
