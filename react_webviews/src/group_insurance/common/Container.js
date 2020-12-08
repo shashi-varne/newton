@@ -38,7 +38,7 @@ class Container extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
-    if (pathname.indexOf('group-health') >= 0) {
+    if (pathname.indexOf('group-health') >= 0 || pathname.indexOf('life-insurance') >= 0 ) {
       this.setState({
         new_header: true,
         inPageTitle: true,
@@ -348,6 +348,12 @@ class Container extends Component {
       case '/group-insurance/term/intro':
         this.navigate('/group-insurance');
         break;
+      case '/group-insurance/life-insurance/savings-plan/landing': 
+        this.navigate(back_button_mapper[pathname]);
+        break;
+        case '/group-insurance/life-insurance/entry': 
+        this.navigate(back_button_mapper[pathname]);
+        break;
       default:
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
           this.navigate(back_button_mapper[pathname]);
@@ -524,10 +530,9 @@ class Container extends Component {
           <div id="header-title-page"
             style={this.props.styleHeader} 
             className={`header-title-page  ${this.props.classHeader}`}>
-                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
-                  {this.props.title}
-                </div>
-              
+               <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
+                 {this.props.title}
+              </div>
               {this.state.inPageTitle && this.props.count &&
                 <span color="inherit" 
                 className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}

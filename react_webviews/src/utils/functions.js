@@ -420,7 +420,7 @@ function getPartnerConfig(partner_code) {
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
       askEmail: 'ask@fisdom.com',
-      mobile: '+91-8048093070',
+      mobile: '+91-7829228886',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
       webAppUrl: 'https://app.fisdom.com/#!/',
@@ -443,7 +443,7 @@ function getPartnerConfig(partner_code) {
       askEmail: 'ask@finity.in',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'mywayBackColor',
-      webAppUrl: 'https://app.finity.in/#!/',
+      webAppUrl: 'https://app.mywaywealth.com/#!/',
       email_domain: 'finity.in',
     },
     minvest: {
@@ -770,17 +770,17 @@ export function isFeatureEnabled(config, feature) {
   }
 
   let mapper = {
-    open_inapp_tab_hs: {
-      fisdom: {
-        android: '999',
-        ios: '',
+    'open_inapp_tab': {
+      'fisdom': {
+        'android': '205',
+        'ios': '5.4'
       },
-      finity: {
-        android: '999',
-        ios: '',
-      },
-    },
-  };
+      'myway': {
+        'android': '102',
+        'ios': '5.2'
+      }
+    }
+  }
 
   if (
     mapper[feature] &&
