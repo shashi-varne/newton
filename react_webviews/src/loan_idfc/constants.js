@@ -7,15 +7,15 @@ export function goBackMap(path) {
       '/loan/idfc/journey': '/loan/idfc/home',
       '/loan/idfc/edit-number': '/loan/idfc/home',
       '/loan/idfc/application-summary': '/loan/idfc/journey',
-      '/loan/idfc/personal-details': '/loan/idfc/home',
+      '/loan/idfc/personal-details': '/loan/idfc/journey',
       '/loan/idfc/basic-details': '/loan/idfc/home',
       '/loan/idfc/professional-details': '/loan/idfc/basic-details',
-      '/loan/idfc/loan-requirement-details': '/loan/idfc/home',
-      '/loan/idfc/income-details': '/loan/idfc/home',
+      '/loan/idfc/loan-requirement-details': '/loan/idfc/journey',
+      '/loan/idfc/income-details': '/loan/idfc/journey',
       '/loan/idfc/upload-bank': '/loan/idfc/income-details',
-      '/loan/idfc/eligible-loan': '/loan/idfc/home',
-      '/loan/idfc/loan-eligible': '/loan/idfc/home',
-      '/loan/idfc/bt-info': '/loan/idfc/home',
+      '/loan/idfc/eligible-loan': '/loan/idfc/journey',
+      '/loan/idfc/loan-eligible': '/loan/idfc/journey',
+      '/loan/idfc/bt-info': '/loan/idfc/journey',
     }
 
   return mapper[path] || false;
