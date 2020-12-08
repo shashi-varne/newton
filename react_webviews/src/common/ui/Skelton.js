@@ -10,9 +10,11 @@ import './style.scss';
 
 
 // let highlight_color = '#D0E6ff';
-let highlight_color = getConfig().skelton_color;
-// let highlight_color = 'red';
+// let highlight_color = getConfig().skelton_color;
+// let highlight_color = '#D8D8D8';
+let highlight_color = '#D3DBE4';
 
+// highlight_color = '#5F40AF';
 
 
 class UiSkeltonClass extends Component {

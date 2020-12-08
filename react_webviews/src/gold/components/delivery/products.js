@@ -157,7 +157,8 @@ class GoldDeliveryProducts extends Component {
     return (
       <div key={index} className="delivery-tile" onClick={() => this.selectGoldProduct(index)} >
         {props.media.images && 
-        <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
+        // <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
+        <Imgc alt="Gold" className="delivery-icon st1" src={props.media.images[0]} width="80" />}
 
         <div className="disc">{props.description}</div>
         <div className="making-charges">Making charges</div>
@@ -223,7 +224,7 @@ class GoldDeliveryProducts extends Component {
         Select gold coin
         </div>
 
-       {!this.state.skelton && <div className="delivery-products-tiles">
+       {!this.state.skelton && <div className="delivery-products-tiles skelton-tiles">
             {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
         </div>}
 

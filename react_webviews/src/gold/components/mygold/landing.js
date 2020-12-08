@@ -440,15 +440,17 @@ class GoldSummary extends Component {
         <Imgc 
           src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
         <div style={{display: 'grid', margin: '0 0 0 10px'}}>
-          <div className="highlight-text12">
+          {!this.state.skelton && !this.state.onloadError && <div className="highlight-text12">
             Your gold locker
             <img  style={{margin: '0 0 0 8px', width: 11}}
           src={ require(`assets/lock_icn.svg`)} alt="Gold" />
-          </div>
-
-          {!this.state.skelton && !this.state.onloadError && <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
-          {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
           </div>}
+
+          {!this.state.skelton && !this.state.onloadError && 
+          <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
+          {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
+          </div>
+          }
 
           {!this.state.skelton && this.state.onloadError && 
             <div className="highlight-text2 onload-error"
@@ -458,6 +460,9 @@ class GoldSummary extends Component {
           }
 
           <SkeltonRect className="balance-skelton" 
+            hide={!this.state.skelton} 
+          />
+          <SkeltonRect className="balance-skelton2" 
             hide={!this.state.skelton} 
           />
         </div>
