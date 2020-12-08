@@ -48,11 +48,10 @@ class DocumentUpload extends Component {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
+        type: "native_receiver_image",
         show_loader: function (show_loader) {
-
           that.showLoaderNative();
-        }
+        },
       });
     }
   }
@@ -128,8 +127,8 @@ class DocumentUpload extends Component {
 
   showLoaderNative() {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
   }
 
   handleChange = (name) => (event) => {
@@ -166,7 +165,6 @@ class DocumentUpload extends Component {
       doc_type: type,
     });
 
-    
     if (getConfig().html_camera) {
       this.openCameraWeb(id);
     } else {
@@ -178,26 +176,36 @@ class DocumentUpload extends Component {
     let document = this.state.form_data.doc_name;
 
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
+    console.log(file);
+    let ext = file.type.split("/")[1];
+    name = document.split(" ").join("_") + side + "." + ext;
 
     file.name = name;
     file.category_id = category;
     file.checklist_doc_type = doc_type;
     file.doc_name = document;
+    file.doc_type = file.type;
 
-    this.uploadDocument(file);
+    let that = this;
+    getBase64(file, function (img) {
+      file.imageBaseFile = img;
+      that.uploadDocument(file, side);
 
-    if (totalUpload < 3) {
-      image_data[side] = file;
-    } else {
-      documents.push(file);
-    }
-
-    this.setState({
-      documents: documents,
-      image_data: image_data,
-      show_loader: false,
-    })
-  }
+      if (totalUpload < 3) {
+        image_data[side] = file;
+      } else {
+        documents.push(file);
+      }
+  
+      that.setState({
+        documents: documents,
+        image_data: image_data,
+        show_loader: false,
+        fileUploaded: true,
+        disbableButton: true,
+      });
+    });
+  };
 
   getPdf = (e) => {
     e.preventDefault();
@@ -236,12 +244,13 @@ class DocumentUpload extends Component {
       getBase64(file, function (img) {
         file.imageBaseFile = img;
         that.uploadDocument(file);
+        console.log(file);
         documents.push(file);
 
         that.setState({
           fileUploaded: true,
           documents: documents,
-          disbableButton: true
+          disbableButton: true,
         });
       });
     }
@@ -253,8 +262,7 @@ class DocumentUpload extends Component {
     let { image_data, category, doc_type } = this.state;
     let id = e.target.id;
     image_data[id] = {};
-    let doc_name =
-      this.state.form_data.doc_name;
+    let doc_name = this.state.form_data.doc_name;
 
     let file = e.target.files[0];
 
@@ -273,10 +281,10 @@ class DocumentUpload extends Component {
     file.doc_type = file.type;
 
     getBase64(file, function (img) {
-      file.img = img;
+      file.imageBaseFile = img;
       file.uploaded = true;
       image_data[id] = file;
-
+      console.log(file);
       that.uploadDocument(image_data[id], id);
 
       that.setState({
@@ -288,9 +296,11 @@ class DocumentUpload extends Component {
   uploadDocument = async (file, id) => {
     let { image_data, totalUpload, disbableButton } = this.state;
 
+    let ext = file.type.split("/")[1];
+
     const data = new FormData();
     data.append("doc_type", file.doc_name);
-    data.append("file", file);
+    data.append("file", file, (file.name + ext));
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
 
@@ -306,13 +316,12 @@ class DocumentUpload extends Component {
         if (totalUpload < 3) {
           image_data[id].integrated = true;
         } else {
-          disbableButton = false
+          disbableButton = false;
         }
-        
 
         this.setState({
           image_data: image_data,
-          disbableButton: disbableButton
+          disbableButton: disbableButton,
         });
       }
     } catch (err) {
@@ -335,7 +344,11 @@ class DocumentUpload extends Component {
               fontWeight: 600,
             }}
           >
-            <div>Upload PAN card</div>
+            <div>
+              {side !== "single"
+                ? `${side} side of the document`
+                : "upload document"}
+            </div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
                 onClick={() => this.startUpload("open_camera", side, type)}
@@ -367,7 +380,7 @@ class DocumentUpload extends Component {
             <div>
               <img
                 style={{ width: "100%", height: 150 }}
-                src={image_data[side].img || this.state.document_url || ""}
+                src={image_data[side].imageBaseFile || this.state.document_url || ""}
                 alt="PAN"
               />
             </div>
@@ -398,45 +411,94 @@ class DocumentUpload extends Component {
     let { image_data } = this.state;
     return (
       <div>
-        {!image_data[side] && <div style={{
-          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
-          textAlign: 'center'
-        }}>
-          <div>Front side of PAN card</div>
-          <div style={{ margin: '20px 0 20px 0', fontSize: '12px', lineHeight: '20px' }}>
-            <div onClick={() => this.startUpload("open_camera", side, type)} style={{
-              width: '50%', float: 'left',
-              textAlign: 'center', borderRight: '1px solid #e1e1e1'
-
-            }}>
-              <img src={camera_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>OPEN CAMERA</div>
-            </div>
-            <div onClick={() => this.startUpload("open_gallery", side, type)} style={{ textAlign: 'center' }}>
-              <img src={gallery_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>GO TO GALLERY</div>
+        {!image_data[side] && (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "10px 0px 0px 0px",
+              textAlign: "center",
+            }}
+          >
+            <div>Front side of PAN card</div>
+            <div
+              style={{
+                margin: "20px 0 20px 0",
+                fontSize: "12px",
+                lineHeight: "20px",
+              }}
+            >
+              <div
+                onClick={() => this.startUpload("open_camera", side, type)}
+                style={{
+                  width: "50%",
+                  float: "left",
+                  textAlign: "center",
+                  borderRight: "1px solid #e1e1e1",
+                }}
+              >
+                <img src={camera_green} alt="OTM"></img>
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  OPEN CAMERA
+                </div>
+              </div>
+              <div
+                onClick={() => this.startUpload("open_gallery", side, type)}
+                style={{ textAlign: "center" }}
+              >
+                <img src={gallery_green} alt="OTM"></img>
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  GO TO GALLERY
+                </div>
+              </div>
             </div>
           </div>
-        </div>}
-        {image_data[side] && <div style={{
-          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
-          textAlign: 'center'
-        }}>
-          <div>
-            <img style={{ width: '100%', height: 150 }} src={image_data[side].img || this.state.document_url || ""} alt="PAN" />
-          </div>
-          <div style={{ margin: '20px 0 20px 0', fontSize: '12px', lineHeight: '20px' }}>
-            <div onClick={() => this.startUpload("open_camera", side, type)} style={{
-              width: '50%', float: 'left',
-              textAlign: 'center', borderRight: '1px solid #e1e1e1'
-            }}>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>OPEN CAMERA</div>
+        )}
+        {image_data[side] && (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "0px 0px 0px 0px",
+              textAlign: "center",
+            }}
+          >
+            <div>
+              <img
+                style={{ width: "100%", height: 150 }}
+                src={image_data[side].imageBaseFile || this.state.document_url || ""}
+                alt="PAN"
+              />
             </div>
-            <div onClick={() => this.startUpload("open_gallery", side, type)} style={{ textAlign: 'center' }}>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>GO TO GALLERY</div>
+            <div
+              style={{
+                margin: "20px 0 20px 0",
+                fontSize: "12px",
+                lineHeight: "20px",
+              }}
+            >
+              <div
+                onClick={() => this.startUpload("open_camera", side, type)}
+                style={{
+                  width: "50%",
+                  float: "left",
+                  textAlign: "center",
+                  borderRight: "1px solid #e1e1e1",
+                }}
+              >
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  OPEN CAMERA
+                </div>
+              </div>
+              <div
+                onClick={() => this.startUpload("open_gallery", side, type)}
+                style={{ textAlign: "center" }}
+              >
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  GO TO GALLERY
+                </div>
+              </div>
             </div>
           </div>
-        </div>}
+        )}
       </div>
     );
   }
@@ -453,7 +515,7 @@ class DocumentUpload extends Component {
       documents,
       docs,
       totalUpload,
-      disbableButton
+      disbableButton,
     } = this.state;
 
     if (totalUpload < 3 && Object.keys(image_data).length !== totalUpload) {
@@ -505,7 +567,8 @@ class DocumentUpload extends Component {
               >
                 {getConfig().html_camera &&
                   this.renderHtmlCamera("front", "doc1")}
-                {!getConfig().html_camera && this.renderNativeCamera("front", "doc1")}
+                {!getConfig().html_camera &&
+                  this.renderNativeCamera("front", "doc1")}
               </div>
 
               <div
@@ -514,7 +577,8 @@ class DocumentUpload extends Component {
               >
                 {getConfig().html_camera &&
                   this.renderHtmlCamera("back", "doc2")}
-                {!getConfig().html_camera && this.renderNativeCamera("back", "doc2")}
+                {!getConfig().html_camera &&
+                  this.renderNativeCamera("back", "doc2")}
               </div>
 
               <div style={{ display: "none" }}>
@@ -550,7 +614,14 @@ class DocumentUpload extends Component {
                 <div className="upload-bank-statement">
                   <div
                     className="pdf-upload"
-                    onClick={() => this.startUpload("open_file", '', `doc${documents.length + 1}`, `document_${documents.length + 1}`)}
+                    onClick={() =>
+                      this.startUpload(
+                        "open_file",
+                        "",
+                        `doc${documents.length + 1}`,
+                        `document_${documents.length + 1}`
+                      )
+                    }
                   >
                     <span className="plus-sign">
                       <input

@@ -69,14 +69,14 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
   },
-  "idfc_1.1_accepted": {
-    top_icon: "ils_loan_failed",
-    top_title: "Application Rejected",
-    button_title: "OK",
-    icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
-  },
+  // "idfc_1.1_accepted": {
+  //   top_icon: "ils_loan_failed",
+  //   top_title: "Application Rejected",
+  //   button_title: "OK",
+  //   icon: "close",
+  //   cta_state: "/loan/idfc/home",
+  //   close_state: "/loan/idfc/home",
+  // },
   "Salary receipt mode": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
