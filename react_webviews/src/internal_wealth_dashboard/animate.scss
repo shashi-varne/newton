@@ -10,6 +10,7 @@
   opacity: 0;
   animation: iwd-fade #{$time}s #{$timingFunc} #{$delay}s;
   animation-name: iwd-fade;
+  animation-fill-mode: both;
   -webkit-animation-name: iwd-fade;
   -webkit-animation-fill-mode: both;
 }
@@ -164,6 +165,8 @@
   // cubic-bezier(0.29, 0.83, 0.51, 0.97)
   animation-name: iwd-fadeFromLeft;
   -webkit-animation-name: iwd-fadeFromLeft;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
 
 @keyframes iwd-fadeFromLeft{

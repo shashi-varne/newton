@@ -514,7 +514,7 @@ $card-padding: 50px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  @extend .iwd-fade;
+  @extend .iwd-fadeFromLeft;
   animation-delay: 0.4s;
   position: relative;
   z-index: 2;
