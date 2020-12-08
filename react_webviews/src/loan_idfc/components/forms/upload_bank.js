@@ -305,6 +305,7 @@ class UploadBank extends Component {
 
         this.setState({
           confirmed: true,
+          isApiRunning: false,
           documents: documents,
         });
       }
