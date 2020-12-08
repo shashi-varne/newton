@@ -110,7 +110,7 @@ class ApplicationSummary extends Component {
       properties: {
         user_action: user_action,
         screen_name: "summary",
-        stage: "basic details",
+        stage: "basic details uploaded",
       },
     };
 
