@@ -16,6 +16,8 @@ export function goBackMap(path) {
       '/loan/idfc/eligible-loan': '/loan/idfc/journey',
       '/loan/idfc/loan-eligible': '/loan/idfc/journey',
       '/loan/idfc/bt-info': '/loan/idfc/journey',
+      '/loan/idfc/doc-list': '/loan/idfc/journey',
+      '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
     }
 
   return mapper[path] || false;
