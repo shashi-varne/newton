@@ -227,23 +227,26 @@ class JourneyMap extends Component {
     let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
+    let selected_journey = this.state.journeyData.options.find((data) => data.id === id);
+    let stage = selected_journey.titleCompleted.toLowerCase();
+    
     // ---step-1
     if (id === "basic_details") {
-      this.sendEvents("summary", {stage: "basic details uploaded", summary_selected_for: "basic details uploaded"});
+      this.sendEvents("summary", {stage: stage, summary_selected_for: stage});
       this.navigate("application-summary");
     }
 
     // ---step-2
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
-        this.sendEvents('next', {stage: "loan application created"});
+        this.sendEvents('next', {stage: stage});
         this.getCkycState();
       }
       if (index > "1") {
-        this.sendEvents('summary', {stage: "loan application created", summary_selected_for: "loan application created"});
+        this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
         this.navigate("ckyc-summary");
       } else {
-        this.sendEvents('next', {stage: "loan application created"});
+        this.sendEvents('next', {stage: stage});
         this.updateApplication({
           idfc_loan_status: "ckyc",
         });
@@ -252,7 +255,7 @@ class JourneyMap extends Component {
 
     // ---step-3
     if (id === "income_details") {
-      this.sendEvents('next', {stage: "provide income details"});
+      this.sendEvents('next', {stage: stage});
       if (idfc_loan_status === "idfc_0.5_accepted") {
         this.get05Callback();
       } else if (idfc_loan_status === "idfc_1.0_accepted") {
@@ -267,13 +270,13 @@ class JourneyMap extends Component {
 
     // ---step-4
     if (id === "document_upload") {
-      this.sendEvents('next', {stage: "documents uploaded"});
+      this.sendEvents('next', {stage: stage});
       this.navigate(next_state);
     }  
 
     // ---step-5
     if (id === "sanction_and_disbursal") {
-      this.sendEvents('next', {stage: "Sanction and disbursal"});
+      this.sendEvents('next', {stage: stage});
       this.navigate('reports')
     }
   };
