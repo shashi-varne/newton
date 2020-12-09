@@ -243,7 +243,7 @@ class DocumentUpload extends Component {
 
     if (getConfig().html_camera && method_name !== "open_file") {
       this.openCameraWeb(type);
-    } else if (method_name === "open_file") {
+    } else if (getConfig().html_camera && method_name === "open_file") {
       this.openCameraWeb();
     } else {
       this.native_call_handler(method_name, type, name);
