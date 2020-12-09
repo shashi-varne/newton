@@ -18,6 +18,7 @@ import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { bytesToSize } from "utils/validators";
 import Input from "../../../common/ui/Input";
+import { element } from "prop-types";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -162,11 +163,14 @@ class DocumentUpload extends Component {
   };
 
   sendEvents(user_action) {
+    let type = (this.state.type === "open_camera" ? "camera" : "gallery") || "";
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "docs_upload",
+        screen_name: `${this.state.docList.category_name} doc` || "doc_upload",
+        doc_type: this.state.form_data.doc_name,
+        type: type,
       },
     };
 
@@ -240,6 +244,7 @@ class DocumentUpload extends Component {
     this.setState({
       form_data: form_data,
       totalUpload: totalUpload,
+
     });
   };
 
@@ -439,7 +444,7 @@ class DocumentUpload extends Component {
             <div>upload document</div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
-                onClick={() => this.startUpload("open_camera", type)}
+                onClick={() => this.startUpload("open_gallery", type)}
                 style={{
                   textAlign: "center",
                   cursor: "pointer",
@@ -474,7 +479,7 @@ class DocumentUpload extends Component {
             </div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
-                onClick={() => this.startUpload("open_camera", type)}
+                onClick={() => this.startUpload("open_gallery", type)}
                 style={{
                   textAlign: "center",
                 }}
