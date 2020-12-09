@@ -10,6 +10,7 @@ export function goBackMap(path) {
       '/loan/idfc/personal-details': '/loan/idfc/journey',
       '/loan/idfc/basic-details': '/loan/idfc/home',
       '/loan/idfc/professional-details': '/loan/idfc/basic-details',
+      '/loan/idfc/address-details': '/loan/idfc/personal-details',
       '/loan/idfc/loan-requirement-details': '/loan/idfc/journey',
       '/loan/idfc/income-details': '/loan/idfc/journey',
       '/loan/idfc/upload-bank': '/loan/idfc/income-details',
@@ -307,7 +308,7 @@ export const idfc_config = {
     ],
     organisationTypeOptions: [
       "CENTRAL GOVT.",
-      "EDUCATIONAl INSTITUTE",
+      "EDUCATIONAL INSTITUTE",
       "PARTNERSHIP FIRM",
       "PRIVATE LIMITED COMPANY",
       "PUBLIC LIMITED COMPANY",

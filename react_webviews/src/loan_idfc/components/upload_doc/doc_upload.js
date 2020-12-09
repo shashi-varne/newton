@@ -430,7 +430,7 @@ class DocumentUpload extends Component {
             <div>upload document</div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
-                onClick={() => this.startUpload("open_camera", type)}
+                onClick={() => this.startUpload("open_gallery", type)}
                 style={{
                   textAlign: "center",
                   cursor: "pointer",
@@ -465,7 +465,7 @@ class DocumentUpload extends Component {
             </div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
-                onClick={() => this.startUpload("open_camera", type)}
+                onClick={() => this.startUpload("open_gallery", type)}
                 style={{
                   textAlign: "center",
                 }}
