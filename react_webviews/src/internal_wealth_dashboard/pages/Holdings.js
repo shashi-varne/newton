@@ -101,10 +101,12 @@ const Holdings = () => {
         bool = false;
       }
       if (bool && filterVal?.fisdom_rating) {
+        // eslint-disable-next-line radix
         let fisdomRating = parseInt(filterVal?.fisdom_rating);
         bool = fisdomRating === 1 ? el.mf.fisdom_rating <= 3 : el.mf.fisdom_rating >= 4;
       }
       if (bool && filterVal?.current_value_type) {
+        // eslint-disable-next-line radix
         let currentValueType = parseInt(filterVal?.current_value_type);
         if (currentValueType === 4) {
           bool = el.current > currentValue(currentValueType).max;
