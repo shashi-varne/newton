@@ -22,6 +22,7 @@ import { childeNameMapper } from '../../../constants';
 import {getCoverageType} from '../constants';
 
 import Checkbox from 'material-ui/Checkbox';
+// import Checkbox from '../../../../common/ui/Checkbox';
 import Grid from 'material-ui/Grid';
 
 class GroupHealthPlanFinalSummary extends Component {
@@ -35,11 +36,12 @@ class GroupHealthPlanFinalSummary extends Component {
             lead: {
                 member_base: []
             },
+            quotation : {  member_base : []},
             tncChecked: true,
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
-            screen_name:'final_summary_screen'
+            screen_name:'final_summary_screen',
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
@@ -53,32 +55,54 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize();
     }
 
+ 
     onload = () => {
-        let { lead, provider } = this.state;
-        let member_base = lead.member_base;
+        let { lead, provider } = this.state;  
+
+        let insured_people_details = lead.insured_people_details;
+        let buyer_details = lead.buyer_details;
+        buyer_details.key = 'applicant';
+        let member_base = [];
+
+        insured_people_details.forEach(element => {
+            element.insured_person.answers = element.answers
+            member_base.push(element.insured_person)
+          });
+      
+          member_base.forEach(element => {
+            let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+             element.key = relation.key
+           });
+        if(lead.quotation_details.insurance_type === 'family' || lead.quotation_details.insurance_type === 'parents' || lead.quotation_details.insurance_type === 'parents_in_law'){
+         member_base.push(buyer_details)
+        }
+
         let ped_list = (this.state.providerConfig.select_ped_screen || {}).ped_list || [];
         
-        let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
- 
+        let applicantIndex = this.state.member_base.findIndex(item => item.key === "applicant");
         if(applicantIndex >=0) {
             let appli_data = member_base[applicantIndex];
             member_base.splice(applicantIndex, 1);
             member_base.splice(0, 0, appli_data);
         }
-        
+         member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+
+
         this.setState({
-            applicantIndex: applicantIndex
+            applicantIndex: applicantIndex,
+            member_base: member_base
         });
 
         let pan_amount = this.state.pan_amount;
 
         let pan_needed = false;
-        if (lead.total_amount > pan_amount) {
+        if (lead.quotation_details.total_premium > pan_amount) {
             pan_needed = true;
         }
 
-        if(lead.add_ons_amount) {
-            let add_ons_backend = lead.add_ons_json;
+        let addon = Object.keys(lead.quotation_details.add_ons).length
+        if( addon !== 0) {
+            let add_ons_backend = lead.quotation_details.add_ons;
             let add_ons_show = '';
             for (var key in add_ons_backend) {
 
@@ -127,19 +151,19 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
         const med_ques_mapper_religare = {
-            'mand_1': {
+            'religare_mhd_prev_hosp': {
                 'disc': 'Any illness/injury in last 48 months?',
                 'members': []
             },
-            'mand_2': {
+            'religare_mhd_file_claim': {
                 'disc': 'Previous health insurance claim?',
                 'members': []
             },
-            'mand_3': {
+            'religare_mhd_prev_proposal_decline': {
                 'disc': 'Previous health insurance declined/increase?',
                 'members': []
             },
-            'mand_4': {
+            'religare_mhd_exising_policy_in_religare': {
                 'disc': 'Already covered with Care (formerly Religare)?',
                 'members': []
             }
@@ -171,7 +195,7 @@ class GroupHealthPlanFinalSummary extends Component {
             let member_display = capitalizeFirstLetter(childeNameMapper(member.key));
 
             let obj = {
-                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? lead.account_type !== 'self' ? dateOrdinal(i + 1) : '' : dateOrdinal(i))  + ' insured)') : ''}`,
+                title: `${member_display}'s details ${member_base.length > 1 ? ('(' + (applicantIndex === -1 ? lead.quotation_details.insurance_type !== 'self' ? dateOrdinal(i + 1) : '' : dateOrdinal(i))  + ' insured)') : ''}`,
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
@@ -179,7 +203,7 @@ class GroupHealthPlanFinalSummary extends Component {
                 obj.title = 'Applicant details';
             }
 
-            if (lead.account_type === 'self') {
+            if (lead.quotation_details.insurance_type === 'self') {
                 obj.title = 'Personal details';
             }
 
@@ -205,52 +229,70 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
             if (pan_needed && (member.key === 'applicant' || member.key === 'self') &&
-                lead.self_account_key.pan_number) {
+                lead.buyer_details.pan_no) {
                 data.push({
                     'title': 'PAN number',
                     'key': 'pan',
-                    'subtitle': lead.self_account_key.pan_number
+                    'subtitle': lead.buyer_details.pan_no
                 })
             }
 
+            if(member.key === 'applicant' && (this.state.insured_account_type === 'self' || this.state.insured_account_type === 'self_family') ){
+                continue    
+            }
             obj.data = data;
             accordianData.push(obj);
+         
+            if(member.key === 'applicant'){
+                continue
+            }
+
 
             if (provider === 'HDFCERGO') {
-                if (member.ped_diseases_name) {
-                    let dis_data = {
-                        'title': `${member.relation}'s diseases`,
-                        'subtitle': member.ped_diseases_name
+                let subtitle = []
+                member.answers.pre_existing_diseases.forEach((name) => {
+                    let ped = ped_list.find(item => item.id === name.front_end_question_id);
+                    if (ped.id === 'hdfc_ergo_ped_other_diseases') {
+                        subtitle.push(name.description)
+                    } else {
+                        subtitle.push(ped.name)
                     }
+                })
 
+                if (member.ped) {
+                    let dis_data = {
+                        'title': `${(childeNameMapper(member.key)).toUpperCase()}'s diseases`,
+                        'subtitle': subtitle
+                    }
                     diseases_data_backend.push(dis_data);
                 }
             }
 
 
-            let life_style_question = member.life_style_question;
+            let life_style_question = member.answers.life_style_details;
             if (provider === 'RELIGARE') {
-
-                // for lifestyle
-
-                if (life_style_question && life_style_question.answer) {
+                         
+                // for lifestyle     
+              
+                if (life_style_question.length >=1 && life_style_question[0].yes_no) {
+                    let date = life_style_question[0].since_when
+                     date = date.split('/')
                     members_for_life_style.push(member_display);
 
                     life_style_details_data.push({
                         'title': `${member_display}'s consumption details`,
-                        'subtitle': life_style_question.answer_description
+                        'subtitle': life_style_question[0].description
                     });
 
                     life_style_details_data.push({
                         'title': `Since when`,
-                        'subtitle': life_style_question.start_date
+                        'subtitle': `${date[1]}/${date[2]}`
                     });
 
                 }
 
-
-                // for peds
-                if (member.ped_exists) {
+                // for peds 
+                if (member.ped) {
 
                     if (this.state.insured_account_type !== 'self') {
                         diseases_data_backend.push({
@@ -261,13 +303,15 @@ class GroupHealthPlanFinalSummary extends Component {
                     }
                     
                     // eslint-disable-next-line no-loop-func
-                    member.ped_diseases.forEach(ped_option => {
+                    member.answers.pre_existing_diseases.forEach(ped_option => {
                         
-                        // eslint-disable-next-line no-loop-func
-                        let ped = ped_list.find(item => item.id === ped_option.key_mapper);
+                        // eslint-disable-next-line no-loop-func 
+                        let ped = ped_list.find(item => item.key === ped_option.front_end_question_id);
+                        let ped_data = ped_option.since_when.split('/')
                         diseases_data_backend.push({
-                            'title': ped_option.answer_description || ped.name,
-                            'subtitle': 'Since - ' + ped_option.start_date
+                            'title': ped_option.description || ped.name,
+                            // eslint-disable-next-line
+                            'subtitle': 'Since - ' + `${ped_data[1]}/${ped_data[2]}`
                         })
                     })
                     
@@ -275,11 +319,11 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
 
                 // for med questions
-                if (member.medical_questions) {
-                    for (var qs in member.medical_questions) {
-                        let q_data = member.medical_questions[qs];
-                        if (q_data.answer) {
-                            med_ques_data[q_data.key_mapper].members.push(member_display);
+                if (member.answers.medical_history_details.length >= 1 ) {
+                    for (var qs in member.answers.medical_history_details) {
+                         let q_data = member.answers.medical_history_details[qs];
+                        if (q_data.yes_no) {
+                            med_ques_data[q_data.front_end_question_id].members.push(member_display);
                         }
                     }
                 }
@@ -289,12 +333,11 @@ class GroupHealthPlanFinalSummary extends Component {
             if (provider === 'STAR') {
 
                 // for ped
-                if (member.ped_diseases_name) {
+                if (member.answers.pre_existing_diseases.length >= 1) {
                     members_for_life_style.push(member_display);
-
                     diseases_data_backend.push({
                         'title': `${member_display}'s pre-existing disease details`,
-                        'subtitle': member.ped_diseases_name
+                        'subtitle': member.answers.pre_existing_diseases[0].description
                     });
 
                 }
@@ -308,21 +351,21 @@ class GroupHealthPlanFinalSummary extends Component {
             data: [
                 {
                     'title': 'Email id',
-                    'subtitle': lead.email
+                    'subtitle': lead.buyer_details.email
                 },
                 {
                     'title': 'Mobile number',
-                    'subtitle': lead.mobile_number
+                    'subtitle': lead.buyer_details.phone_number
                 }
             ]
         }
 
         accordianData.push(contact_data);
-
-        let address_data_backend = [lead.correspondence_address ,lead.permanent_address];
+    
+        let address_data_backend = [lead.address_details.correspondence_address ,lead.address_details.permanent_address];
 
         if (['HDFCERGO', 'STAR'].includes(provider)) {
-            address_data_backend = [lead.permanent_address]
+            address_data_backend = [lead.address_details.permanent_address]
         }
 
         let data = address_data_backend.map((item, index) => {
@@ -331,14 +374,14 @@ class GroupHealthPlanFinalSummary extends Component {
                     'title': `${provider==='RELIGARE'? index === 0 ? 'Current address' : 'Permanent address':''}`,
                     'subtitle': ' ',
                     'key': 'heading'
-                },
+                },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
                 {
                     'title': 'Address line 1',
-                    'subtitle': item.addressline
+                    'subtitle': item.addr_line1
                 },
                 {
                     'title': 'Address line 2',
-                    'subtitle': item.addressline2
+                    'subtitle': item.addr_line2
                 },
                 {
                     'title': 'Pincode',
@@ -370,7 +413,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
         accordianData.push(address_data);
 
-        let nominee_data_backend = lead.nominee_account_key;
+        let nominee_data_backend = lead.nominee_details;
         let nominee_data = {
             'title': 'Nominee',
             edit_state: `/group-insurance/group-health/${this.state.provider}/edit-nominee`,
@@ -394,9 +437,9 @@ class GroupHealthPlanFinalSummary extends Component {
                     'subtitle': nominee_data_backend.dob
                 },
             )
-
-            if (lead.appointee_account_key) {
-                let appointee_data_backend = lead.appointee_account_key;
+            
+            if (lead.appointee_details.name) {
+                let appointee_data_backend = lead.appointee_details;
                 nominee_data.data = [
                     ...nominee_data.data,
                     {
@@ -495,8 +538,8 @@ class GroupHealthPlanFinalSummary extends Component {
         })
     }
 
-    redirectToPayment = (pg_data) => {
-        let resultData = pg_data || this.state.pg_data;
+    redirectToPayment = (pg_data) => {  
+        let resultData = this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
 
@@ -546,27 +589,38 @@ class GroupHealthPlanFinalSummary extends Component {
         })
         this.handleClose();
 
-        if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
-            this.redirectToPayment();
-            return;
-        }
+        // if(this.state.provider === 'RELIGARE' && !data.showMedDialog) {
+            // this.redirectToPayment();
+        //     return;
+        // }
+        let application_id = storageService().get('health_insurance_application_id');
         try {
-            let res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/start/payment?lead_id=${this.state.quote_id}`);
-
+            let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
+           
 
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
-            })
+            }); 
+
             if (res.pfwresponse.status_code === 200) {
-
-                if(resultData.ped_check && data.showMedDialog) {
-                    this.openMedicalDialog('ped');
-                    return;
-                } else {
-                    this.redirectToPayment(resultData);
-                }
-
+                    if (this.state.provider === 'HDFCERGO') {
+                        let lead = resultData || {};
+                        if (lead.ped_check) {
+                            this.openMedicalDialog('ped');
+                        } else if (lead.ppc_check) {
+                            this.openMedicalDialog('ppc');
+                        } else if (lead.application_status === 'ready_for_payment') {
+                            this.redirectToPayment(resultData);
+                        }
+                    } else {
+                        if(resultData.ped_check && data.showMedDialog) {
+                            this.openMedicalDialog('ppc');
+                            return;
+                        } else {
+                            this.redirectToPayment(resultData);
+                        }
+                    }   
             } else {
                 this.setState({
                     show_loader: false
@@ -583,60 +637,67 @@ class GroupHealthPlanFinalSummary extends Component {
         }
     }
 
-    checkPPC = async () => {
+    // checkPPC = async () => {
+    //     let application_id = storageService().get('health_insurance_application_id');
+    //     this.setState({
+    //         show_loader: true
+    //     });
+    //     try {
+           
+    //         let res = await Api.get(`api/insurancev2/api/insurance/proposal/${this.state.providerConfig.provider_api}/ppc_ped_check?application_id=${application_id}`);
 
-        this.setState({
-            show_loader: true
-        });
-        try {
-            let res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/ppc/check?quote_id=${this.state.quote_id}`);
-
-
-            var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-                if(this.state.provider === 'HDFCERGO') {
-                    let lead = resultData.quote_lead || {};
-                    if (lead.ped_check) {
-                        this.openMedicalDialog('ped');
-                    } else if (lead.ppc_check) {
-                        this.openMedicalDialog('ppc');
-                    } else if (lead.status === 'ready_to_pay') {
-                        this.startPayment();
-                    }
-                } else {
-                    this.startPayment({showMedDialog : true});
-                }
+    //         var resultData = res.pfwresponse.result;
+    //         if (res.pfwresponse.status_code === 200) {
+    //             if(this.state.provider === 'HDFCERGO') {
+    //                 let lead = resultData.quote_lead || {};
+    //                 if (lead.ped_check) {
+    //                     this.openMedicalDialog('ped');
+    //                 } else if (lead.ppc_check) {
+    //                     this.openMedicalDialog('ppc');
+    //                 } else if (lead.status === 'ready_to_pay') {
+    //                     this.startPayment();
+    //                 }
+    //             } else {
+    //                 this.startPayment({showMedDialog : true});
+    //             }
                 
-            } else {
-                this.setState({
-                    show_loader: false
-                });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
-            }
-        } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
-        }
-    }
+    //         } else {
+    //             this.setState({
+    //                 show_loader: false
+    //             });
+    //             toast(resultData.error || resultData.message
+    //                 || 'Something went wrong');
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //         this.setState({
+    //             show_loader: false
+    //         });
+    //         toast('Something went wrong');
+    //     }
+    // }
 
     handleClick = async () => {
+
+
+        if(!this.state.tncChecked){
+            toast('Please Agree to the Terms and Conditions');
+            return;
+          }
         this.sendEvents('next');
         let {lead}  = this.state;
 
         if(this.state.provider === 'STAR') {
-            if(lead.ped_check) {
-                this.openMedicalDialog('ped');
+            if(lead.application_details.ped) {
+                // this.openMedicalDialog('ped');
+                this.startPayment({showMedDialog : true});
                 return;
-            } else {
+            }
+            else {
                 this.startPayment();
             }
         } else {
-            this.checkPPC();
+            this.startPayment({showMedDialog : true});
         }
         
     }
@@ -684,7 +745,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     renderMembertop = (props, index) => {
-        if (props.key === 'applicant') {
+        if (props.key === "applicant") {
             return (
                 <div className="member-tile" key={index}>
                     <div className="mt-left">
@@ -708,7 +769,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                            {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
+                            {this.state.applicantIndex === -1 ? (this.state.quotation.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({childeNameMapper(props.key)})
@@ -721,7 +782,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordiansubData = (props, index) => {
-        
+
         return (
             <div key={index}>
                 {props.subtitle &&
@@ -729,8 +790,9 @@ class GroupHealthPlanFinalSummary extends Component {
                         <div className="title" style={{opacity: props.key === 'heading' ? 0.6 : ''}}>
                             {props.title}
                         </div>
-                        <div className="subtitle">
-                            {capitalizeFirstLetter(props.subtitle.toLowerCase())} {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                        <div className="subtitle" style={{margin : '7px 0 0 0', overflowWrap: 'break-word'}}>
+                          {capitalizeFirstLetter(props.subtitle + "")}
+                             {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -858,172 +920,183 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
+    handleTermsAndConditions = () =>{
+        this.setState({
+          tncChecked : !this.state.tncChecked
+        });
+      }
+      
     render() {
         return (
             <Container
-                provider={this.state.provider}
-                resetpage={true}
-                handleReset={this.showDialog}
-                events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
-                title="Summary"
-                fullWidthButton={true}
-                onlyButton={true}
-                buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.lead.total_amount)}`}
-                handleClick={() => this.handleClick()}
-            >
+            provider={this.state.provider}
+            resetpage={true}
+            handleReset={this.showDialog}
+            events={this.sendEvents('just_set_events')}
+            showLoader={this.state.show_loader}
+            title="Summary"
+            fullWidthButton={true}
+            onlyButton={true}
+            buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
+            handleClick={() => this.handleClick()}
+        >
 
-                <div className="group-health-final-summary">
-                    <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
-                        <div className="left">
-                            <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>
-                            <div className="tc-subtitle">{this.state.lead.plan_title}</div>
+            <div className="group-health-final-summary">
+                <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
+                    <div className="left">
+                          {
+                              this.state.provider !== 'RELIGARE' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
+                          }
+                          
+
+                        <div className="tc-subtitle">{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
+                    </div>
+
+                    <div className="tc-right">
+                        <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                    </div>
+                </div>
+
+                <div className='mid-content'>
+
+                    {this.state.member_base && this.state.member_base.map(this.renderMembertop)}
+
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
                         </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                SUM INSURED
+                            </div>
+                            <div className="mtr-bottom">
+                                {numDifferentiationInr(this.state.quotation.individual_sum_insured)}
+                            </div>
+                        </div>
+                    </div>
+                   
+                    { this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0) && <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                ADD ON
+                            </div>
+                            <div className="mtr-bottom">
+                                {this.state.add_ons_show}
+                            </div>
+                        </div>
+                    </div>}
 
-                        <div className="tc-right">
-                            <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                   {this.state.quotation.floater_type &&
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                COVERAGE TYPE
+                            </div>
+                            <div className="mtr-bottom">
+                            {getCoverageType(this.state.lead)}
+                            </div>
+                        </div>
+                    </div>}
+
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                COVER PERIOD
+                            </div>
+                            <div className="mtr-bottom">
+                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
+                            </div>
                         </div>
                     </div>
 
-                    <div className='mid-content'>
-
-                        {this.state.lead.member_base.map(this.renderMembertop)}
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    SUM INSURED
-                                </div>
-                                <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
-                                </div>
-                            </div>
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
                         </div>
-
-                        {this.state.lead.add_ons_amount > 0 && <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                TOTAL PREMIUM
                             </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    ADD ON
+                            <div className="mtr-bottom flex" style={{textTransform:'none'}}>
+                                <div>
+                                    <div> {inrFormatDecimal(this.state.quotation.base_premium - this.state.quotation.total_discount)} </div>
+                                    <div style={{ fontSize: 10 }}> (Basic premium)</div>
                                 </div>
-                                <div className="mtr-bottom">
-                                    {this.state.add_ons_show}
+                                <div>
+                                    &nbsp;+&nbsp;
                                 </div>
-                            </div>
-                        </div>}
-
-                       {this.state.lead.cover_type &&
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    COVERAGE TYPE
-                                </div>
-                                <div className="mtr-bottom">
-                                {getCoverageType(this.state.lead)}
-                                </div>
-                            </div>
-                        </div>}
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    COVER PERIOD
-                                </div>
-                                <div className="mtr-bottom">
-                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="member-tile">
-                            <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                    TOTAL PREMIUM
-                                </div>
-                                <div className="mtr-bottom flex" style={{textTransform:'none'}}>
+                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  &&
                                     <div>
-                                        <div> {inrFormatDecimal(this.state.lead.base_premium_showable)} </div>
-                                        <div style={{ fontSize: 10 }}> (Basic premium)</div>
+                                        <div> {inrFormatDecimal(this.state.quotation.add_on_premium)} </div>
+                                        <div style={{ fontSize: 10 }}> (Add on amount)</div>
                                     </div>
+                                }
+                                {this.state.add_ons_show && (Object.keys(this.state.quotation.add_ons).length > 0)  &&
                                     <div>
                                         &nbsp;+&nbsp;
                                     </div>
-                                    {this.state.lead.add_ons_amount > 0 &&
-                                        <div>
-                                            <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
-                                            <div style={{ fontSize: 10 }}> (Add on amount)</div>
-                                        </div>
-                                    }
-                                    {this.state.lead.add_ons_amount > 0 &&
-                                        <div>
-                                            &nbsp;+&nbsp;
-                                        </div>
-                                    }
-                                    <div>
-                                        <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
-                                        <div style={{ fontSize: 10 }}>(18% GST) </div>
+                                }
+                                <div>
+                                    <div>{inrFormatDecimal(this.state.quotation.gst)} </div>
+                                    <div style={{ fontSize: 10 }}>(18% GST) </div>
+                                </div>
+                                <div>
+                                    &nbsp;=&nbsp;
                                     </div>
-                                    <div>
-                                        &nbsp;=&nbsp;
-                                        </div>
-                                    <div>
-                                        {inrFormatDecimal(this.state.lead.total_amount)}
-                                    </div>
+                                <div>
+                                    {inrFormatDecimal(this.state.quotation.total_premium)}
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <div className="bottom-content">
-                        <div className="generic-hr"></div>
-
-                        {this.state.accordianData.map(this.renderAccordian)}
-
-
-                    </div>
-
-                    <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
-                        <Grid container spacing={16} alignItems="center">
-                        <Grid item xs={1} className="TextCenter">
-                            <Checkbox
-                            defaultChecked
-                            checked={true}
-                            color="default"
-                            value="checked"
-                            name="checked"
-                            onChange={(e) => this.setState({ tncChecked: e.target.checked })}
-                            className="Checkbox" />
-                        </Grid>
-                        <Grid item xs={11}>
-                            <div className="accident-plan-terms-text" style={{}}>
-                            I agree to the <span onClick={() => this.openInBrowser(this.state.common_data.tnc,
-                            'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
-                                Terms and conditions</span></div>
-                        </Grid>
-                        </Grid>
-                    </div>
-                      <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
                 </div>
-                {this.state.medical_dialog_data &&
-                    <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
-                {this.renderDialog()}
-            </Container>
-        );
-    }
+
+                <div className="bottom-content">
+                    <div className="generic-hr"></div>
+
+                    {this.state.accordianData.map(this.renderAccordian)}
+
+
+                </div>
+
+                <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
+                    <Grid container spacing={16} alignItems="center">
+                    <Grid item xs={1} className="TextCenter">           
+                    <Checkbox
+                  defaultChecked
+                  checked={this.state.tncChecked}
+                  color="default"
+                  value="checked"
+                  name="checked"
+                  onChange={this.handleTermsAndConditions}
+                  className="Checkbox"
+                />
+                    </Grid>
+                    <Grid item xs={11}>
+                        <div className="accident-plan-terms-text" style={{}}>
+                        I agree to the <span onClick={() => this.openInBrowser(this.state.lead.terms_and_condition,
+                        'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
+                            Terms and conditions</span></div>
+                    </Grid>
+                    </Grid>
+                </div>
+                  <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
+            </div>
+            {this.state.medical_dialog_data &&
+                <BottomSheet parent={this} data={this.state.medical_dialog_data} />}
+            {this.renderDialog()}
+        </Container>
+    );
+}
 }
 
 export default GroupHealthPlanFinalSummary;

@@ -45,7 +45,7 @@ export var fyntuneConstants = {
       },
       {
         title: "Complete application form",
-        subtitle: "Now select a plan you like and fill up an application form",
+        subtitle: "Now select a plan you like and fill up the application form",
       },
       {
         title: "Make payment",
@@ -56,7 +56,7 @@ export var fyntuneConstants = {
         subtitle: "Help us with a few answers to evaluate your application",
       },
       {
-        title: "Upload and request documents",
+        title: "Upload the required documents",
         subtitle: "Lastly, upload all the required documents and you're good to go",
       },
     ],
