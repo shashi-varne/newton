@@ -13,6 +13,8 @@ import IcSecServicesIcon from '../assets/fisdom/ic_sec_services.svg';
 import IcSecTechnologyIcon from '../assets/fisdom/ic_sec_technology.svg';
 // ----------------------------------------------
 
+// import helper functions
+import { formatAmountInr } from "utils/validators";
 export const topStocksIconMappings = {
   'Financial Services': IcSecFinanceIcon,
   Energy: IcSecEnergyIcon,
@@ -544,6 +546,9 @@ export const transactionsHeaderMap = [
   {
     label: 'Amount',
     accessor: 'amount',
+    formatter: (type) => {
+      return formatAmountInr(type);
+    },
   },
 ];
 

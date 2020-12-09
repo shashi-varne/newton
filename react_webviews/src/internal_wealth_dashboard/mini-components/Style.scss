@@ -1150,7 +1150,7 @@ table.iwd-transactions-table {
 }
 
 .iwd-transactions-table {
-  width: 800px !important;
+  width: 90% !important;
 
   td:nth-child(1) {
     padding-left: 10px;
@@ -1415,6 +1415,11 @@ table.iwd-transactions-table {
 }
 
 @media only screen and (max-width: 450px) {
+
+  // Holding Transaction page
+  .iwd-transactions-table {
+    width: 800px !important;
+  }
   .iwd-statement-reports {
     margin-bottom: 40px;
   }
@@ -1447,6 +1452,11 @@ table.iwd-transactions-table {
       align-items: center;
       width: 80%;
 
+      //changes done
+      position: fixed;
+      left:0;
+      bottom: 10px;
+
       margin: 30px auto 20px auto;
       .MuiButtonBase-root {
         border-radius: 6px;
@@ -1470,6 +1480,7 @@ table.iwd-transactions-table {
       display: flex;
       flex-direction: column;
       //padding: $card-padding-mobile;
+      padding-bottom: 80px;
 
       .iwd-filter-head-container {
         justify-content: center;
