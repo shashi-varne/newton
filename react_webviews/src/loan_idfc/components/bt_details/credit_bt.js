@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { formatMonthandYear, dobFormatTest } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, isValidMonthYear, formatAmountInr } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 
 class LoanBtDetails extends Component {
@@ -73,14 +73,14 @@ class LoanBtDetails extends Component {
     });
   };
 
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "credit_card_details", 
+        screen_name: "credit_card_details",
         no_of_cards_entered: data.no_of_cards_entered,
-        skipped_screen: data.no_of_cards_entered !==0 ? "no" : "yes",
+        skipped_screen: data.no_of_cards_entered !== 0 ? "no" : "yes",
       },
     };
 
@@ -95,14 +95,10 @@ class LoanBtDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    if (
-      name === "creditCardNumber" &&
-      (form_data[index][name] || "").length >= 4
-    ) {
-      return;
-    }
-
-    if (name === "creditCardExpiryDate") {
+    if (name === "creditCardNumber") {
+      if (value.length <= 4)
+        form_data[index][name] = value;
+    } else if (name === "creditCardExpiryDate") {
       if (!dobFormatTest(value)) {
         return;
       }
@@ -127,36 +123,60 @@ class LoanBtDetails extends Component {
 
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    this.setState({
-      form_data: form_data,
-    });
     let keysToCheck = [
-      {key: "financierName", name: "financier name"}, 
-      {key: "creditCardNumber", name: "credit card number"},
-      {key: "creditCardExpiryDate", name: "credit card expiry date"}, 
-      {key: "principalOutstanding", name: "principal outstanding"},
+      { key: "financierName", name: "financier name" },
+      { key: "creditCardNumber", name: "credit card number" },
+      { key: "creditCardExpiryDate", name: "credit card expiry date" },
+      { key: "principalOutstanding", name: "principal outstanding" },
     ]
-    if(checked) {
+    if (checked) {
       keysToCheck.forEach(item => {
-        if(!form_data[index][item.key]) {
+        if (!form_data[index][item.key]) {
           form_data[index][`${item.key}_error`] = `Please enter ${item.name}`;
         }
       })
-      this.setState({form_data : form_data});
     }
+    this.setState({
+      form_data: form_data,
+    });
   };
 
   handleClick = () => {
-    let form_checked = this.state.form_data.filter(
+    let { form_data } = this.state;
+    let form_checked = form_data.filter(
       (item) => item.is_selected === true
     );
+    let submit_details = true;
+    form_data.forEach((data, index) => {
+      if (data.is_selected) {
+        if (data["creditCardNumber"].length < 4) {
+          form_data[index]["creditCardNumber_error"] = "please enter last 4 digits of credit card number";
+          submit_details = false;
+        }
 
-    if (form_checked.length > 3) {
-      toast("more than 3 bt are not allowed");
+        if (!isValidMonthYear(data["creditCardExpiryDate"])) {
+          form_data[index]["creditCardExpiryDate_error"] = "please enter valid credit card expiry date";
+          submit_details = false;
+        }
+
+        if (data['principalOutstanding'] > 500000) {
+          form_data[index]["principalOutstanding_error"] = `amount cannot exceed ${formatAmountInr(500000)}`;
+          submit_details = false;
+        }
+      }
+    })
+
+    if (!submit_details) {
+      this.setState({ form_data: form_data })
+      return
+    }
+
+    if (form_checked.length > 2) {
+      toast("more than 2 credit bt are not allowed");
       return;
     }
 
-    this.sendEvents('next', {no_of_cards_entered: form_checked.length, });
+    this.sendEvents('next', { no_of_cards_entered: form_checked.length, });
     this.submitApplication(
       {
         bt_selection: form_checked,
