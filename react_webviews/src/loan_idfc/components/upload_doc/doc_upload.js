@@ -92,9 +92,12 @@ class DocumentUpload extends Component {
       if (doc_checklist.length !== 0) {
         let file1, file2, file3;
         for (var i = doc_checklist.length - 1; i >= 0; i--) {
+        console.log(documents.length)
+        console.log(documents)
+
           if (
             doc_checklist[i].doc_type === "doc1" &&
-            (!image_data.doc1 || documents.length === 0)
+            (!image_data.doc1 || documents.length === 2)
           ) {
             if (totalUpload < 3) {
               image_data.doc1 = {
@@ -131,10 +134,11 @@ class DocumentUpload extends Component {
               };
 
               documents.push(file2);
+
             }
           }
 
-          if (doc_checklist[i].doc_type === "doc3" && documents.length === 2) {
+          if (doc_checklist[i].doc_type === "doc3" && documents.length === 0) {
             file3 = {
               uploaded: true,
               integrated: true,
@@ -144,6 +148,7 @@ class DocumentUpload extends Component {
             documents.push(file3);
           }
         }
+
 
         this.setState({
           disbableButton: false,
@@ -378,7 +383,7 @@ class DocumentUpload extends Component {
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
-    data.append("file", file, file.name + ext);
+    data.append("file", file, file.name);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
 
