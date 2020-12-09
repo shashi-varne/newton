@@ -84,12 +84,12 @@ const Dashboard = () => {
     if (page && !isEmpty(page)) {
       if (pageNum !== 1) {
         page.style.background = '#f9f9f9';
-        header.classList.add('iwd-dashboard-pg1');
-        profile.style.color = '#767e86';
+        if (header) header.classList.add('iwd-dashboard-pg1');
+        if (profile) profile.style.color = '#767e86';
       } else {
         page.style.background = '';
-        header.classList.remove('iwd-dashboard-pg1');
-        profile.style.color = '#d3dbe4';
+        if (header) header.classList.remove('iwd-dashboard-pg1');
+        if (profile) profile.style.color = '#d3dbe4';
       }
     }
   };
