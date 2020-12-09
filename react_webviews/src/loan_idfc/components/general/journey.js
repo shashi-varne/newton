@@ -53,10 +53,10 @@ const journeyMapper2 = {
   //   index: "2",
   //   next_state: "loan-requirement-details"
   // },
-  // "idfc_1.0_submitted": {
-  //   index: "2",
-  //   next_state: "loan-requirement-details"
-  // },
+  "idfc_1.0_failed": {
+    index: "2",
+    next_state: "loan-requirement-details"
+  },
   "idfc_1.0_accepted": {
     index: "2",
     next_state: "eligible-loan"

@@ -84,7 +84,7 @@ export const idfc_config = {
     journeyData: {
       title: 'Personal loan in just 5 steps',
       options: [
-        { 'step': '1', 'title': 'Enter basic details', 'subtitle': 'Fill in personal and work details to get started with your loan application.' },
+        { 'step': '1', 'title': 'Enter basic details', 'subtitle': 'Fill in basic and work details to get started with your loan application.' },
         { 'step': '2', 'title': 'Create loan application', 'subtitle': 'Provide/confirm your personal and address details to proceed with your loan application.' },
         { 'step': '3', 'title': 'Provide income details', 'subtitle': 'Enter your loan requirements and income details to get the best loan offer.' },
         { 'step': '4', 'title': 'Upload documents', 'subtitle': 'Provide your office address and upload documents to get your loan sanctioned.' },
