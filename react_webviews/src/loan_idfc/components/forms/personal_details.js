@@ -39,6 +39,7 @@ class PersonalDetails extends Component {
       screen_name: "personal_details_screen",
       form_data: {},
       confirm_details: false,
+      details_changed: "no",
     };
 
     this.initialize = initialize.bind(this);
@@ -101,6 +102,8 @@ class PersonalDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "kyc_personal_details",
+        details_changed: this.state.details_changed,
+        ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
     };
 
@@ -113,15 +116,20 @@ class PersonalDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let { form_data, details_changed } = this.state;
 
     if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
 
+    if (name === 'dob' && this.state.confirm_details) {
+      details_changed = 'yes'
+    }
+
     this.setState({
       form_data: form_data,
+      details_changed: details_changed,
     });
   };
 

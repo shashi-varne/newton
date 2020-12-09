@@ -79,7 +79,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     screenName: "system_error",
-    stage: "after loan requirement details",
+    stage: "after additional details",
   },
   // "idfc_1.1_accepted": {
   //   top_icon: "ils_loan_failed",
@@ -98,6 +98,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     screenName: "application_rejected",
+    stage: "after basic details",
   },
   Salary: {
     top_icon: "ils_loan_failed",
@@ -107,6 +108,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     screenName: "application_rejected",
+    stage: "after basic details",
   },
   Age: {
     top_icon: "ils_loan_failed",
@@ -116,6 +118,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     screenName: "application_rejected",
+    stage: "after basic details",
   },
   is_dedupe: {
     top_icon: "ils_loan_failed",

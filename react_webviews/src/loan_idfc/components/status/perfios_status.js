@@ -39,7 +39,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
-    status: "verification failed",
+    status: "verification failed 2",
   },
 };
 

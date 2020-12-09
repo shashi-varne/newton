@@ -28,6 +28,7 @@ class AddressDetails extends Component {
       screen_name: "address_details",
       form_data: {},
       confirm_details: false,
+      permanent_address_edited: "no",
     };
 
     this.initialize = initialize.bind(this);
@@ -103,6 +104,8 @@ class AddressDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "kyc_address_details",
+        permanent_address_edited: this.state.permanent_address_edited,
+        ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
     };
 
@@ -115,14 +118,20 @@ class AddressDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let { form_data, permanent_address_edited } = this.state;
 
     if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
+
+    if (name === 'permanent_address2' && this.state.confirm_details) {
+      permanent_address_edited = 'yes'
+    }
+
     this.setState({
       form_data: form_data,
+      permanent_address_edited: permanent_address_edited,
     });
   };
 
