@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from  '../../common/Container';
 
-import { getConfig , isFeatureEnabled} from '../../../utils/functions';
+import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
 
 
