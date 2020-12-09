@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
-const DEFAULT_COLOR = '#040404';
 
 const RadialBarChart = ({
   className,
-  radius,
+  radius = 85,
   progress,
   strokeWidth,
   dimension,
   color,
-  secondaryColor,
 }) => {
   // const { setStrokeLength } = this.state;
   useEffect(() => {
     setTimeout(() => {
       setStrokeLength((circumference / 100) * progress);
+      setStrokeLengthInner((circumferenceInner / 100) * (100 - progress));
     });
   }, []);
   const circleRadius = Math.min(radius, 85);
   const circumference = 2 * 3.14 * circleRadius;
+  const circumferenceInner = 2 * 3.14 * circleRadius - 20;
   const [strokeLength, setStrokeLength] = useState(0);
+  const [strokeLengthInner, setStrokeLengthInner] = useState(0);
 
   return (
     <div className={`radial-chart`}>
@@ -56,7 +57,7 @@ const RadialBarChart = ({
           className='radial-chart-progress'
           stroke={color}
           strokeWidth={strokeWidth}
-          strokeDasharray={`${strokeLength},${circumference}`}
+          strokeDasharray={`${strokeLengthInner},${circumferenceInner}`}
           strokeLinecap='round'
           fill='none'
           strokeOpacity={0.6}

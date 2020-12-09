@@ -11,7 +11,7 @@ import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
 const Elss = () => {
   const title = 'ELSS report';
-  const [years, setYears] = useState(null);
+  const [years, setYears] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const fetchElssYears = async () => {
@@ -39,20 +39,14 @@ const Elss = () => {
         isLoading={isLoading}
         loadingText='Fetching ...'
         error={hasError}
+        noData={!years?.length}
+        noDataText="No ELSS reports to display"
       >
-        {years?.length > 0 ? (
-          <div className='iwd-statement-reports'>
-            {years.map((el, idx) => (
-              <StatementCard key={idx} year={el} sType='elss' />
-            ))}
-          </div>
-        ) : (
-          <ErrorScreen
-            useTemplate={true}
-            templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
-            templateErrText='No Tax report to display'
-          />
-        )}
+        <div className='iwd-statement-reports'>
+          {years.map((el, idx) => (
+            <StatementCard key={idx} year={el} sType='elss' />
+          ))}
+        </div>
         {isMobileView && years?.length > 3 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>

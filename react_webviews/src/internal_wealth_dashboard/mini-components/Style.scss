@@ -669,6 +669,21 @@ ul#iwd-bars {
   }
 }
 
+#iwd-profile-short {
+  display: flex;
+  color: $grey;
+
+  #iwd-ps-name {
+    font-size: 13px;
+    line-height: 21px;
+  }
+
+  #iwd-ps-contact {
+    font-size: 11px;
+    line-height: 18px;
+  }
+}
+
 .iwd-holding-card {
   background: white;
   position: relative;

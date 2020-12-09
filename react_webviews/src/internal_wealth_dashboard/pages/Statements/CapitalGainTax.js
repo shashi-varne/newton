@@ -10,7 +10,7 @@ import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
 const CapitalGainTax = () => {
   const title = 'Capital gain tax';
-  const [years, setYears] = useState(null);
+  const [years, setYears] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const fetchCapitalYears = async () => {
@@ -39,20 +39,14 @@ const CapitalGainTax = () => {
         isLoading={isLoading}
         loadingText='Fetching ...'
         error={hasError}
+        noData={!years?.length}
+        noDataText="No Tax reports to display"
       >
-        {years?.length > 0 ? (
-          <div className='iwd-statement-reports'>
-            {years.map((el, idx) => (
-              <StatementCard key={idx} year={el} sType='capital_gains' />
-            ))}
-          </div>
-        ) : (
-          <ErrorScreen
-            useTemplate={true}
-            templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
-            templateErrText='No Tax report to display'
-          />
-        )}
+        <div className='iwd-statement-reports'>
+          {years.map((el, idx) => (
+            <StatementCard key={idx} year={el} sType='capital_gains' />
+          ))}
+        </div>
         {isMobileView && years?.length > 3 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>

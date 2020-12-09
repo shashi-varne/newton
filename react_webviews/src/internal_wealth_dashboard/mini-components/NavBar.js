@@ -34,7 +34,6 @@ const NavBar = (props) => {
       onMouseOver={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      
       <img
         src={open ? fisdom_logo : fisdom_icon}
         alt="fisdom"

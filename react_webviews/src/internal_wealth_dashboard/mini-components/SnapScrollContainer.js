@@ -1,18 +1,14 @@
 // -----------------Assets------------------------
-import DownwardIcon from 'assets/ic_down_arrow_purple.svg';
 import UpwardIcon from 'assets/ic_up_arrow_purple.svg';
 import IlsError from 'assets/fisdom/ils_error.svg';
-// import IlsErrorMob from 'assets/fisdom/ils_error_mob.svg';
+import IlsNoData from 'assets/fisdom/ils_no_data.svg';
 // -----------------------------------------------
 import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'material-ui/IconButton';
 import { last, get, cloneDeep } from 'lodash';
-import { isFunction } from '../../utils/validators';
+import { isEmpty, isFunction } from '../../utils/validators';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 import IwdScreenLoader from './IwdScreenLoader';
-import { getConfig } from 'utils/functions';
-
-const isMobileView = getConfig().isMobileDevice;
 
 const SnapScrollContainer = ({
   pages = 1,
@@ -23,6 +19,8 @@ const SnapScrollContainer = ({
   errorText = '',
   isLoading = false,
   loadingText = '',
+  noData = false,
+  noDataText = '',
   onErrorBtnClick = () => {},
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,24 +34,25 @@ const SnapScrollContainer = ({
 
   const createObserver = () => {
     const { current: rootElem } = container;
-    const options = {
-      root: rootElem,
-      // rootMargin: '220px 0px 60px 0px',
-      threshold: 0.6,
-    };
-
-    const childElems = [].slice
-      .apply(rootElem.children)
-      .filter((domElem) => domElem.className === 'iwd-scroll-child');
-    console.log(cloneDeep(childElems));
-    let observer = new IntersectionObserver(handleIntersect, options);
-    for (let i = childElems.length; i--; ) {
-      observer.observe(childElems[i]);
+    if (!isEmpty(rootElem) && !isEmpty(rootElem.children)) {
+      const options = {
+        root: rootElem,
+        // rootMargin: '220px 0px 60px 0px',
+        threshold: 0.6,
+      };
+  
+      const childElems = [].slice
+        .apply(rootElem.children)
+        .filter((domElem) => domElem.className === 'iwd-scroll-child');
+      console.log(cloneDeep(childElems));
+      let observer = new IntersectionObserver(handleIntersect, options);
+      for (let i = childElems.length; i--; ) {
+        observer.observe(childElems[i]);
+      }
     }
   };
 
   const handleIntersect = (entries, observer) => {
-    console.log('entries', entries, observer);
     const page = last(entries);
     const pageNumber = parseInt(get(page, 'target.dataset.pgno', ''), 10);
     if (pageNumber) {
@@ -90,6 +89,19 @@ const SnapScrollContainer = ({
       <div className='iwd-scroll-contain' ref={container}>
         <IwdScreenLoader loadingText={loadingText} />
       </div>
+    );
+  } else if (noData) {
+    return (
+      <ErrorScreen
+        useTemplate={true}
+        templateImage={IlsNoData}
+        templateErrText={
+          noDataText ||
+          "No data found"
+        }
+        templateBtnText='Retry'
+        clickHandler={onErrorBtnClick}
+      />
     );
   } else if (error) {
     return (
