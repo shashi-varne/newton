@@ -79,6 +79,7 @@ const journeyMapper2 = {
   },
   "idfc_1.7_accepted": {
     index: "3",
+    next_state: "doc-list"
   },
   doc_uploaded: {
     index: "4",

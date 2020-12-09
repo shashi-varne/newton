@@ -79,9 +79,9 @@ class DocumentUpload extends Component {
         };
       });
 
-      form_data.doc_name = docList[selectedIndex].doc_checklist[0].subtype;
+      form_data.doc_name = (docList[selectedIndex].doc_checklist[0] && docList[selectedIndex].doc_checklist[0].subtype) || "";
 
-      let doc_checklist = docList[selectedIndex].doc_checklist[0].docs;
+      let doc_checklist = (docList[selectedIndex].doc_checklist[0] && docList[selectedIndex].doc_checklist[0].docs) || [];
 
       docsMap.forEach((item) => {
         if (item.name === form_data.doc_name) {
