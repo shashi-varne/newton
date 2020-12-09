@@ -118,27 +118,35 @@ class LoanBtDetails extends Component {
     });
   };
 
-  handleCheckbox = (checked, index, id) => {
-    let { form_data } = this.state;
-
-    form_data[index]["is_selected"] = checked;
-    form_data[index]["bt_data_id"] = id;
+  validateFields = (form_data, index) => {
+    let submit_form = true;
     let keysToCheck = [
       { key: "financierName", name: "financier name" },
       { key: "creditCardNumber", name: "credit card number" },
       { key: "creditCardExpiryDate", name: "credit card expiry date" },
       { key: "principalOutstanding", name: "principal outstanding" },
     ]
-    if (checked) {
-      keysToCheck.forEach(item => {
-        if (!form_data[index][item.key]) {
-          form_data[index][`${item.key}_error`] = `Please enter ${item.name}`;
-        }
-      })
-    }
+
+    keysToCheck.forEach(item => {
+      if (!form_data[index][item.key]) {
+        form_data[index][`${item.key}_error`] = `Please enter ${item.name}`;
+        submit_form = false;
+      }
+    })
+
     this.setState({
       form_data: form_data,
     });
+    return submit_form;
+  }
+
+  handleCheckbox = (checked, index, id) => {
+    let { form_data } = this.state;
+
+    form_data[index]["is_selected"] = checked;
+    form_data[index]["bt_data_id"] = id;
+    if(checked)
+      this.validateFields(form_data,index);
   };
 
   handleClick = () => {
@@ -146,10 +154,12 @@ class LoanBtDetails extends Component {
     let form_checked = form_data.filter(
       (item) => item.is_selected === true
     );
+
     let submit_details = true;
     form_data.forEach((data, index) => {
       if (data.is_selected) {
-        if (data["creditCardNumber"].length < 4) {
+        submit_details = this.validateFields(form_data, index)
+        if(data.creditCardNumber && data.creditCardNumber.length < 4) {
           form_data[index]["creditCardNumber_error"] = "please enter last 4 digits of credit card number";
           submit_details = false;
         }
