@@ -46,7 +46,7 @@ class ImgcClass extends Component {
 
             <Fragment>
 
-                <img id="image" src={props.src} className={props.className}
+                <img id="image" src={props.src}
                     onLoad={() => {
                         console.log("loaded")
                         this.setState({
@@ -66,7 +66,7 @@ class ImgcClass extends Component {
                         flexShrink: 0,
                         display: skeltonFlag ? 'none' : ''
                     }}
-                    className={`${props.className}  ${skeltonFlag ? '' : ''}`}
+                    className={`${props.className}`}
                 />
 
 
