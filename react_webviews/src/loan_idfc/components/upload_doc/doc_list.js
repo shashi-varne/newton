@@ -42,6 +42,9 @@ class DocumentList extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
+    this.setState({
+      show_loader: true
+    })
     try {
       const res = await Api.get(
         `relay/api/loan/idfc/document/submit/${this.state.application_id}`
@@ -55,6 +58,9 @@ class DocumentList extends Component {
 
     } catch (err) {
       console.log(err);
+      this.setState({
+        show_loader: false
+      })
       toast("Something went wrong");
     }
   };

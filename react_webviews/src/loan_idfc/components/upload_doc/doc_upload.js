@@ -48,11 +48,10 @@ class DocumentUpload extends Component {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
+        type: "native_receiver_image",
         show_loader: function (show_loader) {
-
           that.showLoaderNative();
-        }
+        },
       });
     }
   }
@@ -70,18 +69,94 @@ class DocumentUpload extends Component {
         return item.doc_display_name;
       });
 
+      let { form_data, totalUpload, image_data, documents } = this.state;
+
       let docsMap = docList[selectedIndex].docs.map((item) => {
         return {
           name: item.doc_display_name,
           value: item.pages || "3",
+          form_data: form_data,
         };
       });
+
+      form_data.doc_name = docList[selectedIndex].doc_checklist[0].subtype;
+
+      let doc_checklist = docList[selectedIndex].doc_checklist[0].docs;
+
+      docsMap.forEach((item) => {
+        if (item.name === form_data.doc_name) {
+          totalUpload = item.value;
+        }
+      });
+
+      if (doc_checklist.length !== 0) {
+        let file1, file2, file3;
+        for (var i = doc_checklist.length - 1; i >= 0; i--) {
+          if (
+            doc_checklist[i].doc_type === "doc1" &&
+            (!image_data.doc1 || documents.length === 0)
+          ) {
+            if (totalUpload < 3) {
+              image_data.doc1 = {
+                uploaded: true,
+                integrated: true,
+                imageBaseFile: doc_checklist[i].doc_url,
+              };
+            } else {
+              file1 = {
+                uploaded: true,
+                integrated: true,
+                name: doc_checklist[i].doc_type + "." +doc_checklist[i].extension,
+              };
+
+              documents.push(file1);
+            }
+          }
+
+          if (
+            doc_checklist[i].doc_type === "doc2" &&
+            (!image_data.doc2 || documents.length === 1)
+          ) {
+            if (totalUpload < 3) {
+              image_data.doc2 = {
+                uploaded: true,
+                integrated: true,
+                imageBaseFile: doc_checklist[i].doc_url,
+              };
+            } else {
+              file2 = {
+                uploaded: true,
+                integrated: true,
+                name: doc_checklist[i].doc_type + "." +doc_checklist[i].extension,
+              };
+
+              documents.push(file2);
+            }
+          }
+
+          if (doc_checklist[i].doc_type === "doc3" && documents.length === 2) {
+            file3 = {
+              uploaded: true,
+              integrated: true,
+              name: doc_checklist[i].doc_type + "." +doc_checklist[i].extension,
+            };
+
+            documents.push(file3);
+          }
+        }
+
+        this.setState({
+          disbableButton: false,
+        });
+      }
 
       this.setState({
         docList: docList[selectedIndex],
         docs: docs,
         docsMap: docsMap,
         category: category,
+        documents: documents,
+        totalUpload: totalUpload,
       });
     }
   };
@@ -102,21 +177,19 @@ class DocumentUpload extends Component {
     }
   }
 
-  native_call_handler(method_name, doc_type, doc_name, side = "") {
+  native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
         type: "doc",
         doc_type: doc_type,
         doc_name: doc_name,
-        doc_side: side,
         // callbacks from native
         upload: function upload(file) {
           try {
             that.setState({
               docType: this.doc_type,
               docName: this.doc_name,
-              docSide: this.doc_side,
               show_loader: true,
             });
             switch (file.type) {
@@ -125,7 +198,7 @@ class DocumentUpload extends Component {
               case "image/jpg":
               case "image/png":
               case "image/bmp":
-                that.save(file, this.doc_name, this.doc_side);
+                that.save(file, this.doc_name);
                 break;
               default:
                 alert("Please select pdf/img file");
@@ -144,14 +217,16 @@ class DocumentUpload extends Component {
 
   showLoaderNative() {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
   }
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target : event;
 
     let { form_data, docsMap, totalUpload } = this.state;
+
+    console.log(value);
 
     form_data[name] = value;
     form_data[name + "_error"] = "";
@@ -176,44 +251,53 @@ class DocumentUpload extends Component {
     }
   }
 
-  startUpload(method_name, id, type = "", name = "") {
+  startUpload(method_name, type = "", name = "") {
     this.setState({
       type: method_name,
       doc_type: type,
     });
 
-    
     if (getConfig().html_camera) {
-      this.openCameraWeb(id);
+      this.openCameraWeb(type);
     } else {
-      this.native_call_handler(method_name, type, name, id);
+      // this.native_call_handler(method_name, type, name, id);
     }
   }
 
-  save = (file, name, side) => {
+  save = (file, name) => {
     let document = this.state.form_data.doc_name;
 
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
+    console.log(file);
+    let ext = file.type.split("/")[1];
+    name = document.split(" ").join("_") + "." + ext;
 
     file.name = name;
     file.category_id = category;
     file.checklist_doc_type = doc_type;
     file.doc_name = document;
+    file.doc_type = file.type;
 
-    this.uploadDocument(file);
+    let that = this;
+    getBase64(file, function (img) {
+      file.imageBaseFile = img;
+      that.uploadDocument(file, doc_type);
 
-    if (totalUpload < 3) {
-      image_data[side] = file;
-    } else {
-      documents.push(file);
-    }
+      if (totalUpload < 3) {
+        image_data[doc_type] = file;
+      } else {
+        documents.push(file);
+      }
 
-    this.setState({
-      documents: documents,
-      image_data: image_data,
-      show_loader: false,
-    })
-  }
+      that.setState({
+        documents: documents,
+        image_data: image_data,
+        show_loader: false,
+        fileUploaded: true,
+        disbableButton: true,
+      });
+    });
+  };
 
   getPdf = (e) => {
     e.preventDefault();
@@ -252,12 +336,13 @@ class DocumentUpload extends Component {
       getBase64(file, function (img) {
         file.imageBaseFile = img;
         that.uploadDocument(file);
+        console.log(file);
         documents.push(file);
 
         that.setState({
           fileUploaded: true,
           documents: documents,
-          disbableButton: true
+          disbableButton: true,
         });
       });
     }
@@ -268,9 +353,8 @@ class DocumentUpload extends Component {
 
     let { image_data, category, doc_type } = this.state;
     let id = e.target.id;
-    image_data[id] = {};
-    let doc_name =
-      this.state.form_data.doc_name;
+    image_data[doc_type] = {};
+    let doc_name = this.state.form_data.doc_name;
 
     let file = e.target.files[0];
 
@@ -286,14 +370,14 @@ class DocumentUpload extends Component {
     }
 
     let that = this;
-    file.doc_type = file.type;
+    file.doc_type = doc_type;
 
     getBase64(file, function (img) {
-      file.img = img;
+      file.imageBaseFile = img;
       file.uploaded = true;
-      image_data[id] = file;
-
-      that.uploadDocument(image_data[id], id);
+      image_data[doc_type] = file;
+      console.log(file);
+      that.uploadDocument(image_data[doc_type], doc_type);
 
       that.setState({
         image_data: image_data,
@@ -301,12 +385,14 @@ class DocumentUpload extends Component {
     });
   };
 
-  uploadDocument = async (file, id) => {
+  uploadDocument = async (file, type) => {
     let { image_data, totalUpload, disbableButton } = this.state;
+
+    let ext = file.type.split("/")[1];
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
-    data.append("file", file);
+    data.append("file", file, file.name + ext);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
 
@@ -320,15 +406,14 @@ class DocumentUpload extends Component {
 
       if (status === 200) {
         if (totalUpload < 3) {
-          image_data[id].integrated = true;
+          image_data[type].integrated = true;
         } else {
-          disbableButton = false
+          disbableButton = false;
         }
-        
 
         this.setState({
           image_data: image_data,
-          disbableButton: disbableButton
+          disbableButton: disbableButton,
         });
       }
     } catch (err) {
@@ -337,12 +422,12 @@ class DocumentUpload extends Component {
     }
   };
 
-  renderHtmlCamera(side, type) {
+  renderHtmlCamera(type) {
     let { image_data } = this.state;
 
     return (
       <div>
-        {!image_data[side] && (
+        {!image_data[type] && (
           <div
             style={{
               border: "1px dashed #e1e1e1",
@@ -351,10 +436,10 @@ class DocumentUpload extends Component {
               fontWeight: 600,
             }}
           >
-            <div>Upload PAN card</div>
+            <div>upload document</div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
-                onClick={() => this.startUpload("open_camera", side, type)}
+                onClick={() => this.startUpload("open_camera", type)}
                 style={{
                   textAlign: "center",
                   cursor: "pointer",
@@ -364,7 +449,7 @@ class DocumentUpload extends Component {
                   type="file"
                   style={{ display: "none" }}
                   onChange={this.getPhoto}
-                  id={side ? side : "myFile"}
+                  id={type ? type : "myFile"}
                 />
                 <img src={camera_green} alt="PAN"></img>
                 <div style={{ color: "#28b24d" }}>Click here to upload</div>
@@ -372,7 +457,7 @@ class DocumentUpload extends Component {
             </div>
           </div>
         )}
-        {image_data[side] && image_data[side].uploaded && (
+        {image_data[type] && image_data[type].uploaded && (
           <div
             style={{
               border: "1px dashed #e1e1e1",
@@ -383,13 +468,13 @@ class DocumentUpload extends Component {
             <div>
               <img
                 style={{ width: "100%", height: 150 }}
-                src={image_data[side].img || this.state.document_url || ""}
+                src={image_data[type].imageBaseFile || ""}
                 alt="PAN"
               />
             </div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
               <div
-                onClick={() => this.startUpload("open_camera", side, type)}
+                onClick={() => this.startUpload("open_camera", type)}
                 style={{
                   textAlign: "center",
                 }}
@@ -398,7 +483,7 @@ class DocumentUpload extends Component {
                   type="file"
                   style={{ display: "none" }}
                   onChange={this.getPhoto}
-                  id={side ? side : "myFile"}
+                  id={type ? type : "myFile"}
                 />
                 <img src={camera_grey} alt="PAN"></img>
                 <div style={{ color: "#b4b4b4" }}>Click here to upload new</div>
@@ -410,49 +495,101 @@ class DocumentUpload extends Component {
     );
   }
 
-  renderNativeCamera(side, type) {
+  renderNativeCamera(type) {
     let { image_data } = this.state;
     return (
       <div>
-        {!image_data[side] && <div style={{
-          border: '1px dashed #e1e1e1', padding: '10px 0px 0px 0px',
-          textAlign: 'center'
-        }}>
-          <div>Front side of PAN card</div>
-          <div style={{ margin: '20px 0 20px 0', fontSize: '12px', lineHeight: '20px' }}>
-            <div onClick={() => this.startUpload("open_camera", side, type)} style={{
-              width: '50%', float: 'left',
-              textAlign: 'center', borderRight: '1px solid #e1e1e1'
-
-            }}>
-              <img src={camera_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>OPEN CAMERA</div>
-            </div>
-            <div onClick={() => this.startUpload("open_gallery", side, type)} style={{ textAlign: 'center' }}>
-              <img src={gallery_green} alt="OTM"></img>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>GO TO GALLERY</div>
+        {!image_data[type] && (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "10px 0px 0px 0px",
+              textAlign: "center",
+            }}
+          >
+            <div>Front side of document</div>
+            <div
+              style={{
+                margin: "20px 0 20px 0",
+                fontSize: "12px",
+                lineHeight: "20px",
+              }}
+            >
+              <div
+                onClick={() => this.startUpload("open_camera", type)}
+                style={{
+                  width: "50%",
+                  float: "left",
+                  textAlign: "center",
+                  borderRight: "1px solid #e1e1e1",
+                }}
+              >
+                <img src={camera_green} alt="OTM"></img>
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  OPEN CAMERA
+                </div>
+              </div>
+              <div
+                onClick={() => this.startUpload("open_gallery", type)}
+                style={{ textAlign: "center" }}
+              >
+                <img src={gallery_green} alt="OTM"></img>
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  GO TO GALLERY
+                </div>
+              </div>
             </div>
           </div>
-        </div>}
-        {image_data[side] && <div style={{
-          border: '1px dashed #e1e1e1', padding: '0px 0px 0px 0px',
-          textAlign: 'center'
-        }}>
-          <div>
-            <img style={{ width: '100%', height: 150 }} src={image_data[side].img || this.state.document_url || ""} alt="PAN" />
-          </div>
-          <div style={{ margin: '20px 0 20px 0', fontSize: '12px', lineHeight: '20px' }}>
-            <div onClick={() => this.startUpload("open_camera", side, type)} style={{
-              width: '50%', float: 'left',
-              textAlign: 'center', borderRight: '1px solid #e1e1e1'
-            }}>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>OPEN CAMERA</div>
+        )}
+        {image_data[type] && (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "0px 0px 0px 0px",
+              textAlign: "center",
+            }}
+          >
+            <div>
+              <img
+                style={{ width: "100%", height: 150 }}
+                src={
+                  image_data[type].imageBaseFile ||
+                  ""
+                }
+                alt="PAN"
+              />
             </div>
-            <div onClick={() => this.startUpload("open_gallery", side, type)} style={{ textAlign: 'center' }}>
-              <div style={{ color: '#28b24d', fontWeight: 600 }}>GO TO GALLERY</div>
+            <div
+              style={{
+                margin: "20px 0 20px 0",
+                fontSize: "12px",
+                lineHeight: "20px",
+              }}
+            >
+              <div
+                onClick={() => this.startUpload("open_camera", type)}
+                style={{
+                  width: "50%",
+                  float: "left",
+                  textAlign: "center",
+                  borderRight: "1px solid #e1e1e1",
+                }}
+              >
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  OPEN CAMERA
+                </div>
+              </div>
+              <div
+                onClick={() => this.startUpload("open_gallery", type)}
+                style={{ textAlign: "center" }}
+              >
+                <div style={{ color: "#28b24d", fontWeight: 600 }}>
+                  GO TO GALLERY
+                </div>
+              </div>
             </div>
           </div>
-        </div>}
+        )}
       </div>
     );
   }
@@ -470,7 +607,7 @@ class DocumentUpload extends Component {
       documents,
       docs,
       totalUpload,
-      disbableButton
+      disbableButton,
     } = this.state;
 
     if (totalUpload < 3 && Object.keys(image_data).length !== totalUpload) {
@@ -509,9 +646,8 @@ class DocumentUpload extends Component {
 
           {totalUpload === "1" && (
             <div className="loan-mandate-pan" style={{ marginBottom: "50px" }}>
-              {getConfig().html_camera &&
-                this.renderHtmlCamera("single", "doc1")}
-              {!getConfig().html_camera && this.renderNativeCamera()}
+              {getConfig().html_camera && this.renderHtmlCamera("doc1")}
+              {!getConfig().html_camera && this.renderNativeCamera("doc1")}
             </div>
           )}
 
@@ -521,18 +657,16 @@ class DocumentUpload extends Component {
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera &&
-                  this.renderHtmlCamera("front", "doc1")}
-                {!getConfig().html_camera && this.renderNativeCamera("front", "doc1")}
+                {getConfig().html_camera && this.renderHtmlCamera("doc1")}
+                {!getConfig().html_camera && this.renderNativeCamera("doc1")}
               </div>
 
               <div
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera &&
-                  this.renderHtmlCamera("back", "doc2")}
-                {!getConfig().html_camera && this.renderNativeCamera("back", "doc2")}
+                {getConfig().html_camera && this.renderHtmlCamera("doc2")}
+                {!getConfig().html_camera && this.renderNativeCamera("doc2")}
               </div>
 
               <div style={{ display: "none" }}>
@@ -558,7 +692,7 @@ class DocumentUpload extends Component {
                         alt=""
                       />
                       {item.name}
-                      <span className="bytes">{bytesToSize(item.size)}</span>
+                      {/* <span className="bytes">{bytesToSize(item.size)}</span> */}
                     </div>
                   </div>
                 </div>
@@ -568,7 +702,14 @@ class DocumentUpload extends Component {
                 <div className="upload-bank-statement">
                   <div
                     className="pdf-upload"
-                    onClick={() => this.startUpload("open_file", '', `doc${documents.length + 1}`, `document_${documents.length + 1}`)}
+                    onClick={() =>
+                      this.startUpload(
+                        "open_file",
+                        "",
+                        `doc${documents.length + 1}`,
+                        `document_${documents.length + 1}`
+                      )
+                    }
                   >
                     <span className="plus-sign">
                       <input

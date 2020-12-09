@@ -126,7 +126,6 @@ class UploadBank extends Component {
   
 
   native_call_handler(method_name, doc_type) {
-    console.log(doc_type)
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
@@ -222,21 +221,19 @@ class UploadBank extends Component {
       return;
     }
 
-    let { documents, editId, count } = this.state;
+    let { documents, editId, doc_id, count } = this.state;
     file.doc_type = file.type;
     file.name = `Bank_statement_${count}.pdf`
     file.status = "uploaded";
     file.id = count++;
 
-    if (editId !== null) {
-      var index = documents.findIndex((item) => item.id === editId);
-      file.id = editId;
-      file.edited = true;
-      documents[index] = file;
-    }
-
-    if (editId === undefined || editId === null) {
+    if (editId === "") {
       documents.push(file);
+    } else {
+      var index = documents.findIndex((item) => item.id === editId);
+      file.curr_status = "edit";
+      file.document_id = doc_id;
+      documents[index] = file;
     }
 
     this.setState({
@@ -244,7 +241,7 @@ class UploadBank extends Component {
       documents: documents,
       show_loader: false,
       confirmed: false,
-      editId: null,
+      editId: "",
       count: count,
     });
   }
@@ -269,8 +266,10 @@ class UploadBank extends Component {
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
 
+    let ext = documents[index].type.split("/")[1];
+
     if (curr_status.status !== "delete") {
-      data.append("file", documents[index]);
+      data.append("file", documents[index], documents[index].name + ext);
       data.append("password", documents[index].password);
     }
 

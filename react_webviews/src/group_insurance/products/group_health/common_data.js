@@ -7,7 +7,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
-
+import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
@@ -19,6 +19,7 @@ export async function initialize() {
     this.memberKeyMapper = memberKeyMapper.bind(this);
 
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
+    
     let providerConfig = getGhProviderConfig(provider);
     let screenData = {};
     if(this.state.screen_name && providerConfig[this.state.screen_name]) {
@@ -63,10 +64,11 @@ export async function initialize() {
 
 
     let lead = {
-        member_base: []
+        member_base: [],
     };
 
     if (this.state.get_lead) {
+
         try {
 
             this.setState({
@@ -74,40 +76,71 @@ export async function initialize() {
             });
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
+            let resume = storageService().getObject("resumeToPremiumHealthInsurance");
+            let application_id = storageService().get('health_insurance_application_id');
+            let url;
+  
+            if (resume && !application_id) {
+                url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
+                const res = await Api.get(url);
 
-            let url = `/api/ins_service/api/insurance/${providerConfig.provider_api}/lead/quote?quote_id=${quote_id}`;
 
-            if(this.state.screen_name === 'final_summary_screen') {
-                url += `&forms_completed=true`;
-            }
-            const res = await Api.get(url);
-              
-            var resultData = res.pfwresponse.result;
-            
-             this.setState({
-                show_loader: false
-            });
-            if (res.pfwresponse.status_code === 200) {
-
-                lead = resultData.quote;
-                lead.base_premium = lead.base_premium;
-                lead.member_base = ghGetMember(lead, this.state.providerConfig);
+                if (res.pfwresponse.status_code === 200) {
+                    var resultData = res.pfwresponse.result;
+                    lead = resultData;
+                    lead.member_base = ghGetMember(lead, this.state.providerConfig);               
+                    this.setState({
+                        lead: resultData || {},
+                    }, () => {
+                        if (this.onload && !this.state.ctaWithProvider) {
+                            this.onload();
+                        }
+                    })
+                    
+                } else {
+                    toast(resultData.error || resultData.message ||
+                        'Something went wrong');
+                }
                 this.setState({
-                    lead: resultData.quote || {},
-                    common_data: {
-                        ...resultData.common,
-                        tnc: resultData.common.tnc || resultData.tnc
-                    },
-                    insured_account_type: lead.account_type || ''
-                }, () => {
-                    if (this.onload && !this.state.ctaWithProvider) {
-                        this.onload();
-                    }
+                    show_loader: false
+                });
+            } else if(application_id) {
+                url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
+   
+                if (this.state.screen_name === 'final_summary_screen') {
+                    url += `&form_submitted=true`;
+                }
+                const res = await Api.get(url);
+                // eslint-disable-next-line
+                var resultData = res.pfwresponse.result;
 
-                })
-            } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                this.setState({
+                    show_loader: false
+                });
+                if (res.pfwresponse.status_code === 200) {
+                    lead = resultData.quotation_details;
+                    var member_base = ghGetMember(lead, this.state.providerConfig);
+                                   
+                    this.setState({
+                        lead: resultData || {},
+                        member_base: member_base,
+                        quotation: resultData.quotation_details || {},
+                        common_data: {
+                            ...resultData.common,
+                            tnc: resultData.common.tnc || resultData.tnc
+                        },
+                        insured_account_type: lead.insurance_type || ''
+                    }, () => {
+                        if (this.onload && !this.state.ctaWithProvider) {
+                            this.onload();
+                        }
+
+                    })
+
+                } else {
+                    toast(resultData.error || resultData.message ||
+                        'Something went wrong');
+                }
             }
         } catch (err) {
             console.log(err);
@@ -120,23 +153,31 @@ export async function initialize() {
         }
     }
 
-
-    if (this.state.ctaWithProvider) {
-
-
-        let leftTitle, leftSubtitle, sum_assured, tenure, base_premium, tax_amount, total_amount, discount_amount, net_premium = '';
+    if (this.state.ctaWithProvider) { 
+        let leftTitle, leftSubtitle, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
-            leftSubtitle = lead.total_amount;
-            sum_assured = lead.sum_assured;
+            // eslint-disable-next-line 
+            leftSubtitle = lead.total_premium;
             tenure = lead.tenure;
             base_premium = lead.base_premium;
-            tax_amount = lead.tax_amount;
-            total_amount = lead.total_amount;
-            discount_amount = lead.discount_amount;
-            net_premium = lead.premium;
+            total_amount =  lead.total_premium;
+            individual_sum_insured = lead.individual_sum_insured;
+            total_discount = lead.total_discount;
+            gst = lead.gst;
+            net_premium = lead.total_premium - lead.gst;
+            
+            if(provider === 'HDFCERGO'){
+                leftTitle = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
+            }else if(provider === 'RELIGARE'){
+                leftTitle = 'Care'
+            }else{
+                leftTitle = 'Star health'
+            }
+
+
         } else {
-            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data.WF : [];
+            let premium_data = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.premium_data : [];
             let selectedIndexSumAssured = groupHealthPlanData.selectedIndexSumAssured || 0;
 
             this.setState({
@@ -144,7 +185,9 @@ export async function initialize() {
             })
 
             leftTitle = groupHealthPlanData.plan_selected ? groupHealthPlanData.plan_selected.plan_title : '';
-            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].net_premium : '';
+            if(selectedIndexSumAssured && premium_data){
+            leftSubtitle = premium_data[selectedIndexSumAssured] ? premium_data[selectedIndexSumAssured].premium : '';
+            }
 
         }
 
@@ -165,78 +208,52 @@ export async function initialize() {
             buttonTitle: "OK",
             content1: [
                 {
-                    'name': 'Basic premium ', 'value':
-                        inrFormatDecimal(net_premium)
+                    'name': 'Basic premium ', 
+                    'value': inrFormatDecimal(base_premium)
                 },
-                { 'name': 'GST', 'value': inrFormatDecimal(tax_amount) }
             ],
             content2: [
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
             ],
-            sum_assured: sum_assured,
+            sum_assured: individual_sum_insured,
             tenure: tenure
         }
-        if(provider === 'RELIGARE' && !lead.add_ons_amount){
-            confirmDialogData.content1 = [
-                {
-                    'name': 'Basic premium ', 
-                    'value': inrFormatDecimal(base_premium)
+        if(provider === 'RELIGARE') {
+            if(lead.add_ons && !isEmpty(lead.add_ons)){
+                let add_ons_backend = lead.add_ons;
+                let data = [];
+                let heading_added = false;
+                for (var key in add_ons_backend) {
+                    data.push({
+                        name: add_ons_backend[key].title,
+                        value: inrFormatDecimal(add_ons_backend[key].price),
+                        heading: !heading_added ? 'Add ons' : ''
+                    })
+
+                    heading_added = true;
                 }
-            ]
-            if(discount_amount > 0){
-                confirmDialogData.content1.push({
-                    'name': 'Total discount', 
-                    'value': inrFormatDecimal(discount_amount) 
-                });
+                confirmDialogData.content1 = confirmDialogData.content1.concat(data);
             }
+        }
+
+        if(total_discount > 0){
+            confirmDialogData.content1.push({
+                'name': 'Total discount', 
+                'value': inrFormatDecimal(total_discount) 
+            });
+        }
+        if(base_premium !== net_premium){
             confirmDialogData.content1.push({
                 'name': 'Net premium', 
                 'value': inrFormatDecimal(net_premium) 
             });
-            confirmDialogData.content1.push({
-                'name': 'GST', 
-                'value': inrFormatDecimal(tax_amount) 
-            })
         }
-        if(provider === 'RELIGARE' && lead.add_ons_amount) {
 
-            confirmDialogData.content1 = [
-                {
-                    'name': 'Basic premium ', 
-                    'value': inrFormatDecimal(base_premium)
-                }
-            ]
-
-            let add_ons_backend = lead.add_ons_json;
-            let data = [];
-            let heading_added = false;
-            for (var key in add_ons_backend) {
-                data.push({
-                    name: add_ons_backend[key].title,
-                    value: inrFormatDecimal(add_ons_backend[key].premium),
-                    heading: !heading_added ? 'Add ons' : ''
-                })
-
-                heading_added = true;
-            }
-
-            confirmDialogData.content1 = confirmDialogData.content1.concat(data);
-
-            if(discount_amount > 0){
-                confirmDialogData.content1.push({
-                    'name': 'Total discount', 
-                    'value': inrFormatDecimal(discount_amount) 
-                });
-            }
-            confirmDialogData.content1.push({
-                'name': 'Net premium', 
-                'value': inrFormatDecimal(net_premium) 
-            });
-            confirmDialogData.content1.push({
-                'name': 'GST', 
-                'value': inrFormatDecimal(tax_amount) 
-            })
-        }
+        confirmDialogData.content1.push({
+            'name': 'GST',
+            'value': inrFormatDecimal(gst)
+        })
+        
 
 
         this.setState({
@@ -246,25 +263,35 @@ export async function initialize() {
             if (this.onload) {
                 this.onload();
             }
-
         })
     }
 }
 
-export function updateBottomPremium(premium) {
 
-    this.setState({
-        bottomButtonData: {
-            ...this.state.bottomButtonData,
-            leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].net_premium)
-        }
-    })
+export function updateBottomPremium(premium) {
+    if(this.state.premium_data){
+        this.setState({
+            bottomButtonData: {
+                ...this.state.bottomButtonData,
+                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '')
+            }
+        })    
+    }
 }
 
-export async function updateLead(body, quote_id) {
+export function updateBottomPremiumAddOns(premium) {
+    if(this.state.add_ons_data){
+        this.setState({
+            bottomButtonData: {
+                ...this.state.bottomButtonData,
+                leftSubtitle: inrFormatDecimal(premium ||'')
+            }
+        })    
+    }
+}
+
+export async function updateLead( body, quote_id) {
     try {
-
-
         if (!quote_id) {
             quote_id = storageService().get('ghs_ergo_quote_id');
         }
@@ -272,11 +299,15 @@ export async function updateLead(body, quote_id) {
         this.setState({
             show_loader: true
         });
+        let application_id = storageService().get('health_insurance_application_id');
+         body.application_id = application_id
 
-        const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/update?quote_id=${quote_id}`,body);
-
+        const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
+
+            if (body.pedcase) { this.initialize(); this.setState({ show_loader: true });return}
+
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
                 console.log('if');
@@ -288,13 +319,16 @@ export async function updateLead(body, quote_id) {
             this.setState({
                 show_loader: false
             });
-            if (resultData.bmi_check) {
+            if (resultData.error && resultData.error.length > 0 && resultData.error[0]==='BMI check failed.') {
                 this.setState({
                     openBmiDialog: true
                 }, () => {
                     this.sendEvents('next', {bmi_check: true});
                 });
             } else {
+                if(resultData.error && resultData.error.length > 0 && resultData.error[0]){
+                    resultData.error = resultData.error[0]
+                }
                 toast(
                     resultData.error ||
                     resultData.message ||
@@ -313,7 +347,7 @@ export async function updateLead(body, quote_id) {
 
 export function navigate(pathname, data = {}) {
 
-    if (this.props.edit || data.edit) {
+    if ((this.props.edit || data.edit) && ['select_ped_screen', 'is_ped'].indexOf(this.state.screen_name) === -1) {
         this.props.history.replace({
             pathname: pathname,
             search: getConfig().searchParams
@@ -333,7 +367,6 @@ export function navigate(pathname, data = {}) {
 export async function resetQuote() {
 
     this.handleClose();
-    let quote_id = storageService().get('ghs_ergo_quote_id');
     this.setState({
         show_loader: true,
         restart_conformation: true
@@ -342,7 +375,8 @@ export async function resetQuote() {
     });
 
     try {
-        const res = await Api.get(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/lead/cancel/${quote_id}`);
+
+        const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
@@ -480,7 +514,7 @@ export function openMedicalDialog(type) {
         'icon': 'ic_medical_checkup2',
         'dialog_name': 'medical_dialog',
         'cta_title': 'CONTINUE TO PAYMENT',
-        'handleClick': this.startPayment
+        'handleClick': this.redirectToPayment
     };
     let provider = this.state.provider;
 
