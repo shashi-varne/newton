@@ -392,12 +392,12 @@ button {
 .fyntune-heading {
   font-size: 17px;
   font-weight: 500;
-  margin-top: 50px;
+  margin-top: 40px;
 }
 .fyntune-info {
   color: #8d918e;
   font-size: 15px;
-  line-height: 30px;
+  line-height: 24px;
   padding-right: 20px;
 }
 
@@ -420,7 +420,7 @@ button {
 
 .FiveStepPlan-Info{
   line-height: 8px;
-  margin: 25px 0px 25px 30px;
+  margin: 20px 0px 20px 30px;
 }
 
 .FiveStepPlan-Number{
@@ -952,6 +952,10 @@ input#pan {
     border-bottom: 1px solid #d7d4d4;
     cursor: pointer;
     padding: 5px 0 5px 0;
+  }
+
+  .common-faqs-tile:last-child{
+    margin-bottom: 50px;
   }
 
   .top-tile {

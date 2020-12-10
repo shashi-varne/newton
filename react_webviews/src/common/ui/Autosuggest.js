@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-
 import ReactSearchBox from 'react-search-box'
 import './style.scss';
-
-
 class AutosuggestInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
       value: this.props.value || '',
       suggestions_list: this.props.suggestions_list || [],
-      suggestions: []
+      suggestions: [],
     };
   }
-
   componentDidUpdate(prevState) {
     if (prevState.value !== this.props.value) {
       this.setState({ value: this.props.value })
@@ -22,11 +18,15 @@ class AutosuggestInput extends Component {
       this.setState({ suggestions_list: this.props.suggestions_list })
     }
   }
-
   handleChange = (value) => {
     this.props.onChange(value);
-
   };
+
+  componentDidMount(){
+      this.setState({
+        suggestions : this.props.options
+      })
+  }
 
   render() {
     return (
@@ -36,7 +36,7 @@ class AutosuggestInput extends Component {
         </div>
         <ReactSearchBox
           placeholder={this.props.placeholder}
-          data={this.props.value && this.props.value.length >= 2 ? this.props.options : []}
+          data={this.props.value && this.props.value.length >= 2 ? this.state.suggestions : []}
           // onSelect={record => console.log(record)}
           // onFocus={() => {
           //   console.log('This function is called when is focussed')
@@ -52,11 +52,8 @@ class AutosuggestInput extends Component {
     );
   }
 }
-
 const Autosuggests = (props) => (
   <AutosuggestInput
     {...props} />
 );
-
 export default Autosuggests;
-

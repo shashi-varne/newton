@@ -85,6 +85,7 @@ const Date = (props) => {
         if (el.is_sip) {
           el.allowed_sip_dates_new = [];
           el.sip_day = '';
+          // eslint-disable-next-line array-callback-return
           el.allowed_sip_dates.map((date, index) => {
             el.allowed_sip_dates_new[index] = {
               name: dateOrdinal(date) + ' of every month',
@@ -161,6 +162,7 @@ const Date = (props) => {
         SIP switch transactions
       </Typography>
       {funds.length > 0 &&
+        // eslint-disable-next-line array-callback-return
         funds.map((el) => {
           const checkMap = storageService().getObject('checkMap');
           if (el.is_sip && checkMap[el.id]) {
