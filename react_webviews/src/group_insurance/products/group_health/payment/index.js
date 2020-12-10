@@ -320,28 +320,16 @@ class GroupHealthPayment extends Component {
                 <div className="content">
                   <div className="content-points">
                     <div className="content-points-inside-text">
-                      Basic premium
+                      Net premium
                                 </div>
                     <div className="content-points-inside-text">
-                      {inrFormatDecimal(this.state.lead.base_premium - this.state.lead.total_discount)}
+                      {inrFormatDecimal(this.state.lead.total_premium - this.state.lead.gst)}
                     </div>
                   </div>
-
-                  {this.state.lead.add_on_premium > 0 && 
-                    <div className="content-points">
-                      <div className="content-points-inside-text">
-                       Add ons amount
-                      </div>
-                      <div className="content-points-inside-text">
-                        {inrFormatDecimal(this.state.lead.add_on_premium)}
-                      </div>
-                    </div>
-                  }
-
                   <div className="content-points">
                     <div className="content-points-inside-text">
                       GST
-                                </div>
+                    </div>
                     <div className="content-points-inside-text">
                       {(inrFormatDecimal(this.state.lead.gst))}
                     </div>
