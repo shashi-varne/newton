@@ -62,7 +62,7 @@ class Landing extends Component {
         this.navigate("loan-status");
       }
 
-      if (!pan_status || (!ckyc_status && pan_status === "success")) {
+      if (!pan_status || vendor_application_status === "pan") {
         this.navigate("basic-details");
       } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe) {
         this.navigate("journey");

@@ -116,13 +116,10 @@ const Lending = props => {
             render={(props) => <ProfessionalDetails {...props} edit={true} />} />
 
           <Route path={`${url}/edit-personal-details`} 
-            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+            render={(props) => <PersonalDetails {...props} edit={true} />} />
 
           <Route path={`${url}/edit-address-details`} 
-            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
-
-          <Route path={`${url}/edit-loan-requirement-details`} 
-            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+            render={(props) => <AddressDetails {...props} edit={true} />} />
        
           <Route component={NotFound} />
 

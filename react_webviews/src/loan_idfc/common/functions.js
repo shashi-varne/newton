@@ -407,7 +407,7 @@ export async function get10Callback(next_state) {
 
   setTimeout(function () {
     if (result.idfc_10_callback === true) {
-      that.navigate(next_state);
+      that.navigate('eligible-loan');
     } else if (
       result.vendor_application_status === "idfc_cancelled" ||
       result.is_cancelled === true

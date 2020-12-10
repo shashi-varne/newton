@@ -52,7 +52,9 @@ class DocumentList extends Component {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        this.navigate('reports')
+        this.navigate('final-offer')
+      } else {
+        toast(result.error || result.message || "Something went wrong!");
       }
 
     } catch (err) {

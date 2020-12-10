@@ -25,7 +25,7 @@ const commonMapper = {
   },
   "idfc_0.5_submitted": {
     top_icon: "ils_loan_status",
-    top_title: "Congratulations,",
+    // top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
@@ -243,7 +243,12 @@ class LoanStatus extends Component {
       vendor_application_status,
       rejection_reason,
       is_dedupe,
+      first_name
     } = this.state;
+
+    if (vendor_application_status === 'idfc_0.5_accepted') {
+      commonMapper.top_title = `Congratulations, ${first_name}`;
+    }
 
     return (
       <Container
