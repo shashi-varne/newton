@@ -75,6 +75,7 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
       marginLeft: '1.5em',
       color: '#0A1D32',
       opacity: '0.3',
+      position: 'absolute',
     }),
     singleValue: (base) => ({
       ...base,

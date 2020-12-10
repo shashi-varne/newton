@@ -131,7 +131,7 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        disabled={filterState['viewFor'] !== 'select_dates'}
+                        disabled={filterState?.viewFor !== 'select_dates' || isEmpty(filterState)}
                         value={startDate}
                         onChange={(e) => handleDateChange(e, 'from_tdate')}
                       />
@@ -146,7 +146,7 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
                         InputLabelProps={{
                           shrink: true,
                         }}
-                        disabled={filterState['viewFor'] !== 'select_dates'}
+                        disabled={filterState?.viewFor !== 'select_dates' || isEmpty(filterState)}
                         value={endDate}
                         onChange={(e) => handleDateChange(e, 'to_tdate')}
                       />

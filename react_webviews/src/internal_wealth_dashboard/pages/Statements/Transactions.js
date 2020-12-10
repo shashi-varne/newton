@@ -22,7 +22,6 @@ import AutoSuggestSearch from '../../mini-components/AutoSuggestSearch';
 import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
-import { getConfig } from 'utils/functions';
 const transactionMapper = [...transactionsHeaderMap];
 transactionMapper.splice(1, 0, {
   label: 'Fund Name',
@@ -39,7 +38,6 @@ const Transactions = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [pageMap, setPageMap] = useState([null, null]);
   const [hasError, setHasError] = useState(false);
-  const isMobileView = getConfig().isMobileDevice;
 
   const pushToPageMap = (url) => {
     if (!url) return;

@@ -179,12 +179,12 @@ $background: #f9f9f9;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  scroll-snap-align: start;
+  scroll-snap-align: end;
   margin-bottom: 200px;
 }
 
 .iwd-scroll-child:nth-last-child(1) {
-  margin-bottom: 50px;
+  margin-bottom: 0px;
 }
 
 .iwd-header-title {
@@ -335,7 +335,7 @@ $background: #f9f9f9;
   #iwd-d-risk {
     width: 55%;
     margin-right: 3%;
-
+    height: 85%;
     #iwd-dr-data {
       display: flex;
       flex-wrap: wrap;
@@ -1806,6 +1806,8 @@ $background: #f9f9f9;
   transform: translate(-50%, -50%);
 }
 @media only screen and (max-width: 450px) {
+  
+
   .iwd-statement-trans-error {
     top: 55%;
     left: 50%;

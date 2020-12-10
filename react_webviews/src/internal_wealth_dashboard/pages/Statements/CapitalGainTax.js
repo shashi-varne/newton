@@ -17,7 +17,6 @@ const CapitalGainTax = () => {
       setYears(tax_statement?.capital_gains);
       setIsLoading(false);
     } catch (err) {
-      //toast(err);
       setHasError(true);
       setIsLoading(false);
     }

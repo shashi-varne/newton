@@ -1,12 +1,12 @@
 
 import React, { useEffect } from 'react';
 import { getConfig } from "utils/functions";
-import Statements from './Statements';
 import NavBar from '../mini-components/NavBar';
 import NavBarMobile from '../mini-components/NavBarMobile';
 import Dashboard from './Dashboard';
 import Analysis from './Analysis';
 import Holdings from './Holdings';
+import Statements from './Statements';
 import Recommendations from './Recommendations';
 import { isEmpty, storageService } from '../../utils/validators';
 import { navigate as navigateFunc } from '../common/commonFunctions';
@@ -62,7 +62,7 @@ const Main = (props) => {
           enter={false}
           exit={false}
           classNames='iwd-entry-animate'
-          timeout={30000}
+          timeout={3000}
         >
           {renderTab()}
         </CSSTransition>

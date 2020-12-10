@@ -18,7 +18,6 @@ const Elss = () => {
       setYears(tax_statement?.elss);
       setIsLoading(false);
     } catch (err) {
-      //toast(err);
       setHasError(true);
       setIsLoading(false);
     }

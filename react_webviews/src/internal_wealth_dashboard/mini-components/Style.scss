@@ -298,7 +298,7 @@ $card-padding: 50px;
   width: 80px;
   position: absolute;
   overflow: hidden;
-  z-index: 3;
+  z-index: 4;
   background: #613eb9;
   border-radius: 0px 10px 10px 0;
   padding: 15px;
@@ -517,7 +517,7 @@ $card-padding: 50px;
   @extend .iwd-fade;
   animation-delay: 0.4s;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 
   #iwd-ph-left {
     // float: left;
@@ -838,7 +838,7 @@ ul#iwd-bars {
 .radial-chart-progress {
   transform: rotate(90deg);
   transform-origin: center;
-  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14) 1s;
+  transition: all 1s cubic-bezier(0.58, 0.16, 0.5, 1.14) 1.5s;
 }
 
 table.iwd-transactions-table {
@@ -1135,7 +1135,7 @@ table.iwd-transactions-table {
 }
 
 .iwd-transactions-table {
-  width: 800px !important;
+  width: 90% !important;
 
   td:nth-child(1) {
     padding-left: 10px;
@@ -1324,6 +1324,11 @@ table.iwd-transactions-table {
 }
 
 @media only screen and (max-width: 450px) {
+
+  // Holding Transaction page
+  .iwd-transactions-table {
+    width: 800px !important;
+  }
   .iwd-statement-reports {
     margin-bottom: 40px;
   }
@@ -1357,6 +1362,11 @@ table.iwd-transactions-table {
       align-items: center;
       width: 80%;
 
+      //changes done
+      position: fixed;
+      left:0;
+      bottom: 10px;
+
       margin: 30px auto 20px auto;
       .MuiButtonBase-root {
         border-radius: 6px;
@@ -1380,6 +1390,7 @@ table.iwd-transactions-table {
       display: flex;
       flex-direction: column;
       //padding: $card-padding-mobile;
+      padding-bottom: 80px;
 
       .iwd-filter-head-container {
         justify-content: center;
