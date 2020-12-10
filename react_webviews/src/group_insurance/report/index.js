@@ -4,7 +4,7 @@ import Container from '../common/Container';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-
+import { getDateBreakup } from 'utils/validators';
 import {
   inrFormatDecimalWithoutIcon
 } from '../../utils/validators';
@@ -27,7 +27,7 @@ class Report extends Component {
   navigate = (pathname, provider) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&provider=' + provider,
+      search: getConfig().searchParams,
       params: {
         backToState: 'report'
       }
@@ -35,18 +35,27 @@ class Report extends Component {
   }
 
   getProviderObject = (policy) => {
-    let provider = policy.provider;
+    let provider = policy.vendor || policy.provider;
     let obj = policy;
+    let formatted_valid_from = ''
     obj.key = provider;
 
-    if (provider === 'HDFCERGO') {
+    if(['hdfc_ergo','star','religare'].indexOf(provider) !== -1 ){
+      let valid_from = obj.valid_from ? getDateBreakup(obj.valid_from): '';
+      let formatted_day = valid_from && valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
+      formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+    }
+    
+    if (provider === 'hdfc_ergo') {
       obj = {
         ...obj,
         product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'HDFCERGO',
-        id: policy.lead_id,
-        premium: policy.total_amount
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
     }else if( provider === 'FYNTUNE'){
       obj = {
@@ -57,24 +66,27 @@ class Report extends Component {
         id: policy.fyntune_ref_id, 
         premium: policy.total_amount
       };
-    } else if (provider === 'RELIGARE') {
+    } else if (provider === 'religare') {
       obj = {
         ...obj,
-        product_name: policy.product_title,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'RELIGARE',
-        id: policy.lead_id,
-        premium: policy.total_amount
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
-    }  else if (provider === 'STAR') {
+    }  else if (provider === 'star') {
       obj = {
         ...obj,
-        product_name: 'Star Family Health Optima',
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'STAR',
-        status_title: 'Star Health',
-        id: policy.lead_id,
-        premium: policy.total_amount
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
     }  else if (provider === 'BHARTIAXA') {
       obj = {
@@ -101,8 +113,7 @@ class Report extends Component {
     return obj;
   }
 
-  setReportData(termData, group_insurance_policies) {
-
+  setReportData(termData, group_insurance_policies, health_insurance_policies) {
 
     let canShowReport = false;
     let application;
@@ -160,15 +171,17 @@ class Report extends Component {
     }
 
 
+    let hs_policies = health_insurance_policies.insurance_apps;
+    for (let i = 0; i < hs_policies.length; i++) {
+      let policy = this.getProviderObject(hs_policies[i]);
+      reportData.push(policy);
+    }
+
     let ins_policies = group_insurance_policies.ins_policies || [];
     for (var i = 0; i < ins_policies.length; i++) {
       let policy = this.getProviderObject(ins_policies[i]);
       reportData.push(policy);
     }
-
-    console.log(reportData);
-
-
     this.setState({
       reportData: reportData,
       termRedirectionPath: fullPath
@@ -194,9 +207,11 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : ''
         })
 
-        let ins_policies = policyData.group_insurance || {};
+        let group_insurance_policies = policyData.group_insurance || {};
+        let health_insurance_policies = policyData.health_insurance || {};
+        let term_insurance_policies = policyData.term_insurance || {};
 
-        this.setReportData(policyData.term_insurance, ins_policies);
+        this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -225,13 +240,21 @@ class Report extends Component {
     this.sendEvents('next', policy.key);
     let path = '';
     let key = policy.key;
+
     if (key === 'TERM_INSURANCE') {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
-    } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
-      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
-    } else if(key === 'FYNTUNE'){
+    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
+      if(key === 'hdfc_ergo'){
+        key = 'HDFCERGO';
+      }else if(key === 'star'){
+        key = 'STAR';
+      }else if(key === 'religare'){
+        key = 'RELIGARE';
+      }
+      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
+    }else if(key === 'FYNTUNE'){
       path =`/group-insurance/life-insurance/savings-plan/report-details/${policy.id}`;
     }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
@@ -241,7 +264,7 @@ class Report extends Component {
   }
 
   renderReportCards(props, index) {
-    let health_providers = ['HDFCERGO', 'RELIGARE', 'STAR'];
+    let health_providers = ['hdfc_ergo', 'religare', 'star'];
     return (
       <div className="group-insurance-report card"
         onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
@@ -287,7 +310,7 @@ class Report extends Component {
                     ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                 </div>
                 <div className="report-cover-amount"><span>Premium:
-                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year
+                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}
                   </div>
               </div>
             }

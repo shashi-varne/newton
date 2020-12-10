@@ -28,14 +28,11 @@ class OtpVerification extends Component {
   }
 
   componentWillMount() {
-
     let { params } = this.props.location;
 
     if (!params) {
       params = {};
     }
-
-    console.log(params)
 
     if (!params || !params.resend_otp_url || !params.verify_otp_url) {
       this.props.history.goBack();
@@ -52,8 +49,8 @@ class OtpVerification extends Component {
       resend_otp_url: params.resend_otp_url || "",
       verify_otp_url: params.verify_otp_url || "",
       next_state: params.next_state || "",
-    // }, () => {
-    //   this.initialize();
+    }, () => {
+      this.initialize();
     });
   }
 
@@ -171,14 +168,14 @@ class OtpVerification extends Component {
         const { result, status_code: status } = res.pfwresponse;
 
         if (status === 200) {
-          if (!result.error) {
+          // if (!result.error) {
             this.navigate(this.state.next_state);
-          } else {
-            this.setState({
-              show_loader: false,
-              otpVerified: false,
-            });
-          }
+        //   } else {
+        //     this.setState({
+        //       show_loader: false,
+        //       otpVerified: false,
+        //     });
+        //   }
         } else {
           this.setState({
             show_loader: false,
@@ -186,6 +183,7 @@ class OtpVerification extends Component {
           toast(result.error || result.message || "Something went wrong!");
         }
       } catch (err) {
+        console.log(err)
         this.setState({
           show_loader: false,
         });

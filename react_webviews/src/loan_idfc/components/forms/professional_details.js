@@ -41,6 +41,7 @@ class ProfessionalDetails extends Component {
     let application_info = lead.application_info || {};
 
     let { employment_type } = application_info;
+    console.log((professional_info.organisation || "").toUpperCase())
 
     let form_data = {
       company_name: professional_info.company_name,
