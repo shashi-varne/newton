@@ -1,6 +1,6 @@
 import React from 'react';
 import pdf_icon from 'assets/pdf_icon.svg';
-import xls_icon from 'assets/xls_icon.svg';
+// import xls_icon from 'assets/xls_icon.svg';
 import { downloadReport } from '../common/ApiCalls';
 const StatementCard = ({ sType, year }) => {
   const handleDownloadReport = async () => {

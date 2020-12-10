@@ -503,6 +503,9 @@ $background: #f9f9f9;
     display: flex;
     flex-wrap: wrap;
   }
+  .iwd-holding-header-count {
+    font-weight: normal;
+  }
 }
 
 .iwd-holding-detail {
@@ -952,6 +955,7 @@ $background: #f9f9f9;
     }
 
     .iwd-analysis-portfolio-percentage {
+      color: $dark;
       font-size: 15px;
     }
   }
@@ -973,6 +977,7 @@ $background: #f9f9f9;
   }
 
   .iwd-analysis-amc-percentage {
+    color: $dark;
     font-size: 17px;
   }
 
@@ -1473,20 +1478,28 @@ $background: #f9f9f9;
       .iwd-analysis-portfolio-name {
         font-size: 13px;
       }
+
+      .iwd-analysis-portfolio-stock {
+        width: 100%;
+        margin-top: 40px;
+        justify-content: flex-start;
+      }
+
+      .iwd-analysis-portfolio-stock:nth-of-type(1) {
+        margin-top: 0;
+      }
     }
     .iwd-analysis-amc {
       width: 100%;
       margin-bottom: 40px;
     }
 
-    .iwd-d-newsletter {
-      display: block;
+    .iwd-analysis-amc:nth-last-of-type(1) {
+      margin-bottom: 0;
     }
 
-    .iwd-analysis-portfolio-stock {
-      width: 100%;
-      margin-top: 30px;
-      justify-content: flex-start;
+    .iwd-d-newsletter {
+      display: block;
     }
 
     .iwd-analysis-header-container-left {

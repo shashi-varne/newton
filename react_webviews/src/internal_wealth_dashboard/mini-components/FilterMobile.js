@@ -5,7 +5,6 @@ import { PrimaryButton as Button } from '../common/Button';
 import { storageService } from '../../utils/validators';
 import TextField from '@material-ui/core/TextField';
 import { dateFormater, date_range_selector } from '../common/commonFunctions';
-import toast from '../../common/ui/Toast';
 import isEmpty from 'lodash/isEmpty';
 import { Dialog } from 'material-ui';
 

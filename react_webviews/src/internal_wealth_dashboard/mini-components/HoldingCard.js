@@ -8,9 +8,6 @@ import { Button } from 'material-ui';
 import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
-import { navigate as navigateFunc } from '../common/commonFunctions';
-import { countChars } from '../../utils/validators';
-
 
 const HoldingCard = ({
   mf: mf_detail = {},
@@ -27,15 +24,6 @@ const HoldingCard = ({
     fisdom_rating,
     isin = 1,
   } = mf_detail;
-
-  const ellipsify = (line) =>  {
-    const characters = countChars(line)
-    if (characters >= 52) {
-      return `${line.split('0, 52')}...`
-    }
-    return line
-  }
-  
 
   return (
     <div className="iwd-holding-card">
@@ -54,7 +42,7 @@ const HoldingCard = ({
           onCloseClick={() => setOpenDetail(false)}
         />
       }
-      <div>stars</div>
+      <div>stars {fisdom_rating}</div>
       <div className="iwd-hc-type">
         {scheme_type}
         <span>|</span>

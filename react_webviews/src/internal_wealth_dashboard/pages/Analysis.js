@@ -117,6 +117,7 @@ function MarketCapAllocation({ data = {}, isLoading }) {
       isLoading={isLoading}
       headerText="Market cap allocation"
       error={isEmpty(data)}
+      errorText="Something went wrong! Please wait and try again later"
     >
       <section className='iwd-agl-content'>
         <div className='iwd-chart'>
@@ -142,6 +143,7 @@ function TopSectorAllocation({ data = {}, isLoading }) {
       id='iwd-sector-alloc'
       isLoading={isLoading}
       error={isEmpty(data)}
+      errorText="Something went wrong! Please wait and try again later"
       headerText='Top sector allocation'
     >
       <section className='iwd-agr-content'>
@@ -167,6 +169,7 @@ function RatingWiseExposure({ data = {}, isLoading }) {
       className='iwd-analysis-graph-left'
       id='iwd-rating-exposure'
       error={isEmpty(data)}
+      errorText="Something went wrong! Please wait and try again later"
       isLoading={isLoading}
       headerText='Rating wise exposure'
     >
@@ -193,6 +196,7 @@ function MaturityWiseExposure({ data = {}, isLoading }) {
       className='iwd-analysis-graph-right'
       id='iwd-maturity-exposure'
       error={isEmpty(data)}
+      errorText="Something went wrong! Please wait and try again later"
       isLoading={isLoading}
       headerText='Maturity wise exposure'
     >
@@ -246,6 +250,7 @@ function TopStocks({ topStocks }) {
         className="iwd-analysis-card"
         headerText="Top stocks in portfolio"
         error={isEmpty(topStocks)}
+        errorText="Something went wrong! Please wait and try again later"
       >
         <div className='iwd-analysis-portfolios-equity'>
           {topStocks.map(
@@ -278,6 +283,7 @@ function TopHoldings({ topHoldings }) {
         className="iwd-analysis-card"
         headerText="Top holdings"
         error={isEmpty(topHoldings)}
+        errorText="Something went wrong! Please wait and try again later"
       >
         <div className='iwd-analysis-portfolios-equity'>
           {topHoldings.map(({ instrument_name: name, share: percentage }) => (
@@ -302,6 +308,7 @@ function TopAMCS({ topAMCs }) {
         className='iwd-analysis-card'
         headerText='Top Stocks in portfolio'
         error={isEmpty(topAMCs)}
+        errorText="Something went wrong! Please wait and try again later"
       >
         <div className="iwd-analysis-top-amcs">
           {topAMCs.map(

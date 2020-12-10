@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import StatementCard from '../../mini-components/StatementCard';
 import { fetchGainsElssYears } from '../../common/ApiCalls';
-import toast from '../../../common/ui/Toast';
 import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
-import IlsNoData from 'assets/fisdom/ils_no_data.svg';
-import IlsNoDataMob from 'assets/fisdom/ils_no_data_mob.svg';
 import { getConfig } from 'utils/functions';
-import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
 import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
+
 const Elss = () => {
   const title = 'ELSS report';
   const [years, setYears] = useState([]);

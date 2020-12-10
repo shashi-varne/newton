@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import LoginFields from '../../common/responsive-components/LoginFields';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { WhiteButton } from '../common/Button';
