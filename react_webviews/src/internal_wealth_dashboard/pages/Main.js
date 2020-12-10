@@ -62,7 +62,7 @@ const Main = (props) => {
           enter={false}
           exit={false}
           classNames='iwd-entry-animate'
-          timeout={30000}
+          timeout={3000}
         >
           {renderTab()}
         </CSSTransition>
