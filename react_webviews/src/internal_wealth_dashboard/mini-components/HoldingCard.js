@@ -8,6 +8,7 @@ import { Button } from 'material-ui';
 import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
+import IwdCard from '../mini-components/IwdCard';
 
 const HoldingCard = ({
   mf: mf_detail = {},
@@ -23,10 +24,10 @@ const HoldingCard = ({
     name,
     fisdom_rating,
     isin = 1,
-  } = mf_detail;
+  } = mf_detail;  
 
   return (
-    <div className="iwd-holding-card">
+    <IwdCard className="iwd-holding-card">
       {openDetail &&
         <HoldingDetail
           isin={isin}
@@ -79,7 +80,7 @@ const HoldingCard = ({
         <span>More details</span>
         <img src={nextArrow} alt="" style={{ marginLeft: '15px' }} />
       </Button>
-    </div>
+    </IwdCard>
   );
 };
 

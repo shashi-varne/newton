@@ -60,7 +60,7 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
         borderRight: '2px solid #f0f1f5',
         minWidth: '200px',
       }}
-      className='iwd-filter-desktop'
+      className='iwd-filter-desktop iwd-fadeFromLeft'
     >
       <section className='iwd-filter-head-container'>
         <div className='iwd-filter-head'>Filters</div>

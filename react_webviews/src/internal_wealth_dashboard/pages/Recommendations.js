@@ -16,6 +16,9 @@ const Recommendations = () => {
         <div className="iwd-header-title">Recommendations</div>
       </PageHeader>
       <ErrorScreen
+        classes={{
+          container: 'iwd-fade'
+        }}
         useTemplate={true}
         templateImage={isMobileView ? IlsWipMob : IlsWip}
         templateErrText="We are in a process of building something best for you, with this you can easily rebalance your funds as per the market ongoings."

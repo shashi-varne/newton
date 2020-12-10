@@ -64,14 +64,15 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
 
     control: (base, state) => ({
       ...base,
+      minHeight: '45px',
       border: 'none',
       color: 'black',
       boxShadow: 'none',
-      background: 'rgba(31,18,65,0.05)',
+      background: 'rgba(79, 45, 167, 0.05)',
       cursor: 'pointer',
     }),
     placeholder: (base) => ({
-      marginLeft: '1em',
+      marginLeft: '1.5em',
       color: '#0A1D32',
       opacity: '0.3',
     }),
@@ -95,6 +96,14 @@ const AutoSuggestSearch = ({ fundNames, placeholder, filter_key, handleFilterDat
       color: '#1F041E',
       alignItems: 'left',
       padding: '20px 15px',
+    }),
+    input: (base) => ({
+      ...base,
+      marginLeft: '1.5em',
+    }),
+    menu: (base) => ({
+      ...base,
+      marginLeft: '2px',
     }),
   };
   return (

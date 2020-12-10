@@ -137,14 +137,13 @@ const Holdings = () => {
           <span className='iwd-holding-header-count'> {holdingsList.length || ''}</span>
         </div>
       </PageHeader>
-      {open && (
-        <FilterMobile
-          clickHandler={clickHandler}
-          filterOptions={HoldingFilterOptions}
-          filter_key={filter_key}
-          handleFilterData={handleFilterData}
-        />
-      )}
+      <FilterMobile
+        clickHandler={clickHandler}
+        filterOptions={HoldingFilterOptions}
+        filter_key={filter_key}
+        open={open}
+        handleFilterData={handleFilterData}
+      />
       <section style={{ display: 'flex', width: '100%' }}>
         {!open && (
           <FilterDesktop
@@ -169,6 +168,9 @@ const Holdings = () => {
           >
             {filterVal && !filterData && (
               <ErrorScreen
+                classes={{
+                  container: 'iwd-fade'
+                }}
                 useTemplate={true}
                 templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
                 templateErrText='Oops! We couldn’t find any data for the selected filter. Try removing or changing the filter.'

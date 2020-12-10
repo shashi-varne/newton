@@ -108,7 +108,7 @@
   margin-top: 40px;
   width: 100%;
 
-  a, a:visited {
+  a, a:visited, a:hover {
     @extend #login-clickable-elem;
   }
 

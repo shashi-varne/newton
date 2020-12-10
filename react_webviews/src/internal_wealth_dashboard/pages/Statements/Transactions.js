@@ -134,20 +134,18 @@ const Transactions = () => {
   };
   return (
     <div className='iwd-statement-transaction'>
-      {isMobileView && open ? (
-        <FilterMobile
-          clickHandler={clickHandler}
-          filterOptions={mobileFilterOptions}
-          filter_key={filter_key}
-          handleFilterData={handleFilterData}
-        />
-      ) : (
-        <FilterDesktop
-          filterOptions={transactionFilterOptions}
-          filter_key={filter_key}
-          handleFilterData={handleDesktopFilterData}
-        />
-      )}
+      <FilterMobile
+        clickHandler={clickHandler}
+        filterOptions={mobileFilterOptions}
+        filter_key={filter_key}
+        open={open}
+        handleFilterData={handleFilterData}
+      />
+      <FilterDesktop
+        filterOptions={transactionFilterOptions}
+        filter_key={filter_key}
+        handleFilterData={handleDesktopFilterData}
+      />
       {!open && !hasError && (
         <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
           <img src={filter_sign} alt='filter' />
@@ -156,6 +154,9 @@ const Transactions = () => {
       {hasError && (
         <div className='iwd-statement-trans-error'>
           <ErrorScreen
+            classes={{
+              container: 'iwd-fade'
+            }}
             templateErrTitle='Oops!'
             useTemplate={true}
             templateImage={IlsError}
@@ -167,7 +168,7 @@ const Transactions = () => {
       )}
       {!hasError && (
         <div className='iwd-transaction-container'>
-          <section className='iwd-transaction-search-container'>
+          <section className='iwd-transaction-search-container iwd-animatedFade'>
             <div className='iwd-transaction-search'>
               {fundNames && (
                 <AutoSuggestSearch
@@ -182,7 +183,7 @@ const Transactions = () => {
               <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
             </div>
           </section>
-          <section className='iwd-card iwd-transaction-table-container'>
+          <section className='iwd-card iwd-transaction-table-container iwd-animatedFade'>
             <div className='iwd-transaction-header'>
               <div className='iwd-transaction-title'>Transactions</div>
 
