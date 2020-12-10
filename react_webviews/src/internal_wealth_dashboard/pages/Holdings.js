@@ -101,11 +101,11 @@ const Holdings = () => {
         bool = false;
       }
       if (bool && filterVal?.fisdom_rating) {
-        let fisdomRating = parseInt(filterVal?.fisdom_rating);
+        let fisdomRating = parseInt(filterVal?.fisdom_rating, 10);
         bool = fisdomRating === 1 ? el.mf.fisdom_rating <= 3 : el.mf.fisdom_rating >= 4;
       }
       if (bool && filterVal?.current_value_type) {
-        let currentValueType = parseInt(filterVal?.current_value_type);
+        let currentValueType = parseInt(filterVal?.current_value_type, 10);
         if (currentValueType === 4) {
           bool = el.current > currentValue(currentValueType).max;
         } else {
@@ -132,9 +132,10 @@ const Holdings = () => {
   return (
     <div className='iwd-page' id='iwd-holdings'>
       <PageHeader>
-        <>
-          <div className='iwd-header-title'>Holdings</div>
-        </>
+        <div className='iwd-header-title'>
+          Holdings
+          <span className='iwd-holding-header-count'> {holdingsList.length || ''}</span>
+        </div>
       </PageHeader>
       <FilterMobile
         clickHandler={clickHandler}

@@ -25,11 +25,11 @@ const Main = (props) => {
         navigate('login');
       } else {
         const { user } = res.pfwresponse.result;
-        const { email, name } = user;
+        const { email, name, mobile } = user;
         
-        storageService().set('iwd-user-email', email);
-        storageService().set('iwd-user-name', name);
-        storageService().set('iwd-user-mobile', user.mobile || '--');
+        storageService().set('iwd-user-email', email || '');
+        storageService().set('iwd-user-name', name || '');
+        storageService().set('iwd-user-mobile', mobile || '');
       }
     } catch (e) {
       console.log(e);

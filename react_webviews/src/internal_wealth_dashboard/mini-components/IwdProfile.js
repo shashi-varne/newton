@@ -71,7 +71,21 @@ const IwdProfile = (props) => {
       </ClickAwayListener>
     );
   }
-  return profileIcon;
+  return (
+    <div id="iwd-profile-short">
+      <div style={{
+        marginRight: '10px',
+      }}>
+        <div id="iwd-ps-name">
+          {name}
+        </div>
+        <div id="iwd-ps-contact">
+          {mobile || email || '--'}
+        </div>
+      </div>
+      {profileIcon}
+    </div>
+  );
 };
 
 export default withRouter(IwdProfile);

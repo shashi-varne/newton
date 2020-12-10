@@ -43,7 +43,7 @@ const HoldingCard = ({
           onCloseClick={() => setOpenDetail(false)}
         />
       }
-      <div>stars</div>
+      <div>stars {fisdom_rating}</div>
       <div className="iwd-hc-type">
         {scheme_type}
         <span>|</span>

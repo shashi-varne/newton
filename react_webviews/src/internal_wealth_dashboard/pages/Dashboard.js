@@ -21,6 +21,7 @@ const isMobileView = getConfig().isMobileDevice;
 const Dashboard = () => {
   const username = storageService().get('iwd-user-name') || '';
   const [overviewData, setOverviewData] = useState({});
+  const [assetAlloc, setAssetAlloc] = useState({});
   const [isLoadingOverview, setIsLoadingOverview] = useState(true);
   const [overviewError, setOverviewError] = useState(false);
   const [riskData, setRiskData] = useState({});
@@ -40,12 +41,12 @@ const Dashboard = () => {
       setOverviewData({
         current_val: get(data, 'current.current', ''),
         invested_val: get(data, 'current.invested', ''),
-        asset_alloc: {
-          equity: get(data, 'current.stock', ''),
-          debt: get(data, 'current.bond', ''),
-        },
         total_realised: get(data, 'past.earnings', ''),
         xirr: get(data, 'earnings_percent', '--'),
+      });
+      setAssetAlloc({
+        equity: get(data, 'current.stock', ''),
+        debt: get(data, 'current.bond', ''),
       });
     } catch (e) {
       console.error(e);
@@ -78,14 +79,17 @@ const Dashboard = () => {
   const pageChanged = (pageNum) => {
     const page = document.getElementById('iwd-dashboard');
     const header = document.getElementById('iwd-ph-left');
+    const profile = document.getElementById('iwd-profile-short');
 
     if (page && !isEmpty(page)) {
       if (pageNum !== 1) {
         page.style.background = '#f9f9f9';
-        header.classList.add('iwd-dashboard-pg1');
+        if (header) header.classList.add('iwd-dashboard-pg1');
+        if (profile) profile.style.color = '#767e86';
       } else {
         page.style.background = '';
-        header.classList.remove('iwd-dashboard-pg1');
+        if (header) header.classList.remove('iwd-dashboard-pg1');
+        if (profile) profile.style.color = '#d3dbe4';
       }
     }
   };
@@ -101,8 +105,14 @@ const Dashboard = () => {
       <SnapScrollContainer
         pages={2}
         onPageChange={pageChanged}
+        isLoading={isLoadingOverview} // Overview is the most important part here, hence full screen load depends on this
+        loadingText='Hold tight! Getting you the good stuff ...'
+        error={overviewError} // Overview is the most important part here, hence full screen error depends on this
         hideFooter={isMobileView}
-        error={overviewError && riskError}
+        onErrorBtnClick={() => {
+          fetchOverview();
+          fetchPortfolioRisk();
+        }}
       >
         <>
           <div className='iwd-scroll-child' data-pgno='1'>
@@ -145,17 +155,15 @@ const Dashboard = () => {
               id='iwd-d-asset-alloc'
               headerText='Asset allocation'
               error={
-                isEmpty(overviewData) ||
-                isEmpty(overviewData.asset_alloc.equity) ||
-                isEmpty(overviewData.asset_alloc.debt)
+                isEmpty(assetAlloc.equity) ||
+                isEmpty(assetAlloc.debt)
               }
               errorText='Something went wrong! Please retry after some time or contact your wealth manager'
               isLoading={isLoadingOverview}
             >
               <div id='iwd-daa-graph'>
                 <RadialBarChart
-                  radius={100}
-                  progress={42}
+                  progress={assetAlloc.equity}
                   strokeWidth={10}
                   dimension={200}
                   color='#39B7A8'
@@ -166,14 +174,14 @@ const Dashboard = () => {
                       <div className='dot'></div>
                       Equity
                     </div>
-                    <div className='value'>42%</div>
+                    <div className='value'>{assetAlloc.equity}%</div>
                   </div>
                   <div className='iwd-daal-item'>
                     <div className='label'>
                       <div className='dot'></div>
                       Debt
                     </div>
-                    <div className='value'>58%</div>
+                    <div className='value'>{assetAlloc.debt}%</div>
                   </div>
                 </div>
               </div>
@@ -216,9 +224,6 @@ const Dashboard = () => {
             </IwdCard>
             <IwdCard
               headerText="Open source and non-custodial protocol enabling the creation of money markets"
-              error={isEmpty(riskData) || riskError}
-              errorText='Something went wrong! Please retry after some time or contact your wealth manager'
-              isLoading={isLoadingRisk}
               className="iwd-d-newsletter"
             >
               <>

@@ -4,7 +4,7 @@ import FilterMobile from '../../mini-components/FilterMobile';
 import {
   getTransactions,
   hitNextPage,
-  fetchPortfolioNames,
+  fetchPortfolioFundNames,
   downloadTransactionReport,
 } from '../../common/ApiCalls';
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
@@ -91,7 +91,7 @@ const Transactions = () => {
 
   const fetch_fund_names = async () => {
     try {
-      const { funds } = await fetchPortfolioNames();
+      const { funds } = await fetchPortfolioFundNames();
       setFundNames(funds);
     } catch (err) {
       toast(err);
