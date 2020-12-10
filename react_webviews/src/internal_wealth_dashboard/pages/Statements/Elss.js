@@ -5,6 +5,7 @@ import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
 import { getConfig } from 'utils/functions';
 import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 const isMobileView = getConfig().isMobileDevice;
+
 const Elss = () => {
   const title = 'ELSS report';
   const [years, setYears] = useState([]);

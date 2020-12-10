@@ -7,9 +7,10 @@ import TextField from '@material-ui/core/TextField';
 import { dateFormater, date_range_selector } from '../common/commonFunctions';
 import isEmpty from 'lodash/isEmpty';
 import { Dialog } from 'material-ui';
+import { CSSTransition } from 'react-transition-group';
 
-const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterData }) => {
-  const storedFilterVal = storageService().getObject(filter_key);
+const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterData, open }) => {
+  const storedFilterVal = storageService().getObject(filter_key) || {};
   const [startDate, setStartDate] = useState(storedFilterVal['from_tdate'] || '');
   const [endDate, setEndDate] = useState(storedFilterVal['to_tdate'] || '');
   const [filterState, setFilterState] = useState(storedFilterVal || null);
@@ -103,63 +104,71 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   );
 
   return (
-    <Dialog fullScreen={true} classes={{ paper: 'iwd-filter-mobile' }} open={true}>
-      <div className='iwd-filter-mobile-container'>
-        <PageCloseBtn clickHandler={clickHandler} />
-        <div className='iwd-filter-mobile-section'>
-          <section className='iwd-filter-head-container'>
-            <div className='iwd-filter-head'>Filters</div>
-          </section>
-          {renderFilters()}
-          {filter_key === 'iwd-transaction-filters' && (
-            <>
-              <div className='iwd-transaction-date-filter'>
-                <div className='iwd-transaction-date'>
-                  <div className='iwd-date-text'>From</div>
-                  <div className='iwd-date-selector'>
-                    <TextField
-                      id='date'
-                      type='date'
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      disabled={filterState?.viewFor !== 'select_dates' || isEmpty(filterState)}
-                      value={startDate}
-                      onChange={(e) => handleDateChange(e, 'from_tdate')}
-                    />
+    <CSSTransition
+      in={open}
+      appear={true}
+      unmountOnExit
+      classNames="circularExpandFilter"
+      timeout={2000}
+    >
+      <Dialog fullScreen={true} classes={{ paper: 'iwd-filter-mobile' }} open={true}>
+        <div className='iwd-filter-mobile-container'>
+          <PageCloseBtn clickHandler={clickHandler} />
+          <div className='iwd-filter-mobile-section'>
+            <section className='iwd-filter-head-container'>
+              <div className='iwd-filter-head'>Filters</div>
+            </section>
+            {renderFilters()}
+            {filter_key === 'iwd-transaction-filters' && (
+              <>
+                <div className='iwd-transaction-date-filter'>
+                  <div className='iwd-transaction-date'>
+                    <div className='iwd-date-text'>From</div>
+                    <div className='iwd-date-selector'>
+                      <TextField
+                        id='date'
+                        type='date'
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        disabled={filterState?.viewFor !== 'select_dates' || isEmpty(filterState)}
+                        value={startDate}
+                        onChange={(e) => handleDateChange(e, 'from_tdate')}
+                      />
+                    </div>
+                  </div>
+                  <div className='iwd-transaction-date'>
+                    <div className='iwd-date-text'>To</div>
+                    <div className='iwd-date-selector'>
+                      <TextField
+                        id='date'
+                        type='date'
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        disabled={filterState?.viewFor !== 'select_dates' || isEmpty(filterState)}
+                        value={endDate}
+                        onChange={(e) => handleDateChange(e, 'to_tdate')}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className='iwd-transaction-date'>
-                  <div className='iwd-date-text'>To</div>
-                  <div className='iwd-date-selector'>
-                    <TextField
-                      id='date'
-                      type='date'
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      disabled={filterState?.viewFor !== 'select_dates'  || isEmpty(filterState)}
-                      value={endDate}
-                      onChange={(e) => handleDateChange(e, 'to_tdate')}
-                    />
-                  </div>
-                </div>
+              </>
+            )}
+            <div className='iwd-filter-footer'>
+              <div
+                className={`iwd-filter-clear ${isEmpty(clearCheck) && 'iwd-disable-clear'}`}
+                onClick={clearFilters}
+              >
+                Clear All
               </div>
-            </>
-          )}
-          <div className='iwd-filter-footer'>
-            <div
-              className={`iwd-filter-clear ${isEmpty(clearCheck) && 'iwd-disable-clear'}`}
-              onClick={clearFilters}
-            >
-              Clear All
-            </div>
 
-            <Button onClick={applyFilters}>Apply</Button>
+              <Button onClick={applyFilters}>Apply</Button>
+            </div>
           </div>
         </div>
-      </div>
-    </Dialog>
+      </Dialog>
+    </CSSTransition>            
   );
 };
 

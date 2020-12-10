@@ -1,16 +1,17 @@
-import React, { memo, useState, useEffect } from 'react';
+// -------------- Assets ---------------
+import fisdomLogo from 'assets/fisdom/fisdom_logo_coloured.png';
+import bgWaves from 'assets/bg_waves.svg';
+import HelpPage from '../mini-components/Help';
+import ForgotPasswordPage from '../mini-components/ForgotPassword';
+// -------------------------------------
+import React, { memo, useState } from 'react';
 import LoginFields from '../../common/responsive-components/LoginFields';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { WhiteButton } from '../common/Button';
 import IwdPhoneInput from '../common/IwdPhoneInput';
 import IwdOtpInput from '../common/IwdOtpInput';
 import { Button } from 'material-ui';
-// ---------- Image Imports ------------
-import fisdomLogo from 'assets/fisdom/fisdom_logo_coloured.png';
-import bgWaves from 'assets/bg_waves.svg';
-import HelpPage from '../mini-components/Help';
-import ForgotPasswordPage from '../mini-components/ForgotPassword';
-// -------------------------------------
+import { CSSTransition } from 'react-transition-group';
 
 const Login = (props) => {
   const [openHelpPage, toggleHelpPage] = useState(false);
@@ -24,7 +25,14 @@ const Login = (props) => {
   return (
     <>
       {openForgotPwd && <ForgotPasswordPage onClose={() => toggleForgotPwd(false)} />}
-      <HelpPage className={`circularExpand ${openHelpPage ? 'expand' : 'shrink'}`} onClose={() => toggleHelpPage(false)}/>
+      <CSSTransition
+        in={openHelpPage}
+        unmountOnExit
+        classNames="circularExpand"
+        timeout={1000}
+        >
+        <HelpPage className={`circularExpand`} onClose={() => toggleHelpPage(false)}/>
+      </CSSTransition>
       <div
         id="iwd-login"
         className={(openHelpPage || openForgotPwd) ? 'iwd-bg-fixed' : ''}
@@ -52,9 +60,9 @@ const Login = (props) => {
         <div id="iwd-login-right">
           <div id="iwd-ll-login-container">
             <LoginFields
-              phoneComponent={<IwdPhoneInput containerClass="fade" dropdownClass="iwd-phone-input-dropdown" />}
+              phoneComponent={<IwdPhoneInput containerClass="iwd-fade" dropdownClass="iwd-phone-input-dropdown" />}
               otpComponent={<IwdOtpInput />}
-              buttonComponent={<WhiteButton classes={{ root: 'fade' }}>Hello</WhiteButton>}
+              buttonComponent={<WhiteButton classes={{ root: 'iwd-fade' }}>Hello</WhiteButton>}
               navigateFunction={navigate}
               emailFieldClasses={{
                 root: 'iwd-text-field',

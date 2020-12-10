@@ -5,6 +5,7 @@ $primary: rgb(79, 45, 167);
 $light-green: rgb(154, 211, 204); //9AD3CC
 $card-padding-mob: 40px;
 $card-padding: 50px;
+@import '../animate.scss';
 
 .iwd-cursor__pointer {
   cursor: pointer;
@@ -297,7 +298,7 @@ $card-padding: 50px;
   width: 80px;
   position: absolute;
   overflow: hidden;
-  z-index: 2;
+  z-index: 3;
   background: #613eb9;
   border-radius: 0px 10px 10px 0;
   padding: 15px;
@@ -347,6 +348,10 @@ $card-padding: 50px;
       color: white;
     }
   }
+}
+
+#iwd-nav {
+  @extend .iwd-fadeFromLeft;
 }
 
 #iwd-nav:hover {
@@ -509,6 +514,10 @@ $card-padding: 50px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  @extend .iwd-fade;
+  animation-delay: 0.4s;
+  position: relative;
+  z-index: 2;
 
   #iwd-ph-left {
     // float: left;
@@ -633,8 +642,7 @@ ul#iwd-bars {
   background-color: white;
   position: absolute;
   right: 0;
-  z-index: 6;
-  cursor: pointer;
+  z-index: 3;
 
   .iwd-profile-username {
     font-size: 15px;
@@ -719,46 +727,22 @@ ul#iwd-bars {
     justify-content: space-between;
     margin-bottom: 30px;
 
-    // span {
-    //   // display: -webkit-box;
-    //   // -webkit-line-clamp: 3;
-    //   // -webkit-box-orient: vertical;
-    //   font-weight: 600;
-    //   position: relative;
-    //   font-size: 30px;
-    //   line-height: 40px;
-    //   max-height: calc(40px * 3);
-    //   overflow: hidden;
-    //   padding-right: 5px;
-    //   color: $dark;
-    // }
-
-    // span::before {
-    //   position: absolute;
-    //   content: "...";
-    //   bottom: 0;
-    //   right: 0;
-    // }
-
-    // span::after {
-    //   position: absolute;
-    //   content: "";
-    //   bottom: 0;
-    //   right: 0;
-    //   width: 5px;
-    //   height: 5px;
-    //   background: white;
-    // }
-
     span {
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
-      font-weight: 600;
+      font-weight: bold;
       font-size: 30px;
+      color: $dark;
       line-height: 40px;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    img {
+      position: absolute;
+      top: 20px;
+      right: 20px;
     }
   }
 
@@ -842,7 +826,7 @@ ul#iwd-bars {
 .radial-chart {
   position: relative;
   display: inline-block;
-  transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in 1s;
   margin-top: 20px;
 }
 .radial-chart.no-progress .radial-chart-progress {
@@ -854,8 +838,7 @@ ul#iwd-bars {
 .radial-chart-progress {
   transform: rotate(90deg);
   transform-origin: center;
-  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14);
-  transition-delay: 0.3s;
+  transition: all 0.6s cubic-bezier(0.58, 0.16, 0.5, 1.14) 1s;
 }
 
 table.iwd-transactions-table {
@@ -926,7 +909,7 @@ table.iwd-transactions-table {
     letter-spacing: 0em;
     text-align: left;
     color: $dark;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .MuiIconButton-root {
@@ -1004,6 +987,8 @@ table.iwd-transactions-table {
         margin-left: 10px;
         letter-spacing: 2px;
         line-height: 18px;
+        text-transform: uppercase;
+        font-weight: 600;
       }
     }
 
@@ -1012,7 +997,7 @@ table.iwd-transactions-table {
       font-size: 30px;
       line-height: 27px;
       margin-top: 10px;
-      color: $grey;
+      text-align: center;
     }
   }
 }
@@ -1204,42 +1189,6 @@ table.iwd-transactions-table {
   font-size: 17px;
 }
 
-// Legends
-.iwd-legend-container {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  list-style: none;
-  background-color: inherit;
-
-  .iwd-legend-child {
-    width: 30%;
-
-    .iwd-lc-header {
-      display: flex;
-      align-items: center;
-
-      .iwd-lc-icon {
-        width: 8px;
-        height: 8px;
-        background: hsla(173, 59, 55, 1);
-      }
-
-      .iwd-lc-title {
-        color: hsla(173, 59, 55, 1);
-        margin-left: 10px;
-      }
-    }
-
-    .iwd-lc-value {
-      color: $grey;
-      font-size: 30px;
-    }
-  }
-}
-
 // Pagination
 .iwd-pagination-container {
   display: flex;
@@ -1277,47 +1226,6 @@ table.iwd-transactions-table {
   font-size: 17px;
 }
 
-// Legends
-
-.iwd-legend-container {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  list-style: none;
-  background-color: inherit;
-
-  .iwd-legend-child {
-    width: 30%;
-
-    .iwd-lc-header {
-      display: flex;
-      align-items: center;
-
-      .iwd-lc-icon {
-        width: 8px;
-        height: 8px;
-        background: hsla(173, 59, 55, 1);
-      }
-
-      .iwd-lc-title {
-        color: hsla(173,59,55,1);
-        margin-left: 10px;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-    }
-  
-    .iwd-lc-value {
-      color:  $dark;
-      font-size: 30px;
-      text-align: center;
-    }
-  }
-}
-
-
 @media only screen and (min-width: 300px) and (max-width: 800px) {
   .iwd-legend-container {
     margin: 0 auto;
@@ -1346,6 +1254,7 @@ table.iwd-transactions-table {
       }
 
       .iwd-lc-value {
+        color: $dark;
         font-size: 17px;
         text-align: center;
       }
@@ -1438,6 +1347,7 @@ table.iwd-transactions-table {
     overflow-y: auto;
     background: white;
     margin: 0 !important;
+    transition: clip-path 0.8s ease-in-out 0.1s;
     font-family: 'Poppins', 'Roboto', sans-serif;
 
     .iwd-filter-mobile-container {
@@ -1607,7 +1517,7 @@ table.iwd-transactions-table {
 
 .iwd-date-range-picker {
   .rs-picker-daterange {
-    background-color: rgba(31, 18, 65, 0.05);
+    background-color: rgba($primary, 0.05);
     border-radius: 4px;
     width: 100%;
     a {
@@ -1618,6 +1528,10 @@ table.iwd-transactions-table {
     }
   }
   width: 250px;
+}
+.rs-picker-toggle:hover {
+  background-color: rgba($primary, 0.03) !important;
+  background: rgba($primary, 0.03) !important;
 }
 .rs-picker-toggle-value,
 .rs-picker-toggle-placeholder,
