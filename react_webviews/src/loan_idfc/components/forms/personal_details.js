@@ -138,7 +138,7 @@ class PersonalDetails extends Component {
     ];
     
     if (this.state.confirm_details) {
-      keys_to_check.push(...["dob", "mother_name"]);
+      keys_to_check.push(...["dob", "mother_name", "middle_name"]);
     }
 
     this.formCheckUpdate(keys_to_check, form_data);

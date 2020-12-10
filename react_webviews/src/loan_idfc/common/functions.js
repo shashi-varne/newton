@@ -356,6 +356,9 @@ export async function updateApplication(params, next_state = "") {
         });
         toast(result.error || result.message || "Something went wrong!");
       } else {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
@@ -612,7 +615,7 @@ export async function formCheckUpdate(
       selectTypeInput.indexOf(key_check) !== -1
         ? "Please select "
         : "Please enter ";
-    if (!form_data[key_check]) {
+    if (!form_data[key_check] && key_check !== "middle_name") {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmitForm = false;
     }
