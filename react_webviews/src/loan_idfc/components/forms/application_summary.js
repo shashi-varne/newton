@@ -11,6 +11,7 @@ class ApplicationSummary extends Component {
       show_loader: false,
       accordianData: [],
       detail_clicked: [],
+      isSelfEmployee: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -27,6 +28,8 @@ class ApplicationSummary extends Component {
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
 
+    let isSelfEmployee = application_info.employment_type === "self_employed";
+
     let personal_data = {
       title: "Personal details",
       edit_state: "/loan/idfc/edit-basic-details",
@@ -34,18 +37,22 @@ class ApplicationSummary extends Component {
         {
           title: "Date of birth ",
           subtitle: timeStampToDate(personal_info.dob || ""),
+          common_field: true,
         },
         {
           title: "PAN number",
           subtitle: personal_info.pan_no,
+          common_field: true,
         },
         {
           title: "Education qualification",
           subtitle: professional_info.educational_qualification,
+          common_field: true,
         },
         {
           title: "Employment type",
-          subtitle: capitalizeFirstLetter(application_info.employment_type || ""),
+          subtitle: capitalizeFirstLetter(application_info.employment_type.split('_').join(' ') || ""),
+          common_field: true,
         },
       ],
     };
@@ -59,34 +66,42 @@ class ApplicationSummary extends Component {
         {
           title: "Company name",
           subtitle: professional_info.company_name,
+          common_field: true,
         },
         {
           title: "Official email",
           subtitle: professional_info.office_email,
+          common_field: false,
         },
         {
           title: "Net monthly salary",
           subtitle: formatAmountInr(application_info.net_monthly_salary || ""),
+          common_field: false,
         },
         {
           title: "Salary receipt mode",
           subtitle: capitalize(professional_info.salary_mode || ""),
+          common_field: false,
         },
         {
           title: "Company constitution",
           subtitle: capitalize(professional_info.constitution || ""),
+          common_field: true,
         },
         {
           title: "Organisation",
           subtitle: capitalize(professional_info.organisation || ""),
+          common_field: true,
         },
         {
           title: "Department",
           subtitle: capitalize(professional_info.department || ""),
+          common_field: false,
         },
         {
           title: "Industry",
           subtitle: capitalize(professional_info.industry || ""),
+          common_field: false,
         },
       ],
     };
@@ -96,7 +111,8 @@ class ApplicationSummary extends Component {
     this.setState(
       {
         accordianData: accordianData,
-        idfc_loan_status: vendor_info.idfc_loan_status
+        idfc_loan_status: vendor_info.idfc_loan_status,
+        isSelfEmployee: isSelfEmployee,
       },
       () => {
         this.handleAccordian(0);
@@ -127,7 +143,13 @@ class ApplicationSummary extends Component {
   renderAccordiansubData = (props, index) => {
     return (
       <div key={index}>
-        {props.subtitle && (
+        {props.subtitle && props.common_field && this.state.isSelfEmployee && (
+          <div className="bctc-tile">
+            <div className="title">{props.title}</div>
+            <div className="subtitle">{props.subtitle}</div>
+          </div>
+        )}
+        {props.subtitle && !this.state.isSelfEmployee && (
           <div className="bctc-tile">
             <div className="title">{props.title}</div>
             <div className="subtitle">{props.subtitle}</div>
