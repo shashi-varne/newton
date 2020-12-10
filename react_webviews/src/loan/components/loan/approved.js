@@ -80,7 +80,7 @@ class LoanApprvoed extends Component {
           </div>
 
           <div className="content">
-            Upon DMI Finance completing due diligence, <b>you will receive the confirmation SMS from Fisdom and DMI Finance</b> in next 12 hours on your registered Mobile number. 
+            Upon DMI Finance completing due diligence, <b>you will receive the confirmation SMS from Fisdom and DMI Finance</b> in next 48 hours on your registered Mobile number. 
           </div>
 
           <div className="content">
