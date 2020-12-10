@@ -29,150 +29,192 @@ class AddPolicy extends Component {
     };
     
   }
+componentWillMount() {
 
-  componentWillMount(){
+  let company = [{
+      'name': 'HDFC Ergo',
+      'value': 'HDFC Ergo'
+    },
+    {
+      'name': 'Bharti Axa',
+      'value': 'Bharti Axa'
+    },
+    {
+      'name': 'Care Health',
+      'value': 'Care Health'
+    },
+    {
+      'name': 'Star Health',
+      'value': 'Star Health'
+    },
+    {
+      'name': 'Bajaj Allianz',
+      'value': 'Bajaj Allianz'
+    },
+    {
+      'name': 'HDFC Life',
+      'value': 'HDFC Life'
+    }, {
+      'name': 'Edelweiss Tokio Life',
+      'value': 'Edelweiss Tokio'
+    }, {
+      'name': 'Kotak Life',
+      'value': 'Kotak Life'
+    }
+  ]
 
-    let company =  [
-        {
-            'name': 'CARE',
-            'value': 'CARE'
-        },
-        {
-            'name': 'HDFC',
-            'value': 'HDFC_ERGO'
-        },
-        {
-            'name': 'STAR',
-            'value': 'STAR'
-        }]
-
-      this.setState({
-        company : company
-      })
-  }
-
-
-
-  handleChange = name  => event => {
-    let company = this.state.company
-    var value = company[event].name
-    let form_data = this.state.form_data 
-    form_data[name] = value;
-    form_data.index = event
-    form_data[name + '_error'] = '';
-    this.setState({
-        form_data : form_data
-    })    
+  this.setState({
+    company: company
+  })
 }
 
-handleChange2 = name =>  event =>{
-  if (!name) {
-    name = event.target.number;
-  }
-  var value = event.target ? event.target.value : event;
-  let form_data = this.state.form_data 
+
+
+handleChange = name => event => {
+  let company = this.state.company
+  var value = company[event].name
+  let form_data = this.state.form_data
   form_data[name] = value;
   form_data.index = event
   form_data[name + '_error'] = '';
   this.setState({
-    form_data : form_data
-})  
+    form_data: form_data
+  })
+}
+
+handleChange2 = name => event => {
+  if (!name) {
+    name = event.target.number;
+  }
+  var value = event.target ? event.target.value : event;
+  let form_data = this.state.form_data
+  form_data[name] = value;
+  form_data.index = event
+  form_data[name + '_error'] = '';
+  this.setState({
+    form_data: form_data
+  })
 }
 
 
-  handleClick2 = () => {
-  let  state  = `/group-insurance/common/report`;
-      this.navigate(state);
-  }
- 
-  handleClose = () => {
-    this.setState({
-      openConfirmDialog: false,
-      openBmiDialog: false,
-      openDialogReset: false
-    });
-  }
+handleClick2 = () => {
+  let state = `/group-insurance/common/report`;
+  this.navigate(state);
+}
+
+handleClose = () => {
+  this.setState({
+    openConfirmDialog: false,
+    openBmiDialog: false,
+    openDialogReset: false
+  });
+}
 
 
-  sendEvents(user_action, insurance_type) {
-    let eventObj = {
-      "event_name": 'Group Insurance',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'decleration',
-      }
-    };
-
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
+sendEvents(user_action, insurance_type) {
+  let eventObj = {
+    "event_name": 'Group Insurance',
+    "properties": {
+      "user_action": user_action,
+      "screen_name": 'offline_form',
     }
-  }
+  };
 
-
-  navigate = (pathname, search, data = {}) => {
-
-    if (this.props.edit || data.edit) {
-      this.props.history.replace({
-          pathname: pathname,
-          search: getConfig().searchParams
-      });
+  if (user_action === 'just_set_events') {
+    return eventObj;
   } else {
-      this.props.history.push({
-          pathname: pathname,
-          search: getConfig().searchParams,
-          params: {
-              forceClose: this.state.forceClose || false
-          }
-      });
-  }
-  }
-
-  componentDidMount(){
-    this.setState({
-        show_loader: false
-      })
-  }
-
-
-  handleClick = async () => {
-    this.setState({
-      searching : false,
-      lock : true
+    nativeCallback({
+      events: eventObj
     });
-
-    try {
-      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=STAR`);
-      // const res = {pfwresponse : { status_code : 200}};
-      let resultData = res.pfwresponse
-      if(res.pfwresponse.status_code === 200 && true ){
-     this.setState({
-      openBmiDialog: true,
-      searching : true,
-    })
-
-    var form_data = this.state.form_data
-    form_data.notfound = true
-    this.setState({
-        lock : false,
-        form_data : form_data
-    })
-        this.renderBmiDialog();
-      }
-      else {
-        this.state({
-          show_loader: false,
-        })
-        toast(resultData.error || resultData.message || "Something went wrong");
-      }
-    } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
-      toast("Something went wrong");
-    }
   }
+}
+
+
+navigate = (pathname, search, data = {}) => {
+
+  if (this.props.edit || data.edit) {
+    this.props.history.replace({
+      pathname: pathname,
+      search: getConfig().searchParams
+    });
+  } else {
+    this.props.history.push({
+      pathname: pathname,
+      search: getConfig().searchParams,
+      params: {
+        forceClose: this.state.forceClose || false
+      }
+    });
+  }
+}
+
+componentDidMount() {
+  this.setState({
+    show_loader: false
+  })
+}
+
+
+handleClick = async () => {
+
+  console.log(this.state.form_data)
+  let form_data = this.state.form_data
+
+  if (!form_data.Vendor) {
+    form_data.name_error2 = 'Please select Vendor'
+  }
+
+  if (!form_data.number) {
+    form_data.name_error = 'Please Enter Policy number'
+  }
+
+  if (!form_data.Vendor || !form_data.number) {
+    this.setState({
+      form_data: form_data
+    });
+    toast('Please Fill in the details');
+    return
+  }else{
+    form_data.name_error = ''
+    form_data.name_error2 = ''
+    this.setState({
+      form_data: form_data
+    });
+  }
+
+  this.setState({
+    searching: false,
+    lock: true
+  });
+  try {
+    const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
+    let resultData = res.pfwresponse.result
+    if (res.pfwresponse.status_code === 200) {
+      form_data.notfound = true
+      this.setState({
+        openBmiDialog: true,
+        searching: true,
+        lock: false,
+        form_data: form_data
+      })
+      this.renderBmiDialog();
+    } else {
+      form_data.notfound = true
+      this.setState({
+        searching: true,
+        lock: false,
+        form_data: form_data
+      })
+      console.log(resultData)
+      toast(resultData.error || resultData.message || "Something went wrong");
+    }
+  } catch (err) {
+    this.setState({
+      show_loader: false,
+    });
+    toast("Something went wrong");
+  }
+}
 
   renderlockDialog = () => {
     return ( 
@@ -255,10 +297,10 @@ handleChange2 = name =>  event =>{
               options={this.state.company}
               id="relation"
               label="Insurance Company"
-              error={ false}
+              error={this.state.form_data.name_error2 ? true : false}
               name="Vendor"
-            //   helperText={'Insurance Company'}
-              value={this.state.form_data.Vendor || 'CARE'}
+              helperText={this.state.form_data.name_error2}
+              value={this.state.form_data.Vendor || 'HDFC Ergo'}
               onChange={this.handleChange("Vendor")}
             />
           </div>
@@ -271,8 +313,8 @@ handleChange2 = name =>  event =>{
                             id="name"
                             name="name"
                             maxLength="50"
-                            // error={this.state.form_data.name_error ? true : false}
-                            // helperText={this.state.form_data.name_error}
+                            error={this.state.form_data.name_error ? true : false}
+                            helperText={this.state.form_data.name_error || 'Insurance Company'}
                             value={this.state.form_data.number || ''}
                             onChange={this.handleChange2('number')} />
                     </div>
