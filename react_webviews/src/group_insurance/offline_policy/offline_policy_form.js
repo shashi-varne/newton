@@ -191,6 +191,8 @@ handleClick = async () => {
     // const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=000108517E&provider=Edelweiss Tokio`);
     let resultData = res.pfwresponse.result
     if (res.pfwresponse.status_code === 200 && resultData.policy_binded) {
+      form_data.notfound = false
+      form_data.found = false
       this.setState({
         openBmiDialog: true,
         searching: true,
@@ -201,6 +203,7 @@ handleClick = async () => {
 
      if (resultData.error === "Sorry! Could'nt find your policy details.") {
        form_data.notfound = true
+       form_data.found = false
        this.setState({
          searching: true,
          lock: false,
@@ -208,8 +211,9 @@ handleClick = async () => {
        })
       }
 
-      if(resultData.error ===  'This policy already belongs to a user.'){
+      if(resultData.error === 'This policy already belongs to a user.'){
         form_data.found = true
+        form_data.notfound = false
         this.setState({
           searching: true,
           lock: false,
