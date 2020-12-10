@@ -633,15 +633,8 @@ class GoldSummary extends Component {
         // noHeader={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
-        classOverRide="gold-landing-container gold-landing-container-background"
-        classOverRideContainer="gold-landing-container gold-landing-container-background"
-        styleContainer={{
-          backgroundImage: `url(${this.state.gold_pattern})`,
-        }}
-        styleHeader={{
-          backgroundImage: `url(${this.state.gold_pattern})`,
-        }}
-        classHeader="gold-landing-header gold-landing-container-background"
+        classOverRide="gold-landing-container"
+        classOverRideContainer="gold-landing-container"
       >
         <div className="gold-landing" id="goldSection">
             
