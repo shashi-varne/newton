@@ -2,7 +2,7 @@
 import IlsError from 'assets/fisdom/ils_error.svg';
 // ----------------------------------------------------
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
+// import { CSSTransition } from 'react-transition-group';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 import IwdCardLoader from './IwdCardLoader';
 
