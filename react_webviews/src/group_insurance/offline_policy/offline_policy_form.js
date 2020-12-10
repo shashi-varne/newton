@@ -21,7 +21,7 @@ class AddPolicy extends Component {
         show_loader: true,
         premium_details : {},
         productTitle : {},
-        company : {},
+        vendor_details : {},
         form_data : {},
         openBmiDialog : false,
         searching : true,
@@ -31,7 +31,7 @@ class AddPolicy extends Component {
   }
 componentWillMount() {
 
-  let company = [{
+  let vendor_details = [{
       'name': 'HDFC Ergo',
       'value': 'HDFC Ergo'
     },
@@ -55,7 +55,7 @@ componentWillMount() {
       'name': 'HDFC Life',
       'value': 'HDFC Life'
     }, {
-      'name': 'Edelweiss Tokio Life',
+      'name': 'Edelweiss Tokio',
       'value': 'Edelweiss Tokio'
     }, {
       'name': 'Kotak Life',
@@ -63,16 +63,20 @@ componentWillMount() {
     }
   ]
 
+  let form_data = this.state.form_data
+  form_data.Vendor = 'HDFC Ergo'
+
   this.setState({
-    company: company
+    vendor_details: vendor_details,
+    form_data : form_data
   })
 }
 
 
 
 handleChange = name => event => {
-  let company = this.state.company
-  var value = company[event].name
+  let vendor_details = this.state.vendor_details
+  var value = vendor_details[event].name
   let form_data = this.state.form_data
   form_data[name] = value;
   form_data.index = event
@@ -157,12 +161,7 @@ componentDidMount() {
 
 handleClick = async () => {
 
-  console.log(this.state.form_data)
   let form_data = this.state.form_data
-
-  if (!form_data.Vendor) {
-    form_data.name_error2 = 'Please select Vendor'
-  }
 
   if (!form_data.number) {
     form_data.name_error = 'Please Enter Policy number'
@@ -188,24 +187,36 @@ handleClick = async () => {
   });
   try {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
+
+    // const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=000108517E&provider=Edelweiss Tokio`);
     let resultData = res.pfwresponse.result
-    if (res.pfwresponse.status_code === 200) {
-      form_data.notfound = true
+    if (res.pfwresponse.status_code === 200 && resultData.policy_binded) {
       this.setState({
         openBmiDialog: true,
         searching: true,
         lock: false,
         form_data: form_data
       })
-      this.renderBmiDialog();
     } else {
-      form_data.notfound = true
-      this.setState({
-        searching: true,
-        lock: false,
-        form_data: form_data
-      })
-      console.log(resultData)
+
+     if (resultData.error === "Sorry! Could'nt find your policy details.") {
+       form_data.notfound = true
+       this.setState({
+         searching: true,
+         lock: false,
+         form_data: form_data
+       })
+      }
+
+      if(resultData.error ===  'This policy already belongs to a user.'){
+        form_data.found = true
+        this.setState({
+          searching: true,
+          lock: false,
+          form_data: form_data
+        })
+      }
+
       toast(resultData.error || resultData.message || "Something went wrong");
     }
   } catch (err) {
@@ -221,7 +232,7 @@ handleClick = async () => {
             <div  style={{display: "flex", flexDirection : 'column',justifyContent: "center",alignItems : 'center', minHeight : '100vh' }}>
             <p  className="generic-page-title">Please wait while confirm your policy details</p>
             <br></br>
-            <img className=""  src={require(`assets/Bitmap.svg`)} alt="" />
+            <img className="" src={require(`assets/Bitmap.svg`)} alt="" />
             <br></br>
             <p>It may take 10 to 15 seconds!</p>
             </div>
@@ -289,12 +300,12 @@ handleClick = async () => {
             <div>
             <DropdownInModal
               parent={this}
-              header_title="Insurance Company"
+              header_title="Insurance vendor_details"
               cta_title="SAVE"
               selectedIndex = { this.state.form_data.index || 0}
               width="40"
               dataType="AOB"
-              options={this.state.company}
+              options={this.state.vendor_details}
               id="relation"
               label="Insurance Company"
               error={this.state.form_data.name_error2 ? true : false}
@@ -306,7 +317,7 @@ handleClick = async () => {
           </div>
             <div className="InputField" style={{marginBottom : '20px'}}>
                         <Input
-                            type="number"
+                            type="text"
                             width="40"
                             class="ProposalNumber"
                             label="Policy / Proposal number"
@@ -314,7 +325,7 @@ handleClick = async () => {
                             name="name"
                             maxLength="50"
                             error={this.state.form_data.name_error ? true : false}
-                            helperText={this.state.form_data.name_error || 'Insurance Company'}
+                            helperText={this.state.form_data.name_error || 'Insurance vendor_details'}
                             value={this.state.form_data.number || ''}
                             onChange={this.handleChange2('number')} />
                     </div>
@@ -322,6 +333,7 @@ handleClick = async () => {
 
                    {this.state.form_data.notfound &&  <span><p style={{color : 'red'}}> Sorry! Couldn’t find your policy details! </p>
                     <p style={{color : 'blue'}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
+                    {this.state.form_data.found &&  <span><p style={{color : 'red'}}> This policy already exist in insurance portfolio </p></span>} 
                     </div>
                 </div>
         {this.renderBmiDialog()}

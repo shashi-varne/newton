@@ -19,16 +19,6 @@ class GroupHealthReportDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            premium_data: {
-                WF: []
-            },
-            extra_data: {
-                benefits: {
-                    main: []
-                },
-                special_benefits: [],
-                waiting_period: []
-            },
             lead: {
                 member_base: []
             },
@@ -39,9 +29,7 @@ class GroupHealthReportDetails extends Component {
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits
         }
-
         this.initialize = initialize.bind(this);
-
     }
 
     componentWillMount() {
@@ -56,49 +44,55 @@ class GroupHealthReportDetails extends Component {
     async componentDidMount() {
 
         try {
-            // const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
+            const res = await Api.get(`api/insurancev2/api/insurance/o2o/get/applications?o2o_app_id=089eb113-cbe2-44f0-b860-c0065236e726 `);
 
-        const res ={
-            "pfwmessage": "Success",
-            "pfwstatus_code": 200,
-            "pfwutime": "",
-            "pfwtime": "2020-11-30 23:08:59.567507",
-            "pfwresponse": {
-              "requestapi": "",
-              "status_code": 200,
-              "result": [{
-                "message": "success",
-                "id": "",
-                "product_name": "CARE",
-                "provider": "",
-                "name": "FISDOM",
-                "cover_amount": "10,000",
-                "cover_period": "3",
-                "term": "",
-                "policy_type": "INDIVIDUAL",
-                "policy_number": "XXXXX1234567",
-                "application_number": "XXXXX123457",
-                "dt_policy_issued": "25/02/2020",
-                "dt_policy_start_date": "25/02/2020",
-                "dt_policy_end_date": "05/02/2029",
-                "premium": "100000",
-                "tax": "1345",
-                "total_premium": "1,50,000",
-                "mobile_no": "9738950664",
-                "email": "FISDOM@FISDOM.COM",
-                "status": "pending",
-                "is_group_customer": "",
-                "frequency": "MONTHLY",
-                "dt_next_renewal": "25/02/2025",
-                "product_category": ""
-              }]
-            }
-          }
+        // const ress = {
+        //     "pfwmessage": "Success",
+        //     "pfwstatus_code": 200,
+        //     "pfwutime": "",
+        //     "pfwtime": "2020-12-10 18:14:17.993520",
+        //     "pfwresponse": {
+        //         "requestapi": "",
+        //         "status_code": 200,
+        //         "result": {
+        //             "result": [{
+        //                 "group_customer": "",
+        //                 "email_id": "thulasiram.athuru1989@gmail.com",
+        //                 "policy_number": "000109439E",
+        //                 "status": "Issued",
+        //                 "application_number": "000109439E",
+        //                 "policy_type": "Life",
+        //                 "total_amount": 7262.0,
+        //                 "id": "089eb113-cbe2-44f0-b860-c0065236e726",
+        //                 "tax": 1107.7627118644,
+        //                 "dt_login": null,
+        //                 "logo": null,
+        //                 "dt_next_renewal": "31/05/2021",
+        //                 "insurance_account_id": "f1931aff-dff2-4629-b28d-cc421597fe3c",
+        //                 "cover_period": 30.0,
+        //                 "cover_amount": 15000000.0,
+        //                 "dt_policy_issued": "31/05/2020",
+        //                 "plan_type": "Term Plan",
+        //                 "provider": "Edelweiss Tokio",
+        //                 "mobile_number": "7500075000",
+        //                 "dt_created": "2020-12-10T17:57:02",
+        //                 "product_name": "Zindagi Plus",
+        //                 "dt_policy_end": null,
+        //                 "premium_paying_term": 30.0,
+        //                 "premium": 6154.2372881356,
+        //                 "customer_name": "Thulasiram  Athuru",
+        //                 "dt_policy_start": null,
+        //                 "dt_updated": "2020-12-10T17:57:14",
+        //                 "frequency": "Yearly"
+        //             }]
+        //         }
+        //     }
+        // }
 
             this.setState({
                 show_loader: false
             });
-            var resultData = res.pfwresponse.result[0];
+            var resultData = res.pfwresponse.result.result[0];
             if (res.pfwresponse.status_code === 200) {
                 this.setState({
                     lead: resultData,
@@ -161,7 +155,7 @@ class GroupHealthReportDetails extends Component {
     }
 
     render() {
-        let {provider} = this.state;console.log(this.state.providerData,'this.state.providerData')
+        let {provider} = this.state; console.log(this.state.providerData,'this.state.providerData.')
 
         return (
             <Container
@@ -204,7 +198,7 @@ class GroupHealthReportDetails extends Component {
                                 INSURED NAME
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.name}
+                                    {this.state.lead.customer_name}
                                 </div>
                             </div>
                         </div>
@@ -218,7 +212,7 @@ class GroupHealthReportDetails extends Component {
                                 PROPOSER NAME
                                 </div>
                                 <div className="mtr-bottom">
-                                {this.state.lead.name}
+                                {this.state.lead.customer_name}
                                 </div>
                             </div>
                         </div>
@@ -232,7 +226,7 @@ class GroupHealthReportDetails extends Component {
                                 MOBILE NUMBER
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.mobile_no}
+                                    {this.state.lead.mobile_number}
                                 </div>
                             </div>
                         </div>
@@ -246,7 +240,7 @@ class GroupHealthReportDetails extends Component {
                                 EMAIL ID
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.email}
+                                    {this.state.lead.email_id}
                                 </div>
                             </div>
                         </div>
@@ -288,7 +282,7 @@ class GroupHealthReportDetails extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
+                                    {this.state.lead.cover_period} year{this.state.lead.cover_period>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>
@@ -303,7 +297,7 @@ class GroupHealthReportDetails extends Component {
                                 PLAN TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {getCoverageType(this.state.lead)}
+                                    {this.state.lead.plan_type}
                                 </div>
                             </div>
                         </div>}
@@ -319,7 +313,7 @@ class GroupHealthReportDetails extends Component {
                                 PREMIUM PAYMENT TERM
                                 </div>
                                 <div className="mtr-bottom">
-                                    {getCoverageType(this.state.lead)}
+                                    {this.state.lead.premium_paying_term}
                                 </div>
                             </div>
                         </div>}
@@ -361,7 +355,7 @@ class GroupHealthReportDetails extends Component {
                                         &nbsp;=&nbsp;
                                         </div>
                                         <div>
-                                         {inrFormatDecimal(this.state.lead.total_premium)}
+                                         {inrFormatDecimal(this.state.lead.total_amount)}
                                         </div>
                                 </div>
 
@@ -413,7 +407,7 @@ class GroupHealthReportDetails extends Component {
                     </div>}
 
 
-                    {this.state.lead.dt_policy_end_date && 
+                    {this.state.lead.dt_policy_end && 
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/icn_end_date.svg`)} alt="" />
@@ -423,7 +417,7 @@ class GroupHealthReportDetails extends Component {
                             Policy End date
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.lead.dt_policy_end_date || '-'}
+                                {this.state.lead.dt_policy_end || '-'}
                             </div>
                         </div>
                     </div>}
