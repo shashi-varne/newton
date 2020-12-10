@@ -9,12 +9,9 @@ import './style.scss';
 // import { TextBlock, MediaBlock, TextRow, RectShape, RoundShape } from 'react-placeholder/lib/placeholders';
 
 
-// let highlight_color = '#D0E6ff';
 // let highlight_color = getConfig().skelton_color;
-// let highlight_color = '#D8D8D8';
-let highlight_color = '#D3DBE4';
+let highlight_color = '#E7E7E7';
 
-// highlight_color = '#5F40AF';
 
 
 class UiSkeltonClass extends Component {
