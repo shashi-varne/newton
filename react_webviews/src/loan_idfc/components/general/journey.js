@@ -5,6 +5,9 @@ import { initialize } from "../../common/functions";
 import JourneySteps from "../../../common/ui/JourneySteps";
 
 const journeyMapper2 = {
+  pan: {
+    index: "0",
+  },
   basic_details_uploaded: {
     index: "1",
   },
@@ -126,9 +129,9 @@ class JourneyMap extends Component {
           titleCompleted: "Basic details uploaded ",
           subtitle:
             "Fill in personal and work details to get started with your loan application.",
-          status: index && index >= "0" ? "completed" : "init",
+          status: index > "0" ? "completed" : "init",
           id: "basic_details",
-          cta: "SUMMARY",
+          cta: index > "0" ?  "SUMMARY" : idfc_loan_status === 'pan' ? "RESUME" : "START",
         },
         {
           step: "2",
@@ -192,7 +195,7 @@ class JourneyMap extends Component {
       event_name: "lending",
       properties: {
         user_action: user_action,
-        screen_name: "jifkjd",
+        screen_name: "journey",
         stage: data.stage
       },
     };
@@ -229,8 +232,16 @@ class JourneyMap extends Component {
 
     // ---step-1
     if (id === "basic_details") {
-      this.sendEvents("summary", {stage: "basic-details"});
-      this.navigate("application-summary");
+      if (idfc_loan_status === "pan") {
+        this.sendEvents("next", {stage: "basic-details"});
+        this.navigate("professional-details");
+      } else if (idfc_loan_status === "basic_details_uploaded"){
+        this.sendEvents("summary", {stage: "basic-details"});
+        this.navigate("application-summary");
+      } else {
+        this.sendEvents("next", {stage: "basic-details"});
+        this.navigate("basic-details");
+      }
     }
 
     // ---step-2
@@ -290,8 +301,12 @@ class JourneyMap extends Component {
             src={require(`assets/${this.state.productName}/icn_journey_start.svg`)}
             alt=""
           />
+          {index === "0" && (
+            <div className="head-title">
+            </div>
+          )}
 
-          {index <= "1" && (
+          {index === "1" && (
             <div className="head-title">
               <b>Ta-da! You’ve</b> successfully uploaded your basic details.
             </div>
