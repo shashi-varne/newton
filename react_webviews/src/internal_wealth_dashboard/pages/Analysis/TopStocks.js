@@ -11,7 +11,7 @@ const TopStocks = ({ topStocks }) => {
         error={isEmpty(topStocks)}
       >
         <div className='iwd-analysis-portfolios-equity'>
-          {topStocks.map(
+          {topStocks?.map(
             ({ holding_sector_name: heading, instrument_name: company, share: percentage }) => (
               <div className='iwd-analysis-portfolio-stock' key={company}>
                 <picture>

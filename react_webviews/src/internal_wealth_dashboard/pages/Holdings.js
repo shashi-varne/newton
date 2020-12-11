@@ -154,7 +154,7 @@ const Holdings = () => {
         )}
         <div style={{ flex: '1' }}>
           {/* <> */}
-          {!open && (
+          {!open && !hasError && (
             <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
               <img src={filter_sign} alt='filter' />
             </div>
@@ -169,7 +169,7 @@ const Holdings = () => {
             {filterVal && !filterData && (
               <ErrorScreen
                 classes={{
-                  container: 'iwd-fade'
+                  container: 'iwd-fade',
                 }}
                 useTemplate={true}
                 templateImage={isMobileView ? IlsNoDataMob : IlsNoData}

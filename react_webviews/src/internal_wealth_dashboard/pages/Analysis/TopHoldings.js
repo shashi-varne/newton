@@ -6,7 +6,7 @@ const TopHoldings = ({ topHoldings }) => {
     <div className='iwd-scroll-child' data-pgno='2'>
       <IwdCard className='iwd-analysis-card' headerText='Top holdings' error={isEmpty(topHoldings)}>
         <div className='iwd-analysis-portfolios-equity'>
-          {topHoldings.map(({ instrument_name: name, share: percentage }) => (
+          {topHoldings?.map(({ instrument_name: name, share: percentage }) => (
             <div className='iwd-analysis-debt-holding' key={name}>
               <div className='iwd-analysis-debt-holding-logo'>{name.charAt(0).toUpperCase()}</div>
               <div className='iwd-analysis-debt-holding-details'>
