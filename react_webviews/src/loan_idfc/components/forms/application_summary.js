@@ -237,8 +237,10 @@ class ApplicationSummary extends Component {
         showLoader={this.state.show_loader}
         title="Basic detail Summary"
         buttonTitle="OKAY"
-        handleClick={() => {this.sendEvents('next');
-        this.navigate('journey')}}
+        handleClick={() => {
+          this.sendEvents('next');
+          this.navigate('journey')
+        }}
       >
         <div className="loan-form-summary">
           <div className="bottom-content">

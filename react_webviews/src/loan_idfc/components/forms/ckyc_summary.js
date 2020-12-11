@@ -189,7 +189,7 @@ class ApplicationSummary extends Component {
     );
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
@@ -309,8 +309,10 @@ class ApplicationSummary extends Component {
         showLoader={this.state.show_loader}
         title="Loan application Summary"
         buttonTitle="OKAY"
-        handleClick={() => {this.sendEvents('next');
-        this.navigate('journey')}}
+        handleClick={() => {
+          this.sendEvents('next');
+          this.navigate('journey')
+      }}
       >
         <div className="loan-form-summary">
           <div className="bottom-content" style={{marginBottom: "40px"}}>
