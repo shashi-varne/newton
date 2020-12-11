@@ -6,7 +6,11 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
-import { numDifferentiationInr, changeNumberFormat, formatAmountInr } from "utils/validators";
+import {
+  numDifferentiationInr,
+  changeNumberFormat,
+  formatAmountInr,
+} from "utils/validators";
 
 class EligibleLoan extends Component {
   constructor(props) {
@@ -16,7 +20,7 @@ class EligibleLoan extends Component {
       screen_name: "eligible_loan",
       form_data: {},
       checked: "default_tenor",
-      vendor_info: {}
+      vendor_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -24,36 +28,40 @@ class EligibleLoan extends Component {
 
   componentWillMount() {
     this.initialize();
-    let progressHeaderData = {
-      title: 'Income and loan offer',
-      steps: [
-        {
-          'title': 'Income details',
-          'status': 'completed'
-        },
-        {
-          'title': 'BT transfer details',
-          'status': 'completed'
-        },
-        {
-          'title': 'Loan offer',
-          'status': 'init'
-        }
-      ]
-    }
-
-    this.setState({
-      progressHeaderData: progressHeaderData
-    })
   }
 
-  onload = () => { 
+  onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
 
+    let progressHeaderData = {
+      title: "Income and loan offer",
+      steps: [
+        {
+          title: "Income details",
+          status: "completed",
+        },
+        {
+          title: "Loan offer",
+          status: "init",
+        },
+      ],
+    };
+
+    if (vendor_info.bt_eligible) {
+      progressHeaderData.steps.splice(1, 0, {
+        title: "BT transfer details",
+        status: "completed",
+      });
+    }
+
     this.setState({
-      vendor_info: vendor_info
-    })
+      progressHeaderData: progressHeaderData,
+    });
+
+    this.setState({
+      vendor_info: vendor_info,
+    });
   };
 
   sendEvents(user_action) {
@@ -61,8 +69,9 @@ class EligibleLoan extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        "screen_name": 'loan_offer',
-        offer_selected: this.state.checked=== 'default_tenor' ? 'default' : 'customised',
+        screen_name: "loan_offer",
+        offer_selected:
+          this.state.checked === "default_tenor" ? "default" : "customised",
       },
     };
 
@@ -93,10 +102,10 @@ class EligibleLoan extends Component {
       form_data.amount_required_error = "";
     }
 
-    let keys_to_check = ["amount_required"]
+    let keys_to_check = ["amount_required"];
 
-    this.formCheckUpdate(keys_to_check, form_data, 'one_point_one', true);
-  }
+    this.formCheckUpdate(keys_to_check, form_data, "one_point_one", true);
+  };
 
   handleCheckbox = (name) => {
     this.setState({
@@ -106,21 +115,22 @@ class EligibleLoan extends Component {
 
   render() {
     let { vendor_info } = this.state;
-    let ROI = (vendor_info.ROI/100) * 100;
+    let ROI = (vendor_info.ROI / 100) * 100;
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
       >
         <div className="eligible-loan">
           <div className="subtitle">
-            Woo-hoo! IDFC is offering you a personal loan of ₹{changeNumberFormat(vendor_info.displayOffer)} lacs
+            Woo-hoo! IDFC is offering you a personal loan of ₹
+            {changeNumberFormat(vendor_info.displayOffer)}
           </div>
 
           <div
@@ -150,7 +160,9 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
-                    <div className="sub-title">₹{changeNumberFormat(vendor_info.displayOffer)}</div>
+                    <div className="sub-title">
+                      ₹{changeNumberFormat(vendor_info.displayOffer)}
+                    </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
@@ -160,11 +172,13 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
-                    <div className="sub-title">{formatAmountInr(vendor_info.EMIAmount)}/month</div>
+                    <div className="sub-title">
+                      {formatAmountInr(vendor_info.EMIAmount)}/month
+                    </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
-                      <div className="sub-title">{ROI}%</div>
+                    <div className="sub-title">{ROI}%</div>
                   </div>
                 </div>
               </Grid>
