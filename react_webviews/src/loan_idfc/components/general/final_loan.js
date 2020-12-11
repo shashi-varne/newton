@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { formatAmountInr } from "../../../utils/validators";
+import { formatAmountInr, capitalizeFirstLetter } from "../../../utils/validators";
 import ContactUs from "../../../common/components/contact_us";
 
 class FinalOffer extends Component {
@@ -81,7 +81,7 @@ class FinalOffer extends Component {
             who will guide you through the remaining process until the loan
             amount is disbursed to your bank account.
           </div>
-          <div className="subtitle">Thank you for choosing {this.state.productName}!</div>
+          <div className="subtitle">Thank you for choosing {capitalizeFirstLetter(this.state.productName)}!</div>
           <ContactUs />
         </div>
       </Container>
