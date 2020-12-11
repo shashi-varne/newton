@@ -68,6 +68,12 @@ class PersonalDetails extends Component {
   }
 
   onload = () => {
+    if (this.props.edit) {
+      this.setState({
+        next_state: `/loan/idfc/ckyc-summary`,
+      });
+    }
+
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};
@@ -147,7 +153,7 @@ class PersonalDetails extends Component {
     ];
     
     if (this.state.confirm_details) {
-      keys_to_check.push(...["dob", "mother_name"]);
+      keys_to_check.push(...["dob", "mother_name", "middle_name"]);
     }
 
     this.formCheckUpdate(keys_to_check, form_data);

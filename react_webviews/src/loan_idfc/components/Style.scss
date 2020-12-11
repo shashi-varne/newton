@@ -47,7 +47,7 @@
     .title {
       margin: 10px 10px;
       font-size: 13px;
-      color: #767e86;
+      color: #0a1d32;
     }
   }
 
@@ -94,6 +94,13 @@
     font-weight: 400;
     margin: 20px 10px 30px;
     line-height: 30px;
+  }
+
+  .amount-inr {
+    font-weight: 900;
+    font-size: 20px;
+    text-align: center;
+    color: var(--primary);
   }
 }
 

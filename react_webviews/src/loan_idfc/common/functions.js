@@ -356,6 +356,9 @@ export async function updateApplication(params, next_state = "") {
         });
         toast(result.error || result.message || "Something went wrong!");
       } else {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
@@ -407,7 +410,7 @@ export async function get10Callback(next_state) {
 
   setTimeout(function () {
     if (result.idfc_10_callback === true) {
-      that.navigate(next_state);
+      that.navigate('eligible-loan');
     } else if (
       result.vendor_application_status === "idfc_cancelled" ||
       result.is_cancelled === true
@@ -496,6 +499,9 @@ export async function submitApplication(
         "CreateLoan 17 API Failed",
         "CreateLoan 3 API Failed",
         "CreateLoan 4 API Failed",
+        "Age",
+        "Salary",
+        "Salary receipt mode"
       ];
       if (
         typeof result.error === "string" &&
@@ -612,7 +618,7 @@ export async function formCheckUpdate(
       selectTypeInput.indexOf(key_check) !== -1
         ? "Please select "
         : "Please enter ";
-    if (!form_data[key_check]) {
+    if (!form_data[key_check] && key_check !== "middle_name") {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmitForm = false;
     }

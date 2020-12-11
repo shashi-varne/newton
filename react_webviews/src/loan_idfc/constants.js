@@ -10,6 +10,7 @@ export function goBackMap(path) {
       '/loan/idfc/personal-details': '/loan/idfc/journey',
       '/loan/idfc/basic-details': '/loan/idfc/home',
       '/loan/idfc/professional-details': '/loan/idfc/basic-details',
+      '/loan/idfc/address-details': '/loan/idfc/personal-details',
       '/loan/idfc/loan-requirement-details': '/loan/idfc/journey',
       '/loan/idfc/income-details': '/loan/idfc/journey',
       '/loan/idfc/upload-bank': '/loan/idfc/income-details',
@@ -18,6 +19,8 @@ export function goBackMap(path) {
       '/loan/idfc/bt-info': '/loan/idfc/journey',
       '/loan/idfc/doc-list': '/loan/idfc/journey',
       '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
+      '/loan/idfc/final-loan': '/loan/idfc/home',
+      '/loan/idfc/reports': '/loan/idfc/home',
     }
 
   return mapper[path] || false;
@@ -83,7 +86,7 @@ export const idfc_config = {
     journeyData: {
       title: 'Personal loan in just 5 steps',
       options: [
-        { 'step': '1', 'title': 'Enter basic details', 'subtitle': 'Fill in personal and work details to get started with your loan application.' },
+        { 'step': '1', 'title': 'Enter basic details', 'subtitle': 'Fill in basic and work details to get started with your loan application.' },
         { 'step': '2', 'title': 'Create loan application', 'subtitle': 'Provide/confirm your personal and address details to proceed with your loan application.' },
         { 'step': '3', 'title': 'Provide income details', 'subtitle': 'Enter your loan requirements and income details to get the best loan offer.' },
         { 'step': '4', 'title': 'Upload documents', 'subtitle': 'Provide your office address and upload documents to get your loan sanctioned.' },
@@ -307,7 +310,7 @@ export const idfc_config = {
     ],
     organisationTypeOptions: [
       "CENTRAL GOVT.",
-      "EDUCATIONAl INSTITUTE",
+      "EDUCATIONAL INSTITUTE",
       "PARTNERSHIP FIRM",
       "PRIVATE LIMITED COMPANY",
       "PUBLIC LIMITED COMPANY",

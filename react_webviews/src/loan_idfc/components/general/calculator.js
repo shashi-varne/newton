@@ -10,9 +10,9 @@ class Calculator extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      Net_monthly_Income: 75000,
-      Tenor: 18,
-      Other_EMIs: 0,
+      Net_monthly_Income: 90000,
+      Tenor: 5,
+      Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator"
     };
@@ -99,13 +99,13 @@ class Calculator extends Component {
   
       let Loan_Eligibility = (Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40/100 * Tenor;
   
-      if(Net_monthly_Income < 30000) {
-        Loan_Eligibility = 0;
-      } else if(Loan_Eligibility > 100000) {
-        Loan_Eligibility = 100000;
-      } else if(Loan_Eligibility <=0) {
-        Loan_Eligibility = 0;
-      }
+      // if(Net_monthly_Income < 30000) {
+      //   Loan_Eligibility = 0;
+      // } else if(Loan_Eligibility > 100000) {
+      //   Loan_Eligibility = 100000;
+      // } else if(Loan_Eligibility <=0) {
+      //   Loan_Eligibility = 0;
+      // }
 
       return (
       <Container
@@ -128,9 +128,9 @@ class Calculator extends Component {
             val="Net_monthly_Income"
             value={Net_monthly_Income}
             min="0"
-            max="1000000"
+            max="2500000"
             minValue="0"
-            maxValue="₹ 10 Lacs"
+            maxValue="₹ 25 Lacs"
             onChange={this.onChange}
           />
 
@@ -138,9 +138,9 @@ class Calculator extends Component {
             label="Loan tenor"
             val="Tenor"
             value={Tenor}
-            min="6"
+            min="3"
             max="24"
-            minValue="6 MONTHS"
+            minValue="3 MONTHS"
             maxValue="24 MONTHS"
             onChange={this.onChange}
           />
@@ -150,9 +150,9 @@ class Calculator extends Component {
             val="Other_EMIs"
             value={Other_EMIs}
             min="0"
-            max="500000"
+            max="2500000"
             minValue="0"
-            maxValue="₹ 5 Lacs"
+            maxValue="₹ 25 Lacs"
             onChange={this.onChange}
           />
 
@@ -161,9 +161,9 @@ class Calculator extends Component {
             val="Monthly_expenses"
             value={Monthly_expenses}
             min="0"
-            max="1000000"
+            max="2500000"
             minValue="0"
-            maxValue="₹ 10 Lacs"
+            maxValue="₹ 25 Lacs"
             onChange={this.onChange}
           />
 

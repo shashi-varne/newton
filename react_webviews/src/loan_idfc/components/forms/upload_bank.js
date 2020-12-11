@@ -5,7 +5,7 @@ import Attention from "../../../common/ui/Attention";
 import { initialize } from "../../common/functions";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
-import { getBase64 } from 'utils/functions';
+import { getBase64 } from "utils/functions";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import toast from "../../../common/ui/Toast";
@@ -32,7 +32,7 @@ class UploadBank extends Component {
       form_data: {},
       bankOptions: [],
       doc_id: "",
-      isApiRunning: false
+      isApiRunning: false,
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -69,19 +69,18 @@ class UploadBank extends Component {
     let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
-        type: 'native_receiver_image',
+        type: "native_receiver_image",
         show_loader: function (show_loader) {
-
           that.showLoaderNative();
-        }
+        },
       });
     }
   }
 
   showLoaderNative() {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
   }
 
   onload = () => {};
@@ -123,8 +122,6 @@ class UploadBank extends Component {
     }
   }
 
-  
-
   native_call_handler(method_name, doc_type) {
     let that = this;
     if (getConfig().generic_callback) {
@@ -133,6 +130,7 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
+          console.log(file);
           try {
             that.setState({
               docType: this.doc_type,
@@ -162,7 +160,7 @@ class UploadBank extends Component {
   }
 
   startUpload(method_name, doc_type) {
-    console.log(doc_type)
+    console.log(doc_type);
     this.setState({
       type: method_name,
     });
@@ -172,7 +170,6 @@ class UploadBank extends Component {
     } else {
       this.native_call_handler(method_name, doc_type);
     }
-    
   }
 
   getPdf = (e) => {
@@ -214,7 +211,7 @@ class UploadBank extends Component {
 
   save(file) {
     let acceptedType = ["application/pdf"];
-    console.log(file)
+    console.log(file);
 
     if (acceptedType.indexOf(file.type) === -1) {
       toast("Please select pdf file only");
@@ -223,14 +220,16 @@ class UploadBank extends Component {
 
     let { documents, editId, doc_id, count } = this.state;
     file.doc_type = file.type;
-    file.name = `Bank_statement_${count}.pdf`
-    file.status = "uploaded";
     file.id = count++;
 
+    file.status = "uploaded";
+
     if (editId === "") {
+      file.name = `Bank_statement_${count}.pdf`;
       documents.push(file);
     } else {
       var index = documents.findIndex((item) => item.id === editId);
+      file.name = documents[index].name;
       file.curr_status = "edit";
       file.document_id = doc_id;
       documents[index] = file;
@@ -254,7 +253,7 @@ class UploadBank extends Component {
     documents[index].showDotLoader = true;
     this.setState({
       documents: documents,
-      isApiRunning: true
+      isApiRunning: true,
     });
 
     console.log(documents[index]);
@@ -323,7 +322,7 @@ class UploadBank extends Component {
       doc_id: doc_id,
     });
 
-    this.startUpload("open_gallery");
+    this.startUpload("open_file", "bank_statement");
   };
 
   handleDelete = (id) => {
@@ -347,7 +346,7 @@ class UploadBank extends Component {
     if (name === "password") {
       var index = documents.findIndex((item) => item.id === doc_id);
 
-      documents[index].password = value
+      documents[index].password = value;
 
       this.setState({
         documents: documents,
@@ -547,14 +546,19 @@ class UploadBank extends Component {
                   }}
                 >
                   <div
-                    onClick={() => !item.showDotLoader && this.handleEdit(item.id, item.document_id)}
+                    onClick={() =>
+                      !item.showDotLoader &&
+                      this.handleEdit(item.id, item.document_id)
+                    }
                     className="generic-page-button-small"
                   >
                     EDIT
                   </div>
 
                   <div
-                    onClick={() => !item.showDotLoader && this.handleDelete(item.id)}
+                    onClick={() =>
+                      !item.showDotLoader && this.handleDelete(item.id)
+                    }
                     className="generic-page-button-small"
                   >
                     DELETE
@@ -568,7 +572,7 @@ class UploadBank extends Component {
             <div className="upload-bank-statement">
               <div
                 className="pdf-upload"
-                onClick={() => this.startUpload("open_file", 'bank_statement'+count)}
+                onClick={() => this.startUpload("open_file", "bank_statement")}
               >
                 <span className="plus-sign">
                   <input

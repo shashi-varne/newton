@@ -528,16 +528,16 @@ export const back_button_mapper = {
   '/group-insurance/term/etli/personal-details3': '/group-insurance/term/etli/personal-details2',
   '/group-insurance/term/etli/personal-details2': '/group-insurance/term/etli/personal-details1',
   '/group-insurance/term/etli/personal-details1': '/group-insurance/term/intro',
-  '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
-  '/group-insurance/term/personal-details-redirect' : '/group-insurance/term/intro',
-  '/group-insurance/life-insurance/term/personal-details-redirect': '/group-insurance/life-insurance/term/landing',
+  '/group-insurance/term/personal-details-redirect': '/group-insurance/term/intro',
+  '/group-insurance/life-insurance/term/personal-details-redirect':
+    '/group-insurance/life-insurance/term/landing',
   '/group-insurance/life-insurance/term/landing': '/group-insurance/life-insurance/entry',
-  '/group-insurance/term/intro' : '/group-insurance',
-  '/group-insurance/group-health/entry' : '/group-insurance/health/landing',
+  '/group-insurance/term/intro': '/group-insurance',
+  '/group-insurance/group-health/entry': '/group-insurance/health/landing',
   '/group-insurance/health/landing': '/group-insurance',
   '/group-insurance/life-insurance/savings-plan/landing': '/group-insurance/life-insurance/entry',
   '/group-insurance/life-insurance/entry': '/group-insurance',
-  '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry'
+  '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry',
 };
 
 export const insuranceMaritalStatus = [

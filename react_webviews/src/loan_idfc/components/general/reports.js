@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
-import { numDifferentiationInr, inrFormatDecimal } from 'utils/validators';
+import { timeStampToDate, inrFormatDecimal, changeNumberFormat } from 'utils/validators';
 import { getCssMapperReport } from '../../constants';
 import ContactUs from '../../../common/components/contact_us';
 
@@ -11,12 +11,12 @@ class ReportDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      get_lead: true,
-      getLeadBodyKeys: ['vendor_info', 'personal_info'],
       vendor_info_ui: {
         cssMapper: {}
       },
-      personal_info: {}
+      personal_info: {},
+      application_info: {},
+      vendor_info: {}
     }
 
     this.initialize = initialize.bind(this);
@@ -28,63 +28,22 @@ class ReportDetails extends Component {
     
   }
 
-  disbursementCallback = async () => {
-
-    this.setState({
-      show_loader: true
-    })
-    let body = {
-      "request_type": "disbursement_approval"
-    }
-    let resultData = await this.callBackApi(body);
-    
-  
-
-    let vendor_info = this.state.vendor_info || {};
-    vendor_info.dmi_loan_status  = resultData.dmi_loan_status;
-
-    this.setVendorData(vendor_info);
-    // if (resultData.callback_status) {
-      
-    // } else {
-     
-    // }
-
-  }
-
-  setVendorData = (vendor_info) => {
-    let data = getCssMapperReport(vendor_info);
-
-    let vendor_info_ui = vendor_info;
-    vendor_info_ui.status = data.status;
-    vendor_info_ui.cssMapper = data.cssMapper;
-    this.setState({
-      vendor_info_ui: vendor_info_ui,
-    })
-  }
-
   onload = () => {
 
-   
-    
     let lead = this.state.lead || {};
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
     let personal_info = lead.personal_info || {};
+    let application_id = lead.application_id || "";
 
-    // if(vendor_info.dmi_loan_status === 'callback_awaited_disbursement_approval') {
-    //   this.disbursementCallback();
-    // } else {
-    //   this.setVendorData(vendor_info);
-    // }
-
-    this.setVendorData(vendor_info);
-
+    let full_name = `${personal_info.first_name} ` + (personal_info.middle_name ? `${personal_info.middle_name} ` : "") + `${personal_info.last_name} ` 
    
     this.setState({
       application_info: application_info,
       vendor_info: vendor_info,
-      personal_info: personal_info
+      personal_info: personal_info,
+      application_id: application_id,
+      full_name: full_name
     })
 
   }
@@ -138,7 +97,7 @@ class ReportDetails extends Component {
                 CUSTOMER NAME
                 </div>
                 <div className="mtr-bottom">
-                  {this.state.personal_info.full_name}
+                  {this.state.full_name}
                 </div>
               </div>
             </div>
@@ -153,7 +112,7 @@ class ReportDetails extends Component {
               </div>
                 <div className="mtr-bottom">
 
-                  {numDifferentiationInr(this.state.vendor_info_ui.approved_amount_final)}
+                ₹{changeNumberFormat(this.state.vendor_info.updated_offer_amount)}
                 </div>
               </div>
             </div>
@@ -167,7 +126,7 @@ class ReportDetails extends Component {
                   RATE OF INTEREST
               </div>
                 <div className="mtr-bottom">
-                  {inrFormatDecimal(this.state.vendor_info_ui.approved_emi)}/month
+                  {inrFormatDecimal(this.state.vendor_info.updated_offer_roi)}/month
                 </div>
               </div>
             </div>
@@ -181,7 +140,7 @@ class ReportDetails extends Component {
                   EMI AMOUNT
               </div>
                 <div className="mtr-bottom">
-                  {inrFormatDecimal(this.state.vendor_info_ui.approved_emi)}/month
+                  {inrFormatDecimal(this.state.vendor_info.updated_offer_emi)}/month
                 </div>
               </div>
             </div>
@@ -195,7 +154,7 @@ class ReportDetails extends Component {
                   APPLICATION SUBMISSION DATE
               </div>
                 <div className="mtr-bottom">
-                  {this.state.vendor_info_ui.dt_approval}
+                  {timeStampToDate(this.state.vendor_info.dt_updated || "")}
                 </div>
               </div>
             </div>
@@ -209,7 +168,7 @@ class ReportDetails extends Component {
                   APPLICATION NUMBER
               </div>
                 <div className="mtr-bottom">
-                  {this.state.vendor_info_ui.application_id}
+                  {this.state.application_id}
                 </div>
               </div>
             </div>

@@ -58,6 +58,12 @@ class AddressDetails extends Component {
   }
 
   onload = () => {
+    if (this.props.edit) {
+      this.setState({
+        next_state: `/loan/idfc/ckyc-summary`,
+      });
+    }
+    
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};

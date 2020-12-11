@@ -80,9 +80,9 @@ class DocumentUpload extends Component {
         };
       });
 
-      form_data.doc_name = docList[selectedIndex].doc_checklist[0].subtype;
+      form_data.doc_name = (docList[selectedIndex].doc_checklist[0] && docList[selectedIndex].doc_checklist[0].subtype) || "";
 
-      let doc_checklist = docList[selectedIndex].doc_checklist[0].docs;
+      let doc_checklist = (docList[selectedIndex].doc_checklist[0] && docList[selectedIndex].doc_checklist[0].docs) || [];
 
       docsMap.forEach((item) => {
         if (item.name === form_data.doc_name) {
@@ -93,9 +93,12 @@ class DocumentUpload extends Component {
       if (doc_checklist.length !== 0) {
         let file1, file2, file3;
         for (var i = doc_checklist.length - 1; i >= 0; i--) {
+        console.log(documents.length)
+        console.log(documents)
+
           if (
             doc_checklist[i].doc_type === "doc1" &&
-            (!image_data.doc1 || documents.length === 0)
+            (!image_data.doc1 || documents.length === 2)
           ) {
             if (totalUpload < 3) {
               image_data.doc1 = {
@@ -132,10 +135,11 @@ class DocumentUpload extends Component {
               };
 
               documents.push(file2);
+
             }
           }
 
-          if (doc_checklist[i].doc_type === "doc3" && documents.length === 2) {
+          if (doc_checklist[i].doc_type === "doc3" && documents.length === 0) {
             file3 = {
               uploaded: true,
               integrated: true,
@@ -145,6 +149,7 @@ class DocumentUpload extends Component {
             documents.push(file3);
           }
         }
+
 
         this.setState({
           disbableButton: false,
@@ -262,10 +267,12 @@ class DocumentUpload extends Component {
       doc_type: type,
     });
 
-    if (getConfig().html_camera) {
+    if (getConfig().html_camera && method_name !== "open_file") {
       this.openCameraWeb(type);
+    } else if (getConfig().html_camera && method_name === "open_file") {
+      this.openCameraWeb();
     } else {
-      // this.native_call_handler(method_name, type, name, id);
+      this.native_call_handler(method_name, type, name);
     }
   }
 
@@ -397,7 +404,7 @@ class DocumentUpload extends Component {
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
-    data.append("file", file, file.name + ext);
+    data.append("file", file, file.name);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
 
@@ -710,9 +717,8 @@ class DocumentUpload extends Component {
                     onClick={() =>
                       this.startUpload(
                         "open_file",
-                        "",
                         `doc${documents.length + 1}`,
-                        `document_${documents.length + 1}`
+                        `document_${documents.length + 1}`,
                       )
                     }
                   >
