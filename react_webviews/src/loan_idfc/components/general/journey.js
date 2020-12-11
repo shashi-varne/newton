@@ -4,7 +4,6 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { changeNumberFormat, formatAmountInr } from "utils/validators";
 import JourneySteps from "../../../common/ui/JourneySteps";
-
 const journeyMapper2 = {
   basic_details_uploaded: {
     index: "1",
@@ -92,7 +91,6 @@ const journeyMapper2 = {
     index: "4",
   },
 };
-
 class JourneyMap extends Component {
   constructor(props) {
     super(props);
@@ -101,14 +99,11 @@ class JourneyMap extends Component {
       screen_name: "journey_screen",
       count: 0,
     };
-
     this.initialize = initialize.bind(this);
   }
-
   componentWillMount() {
     this.initialize();
   }
-
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
@@ -201,7 +196,6 @@ class JourneyMap extends Component {
         },
       ],
     };
-
     this.setState({
       journeyData: journeyData,
       ckyc_state: ckyc_state,
@@ -222,24 +216,19 @@ class JourneyMap extends Component {
         stage: data.stage,
       },
     };
-
     if (user_action === "just_set_events") {
       return eventObj;
     } else {
       nativeCallback({ events: eventObj });
     }
   }
-
   getCkycState = async () => {
     this.setState({
       show_loader: true,
     });
-
     await this.getOrCreate();
-
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
-
     if (vendor_info.ckyc_state !== "init") {
       this.updateApplication({
         idfc_loan_status: "ckyc",
@@ -248,17 +237,14 @@ class JourneyMap extends Component {
       this.getCkycState();
     }
   };
-
   handleClick = (id) => {
     let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
-
     // ---step-1
     if (id === "basic_details") {
       this.sendEvents("summary", { stage: "basic-details" });
       this.navigate("application-summary");
     }
-
     // ---step-2
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
@@ -272,7 +258,6 @@ class JourneyMap extends Component {
         });
       }
     }
-
     // ---step-3
     if (id === "income_details") {
       if (idfc_loan_status === "idfc_0.5_accepted") {
@@ -291,7 +276,6 @@ class JourneyMap extends Component {
         this.navigate(next_state);
       }
     }
-
     // ---step-4
     if (id === "document_upload") {
       this.navigate(next_state);
@@ -302,7 +286,6 @@ class JourneyMap extends Component {
       this.navigate("reports");
     }
   };
-
   render() {
     let { idfc_loan_status, index, first_name, vendor_info } = this.state;
     return (
@@ -329,10 +312,9 @@ class JourneyMap extends Component {
 
           {index <= "1" && (
             <div className="head-title">
-              <b>Ta-da! You’ve</b> successfully uploaded your basic details.
+              <b>Ta-da! You've</b> successfully uploaded your basic details.
             </div>
           )}
-
           {index === "2" && (
             <div className="head-title">
               <b>Awesome!</b> Your loan application is successfully created. Now
@@ -369,5 +351,4 @@ class JourneyMap extends Component {
     );
   }
 }
-
 export default JourneyMap;
