@@ -382,7 +382,11 @@ export async function get05Callback() {
   let that = this;
 
   setTimeout(function () {
-    if (result.is_dedupe === true || result.idfc_05_callback === true) {
+    if (
+      result.is_dedupe === true ||
+      result.idfc_05_callback === true ||
+      result.vendor_application_status === "idfc_callback_rejected"
+    ) {
       that.navigate("loan-status");
     } else {
       if (count < 20) {
@@ -410,7 +414,7 @@ export async function get10Callback(next_state) {
 
   setTimeout(function () {
     if (result.idfc_10_callback === true) {
-      that.navigate('eligible-loan');
+      that.navigate("eligible-loan");
     } else if (
       result.vendor_application_status === "idfc_cancelled" ||
       result.is_cancelled === true
@@ -501,7 +505,7 @@ export async function submitApplication(
         "CreateLoan 4 API Failed",
         "Age",
         "Salary",
-        "Salary receipt mode"
+        "Salary receipt mode",
       ];
       if (
         typeof result.error === "string" &&
@@ -598,7 +602,7 @@ export async function formCheckUpdate(
     permanent_pincode: "pincode",
     permanent_city: "city",
     permanent_state: "state",
-    amount_reuired: "loan amount",
+    amount_required: "loan amount",
     office_address: "office address",
     pincode: "pincode",
     city: "city",
@@ -626,6 +630,11 @@ export async function formCheckUpdate(
 
   if (form_data.pan_no && !validatePan(form_data.pan_no)) {
     form_data.pan_no_error = "Invalid PAN number";
+    canSubmitForm = false;
+  }
+
+  if (form_data.amount_required && form_data.amount_required < "100000") {
+    form_data.amount_required_error = "Min loan amount should be 1 lakh";
     canSubmitForm = false;
   }
 
