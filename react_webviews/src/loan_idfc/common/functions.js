@@ -499,6 +499,9 @@ export async function submitApplication(
         "CreateLoan 17 API Failed",
         "CreateLoan 3 API Failed",
         "CreateLoan 4 API Failed",
+        "Age",
+        "Salary",
+        "Salary receipt mode"
       ];
       if (
         typeof result.error === "string" &&
