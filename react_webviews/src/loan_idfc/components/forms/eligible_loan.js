@@ -10,6 +10,7 @@ import {
   numDifferentiationInr,
   changeNumberFormat,
   formatAmountInr,
+  inrFormatDecimal
 } from "utils/validators";
 
 class EligibleLoan extends Component {
@@ -84,10 +85,16 @@ class EligibleLoan extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let { form_data, vendor_info } = this.state;
 
     form_data.amount_required = value;
     form_data.amount_required_error = "";
+
+    let P = value;
+    let r = (vendor_info.ROI/100)/12;
+    let n = vendor_info.netTenor;
+
+    form_data.emi_amount = P*r*(Math.pow(1+r, n))/((Math.pow(1+r, n))-1);
 
     this.setState({
       form_data: form_data,
@@ -130,7 +137,7 @@ class EligibleLoan extends Component {
         <div className="eligible-loan">
           <div className="subtitle">
             Woo-hoo! IDFC is offering you a personal loan of ₹
-            {changeNumberFormat(vendor_info.displayOffer)}
+            {changeNumberFormat(vendor_info.displayOffer || "0")}
           </div>
 
           <div
@@ -161,7 +168,7 @@ class EligibleLoan extends Component {
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
                     <div className="sub-title">
-                      ₹{changeNumberFormat(vendor_info.displayOffer)}
+                      ₹{changeNumberFormat(vendor_info.displayOffer || "0")}
                     </div>
                   </div>
                   <div className="sub-content-right">
@@ -215,13 +222,7 @@ class EligibleLoan extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.amount_required_error}
-                  helperText={
-                    this.state.form_data.amount_required_error ||
-                    numDifferentiationInr(
-                      this.state.form_data.amount_required
-                    ) ||
-                    "Min ₹1 lakh to max 40 lakhs"
-                  }
+                  helperText={`Min ₹1 lakh to max ₹${changeNumberFormat(vendor_info.displayOffer || "0")}`}
                   type="number"
                   width="40"
                   label="Loan amount"
@@ -234,21 +235,21 @@ class EligibleLoan extends Component {
               </div>
               <div className="InputField">
                 <Input
-                  helperText={"Min 12 months to max 48 months"}
+                  // helperText={"Min 12 months to max 48 months"}
                   type="text"
                   width="40"
                   label="Tenure"
                   id="tenure"
                   name="tenure"
-                  value={this.state.form_data.tenure || ""}
-                  onChange={this.handleChange("tenure")}
+                  value={`${vendor_info.netTenor || "0"} months`}
+                  // onChange={this.handleChange("tenure")}
                   disabled={true}
                 />
               </div>
             </FormControl>
             <div className="estimated-emi">
               <div className="title">Estimated EMI</div>
-              <div className="emi">₹0/month</div>
+              <div className="emi">{inrFormatDecimal(this.state.form_data.emi_amount || "0")}/month</div>
             </div>
           </div>
         </div>
