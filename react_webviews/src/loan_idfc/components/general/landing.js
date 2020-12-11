@@ -55,6 +55,7 @@ class Landing extends Component {
       "idfc_1.1_rejected",
       "idfc_1.7_rejected",
       "idfc_4_rejected",
+      "idfc_callback_rejected"
     ];
 
     if (this.state.cta_title === "RESUME") {
