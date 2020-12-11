@@ -449,23 +449,12 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
-                                            <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.base_premium - this.state.quotation_details.total_discount)} </div>
-                                            <div style={{fontSize:10}}> (Basic premium)</div>
+                                            <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
+                                            <div style={{fontSize:10}}> (Net premium)</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
-                                        {this.state.quotation_details && (Object.keys(this.state.quotation_details.add_ons).length > 0)&&
-                                        <div>
-                                            <div> {inrFormatDecimal(this.state.quotation_details.add_on_premium)} </div>
-                                            <div style={{ fontSize: 10 }}> (Add on amount)</div>
-                                        </div>
-                                         }
-                                        {this.state.quotation_details && (Object.keys(this.state.quotation_details.add_ons).length > 0) &&
-                                            <div>
-                                                &nbsp;+&nbsp;
-                                            </div>
-                                        }
                                         <div>
                                             <div>{this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.gst)} </div>
                                             <div style={{fontSize:10}}>(18% GST) </div>
