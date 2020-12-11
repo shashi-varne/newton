@@ -71,7 +71,6 @@ export const idfc_config = {
     loan_bt: 'credit-bt',
     credit_bt: 'eligible-loan',
     eligible_loan: 'loan-eligible',
-    loan_eligible: 'additional-details',
     additional_details: 'doc-list'
   },
   landing_screen: {

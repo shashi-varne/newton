@@ -46,7 +46,7 @@ class Landing extends Component {
         this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
-    let { vendor_application_status, pan_status, ckyc_status, is_dedupe } = this.state;
+    let { vendor_application_status, pan_status, is_dedupe } = this.state;
 
     let rejection_cases = [
       "idfc_null_rejected",

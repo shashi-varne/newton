@@ -3,7 +3,6 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import { timeStampToDate, inrFormatDecimal, changeNumberFormat } from 'utils/validators';
-import { getCssMapperReport } from '../../constants';
 import ContactUs from '../../../common/components/contact_us';
 
 class ReportDetails extends Component {

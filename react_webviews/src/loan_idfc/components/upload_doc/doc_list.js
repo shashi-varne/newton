@@ -103,7 +103,6 @@ class DocumentList extends Component {
         showLoader={this.state.show_loader}
         title="Upload documents"
         buttonTitle="CONTINUE"
-        withProvider={true}
         handleClick={this.handleClick}
         withProvider={true}
         buttonData={this.state.bottomButtonData}

@@ -6,13 +6,10 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
-import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
 import {
   numDifferentiationInr,
-  formatAmount,
   formatAmountInr,
-  inrFormatTest,
 } from "utils/validators";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 

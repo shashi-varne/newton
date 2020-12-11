@@ -154,7 +154,7 @@ export async function getDocumentList() {
     const res = await Api.get(
       `relay/api/loan/idfc/list/document/${this.state.application_id}`
     );
-    const { result, status_code: status } = res.pfwresponse;
+    const { result } = res.pfwresponse;
 
     this.setState(
       {
