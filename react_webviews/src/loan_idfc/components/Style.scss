@@ -151,6 +151,7 @@
     .sub-head {
       font-weight: 600;
       margin-bottom: 10px;
+      color: #0A1D32;
     }
 
     .points {
@@ -571,21 +572,26 @@
   justify-content: space-between;
 }
 
-.render-faqs-table {
-  border: 1px solid;
-  text-align: center;
-  border-collapse: collapse;
-
-  .render-faqs-table-title {
+.render-faqs-table-content {
+  margin-bottom: 35px;
+  border-bottom: 1px solid #d7d4d4;
+  
+  .render-faqs-table {
     border: 1px solid;
-    padding: 10px 5px;
-    width: 40%;
-  }
+    text-align: center;
+    border-collapse: collapse;
 
-  .render-faqs-table-subtitle {
-    border: 1px solid;
-    padding: 10px 5px;
-    width: 60%;
+    .render-faqs-table-title {
+      border: 1px solid;
+      padding: 10px 5px;
+      width: 40%;
+    }
+
+    .render-faqs-table-subtitle {
+      border: 1px solid;
+      padding: 10px 5px;
+      width: 60%;
+    }
   }
 }
 
