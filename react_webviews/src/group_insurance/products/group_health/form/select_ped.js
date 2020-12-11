@@ -271,7 +271,6 @@ class GroupHealthPlanSelectPed extends Component {
                     toast('Atleast select one or uncheck this member');
                     return;
                 }
-        
 
                 body = {
                     
@@ -304,7 +303,11 @@ class GroupHealthPlanSelectPed extends Component {
                         if(options[l].name === 'Other') {
                             var value = this.state[this.state.otherInputData.name];
                         }
-
+                            let date =  data.start_date.split('/')
+                            if(isNaN(date[1]) || date[1].length < 4){
+                            toast('Enter Valid date');
+                            return;
+                            }
                         let obj = {
                             "yes_no": true,
                            "question_id": question_id,
