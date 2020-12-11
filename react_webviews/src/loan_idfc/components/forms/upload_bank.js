@@ -83,7 +83,16 @@ class UploadBank extends Component {
     });
   }
 
-  onload = () => {};
+  onload = () => {
+    let loaderData = {
+      title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
+      subtitle: "It may take 10 to 15 seconds!",
+    };
+    this.setState({
+      loaderData: loaderData,
+      loaderWithData: true,
+    });
+  };
 
   renderNotes = () => {
     let notes = [
@@ -362,7 +371,7 @@ class UploadBank extends Component {
   };
 
   handleClick = async () => {
-    let { form_data } = this.state;
+    let { form_data, loaderData } = this.state;
 
     let { bank_name, start_date, end_date } = this.state.form_data;
     let keys_to_check = ["bank_name", "start_date", "end_date"];
@@ -431,6 +440,8 @@ class UploadBank extends Component {
           progressHeaderData: this.state.progressHeaderData,
         }}
         handleClick={this.handleClick}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="upload-bank-statement">
           <Attention content={this.renderNotes()} />

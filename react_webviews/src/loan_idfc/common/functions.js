@@ -466,7 +466,7 @@ export async function submitApplication(
       show_loader: true,
     });
 
-    let screens = ["address_details", "requirement_details_screen"];
+    let screens = ["address_details", "requirement_details_screen", "additional_details", "credit_bt", "eligible_loan", "bank_upload"];
     this.setState({
       show_loader: true,
       loaderWithData: screens.includes(this.state.screen_name),

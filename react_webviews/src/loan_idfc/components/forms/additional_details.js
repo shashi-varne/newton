@@ -35,6 +35,11 @@ class AdditionalDetails extends Component {
   }
 
   onload = () => {
+    let loaderData = {
+      title: `Please wait while we check if any additional documents need to be uploaded.`,
+      subtitle: "It won't take more than 10 to 15 seconds!",
+    };
+
     let lead = this.state.lead || {};
     let application_info = lead.application_info || {};
     let vendor_info = lead.vendor_info || {};
@@ -54,7 +59,8 @@ class AdditionalDetails extends Component {
     this.setState({
       employment_type: employment_type,
       bottomButtonData: bottomButtonData,
-      form_data: form_data
+      form_data: form_data,
+      loaderData: loaderData,
     });
   };
 
@@ -161,6 +167,8 @@ class AdditionalDetails extends Component {
         handleClick={this.handleClick}
         withProvider={true}
         buttonData={this.state.bottomButtonData}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="additional-details">
           {employment_type === "self employed" && (

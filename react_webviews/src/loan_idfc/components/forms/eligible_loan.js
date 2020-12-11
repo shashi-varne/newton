@@ -48,11 +48,16 @@ class EligibleLoan extends Component {
   }
 
   onload = () => { 
+    let loaderData = {
+      title: `Hang on, while IDFC calculates your final loan offer as per their proprietary algorithms`,
+      subtitle: "This may take around 2 minutes!",
+    };
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
 
     this.setState({
-      vendor_info: vendor_info
+      vendor_info: vendor_info,
+      loaderData: loaderData,
     })
   };
 
@@ -115,6 +120,8 @@ class EligibleLoan extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData
         }}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="eligible-loan">
           <div className="subtitle">

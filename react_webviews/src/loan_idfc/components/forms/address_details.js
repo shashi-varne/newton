@@ -77,7 +77,7 @@ class AddressDetails extends Component {
 
     let loaderData = {
       title: `${personal_info.first_name}, hang on while we create your loan application`,
-      subtitle: "It may take 10 to 15 seconds!",
+      subtitle: "It won't take more than 15 seconds!",
     };
 
     form_data.current_address1 = current_address_data.address1;

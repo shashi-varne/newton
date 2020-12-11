@@ -52,6 +52,11 @@ class LoanBtDetails extends Component {
   }
 
   onload = () => {
+    let loaderData = {
+      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
+      subtitle: "This may take around 2 minutes!",
+    };
+
     let lead = this.state.lead || {};
 
     let bt_info = lead.bt_info;
@@ -70,6 +75,7 @@ class LoanBtDetails extends Component {
 
     this.setState({
       credit_bt: credit_bt,
+      loaderData: loaderData
     });
   };
 
@@ -214,6 +220,8 @@ class LoanBtDetails extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="loan-bt">
           <div className="subtitle">
