@@ -12,10 +12,10 @@ class ReactResponsiveCarousel extends Component {
   };
 
   swipeMargin = () => {
-    let x = document.getElementsByClassName("offer-slide-img");
-    for (const property in x) {
-      if (!isNaN(property)) x[property].style.margin = "0px 20px 0px 20px";
-    }
+    // let x = document.getElementsByClassName("offer-slide-img");
+    // for (const property in x) {
+    //   if (!isNaN(property)) x[property].style.margin = "0px 20px 0px 20px";
+    // }
   };
 
   onChangeEvent = () => {
@@ -32,7 +32,7 @@ class ReactResponsiveCarousel extends Component {
       return (
         <div key={index} className="generic-carousel">
           <Imgc className="offer-slide-img"
-            src={require(`assets/${props.src}`)} alt="Gold Offer"
+            src={this.props.directImgLink ? props :  require(`assets/${props.src}`)} alt="Gold Offer"
             style={{minHeight:170}}
             />
         </div>

@@ -7,12 +7,11 @@ import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal, storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
 import TextField from 'material-ui/TextField';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 
+import ReactResponsiveCarousel from "../../../common/ui/carousel";
 class DeliverySelectedProduct extends Component {
   constructor(props) {
     super(props);
@@ -220,6 +219,14 @@ class DeliverySelectedProduct extends Component {
     });
   }
 
+  carouselSwipe_count = (index) => {
+    this.setState({
+      selectedIndex: index,
+      card_swipe: "yes",
+      card_swipe_count: this.state.card_swipe_count + 1,
+    });
+  };
+
   render() {
     return (
       <Container
@@ -234,22 +241,12 @@ class DeliverySelectedProduct extends Component {
       >
         <div className="delivery-select-product">
           <div className="block1">
-            <Carousel
-
-              showStatus={false} showThumbs={false}
-              showArrows={true}
-              infiniteLoop={false}
-              selectedItem={this.state.selectedIndex}
-              onChange={(index) => {
-                this.setState({
-                  selectedIndex: index,
-                  card_swipe: 'yes',
-                  card_swipe_count: this.state.card_swipe_count + 1
-                });
-              }}
-            >
-              {(this.state.product.media.images || []).map(this.renderOfferImages)}
-            </Carousel>
+            <ReactResponsiveCarousel
+                CarouselImg={this.state.product.media.images || []}
+                callbackFromParent={this.carouselSwipe_count}
+                selectedIndexvalue={this.state.selectedIndex}
+                directImgLink={true}
+              />
           </div>
 
 

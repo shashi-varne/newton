@@ -8,6 +8,8 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { storageService, inrFormatDecimal2 } from 'utils/validators';
 import { gold_providers } from '../../constants';
+import {Imgc} from '../../../common/ui/Imgc';
+
 class DeliveryOrder extends Component {
   constructor(props) {
     super(props);
@@ -180,7 +182,7 @@ class DeliveryOrder extends Component {
           <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
             <div style={{ textAlign: 'right', fontSize: 10, color: getConfig().primary }}>{this.state.providerData.karat}</div>
             <div className="highlight-text1">
-              <img className="highlight-text11" style={{ width: 34 }}
+              <Imgc className="highlight-text11" style={{ width: 34,height:34 }}
                 src={this.state.orderData.media.images[0]} alt="info" />
               <div className="highlight-text12" style={{ display: 'grid' }}>
                 <div>{this.state.orderData.description}</div>

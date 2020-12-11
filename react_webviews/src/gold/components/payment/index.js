@@ -91,7 +91,7 @@ class Payment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       openResponseDialog: false,
       provider_info: {},
       weight: "",
@@ -185,11 +185,11 @@ class Payment extends Component {
         this.setState({
           provider_info: result.gold_user_info.provider_info,
           userInfo: result.gold_user_info.user_info,
-          show_loader: false
+          skelton: false
         });
       } else {
         this.setState({
-          show_loader: false
+          skelton: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
@@ -202,19 +202,19 @@ class Payment extends Component {
       //   this.setState({
       //     goldSellInfo: result.sell_info,
       //     provider_info: provider_info,
-      //     show_loader: false,
+      //     skelton: false,
       //   });
 
       // } else {
       //   this.setState({
-      //     show_loader: false
+      //     skelton: false
       //   });
       //   toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       // }
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -303,7 +303,7 @@ class Payment extends Component {
 
     if(transact_id) {
       this.setState({
-        show_loader: true,
+        skelton: true,
       });
   
       try {
@@ -317,7 +317,7 @@ class Payment extends Component {
           
         } else {
           this.setState({
-            show_loader: false
+            skelton: false
           });
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
         }
@@ -325,7 +325,7 @@ class Payment extends Component {
         this.setFinalTransReport(report);
       } catch (err) {
         this.setState({
-          show_loader: false
+          skelton: false
         });
         toast('Something went wrong');
       }
