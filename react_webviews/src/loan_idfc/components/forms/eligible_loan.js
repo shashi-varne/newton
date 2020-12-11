@@ -6,7 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
-import { numDifferentiationInr } from "utils/validators";
+import { numDifferentiationInr, changeNumberFormat, formatAmountInr } from "utils/validators";
 
 class EligibleLoan extends Component {
   constructor(props) {
@@ -105,6 +105,7 @@ class EligibleLoan extends Component {
 
   render() {
     let { vendor_info } = this.state;
+    let ROI = (vendor_info.ROI/100) * 100;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -147,21 +148,21 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
-                    <div className="sub-title">₹{vendor_info.displayOffer}</div>
+                    <div className="sub-title">₹{changeNumberFormat(vendor_info.displayOffer)}</div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
-                    <div className="sub-title">40 months</div>
+                    <div className="sub-title">{`${vendor_info.netTenor} months`}</div>
                   </div>
                 </div>
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
-                    <div className="sub-title">₹33,000/month</div>
+                    <div className="sub-title">{formatAmountInr(vendor_info.EMIAmount)}/month</div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
-                    <div className="sub-title">24%</div>
+                      <div className="sub-title">{ROI}%</div>
                   </div>
                 </div>
               </Grid>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-// import { formatAmountInr } from "../../../utils/validators";
+import { formatAmountInr } from "../../../utils/validators";
 import ContactUs from "../../../common/components/contact_us";
 
 class FinalOffer extends Component {
@@ -11,6 +11,8 @@ class FinalOffer extends Component {
     this.state = {
       show_loader: false,
       screen_name: "final_loan",
+      first_name: "",
+      vendor_info: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -22,6 +24,15 @@ class FinalOffer extends Component {
 
   onload = () => {
     let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+    let personal_info = lead.personal_info || {};
+    let application_id = lead.application_id || ""
+
+    this.setState({
+      vendor_info: vendor_info,
+      first_name: personal_info.first_name,
+      application_id: application_id
+    })
   };
 
   sendEvents(user_action) {
@@ -41,6 +52,10 @@ class FinalOffer extends Component {
     }
   }
 
+  handleClick = () => {
+    this.navigate('reports')
+  }
+
   render() {
     return (
       <Container
@@ -58,15 +73,14 @@ class FinalOffer extends Component {
           />
 
           <div className="subtitle">
-            Aamir, you application no. XXXXXX78 for a personal loan of Rs.
-            2,00,000 has been submitted and is currently under process.
+            {this.state.first_name}, you application no. {this.state.application_id} for a personal loan of {formatAmountInr(this.state.vendor_info.loanAmount)} has been submitted and is currently under process.
           </div>
           <div className="subtitle">
             You will soon get a call from IDFC First Bank's sales representative
             who will guide you through the remaining process until the loan
             amount is disbursed to your bank account.
           </div>
-          <div className="subtitle">Thank you for choosing Fisdom!</div>
+          <div className="subtitle">Thank you for choosing {this.state.productName}!</div>
           <ContactUs />
         </div>
       </Container>
