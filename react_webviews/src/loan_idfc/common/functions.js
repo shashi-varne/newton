@@ -634,7 +634,7 @@ export async function formCheckUpdate(
   }
 
   if (form_data.amount_required && form_data.amount_required < "100000") {
-    form_data.amount_required_error = "Min loan amount should be 1 lakh";
+    form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
     canSubmitForm = false;
   }
 
