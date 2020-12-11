@@ -443,7 +443,12 @@ export async function get07State() {
   let that = this;
 
   setTimeout(function () {
-    if (result.idfc_07_state === "success") {
+    if (result.idfc_07_state === "triggered" && result.bt_eligible) {
+      let body = {
+        idfc_loan_status: "bt_init",
+      };
+      this.updateApplication(body, "bt-info");
+    } else if (result.idfc_07_state === "success") {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else {
       if (count < 20) {

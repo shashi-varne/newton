@@ -99,6 +99,10 @@ class PerfiosStatus extends Component {
         this.get07State();
       }
 
+      if (!bt_eligible && !idfc_07_state) {
+        this.get07State();
+      }
+
       if (bt_eligible && idfc_07_state === "success") {
         let body = {
           idfc_loan_status: "bt_init",
@@ -111,6 +115,10 @@ class PerfiosStatus extends Component {
           idfc_loan_status: "bt_init",
         };
         this.updateApplication(body, "bt-info");
+      }
+
+      if (bt_eligible && !idfc_07_state) {
+        this.get07State();
       }
     }
 
