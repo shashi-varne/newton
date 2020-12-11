@@ -10,7 +10,7 @@ class ImgcClass extends Component {
         super(props);
         this.state = {
             fetchFailed: false,
-            loaded: this.isCached(props.src)
+            loaded: this.isCached(props.src) || this.props.hideSkelton
         };
     }
 
@@ -24,11 +24,7 @@ class ImgcClass extends Component {
         return complete;
     }
 
-    render() {
-
-        let props = this.props;
-        let skeltonFlag = this.state.fetchFailed || !this.state.loaded;
-
+    renderImage = (props, skeltonFlag) => {
         return (
 
             // <SVG
@@ -41,37 +37,62 @@ class ImgcClass extends Component {
 
 
             // <SkeltonRect style={props.style} className={props.className} />
+            <img id="image" src={props.src}
+                onLoad={() => {
+                    this.setState({
+                        loaded: true
+                    })
+
+                    if (this.props.callbackImgc) {
+                        this.props.callbackImgc(this.props.type);
+                    }
 
 
+                }}
+                onError={() => {
+                    this.setState({
+                        fetchFailed: true
+                    })
+                }}
+                alt={props.alt}
+                style={{
+                    ...props.style,
+                    flexShrink: 0,
+                    display: skeltonFlag ? 'none' : ''
+                }}
+                className={`${props.className}`}
+            />
+
+        )
+
+    }
+
+    renderFallbackIcon = (props) => {
+        return (
+            <div className={`${props.className} generic-fallback-img`} style={props.style}>
+                <img
+                    src={require(`assets/fallback_icon.svg`)} alt="Icon"
+                />
+            </div>
+        )
+    }
+
+    render() {
+
+        let props = this.props;
+        let skeltonFlag = !this.state.loaded;
+
+        let {fetchFailed} = this.state;
+
+        return (
 
             <Fragment>
 
-                <img id="image" src={props.src}
-                    onLoad={() => {
-                        console.log("loaded")
-                        this.setState({
-                            loaded: true
-                        })
-
-                    }}
-                    onError={() => {
-                        console.log("error")
-                        this.setState({
-                            fetchFailed: true
-                        })
-                    }}
-                    alt={props.alt}
-                    style={{
-                        ...props.style,
-                        flexShrink: 0,
-                        display: skeltonFlag ? 'none' : ''
-                    }}
-                    className={`${props.className}`}
-                />
-
+                {this.renderImage(props, skeltonFlag)}
+                {fetchFailed && this.renderFallbackIcon(props)}
 
                 <SkeltonRect
-                    hide={!skeltonFlag}
+                    hide={!skeltonFlag || fetchFailed}
                     style={{ ...props.style, flexShrink: 0 }} className={props.className} />
             </Fragment>
         );

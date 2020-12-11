@@ -411,7 +411,7 @@ function getPartnerConfig(partner_code) {
       secondary: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#f6f2ff',
-      skelton_color: '#F5F3F6',
+      skelton_color: '#E7E7E7',
       label: '#a2a2a2',
       type: 'fisdom',
       // inputFocusedColor: '#4f2da7',
@@ -431,7 +431,7 @@ function getPartnerConfig(partner_code) {
       secondary: '#35cb5d',
       default: '#4a4a4a',
       highlight_color: '#F0F7FF',
-      skelton_color: '#F0F7FF',
+      skelton_color: '#E7E7E7',
       label: '#a2a2a2',
       type: 'finity',
       // inputFocusedColor: '#3792fc',
@@ -528,6 +528,7 @@ function getPartnerConfig(partner_code) {
   let html = document.querySelector(`html`);
   html.style.setProperty(`--secondary`, `${config_to_return.secondary}`);
   html.style.setProperty(`--highlight`, `${config_to_return.highlight_color}`);
+  html.style.setProperty(`--skelton-color`, `${config_to_return.skelton_color}`);
   html.style.setProperty(`--primary`, `${config_to_return.primary}`);
   html.style.setProperty(`--default`, `${config_to_return.default}`);
   html.style.setProperty(`--label`, `${config_to_return.label}`);

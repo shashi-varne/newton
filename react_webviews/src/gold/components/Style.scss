@@ -1274,7 +1274,12 @@ img.gold-offer-slide-img {
   }
 
   .block3 {
-    margin: 30px 0 0 0;
+    margin: 0 0 0 0;
+
+    .steps-icon {
+      width: 80px !important;
+      height: 60px !important;
+    }
 
     .title {
       font-size: 16px;
@@ -1293,7 +1298,7 @@ img.gold-offer-slide-img {
     }
 
     .benefites {
-      margin: 20px 0 0 0;
+      margin: 0 0 0 0;
     }
 
     .benefit-tile-title {
@@ -1308,10 +1313,14 @@ img.gold-offer-slide-img {
       margin: 7px 0 0 0;
     }
 
-    img {
-      width: 70px;
-      margin: 0 20px 0 0;
+    .common-how-steps {
+      padding: 20px 0 10px 0;
     }
+
+    .infoimage-block1 {
+      margin: -20px 0 30px 0;
+    }
+
   }
 
   .block2 {
@@ -1319,6 +1328,11 @@ img.gold-offer-slide-img {
     background: white;
     padding: 10px 15px 20px 15px;
     border-radius: 10px;
+
+    .steps-icon {
+      width: 40px !important;
+      height: 40px !important;
+    }
     .want-to {
       color: #0a1c32;
       font-size: 16px;
@@ -1375,10 +1389,16 @@ img.gold-offer-slide-img {
 
   .block4 {
     background: #fff;
-    padding: 10px 15px 20px 15px;
-    margin: 20px -15px 0 -15px;
+    // padding: 0px 15px 20px 15px;
+    // margin: 0px -15px 0 -15px;
+    padding: 0px 0px 20px 0px;
+    margin: 0px 0px 0 0px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
+
+    .gold-bottom-secure-info {
+      margin: 0px 0px 10px 0px;
+    }
   }
 }
 
@@ -1489,6 +1509,8 @@ img.gold-offer-slide-img {
         cursor: pointer;
       }
     }
+
+    
   }
 
   .page-title {

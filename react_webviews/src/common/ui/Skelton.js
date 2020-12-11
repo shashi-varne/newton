@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { getConfig } from 'utils/functions';
 
 import ReactPlaceholder from 'react-placeholder';
@@ -9,8 +9,7 @@ import './style.scss';
 // import { TextBlock, MediaBlock, TextRow, RectShape, RoundShape } from 'react-placeholder/lib/placeholders';
 
 
-// let highlight_color = getConfig().skelton_color;
-let highlight_color = '#E7E7E7';
+let highlight_color = getConfig().skelton_color;
 
 
 
@@ -127,10 +126,12 @@ const UiSkelton = (props) => (
 export const SkeltonRect = (props) => {
     if (!props.hide) {
         return (
+            <Fragment>
             <ReactPlaceholder type='rect' color={highlight_color}
                 showLoadingAnimation={true} className={props.className} 
                 style={props.style}
                 />
+            </Fragment>
         );
     }
 
