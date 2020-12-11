@@ -9,7 +9,7 @@ const PageHeader = (props) => {
   let { height, hideProfile } = props;
 
   if (!height) {
-    height = isMobileView ? '5vh' : '9vh';
+    height = isMobileView ? 'auto' : '9vh';
   }
 
   if (isUndefined(hideProfile)) {

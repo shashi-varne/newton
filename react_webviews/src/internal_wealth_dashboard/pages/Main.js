@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getConfig } from "utils/functions";
 import NavBar from '../mini-components/NavBar';
 import NavBarMobile from '../mini-components/NavBarMobile';
@@ -17,6 +17,7 @@ const isMobileView = getConfig().isMobileDevice;
 const Main = (props) => {
   const { match: { params } } = props;
   const navigate = navigateFunc.bind(props);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const fetchUserCreds = async () => {
     try {
@@ -24,6 +25,7 @@ const Main = (props) => {
       if (isEmpty(res) || res.pfwstatus_code !== 200) {
         navigate('login');
       } else {
+        setLoggedIn(true);
         const { user } = res.pfwresponse.result;
         const { email, name, mobile } = user;
         
@@ -54,7 +56,7 @@ const Main = (props) => {
   }
 
   return (
-      <div id='iwd-main'>
+    loggedIn ? (<div id='iwd-main'>
         {isMobileView ? <NavBarMobile /> : <NavBar />}
         <CSSTransition
           in={true}
@@ -66,7 +68,7 @@ const Main = (props) => {
         >
           {renderTab()}
         </CSSTransition>
-      </div>
+      </div>) : ''
   );
 };
 

@@ -44,7 +44,13 @@ const NavBarMobile = (props) => {
       }}>
       {!expanded ?
         <div id="iwd-nm-header">
-          <img src={fisdom_logo} id="iwd-nmh-fisdom-logo" alt="fisdom" />
+          <Link
+            to={`dashboard${props.location.search}`}
+            onClick={() => setExpanded(false)}
+            style={{ marginRight: 'auto' }}
+          >
+            <img src={fisdom_logo} id="iwd-nmh-fisdom-logo" alt="fisdom" />
+          </Link>
           <Button className="iwd-nmh-menu" onClick={() => setExpanded(true)}>
             <MenuIcon fontSize="inherit" />
             <span id="iwd-nmhm-text">Menu</span>

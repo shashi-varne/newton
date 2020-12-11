@@ -4,6 +4,7 @@ import { fetchGainsElssYears } from '../../common/ApiCalls';
 import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
 import { getConfig } from 'utils/functions';
 import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
+import { isEmpty } from '../../../utils/validators';
 const isMobileView = getConfig().isMobileDevice;
 
 const Elss = () => {
@@ -11,11 +12,17 @@ const Elss = () => {
   const [years, setYears] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [noData, setNoData] = useState(false);
   const fetchElssYears = async () => {
     try {
       setIsLoading(true);
       const { tax_statement } = await fetchGainsElssYears();
-      setYears(tax_statement?.elss);
+      if (isEmpty(tax_statement?.elss)) {
+        setNoData(true);
+      } else {
+        setNoData(false);
+        setYears(tax_statement?.elss);
+      }
       setIsLoading(false);
     } catch (err) {
       setHasError(true);
@@ -35,7 +42,7 @@ const Elss = () => {
         isLoading={isLoading}
         loadingText='Fetching ...'
         error={hasError}
-        noData={!years?.length}
+        noData={noData}
         noDataText="No ELSS reports to display"
       >
         <div className='iwd-statement-reports'>

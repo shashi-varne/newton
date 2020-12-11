@@ -223,6 +223,7 @@ const Dashboard = () => {
               </div>
             </IwdCard>
             <IwdCard
+              isClickable
               headerText="Open source and non-custodial protocol enabling the creation of money markets"
               className="iwd-d-newsletter"
             >

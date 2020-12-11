@@ -120,7 +120,7 @@ $background: #f9f9f9;
 }
 
 #iwd-main {
-  font-family: 'Poppins', 'Roboto', sans-serif;
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
   height: 100%;
   width: 100%;
   background: #f9f9f9;
@@ -152,6 +152,10 @@ $background: #f9f9f9;
   border-radius: $card-border-radius;
   padding: $card-padding;
   box-sizing: border-box;
+}
+
+.MuiButtonBase-root.iwd-card {
+  @extend .iwd-card;
 }
 
 .iwd-card-header {
@@ -372,7 +376,7 @@ $background: #f9f9f9;
   }
 
   .iwd-d-newsletter {
-
+    text-align: left;
     align-self: flex-start;
     background: $primary;
     width: 40%;
@@ -392,6 +396,7 @@ $background: #f9f9f9;
       float: right;
       border-radius: 50%;
       height: 48px;
+      box-shadow: 0px 0px 40px 2px rgba(255, 255, 255, 0.08), inset -6px 6px 16px -4px rgba(0, 0, 0, 0.35) !important;
     }
 
     #iwd-dn-gist {
@@ -955,6 +960,7 @@ $background: #f9f9f9;
   }
 
   .iwd-analysis-debt-holding-percentage {
+    color: $dark;
     font-size: 15px;
   }
 }
@@ -965,13 +971,13 @@ $background: #f9f9f9;
 
 // Statement Transaction
 .iwd-statement-transaction {
-  width: 100%;
-  display: flex;
+  @extend .iwd-statements-container;
+  margin-top: 0;
 
   .iwd-transaction-container {
     height: 75vh;
     flex: 1;
-    overflow: auto;
+    overflow-y: auto;
 
     .iwd-transaction-search-container {
       display: flex;
@@ -1755,12 +1761,9 @@ $background: #f9f9f9;
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  //-webkit-box-align: center;
-  //-ms-flex-align: center;
-  // align-items: center;
   height: 75vh;
-  // margin-left: -15px;
-  overflow-y: auto;
+  width: 100%;
+  overflow-y: hidden;
 }
 
 .iwd-transactions-table.iwd-statement-transaction-table {
@@ -1827,11 +1830,13 @@ $background: #f9f9f9;
     .iwd-transaction-container {
       height: 75vh;
     }
-    .iwd-statement-transaction
+    .iwd-statement-transaction {
+      margin-top: 0;
       .iwd-transaction-container
       .iwd-transaction-search-container
       .iwd-transaction-search {
-      flex: 1;
+        flex: 1;
+      }
     }
     .iwd-transaction-container .iwd-transaction-search-container .iwd-transaction-date {
       display: none;
