@@ -6,7 +6,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
 import {
-  inrFormatDecimalWithoutIcon
+  inrFormatDecimalWithoutIcon, capitalizeFirstLetter
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getCssMapperReport } from '../constants';
@@ -92,7 +92,19 @@ class Report extends Component {
     return obj;
   }
 
-  setReportData(termData, group_insurance_policies) {
+  getProviderObject_offline(o2o_details){
+    let obj = o2o_details;
+    obj.key = 'o2o_details';
+    obj.top_title = capitalizeFirstLetter(o2o_details.provider)
+    obj.sum_assured = o2o_details.total_amount
+    let data = getCssMapperReport(obj);
+    obj.status = data.status;
+    obj.cssMapper = data.cssMapper;
+
+    return obj;
+  }
+
+  setReportData(termData, group_insurance_policies, o2o_applications ) {
 
 
     let canShowReport = false;
@@ -157,8 +169,12 @@ class Report extends Component {
       reportData.push(policy);
     }
 
-    console.log(reportData);
-
+    // reportData.push(o2o_applications);
+    let o2o_details = o2o_applications || []; 
+    for(var i = 0; i< o2o_details.length; i++){
+      let policy = this.getProviderObject_offline(o2o_details[i]);
+      reportData.push(policy);
+    }
 
     this.setState({
       reportData: reportData,
@@ -186,8 +202,9 @@ class Report extends Component {
         })
 
         let ins_policies = policyData.group_insurance || {};
-
-        this.setReportData(policyData.term_insurance, ins_policies);
+        let o2o_applications = policyData.o2o_applications; 
+         
+        this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -222,6 +239,8 @@ class Report extends Component {
       }
     } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
+    } else if(key === 'o2o_details'){
+      path = `/group-insurance/group-health/o2o-reportdetails/${policy.id}`;
     } else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }

@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
-    inrFormatDecimal,
+    inrFormatDecimal, capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from  '../../common/ui/Toast';
@@ -13,15 +13,15 @@ import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import { initialize } from '../products/group_health/common_data'
 import ReactHtmlParser from 'react-html-parser';
 import {getCoverageType} from '../products/group_health/constants';
+import { getCssMapperReport } from '../constants'
 
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            lead: {
-                member_base: []
-            },
+            productName : getConfig().productName,
+            lead: {},
             policy_data: {
                 cssMapper: {}
             },
@@ -29,13 +29,10 @@ class GroupHealthReportDetails extends Component {
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits
         }
-        this.initialize = initialize.bind(this);
     }
 
-    componentWillMount() {
-        this.initialize();
-
-        const { policy_id } = this.props.match.params;
+    componentWillMount() {  
+      const { policy_id } = this.props.match.params;
         this.setState({
             policy_id: policy_id
         })
@@ -44,58 +41,17 @@ class GroupHealthReportDetails extends Component {
     async componentDidMount() {
 
         try {
-            const res = await Api.get(`api/insurancev2/api/insurance/o2o/get/applications?o2o_app_id=089eb113-cbe2-44f0-b860-c0065236e726 `);
-
-        // const ress = {
-        //     "pfwmessage": "Success",
-        //     "pfwstatus_code": 200,
-        //     "pfwutime": "",
-        //     "pfwtime": "2020-12-10 18:14:17.993520",
-        //     "pfwresponse": {
-        //         "requestapi": "",
-        //         "status_code": 200,
-        //         "result": {
-        //             "result": [{
-        //                 "group_customer": "",
-        //                 "email_id": "thulasiram.athuru1989@gmail.com",
-        //                 "policy_number": "000109439E",
-        //                 "status": "Issued",
-        //                 "application_number": "000109439E",
-        //                 "policy_type": "Life",
-        //                 "total_amount": 7262.0,
-        //                 "id": "089eb113-cbe2-44f0-b860-c0065236e726",
-        //                 "tax": 1107.7627118644,
-        //                 "dt_login": null,
-        //                 "logo": null,
-        //                 "dt_next_renewal": "31/05/2021",
-        //                 "insurance_account_id": "f1931aff-dff2-4629-b28d-cc421597fe3c",
-        //                 "cover_period": 30.0,
-        //                 "cover_amount": 15000000.0,
-        //                 "dt_policy_issued": "31/05/2020",
-        //                 "plan_type": "Term Plan",
-        //                 "provider": "Edelweiss Tokio",
-        //                 "mobile_number": "7500075000",
-        //                 "dt_created": "2020-12-10T17:57:02",
-        //                 "product_name": "Zindagi Plus",
-        //                 "dt_policy_end": null,
-        //                 "premium_paying_term": 30.0,
-        //                 "premium": 6154.2372881356,
-        //                 "customer_name": "Thulasiram  Athuru",
-        //                 "dt_policy_start": null,
-        //                 "dt_updated": "2020-12-10T17:57:14",
-        //                 "frequency": "Yearly"
-        //             }]
-        //         }
-        //     }
-        // }
+            const res = await Api.get(`api/insurancev2/api/insurance/o2o/get/applications?o2o_app_id=${this.state.policy_id}`);
 
             this.setState({
                 show_loader: false
             });
             var resultData = res.pfwresponse.result.result[0];
+            var policy_data = getCssMapperReport(resultData)
             if (res.pfwresponse.status_code === 200) {
                 this.setState({
                     lead: resultData,
+                    policy_data : policy_data
                 })
 
 
@@ -125,7 +81,7 @@ class GroupHealthReportDetails extends Component {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": this.state.providerConfig.provider_api,
+                // "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'report details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
@@ -155,7 +111,7 @@ class GroupHealthReportDetails extends Component {
     }
 
     render() {
-        let {provider} = this.state; console.log(this.state.providerData,'this.state.providerData.')
+        let {provider} = this.state;
 
         return (
             <Container
@@ -177,11 +133,11 @@ class GroupHealthReportDetails extends Component {
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             {/* <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div> */}
-                            <div className="tc-subtitle">{this.state.lead.plan_title || this.state.providerData.subtitle}</div>
+                            <div className="tc-subtitle">{capitalizeFirstLetter(this.state.lead.provider)}</div>
                         </div>
 
                         <div className="tc-right">
-                            <img src={require(`assets/${this.state.providerData.logo_card}`)} alt="" />
+                        <img style={{ width: 50 }} src={this.state.lead.logo} alt="" />
                         </div>
                     </div>
 
@@ -268,7 +224,7 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.sum_assured} 
+                                    {this.state.lead.total_amount} 
                                 </div>
                             </div>
                         </div>
