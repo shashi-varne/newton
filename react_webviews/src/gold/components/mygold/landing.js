@@ -61,7 +61,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: true, // to manage offer carousel
+      showOffers: false, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -178,7 +178,7 @@ class GoldSummary extends Component {
         link: '',
         terms: gold_offer_terms_safegold_november,
         key: 'safegold_november',
-        canShow: true
+        canShow: false
       },
     ];
 
