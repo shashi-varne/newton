@@ -39,6 +39,7 @@ class PersonalDetails extends Component {
       screen_name: "personal_details_screen",
       form_data: {},
       confirm_details: false,
+      details_changed: "no",
     };
 
     this.initialize = initialize.bind(this);
@@ -103,10 +104,12 @@ class PersonalDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "personal_details",
+        screen_name: "kyc_personal_details",
+        details_changed: this.state.details_changed,
+        ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
     };
 
@@ -119,19 +122,25 @@ class PersonalDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let { form_data, details_changed } = this.state;
 
     if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
 
+    if (this.state.confirm_details) {
+      details_changed = 'yes'
+    }
+
     this.setState({
       form_data: form_data,
+      details_changed: details_changed,
     });
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data } = this.state;
     let keys_to_check = [
       "first_name",
@@ -164,6 +173,7 @@ class PersonalDetails extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"

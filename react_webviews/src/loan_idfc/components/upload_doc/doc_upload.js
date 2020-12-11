@@ -18,6 +18,7 @@ import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { bytesToSize } from "utils/validators";
 import Input from "../../../common/ui/Input";
+import { element } from "prop-types";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -166,6 +167,25 @@ class DocumentUpload extends Component {
     }
   };
 
+  sendEvents(user_action) {
+    let type = (this.state.type === "open_camera" ? "camera" : "gallery") || "";
+    let eventObj = {
+      event_name: "idfc_lending",
+      properties: {
+        user_action: user_action,
+        screen_name: `${this.state.docList.category_name} doc` || "doc_upload",
+        doc_type: this.state.form_data.doc_name,
+        type: type,
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
     if (getConfig().generic_callback) {
@@ -229,6 +249,7 @@ class DocumentUpload extends Component {
     this.setState({
       form_data: form_data,
       totalUpload: totalUpload,
+
     });
   };
 
@@ -586,6 +607,7 @@ class DocumentUpload extends Component {
   }
 
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate("doc-list");
   };
 
@@ -612,6 +634,7 @@ class DocumentUpload extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title={this.state.docList.category_name}
         buttonTitle="CONTINUE"

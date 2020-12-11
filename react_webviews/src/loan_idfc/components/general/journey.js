@@ -209,11 +209,12 @@ class JourneyMap extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "jifkjd",
+        screen_name: "journey_map",
         stage: data.stage,
+        summary_selected_for: data.summary_selected_for || "",
       },
     };
     if (user_action === "just_set_events") {
@@ -240,19 +241,26 @@ class JourneyMap extends Component {
   handleClick = (id) => {
     let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
+
+    let selected_journey = this.state.journeyData.options.find((data) => data.id === id);
+    let stage = selected_journey.titleCompleted.toLowerCase();
+    
     // ---step-1
     if (id === "basic_details") {
-      this.sendEvents("summary", { stage: "basic-details" });
+      this.sendEvents("summary", {stage: stage, summary_selected_for: stage});
       this.navigate("application-summary");
     }
     // ---step-2
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
+        this.sendEvents('next', {stage: stage});
         this.getCkycState();
       }
       if (index > "1") {
+        this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
         this.navigate("ckyc-summary");
       } else {
+        this.sendEvents('next', {stage: stage});
         this.updateApplication({
           idfc_loan_status: "ckyc",
         });
@@ -260,6 +268,7 @@ class JourneyMap extends Component {
     }
     // ---step-3
     if (id === "income_details") {
+      this.sendEvents('next', {stage: stage});
       if (idfc_loan_status === "idfc_0.5_accepted") {
         this.get05Callback();
       } else if (idfc_loan_status === "idfc_1.0_accepted") {
@@ -278,18 +287,21 @@ class JourneyMap extends Component {
     }
     // ---step-4
     if (id === "document_upload") {
+      this.sendEvents('next', {stage: stage});
       this.navigate(next_state);
     }
 
     // ---step-5
     if (id === "sanction_and_disbursal") {
-      this.navigate("reports");
+      this.sendEvents('next', {stage: stage});
+      this.navigate('reports')
     }
   };
   render() {
     let { idfc_loan_status, index, first_name, vendor_info } = this.state;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         noFooter={true}
         headerData={{

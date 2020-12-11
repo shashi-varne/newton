@@ -58,10 +58,11 @@ class EligibleLoan extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "address",
+        "screen_name": 'loan_offer',
+        offer_selected: this.state.checked=== 'default_tenor' ? 'default' : 'customised',
       },
     };
 
@@ -108,6 +109,7 @@ class EligibleLoan extends Component {
     let ROI = (vendor_info.ROI/100) * 100;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"

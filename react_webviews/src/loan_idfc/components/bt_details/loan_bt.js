@@ -78,12 +78,14 @@ class LoanBtDetails extends Component {
     });
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "address",
+        screen_name: "select_bt",
+        no_of_loans_selected: data.no_of_loans_selected,
+        skipped_screen: data.no_of_loans_selected !==0 ? "no" : "yes",
       },
     };
 
@@ -153,7 +155,7 @@ class LoanBtDetails extends Component {
 
     this.sendEvents('next', { no_of_cards_entered: form_checked.length, });
     this.updateApplication({
-      bt_selection: this.state.form_data.filter((data) => data.is_selected),
+      bt_selection: form_checked,
     });
   };
 
@@ -172,6 +174,7 @@ class LoanBtDetails extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Select for balance transfer"
         buttonTitle={
