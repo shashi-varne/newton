@@ -61,7 +61,7 @@ class FinalOffer extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="Final loan application submitted"
+        title="Loan application submitted"
         events={this.sendEvents("just_set_events")}
         handleClick={this.handleClick}
         buttonTitle="CHECK REPORT"

@@ -10,7 +10,7 @@ import {
   numDifferentiationInr,
   changeNumberFormat,
   formatAmountInr,
-  inrFormatDecimal
+  inrFormatDecimal,
 } from "utils/validators";
 
 class EligibleLoan extends Component {
@@ -91,10 +91,11 @@ class EligibleLoan extends Component {
     form_data.amount_required_error = "";
 
     let P = value;
-    let r = (vendor_info.ROI/100)/12;
+    let r = vendor_info.ROI / 1200;
     let n = vendor_info.netTenor;
 
-    form_data.emi_amount = P*r*(Math.pow(1+r, n))/((Math.pow(1+r, n))-1);
+    form_data.emi_amount =
+      (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
 
     this.setState({
       form_data: form_data,
@@ -107,6 +108,8 @@ class EligibleLoan extends Component {
     if (this.state.checked === "default_tenor") {
       form_data.amount_required = vendor_info.displayOffer;
       form_data.amount_required_error = "";
+    } else {
+      form_data.maxAmount = vendor_info.displayOffer;
     }
 
     let keys_to_check = ["amount_required"];
@@ -180,7 +183,7 @@ class EligibleLoan extends Component {
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
                     <div className="sub-title">
-                      {formatAmountInr(vendor_info.EMIAmount)}/month
+                      {formatAmountInr(vendor_info.maxAllowedEMI)}/month
                     </div>
                   </div>
                   <div className="sub-content-right">
@@ -222,7 +225,12 @@ class EligibleLoan extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.amount_required_error}
-                  helperText={`Min ₹1 lakh to max ₹${changeNumberFormat(vendor_info.displayOffer || "0")}`}
+                  helperText={
+                    this.state.form_data.amount_required_error ||
+                    `Min ₹1 lakh to max ₹${changeNumberFormat(
+                      vendor_info.displayOffer || "0"
+                    )}`
+                  }
                   type="number"
                   width="40"
                   label="Loan amount"
@@ -249,7 +257,9 @@ class EligibleLoan extends Component {
             </FormControl>
             <div className="estimated-emi">
               <div className="title">Estimated EMI</div>
-              <div className="emi">{inrFormatDecimal(this.state.form_data.emi_amount || "0")}/month</div>
+              <div className="emi">
+                {inrFormatDecimal(this.state.form_data.emi_amount || "0")}/month
+              </div>
             </div>
           </div>
         </div>

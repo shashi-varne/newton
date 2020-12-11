@@ -638,10 +638,15 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  if (form_data.amount_required && form_data.amount_required < "100000") {
-    form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
+  if (form_data.maxAmount && form_data.amount_required > form_data.maxAmount) {
+    form_data.amount_required_error = "amount cannot be greater than max loan amount";
     canSubmitForm = false;
   }
+
+  // if (form_data.amount_required && form_data.amount_required < "100000") {
+  //   form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
+  //   canSubmitForm = false;
+  // }
 
   if (form_data.dob && !isValidDate(form_data.dob)) {
     form_data.dob_error = "Please enter valid dob";
