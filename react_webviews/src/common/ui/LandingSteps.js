@@ -32,8 +32,6 @@ class LandingStepsClass extends Component {
 
   render() {
 
-    console.log(this.props)
-
     return (
 
       <div className="common-landing-steps" style={{ border: 'none', ...this.props.style }}>

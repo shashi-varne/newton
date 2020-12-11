@@ -14,14 +14,6 @@ import { nativeCallback } from 'utils/native_callback';
 import HowToSteps from "../../../common/ui/HowToSteps";
 import LandingSteps from "../../../common/ui/LandingSteps";
 
-
-
-import goldOfferImageFisdom2 from 'assets/gold_offer2.png';
-import goldOfferImageMyway2 from 'assets/gold_offer2.png';
-
-
-import mmtcOfferImage from 'assets/MMTC-PAMP-offer.png';
-
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
@@ -73,7 +65,6 @@ class GoldSummary extends Component {
       bottom_carousel: true //to intechange check how and carousel
     }
 
-    this.renderOfferImages = this.renderOfferImages.bind(this);
   }
 
 
@@ -124,31 +115,32 @@ class GoldSummary extends Component {
 
     let offerImageDataBase = [
       {
-        src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
-        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://finity.in/candere-gold-2019/',
-        terms: '',
-        key: 'candere',
-        canShow: false
-      },
-      {
-        src: mmtcOfferImage,
-        link: '',
-        terms: gold_offer_terms_mmtc,
-        key: 'mmtc_offer',
-        canShow: false,
-        tableData: [
-          {'c1': '1000-1999', 'c2': '10'},
-          {'c1': '2000-4999', 'c2': '25'},
-          {'c1': '5000 and above', 'c2': '100'}
-        ]
-      },
-      {
         src: 'Gold_banner2.jpg',
         link: '',
         terms: gold_offer_terms_safegold_november,
         key: 'safegold_november',
         canShow: true
       },
+      {
+        src: 'gold_offer2.png',
+        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://finity.in/candere-gold-2019/',
+        terms: '',
+        key: 'candere',
+        canShow: true //remove
+      },
+      {
+        src: 'gold_offer2.png',
+        link: '',
+        terms: gold_offer_terms_mmtc,
+        key: 'mmtc_offer',
+        canShow: true,// remove
+        tableData: [
+          {'c1': '1000-1999', 'c2': '10'},
+          {'c1': '2000-4999', 'c2': '25'},
+          {'c1': '5000 and above', 'c2': '100'}
+        ]
+      }
+      
     ];
 
     let offerImageData = [];
@@ -332,7 +324,7 @@ class GoldSummary extends Component {
     }
   }
 
-  handleClickOffer(offer, index) {
+  handleClickOffer = (offer, index) => {
 
     this.sendEvents('next', 'marketing_banner', index);
 
@@ -362,7 +354,7 @@ class GoldSummary extends Component {
     )
   }
 
-  renderOfferImages(props, index) {
+  renderOfferImages = (props, index) => {
     return (
       <div key={index} onClick={() => this.handleClickOffer(props, index)} className="gold-offer-slider">
         <img className="gold-offer-slide-img"
@@ -572,6 +564,7 @@ class GoldSummary extends Component {
                 CarouselImg={this.state.offerImageData}
                 callbackFromParent={this.carouselSwipe_count}
                 selectedIndexvalue={this.state.selectedIndex}
+                handleClick={this.handleClickOffer}
               />
             </div>
       )

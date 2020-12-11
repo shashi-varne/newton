@@ -30,7 +30,11 @@ class ReactResponsiveCarousel extends Component {
 
   renderOfferImages = (props, index) => {
       return (
-        <div key={index} className="generic-carousel">
+        <div key={index} className="generic-carousel" onClick={() => {
+          if(this.props.handleClick) {
+            this.props.handleClick(props, index);
+          }
+        }}>
           <Imgc className="offer-slide-img"
             src={this.props.directImgLink ? props :  require(`assets/${props.src}`)} alt="Gold Offer"
             style={{minHeight:170}}
