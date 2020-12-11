@@ -85,10 +85,10 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {
-      form_data.amount_required = "4000000";
+      form_data.amount_required = vendor_info.displayOffer;
       form_data.amount_required_error = "";
     }
 
@@ -118,7 +118,7 @@ class EligibleLoan extends Component {
       >
         <div className="eligible-loan">
           <div className="subtitle">
-            Woo-hoo! IDFC is offering you a personal loan of ₹40 lacs
+            Woo-hoo! IDFC is offering you a personal loan of ₹{changeNumberFormat(vendor_info.displayOffer)} lacs
           </div>
 
           <div

@@ -47,7 +47,7 @@ class PerfiosStatus extends Component {
       screen_name: "perfios_state",
       commonMapper: {},
       perfios_state: "",
-      count: 0
+      count: 0,
     };
 
     this.initialize = initialize.bind(this);
@@ -123,14 +123,22 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "bypass") {
-      this.submitApplication({}, "one", "", "eligible-loan");
+      if (bt_eligible) {
+        this.navigate("bt-info");
+      } else {
+        this.submitApplication({}, "one", "", "eligible-loan");
+      }
     }
 
     if (perfios_state === "failure") {
-      let body = {
-        perfios_state: "init",
-      };
-      this.updateApplication(body, "income-details");
+      if (bt_eligible) {
+        this.navigate("bt-info");
+      } else {
+        let body = {
+          perfios_state: "init",
+        };
+        this.updateApplication(body, "income-details");
+      }
     }
   };
 
