@@ -129,7 +129,7 @@ class PersonalDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    if (name === 'dob' && this.state.confirm_details) {
+    if (this.state.confirm_details) {
       details_changed = 'yes'
     }
 

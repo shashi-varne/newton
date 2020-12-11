@@ -131,7 +131,7 @@ class AddressDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    if (name === 'permanent_address2' && this.state.confirm_details) {
+    if (this.state.confirm_details) {
       permanent_address_edited = 'yes'
     }
 
