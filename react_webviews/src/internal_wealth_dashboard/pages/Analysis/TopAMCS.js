@@ -10,7 +10,7 @@ const TopAMCS = ({ topAMCs }) => {
         error={isEmpty(topAMCs)}
       >
         <div className='iwd-analysis-top-amcs'>
-          {topAMCs.map(({ amc_logo: logo, amc_name: name, share: percentage }) => (
+          {topAMCs?.map(({ amc_logo: logo, amc_name: name, share: percentage }) => (
             <div className='iwd-analysis-amc' key={name}>
               <img src={logo} alt={name} className='iwd-analysis-amc-logo' />
               <main>

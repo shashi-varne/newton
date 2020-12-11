@@ -1820,15 +1820,15 @@ $background: #f9f9f9;
   .iwd-statements-container {
     align-items: flex-start;
     margin-top: 35px;
+    height: auto;
 
-    .iwd-transaction-pagination {
-      margin-bottom: 2.5em;
-    }
+ 
 
     // Statements Page
 
     .iwd-transaction-container {
       height: 75vh;
+      padding-bottom: 30px;
     }
     .iwd-statement-transaction {
       margin-top: 0;

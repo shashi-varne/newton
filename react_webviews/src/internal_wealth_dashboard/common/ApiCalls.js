@@ -190,7 +190,6 @@ export const overview = async (params) => {
   try {
     const res = await Api.get('/api/invest/reportv4/portfolio/summary', {
       ...params,
-      user_id: '4934000205365249',
       platform,
     });
 
@@ -235,7 +234,6 @@ export const portfolioRisk = async (params = {}) => {
     if (boot) {
       const res = await Api.get('api/reports/portfolio-risk', {
         ...params,
-        user_id: '4934000205365249',
       });
 
       if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -261,7 +259,6 @@ export const holdings = async (params = {}) => {
   try {
     const res = await Api.get('api/invest/reportv4/portfolio/funds', {
       ...params,
-      user_id: '4934000205365249',
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -282,7 +279,7 @@ export const holdings = async (params = {}) => {
 
 export const getFundDetail = async (params = {}) => {
   try {
-    const res = await Api.get('api/reports/fund-details', { ...params, user_id: '4934000205365249' });
+    const res = await Api.get('api/reports/fund-details', { ...params });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -302,7 +299,7 @@ export const getFundDetail = async (params = {}) => {
 
 export const fetchPortfolioAnalysis = async (params = {}) => {
   try {
-    const res = await Api.post('api/reports/portfolio-analysis?user_id=4934000205365249', {
+    const res = await Api.post('api/reports/portfolio-analysis', {
       ...params,
     });
 
@@ -531,7 +528,6 @@ export const getTransactions = async (params = {}) => {
   try {
     const res = await Api.get('api/invest/transactionv4', {
       ...params,
-      user_id: '4934000205365249',
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
@@ -552,7 +548,7 @@ export const getTransactions = async (params = {}) => {
 
 export const fetchPortfolioFundNames = async () => {
   try {
-    const res = await Api.get('api/reports/portfolio-fund-names', { user_id: '4934000205365249' });
+    const res = await Api.get('api/reports/portfolio-fund-names');
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -572,7 +568,7 @@ export const fetchPortfolioFundNames = async () => {
 
 export const fetchGainsElssYears = async () => {
   try {
-    const res = await Api.get('api/iam/myaccount', { user_id: '4934000205365249' });
+    const res = await Api.get('api/iam/myaccount');
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -616,7 +612,6 @@ export const downloadTransactionReport = async (type, params = {}) => {
   try {
     const res = await Api.get(`api/rta/download/account/summary/${type}`, {
       ...params,
-      user_id: '4934000205365249',
     });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
