@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
+import { nativeCallback } from "utils/native_callback";
 
 const commonMapper = {
   failure: {
@@ -11,6 +12,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
+    status: "verification failed 1",
   },
   success: {
     top_icon: "ils_loan_status",
@@ -19,6 +21,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    status: "success",
   },
   blocked: {
     top_icon: "ils_loan_failed",
@@ -27,6 +30,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    status: "verification failed 2",
   },
   bypass: {
     top_icon: "ils_loan_failed",
@@ -35,6 +39,7 @@ const commonMapper = {
     icon: "close",
     // cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    status: "verification failed 2",
   },
 };
 
@@ -77,10 +82,32 @@ class PerfiosStatus extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   };
 
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "idfc_lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "bank_statement_verification",
+        status: this.state.commonMapper.status,
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = () => {
+    if(this.state.commonMapper.button_title === 'RETRY')
+      this.sendEvents('retry');
+    else
+      this.sendEvents('next');
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {

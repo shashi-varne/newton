@@ -37,11 +37,10 @@ class FinalOffer extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "loan eligibility",
-        stage: "eligible",
+        screen_name: "application_submitted",
       },
     };
 
@@ -53,12 +52,14 @@ class FinalOffer extends Component {
   }
 
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate('reports')
   }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Final loan application submitted"
         events={this.sendEvents("just_set_events")}

@@ -120,12 +120,13 @@ class ApplicationSummary extends Component {
     );
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "application form",
+        screen_name: "summary",
+        stage: "basic details uploaded",
       },
     };
 
@@ -137,6 +138,7 @@ class ApplicationSummary extends Component {
   }
 
   handleClick = () => {
+    this.sendEvents('next');
     this.navigate("application-summary");
   };
 
@@ -184,9 +186,7 @@ class ApplicationSummary extends Component {
             {this.state.idfc_loan_status === "basic_details_uploaded" && (
               <div
                 onClick={() => {
-                  this.sendEvents("next", {
-                    edit_clicked: props.title.split(" ")[0],
-                  });
+                  this.sendEvents("edit");
                   this.openEdit(props.edit_state);
                 }}
                 className="generic-page-button-small"
@@ -233,10 +233,14 @@ class ApplicationSummary extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Basic detail Summary"
         buttonTitle="OKAY"
-        handleClick={() => this.navigate('journey')}
+        handleClick={() => {
+          this.sendEvents('next');
+          this.navigate('journey')
+        }}
       >
         <div className="loan-form-summary">
           <div className="bottom-content">

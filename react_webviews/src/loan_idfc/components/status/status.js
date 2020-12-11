@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-// import { nativeCallback } from "utils/native_callback";
+import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import ContactUs from "../../../common/components/contact_us";
+
 
 const commonMapper = {
   idfc_null_failed: {
@@ -14,6 +15,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     failed: true,
+    screenName: "system_error",
   },
   "idfc_callback_rejected": {
     top_icon: "ils_loan_failed",
@@ -30,6 +32,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   "idfc_0.5_submitted": {
     top_icon: "ils_loan_status",
@@ -37,6 +40,7 @@ const commonMapper = {
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
+    screenName: "profile_success",
   },
   "idfc_0.5_accepted": {
     top_icon: "ils_loan_status",
@@ -44,6 +48,7 @@ const commonMapper = {
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/home",
+    screenName: "profile_success",
   },
   idfc_cancelled: {
     top_icon: "ils_loan_failed",
@@ -52,6 +57,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   "idfc_0.5_failed": {
     top_icon: "error_illustration",
@@ -60,6 +66,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after loan requirement details",
   },
   "idfc_1.1_failed": {
     top_icon: "error_illustration",
@@ -68,6 +76,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after loan offer",
   },
   "idfc_1.7_failed": {
     top_icon: "error_illustration",
@@ -76,7 +86,18 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after additional details",
   },
+  // "idfc_1.1_accepted": {
+  //   top_icon: "ils_loan_failed",
+  //   top_title: "Application Rejected",
+  //   button_title: "OK",
+  //   icon: "close",
+  //   cta_state: "/loan/idfc/home",
+  //   close_state: "/loan/idfc/home",
+  //   screenName: "application_rejected",
+  // },
   "Salary receipt mode": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
@@ -84,6 +105,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
+    stage: "after basic details",
   },
   Salary: {
     top_icon: "ils_loan_failed",
@@ -92,6 +115,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
+    stage: "after basic details",
   },
   Age: {
     top_icon: "ils_loan_failed",
@@ -100,6 +125,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
+    stage: "after basic details",
   },
   is_dedupe: {
     top_icon: "ils_loan_failed",
@@ -108,6 +135,7 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
   },
   "idfc_1.0_failed": {
     top_icon: "error_illustration",
@@ -116,6 +144,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "system_error",
+    stage: "after credit card details",
   },
 };
 
@@ -178,11 +208,31 @@ class LoanStatus extends Component {
     }
   };
 
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "idfc_lending",
+      properties: {
+        user_action: user_action,
+        screen_name: this.state.commonMapper.screenName,
+        rejection_reason: this.state.rejection_reason || "",
+        stage: this.state.commonMapper.stage || "",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   goBack = () => {
+    this.sendEvents('back');
     this.navigate(this.state.commonMapper.close_state);
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let {
       commonMapper,
       vendor_application_status,
@@ -250,16 +300,16 @@ class LoanStatus extends Component {
           {rejection_reason === "Salary receipt mode" && (
             <div className="subtitle">
               We’re unable to approve your loan request because as per IDFC’s
-              loan policy your monthly salary does not qualify you for a
-              personal loan at this point.
+              loan policy your salary receipt mode does not make you eligible
+              for a personal loan at this point.
             </div>
           )}
 
           {rejection_reason === "Salary" && (
             <div className="subtitle">
               We’re unable to approve your loan request because as per IDFC’s
-              loan policy your salary receipt mode does not make you eligible
-              for a personal loan at this point.
+              loan policy your monthly salary does not qualify you for a
+              personal loan at this point.
             </div>
           )}
 
