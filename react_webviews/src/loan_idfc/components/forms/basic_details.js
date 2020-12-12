@@ -54,7 +54,6 @@ class BasicDetails extends Component {
     let personal_info = lead.personal_info || {};
     let professional_info = lead.professional_info || {};
     let application_info = lead.application_info || {};
-    let vendor_info = lead.vendor_info || {};
 
     let form_data = {
       dob: timeStampToDate(personal_info.dob || ""),

@@ -5,7 +5,6 @@ import Attention from "../../../common/ui/Attention";
 import { initialize } from "../../common/functions";
 import { bytesToSize } from "utils/validators";
 import { getConfig } from "utils/functions";
-import { getBase64 } from "utils/functions";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
 import toast from "../../../common/ui/Toast";
@@ -83,7 +82,16 @@ class UploadBank extends Component {
     });
   }
 
-  onload = () => {};
+  onload = () => {
+    let loaderData = {
+      title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
+      subtitle: "It may take 10 to 15 seconds!",
+    };
+    this.setState({
+      loaderData: loaderData,
+      loaderWithData: true,
+    });
+  };
 
   renderNotes = () => {
     let notes = [
@@ -330,7 +338,7 @@ class UploadBank extends Component {
   handleChange = (name, doc_id = "") => (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, password, documents } = this.state;
+    let { form_data, documents } = this.state;
 
     if (!name) {
       if (!dobFormatTest(value)) {
@@ -363,7 +371,7 @@ class UploadBank extends Component {
     this.sendEvents("next");
     let { form_data } = this.state;
 
-    let { bank_name, start_date, end_date } = this.state.form_data;
+    let { bank_name } = this.state.form_data;
     let keys_to_check = ["bank_name", "start_date", "end_date"];
 
     let keysMapper = {
@@ -401,7 +409,7 @@ class UploadBank extends Component {
           `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_name}`
         );
 
-        const { result, status_code: status } = res.pfwresponse;
+        const { result } = res.pfwresponse;
 
         if (result) {
           console.log(result);
@@ -418,7 +426,7 @@ class UploadBank extends Component {
   };
 
   render() {
-    let { documents, confirmed, count, isApiRunning } = this.state;
+    let { documents, confirmed, isApiRunning } = this.state;
 
     return (
       <Container
@@ -431,6 +439,8 @@ class UploadBank extends Component {
           progressHeaderData: this.state.progressHeaderData,
         }}
         handleClick={this.handleClick}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="upload-bank-statement">
           <Attention content={this.renderNotes()} />

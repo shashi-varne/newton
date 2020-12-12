@@ -84,14 +84,10 @@ class CommonRenderFaqs extends Component {
             >
                 {this.state.renderData.steps.options.map((option, index) => {
                     let isSelected = this.state.selectedIndex === index;
-                    return <div key={index} style={{
-                        marginBottom: this.state.renderData.steps.options.length - 1 === index ? "25px" : null,
-                        borderBottom: option.is_table && "1px solid #d7d4d4",
-                    }} >
+                    return <div key={index}
+                        className={option.is_table && 'render-faqs-table-content'}
+                    >
                         <div className="render-faqs-title"
-                            style={{
-                                marginTop: !index ? 0 : "15px"
-                            }}
                             onClick={() => option.is_table && this.showHideSteps(index)}
                         >
                             {option.header_title}

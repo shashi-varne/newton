@@ -3,8 +3,6 @@ import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { initialize } from '../../common/functions';
 import {  formatAmountInr } from "../../../utils/validators";
-import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 
 class LoanEligible extends Component {
   constructor(props) {

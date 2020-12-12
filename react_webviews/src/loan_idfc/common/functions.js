@@ -154,7 +154,7 @@ export async function getDocumentList() {
     const res = await Api.get(
       `relay/api/loan/idfc/list/document/${this.state.application_id}`
     );
-    const { result, status_code: status } = res.pfwresponse;
+    const { result } = res.pfwresponse;
 
     this.setState(
       {
@@ -475,7 +475,7 @@ export async function submitApplication(
       show_loader: true,
     });
 
-    let screens = ["address_details", "requirement_details_screen"];
+    let screens = ["address_details", "requirement_details_screen", "additional_details", "credit_bt", "eligible_loan", "bank_upload"];
     this.setState({
       show_loader: true,
       loaderWithData: screens.includes(this.state.screen_name),
