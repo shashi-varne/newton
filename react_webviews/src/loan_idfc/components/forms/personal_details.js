@@ -27,8 +27,10 @@ const gender_options = [
 const genderMapper = {
   M: "Male",
   F: "Female",
+  O: "Others",
   Male: "Male",
   Female: "Female",
+  Others: "Others"
 };
 
 class PersonalDetails extends Component {

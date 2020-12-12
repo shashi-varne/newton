@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { formatMonthandYear, dobFormatTest, isValidMonthYear, formatAmountInr } from "utils/validators";
+import { formatMonthandYear, dobFormatTest, isValidMonthYear, numDifferentiationInr, formatAmountInr } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 
 class LoanBtDetails extends Component {
@@ -318,7 +318,10 @@ class LoanBtDetails extends Component {
                           this.state.form_data[index].principalOutstanding_error
                         }
                         helperText={
-                          this.state.form_data[index].principalOutstanding_error
+                          this.state.form_data[index].principalOutstanding_error ||
+                          numDifferentiationInr(
+                            this.state.form_data[index].principalOutstanding
+                          )
                         }
                         type="number"
                         width="40"

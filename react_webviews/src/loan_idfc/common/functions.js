@@ -443,8 +443,11 @@ export async function get07State() {
   let that = this;
 
   setTimeout(function () {
+    
     if (result.perfios_state === "bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
+    } else if (result.idfc_07_state === "failed") {
+      this.navigate('error')
     } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
       let body = {
         idfc_loan_status: "bt_init",

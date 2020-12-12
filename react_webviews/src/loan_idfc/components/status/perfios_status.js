@@ -111,7 +111,9 @@ class PerfiosStatus extends Component {
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
-      if (!bt_eligible && idfc_07_state === "success") {
+      if (idfc_07_state === "failed") {
+        this.navigate('error')
+      } else if (!bt_eligible && idfc_07_state === "success") {
         this.setState(
           {
             next_state: "eligible-loan",
