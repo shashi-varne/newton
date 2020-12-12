@@ -7,7 +7,6 @@ import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
 import {
-  numDifferentiationInr,
   changeNumberFormat,
   formatAmountInr,
   inrFormatDecimal,

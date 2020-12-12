@@ -475,7 +475,14 @@ export async function submitApplication(
       show_loader: true,
     });
 
-    let screens = ["address_details", "requirement_details_screen", "additional_details", "credit_bt", "eligible_loan", "bank_upload"];
+    let screens = [
+      "address_details",
+      "requirement_details_screen",
+      "additional_details",
+      "credit_bt",
+      "eligible_loan",
+      "bank_upload",
+    ];
     this.setState({
       show_loader: true,
       loaderWithData: screens.includes(this.state.screen_name),
@@ -639,7 +646,8 @@ export async function formCheckUpdate(
   }
 
   if (form_data.maxAmount && form_data.amount_required > form_data.maxAmount) {
-    form_data.amount_required_error = "amount cannot be greater than max loan amount";
+    form_data.amount_required_error =
+      "amount cannot be greater than max loan amount";
     canSubmitForm = false;
   }
 
@@ -687,8 +695,9 @@ export async function netBanking(url) {
   );
 
   var pgLink = url;
-  // eslint-disable-next-line
+
   pgLink +=
+    // eslint-disable-next-line
     (pgLink.match(/[\?]/g) ? "&" : "?") +
     "plutus_redirect_url=" +
     plutus_redirect_url;
