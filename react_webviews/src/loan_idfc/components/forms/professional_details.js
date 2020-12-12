@@ -5,11 +5,7 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import {
-  numDifferentiationInr,
-  capitalizeFirstLetter,
-  capitalize,
-} from "utils/validators";
+import { numDifferentiationInr } from "utils/validators";
 
 class ProfessionalDetails extends Component {
   constructor(props) {

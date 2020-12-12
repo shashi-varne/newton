@@ -3,12 +3,9 @@ import toast from "../../../common/ui/Toast";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { StorageService } from "utils/validators";
 import { getConfig } from "../../../utils/functions";
 import camera_green from "assets/take_pic_green.svg";
 import gallery_green from "assets/go_to_gallery_green.svg";
-import text_error_icon from "assets/text_error_icon.svg";
-import { nativeCallback } from "utils/native_callback";
 import { getBase64 } from "utils/functions";
 import Api from "utils/api";
 import SVG from "react-inlinesvg";
@@ -16,9 +13,7 @@ import plus from "assets/plus.svg";
 import camera_grey from "assets/take_pic_grey.svg";
 import $ from "jquery";
 import { storageService } from "../../../utils/validators";
-import { bytesToSize } from "utils/validators";
-import Input from "../../../common/ui/Input";
-import { element } from "prop-types";
+import { nativeCallback } from "utils/native_callback";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -364,7 +359,6 @@ class DocumentUpload extends Component {
     e.preventDefault();
 
     let { image_data, category, doc_type } = this.state;
-    let id = e.target.id;
     image_data[doc_type] = {};
     let doc_name = this.state.form_data.doc_name;
 
@@ -400,8 +394,6 @@ class DocumentUpload extends Component {
   uploadDocument = async (file, type) => {
     let { image_data, totalUpload, disbableButton } = this.state;
 
-    let ext = file.type.split("/")[1];
-
     const data = new FormData();
     data.append("doc_type", file.doc_name);
     data.append("file", file, file.name);
@@ -414,7 +406,7 @@ class DocumentUpload extends Component {
         data
       );
 
-      const { result, status_code: status } = res.pfwresponse;
+      const { status_code: status } = res.pfwresponse;
 
       if (status === 200) {
         if (totalUpload < 3) {
@@ -613,11 +605,8 @@ class DocumentUpload extends Component {
 
   render() {
     let {
-      docList,
-      selectedIndex,
       image_data,
       documents,
-      docs,
       totalUpload,
       disbableButton,
     } = this.state;

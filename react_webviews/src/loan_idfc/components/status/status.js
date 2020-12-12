@@ -170,16 +170,7 @@ class LoanStatus extends Component {
   onload = () => {
     let vendor_application_status = this.state.vendor_application_status;
     let application_status = this.state.application_status;
-    let pan_status = this.state.pan_status;
-    let ckyc_status = this.state.ckyc_status;
-    let idfc_05_callback = this.state.idfc_05_callback;
-    let perfios_status = this.state.perfios_status;
-    let otp_verified = this.state.otp_verified;
-    let idfc_07_state = this.state.idfc_07_state;
-    let bt_selected = this.state.bt_selected;
-    let idfc_10_callback = this.state.idfc_10_callback;
     let rejection_reason = this.state.rejection_reason;
-    idfc_05_callback;
     let first_name = this.state.first_name;
     let is_dedupe = this.state.is_dedupe;
 
@@ -236,9 +227,6 @@ class LoanStatus extends Component {
     let {
       commonMapper,
       vendor_application_status,
-      application_status,
-      bt_eligible,
-      perfios_state,
       is_dedupe
     } = this.state;
     if (

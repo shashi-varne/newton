@@ -9,7 +9,6 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from "material-ui/Dialog";
-import { withStyles } from "@material-ui/core/styles";
 import logo_safegold from "assets/logo_safegold.svg";
 import logo_mmtc from "assets/logo_mmtc.svg";
 import down_arrow from "assets/down_arrow.svg";
