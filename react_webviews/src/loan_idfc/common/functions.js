@@ -615,6 +615,8 @@ export async function formCheckUpdate(
     permanent_city: "city",
     permanent_state: "state",
     amount_required: "loan amount",
+    purpose: "purpose",
+    tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
     city: "city",
@@ -651,10 +653,10 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  // if (form_data.amount_required && form_data.amount_required < "100000") {
-  //   form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
-  //   canSubmitForm = false;
-  // }
+  if (form_data.amount_required && form_data.amount_required < "1000000") {
+    form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
+    canSubmitForm = false;
+  }
 
   if (form_data.dob && !isValidDate(form_data.dob)) {
     form_data.dob_error = "Please enter valid dob";
