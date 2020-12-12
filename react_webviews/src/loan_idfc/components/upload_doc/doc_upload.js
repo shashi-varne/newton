@@ -13,6 +13,7 @@ import plus from "assets/plus.svg";
 import camera_grey from "assets/take_pic_grey.svg";
 import $ from "jquery";
 import { storageService } from "../../../utils/validators";
+import { nativeCallback } from "utils/native_callback";
 
 class DocumentUpload extends Component {
   constructor(props) {

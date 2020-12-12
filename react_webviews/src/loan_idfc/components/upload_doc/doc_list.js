@@ -126,9 +126,7 @@ class DocumentList extends Component {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: `${
-                    item.doc_checklist.length === 0 ? "right" : "space-between"
-                  }`,
+                  justifyContent:"space-between",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "flex-start" }}>
@@ -137,18 +135,18 @@ class DocumentList extends Component {
                     src={require(`assets/${this.state.productName}/account.svg`)}
                     alt=""
                   />
-                  {item.doc_checklist.length !== 0 && (
-                    <img
-                      style={{ margin: "-2px 0 -10px -22px" }}
-                      src={require(`assets/done.svg`)}
-                      alt=""
-                    />
-                  )}
+                  <img
+                    style={{ 
+                      margin: "-2px 0 -10px -22px",
+                      opacity: item.doc_checklist.length !== 0 ? 1 : 0
+                    }}
+                    src={require(`assets/done.svg`)}
+                    alt=""
+                  />
                 </div>
                 <div
                   style={{
                     width: `${getConfig().isMobileDevice ? "60%" : "70%"}`,
-                    marginLeft: `${item.doc_checklist.length === 0 && "15px"}`,
                   }}
                 >
                   {item.category_name}
@@ -160,7 +158,12 @@ class DocumentList extends Component {
                 </div>
 
                 {item.doc_checklist.length !== 0 && (
-                  <img src={require(`assets/edit_green.svg`)} alt="" />
+                  <img
+                    style={{
+                      opacity: item.doc_checklist.length !== 0 ? 1 : 0
+                    }} 
+                    src={require(`assets/edit_green.svg`)} 
+                    alt="" />
                 )}
               </div>
             </Card>
