@@ -158,14 +158,14 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "failure") {
-      if (bt_eligible) {
-        this.navigate("bt-info");
-      } else {
+      // if (bt_eligible) {
+      //   this.navigate("bt-info");
+      // } else {
         let body = {
           perfios_state: "init",
         };
         this.updateApplication(body, "income-details");
-      }
+      // }
     }
   };
 

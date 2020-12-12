@@ -443,12 +443,14 @@ export async function get07State() {
   let that = this;
 
   setTimeout(function () {
-    if (result.idfc_07_state === "triggered" && result.bt_eligible) {
+    if (result.perfios_state === "bypass") {
+      that.submitApplication({}, "one", "", "eligible-loan");
+    } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
       let body = {
         idfc_loan_status: "bt_init",
       };
       this.updateApplication(body, "bt-info");
-    } else if (result.idfc_07_state === "success") {
+    } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else {
       if (count < 20) {
@@ -653,8 +655,8 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  if (form_data.amount_required && form_data.amount_required < "1000000") {
-    form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
+  if (form_data.amount_required && parseInt(form_data.amount_required) < parseInt("100000")) {
+    form_data.amount_required_error = "Minimum loan amount should be ₹1 lakh";
     canSubmitForm = false;
   }
 
