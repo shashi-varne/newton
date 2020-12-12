@@ -256,8 +256,6 @@ class UploadBank extends Component {
       isApiRunning: true,
     });
 
-    console.log(documents[index]);
-
     if (curr_status.status === "delete") {
       documents[index].curr_status = "delete";
     }
@@ -428,7 +426,7 @@ class UploadBank extends Component {
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        disable={documents.length === 0 || isApiRunning}
+        disable={documents.length === 0 || isApiRunning || !confirmed}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
