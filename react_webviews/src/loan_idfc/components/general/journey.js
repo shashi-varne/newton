@@ -123,7 +123,7 @@ class JourneyMap extends Component {
           title: "Enter basic details",
           titleCompleted: "Basic details uploaded ",
           subtitle:
-            "Fill in personal and work details to get started with your loan application.",
+            "Fill in basic and work details to get started with your loan application.",
           status: index && index >= "0" ? "completed" : "init",
           id: "basic_details",
           cta: "SUMMARY",
