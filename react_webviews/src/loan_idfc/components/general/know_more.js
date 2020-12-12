@@ -34,7 +34,7 @@ class KnowMore extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "know_more",
@@ -57,6 +57,7 @@ class KnowMore extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     let params = {
       create_new:
         this.state.application_exists && this.state.otp_verified ? false : true,
@@ -94,6 +95,7 @@ class KnowMore extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Know More"
         buttonTitle={this.state.cta_title}

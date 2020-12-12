@@ -72,10 +72,12 @@ class BasicDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "basic_details",
+        screen_name: "personal_details",
+        employment_type: this.state.form_data.employment_type,
+        dob: this.state.form_data.dob,
       },
     };
 
@@ -127,6 +129,7 @@ class BasicDetails extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data, pan_state } = this.state;
     let keys_to_check = ["dob", "educational_qualification", "employment_type"];
     if (pan_state !== "success") {
@@ -139,6 +142,7 @@ class BasicDetails extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title={this.setEditTitle("Let's start by getting to know you a bit...")}
         buttonTitle="NEXT"

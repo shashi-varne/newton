@@ -49,10 +49,11 @@ class ReportDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'lending',
+      "event_name": 'idfc_lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan details'
+        "screen_name": 'loan_report',
+        status :this.state.vendor_info_ui.cssMapper.disc,
       }
     };
 

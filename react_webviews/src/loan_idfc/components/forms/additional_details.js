@@ -117,10 +117,10 @@ class AdditionalDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "professional",
+        screen_name: "additional_details",
       },
     };
 
@@ -145,6 +145,7 @@ class AdditionalDetails extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data } = this.state;
 
     let keys_to_check = [
@@ -161,6 +162,7 @@ class AdditionalDetails extends Component {
     let { employment_type } = this.state;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Additional details"
         buttonTitle="CONTINUE"

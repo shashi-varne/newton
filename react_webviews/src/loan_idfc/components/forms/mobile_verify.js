@@ -14,7 +14,8 @@ class MobileVerification extends Component {
     this.state = {
       show_loader: false,
       screen_name: 'mobile_verification',
-      mobile_no: ""
+      mobile_no: "",
+      terms_and_conditions_clicked: 'no',
     };
 
     this.initialize = initialize.bind(this);
@@ -28,10 +29,11 @@ class MobileVerification extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "otp",
+        screen_name: "mobile number verification",
+        't&c_clicked': this.state.terms_and_conditions_clicked,
       },
     };
 
@@ -80,6 +82,7 @@ class MobileVerification extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Mobile verification"
         buttonTitle="GET OTP"
@@ -133,7 +136,7 @@ class MobileVerification extends Component {
                 />
               </Grid>
               <Grid item xs={11}>
-                <div>
+                <div onClick={() => this.setState({terms_and_conditions_clicked : 'yes'})}>
                   <span>
                     I accept{" "}
                     <u style={{ color: "var(--primary)" }}>

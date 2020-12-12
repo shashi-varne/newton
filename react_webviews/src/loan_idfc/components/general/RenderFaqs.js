@@ -3,6 +3,7 @@ import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import Faqs from '../../../common/ui/Faqs';
+import { nativeCallback } from "utils/native_callback";
 class CommonRenderFaqs extends Component {
 
     constructor(props) {
@@ -50,12 +51,30 @@ class CommonRenderFaqs extends Component {
     }
 
     async handleClick() {
+        this.sendEvents('next');
         this.props.history.goBack();
     }
+
+    sendEvents(user_action, data = {}) {
+        let eventObj = {
+          event_name: "idfc_lending",
+          properties: {
+            user_action: user_action,
+            screen_name: "faq",
+          },
+        };
+    
+        if (user_action === "just_set_events") {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+      }
 
     render() {
         return (
             <Container
+                events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
                 buttonTitle={this.state.renderData.cta_title}
                 onlyButton={true}

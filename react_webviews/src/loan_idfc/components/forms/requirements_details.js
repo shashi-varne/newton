@@ -48,10 +48,10 @@ class LoanRequirementDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "personal",
+        screen_name: "loan_requirement_details",
       },
     };
 
@@ -88,6 +88,7 @@ class LoanRequirementDetails extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data } = this.state;
     let keys_to_check = [
       "amount_required",
@@ -101,6 +102,7 @@ class LoanRequirementDetails extends Component {
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Loan requirement details"
         buttonTitle="SUBMIT"

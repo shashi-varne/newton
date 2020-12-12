@@ -41,6 +41,7 @@ class DocumentList extends Component {
   };
 
   handleClick = async () => {
+    this.sendEvents('next');
     this.setState({
       show_loader: true
     })
@@ -66,12 +67,14 @@ class DocumentList extends Component {
     }
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action, data={}) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "upload_doc",
+        screen_name: "upload_docs",
+        docs_list : this.state.docList.map((category) => category.category_name),
+        doc_card_selected: data.doc_card_selected,
       },
     };
 
@@ -100,6 +103,7 @@ class DocumentList extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Upload documents"
         buttonTitle="CONTINUE"
@@ -113,7 +117,10 @@ class DocumentList extends Component {
             <Card
               style={{ marginTop: "20px" }}
               key={index}
-              onClick={() => this.handleCard(item.category)}
+              onClick={() => {
+                this.sendEvents('card_clicked', {doc_card_selected : item.category_name}); 
+                this.handleCard(item.category)
+              }}
             >
               <div
                 style={{

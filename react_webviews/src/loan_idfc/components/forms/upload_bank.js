@@ -115,11 +115,11 @@ class UploadBank extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "otp",
-        fileUploaded: false,
+        screen_name: "upload bank statement",
+        files_uploaded: this.state.documents.length,
       },
     };
 
@@ -370,6 +370,7 @@ class UploadBank extends Component {
   };
 
   handleClick = async () => {
+    this.sendEvents("next");
     let { form_data } = this.state;
 
     let { bank_name } = this.state.form_data;
@@ -431,6 +432,7 @@ class UploadBank extends Component {
 
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"

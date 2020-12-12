@@ -33,11 +33,10 @@ class LoanEligible extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      "event_name": 'lending',
+      "event_name": 'idfc_lending',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'loan eligibility',
-        "stage": 'eligible'
+        "screen_name": 'final_loan_offer',
       }
     };
 

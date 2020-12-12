@@ -58,10 +58,12 @@ class ProfessionalDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "professional",
+        screen_name: "professional_details",
+        salary_mode: this.state.form_data.salary_mode,
+        net_monthly_salary: this.state.form_data.net_monthly_salary,
       },
     };
 
@@ -87,6 +89,7 @@ class ProfessionalDetails extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data, employment_type } = this.state;
     let keys_to_check = ["constitution", "organisation"];
 
@@ -112,6 +115,7 @@ class ProfessionalDetails extends Component {
     let { employment_type } = this.state;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Enter your work details"
         buttonTitle="NEXT"
