@@ -55,7 +55,7 @@ const journeyMapper2 = {
   // },
   "idfc_1.0_failed": {
     index: "2",
-    next_state: "loan-requirement-details",
+    next_state: "eligible-loan",
   },
   "idfc_1.0_accepted": {
     index: "2",
@@ -273,6 +273,8 @@ class JourneyMap extends Component {
         this.get05Callback();
       } else if (idfc_loan_status === "idfc_1.0_accepted") {
         this.get10Callback();
+      } else if (idfc_loan_status === "idfc_1.0_failed") {
+        this.submitApplication({}, "one", "", "eligible-loan");
       } else {
         if (
           idfc_loan_status === "perfios" &&
