@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
@@ -170,7 +171,7 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              { inrFormatDecimal(Loan_Eligibility)}
+              { inrFormatDecimal((parseInt(Loan_Eligibility) < parseInt("100000")) ? "0" : Loan_Eligibility)}
             </div>
           </div>
 

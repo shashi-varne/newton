@@ -655,6 +655,7 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
+  // eslint-disable-next-line
   if (form_data.amount_required && parseInt(form_data.amount_required) < parseInt("100000")) {
     form_data.amount_required_error = "Minimum loan amount should be ₹1 lakh";
     canSubmitForm = false;
