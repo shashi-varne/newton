@@ -175,6 +175,10 @@
         padding: 5px;
       }
     }
+
+    .data {
+      flex-direction: column;
+    }
   }
 }
 
@@ -326,6 +330,14 @@
 }
 
 .basic-details {
+  .basic-details-subtitle {
+    font-weight: 500;
+    color: #0A1D32;
+    font-size: 15px;
+    line-height: 21px;
+    padding: 0 5px 15px 0;
+  }
+
   .sub-head {
     font-size: 13px;
     font-weight: 400;
@@ -336,7 +348,7 @@
   .employment-type {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-evenly;
   }
 
   .employment-card {

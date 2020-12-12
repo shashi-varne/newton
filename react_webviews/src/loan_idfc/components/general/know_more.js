@@ -110,20 +110,16 @@ class KnowMore extends Component {
 
           {tab_clicked === 'tab-1' && <div className="content">
             {features.content.map((item, index) => (
-              <div className="sub-pts" key={index} style={{
-                flexDirection: "column"
-              }}>
+              <div className="sub-pts data" key={index}>
                 <div>
                   <span className="count">{index + 1 + "."}</span>
                   <span className="subtitle">{item.data ? item.data : item}</span>
                 </div>
-                <div>
-                  {item.sub_data &&
-                    item.sub_data.map((element, index) => {
-                      return <div key={index} className="sub-data">{"- " + element}</div>
-                    })
-                  }
-                </div>
+                {item.sub_data &&
+                  item.sub_data.map((element, index) => {
+                    return <div key={index} className="sub-data">{"- " + element}</div>
+                  })
+                }
               </div>
             ))}
           </div>}
