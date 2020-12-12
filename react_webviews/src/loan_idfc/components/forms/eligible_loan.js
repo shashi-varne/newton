@@ -6,7 +6,12 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
-import { numDifferentiationInr, changeNumberFormat, formatAmountInr } from "utils/validators";
+import {
+  numDifferentiationInr,
+  changeNumberFormat,
+  formatAmountInr,
+  inrFormatDecimal,
+} from "utils/validators";
 
 class EligibleLoan extends Component {
   constructor(props) {
@@ -16,7 +21,7 @@ class EligibleLoan extends Component {
       screen_name: "eligible_loan",
       form_data: {},
       checked: "default_tenor",
-      vendor_info: {}
+      vendor_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -24,22 +29,31 @@ class EligibleLoan extends Component {
 
   componentWillMount() {
     this.initialize();
+  }
+
+  onload = () => {
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+
     let progressHeaderData = {
-      title: 'Income and loan offer',
+      title: "Income and loan offer",
       steps: [
         {
-          'title': 'Income details',
-          'status': 'completed'
+          title: "Income details",
+          status: "completed",
         },
         {
-          'title': 'BT transfer details',
-          'status': 'completed'
+          title: "Loan offer",
+          status: "init",
         },
-        {
-          'title': 'Loan offer',
-          'status': 'init'
-        }
-      ]
+      ],
+    };
+
+    if (vendor_info.bt_eligible) {
+      progressHeaderData.steps.splice(1, 0, {
+        title: "BT transfer details",
+        status: "completed",
+      });
     }
 
     this.setState({
@@ -66,8 +80,9 @@ class EligibleLoan extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        "screen_name": 'loan_offer',
-        offer_selected: this.state.checked=== 'default_tenor' ? 'default' : 'customised',
+        screen_name: "loan_offer",
+        offer_selected:
+          this.state.checked === "default_tenor" ? "default" : "customised",
       },
     };
 
@@ -80,10 +95,17 @@ class EligibleLoan extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let { form_data, vendor_info } = this.state;
 
     form_data.amount_required = value;
     form_data.amount_required_error = "";
+
+    let P = value;
+    let r = vendor_info.ROI / 1200;
+    let n = vendor_info.netTenor;
+
+    form_data.emi_amount =
+      (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
 
     this.setState({
       form_data: form_data,
@@ -91,18 +113,19 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
-    let { form_data } = this.state;
+    let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {
-      form_data.amount_required = "4000000";
+      form_data.amount_required = vendor_info.displayOffer;
       form_data.amount_required_error = "";
+    } else {
+      form_data.maxAmount = vendor_info.displayOffer;
     }
 
-    let keys_to_check = ["amount_required"]
+    let keys_to_check = ["amount_required"];
 
-    this.formCheckUpdate(keys_to_check, form_data, 'one_point_one', true);
-  }
+    this.formCheckUpdate(keys_to_check, form_data, "one_point_one", true);
+  };
 
   handleCheckbox = (name) => {
     this.setState({
@@ -112,23 +135,24 @@ class EligibleLoan extends Component {
 
   render() {
     let { vendor_info } = this.state;
-    let ROI = (vendor_info.ROI/100) * 100;
+    let ROI = (vendor_info.ROI / 100) * 100;
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
       >
         <div className="eligible-loan">
           <div className="subtitle">
-            Woo-hoo! IDFC is offering you a personal loan of ₹40 lacs
+            Woo-hoo! IDFC is offering you a personal loan of ₹
+            {changeNumberFormat(vendor_info.displayOffer || "0")}
           </div>
 
           <div
@@ -158,7 +182,9 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
-                    <div className="sub-title">₹{changeNumberFormat(vendor_info.displayOffer)}</div>
+                    <div className="sub-title">
+                      ₹{changeNumberFormat(vendor_info.displayOffer || "0")}
+                    </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
@@ -168,11 +194,13 @@ class EligibleLoan extends Component {
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
-                    <div className="sub-title">{formatAmountInr(vendor_info.EMIAmount)}/month</div>
+                    <div className="sub-title">
+                      {formatAmountInr(vendor_info.maxAllowedEMI)}/month
+                    </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
-                      <div className="sub-title">{ROI}%</div>
+                    <div className="sub-title">{ROI}%</div>
                   </div>
                 </div>
               </Grid>
@@ -211,10 +239,9 @@ class EligibleLoan extends Component {
                   error={!!this.state.form_data.amount_required_error}
                   helperText={
                     this.state.form_data.amount_required_error ||
-                    numDifferentiationInr(
-                      this.state.form_data.amount_required
-                    ) ||
-                    "Min ₹1 lakh to max 40 lakhs"
+                    `Min ₹1 lakh to max ₹${changeNumberFormat(
+                      vendor_info.displayOffer || "0"
+                    )}`
                   }
                   type="number"
                   width="40"
@@ -228,21 +255,23 @@ class EligibleLoan extends Component {
               </div>
               <div className="InputField">
                 <Input
-                  helperText={"Min 12 months to max 48 months"}
+                  // helperText={"Min 12 months to max 48 months"}
                   type="text"
                   width="40"
                   label="Tenure"
                   id="tenure"
                   name="tenure"
-                  value={this.state.form_data.tenure || ""}
-                  onChange={this.handleChange("tenure")}
+                  value={`${vendor_info.netTenor || "0"} months`}
+                  // onChange={this.handleChange("tenure")}
                   disabled={true}
                 />
               </div>
             </FormControl>
             <div className="estimated-emi">
               <div className="title">Estimated EMI</div>
-              <div className="emi">₹0/month</div>
+              <div className="emi">
+                {inrFormatDecimal(this.state.form_data.emi_amount || "0")}/month
+              </div>
             </div>
           </div>
         </div>

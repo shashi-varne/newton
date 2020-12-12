@@ -224,11 +224,15 @@ class AddressDetails extends Component {
 
       if (name === "current_pincode") {
         form_data.current_city = city;
+        form_data.current_city_error = "";
         form_data.current_state = state;
+        form_data.current_state_error = "";
         form_data.current_pincode_error = pincode_error;
       } else if (name === "permanent_pincode") {
         form_data.permanent_city = city;
+        form_data.permanent_city_error = "";
         form_data.permanent_state = state;
+        form_data.permanent_state_error = "";
         form_data.permanent_pincode_error = pincode_error;
       }
     }

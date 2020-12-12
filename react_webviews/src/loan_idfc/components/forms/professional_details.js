@@ -37,7 +37,6 @@ class ProfessionalDetails extends Component {
     let application_info = lead.application_info || {};
 
     let { employment_type } = application_info;
-    console.log((professional_info.organisation || "").toUpperCase())
 
     let form_data = {
       company_name: professional_info.company_name,
@@ -45,7 +44,7 @@ class ProfessionalDetails extends Component {
       net_monthly_salary: application_info.net_monthly_salary,
       salary_mode: (professional_info.salary_mode || "").toUpperCase(),
       constitution: professional_info.constitution,
-      organisation: (professional_info.organisation || "").toUpperCase(),
+      organisation: capitalizeFirstLetter(professional_info.organisation || ""),
       department: professional_info.department,
       industry: professional_info.industry,
     };
