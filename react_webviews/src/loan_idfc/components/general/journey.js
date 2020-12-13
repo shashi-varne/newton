@@ -170,7 +170,7 @@ class JourneyMap extends Component {
             index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",
           cta:
-            idfc_loan_status === "offer_accepted"
+            (idfc_loan_status === "offer_accepted" || idfc_loan_status === "idfc_1.7_accepted")
               ? "START"
               : index === "3"
               ? "RESUME"
