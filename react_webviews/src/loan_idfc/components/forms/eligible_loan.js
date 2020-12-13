@@ -55,24 +55,17 @@ class EligibleLoan extends Component {
       });
     }
 
-    this.setState({
-      progressHeaderData: progressHeaderData
-    })
-  }
-
-  onload = () => { 
     let loaderData = {
       title: `Hang on, while IDFC calculates your final loan offer as per their proprietary algorithms`,
       subtitle: "This may take around 2 minutes!",
     };
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
 
     this.setState({
       vendor_info: vendor_info,
       loaderData: loaderData,
+      progressHeaderData: progressHeaderData
     })
-  };
+  }
 
   sendEvents(user_action) {
     let eventObj = {
