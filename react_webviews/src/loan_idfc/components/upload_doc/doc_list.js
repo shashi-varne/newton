@@ -156,15 +156,12 @@ class DocumentList extends Component {
                     </div>
                   )}
                 </div>
-
-                {item.doc_checklist.length !== 0 && (
-                  <img
-                    style={{
-                      opacity: item.doc_checklist.length !== 0 ? 1 : 0
-                    }} 
-                    src={require(`assets/edit_green.svg`)} 
-                    alt="" />
-                )}
+                <img
+                  style={{
+                    opacity: item.doc_checklist.length !== 0 ? 1 : 0
+                  }} 
+                  src={require(`assets/edit_green.svg`)} 
+                  alt="" />
               </div>
             </Card>
           ))}
