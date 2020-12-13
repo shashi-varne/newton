@@ -28,11 +28,11 @@ class IncomeDetails extends Component {
       steps: [
         {
           title: "Income details",
-          status: "completed",
+          status: "init",
         },
         {
           title: "Loan offer",
-          status: "init",
+          status: "pending",
         },
       ],
     };
