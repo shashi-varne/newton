@@ -41,27 +41,27 @@ class UploadBank extends Component {
   componentWillMount() {
     this.initialize();
 
-    let progressHeaderData = {
-      title: "Income and loan offer",
-      steps: [
-        {
-          title: "Income details",
-          status: "init",
-        },
-        {
-          title: "BT transfer details",
-          status: "pending",
-        },
-        {
-          title: "Loan offer",
-          status: "pending",
-        },
-      ],
-    };
+    // let progressHeaderData = {
+    //   title: "Income and loan offer",
+    //   steps: [
+    //     {
+    //       title: "Income details",
+    //       status: "init",
+    //     },
+    //     {
+    //       title: "BT transfer details",
+    //       status: "pending",
+    //     },
+    //     {
+    //       title: "Loan offer",
+    //       status: "pending",
+    //     },
+    //   ],
+    // };
 
-    this.setState({
-      progressHeaderData: progressHeaderData,
-    });
+    // this.setState({
+    //   progressHeaderData: progressHeaderData,
+    // });
   }
 
   componentDidMount() {
@@ -83,6 +83,29 @@ class UploadBank extends Component {
   }
 
   onload = () => {
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
+    let progressHeaderData = {
+      title: "Income and loan offer",
+      steps: [
+        {
+          title: "Income details",
+          status: "init",
+        },
+        {
+          title: "Loan offer",
+          status: "pending",
+        },
+      ],
+    };
+
+    if (vendor_info.bt_eligible) {
+      progressHeaderData.steps.splice(1, 0, {
+        title: "BT transfer details",
+        status: "pending",
+      });
+    }
+
     let loaderData = {
       title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
       subtitle: "It may take 10 to 15 seconds!",
@@ -90,6 +113,7 @@ class UploadBank extends Component {
     this.setState({
       loaderData: loaderData,
       loaderWithData: true,
+      progressHeaderData: progressHeaderData,
     });
   };
 
