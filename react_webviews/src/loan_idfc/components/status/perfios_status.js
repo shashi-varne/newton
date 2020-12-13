@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
+import ContactUs from "../../../common/components/contact_us";
 
 const commonMapper = {
   failure: {
@@ -82,7 +83,7 @@ class PerfiosStatus extends Component {
   };
 
   goBack = () => {
-    this.sendEvents('back');
+    this.sendEvents("back");
     this.navigate(this.state.commonMapper.close_state);
   };
 
@@ -104,15 +105,14 @@ class PerfiosStatus extends Component {
   }
 
   handleClick = () => {
-    if(this.state.commonMapper.button_title === 'RETRY')
-      this.sendEvents('retry');
-    else
-      this.sendEvents('next');
+    if (this.state.commonMapper.button_title === "RETRY")
+      this.sendEvents("retry");
+    else this.sendEvents("next");
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
       if (idfc_07_state === "failed") {
-        this.navigate('error')
+        this.navigate("error");
       } else if (!bt_eligible && idfc_07_state === "success") {
         this.setState(
           {
@@ -238,6 +238,15 @@ class PerfiosStatus extends Component {
               <b>try again</b> by uploading bank statements of{" "}
               <b>smaller file size</b> to get going/proceed with the
               verification process.
+            </div>
+          )}
+
+          {perfios_state === "processing" && (
+            <div>
+              <div className="subtitle">
+                Oops! Something's not right. Please check back in some time.
+              </div>
+              <ContactUs />
             </div>
           )}
         </div>
