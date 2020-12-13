@@ -263,7 +263,7 @@ class LoanStatus extends Component {
     } = this.state;
 
     if (vendor_application_status === "idfc_0.5_accepted") {
-      commonMapper.top_title = `Congratulations, ${first_name}`;
+      commonMapper.top_title = `Congratulations, ${first_name}!`;
     }
 
     return (
