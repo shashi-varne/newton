@@ -106,6 +106,7 @@ class AdditionalDetails extends Component {
 
       if (name === "pincode") {
         form_data.city = city;
+        form_data.state = state;
         form_data.pincode_error = pincode_error;
       }
     }

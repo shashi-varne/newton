@@ -443,12 +443,17 @@ export async function get07State() {
   let that = this;
 
   setTimeout(function () {
-    if (result.idfc_07_state === "triggered" && result.bt_eligible) {
+    
+    if (result.perfios_state === "bypass") {
+      that.submitApplication({}, "one", "", "eligible-loan");
+    } else if (result.idfc_07_state === "failed") {
+      this.navigate('error')
+    } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
       let body = {
         idfc_loan_status: "bt_init",
       };
       this.updateApplication(body, "bt-info");
-    } else if (result.idfc_07_state === "success") {
+    } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else {
       if (count < 20) {
@@ -475,7 +480,14 @@ export async function submitApplication(
       show_loader: true,
     });
 
-    let screens = ["address_details", "requirement_details_screen", "additional_details", "credit_bt", "eligible_loan", "bank_upload"];
+    let screens = [
+      "address_details",
+      "requirement_details_screen",
+      "additional_details",
+      "credit_bt",
+      "eligible_loan",
+      "bank_upload",
+    ];
     this.setState({
       show_loader: true,
       loaderWithData: screens.includes(this.state.screen_name),
@@ -608,6 +620,8 @@ export async function formCheckUpdate(
     permanent_city: "city",
     permanent_state: "state",
     amount_required: "loan amount",
+    purpose: "purpose",
+    tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
     city: "city",
@@ -639,14 +653,16 @@ export async function formCheckUpdate(
   }
 
   if (form_data.maxAmount && form_data.amount_required > form_data.maxAmount) {
-    form_data.amount_required_error = "amount cannot be greater than max loan amount";
+    form_data.amount_required_error =
+      "amount cannot be greater than max loan amount";
     canSubmitForm = false;
   }
 
-  // if (form_data.amount_required && form_data.amount_required < "100000") {
-  //   form_data.amount_required_error = "Minimum loan amount should be 1 lakh";
-  //   canSubmitForm = false;
-  // }
+  // eslint-disable-next-line
+  if (form_data.amount_required && parseInt(form_data.amount_required) < parseInt("100000")) {
+    form_data.amount_required_error = "Minimum loan amount should be ₹1 lakh";
+    canSubmitForm = false;
+  }
 
   if (form_data.dob && !isValidDate(form_data.dob)) {
     form_data.dob_error = "Please enter valid dob";
@@ -687,8 +703,9 @@ export async function netBanking(url) {
   );
 
   var pgLink = url;
-  // eslint-disable-next-line
+
   pgLink +=
+    // eslint-disable-next-line
     (pgLink.match(/[\?]/g) ? "&" : "?") +
     "plutus_redirect_url=" +
     plutus_redirect_url;

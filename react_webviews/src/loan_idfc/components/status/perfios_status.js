@@ -111,7 +111,9 @@ class PerfiosStatus extends Component {
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
-      if (!bt_eligible && idfc_07_state === "success") {
+      if (idfc_07_state === "failed") {
+        this.navigate('error')
+      } else if (!bt_eligible && idfc_07_state === "success") {
         this.setState(
           {
             next_state: "eligible-loan",
@@ -158,14 +160,14 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "failure") {
-      if (bt_eligible) {
-        this.navigate("bt-info");
-      } else {
+      // if (bt_eligible) {
+      //   this.navigate("bt-info");
+      // } else {
         let body = {
           perfios_state: "init",
         };
         this.updateApplication(body, "income-details");
-      }
+      // }
     }
   };
 

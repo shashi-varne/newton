@@ -17,31 +17,37 @@ class IncomeDetails extends Component {
 
   componentWillMount() {
     this.initialize();
+  }
+
+  onload = () => {
+    let lead = this.state.lead || {};
+    let vendor_info = lead.vendor_info || {};
 
     let progressHeaderData = {
-      title: 'Income and loan offer',
+      title: "Income and loan offer",
       steps: [
         {
-          'title': 'Income details',
-          'status': 'init'
+          title: "Income details",
+          status: "completed",
         },
         {
-          'title': 'BT transfer details',
-          'status': 'pending'
+          title: "Loan offer",
+          status: "init",
         },
-        {
-          'title': 'Loan offer',
-          'status': 'pending'
-        }
-      ]
+      ],
+    };
+
+    if (vendor_info.bt_eligible) {
+      progressHeaderData.steps.splice(1, 0, {
+        title: "BT transfer details",
+        status: "pending",
+      });
     }
 
     this.setState({
-      progressHeaderData: progressHeaderData
-    })
-  }
-
-  onload = () => { };
+      progressHeaderData: progressHeaderData,
+    });
+  };
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
@@ -61,19 +67,19 @@ class IncomeDetails extends Component {
   }
 
   handleClick = (transaction_type) => {
-    this.sendEvents("next",{option_selected: transaction_type});
-    this.startTransaction(transaction_type)
-  }
+    this.sendEvents("next", { option_selected: transaction_type });
+    this.startTransaction(transaction_type);
+  };
 
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Income details"
         noFooter={true}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData
+          progressHeaderData: this.state.progressHeaderData,
         }}
       >
         <div className="income-details">
@@ -81,10 +87,7 @@ class IncomeDetails extends Component {
             Provide bank statements of your salary account for income assessment
             in <b>just 2 clicks!</b>
           </div>
-          <Card
-            withtag="true"
-            onClick={() => this.handleClick('netbanking')}
-          >
+          <Card withtag="true" onClick={() => this.handleClick("netbanking")}>
             <div className="card-content" style={{ padding: "10px 0" }}>
               <img
                 src={require(`assets/${this.state.productName}/mobile_credit_card.svg`)}
@@ -105,9 +108,7 @@ class IncomeDetails extends Component {
 
           <div className="OR">-- OR --</div>
 
-          <Card
-            onClick={() => this.handleClick('manual_upload')}
-          >
+          <Card onClick={() => this.handleClick("manual_upload")}>
             <div className="card-content">
               <img
                 src={require(`assets/${this.state.productName}/register_icn.svg`)}
