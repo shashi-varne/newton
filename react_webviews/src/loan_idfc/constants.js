@@ -3,25 +3,25 @@ import { capitalizeFirstLetter } from "../utils/validators"
 let productName = capitalizeFirstLetter(getConfig().productName);
 
 export function goBackMap(path) {
-    let mapper = {
-      '/loan/idfc/journey': '/loan/idfc/home',
-      '/loan/idfc/edit-number': '/loan/idfc/home',
-      '/loan/idfc/application-summary': '/loan/idfc/journey',
-      '/loan/idfc/personal-details': '/loan/idfc/journey',
-      '/loan/idfc/basic-details': '/loan/idfc/home',
-      '/loan/idfc/professional-details': '/loan/idfc/basic-details',
-      '/loan/idfc/address-details': '/loan/idfc/personal-details',
-      '/loan/idfc/loan-requirement-details': '/loan/idfc/journey',
-      '/loan/idfc/income-details': '/loan/idfc/journey',
-      '/loan/idfc/upload-bank': '/loan/idfc/income-details',
-      '/loan/idfc/eligible-loan': '/loan/idfc/journey',
-      '/loan/idfc/loan-eligible': '/loan/idfc/journey',
-      '/loan/idfc/bt-info': '/loan/idfc/journey',
-      '/loan/idfc/doc-list': '/loan/idfc/journey',
-      '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
-      '/loan/idfc/final-loan': '/loan/idfc/home',
-      '/loan/idfc/reports': '/loan/idfc/home',
-    }
+  let mapper = {
+    '/loan/idfc/journey': '/loan/idfc/home',
+    '/loan/idfc/edit-number': '/loan/idfc/home',
+    '/loan/idfc/application-summary': '/loan/idfc/journey',
+    '/loan/idfc/personal-details': '/loan/idfc/journey',
+    '/loan/idfc/basic-details': '/loan/idfc/home',
+    '/loan/idfc/professional-details': '/loan/idfc/basic-details',
+    '/loan/idfc/address-details': '/loan/idfc/personal-details',
+    '/loan/idfc/loan-requirement-details': '/loan/idfc/journey',
+    '/loan/idfc/income-details': '/loan/idfc/journey',
+    '/loan/idfc/upload-bank': '/loan/idfc/income-details',
+    '/loan/idfc/eligible-loan': '/loan/idfc/journey',
+    '/loan/idfc/loan-eligible': '/loan/idfc/journey',
+    '/loan/idfc/bt-info': '/loan/idfc/journey',
+    '/loan/idfc/doc-list': '/loan/idfc/journey',
+    '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
+    '/loan/idfc/final-loan': '/loan/idfc/home',
+    '/loan/idfc/reports': '/loan/idfc/home',
+  }
 
   return mapper[path] || false;
 }
@@ -142,7 +142,7 @@ export const idfc_config = {
 
         {
           'header_title': 'Fees and charges',
-          'is_table' : true,
+          'is_table': true,
           options: [
             {
               'title': 'EMI Bounce charges per presentation',
@@ -224,7 +224,13 @@ export const idfc_config = {
   know_more_screen: {
     features: {
       content: [
-        "Loan up to 40 lakhs:",
+        {
+          data: "Loan up to 40 lakhs:",
+          sub_data: [
+            "For salaried, the range is from Rs. 1 lakh to 40 lacs",
+            "For self-employed the max loan amount is Rs. 9 lacs",
+          ]
+        },
         "Low interest rate starting at 10.75% p.a.",
         "Flexible loan tenure -- min 12 months, max 60 months",
         "Option of ‘balance transfer’ at attractive rates",
@@ -317,7 +323,7 @@ export const idfc_config = {
       "Society",
       "State Govt.",
       "Trust"
-  ],
+    ],
     departmentOptions: [
       "ACCOUNTS",
       "BACKOFFICE",

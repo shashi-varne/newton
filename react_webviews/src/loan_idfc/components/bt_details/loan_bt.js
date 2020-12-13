@@ -62,12 +62,17 @@ class LoanBtDetails extends Component {
 
     for (var item in bt_info) {
       if (bt_info[item].typeOfLoan === "PersonalLoan") {
-        loan_bt.push({ [item]: bt_info[item].typeOfLoan });
+        loan_bt.push({ ...bt_info[item] });
       }
     }
 
-    loan_bt.forEach(() => {
-      this.state.form_data.push({});
+    loan_bt.forEach((data) => {
+      this.state.form_data.push({
+        is_selected: data.is_selected,
+        financierName: data.financierName,
+        principalOutstanding: data.principalOutstanding,
+        bt_data_id: data.bt_data_id,
+      });
     });
 
     this.setState({
@@ -162,6 +167,10 @@ class LoanBtDetails extends Component {
     form_data[index]["bt_data_id"] = id;
     if(checked)
       this.validateFields(form_data,index);
+    else
+      this.setState({
+        form_data: form_data,
+      });
   };
 
   render() {
@@ -192,16 +201,16 @@ class LoanBtDetails extends Component {
               <Grid container spacing={16}>
                 <Grid item xs={1}>
                   <Checkbox
-                    checked={item.checked}
+                    checked={this.state.form_data[index].is_selected}
                     color="primary"
                     id="checkbox"
                     name="checkbox"
                     disableRipple
-                    onChange={(event) =>
+                    onClick={() =>
                       this.handleCheckbox(
-                        event.target.checked,
+                        !this.state.form_data[index].is_selected,
                         index,
-                        Object.keys(item)[0]
+                        item.bt_data_id
                       )
                     }
                     className="Checkbox"
@@ -238,7 +247,8 @@ class LoanBtDetails extends Component {
                         helperText={
                           this.state.form_data[index].principalOutstanding_error ||
                           numDifferentiationInr(
-                            this.state.form_data[index].principalOutstanding
+                            this.state.form_data[index].principalOutstanding ||
+                            item.principalOutstanding
                           )
                         }
                         type="number"
