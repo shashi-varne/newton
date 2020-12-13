@@ -153,7 +153,10 @@ class PerfiosStatus extends Component {
 
     if (perfios_state === "bypass") {
       if (bt_eligible) {
-        this.navigate("bt-info");
+        let body = {
+          idfc_loan_status: "bt_init",
+        };
+        this.updateApplication(body, "bt-info");
       } else {
         this.submitApplication({}, "one", "", "eligible-loan");
       }
