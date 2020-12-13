@@ -311,7 +311,7 @@ class LoanBtDetails extends Component {
                         type="text"
                         width="40"
                         maxLength={7}
-                        label="Expiry date"
+                        label="Expiry date (MM/YYYY)"
                         id={`card-expiry-${index + 1}`}
                         name="creditCardExpiryDate"
                         value={
