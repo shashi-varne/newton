@@ -125,7 +125,7 @@ class Report extends Component {
     return obj;
   }
 
-  setReportData(termData, group_insurance_policies, o2o_applications ) {
+  setReportData(termData, group_insurance_policies, health_insurance_policies, o2o_applications ) {
 
 
     let canShowReport = false;
@@ -231,7 +231,12 @@ class Report extends Component {
         let ins_policies = policyData.group_insurance || {};
         let o2o_applications = policyData.o2o_applications; 
          
-        this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
+        // this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
+        let group_insurance_policies = policyData.group_insurance || {};
+        let health_insurance_policies = policyData.health_insurance || {};
+        let term_insurance_policies = policyData.term_insurance || {};
+
+        this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
@@ -269,7 +274,18 @@ class Report extends Component {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else if(key === 'o2o_details'){
       path = `/group-insurance/group-health/o2o-reportdetails/${policy.id}`;
-    } else {
+    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
+      if(key === 'hdfc_ergo'){
+        key = 'HDFCERGO';
+      }else if(key === 'star'){
+        key = 'STAR';
+      }else if(key === 'religare'){
+        key = 'RELIGARE';
+      }
+      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
+    }else if(key === 'FYNTUNE'){
+      path =`/group-insurance/life-insurance/savings-plan/report-details/${policy.id}`;
+    }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
