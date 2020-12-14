@@ -221,19 +221,20 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "blocked" && (
             <div className="subtitle">
-              Due to an error your bank statements couldn't be verfied. No
-              worries, you can still go ahead with your loan application.
-              However, do upload your bank statements later.
+              Due to an error, your bank statements couldn't be verified. No
+              worries, our representative will soon get in touch with you to
+              guide you further with your loan application.
             </div>
           )}
 
-          {bt_eligible && perfios_state !== "failure" (
-            <div className="subtitle">
-              Before we move to the final loan offer, we have an option of
-              'Balance Transfer - BT' for you. However, it is up to you whether
-              you want to opt for it or not.
-            </div>
-          )}
+          {bt_eligible &&
+            (perfios_state !== "failure" || perfios_state !== "blocked")(
+              <div className="subtitle">
+                Before we move to the final loan offer, we have an option of
+                'Balance Transfer - BT' for you. However, it is up to you
+                whether you want to opt for it or not.
+              </div>
+            )}
 
           {perfios_state === "failure" && (
             <div className="subtitle">
