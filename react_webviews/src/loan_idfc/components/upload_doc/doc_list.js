@@ -94,7 +94,7 @@ class DocumentList extends Component {
     let { docList, disableButton } = this.state;
 
     docList.forEach((item) => {
-      if (item.doc_checklist.length === 0) {
+      if (item.doc_checklist.length === 0 || item.doc_checklist[0].docs.length === 0) {
         disableButton = true;
       } else {
         disableButton = false;
@@ -138,7 +138,7 @@ class DocumentList extends Component {
                   <img
                     style={{ 
                       margin: "-2px 0 -10px -22px",
-                      opacity: item.doc_checklist.length !== 0 ? 1 : 0
+                      opacity: item.doc_checklist[0].docs.length !== 0 ? 1 : 0
                     }}
                     src={require(`assets/done.svg`)}
                     alt=""
@@ -158,7 +158,7 @@ class DocumentList extends Component {
                 </div>
                 <img
                   style={{
-                    opacity: item.doc_checklist.length !== 0 ? 1 : 0
+                    opacity: item.doc_checklist[0].docs.length !== 0 ? 1 : 0
                   }} 
                   src={require(`assets/edit_green.svg`)} 
                   alt="" />
