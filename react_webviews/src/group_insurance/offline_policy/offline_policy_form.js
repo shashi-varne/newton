@@ -75,18 +75,18 @@ componentWillMount() {
 
 
 
-handleChange = name => event => {           
+handleChange = name => event => {
   if (!name) {
     return
   }
   var value = event.target ? event.target.value : event;
-  if(name === 'Vendor'){
-    var vendor_details = this.state.vendor_details
-        value = vendor_details[event].value
-  }
   let form_data = this.state.form_data
+  if (name === 'Vendor') {
+    var vendor_details = this.state.vendor_details
+    value = vendor_details[event].value
+    form_data.index = event
+  };
   form_data[name] = value;
-  form_data.index = event
   form_data[name + '_error'] = '';
   this.setState({
     form_data: form_data
@@ -318,7 +318,7 @@ handleClick = async () => {
             <div>
             <DropdownInModal
               parent={this}
-              // header_title="Insurance vendor_details"
+              header_title="Insurance Company"
               cta_title="SAVE"
               selectedIndex = { this.state.form_data.index || 0}
               width="40"
