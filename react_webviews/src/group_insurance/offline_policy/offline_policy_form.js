@@ -25,7 +25,8 @@ class AddPolicy extends Component {
         form_data : {},
         openBmiDialog : false,
         searching : true,
-        lock : false
+        lock : false,
+        binding : true
     };
     
   }
@@ -65,7 +66,7 @@ componentWillMount() {
 
   let form_data = this.state.form_data
   form_data.Vendor = 'HDFC Ergo'
-
+  form_data.title = 'CONTINUE'
   this.setState({
     vendor_details: vendor_details,
     form_data : form_data
@@ -161,6 +162,10 @@ componentDidMount() {
 
 handleClick = async () => {
 
+  if(!this.state.binding){
+       return;
+  }
+
   let form_data = this.state.form_data
 
   if (!form_data.number) {
@@ -190,6 +195,7 @@ handleClick = async () => {
 
     // const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=000108517E&provider=Edelweiss Tokio`);
     let resultData = res.pfwresponse.result
+    form_data.title = 'Submit to fetch the detail'
     if (res.pfwresponse.status_code === 200 && resultData.policy_binded) {
       form_data.notfound = false
       form_data.found = false
@@ -197,7 +203,7 @@ handleClick = async () => {
         openBmiDialog: true,
         searching: true,
         lock: false,
-        form_data: form_data
+        form_data: form_data,
       })
     } else {
 
@@ -207,7 +213,8 @@ handleClick = async () => {
        this.setState({
          searching: true,
          lock: false,
-         form_data: form_data
+         form_data: form_data,
+         binding : false
        })
       }
 
@@ -217,7 +224,8 @@ handleClick = async () => {
         this.setState({
           searching: true,
           lock: false,
-          form_data: form_data
+          form_data: form_data,
+          binding : false
         })
       }
 
@@ -296,15 +304,16 @@ handleClick = async () => {
       showLoader={this.state.show_loader}
       title={'Enter your policy details'}
       fullWidthButton={true}
-      buttonTitle={'CONTINUE'}
+      buttonTitle={this.state.form_data.title}
       onlyButton={true}
-      handleClick={() => this.handleClick()}
+      handleClick={() => this.handleClick(this.state.binding)}
+      withProvider={true}
       >
             <div className="InputField" style={{marginTop : '10px'}}>
             <div>
             <DropdownInModal
               parent={this}
-              header_title="Insurance vendor_details"
+              // header_title="Insurance vendor_details"
               cta_title="SAVE"
               selectedIndex = { this.state.form_data.index || 0}
               width="40"
