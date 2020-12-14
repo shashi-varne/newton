@@ -184,8 +184,8 @@ class PerfiosStatus extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={!commonMapper.top_title ? "Sorry" : commonMapper.top_title}
-        buttonTitle={!commonMapper.button_title ? "OK" : commonMapper.button_title}
+        title={commonMapper.top_title}
+        buttonTitle={commonMapper.button_title}
         handleClick={this.handleClick}
         headerData={{
           icon: commonMapper.icon || "",

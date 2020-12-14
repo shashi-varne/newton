@@ -112,6 +112,7 @@ class DocumentUpload extends Component {
                 uploaded: true,
                 integrated: true,
                 imageBaseFile: doc_checklist[i].doc_url,
+                category_id: category,
                 id: doc_checklist[i].doc_id,
                 doc_type: doc_checklist[i].doc_type,
                 name:
@@ -139,6 +140,7 @@ class DocumentUpload extends Component {
                 uploaded: true,
                 integrated: true,
                 imageBaseFile: doc_checklist[i].doc_url,
+                category_id: category,
                 id: doc_checklist[i].doc_id,
                 doc_type: doc_checklist[i].doc_type,
                 name:
@@ -156,6 +158,7 @@ class DocumentUpload extends Component {
               uploaded: true,
               integrated: true,
               imageBaseFile: doc_checklist[i].doc_url,
+              category_id: category,
               id: doc_checklist[i].doc_id,
               doc_type: doc_checklist[i].doc_type,
               name:
@@ -179,6 +182,7 @@ class DocumentUpload extends Component {
         docsMap: docsMap,
         documents: documents,
         totalUpload: totalUpload,
+        category: category
       });
     }
   };
@@ -412,12 +416,12 @@ class DocumentUpload extends Component {
   };
 
   uploadDocument = async (file, type) => {
-    let { image_data, totalUpload, disbableButton, documents } = this.state;
+    let { image_data, totalUpload, disbableButton, documents, category } = this.state;
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
     data.append("file", file, file.name);
-    data.append("category_id", file.category_id);
+    data.append("category_id", category);
     data.append("checklist_doc_type", file.checklist_doc_type);
 
     try {
@@ -444,6 +448,7 @@ class DocumentUpload extends Component {
 
         this.setState({
           image_data: image_data,
+          documents: documents,
           disbableButton: disbableButton,
         });
       }
@@ -452,6 +457,32 @@ class DocumentUpload extends Component {
       toast("Something went wrong");
     }
   };
+
+  deleteDocument = async (index, file) => {
+    let { documents } = this.state;
+
+    const data = new FormData();
+    data.append("doc_type", file.doc_type);
+    data.append("doc_id", file.id);
+    data.append("category_id", file.category_id);
+    data.append("checklist_doc_type", file.doc_type);
+    try {
+      const res = await Api.post(
+        `relay/api/loan/idfc/upload/document/${this.state.application_id}?delete=true`,
+        data
+      );
+
+      const { status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        documents.splice(index, 1);
+      }
+
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+  }
 
   renderHtmlCamera(type) {
     let { image_data } = this.state;
@@ -627,14 +658,6 @@ class DocumentUpload extends Component {
     this.navigate("doc-list");
   };
 
-  handleEdit = (index, doc) => {
-    this.setState({
-      editId: index,
-      doc_id: doc.id,
-    });
-    this.startUpload("open_file", doc.doc_type, "", index);
-  };
-
   render() {
     let { image_data, documents, totalUpload, disbableButton } = this.state;
 
@@ -723,7 +746,7 @@ class DocumentUpload extends Component {
                       {/* <span
                         style={{ float: "right" }}
                         onClick={() =>
-                          item.integrated && this.handleEdit(index, item)
+                          // item.integrated && this.deleteDocument(index, item)
                         }
                       >
                         <img
@@ -731,7 +754,7 @@ class DocumentUpload extends Component {
                           //   opacity: item.doc_checklist.length !== 0 ? 1 : 0,
                           // }}
                           id={item.doc_type}
-                          src={require(`assets/edit_green.svg`)}
+                          src={require(`assets/deleted.svg`)}
                           alt=""
                         />
                       </span> */}
