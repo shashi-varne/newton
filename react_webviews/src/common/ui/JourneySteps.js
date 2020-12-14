@@ -46,8 +46,7 @@ class JourneyStepsClass extends Component {
             )}
           </div>
           <div className={`steps-content ${options.status || "pending"}`} style={{
-            borderColor : options.status === "completed" && getConfig().productName === "fisdom" && "#D5CCE9" 
-            || options.status === "completed" && getConfig().productName === "finity" && "#CBDEF6"
+            borderColor : options.status === "completed" && (getConfig().productName === "fisdom" ? "#D5CCE9" : "#CBDEF6" )
           }} >
             <div className="title flex">
               {options.status === "completed" ? options.titleCompleted : options.title}
