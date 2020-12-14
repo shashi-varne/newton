@@ -184,11 +184,11 @@ class Report extends Component {
     }
 
 
-    let hs_policies = health_insurance_policies || '';
+    let hs_policies = health_insurance_policies.insurance_apps || '';
     for (let i = 0; i < hs_policies.length; i++) {
       let policy = this.getProviderObject(hs_policies[i]);
       reportData.push(policy);
-    }
+    } 
 
     let ins_policies = group_insurance_policies.ins_policies || [];
     for (var i = 0; i < ins_policies.length; i++) {

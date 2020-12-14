@@ -33,34 +33,34 @@ class AddPolicy extends Component {
 componentWillMount() {
 
   let vendor_details = [{
-      'name': 'HDFC Ergo',
-      'value': 'HDFC Ergo'
+      'name': 'HDFC Ergoa',
+      'value': 'hdfc ergo'
     },
     {
       'name': 'Bharti Axa',
-      'value': 'Bharti Axa'
+      'value': 'bharti axa general'
     },
     {
       'name': 'Care Health',
-      'value': 'Care Health'
+      'value': 'religare health'
     },
     {
       'name': 'Star Health',
-      'value': 'Star Health'
+      'value': 'star health'
     },
     {
       'name': 'Bajaj Allianz',
-      'value': 'Bajaj Allianz'
+      'value': 'bajaj allianz'
     },
     {
       'name': 'HDFC Life',
-      'value': 'HDFC Life'
+      'value': 'hdfc life'
     }, {
       'name': 'Edelweiss Tokio',
-      'value': 'Edelweiss Tokio'
+      'value': 'edelweiss tokio'
     }, {
       'name': 'Kotak Life',
-      'value': 'Kotak Life'
+      'value': 'kotak life'
     }
   ]
 
@@ -82,7 +82,7 @@ handleChange = name => event => {
   var value = event.target ? event.target.value : event;
   if(name === 'Vendor'){
     var vendor_details = this.state.vendor_details
-        value = vendor_details[event].name
+        value = vendor_details[event].value
   }
   let form_data = this.state.form_data
   form_data[name] = value;
@@ -188,11 +188,14 @@ handleClick = async () => {
     lock: true
   });
   try {
+
+    console.log(form_data.Vendor, 'form_data.Vendor')
+
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
 
     let resultData = res.pfwresponse.result
     form_data.title = 'Submit to fetch the detail'
-    if (res.pfwresponse.status_code === 200 && resultData.policy_binded) {
+    if (res.pfwresponse.status_code === 200 && resultData.policy_binded || true) {
       form_data.notfound = false
       form_data.found = false
       this.setState({
@@ -241,6 +244,7 @@ handleClick = async () => {
     }
   } catch (err) {
     this.setState({
+      searching: false,
       show_loader: false,
     });
     toast("Something went wrong");
