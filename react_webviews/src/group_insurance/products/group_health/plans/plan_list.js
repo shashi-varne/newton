@@ -3,12 +3,13 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import {formatAmount} from '../../../../utils/validators';
+
 
 class GroupHealthPlanList extends Component {
 
@@ -16,9 +17,7 @@ class GroupHealthPlanList extends Component {
         super(props);
         this.state = {
             show_loader: true,
-            plan_data: {
-                coverplan: []
-            },
+            plan_data: {},
             screen_name: 'plan_list_screen'
         }
 
@@ -30,10 +29,16 @@ class GroupHealthPlanList extends Component {
     }
 
     async componentDidMount() {
+        let {groupHealthPlanData : {post_body}} = this.state;
+
+        let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details'];
+        let body = {};
+        for(let key of allowed_post_body_keys){
+            body[key] = post_body[key];
+        }
         try {
 
-            let body = this.state.groupHealthPlanData.post_body;
-            const res = await Api.post(`/api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/coverplan`,
+             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/plans/${this.state.providerConfig.provider_api}`,
              body);
 
             this.setState({
@@ -43,7 +48,8 @@ class GroupHealthPlanList extends Component {
             if (res.pfwresponse.status_code === 200) {
 
                 this.setState({
-                    plan_data: resultData
+                    plan_data: resultData,
+                    common: resultData.common
                 }, () => {
                     ReactTooltip.rebuild()
                 })
@@ -81,8 +87,8 @@ class GroupHealthPlanList extends Component {
                 "product": this.state.providerConfig.provider_api,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'select plan',
-                'plan_type': plan.plan_type || '',
-                'recommendation_tag': plan.recommendation_tag || ''
+                'plan_type':this.state.provider === 'HDFCERGO' ? this.state.providerConfig.hdfc_plan_title_mapper[plan.plan_id] : plan.plan_name,
+                'recommendation_tag': plan.recommedation_tag || ''
             }
         };
 
@@ -100,13 +106,19 @@ class GroupHealthPlanList extends Component {
         let eldest_dict  = plan_data.eldest_dict || {};
 
         groupHealthPlanData.plan_selected = plan;
+        groupHealthPlanData.plan_selected.copay = plan.complete_details.copay;
+        groupHealthPlanData.post_body.plan_id = plan.plan_id;
         groupHealthPlanData.base_plan_title = common.base_plan_title
         groupHealthPlanData.post_body.plan = plan.plan_type;
         groupHealthPlanData.post_body.cover_plan = plan.plan_type;
 
+        if(provider === 'HDFCERGO'){
+            groupHealthPlanData.plan_selected.plan_title = this.state.providerConfig.hdfc_plan_title_mapper[plan.plan_id];
+        }
         if(provider === 'RELIGARE') {
             groupHealthPlanData.post_body.eldest_member = eldest_dict.eldest_member;
             groupHealthPlanData.post_body.eldest_dob = eldest_dict.eldest_dob;
+            groupHealthPlanData.plan_selected.plan_title = 'Care';
         }
        
         this.setLocalProviderData(groupHealthPlanData);
@@ -114,7 +126,7 @@ class GroupHealthPlanList extends Component {
         this.navigate(this.state.next_screen || 'plan-details');
     }
 
-    renderTileMidData = (props, index, plan_data) => {
+    renderTileMidData = (props, index) => {
         return (
             <div key={index} className="pi-tile">
                 <div className="pi-left">{props.label}</div>
@@ -130,11 +142,11 @@ class GroupHealthPlanList extends Component {
         let plan_data = props;
         return (
             <div className="tile" key={index} onClick={() => this.selectPlan(props, index)}>
-                <div className="group-health-recommendation" style={{ backgroundColor: props.recommendation_tag === 'Recommended' ? '#E86364' : '' }}>{props.recommendation_tag}</div>
+                <div className="group-health-recommendation" style={{ backgroundColor: props.recommedation_tag === 'Recommended' ? '#E86364' : '' }}>{plan_data.recommedation_tag}</div>
                 <div className="group-health-top-content-plan-logo">
                     <div className="left">
-                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.plan_data.common.base_plan_title:''}</div>
-                        <div className="tc-subtitle">{props.plan_title}</div>
+                        <div className="tc-title">{this.state.provider==='HDFCERGO'? this.state.providerConfig.title2 :''}</div>
+                        <div className="tc-subtitle">{this.state.provider === 'HDFCERGO' ? this.state.providerConfig.hdfc_plan_title_mapper[props.plan_id] : plan_data.plan_name}</div>
                     </div>
                     <div className="tc-right">
                         <img
@@ -145,12 +157,12 @@ class GroupHealthPlanList extends Component {
                 </div>
 
                 <div className="plan-info">
-                    {(props.top_plan_benefits || []).map((props, index) => 
-                    this.renderTileMidData(props, index, plan_data))}
+                    {(plan_data.display_content || []).map((props, index) => 
+                    this.renderTileMidData(props, index))}
                 </div>
 
-                <div className="bottom-cta" onClick={() => this.selectPlan(props, index)}>
-                    starts at {inrFormatDecimal(props.premium)}/year
+                <div className="bottom-cta">
+                    STARTS AT ₹ {formatAmount(props.starts_at_value)}/YEAR
                 </div>
             </div>
         );
@@ -170,7 +182,7 @@ class GroupHealthPlanList extends Component {
             >
                 <div className="group-health-plan-list">
                     <div className="tiles">
-                        {this.state.plan_data.coverplan.map(this.renderPlans)}
+                        {this.state.plan_data.plans && this.state.plan_data.plans.map(this.renderPlans)}
                     </div>
                 </div>
             </Container>

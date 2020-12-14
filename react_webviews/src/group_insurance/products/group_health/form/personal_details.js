@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
-
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { health_providers, genderOptions, childeNameMapper } from '../../../constants';
@@ -20,7 +19,8 @@ import Dialog, {
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
 import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
-import GenericTooltip from '../../../../common/ui/GenericTooltip'
+import GenericTooltip from '../../../../common/ui/GenericTooltip';
+import { storageService } from 'utils/validators';
 
 class GroupHealthPlanPersonalDetails extends Component {
 
@@ -32,11 +32,12 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data: {},
       ctaWithProvider: true,
       show_loader: true,
+      quotation : { member_details : {}  },
       get_lead: true,
       openBmiDialog: false,
       pan_needed: false,
       screen_name: 'personal_details_screen',
-      occupationOptions: []
+      occupationOptions: [],
     }
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
@@ -44,27 +45,30 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   onload = () => {
-
-    let lead = this.state.lead || {};
+  
+    let lead = this.state.lead || {}
+    let quotation = this.state.quotation || {};     
+    let insured_people_details  = lead.insured_people_details;
     let occupationOptions = this.state.screenData.occupation_opts;
 
     this.setState({
       occupationOptions: occupationOptions
     })
 
-    let spouse_relation = lead.spouse_account_key ? lead.spouse_account_key.relation : '';
-
-    let member_base = lead.member_base || [];
+    let spouse_relation = quotation.member_details.spouse_account_key ? quotation.member_details.spouse_account_key.relation.toUpperCase() : '';
+ 
+    let member_base = this.state.member_base || [];
+  
     // let member_key = this.props.match.params.member_key;
     let member_key = this.props.member_key;
 
     let pan_amount = this.state.pan_amount;
 
     let pan_needed = false;
-    if (lead.total_amount > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
+    if (quotation.total_premium > pan_amount && (member_key === 'self' || member_key === 'applicant')) {
       pan_needed = true;
     }
-
+ 
 
     let header_title = `${capitalizeFirstLetter(childeNameMapper(member_key))}'s details`;
     let header_subtitle = '';
@@ -75,30 +79,38 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     let next_state = `/group-insurance/group-health/${this.state.provider}/contact`;
-    let backend_key = '';
-    for (var i = 0; member_base && i < member_base.length; i++) {
-      let key = member_base[i].key;
+    let backend_key, form_data = {};
 
-      if (member_key === key) {
-        backend_key = member_base[i].backend_key;
-        if (i !== member_base.length - 1) {
-          next_state = member_base[i + 1].key;
-          break;
-        }
+    for (var i = 0; i < member_base.length; i++) {
+      if(member_base[i].key === member_key){
+          if(i !== member_base.length - 1){
+            next_state = member_base[i + 1].key;
+          }
       }
-
     }
-
     if (this.props.edit) {
       next_state = `/group-insurance/group-health/${this.state.provider}/final-summary`;
     }
 
-    let form_data = lead[backend_key] || {};
+    member_base.forEach(element => {   
+      if(element["key"] === member_key){
+         // eslint-disable-next-line
+        backend_key = element.backend_key          
+      }
+    });
 
+    if (this.state.provider !== 'STAR'){
+      insured_people_details.forEach((member) => {
+       if (member.insured_person.relation_key === backend_key) {
+        form_data = member.insured_person
+       }
+     })
+ }
+
+    form_data.pan_no =   lead.buyer_details.pan_no || "";
     let dobNeeded = member_key === 'applicant';
     form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
     let age = calculateAge(form_data.dob);
-
 
     let height_options = [];
 
@@ -109,6 +121,21 @@ class GroupHealthPlanPersonalDetails extends Component {
       };
       height_options.push(data);
     }
+
+
+    if (this.state.provider === 'STAR') {
+      var occupation;
+      insured_people_details.forEach((member) => {
+        if (member.insured_person.relation_key === backend_key) {
+          form_data = member.insured_person   
+          occupation = member.insured_person.occupation
+        }
+      })
+      
+      let occupationIndex = '';
+      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
+      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+    };
 
     var selectedIndex = 123;
     let height = form_data.height || height_options[selectedIndex].value;
@@ -124,12 +151,12 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     form_data.selectedIndex = selectedIndex;
 
-    if (this.state.provider === 'STAR') {
-      let occupation = lead[backend_key].occupation;
-      let occupationIndex = '';
-  
-      occupationIndex = occupation !== null && occupationOptions.findIndex(item => item.name === occupation || item.value === occupation);
-      form_data.occupation = (occupationIndex && occupationIndex !== -1) && occupationOptions[occupationIndex].value;
+
+    if(member_key === 'applicant'){
+      form_data = lead.buyer_details;
+      form_data.relation = 'self';
+      form_data.relation_key = 'applicant';
+      backend_key = 'self_account_key';
     }
 
     this.setState({
@@ -158,16 +185,16 @@ class GroupHealthPlanPersonalDetails extends Component {
     if (this.state.member_key && this.state.member_key !== this.props.member_key) {
       this.onload();
     }
+    storageService().setObject('applicationPhaseReached', true);
   }
 
   componentWillMount() {
-    this.initialize();
+    this.initialize()
   }
 
-
+ 
   handleChange = name => event => {
 
-    
     var input = document.getElementById('dob');
     input.onkeyup = formatDate;
 
@@ -179,18 +206,21 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     var value = event.target ? event.target.value : event;
 
+    if(name === 'weight'){
+      value = event.target ? event.target.value.substr(0,3) : event;
+    }
+
     if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
       return;
     }
 
-    if(name === 'pan_number' && containsSpecialCharacters(value)){
+    if(name === 'pan_no' && containsSpecialCharacters(value)){
       return;
     }
     
     if (name === 'dob' && !dobFormatTest(value)) {
       return;
     }
-
     if (name === 'height') {
       let index = event;
       const height = `${this.state.height_options[index].value}`;
@@ -227,11 +257,13 @@ class GroupHealthPlanPersonalDetails extends Component {
     }
 
     if (this.state.pan_needed) {
-      keys_to_check.push('pan_number');
+      keys_to_check.push('pan_no');
     }
 
     let form_data = this.state.form_data;
+
     let validation_props = this.state.validation_props;
+
     let isChild = form_data.relation.includes('SON') || form_data.relation.includes('DAUGHTER');
     if (this.state.provider === 'RELIGARE') {
       if (isChild) {
@@ -257,7 +289,7 @@ class GroupHealthPlanPersonalDetails extends Component {
       let first_error = key_check === 'gender' || key_check === 'height' ? 'Please select ' :
         'Please enter ';
       if (!form_data[key_check] || form_data[key_check] === "0") {
-        form_data[key_check + '_error'] = first_error + (key_check === 'pan_number' ? 'pan number' : key_check);
+        form_data[key_check + '_error'] = first_error + (key_check === 'pan_no' ? 'pan number' : key_check);
       }
     }
 
@@ -265,9 +297,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.name_error = 'Enter valid full name';
     }
 
-    if (this.state.pan_needed && form_data.pan_number &&
-      !validatePan(form_data.pan_number)) {
-      form_data.pan_number_error = 'Invalid PAN number';
+    if (this.state.pan_needed && form_data.pan_no &&
+      !validatePan(form_data.pan_no)) {
+      form_data.pan_no_error = 'Invalid PAN number';
     }
 
     if ((this.state.member_key === 'self' || this.state.member_key === 'applicant') && form_data.gender) {
@@ -305,7 +337,6 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if (this.state.member_key === 'applicant') {
 
-
       if (provider === 'HDFCERGO') {
         if (form_data.gender === 'MALE' && (age < validation_props.dob_married_male.min || age > validation_props.dob_married_male.max)) {
           form_data.dob_error = `Valid age is between ${validation_props.dob_married_male.min } - ${validation_props.dob_married_male.max - 1} years`;
@@ -317,15 +348,14 @@ class GroupHealthPlanPersonalDetails extends Component {
 
       }
 
-      if (this.state.lead.account_type === 'parents') {
-        let ageParent1 = calculateAge(((this.state.lead.parent_account1_key || {}).dob || ''));
-        let ageParent2 = calculateAge(((this.state.lead.parent_account2_key || {}).dob || ''));
+      if (this.state.quotation.insurance_type === 'parents') {
+        let ageParent1 = calculateAge(((this.state.quotation.member_details.parent_account1_key || {}).dob || ''));
+        let ageParent2 = calculateAge(((this.state.quotation.member_details.parent_account2_key || {}).dob || ''));
 
         if ((ageParent1 && age >= ageParent1) || (ageParent2 && age >= ageParent2)) {
           form_data.dob_error = "Applicant's age should be less than parents'age";
         }
       }
-
     }
 
     if (form_data.name &&
@@ -333,6 +363,12 @@ class GroupHealthPlanPersonalDetails extends Component {
       form_data.name_error = 'Invalid name';
     }
 
+    let weight_limit = form_data.weight ? form_data.weight.toString() : ''
+    // .weight.toString()
+
+    if(weight_limit.length > 3){
+      form_data.weight_error = "Invalid weight";
+    }
 
     let canSubmitForm = true;
     for (var key in form_data) {
@@ -358,40 +394,88 @@ class GroupHealthPlanPersonalDetails extends Component {
           gender = 'MALE';
         }
       }
-
-      let occupationValue = '';
+                                                   
+      let occupationValue = '';     
       if (provider === 'STAR') {
         let { occupationOptions } = this.state;
-
         let occupation = form_data.occupation || '';
         occupationValue = occupation && occupationOptions.find(item => item.name === occupation || item.value === occupation).name;
       }
-
-
-
       let body = {
-        [this.state.backend_key]: {
-          "name": form_data.name || '',
+    
+        "insured_people_details": [{
+          "name": form_data.name,
+          "height": form_data.height || '',
+          "relation_key": this.state.backend_key,
+          "weight": form_data.weight || '',
+          "relation": this.state.form_data.relation,
           "dob": form_data.dob || '',
           "gender": form_data.gender || gender,
-          "height": form_data.height || '',
-          "weight": form_data.weight || '',
-        }
-      }
-     
-      if (provider === 'STAR') {
-        body[this.state.backend_key].occupation = occupationValue
+        }]
       }
 
-      if (this.state.pan_needed) {
-        body[this.state.backend_key].pan_number = form_data.pan_number;
+         if (provider === 'STAR') {
+          body = {
+          "insured_people_details": [{
+            "name": form_data.name,
+            "height": form_data.height || '',
+            "relation_key": this.state.backend_key,
+            "weight": form_data.weight || '',
+            "relation": this.state.form_data.relation,
+            "dob": form_data.dob || '',
+            "gender": form_data.gender || gender,
+            "occupation" : occupationValue
+          }]
+        }
+      }
+      
+
+      if (this.state.backend_key === 'self_account_key') {
+        body.buyer_details = {
+          "name": form_data.name || '',
+          "pan_no": form_data.pan_no || "",
+          "dob": form_data.dob || '',
+          "gender": form_data.gender || gender,
+        }
+      } 
+
+      if (this.state.backend_key === 'self_account_key' && provider === 'STAR') {
+        body = {
+          "insured_people_details": [{
+            "name": form_data.name,
+            "height": form_data.height || '',
+            "relation_key": this.state.backend_key,
+            "weight": form_data.weight || '',
+            "relation": this.state.form_data.relation,
+            "dob": form_data.dob || '',
+            "gender": form_data.gender || gender,
+            "occupation": occupationValue
+          }],
+          "buyer_details": {
+            "name": form_data.name || '',
+            "pan_no": form_data.pan_no || "",
+            "dob": form_data.dob || '',
+            "gender": form_data.gender || gender,
+          }
+        }
+      }
+      if(this.props.member_key === "applicant"){
+        body = {
+          "buyer_details": {
+            "name": form_data.name || '',
+            "pan_no": form_data.pan_no || "",
+            "dob": form_data.dob || '',
+            "gender": form_data.gender || gender,
+          } 
+        }
       }
 
       this.updateLead(body);
     }
   }
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action, data = {}) {  
+    let formName = (this.state.form_data.name || '').split(" ").filter(e => e).length >= 2;
     let eventObj = {
       "event_name": 'health_insurance',
       "properties": {
@@ -399,7 +483,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         "product": this.state.providerConfig.provider_api,
         "flow": this.state.insured_account_type || '',
         "screen_name": 'personal details',
-        'full_name': this.state.form_data.name ? 'yes' : 'no',
+        'full_name': formName ?  'yes' : 'no',
         'dob': this.state.form_data.dob,
         'height': this.state.form_data.height ? 'yes' : 'no',
         'weight': this.state.form_data.weight ? 'yes' : 'no',
@@ -407,7 +491,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         'member': this.props.member_key,
         "occupation": this.state.form_data.occupation ? 'yes' : 'no',
         'from_edit': this.props.edit ? 'yes' : 'no',
-        'pan_entered': this.state.form_data.pan_number ? 'yes' : 'no',
+        'pan_entered': this.state.form_data.pan_no ? 'yes' : 'no',
         'policy_cannot_be_issued': data.bmi_check ? 'yes' : 'no'
       }
     };
@@ -472,7 +556,7 @@ class GroupHealthPlanPersonalDetails extends Component {
                 src={require(`assets/${this.state.productName}/ic_medical_checkup.svg`)} alt="" />
             </div>
             <div className="content-mid">
-              We are not able to proceed with this application as the insured BMI* is greater than 40.
+          {this.state.provider === 'HDFCERGO' ? 'We are not able to proceed with this application as the insured BMI* is greater than 40.' : 'We are not able to proceed with this application as the insured BMI does not fall under permissible limits for this product.'}
             </div>
 
             <div className="content-bottom">
@@ -524,8 +608,8 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   render() {
-    let currentDate = new Date().toISOString().slice(0, 10);
 
+    let currentDate = new Date().toISOString().slice(0, 10);    
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -549,7 +633,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             width="40"
             label="Full name"
             class="Name"
-            maxLength="50"
+            maxLength={this.state.provider === 'STAR' ? "100": "50"}
             id="name"
             name="name"
             error={this.state.form_data.name_error ? true : false}
@@ -564,7 +648,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             type="text"
             width="40"
             label="Date of birth (DD/MM/YYYY)"
-            class="DOB"
+            class="dob"
             id="dob"
             name="dob"
             max={currentDate}
@@ -603,17 +687,17 @@ class GroupHealthPlanPersonalDetails extends Component {
               style={{ alignItems: "baseline" }}
             >
               <Input
-                error={this.state.form_data.pan_number_error ? true : false}
-                helperText={this.state.form_data.pan_number_error}
+                error={this.state.form_data.pan_no_error ? true : false}
+                helperText={this.state.form_data.pan_no_error}
                 type="text"
                 width="40"
                 label="Enter PAN"
                 class="name"
                 id="name"
-                name="pan_number"
+                name="pan_no"
                 maxLength="10"
-                value={this.state.form_data.pan_number || ""}
-                onChange={this.handleChange("pan_number")}
+                value={this.state.form_data.pan_no || ""}
+                onChange={this.handleChange("pan_no")}
               />
               <GenericTooltip
                 content={
