@@ -190,6 +190,9 @@ class LoanBtDetails extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        current={1}
+        total={2}
+        count={1}
       >
         <div className="loan-bt">
           <div className="subtitle">
