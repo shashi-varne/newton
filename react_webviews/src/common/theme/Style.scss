@@ -151,6 +151,49 @@ body[data-device="web"] {
   cursor: pointer;
 }
 
+
+@mixin fadein-animation-base {
+  animation: container-animation-fadein ease 0.15s; 
+  // animation: container-animation-left-to-right ease 0.2s;
+
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards;
+}
+
+.fadein-animation {
+  @include fadein-animation-base();
+}
+
+@keyframes container-animation-fadein {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes container-animation-left-to-right {
+  0% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes container-animation-top-to-bottom {
+  0% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .Container {
   padding: 20px 20px;
   /* margin-bottom: 60px;
@@ -159,6 +202,8 @@ body[data-device="web"] {
   overflow-y: scroll;
   // margin-bottom: 56px !important;
   padding-bottom: 56px !important;
+  @include fadein-animation-base();
+ 
 }
 
 .Container .container-padding {

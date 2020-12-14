@@ -191,7 +191,7 @@ class Container extends Component {
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
             >
             <div 
-            className={`${!this.props.skelton ? 'slide-fade-show' : 'slide-fade'}`}
+            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
             style={{display: this.props.skelton ? 'none': ''}}
             > {this.props.children} </div>
           </div>
