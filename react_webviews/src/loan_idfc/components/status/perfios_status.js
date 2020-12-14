@@ -174,7 +174,7 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "blocked") {
-      this.navigate(commonMapper["blocked"].cta_state)
+      this.navigate(commonMapper["blocked"].cta_state);
     }
   };
 
@@ -237,11 +237,9 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "failure" && (
             <div className="subtitle">
-              Your <b>statements</b> could not be verified as it <b>exceeds</b>{" "}
-              the <b>maximum allowed file size.</b> We recommend you to{" "}
-              <b>try again</b> by uploading bank statements of{" "}
-              <b>smaller file size</b> to get going/proceed with the
-              verification process.
+              Bank statement analysis failed due to some error. We recommend you
+              to try again by uploading correct bank statements to proceed with
+              the verification process.
             </div>
           )}
 
