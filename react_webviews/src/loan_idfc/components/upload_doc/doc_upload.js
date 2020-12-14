@@ -114,7 +114,7 @@ class DocumentUpload extends Component {
                 imageBaseFile: doc_checklist[i].doc_url,
                 category_id: category,
                 id: doc_checklist[i].doc_id,
-                doc_type: doc_checklist[i].doc_type,
+                checklist_doc_type: doc_checklist[i].doc_type,
                 name:
                   doc_checklist[i].display_name +
                   "." +
@@ -142,7 +142,7 @@ class DocumentUpload extends Component {
                 imageBaseFile: doc_checklist[i].doc_url,
                 category_id: category,
                 id: doc_checklist[i].doc_id,
-                doc_type: doc_checklist[i].doc_type,
+                checklist_doc_type: doc_checklist[i].doc_type,
                 name:
                   doc_checklist[i].display_name +
                   "." +
@@ -160,7 +160,7 @@ class DocumentUpload extends Component {
               imageBaseFile: doc_checklist[i].doc_url,
               category_id: category,
               id: doc_checklist[i].doc_id,
-              doc_type: doc_checklist[i].doc_type,
+              checklist_doc_type: doc_checklist[i].doc_type,
               name:
                 doc_checklist[i].display_name +
                 "." +
@@ -182,7 +182,7 @@ class DocumentUpload extends Component {
         docsMap: docsMap,
         documents: documents,
         totalUpload: totalUpload,
-        category: category
+        category: category,
       });
     }
   };
@@ -416,7 +416,13 @@ class DocumentUpload extends Component {
   };
 
   uploadDocument = async (file, type) => {
-    let { image_data, totalUpload, disbableButton, documents, category } = this.state;
+    let {
+      image_data,
+      totalUpload,
+      disbableButton,
+      documents,
+      category,
+    } = this.state;
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
@@ -460,12 +466,13 @@ class DocumentUpload extends Component {
 
   deleteDocument = async (index, file) => {
     let { documents } = this.state;
+    console.log(file);
 
     const data = new FormData();
     data.append("doc_type", file.doc_type);
     data.append("doc_id", file.id);
     data.append("category_id", file.category_id);
-    data.append("checklist_doc_type", file.doc_type);
+    data.append("checklist_doc_type", file.checklist_doc_type);
     try {
       const res = await Api.post(
         `relay/api/loan/idfc/upload/document/${this.state.application_id}?delete=true`,
@@ -475,14 +482,22 @@ class DocumentUpload extends Component {
       const { status_code: status } = res.pfwresponse;
 
       if (status === 200) {
+        // console.log(index)
+        // console.log(documents)
+        let index = documents.findIndex(
+          (item) => item.checklist_doc_type === file.checklist_doc_type
+        );
         documents.splice(index, 1);
-      }
 
+        this.setState({
+          documents: documents,
+        });
+      }
     } catch (err) {
       console.log(err);
       toast("Something went wrong");
     }
-  }
+  };
 
   renderHtmlCamera(type) {
     let { image_data } = this.state;
@@ -513,7 +528,7 @@ class DocumentUpload extends Component {
                   onChange={this.getPhoto}
                   id={type ? type : "myFile"}
                 />
-                <img src={camera_green} alt="PAN"></img>
+                <img src={camera_green} alt=""></img>
                 <div style={{ color: "#28b24d" }}>Click here to upload</div>
               </div>
             </div>
@@ -531,7 +546,7 @@ class DocumentUpload extends Component {
               <img
                 style={{ width: "100%", height: 150 }}
                 src={image_data[type].imageBaseFile || ""}
-                alt="PAN"
+                alt=""
               />
             </div>
             <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
@@ -547,7 +562,7 @@ class DocumentUpload extends Component {
                   onChange={this.getPhoto}
                   id={type ? type : "myFile"}
                 />
-                <img src={camera_grey} alt="PAN"></img>
+                <img src={camera_grey} alt=""></img>
                 <div style={{ color: "#b4b4b4" }}>Click here to upload new</div>
               </div>
             </div>
@@ -615,7 +630,7 @@ class DocumentUpload extends Component {
               <img
                 style={{ width: "100%", height: 150 }}
                 src={image_data[type].imageBaseFile || ""}
-                alt="PAN"
+                alt=""
               />
             </div>
             <div
@@ -743,11 +758,9 @@ class DocumentUpload extends Component {
                         alt=""
                       />
                       {item.name}
-                      {/* <span
+                      <span
                         style={{ float: "right" }}
-                        onClick={() =>
-                          // item.integrated && this.deleteDocument(index, item)
-                        }
+                        onClick={() => this.deleteDocument(index, item)}
                       >
                         <img
                           // style={{
@@ -757,7 +770,7 @@ class DocumentUpload extends Component {
                           src={require(`assets/deleted.svg`)}
                           alt=""
                         />
-                      </span> */}
+                      </span>
                     </div>
                   </div>
                 </div>
