@@ -191,6 +191,7 @@ export async function getOrCreate(params) {
       document_info: true,
       vendor_info: true,
       bt_info: true,
+      perfios_info: true
     };
 
     let lead = {};
@@ -443,16 +444,15 @@ export async function get07State() {
   let that = this;
 
   setTimeout(function () {
-    
-    if (result.perfios_state === "bypass") {
+    if (result.perfios_status === "bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (result.idfc_07_state === "failed") {
-      this.navigate('error')
+      that.navigate('error')
     } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
       let body = {
         idfc_loan_status: "bt_init",
       };
-      this.updateApplication(body, "bt-info");
+      that.updateApplication(body, "bt-info");
     } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else {
