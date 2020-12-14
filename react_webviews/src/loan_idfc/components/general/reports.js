@@ -69,6 +69,8 @@ class ReportDetails extends Component {
   }
 
   render() {
+    let { vendor_info } = this.state;
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -81,7 +83,7 @@ class ReportDetails extends Component {
 
           <div style={{ margin: '0px 0 40px 0' }} className={`report-color-state ${this.state.vendor_info_ui.cssMapper.color}`}>
             <div className="circle"></div>
-            <div className="report-color-state-title">{this.state.vendor_info_ui.cssMapper.disc}</div>
+            <div className="report-color-state-title">{(vendor_info.idfc_loan_status || "").toUpperCase().split("_").join(" ")}</div>
           </div>
 
           <div className='mid-content'>
