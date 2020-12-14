@@ -244,6 +244,7 @@ class GoldSummary extends Component {
       } else {
         this.setState({
           error: true,
+          onloadError: true,
           errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
             'Something went wrong'
         });
@@ -253,6 +254,9 @@ class GoldSummary extends Component {
       if (res2.pfwresponse.status_code === 200) {
         result2 = res2.pfwresponse.result;
       } else {
+        this.setState({
+          onloadError: true
+        });
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong');
       }
 
