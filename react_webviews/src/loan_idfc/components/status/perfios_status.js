@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
+import ContactUs from "../../../common/components/contact_us";
 
 const commonMapper = {
   failure: {
@@ -28,7 +29,7 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "OK",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     status: "verification failed 2",
   },
@@ -82,7 +83,7 @@ class PerfiosStatus extends Component {
   };
 
   goBack = () => {
-    this.sendEvents('back');
+    this.sendEvents("back");
     this.navigate(this.state.commonMapper.close_state);
   };
 
@@ -104,15 +105,14 @@ class PerfiosStatus extends Component {
   }
 
   handleClick = () => {
-    if(this.state.commonMapper.button_title === 'RETRY')
-      this.sendEvents('retry');
-    else
-      this.sendEvents('next');
+    if (this.state.commonMapper.button_title === "RETRY")
+      this.sendEvents("retry");
+    else this.sendEvents("next");
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
       if (idfc_07_state === "failed") {
-        this.navigate('error')
+        this.navigate("error");
       } else if (!bt_eligible && idfc_07_state === "success") {
         this.setState(
           {
@@ -153,7 +153,10 @@ class PerfiosStatus extends Component {
 
     if (perfios_state === "bypass") {
       if (bt_eligible) {
-        this.navigate("bt-info");
+        let body = {
+          idfc_loan_status: "bt_init",
+        };
+        this.updateApplication(body, "bt-info");
       } else {
         this.submitApplication({}, "one", "", "eligible-loan");
       }
@@ -163,11 +166,15 @@ class PerfiosStatus extends Component {
       // if (bt_eligible) {
       //   this.navigate("bt-info");
       // } else {
-        let body = {
-          perfios_state: "init",
-        };
-        this.updateApplication(body, "income-details");
+      let body = {
+        perfios_state: "init",
+      };
+      this.updateApplication(body, "income-details");
       // }
+    }
+
+    if (perfios_state === "blocked") {
+      this.navigate(commonMapper["blocked"].cta_state)
     }
   };
 
@@ -237,6 +244,29 @@ class PerfiosStatus extends Component {
               verification process.
             </div>
           )}
+
+          {perfios_state === "processing" && (
+            <div>
+              <div className="subtitle">
+                Oops! Something's not right. Please check back in some time.
+              </div>
+              <ContactUs />
+            </div>
+          )}
+
+          {/* {!perfios_state && (
+            <div>
+              <img
+                src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
+                className="center"
+                alt=""
+              />
+              <div className="subtitle">
+                Oops! Something's not right. Please check back in some time.
+              </div>
+              <ContactUs />
+            </div>
+          )} */}
         </div>
       </Container>
     );

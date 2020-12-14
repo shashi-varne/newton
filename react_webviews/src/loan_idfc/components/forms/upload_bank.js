@@ -40,28 +40,6 @@ class UploadBank extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    // let progressHeaderData = {
-    //   title: "Income and loan offer",
-    //   steps: [
-    //     {
-    //       title: "Income details",
-    //       status: "init",
-    //     },
-    //     {
-    //       title: "BT transfer details",
-    //       status: "pending",
-    //     },
-    //     {
-    //       title: "Loan offer",
-    //       status: "pending",
-    //     },
-    //   ],
-    // };
-
-    // this.setState({
-    //   progressHeaderData: progressHeaderData,
-    // });
   }
 
   componentDidMount() {
@@ -329,10 +307,12 @@ class UploadBank extends Component {
           documents.splice(index, 1);
         } else {
           documents[index].showButton = true;
+          this.setState({
+            confirmed: true,
+          });
         }
 
         this.setState({
-          confirmed: true,
           isApiRunning: false,
           documents: documents,
         });
@@ -444,6 +424,9 @@ class UploadBank extends Component {
         }
       } catch (err) {
         console.log(err);
+        this.setState({
+          show_loader: false,
+        });
         toast("Something went wrong");
       }
     }
@@ -454,11 +437,11 @@ class UploadBank extends Component {
 
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        disable={documents.length === 0 || isApiRunning || !confirmed}
+        disable={documents.length === 0 || !confirmed || isApiRunning}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}

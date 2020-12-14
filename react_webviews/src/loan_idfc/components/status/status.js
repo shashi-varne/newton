@@ -5,7 +5,6 @@ import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import ContactUs from "../../../common/components/contact_us";
 
-
 const commonMapper = {
   idfc_null_failed: {
     top_icon: "error_illustration",
@@ -17,7 +16,7 @@ const commonMapper = {
     failed: true,
     screenName: "system_error",
   },
-  "idfc_callback_rejected": {
+  idfc_callback_rejected: {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -218,21 +217,14 @@ class LoanStatus extends Component {
   }
 
   goBack = () => {
-    this.sendEvents('back');
+    this.sendEvents("back");
     this.navigate(this.state.commonMapper.close_state);
   };
 
   handleClick = () => {
-    this.sendEvents('next');
-    let {
-      commonMapper,
-      vendor_application_status,
-      is_dedupe
-    } = this.state;
-    if (
-      !is_dedupe &&
-      vendor_application_status === "idfc_0.5_accepted"
-    ) {
+    this.sendEvents("next");
+    let { commonMapper, vendor_application_status, is_dedupe } = this.state;
+    if (!is_dedupe && vendor_application_status === "idfc_0.5_accepted") {
       let body = {
         perfios_state: "init",
         idfc_loan_status: "perfios",
@@ -263,7 +255,7 @@ class LoanStatus extends Component {
     } = this.state;
 
     if (vendor_application_status === "idfc_0.5_accepted") {
-      commonMapper.top_title = `Congratulations, ${first_name}`;
+      commonMapper.top_title = `Congratulations, ${first_name}!`;
     }
 
     return (
@@ -341,6 +333,20 @@ class LoanStatus extends Component {
 
           {commonMapper.top_title === "System error" && (
             <div>
+              <div className="subtitle">
+                Oops! Something's not right. Please check back in some time.
+              </div>
+              <ContactUs />
+            </div>
+          )}
+
+          {!commonMapper.top_title === "System error" && (
+            <div>
+              <img
+                src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
+                className="center"
+                alt=""
+              />
               <div className="subtitle">
                 Oops! Something's not right. Please check back in some time.
               </div>
