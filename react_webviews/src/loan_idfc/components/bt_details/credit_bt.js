@@ -234,6 +234,9 @@ class LoanBtDetails extends Component {
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
+        current={2}
+        total={2}
+        count={1}
       >
         <div className="loan-bt">
           <div className="subtitle">
