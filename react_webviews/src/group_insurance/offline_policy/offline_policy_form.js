@@ -65,7 +65,7 @@ componentWillMount() {
   ]
 
   let form_data = this.state.form_data
-  form_data.Vendor = 'HDFC Ergo'
+  // form_data.Vendor = 'HDFC Ergo'
   form_data.title = 'CONTINUE'
   this.setState({
     vendor_details: vendor_details,
@@ -75,9 +75,15 @@ componentWillMount() {
 
 
 
-handleChange = name => event => {
-  let vendor_details = this.state.vendor_details
-  var value = vendor_details[event].name
+handleChange = name => event => {           
+  if (!name) {
+    return
+  }
+  var value = event.target ? event.target.value : event;
+  if(name === 'Vendor'){
+    var vendor_details = this.state.vendor_details
+        value = vendor_details[event].name
+  }
   let form_data = this.state.form_data
   form_data[name] = value;
   form_data.index = event
@@ -87,19 +93,6 @@ handleChange = name => event => {
   })
 }
 
-handleChange2 = name => event => {
-  if (!name) {
-    name = event.target.number;
-  }
-  var value = event.target ? event.target.value : event;
-  let form_data = this.state.form_data
-  form_data[name] = value;
-  form_data.index = event
-  form_data[name + '_error'] = '';
-  this.setState({
-    form_data: form_data
-  })
-}
 
 
 handleClick2 = () => {
@@ -167,9 +160,15 @@ handleClick = async () => {
   }
 
   let form_data = this.state.form_data
+  form_data.name_error = ''
+  form_data.name_error2 = ''
 
   if (!form_data.number) {
     form_data.name_error = 'Please Enter Policy number'
+  }
+
+  if (!form_data.Vendor) {
+    form_data.name_error2 = 'Please Select Company Name'
   }
 
   if (!form_data.Vendor || !form_data.number) {
@@ -179,8 +178,6 @@ handleClick = async () => {
     toast('Please Fill in the details');
     return
   }else{
-    form_data.name_error = ''
-    form_data.name_error2 = ''
     this.setState({
       form_data: form_data
     });
@@ -193,7 +190,6 @@ handleClick = async () => {
   try {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
 
-    // const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=000108517E&provider=Edelweiss Tokio`);
     let resultData = res.pfwresponse.result
     form_data.title = 'Submit to fetch the detail'
     if (res.pfwresponse.status_code === 200 && resultData.policy_binded) {
@@ -215,7 +211,13 @@ handleClick = async () => {
          lock: false,
          form_data: form_data,
          binding : false
-       })
+       });
+       setTimeout(() => {
+        var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+        for (var i = 0; i < x.length; i++) {
+          x.item(i).style.backgroundColor = "#CDF4D7";
+        }
+      }, 0);
       }
 
       if(resultData.error === 'This policy already belongs to a user.'){
@@ -226,7 +228,13 @@ handleClick = async () => {
           lock: false,
           form_data: form_data,
           binding : false
-        })
+        });
+        setTimeout(() => {
+          var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+          for (var i = 0; i < x.length; i++) {
+            x.item(i).style.backgroundColor = "#CDF4D7";
+          }
+        }, 0);
       }
 
       toast(resultData.error || resultData.message || "Something went wrong");
@@ -324,7 +332,7 @@ handleClick = async () => {
               error={this.state.form_data.name_error2 ? true : false}
               name="Vendor"
               helperText={this.state.form_data.name_error2}
-              value={this.state.form_data.Vendor || 'HDFC Ergo'}
+              value={this.state.form_data.Vendor || ''}
               onChange={this.handleChange("Vendor")}
             />
           </div>
@@ -338,9 +346,9 @@ handleClick = async () => {
                             name="name"
                             maxLength="50"
                             error={this.state.form_data.name_error ? true : false}
-                            helperText={this.state.form_data.name_error || 'Insurance vendor_details'}
+                            helperText={this.state.form_data.name_error}
                             value={this.state.form_data.number || ''}
-                            onChange={this.handleChange2('number')} />
+                            onChange={this.handleChange('number')} />
                     </div>
                     <div>
 

@@ -125,7 +125,7 @@ class Report extends Component {
     return obj;
   }
 
-  setReportData(termData, group_insurance_policies, health_insurance_policies, o2o_applications ) {
+  setReportData(termData, group_insurance_policies, health_insurance_policies  , o2o_applications ) {
 
 
     let canShowReport = false;
@@ -184,7 +184,7 @@ class Report extends Component {
     }
 
 
-    let hs_policies = health_insurance_policies.insurance_apps;
+    let hs_policies = health_insurance_policies || '';
     for (let i = 0; i < hs_policies.length; i++) {
       let policy = this.getProviderObject(hs_policies[i]);
       reportData.push(policy);
@@ -228,9 +228,7 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : ''
         })
 
-        let ins_policies = policyData.group_insurance || {};
-        let o2o_applications = policyData.o2o_applications; 
-         
+        let o2o_applications = policyData.o2o_applications;          
         // this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
         let group_insurance_policies = policyData.group_insurance || {};
         let health_insurance_policies = policyData.health_insurance || {};
@@ -273,7 +271,7 @@ class Report extends Component {
     } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else if(key === 'o2o_details'){
-      path = `/group-insurance/group-health/o2o-reportdetails/${policy.id}`;
+      path = `/group-insurance/group-health/offline-to-online-report-details/${policy.id}`;
     } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
       if(key === 'hdfc_ergo'){
         key = 'HDFCERGO';

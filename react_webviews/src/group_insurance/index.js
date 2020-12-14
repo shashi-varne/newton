@@ -552,7 +552,7 @@ const Insurance = (props) => {
 
           {/****    offline to online  ***OfflineReport***/}
           <Route path={`${url}/group-insurance/add-policy`} component={AddPolicy} />
-          <Route path={`${url}/group-health/o2o-reportdetails/:policy_id`} component={OfflineReport} />
+          <Route path={`${url}/group-health/offline-to-online-report-details/:policy_id`} component={OfflineReport} />
 
           <Route component={NotFound} />
         </Switch>

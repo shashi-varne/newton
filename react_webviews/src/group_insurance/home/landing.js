@@ -8,6 +8,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../constants';
 import { nativeCallback } from 'utils/native_callback';
+import '../common/Style.scss'
 
 class Landing extends Component {
 
@@ -377,7 +378,7 @@ class Landing extends Component {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
-            < img  src={ require(`assets/ic_hand_insurance_${this.state.type}.svg`)} alt='' />
+            <img  src={ require(`assets/ic_hand_insurance_${this.state.type}.svg`)} alt='' />
           </div>
           <div style={{
             marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
@@ -387,9 +388,9 @@ class Landing extends Component {
             Get instant policy issuance
             </div>
           <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
-           <div className='products' style={{ marginTop: '50px' }}>
+           <div  style={{ marginTop: '50px' }}>
            <div onClick={this.policymove}>
-           <img onClick={this.policymove} style={{ margin: '-15px 5px 15px 0' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           <img style={{ margin: '-15px 5px 15px 0' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Get started</h1>
             <div>
