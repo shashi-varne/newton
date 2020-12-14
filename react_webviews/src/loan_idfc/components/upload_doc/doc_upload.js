@@ -75,9 +75,15 @@ class DocumentUpload extends Component {
         };
       });
 
-      form_data.doc_name = (docList[selectedIndex].doc_checklist[0] && docList[selectedIndex].doc_checklist[0].subtype) || "";
+      form_data.doc_name =
+        (docList[selectedIndex].doc_checklist[0] &&
+          docList[selectedIndex].doc_checklist[0].subtype) ||
+        "";
 
-      let doc_checklist = (docList[selectedIndex].doc_checklist[0] && docList[selectedIndex].doc_checklist[0].docs) || [];
+      let doc_checklist =
+        (docList[selectedIndex].doc_checklist[0] &&
+          docList[selectedIndex].doc_checklist[0].docs) ||
+        [];
 
       docsMap.forEach((item) => {
         if (item.name === form_data.doc_name) {
@@ -88,8 +94,8 @@ class DocumentUpload extends Component {
       if (doc_checklist.length !== 0) {
         let file1, file2, file3;
         for (var i = doc_checklist.length - 1; i >= 0; i--) {
-        console.log(documents.length)
-        console.log(documents)
+          console.log(documents.length);
+          console.log(documents);
 
           if (
             doc_checklist[i].doc_type === "doc1" &&
@@ -105,7 +111,13 @@ class DocumentUpload extends Component {
               file1 = {
                 uploaded: true,
                 integrated: true,
-                name: doc_checklist[i].doc_type + "." +doc_checklist[i].extension,
+                imageBaseFile: doc_checklist[i].doc_url,
+                id: doc_checklist[i].doc_id,
+                doc_type: doc_checklist[i].doc_type,
+                name:
+                  doc_checklist[i].display_name +
+                  "." +
+                  doc_checklist[i].extension,
               };
 
               documents.push(file1);
@@ -126,11 +138,16 @@ class DocumentUpload extends Component {
               file2 = {
                 uploaded: true,
                 integrated: true,
-                name: doc_checklist[i].doc_type + "." +doc_checklist[i].extension,
+                imageBaseFile: doc_checklist[i].doc_url,
+                id: doc_checklist[i].doc_id,
+                doc_type: doc_checklist[i].doc_type,
+                name:
+                  doc_checklist[i].display_name +
+                  "." +
+                  doc_checklist[i].extension,
               };
 
               documents.push(file2);
-
             }
           }
 
@@ -138,13 +155,18 @@ class DocumentUpload extends Component {
             file3 = {
               uploaded: true,
               integrated: true,
-              name: doc_checklist[i].doc_type + "." +doc_checklist[i].extension,
+              imageBaseFile: doc_checklist[i].doc_url,
+              id: doc_checklist[i].doc_id,
+              doc_type: doc_checklist[i].doc_type,
+              name:
+                doc_checklist[i].display_name +
+                "." +
+                doc_checklist[i].extension,
             };
 
             documents.push(file3);
           }
         }
-
 
         this.setState({
           disbableButton: false,
@@ -155,7 +177,6 @@ class DocumentUpload extends Component {
         docList: docList[selectedIndex],
         docs: docs,
         docsMap: docsMap,
-        category: category,
         documents: documents,
         totalUpload: totalUpload,
       });
@@ -244,7 +265,6 @@ class DocumentUpload extends Component {
     this.setState({
       form_data: form_data,
       totalUpload: totalUpload,
-
     });
   };
 
@@ -256,7 +276,7 @@ class DocumentUpload extends Component {
     }
   }
 
-  startUpload(method_name, type = "", name = "") {
+  startUpload(method_name, type = "", name = "", id = "") {
     this.setState({
       type: method_name,
       doc_type: type,
@@ -392,7 +412,7 @@ class DocumentUpload extends Component {
   };
 
   uploadDocument = async (file, type) => {
-    let { image_data, totalUpload, disbableButton } = this.state;
+    let { image_data, totalUpload, disbableButton, documents } = this.state;
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
@@ -406,12 +426,19 @@ class DocumentUpload extends Component {
         data
       );
 
-      const { status_code: status } = res.pfwresponse;
+      const { status_code: status, result } = res.pfwresponse;
 
       if (status === 200) {
         if (totalUpload < 3) {
           image_data[type].integrated = true;
         } else {
+          let index = documents.findIndex(
+            (item) => item.checklist_doc_type === file.checklist_doc_type
+          );
+          console.log(documents[index]);
+          documents[index].id = result.document_id;
+          console.log(documents[index]);
+
           disbableButton = false;
         }
 
@@ -556,10 +583,7 @@ class DocumentUpload extends Component {
             <div>
               <img
                 style={{ width: "100%", height: 150 }}
-                src={
-                  image_data[type].imageBaseFile ||
-                  ""
-                }
+                src={image_data[type].imageBaseFile || ""}
                 alt="PAN"
               />
             </div>
@@ -599,17 +623,20 @@ class DocumentUpload extends Component {
   }
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     this.navigate("doc-list");
   };
 
+  handleEdit = (index, doc) => {
+    this.setState({
+      editId: index,
+      doc_id: doc.id,
+    });
+    this.startUpload("open_file", doc.doc_type, "", index);
+  };
+
   render() {
-    let {
-      image_data,
-      documents,
-      totalUpload,
-      disbableButton,
-    } = this.state;
+    let { image_data, documents, totalUpload, disbableButton } = this.state;
 
     if (totalUpload < 3 && Object.keys(image_data).length !== totalUpload) {
       for (var i in image_data) {
@@ -623,7 +650,7 @@ class DocumentUpload extends Component {
 
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title={this.state.docList.category_name}
         buttonTitle="CONTINUE"
@@ -693,7 +720,21 @@ class DocumentUpload extends Component {
                         alt=""
                       />
                       {item.name}
-                      {/* <span className="bytes">{bytesToSize(item.size)}</span> */}
+                      {/* <span
+                        style={{ float: "right" }}
+                        onClick={() =>
+                          item.integrated && this.handleEdit(index, item)
+                        }
+                      >
+                        <img
+                          // style={{
+                          //   opacity: item.doc_checklist.length !== 0 ? 1 : 0,
+                          // }}
+                          id={item.doc_type}
+                          src={require(`assets/edit_green.svg`)}
+                          alt=""
+                        />
+                      </span> */}
                     </div>
                   </div>
                 </div>
@@ -707,7 +748,7 @@ class DocumentUpload extends Component {
                       this.startUpload(
                         "open_file",
                         `doc${documents.length + 1}`,
-                        `document_${documents.length + 1}`,
+                        `document_${documents.length + 1}`
                       )
                     }
                   >

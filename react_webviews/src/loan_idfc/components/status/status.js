@@ -342,6 +342,11 @@ class LoanStatus extends Component {
 
           {!commonMapper.top_title === "System error" && (
             <div>
+              <img
+                src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
+                className="center"
+                alt=""
+              />
               <div className="subtitle">
                 Oops! Something's not right. Please check back in some time.
               </div>

@@ -191,6 +191,7 @@ export async function getOrCreate(params) {
       document_info: true,
       vendor_info: true,
       bt_info: true,
+      perfios_info: true
     };
 
     let lead = {};

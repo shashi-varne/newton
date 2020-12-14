@@ -83,6 +83,7 @@ const journeyMapper2 = {
   },
   doc_uploaded: {
     index: "3",
+    next_state: "doc-list",
   },
   idfc_4_submitted: {
     index: "3",

@@ -29,7 +29,7 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "OK",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     status: "verification failed 2",
   },
@@ -68,7 +68,8 @@ class PerfiosStatus extends Component {
     let vendor_info = lead.vendor_info || {};
     let personal_info = lead.personal_info || {};
     let name = personal_info.first_name;
-    let perfios_state = vendor_info.perfios_state;
+    // let perfios_state = vendor_info.perfios_state;
+    let perfios_state = "blocked";
     let idfc_07_state = vendor_info.idfc_07_state;
 
     let bt_eligible = vendor_info.bt_eligible;
@@ -166,11 +167,15 @@ class PerfiosStatus extends Component {
       // if (bt_eligible) {
       //   this.navigate("bt-info");
       // } else {
-        let body = {
-          perfios_state: "init",
-        };
-        this.updateApplication(body, "income-details");
+      let body = {
+        perfios_state: "init",
+      };
+      this.updateApplication(body, "income-details");
       // }
+    }
+
+    if (perfios_state === "blocked") {
+      this.navigate(commonMapper["blocked"].cta_state)
     }
   };
 
@@ -179,8 +184,8 @@ class PerfiosStatus extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title={commonMapper.top_title}
-        buttonTitle={commonMapper.button_title}
+        title={!commonMapper.top_title ? "Sorry" : commonMapper.top_title}
+        buttonTitle={!commonMapper.button_title ? "OK" : commonMapper.button_title}
         handleClick={this.handleClick}
         headerData={{
           icon: commonMapper.icon || "",
@@ -243,6 +248,20 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "processing" && (
             <div>
+              <div className="subtitle">
+                Oops! Something's not right. Please check back in some time.
+              </div>
+              <ContactUs />
+            </div>
+          )}
+
+          {!perfios_state && (
+            <div>
+              <img
+                src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
+                className="center"
+                alt=""
+              />
               <div className="subtitle">
                 Oops! Something's not right. Please check back in some time.
               </div>
