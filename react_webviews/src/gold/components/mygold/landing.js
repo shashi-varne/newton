@@ -18,7 +18,7 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
 import gold_pattern_myway from 'assets/finity/gold_pattern.png';
-import crd_gold_info from 'assets/card_gold_info.png';
+import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
 
@@ -546,7 +546,8 @@ class GoldSummary extends Component {
               <div className="bottom-content">
                 Buy-sell anytime | 24K 99.99% pure | 100% secure
               </div>
-            </div>}
+            </div>
+            }
         </div>
     )
   }
