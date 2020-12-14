@@ -255,7 +255,7 @@ class PerfiosStatus extends Component {
             </div>
           )}
 
-          {!perfios_state && (
+          {/* {!perfios_state && (
             <div>
               <img
                 src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
@@ -267,7 +267,7 @@ class PerfiosStatus extends Component {
               </div>
               <ContactUs />
             </div>
-          )}
+          )} */}
         </div>
       </Container>
     );
