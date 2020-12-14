@@ -30,7 +30,11 @@ class JourneyStepsClass extends Component {
     const props = this.props;
 
     return (
-      <div className="journey-steps-count" key={index}>
+      <div className="journey-steps-count" key={index} 
+      onClick={() => {
+        options.status !== "pending" && props.handleClick(options.id)
+      }} 
+      >
           <div className={`circle-count ${options.status || "pending"}`}>
             {options.status !== "completed" && (
               <div className="count">{options.step}</div>
@@ -41,7 +45,10 @@ class JourneyStepsClass extends Component {
               </div>
             )}
           </div>
-          <div className={`steps-content ${options.status || "pending"}`}>
+          <div className={`steps-content ${options.status || "pending"}`} style={{
+            borderColor : options.status === "completed" && getConfig().productName === "fisdom" && "#D5CCE9" 
+            || options.status === "completed" && getConfig().productName === "finity" && "#CBDEF6"
+          }} >
             <div className="title flex">
               {options.status === "completed" ? options.titleCompleted : options.title}
               {options.status && (
