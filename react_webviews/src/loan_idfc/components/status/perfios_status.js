@@ -68,8 +68,7 @@ class PerfiosStatus extends Component {
     let vendor_info = lead.vendor_info || {};
     let personal_info = lead.personal_info || {};
     let name = personal_info.first_name;
-    // let perfios_state = vendor_info.perfios_state;
-    let perfios_state = "blocked";
+    let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
 
     let bt_eligible = vendor_info.bt_eligible;
