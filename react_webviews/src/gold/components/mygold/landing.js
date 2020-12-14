@@ -18,7 +18,6 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
 import gold_pattern_myway from 'assets/finity/gold_pattern.png';
-import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
 
@@ -527,7 +526,8 @@ class GoldSummary extends Component {
       <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
             <Imgc 
             style={{width:'100%',cursor:'pointer', minHeight: 233}} 
-            src={crd_gold_info} alt="" 
+            src={ require(`assets/${this.state.productName}/crd_gold_info.svg`)}
+            alt="" 
             type="gold_check_how_icon"
             callbackImgc={this.callbackImgc}
             />
