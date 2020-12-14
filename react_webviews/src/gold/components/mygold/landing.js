@@ -30,7 +30,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
-import gold_pattern_myway from 'assets/myway/gold_pattern.png';
+import gold_pattern_myway from 'assets/finity/gold_pattern.png';
 import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
@@ -61,7 +61,7 @@ class GoldSummary extends Component {
       apiError: '',
       user_info: {},
       openDialogOffer: false,
-      showOffers: true, // to manage offer carousel
+      showOffers: false, // to manage offer carousel
       offerImageData: [],
       productName: getConfig().productName,
       mmtc_info: {},
@@ -89,7 +89,7 @@ class GoldSummary extends Component {
     nativeCallback({ action: 'take_control_reset' });
     storageService().remove('gold_provider');
     let type = getConfig().productName;
-    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
+    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Finity';
     
     var gold_offer_terms1 = [
       'For a transaction to be valid, there must be a minimum purchase of Rs 1,000 for each offer.',
@@ -123,16 +123,18 @@ class GoldSummary extends Component {
 
     
     var gold_offer_terms_safegold_november = [
-      'Offer is only valid till  23:59 hrs 31st October 2020.',
-      'For a customer to be valid for the offer (s)he should purchase gold worth at least 10gm during the offer period.',
+      'Offer is only valid till  23:59 hrs 20th November 2020.',
+      'For a customer to be valid for the offer (s)he should purchase gold worth at least 1gm during the offer period.',
       'This offer can be availed only once ( per device, per user, per account) during the offer period. Highest Goldback applicable will be given to the customer.',
-      'Purchase can be done in a single transaction or multiple transaction but the total gold should be greater than at least 10gm.',
+      'Purchase can be done in a single transaction or multiple transaction but the total gold should be greater than at least 1gm.',
       'Goldback will be allotted as per below mentioned criteria as per the price of Gold on the allocation date as mentioned below.',
       [
+        'Gold purchased greater than 1gm : Rs 100/- for first 500 customers',
         'Gold purchased greater than 10gm : Rs 2500/- for first 30 customers',
         'Gold purchased greater than 20 gm : Rs 5000/- for first 25 customers'
       ],
-      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 20th November 2020.",
+
+      "Gold-back amounts for lucky winners will be credited to the customer's Safegold account by 5th December 2020.",
       `Any conditions which are not explicitly covered would be at the sole discretion of Finwizard Technology Private Limited. The decision of ${typeCaps} in this regard will be final and the company has the right to change terms and conditions at any time.`,
       "In case of any customer query or dispute, Finwizard Technology Private Limited reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
     ]
@@ -154,7 +156,7 @@ class GoldSummary extends Component {
       },
       {
         src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
-        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://mywaywealth.com/candere-gold-2019/',
+        link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://finity.in/candere-gold-2019/',
         terms: '',
         key: 'candere',
         canShow: false
@@ -176,7 +178,7 @@ class GoldSummary extends Component {
         link: '',
         terms: gold_offer_terms_safegold_november,
         key: 'safegold_november',
-        canShow: true
+        canShow: false
       },
     ];
 

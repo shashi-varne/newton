@@ -380,6 +380,152 @@ button {
   margin-right: 10px;
 }
 
+.resume-page-content{
+  font-size: 14px;
+  color: grey;
+  margin-top: 20px;
+  line-height: 20px;
+}
+.fyntune-landing{
+  font-family: "Roboto", sans-serif;
+}
+.fyntune-heading {
+  font-size: 17px;
+  font-weight: 500;
+  margin-top: 40px;
+}
+.fyntune-info {
+  color: #8d918e;
+  font-size: 15px;
+  line-height: 24px;
+  padding-right: 20px;
+}
+
+.fyntune-faq {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.FiveStepPlan-Container{
+  padding-left: 15px;
+}
+
+.FiveStepPlan-Box{
+  position: relative;
+  border: 2px solid #d6cceb;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  max-height: 110px;
+}
+
+.FiveStepPlan-Info{
+  line-height: 8px;
+  margin: 20px 0px 20px 30px;
+}
+
+.FiveStepPlan-Number{
+  position: absolute;
+  background-color: white;
+  padding: 8px 12px;
+  border-radius: 999px;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -18px;
+  color: #5D44AE;
+  border: 2px #5D44AE solid;
+}
+
+.FiveStepPlan-title{
+  font-size: 15px;
+  line-height: 16px;
+}
+
+.FiveStepPlan-subtitle{
+  font-size: 13px;
+  color: #767E86;
+  padding-right: 30px;
+  line-height: 20px;
+  transform: translateY(-8px);
+}
+
+.landing-hero-container{
+  width: 100%;
+}
+.landing-hero-img{
+  width: 100%;
+  object-fit: cover;
+}
+
+.resume-int-page-title{
+  margin-bottom: 30px;
+}
+.resume-int-hero-container{
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.resume-int-hero-img{
+  width: 100%;
+  object-fit: cover;
+}
+.resume-int-page-content{
+  font-size: 18px;
+  color: #79838F;
+  line-height: 25px;
+  font-family: "Roboto";
+}
+
+.resume-card {
+  padding: 20px;
+  margin: 20px 0 20px 0;
+  box-shadow: 0px 2px 6px 0px rgba(102, 120, 121, 0.25);
+  border-radius: 4px;
+  .rc-title {
+    color: #0A1D32;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+  }
+
+  .rc-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .rc-tile-left {
+      display: flex;
+      /* align-items: center; */
+  }
+  
+  .rct-title {
+      color: #0A1D32;
+      font-size: 10px;
+      font-weight: 600;
+      margin: 4px 0 5px 0;
+  }
+  
+  .rct-subtitle {
+      color: #0A1D32;
+      font-size: 16px;
+      font-weight: 400;
+  }
+  
+  .rc-tile-premium-data {
+      margin: 0 0 0 10px;
+  }
+
+  .rc-bottom {
+    margin: 20px 0 0 0;
+  }
+  
+  .rcb-content {
+      color: #767E86;
+      font-size: 12px;
+      font-weight: 400;
+  }
+}
+
+
 input#pan {
   text-transform: uppercase;
 }
@@ -808,6 +954,10 @@ input#pan {
     padding: 5px 0 5px 0;
   }
 
+  .common-faqs-tile:last-child{
+    margin-bottom: 50px;
+  }
+
   .top-tile {
     display: flex;
     justify-content: space-between;
@@ -1049,4 +1199,8 @@ input#pan {
   font-size: 13px;
   color: #767E86;
   margin-top: 10px;
+}
+
+.OTP-title{
+  justify-content: center !important;
 }

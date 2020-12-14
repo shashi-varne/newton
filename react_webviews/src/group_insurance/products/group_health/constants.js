@@ -1,9 +1,10 @@
 export const hdfc = {
     key: 'HDFCERGO',
-    provider_api: 'hdfcergo',
+    provider_api: 'hdfc_ergo',
     title: 'HDFC ERGO',
     title2: 'my: health Suraksha',
     subtitle: 'my: health Suraksha',
+    address_field_max_length: 70,
     logo: 'hdfc_ergo_ic_logo_cta.svg',
     logo_card: 'hdfc_ergo_ic_logo_card.svg',
     logo_cta: 'hdfc_ergo_ic_logo_cta.svg',
@@ -19,8 +20,8 @@ export const hdfc = {
     validation_props: {
         'dob_adult': { min: 18, max: 90 },
         'dob_child': { minDays: 90, max: 25 },
-        'dob_married_male': { min: 21, max: 25 },
-        'dob_married_female': {min: 18}
+        'dob_married_male': { min: 21, max: 90 },
+        'dob_married_female': {min: 18 , max:90}
     },
     applicant_detail_screen: {
         fields: [
@@ -28,6 +29,11 @@ export const hdfc = {
             'addr1',
             'erg-1'
         ]
+    },
+    hdfc_plan_title_mapper : {
+        'hdfc_ergo_silver_smart': 'Silver Smart Plan',
+        'hdfc_ergo_gold_smart': 'Gold Smart Plan',
+        'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
     },
     landing_screen: {
         offerImageData: [
@@ -91,7 +97,7 @@ export const hdfc = {
             },
             {
                 'name': 'Self & family members',
-                'value': 'selfandfamily'
+                'value': 'self_family'
             },
             {
                 'name': 'Parents',
@@ -127,19 +133,19 @@ export const hdfc = {
             },
             {
                 'name': 'GRANDPARENT',
-                'value': 'GRANDPARENT'
+                'value': 'GRAND PARENT'
             },
             {
                 'name': 'GRANDCHILD',
-                'value': 'GRANDCHILD'
+                'value': 'GRAND CHILD'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
+                'value': 'BROTHER IN LAW'
             },
             {
                 'name': 'SISTER IN LAW',
-                'value': 'SISTER_IN_LAW'
+                'value': 'SISTER IN LAW'
             },
             {
                 'name': 'NEPHEW',
@@ -152,26 +158,39 @@ export const hdfc = {
             {
                 'name': 'SPOUSE',
                 'value': 'SPOUSE'
-            }
+            },
+            // {
+            //     'name' : 'OTHER RELATIVE',
+            //     'value': 'OTHER RELATIVE'
+            // }
         ]
     },
     select_ped_screen: {
         ped_list: [
-            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' },
-            { 'name': 'Adenoid/ Adenoidectomy' },
-            { 'name': 'Appendix/Appendicitis/Appendix surgery' },
-            { 'name': 'Asthma' },
-            { 'name': 'Cataract - 1 Eye/Both Eyes' },
-            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia' },
-            { 'name': 'Cholecystectomy/Gall bladder surgery/removal' },
-            { 'name': 'Diabetes/High Sugar' },
-            { 'name': 'Fall/Accidental Injury' },
-            { 'name': 'Fistula' },
-            { 'name': 'Fissure' },
-            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue' },
-            { 'name': 'Fibroid/Myomectomy' },
-            { 'name': 'Fracture with implant/rod/screw/plate' },
-            { 'name': 'Other' }
+            { 'name': 'Acute Gastroenteritis/AGE/Diarrhoea/Loose Motions/Vomiting' ,   "id": "hdfc_ergo_ped_diarrhoea",},
+            { 'name': 'Adenoid/ Adenoidectomy',  "id": "hdfc_ergo_ped_adenoid_adenoidectomy", },
+            {'name' : 'Tuberculosis', 'id': 'hdfc_ergo_ped_tuberculosis'},
+            { 'name': 'Hypothyroid' , "id" : "hdfc_ergo_ped_hypothyroid"},
+            {'name':  'Renal Calculus/Kidney Stone/Urinary Calculus', "id":'hdfc_ergo_ped_renal_kidneystone_urinary'},
+            { 'name': 'Cataract - 1 Eye/Both Eyes' ,    "id": "hdfc_ergo_ped_cataract" },
+            { 'name': 'Cholesterol/Triglyceride/Dyslipidaemia/Hyperlipidaemia', "id": "hdfc_ergo_ped_cholesterol", },
+            { 'name': 'Tonsil/Tonsillectomy' ,  "id": "hdfc_ergo_ped_tonsils_tonsillectomy", },
+            {'name' : 'Fistula', 'id' : 'hdfc_ergo_ped_fistula'},
+            { 'name': 'Piles/Haemorrhoids', 'id': 'hdfc_ergo_ped_piles_haemorrhoids'},
+            {'name' : 'Hernia/Inguinal Hernia/Umbilical Hernia' , 'id': 'hdfc_ergo_ped_hernia'},
+            { 'name': 'Asthma', 'id': 'hdfc_ergo_ped_asthma'},
+            { 'name': 'Fall/Accidental Injury' ,   "id": "hdfc_ergo_ped_fall_accidental_injury"},
+            { 'name': 'Fissure',  "id": "hdfc_ergo_ped_fissure", },
+            { 'name': 'Fever/Viral Fever/Enteric Fever/Typhoid/Malaria/Dengue', "id": "hdfc_ergo_ped_fever"  },
+            { 'name': 'Fibroid/Myomectomy',  "id": "hdfc_ergo_ped_fibroid_myomectomy" },
+            { 'name': 'Fracture with implant/rod/screw/plate' , "id": "hdfc_ergo__ped_fracture_with_implant",},
+            { 'name': 'Fracture without implant/rod/screw/plate' , 'id':'hdfc_ergo_ped_fracture_without_implant'},
+            {'name':  'Hysterectomy/Uterus removal', 'id':'hdfc_ergo_ped_uterus_removal'},
+            {'name':  'Hypertension/Blood pressure', 'id' : 'hdfc_ergo_hypertension_blood_pressure'},
+            {'name':  'Diabetes/High Sugar', 'id': 'hdfc_ergo_ped_diabetes'},
+            {'name' : 'Cholecystectomy/Gall bladder surgery/removal', 'id':'hdfc_ergo_ped_gall_bladder_removal'},
+            {'name':  'Piles/Haemorrhoids', 'id' : 'hdfc_ergo_ped_appendix'},
+            { 'name': 'Other' ,  "id": "hdfc_ergo_ped_other_diseases", }
         ]
     },
     payment_screen: {
@@ -184,7 +203,9 @@ export const religare = {
     key: 'RELIGARE',
     provider_api: 'religare',
     title: 'Care Health (formerly Religare)',
+    title2: 'Care Health',
     subtitle: 'Care',
+    address_field_max_length: 60,
     logo: 'ic_religare_logo.svg',
     logo_card: 'ic_religare_logo_card.svg',
     logo_cta: 'ic_religare_logo.svg',
@@ -210,7 +231,7 @@ export const religare = {
     validation_props: {
         'dob_adult': { min: 18, max: 99 }, 
         'dob_child': { minDays: 91, minAge: 5, max: 25 },
-        'dob_married_male': { min: 21, max: 25 },
+        'dob_married_male': { min: 18, max: 99 },
         'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {
@@ -219,6 +240,12 @@ export const religare = {
             'addr1',
             'erg-1'
         ]
+    },
+    add_on_title : {
+        uar: 'Unlimited Automatic Recharge',
+        opd: 'OPD care',
+        ped_wait_period: 'Reduction in PED wait period',
+        ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
         offerImageData: [
@@ -298,7 +325,7 @@ export const religare = {
             },
             {
                 'name': 'Self & family members',
-                'value': 'selfandfamily'
+                'value': 'self_family'
             },
             {
                 'name': 'Parents',
@@ -360,10 +387,10 @@ export const religare = {
                 'name': 'SON',
                 'value': 'SON'
             },
-            {
-                'name': 'SPOUSE',
-                'value': 'SPOUSE'
-            },
+            // {
+            //     'name': 'SPOUSE',
+            //     'value': 'SPOUSE'
+            // },
             {
                 'name': 'DAUGHTER',
                 'value': 'DAUGHTER'
@@ -385,84 +412,98 @@ export const religare = {
                 'name': 'Diabetes',
                 id: 'ped_no_1',
                 tag: 'PEDdiabetesDetails',
+                "key" : 'religare_ped_diabetes',
                 description: 'Diabetes Mellitus type 1 or Diabetes on insulin or Diabetes associated with blindness or chronic foot ulcer',
             },
             {
                 'name': 'Hypertension',
                 id: 'ped_no_2',
                 tag: 'PEDhyperTensionDetails',
+                "key" :  "religare_ped_hypertension",
                 description: 'Hypertension / High blood pressure'
             },
             {
                 'name': 'Liver disease',
                 id: 'ped_no_3',
                 tag: 'PEDliverDetails',
+                "key" : "religare_ped_liver_disease",
                 description: 'Pancreatitis or Liver disease(including but not limited to Cirrhosis / Hepatitis B or C / Willson’s disease) or any other digestive tract disorder(disorders of esophagus or stomach or intestine or any other)'
             },
             {
                 'name': 'Cancer',
                 id: 'ped_no_4',
                 tag: 'PEDcancerDetails',
+                "key" : "religare_ped_cancer",
                 description: 'Cancer'
             },
             {
                 'name': 'Cardiac disorder',
                 id: 'ped_no_5',
                 tag: 'PEDcardiacDetails',
+                "key" :   "religare_ped_cardiac_disorder",
                 description: 'Any cardiovascular / Heart disease(including but not limited to Coronary artery disease / Rheumatic heart disease / Heart attack or Myocardial infarction / Heart failure / Bypass Grafting or CABG / Angioplasty or PTCA / Heart valve diseases / Pacemaker implantation)'
             },
             {
                 'name': 'Blood disorder',
                 id: 'ped_no_6',
                 tag: 'PEDjointpainDetails',
+                "key" : "religare_ped_blood_disorder",
                 description: 'Any disorders of Blood and / or Immunity(including but not limited to bleeding or clotting disorders, Systemic Lupus Erythematosus, Rheumatoid Arthritis, Crohn’s disease, Ulcerative Colitis) '
             },
             {
                 'name': 'Kidney disease',
                 id: 'ped_no_7',
                 tag: 'PEDkidneyDetails',
+                "key" : "religare_ped_kidney_disease",
                 description: 'Any Kidney / urinary tract / reproductive organ disease'
             },
             {
                 'name': 'Paralysis',
                 id: 'ped_no_8',
                 tag: 'PEDparalysisDetails',
+                "key" : "religare_ped_paralysis",
                 description: 'Any Neuromuscular(muscles or nervous system) disorder or Psychiatric disorders(including but not limited to Motor Neuron Disease, Muscular dystrophies, Epilepsy, Paralysis, Parkinsonism, Multiple Sclerosis, stroke, mental illness)'
             },
             {
                 'name': 'Congenital disorder',
                 id: 'ped_no_9',
                 tag: 'PEDcongenitalDetails',
+                "key" :  "religare_ped_congenital_disorder",
                 description: 'Congenital disorder'
             },
             {
                 'name': 'HIV / AIDS',
                 id: 'ped_no_10',
                 tag: 'PEDHivaidsDetails',
+                "key" : "religare_ped_hiv_aids",
                 description: 'HIV / AIDS / STD'
             },
             {
                 'name': 'Respiratory disorders',
                 id: 'ped_no_11',
                 tag: 'PEDRespiratoryDetails',
+                "key" : "religare_ped_respiratory_disorders",
                 description: 'Any Respiratory disease / Disease of Lungs, Pleura, and airway(including but not limited to Asthma / Tuberculosis / Pleural effusion / Bronchitis / Emphysema) '
             },
             {
                 'name': 'Endocrine disorders',
                 id: 'ped_no_12',
                 tag: 'PEDEndoDetails',
+                "key" : "religare_ped_endocrine_disorders",
                 description: 'Any disorders of the endocrine system(including but not limited to Pituitary / Parathyroid / adrenal gland disorders)'
             },
             {
                 'name': 'Any other medication / treatment',
                 id: 'ped_no_13',
                 tag: 'PEDillnessDetails',
+                "key" : "religare_ped_other_med_treatment",
                 description: 'Has any of the proposed to be insured consulted / taken treatment or recommended to take investigations / medication / surgery other than for childbirth / minor injuries ? *'
             },
             {
                 'name': 'Any other surgery',
                 id: 'ped_no_14',
                 tag: 'PEDSurgeryDetails',
+                "key" :  "religare_ped_other_surgery",
                 description: 'Has any of the proposed to be insured been hospitalised or has been under any prolonged treatment for any illness / injury or has undergone surgery other than for childbirth / minor injuries ? *'
             },
             {
@@ -470,6 +511,7 @@ export const religare = {
                 'name': 'Other',
                 id: 'ped_no_15',
                 tag: 'PEDotherDetails',
+                "key" : "religare_ped_other_disease",
                 description: ''
             }
         ]
@@ -485,6 +527,7 @@ export const star = {
     title: 'Star',
     title2: 'Star',
     subtitle: 'Family Health Optima',
+    address_field_max_length: 270,
     logo: 'ic_star_logo.svg',
     logo_card: 'ic_star_logo_card.svg',
     logo_cta: 'ic_star_logo.svg',
@@ -507,7 +550,7 @@ export const star = {
     validation_props: {
         'dob_adult': { min: 18, max: 65 },
         'dob_child': { minDays: 16, max: 25 },
-        'dob_married_male': { min: 18, max: 25 },
+        'dob_married_male': { min: 18, max: 65 },
         'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {
@@ -579,12 +622,12 @@ export const star = {
             },
             {
                 'name': 'Self & family members',
-                'value': 'selfandfamily'
+                'value': 'self_family'
             },
             {
                 'name': 'Parents/Parents-in-law',
-                'value': 'parentsinlaw'
-            }
+                'value': 'parents_in_law'
+            },
         ]
     },
     add_members_screen: {
@@ -611,105 +654,105 @@ export const star = {
         nominee_opts: [
             {
                 'name': 'FATHER',
-                'value': 'FATHER'
+                'value': 'Father'
             },
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER'
+                'value': 'Mother'
             },
             {
                 'name': 'SISTER',
-                'value': 'SISTER'
+                'value': 'Sister'
             },
             {
                 'name': 'BROTHER',
-                'value': 'BROTHER'
+                'value': 'Brother'
             },
             {
                 'name': 'SON',
-                'value': 'SON'
+                'value': 'Son'
             },
             {
                 'name': 'DAUGHTER',
-                'value': 'DAUGHTER'
+                'value': 'Daughter'
             },
             {
                 'name': 'SPOUSE',
-                'value': 'SPOUSE'
+                'value': 'Spouse'
             },
             {
                 'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
+                'value': 'Grand Father'
             },
             {
                 'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
+                'value': 'Grand Mother'
             },
             {
                 'name': 'FATHER IN LAW',
-                'value': 'FATHER_IN_LAW'
+                'value': 'FatherinLaw'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
+                'value': 'BrotherinLaw'
             },
             {
                 'name': 'SON IN LAW',
-                'value': 'SON_IN_LAW'
+                'value': 'SoninLaw'
             },
             {
                 'name': 'DAUGHTER IN LAW',
-                'value': 'DAUGHTER_IN_LAW'
+                'value': 'Daughter in Law'
             },
             {
                 'name': 'COUSIN SON',
-                'value': 'COUSIN_SON'
+                'value': 'Cousin Son'
             },
             {
                 'name': 'GRAND DAUGHTER',
-                'value': 'GRANDDAUGHTER'
+                'value': 'Grand Daughter'
             },
             {
                 'name': 'GRAND SON',
-                'value': 'GRANDSON'
+                'value': 'Grand Son'
             },
             {
                 'name': 'OTHERS',
-                'value': 'OTHERS'
+                'value': 'Others'
             }
         ],
         appointee_opts: [
             {
                 'name': 'MOTHER',
-                'value': 'MOTHER'
+                'value': 'Mother'
             },
             {
                 'name': 'FATHER',
-                'value': 'FATHER'
+                'value': 'Father'
             },
             {
                 'name': 'GRAND FATHER',
-                'value': 'GRANDFATHER'
+                'value': 'Grand Father'
             },
             {
                 'name': 'GRAND MOTHER',
-                'value': 'GRANDMOTHER'
+                'value': 'Grand Mother'
             },
             {
                 'name': 'BROTHER',
-                'value': 'BROTHER'
+                'value': 'Brother'
             },
             {
                 'name': 'SISTER',
-                'value': 'SISTER'
+                'value': 'Sister'
             },
             {
                 'name': 'BROTHER IN LAW',
-                'value': 'BROTHER_IN_LAW'
+                'value': 'Brother In Law'
             },
             {
                 'name': 'OTHERS',
-                'value': 'OTHERS'
+                'value': 'Others'
             }
         ],
         showDob: true,
@@ -804,8 +847,11 @@ export function memberKeyMapperFunction(groupHealthPlanData) {
     for (let i = 0; i < dob_data.length; i++) {
         let key = dob_data[i].key;
 
-        if (!ui_members.father && key === 'mother') {
+        if (!ui_members.mother && key === 'father') {
             dob_data[i].backend_key = 'parent_account1_key';
+        }
+        if (!ui_members.father && key === 'mother') {
+            dob_data[i].backend_key = 'parent_account2_key';
         }
 
         let relation = key;
@@ -897,12 +943,12 @@ export const avilableMembersToInsured = [
     {
         'key': 'father_in_law',
         'value': '',
-        'backend_key': 'parent_inlaw_account1_key'
+        'backend_key': 'parent_in_law_account1_key'
     },
     {
         'key': 'mother_in_law',
         'value': '',
-        'backend_key': 'parent_inlaw_account2_key'
+        'backend_key': 'parent_in_law_account2_key'
     },
     {
         'key': 'son',
@@ -958,11 +1004,10 @@ export const avilableMembersToInsured = [
 
 
 export function getCoverageType(lead) {
-    let members = lead.member_base || [];
-    let account_type = lead.account_type;
-
-    if(account_type !== 'self' && members.length > 2) { //one extra for applicant
-        if(lead.cover_type === 'WF') {
+    let insured_people_details = lead.insured_people_details || lead.insured_member_details || [];
+    let insurance_type = lead.quotation_details.insurance_type;
+    if(insurance_type !== 'self' && insured_people_details.length >= 2) { //one extra for applicant
+        if(lead.quotation_details.floater_type === 'floater') {
             return 'Family floater';
         }
 

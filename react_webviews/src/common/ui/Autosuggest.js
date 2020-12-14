@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-
 import ReactSearchBox from 'react-search-box';
 import './style.scss';
-
 class AutosuggestInput extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +10,6 @@ class AutosuggestInput extends Component {
       suggestions: [],
     };
   }
-
   componentDidUpdate(prevState) {
     if (prevState.value !== this.props.value) {
       this.setState({ value: this.props.value });
@@ -21,10 +18,15 @@ class AutosuggestInput extends Component {
       this.setState({ suggestions_list: this.props.suggestions_list });
     }
   }
-
   handleChange = (value) => {
     this.props.onChange(value);
   };
+
+  componentDidMount(){
+      this.setState({
+        suggestions : this.props.options
+      })
+  }
 
   render() {
     return (
@@ -32,7 +34,7 @@ class AutosuggestInput extends Component {
         <div className='label-custom'>{this.props.label}</div>
         <ReactSearchBox
           placeholder={this.props.placeholder}
-          data={this.props.value && this.props.value.length >= 2 ? this.props.options : []}
+          data={this.props.value && this.props.value.length >= 2 ? this.state.suggestions : []}
           // onSelect={record => console.log(record)}
           onSelect={(record) => this.props.onSelect(record)}
           // onFocus={() => {

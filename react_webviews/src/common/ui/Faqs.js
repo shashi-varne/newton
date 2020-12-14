@@ -62,7 +62,7 @@ class FaqsClass extends Component {
                     </div>
                 }
                 {isSelected && option.points &&
-                    <div>
+                    <div style={{marginBottom: option.points.length >= 8 ? '30px' : ''}}>
                         {option.points.map(this.renderPoints)}
                     </div>
                 }

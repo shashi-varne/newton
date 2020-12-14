@@ -49,7 +49,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       open_browser_web(message.url, '')
     } else {
       let url = 'https://fis.do/m/module?action_type=native';
-      if (getConfig().productName === 'myway') {
+      if (getConfig().productName === 'finity') {
         url = 'https://w-ay.in/m/module?action_type=native';
       }
 
@@ -128,7 +128,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.data = message;
     }
 
-    if (project === 'mandate-otm' || project === 'isip') {
+    if (['mandate-otm', 'isip', 'w-report'].includes(project)) {
 
       // For only events, if actions is present, then proceed to next block
       if (events) {
@@ -282,7 +282,7 @@ export function openNativeModule(moduleName) {
 
 
   let url = 'https://fis.do/m/module?action_type=native';
-  if (getConfig().productName === 'myway') {
+  if (getConfig().productName === 'finity') {
     url = 'https://w-ay.in/m/module?action_type=native';
   }
 

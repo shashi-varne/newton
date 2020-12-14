@@ -8,7 +8,6 @@ import InfoBox from './InfoBox';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { isFunction, storageService } from '../../utils/validators';
 import { getConfig } from '../../utils/functions';
-import CAMSLoader from './camsLoader';
 const emailDomain = getConfig().email_domain;
 
 const theme = createMuiTheme({
@@ -153,17 +152,17 @@ export default class EmailRequestSteps extends Component {
     /* Store email detail in LS here so email_not_received and 
     statement_not_received screens can use this data */
     storageService().setObject('email_detail_hni', emailDetail);
-    if (getConfig().app === 'android') {
-      parent.setState({
-        show_loader: true,
-        loadingText: <CAMSLoader />,
-      });
-      setTimeout(() => {
-        parent.navigate('cams_webpage');
-      }, 2000);
-    } else {
-      parent.navigate('cams_request_steps');
-    }
+    // if (getConfig().app === 'android') {
+    //   parent.setState({
+    //     show_loader: true,
+    //     loadingText: <CAMSLoader />,
+    //   });
+    //   setTimeout(() => {
+    //     parent.navigate('cams_webpage');
+    //   }, 2000);
+    // } else {
+    parent.navigate('cams_request_steps');
+    // }
   }
 
   onPopupClose = () => {

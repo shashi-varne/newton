@@ -29,6 +29,7 @@ class radioAndCheckboxList extends Component {
   }
 
   renderInputs = (option, index) => {
+
     return (
       <FormControl fullWidth>
         <div className="InputField">
@@ -134,23 +135,25 @@ class radioAndCheckboxList extends Component {
               <div>
                 <p>Who is the member?</p>
                 <Grid container spacing={0}>
+                      
+                      
 
                   {item.members.map((member, index_member) => (
                     member.key !== 'applicant' && <div key={index_member}>
                       <Grid item xs key={index}>
                         <Grid item xs>
                           <Checkbox
-                            checked={item.inputs[member.backend_key]}
+                            checked={item.inputs[member.relation_key]}
                             color="primary"
                             // value={member}
-                            id={member.backend_key}
-                            name={member.backend_key}
+                            id={member.relation_key}
+                            name={member.relation_key}
                             disableRipple
                             onChange={(event) => this.props.handleCheckbox(event, index, member)}
                             className="Checkbox"
                           />
                           <span style={{ fontSize: "14px", marginRight: '50px' }}>
-                            {capitalizeFirstLetter(childeNameMapper(member.key))}
+                            {capitalizeFirstLetter(childeNameMapper(member.relation))}
                           </span>
                         </Grid>
                       </Grid>
@@ -172,8 +175,8 @@ class radioAndCheckboxList extends Component {
                         checked={option.life_style_question_exists || false}
                         color="primary"
                         // value={option.life_style_question_exists}
-                        id={option.backend_key}
-                        name={option.backend_key}
+                        id={option.relation_key}
+                        name={option.relation_key}
                         disableRipple
                         onChange={(event) => this.props.handleCheckbox(event, index)}
                         className="Checkbox"
@@ -206,8 +209,8 @@ class radioAndCheckboxList extends Component {
                         checked={option.ped_exists || false}
                         color="primary"
                         // value={option.life_style_question_exists}
-                        id={option.backend_key}
-                        name={option.backend_key}
+                        id={option.relation_key}
+                        name={option.relation_key}
                         disableRipple
                         onChange={(event) => this.props.handleCheckbox(event, index)}
                         className="Checkbox"

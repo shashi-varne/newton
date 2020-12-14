@@ -97,6 +97,7 @@ import DenguePaymentCallback from './products/dengue/payment-callback';
 
 /* Corona */
 import CoronaForm from './products/corona/form';
+import CoronaPlanDeclaration from './products/corona/declaration'
 import CoronaSummary from './products/corona/summary';
 import CoronaFailed from './products/corona/payment-failed';
 import CoronaPaymentSuccess from './products/corona/payment-success';
@@ -105,6 +106,8 @@ import CoronaPlanDetails from './products/corona';
 import CoronaPlanPayment from './products/corona/payment';
 import CoronaPaymentCallback from './products/corona/payment-callback';
 
+/*************************** Life Insurence **********************************/
+import LifeInsuranceEntry from './products/life_insurance/entry';
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -170,6 +173,13 @@ import EtliPersonalDetails2 from './products/term_insurance/etli/personal_detail
 import EtliPersonalDetails3 from './products/term_insurance/etli/personal_details3';
 import EtliAuthFailed from './products/term_insurance/etli/auth_failed';
 
+
+//fyntune
+import FyntuneLanding from './products/life_insurance/landing';
+import ResumeIntermediatePage from './products/life_insurance/resumeIntermediatePage';
+import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
+import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
+
 // common
 
 import Report from './report';
@@ -185,6 +195,8 @@ import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how
 
 import Tooltip from '../common/ui/Tooltip';
 import StarAddress from './products/group_health/Star/star_address';
+
+
 
 
 const generateClassName = createGenerateClassName({
@@ -290,6 +302,7 @@ const Insurance = (props) => {
 
           {/********** Corona **********/}
           <Route path={`${url}/corona/plan`} component={CoronaPlanDetails} />
+          <Route path={`${url}/corona/declaration`} component={CoronaPlanDeclaration} />
           <Route path={`${url}/corona/form`} component={CoronaForm} />
           <Route path={`${url}/corona/summary`} component={CoronaSummary} />
           <Route path={`${url}/corona/summary-success`} component={CoronaPlanSuccess} />
@@ -317,6 +330,15 @@ const Insurance = (props) => {
           <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
           <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
           <Route path={`${url}/wallet/payment-callback`} component={SmartwalletPaymentCallback} />
+
+           {/********** Life Insurance **********/}
+           <Route path={`${url}/life-insurance/entry`} component={LifeInsuranceEntry} />
+           <Route path={`${url}/life-insurance/term/personal-details-redirect`} component={PersonalDetailsRedirect} />
+           <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
+           <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />      
+           <Route path={`${url}/life-insurance/resume-intermediate`} component={ResumeIntermediatePage}/>   
+           <Route path={`${url}/life-insurance/savings-plan/report-details/:policy_id`} component={FyntuneReportDetails}/>
+           <Route path={`${url}/life-insurance/app-update`} component={LifeInsuranceAppUpdate}/>                                                              
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />
@@ -523,6 +545,9 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
           <Route path={`${url}/group-health/:provider/how-to-claim-star`} component={GroupHealthPlanHowToClaimStar} />
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
+
+          
+
 
           <Route component={NotFound} />
         </Switch>

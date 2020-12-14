@@ -9,7 +9,7 @@ import SVG from 'react-inlinesvg';
 import HowToSteps from '../../../common/ui/HowToSteps';
 import dmi_logo from 'assets/dmi_logo.svg';
 import ic_why_hs_fisdom from 'assets/fisdom/ic_why_hs_loan.svg';
-import ic_why_hs_myway from 'assets/myway/ic_why_hs_loan.svg';
+import ic_why_hs_myway from 'assets/finity/ic_why_hs_loan.svg';
 
 class Landing extends Component {
   constructor(props) {
@@ -52,7 +52,7 @@ class Landing extends Component {
           'icon' : 'ic_why_loan_3'
       },
        {
-          'title': 'Complete easy loan application process and get money within 12 hrs',
+          'title': 'Complete easy loan application process and get money within 48 hrs',
           'icon' : 'ic_why_loan_4'
       },
        {
@@ -137,7 +137,7 @@ class Landing extends Component {
   openFaqs = () => {
 
     let type = this.state.productName;
-    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Myway';
+    let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Finity';
 
     this.sendEvents('next', {things_to_know: 'faq'})
     let options = [
@@ -163,7 +163,7 @@ class Landing extends Component {
         points: [
           'Digital loans: Bid farewell to piles of paperwork and branch visits',
           'Zero documentation: No income documents required',
-          'Money in account within 12 hrs: Submit loan application in 10 mins and get credit within 12 hrs',
+          'Money in account within 48 hrs: Submit loan application in 10 mins and get credit within 48 hrs',
           'Collateral free loan: You don’t have to provide any security for your loan'
         ]
       },
@@ -184,6 +184,14 @@ class Landing extends Component {
       {
         'title': 'Are there any prepayment charges ?',
         'subtitle': 'Prepayment not allowed for first 6 months. Prepayment charges of 3% flat on the o/s principal to be applied post this.'
+      },
+      {
+        'title': 'What is the minimum and maximum period for repayment?',
+        'subtitle': 'Minimum tenor is 6 months and maximum is 24 months.'
+      },
+      {
+        'title': 'What is the Processing fee? ',
+        'subtitle': 'Processing fee is 2% of gross disbursement amount plus GST as applicable.'
       }
     ];
 
@@ -294,7 +302,7 @@ class Landing extends Component {
                 </Button>
             </div>
             <div className="bottom-content">
-              No paper-work | Money in A/c within 12 hrs
+              No paper-work | Money in A/c within 48 hrs
             </div>
           </div>
         </div>

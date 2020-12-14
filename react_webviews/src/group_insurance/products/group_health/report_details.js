@@ -51,7 +51,6 @@ class GroupHealthReportDetails extends Component {
 
     componentWillMount() {
         this.initialize();
-
         const { policy_id } = this.props.match.params;
         this.setState({
             policy_id: policy_id
@@ -60,39 +59,69 @@ class GroupHealthReportDetails extends Component {
 
     async componentDidMount() {
 
-        try {
-
-            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/get/policy/${this.state.policy_id}`);
-
+        try {        
+            
+            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
+        
             this.setState({
                 show_loader: false
             });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
+                let lead = {};
+                let member_details = {};
 
-                let policy_data = resultData.policy_data || {};
-                let lead = policy_data.insured_lead_details || {};
+                let policy_data = resultData.policy || {};
+                let common_data = resultData.common;
+                let payment_details = resultData.payment_details;
+                let application_details = resultData.application_details;
+                
+                let dt_created = new Date(policy_data.dt_created);
+                let dt_updated = new Date(policy_data.dt_updated);
+                let payment_success_dt = new Date(payment_details.payment_success_dt);
+
+                // let valid_from = getDateBreakup(policy_data.valid_from)
+                // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
+                payment_details.payment_success_dt = payment_success_dt.getDate()+'/'+ (payment_success_dt.getMonth()+1) +'/'+ payment_success_dt.getFullYear();
+                policy_data.dt_created = dt_created.getDate()+'/'+ (dt_created.getMonth()+1) +'/'+ dt_created.getFullYear();
+                policy_data.dt_updated = dt_updated.getDate()+'/'+ (dt_updated.getMonth()+1) +'/'+ dt_updated.getFullYear();
+                // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+                
+                lead.insurance_type = resultData.quotation_details.insurance_type;
+                let insured_members = resultData.insured_member_details;
+                for(var i = 0; i < insured_members.length; i++){
+                    member_details[insured_members[i].relation_key]  = insured_members[i];
+                }
+
+                if(['parents', 'parents_in_law', 'family'].includes(lead.insurance_type)) {
+                    member_details['self_account_key'] = resultData.buyer_details;
+                }
+
+                lead.member_details = member_details;
                 lead.member_base = ghGetMember(lead, this.state.providerConfig);
-
                 let member_base = lead.member_base;
                 let applicantIndex = member_base.findIndex(item => item.key === 'applicant');
-
                 if(applicantIndex >= 0) {
                     let appli_data = member_base[applicantIndex];
                     member_base.splice(applicantIndex, 1);
                     member_base.splice(0, 0, appli_data);
                 }
-
+                policy_data.provider = this.state.providerConfig.key
                 let data = getCssMapperReport(policy_data);
                 policy_data.status = data.status;
                 policy_data.cssMapper = data.cssMapper;
 
                 this.setState({
-                    extra_data: resultData.quote_info,
-                    policy_data: resultData.policy_data,
-                    quote_info: resultData.quote_info,
+                    resultData: resultData,
+                    common_data: common_data,
+                    extra_data: resultData.plan_details,
+                    policy_data: policy_data,
+                    quote_info: resultData.plan_details,
                     lead: lead,
-                    applicantIndex: applicantIndex
+                    quotation_details: resultData.quotation_details,
+                    applicantIndex: applicantIndex,
+                    application_details: application_details,
+                    payment_details: payment_details
                 })
 
 
@@ -117,7 +146,7 @@ class GroupHealthReportDetails extends Component {
             nativeCallback({
                 action: 'open_in_browser',
                 message: {
-                    url: url
+                    url: this.state.download_link || url
                 }
             });
         } else {
@@ -132,8 +161,8 @@ class GroupHealthReportDetails extends Component {
             this.setState({
                 show_loader: true
             });
-            const res = await Api.get(`api/ins_service/api/insurance/${this.state.providerConfig.provider_api}/policy/download?policy_number=${this.state.policy_data.policy_number}`);
 
+           const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
             this.setState({
                 show_loader: false
             });
@@ -172,13 +201,13 @@ class GroupHealthReportDetails extends Component {
 
             let data_mapper = {
                 'whats_included': {
-                    'header_title': "What's included?",
+                    'header_title': "What is covered?",
                     'header_subtitle': 'These are some of the benefits that are covered under this policy',
                     'steps': this.state.extra_data.whats_included,
                     'pathname': '/gold/common/render-benefits'
                 },
                 'whats_not_included': {
-                    'header_title': "What's not included?",
+                    'header_title': "What is not covered?",
                     'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
                     'steps': this.state.extra_data.whats_not_included,
                     'pathname': '/gold/common/render-benefits'
@@ -194,7 +223,8 @@ class GroupHealthReportDetails extends Component {
     
             let renderData = {
                 'header_title': mapper_data.header_title,
-                'header_subtitle': `${this.state.providerData.subtitle} ${this.state.lead.plan_title}`,
+                'header_subtitle': mapper_data.header_subtitle || `${this.state.provider === 'STAR'? this.state.providerData.title2 : this.state.providerData.subtitle} ${this.state.provider === "HDFCERGO" ? this.state.plan_selected.plan_title: this.state.provider === 'STAR'? this.state.providerConfig.subtitle:''}`,
+                'bottom_title': '*For detailed list, please refer policy prospectus',
                 'steps': {
                     'options': mapper_data.steps
                 },
@@ -309,7 +339,7 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="mt-right">
                         <div className="mtr-top">
-                        {this.state.applicantIndex === -1 ? (this.state.lead.account_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
+                        {this.state.applicantIndex === -1 ? (this.state.lead.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') :dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
                             {props.name} ({childeNameMapper(props.key)})
@@ -341,16 +371,16 @@ class GroupHealthReportDetails extends Component {
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
             >
-                <div className="group-health-plan-details group-health-final-summary">
+                 <div className="group-health-plan-details group-health-final-summary">
 
-                    <div style={{ margin: '0px 0 40px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
+                    <div style={{ margin: '18px 0 12px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
                         <div className="circle"></div>
                         <div className="report-color-state-title">{this.state.policy_data.cssMapper.disc}</div>
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div>
-                            <div className="tc-subtitle">{this.state.lead.plan_title || this.state.providerData.subtitle}</div>
+                            <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.provider === 'STAR' ? this.state.providerConfig.title: ''}</div>
+                            <div className="tc-subtitle">{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
@@ -371,7 +401,7 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.sum_assured)}
+                                    {this.state.quotation_details && numDifferentiationInr( this.state.quotation_details.individual_sum_insured)}
                                 </div>
                             </div>
                         </div>
@@ -385,12 +415,15 @@ class GroupHealthReportDetails extends Component {
                                     COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.tenure} year{this.state.lead.tenure>'1' && <span>s</span>}
+                                    {
+                                        this.state.quotation_details ? this.state.quotation_details.tenure > 1 ? `${this.state.quotation_details.tenure} years`: `${this.state.quotation_details.tenure} year` : ''
+                                    }
+
                                 </div>
                             </div>
                         </div>
 
-                       {this.state.lead.cover_type && 
+                       {this.state.quotation_details && 
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
@@ -400,7 +433,7 @@ class GroupHealthReportDetails extends Component {
                                     COVERAGE TYPE
                                 </div>
                                 <div className="mtr-bottom">
-                                    {getCoverageType(this.state.lead)}
+                                    {getCoverageType(this.state.resultData)}
                                 </div>
                             </div>
                         </div>}
@@ -416,50 +449,24 @@ class GroupHealthReportDetails extends Component {
 
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.lead.base_premium_showable ||
-                                                 this.state.lead.premium)} </div>
-                                            <div style={{fontSize:10}}> (Basic premium)</div>
+                                            <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
+                                            <div style={{fontSize:10}}> (Net premium)</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
                                         </div>
-                                        {this.state.lead.add_ons_amount &&
                                         <div>
-                                            <div> {inrFormatDecimal(this.state.lead.add_ons_amount)} </div>
-                                            <div style={{ fontSize: 10 }}> (Add on amount)</div>
-                                        </div>
-                                         }
-                                        {this.state.lead.add_ons_amount &&
-                                            <div>
-                                                &nbsp;+&nbsp;
-                                            </div>
-                                        }
-                                        <div>
-                                            <div>{inrFormatDecimal(this.state.lead.tax_amount)} </div>
+                                            <div>{this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.gst)} </div>
                                             <div style={{fontSize:10}}>(18% GST) </div>
                                         </div>
                                         <div>
                                         &nbsp;=&nbsp;
                                         </div>
                                         <div>
-                                         {inrFormatDecimal(this.state.lead.total_amount)}
+                                         {this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium)}
                                         </div>
                                 </div>
 
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="member-tile">
-                        <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/sip_date_icon.svg`)} alt="" />
-                        </div>
-                        <div className="mt-right">
-                            <div className="mtr-top">
-                                Purchased on
-                                </div>
-                            <div className="mtr-bottom">
-                                {this.state.policy_data.dt_created}
                             </div>
                         </div>
                     </div>
@@ -473,12 +480,12 @@ class GroupHealthReportDetails extends Component {
                                 DATE OF PAYMENT
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.transaction_date || '-'}
+                            {this.state.payment_details && this.state.payment_details.payment_success_dt} 
                             </div>
                         </div>
                     </div>
 
-                    {this.state.policy_data.policy_number &&
+                    {this.state.policy_data.status && this.state.policy_data.status === 'policy_issued' &&
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
@@ -493,7 +500,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>}
 
-                    {!this.state.policy_data.policy_number && this.state.policy_data.proposal_number &&
+                    {this.state.policy_data && this.state.policy_data.status === 'pending' &&
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
@@ -503,7 +510,7 @@ class GroupHealthReportDetails extends Component {
                                 PROPOSAL NUMBER
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.policy_data.proposal_number || '-'}
+                                {this.state.application_details && (this.state.application_details.proposal_number || '-')}
                             </div>
                         </div>
                     </div>}
@@ -543,7 +550,7 @@ class GroupHealthReportDetails extends Component {
                             }}>
                                 Plan Details
                             </div>
-                            {this.state.policy_data.policy_number &&
+                            {this.state.policy_data && this.state.policy_data.status === 'policy_issued' &&
                                 <div className="flex">
                                     <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
                                         |
@@ -578,7 +585,7 @@ class GroupHealthReportDetails extends Component {
                                     <span className="special-benefit-text">Special benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.special_benefits.map(this.renderSteps)}
+                                    {this.state.extra_data.benefits.special.map(this.renderSteps)}
                                 </div>
 
                                 <div className="special-benefit"
@@ -592,17 +599,35 @@ class GroupHealthReportDetails extends Component {
                                 </div>
                             </div>
 
-                            <div className="common-how-steps" style={{ border: 'none', marginTop: 0, marginBottom: 0 }}>
+                            <div className="common-how-steps" style={{ border: 'none', marginTop: '-45px', marginBottom: 0 }}>
                                 <div className="top-tile">
-                                    <div className="top-title">
+                                    <div className="top-title" style={{marginBottom: '-10px'}}>
                                         Waiting period
                             </div>
                                 </div>
                                 <div className='common-steps-images'>
-                                    {this.state.extra_data.waiting_period.map(this.renderSteps)}
+                                    {this.state.extra_data.waiting_periods.map(this.renderSteps)}
                                 </div>
 
                             </div>
+
+                            <div className="accident-plan-read" style={{ padding: 0 }}>
+                        
+                           <div className="accident-plan-read-text">
+                             *For detailed list of all terms and conditions, please refer
+                             <span
+                               style={{ color: getConfig().primary }}
+                               onClick={() =>
+                                 this.openInBrowser(
+                                   this.state.common_data.policy_prospectus,
+                                   "read_document"
+                                 )
+                               }
+                             >
+                               &nbsp;policy prospectus
+                             </span>
+                           </div>
+                         </div>
 
                         </div>}
 
@@ -611,12 +636,12 @@ class GroupHealthReportDetails extends Component {
                             <div className="bd-tile" onClick={() => this.navigateBenefits('whats_included')}>
                                 <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_covered.svg`)}
                                     alt="" />
-                                <div className="bd-content">What's included?</div>
+                                <div className="bd-content">What is covered?</div>
                             </div>}
                         {this.state.showPlanDetails && <div className="bd-tile" onClick={() => this.navigateBenefits('whats_not_included')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_whats_not_covered.svg`)}
                                 alt="" />
-                            <div className="bd-content">What's not included?</div>
+                            <div className="bd-content">What is not covered?</div>
                         </div>}
                         <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
@@ -625,7 +650,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                         <div className="generic-hr"></div>
                     </div>
-                </div>
+                </div> 
             </Container>
         );
     }
