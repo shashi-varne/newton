@@ -6,7 +6,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import DropdownInModal from '../../common/ui/DropdownInModal'
 import Input from '../../common/ui/Input'
-import Dialog, { DialogContent, DialogContentText, DialogActions } from 'material-ui/Dialog';
+import Dialog, { DialogContent  } from 'material-ui/Dialog';
 import Api from '../../../src/utils/api';
 import toast from '../../common/ui/Toast'
 
@@ -189,13 +189,11 @@ handleClick = async () => {
   });
   try {
 
-    console.log(form_data.Vendor, 'form_data.Vendor')
-
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
 
     let resultData = res.pfwresponse.result
     form_data.title = 'Submit to fetch the detail'
-    if (res.pfwresponse.status_code === 200 && resultData.policy_binded || true) {
+    if (res.pfwresponse.status_code === 200) {
       form_data.notfound = false
       form_data.found = false
       this.setState({
@@ -206,15 +204,9 @@ handleClick = async () => {
       })
     } else {
 
-     if (resultData.error === "Sorry! Could'nt find your policy details.") {
-       form_data.notfound = true
+     if (!resultData.found) {
        form_data.found = false
-       this.setState({
-         searching: true,
-         lock: false,
-         form_data: form_data,
-         binding : false
-       });
+       form_data.notfound = true
        setTimeout(() => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         for (var i = 0; i < x.length; i++) {
@@ -223,15 +215,9 @@ handleClick = async () => {
       }, 0);
       }
 
-      if(resultData.error === 'This policy already belongs to a user.'){
+      if(resultData.found){
         form_data.found = true
         form_data.notfound = false
-        this.setState({
-          searching: true,
-          lock: false,
-          form_data: form_data,
-          binding : false
-        });
         setTimeout(() => {
           var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
           for (var i = 0; i < x.length; i++) {
@@ -240,12 +226,19 @@ handleClick = async () => {
         }, 0);
       }
 
+      this.setState({
+        form_data: form_data,
+        binding : false,
+        searching: true,
+        lock: false
+      });
+
       toast(resultData.error || resultData.message || "Something went wrong");
     }
   } catch (err) {
     this.setState({
-      searching: false,
-      show_loader: false,
+      searching: true,
+      lock: false
     });
     toast("Something went wrong");
   }
