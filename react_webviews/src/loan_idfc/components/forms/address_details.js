@@ -109,8 +109,8 @@ class AddressDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "kyc_address_details",
-        permanent_address_edited: this.state.permanent_address_edited || 'no',
-        current_address_edited: this.state.current_address_edited || 'no',
+        permanent_address_edited: this.state.form_data.permanent_address_edited || 'no',
+        current_address_edited: this.state.form_data.current_address_edited || 'no',
         ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
     };
@@ -124,19 +124,22 @@ class AddressDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data, permanent_address_edited, current_address_edited } = this.state;
+    let { form_data } = this.state;
 
     if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
 
-    {this.state.confirm_details && (name.includes('current') ? current_address_edited = 'yes' : permanent_address_edited = 'yes')}
+
+    if (this.state.confirm_details) {
+      let edited_address = name.split("_")[0];
+
+      form_data[edited_address + 'address_edited'] = "yes"
+    }
 
     this.setState({
       form_data: form_data,
-      permanent_address_edited: permanent_address_edited,
-      current_address_edited: current_address_edited,
     });
   };
 
