@@ -277,8 +277,8 @@ handleClick = async () => {
             </div>
             <div className="content-mid" >
           <div>We have found one policy with the following details:</div> 
-          <div>Proposer Name:{this.state.o2o_data.product_name} </div> 
-          <div>Product Name: {this.state.o2o_data.customer_name}  </div> 
+          <div>Proposer Name:{this.state.o2o_data.customer_name} </div>
+          <div>Product Name: {this.state.o2o_data.product_name}  </div> 
             </div>
             <div className="content-bottom">
             Would you like to import the policy details?
