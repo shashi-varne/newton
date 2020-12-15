@@ -57,7 +57,7 @@ componentWillMount() {
       'name': 'HDFC Life',
       'value': 'hdfc life'
     }, {
-      'name': 'Edelweiss Tokio',
+      'name': 'Edelweiss Tokio Life',
       'value': 'edelweiss tokio'
     }, {
       'name': 'Kotak Life',
