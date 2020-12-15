@@ -316,9 +316,10 @@ handleClick = async () => {
       onlyButton={true}
       handleClick={() => this.handleClick(this.state.binding)}
       withProvider={true}
+      title='Enter your policy details'
       >
-        <div className='health_insurance' style={{fontWeight: '700', fontSize:'20px', marginTop:'' }}> Enter your policy details   </div>
-            <div className="InputField" style={{marginTop : '30px'}}>
+        {/* <div className='health_insurance' style={{fontWeight: '700', fontSize:'20px', marginTop:'' }}> Enter your policy details   </div> */}
+            <div className="InputField">
             <div>
             <DropdownWithoutIcon
               parent={this}

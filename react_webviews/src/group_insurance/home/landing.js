@@ -375,8 +375,8 @@ class Landing extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
-        title="">
-        <div className='health_insurance' style={{fontWeight: '700', color: '#160d2e', fontSize:'20px'}}>Insurance</div>
+        title="Insurance">
+        {/* <div className='health_insurance' style={{fontWeight: '700', color: '#160d2e', fontSize:'20px'}}>Insurance</div> */}
            <div  style={{ marginTop: '40px' }}>
            <div onClick={this.policymove}>
            <img style={{ margin: '-15px 5px 15px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
