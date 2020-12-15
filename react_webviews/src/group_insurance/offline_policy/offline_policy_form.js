@@ -337,6 +337,7 @@ handleClick = async () => {
               onChange={this.handleChange("Vendor")}
             />
           </div>
+          <br></br>
             <div className="InputField" style={{marginBottom : '20px'}}>
                         <Input
                             type="text"
