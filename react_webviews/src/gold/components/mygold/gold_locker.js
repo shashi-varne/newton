@@ -59,7 +59,6 @@ class GoldLocker extends Component {
     let isRegistered = isUserRegistered(result1);
     let data = result1.gold_user_info.provider_info || {};
     data.isRegistered = isRegistered;
-    console.log(isRegistered)
     data.user_info = result1.gold_user_info.user_info || {};
     data.sell_value = ((result2.sell_info.plutus_rate) * (data.gold_balance || 0)).toFixed(2) || 0;
     data.provider = provider;
