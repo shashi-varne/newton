@@ -38,7 +38,7 @@ class LoanBtDetails extends Component {
           status: "completed",
         },
         {
-          title: "BT transfer details",
+          title: "BT details",
           status: "init",
         },
         {
