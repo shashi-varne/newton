@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { ResponsiveBubble } from '@nivo/circle-packing';
 import { upperCase } from 'lodash';
 
-const IwdBubbleChart = ({ data = {} }) => {
+const IwdBubbleChart = ({ data = [] }) => {
   const [dataList, setDataList] = useState([]);
 
   const dataFormatter = () => {
     const list = [];
-    for (let [key, val] of Object.entries(data)) {
+    for (let { name, share } of data) {
       list.push({
-        name: upperCase(key),
-        value: `${val}`,
-        color: `rgba(57, 183, 171, ${val / 100})`,
+        name: upperCase(name),
+        value: `${share}`,
+        color: `rgba(57, 183, 171, ${share / 100})`,
       });
     }
     setDataList(list);

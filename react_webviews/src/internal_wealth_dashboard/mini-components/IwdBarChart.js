@@ -13,14 +13,14 @@ const IwdBarChart = ({ data, classes = {} }) => {
   //   //   liBar.classList.add("li-wr-hovered")
   //   // }
   //   // liBars.map(liBar => );
-  //   liBars[idx].style.flexBasis = `${item.value + 15}%`;
+  //   liBars[idx].style.flexBasis = `${item.share + 15}%`;
   //   liBars[idx].style.transform = `scaleY(1.6)`;
   // };
 
   // const onElemLeave = () => {
   //   let liBars = document.getElementsByClassName('li-wr');
   //   for (let i = 0; i < data.length; i++) {
-  //     liBars[i].style.flexBasis = `${data[i].value}%`;
+  //     liBars[i].style.flexBasis = `${data[i].share}%`;
   //     liBars[i].style.transform = `scaleY(1)`;
   //   }
   // };
@@ -28,15 +28,15 @@ const IwdBarChart = ({ data, classes = {} }) => {
   return (
     <div>
       <ul id="iwd-bars" className={containerClass}>
-        {Object.entries(data).map(([key, value], idx) => (
+        {data.map(({ name, share }, idx) => (
           <li
             key={idx}
             className={`iwd-bars-li ${childClass}`}
-            style={{ flexBasis: `${value}%`, opacity: (value / 100) + 0.3 }}
+            style={{ flexBasis: `${share}%`, opacity: (share / 100) + 0.3 }}
             // onMouseEnter={() => onElemHover(item, idx)}
             // onMouseLeave={() => onElemLeave()}
           >
-            <div>{key}</div>
+            <div>{name}</div>
           </li>
         ))}
       </ul>

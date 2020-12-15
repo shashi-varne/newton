@@ -6,7 +6,7 @@ const TopAMCS = ({ topAMCs }) => {
     <div className='iwd-scroll-child' data-pgno='3'>
       <IwdCard
         className='iwd-analysis-card'
-        headerText='Top Stocks in portfolio'
+        headerText='Top AMC exposure'
         error={isEmpty(topAMCs)}
       >
         <div className='iwd-analysis-top-amcs'>
