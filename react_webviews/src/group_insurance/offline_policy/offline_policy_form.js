@@ -4,12 +4,12 @@ import '../common/Style.css';
 import { getConfig } from 'utils/functions';
 // import { insuranceProductTitleMapper } from '/constants';
 import { nativeCallback } from 'utils/native_callback';
-import DropdownInModal from '../../common/ui/DropdownInModal'
+// import DropdownInModal from '../../common/ui/DropdownInModal'
 import Input from '../../common/ui/Input'
 import Dialog, { DialogContent  } from 'material-ui/Dialog';
 import Api from '../../../src/utils/api';
 import toast from '../../common/ui/Toast'
-
+import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon'
 class AddPolicy extends Component {
 
   constructor(props) {
@@ -34,7 +34,7 @@ class AddPolicy extends Component {
 componentWillMount() {
 
   let vendor_details = [{
-      'name': 'HDFC Ergoa',
+      'name': 'HDFC Ergo',
       'value': 'hdfc ergo'
     },
     {
@@ -80,11 +80,13 @@ handleChange = name => event => {
   if (!name) {
     return
   }
-  var value = event.target ? event.target.value : event;
+
+  if(name === 'number'){
+    var value = event ? event.target.value : event;
+  }
   let form_data = this.state.form_data
   if (name === 'Vendor') {
-    var vendor_details = this.state.vendor_details
-    value = vendor_details[event].value
+    var value = event
     form_data.index = event
   };
   form_data[name] = value;
@@ -309,16 +311,16 @@ handleClick = async () => {
       <Container
       events={this.sendEvents("just_set_events")}
       showLoader={this.state.show_loader}
-      title={'Enter your policy details'}
       fullWidthButton={true}
       buttonTitle={this.state.form_data.title}
       onlyButton={true}
       handleClick={() => this.handleClick(this.state.binding)}
       withProvider={true}
       >
-            <div className="InputField" style={{marginTop : '10px'}}>
+        <div className='health_insurance' style={{fontWeight: '700', fontSize:'20px', marginTop:'' }}> Enter your policy details   </div>
+            <div className="InputField" style={{marginTop : '30px'}}>
             <div>
-            <DropdownInModal
+            <DropdownWithoutIcon
               parent={this}
               header_title="Insurance Company"
               cta_title="SAVE"
