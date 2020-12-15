@@ -202,6 +202,7 @@ class Landing extends Component {
   }
 
   policymove = ()=> {
+    this.sendEvents('next', "")
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 

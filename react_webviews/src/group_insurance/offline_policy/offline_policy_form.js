@@ -111,10 +111,10 @@ handleClose = () => {
 
 sendEvents(user_action, insurance_type) {
   let eventObj = {
-    "event_name": 'Group Insurance',
+    "event_name": 'import_policy',
     "properties": {
       "user_action": user_action,
-      "screen_name": 'offline_form',
+      "screen_name": 'policy found',
     }
   };
 
