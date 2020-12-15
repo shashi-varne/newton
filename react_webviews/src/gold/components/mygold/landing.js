@@ -183,7 +183,7 @@ class GoldSummary extends Component {
         {
           icon: "ic_sell_gold",
           title: "Sell gold",
-          next_state: '/gold/buy'
+          next_state: '/gold/sell'
         },
         {
           icon: "ic_delivery",
