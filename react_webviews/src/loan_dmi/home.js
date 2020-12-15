@@ -16,7 +16,6 @@ class Home extends Component {
     componentWillMount() {
         this.initialize();
 
-
         let stepContentMapper = {
             title: 'Why choose us?',
             options: [
@@ -81,7 +80,7 @@ class Home extends Component {
                         baseData={this.state.stepContentMapper}
                     />
 
-                    <div className="block1-info">
+                    <div className="block1-info" onClick={() => this.navigate("calculator")}>
                         <img
                             src={require(`assets/${this.state.productName}/calculatemi.svg`)}
                             alt="calculator" />
