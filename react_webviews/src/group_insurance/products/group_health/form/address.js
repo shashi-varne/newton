@@ -161,15 +161,10 @@ class GroupHealthPlanAddressDetails extends Component {
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
-        if(this.state.provider === 'RELIGARE' && (name.includes('addr_line1') || name.includes('addr_line2'))){
-            value = event.target ? event.target.value.substr(0, 60) : event;
-        }
+        let address_field_max_length = this.state.providerConfig.address_field_max_length;
        
-        if(this.state.provider === 'HDFCERGO' && (name.includes('addr_line1') || name.includes('addr_line2'))){
-            value = event.target ? event.target.value.substr(0, 90) : event;
-            if(charsNotAllowedHDFC(value)){
-                return;
-            }   
+        if(name.includes('addr_line1') || name.includes('addr_line2')){
+            value = event.target ? event.target.value.substr(0, address_field_max_length) : event;
         }
         if (name === 'mobile_number') {
             if (value.length <= 10) {
@@ -251,8 +246,20 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         }
 
-
         let canSubmitForm = true;
+        let address_field_max_length = this.state.providerConfig.address_field_max_length;
+        
+        let address_key_check = ['addr_line1', 'addr_line2', 'p_addr_line1', 'p_addr_line2'];
+        for(var i = 0; i < address_key_check.length; i++){
+            if(this.state.provider === 'HDFCERGO'){
+                if(charsNotAllowedHDFC(form_data[address_key_check[i]])){
+                    form_data[address_key_check[i] + '_error'] = 'Only following special characters are allowed: # / . ,';
+                }
+            }
+            if(form_data[address_key_check[i]] && (form_data[address_key_check[i]].length > address_field_max_length)){
+                form_data[address_key_check[i] + '_error'] = `Maximum allowed length is ${address_field_max_length} characters`;
+            }   
+        }
 
         if (provider === 'HDFCERGO' && !form_data.pincode_match) {
             form_data.pincode_error = 'verifying pincode';
