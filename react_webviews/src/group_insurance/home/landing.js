@@ -47,13 +47,13 @@ class Landing extends Component {
       {
         key: 'CORONA',
         title: 'Coronavirus Insurance',
-        subtitle: 'starts from ₹459',
+        subtitle: 'Starts from ₹750/year',
         icon: 'ic_coronavirus_insurance'
       },
       {
         key: 'PERSONAL_ACCIDENT',
         title: 'Personal Accident Insurance',
-        subtitle: 'Starts from ₹ 200/year',
+        subtitle: 'Starts from ₹200/year',
         icon: 'ic_personal_accident'
       },
       {
@@ -65,7 +65,7 @@ class Landing extends Component {
       {
         key: 'DENGUE',
         title: 'Dengue insurance',
-        subtitle: 'Starts from ₹ 50/year',
+        subtitle: 'Starts from ₹50/year',
         icon: 'dengue_icon'
       },
       {
@@ -382,7 +382,7 @@ class Landing extends Component {
             <img style={{ margin: '0px 10px 0 0' }} src={ require(`assets/instant_${this.state.type}.svg`)  }alt="" />
             Get instant policy issuance
             </div>
-          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | Zero paperwork</div>
+          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | No paperwork</div>
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px',marginBottom: '25px'  }}>Get started</h1>
             <div>
