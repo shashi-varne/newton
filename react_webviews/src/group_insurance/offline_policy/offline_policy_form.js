@@ -277,7 +277,7 @@ handleClick = async () => {
             </div>
             <div className="content-mid" >
           <div>We have found one policy with the following details:</div> 
-          <div>Proposer Name:{this.state.o2o_data.customer_name} </div>
+          <div>Proposer Name:{this.state.o2o_data.product_name} </div>
           <div>Product Name: {this.state.o2o_data.product_name}  </div> 
             </div>
             <div className="content-bottom">
@@ -304,8 +304,8 @@ handleClick = async () => {
 
   render() {
     return (
-      <div>
-           {this.state.searching  && <div>
+      <div style={{height: '100vw'}}>
+           {this.state.searching  &&
       <Container
       events={this.sendEvents("just_set_events")}
       showLoader={this.state.show_loader}
@@ -358,7 +358,7 @@ handleClick = async () => {
                 </div>
         {this.renderBmiDialog()}
       </Container>
-         </div>}
+         }
 
       { this.state.lock && this.renderlockDialog()}
        </div>
