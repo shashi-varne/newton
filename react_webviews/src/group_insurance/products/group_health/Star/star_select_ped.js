@@ -29,11 +29,28 @@ class GroupHealthStarPlanSelectPed extends Component {
 
   onload() {
 
-    let { member_base, account_type } = this.state.lead;
+    let { insured_people_details, quotation_details } = this.state.lead;
+    let account_type  =  quotation_details.insurance_type
+    let member_base =  []
 
-    member_base.push({
-        key: 'none'
-    })
+
+    insured_people_details.forEach(element => {
+          if (element.answers.pre_existing_diseases.length >= 1) {
+            element.insured_person.ped_diseases_name = element.answers.pre_existing_diseases[0].description;
+            element.insured_person.ped_exists = true;
+            element.insured_person.key = element.insured_person.relation;
+          }
+      member_base.push(element.insured_person)
+    });
+  
+    member_base.forEach(element => {
+      let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+       element.key = relation.key
+     });
+
+    member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+     
+    member_base.push({ key: 'none' })
 
     let list = [
         {
@@ -192,34 +209,39 @@ class GroupHealthStarPlanSelectPed extends Component {
       canProceed = false;
       toast("Select atleast one option");
     }
+ 
+   if (canProceed) {
+    let body = {}
 
-
-    let body = {};
-
-    if (canProceed) {
-
-      for (var i in member_base) {
-        let member_data = member_base[i];
-
-        if (member_data.key !== 'none') {
-          let backend_key = member_data.backend_key;
-          body[backend_key] = {};
-
-          if ((member_data.ped_exists  === 'Yes' ||
-          member_data.ped_exists === true) && !none_option_selected) {
-            body[backend_key].ped_exists = 'true';
-            body[backend_key].ped_diseases_name = member_data.ped_diseases_name;
-          } else {
-            body[backend_key].ped_exists = 'false';
-            body[backend_key].ped_diseases_name = '';
-          }
-        }
-
-      }
-
-      this.updateLead(body);
-    }
-  };
+     body.answers = {}
+     let insured_people_details = []
+     for (var i in member_base) {
+       let member_data = member_base[i];
+       if (member_data.key !== 'none') {
+         let backend_key = member_data.relation_key;
+         let pre_existing_diseases_array = []
+         if ((member_data.ped_exists === 'Yes' ||
+             member_data.ped_exists === true) && !none_option_selected) {
+           let obj = {
+             "yes_no": true,
+             "question_id": "star_ped_question",
+             "description": member_data.ped_diseases_name,
+           }
+           pre_existing_diseases_array.push(obj)
+           body.answers[backend_key] = {}
+           body.answers[backend_key]['pre_existing_diseases'] = pre_existing_diseases_array
+           insured_people_details.push({  "relation_key": backend_key, 'ped': true})
+         } else {
+           body.answers[backend_key] = {}
+           body.answers[backend_key]['pre_existing_diseases'] = pre_existing_diseases_array
+           insured_people_details.push({  "relation_key": backend_key, 'ped': false})
+         }
+       }
+     }
+     body.insured_people_details = insured_people_details;
+     this.updateLead(body);
+   }
+   };
 
   handleClose = () => {
     this.setState({

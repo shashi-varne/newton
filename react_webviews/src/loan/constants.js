@@ -22,7 +22,7 @@ export function getCssMapperReport(vendor_info) {
     let cssMapper = {
       'callback_awaited_disbursement_approval': {
         color: 'green',
-        disc: 'Approved'
+        disc: 'Application Submitted'
       },
       'disbursement_approved': {
         color: 'yellow',

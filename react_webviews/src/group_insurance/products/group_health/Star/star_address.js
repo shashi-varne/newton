@@ -44,12 +44,12 @@ class StarAddress extends Component {
     }
 
     const { lead = {} } = this.state;
-    lead.permanent_address = lead.permanent_address || {};
-    let form_data = lead.permanent_address || {};
+    lead.permanent_address = lead.address_details.permanent_address || {};
+    let form_data = lead.address_details.permanent_address || {};
 
-    form_data.city = lead.permanent_address.city;
-    form_data.area_id = lead.permanent_address.area_id;
-    form_data.pincode = lead.permanent_address.pincode || '';
+    form_data.city = lead.address_details.permanent_address.city;
+    form_data.area_id = lead.address_details.permanent_address.area_id;
+    form_data.pincode = lead.address_details.permanent_address.pincode || '';
     this.setState({
       form_data,
       bottomButtonData: {
@@ -74,7 +74,8 @@ class StarAddress extends Component {
     }, async () => {
       try {
         const { pincode, city_id } = form_data;
-        const res = await Api.get(`/api/ins_service/api/insurance/star/get/area?pincode=${pincode}&city_id=${city_id}`);
+        const res = await Api.get(`api/insurancev2/api/insurance/proposal/star/area_options?pincode=${pincode}&city_id=${city_id}`);
+
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const areaList = this.formatAreaOpts(res.pfwresponse.result.areas);
 
@@ -107,8 +108,12 @@ class StarAddress extends Component {
     if (!name) {
       name = event.target.name;
     }
-    const value = event.target ? event.target.value : event;
+    var value = event.target ? event.target.value : event;
     let form_data = this.state.form_data || {};
+
+    if(this.state.provider === 'STAR' && (name.includes('addr_line1') || name.includes('addr_line2'))){
+      value = event.target ? event.target.value.substr(0, 240) : event;
+    }
 
     if (name === 'city_id') {
       form_data.city_id = value;
@@ -155,8 +160,8 @@ class StarAddress extends Component {
 
     this.sendEvents('next');
     const keysMapper = {
-      'addressline': 'Address line 1',
-      'addressline2': 'Address line 2',
+      'addr_line1': 'Address line 1',
+      'addr_line2': 'Address line 2',
       'pincode': 'pincode',
       'city_id': 'city',
       'area_id': 'area',
@@ -165,8 +170,8 @@ class StarAddress extends Component {
 
     
     const keys_to_check = [
-      'addressline',
-      'addressline2',
+      'addr_line1',
+      'addr_line2',
       'pincode',
       'city_id',
       'area_id',
@@ -201,12 +206,16 @@ class StarAddress extends Component {
         acc[key] = `${form_data[key]}`;
         return acc;
       }, {});
+      
+
+      data_to_send['country'] = 'INDIA'
       const body = {
-        permanent_address: {
-          ...data_to_send,
-          'district': '',
-        },
-      };
+        "address_details": {                   
+          "permanent_address": data_to_send,
+          "correspondence_addr_same": 'y'
+        }
+      }
+
       this.updateLead(body);
     }
   };
@@ -221,8 +230,8 @@ class StarAddress extends Component {
         "flow": this.state.insured_account_type || '',
         "screen_name": 'address details',
         'from_edit': this.props.edit ? 'yes' : 'no',
-        'address_entered': this.state.form_data.addressline ? 'yes' : 'no',
-        'address2_entered': this.state.form_data.addressline2 ? 'yes' : 'no',
+        'address_entered': this.state.form_data.addr_line1 ? 'yes' : 'no',
+        'address2_entered': this.state.form_data.addr_line2 ? 'yes' : 'no',
       }
     };
 
@@ -260,14 +269,12 @@ class StarAddress extends Component {
     if (pincode.length === 6) {
       try {
         this.setState({ isLoadingCity: true });
-        const res = await Api.get((`/api/ins_service/api/insurance/star/get/city?pincode=${pincode}`));
+        const res = await Api.get((`api/insurancev2/api/insurance/proposal/star/city_options?pincode=${pincode}`));
 
         if (res.pfwresponse.status_code === 200 && !isEmpty(res.pfwresponse.result)) {
           const cityList = this.formatCityOpts(res.pfwresponse.result.cities);
           form_data.state = res.pfwresponse.result.state;
-
           let data = cityList.filter(city => city.name === form_data.city);
-          
           if(data.length > 0) {
             form_data.city = data[0].name;
             form_data.city_id = data[0].value;
@@ -302,8 +309,8 @@ class StarAddress extends Component {
     this.setState({
       form_data: form_data,
       isLoadingCity: false,
-    })
-  }
+    });
+  };
 
   render() {
 
@@ -327,25 +334,25 @@ class StarAddress extends Component {
           <div className="InputField">
             <Input
               type="text"
-              id="addressline"
+              id="addr_line1"
               label="Address line 1"
-              name="addressline"
+              name="addr_line1"
               placeholder="ex: 16/1 Queens paradise"
-              error={(this.state.form_data.addressline_error) ? true : false}
-              helperText={this.state.form_data.addressline_error}
-              value={this.state.form_data.addressline || ''}
+              error={(this.state.form_data.addr_line1_error) ? true : false}
+              helperText={this.state.form_data.addr_line1_error}
+              value={this.state.form_data.addr_line1 || ''}
               onChange={this.handleChange()} />
           </div>
           <div className="InputField">
             <Input
               type="text"
-              id="addressline2"
+              id="addr_line2"
               label="Address line 2"
-              name="addressline2"
+              name="addr_line2"
               placeholder="ex: 16/1 Queens paradise"
-              error={(this.state.form_data.addressline2_error) ? true : false}
-              helperText={this.state.form_data.addressline2_error}
-              value={this.state.form_data.addressline2 || ''}
+              error={(this.state.form_data.addr_line2_error) ? true : false}
+              helperText={this.state.form_data.addr_line2_error}
+              value={this.state.form_data.addr_line2 || ''}
               onChange={this.handleChange()} />
           </div>
           <FormControl fullWidth>

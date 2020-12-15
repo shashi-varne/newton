@@ -7,13 +7,12 @@ import { request_order, resend_otp, verify_otp, expire_rebalance_switch } from '
 import toast from 'common/ui/Toast';
 import OtpDefault from '../../common/ui/otp';
 import { nativeCallback } from 'utils/native_callback';
-
+const totalTime = 30;
 const Otp = (props) => {
   const [otp, setOtp] = useState('');
   const [trx, settrx] = useState('');
   const [resend, setResend] = useState('');
   const [timeAvailable, setTimeAvailable] = useState(30);
-  const [totalTime, setTotalTime] = useState(30);
   const [mobile, setMobile] = useState(storageService().getObject('mobile') || '');
   const [disable, setDisable] = useState(false);
   const [error, setError] = useState(false);
