@@ -51,12 +51,7 @@ class JourneyStepsClass extends Component {
             <div className="title flex">
               {options.status === "completed" ? options.titleCompleted : options.title}
               {options.status && (
-                <span
-                  className="status"
-                  onClick={() => {
-                    props.handleClick(options.id);
-                  }}
-                >
+                <span className="status">
                   {options.cta}
                 </span>
               )}

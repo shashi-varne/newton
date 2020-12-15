@@ -50,7 +50,7 @@ class EligibleLoan extends Component {
 
     if (vendor_info.bt_eligible) {
       progressHeaderData.steps.splice(1, 0, {
-        title: "BT transfer details",
+        title: "BT details",
         status: "completed",
       });
     }
