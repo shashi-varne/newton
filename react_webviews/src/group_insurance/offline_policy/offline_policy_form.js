@@ -273,14 +273,14 @@ handleClick = async () => {
               </div>
               <img className=""  src={require(`assets/${this.state.type}/icn_policy_found_f.svg`)} alt="" />
             </div>
-            <div className="content-mid">
-            We have found one policy with the following details:
-              Proposer Name: Uttam Paswan
-            Product Name: Care health insurance
+            <div className="content-mid" >
+          <div>We have found one policy with the following details:</div> 
+          <div>Proposer Name: </div> 
+          <div>Product Name: </div> 
             </div>
-
             <div className="content-bottom">
             Would you like to import the policy details?
+            <br></br>
             </div>
 
             <div className="actions flex-between">
