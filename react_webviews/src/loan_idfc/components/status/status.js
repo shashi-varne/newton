@@ -15,6 +15,7 @@ const commonMapper = {
     close_state: "/loan/idfc/home",
     failed: true,
     screenName: "system_error",
+    stage: "after address details"
   },
   idfc_callback_rejected: {
     top_icon: "ils_loan_failed",
@@ -23,6 +24,8 @@ const commonMapper = {
     icon: "close",
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
+    screenName: "application_rejected",
+    stage: "after loan requirement details",
   },
   "idfc_0.5_rejected": {
     top_icon: "ils_loan_failed",
@@ -32,6 +35,17 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     screenName: "application_rejected",
+    stage: "after loan requirement details",
+  },
+  "idfc_10_rejected": {
+    top_icon: "ils_loan_failed",
+    // top_title: "Sorry",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/home",
+    screenName: "not_eligible",
+    stage: "after loan requirement details",
   },
   "idfc_0.5_submitted": {
     top_icon: "ils_loan_status",
@@ -88,15 +102,6 @@ const commonMapper = {
     screenName: "system_error",
     stage: "after additional details",
   },
-  // "idfc_1.1_accepted": {
-  //   top_icon: "ils_loan_failed",
-  //   top_title: "Application Rejected",
-  //   button_title: "OK",
-  //   icon: "close",
-  //   cta_state: "/loan/idfc/home",
-  //   close_state: "/loan/idfc/home",
-  //   screenName: "application_rejected",
-  // },
   "Salary receipt mode": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
@@ -135,6 +140,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/home",
     close_state: "/loan/idfc/home",
     screenName: "application_rejected",
+    stage: "after loan requirement details",
   },
   "idfc_1.0_failed": {
     top_icon: "error_illustration",
@@ -258,6 +264,10 @@ class LoanStatus extends Component {
       commonMapper.top_title = `Congratulations, ${first_name}!`;
     }
 
+    if (vendor_application_status === "idfc_10_rejected") {
+      commonMapper.top_title = `Sorry ${first_name}, you’re not eligible for a loan at this point.`;
+    }
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -351,6 +361,16 @@ class LoanStatus extends Component {
                 Oops! Something's not right. Please check back in some time.
               </div>
               <ContactUs />
+            </div>
+          )}
+
+          {vendor_application_status === "idfc_10_rejected" && (
+            <div>
+              <div className='subtitle'>
+                Your loan application did not meet IDFC FIRST Bank’s loan policy. Hence we will not be able to take this forward.<br />
+                However, we thank you for showing interest in our loan offering.<br /><br />
+                We hope to be of assistance in future.
+              </div>
             </div>
           )}
         </div>
