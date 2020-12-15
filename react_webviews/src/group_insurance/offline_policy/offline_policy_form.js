@@ -26,7 +26,8 @@ class AddPolicy extends Component {
         openBmiDialog : false,
         searching : true,
         lock : false,
-        binding : true
+        binding : true,
+        o2o_data : ''
     };
     
   }
@@ -201,6 +202,7 @@ handleClick = async () => {
         searching: true,
         lock: false,
         form_data: form_data,
+        o2o_data : resultData.o2o_data
       })
     } else {
 
@@ -275,8 +277,8 @@ handleClick = async () => {
             </div>
             <div className="content-mid" >
           <div>We have found one policy with the following details:</div> 
-          <div>Proposer Name: </div> 
-          <div>Product Name: </div> 
+          <div>Proposer Name:{this.state.o2o_data.product_name} </div> 
+          <div>Product Name: {this.state.o2o_data.customer_name}  </div> 
             </div>
             <div className="content-bottom">
             Would you like to import the policy details?
