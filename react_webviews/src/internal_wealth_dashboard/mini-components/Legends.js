@@ -1,6 +1,6 @@
 import React from 'react' 
 
-function Legends({ data = {}, columns = 2, classes = {}, percentage = true, round = 0 }) {
+function Legends({ data = [], columns = 2, classes = {}, percentage = true, round = 0 }) {
   const {
     container: containerClass,
     child: childClass,
@@ -11,10 +11,9 @@ function Legends({ data = {}, columns = 2, classes = {}, percentage = true, roun
 
   return (
     <ul className={`iwd-legend-container ${containerClass}`}>
-      {Object.entries(data)
-        .map(([key, share]) => (
+      {data.map(({name, share}) => (
         <li
-          key={key}
+          key={name}
           className={`iwd-legend-child ${childClass}`}
           style={{
             width: `${100/columns}%`,
@@ -25,7 +24,7 @@ function Legends({ data = {}, columns = 2, classes = {}, percentage = true, roun
               className={`iwd-lc-icon ${iconClass}`}
               style={{ opacity: (share / 100) + 0.3 }}
             ></div>
-            <div className={`iwd-lc-title ${labelClass}`}>{key}</div>
+            <div className={`iwd-lc-title ${labelClass}`}>{name}</div>
           </header>
         <div className={`iwd-lc-value ${valueClass}`}>{Math.round(share, round)}{percentage ? '%': ''}</div>
         </li>

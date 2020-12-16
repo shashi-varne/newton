@@ -7,7 +7,7 @@ import { isEmpty } from 'utils/validators';
 import { getConfig } from 'utils/functions';
 
 const isMobileView = getConfig().isMobileDevice;
-function MarketCapAllocation({ data = {}, isLoading }) {
+function MarketCapAllocation({ data = [], isLoading }) {
   return (
     <IwdCard
       className='iwd-analysis-graph-left'
@@ -15,6 +15,7 @@ function MarketCapAllocation({ data = {}, isLoading }) {
       isLoading={isLoading}
       headerText='Market cap allocation'
       error={isEmpty(data)}
+      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
     >
       <section className='iwd-agl-content'>
         <div className='iwd-chart'>
@@ -33,13 +34,14 @@ function MarketCapAllocation({ data = {}, isLoading }) {
   );
 }
 
-function TopSectorAllocation({ data = {}, isLoading }) {
+function TopSectorAllocation({ data = [], isLoading }) {
   return (
     <IwdCard
       className='iwd-analysis-graph-right'
       id='iwd-sector-alloc'
       isLoading={isLoading}
       error={isEmpty(data)}
+      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
       headerText='Top sector allocation'
     >
       <section className='iwd-agr-content'>
@@ -47,10 +49,10 @@ function TopSectorAllocation({ data = {}, isLoading }) {
           <IwdLineChart data={data} />
         </div>
         <div className='iwd-sector-alloc-legend'>
-          {Object.entries(data).map(([key, value], idx) => (
+          {data.map(({name, share}, idx) => (
             <div className='iwd-sal-item' key={idx}>
-              <span className='iwd-sali-label'>{key}</span>
-              <span className='iwd-sali-value'>{value}%</span>
+              <span className='iwd-sali-label'>{name}</span>
+              <span className='iwd-sali-value'>{share}%</span>
             </div>
           ))}
         </div>
@@ -59,12 +61,13 @@ function TopSectorAllocation({ data = {}, isLoading }) {
   );
 }
 
-function RatingWiseExposure({ data = {}, isLoading }) {
+function RatingWiseExposure({ data = [], isLoading }) {
   return (
     <IwdCard
       className='iwd-analysis-graph-left'
       id='iwd-rating-exposure'
       error={isEmpty(data)}
+      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
       isLoading={isLoading}
       headerText='Rating wise exposure'
     >
@@ -85,12 +88,13 @@ function RatingWiseExposure({ data = {}, isLoading }) {
   );
 }
 
-function MaturityWiseExposure({ data = {}, isLoading }) {
+function MaturityWiseExposure({ data = [], isLoading }) {
   return (
     <IwdCard
       className='iwd-analysis-graph-right'
       id='iwd-maturity-exposure'
       error={isEmpty(data)}
+      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
       isLoading={isLoading}
       headerText='Maturity wise exposure'
     >
@@ -110,7 +114,7 @@ function MaturityWiseExposure({ data = {}, isLoading }) {
   );
 }
 
-const ChartsContainer = ({ data, page, isLoading }) => {
+const ChartsContainer = ({ data = {}, page, isLoading }) => {
   return (
     <div className='iwd-scroll-child' data-pgno='1'>
       {page === 'equity' ? (
