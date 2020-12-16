@@ -188,3 +188,35 @@
   row-gap: 35px;
   padding: 15px 0 40px 0;
 }
+
+.personal-details {
+  margin-bottom: 40px;
+  .personal-details-subtitle {
+    font-weight: 500;
+    color: #0a1d32;
+    font-size: 15px;
+    line-height: 21px;
+    padding: 0 5px 15px 0;
+  }
+
+  .sub-head {
+    font-size: 13px;
+    font-weight: 400;
+    color: #767e86;
+    margin: 10px 0;
+  }
+
+  .employment-type {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin: 20px 0;
+  }
+
+  .employment-card {
+    width: fit-content;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 5px rgba(0, 0, 0, 0.05);
+  }
+}
