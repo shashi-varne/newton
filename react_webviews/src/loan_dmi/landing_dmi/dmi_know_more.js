@@ -2,16 +2,13 @@ import React, { Component } from "react";
 import Container from "../common/container";
 import { initialize } from "../common/functions";
 import HowToSteps from "../../common/ui/HowToSteps";
-import JourneySteps from "../../common/ui/JourneySteps";
-import PartnerCard from "../components/partner_card";
-import Button from "material-ui/Button";
 
 class DmiKnowMore extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "idfc_know_more_screen",
+      screen_name: "dmi_know_more_screen",
     };
     this.initialize = initialize.bind(this);
   }
@@ -42,7 +39,7 @@ class DmiKnowMore extends Component {
       title: "DMI Finance",
       subtitle: "Quick money transfer",
       loan_amount: "₹1 lac",
-      logo: "idfc_logo",
+      logo: "dmi-finance",
     };
 
     this.setState({
