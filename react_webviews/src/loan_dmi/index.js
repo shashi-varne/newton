@@ -11,6 +11,7 @@ import NotFound from "../common/components/NotFound";
 
 import Home from "./home";
 import Calculator from "./calculator";
+import SelectLoan from "./select_loan";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -52,6 +53,7 @@ const Lending = props => {
 
                     <Route path={`${url}/home`} component={Home} />
                     <Route path={`${url}/calculator`} component={Calculator} />
+                    <Route path={`${url}/select-loan`} component={SelectLoan} />
                     <Route component={NotFound} />
 
                 </Switch>
