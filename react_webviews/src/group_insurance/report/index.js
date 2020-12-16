@@ -217,6 +217,7 @@ class Report extends Component {
       'health': 'Health insurance',
       'life': 'Life insurance',
       'motor': 'Motor insurance',
+      'others': 'General Insurance',
       'other': 'General Insurance'
     }
 

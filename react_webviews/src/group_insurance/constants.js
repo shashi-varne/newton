@@ -704,6 +704,30 @@ export function getCssMapperReport(policy) {
       color: 'yellow',
       disc: 'Status awaited from'
     },
+    'Issued': {
+      color: 'green',
+      disc: 'Issued'
+    },
+    'Pending': {
+      color: 'yellow',
+      disc: 'Pending'
+    },
+    'Login': {
+      color: 'yellow',
+      disc: 'In process'
+    },
+    'Rejected': {
+      color: 'red',
+      disc: 'Rejected'
+    },
+    'Declined': {
+      color: 'red',
+      disc: 'Declined'
+    },
+    'Cancelled': {
+      color: 'red',
+      disc: 'Cancelled'
+    },
     'incomplete': {
       color: 'yellow',
       disc: 'Policy Pending'
@@ -712,18 +736,6 @@ export function getCssMapperReport(policy) {
       color: 'green',
       disc: 'Policy Issued'
     }, 
-    'issued': {
-      color: 'green',
-      disc: 'Policy Issued'
-    },
-    'Pending': {
-      color: 'yellow',
-      disc: 'Policy Pending'
-    },
-    'Login': {
-      color: 'yellow',
-      disc: 'Policy Pending'
-    },
     'success': {
       color: 'green',
       disc: 'Policy Issued'
@@ -740,23 +752,11 @@ export function getCssMapperReport(policy) {
       color: 'red',
       disc: 'Policy Rejected'
     },
-    'Declined': {
-      color: 'red',
-      disc: 'Policy Declined'
-    },
-    'Rejected': {
-      color: 'red',
-      disc: 'Policy Rejected'
-    },
     'failed': {
       color: 'red',
       disc: 'Policy Failed'
     },
     'cancelled': {
-      color: 'red',
-      disc: 'Policy Cancelled'
-    },
-    'Cancelled': {
       color: 'red',
       disc: 'Policy Cancelled'
     },

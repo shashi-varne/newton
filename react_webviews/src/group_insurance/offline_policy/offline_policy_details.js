@@ -73,6 +73,7 @@ class GroupHealthReportDetails extends Component {
             'health' : 'Health insurance',
             'life': 'Life insurance',
             'motor': 'Motor insurance',
+            'others': 'General Insurance',
             'other': 'General Insurance'
         }
 
@@ -231,6 +232,21 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>}
 
+                        {!this.state.lead.policy_number &&  this.state.lead.application_number &&
+                        <div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                PROPOSAL NUMBER
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.lead.application_number}
+                                </div>
+                            </div>
+                        </div>}
+
                         {this.state.lead.total_amount &&
                         <div className="member-tile">
                             <div className="mt-left">
@@ -287,7 +303,7 @@ class GroupHealthReportDetails extends Component {
                                 PREMIUM PAYMENT TERM
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.premium_paying_term}
+                                    {this.state.lead.premium_paying_term > 1 ? this.state.lead.premium_paying_term + ' years': this.state.lead.premium_paying_term + ' year' } <span></span>
                                 </div>
                             </div>
                         </div>}
@@ -367,7 +383,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>}
 
-                    {this.state.lead.dt_policy_start_date && 
+                    {this.state.lead.dt_policy_start && 
                       <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
@@ -377,11 +393,10 @@ class GroupHealthReportDetails extends Component {
                             POLICY START DATE
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.lead.dt_policy_start_date || '-'}
+                                {this.state.lead.dt_policy_start || '-'}
                             </div>
                         </div>
                     </div>}
-
 
                     {this.state.lead.dt_policy_end && 
                       <div className="member-tile">
@@ -394,6 +409,21 @@ class GroupHealthReportDetails extends Component {
                                 </div>
                             <div className="mtr-bottom">
                                 {this.state.lead.dt_policy_end || '-'}
+                            </div>
+                        </div>
+                    </div>}
+
+                    {this.state.lead.dt_next_renewal && 
+                      <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/icn_start_date_1.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                            RENEWAL START DATE
+                                </div>
+                            <div className="mtr-bottom">
+                                {this.state.lead.dt_next_renewal || '-'}
                             </div>
                         </div>
                     </div>}
