@@ -42,7 +42,6 @@ const ScrollToTop = withRouter(
 
 const Lending = props => {
     const { url } = props.match;
-    console.log(url + "in log home")
 
     return (
         <JssProvider jss={jss} generateClassName={generateClassName}>

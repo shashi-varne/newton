@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import Container from "./common/container";
 import { initialize } from "./common/functions";
 import HowToSteps from "../common/ui/HowToSteps";
-import Button from "material-ui/Button";
-import Card from "../common/ui/Card";
+import PartnerCard from "./components/partner_card";
 
 class Home extends Component {
     constructor(props) {
@@ -45,14 +44,26 @@ class Home extends Component {
             ]
         };
 
+        let partnerData = {
+            inex: 0,
+            title: 'IDFC FIRST BANK',
+            subtitle: 'Quick disbursal',
+            loan_amount: " ₹40 lac",
+            logo: 'idfc_logo',
+            cta_title: 'RESUME',
+        };
+
         this.setState({
-            stepContentMapper: stepContentMapper
+            stepContentMapper: stepContentMapper,
+            partnerData: partnerData,
         });
     }
 
     handleImage = () => {
-        this.setState({displayImage : !this.state.displayImage})
+        this.setState({ displayImage: !this.state.displayImage })
     }
+
+    handleClick = () => {   }
 
     render() {
         return (
@@ -65,28 +76,10 @@ class Home extends Component {
                     <div className="block1-info" onClick={() => this.handleImage()}>
                         {this.state.displayImage ?
                             <img src={require(`assets/${this.state.productName}/icn_hero.svg`)} alt="info" />
-                            : <Card>
-                                <div className="flex partner">
-                                    <div>
-                                        <div>IDFC First bank</div>
-                                        <div>Quick disbursal</div>
-                                    </div>
-                                    <img
-                                        src={require(`assets/idfc_logo.svg`)}
-                                        alt='idfc logo'
-                                    />
-                                </div>
-                                <div className='flex'>
-                                    <div> <span className='sub-text'>Loan upto:</span> ₹40 lac </div>
-                                    <Button
-                                        variant="raised"
-                                        size="large"
-                                        autoFocus
-                                    >
-                                        RESUME
-                                </Button>
-                                </div>
-                            </Card>
+                            : <PartnerCard
+                                baseData={this.state.partnerData}
+                                handleClick={this.handleClick}
+                            />
                         }
                     </div>
 

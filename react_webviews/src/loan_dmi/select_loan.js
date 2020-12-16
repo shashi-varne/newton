@@ -1,16 +1,14 @@
 import React, { Component } from "react";
 import Container from "./common/container";
 import { initialize } from "./common/functions";
-import Button from "material-ui/Button";
-import Card from "../common/ui/Card";
+import PartnerCard from "./components/partner_card";
 
-class PolicyQuotes extends Component {
+class SelectLoan extends Component {
     constructor(props) {
         super(props);
         this.state = {
             show_loader: false,
             screen_name: "select_loan_screen",
-            displayTag: true, 
         };
         this.initialize = initialize.bind(this);
     }
@@ -20,12 +18,14 @@ class PolicyQuotes extends Component {
 
         let stepContentMapper = [
             {
+                index: 0,
                 title: 'IDFC FIRST BANK',
                 subtitle: 'Competetive intrest rate',
                 loan_amount: " ₹40 lac",
                 logo: 'idfc_logo',
                 cta_title: 'APPLY NOW',
                 card_tag: 'Recommended',
+                displayTag: true,
                 benefits: {
                     benefits_title: 'Basic benefits',
                     options: [
@@ -46,6 +46,7 @@ class PolicyQuotes extends Component {
                 }
             },
             {
+                index: 1,
                 title: 'DMI Finance',
                 subtitle: 'Quick disbursal',
                 loan_amount: " ₹1 lac",
@@ -78,19 +79,7 @@ class PolicyQuotes extends Component {
         this.setState({ selectedIndexs: selectedIndexs })
     }
 
-    renderBenefits  = (data, index) => {
-        return <div key={index} className='benefits-points'>
-            <div className='dot'></div>
-            <div>
-                <div>{data.data ? data.data : data}</div>
-                {data.sub_data &&
-                    data.sub_data.map((element, index) => {
-                        return <div key={index} className='sub-data'>{"- " + element}</div>
-                    })
-                }
-            </div>
-        </div>
-    }
+    handleClick = () => { }
 
     render() {
         return (
@@ -101,41 +90,13 @@ class PolicyQuotes extends Component {
             >
                 <div className='select_loan'>
                     {this.state.stepContentMapper.map((item, index) => {
-                        return <Card key={index}>
-                            {item.card_tag && this.state.displayTag && <div className='card-tag'>{item.card_tag}</div>}
-                            <div className="flex partner">
-                                <div>
-                                    <div>{item.title}</div>
-                                    <div>{item.subtitle}</div>
-                                </div>
-                                <img
-                                    src={require(`assets/${item.logo}.svg`)}
-                                    alt={item.logo}
-                                />
-                            </div>
-                            <div className='flex'>
-                                <div> <span className='sub-text'>Loan upto:</span> {" " + item.loan_amount} </div>
-                                <Button
-                                    variant="raised"
-                                    size="large"
-                                    autoFocus
-                                >
-                                    {item.cta_title}
-                                </Button>
-                            </div>
-                            <div className="benefits" onClick={() => this.handleBenefits(index)}>
-                                <div className='benefits-header'>
-                                    Benefits
-                                    <img src={require(`assets/${this.state.selectedIndexs[index] ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
-                                </div>
-                                {this.state.selectedIndexs[index] && (
-                                    <div className='benefits-content'>
-                                        {item.benefits.benefits_title && <div>{item.benefits.benefits_title}</div>}
-                                        {item.benefits.options.map(this.renderBenefits)}
-                                    </div>
-                                )}
-                            </div>
-                        </Card>
+                        return <PartnerCard
+                            key={index}
+                            baseData={item}
+                            handleBenefits={this.handleBenefits}
+                            handleClick={this.handleClick}
+                            isSelected={this.state.selectedIndexs[index]}
+                        />
                     })}
                 </div>
             </Container >
@@ -143,4 +104,4 @@ class PolicyQuotes extends Component {
     }
 }
 
-export default PolicyQuotes;
+export default SelectLoan;
