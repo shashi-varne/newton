@@ -28,7 +28,7 @@ class GroupHealthReportDetails extends Component {
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits,
-            TitleMpaer : {}
+            TitleMaper : {}
         }
     }
 
@@ -69,14 +69,15 @@ class GroupHealthReportDetails extends Component {
         }
 
 
-        let TitleMpaer = {
-            'life' : 'Health insurance',
-            'motor': 'Life insurance',
-            'motor': 'Motor insurance'
+        let TitleMaper = {
+            'health' : 'Health insurance',
+            'life': 'Life insurance',
+            'motor': 'Motor insurance',
+            'other': 'General Insurance'
         }
 
         this.setState({
-            TitleMpaer : TitleMpaer
+            TitleMaper : TitleMaper
         })
     }
 
@@ -129,7 +130,7 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={ this.state.TitleMpaer[this.state.lead.policy_type] ? this.state.TitleMpaer[this.state.lead.policy_type]  : ''}
+                title={ this.state.TitleMaper[this.state.lead.policy_type] ? this.state.TitleMaper[this.state.lead.policy_type]  : ''}
                 fullWidthButton={true}
                 buttonTitle="OK"
                 onlyButton={true}

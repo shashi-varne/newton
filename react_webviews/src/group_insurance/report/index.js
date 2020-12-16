@@ -18,7 +18,7 @@ class Report extends Component {
     this.state = {
       show_loader: true,
       reportData: [],
-      TitleMpaer : {}
+      TitleMaper : {}
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -117,13 +117,13 @@ class Report extends Component {
   getProviderObject_offline(o2o_details){
     let obj = o2o_details;
     obj.key = 'o2o_details';
-    obj.top_title = this.state.TitleMpaer[o2o_details.policy_type] ? this.state.TitleMpaer[o2o_details.policy_type]  : ''
+    obj.top_title = this.state.TitleMaper[o2o_details.policy_type] ? this.state.TitleMaper[o2o_details.policy_type]  : ''
     obj.sum_assured = o2o_details.cover_amount
     let data = getCssMapperReport(obj);
     obj.premium = o2o_details.total_amount;
     obj.status = data.status;
     obj.cssMapper = data.cssMapper;
-
+    obj.product_key = 'offline_insurance' 
     return obj;
   }
 
@@ -213,14 +213,15 @@ class Report extends Component {
 
   async componentDidMount() {
 
-    let TitleMpaer = {
-      'life': 'Health insurance',
-      'motor': 'Life insurance',
-      'motor': 'Motor insurance'
+    let TitleMaper = {
+      'health': 'Health insurance',
+      'life': 'Life insurance',
+      'motor': 'Motor insurance',
+      'other': 'General Insurance'
     }
 
     this.setState({
-      TitleMpaer: TitleMpaer
+      TitleMaper: TitleMaper
     })
 
     try {
@@ -326,9 +327,14 @@ class Report extends Component {
                 <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
-                {props.product_key !== 'CORONA' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
                   {props.key !== 'TERM_INSURANCE' &&
-                    ' annually'
+                    ' annually' 
+                  }
+                </div>}
+                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+                  {props.key !== 'TERM_INSURANCE' &&
+                  <span style={{textTransform : "lowercase", fontWeight : 'normal'}}>/{props.frequency}</span>
                   }
                 </div>}
                 {props.product_key === 'CORONA' &&
