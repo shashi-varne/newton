@@ -333,8 +333,11 @@ class Report extends Component {
                   }
                 </div>}
                 {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
-                  {props.key !== 'TERM_INSURANCE' &&
+                  {props.key !== 'TERM_INSURANCE' && props.frequency !== 'single' &&
                   <span style={{textTransform : "lowercase", fontWeight : 'normal'}}>/{props.frequency}</span>
+                  }
+                   {props.key !== 'TERM_INSURANCE' && props.frequency === 'single' &&
+                  <span style={{textTransform : "lowercase", fontWeight : 'normal'}}>/one time payment</span>
                   }
                 </div>}
                 {props.product_key === 'CORONA' &&

@@ -714,7 +714,7 @@ export function getCssMapperReport(policy) {
     }, 
     'issued': {
       color: 'green',
-      disc: 'APPROVED'
+      disc: 'Policy Issued'
     },
     'Pending': {
       color: 'yellow',

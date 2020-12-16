@@ -77,6 +77,13 @@ componentWillMount() {
 
 
 handleChange = name => event => {
+  setTimeout(() => {
+    var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+    for (var i = 0; i < x.length; i++) {
+      x.item(i).style.backgroundColor = "#35CB5D";
+    }
+  }, 0);
+
   if (!name) {
     return
   }
@@ -85,6 +92,9 @@ handleChange = name => event => {
     var value = event ? event.target.value : event;
   }
   let form_data = this.state.form_data
+  form_data.title = 'CONTINUE'
+  form_data.notfound = false
+  form_data.found = false
   if (name === 'Vendor') {
     var value = event
     form_data.index = event
@@ -92,7 +102,8 @@ handleChange = name => event => {
   form_data[name] = value;
   form_data[name + '_error'] = '';
   this.setState({
-    form_data: form_data
+    form_data: form_data,
+    binding: true
   })
 }
 

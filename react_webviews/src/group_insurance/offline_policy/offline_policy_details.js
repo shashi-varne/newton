@@ -10,9 +10,9 @@ import Api from 'utils/api';
 import toast from  '../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import { initialize } from '../products/group_health/common_data'
+// import { initialize } from '../products/group_health/common_data'
 import ReactHtmlParser from 'react-html-parser';
-import {getCoverageType} from '../products/group_health/constants';
+// import {getCoverageType} from '../products/group_health/constants';
 import { getCssMapperReport } from '../constants'
 
 class GroupHealthReportDetails extends Component {
