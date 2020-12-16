@@ -1,6 +1,7 @@
 import { getConfig } from 'utils/functions';
 import { subDays, startOfMonth, addMonths, endOfMonth, startOfYear } from 'date-fns';
 import moment from 'moment';
+
 export function navigate(pathname, params, replace) {
   if (!replace) {
     this.history.push({
@@ -21,30 +22,31 @@ export function navigate(pathname, params, replace) {
 }
 
 export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) => {
+  console.log('curr: ', current_amt_arr, ', inv: ', invested_amt_arr);
   if (!current_amt_arr.length || !invested_amt_arr.length) return { data: [] };
   const obj = {
     current_amount: [],
     invested_amount: [],
   };
-  let max = current_amt_arr[0].value,
-    min = current_amt_arr[0].value,
+  let max = current_amt_arr[0].close,
+    min = current_amt_arr[0].close,
     curr_val,
     inv_val;
 
   for (let i = 0; i < current_amt_arr.length; i++) {
     curr_val = current_amt_arr[i];
     inv_val = invested_amt_arr[i];
-    max = Math.max(max, Number(curr_val.value), Number(inv_val.value));
-    min = Math.min(min, Number(curr_val.value), Number(inv_val.value));
+    max = Math.max(max, Number(curr_val.close), Number(inv_val.close));
+    min = Math.min(min, Number(curr_val.close), Number(inv_val.close));
     obj.current_amount.push({
       x: curr_val.date,
-      y: curr_val.value,
-      color: '#b9abdd',
+      y: curr_val.close,
+      color: '#4F2DA6',
     });
     obj.invested_amount.push({
       x: inv_val.date,
-      y: inv_val.value,
-      color: '#502da8',
+      y: inv_val.close,
+      color: '#4AD0C0',
     });
   }
 

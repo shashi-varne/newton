@@ -7,7 +7,7 @@ $card-padding: 50px;
 $card-padding-mobile: 40px;
 $background: #f9f9f9;
 @import '../animate.scss';
-@include iwd-animatedDelay(10, 0.6);
+@include iwd-animatedDelay(10, 0.4);
 
 .iwd-text-field {
   font-family: 'Poppins', 'Roboto', sans-serif !important;
@@ -91,8 +91,6 @@ $background: #f9f9f9;
     padding: 5% 9%;
     box-sizing: border-box;
 
-    @include iwd-animatedDelay(10, 0.3);
-
     #iwd-ll-login-container {
       width: 100%;
 
@@ -137,6 +135,35 @@ $background: #f9f9f9;
   *::-webkit-scrollbar-thumb {
     border-radius: 2.5px;
     background-color: hsla(257, 58%, 70%, 1);
+  }
+
+  .iwd-m-loadscreen {
+    padding-top: 200px;
+    
+    .iwd-ml-text {
+      font-size: 14px;
+    }
+  }
+
+  .iwd-m-errorscreen {
+    @extend .iwd-animatedFade;
+    
+    .iwd-me-title {
+      color: $primary;
+    }
+
+    .iwd-me-text {
+      color: rgba($grey, 0.7);
+    }
+  }
+
+  #iwd-m-loadscreen-logo {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, 50%);
+    width: 175px;
+    
   }
 }
 
@@ -336,6 +363,77 @@ $background: #f9f9f9;
     }
   }
 
+  #iwd-d-growth-graph {
+    width: 100%;
+    height: 95%;
+
+    #iwd-dgg-filter {
+      width: inherit;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin: -20px 0 25px;
+
+      #iwd-range-picker {
+        text-transform: uppercase;
+
+        span.iwd-rp-item {
+          font-size: 13px;
+          line-height: 21px;
+          color: $primary;
+          display: inline-block;
+          position: relative;
+          margin-right: 40px;
+        }
+        
+        span.iwd-rp-item.selected {
+          font-weight: bold;
+        }
+
+        span.iwd-rp-item.selected::after {
+          content: "";
+          position: absolute;
+          width: 50%;
+          height: 1px;
+          bottom: 0;
+          left: 25%;
+          border-bottom: 3px solid $primary;
+        }
+      }
+
+      #iwd-dggf-nav {
+        font-size: 30px;
+        line-height: 40px;
+        color: $grey;
+        text-transform: uppercase;
+        position: relative;
+        transition: all 0.5s ease-out;
+                
+        img {
+          margin-right: 10px;
+        }
+
+        .iwd-dot-loader {
+          margin: 0;
+          display: inline-block;
+          position: absolute;
+          left: 26px;
+          bottom: -10px;
+
+          div {
+            width: 6px;
+            height: 6px;
+          }
+        }
+
+        span {
+          color: $dark;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+
   #iwd-d-risk {
     width: 55%;
     margin-right: 3%;
@@ -420,7 +518,6 @@ $background: #f9f9f9;
 }
 
 #iwd-holdings {
-  @include iwd-animatedDelay(30, 0.6);
   .iwd-scroll-contain {
     //padding-left: 270px;
     height: 75vh;
@@ -1338,6 +1435,59 @@ $background: #f9f9f9;
       }
     }
 
+    #iwd-d-growth-graph {
+      padding: 40px 16px;
+
+      #iwd-dgg-filter {
+        justify-content: center;
+        margin-bottom: 25px;
+
+        #iwd-range-picker {
+          text-transform: uppercase;
+          flex-basis: 100%;
+          text-align: center;
+
+          span.iwd-rp-item {
+            margin-right: 20px;
+          }
+        }
+
+        #iwd-dggf-nav {
+          font-size: 17px;
+          line-height: 0;
+          margin-top: 30px;
+          min-width: 130px;
+          display: flex;
+          align-items: center;
+          height: 20px;
+
+          * {
+            vertical-align: middle;
+          }
+
+          img {
+            width: 12px;
+          }
+
+          span {
+            display: inline-block;
+            text-align: center;
+          }
+
+          .iwd-dot-loader {
+            position: unset;
+            min-width: 80px;
+
+            div {
+              width: 4px;
+              height: 4px;
+            }
+          }
+        }
+      }
+    }
+
+
     #iwd-d-risk {
       margin-right: 0;
       margin-bottom: 40px;
@@ -1594,6 +1744,8 @@ $background: #f9f9f9;
       height: 78vh;
       flex-direction: column;
       flex-wrap: nowrap;
+
+      @extend .iwd-animatedFade;
     }
   }
 

@@ -11,7 +11,8 @@ function Legends({ data = {}, columns = 2, classes = {}, percentage = true, roun
 
   return (
     <ul className={`iwd-legend-container ${containerClass}`}>
-      {Object.entries(data).map(([key, share]) => (
+      {Object.entries(data)
+        .map(([key, share]) => (
         <li
           key={key}
           className={`iwd-legend-child ${childClass}`}

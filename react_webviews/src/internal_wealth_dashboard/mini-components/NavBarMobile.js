@@ -15,7 +15,9 @@ const allTabs = ['dashboard', 'analysis', 'holdings', 'recommendations', 'statem
 const NavBarMobile = (props) => {
   const name = storageService().get('iwd-user-name') || '';
   const email = storageService().get('iwd-user-email') || '';
-  const mobile = storageService().get('iwd-user-mobile') || '';
+  let mobile = storageService().get('iwd-user-mobile') || '';
+  mobile = mobile ? `+91-${mobile}` : '';
+  const pan = storageService().get('iwd-user-pan') || '';
   const { match = {} } = props;
   const navigate = navigateFunc.bind(props);
   const [expanded, setExpanded] = useState(false);
@@ -87,7 +89,7 @@ const NavBarMobile = (props) => {
             <div id="iwd-nmp-user-icon">{name.charAt(0)}</div>
             <div className="iwd-nmp-user-detail">
               <b>PAN: </b>
-              CXIPP 4122 M
+              {pan}
             </div>
             <div className="iwd-nmp-user-detail">
               <b>Email: </b>

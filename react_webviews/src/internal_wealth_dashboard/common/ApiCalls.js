@@ -186,7 +186,7 @@ export const resendOtp = async () => {
   }
 };
 
-export const overview = async (params) => {
+export const getOverview = async (params) => {
   try {
     const res = await Api.get('/api/invest/reportv4/portfolio/summary', {
       ...params,
@@ -201,6 +201,53 @@ export const overview = async (params) => {
 
     if (status === 200) {
       return result.report;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const getGrowthData = async (params) => {
+  // return dummyGrowth.data;
+  try {
+    const res = await Api.get('/api/invest/report/get/performance-graph', {
+      ...params,
+      platform,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result.data;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const getGrowthXirr = async (params) => {
+  try {
+    const res = await Api.get('/api/reports/xirr', {
+      ...params,
+      platform,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
     } else {
       throw result.error || result.message || genericErrMsg;
     }
@@ -229,26 +276,44 @@ export const hitNextPage = async (next_page, params) => {
   }
 };
 
-export const portfolioRisk = async (params = {}) => {
+export const getPortfolioRisk = async (params = {}) => {
   try {
-    if (boot) {
-      const res = await Api.get('api/reports/portfolio-risk', {
-        ...params,
-      });
+    const res = await Api.get('api/reports/portfolio-risk', {
+      ...params,
+    });
 
-      if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-        throw genericErrMsg;
-      }
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
 
-      const { result, status_code: status } = res.pfwresponse;
+    const { result, status_code: status } = res.pfwresponse;
 
-      if (status === 200) {
-        return result || {};
-      } else {
-        throw result.error || result.message || genericErrMsg;
-      }
+    if (status === 200) {
+      return result || {};
     } else {
-      return overview;
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const getNewsletter = async (params = {}) => {
+  try {
+    const res = await Api.get('api/cms/article/category/4?sort=desc', {
+      ...params,
+    });
+
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result || {};
+    } else {
+      throw result.error || result.message || genericErrMsg;
     }
   } catch (e) {
     throw e;
@@ -317,211 +382,6 @@ export const fetchPortfolioAnalysis = async (params = {}) => {
   } catch (e) {
     throw e;
   }
-};
-
-export const fetchPortfolioAnalysisMock = async (params = {}) => {
-  const isSuccess = true;
-  try {
-    if (isSuccess) {
-      return new Promise((resolve) => {
-        setTimeout(() => resolve(analysisPageApiMockSuccess.pfwresponse.result), 1000);
-      });
-    } else {
-      return new Promise((_, reject) => {
-        setTimeout(() => {
-          reject(analysisPageApiMockError.pfwresponse.result);
-        }, 1000);
-      });
-    }
-  } catch (e) {
-    return new Promise((_, reject) => {
-      setTimeout(() => {
-        reject(analysisPageApiMockError.pfwresponse.result);
-      }, 1000);
-    });
-  }
-};
-
-const analysisPageApiMockSuccess = {
-  pfwstatus_code: 200,
-  pfwtime: '2020-11-12 05:27:51.443542',
-  pfwresponse: {
-    status_code: 200,
-    requestapi: '',
-    result: {
-      maturity_exposure: {
-        '0-1y': 100.0,
-        '1-5': 20,
-        '5-10': 20,
-        '10-20': 10,
-        '20-30': 10,
-        '30-40': 20,
-      },
-      sector_alloc: {
-        Healthcare: 5.81,
-        'Financial Services': 52.5,
-        'Communication Services': 2.43,
-        Utilities: 6.08,
-        'Real Estate': 0.43,
-        Energy: 9.9,
-        Industrials: 5.28,
-        Technology: 8.95,
-        'Basic Materials': 4.12,
-        'Consumer Cyclical': 1.82,
-        'Consumer Defensive': 2.69,
-      },
-      market_cap_alloc: {
-        'small cap': 4.62,
-        'mid cap': 19.77,
-        'large cap': 75.61,
-      },
-      top_amcs: {
-        equity: [
-          {
-            amc_logo: 'http://localhost/static/img/amc-logo/high-res/hdfc_new.png',
-            share: 53.02,
-            amc_name: 'HDFC Mutual Fund',
-          },
-          {
-            amc_logo: 'http://localhost/static/img/amc-logo/high-res/icici_new.png',
-            share: 46.98,
-            amc_name: 'ICICI Prudential Mutual Fund',
-          },
-        ],
-        debt: [],
-      },
-      rating_exposure: {
-        SOV: 12.03,
-        AA: 18.7,
-        A: 18.17,
-        Others: 51.1,
-        'AAAA+': 18.17,
-        'Others++': 51.1,
-      },
-      top_holdings: {
-        equity: [
-          {
-            holding_sector_name: 'Financial Services',
-            instrument_name: 'HDFC Bank Ltd',
-            share: 8.41,
-          },
-          {
-            holding_sector_name: 'Financial Services',
-            instrument_name: 'ICICI Bank Ltd',
-            share: 7.89,
-          },
-          {
-            holding_sector_name: 'Energy',
-            instrument_name: 'Reliance Industries Ltd',
-            share: 6.41,
-          },
-          {
-            holding_sector_name: 'Technology',
-            instrument_name: 'Infosys Ltd',
-            share: 5.57,
-          },
-          {
-            holding_sector_name: 'Financial Services',
-            instrument_name: 'Axis Bank Ltd',
-            share: 4.3,
-          },
-          {
-            holding_sector_name: 'Financial Services',
-            instrument_name: 'State Bank of India',
-            share: 3.55,
-          },
-          {
-            holding_sector_name: 'Utilities',
-            instrument_name: 'NTPC Ltd',
-            share: 2.81,
-          },
-          {
-            holding_sector_name: 'Healthcare',
-            instrument_name: 'Cipla Ltd',
-            share: 2.63,
-          },
-          {
-            holding_sector_name: 'Financial Services',
-            instrument_name: 'Motilal Oswal Financial Services Ltd',
-            share: 2.54,
-          },
-          {
-            holding_sector_name: 'Energy',
-            instrument_name: 'Bharat Petroleum Corp Ltd',
-            share: 2.4,
-          },
-        ],
-        debt: [
-          {
-            instrument_name: 'HDFC Ltd.',
-            share: 51.1,
-          },
-          {
-            instrument_name: 'Muthoot Finance Limited',
-            share: 18.7,
-          },
-          {
-            instrument_name: 'Punjab National Bank',
-            share: 18.17,
-          },
-          {
-            instrument_name: '182 DTB 12112020',
-            share: 12.03,
-          },
-          {
-            instrument_name: 'HDFC Ltd.',
-            share: 51.1,
-          },
-          {
-            instrument_name: 'Muthoot Finance Limited',
-            share: 18.7,
-          },
-          {
-            instrument_name: 'Punjab National Bank',
-            share: 18.17,
-          },
-          {
-            instrument_name: '182 DTB 12112020',
-            share: 12.03,
-          },
-          {
-            instrument_name: 'HDFC Ltd.',
-            share: 51.1,
-          },
-          {
-            instrument_name: 'Muthoot Finance Limited',
-            share: 18.7,
-          },
-          {
-            instrument_name: 'Punjab National Bank',
-            share: 18.17,
-          },
-          {
-            instrument_name: '182 DTB 12112020',
-            share: 12.03,
-          },
-        ],
-      },
-    },
-  },
-  pfwuser_id: 5648541271719936,
-  pfwutime: '',
-  pfwmessage: 'Success',
-};
-
-const analysisPageApiMockError = {
-  pfwstatus_code: 200,
-  pfwtime: '2020-11-12 05:29:47.798146',
-  pfwresponse: {
-    status_code: 400,
-    requestapi: '',
-    result: {
-      error: 'MF data could not be fetched from mfservice',
-    },
-  },
-  pfwuser_id: 5648541271719936,
-  pfwutime: '',
-  pfwmessage: 'Success',
 };
 
 export const getTransactions = async (params = {}) => {

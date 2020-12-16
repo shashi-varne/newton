@@ -16,6 +16,7 @@ import { transactionsHeaderMap } from '../constants';
 import ScrollTopBtn from './ScrollTopBtn';
 import { Dialog } from 'material-ui';
 import { getConfig } from 'utils/functions';
+import RatingStar from '../../fund_details/common/RatingStar';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -78,7 +79,9 @@ const HoldingDetail = ({
                 </div>
               </div>
             </div>
-            <div>stars</div>
+            <div>
+              <RatingStar value={investmentDetail.fisdom_rating} />
+            </div>
             <div className="iwd-hdc-type">
               <span className="iwd-hdct-invested">
                 Since {formattedDate(investmentDetail.invested_since, 'm y')}

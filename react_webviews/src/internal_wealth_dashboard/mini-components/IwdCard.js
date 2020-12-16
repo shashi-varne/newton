@@ -18,6 +18,8 @@ export default function IwdCard({
   style = {},
   onClick = () => {},
   isClickable = false,
+  animate = true,
+  animation = ''
 }) {
   const renderChild = () => {
     if (isLoading) {
@@ -58,7 +60,7 @@ export default function IwdCard({
     //   timeout={20000}
     //   // To animate card content
     // >
-    <div className={`iwd-card ${className} iwd-animatedFade`} id={id} style={style} onClick={onClick}>
+    <div className={`iwd-card ${className} ${animate ? animation || 'iwd-animatedFade' : ''}`} id={id} style={style} onClick={onClick}>
       {headerText && <div className="iwd-card-header">{headerText}</div>}
       {renderChild()}
     </div>

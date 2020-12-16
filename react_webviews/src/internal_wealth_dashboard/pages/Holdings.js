@@ -87,6 +87,7 @@ const Holdings = () => {
   useEffect(() => {
     filter(holdingsList);
   }, [filterVal]);
+
   const checkSchemeType = (filterSchemeType, currentSchemeType) => {
     return schemeMap[filterSchemeType].includes(currentSchemeType);
   };
@@ -153,18 +154,13 @@ const Holdings = () => {
           />
         )}
         <div style={{ flex: '1' }}>
-          {/* <> */}
-          {!open && !hasError && (
-            <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
-              <img src={filter_sign} alt='filter' />
-            </div>
-          )}
           <SnapScrollContainer
             hideFooter={true}
             error={hasError}
             onErrorBtnClick={fetchHoldings}
             isLoading={isLoading}
             loadingText='Fetching ...'
+            scrollOnChange={true}
           >
             {filterVal && !filterData && (
               <ErrorScreen
@@ -182,7 +178,11 @@ const Holdings = () => {
                 : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
             </>
           </SnapScrollContainer>
-          {/* </> */}
+          {!open && !hasError && (
+            <div className='iwd-filter-button' onClick={() => isOpen(!open)}>
+              <img src={filter_sign} alt='filter' />
+            </div>
+          )}
         </div>
       </section>
     </div>

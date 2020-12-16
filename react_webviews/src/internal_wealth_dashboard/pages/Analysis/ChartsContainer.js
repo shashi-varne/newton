@@ -1,6 +1,6 @@
 import React from 'react';
 import IwdBubbleChart from '../../mini-components/IwdBubbleChart';
-import IwdBarChart from '../../mini-components/IwdBarChart';
+import IwdLineChart from '../../mini-components/IwdLineChart';
 import IwdCard from '../../mini-components/IwdCard';
 import Legends from '../../mini-components/Legends';
 import { isEmpty } from 'utils/validators';
@@ -44,7 +44,7 @@ function TopSectorAllocation({ data = {}, isLoading }) {
     >
       <section className='iwd-agr-content'>
         <div className='iwd-chart'>
-          <IwdBarChart data={data} />
+          <IwdLineChart data={data} />
         </div>
         <div className='iwd-sector-alloc-legend'>
           {Object.entries(data).map(([key, value], idx) => (
@@ -96,7 +96,7 @@ function MaturityWiseExposure({ data = {}, isLoading }) {
     >
       <section className='iwd-agr-content'>
         <div className='iwd-chart'>
-          <IwdBarChart data={data} />
+          <IwdLineChart data={data} />
         </div>
         <Legends
           data={data}

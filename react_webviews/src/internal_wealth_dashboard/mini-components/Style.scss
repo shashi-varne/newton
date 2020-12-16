@@ -355,6 +355,7 @@ $card-padding: 50px;
 
 #iwd-nav {
   @extend .iwd-fadeFromLeft;
+  animation-duration: 1.8s !important;
 }
 
 #iwd-nav:hover {
@@ -547,7 +548,7 @@ $card-padding: 50px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 50%;
-    transition: box-shadow 0.5s ease-in-out;
+    transition: box-shadow 0.4s ease-out;
 
     img {
       transform: rotate(0deg);
@@ -694,6 +695,60 @@ ul#iwd-bars {
   }
 }
 
+.iwd-growth-graph-legend {
+  border: 1px solid $light-grey;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background-color: #ffffff;
+  padding: 10px;
+  min-width: 340px;
+
+  .iwd-ggl-header {
+    font-size: 11px;
+    font-weight: 700;
+    color: $grey;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .iwd-ggl-body {
+    display: flex;
+    justify-content: center;
+  }
+
+  .iwd-ggl-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .iwd-ggli-color-bubble {
+      width: 8px;
+      height: 8px;
+      border-radius: 10px;
+      margin-right: 6px;
+    }
+
+    .iwd-ggli-label {
+      font-weight: 600; 
+    }
+
+    span {
+      font-size: 13px;
+      line-height: 21px;
+      flex: 1;
+      text-transform: capitalize;
+      color: $dark;
+    }
+  }
+
+  .iwd-ggl-item:nth-child(1) {
+    border-right: 1px solid #C4C4C4;
+    padding-right: 20px;
+    margin-right: 20px;
+  }
+}
+
 .iwd-holding-card {
   background: white;
   position: relative;
@@ -828,7 +883,6 @@ ul#iwd-bars {
 .radial-chart {
   position: relative;
   display: inline-block;
-  transition: all 0.3s ease-in 1s;
   margin-top: 20px;
 }
 .radial-chart.no-progress .radial-chart-progress {
@@ -840,7 +894,7 @@ ul#iwd-bars {
 .radial-chart-progress {
   transform: rotate(90deg);
   transform-origin: center;
-  transition: all 1s cubic-bezier(0.58, 0.16, 0.5, 1.14) 1.5s;
+  transition: all 1s cubic-bezier(0.58, 0.16, 0.5, 1.14) 1s;
 }
 
 table.iwd-transactions-table {
@@ -1150,7 +1204,7 @@ table.iwd-transactions-table {
 
 // Statement Card
 .iwd-statement-card {
-  padding: $card-padding;
+  padding: 40px;
   height: 224px;
   width: 279px;
   margin: 15px;
@@ -1260,6 +1314,21 @@ table.iwd-transactions-table {
         font-size: 17px;
         text-align: center;
       }
+    }
+  }
+
+  .iwd-growth-graph-legend {
+    min-width: 0;
+    padding-bottom: 5px;
+
+    .iwd-ggl-body {
+      display: block;
+    }
+
+    .iwd-ggl-item:nth-child(1) {
+      border-right: none;
+      padding-right: 0px;
+      margin-right: 0px;
     }
   }
 

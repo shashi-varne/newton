@@ -1,3 +1,4 @@
+import fisdomLogo from 'assets/fisdom/fisdom_logo_coloured.png';
 
 import React, { useEffect, useState } from 'react';
 import { getConfig } from "utils/functions";
@@ -10,33 +11,55 @@ import Statements from './Statements';
 import Recommendations from './Recommendations';
 import { isEmpty, storageService } from '../../utils/validators';
 import { navigate as navigateFunc } from '../common/commonFunctions';
+import { get } from 'lodash';
 import Api from '../../utils/api';
 import { CSSTransition } from 'react-transition-group';
+import IwdScreenLoader from '../mini-components/IwdScreenLoader';
+import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 const isMobileView = getConfig().isMobileDevice;
 
 const Main = (props) => {
   const { match: { params } } = props;
   const navigate = navigateFunc.bind(props);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loginErr, setLoginErr] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchUserCreds = async () => {
     try {
+      setIsLoading(true);
       const res = await Api.get('api/whoami');
       if (isEmpty(res) || res.pfwstatus_code !== 200) {
-        navigate('login');
+        showError();
       } else {
-        setLoggedIn(true);
+        setIsLoading(false);
         const { user } = res.pfwresponse.result;
         const { email, name, mobile } = user;
         
         storageService().set('iwd-user-email', email || '');
         storageService().set('iwd-user-name', name || '');
-        storageService().set('iwd-user-mobile', mobile || '');
+        storageService().set('iwd-user-mobile', mobile.slice(-10) || '');
+        const kycDetail = await Api.post(`api/user/account/summary`, {
+          "kyc": ["kyc"],
+          "user": ["user"]
+        });
+
+        storageService().set(
+          'iwd-user-pan',
+          get(kycDetail, 'pfwresponse.result.data.kyc.kyc.data.pan.meta_data.pan_number', '')
+        );
       }
     } catch (e) {
       console.log(e);
-      navigate('login');
+      setIsLoading(false);
+      showError();
     }
+  };
+
+  const showError = () => {
+    setLoginErr(true);
+    setTimeout(() => {
+      navigate('login');
+    }, 5000);
   };
 
   useEffect(() => {
@@ -55,20 +78,50 @@ const Main = (props) => {
     return tabMap[params.tab] || <></>;
   }
 
+  if (isLoading) {
+    return (
+      <div id="iwd-main" className="iwd-animatedFade">
+        <img src={fisdomLogo} alt="fisdom" id="iwd-m-loadscreen-logo"/>
+        <IwdScreenLoader
+          classes={{
+            container: 'iwd-m-loadscreen',
+            text: 'iwd-ml-text'
+          }}
+          loadingText="Verifying login..."
+        />
+      </div>
+    )
+  } else if (loginErr) {
+    return (
+      <div id="iwd-main">
+        <ErrorScreen
+          useTemplate={true}
+          templateErrText="Redirecting to login page..."
+          templateErrTitle="You have been logged out."
+          classes={{
+            container: 'iwd-m-errorscreen',
+            title: 'iwd-me-title',
+            text: 'iwd-me-text'
+          }}
+        />
+      </div>
+    )
+  }
+
   return (
-    loggedIn ? (<div id='iwd-main'>
-        {isMobileView ? <NavBarMobile /> : <NavBar />}
-        <CSSTransition
-          in={true}
-          appear
-          enter={false}
-          exit={false}
-          classNames='iwd-entry-animate'
-          timeout={3000}
-        >
-          {renderTab()}
-        </CSSTransition>
-      </div>) : ''
+    <div id='iwd-main'>
+      {isMobileView ? <NavBarMobile /> : <NavBar />}
+      <CSSTransition
+        in={true}
+        appear
+        enter={false}
+        exit={false}
+        classNames='iwd-entry-animate'
+        timeout={30000}
+      >
+        {renderTab()}
+      </CSSTransition>
+    </div>
   );
 };
 

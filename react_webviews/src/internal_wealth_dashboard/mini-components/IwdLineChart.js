@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IwdBarChart = ({ data, classes = {} }) => {
+const IwdLineChart = ({ data, classes = {} }) => {
   const {
     container: containerClass,
     child: childClass,
@@ -29,19 +29,19 @@ const IwdBarChart = ({ data, classes = {} }) => {
     <div>
       <ul id="iwd-bars" className={containerClass}>
         {Object.entries(data).map(([key, value], idx) => (
-          <li
-            key={idx}
-            className={`iwd-bars-li ${childClass}`}
-            style={{ flexBasis: `${value}%`, opacity: (value / 100) + 0.3 }}
-            // onMouseEnter={() => onElemHover(item, idx)}
-            // onMouseLeave={() => onElemLeave()}
-          >
-            <div>{key}</div>
-          </li>
+            <li
+              key={idx}
+              className={`iwd-bars-li ${childClass}`}
+              style={{ flexBasis: `${value}%`, opacity: (value / 100) + 0.3 }}
+              // onMouseEnter={() => onElemHover(item, idx)}
+              // onMouseLeave={() => onElemLeave()}
+            >
+              <div>{key}</div>
+            </li>
         ))}
       </ul>
     </div>
   );
 };
 
-export default IwdBarChart;
+export default IwdLineChart;

@@ -9,7 +9,9 @@ import { storageService } from '../../utils/validators';
 const IwdProfile = (props) => {
   const name = storageService().get('iwd-user-name') || '';
   const email = storageService().get('iwd-user-email') || '';
-  const mobile = storageService().get('iwd-user-mobile') || '';
+  let mobile = storageService().get('iwd-user-mobile') || '';
+  mobile = mobile ? `+91-${mobile}` : '';
+  const pan = storageService().get('iwd-user-pan') || '';
   const navigate = navigateFunc.bind(props);
   const [expanded, setExpanded] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -28,10 +30,6 @@ const IwdProfile = (props) => {
     setLoggingOut(false);
   };
 
-  if (!name || !email) {
-    navigate('login');
-  }
-
   const profileIcon = (
     <div id='iwd-profile-icon' onClick={!expanded && toggleExpanded}>
       {name.charAt(0)}
@@ -46,7 +44,7 @@ const IwdProfile = (props) => {
           <div className='iwd-profile-username'>{name}</div>
           <div className='iwd-profile-detail' id='pan'>
             <b>PAN: </b>
-            CXIPP 4122 M
+            {pan || '--'}
           </div>
           <div className='iwd-profile-detail'>
             <b>Email: </b>

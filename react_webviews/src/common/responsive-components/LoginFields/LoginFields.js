@@ -160,7 +160,7 @@ const LoginFields = (props) => {
         status: 'success',
         user_id: res.user.user_id,
       });
-      props.onLoginSuccess();
+      props.onLoginSuccess(res);
     } catch (err) {
       if (err.includes('wrong OTP')) {
         setOtpErr('Incorrect OTP! Please check and try again');
