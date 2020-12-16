@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Container from "./common/container";
 import { initialize } from "./common/functions";
 import HowToSteps from "../common/ui/HowToSteps";
+import Button from "material-ui/Button";
+import Card from "../common/ui/Card";
 
 class Home extends Component {
     constructor(props) {
@@ -9,6 +11,7 @@ class Home extends Component {
         this.state = {
             show_loader: false,
             screen_name: "home_screen",
+            displayImage: true
         };
         this.initialize = initialize.bind(this);
     }
@@ -47,6 +50,10 @@ class Home extends Component {
         });
     }
 
+    handleImage = () => {
+        this.setState({displayImage : !this.state.displayImage})
+    }
+
     render() {
         return (
             <Container
@@ -55,10 +62,32 @@ class Home extends Component {
                 noFooter={true}
             >
                 <div className="loan-home">
-                    <div className="block1-info"   >
-                        <img
-                            src={require(`assets/${this.state.productName}/icn_hero.svg`)}
-                            alt="info" />
+                    <div className="block1-info" onClick={() => this.handleImage()}>
+                        {this.state.displayImage ?
+                            <img src={require(`assets/${this.state.productName}/icn_hero.svg`)} alt="info" />
+                            : <Card>
+                                <div className="flex partner">
+                                    <div>
+                                        <div>IDFC First bank</div>
+                                        <div>Quick disbursal</div>
+                                    </div>
+                                    <img
+                                        src={require(`assets/idfc_logo.svg`)}
+                                        alt='idfc logo'
+                                    />
+                                </div>
+                                <div className='flex'>
+                                    <div> <span className='sub-text'>Loan upto:</span> ₹40 lac </div>
+                                    <Button
+                                        variant="raised"
+                                        size="large"
+                                        autoFocus
+                                    >
+                                        RESUME
+                                </Button>
+                                </div>
+                            </Card>
+                        }
                     </div>
 
                     <div className='block2-info'>
