@@ -27,7 +27,8 @@ class GroupHealthReportDetails extends Component {
             },
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            TitleMpaer : {}
         }
     }
 
@@ -66,6 +67,17 @@ class GroupHealthReportDetails extends Component {
             });
             toast('Something went wrong');
         }
+
+
+        let TitleMpaer = {
+            'life' : 'Health insurance',
+            'motor': 'Life insurance',
+            'motor': 'Motor insurance'
+        }
+
+        this.setState({
+            TitleMpaer : TitleMpaer
+        })
     }
 
     navigate = (pathname) => {
@@ -117,7 +129,7 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={'Health insurance'}
+                title={ this.state.TitleMpaer[this.state.lead.policy_type] ? this.state.TitleMpaer[this.state.lead.policy_type]  : ''}
                 fullWidthButton={true}
                 buttonTitle="OK"
                 onlyButton={true}
@@ -228,7 +240,7 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {numDifferentiationInr(this.state.lead.total_amount)} 
+                                    {numDifferentiationInr(this.state.lead.cover_amount)} 
                                 </div>
                             </div>
                         </div>}

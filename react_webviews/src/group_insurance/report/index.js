@@ -17,7 +17,8 @@ class Report extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      reportData: []
+      reportData: [],
+      TitleMpaer : {}
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -116,9 +117,10 @@ class Report extends Component {
   getProviderObject_offline(o2o_details){
     let obj = o2o_details;
     obj.key = 'o2o_details';
-    obj.top_title = capitalizeFirstLetter(o2o_details.provider)
-    obj.sum_assured = o2o_details.total_amount
+    obj.top_title = this.state.TitleMpaer[o2o_details.policy_type] ? this.state.TitleMpaer[o2o_details.policy_type]  : ''
+    obj.sum_assured = o2o_details.cover_amount
     let data = getCssMapperReport(obj);
+    obj.premium = o2o_details.total_amount;
     obj.status = data.status;
     obj.cssMapper = data.cssMapper;
 
@@ -210,6 +212,16 @@ class Report extends Component {
   }
 
   async componentDidMount() {
+
+    let TitleMpaer = {
+      'life': 'Health insurance',
+      'motor': 'Life insurance',
+      'motor': 'Motor insurance'
+    }
+
+    this.setState({
+      TitleMpaer: TitleMpaer
+    })
 
     try {
 
