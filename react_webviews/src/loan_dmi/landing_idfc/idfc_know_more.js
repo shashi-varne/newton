@@ -3,8 +3,6 @@ import Container from "../common/container";
 import { initialize } from "../common/functions";
 import HowToSteps from "../../common/ui/HowToSteps";
 import JourneySteps from "../../common/ui/JourneySteps";
-import PartnerCard from "../components/partner_card";
-import Button from "material-ui/Button";
 
 class IdfcKnowMore extends Component {
   constructor(props) {
@@ -33,7 +31,6 @@ class IdfcKnowMore extends Component {
         },
         {
           icon: "icn_b3_m",
-          title: "Built-in security",
           subtitle:
             "Maximum age at the time of loan maturity should not be >60 years ",
         },

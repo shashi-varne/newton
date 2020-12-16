@@ -14,6 +14,7 @@ import Calculator from "./calculator";
 import SelectLoan from "./select_loan";
 import PersonalDetails from "./components/forms/personal_details";
 import IdfcKnowMore from "./landing_idfc/idfc_know_more";
+import DmiKnowMore from "./landing_dmi/dmi_know_more";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -56,6 +57,7 @@ const Lending = (props) => {
           <Route path={`${url}/select-loan`} component={SelectLoan} />
           <Route path={`${url}/personal-details`} component={PersonalDetails} />
           <Route path={`${url}/idfc-know-more`} component={IdfcKnowMore} />
+          <Route path={`${url}/dmi-know-more`} component={DmiKnowMore} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
