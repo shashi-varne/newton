@@ -56,7 +56,8 @@ class DmiKnowMore extends Component {
       <Container
         showLoader={this.state.show_loader}
         title="Know more"
-        noFooter={true}
+        buttonTitle="APPLY NOW"
+        handleClick={this.handleClick}
       >
         <div className="loan-know-more">
           <div className="block1-info">
