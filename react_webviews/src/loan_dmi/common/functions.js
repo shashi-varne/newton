@@ -8,12 +8,10 @@ export async function initialize() {
 
   nativeCallback({ action: "take_control_reset" });
 
-  this.setState(
-    {
-      productName: getConfig().productName,
-      count: 0,
-    }
-  );
+  this.setState({
+    productName: getConfig().productName,
+    count: 0,
+  });
 }
 
 export function openInBrowser(url) {

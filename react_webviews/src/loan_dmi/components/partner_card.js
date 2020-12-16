@@ -3,63 +3,88 @@ import Button from "material-ui/Button";
 import Card from "../../common/ui/Card";
 
 class PartnerCard extends Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    renderBenefits = (data, index) => {
-        return <div key={index} className='benefits-points'>
-            <div className='dot'></div>
-            <div>
-                <div>{data.data ? data.data : data}</div>
-                {data.sub_data &&
-                    data.sub_data.map((element, index) => {
-                        return <div key={index} className='sub-data'>{"- " + element}</div>
-                    })
-                }
-            </div>
+  renderBenefits = (data, index) => {
+    return (
+      <div key={index} className="benefits-points">
+        <div className="dot"></div>
+        <div>
+          <div>{data.data ? data.data : data}</div>
+          {data.sub_data &&
+            data.sub_data.map((element, index) => {
+              return (
+                <div key={index} className="sub-data">
+                  {"- " + element}
+                </div>
+              );
+            })}
         </div>
-    }
+      </div>
+    );
+  };
 
-    render() {
-        return (
-            <Card className="partner-card">
-                {this.props.baseData.card_tag && this.props.baseData.displayTag && <div className='card-tag'>{this.props.baseData.card_tag}</div>}
-                <div className="flex partner">
-                    <div>
-                        <div>{this.props.baseData.title}</div>
-                        <div>{this.props.baseData.subtitle}</div>
-                    </div>
-                    <img
-                        src={require(`assets/${this.props.baseData.logo}.svg`)}
-                        alt={this.props.baseData.logo}
-                    />
-                </div>
-                <div className='flex'>
-                    <div> <span className='sub-text'>Loan upto:</span> {" " + this.props.baseData.loan_amount} </div>
-                    <Button
-                        variant="raised"
-                        size="large"
-                        autoFocus
-                        onClick={() => this.props.handleClick()}
-                    >
-                        {this.props.baseData.cta_title}
-                    </Button>
-                </div>
-                {this.props.baseData.benefits && <div className="benefits" onClick={() => this.props.handleBenefits(this.props.baseData.index)}>
-                    <div className='benefits-header'> Benefits
-                        <img src={require(`assets/${this.props.isSelected ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />
-                    </div>
-                    {this.props.isSelected && (
-                        <div className='benefits-content'>
-                            {this.props.baseData.benefits.benefits_title && <div>{this.props.baseData.benefits.benefits_title}</div>}
-                            {this.props.baseData.benefits.options.map(this.renderBenefits)}
-                        </div>
-                    )}
-                </div>}
-            </Card>
-        );
-    }
+  render() {
+    return (
+      <Card className="partner-card">
+        {this.props.baseData.card_tag && this.props.baseData.displayTag && (
+          <div className="card-tag">{this.props.baseData.card_tag}</div>
+        )}
+        <div className="flex partner">
+          <div>
+            <div>{this.props.baseData.title}</div>
+            <div>{this.props.baseData.subtitle}</div>
+          </div>
+          <img
+            src={require(`assets/${this.props.baseData.logo}.svg`)}
+            alt={this.props.baseData.logo}
+          />
+        </div>
+        <div className="flex">
+          <div>
+            {" "}
+            <span className="sub-text">Loan upto:</span>{" "}
+            {" " + this.props.baseData.loan_amount}{" "}
+          </div>
+          <Button
+            variant="raised"
+            size="large"
+            autoFocus
+            onClick={() => this.props.handleClick()}
+          >
+            {this.props.baseData.cta_title}
+          </Button>
+        </div>
+        {this.props.baseData.benefits && (
+          <div
+            className="benefits"
+            onClick={() => this.props.handleBenefits(this.props.baseData.index)}
+          >
+            <div className="benefits-header">
+              {" "}
+              Benefits
+              <img
+                src={require(`assets/${
+                  this.props.isSelected ? "minus_icon" : "plus_icon"
+                }.svg`)}
+                alt=""
+              />
+            </div>
+            {this.props.isSelected && (
+              <div className="benefits-content">
+                {this.props.baseData.benefits.benefits_title && (
+                  <div>{this.props.baseData.benefits.benefits_title}</div>
+                )}
+                {this.props.baseData.benefits.options.map(this.renderBenefits)}
+              </div>
+            )}
+          </div>
+        )}
+      </Card>
+    );
+  }
 }
 
 export default PartnerCard;

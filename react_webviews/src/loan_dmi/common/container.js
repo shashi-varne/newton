@@ -64,15 +64,18 @@ class Container extends Component {
     if (this.props.showLoader) {
       return (
         <div
-          className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ""
-            }`}
+          className={`Loader ${
+            this.props.loaderData ? this.props.loaderData.loaderClass : ""
+          }`}
         >
           <div className="LoaderOverlay">
-            <div className="LoaderOverlay-title">
-              {data.title}
-            </div>
-            <img className="LoaderOverlay-image" src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
-            <div className="LoaderOverlay-subtitle" >{data.subtitle}</div>
+            <div className="LoaderOverlay-title">{data.title}</div>
+            <img
+              className="LoaderOverlay-image"
+              src={require(`assets/${this.state.productName}/lock_key.svg`)}
+              alt=""
+            />
+            <div className="LoaderOverlay-subtitle">{data.subtitle}</div>
           </div>
         </div>
       );
@@ -94,8 +97,9 @@ class Container extends Component {
     if (this.state.mounted) {
       return (
         <div
-          className={`ContainerWrapper loanMainContainer ${this.props.classOverRide
-            }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
+          className={`ContainerWrapper loanMainContainer ${
+            this.props.classOverRide
+          }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
         >
           {/* Header Block */}
           {!this.props.noHeader &&
@@ -138,8 +142,9 @@ class Container extends Component {
           {/* Children Block */}
           <div
             style={this.props.styleContainer}
-            className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""
-              }`}
+            className={`Container ${this.props.classOverRideContainer} ${
+              this.props.noPadding ? "no-padding" : ""
+            }`}
           >
             {this.props.children}
           </div>
