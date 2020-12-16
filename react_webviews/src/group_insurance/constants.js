@@ -711,6 +711,18 @@ export function getCssMapperReport(policy) {
     'policy_issued': {
       color: 'green',
       disc: 'Policy Issued'
+    }, 
+    'issued': {
+      color: 'green',
+      disc: 'Policy Issued'
+    },
+    'Pending': {
+      color: 'yellow',
+      disc: 'Policy Pending'
+    },
+    'Login': {
+      color: 'yellow',
+      disc: 'Policy Pending'
     },
     'success': {
       color: 'green',
@@ -725,6 +737,14 @@ export function getCssMapperReport(policy) {
       disc: 'Policy Expired'
     },
     'rejected': {
+      color: 'red',
+      disc: 'Policy Rejected'
+    },
+    'Declined': {
+      color: 'red',
+      disc: 'Policy Declined'
+    },
+    'Rejected': {
       color: 'red',
       disc: 'Policy Rejected'
     },

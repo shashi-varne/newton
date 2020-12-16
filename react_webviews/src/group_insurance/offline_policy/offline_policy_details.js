@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
-    inrFormatDecimal, capitalizeFirstLetter
+    inrFormatDecimal, capitalizeFirstLetter , numDifferentiationInr
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from  '../../common/ui/Toast';
@@ -143,8 +143,22 @@ class GroupHealthReportDetails extends Component {
 
                     <div className='mid-content'>
 
-        
+                    { this.state.lead.customer_name && 
+                    <div className="member-tile">
+                            <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                PROPOSER NAME
+                                </div>
+                                <div className="mtr-bottom">
+                                {this.state.lead.customer_name}
+                                </div>
+                            </div>
+                        </div> }       
 
+                    { this.state.lead.customer_name &&
                     <div className="member-tile">
                             <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
@@ -157,22 +171,9 @@ class GroupHealthReportDetails extends Component {
                                     {this.state.lead.customer_name}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
-                        <div className="member-tile">
-                            <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_insured.svg`)} alt="" />
-                            </div>
-                            <div className="mt-right">
-                                <div className="mtr-top">
-                                PROPOSER NAME
-                                </div>
-                                <div className="mtr-bottom">
-                                {this.state.lead.customer_name}
-                                </div>
-                            </div>
-                        </div>
-
+                        { this.state.lead.mobile_number &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/icn_phn_no.svg`)} alt="" />
@@ -185,8 +186,9 @@ class GroupHealthReportDetails extends Component {
                                     {this.state.lead.mobile_number}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
+                         {this.state.lead.email_id &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/icn_mail_id.svg`)} alt="" />
@@ -195,12 +197,13 @@ class GroupHealthReportDetails extends Component {
                                 <div className="mtr-top">
                                 EMAIL ID
                                 </div>
-                                <div className="mtr-bottom">
+                                <div className="mtr-bottom" style={{textTransform:'lowercase'}}>
                                     {this.state.lead.email_id}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
+                        {this.state.lead.policy_number &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_policy.svg`)} alt="" />
@@ -213,8 +216,9 @@ class GroupHealthReportDetails extends Component {
                                     {this.state.lead.policy_number}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
+                        {this.state.lead.total_amount &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_how_to_claim2.svg`)} alt="" />
@@ -224,11 +228,12 @@ class GroupHealthReportDetails extends Component {
                                     SUM INSURED
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.total_amount} 
+                                    {numDifferentiationInr(this.state.lead.total_amount)} 
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
+                         {this.state.lead.cover_period &&
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
@@ -241,9 +246,9 @@ class GroupHealthReportDetails extends Component {
                                     {this.state.lead.cover_period} year{this.state.lead.cover_period>'1' && <span>s</span>}
                                 </div>
                             </div>
-                        </div>
+                        </div>}
 
-                       {this.state.lead && 
+                       {this.state.lead.plan_type && 
                         <div className="member-tile">
                             <div className="mt-left">
                                 <img src={require(`assets/${this.state.productName}/icn_plan_type.svg`)} alt="" />
@@ -319,6 +324,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
+                    {this.state.lead.frequency &&
                     <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/icn_payment_frequency.svg`)} alt="" />  
@@ -331,8 +337,9 @@ class GroupHealthReportDetails extends Component {
                                 {this.state.lead.frequency}
                             </div>
                         </div>
-                    </div>
+                    </div>}
 
+                     {this.state.lead.dt_policy_issued  &&
                     <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/icn_issue_date.svg`)} alt="" />
@@ -345,7 +352,7 @@ class GroupHealthReportDetails extends Component {
                                 {this.state.lead.dt_policy_issued || '-'}
                             </div>
                         </div>
-                    </div>
+                    </div>}
 
                     {this.state.lead.dt_policy_start_date && 
                       <div className="member-tile">
