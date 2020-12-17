@@ -60,7 +60,8 @@ const Header = ({ classes, title, count, total, current, goBack,
                   </div>
                   <div
                   style = {{
-                  textAlign : index === 0 ? 'left' : index === headerData.progressHeaderData.steps.length - 1 ? 'right' : 'centre'}}
+                    marginLeft : index === 0 ? '-40%' : index === headerData.progressHeaderData.steps.length - 1 ? '50%' : '0',
+                  }}
                   >{step.title}</div>
                 </div>
               ))}
