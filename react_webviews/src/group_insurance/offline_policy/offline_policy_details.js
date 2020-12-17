@@ -70,12 +70,12 @@ class GroupHealthReportDetails extends Component {
 
 
         let TitleMaper = {
-            'health' : 'Health insurance',
-            'life': 'Life insurance',
-            'motor': 'Motor insurance',
-            'others': 'General Insurance',
-            'other': 'General Insurance'
-        }
+            'Health': 'Health insurance',
+            'Life': 'Life insurance',
+            'Motor': 'Motor insurance',
+            'Others': 'General Insurance',
+            'Other': 'General Insurance'
+          }
 
         this.setState({
             TitleMaper : TitleMaper
@@ -101,7 +101,7 @@ class GroupHealthReportDetails extends Component {
                 "screen_name": 'report details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
-                'download policy' : 'yes'
+                'download policy' : 'no'
             }
         };
 
@@ -148,8 +148,8 @@ class GroupHealthReportDetails extends Component {
                     </div>
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            {/* <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.providerData.title}</div> */}
-                            <div className="tc-subtitle">{capitalizeFirstLetter(this.state.lead.provider)}</div>
+                            {/* <div className="tc-title">{this.state.lead.provider === 'Hdfc Ergo' ? 'HDFC Ergo'  : capitalizeFirstLetter(this.state.lead.provider)}</div> */}
+                            <div className="tc-subtitle">{this.state.lead.provider === 'Hdfc Ergo' ? 'HDFC Ergo'  : capitalizeFirstLetter(this.state.lead.provider)}</div>
                         </div>
 
                         <div className="tc-right">
@@ -305,7 +305,7 @@ class GroupHealthReportDetails extends Component {
                                 PREMIUM PAYMENT TERM
                                 </div>
                                 <div className="mtr-bottom">
-                                    {this.state.lead.premium_paying_term > 1 ? this.state.lead.premium_paying_term + ' years': this.state.lead.premium_paying_term + ' year' } <span></span>
+                                    {this.state.lead.premium_paying_term} year{this.state.lead.cover_period>'1' && <span>s</span>}
                                 </div>
                             </div>
                         </div>}

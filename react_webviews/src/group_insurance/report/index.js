@@ -214,11 +214,11 @@ class Report extends Component {
   async componentDidMount() {
 
     let TitleMaper = {
-      'health': 'Health insurance',
-      'life': 'Life insurance',
-      'motor': 'Motor insurance',
-      'others': 'General Insurance',
-      'other': 'General Insurance'
+      'Health': 'Health insurance',
+      'Life': 'Life insurance',
+      'Motor': 'Motor insurance',
+      'Others': 'General Insurance',
+      'Other': 'General Insurance'
     }
 
     this.setState({
