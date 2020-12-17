@@ -96,10 +96,12 @@ class GroupHealthReportDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 // "product": this.state.providerConfig.provider_api,
+                'plan_name' :   'he'  ,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'report details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
-                "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
+                "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
+                'download policy' : 'yes'
             }
         };
 

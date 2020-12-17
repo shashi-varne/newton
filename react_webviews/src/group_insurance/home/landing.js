@@ -202,7 +202,7 @@ class Landing extends Component {
   }
 
   policymove = ()=> {
-    this.sendEvents('next', "")
+    this.sendEvents('next', "", 'enter policy details')
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
@@ -350,12 +350,12 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents(user_action, insurance_type , enter_policy_details) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'insurance',
+        "screen_name": enter_policy_details ? enter_policy_details : 'insurance',
         "insurance_type": insurance_type ? insurance_type : ''
       }
     };

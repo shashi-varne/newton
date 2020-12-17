@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import '../common/Style.css';
 import { getConfig } from 'utils/functions';
+import { capitalizeFirstLetter } from 'utils/validators'
 // import { insuranceProductTitleMapper } from '/constants';
 import { nativeCallback } from 'utils/native_callback';
 // import DropdownInModal from '../../common/ui/DropdownInModal'
@@ -169,8 +170,8 @@ componentDidMount() {
 
 handleClick = async () => {
 
-  if(!this.state.binding){
-       return;
+  if (!this.state.binding) {
+    return;
   }
 
   let form_data = this.state.form_data
@@ -191,7 +192,7 @@ handleClick = async () => {
     });
     toast('Please Fill in the details');
     return
-  }else{
+  } else {
     this.setState({
       form_data: form_data
     });
@@ -206,7 +207,7 @@ handleClick = async () => {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
 
     let resultData = res.pfwresponse.result
-    form_data.title = 'Submit to fetch the detail'
+    form_data.title = 'SUBMIT TO FETCH THE DETAIL'
     if (res.pfwresponse.status_code === 200) {
       form_data.notfound = false
       form_data.found = false
@@ -215,47 +216,44 @@ handleClick = async () => {
         searching: true,
         lock: false,
         form_data: form_data,
-        o2o_data : resultData.o2o_data
+        o2o_data: resultData.o2o_data,
+        binding: true
       })
-    } else {
-
-     if (!resultData.found) {
-       form_data.found = false
-       form_data.notfound = true
-       setTimeout(() => {
+    } else if (!resultData.found) {
+      form_data.found = false
+      form_data.notfound = true
+      setTimeout(() => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
         }
       }, 0);
-      }
-
-      if(resultData.found){
-        form_data.found = true
-        form_data.notfound = false
-        setTimeout(() => {
-          var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-          for (var i = 0; i < x.length; i++) {
-            x.item(i).style.backgroundColor = "#CDF4D7";
-          }
-        }, 0);
-      }
-
-      this.setState({
-        form_data: form_data,
-        binding : false,
-        searching: true,
-        lock: false
-      });
-
+      this.state({ binding: false})
+    } else if (resultData.found) {
+      form_data.found = true
+      form_data.notfound = false
+      setTimeout(() => {
+        var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+        for (var i = 0; i < x.length; i++) {
+          x.item(i).style.backgroundColor = "#CDF4D7";
+        }
+      }, 0);
+      this.state({ binding: false})
+    } else {
       toast(resultData.error || resultData.message || "Something went wrong");
     }
+
+    this.setState({
+      form_data: form_data,
+      searching: true,
+      lock: false
+    });
+
   } catch (err) {
     this.setState({
       searching: true,
       lock: false
     });
-    toast("Something went wrong");
   }
 }
 
@@ -282,16 +280,16 @@ handleClick = async () => {
         <DialogContent>
           <div className="group-health-bmi-dialog" id="alert-dialog-description">
 
-            <div className="top-content flex-between">
+            <div className="top-content flex-between" style={{marginBottom : '20px', marginTop : '-15px'}}>
               <div className="generic-page-title">
-               <h2>Policy Found!</h2>
+               <h2>Policy found!</h2>
               </div>
               <img className=""  src={require(`assets/${this.state.type}/icn_policy_found_f.svg`)} alt="" />
             </div>
-            <div className="content-mid" >
+            <div className="content-mid">
           <div>We have found one policy with the following details:</div> 
-          <div>Proposer Name:{this.state.o2o_data.product_name} </div>
-          <div>Product Name: {this.state.o2o_data.product_name}  </div> 
+          <div className="content-large">Proposer Name: <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.product_name)} </span></div>
+          <div className="content-large">Product Name:  <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.product_name)} </span> </div>
             </div>
             <div className="content-bottom">
             Would you like to import the policy details?
@@ -367,7 +365,7 @@ handleClick = async () => {
                     <div>
 
                    {this.state.form_data.notfound &&  <span><p style={{color : 'red'}}> Sorry! Couldn’t find your policy details! </p>
-                    <p style={{color : 'blue'}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
+                    <p style={{color : '#6650AB'}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
                     {this.state.form_data.found &&  <span><p style={{color : 'red'}}> This policy already exist in insurance portfolio </p></span>} 
                     </div>
                 </div>
