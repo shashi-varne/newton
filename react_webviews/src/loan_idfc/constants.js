@@ -79,7 +79,7 @@ export const idfc_config = {
     additional_details: 'doc-list',
 
     home_screen: 'personal-details',
-    reccommended: 'select-loan',
+    recommended: 'select-loan',
   },
   landing_screen: {
     stepContentMapper: {

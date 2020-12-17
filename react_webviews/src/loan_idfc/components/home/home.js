@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { initialize } from "../../common/functions";
+import { initialize, getSummary } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import PartnerCard from "./partner_card";
 
@@ -13,6 +13,7 @@ class Home extends Component {
       displayImage: true,
     };
     this.initialize = initialize.bind(this);
+    this.getSummary = getSummary.bind(this);
   }
 
   componentWillMount() {
@@ -64,7 +65,7 @@ class Home extends Component {
   };
 
   handleClick = () => {
-    this.navigate(this.state.next_state);
+    this.getSummary();
   };
 
   render() {

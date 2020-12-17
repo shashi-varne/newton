@@ -16,8 +16,16 @@ class SelectLoan extends Component {
   componentWillMount() {
     this.initialize();
 
-    let stepContentMapper = [
-      {
+    let { params } = this.props.location || {};
+    if (!params || !params.selectedVendors) {
+      this.props.history.goBack();
+      return;
+    }
+
+    let selectedVendors = params ? params.selectedVendors : [];
+
+    let vendors_data = {
+      idfc: {
         index: 0,
         title: "IDFC FIRST BANK",
         subtitle: "Competetive intrest rate",
@@ -45,7 +53,7 @@ class SelectLoan extends Component {
           ],
         },
       },
-      {
+      dmi: {
         index: 1,
         title: "DMI Finance",
         subtitle: "Quick disbursal",
@@ -59,7 +67,13 @@ class SelectLoan extends Component {
           ],
         },
       },
-    ];
+    };
+
+    let stepContentMapper = [];
+
+    selectedVendors.forEach((item) => {
+      stepContentMapper.push(vendors_data[item]);
+    });
 
     let selectedIndexs = [];
 

@@ -52,6 +52,7 @@ export async function initialize() {
       screenData: screenData,
       productName: getConfig().productName,
       count: 0,
+      selectedVendors: [],
     }
     // () => {
     //   this.onload();
@@ -790,5 +791,48 @@ export function navigate(pathname, data = {}) {
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
     });
+  }
+}
+
+export async function getRecommendedVendor(params) {
+  this.setState({
+    show_loader: true,
+  });
+
+  const res = await Api.post(
+    `relay/api/loan/account/recommendation`,
+    params
+  );
+
+  const { result, status_code: status } = res.pfwresponse;
+  if(status === 200) {
+    let selectedVendors = [];
+    if(result.idfc) selectedVendors.push('idfc');
+    if(result.dmi)  selectedVendors.push('dmi');
+    this.navigate(
+      this.state.next_state, 
+      {params : {selectedVendors :selectedVendors}
+    })
+  } else {
+    this.setState({show_loader : false})
+    toast(result.error || result.message || "Something went wrong!");
+  }
+}
+
+export async function getSummary() {
+  this.setState({
+    show_loader: true,
+  });
+
+  const res = await Api.get(
+    `relay/api/loan/account/get/summary`,
+  );
+
+  const { result, status_code: status } = res.pfwresponse;
+  if(status === 200) {
+    this.navigate(this.state.next_state)
+  } else {
+    this.setState({show_loader : false})
+    toast(result.error || result.message || "Something went wrong!");
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { initialize } from "../../common/functions";
+import { initialize, getRecommendedVendor } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import { numDifferentiationInr } from "utils/validators";
@@ -11,10 +11,11 @@ class Recommended extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
-      screen_name: "reccommended",
+      screen_name: "recommended",
     };
 
     this.initialize = initialize.bind(this);
+    this.getRecommendedVendor = getRecommendedVendor.bind(this);
   }
 
   componentWillMount() {
@@ -47,8 +48,45 @@ class Recommended extends Component {
     });
   };
 
+  validateFields(keys_to_check, form_data) {
+    let canSubmitForm = true;
+    let keysMapper = {
+      loan_requirement: "loan requirement",
+      employment_type: "employment type",
+      net_monthly_salary: "net monthly salary",
+    };
+
+    for (var i = 0; i < keys_to_check.length; i++) {
+      let key_check = keys_to_check[i];
+      if (!form_data[key_check]) {
+        form_data[key_check + "_error"] =
+          "Please enter " + keysMapper[key_check];
+        canSubmitForm = false;
+      }
+    }
+
+    if (!canSubmitForm) this.setState({ form_data: form_data });
+    return canSubmitForm;
+  }
+
   handleClick = () => {
-    this.navigate(this.state.next_state);
+    let { form_data } = this.state;
+    let keys_to_check = ["loan_requirement", "employment_type"];
+
+    if (form_data.employment_type === "Salaried")
+      keys_to_check.push("net_monthly_salary");
+      
+    if (this.validateFields(keys_to_check, form_data)) {
+      let body = {};
+      this.setState({
+        show_loader: true,
+      });
+      for (var j in keys_to_check) {
+        let key = keys_to_check[j];
+        body[key] = form_data[key] || "";
+      }
+      this.getRecommendedVendor(body);
+    }
   };
 
   render() {
@@ -60,9 +98,7 @@ class Recommended extends Component {
         handleClick={this.handleClick}
       >
         <div className="recommended">
-          <div className="recommended-subtitle">
-            Enter the details below:
-          </div>
+          <div className="recommended-subtitle">Enter the details below:</div>
           <FormControl fullWidth>
             <div className="InputField">
               <Input
