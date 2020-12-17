@@ -35,6 +35,18 @@ class Container extends Component {
     this.unmount();
   }
 
+  goBackMap(path) {
+    let mapper = {
+      '/loan1/idfc-dmi/calculator': '/loan1/idfc-dmi/home',
+      '/loan1/idfc-dmi/personal-details': '/loan1/idfc-dmi/home',
+      '/loan1/idfc-dmi/select-loan': '/loan1/idfc-dmi/personal-details',
+      '/loan1/idfc-dmi/dmi-know-more': '/loan1/idfc-dmi/select-loan',
+      '/loan1/idfc-dmi/idfc-know-more': '/loan1/idfc-dmi/select-loan',
+    }
+  
+    return mapper[path] || false;
+  }
+
   historyGoBack = (backData) => {
     if (this.getEvents("back")) {
       nativeCallback({ events: this.getEvents("back") });
@@ -43,6 +55,21 @@ class Container extends Component {
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
       return;
+    }
+
+    let pathname = this.props.history.location.pathname;
+
+    if (this.goBackMap(pathname)) {
+      this.navigate(this.goBackMap(pathname));
+      return;
+    }
+
+    switch (pathname) {
+      case "/loan1/idfc-dmi/home":
+        nativeCallback({ action: "native_back" });
+        break;
+      default:
+        this.props.history.goBack();
     }
   };
 

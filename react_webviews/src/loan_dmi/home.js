@@ -63,7 +63,9 @@ class Home extends Component {
     this.setState({ displayImage: !this.state.displayImage });
   };
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate(this.state.next_state);
+  };
 
   render() {
     return (
@@ -87,7 +89,7 @@ class Home extends Component {
             )}
           </div>
 
-          <div className="block2-info">
+          <div className="block2-info" onClick={() => this.handleClick()}>
             <div className="top-title">What are you looking for ?</div>
             <div className="content">
               <img

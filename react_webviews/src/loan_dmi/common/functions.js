@@ -6,6 +6,19 @@ export async function initialize() {
   this.openInBrowser = openInBrowser.bind(this);
   this.openInTabApp = openInTabApp.bind(this);
 
+  let get_next = {
+    home_screen: 'personal-details',
+    personal_details: 'select-loan',
+  };
+
+  let next_screen = this.state.next_screen || "";
+  if (this.state.screen_name && get_next[this.state.screen_name]) {
+    next_screen = get_next[this.state.screen_name];
+    this.setState({
+      next_state: next_screen,
+    });
+  }
+
   nativeCallback({ action: "take_control_reset" });
 
   this.setState({

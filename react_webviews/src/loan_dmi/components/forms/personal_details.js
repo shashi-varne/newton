@@ -47,7 +47,9 @@ class PersonalDetails extends Component {
     });
   };
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate(this.state.next_state);
+  };
 
   render() {
     return (
