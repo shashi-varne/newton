@@ -1229,7 +1229,7 @@ input#pan {
   position: absolute;
 }
 
-@mixin generic-page-button-small {
+@mixin generic-page-button-small-base {
   color: var(--secondary);
   font-size: 12px;
   font-weight: 700;
@@ -1242,8 +1242,12 @@ input#pan {
   align-items: center;
 }
 
+.generic-page-button-small {
+  @include generic-page-button-small-base();
+}
+
 .generic-page-button-small-withoutborder {
-  @include generic-page-button-small();
+  @include generic-page-button-small-base();
   border: unset;
 }
 
