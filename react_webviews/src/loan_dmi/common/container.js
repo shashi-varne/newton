@@ -40,8 +40,7 @@ class Container extends Component {
       '/loan1/idfc-dmi/calculator': '/loan1/idfc-dmi/home',
       '/loan1/idfc-dmi/personal-details': '/loan1/idfc-dmi/home',
       '/loan1/idfc-dmi/select-loan': '/loan1/idfc-dmi/personal-details',
-      '/loan1/idfc-dmi/dmi-know-more': '/loan1/idfc-dmi/select-loan',
-      '/loan1/idfc-dmi/idfc-know-more': '/loan1/idfc-dmi/select-loan',
+      '/loan1/idfc-dmi/know-more': '/loan1/idfc-dmi/select-loan',
     }
   
     return mapper[path] || false;
