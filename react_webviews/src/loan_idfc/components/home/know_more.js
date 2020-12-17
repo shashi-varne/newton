@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Container from "./common/container";
-import { initialize } from "./common/functions";
-import HowToSteps from "../common/ui/HowToSteps";
-import JourneySteps from "../common/ui/JourneySteps";
+import Container from "../../common/Container";
+import { initialize } from "../../common/functions";
+import HowToSteps from "../../../common/ui/HowToSteps";
+import JourneySteps from "../../../common/ui/JourneySteps";
 
 class IdfcKnowMore extends Component {
   constructor(props) {

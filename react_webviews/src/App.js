@@ -25,7 +25,7 @@ import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
-import IDFC_DMI from './loan_dmi';
+import IDFC_DMI from './loan_idfc/components/home';
 
 class App extends Component {
   render() {

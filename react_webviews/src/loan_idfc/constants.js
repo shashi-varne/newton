@@ -22,6 +22,11 @@ export function goBackMap(path) {
     '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
     '/loan/idfc/final-loan': '/loan/idfc/home',
     '/loan/idfc/reports': '/loan/idfc/home',
+
+    '/loan1/idfc-dmi/calculator': '/loan1/idfc-dmi/home',
+    '/loan1/idfc-dmi/personal-details': '/loan1/idfc-dmi/home',
+    '/loan1/idfc-dmi/select-loan': '/loan1/idfc-dmi/personal-details',
+    '/loan1/idfc-dmi/know-more': '/loan1/idfc-dmi/select-loan',
   }
 
   return mapper[path] || false;
@@ -71,7 +76,10 @@ export const idfc_config = {
     loan_bt: 'credit-bt',
     credit_bt: 'eligible-loan',
     eligible_loan: 'loan-eligible',
-    additional_details: 'doc-list'
+    additional_details: 'doc-list',
+
+    home_screen: 'personal-details',
+    reccommended: 'select-loan',
   },
   landing_screen: {
     stepContentMapper: {

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Container from "./common/container";
-import { initialize } from "./common/functions";
-import PartnerCard from "./components/partner_card";
+import Container from "../../common/Container";
+import { initialize } from "../../common/functions";
+import PartnerCard from "./partner_card";
 
 class SelectLoan extends Component {
   constructor(props) {

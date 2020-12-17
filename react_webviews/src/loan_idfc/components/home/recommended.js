@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import Container from "../../common/container";
+import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import { numDifferentiationInr } from "utils/validators";
 
-class PersonalDetails extends Component {
+class Recommended extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       form_data: {},
-      screen_name: "personal_details",
+      screen_name: "reccommended",
     };
 
     this.initialize = initialize.bind(this);
@@ -59,8 +59,8 @@ class PersonalDetails extends Component {
         buttonTitle="NEXT"
         handleClick={this.handleClick}
       >
-        <div className="personal-details">
-          <div className="personal-details-subtitle">
+        <div className="recommended">
+          <div className="recommended-subtitle">
             Enter the details below:
           </div>
           <FormControl fullWidth>
@@ -149,4 +149,4 @@ class PersonalDetails extends Component {
   }
 }
 
-export default PersonalDetails;
+export default Recommended;

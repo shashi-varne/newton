@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import Button from "material-ui/Button";
-import Card from "../../common/ui/Card";
+import Card from "../../../common/ui/Card";
 
 class PartnerCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+  
   renderBenefits = (data, index) => {
     return (
       <div key={index} className="benefits-points">
@@ -44,9 +41,8 @@ class PartnerCard extends Component {
         </div>
         <div className="flex">
           <div>
-            {" "}
-            <span className="sub-text">Loan upto:</span>{" "}
-            {" " + this.props.baseData.loan_amount}{" "}
+            <span className="sub-text">Loan upto:</span>
+            {" " + this.props.baseData.loan_amount}
           </div>
           <Button
             variant="raised"

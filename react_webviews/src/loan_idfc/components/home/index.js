@@ -2,18 +2,18 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
-import "../common/theme/Style.scss";
+import "../../../common/theme/Style.scss";
 import { themeConfig } from "utils/constants";
 import { ToastContainer } from "react-toastify";
 
-import "./style.scss";
-import NotFound from "../common/components/NotFound";
+import "../Style.scss";
+import NotFound from "../../../common/components/NotFound";
 
 import Home from "./home";
-import Calculator from "./calculator";
 import SelectLoan from "./select_loan";
-import PersonalDetails from "./components/forms/personal_details";
+import Recommended from "./recommended";
 import KnowMore from "./know_more";
+import Calculator from "../../components/general/calculator";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -54,7 +54,7 @@ const Lending = (props) => {
           <Route path={`${url}/home`} component={Home} />
           <Route path={`${url}/calculator`} component={Calculator} />
           <Route path={`${url}/select-loan`} component={SelectLoan} />
-          <Route path={`${url}/personal-details`} component={PersonalDetails} />
+          <Route path={`${url}/personal-details`} component={Recommended} />
           <Route path={`${url}/know-more`} component={KnowMore} />
           <Route component={NotFound} />
         </Switch>

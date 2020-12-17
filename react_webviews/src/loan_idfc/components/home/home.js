@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Container from "./common/container";
-import { initialize } from "./common/functions";
-import HowToSteps from "../common/ui/HowToSteps";
-import PartnerCard from "./components/partner_card";
+import Container from "../../common/Container";
+import { initialize } from "../../common/functions";
+import HowToSteps from "../../../common/ui/HowToSteps";
+import PartnerCard from "./partner_card";
 
 class Home extends Component {
   constructor(props) {
