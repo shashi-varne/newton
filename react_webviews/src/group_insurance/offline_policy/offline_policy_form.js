@@ -108,11 +108,21 @@ handleChange = name => event => {
   })
 }
 
-
-
-handleClick2 = () => {
-  let state = `/group-insurance/common/report`;
-  this.navigate(state);
+handleClick2 = async () => {
+  this.setState({ show_loader: true });
+let form_data = this.state.form_data
+  try {
+    const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}&bind=true`)
+    if (res.pfwresponse.status_code === 200) {  
+      let state = `/group-insurance/common/report`;
+      this.navigate(state);
+    }
+  }
+  catch (err) {
+    this.setState({
+      show_loader: false
+    });
+  }
 }
 
 handleClose = () => {
@@ -228,7 +238,7 @@ handleClick = async () => {
           x.item(i).style.backgroundColor = "#CDF4D7";
         }
       }, 0);
-      this.state({ binding: false})
+      this.setState({ binding: false})
     } else if (resultData.found) {
       form_data.found = true
       form_data.notfound = false
@@ -238,7 +248,7 @@ handleClick = async () => {
           x.item(i).style.backgroundColor = "#CDF4D7";
         }
       }, 0);
-      this.state({ binding: false})
+      this.setState({ binding: false})
     } else {
       toast(resultData.error || resultData.message || "Something went wrong");
     }
