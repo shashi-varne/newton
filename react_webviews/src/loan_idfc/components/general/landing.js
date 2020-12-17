@@ -82,12 +82,12 @@ class Landing extends Component {
     }
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "introduction",
+        screen_name: "home_screen",
       },
     };
 
@@ -182,7 +182,7 @@ class Landing extends Component {
             <div
               className="Flex calculator"
               onClick={() =>
-                {this.sendEvents('eligibility_calculator'); 
+                {this.sendEvents('calculator'); 
                 this.navigate("calculator", {
                   params: {
                     next_state: this.state.next_state,
