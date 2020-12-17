@@ -4,6 +4,7 @@ import { initialize, getRecommendedVendor } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import { numDifferentiationInr } from "utils/validators";
+import { nativeCallback } from "utils/native_callback";
 
 class Recommended extends Component {
   constructor(props) {
@@ -75,7 +76,7 @@ class Recommended extends Component {
 
     if (form_data.employment_type === "Salaried")
       keys_to_check.push("net_monthly_salary");
-      
+
     if (this.validateFields(keys_to_check, form_data)) {
       let body = {};
       this.setState({
@@ -85,13 +86,32 @@ class Recommended extends Component {
         let key = keys_to_check[j];
         body[key] = form_data[key] || "";
       }
+      this.sendEvents('next')
       this.getRecommendedVendor(body);
     }
   };
 
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "home_loan_requirement",
+        employment_type: this.state.form_data.employment_type || '',
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Help us to provide you with best offers"
         buttonTitle="NEXT"

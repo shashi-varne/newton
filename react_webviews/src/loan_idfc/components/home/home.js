@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { initialize, getSummary } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import PartnerCard from "./partner_card";
+import { nativeCallback } from "utils/native_callback";
 
 class Home extends Component {
   constructor(props) {
@@ -65,12 +66,30 @@ class Home extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next')
     this.getSummary();
   };
+
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "home_screen",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Loans"
         noFooter={true}
@@ -113,7 +132,10 @@ class Home extends Component {
 
           <div
             className="block1-info"
-            onClick={() => this.navigate("calculator")}
+            onClick={() => {
+              this.sendEvents('calculator');
+              this.navigate("calculator");
+            }}
           >
             <img
               src={require(`assets/${this.state.productName}/calculatemi.svg`)}

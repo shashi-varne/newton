@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import JourneySteps from "../../../common/ui/JourneySteps";
+import { nativeCallback } from "utils/native_callback";
 
 class IdfcKnowMore extends Component {
   constructor(props) {
@@ -149,8 +150,6 @@ class IdfcKnowMore extends Component {
       eligibility = loan_partners[provider].eligibility;
     }
 
-    console.log(loan_partners[provider].partnerData);
-
     this.setState({
       partnerData: loan_partners[provider].partnerData,
       journeyData: loan_partners[provider].journeyData,
@@ -159,12 +158,31 @@ class IdfcKnowMore extends Component {
     });
   }
 
-  handleClick = () => {};
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "know_more",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  handleClick = () => {
+    this.sendEvents('next');
+  };
 
   render() {
     let { partnerData, eligibility, journeyData, documents } = this.state;
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Know more"
         buttonTitle="APPLY NOW"
@@ -196,7 +214,7 @@ class IdfcKnowMore extends Component {
           {documents && (
             <>
               <div className="generic-hr"></div>
-              <div className="Flex block2">
+              <div className="Flex block2" onClick={() => {this.sendEvents('documents')}} >
                 <img
                   className="accident-plan-read-icon"
                   src={require(`assets/${this.state.productName}/document.svg`)}
@@ -207,7 +225,7 @@ class IdfcKnowMore extends Component {
             </>
           )}
           <div className="generic-hr"></div>
-          <div className="Flex block2">
+          <div className="Flex block2" onClick={() => {this.sendEvents('faq')}} >
             <img
               className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}

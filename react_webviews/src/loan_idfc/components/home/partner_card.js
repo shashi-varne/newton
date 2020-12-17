@@ -3,7 +3,7 @@ import Button from "material-ui/Button";
 import Card from "../../../common/ui/Card";
 
 class PartnerCard extends Component {
-  
+
   renderBenefits = (data, index) => {
     return (
       <div key={index} className="benefits-points">
@@ -48,7 +48,7 @@ class PartnerCard extends Component {
             variant="raised"
             size="large"
             autoFocus
-            onClick={() => this.props.handleClick()}
+            onClick={() => this.props.handleClick(this.props.baseData.provider_name)}
           >
             {this.props.baseData.cta_title}
           </Button>

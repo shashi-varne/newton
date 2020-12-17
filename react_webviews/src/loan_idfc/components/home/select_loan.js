@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import PartnerCard from "./partner_card";
+import { nativeCallback } from "utils/native_callback";
 
 class SelectLoan extends Component {
   constructor(props) {
@@ -34,6 +35,7 @@ class SelectLoan extends Component {
         cta_title: "APPLY NOW",
         card_tag: "Recommended",
         displayTag: true,
+        provider_name: 'idfc',
         benefits: {
           benefits_title: "Basic benefits",
           options: [
@@ -60,6 +62,7 @@ class SelectLoan extends Component {
         loan_amount: " ₹1 lac",
         logo: "dmi-finance",
         cta_title: "APPLY NOW",
+        provider_name: 'dmi',
         benefits: {
           options: [
             "Complete Digital and Presenceless process",
@@ -93,11 +96,31 @@ class SelectLoan extends Component {
     this.setState({ selectedIndexs: selectedIndexs });
   };
 
-  handleClick = () => {};
+  handleClick = (provider_name) => {
+    this.sendEvents('next', {provider_name : provider_name})
+  };
+
+  sendEvents(user_action, data={}) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "select_loan_provider",
+        provider_name: data.provider_name,
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         title="Select loan provider"
         noFooter={true}
