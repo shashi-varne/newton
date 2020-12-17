@@ -87,7 +87,7 @@ class Container extends Component {
             <div className="LoaderOverlay-title">
               {data.title}
             </div>
-            <img className="LoaderOverlay-image" src={require(`assets/${this.state.productName}/lock_key.svg`)} alt="" />
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
             <div className="LoaderOverlay-subtitle" >{data.subtitle}</div>
           </div>
         </div>
