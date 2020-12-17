@@ -252,6 +252,7 @@ class Report extends Component {
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
+        this.setState({ nextPage: ''})
       }
 
     } catch (err) {
@@ -378,9 +379,7 @@ class Report extends Component {
       this.setState({
         loading_more: true
       });
-
-      let res = await Api.get(this.state.nextPage)
-
+      let res = await Api.get(this.state.nextPage);
       this.setState({
         loading_more: false
       });
@@ -390,9 +389,7 @@ class Report extends Component {
         var next_page = policyData.group_insurance.next_page;
         var has_more = policyData.group_insurance.more;
 
-        this.setState({
-          nextPage: (has_more) ? next_page : null
-        });
+        this.setState({ nextPage: (has_more) ? next_page : null });
 
         var newReportData = [];
 
@@ -409,7 +406,8 @@ class Report extends Component {
       }
     } catch (err) {
       this.setState({
-        loading_more: false
+        loading_more: false,
+        nextPage: ''
       });
       toast('Something went wrong');
     }

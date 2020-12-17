@@ -142,7 +142,7 @@ class GroupHealthReportDetails extends Component {
             >
                 <div className="group-health-plan-details group-health-final-summary">
 
-                    <div style={{ margin: '0px 0 40px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
+                    <div style={{ margin: '20px 0 10px 0' }} className={`report-color-state ${this.state.policy_data.cssMapper.color}`}>
                         <div className="circle"></div>
                         <div className="report-color-state-title">{this.state.policy_data.cssMapper.disc}</div>
                     </div>
@@ -157,7 +157,7 @@ class GroupHealthReportDetails extends Component {
                         </div>
                     </div>
 
-                    <div className='mid-content'>
+                    <div className='mid-content'> 
 
                     { this.state.lead.customer_name && 
                     <div className="member-tile">
