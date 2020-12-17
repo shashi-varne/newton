@@ -271,7 +271,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    COVER PERIOD
+                                    {this.state.lead.provider === 'Motor' ? 'IDV' : 'COVER PERIOD'} 
                                 </div>
                                 <div className="mtr-bottom">
                                     {this.state.lead.cover_period} year{this.state.lead.cover_period>'1' && <span>s</span>}
@@ -365,7 +365,7 @@ class GroupHealthReportDetails extends Component {
                             Payment frequency
                                 </div>
                             <div className="mtr-bottom">
-                                {this.state.lead.frequency}
+                                 {this.state.lead.frequency === 'Single'? 'One Time Payment' : this.state.lead.frequency}
                             </div>
                         </div>
                     </div>}

@@ -298,7 +298,7 @@ handleClick = async () => {
             </div>
             <div className="content-mid">
           <div>We have found one policy with the following details:</div> 
-          <div className="content-large">Proposer Name: <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.product_name)} </span></div>
+          <div className="content-large">Proposer Name: <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.customer_name)} </span></div>
           <div className="content-large">Product Name:  <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.product_name)} </span> </div>
             </div>
             <div className="content-bottom">

@@ -712,7 +712,7 @@ export function getCssMapperReport(policy) {
       color: 'yellow',
       disc: 'Pending'
     },
-    'Login': {
+    'In_Process': {
       color: 'yellow',
       disc: 'In process'
     },
