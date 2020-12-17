@@ -442,7 +442,7 @@ class GoldLocker extends Component {
               }
             </div>
           }
-          {(!this.state.selected_provider_info.isRegistered || this.state.selected_provider_info.report.orders).length<= 0 &&
+          {(!this.state.selected_provider_info.isRegistered || (this.state.selected_provider_info.report.orders).length<= 0 )&&
             <div>
               <div>
                 <img className="img"
