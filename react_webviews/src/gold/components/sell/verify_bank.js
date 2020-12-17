@@ -16,6 +16,7 @@ import RefreshSellPrice from '../ui_components/sell_price';
 import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import PriceChangeDialog from '../ui_components/price_change_dialog';
 import {bankAccountTypeMapper} from 'utils/constants';
+import {Imgc} from '../../../common/ui/Imgc';
 
 const verificationDataMapper = {
     'success': {
@@ -257,7 +258,7 @@ class SellVerifyBank extends Component {
                 <DialogContent>
                     <div className="gold-dialog" id="alert-dialog-description">
                         <div>
-                            <img style={{ margin: '0 0 15px 0', width: '100%', borderRadius: 6 }}
+                            <Imgc style={{ margin: '0 0 15px 0', width: '100%',height:100, borderRadius: 6 }}
                                 src={require(`assets/ic_verfication_in_progress.gif`)} alt="info" />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -322,7 +323,7 @@ class SellVerifyBank extends Component {
                             <div style={{ color: '#0A1C32', fontSize: 16, fontWeight: 600 }}>
                                 {this.state.statusMapper.title}
                             </div>
-                            <img style={{ margin: '0 0 15px 0', borderRadius: 6 }}
+                            <Imgc style={{ margin: '0 0 15px 0', borderRadius: 6,width:115,height:84 }}
                                 src={require(`assets/${this.state.productName}/${this.state.statusMapper.icon}.svg`)} alt="info"
                             />
                         </div>
