@@ -16,6 +16,7 @@ import Api from '../../utils/api';
 import { CSSTransition } from 'react-transition-group';
 import IwdScreenLoader from '../mini-components/IwdScreenLoader';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import { nativeCallback } from '../../utils/native_callback';
 const isMobileView = getConfig().isMobileDevice;
 
 const Main = (props) => {
@@ -23,6 +24,26 @@ const Main = (props) => {
   const navigate = navigateFunc.bind(props);
   const [loginErr, setLoginErr] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const sendEvents = () => {
+    const eventObj = {
+      "event_name": 'internal dashboard hni',
+      "properties": {
+        "user_action": 'landed',
+        "screen_name": 'Landing page',
+      }
+    };
+
+    const storage_val = storageService().get('iwd-landed-time');
+    const link_click_time = storage_val ? new Date(storage_val) : null;
+    const current_time = new Date();
+
+    // If user lands on this page again within 6 hours, will not log/trigger the event
+    if (!link_click_time || (current_time - link_click_time) / 60000 > 6 * 60) {
+      storageService().set('iwd-landed-time', current_time);
+      nativeCallback({ events: eventObj });
+    }
+  };
 
   const fetchUserCreds = async () => {
     try {
@@ -32,6 +53,8 @@ const Main = (props) => {
         showError();
       } else {
         setIsLoading(false);
+        sendEvents();
+
         const { user } = res.pfwresponse.result;
         const { email, name, mobile } = user;
         

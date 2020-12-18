@@ -10,7 +10,6 @@ import toast from '../../ui/Toast';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LoadingScreen from "../../../wealth_report/mini-components/LoadingScreen";
 import { FormControl, TextField, InputAdornment } from "material-ui";
-import { nativeCallback } from 'utils/native_callback';
 import { validateEmail, storageService, isFunction } from "../../../utils/validators";
 
 const LoginFields = (props) => {
@@ -30,17 +29,6 @@ const LoginFields = (props) => {
   const [password, setPwd] = useState(storedPwd || "");
   const [showPassword, setShowPassword] = useState(false);
   const [resendDisabled, disableResend] = useState(false);
-
-  const sendEvents = (user_action, props) => {
-    let eventObj = {
-      "event_name": 'portfolio web report',
-      "properties": {
-        "user_action": user_action,
-        ...props,
-      }
-    };
-    nativeCallback({ events: eventObj });
-  };
 
   useEffect(() => {
     if (params.view) {
@@ -140,11 +128,6 @@ const LoginFields = (props) => {
       await login({ mobileNo: formatNumber(), countryCode });
       navigate('login/otp');
     } catch (err) {
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'fail',
-        error_message: err,
-      });
       console.log(err);
       toast(err);
     }
@@ -155,11 +138,6 @@ const LoginFields = (props) => {
     try {
       setOpLoading(true);
       const res = await verifyOtp({ mobileNo: formatNumber(), countryCode, otp: otpVal });
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'success',
-        user_id: res.user.user_id,
-      });
       props.onLoginSuccess(res);
     } catch (err) {
       if (err.includes('wrong OTP')) {
@@ -168,11 +146,6 @@ const LoginFields = (props) => {
         console.log(err);
         toast(err);
       }
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'fail',
-        error_message: err,
-      });
     }
     setOpLoading(false);
   };
@@ -196,12 +169,7 @@ const LoginFields = (props) => {
       }
       setOpLoading(true);
       const res = await emailLogin({ email, password });
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'success',
-        user_id: res.user.user_id,
-      });
-      props.onLoginSuccess();
+      props.onLoginSuccess(res);
     } catch (err) {
       console.log(err);
       if (err.includes('registered')) {
@@ -211,11 +179,6 @@ const LoginFields = (props) => {
       } else {
         toast(err);
       }
-      sendEvents('login', {
-        screen_name: 'login',
-        status: 'fail',
-        error_message: err,
-      });
     }
     setOpLoading(false);
   };

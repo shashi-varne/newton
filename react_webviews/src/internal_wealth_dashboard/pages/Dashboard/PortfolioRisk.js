@@ -7,6 +7,7 @@ import IwdCommonPageFooter from '../../mini-components/IwdCommonPageFooter';
 import { getNewsletter, getPortfolioRisk } from '../../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import { isEmpty } from '../../../utils/validators';
+import { nativeCallback } from '../../../utils/native_callback';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -17,6 +18,18 @@ const RiskProfile = () => {
   const [blogData, setBlogData] = useState({});
   const [isLoadingBlog, setIsLoadingBlog] = useState(true);
   const [blogError, setBlogError] = useState(false);
+
+  const sendEvents = (user_action, props) => {
+    let eventObj = {
+      "event_name": 'internal dashboard hni',
+      "properties": {
+        screen_name: 'dashboard overview',
+        "user_action": user_action,
+        ...props,
+      }
+    };
+    nativeCallback({ events: eventObj });
+  };
 
   useEffect(() => {
     fetchPortfolioRisk();
@@ -52,6 +65,7 @@ const RiskProfile = () => {
   };
 
   const openArticle = (url) => {
+    sendEvents('blog_clicked');
     window.open(url, '_blank');
   };
 

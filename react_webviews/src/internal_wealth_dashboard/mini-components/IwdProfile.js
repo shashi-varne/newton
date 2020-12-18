@@ -5,6 +5,7 @@ import { navigate as navigateFunc } from '../common/commonFunctions';
 import { logout } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
+import { nativeCallback } from '../../utils/native_callback';
 
 const IwdProfile = (props) => {
   const name = storageService().get('iwd-user-name') || '';
@@ -16,12 +17,25 @@ const IwdProfile = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
+  const sendEvents = (user_action, props) => {
+    let eventObj = {
+      "event_name": 'internal dashboard hni',
+      "properties": {
+        screen_name: 'landing page',
+        "user_action": user_action,
+        ...props,
+      }
+    };
+    nativeCallback({ events: eventObj });
+  };
+
   const toggleExpanded = () => setExpanded(!expanded);
 
   const logoutUser = async () => {
     try {
       setLoggingOut(true);
       await logout();
+      sendEvents('logout');
       navigate('login');
     } catch (err) {
       console.log(err);
@@ -31,7 +45,7 @@ const IwdProfile = (props) => {
   };
 
   const profileIcon = (
-    <div id='iwd-profile-icon' onClick={!expanded && toggleExpanded}>
+    <div id='iwd-profile-icon' onClick={!expanded ? toggleExpanded : undefined}>
       {name.charAt(0)}
     </div>
   );

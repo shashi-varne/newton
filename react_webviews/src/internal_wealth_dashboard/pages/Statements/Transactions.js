@@ -22,6 +22,7 @@ import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from '../../../utils/functions';
+import { nativeCallback } from '../../../utils/native_callback';
 const transactionMapper = [...transactionsHeaderMap];
 transactionMapper.splice(1, 0, {
   label: 'Fund Name',
@@ -38,6 +39,18 @@ const Transactions = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [pageMap, setPageMap] = useState([null, null]);
   const [hasError, setHasError] = useState(false);
+
+  const sendEvents = (user_action, props) => {
+    let eventObj = {
+      "event_name": 'internal dashboard hni',
+      "properties": {
+        screen_name: 'statements',
+        "user_action": user_action,
+        ...props,
+      }
+    };
+    nativeCallback({ events: eventObj });
+  };
 
   const pushToPageMap = (url) => {
     if (!url || !!pageMap[activePage + 1]) return;
@@ -107,6 +120,7 @@ const Transactions = () => {
   };
 
   const downloadTransactions = async () => {
+    sendEvents('download_report');
     if (transactions?.length > 0) {
       try {
         const filterData = storageService().getObject(filter_key);

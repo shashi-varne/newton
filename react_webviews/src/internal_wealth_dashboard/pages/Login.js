@@ -12,14 +12,31 @@ import IwdPhoneInput from '../common/IwdPhoneInput';
 import IwdOtpInput from '../common/IwdOtpInput';
 import { Button } from 'material-ui';
 import { CSSTransition } from 'react-transition-group';
+import { nativeCallback } from 'utils/native_callback';
 
 const Login = (props) => {
   const [openHelpPage, toggleHelpPage] = useState(false);
   const [openForgotPwd, toggleForgotPwd] = useState(false);
   const navigate = navigateFunc.bind(props);
 
-  const onLoginSuccess = async () => {
+  const onLoginSuccess = async (res) => {
     navigate('main/dashboard');
+    sendEvents('login', {
+      screen_name: 'login',
+      status: 'success',
+      user_id: res.user.user_id,
+    });
+  };
+
+  const sendEvents = (user_action, props) => {
+    let eventObj = {
+      "event_name": 'internal dashboard hni',
+      "properties": {
+        "user_action": user_action,
+        ...props,
+      }
+    };
+    nativeCallback({ events: eventObj });
   };
 
   return (

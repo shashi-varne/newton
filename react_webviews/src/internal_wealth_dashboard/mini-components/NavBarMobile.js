@@ -10,6 +10,7 @@ import { logout } from '../common/ApiCalls';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
+import { nativeCallback } from '../../utils/native_callback';
 const allTabs = ['dashboard', 'analysis', 'holdings', 'recommendations', 'statements'];
 
 const NavBarMobile = (props) => {
@@ -24,10 +25,23 @@ const NavBarMobile = (props) => {
   const [loggingOut, setLoggingOut] = useState(false);
   const { params: { tab: currentTab = 'dashboard' }} = match;
 
+  const sendEvents = (user_action, props) => {
+    let eventObj = {
+      "event_name": 'internal dashboard hni',
+      "properties": {
+        screen_name: 'landing page',
+        "user_action": user_action,
+        ...props,
+      }
+    };
+    nativeCallback({ events: eventObj });
+  };
+
   const logoutUser = async () => {
     try {
       setLoggingOut(true);
       await logout();
+      sendEvents('logout');
       navigate('login');
     } catch (err) {
       console.log(err);
