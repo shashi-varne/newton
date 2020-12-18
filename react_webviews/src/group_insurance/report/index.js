@@ -18,7 +18,8 @@ class Report extends Component {
     this.state = {
       show_loader: true,
       reportData: [],
-      TitleMaper : {}
+      TitleMaper : {},
+      policy_title : ''
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -117,13 +118,19 @@ class Report extends Component {
   getProviderObject_offline(o2o_details){
     let obj = o2o_details;
     obj.key = 'insurance';
-    obj.top_title = this.state.TitleMaper[o2o_details.policy_type] ? this.state.TitleMaper[o2o_details.policy_type]  : ''
+    let top_title = this.state.TitleMaper[o2o_details.policy_type] ? this.state.TitleMaper[o2o_details.policy_type]  : ''
+    obj.top_title = top_title
     obj.sum_assured = o2o_details.cover_amount
     let data = getCssMapperReport(obj);
     obj.premium = o2o_details.total_amount;
     obj.status = data.status;
     obj.cssMapper = data.cssMapper;
     obj.product_key = 'offline_insurance' 
+
+    this.setState({
+      policy_title : top_title
+    })
+
     return obj;
   }
 
@@ -425,10 +432,15 @@ class Report extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance_report',
-        "type": insurance_type ? insurance_type : '',
+        "type": insurance_type ? insurance_type : '', 
         report: reportState
       }
     };
+
+
+  if(insurance_type === 'insurance'){
+    eventObj.properties.policy = this.state.policy_title ? this.state.policy_title : ''
+  }
 
     if (user_action === 'just_set_events') {
       return eventObj;
