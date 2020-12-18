@@ -46,6 +46,7 @@ const Transactions = () => {
       "properties": {
         screen_name: 'statements',
         "user_action": user_action,
+        report_type: 'transactions',
         ...props,
       }
     };
