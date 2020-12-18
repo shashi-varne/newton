@@ -114,6 +114,7 @@ let form_data = this.state.form_data
   try {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}&bind=true`)
     if (res.pfwresponse.status_code === 200) {
+      this.sendEvents('next','policy found')
       let state = `/group-insurance/common/report`;
       this.navigate(state);
     }
@@ -134,12 +135,12 @@ handleClose = () => {
 }
 
 
-sendEvents(user_action) {
+sendEvents(user_action, policy_found) {
   let eventObj = {
     "event_name": 'import_policy',
     "properties": {
-      "user_action": user_action,
-      "screen_name": 'policy found',
+      "user_action":  user_action,
+      "screen_name": policy_found ? policy_found : 'enter policy details',
     }
   };
 
@@ -209,8 +210,7 @@ handleClick = async () => {
   }
 
   this.setState({
-    searching: false,
-    lock: true
+   show_loader : true
   });
   try {
 
@@ -223,8 +223,6 @@ handleClick = async () => {
       form_data.found = false
       this.setState({
         openBmiDialog: true,
-        searching: true,
-        lock: false,
         form_data: form_data,
         o2o_data: resultData.o2o_data,
         binding: true
@@ -255,28 +253,16 @@ handleClick = async () => {
 
     this.setState({
       form_data: form_data,
-      searching: true,
-      lock: false
+      show_loader : false
     });
 
   } catch (err) {
+    console.log(err)
     this.setState({
-      searching: true,
-      lock: false
+      show_loader : false
     });
   }
 }
-
-  renderlockDialog = () => {
-    return ( 
-            <div  style={{display: "flex", flexDirection : 'column',justifyContent: "center",alignItems : 'center', minHeight : '100vh' }}>
-            <p  className="generic-page-title">Please wait while confirm your policy details</p>
-            <br></br>
-            <img className="" src={require(`assets/Bitmap.svg`)} alt="" />
-            <br></br>
-            <p>It may take 10 to 15 seconds!</p>
-            </div>
-    )}
 
   renderBmiDialog = () => {
     return (
@@ -325,8 +311,6 @@ handleClick = async () => {
 
   render() {
     return (
-      <div style={{height: '100vw'}}>
-           {this.state.searching  &&
       <Container
       events={this.sendEvents("just_set_events")}
       showLoader={this.state.show_loader}
@@ -381,10 +365,6 @@ handleClick = async () => {
                 </div>
         {this.renderBmiDialog()}
       </Container>
-         }
-
-      { this.state.lock && this.renderlockDialog()}
-       </div>
     );
   }
 }
