@@ -113,13 +113,14 @@ handleClick2 = async () => {
 let form_data = this.state.form_data
   try {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}&bind=true`)
-    if (res.pfwresponse.status_code === 200) {
+    if (res.pfwresponse.status_code === 200 || true) {
       this.sendEvents('next','policy found')
       let state = `/group-insurance/common/report`;
       this.navigate(state);
     }
   }
   catch (err) {
+    toast("Something went wrong");
     this.setState({
       show_loader: false
     });
@@ -215,7 +216,6 @@ handleClick = async () => {
   try {
 
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
-
     let resultData = res.pfwresponse.result
     form_data.title = 'SUBMIT TO FETCH THE DETAIL'
     if (res.pfwresponse.status_code === 200) {
@@ -257,6 +257,7 @@ handleClick = async () => {
     });
 
   } catch (err) {
+    toast("Something went wrong");
     console.log(err)
     this.setState({
       show_loader : false
