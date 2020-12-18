@@ -352,7 +352,7 @@ class Landing extends Component {
 
   sendEvents(user_action, insurance_type , enter_policy_details) {
     let eventObj = {
-      "event_name": 'Group Insurance',
+      "event_name": enter_policy_details ? 'import_policy' : 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": enter_policy_details ? enter_policy_details : 'insurance',

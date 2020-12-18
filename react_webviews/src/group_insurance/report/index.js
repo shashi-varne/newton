@@ -116,7 +116,7 @@ class Report extends Component {
 
   getProviderObject_offline(o2o_details){
     let obj = o2o_details;
-    obj.key = 'o2o_details';
+    obj.key = 'insurance';
     obj.top_title = this.state.TitleMaper[o2o_details.policy_type] ? this.state.TitleMaper[o2o_details.policy_type]  : ''
     obj.sum_assured = o2o_details.cover_amount
     let data = getCssMapperReport(obj);
@@ -285,7 +285,7 @@ class Report extends Component {
       }
     } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
-    } else if(key === 'o2o_details'){
+    } else if(key === 'insurance'){
       path = `/group-insurance/group-health/offline-to-online-report-details/${policy.id}`;
     } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
       if(key === 'hdfc_ergo'){

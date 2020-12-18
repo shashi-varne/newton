@@ -92,16 +92,16 @@ class GroupHealthReportDetails extends Component {
 
     sendEvents(user_action) {
         let eventObj = {
-            "event_name": 'health_insurance',
+            "event_name": 'portfolio',
             "properties": {
                 "user_action": user_action,
                 // "product": this.state.providerConfig.provider_api,
-                'plan_name' :   this.state.provider  ,
+                'plan_name' :   this.state.lead.provider  ,
                 "flow": this.state.insured_account_type || '',
-                "screen_name": 'report details',
+                "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
-                'download policy' : 'no'
+                'download_policy' : 'no'
             }
         };
 
