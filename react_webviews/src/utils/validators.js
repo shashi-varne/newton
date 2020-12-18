@@ -288,7 +288,7 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   }
 
   if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + 'Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + 'Lacs';
+  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + 'Lakhs';
   else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + 'K';
   else if (val) return inrFormatDecimal(val);
 
