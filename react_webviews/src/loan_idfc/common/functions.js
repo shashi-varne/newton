@@ -53,8 +53,7 @@ export async function initialize() {
     {
       screenData: screenData,
       productName: getConfig().productName,
-      count: 0,
-      selectedVendors: [],
+      count: 0
     }
     // () => {
     //   this.onload();
@@ -829,23 +828,32 @@ export async function getRecommendedVendor(params) {
 }
 
 export async function getSummary() {
-  this.setState({
-    show_loader: true,
-  });
-
-  const res = await Api.get(`relay/api/loan/account/get/summary`);
-
-  const { result, status_code: status } = res.pfwresponse;
-  if (status === 200) {
+  try {
     this.setState({
-      account_exists: result.account_exists,
-      ongoing_loan_details: result.ongoing_loan_details,
-      loan_exists: result.ongoing_loan_details.length,
-      vendor_name: result.ongoing_loan_details[0] && result.ongoing_loan_details[0].vendor || '',
-      show_loader: false,
+      show_loader: true,
     });
-  } else {
+
+    const res = await Api.get(`relay/api/loan/account/get/summary`);
+
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      this.setState({
+        account_exists: result.account_exists,
+        ongoing_loan_details: result.ongoing_loan_details,
+        show_loader: false,
+      },
+      () => {
+        if (this.onload && !this.state.ctaWithProvider) {
+          this.onload();
+        }
+      });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
     this.setState({ show_loader: false });
-    toast(result.error || result.message || "Something went wrong!");
+    console.log(err);
+    toast("Something went wrong");
   }
 }

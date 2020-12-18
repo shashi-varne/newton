@@ -766,6 +766,9 @@
   .block1-info {
     margin-top: 10px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
 
     img {
       width: 100%;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { initialize, getSummary } from "../../common/functions";
+import { initialize } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
@@ -14,7 +14,6 @@ class Home extends Component {
       displayImage: true,
     };
     this.initialize = initialize.bind(this);
-    // this.getSummary = getSummary.bind(this);
   }
 
   componentWillMount() {
@@ -102,7 +101,22 @@ class Home extends Component {
     }
   }
 
+  onload = () => {
+    let { ongoing_loan_details } = this.state;
+    this.setState({
+      loan_exists: ongoing_loan_details.length,
+    });
+  };
+
   render() {
+    let {
+      ongoing_loan_details,
+      loan_exists,
+      productName,
+      account_exists,
+      partnerData,
+      stepContentMapper,
+    } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -112,38 +126,49 @@ class Home extends Component {
       >
         <div className="loan-home">
           <div className="block1-info">
-            {this.state.account_exists && this.state.loan_exists !== 0 ? (
-              <PartnerCard
-              baseData={this.state.partnerData[this.state.ongoing_loan_details[0].vendor]}
-              handleClick={this.handleClick}
-            />
-             ) : (
+            {account_exists && loan_exists !== 0 ? (
+              ongoing_loan_details.map((item, index) => {
+                return (
+                  <PartnerCard
+                    key={index}
+                    baseData={partnerData[item.vendor]}
+                    handleClick={this.handleClick}
+                  />
+                );
+              })
+            ) : (
               <img
-                src={require(`assets/${this.state.productName}/icn_hero.svg`)}
+                src={require(`assets/${productName}/icn_hero.svg`)}
                 alt="info"
               />
-            )} 
+            )}
           </div>
 
-          <div className="block2-info" onClick={() => this.handleClick()}>
-            <div className="top-title">{this.state.loan_exists !== 0 ? 'Start a new application' : 'What are you looking for ?'}</div>
-            <div className="content">
-              <img
-                src={require(`assets/${this.state.productName}/icn_loan_amnt.svg`)}
-                alt="amount icon"
-              />
-              <div className="data">
-                <div className="title generic-page-title">Personal loans</div>
-                <div className="subtitle generic-page-subtitle">
-                  Get loans upto ₹40 lac
+          {ongoing_loan_details && ongoing_loan_details.length !== 2 && (
+            <div className="block2-info" onClick={() => this.handleClick()}>
+              <div className="top-title">
+                {loan_exists !== 0
+                  ? "Start a new application"
+                  : "What are you looking for ?"}
+              </div>
+              <div className="content">
+                <img
+                  src={require(`assets/${productName}/icn_loan_amnt.svg`)}
+                  alt="amount icon"
+                />
+                <div className="data">
+                  <div className="title generic-page-title">Personal loans</div>
+                  <div className="subtitle generic-page-subtitle">
+                    Get loans upto ₹40 lac
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           <HowToSteps
             style={{ marginTop: 20, marginBottom: 0 }}
-            baseData={this.state.stepContentMapper}
+            baseData={stepContentMapper}
           />
 
           <div
@@ -154,7 +179,7 @@ class Home extends Component {
             }}
           >
             <img
-              src={require(`assets/${this.state.productName}/calculatemi.svg`)}
+              src={require(`assets/${productName}/calculatemi.svg`)}
               alt="calculator"
             />
           </div>
