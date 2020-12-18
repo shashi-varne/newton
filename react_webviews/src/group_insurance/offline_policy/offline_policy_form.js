@@ -283,7 +283,7 @@ handleClick = async () => {
               <img className=""  src={require(`assets/${this.state.type}/icn_policy_found_f.svg`)} alt="" />
             </div>
             <div className="content-mid">
-          <div>We have found one policy with the following details:</div> 
+          <div className="content-large">We have found one policy with the following details:</div> 
           <div className="content-large">Proposer Name: <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.customer_name)} </span></div>
           <div className="content-large">Product Name:  <span style={{fontWeight:'500'}}>{capitalizeFirstLetter(this.state.o2o_data.product_name)} </span> </div>
             </div>

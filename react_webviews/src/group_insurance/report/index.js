@@ -237,7 +237,7 @@ class Report extends Component {
 
         var policyData = res.pfwresponse.result.response;
         var next_page = policyData.group_insurance.next_page;
-        var has_more = policyData.group_insurance.more;
+        var has_more = policyData.group_insurance.more;  console.log(has_more,'has_more')
 
         this.setState({
           nextPage: (has_more) ? next_page : ''
@@ -253,7 +253,7 @@ class Report extends Component {
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
-        this.setState({ nextPage: ''})
+        // this.setState({ nextPage: ''})
       }
 
     } catch (err) {
@@ -453,6 +453,9 @@ class Report extends Component {
 
   onScroll = () => {
     if (this.hasReachedBottom()) {
+
+      console.log(this.state.nextPage)
+
       if (this.state.nextPage) {
         this.loadMore();
       }
