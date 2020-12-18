@@ -28,7 +28,7 @@ class GroupHealthLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // show_loader: true,
+      show_loader: true,
       productName: getConfig().productName,
       provider: this.props.match.params.provider,
       checked: true,
