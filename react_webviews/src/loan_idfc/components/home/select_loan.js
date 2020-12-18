@@ -71,8 +71,12 @@ class SelectLoan extends Component {
 
   onload = () => {
 
-    let {selectedVendors, vendors_data} = this.state
+    let {selectedVendors, vendors_data} = this.state;
     let stepContentMapper = [];
+
+    if(selectedVendors.length !== 2)  {
+      vendors_data.idfc.displayTag = false;
+    }
 
     selectedVendors.forEach((item) => {
       stepContentMapper.push(vendors_data[item]);
@@ -87,6 +91,7 @@ class SelectLoan extends Component {
     this.setState({
       stepContentMapper: stepContentMapper,
       selectedIndexs: selectedIndexs,
+      vendors_data: vendors_data,
     });
   }
 

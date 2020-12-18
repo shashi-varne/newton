@@ -25,7 +25,7 @@ export function goBackMap(path) {
 
     '/loan/idfc/calculator': '/loan/idfc/loan-home',
     '/loan/idfc/recommended': '/loan/idfc/loan-home',
-    '/loan/idfc/select-loan': '/loan/idfc/home',
+    '/loan/idfc/select-loan': '/loan/idfc/loan-home',
     '/loan/idfc/loan-know-more': '/loan/idfc/select-loan',
   }
 
