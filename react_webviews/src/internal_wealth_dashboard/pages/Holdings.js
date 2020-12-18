@@ -10,7 +10,7 @@ import HoldingCard from '../mini-components/HoldingCard';
 import SnapScrollContainer from '../mini-components/SnapScrollContainer';
 import FilterDesktop from '../mini-components/FilterDesktop';
 import FilterMobile from '../mini-components/FilterMobile';
-import { holdings } from '../common/ApiCalls';
+import { getHoldings } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { isEmpty, storageService } from '../../utils/validators';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
@@ -33,7 +33,7 @@ const Holdings = () => {
   const fetchHoldings = async () => {
     try {
       setIsLoading(true);
-      const result = await holdings();
+      const result = await getHoldings();
       if (isEmpty(result)) {
         setHasError(true);
       }

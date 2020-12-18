@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PageHeader from '../../mini-components/PageHeader';
 import { getConfig } from 'utils/functions';
 import toast from 'common/ui/Toast';
-import { fetchPortfolioAnalysis } from '../../common/ApiCalls';
+import { getPortfolioAnalysis } from '../../common/ApiCalls';
 import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
 import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 import HeaderNavBar from '../../common/HeaderNavBar';
@@ -23,7 +23,7 @@ function Analysis() {
   const getPortfolio = async () => {
     try {
       setIsLoading(true);
-      const result = await fetchPortfolioAnalysis({
+      const result = await getPortfolioAnalysis({
         scheme_type: null,
         market_cap_alloc: true,
         sector_alloc: true,

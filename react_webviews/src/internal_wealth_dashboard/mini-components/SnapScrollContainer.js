@@ -5,7 +5,7 @@ import IlsNoData from 'assets/fisdom/ils_no_data.svg';
 // -----------------------------------------------
 import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'material-ui/IconButton';
-import { last, get, cloneDeep } from 'lodash';
+import { last, get } from 'lodash';
 import { isEmpty, isFunction } from '../../utils/validators';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 import IwdScreenLoader from './IwdScreenLoader';
@@ -54,8 +54,8 @@ const SnapScrollContainer = ({
       const childElems = [].slice
         .apply(rootElem.children)
         .filter((domElem) => domElem.className === 'iwd-scroll-child');
-      console.log(cloneDeep(childElems));
-      let observer = new IntersectionObserver(handleIntersect, options);
+      
+        let observer = new IntersectionObserver(handleIntersect, options);
       for (let i = childElems.length; i--; ) {
         observer.observe(childElems[i]);
       }

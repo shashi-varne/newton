@@ -539,7 +539,7 @@ $background: #f9f9f9;
     @extend .iwd-fade-entrance;
     padding: 50px 100px;
     box-sizing: border-box;
-    height: 100vh;
+    height: auto;
   }
 
   .iwd-hdc-header {
@@ -643,13 +643,13 @@ $background: #f9f9f9;
 
   .iwd-hdc-transactions {
     margin-top: 60px;
+    margin-bottom: 20px;
 
     .iwd-card-header {
       margin-bottom: 10px;
     }
 
     .iwd-hdct-table-container {
-      max-height: 260px;
       overflow: auto;
     }
   }
@@ -657,6 +657,10 @@ $background: #f9f9f9;
   .iwd-hd-banner-img {
     width: 100%;
     margin-bottom: -5px;
+  }
+
+  #iwd-page-footer {
+    margin-top: 40px;
   }
 }
 
@@ -1158,22 +1162,6 @@ $background: #f9f9f9;
       }
     }
 
-    .iwd-transaction-pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .iwd-rs-pagination > li > a {
-        font-size: 13px;
-        line-height: 24px;
-        color: var(--primary);
-      }
-
-      .iwd-rs-pagination > li.rs-pagination-btn-active > a {
-        font-weight: bold;
-        text-decoration: underline;
-      }
-    }
   }
 
   /* Hide scrollbar for Chrome, Safari and Opera */
@@ -1211,6 +1199,24 @@ $background: #f9f9f9;
         white-space: nowrap;
       }
     }
+  }
+}
+
+.iwd-transaction-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .iwd-rs-pagination > li > a {
+    font-size: 13px;
+    line-height: 24px;
+    color: var(--primary);
+  }
+
+  .iwd-rs-pagination > li.rs-pagination-btn-active > a {
+    font-weight: bold;
+    text-decoration: underline;
+    color: var(--primary);
   }
 }
 
@@ -1874,24 +1880,25 @@ $background: #f9f9f9;
       }
     }
 
-    .iwd-transaction-pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      .iwd-rs-pagination > li > a {
-        font-size: 13px;
-        line-height: 24px;
-        color: var(--primary);
-      }
-
-      .iwd-rs-pagination > li.rs-pagination-btn-active > a {
-        font-weight: bold;
-        text-decoration: underline;
-      }
-    }
   }
 
+  .iwd-transaction-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .iwd-rs-pagination > li > a {
+      font-size: 13px;
+      line-height: 24px;
+      color: var(--primary);
+    }
+
+    .iwd-rs-pagination > li.rs-pagination-btn-active > a {
+      font-weight: bold;
+      text-decoration: underline;
+    }
+  }
+  
   /* Hide scrollbar for Chrome, Safari and Opera */
   .iwd-transaction-container::-webkit-scrollbar {
     display: none;
@@ -1974,14 +1981,13 @@ $background: #f9f9f9;
     margin-top: 35px;
     height: auto;
 
- 
-
     // Statements Page
-
     .iwd-transaction-container {
-      height: 75vh;
+      height: 65vh;
       padding-bottom: 30px;
+      box-sizing: border-box;
     }
+
     .iwd-statement-transaction {
       margin-top: 0;
       .iwd-transaction-container

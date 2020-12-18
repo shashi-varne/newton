@@ -22,7 +22,6 @@ export function navigate(pathname, params, replace) {
 }
 
 export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) => {
-  console.log('curr: ', current_amt_arr, ', inv: ', invested_amt_arr);
   if (!current_amt_arr.length || !invested_amt_arr.length) return { data: [] };
   const obj = {
     current_amount: [],

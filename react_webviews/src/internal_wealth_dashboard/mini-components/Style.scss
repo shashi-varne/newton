@@ -12,7 +12,6 @@ $card-padding: 50px;
 }
 
 .iwd-d-newsletter {
-
   align-self: flex-start;
   background: $primary;
   width: 40%;
@@ -21,6 +20,10 @@ $card-padding: 50px;
   padding-right: 30px;
   box-sizing: border-box;
   border-bottom-right-radius: 70px;
+
+  .MuiCircularProgress-colorPrimary {
+    color: white;
+  }
 
   .iwd-card-header {
     color: white;
@@ -1191,8 +1194,6 @@ table.iwd-transactions-table {
 }
 
 .iwd-transactions-table {
-  width: 90% !important;
-
   td:nth-child(1) {
     padding-left: 10px;
   }

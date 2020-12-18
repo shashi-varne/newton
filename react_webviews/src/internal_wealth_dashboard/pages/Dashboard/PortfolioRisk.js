@@ -4,9 +4,9 @@ import { IconButton } from 'material-ui';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import toast from '../../../common/ui/Toast';
 import IwdCommonPageFooter from '../../mini-components/IwdCommonPageFooter';
-import { getBlog, getNewsletter, getPortfolioRisk } from '../../common/ApiCalls';
+import { getNewsletter, getPortfolioRisk } from '../../common/ApiCalls';
 import { getConfig } from 'utils/functions';
-import { formattedDate, isEmpty } from '../../../utils/validators';
+import { isEmpty } from '../../../utils/validators';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -29,7 +29,6 @@ const RiskProfile = () => {
       setRiskError(false);
       const data = await getPortfolioRisk({ date_range: 'one_year' });
       setRiskData(data);
-      console.log(data);
     } catch (e) {
       console.log(e);
       setRiskError(true);
@@ -44,7 +43,6 @@ const RiskProfile = () => {
       setBlogError(false);
       const { articles } = await getNewsletter();
       setBlogData(articles[0]);
-      console.log(articles);
     } catch (e) {
       console.log(e);
       setBlogError(true);
@@ -95,9 +93,12 @@ const RiskProfile = () => {
       </IwdCard>
       <IwdCard
         isClickable
-        headerText={blogData.title}
+        isLoading={isLoadingBlog}
+        error={blogError}
+        errorText='Something went wrong! Please retry after some time or contact your wealth manager'
+        headerText={blogData.title || ''}
         className="iwd-d-newsletter"
-        onClick={() => openArticle(blogData.url)}
+        onClick={() => openArticle(blogData.link)}
       >
         <>
           <IconButton className='iwd-dn-btn'>

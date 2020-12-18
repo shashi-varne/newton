@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import StatementCard from '../../mini-components/StatementCard';
-import { fetchGainsElssYears } from '../../common/ApiCalls';
+import { getGainsElssYears } from '../../common/ApiCalls';
 import SnapScrollContainer from '../../mini-components/SnapScrollContainer';
 import { getConfig } from 'utils/functions';
 import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
@@ -16,7 +16,7 @@ const Elss = () => {
   const fetchElssYears = async () => {
     try {
       setIsLoading(true);
-      const { tax_statement } = await fetchGainsElssYears();
+      const { tax_statement } = await getGainsElssYears();
       if (isEmpty(tax_statement?.elss)) {
         setNoData(true);
       } else {

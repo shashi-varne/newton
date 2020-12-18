@@ -4,15 +4,14 @@ import FilterMobile from '../../mini-components/FilterMobile';
 import {
   getTransactions,
   hitNextPage,
-  fetchPortfolioFundNames,
-  downloadTransactionReport,
+  getPortfolioFundNames,
 } from '../../common/ApiCalls';
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
 import FSTable from 'common/responsive-components/FSTable';
 import { transactionsHeaderMap } from '../../constants';
 import IlsError from 'assets/fisdom/ils_error.svg';
 import { Pagination } from 'rsuite';
-import { storageService } from '../../../utils/validators';
+import { isEmpty, storageService } from '../../../utils/validators';
 import IWdScreenLoader from '../../mini-components/IwdScreenLoader';
 import 'rsuite/dist/styles/rsuite-default.css';
 import debounce from 'lodash/debounce';
@@ -22,6 +21,7 @@ import AutoSuggestSearch from '../../mini-components/AutoSuggestSearch';
 import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
+import { getConfig } from '../../../utils/functions';
 const transactionMapper = [...transactionsHeaderMap];
 transactionMapper.splice(1, 0, {
   label: 'Fund Name',
@@ -40,18 +40,12 @@ const Transactions = () => {
   const [hasError, setHasError] = useState(false);
 
   const pushToPageMap = (url) => {
-    if (!url) return;
+    if (!url || !!pageMap[activePage + 1]) return;
     setPageMap([...pageMap, url]);
   };
 
   useEffect(() => {
     fetch_fund_names();
-    const filterData = storageService().getObject(filter_key);
-    if (filterData) {
-      get_transactions(filterData);
-    } else {
-      get_transactions();
-    }
   }, []);
 
   useEffect(() => {
@@ -61,6 +55,7 @@ const Transactions = () => {
   const get_transactions = async () => {
     try {
       setIsLoading(true);
+
       let response;
       if (activePage === 1) {
         response = await getTransactions({
@@ -68,13 +63,11 @@ const Transactions = () => {
           count: false,
           ...filterVal,
         });
-        if (!pageMap[2]) {
-          pushToPageMap(response.next_page);
-        }
       } else {
         const urlToHit = pageMap[activePage];
         response = await hitNextPage(urlToHit);
       }
+      pushToPageMap(response.next_page);
 
       setTransactions(response.transactions);
     } catch (err) {
@@ -89,7 +82,7 @@ const Transactions = () => {
 
   const fetch_fund_names = async () => {
     try {
-      const { funds } = await fetchPortfolioFundNames();
+      const { funds } = await getPortfolioFundNames();
       setFundNames(funds);
     } catch (err) {
       toast(err);
@@ -117,7 +110,11 @@ const Transactions = () => {
     if (transactions?.length > 0) {
       try {
         const filterData = storageService().getObject(filter_key);
-        await downloadTransactionReport('pdf', filterData);
+        const baseURL = getConfig().base_url;
+        window.open(
+          `${baseURL}/api/rta/download/account/summary/pdf${buildParamsFromObj(filterData)}`,
+          '_blank'
+        );
       } catch (err) {
         toast(err);
       }
@@ -125,11 +122,23 @@ const Transactions = () => {
       toast('No transaction to download');
     }
   };
+
+  const buildParamsFromObj = (obj) => {
+    if (isEmpty(obj)) return '';
+
+    const pStr = Object.entries(obj).reduce((paramStr, [key, val]) => {
+      paramStr += `${key}=${val}&`;
+      return paramStr;
+    }, '?');
+    return pStr.slice(0, -1);
+  };
+
   const retry = () => {
     setHasError(false);
     get_transactions();
     fetch_fund_names();
   };
+
   return (
     <div className='iwd-statement-transaction'>
       <FilterMobile

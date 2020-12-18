@@ -17,6 +17,7 @@ import ScrollTopBtn from './ScrollTopBtn';
 import { Dialog } from 'material-ui';
 import { getConfig } from 'utils/functions';
 import RatingStar from '../../fund_details/common/RatingStar';
+import { Pagination } from 'rsuite';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -30,6 +31,17 @@ const HoldingDetail = ({
   const [isLoadingFundDetail, setIsLoadingFundDetail] = useState(true);
   const [transactions, setTransations] = useState([]);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(true);
+  const [pageMap, setPageMap] = useState([null, null]);
+  const [activePage, setActivePage] = useState(1);
+
+  const pushToPageMap = (url) => {
+    if (!url) return;
+    setPageMap([...pageMap, url]);
+  };
+
+  const onPageSelect = (page) => {
+    setActivePage(page);
+  };
 
   const fetchHoldingDetail = async () => {
     try {
@@ -48,8 +60,11 @@ const HoldingDetail = ({
       setIsLoadingTransactions(true);
       const result = await getTransactions({
         amfi: isin,
-        page_size: 20,
+        page_size: 10,
       });
+      if (!pageMap[2]) {
+        pushToPageMap(result.next_page);
+      }
       setTransations(result.transactions);
     } catch (e) {
       console.log(e);
@@ -158,10 +173,21 @@ const HoldingDetail = ({
                 }
               </div>
             </div>
+            {!isLoadingTransactions && (
+              <div className='iwd-transaction-pagination'>
+                <Pagination
+                  first
+                  prev
+                  next
+                  pages={pageMap.length - 1}
+                  activePage={activePage}
+                  onSelect={onPageSelect}
+                  classPrefix='iwd-rs-pagination rs-pagination'
+                ></Pagination>
+              </div>
+            )}
             {isMobileView && <ScrollTopBtn containerIdentifier="iwd-holding-detail" />}
           </div>
-          {/* Todo: use src-set for images */}
-          {/* <img src={bg_waves_full} alt=""  /> */}
           <picture>
             <source srcSet={`${bg_waves_small} 1x`} media="(max-width: 640px)" />
             <img

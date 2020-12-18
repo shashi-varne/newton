@@ -9,7 +9,7 @@ import { genericErrMsg } from '../constants';
 //   keys.map(key => storageService().remove(key));
 // }
 const platform = 'fisdom';
-let boot = true;
+// let boot = true;
 // storageService().setObject('wr-boot', boot);
 // resetLSKeys(['wr-emails', 'wr-pans', 'wr-holdings']);
 
@@ -320,7 +320,7 @@ export const getNewsletter = async (params = {}) => {
   }
 };
 
-export const holdings = async (params = {}) => {
+export const getHoldings = async (params = {}) => {
   try {
     const res = await Api.get('api/invest/reportv4/portfolio/funds', {
       ...params,
@@ -362,7 +362,7 @@ export const getFundDetail = async (params = {}) => {
   }
 };
 
-export const fetchPortfolioAnalysis = async (params = {}) => {
+export const getPortfolioAnalysis = async (params = {}) => {
   try {
     const res = await Api.post('api/reports/portfolio-analysis', {
       ...params,
@@ -406,7 +406,7 @@ export const getTransactions = async (params = {}) => {
   }
 };
 
-export const fetchPortfolioFundNames = async () => {
+export const getPortfolioFundNames = async () => {
   try {
     const res = await Api.get('api/reports/portfolio-fund-names');
 
@@ -426,53 +426,9 @@ export const fetchPortfolioFundNames = async () => {
   }
 };
 
-export const fetchGainsElssYears = async () => {
+export const getGainsElssYears = async () => {
   try {
     const res = await Api.get('api/iam/myaccount');
-
-    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
-    }
-
-    const { result, status_code: status } = res.pfwresponse;
-
-    if (status === 200) {
-      return result || {};
-    } else {
-      throw result.error || result.message || genericErrMsg;
-    }
-  } catch (e) {
-    throw e;
-  }
-};
-
-export const downloadReport = async (sType, year) => {
-  try {
-    const res = await Api.get(`printpage/invest/export/4934000205365249/${sType}`, {
-      year,
-    });
-
-    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
-      throw genericErrMsg;
-    }
-
-    const { result, status_code: status } = res.pfwresponse;
-
-    if (status === 200) {
-      return result || {};
-    } else {
-      throw result.error || result.message || genericErrMsg;
-    }
-  } catch (e) {
-    throw e;
-  }
-};
-
-export const downloadTransactionReport = async (type, params = {}) => {
-  try {
-    const res = await Api.get(`api/rta/download/account/summary/${type}`, {
-      ...params,
-    });
 
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;

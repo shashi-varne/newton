@@ -29,39 +29,8 @@ const DateRangeSelector = ({ filter_key, handleFilterData }) => {
     storageService().setObject(filter_key, filterData);
     handleFilterData(filterData);
   };
-  /*
   
-  const compare_custom_range_dates = (value) => {
-    const [startq, endq] = value;
-    const starts = [
-      new Date(startq).getDate(),
-      new Date(startq).getMonth(),
-      new Date(startq).getFullYear(),
-    ];
-    const ends = [
-      new Date(endq).getDate(),
-      new Date(endq).getMonth(),
-      new Date(endq).getFullYear(),
-    ];
-    const [startw, endw] = date_range_selector['past_seven_days']();
-    const rstart = [
-      new Date(startw).getDate(),
-      new Date(startw).getMonth(),
-      new Date(startw).getFullYear(),
-    ];
-    const rend = [
-      new Date(endw).getDate(),
-      new Date(endw).getMonth(),
-      new Date(endw).getFullYear(),
-    ];
-
-    if (isEqual(starts, rstart) && isEqual(ends, rend)) {
-      console.log('matching');
-    }
-    console.log('value', starts);
-    console.log('range', rstart);
-  };
-  */
+  
   return (
     <div className='iwd-date-range-picker'>
       <DateRangePicker

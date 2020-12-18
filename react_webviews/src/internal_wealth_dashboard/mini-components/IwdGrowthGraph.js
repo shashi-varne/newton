@@ -103,9 +103,7 @@ const IwdGrowthGraph = ({
 export default IwdGrowthGraph;
 
 const IwdLineTooltip = ({ slice }) => {
-  // return '';
   const [date] = slice.points.map(point => point.data.x);
-  console.log(date);
   return (
     <div className="iwd-growth-graph-legend">
       <div className="iwd-ggl-header">{formattedDate(date, 'd m, y')}</div>
