@@ -79,7 +79,7 @@ class Home extends Component {
     let { account_exists, loan_exists } = this.state;
     if (account_exists && loan_exists !== 0) {
       this.sendEvents("resume");
-      this.navigate("know-more");
+      this.navigate("loan-know-more");
     } else {
       this.sendEvents("next");
       this.navigate(this.state.next_state);

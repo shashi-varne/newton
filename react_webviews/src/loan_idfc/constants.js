@@ -23,10 +23,10 @@ export function goBackMap(path) {
     '/loan/idfc/final-loan': '/loan/idfc/home',
     '/loan/idfc/reports': '/loan/idfc/home',
 
-    '/loan1/idfc-dmi/calculator': '/loan1/idfc-dmi/home',
-    '/loan1/idfc-dmi/personal-details': '/loan1/idfc-dmi/home',
-    '/loan1/idfc-dmi/select-loan': '/loan1/idfc-dmi/personal-details',
-    '/loan1/idfc-dmi/know-more': '/loan1/idfc-dmi/select-loan',
+    '/loan/idfc/calculator': '/loan/idfc/loan-home',
+    '/loan/idfc/recommended': '/loan/idfc/loan-home',
+    '/loan/idfc/select-loan': '/loan/idfc/recommended',
+    '/loan/idfc/loan-know-more': '/loan/idfc/select-loan',
   }
 
   return mapper[path] || false;
@@ -78,7 +78,7 @@ export const idfc_config = {
     eligible_loan: 'loan-eligible',
     additional_details: 'doc-list',
 
-    home_screen: 'personal-details',
+    home_screen: 'recommended',
     recommended: 'select-loan',
   },
   landing_screen: {

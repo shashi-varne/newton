@@ -841,7 +841,7 @@ export async function getSummary() {
       account_exists: result.account_exists,
       ongoing_loan_details: result.ongoing_loan_details,
       loan_exists: result.ongoing_loan_details.length,
-      vendor_name: result.ongoing_loan_details[0].vendor,
+      vendor_name: result.ongoing_loan_details[0] && result.ongoing_loan_details[0].vendor || '',
       show_loader: false,
     });
   } else {
