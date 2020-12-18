@@ -17,14 +17,6 @@ class SelectLoan extends Component {
   componentWillMount() {
     this.initialize();
 
-    let { params } = this.props.location || {};
-    if (!params || !params.selectedVendors) {
-      this.props.history.goBack();
-      return;
-    }
-
-    let selectedVendors = params ? params.selectedVendors : [];
-
     let vendors_data = {
       idfc: {
         index: 0,
@@ -72,6 +64,14 @@ class SelectLoan extends Component {
       },
     };
 
+    this.setState({
+      vendors_data: vendors_data,
+    });
+  }
+
+  onload = () => {
+
+    let {selectedVendors, vendors_data} = this.state
     let stepContentMapper = [];
 
     selectedVendors.forEach((item) => {
@@ -126,7 +126,7 @@ class SelectLoan extends Component {
         noFooter={true}
       >
         <div className="select_loan">
-          {this.state.stepContentMapper.map((item, index) => {
+          {this.state.stepContentMapper &&  this.state.stepContentMapper.map((item, index) => {
             return (
               <PartnerCard
                 key={index}
