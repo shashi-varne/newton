@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import SliderWithValues from "../../../common/ui/SilderWithValues"
+import SliderWithValues from "../../../common/ui/SilderWithValues";
 import { inrFormatDecimal } from "../../../utils/validators";
 
 class Calculator extends Component {
@@ -15,7 +15,7 @@ class Calculator extends Component {
       Tenor: 5,
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
-      screen_name: "calculator"
+      screen_name: "calculator",
     };
 
     this.initialize = initialize.bind(this);
@@ -27,42 +27,64 @@ class Calculator extends Component {
     let { params } = this.props.location;
 
     if (!params) {
-      this.navigate('home')
-      return
+      this.navigate("home");
+      return;
     }
 
     this.setState({
-      ...params
-    })
+      ...params,
+    });
   }
 
   onload = async () => {};
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let params = {
       create_new:
         this.state.application_exists && this.state.otp_verified ? false : true,
     };
 
-    let { vendor_application_status, pan_status, ckyc_status } = this.state;
+    let {
+      vendor_application_status,
+      pan_status,
+      is_dedupe,
+      rejection_reason,
+    } = this.state;
 
     let rejection_cases = [
       "idfc_null_rejected",
       "idfc_0.5_rejected",
       "idfc_1.0_rejected",
+      "idfc_1.1_rejected",
       "idfc_1.7_rejected",
       "idfc_4_rejected",
+      "idfc_callback_rejected",
+      "Age",
+      "Salary",
+      "Salary reciept mode",
     ];
 
     if (this.state.cta_title === "RESUME") {
-      if (rejection_cases.indexOf(vendor_application_status) !== -1) {
+      if (
+        rejection_cases.indexOf(
+          vendor_application_status || rejection_reason
+        ) !== -1 ||
+        is_dedupe
+      ) {
         this.navigate("loan-status");
       }
 
-      if (pan_status === "" || ckyc_status === "") {
+      if (rejection_cases.indexOf(rejection_reason) !== -1) {
+        this.navigate("loan-status");
+      }
+
+      if (!pan_status || vendor_application_status === "pan") {
         this.navigate("basic-details");
-      } else if (rejection_cases.indexOf(vendor_application_status) === -1) {
+      } else if (
+        rejection_cases.indexOf(vendor_application_status) === -1 &&
+        !is_dedupe
+      ) {
         this.navigate("journey");
       }
     } else {
@@ -87,44 +109,46 @@ class Calculator extends Component {
   }
 
   onChange = (val, key) => {
-    this.setState({[key]: val})
-  }
+    this.setState({ [key]: val });
+  };
 
   render() {
     const {
-        Net_monthly_Income,
-        Tenor,
-        Other_EMIs,
-        Monthly_expenses
-      } = this.state;
-  
-      let Loan_Eligibility = (Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40/100 * Tenor;
-  
-      // if(Net_monthly_Income < 30000) {
-      //   Loan_Eligibility = 0;
-      // } else if(Loan_Eligibility > 100000) {
-      //   Loan_Eligibility = 100000;
-      // } else if(Loan_Eligibility <=0) {
-      //   Loan_Eligibility = 0;
-      // }
+      Net_monthly_Income,
+      Tenor,
+      Other_EMIs,
+      Monthly_expenses,
+    } = this.state;
 
-      return (
+    let Loan_Eligibility =
+      (((Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40) / 100) *
+      Tenor;
+
+    // if(Net_monthly_Income < 30000) {
+    //   Loan_Eligibility = 0;
+    // } else if(Loan_Eligibility > 100000) {
+    //   Loan_Eligibility = 100000;
+    // } else if(Loan_Eligibility <=0) {
+    //   Loan_Eligibility = 0;
+    // }
+
+    return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Loan eligibility calculator"
         buttonTitle={this.state.cta_title}
         styleFooter={{
-          backgroundColor: "var(--highlight)"
+          backgroundColor: "var(--highlight)",
         }}
         styleContainer={{
-          backgroundColor: "var(--highlight)"
+          backgroundColor: "var(--highlight)",
         }}
         noPadding={true}
         handleClick={this.handleClick}
       >
         <div className="idfc-loan-calculator">
-          <SliderWithValues 
+          <SliderWithValues
             label="Net monthly income"
             val="Net_monthly_Income"
             value={Net_monthly_Income}
@@ -171,13 +195,14 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              { inrFormatDecimal((parseInt(Loan_Eligibility) < parseInt("100000")) ? "0" : Loan_Eligibility)}
+              {inrFormatDecimal(
+                parseInt(Loan_Eligibility) < parseInt("100000")
+                  ? "0"
+                  : Loan_Eligibility
+              )}
             </div>
           </div>
-
-          
         </div>
-
       </Container>
     );
   }

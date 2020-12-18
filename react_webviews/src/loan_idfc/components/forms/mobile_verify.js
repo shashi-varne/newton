@@ -140,7 +140,7 @@ class MobileVerification extends Component {
                   <span>
                     I accept{" "}
                     <u style={{ color: "var(--primary)" }}>
-                      Terms and condition
+                      Terms & condition
                     </u>
                   </span>
                 </div>
