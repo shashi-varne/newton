@@ -14,7 +14,7 @@ class Home extends Component {
       displayImage: true,
     };
     this.initialize = initialize.bind(this);
-    this.getSummary = getSummary.bind(this);
+    // this.getSummary = getSummary.bind(this);
   }
 
   componentWillMount() {
@@ -47,12 +47,22 @@ class Home extends Component {
     };
 
     let partnerData = {
-      inex: 0,
-      title: "IDFC FIRST BANK",
-      subtitle: "Quick disbursal",
-      loan_amount: " ₹40 lac",
-      logo: "idfc_logo",
-      cta_title: "RESUME",
+      idfc: {
+        index: 0,
+        title: "IDFC FIRST BANK",
+        subtitle: "Quick disbursal",
+        loan_amount: " ₹40 lac",
+        logo: "idfc_logo",
+        cta_title: "RESUME",
+      },
+      dmi: {
+        index: 1,
+        title: "DMI Finance",
+        subtitle: "Quick money transfer",
+        loan_amount: "₹1 lac",
+        logo: "dmi-finance",
+        cta_title: "RESUME",
+      },
     };
 
     this.setState({
@@ -66,8 +76,14 @@ class Home extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next')
-    this.getSummary();
+    let { account_exists, loan_exists } = this.state;
+    if (account_exists && loan_exists !== 0) {
+      this.sendEvents("resume");
+      this.navigate("know-more");
+    } else {
+      this.sendEvents("next");
+      this.navigate(this.state.next_state);
+    }
   };
 
   sendEvents(user_action) {
@@ -95,22 +111,22 @@ class Home extends Component {
         noFooter={true}
       >
         <div className="loan-home">
-          <div className="block1-info" onClick={() => this.handleImage()}>
-            {this.state.displayImage ? (
+          <div className="block1-info">
+            {this.state.account_exists && this.state.loan_exists !== 0 ? (
+              <PartnerCard
+              baseData={this.state.partnerData[this.state.ongoing_loan_details[0].vendor]}
+              handleClick={this.handleClick}
+            />
+             ) : (
               <img
                 src={require(`assets/${this.state.productName}/icn_hero.svg`)}
                 alt="info"
               />
-            ) : (
-              <PartnerCard
-                baseData={this.state.partnerData}
-                handleClick={this.handleClick}
-              />
-            )}
+            )} 
           </div>
 
           <div className="block2-info" onClick={() => this.handleClick()}>
-            <div className="top-title">What are you looking for ?</div>
+            <div className="top-title">{this.state.loan_exists !== 0 ? 'Start a new application' : 'What are you looking for ?'}</div>
             <div className="content">
               <img
                 src={require(`assets/${this.state.productName}/icn_loan_amnt.svg`)}
@@ -133,7 +149,7 @@ class Home extends Component {
           <div
             className="block1-info"
             onClick={() => {
-              this.sendEvents('calculator');
+              this.sendEvents("calculator");
               this.navigate("calculator");
             }}
           >

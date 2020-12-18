@@ -31,6 +31,8 @@ export async function initialize() {
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
   this.get07State = get07State.bind(this);
+  this.getRecommendedVendor = getRecommendedVendor.bind(this);
+  this.getSummary = getSummary.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -70,7 +72,14 @@ export async function initialize() {
     "loan_status",
   ];
 
-  if (!screens.includes(this.state.screen_name)) {
+  let idfc_dmi_screens = [
+    'home_screen',
+    'know_more_screen',
+    'select_loan_screen',
+    'recommended'
+  ]
+
+  if (!screens.includes(this.state.screen_name) && !idfc_dmi_screens.includes(this.state.screen_name)) {
     this.getOrCreate();
   } else {
     this.setState({
@@ -84,6 +93,10 @@ export async function initialize() {
 
   if (this.state.screen_name === "loan_status") {
     this.getUserStatus();
+  }
+
+  if(idfc_dmi_screens.includes(this.state.screen_name)) {
+    this.getSummary();
   }
 }
 
@@ -799,22 +812,18 @@ export async function getRecommendedVendor(params) {
     show_loader: true,
   });
 
-  const res = await Api.post(
-    `relay/api/loan/account/recommendation`,
-    params
-  );
+  const res = await Api.post(`relay/api/loan/account/recommendation`, params);
 
   const { result, status_code: status } = res.pfwresponse;
-  if(status === 200) {
+  if (status === 200) {
     let selectedVendors = [];
-    if(result.idfc) selectedVendors.push('idfc');
-    if(result.dmi)  selectedVendors.push('dmi');
-    this.navigate(
-      this.state.next_state, 
-      {params : {selectedVendors :selectedVendors}
-    })
+    if (result.idfc) selectedVendors.push("idfc");
+    if (result.dmi) selectedVendors.push("dmi");
+    this.navigate(this.state.next_state, {
+      params: { selectedVendors: selectedVendors },
+    });
   } else {
-    this.setState({show_loader : false})
+    this.setState({ show_loader: false });
     toast(result.error || result.message || "Something went wrong!");
   }
 }
@@ -824,15 +833,19 @@ export async function getSummary() {
     show_loader: true,
   });
 
-  const res = await Api.get(
-    `relay/api/loan/account/get/summary`,
-  );
+  const res = await Api.get(`relay/api/loan/account/get/summary`);
 
   const { result, status_code: status } = res.pfwresponse;
-  if(status === 200) {
-    this.navigate(this.state.next_state)
+  if (status === 200) {
+    this.setState({
+      account_exists: result.account_exists,
+      ongoing_loan_details: result.ongoing_loan_details,
+      loan_exists: result.ongoing_loan_details.length,
+      vendor_name: result.ongoing_loan_details[0].vendor,
+      show_loader: false,
+    });
   } else {
-    this.setState({show_loader : false})
+    this.setState({ show_loader: false });
     toast(result.error || result.message || "Something went wrong!");
   }
 }
