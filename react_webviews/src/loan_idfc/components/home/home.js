@@ -175,7 +175,11 @@ class Home extends Component {
             className="block1-info"
             onClick={() => {
               this.sendEvents("calculator");
-              this.navigate("calculator");
+              this.navigate("calculator", {
+                params: {
+                  cta_title: "APPLY NOW",
+                },
+              });
             }}
           >
             <img
