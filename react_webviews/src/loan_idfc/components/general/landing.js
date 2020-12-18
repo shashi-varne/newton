@@ -41,7 +41,8 @@ class Landing extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next')
+    let user_action = this.state.cta_title === "APPLY NOW" ? 'next' : 'resume';
+    this.sendEvents(user_action)
     let params = {
       create_new:
         this.state.application_exists && this.state.otp_verified ? false : true,

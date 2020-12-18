@@ -528,6 +528,9 @@ export async function submitApplication(
         typeof result.error === "string" &&
         rejection_cases.indexOf(result.error) === -1
       ) {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error || result.message || "Something went wrong!");
       } else if (
         typeof result.error === "string" &&
@@ -535,6 +538,9 @@ export async function submitApplication(
       ) {
         this.navigate("loan-status");
       } else {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
