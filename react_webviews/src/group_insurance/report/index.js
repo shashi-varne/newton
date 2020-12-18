@@ -18,8 +18,7 @@ class Report extends Component {
     this.state = {
       show_loader: true,
       reportData: [],
-      TitleMaper : {},
-      policy_title : ''
+      TitleMaper : {}
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -126,11 +125,6 @@ class Report extends Component {
     obj.status = data.status;
     obj.cssMapper = data.cssMapper;
     obj.product_key = 'offline_insurance' 
-
-    this.setState({
-      policy_title : top_title
-    })
-
     return obj;
   }
 
@@ -282,7 +276,8 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
-    this.sendEvents('next', policy.key);
+    let policy_type = policy.policy_type ? policy.policy_type : ''
+    this.sendEvents('next', policy.key, policy_type);
     let path = '';
     let key = policy.key;
 
@@ -420,7 +415,7 @@ class Report extends Component {
     }
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents(user_action, insurance_type, policy_type) {
 
     let reportState = {};
     for (var i = 0; i < this.state.reportData.length; i++) {
@@ -432,20 +427,21 @@ class Report extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance_report',
-        "type": insurance_type ? insurance_type : '', 
+        "type": insurance_type ? insurance_type : '',
         report: reportState
       }
     };
 
-
-  if(insurance_type === 'insurance'){
-    eventObj.properties.policy = this.state.policy_title ? this.state.policy_title : ''
-  }
+    if (insurance_type === 'insurance') {
+      eventObj.properties.policy =  policy_type ? this.state.TitleMaper[policy_type] : ''
+    }
 
     if (user_action === 'just_set_events') {
       return eventObj;
     } else {
-      nativeCallback({ events: eventObj });
+      nativeCallback({
+        events: eventObj
+      });
     }
   }
 
