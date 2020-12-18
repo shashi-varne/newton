@@ -70,19 +70,18 @@ class Home extends Component {
   }
 
   handleClick = () => {
-    let { account_exists, loan_exists, providedPersonalDetails } = this.state;
-    if (account_exists && loan_exists !== 0) {
-      this.sendEvents("resume");
-      this.navigate("loan-know-more");
+    let { loan_exists, providedPersonalDetails } = this.state;
+    this.sendEvents("next");
+    if (providedPersonalDetails && loan_exists !== 0) {
+      this.navigate("select-loan");
     } else {
-      this.sendEvents("next");
-      console.log('provided details '+providedPersonalDetails)
-      if(providedPersonalDetails) {
-        this.navigate('select-loan');
-      } else{
-        this.navigate('recommended');
-      }
+      this.navigate("recommended");
     }
+  };
+
+  handleResume = () => {
+    this.sendEvents("resume");
+    this.navigate("loan-know-more");
   };
 
   sendEvents(user_action) {
@@ -133,7 +132,7 @@ class Home extends Component {
                   <PartnerCard
                     key={index}
                     baseData={partnerData[item.vendor]}
-                    handleClick={this.handleClick}
+                    handleClick={this.handleResume}
                   />
                 );
               })
