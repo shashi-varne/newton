@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Button from "material-ui/Button";
 import Card from "../../../common/ui/Card";
+import SVG from "react-inlinesvg";
+import { getConfig } from "utils/functions";
 
 class PartnerCard extends Component {
-
   renderBenefits = (data, index) => {
     return (
       <div key={index} className="benefits-points">
@@ -48,7 +49,9 @@ class PartnerCard extends Component {
             variant="raised"
             size="large"
             autoFocus
-            onClick={() => this.props.handleClick(this.props.baseData.provider_name)}
+            onClick={() =>
+              this.props.handleClick(this.props.baseData.provider_name)
+            }
           >
             {this.props.baseData.cta_title}
           </Button>
@@ -59,13 +62,14 @@ class PartnerCard extends Component {
             onClick={() => this.props.handleBenefits(this.props.baseData.index)}
           >
             <div className="benefits-header">
-              {" "}
               Benefits
-              <img
+              <SVG
+                preProcessor={(code) =>
+                  code.replace(/fill=".*?"/g, "fill=" + getConfig().primary)
+                }
                 src={require(`assets/${
                   this.props.isSelected ? "minus_icon" : "plus_icon"
                 }.svg`)}
-                alt=""
               />
             </div>
             {this.props.isSelected && (
