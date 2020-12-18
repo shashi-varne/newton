@@ -11,7 +11,6 @@ class Home extends Component {
     this.state = {
       show_loader: false,
       screen_name: "home_screen",
-      displayImage: true,
     };
     this.initialize = initialize.bind(this);
   }
@@ -70,18 +69,19 @@ class Home extends Component {
     });
   }
 
-  handleImage = () => {
-    this.setState({ displayImage: !this.state.displayImage });
-  };
-
   handleClick = () => {
-    let { account_exists, loan_exists } = this.state;
+    let { account_exists, loan_exists, providedPersonalDetails } = this.state;
     if (account_exists && loan_exists !== 0) {
       this.sendEvents("resume");
       this.navigate("loan-know-more");
     } else {
       this.sendEvents("next");
-      this.navigate(this.state.next_state);
+      console.log('provided details '+providedPersonalDetails)
+      if(providedPersonalDetails) {
+        this.navigate('select-loan');
+      } else{
+        this.navigate('recommended');
+      }
     }
   };
 
@@ -105,6 +105,7 @@ class Home extends Component {
     let { ongoing_loan_details } = this.state;
     this.setState({
       loan_exists: ongoing_loan_details.length,
+      show_loader: false,
     });
   };
 

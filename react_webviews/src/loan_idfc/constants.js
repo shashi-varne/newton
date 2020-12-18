@@ -78,7 +78,6 @@ export const idfc_config = {
     eligible_loan: 'loan-eligible',
     additional_details: 'doc-list',
 
-    home_screen: 'recommended',
     recommended: 'select-loan',
   },
   landing_screen: {
