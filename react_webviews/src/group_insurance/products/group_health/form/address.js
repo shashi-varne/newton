@@ -250,7 +250,7 @@ class GroupHealthPlanAddressDetails extends Component {
         let address_field_max_length = this.state.providerConfig.address_field_max_length;
         
         let address_key_check = ['addr_line1', 'addr_line2', 'p_addr_line1', 'p_addr_line2'];
-        for(var i = 0; i < address_key_check.length; i++){
+        for(let i = 0; i < address_key_check.length; i++){
             if(this.state.provider === 'HDFCERGO'){
                 if(charsNotAllowedHDFC(form_data[address_key_check[i]])){
                     form_data[address_key_check[i] + '_error'] = 'Only following special characters are allowed: # / . ,';
