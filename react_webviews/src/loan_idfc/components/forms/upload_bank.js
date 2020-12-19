@@ -454,6 +454,7 @@ class UploadBank extends Component {
     let { params } = this.state;
 
     if (params.adminPanel) {
+      console.log(this.state.params.redirect);
       window.location.href = this.state.params.redirect;
     } else {
       this.navigate('income-details')
