@@ -75,7 +75,7 @@ class Home extends Component {
     if (providedPersonalDetails) {
       this.navigate("select-loan");
     } else {
-      this.navigate("recommended");
+      this.navigate("edit-details");
     }
   };
 

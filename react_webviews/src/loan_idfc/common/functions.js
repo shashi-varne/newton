@@ -47,13 +47,20 @@ export async function initialize() {
     });
   }
 
+  let provider = this.props.match.params.id || "";
+
+  this.setState({
+    provider: provider,
+  });
+
   nativeCallback({ action: "take_control_reset" });
 
   this.setState(
     {
+      provider: provider,
       screenData: screenData,
       productName: getConfig().productName,
-      count: 0
+      count: 0,
     }
     // () => {
     //   this.onload();
@@ -64,21 +71,89 @@ export async function initialize() {
     show_loader: true,
   });
 
+  let lead = {
+    member_base: [],
+  };
+
+  if (provider === 'dmi') {
+    try {
+      this.setState({
+        show_loader: true,
+      });
+
+      let body = {
+        vendor_name: "DMI",
+        application_info: "True",
+      };
+
+      for (var key in this.state.getLeadBodyKeys) {
+        body[this.state.getLeadBodyKeys[key]] = "True";
+      }
+      const res = await Api.post("/relay/api/loan/get/application/dmi", body);
+
+      var resultData = res.pfwresponse.result;
+
+      this.setState({
+        show_loader: false,
+      });
+      if (res.pfwresponse.status_code === 200) {
+        lead = resultData || {};
+        let application_id = (lead.application_info || {}).application_id;
+        storageService().set("loan_application_id", application_id);
+        this.setState(
+          {
+            lead: lead || {},
+            application_id: application_id,
+          },
+          () => {
+            if (this.onload && !this.state.ctaWithProvider) {
+              this.onload();
+            }
+          }
+        );
+      } else {
+        toast(resultData.error || resultData.message || "Something went wrong");
+        this.onload();
+      }
+    } catch (err) {
+      console.log(err);
+      this.setState(
+        {
+          show_loader: false,
+          lead: lead,
+          common_data: {},
+        },
+        () => {
+          this.onload();
+        }
+      );
+      toast("Something went wrong");
+    }
+  } else {
+    let application_id = storageService().get("loan_application_id");
+    this.setState({
+      application_id: application_id,
+    });
+  }
+
   let screens = [
     "calculator",
     "know_more_screen",
     "landing_screen",
     "loan_status",
+    "main_landing_screen",
   ];
 
   let idfc_dmi_screens = [
-    'home_screen',
-    'know_more_screen',
-    'select_loan_screen',
-    'recommended'
-  ]
+    "home_screen",
+    "select_loan_screen",
+    "recommended",
+  ];
 
-  if (!screens.includes(this.state.screen_name) && !idfc_dmi_screens.includes(this.state.screen_name)) {
+  if (
+    !screens.includes(this.state.screen_name) &&
+    !idfc_dmi_screens.includes(this.state.screen_name)
+  ) {
     this.getOrCreate();
   } else {
     this.setState({
@@ -94,7 +169,11 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if(idfc_dmi_screens.includes(this.state.screen_name)) {
+  if (this.state.screen_name === "main_landing_screen" && provider === 'idfc') {
+    this.getUserStatus();
+  }
+
+  if (idfc_dmi_screens.includes(this.state.screen_name)) {
     this.getSummary();
   }
 }
@@ -204,7 +283,7 @@ export async function getOrCreate(params) {
       document_info: true,
       vendor_info: true,
       bt_info: true,
-      perfios_info: true
+      perfios_info: true,
     };
 
     let lead = {};
@@ -232,7 +311,7 @@ export async function getOrCreate(params) {
         }
       );
 
-      let screens = ["landing_screen", "calculator", "know_more_screen"];
+      let screens = ["main_landing_screen", "calculator", "know_more_screen"];
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       }
@@ -427,7 +506,7 @@ export async function get10Callback(next_state) {
   let that = this;
 
   setTimeout(function () {
-    if (result.idfc_10_callback === true) {
+    if (result.idfc_10_callback) {
       that.navigate("eligible-loan");
     } else if (
       result.vendor_application_status === "idfc_cancelled" ||
@@ -460,7 +539,7 @@ export async function get07State() {
     if (result.perfios_status === "bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (result.idfc_07_state === "failed") {
-      that.navigate('error')
+      that.navigate("error");
     } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
       let body = {
         idfc_loan_status: "bt_init",
@@ -541,6 +620,9 @@ export async function submitApplication(
         typeof result.error === "string" &&
         rejection_cases.indexOf(result.error) === -1
       ) {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error || result.message || "Something went wrong!");
       } else if (
         typeof result.error === "string" &&
@@ -548,6 +630,9 @@ export async function submitApplication(
       ) {
         this.navigate("loan-status");
       } else {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
@@ -670,9 +755,12 @@ export async function formCheckUpdate(
       "amount cannot be greater than max loan amount";
     canSubmitForm = false;
   }
-
-  // eslint-disable-next-line
-  if (form_data.amount_required && parseInt(form_data.amount_required) < parseInt("100000")) {
+  
+  if (
+    form_data.amount_required &&
+    // eslint-disable-next-line
+    parseInt(form_data.amount_required) < parseInt("100000")
+  ) {
     form_data.amount_required_error = "Minimum loan amount should be ₹1 lakh";
     canSubmitForm = false;
   }
@@ -807,7 +895,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export async function getRecommendedVendor(params) {
-  try{
+  try {
     this.setState({
       show_loader: true,
     });
@@ -838,12 +926,12 @@ export async function getSummary() {
 
     const { result, status_code: status } = res.pfwresponse;
 
-    let available_vendors = ['idfc', 'dmi'];
+    let available_vendors = ["idfc", "dmi"];
     let selectedVendors = [];
 
     available_vendors.forEach((element) => {
-      result[element] && selectedVendors.push(element)
-    })
+      result[element] && selectedVendors.push(element);
+    });
 
     let personal_details =   ['loan_amount_required', 'employment_type'];
     let providedPersonalDetails = true;
@@ -873,7 +961,9 @@ export async function getSummary() {
         }
       });
     } else {
-      this.setState({ show_loader: false });
+      this.setState({ show_loader: false }, () => {
+        this.onload();
+      });
       toast(result.error || result.message || "Something went wrong!");
     }
   } catch (err) {

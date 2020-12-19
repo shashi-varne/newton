@@ -4,159 +4,112 @@ import { initialize } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import JourneySteps from "../../../common/ui/JourneySteps";
 import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
 
 class IdfcKnowMore extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "know_more_screen",
+      screen_name: "main_landing_screen",
+      partnerData: {},
+      top_cta_title: "APPLY NOW",
     };
     this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
     this.initialize();
+  }
 
-    let loan_partners = {
-      dmi: {
-        eligibility: {
-          title: "Eligibility criteria",
-          options: [
-            {
-              icon: "ic_why_loan1",
-              subtitle: "Salaried and resident Indian citizens",
-            },
-            {
-              icon: "ic_why_loan2",
-              subtitle: "Age between 23 and 55 years",
-            },
-            {
-              icon: "ic_why_loan3",
-              subtitle:
-                "Employed with a private, public limited company, or an MNC",
-            },
-          ],
-        },
-
-        partnerData: {
-          title: "DMI Finance",
-          subtitle: "Quick money transfer",
-          loan_amount: "₹1 lac",
-          logo: "dmi-finance",
-        },
-      },
-
-      idfc: {
-        documents: true,
-        salariedEligibility: {
-          title: "Eligibility criteria",
-          options: [
-            {
-              icon: "icn_b1_m",
-              subtitle:
-                "Must be earning a minimum net monthly salary of Rs. 20,000",
-            },
-            {
-              icon: "icn_b2_m",
-              subtitle: "Should at least be 23 years of age",
-            },
-            {
-              icon: "icn_b3_m",
-              subtitle:
-                "Maximum age at the time of loan maturity should not be >60 years ",
-            },
-          ],
-        },
-
-        selfEmployeeEligibility: {
-          title: "Eligibility criteria",
-          options: [
-            {
-              icon: "icn_b2_m",
-              subtitle: "Should at least be 23 years of age",
-            },
-            {
-              icon: "icn_b3_m",
-              subtitle:
-                "Maximum age at the time of loan maturity should not be >65 years",
-            },
-            {
-              icon: "icn_b4_m",
-              subtitle: "Business must be in operations for at least 3 years",
-            },
-            {
-              icon: "Group 9964",
-              subtitle:
-                "You must be managing your business from the same office premises for at least a year",
-            },
-          ],
-        },
-
-        partnerData: {
-          title: "IDFC FIRST BANK",
-          subtitle: "Competetive intrest rate",
-          loan_amount: " ₹40 lac",
-          logo: "idfc_logo",
-        },
-
-        journeyData: {
-          title: "Personal loan in just 5 steps",
-          options: [
-            {
-              step: "1",
-              title: "Enter basic details",
-              subtitle:
-                "Fill in basic and work details to get started with your loan application.",
-            },
-            {
-              step: "2",
-              title: "Create loan application",
-              subtitle:
-                "Provide/confirm your personal and address details to proceed with your loan application.",
-            },
-            {
-              step: "3",
-              title: "Provide income details",
-              subtitle:
-                "Enter your loan requirements and income details to get the best loan offer.",
-            },
-            {
-              step: "4",
-              title: "Upload documents",
-              subtitle:
-                "Provide your office address and upload documents to get your loan sanctioned.",
-            },
-            {
-              step: "5",
-              title: "Sanction and disbursal",
-              subtitle:
-                "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
-            },
-          ],
-        },
-      },
-    };
-
-    let provider = "idfc";
+  onload = () => {
+    let { screenData, provider } = this.state;
 
     let employement_type = "salaried";
     let eligibility = {};
     if (provider === "idfc") {
       employement_type === "salaried"
-        ? (eligibility = loan_partners[provider].salariedEligibility)
-        : (eligibility = loan_partners[provider].selfEmployeeEligibility);
+        ? (eligibility = screenData.loan_partners[provider].salariedEligibility)
+        : (eligibility =
+            screenData.loan_partners[provider].selfEmployeeEligibility);
     } else {
-      eligibility = loan_partners[provider].eligibility;
+      eligibility = screenData.loan_partners[provider].eligibility;
     }
 
     this.setState({
-      partnerData: loan_partners[provider].partnerData,
-      journeyData: loan_partners[provider].journeyData,
+      partnerData: screenData.loan_partners[provider].partnerData,
+      journeyData: screenData.loan_partners[provider].journeyData,
       eligibility: eligibility,
-      documents: loan_partners[provider].documents,
+      documents: screenData.loan_partners[provider].documents,
     });
-  }
+
+    if (provider === "dmi") {
+      let lead = this.state.lead || {};
+      let application_info = lead.application_info || {};
+      let vendor_info = lead.vendor_info || {};
+
+      let rejection_reason = application_info.rejection_reason || "";
+
+      this.setState({
+        reason: rejection_reason,
+      });
+
+      if (vendor_info.dmi_loan_status === "complete") {
+        this.navigate("report");
+        return;
+      }
+
+      let process_done = false;
+      let isResume = true;
+      let top_cta_title = "RESUME";
+
+      if (
+        !application_info.latitude ||
+        !application_info.network_service_provider
+      ) {
+        this.setState({
+          location_needed: true,
+        });
+
+        isResume = false;
+        top_cta_title = "APPLY NOW";
+
+        this.setState({
+          isResume: isResume,
+        });
+      }
+
+      if (
+        [
+          "callback_awaited_disbursement_approval",
+          "disbursement_approved",
+        ].indexOf(vendor_info.dmi_loan_status) !== -1
+      ) {
+        process_done = true;
+      }
+
+      this.setState({
+        application_info: application_info,
+        vendor_info: vendor_info,
+        isResume: isResume,
+        process_done: process_done,
+        top_cta_title: top_cta_title,
+      });
+    }
+
+    if (provider === 'idfc') {
+      this.setState({
+        top_cta_title:
+          this.state.application_exists && this.state.otp_verified
+            ? "RESUME"
+            : "APPLY NOW",
+        next_state:
+          this.state.application_exists && this.state.otp_verified
+            ? "journey"
+            : "edit-number",
+      });
+    }
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -174,18 +127,98 @@ class IdfcKnowMore extends Component {
     }
   }
 
+  getNextState = () => {
+    let dmi_loan_status = this.state.vendor_info.dmi_loan_status || '';
+    let application_status = this.state.application_info.application_status || '';
+
+    let state = '';
+    if(this.state.process_done) {
+      state = 'report-details';
+    } else {
+      if(this.state.location_needed) {//condition for mobile
+        state = 'permissions';
+      } else if(dmi_loan_status === 'application_rejected' || application_status === 'internally_rejected') {
+        state = 'instant-kyc-status';
+      }else {
+        state = 'journey';
+      }
+    }
+
+    return state;
+  }
+
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
+    let { provider } = this.state;
+
+    if (provider === 'dmi') {
+      let state =  this.getNextState();
+      let rejection_reason = this.state.reason || '';
+  
+      if (state === 'instant-kyc-status') {
+        let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
+        this.navigate(state, {
+          searchParams: searchParams,
+          params: {
+            rejection_reason: rejection_reason
+          }
+        });
+      
+      } else {
+        this.navigate(state);
+      }
+    }
+
+    if (provider === 'idfc') {
+      let params = {
+        create_new:
+          this.state.application_exists && this.state.otp_verified ? false : true,
+      };
+  
+      let { vendor_application_status, pan_status, is_dedupe, rejection_reason } = this.state;
+  
+      let rejection_cases = [
+        "idfc_null_rejected",
+        "idfc_0.5_rejected",
+        "idfc_1.0_rejected",
+        "idfc_1.1_rejected",
+        "idfc_1.7_rejected",
+        "idfc_4_rejected",
+        "idfc_callback_rejected",
+        "Age",
+        "Salary",
+        "Salary reciept mode"
+      ];
+  
+      if (this.state.cta_title === "RESUME") {
+        if (rejection_cases.indexOf(vendor_application_status || rejection_reason) !== -1 || is_dedupe) {
+          this.navigate("loan-status");
+        }
+  
+        if (rejection_cases.indexOf(rejection_reason) !== -1) {
+          this.navigate("loan-status");
+        }
+  
+        if (!pan_status || vendor_application_status === "pan") {
+          this.navigate("basic-details");
+        } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe) {
+          this.navigate("journey");
+        }
+  
+      } else {
+        this.getOrCreate(params);
+      }
+    }
   };
 
   render() {
     let { partnerData, eligibility, journeyData, documents } = this.state;
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Know more"
-        buttonTitle="APPLY NOW"
+        buttonTitle={this.state.top_cta_title}
         handleClick={this.handleClick}
       >
         <div className="loan-know-more">
@@ -195,10 +228,12 @@ class IdfcKnowMore extends Component {
                 <div>{partnerData.title}</div>
                 <div>{partnerData.subtitle}</div>
               </div>
-              <img
-                src={require(`assets/${partnerData.logo}.svg`)}
-                alt="idfc logo"
-              />
+              {partnerData.logo && (
+                <img
+                  src={require(`assets/${partnerData.logo}.svg`)}
+                  alt="idfc logo"
+                />
+              )}
             </div>
             <div className="sub-text">Apply for loan up to</div>
             <div className="loan-amount">{partnerData.loan_amount}</div>
@@ -206,15 +241,22 @@ class IdfcKnowMore extends Component {
 
           {journeyData && <JourneySteps static={true} baseData={journeyData} />}
 
-          <HowToSteps
-            style={{ marginTop: 20, marginBottom: 0 }}
-            baseData={eligibility}
-          />
+          {eligibility && (
+            <HowToSteps
+              style={{ marginTop: 20, marginBottom: 0 }}
+              baseData={eligibility}
+            />
+          )}
 
           {documents && (
             <>
               <div className="generic-hr"></div>
-              <div className="Flex block2" onClick={() => {this.sendEvents('documents')}} >
+              <div
+                className="Flex block2"
+                onClick={() => {
+                  this.sendEvents("documents");
+                }}
+              >
                 <img
                   className="accident-plan-read-icon"
                   src={require(`assets/${this.state.productName}/document.svg`)}
@@ -225,7 +267,12 @@ class IdfcKnowMore extends Component {
             </>
           )}
           <div className="generic-hr"></div>
-          <div className="Flex block2" onClick={() => {this.sendEvents('faq')}} >
+          <div
+            className="Flex block2"
+            onClick={() => {
+              this.sendEvents("faq");
+            }}
+          >
             <img
               className="accident-plan-read-icon"
               src={require(`assets/${this.state.productName}/ic_document_copy.svg`)}

@@ -15,6 +15,7 @@ import Input from "../../../common/ui/Input";
 import { formatDate, dobFormatTest } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import { getUrlParams } from "utils/validators";
 
 class UploadBank extends Component {
   constructor(props) {
@@ -30,8 +31,10 @@ class UploadBank extends Component {
       count: 1,
       form_data: {},
       bankOptions: [],
+      params: getUrlParams(),
       doc_id: "",
       isApiRunning: false,
+      adminPanel: false,
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -40,6 +43,14 @@ class UploadBank extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let { params } = this.state;
+
+    if (params.adminPanel) {
+      this.setState({
+        params: params,
+      });
+    }
   }
 
   componentDidMount() {
@@ -88,6 +99,13 @@ class UploadBank extends Component {
       title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
       subtitle: "It may take 10 to 15 seconds!",
     };
+
+    if (this.state.params.adminPanel) {
+      this.setState({
+        application_id: this.state.params.application_id,
+      });
+    }
+
     this.setState({
       loaderData: loaderData,
       loaderWithData: true,
@@ -97,18 +115,18 @@ class UploadBank extends Component {
 
   renderNotes = () => {
     let notes = [
-      "1. Attach latest bank statements of the same account where your salary gets credited every month",
-      "2. Ensure the bank statements are of the last 3 months from this month",
-      "3. Files must be original and should be uploaded in a PDF format",
-      "4. Share respective passwords if your statements are password protected",
-      "5. Upload multiple statements of the same bank account with each file not exceeding 6 MB",
+      "Attach latest bank statements of the same account where your salary gets credited every month",
+      "Ensure the bank statements are of the last 3 months from this month",
+      "Files must be original and should be uploaded in a PDF format",
+      "Share respective passwords if your statements are password protected",
+      "Upload multiple statements of the same bank account with each file not exceeding 6 MB",
     ];
 
     return (
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
           <div style={{ marginTop: index !== 0 && "20px" }} key={index}>
-            {item}
+            {`${index+1}. ${item}`}
           </div>
         ))}
       </div>
@@ -432,8 +450,19 @@ class UploadBank extends Component {
     }
   };
 
+  goBack = () => {
+    let { params } = this.state;
+
+    if (params.adminPanel) {
+      console.log(this.state.params.redirect);
+      window.location.href = this.state.params.redirect;
+    } else {
+      this.navigate('income-details')
+    }
+  }
+
   render() {
-    let { documents, confirmed, isApiRunning } = this.state;
+    let { documents, confirmed, isApiRunning, params } = this.state;
 
     return (
       <Container
@@ -443,7 +472,11 @@ class UploadBank extends Component {
         buttonTitle="SUBMIT AND CONTINUE"
         disable={documents.length === 0 || !confirmed || isApiRunning}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData,
+          progressHeaderData: !params.adminPanel
+            ? this.state.progressHeaderData
+            : "",
+          icon: params.adminPanel ? "close" : "",
+          goBack: this.goBack,
         }}
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}
