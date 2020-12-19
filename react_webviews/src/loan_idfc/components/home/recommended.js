@@ -54,7 +54,7 @@ class Recommended extends Component {
     let keysMapper = {
       loan_amount_required: "loan requirement",
       employment_type: "employment type",
-      net_monthly_salary: "net monthly salary",
+      monthly_salary: "monthly salary",
     };
 
     for (var i = 0; i < keys_to_check.length; i++) {
@@ -75,7 +75,7 @@ class Recommended extends Component {
     let keys_to_check = ["loan_amount_required", "employment_type"];
 
     if (form_data.employment_type === "Salaried")
-      keys_to_check.push("net_monthly_salary");
+      keys_to_check.push("monthly_salary");
 
     if (this.validateFields(keys_to_check, form_data)) {
       let body = {};
@@ -180,21 +180,21 @@ class Recommended extends Component {
               <FormControl fullWidth>
                 <div className="InputField">
                   <Input
-                    error={!!this.state.form_data.net_monthly_salary_error}
+                    error={!!this.state.form_data.monthly_salary_error}
                     helperText={
-                      this.state.form_data.net_monthly_salary_error ||
+                      this.state.form_data.monthly_salary_error ||
                       numDifferentiationInr(
-                        this.state.form_data.net_monthly_salary
+                        this.state.form_data.monthly_salary
                       )
                     }
                     type="number"
                     width="40"
                     label="Net monthly salary (in rupees)"
-                    class="net_monthly_salary"
-                    id="net_monthly_salary"
-                    name="net_monthly_salary"
-                    value={this.state.form_data.net_monthly_salary || ""}
-                    onChange={this.handleChange("net_monthly_salary")}
+                    class="monthly_salary"
+                    id="monthly_salary"
+                    name="monthly_salary"
+                    value={this.state.form_data.monthly_salary || ""}
+                    onChange={this.handleChange("monthly_salary")}
                   />
                 </div>
               </FormControl>
