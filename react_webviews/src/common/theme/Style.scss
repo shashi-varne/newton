@@ -1205,7 +1205,7 @@ input#pan {
   width: 100%;
 
   .progress-bar {
-    margin: 20px -5px 0 -40px;
+    margin: 20px 10px 0 -15px;
     .head {
       text-align: center;
       font-size: 13px;
@@ -1232,9 +1232,16 @@ input#pan {
       width: 48.5%;
     }
 
+    .tiny-hr {
+      width: 23.5%;
+    }
+
+    .large-hr {
+      width: 75%;
+    }
+
     .invisible-line {
       border: 1px solid #FFFFFF;
-      // width: 46%;
     }
 
     .line {

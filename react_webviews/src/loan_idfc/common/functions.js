@@ -506,7 +506,7 @@ export async function get10Callback(next_state) {
   let that = this;
 
   setTimeout(function () {
-    if (result.idfc_10_callback === true) {
+    if (result.idfc_10_callback) {
       that.navigate("eligible-loan");
     } else if (
       result.vendor_application_status === "idfc_cancelled" ||
@@ -620,6 +620,9 @@ export async function submitApplication(
         typeof result.error === "string" &&
         rejection_cases.indexOf(result.error) === -1
       ) {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error || result.message || "Something went wrong!");
       } else if (
         typeof result.error === "string" &&
@@ -627,6 +630,9 @@ export async function submitApplication(
       ) {
         this.navigate("loan-status");
       } else {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }

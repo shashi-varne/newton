@@ -47,15 +47,22 @@ const Header = ({ classes, title, count, total, current, goBack,
               {headerData.progressHeaderData.steps.map((step, index) => (
                 <div className="journey-header-progress" key={index}>
                   <div className="indicator">
-                    <div className="hr"><hr className={`${index === 0 ? 'invisible-line' :
+                    <div className  = {index === 0 ? 'tiny-hr' : index === headerData.progressHeaderData.steps.length - 1 ? 'large-hr' : 'hr'} >
+                      <hr className={`${index === 0 ? 'invisible-line' :
                       `line line-${headerData.progressHeaderData.steps[index - 1].status}`
                       }`} /></div>
                     <span className={`dot ${step.status}`}></span>
-                    <div className="hr"><hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'invisible-line' :
+                    <div className={index === 0 ? 'large-hr' : index === headerData.progressHeaderData.steps.length - 1 ? 'tiny-hr' : 'hr'} 
+                      
+                      ><hr className={`${index === headerData.progressHeaderData.steps.length - 1 ? 'invisible-line' :
                       `line line-${headerData.progressHeaderData.steps[index].status}`
-                      }`} /></div>
+                      }`}  /></div>
                   </div>
-                  <div>{step.title}</div>
+                  <div
+                  style = {{
+                    marginLeft : index === 0 ? '-40%' : index === headerData.progressHeaderData.steps.length - 1 ? '50%' : '0',
+                  }}
+                  >{step.title}</div>
                 </div>
               ))}
             </div>

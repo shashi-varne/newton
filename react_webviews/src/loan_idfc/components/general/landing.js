@@ -41,7 +41,8 @@ class Landing extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next')
+    let user_action = this.state.cta_title === "APPLY NOW" ? 'next' : 'resume';
+    this.sendEvents(user_action)
     let params = {
       create_new:
         this.state.application_exists && this.state.otp_verified ? false : true,
@@ -82,12 +83,12 @@ class Landing extends Component {
     }
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "introduction",
+        screen_name: "home_screen",
       },
     };
 
@@ -182,7 +183,7 @@ class Landing extends Component {
             <div
               className="Flex calculator"
               onClick={() =>
-                {this.sendEvents('eligibility_calculator'); 
+                {this.sendEvents('calculator'); 
                 this.navigate("calculator", {
                   params: {
                     next_state: this.state.next_state,
