@@ -20,7 +20,7 @@ export function goBackMap(path) {
     '/loan/idfc/bt-info': '/loan/idfc/journey',
     '/loan/idfc/doc-list': '/loan/idfc/journey',
     '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
-    '/loan/idfc/final-loan': '/loan/idfc/home',
+    '/loan/idfc/final-offer': '/loan/idfc/home',
     '/loan/idfc/reports': '/loan/idfc/home',
   }
 
