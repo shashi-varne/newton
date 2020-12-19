@@ -130,10 +130,13 @@ handleClick2 = async () => {
 
 handleClose = () => {
   this.sendEvents('back','policy found')
+  let form_data = this.state.form_data
+  form_data.title = 'CONTINUE'
   this.setState({
     openConfirmDialog: false,
     openBmiDialog: false,
-    openDialogReset: false
+    openDialogReset: false,
+    form_data : form_data
   });
 }
 
@@ -218,8 +221,8 @@ handleClick = async () => {
   try {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
     let resultData = res.pfwresponse.result
-    form_data.title = 'SUBMIT TO FETCH THE DETAIL'
     if (res.pfwresponse.status_code === 200) {
+      form_data.title = 'SUBMIT TO FETCH THE DETAIL'
       form_data.notfound = false
       form_data.found = false
       this.setState({
