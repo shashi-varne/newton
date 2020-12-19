@@ -21,7 +21,6 @@ const SnapScrollContainer = ({
   loadingText = '',
   noData = false,
   noDataText = '',
-  scrollOnChange = false,
   onErrorBtnClick = () => {},
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,15 +31,6 @@ const SnapScrollContainer = ({
     createObserver();
     // Todo: Need to unobserve
   }, [isLoading, error]);
-
-  useEffect(() => {
-    if (!scrollOnChange) return;
-    const { current: rootElem } = container;
-
-    if (!isEmpty(rootElem)) {
-      rootElem.scrollTop = 0;
-    }
-  }, [scrollChildren]);
 
   const createObserver = () => {
     const { current: rootElem } = container;

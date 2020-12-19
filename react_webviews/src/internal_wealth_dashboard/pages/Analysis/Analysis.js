@@ -10,6 +10,8 @@ import ChartsContainer from './ChartsContainer';
 import TopStocks from './TopStocks';
 import TopHoldings from './TopHoldings';
 import TopAMCS from './TopAMCS';
+import IwdCard from '../../mini-components/IwdCard';
+import { scrollElementToPos } from '../../common/commonFunctions';
 const isMobileView = getConfig().isMobileDevice;
 
 function Analysis() {
@@ -54,6 +56,7 @@ function Analysis() {
 
   const handlePageType = (name) => {
     setPageType(name);
+    scrollElementToPos('iwd-scroll-contain', 0, 0);
   };
 
   const pageTypeMapper = {
@@ -65,6 +68,23 @@ function Analysis() {
     },
   };
 
+  const renderTabCard = () => {
+    const redirectTo = pageType === 'equity' ? 'debt' : 'equity';
+
+    return (
+      <IwdCard
+        headerText={`Check the analysis of your ${redirectTo} allocations`}
+        isClickable
+        onClick={() => setPageType(redirectTo)}
+        className="iwd-a-tab-change-card"
+      >
+        <div id="iwd-atcc-content">
+          {redirectTo === 'debt' ? 'Next' : 'Previous'}
+        </div>
+      </IwdCard>
+    );
+  }
+
   return (
     <section className='iwd-page iwd-page__analysis' id='iwd-analysis'>
       <PageHeader height='9vh' hideProfile={isMobileView}>
@@ -72,6 +92,7 @@ function Analysis() {
           title='Analysis'
           tabs={Object.keys(pageTypeMapper).map((key) => key)}
           handlePageType={handlePageType}
+          currentTab={pageType}
         />
       </PageHeader>
       <SnapScrollContainer
@@ -85,6 +106,7 @@ function Analysis() {
         <ChartsContainer data={graphData} page={pageType} />
         {pageTypeMapper[pageType].component}
         <TopAMCS topAMCs={topAMCs[pageType]} />
+        {renderTabCard()}
         {isMobileView && <ScrollTopBtn />}
       </SnapScrollContainer>
     </section>

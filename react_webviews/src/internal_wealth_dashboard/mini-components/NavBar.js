@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+// ------------------ Assets ---------------------
 import ic_dashboard from 'assets/ic_dashboard.svg';
 import ic_analysis from 'assets/ic_analysis.svg';
 import ic_recommend from 'assets/ic_recommend.svg';
@@ -6,6 +6,8 @@ import ic_statement from 'assets/ic_statement.svg';
 import ic_holdings from 'assets/ic_holding.svg';
 import fisdom_logo from 'assets/fisdom/fisdom_logo_white.svg';
 import fisdom_icon from 'assets/fisdom/fisdom_icon_white.svg';
+// ------------------------------------------------
+import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 const tabs = [{
   label: 'dashboard',

@@ -15,6 +15,8 @@ import toast from '../../common/ui/Toast';
 import { isEmpty, storageService } from '../../utils/validators';
 import ErrorScreen from '../../common/responsive-components/ErrorScreen';
 import { HoldingFilterOptions } from './../constants';
+import ScrollTopBtn from '../mini-components/ScrollTopBtn';
+import { scrollElementToPos } from '../common/commonFunctions';
 const isMobileView = getConfig().isMobileDevice;
 const schemeMap = {
   hybrid: ['hybrid', 'hybrid (c)', 'hybrid (nc)'],
@@ -86,6 +88,7 @@ const Holdings = () => {
 
   useEffect(() => {
     filter(holdingsList);
+    scrollElementToPos('iwd-scroll-contain', 0, 0);
   }, [filterVal]);
 
   const checkSchemeType = (filterSchemeType, currentSchemeType) => {
@@ -177,6 +180,7 @@ const Holdings = () => {
                 ? filterData?.map((holding, idx) => <HoldingCard {...holding} key={idx} />)
                 : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
             </>
+            {isMobileView && (filterData || holdingsList || []).length > 1 && <ScrollTopBtn />}
           </SnapScrollContainer>
           {!open && !hasError && (
             <div className='iwd-filter-button' onClick={() => isOpen(!open)}>

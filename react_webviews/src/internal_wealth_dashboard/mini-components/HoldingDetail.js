@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import PageCloseBtn from './PageCloseBtn';
 import { formattedDate, numDifferentiationInr, nonRoundingToFixed } from 'utils/validators.js';
 import toast from '../../common/ui/Toast';
-import { getFundDetail, getTransactions } from '../common/ApiCalls';
+import { getFundDetail, getTransactions, hitNextPage } from '../common/ApiCalls';
 import IwdScreenLoader from './IwdScreenLoader';
 import IwdCardLoader from './IwdCardLoader';
 import FSTable from '../../common/responsive-components/FSTable';
@@ -29,13 +29,13 @@ const HoldingDetail = ({
 }) => {
   const [fundDetail, setFundDetail] = useState({});
   const [isLoadingFundDetail, setIsLoadingFundDetail] = useState(true);
-  const [transactions, setTransations] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [isLoadingTransactions, setIsLoadingTransactions] = useState(true);
   const [pageMap, setPageMap] = useState([null, null]);
   const [activePage, setActivePage] = useState(1);
 
   const pushToPageMap = (url) => {
-    if (!url) return;
+    if (!url || !!pageMap[activePage + 1]) return;
     setPageMap([...pageMap, url]);
   };
 
@@ -58,14 +58,21 @@ const HoldingDetail = ({
   const fetchTransactions = async () => {
     try {
       setIsLoadingTransactions(true);
-      const result = await getTransactions({
-        amfi: isin,
-        page_size: 10,
-      });
-      if (!pageMap[2]) {
-        pushToPageMap(result.next_page);
+
+      let response;
+      if (activePage === 1) {
+        response = await getTransactions({
+          page_size: 10,
+          count: false,
+          amfi: isin,
+        });
+      } else {
+        const urlToHit = pageMap[activePage];
+        response = await hitNextPage(urlToHit);
       }
-      setTransations(result.transactions);
+
+      pushToPageMap(response.next_page);
+      setTransactions(response.transactions);
     } catch (e) {
       console.log(e);
       toast(e);
@@ -75,8 +82,11 @@ const HoldingDetail = ({
 
   useEffect(() => {
     fetchHoldingDetail();
-    fetchTransactions();
   }, []);
+  
+  useEffect(() => {
+    fetchTransactions();
+  }, [activePage]);
 
   return (
     <Dialog fullScreen={true} open={true} classes={{ paper: 'iwd-holding-detail'}}>
@@ -167,6 +177,7 @@ const HoldingDetail = ({
                   <FSTable
                     headersMap={transactionsHeaderMap}
                     serializeData={true}
+                    serialOffset={(activePage - 1) * 10}
                     data={transactions}
                     className="iwd-transactions-table"
                   />

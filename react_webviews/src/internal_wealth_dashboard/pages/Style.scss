@@ -232,6 +232,28 @@ $background: #f9f9f9;
   line-height: 18px;
 }
 
+.iwd-purple-card {
+  text-align: left;
+  align-self: flex-start;
+  background: $primary;
+  width: 40%;
+  height: auto;
+  padding: 34px 50px;
+  padding-right: 30px;
+  box-sizing: border-box;
+  border-bottom-right-radius: 70px;
+
+  .MuiCircularProgress-colorPrimary {
+    color: white;
+  }
+
+  .iwd-card-header {
+    color: white;
+    width: 85%;
+    float: left;
+  }
+}
+
 #iwd-dashboard {
   background: var(--primary);
 
@@ -438,6 +460,7 @@ $background: #f9f9f9;
     width: 55%;
     margin-right: 3%;
     height: 85%;
+
     #iwd-dr-data {
       display: flex;
       flex-wrap: wrap;
@@ -474,35 +497,21 @@ $background: #f9f9f9;
   }
 
   .iwd-d-newsletter {
-    text-align: left;
-    align-self: flex-start;
-    background: $primary;
-    width: 40%;
-    height: auto;
-    padding: 34px 50px;
-    padding-right: 30px;
-    box-sizing: border-box;
-    border-bottom-right-radius: 70px;
-
-    .iwd-card-header {
-      color: white;
-      width: 85%;
-      float: left;
-    }
-
-    .iwd-dn-btn {
-      float: right;
-      border-radius: 50%;
-      height: 48px;
-      box-shadow: 0px 0px 40px 2px rgba(255, 255, 255, 0.08), inset -6px 6px 16px -4px rgba(0, 0, 0, 0.35) !important;
-    }
-
+    @extend .iwd-purple-card;
+  
     #iwd-dn-gist {
       font-size: 15px;
       line-height: 24px;
       color: $light-grey;
       margin-top: 47px;
       clear: both;
+    }
+  
+    .iwd-dn-btn {
+      float: right;
+      border-radius: 50%;
+      height: 48px;
+      box-shadow: 0px 0px 40px 2px rgba(255, 255, 255, 0.08), inset -6px 6px 16px -4px rgba(0, 0, 0, 0.35) !important;
     }
 
     #iwd-dn-issue {
@@ -680,7 +689,9 @@ $background: #f9f9f9;
     margin-left: 50px;
   }
 
-  .iwd-d-newsletter {
+  .iwd-a-tab-change-card {
+    @extend .iwd-purple-card;
+
     display: none;
   }
 
@@ -1317,7 +1328,7 @@ $background: #f9f9f9;
 
   .iwd-page {
     padding: 20px;
-    padding-top: 90px;
+    padding-top: 85px;
   }
 
   .iwd-card {
@@ -1367,6 +1378,23 @@ $background: #f9f9f9;
     font-size: 20px;
     line-height: 32px;
     text-transform: capitalize;
+  }
+
+  .iwd-purple-card {
+    display: block;
+    width: 100%;
+    height: auto;
+    padding: 30px 40px;
+    box-sizing: border-box;
+    background: $primary;
+    text-align: left;
+    border-bottom-right-radius: 70px;
+
+    .iwd-card-header {
+      text-align: left;
+      width: 100%;
+      float: none;
+    }
   }
 
   #iwd-dashboard {
@@ -1493,7 +1521,6 @@ $background: #f9f9f9;
       }
     }
 
-
     #iwd-d-risk {
       margin-right: 0;
       margin-bottom: 40px;
@@ -1527,16 +1554,7 @@ $background: #f9f9f9;
       }
     }
 
-    .iwd-d-newsletter {
-      width: 100%;
-      padding: 30px 40px;
-
-      .iwd-card-header {
-        text-align: left;
-        width: 100%;
-        float: none;
-      }
-
+    .iwd-d-newsletter {      
       .iwd-dn-btn {
         display: none;
       }
@@ -1552,6 +1570,14 @@ $background: #f9f9f9;
   #iwd-analysis {
     .iwd-scroll-contain {
       height: 86%;
+    }
+
+    .iwd-a-tab-change-card {
+      margin-bottom: 40px;
+
+      #iwd-atcc-content {
+        color: white;
+      }
     }
 
     .iwd-analysis-portfolios-equity {
@@ -1573,6 +1599,7 @@ $background: #f9f9f9;
         margin-top: 0;
       }
     }
+
     .iwd-analysis-amc {
       width: 100%;
       margin-bottom: 40px;
@@ -1580,10 +1607,6 @@ $background: #f9f9f9;
 
     .iwd-analysis-amc:nth-last-of-type(1) {
       margin-bottom: 0;
-    }
-
-    .iwd-d-newsletter {
-      display: block;
     }
 
     .iwd-analysis-header-container-left {
@@ -1980,6 +2003,7 @@ $background: #f9f9f9;
     align-items: flex-start;
     margin-top: 35px;
     height: auto;
+    overflow: hidden;
 
     // Statements Page
     .iwd-transaction-container {

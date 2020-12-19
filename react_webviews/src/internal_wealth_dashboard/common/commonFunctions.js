@@ -1,6 +1,7 @@
 import { getConfig } from 'utils/functions';
 import { subDays, startOfMonth, addMonths, endOfMonth, startOfYear } from 'date-fns';
 import moment from 'moment';
+import { isEmpty } from '../../utils/validators';
 
 export function navigate(pathname, params, replace) {
   if (!replace) {
@@ -78,4 +79,10 @@ export const date_range_selector = {
   ],
   month_to_date: () => [startOfMonth(new Date()), subDays(new Date(), 1)],
   year_to_date: () => [startOfYear(new Date()), subDays(new Date(), 1)],
+};
+
+export const scrollElementToPos = (elementClass, posX = 0, posY = 0) => {
+  const [scrollElem] = document.getElementsByClassName(elementClass) || [];
+  if (isEmpty(scrollElem)) return;
+  scrollElem.scrollTo(posX, posY);
 };

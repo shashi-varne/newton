@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-const HeaderNavBar = ({ title, tabs, handlePageType }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+const HeaderNavBar = ({ title, tabs, handlePageType, currentTab }) => {
+
   useEffect(() => {
-    handlePageType(tabs[0]);
-  }, []);
-  const handlePage = (idx, tab) => {
-    setActiveIndex(idx);
+    handlePage(currentTab);
+  }, [currentTab]);
+  
+  const handlePage = (tab) => {
     handlePageType(tab);
   };
+
   return (
     <div className='iwd-page-header-nav'>
       <div className='iwd-page-header-nav-title'>{title}</div>
       <div className='iwd-page-header-path-list'>
-        {tabs?.map((tab, idx) => {
+        {tabs?.map((tab) => {
           return (
             <button
-              key={idx}
-              className={`iwd-header-nav-button ${activeIndex === idx && 'selected'}`}
-              onClick={() => handlePage(idx, tab)}
+              key={tab}
+              className={`iwd-header-nav-button ${currentTab === tab && 'selected'}`}
+              onClick={() => handlePage(tab)}
             >
               {tab}
             </button>

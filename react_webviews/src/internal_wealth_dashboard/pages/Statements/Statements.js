@@ -32,6 +32,7 @@ const Statements = () => {
           title='Statements'
           tabs={Object.keys(pageTypeMapper).map((key) => key)}
           handlePageType={handlePageType}
+          currentTab={pageType}
         />
       </PageHeader>
 

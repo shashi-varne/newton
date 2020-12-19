@@ -11,51 +11,6 @@ $card-padding: 50px;
   cursor: pointer;
 }
 
-.iwd-d-newsletter {
-  align-self: flex-start;
-  background: $primary;
-  width: 40%;
-  height: auto;
-  padding: 34px 50px;
-  padding-right: 30px;
-  box-sizing: border-box;
-  border-bottom-right-radius: 70px;
-
-  .MuiCircularProgress-colorPrimary {
-    color: white;
-  }
-
-  .iwd-card-header {
-    color: white;
-    width: 85%;
-    float: left;
-  }
-
-  .iwd-dn-btn {
-    float: right;
-    border-radius: 50%;
-    height: 48px;
-  }
-
-  #iwd-dn-gist {
-    font-size: 15px;
-    line-height: 24px;
-    color: $light-grey;
-    margin-top: 47px;
-    clear: both;
-  }
-
-  #iwd-dn-issue {
-    font-weight: bold;
-    font-size: 10px;
-    line-height: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: $light-grey;
-    margin-top: 10px;
-  }
-}
-
 .iwd-dot-loader {
   width: auto;
   text-align: inherit;
@@ -377,7 +332,7 @@ $card-padding: 50px;
 #iwd-nav-mob {
   position: absolute;
   top: 0;
-  height: 71px;
+  height: 61px;
   width: 100%;
   border-radius: 0 0 16px 16px;
   box-sizing: border-box;
@@ -390,7 +345,9 @@ $card-padding: 50px;
   #iwd-nm-header {
     display: flex;
     align-items: center;
-    padding: 17px 20px;
+    padding: 16px 20px;
+    max-height: 61px;
+    box-sizing: border-box;
 
     #iwd-nmh-fisdom-logo {
       height: 24px;
@@ -1065,28 +1022,7 @@ table.iwd-transactions-table {
   .shrink {
     clip-path: circle(0% at bottom);
   }
-
-  .iwd-d-newsletter {
-    width: 100%;
-    padding: 30px 40px;
-
-    .iwd-card-header {
-      text-align: left;
-      width: 100%;
-      float: none;
-    }
-
-    .iwd-dn-btn {
-      display: none;
-    }
-
-    #iwd-dn-gist {
-      font-size: 13px;
-      line-height: 21px;
-      margin-top: 30px;
-    }
-  }
-
+  
   .iwd-common-page-footer {
     img:nth-of-type(2) {
       margin-left: 20px;

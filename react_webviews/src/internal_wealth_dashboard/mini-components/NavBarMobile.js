@@ -1,6 +1,6 @@
 // -------------------- Assets ------------------
 import close from 'assets/ic_close_white.svg';
-import fisdom_logo from 'assets/fisdom/fisdom_logo.png';
+import fisdom_logo from 'assets/fisdom/fisdom_logo_white.svg';
 // ----------------------------------------------
 import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';

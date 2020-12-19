@@ -30,7 +30,7 @@ const PortfolioGrowth = () => {
   const [growthError, setGrowthError] = useState(false);
   const [xirr, setXirr] = useState('');
   const [isLoadingXirr, setIsLoadingXirr] = useState(true);
-  const [selectedRange, setSelectedRange] = useState('ytd');
+  const [selectedRange, setSelectedRange] = useState('5 years');
 
   useEffect(() => {
     fetchGrowthGraphXirr();
@@ -86,7 +86,7 @@ const PortfolioGrowth = () => {
   const filterDateTicks = (ticks = []) => {
     if (!isMobileView) return ticks;
 
-    return ticks;
+    return [ticks[0], ticks[2], ticks[4], ticks[ticks.length - 2]];
   };
 
   const GraphRangePicker = () => {
@@ -113,7 +113,7 @@ const PortfolioGrowth = () => {
     <IwdCard
       id="iwd-d-growth-graph"
       headerText="Portfolio growth"
-      error={isEmpty(growthData) || growthError}
+      error={growthError}
       errorText='Something went wrong! Please retry after some time or contact your wealth manager'
       // isLoading={isLoadingGrowth}
     >
