@@ -61,8 +61,8 @@ class ProfessionalDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "professional_details",
-        salary_mode: this.state.form_data.salary_mode,
-        net_monthly_salary: this.state.form_data.net_monthly_salary,
+        salary_mode: this.state.form_data.salary_mode || '',
+        net_monthly_salary: this.state.form_data.net_monthly_salary || '',
       },
     };
 
