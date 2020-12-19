@@ -726,7 +726,7 @@ body[data-device="mobile"] {
   }
 
   .completed {
-    border: 1px solid #CBDEF6;
+    border: 1px solid var(--primary);
     background-color: var(--primary);
     cursor: pointer;
 

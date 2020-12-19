@@ -115,18 +115,18 @@ class UploadBank extends Component {
 
   renderNotes = () => {
     let notes = [
-      "1. Attach latest bank statements of the same account where your salary gets credited every month",
-      "2. Ensure the bank statements are of the last 3 months from this month",
-      "3. Files must be original and should be uploaded in a PDF format",
-      "4. Share respective passwords if your statements are password protected",
-      "5. Upload multiple statements of the same bank account with each file not exceeding 6 MB",
+      "Attach latest bank statements of the same account where your salary gets credited every month",
+      "Ensure the bank statements are of the last 3 months from this month",
+      "Files must be original and should be uploaded in a PDF format",
+      "Share respective passwords if your statements are password protected",
+      "Upload multiple statements of the same bank account with each file not exceeding 6 MB",
     ];
 
     return (
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
           <div style={{ marginTop: index !== 0 && "20px" }} key={index}>
-            {item}
+            {`${index+1}. ${item}`}
           </div>
         ))}
       </div>
