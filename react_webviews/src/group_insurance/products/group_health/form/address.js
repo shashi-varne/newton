@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
-import {validateNumber, validateLengthDynamic } from 'utils/validators';
+import {validateNumber, validateLengthDynamic, charsNotAllowedHDFC } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 
@@ -47,7 +47,8 @@ class GroupHealthPlanAddressDetails extends Component {
         this.initialize();
     }
 
-    onload = () => {
+  
+    onload = async () => {
 
         if (this.props.edit) {
             this.setState({
@@ -58,24 +59,23 @@ class GroupHealthPlanAddressDetails extends Component {
         let lead = this.state.lead || {};
         let form_data =  {
             ...this.state.form_data,
-            ...lead.permanent_address
-        };
+            ...lead.address_details.permanent_address
+        };                                            
 
-        let correspondence_address = lead.correspondence_address || {};
-        let permanent_address = lead.permanent_address || {};
-
+        let correspondence_address = lead.address_details.correspondence_address || {};
+        let permanent_address = lead.address_details.permanent_address || {};
         if (this.state.provider === 'RELIGARE') {
             form_data = {
                 ...this.state.form_data,
-                addressline: correspondence_address.addressline || '',
-                addressline2: correspondence_address.addressline2 || '',
+                addr_line1: correspondence_address.addr_line1 || '',
+                addr_line2: correspondence_address.addr_line2 || '',
                 pincode: correspondence_address.pincode || '',
                 city: correspondence_address.city || '',
                 state: correspondence_address.state || '',
                 country: correspondence_address.country || '',
 
-                p_addressline: permanent_address.addressline || '',
-                p_addressline2: permanent_address.addressline2 || '',
+                p_addr_line1: permanent_address.addr_line1 || '',
+                p_addr_line2: permanent_address.addr_line2 || '',
                 p_pincode: permanent_address.pincode || '',
                 p_city: permanent_address.city || '',
                 p_state: permanent_address.state || '',
@@ -91,9 +91,9 @@ class GroupHealthPlanAddressDetails extends Component {
                 this.getCityListReligare({form_data, name: 'p_pincode'});
             };
         }
-        
         if(this.state.provider === 'HDFCERGO') {
-            form_data.city = lead.city;
+            form_data.city = lead.address_details.permanent_address.city
+            form_data.pincode = lead.address_details.permanent_address.pincode || ""
         }
 
         if (form_data.pincode) {
@@ -113,6 +113,43 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         })
 
+        
+        if (this.state.provider === 'HDFCERGO' && form_data.pincode && form_data.pincode.length === 6 && permanent_address.city) {
+            let pincode = form_data.pincode;
+            let cityName = permanent_address.city
+            this.setState({
+                form_data: form_data,
+                isLoadingCity: true
+            })
+            try {
+                const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
+
+                this.setState({isLoadingCity: false});
+                if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
+                    form_data.state = res.pfwresponse.result.state;
+                    form_data.pincode_match = true;
+                    // eslint-disable-next-line 
+                    form_data['pincode' + '_error'] = '';
+                } else {
+                    form_data.state = '';
+                    form_data.pincode_match = false;
+                    // eslint-disable-next-line 
+                    form_data['pincode' + '_error'] = res.pfwresponse.result.error || 'Please enter valid pincode';
+                }
+
+            } catch (err) {
+                this.setState({
+                    show_loader: false
+                });
+                toast('Something went wrong');
+            }
+
+        } else {
+            form_data.state = '';
+        }
+        this.setState({
+            form_data: form_data
+        })
     }
 
     handleChange = name => event => {
@@ -120,11 +157,14 @@ class GroupHealthPlanAddressDetails extends Component {
         if (!name) {
             name = event.target.name;
         }
+
         var value = event.target ? event.target.value : event;
         var form_data = this.state.form_data || {};
 
-        if(name.includes('addressline')){
-            value = event.target ? event.target.value.substr(0, 60) : event;
+        let address_field_max_length = this.state.providerConfig.address_field_max_length;
+       
+        if(name.includes('addr_line1') || name.includes('addr_line2')){
+            value = event.target ? event.target.value.substr(0, address_field_max_length) : event;
         }
         if (name === 'mobile_number') {
             if (value.length <= 10) {
@@ -173,27 +213,27 @@ class GroupHealthPlanAddressDetails extends Component {
 
         this.sendEvents('next');
         let keysMapper = {
-            'addressline': 'Address line 1',
-            'addressline2': 'Address line 2',
+            'addr_line1': 'Address line 1',
+            'addr_line2': 'Address line 2',
             'pincode': 'pincode',
             'city': 'city',
-            'p_addressline': 'Address line 1',
-            'p_addressline2': 'Address line 2',
+            'p_addr_line1': 'Address line 1',
+            'p_addr_line2': 'Address line 2',
             'p_pincode': 'pincode',
             'p_city': 'city'
         }
 
-        let keys_to_check = ['addressline', 'addressline2', 'pincode'];
+        let keys_to_check = ['addr_line1', 'addr_line2', 'pincode'];
         if (provider === 'RELIGARE') {
             if (checked) {
                 form_data.p_pincode_error = '';
                 form_data.p_city_error = '';
-                form_data.p_addressline_error = '';
-                form_data.p_addressline2_error = '';
-                keys_to_check = ['addressline', 'addressline2', 'pincode', 'city'];
+                form_data.p_addr_line1_error = '';
+                form_data.p_addr_line2_error = '';
+                keys_to_check = ['addr_line1', 'addr_line2', 'pincode', 'city'];
             } else {
-                keys_to_check = ['addressline', 'addressline2', 'pincode', 'city',
-                    'p_addressline', 'p_addressline2', 'p_pincode', 'p_city'];
+                keys_to_check = ['addr_line1', 'addr_line2', 'pincode', 'city',
+                    'p_addr_line1', 'p_addr_line2', 'p_pincode', 'p_city'];
             }
 
         }
@@ -206,8 +246,20 @@ class GroupHealthPlanAddressDetails extends Component {
             }
         }
 
-
         let canSubmitForm = true;
+        let address_field_max_length = this.state.providerConfig.address_field_max_length;
+        
+        let address_key_check = ['addr_line1', 'addr_line2', 'p_addr_line1', 'p_addr_line2'];
+        for(let i = 0; i < address_key_check.length; i++){
+            if(this.state.provider === 'HDFCERGO'){
+                if(charsNotAllowedHDFC(form_data[address_key_check[i]])){
+                    form_data[address_key_check[i] + '_error'] = 'Only following special characters are allowed: # / . ,';
+                }
+            }
+            if(form_data[address_key_check[i]] && (form_data[address_key_check[i]].length > address_field_max_length)){
+                form_data[address_key_check[i] + '_error'] = `Maximum allowed length is ${address_field_max_length} characters`;
+            }   
+        }
 
         if (provider === 'HDFCERGO' && !form_data.pincode_match) {
             form_data.pincode_error = 'verifying pincode';
@@ -225,14 +277,16 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data['p_pincode_error'] = 'Please enter valid pincode';
         }
 
-        for(let key in form_data){
-            if(key === 'addressline' || key ==="addressline2" || key ==="p_addressline" || key === "p_addressline2"){
-                if(validateLengthDynamic(form_data[key], 4)){
-                    form_data[key+'_error'] = "Please enter at least 4 characters";
+        for(let key in form_data){ 
+            if(form_data[key]){
+                if(key === 'addr_line1' || key ==="addr_line2" || key ==="p_addr_line1" || key === "p_addr_line2"){
+                    if(validateLengthDynamic(form_data[key], 4)){
+                        form_data[key+'_error'] = "Please enter at least 4 characters";
+                    }
                 }
             }
         }
-        
+
         if(this.state.sameAddressCheck){
             for(var form_key in form_data){
                 if(form_key.includes('p_') && form_key.includes('_error')){
@@ -244,7 +298,7 @@ class GroupHealthPlanAddressDetails extends Component {
             if (key.indexOf('error') >= 0) {
                 if (form_data[key]) {
                     canSubmitForm = false;
-                    toast('Please check all the errors');
+                    toast('Please check all the errors'); 
                     break;
                 }
             }
@@ -256,43 +310,45 @@ class GroupHealthPlanAddressDetails extends Component {
         });
 
         if (canSubmitForm) {
-
             let body = {};
             if (provider === 'HDFCERGO') {
                 body = {
-                    permanent_address: {  //for ergo, in backend we are storing current in permanent_address key
-                        addressline: form_data.addressline,
-                        addressline2: form_data.addressline2,
-                        pincode: form_data.pincode,
-                        state: form_data.state,
-                        city: form_data.city
+                    
+                    "address_details": {
+                        "permanent_address": {
+                            "state": form_data.state,
+                            "addr_line1": form_data.addr_line1,
+                            "pincode": form_data.pincode,
+                            "addr_line2": form_data.addr_line2,
+                            "city": form_data.city
+                        },
+                        "correspondence_addr_same": 'y'
                     }
                 }
-
             }
 
+
             if (provider === 'RELIGARE') {
-
                 body = {
-
-                    correspondence_address: {
-                        addressline: form_data.addressline,
-                        addressline2: form_data.addressline2,
-                        pincode: form_data.pincode,
-                        state: form_data.state,
-                        city: form_data.city
-                    },
-
-                    permanent_address: {
-                        addressline: checked ? form_data.addressline : form_data.p_addressline,
-                        addressline2: checked ? form_data.addressline2 : form_data.p_addressline2,
-                        pincode: checked ? form_data.pincode : form_data.p_pincode,
-                        state: checked ? form_data.state : form_data.p_state,
-                        city: checked ? form_data.city : form_data.p_city
-                    },
-
-                };
-
+                    
+                    "address_details": {
+                        "correspondence_address": {
+                            "state": form_data.state,
+                            "addr_line1": form_data.addr_line1,
+                            "pincode": form_data.pincode,
+                            "addr_line2": form_data.addr_line2,
+                            "city": form_data.city
+                        },
+                        "correspondence_addr_same": checked ? 'y' : 'n',
+                        "permanent_address": { 
+                            "state": checked ? form_data.state : form_data.p_state,
+                            "addr_line1": checked ? form_data.addr_line1 : form_data.p_addr_line1,
+                            "pincode":checked ? form_data.pincode : form_data.p_pincode,
+                            "addr_line2":  checked ? form_data.addr_line2 : form_data.p_addr_line2,
+                            "city": checked ? form_data.city : form_data.p_city
+                        }
+                    }
+                }
             }
 
             this.updateLead(body);
@@ -309,9 +365,9 @@ class GroupHealthPlanAddressDetails extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'address details',
                 'from_edit': this.props.edit ? 'yes' : 'no',
-                'address_entered': this.state.form_data.addressline ? 'yes' : 'no',
+                'address_entered': this.state.form_data.addr_line1 ? 'yes' : 'no',
                 "permanent_current_same": this.state.checked ? 'yes' : 'no',
-                "permanent_address_entered": this.state.form_data.p_addressline ? 'yes' : 'no',
+                "permanent_address_entered": this.state.form_data.p_addr_line1 ? 'yes' : 'no',
             }
         };
 
@@ -334,8 +390,8 @@ class GroupHealthPlanAddressDetails extends Component {
         form_data[name] = pincode;
         form_data[name + '_error'] = '';
         form_data.pincode_match = false;
-
-
+        let cityName = this.state.lead.address_details.permanent_address.city
+       
 
         if (pincode.length === 6) {
             this.setState({
@@ -343,7 +399,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 isLoadingCity: true
             })
             try {
-                const res = await Api.get((`/api/ins_service/api/insurance/hdfcergo/pincode/validate?pincode=${pincode}&city=${this.state.lead.city}`));
+                const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
 
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
@@ -386,7 +442,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
         this.setState({isLoadingCity: true});
-        const res = await Api.get((`/api/ins_service/api/insurance/religare/pincode/validate?pincode=${form_data[name]}`));
+        const res = await Api.get((`api/insurancev2/api/insurance/proposal/religare/validate_pincode?pincode=${form_data[name]}`));
         this.setState({isLoadingCity: false});
         let { country } = form_data;
         let pincode_error = '';
@@ -426,7 +482,6 @@ class GroupHealthPlanAddressDetails extends Component {
             form_data.p_country = country || 'India';
         }
 
-        console.log(form_data);
 
         this.setState({
             form_data: form_data
@@ -548,13 +603,13 @@ class GroupHealthPlanAddressDetails extends Component {
                                 <Input
                                     type="text"
                                     disabled={this.state.checked}
-                                    id="p_addressline"
+                                    id="p_addr_line1"
                                     label="Address line 1"
-                                    name="p_addressline"
+                                    name="p_addr_line1"
                                     placeholder="ex: 16/1 Queens paradise"
-                                    error={(this.state.form_data.p_addressline_error) ? true : false}
-                                    helperText={this.state.form_data.p_addressline_error}
-                                    value={this.state.form_data.p_addressline || ''}
+                                    error={(this.state.form_data.p_addr_line1_error) ? true : false}
+                                    helperText={this.state.form_data.p_addr_line1_error}
+                                    value={this.state.form_data.p_addr_line1 || ''}
                                     onChange={this.handleChange()} />
                             </div>
 
@@ -562,13 +617,13 @@ class GroupHealthPlanAddressDetails extends Component {
                                 <Input
                                     type="text"
                                     disabled={this.state.checked}
-                                    id="p_addressline2"
+                                    id="p_addr_line2"
                                     label="Address line 2"
-                                    name="p_addressline2"
+                                    name="p_addr_line2"
                                     placeholder="ex: 16/1 Queens paradise"
-                                    error={(this.state.form_data.p_addressline2_error) ? true : false}
-                                    helperText={this.state.form_data.p_addressline2_error}
-                                    value={this.state.form_data.p_addressline2 || ''}
+                                    error={(this.state.form_data.p_addr_line2_error) ? true : false}
+                                    helperText={this.state.form_data.p_addr_line2_error}
+                                    value={this.state.form_data.p_addr_line2 || ''}
                                     onChange={this.handleChange()} />
                             </div>
 
@@ -647,25 +702,25 @@ class GroupHealthPlanAddressDetails extends Component {
                     <div className="InputField">
                         <Input
                             type="text"
-                            id="addressline"
+                            id="addr_line1"
                             label="Address line 1"
-                            name="addressline"
+                            name="addr_line1"
                             placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.addressline_error) ? true : false}
-                            helperText={this.state.form_data.addressline_error}
-                            value={this.state.form_data.addressline || ''}
+                            error={(this.state.form_data.addr_line1_error) ? true : false}
+                            helperText={this.state.form_data.addr_line1_error}
+                            value={this.state.form_data.addr_line1 || ''}
                             onChange={this.handleChange()} />
                     </div>
                     <div className="InputField">
                         <Input
                             type="text"
-                            id="addressline2"
+                            id="addr_line2"
                             label="Address line 2"
-                            name="addressline2"
+                            name="addr_line2"
                             placeholder="ex: 16/1 Queens paradise"
-                            error={(this.state.form_data.addressline2_error) ? true : false}
-                            helperText={this.state.form_data.addressline2_error}
-                            value={this.state.form_data.addressline2 || ''}
+                            error={(this.state.form_data.addr_line2_error) ? true : false}
+                            helperText={this.state.form_data.addr_line2_error}
+                            value={this.state.form_data.addr_line2 || ''}
                             onChange={this.handleChange()} />
                     </div>
                     {this.state.provider === 'HDFCERGO' &&

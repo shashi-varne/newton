@@ -34,7 +34,7 @@ class CommonLanding extends Component {
         let navigateMapper = {
             'group-insurance': '/group-insurance',
             'health-insurance': '/group-insurance/health/landing',
-            'term-insurance': '/group-insurance/term/intro',
+            'term-insurance': '/group-insurance/life-insurance/term/landing',
             'gold': '/gold/landing',
             'gold-buy': '/gold/buy',
             'gold-locker': '/gold/gold-locker',
@@ -45,7 +45,8 @@ class CommonLanding extends Component {
             'health-insurance-comprehensive': '/group-insurance/group-health/entry',
             'health-insurance-hdfcergo': '/group-insurance/group-health/HDFCERGO/landing',
             'health-insurance-religare': '/group-insurance/group-health/RELIGARE/landing',
-            'health-insurance-star': '/group-insurance/group-health/STAR/landing'
+            'health-insurance-star': '/group-insurance/group-health/STAR/landing',
+            'life-insurance-fyntune': '/group-insurance/life-insurance/savings-plan/landing'
         };
 
         let pathname = navigateMapper[main_module] || '';
