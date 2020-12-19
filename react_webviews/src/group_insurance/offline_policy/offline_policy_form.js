@@ -110,7 +110,7 @@ handleChange = name => event => {
 
 handleClick2 = async () => {
   this.setState({ show_loader: true });
-let form_data = this.state.form_data
+  let form_data = this.state.form_data
   try {
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}&bind=true`)
     if (res.pfwresponse.status_code === 200) {
@@ -118,6 +118,7 @@ let form_data = this.state.form_data
       let state = `/group-insurance/common/report`;
       this.navigate(state);
     }
+    this.setState({ show_loader: false });
   }
   catch (err) {
     toast("Something went wrong");
@@ -128,6 +129,7 @@ let form_data = this.state.form_data
 }
 
 handleClose = () => {
+  this.sendEvents('back','policy found')
   this.setState({
     openConfirmDialog: false,
     openBmiDialog: false,
@@ -214,7 +216,6 @@ handleClick = async () => {
    show_loader : true
   });
   try {
-
     const res = await Api.get(`/api/insurancev2/api/insurance/o2o/bind/user/policy/applications?policy_or_proposal_number=${form_data.number}&provider=${form_data.Vendor}`);
     let resultData = res.pfwresponse.result
     form_data.title = 'SUBMIT TO FETCH THE DETAIL'
@@ -298,7 +299,6 @@ handleClick = async () => {
               NO
               </div>
               <div className="generic-page-button-small-with-green" onClick={() => {
-                this.handleClose();
                 this.handleClick2();
               }}>
                 YES
