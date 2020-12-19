@@ -6,7 +6,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getDateBreakup } from 'utils/validators';
 import {
-  inrFormatDecimalWithoutIcon, capitalizeFirstLetter
+  inrFormatDecimalWithoutIcon, capitalizeFirstLetter , inrFormatDecimal
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getCssMapperReport } from '../constants';
@@ -331,12 +331,12 @@ class Report extends Component {
                 <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
-                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' &&
                     ' annually' 
                   }
                 </div>}
-                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
                   <span style={{textTransform : "lowercase", fontWeight : 'normal'}}>/{props.frequency}</span>
                   }
