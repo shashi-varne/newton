@@ -31,6 +31,8 @@ export async function initialize() {
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
   this.get07State = get07State.bind(this);
+  this.getRecommendedVendor = getRecommendedVendor.bind(this);
+  this.getSummary = getSummary.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -51,7 +53,7 @@ export async function initialize() {
     {
       screenData: screenData,
       productName: getConfig().productName,
-      count: 0,
+      count: 0
     }
     // () => {
     //   this.onload();
@@ -69,7 +71,14 @@ export async function initialize() {
     "loan_status",
   ];
 
-  if (!screens.includes(this.state.screen_name)) {
+  let idfc_dmi_screens = [
+    'home_screen',
+    'know_more_screen',
+    'select_loan_screen',
+    'recommended'
+  ]
+
+  if (!screens.includes(this.state.screen_name) && !idfc_dmi_screens.includes(this.state.screen_name)) {
     this.getOrCreate();
   } else {
     this.setState({
@@ -83,6 +92,10 @@ export async function initialize() {
 
   if (this.state.screen_name === "loan_status") {
     this.getUserStatus();
+  }
+
+  if(idfc_dmi_screens.includes(this.state.screen_name)) {
+    this.getSummary();
   }
 }
 
@@ -790,5 +803,77 @@ export function navigate(pathname, data = {}) {
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
     });
+  }
+}
+
+export async function getRecommendedVendor(params) {
+  try{
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.post(`relay/api/loan/account/recommendation`, params);
+
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      this.navigate(this.state.next_state);
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    this.setState({ show_loader: false });
+    console.log(err);
+    toast("Something went wrong");
+  }
+}
+
+export async function getSummary() {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.get(`relay/api/loan/account/get/summary`);
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    let available_vendors = ['idfc', 'dmi'];
+    let selectedVendors = [];
+
+    available_vendors.forEach((element) => {
+      result[element] && selectedVendors.push(element)
+    })
+
+    let personal_details =   ['loan_amount_required', 'monthly_salary', 'employment_type'];
+    let providedPersonalDetails = true;
+
+    for(let element in personal_details) {
+      if(result[personal_details[element]] === null) {
+        providedPersonalDetails = false;
+      }
+    }
+
+    if (status === 200) {
+      this.setState({
+        account_exists: result.account_exists,
+        ongoing_loan_details: result.ongoing_loan_details,
+        selectedVendors: selectedVendors,
+        providedPersonalDetails: providedPersonalDetails,
+        show_loader: false,
+      },
+      () => {
+        if (this.onload && !this.state.ctaWithProvider) {
+          this.onload();
+        }
+      });
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    this.setState({ show_loader: false });
+    console.log(err);
+    toast("Something went wrong");
   }
 }

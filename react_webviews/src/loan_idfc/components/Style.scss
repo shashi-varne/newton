@@ -343,7 +343,7 @@
   margin-bottom: 40px;
   .basic-details-subtitle {
     font-weight: 500;
-    color: #0A1D32;
+    color: #0a1d32;
     font-size: 15px;
     line-height: 21px;
     padding: 0 5px 15px 0;
@@ -736,7 +736,7 @@
     text-align: center;
     margin: 20px 0 10px 0;
   }
-  
+
   .loan-amount {
     color: var(--primary);
     font-size: 20px;
@@ -751,5 +751,282 @@
     justify-content: space-between;
     font-weight: 500;
     text-align: center;
+  }
+}
+
+.loan-home {
+  .top-title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 20px;
+    color: #160d2e;
+  }
+
+  .block1-info {
+    margin-top: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .block2-info {
+    margin: 30px 0 35px 0;
+
+    .content {
+      display: flex;
+      align-items: center;
+      padding: 20px 10px 0 10px;
+
+      img {
+        width: 35px;
+      }
+
+      .title {
+        font-size: 15px;
+      }
+
+      .subtitle {
+        margin-bottom: 0;
+      }
+
+      div {
+        margin-left: 15px;
+      }
+    }
+  }
+
+  .block3-info {
+    margin: 30px 0;
+
+    .partners {
+      display: flex;
+      padding: 10px 0;
+      justify-content: space-evenly;
+      text-align: center;
+      font-size: 16px;
+      line-height: 19px;
+      color: #160d2e;
+      margin-top: 20px;
+
+      .card {
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12),
+          0px 2px 2px rgba(0, 0, 0, 0.0483186);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        img {
+          padding: 25px;
+          width: 60px;
+        }
+      }
+    }
+  }
+}
+
+.partner-card {
+  .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+      width: 50px;
+      border: 1px solid #d8d8d8;
+    }
+
+    .sub-text {
+      font-size: 15px;
+      line-height: 20px;
+      color: #767e86;
+    }
+
+    button {
+      padding: 14px 30px;
+      font-size: 13px;
+      line-height: 15px;
+      letter-spacing: 1px;
+      color: #ffffff;
+      background: var(--secondary) !important;
+      border-radius: 4px;
+    }
+  }
+
+  .partner {
+    margin-bottom: 15px;
+    text-align: left;
+
+    div :first-child {
+      font-weight: 500;
+      font-size: 17px;
+      line-height: 20px;
+      color: #0a1d32;
+      padding: 5px 0;
+    }
+
+    div :nth-child(2) {
+      font-size: 13px;
+      line-height: 20px;
+      color: var(--primary);
+      padding: 5px 0;
+    }
+  }
+
+  .card-tag {
+    background: var(--primary);
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 8px;
+    line-height: 10px;
+    letter-spacing: 0.1px;
+    color: #ffffff;
+    padding: 2px 3px;
+    width: fit-content;
+    margin-bottom: 6px;
+  }
+
+  .benefits {
+    margin: 28px -20px -20px -20px;
+    background-color: var(--highlight);
+    border-bottom: 6px;
+
+    img {
+      color: var(--primary);
+    }
+
+    .benefits-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 20px;
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 15px;
+      color: #0a1d32;
+    }
+
+    .benefits-content {
+      padding: 10px 20px;
+      font-size: 13px;
+      line-height: 15px;
+      color: #0e1513;
+      opacity: 0.8;
+    }
+
+    .benefits-points {
+      color: #767e86;
+      line-height: 22px;
+      padding: 8px 0;
+      display: flex;
+      align-items: baseline;
+
+      .dot {
+        background-color: #d8d8d8;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .sub-data {
+        padding: 5px 0;
+      }
+    }
+  }
+}
+
+.select_loan {
+  display: flex;
+  flex-direction: column;
+  row-gap: 35px;
+  padding: 15px 0 40px 0;
+}
+
+.recommended {
+  margin-bottom: 40px;
+  .recommended-subtitle {
+    font-weight: 500;
+    color: #0a1d32;
+    font-size: 15px;
+    line-height: 21px;
+    padding: 0 5px 15px 0;
+  }
+
+  .sub-head {
+    font-size: 13px;
+    font-weight: 400;
+    color: #767e86;
+    margin: 10px 0;
+  }
+
+  .employment-type {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    margin: 20px 0;
+  }
+
+  .employment-card {
+    width: fit-content;
+    cursor: pointer;
+    border-radius: 6px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 5px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.loan-know-more {
+  margin-bottom: 50px;
+  .block1-info {
+    margin: 10px 0 30px 0;
+    text-align: left;
+    font-size: 13px;
+
+    .partner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      img {
+        width: 50px;
+        border: 1px solid #d8d8d8;
+      }
+
+      div :first-child {
+        font-weight: 500;
+        font-size: 17px;
+        line-height: 20px;
+        color: #0a1d32;
+        padding: 5px 0;
+      }
+
+      div :nth-child(2) {
+        font-size: 13px;
+        line-height: 20px;
+        color: var(--primary);
+        padding: 5px 0;
+      }
+    }
+
+    .sub-text {
+      font-weight: 300;
+      padding: 10px 0;
+    }
+
+    .loan-amount {
+      font-weight: 500;
+    }
+  }
+
+  .block2 {
+    padding: 15px 0;
+    align-items: center;
+    cursor: pointer;
   }
 }

@@ -40,6 +40,11 @@ import CommonRenderFaqs from "./components/general/RenderFaqs";
 import FinalOffer from "./components/general/final_loan";
 import Reports from "./components/general/reports";
 
+import Home from "./components/home/home";
+import SelectLoan from "./components/home/select_loan";
+import Recommended from "./components/home/recommended";
+import LoanKnowMore from "./components/home/know_more";
+
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -120,6 +125,11 @@ const Lending = props => {
 
           <Route path={`${url}/edit-address-details`} 
             render={(props) => <AddressDetails {...props} edit={true} />} />
+
+          <Route path={`${url}/loan-home`} component={Home} />
+          <Route path={`${url}/select-loan`} component={SelectLoan} />
+          <Route path={`${url}/recommended`} component={Recommended} />
+          <Route path={`${url}/loan-know-more`} component={LoanKnowMore} />
        
           <Route component={NotFound} />
 
