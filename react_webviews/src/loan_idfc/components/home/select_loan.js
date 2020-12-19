@@ -103,6 +103,12 @@ class SelectLoan extends Component {
 
   handleClick = (provider_name) => {
     this.sendEvents('next', {provider_name : provider_name})
+
+    this.navigate(`/loan/${provider_name}/loan-know-more`, {
+      params: {
+        provider: provider_name
+      }
+    })
   };
 
   sendEvents(user_action, data={}) {

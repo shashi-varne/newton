@@ -84,7 +84,7 @@ const Lending = props => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-          <Route path={`${url}/home`} component={Landing} />
+          <Route path={`${url}/dmi/home`} component={Landing} />
           <Route path={`${url}/app-update`} component={AppUpdate} />
           <Route path={`${url}/journey`} component={Journey} />
           <Route path={`${url}/calculator`} component={Calculator} />

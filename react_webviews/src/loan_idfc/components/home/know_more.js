@@ -18,6 +18,18 @@ class IdfcKnowMore extends Component {
   componentWillMount() {
     this.initialize();
 
+    let { params } = this.props.location;
+
+    if (!params) {
+      params = {}
+    }
+
+    this.setState({
+      ...params,
+    });
+
+    console.log(params.provider)
+
     let loan_partners = {
       dmi: {
         eligibility: {
@@ -138,7 +150,7 @@ class IdfcKnowMore extends Component {
       },
     };
 
-    let provider = "idfc";
+    let provider = "dmi";
 
     let employement_type = "salaried";
     let eligibility = {};

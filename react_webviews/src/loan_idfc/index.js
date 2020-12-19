@@ -40,6 +40,9 @@ import CommonRenderFaqs from "./components/general/RenderFaqs";
 import FinalOffer from "./components/general/final_loan";
 import Reports from "./components/general/reports";
 
+
+import Loan from '../loan';
+
 import Home from "./components/home/home";
 import SelectLoan from "./components/home/select_loan";
 import Recommended from "./components/home/recommended";
@@ -83,7 +86,7 @@ const Lending = props => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-          <Route path={`${url}/home`} component={Landing} />
+          <Route path={`${url}/idfc/home`} component={Landing} />
           <Route path={`${url}/edit-number`} component={MobileVerify} />
           <Route path={`${url}/otp-verify`} component={OtpVerification} />
           <Route path={`${url}/journey`} component={JourneyMap} />
@@ -114,21 +117,23 @@ const Lending = props => {
           <Route path={`${url}/error`} component={SystemError} />
 
           {/* Edit paths */}
-          <Route path={`${url}/edit-basic-details`} 
+          <Route path={`${url}/idfc/edit-basic-details`} 
             render={(props) => <BasicDetails {...props} edit={true} />} />
 
-          <Route path={`${url}/edit-professional-details`} 
+          <Route path={`${url}/idfc/edit-professional-details`} 
             render={(props) => <ProfessionalDetails {...props} edit={true} />} />
 
-          <Route path={`${url}/edit-personal-details`} 
+          <Route path={`${url}/idfc/edit-personal-details`} 
             render={(props) => <PersonalDetails {...props} edit={true} />} />
 
-          <Route path={`${url}/edit-address-details`} 
+          <Route path={`${url}/idfc/edit-address-details`} 
             render={(props) => <AddressDetails {...props} edit={true} />} />
+
+          {/* <Route path={`${url}/dmi`} component={Loan} /> */}
 
           <Route path={`${url}/loan-home`} component={Home} />
           <Route path={`${url}/select-loan`} component={SelectLoan} />
-          <Route path={`${url}/recommended`} component={Recommended} />
+          <Route path={`${url}/recommendation`} component={Recommended} />
           <Route path={`${url}/loan-know-more`} component={LoanKnowMore} />
        
           <Route component={NotFound} />
