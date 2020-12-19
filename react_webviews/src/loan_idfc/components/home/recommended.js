@@ -52,7 +52,7 @@ class Recommended extends Component {
   validateFields(keys_to_check, form_data) {
     let canSubmitForm = true;
     let keysMapper = {
-      loan_requirement: "loan requirement",
+      loan_amount_required: "loan requirement",
       employment_type: "employment type",
       net_monthly_salary: "net monthly salary",
     };
@@ -72,7 +72,7 @@ class Recommended extends Component {
 
   handleClick = () => {
     let { form_data } = this.state;
-    let keys_to_check = ["loan_requirement", "employment_type"];
+    let keys_to_check = ["loan_amount_required", "employment_type"];
 
     if (form_data.employment_type === "Salaried")
       keys_to_check.push("net_monthly_salary");
@@ -96,7 +96,7 @@ class Recommended extends Component {
       event_name: "lending",
       properties: {
         user_action: user_action,
-        screen_name: "home_loan_requirement",
+        screen_name: "home_loan_amount_required",
         employment_type: this.state.form_data.employment_type || '',
       },
     };
@@ -122,20 +122,20 @@ class Recommended extends Component {
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.loan_requirement_error}
+                error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
-                  this.state.form_data.loan_requirement_error ||
-                  numDifferentiationInr(this.state.form_data.loan_requirement)
+                  this.state.form_data.loan_amount_required_error ||
+                  numDifferentiationInr(this.state.form_data.loan_amount_required)
                 }
                 type="number"
                 width="40"
                 label="Loan requirement"
-                class="loan_requirement"
+                class="loan_amount_required"
                 maxLength={10}
-                id="loan_requirement"
-                name="loan_requirement"
-                value={this.state.form_data.loan_requirement || ""}
-                onChange={this.handleChange("loan_requirement")}
+                id="loan_amount_required"
+                name="loan_amount_required"
+                value={this.state.form_data.loan_amount_required || ""}
+                onChange={this.handleChange("loan_amount_required")}
               />
             </div>
           </FormControl>
