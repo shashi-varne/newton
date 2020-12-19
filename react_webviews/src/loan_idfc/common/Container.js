@@ -54,7 +54,7 @@ class Container extends Component {
     }
 
     switch (pathname) {
-      case "/loan/idfc/home":
+      case "/loan/idfc/loan-home":
         nativeCallback({ action: "native_back" });
         break;
       default:
