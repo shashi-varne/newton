@@ -845,8 +845,12 @@ export async function getSummary() {
       result[element] && selectedVendors.push(element)
     })
 
-    let personal_details =   ['loan_amount_required', 'monthly_salary', 'employment_type'];
+    let personal_details =   ['loan_amount_required', 'employment_type'];
     let providedPersonalDetails = true;
+
+    if(result.employment_type === 'Salaried')  {
+      personal_details.push('monthly_salary')
+    }
 
     for(let element in personal_details) {
       if(result[personal_details[element]] === null) {
@@ -861,6 +865,7 @@ export async function getSummary() {
         selectedVendors: selectedVendors,
         providedPersonalDetails: providedPersonalDetails,
         show_loader: false,
+        employment_type: result.employment_type,
       },
       () => {
         if (this.onload && !this.state.ctaWithProvider) {

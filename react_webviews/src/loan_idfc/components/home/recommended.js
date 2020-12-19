@@ -54,7 +54,7 @@ class Recommended extends Component {
     let keysMapper = {
       loan_requirement: "loan requirement",
       employment_type: "employment type",
-      net_monthly_salary: "net monthly salary",
+      monthly_salary: "net monthly salary",
     };
 
     for (var i = 0; i < keys_to_check.length; i++) {
@@ -72,13 +72,13 @@ class Recommended extends Component {
 
   handleClick = () => {
     let { form_data } = this.state;
-    let keys_to_check = ["loan_requirement", "employment_type"];
-
-    if (form_data.employment_type === "Salaried")
-      keys_to_check.push("net_monthly_salary");
+    let keys_to_check = ["loan_amount_required", "employment_type"];
+    let body = {};
+    if (form_data.employment_type === "Salaried") {
+      keys_to_check.push("monthly_salary");
+    }
 
     if (this.validateFields(keys_to_check, form_data)) {
-      let body = {};
       this.setState({
         show_loader: true,
       });
@@ -86,7 +86,7 @@ class Recommended extends Component {
         let key = keys_to_check[j];
         body[key] = form_data[key] || "";
       }
-      this.sendEvents('next')
+      this.sendEvents("next");
       this.getRecommendedVendor(body);
     }
   };
@@ -97,7 +97,7 @@ class Recommended extends Component {
       properties: {
         user_action: user_action,
         screen_name: "home_loan_requirement",
-        employment_type: this.state.form_data.employment_type || '',
+        employment_type: this.state.form_data.employment_type || "",
       },
     };
 
@@ -111,7 +111,7 @@ class Recommended extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Help us to provide you with best offers"
         buttonTitle="NEXT"
@@ -122,20 +122,22 @@ class Recommended extends Component {
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.loan_requirement_error}
+                error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
-                  this.state.form_data.loan_requirement_error ||
-                  numDifferentiationInr(this.state.form_data.loan_requirement)
+                  this.state.form_data.loan_amount_required_error ||
+                  numDifferentiationInr(
+                    this.state.form_data.loan_amount_required
+                  )
                 }
                 type="number"
                 width="40"
                 label="Loan requirement"
-                class="loan_requirement"
+                class="loan_amount_required"
                 maxLength={10}
-                id="loan_requirement"
-                name="loan_requirement"
-                value={this.state.form_data.loan_requirement || ""}
-                onChange={this.handleChange("loan_requirement")}
+                id="loan_amount_required"
+                name="loan_amount_required"
+                value={this.state.form_data.loan_amount_required || ""}
+                onChange={this.handleChange("loan_amount_required")}
               />
             </div>
           </FormControl>
@@ -180,21 +182,19 @@ class Recommended extends Component {
               <FormControl fullWidth>
                 <div className="InputField">
                   <Input
-                    error={!!this.state.form_data.net_monthly_salary_error}
+                    error={!!this.state.form_data.monthly_salary_error}
                     helperText={
-                      this.state.form_data.net_monthly_salary_error ||
-                      numDifferentiationInr(
-                        this.state.form_data.net_monthly_salary
-                      )
+                      this.state.form_data.monthly_salary_error ||
+                      numDifferentiationInr(this.state.form_data.monthly_salary)
                     }
                     type="number"
                     width="40"
                     label="Net monthly salary (in rupees)"
-                    class="net_monthly_salary"
-                    id="net_monthly_salary"
-                    name="net_monthly_salary"
-                    value={this.state.form_data.net_monthly_salary || ""}
-                    onChange={this.handleChange("net_monthly_salary")}
+                    class="monthly_salary"
+                    id="monthly_salary"
+                    name="monthly_salary"
+                    value={this.state.form_data.monthly_salary || ""}
+                    onChange={this.handleChange("monthly_salary")}
                   />
                 </div>
               </FormControl>

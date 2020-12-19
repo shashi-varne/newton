@@ -70,9 +70,9 @@ class Home extends Component {
   }
 
   handleClick = () => {
-    let { loan_exists, providedPersonalDetails } = this.state;
+    let { providedPersonalDetails } = this.state;
     this.sendEvents("next");
-    if (providedPersonalDetails && loan_exists !== 0) {
+    if (providedPersonalDetails) {
       this.navigate("select-loan");
     } else {
       this.navigate("recommended");
