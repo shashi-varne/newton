@@ -79,9 +79,9 @@ class Home extends Component {
     }
   };
 
-  handleResume = () => {
+  handleResume = (vendor) => {
     this.sendEvents("resume");
-    this.navigate("loan-know-more");
+    this.navigate(`${vendor}/loan-know-more`);
   };
 
   sendEvents(user_action) {
@@ -132,7 +132,7 @@ class Home extends Component {
                   <PartnerCard
                     key={index}
                     baseData={partnerData[item.vendor]}
-                    handleClick={this.handleResume}
+                    handleClick={() => this.handleResume(item.vendor)}
                   />
                 );
               })
