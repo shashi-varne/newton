@@ -11,7 +11,7 @@ import health_suraksha_myway from 'assets/health_suraksha_myway.svg';
 import super_topup_fisdom from 'assets/super_topup_fisdom.svg';
 import super_topup_myway from 'assets/super_topup_myway.svg';
 
-
+import HealthInsuranceEntry from '../group_health/plans/entry'
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -78,6 +78,9 @@ class HealthInsuranceLanding extends Component {
 
 
   navigate = (pathname, search) => {
+
+    console.log(this.props)
+
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -168,6 +171,7 @@ class HealthInsuranceLanding extends Component {
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
 
+                  <HealthInsuranceEntry  parent={this}  />
             </div>
           </div>
         </div>

@@ -272,6 +272,8 @@ class Landing extends Component {
 
   handleClick = (product_key) => {
 
+    console.log(product_key,'product_key')
+
     this.sendEvents('next', product_key)
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
 
@@ -292,8 +294,6 @@ class Landing extends Component {
       } else {
         path = 'plan';
       }
-
-
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } else if (product_key === 'LIFE_INSURANCE') {
         fullPath = 'life-insurance/entry';
