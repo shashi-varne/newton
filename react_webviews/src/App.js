@@ -18,9 +18,7 @@ import CommonLanding from './common/components/landing';
 
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
-import DmiLoan from './loan';
-// import Loan_idfc from './loan_idfc';
-import Loan from "./loan_idfc";
+import Loan from './loan_idfc';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
@@ -45,8 +43,7 @@ class App extends Component {
           <Route path='/isip' component={IsipBIller} />
           <Route path='/w-report' component={WealthReport} />
           <Route path='/help' component={HelpSupport} />
-          <Route path='/loan/main' component={Loan} />
-          <Route path='/loan/main' component={DmiLoan} />
+          <Route path='/loan' component={Loan} />
           <Route path='/pg' component={Payment} />
           <Route path='/kyc-esign' component={KycEsign} />
           <Route path='/whatsapp/' component={Whatsapp} />
