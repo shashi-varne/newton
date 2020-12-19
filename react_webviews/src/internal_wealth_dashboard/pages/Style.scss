@@ -358,6 +358,11 @@ $background: #f9f9f9;
 
         .iwd-daal-item:nth-last-child(1) {
           margin-bottom: 0;
+          .label {
+            .dot {
+            opacity: 0.6;
+            }
+          }
         }
       }
     }
@@ -1969,6 +1974,10 @@ $background: #f9f9f9;
 }
 @media only screen and (max-width: 450px) {
   
+  .iwd-transaction-header{
+    margin-left: -20px;
+    margin-right: -20px;
+  }
 
   .iwd-statement-trans-error {
     top: 55%;

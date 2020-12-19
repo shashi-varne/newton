@@ -123,7 +123,9 @@ const HoldingDetail = ({
                 </div>
                 <div className="iwd-hdcn-item-divider"></div>
                 <div className="iwd-hdcn-item" style={{ display: 'flex' }}>
-                  <img src={true ? positive : negative} alt="" />
+                  { investmentDetail.xirr !== 0 &&
+                    <img src={investmentDetail.xirr >= 0 ? positive : negative} alt="" />
+                  }
                   <div>
                     <div className="iwd-hdcni-value">
                       {(investmentDetail.xirr ? investmentDetail.xirr + '%' : '--')}
