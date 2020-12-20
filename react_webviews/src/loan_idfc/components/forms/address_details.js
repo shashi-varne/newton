@@ -436,6 +436,7 @@ class AddressDetails extends Component {
                   name="permanent_address1"
                   value={this.state.form_data.permanent_address1 || ""}
                   onChange={this.handleChange("permanent_address1")}
+                  disabled={this.state.isPermanent_address === 'Yes'}
                 />
               </div>
 
@@ -450,6 +451,7 @@ class AddressDetails extends Component {
                   name="permanent_address2"
                   value={this.state.form_data.permanent_address2 || ""}
                   onChange={this.handleChange("permanent_address2")}
+                  disabled={this.state.isPermanent_address === 'Yes'}
                 />
               </div>
 
@@ -465,6 +467,7 @@ class AddressDetails extends Component {
                     name="permanent_address3"
                     value={this.state.form_data.permanent_address3 || ""}
                     onChange={this.handleChange("permanent_address3")}
+                    disabled={this.state.isPermanent_address === 'Yes'}
                   />
                 </div>
               )}
@@ -480,6 +483,7 @@ class AddressDetails extends Component {
                   name="permanent_landmark"
                   value={this.state.form_data.permanent_landmark || ""}
                   onChange={this.handleChange("permanent_landmark")}
+                  disabled={this.state.isPermanent_address === 'Yes'}
                 />
               </div>
 
@@ -494,6 +498,7 @@ class AddressDetails extends Component {
                   name="permanent_pincode"
                   value={this.state.form_data.permanent_pincode || ""}
                   onChange={this.handlePincode("permanent_pincode")}
+                  disabled={this.state.isPermanent_address === 'Yes'}
                 />
               </div>
 
