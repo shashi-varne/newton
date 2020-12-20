@@ -126,7 +126,9 @@ class PersonalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, details_changed } = this.state;
 
-    if (name) {
+    if(name === 'first_name' && value.indexOf(' ') >= 0) {
+      return
+    } else if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
