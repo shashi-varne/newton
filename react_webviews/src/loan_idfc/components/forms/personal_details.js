@@ -126,13 +126,17 @@ class PersonalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, details_changed } = this.state;
 
-    if (name) {
+    if(name === 'first_name' && value.indexOf(' ') >= 0) {
+      return
+    } else if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
 
-    if (this.state.confirm_details) {
+    let confirm_fields = ["first_name", "last_name", "middle_name", "dob"]
+    if (this.state.confirm_details && confirm_fields.includes(name)) {
       details_changed = 'yes'
+      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
     }
 
     this.setState({
@@ -162,13 +166,19 @@ class PersonalDetails extends Component {
   };
 
   handleChangeRadio = (event) => {
-    let { form_data } = this.state;
+    let { form_data, details_changed } = this.state;
 
     form_data.gender = gender_options[event].value;
     form_data.gender_error = "";
 
+    if (this.state.confirm_details) {
+      details_changed = 'yes'
+      form_data['gender_helper'] = 'You need to provide proof for the changed info';
+    }
+
     this.setState({
       form_data: form_data,
+      details_changed: details_changed,
     });
   };
 
@@ -195,7 +205,7 @@ class PersonalDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.first_name_error}
-                helperText={this.state.form_data.first_name_error}
+                helperText={this.state.form_data.first_name_error || this.state.form_data.first_name_helper}
                 type="text"
                 width="40"
                 label="First name"
@@ -211,7 +221,7 @@ class PersonalDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.middle_name_error}
-                  helperText={this.state.form_data.middle_name_error}
+                  helperText={this.state.form_data.middle_name_error || this.state.form_data.middle_name_helper}
                   type="text"
                   width="40"
                   label="Middle name"
@@ -227,7 +237,7 @@ class PersonalDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.last_name_error}
-                helperText={this.state.form_data.last_name_error}
+                helperText={this.state.form_data.last_name_error || this.state.form_data.last_name_helper}
                 type="text"
                 width="40"
                 label="Last name"
@@ -243,7 +253,7 @@ class PersonalDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.dob_error}
-                  helperText={this.state.form_data.dob_error}
+                  helperText={this.state.form_data.dob_error || this.state.form_data.dob_helper}
                   type="text"
                   width="40"
                   label="Date of birth"
@@ -271,6 +281,10 @@ class PersonalDetails extends Component {
                 value={this.state.form_data.gender || ""}
                 onChange={this.handleChangeRadio}
               />
+              {this.state.form_data.gender_helper && <div className="helper-text">
+                {this.state.form_data.gender_helper}
+                </div>
+              }
             </div>
 
             <div className="InputField">

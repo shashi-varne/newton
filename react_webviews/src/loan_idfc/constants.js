@@ -22,6 +22,7 @@ export function goBackMap(path) {
     '/loan/idfc/doc-upload': '/loan/idfc/doc-list',
     '/loan/idfc/final-offer': '/loan/idfc/home',
     '/loan/idfc/reports': '/loan/idfc/home',
+    '/loan/idfc/otp-verify': '/loan/idfc/edit-number',
   }
 
   return mapper[path] || false;
