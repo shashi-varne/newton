@@ -6,6 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
+import Autosuggests from "../../../common/ui/Autosuggest";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class ProfessionalDetails extends Component {
       screen_name: "professional_details_screen",
       employment_type: "",
       industryOptions: [],
+      companyOptions: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -61,8 +63,8 @@ class ProfessionalDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "professional_details",
-        salary_mode: this.state.form_data.salary_mode || '',
-        net_monthly_salary: this.state.form_data.net_monthly_salary || '',
+        salary_mode: this.state.form_data.salary_mode || "",
+        net_monthly_salary: this.state.form_data.net_monthly_salary || "",
       },
     };
 
@@ -88,7 +90,7 @@ class ProfessionalDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let { form_data, employment_type } = this.state;
     let keys_to_check = ["constitution", "organisation"];
 
@@ -111,10 +113,10 @@ class ProfessionalDetails extends Component {
   };
 
   render() {
-    let { employment_type } = this.state;
+    let { employment_type, industryOptions, companyOptions } = this.state;
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Enter your work details"
         buttonTitle="NEXT"
@@ -122,17 +124,21 @@ class ProfessionalDetails extends Component {
       >
         <div className="professional-details">
           <FormControl fullWidth>
-            {employment_type === "salaried" && (
+            {employment_type === "salaried" && companyOptions.length > 0 && (
               <div className="InputField">
-                <DropdownWithoutIcon
+                <Autosuggests
+                  parent={this}
                   width="40"
-                  options={this.state.screenData.companyOptions}
-                  id="company_name"
+                  placeholder="Search for company"
+                  options={companyOptions}
                   label="Company name"
+                  id="company_name"
+                  name="company_name"
                   error={this.state.form_data.company_name_error ? true : false}
                   helperText={this.state.form_data.company_name_error}
-                  value={this.state.form_data.company_name || ""}
-                  name="company_name"
+                  value={(
+                    this.state.form_data.company_name || ""
+                  ).toUpperCase()}
                   onChange={this.handleChange("company_name")}
                 />
               </div>
@@ -256,17 +262,21 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                <DropdownWithoutIcon
-                  width="40"
-                  options={this.state.industryOptions}
-                  id="industry"
-                  label="Industry type"
-                  error={this.state.form_data.industry_error ? true : false}
-                  helperText={this.state.form_data.industry_error}
-                  value={this.state.form_data.industry || ""}
-                  name="industry"
-                  onChange={this.handleChange("industry")}
-                />
+                {industryOptions.length > 0 && (
+                  <Autosuggests
+                    parent={this}
+                    width="40"
+                    placeholder="Search for industry"
+                    options={industryOptions}
+                    label="industry"
+                    id="industry"
+                    name="industry"
+                    error={this.state.form_data.industry_error ? true : false}
+                    helperText={this.state.form_data.industry_error}
+                    value={this.state.form_data.industry}
+                    onChange={this.handleChange("industry")}
+                  />
+                )}
               </div>
             )}
           </FormControl>
