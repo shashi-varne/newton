@@ -70,12 +70,12 @@ class Home extends Component {
   }
 
   handleClick = () => {
-    let { loan_exists, providedPersonalDetails } = this.state;
+    let { ongoing_loan_details } = this.state;
     this.sendEvents("next");
-    if (providedPersonalDetails && loan_exists !== 0) {
-      this.navigate("select-loan");
-    } else {
+    if (ongoing_loan_details.length === 0) {
       this.navigate("edit-details");
+    } else {
+      this.navigate("select-loan");
     }
   };
 
@@ -100,13 +100,7 @@ class Home extends Component {
     }
   }
 
-  onload = () => {
-    let { ongoing_loan_details } = this.state;
-    this.setState({
-      loan_exists: ongoing_loan_details.length,
-      show_loader: false,
-    });
-  };
+  onload = () => {};
 
   render() {
     let {

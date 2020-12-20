@@ -150,6 +150,7 @@ class IdfcKnowMore extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { provider } = this.state;
+    console.log(provider)
 
     if (provider === 'dmi') {
       let state =  this.getNextState();
@@ -165,7 +166,7 @@ class IdfcKnowMore extends Component {
         });
       
       } else {
-        this.navigate(state);
+        // this.navigate(state);
       }
     }
 
@@ -190,7 +191,7 @@ class IdfcKnowMore extends Component {
         "Salary reciept mode"
       ];
   
-      if (this.state.cta_title === "RESUME") {
+      if (this.state.top_cta_title === "RESUME") {
         if (rejection_cases.indexOf(vendor_application_status || rejection_reason) !== -1 || is_dedupe) {
           this.navigate("loan-status");
         }
@@ -199,7 +200,7 @@ class IdfcKnowMore extends Component {
           this.navigate("loan-status");
         }
   
-        if (!pan_status || vendor_application_status === "pan") {
+        if (pan_status === '' || vendor_application_status === "pan") {
           this.navigate("basic-details");
         } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe) {
           this.navigate("journey");

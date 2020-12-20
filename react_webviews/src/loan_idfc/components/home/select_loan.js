@@ -16,6 +16,15 @@ class SelectLoan extends Component {
 
   componentWillMount() {
     this.initialize();
+  }
+
+  onload = () => {
+    let { selectedVendors, ongoing_loan_details } = this.state;
+    let stepContentMapper = [];
+    let status = [];
+
+    ongoing_loan_details.length !== 0 &&
+      ongoing_loan_details.forEach((item) => status.push(item.vendor));
 
     let vendors_data = {
       idfc: {
@@ -24,10 +33,10 @@ class SelectLoan extends Component {
         subtitle: "Competetive intrest rate",
         loan_amount: " ₹40 lac",
         logo: "idfc_logo",
-        cta_title: "APPLY NOW",
+        cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
         card_tag: "Recommended",
         displayTag: true,
-        provider_name: 'idfc',
+        provider_name: "idfc",
         benefits: {
           benefits_title: "Basic benefits",
           options: [
@@ -53,8 +62,8 @@ class SelectLoan extends Component {
         subtitle: "Quick disbursal",
         loan_amount: " ₹1 lac",
         logo: "dmi-finance",
-        cta_title: "APPLY NOW",
-        provider_name: 'dmi',
+        cta_title: status.includes('dmi') ? 'RESUME' : 'APPLY NOW',
+        provider_name: "dmi",
         benefits: {
           options: [
             "Complete Digital and Presenceless process",
@@ -67,14 +76,8 @@ class SelectLoan extends Component {
     this.setState({
       vendors_data: vendors_data,
     });
-  }
 
-  onload = () => {
-
-    let {selectedVendors, vendors_data} = this.state;
-    let stepContentMapper = [];
-
-    if(selectedVendors.length !== 2)  {
+    if (selectedVendors.length !== 2) {
       vendors_data.idfc.displayTag = false;
     }
 
@@ -93,7 +96,7 @@ class SelectLoan extends Component {
       selectedIndexs: selectedIndexs,
       vendors_data: vendors_data,
     });
-  }
+  };
 
   handleBenefits = (index) => {
     let { selectedIndexs } = this.state;
@@ -102,16 +105,16 @@ class SelectLoan extends Component {
   };
 
   handleClick = (provider_name) => {
-    this.sendEvents('next', {provider_name : provider_name})
+    this.sendEvents("next", { provider_name: provider_name });
 
     this.navigate(`/loan/${provider_name}/loan-know-more`, {
       params: {
-        provider: provider_name
-      }
-    })
+        provider: provider_name,
+      },
+    });
   };
 
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       event_name: "lending",
       properties: {
@@ -131,23 +134,24 @@ class SelectLoan extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Select loan provider"
         noFooter={true}
       >
         <div className="select_loan">
-          {this.state.stepContentMapper &&  this.state.stepContentMapper.map((item, index) => {
-            return (
-              <PartnerCard
-                key={index}
-                baseData={item}
-                handleBenefits={this.handleBenefits}
-                handleClick={this.handleClick}
-                isSelected={this.state.selectedIndexs[index]}
-              />
-            );
-          })}
+          {this.state.stepContentMapper &&
+            this.state.stepContentMapper.map((item, index) => {
+              return (
+                <PartnerCard
+                  key={index}
+                  baseData={item}
+                  handleBenefits={this.handleBenefits}
+                  handleClick={this.handleClick}
+                  isSelected={this.state.selectedIndexs[index]}
+                />
+              );
+            })}
         </div>
       </Container>
     );
