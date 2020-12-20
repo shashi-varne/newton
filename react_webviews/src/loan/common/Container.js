@@ -92,7 +92,7 @@ class Container extends Component {
 
 
     switch (pathname) {
-      case "/loan/dmi/loan-home":
+      case "/loan/dmi/loan-know-more":
       case "/loan/dmi/report":
       case "/loan/dmi/app-update":
         nativeCallback({ action: "native_back"});
@@ -123,7 +123,7 @@ class Container extends Component {
     });
 
     if(this.state.callbackType === 'loan_home') {
-      this.navigate('/loan/dmi/loan-home');
+      this.navigate('/loan/dmi/loan-know-more');
     } else if(this.state.callbackType === 'loan_journey') {
       this.navigate('/loan/dmi/journey');
     } else {

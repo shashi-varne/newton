@@ -198,7 +198,7 @@ export async function acceptAgreement() {
 
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200 && !resultData.error) {
-            this.navigate(this.state.next_state || '/loan/home');
+            this.navigate(this.state.next_state || '/loan/dmi/loan-know-more');
 
         } else {
 

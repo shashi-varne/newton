@@ -18,8 +18,8 @@ const commonMapper = {
     'top_title': 'Sorry!',
     'mid_title': '',
     'button_title': 'OK',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home'
+    'cta_state': '/loan/dmi/loan-know-more',
+    'close_state': '/loan/dmi/loan-know-more'
   },
   'failed': {
     'top_icon': 'error_illustration',
@@ -27,15 +27,15 @@ const commonMapper = {
     'mid_title': '',
     'button_title': 'RETRY',
     'cta_state': '/loan/bank',
-    'close_state': '/loan/home'
+    'close_state': '/loan/dmi/loan-know-more'
   },
   'loan_not_eligible': {
     'top_icon': 'ils_loan_failed',
     'top_title': 'Sorry!',
     'mid_title': '',
     'button_title': 'OK',
-    'cta_state': '/loan/home',
-    'close_state': '/loan/home',
+    'cta_state': '/loan/dmi/loan-know-more',
+    'close_state': '/loan/dmi/loan-know-more',
     'noFooter': true,
     'hide_contact': true
   },

@@ -12,7 +12,7 @@ const commonMapper = {
     button_title: "RETRY",
     icon: "close",
     // cta_state: "/loan/idfc/income-details",
-    close_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 1",
   },
   success: {
@@ -20,8 +20,8 @@ const commonMapper = {
     top_title: "Bank statement verification successful",
     button_title: "NEXT",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    // cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     status: "success",
   },
   blocked: {
@@ -29,8 +29,8 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
   },
   bypass: {
@@ -38,8 +38,8 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "NEXT",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    // cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
   },
 };
