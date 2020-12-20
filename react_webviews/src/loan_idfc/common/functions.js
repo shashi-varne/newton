@@ -84,6 +84,10 @@ export async function initialize() {
   if (this.state.screen_name === "loan_status" || this.state.screen_name === "system_error" ) {
     this.getUserStatus();
   }
+
+  if(this.state.screen_name === 'loan_eligible') {
+    this.getUserStatus();
+  }
 }
 
 export async function getInstitutionList() {
