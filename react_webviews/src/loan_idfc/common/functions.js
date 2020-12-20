@@ -81,7 +81,7 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "loan_status") {
+  if (this.state.screen_name === "loan_status" || this.state.screen_name === "system_error" ) {
     this.getUserStatus();
   }
 }
