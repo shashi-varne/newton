@@ -6,9 +6,15 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { formatMonthandYear, dobFormatTest, isValidMonthYear, numDifferentiationInr, formatAmountInr } from "utils/validators";
+import {
+  formatMonthandYear,
+  dobFormatTest,
+  isValidMonthYear,
+  numDifferentiationInr,
+  formatAmountInr,
+} from "utils/validators";
 import toast from "../../../common/ui/Toast";
+import Autosuggests from "../../../common/ui/Autosuggest";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -82,7 +88,7 @@ class LoanBtDetails extends Component {
 
     this.setState({
       credit_bt: credit_bt,
-      loaderData: loaderData
+      loaderData: loaderData,
     });
   };
 
@@ -109,8 +115,7 @@ class LoanBtDetails extends Component {
     let { form_data } = this.state;
 
     if (name === "creditCardNumber") {
-      if (value.length <= 4)
-        form_data[index][name] = value;
+      if (value.length <= 4) form_data[index][name] = value;
     } else if (name === "creditCardExpiryDate") {
       if (!dobFormatTest(value)) {
         return;
@@ -138,65 +143,65 @@ class LoanBtDetails extends Component {
       { key: "creditCardNumber", name: "credit card number" },
       { key: "creditCardExpiryDate", name: "credit card expiry date" },
       { key: "principalOutstanding", name: "principal outstanding" },
-    ]
+    ];
 
-    keysToCheck.forEach(item => {
+    keysToCheck.forEach((item) => {
       if (!form_data[index][item.key]) {
         form_data[index][`${item.key}_error`] = `Please enter ${item.name}`;
         submit_form = false;
       }
-    })
+    });
 
     this.setState({
       form_data: form_data,
     });
     return submit_form;
-  }
+  };
 
   handleCheckbox = (checked, index, id) => {
     let { form_data } = this.state;
 
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    if(checked)
-      this.validateFields(form_data,index);
+    if (checked) this.validateFields(form_data, index);
     else
       this.setState({
         form_data: form_data,
       });
-
   };
 
   handleClick = () => {
     let { form_data } = this.state;
-    let form_checked = form_data.filter(
-      (item) => item.is_selected === true
-    );
+    let form_checked = form_data.filter((item) => item.is_selected === true);
 
     let submit_details = true;
     form_data.forEach((data, index) => {
       if (data.is_selected) {
-        submit_details = this.validateFields(form_data, index)
-        if(data.creditCardNumber && data.creditCardNumber.length < 4) {
-          form_data[index]["creditCardNumber_error"] = "please enter last 4 digits of credit card number";
+        submit_details = this.validateFields(form_data, index);
+        if (data.creditCardNumber && data.creditCardNumber.length < 4) {
+          form_data[index]["creditCardNumber_error"] =
+            "please enter last 4 digits of credit card number";
           submit_details = false;
         }
 
         if (!isValidMonthYear(data["creditCardExpiryDate"])) {
-          form_data[index]["creditCardExpiryDate_error"] = "please enter valid credit card expiry date";
+          form_data[index]["creditCardExpiryDate_error"] =
+            "please enter valid credit card expiry date";
           submit_details = false;
         }
 
-        if (data['principalOutstanding'] > 500000) {
-          form_data[index]["principalOutstanding_error"] = `amount cannot exceed ${formatAmountInr(500000)}`;
+        if (data["principalOutstanding"] > 500000) {
+          form_data[index][
+            "principalOutstanding_error"
+          ] = `amount cannot exceed ${formatAmountInr(500000)}`;
           submit_details = false;
         }
       }
-    })
+    });
 
     if (!submit_details) {
-      this.setState({ form_data: form_data })
-      return
+      this.setState({ form_data: form_data });
+      return;
     }
 
     if (form_checked.length > 2) {
@@ -204,7 +209,7 @@ class LoanBtDetails extends Component {
       return;
     }
 
-    this.sendEvents('next', { no_of_cards_entered: form_checked.length, });
+    this.sendEvents("next", { no_of_cards_entered: form_checked.length });
     this.submitApplication(
       {
         bt_selection: form_checked,
@@ -222,7 +227,7 @@ class LoanBtDetails extends Component {
 
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Credit card details"
         buttonTitle={
@@ -269,26 +274,36 @@ class LoanBtDetails extends Component {
                   <div className="sub-head">₹40 lacs</div>
                   <FormControl fullWidth>
                     <div className="InputField">
-                      <DropdownWithoutIcon
-                        width="40"
-                        options={this.state.bankOptions}
-                        label="Financer name"
-                        id="financierName"
-                        name="financierName"
-                        error={!!this.state.form_data[index].financierName_error}
-                        helperText={this.state.form_data[index].financierName_error}
-                        value={
-                          this.state.form_data[index].financierName ||
-                          item.financierName ||
-                          ""
-                        }
-                        onChange={this.handleChange("financierName", index)}
-                      />
+                      {this.state.bankOptions.length > 0 && (
+                        <Autosuggests
+                          parent={this}
+                          width="40"
+                          placeholder="Search for financierName"
+                          options={this.state.bankOptions}
+                          label="Financer name"
+                          id="financierName"
+                          name="financierName"
+                          error={
+                            !!this.state.form_data[index].financierName_error
+                          }
+                          helperText={
+                            this.state.form_data[index].financierName_error
+                          }
+                          value={
+                            this.state.form_data[index].financierName ||
+                            item.financierName ||
+                            ""
+                          }
+                          onChange={this.handleChange("financierName", index)}
+                        />
+                      )}
                     </div>
 
                     <div className="InputField">
                       <Input
-                        error={!!this.state.form_data[index].creditCardNumber_error}
+                        error={
+                          !!this.state.form_data[index].creditCardNumber_error
+                        }
                         helperText={
                           this.state.form_data[index].creditCardNumber_error
                         }
@@ -307,7 +322,10 @@ class LoanBtDetails extends Component {
 
                     <div className="InputField">
                       <Input
-                        error={!!this.state.form_data[index].creditCardExpiryDate_error}
+                        error={
+                          !!this.state.form_data[index]
+                            .creditCardExpiryDate_error
+                        }
                         helperText={
                           this.state.form_data[index].creditCardExpiryDate_error
                         }
@@ -333,7 +351,8 @@ class LoanBtDetails extends Component {
                           this.state.form_data[index].principalOutstanding_error
                         }
                         helperText={
-                          this.state.form_data[index].principalOutstanding_error ||
+                          this.state.form_data[index]
+                            .principalOutstanding_error ||
                           numDifferentiationInr(
                             this.state.form_data[index].principalOutstanding
                           )

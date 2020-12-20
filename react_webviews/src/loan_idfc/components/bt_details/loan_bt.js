@@ -11,7 +11,7 @@ import {
   numDifferentiationInr,
   formatAmountInr,
 } from "utils/validators";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import Autosuggests from "../../../common/ui/Autosuggest";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -224,22 +224,30 @@ class LoanBtDetails extends Component {
                   <div className="head">Loan type</div>
                   <div className="sub-head">Personal loan</div>
                   <FormControl fullWidth>
-                    <div className="InputField">
-                      <DropdownWithoutIcon
-                        width="40"
-                        options={this.state.bankOptions}
-                        label="Financer name"
-                        id="financierName"
-                        name="financierName"
-                        error={!!this.state.form_data[index].financierName_error}
-                        helperText={this.state.form_data[index].financierName_error}
-                        value={
-                          this.state.form_data[index].financierName ||
-                          item.financierName ||
-                          ""
-                        }
-                        onChange={this.handleChange("financierName", index)}
-                      />
+                  <div className="InputField">
+                      {this.state.bankOptions.length > 0 && (
+                        <Autosuggests
+                          parent={this}
+                          width="40"
+                          placeholder="Search for financierName"
+                          options={this.state.bankOptions}
+                          label="Financer name"
+                          id="financierName"
+                          name="financierName"
+                          error={
+                            !!this.state.form_data[index].financierName_error
+                          }
+                          helperText={
+                            this.state.form_data[index].financierName_error
+                          }
+                          value={
+                            this.state.form_data[index].financierName ||
+                            item.financierName ||
+                            ""
+                          }
+                          onChange={this.handleChange("financierName", index)}
+                        />
+                      )}
                     </div>
 
                     <div className="InputField">
