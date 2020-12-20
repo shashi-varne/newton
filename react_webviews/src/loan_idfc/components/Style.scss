@@ -376,6 +376,22 @@
 
 .personal-details {
   margin-bottom: 40px;
+
+  .MuiFormHelperText-root {
+    color: var(--primary);
+  }
+
+  .helper-text  {
+    margin: 0;
+    font-size: 0.75rem;
+    text-align: left;
+    margin-top: 8px;
+    min-height: 1em;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1em;
+    margin-bottom: 10px;
+    color: var(--primary);
+  }
 }
 
 .address-details {
