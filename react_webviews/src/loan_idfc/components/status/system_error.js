@@ -91,16 +91,16 @@ class SystemError extends Component {
     let vendor_application_status = this.state.vendor_application_status;
     let rejection_reason = this.state.rejection_reason;
     let is_dedupe = this.state.is_dedupe;
-    let commonMapper = {}
+    let common_mapper = {}
     if (rejection_reason) {
-      commonMapper= commonMapper[rejection_reason] || {};
+      common_mapper= commonMapper[rejection_reason] || {};
     } else if (is_dedupe) {
-      commonMapper= commonMapper["is_dedupe"] || {};
+      common_mapper= commonMapper["is_dedupe"] || {};
     } else {
-      commonMapper= commonMapper[vendor_application_status] || {};
+      common_mapper= commonMapper[vendor_application_status] || {};
     }
     this.setState({
-      stage: commonMapper.stage || '',
+      stage: common_mapper.stage || '',
     });
   };
 
