@@ -14,9 +14,7 @@ class ReportDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      vendor_info_ui: {
-        cssMapper: {},
-      },
+      cssMapper: {},
       personal_info: {},
       application_info: {},
       vendor_info: {},
@@ -41,9 +39,40 @@ class ReportDetails extends Component {
       (personal_info.middle_name ? `${personal_info.middle_name} ` : "") +
       `${personal_info.last_name} `;
 
-    // let status = ["application_submitted", "idfc_4_submitted", "idfc_4_accepted", "idfc_4_failed"]
+    let status = [
+      "application_submitted",
+      "idfc_4_submitted",
+      "idfc_4_accepted",
+      "idfc_4_failed",
+    ];
 
-    // let loan_status = vendor_info.idfc
+    let loan_status =
+      vendor_info.idfc_loan_status.indexOf(status) === -1
+        ? "DATA VERIFICATION PENDING"
+        : vendor_info.idfc_loan_status;
+
+    let cssMapper = {
+      "DATA VERIFICATION PENDING": {
+        color: "yellow",
+        disc: "DATA VERIFICATION PENDING",
+      },
+      Underwriting: {
+        color: "yellow",
+        disc: "Underwriting",
+      },
+      Sanctioned: {
+        color: "yellow",
+        disc: "Sanctioned",
+      },
+      "Pre Disbursal stage": {
+        color: "yellow",
+        disc: "Pre Disbursal stage",
+      },
+      Disbursal: {
+        color: "green",
+        disc: "Disbursal",
+      },
+    };
 
     this.setState({
       application_info: application_info,
@@ -51,6 +80,8 @@ class ReportDetails extends Component {
       personal_info: personal_info,
       application_id: application_id,
       full_name: full_name,
+      loan_status: loan_status,
+      cssMapper: cssMapper,
     });
   };
 
@@ -60,7 +91,7 @@ class ReportDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "loan_report",
-        status: this.state.vendor_info_ui.cssMapper.disc,
+        // status: this.state.vendor_info_ui.cssMapper.disc,
       },
     };
 
@@ -76,8 +107,7 @@ class ReportDetails extends Component {
   };
 
   render() {
-    let { vendor_info } = this.state;
-
+    console.log(this.state.cssMapper[this.state.loan_status || ""]);
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -89,14 +119,15 @@ class ReportDetails extends Component {
         <div className="loan-report-details loan-form-summary">
           <div
             style={{ margin: "0px 0 40px 0" }}
-            className={`report-color-state ${this.state.vendor_info_ui.cssMapper.color}`}
+            className={`report-color-state ${
+              this.state.cssMapper[this.state.loan_status || ""] &&
+              this.state.cssMapper[this.state.loan_status || ""].color
+            }`}
           >
             <div className="circle"></div>
             <div className="report-color-state-title">
-              {(vendor_info.idfc_loan_status || "")
-                .toUpperCase()
-                .split("_")
-                .join(" ")}
+              {this.state.cssMapper[this.state.loan_status || ""] &&
+                this.state.cssMapper[this.state.loan_status || ""].disc}
             </div>
           </div>
 
@@ -135,15 +166,14 @@ class ReportDetails extends Component {
             <div className="member-tile">
               <div className="mt-left">
                 <img
-                  src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)}
+                  src={require(`assets/${this.state.productName}/icn_ROI.svg`)}
                   alt=""
                 />
               </div>
               <div className="mt-right">
                 <div className="mtr-top">RATE OF INTEREST</div>
                 <div className="mtr-bottom">
-                  {inrFormatDecimal(this.state.vendor_info.updated_offer_roi)}
-                  /month
+                  {this.state.vendor_info.updated_offer_roi}%
                 </div>
               </div>
             </div>
