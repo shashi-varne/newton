@@ -59,7 +59,7 @@ class PartnerCard extends Component {
         {this.props.baseData.benefits && (
           <div
             className="benefits"
-            onClick={() => this.props.handleBenefits(this.props.baseData.index)}
+            onClick={() => this.props.handleBenefits(this.props.index)}
           >
             <div className="benefits-header">
               Benefits
