@@ -10,6 +10,7 @@ import {
   changeNumberFormat,
   formatAmountInr,
   inrFormatDecimal,
+  numDifferentiationInr
 } from "utils/validators";
 
 class EligibleLoan extends Component {
@@ -230,8 +231,9 @@ class EligibleLoan extends Component {
                 <Input
                   error={!!this.state.form_data.amount_required_error}
                   helperText={
-                    this.state.form_data.amount_required_error ||
-                    `Min ₹1 lakh to max ₹${changeNumberFormat(
+                    this.state.form_data.amount_required_error || 
+                    (this.state.form_data.amount_required && numDifferentiationInr(this.state.form_data.amount_required)) ||
+                    `Min ₹1 Lakh to max ₹${changeNumberFormat(
                       vendor_info.displayOffer || "0"
                     )}`
                   }
