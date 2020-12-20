@@ -81,11 +81,14 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "loan_status" || this.state.screen_name === "system_error" ) {
+  if (
+    this.state.screen_name === "loan_status" ||
+    this.state.screen_name === "system_error"
+  ) {
     this.getUserStatus();
   }
 
-  if(this.state.screen_name === 'loan_eligible') {
+  if (this.state.screen_name === "loan_eligible") {
     this.getUserStatus();
   }
 }
@@ -104,22 +107,25 @@ export async function getInstitutionList() {
       let banklist = result.data;
       let bankOptions = [];
 
-      if (this.state.screen_name === "bank_upload") {
-        bankOptions = banklist.map((item) => {
-          return { name: item.institution_name, value: item.institution_id };
-        });
-      } else {
-        bankOptions = banklist.map((item) => item.institution_name);
-      }
+      bankOptions = banklist.map((item) => {
+        return { key: item.institution_id, value: item.institution_name };
+      });
 
       this.setState({
         bankOptions: bankOptions,
+        show_loader: false,
       });
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
 }
@@ -135,7 +141,6 @@ export async function getPickList() {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-
       let tnc = result.tnc;
       let industryOptions = result.industry.map((element) => {
         return {
@@ -164,6 +169,9 @@ export async function getPickList() {
       );
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
@@ -667,7 +675,7 @@ export async function formCheckUpdate(
     "organisation",
     "department",
     "industry",
-    "company_name"
+    "company_name",
   ];
 
   for (var i = 0; i < keys_to_check.length; i++) {
@@ -693,7 +701,6 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  
   if (
     form_data.amount_required &&
     // eslint-disable-next-line
@@ -712,19 +719,24 @@ export async function formCheckUpdate(
   }
 
   if (form_data.industry) {
-    let data = this.state.industryOptions.filter(data => (data.key).toUpperCase() === (form_data.industry).toUpperCase());
+    let data = this.state.industryOptions.filter(
+      (data) => data.key.toUpperCase() === form_data.industry.toUpperCase()
+    );
 
-    if(data.length === 0) {
+    if (data.length === 0) {
       form_data.industry_error = "Please select industry from provided list";
       canSubmitForm = false;
     }
   }
 
   if (form_data.company_name) {
-    let data = this.state.companyOptions.filter(data => (data.key).toUpperCase() === (form_data.company_name).toUpperCase());
+    let data = this.state.companyOptions.filter(
+      (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
+    );
 
-    if(data.length === 0) {
-      form_data.company_name_error = "Please select company name from provided list";
+    if (data.length === 0) {
+      form_data.company_name_error =
+        "Please select company name from provided list";
       canSubmitForm = false;
     }
   }

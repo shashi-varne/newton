@@ -17,20 +17,14 @@ const gender_options = [
   {
     name: "Female",
     value: "Female",
-  },
-  {
-    name: "Others",
-    value: "Others",
-  },
+  }
 ];
 
 const genderMapper = {
   M: "Male",
   F: "Female",
-  O: "Others",
   Male: "Male",
   Female: "Female",
-  Others: "Others"
 };
 
 class PersonalDetails extends Component {

@@ -114,6 +114,7 @@ class ProfessionalDetails extends Component {
 
   render() {
     let { employment_type, industryOptions, companyOptions } = this.state;
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -136,9 +137,7 @@ class ProfessionalDetails extends Component {
                   name="company_name"
                   error={this.state.form_data.company_name_error ? true : false}
                   helperText={this.state.form_data.company_name_error}
-                  value={(
-                    this.state.form_data.company_name || ""
-                  ).toUpperCase()}
+                  value={this.state.form_data.company_name || ""}
                   onChange={this.handleChange("company_name")}
                 />
               </div>

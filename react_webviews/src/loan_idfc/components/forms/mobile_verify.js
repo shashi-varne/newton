@@ -155,7 +155,6 @@ class MobileVerification extends Component {
                 </div>
               </Grid>
             </Grid>
-            {/* I accept <u style={{ color: "#3792FC" }}>Terms and condition</u> */}
           </div>
         </div>
       </Container>

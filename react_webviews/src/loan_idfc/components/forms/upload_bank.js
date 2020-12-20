@@ -14,8 +14,8 @@ import Api from "utils/api";
 import Input from "../../../common/ui/Input";
 import { formatDate, dobFormatTest } from "utils/validators";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { getUrlParams } from "utils/validators";
+import Autosuggests from "../../../common/ui/Autosuggest";
 
 class UploadBank extends Component {
   constructor(props) {
@@ -108,7 +108,6 @@ class UploadBank extends Component {
 
     this.setState({
       loaderData: loaderData,
-      loaderWithData: true,
       progressHeaderData: progressHeaderData,
     });
   };
@@ -126,7 +125,7 @@ class UploadBank extends Component {
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
           <div style={{ marginTop: index !== 0 && "20px" }} key={index}>
-            {`${index+1}. ${item}`}
+            {`${index + 1}. ${item}`}
           </div>
         ))}
       </div>
@@ -391,9 +390,8 @@ class UploadBank extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
-    let { form_data } = this.state;
+    let { form_data, bankOptions } = this.state;
 
-    let { bank_name } = this.state.form_data;
     let keys_to_check = ["bank_name", "start_date", "end_date"];
 
     let keysMapper = {
@@ -422,13 +420,16 @@ class UploadBank extends Component {
     });
 
     if (canSubmit) {
+      let bank = bankOptions.filter((item) => item.value === form_data.bank_name);
+
       try {
         this.setState({
           show_loader: true,
+          loaderWithData: true,
         });
 
         const res = await Api.get(
-          `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank_name}`
+          `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank[0].key}`
         );
 
         const { result } = res.pfwresponse;
@@ -457,12 +458,12 @@ class UploadBank extends Component {
       console.log(this.state.params.redirect);
       window.location.href = this.state.params.redirect;
     } else {
-      this.navigate('income-details')
+      this.navigate("income-details");
     }
-  }
+  };
 
   render() {
-    let { documents, confirmed, isApiRunning, params } = this.state;
+    let { documents, confirmed, isApiRunning, params, bankOptions } = this.state;
 
     return (
       <Container
@@ -486,18 +487,19 @@ class UploadBank extends Component {
           <Attention content={this.renderNotes()} />
           <FormControl fullWidth>
             <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.bankOptions}
-                id="bank_name"
-                label="Bank name"
-                dataType="AOB"
-                error={this.state.form_data.bank_name_error ? true : false}
-                helperText={this.state.form_data.bank_name_error}
-                value={this.state.form_data.bank_name || ""}
-                name="bank_name"
-                onChange={this.handleChange("bank_name")}
-              />
+              {bankOptions.length > 0  && <Autosuggests
+                  parent={this}
+                  width="40"
+                  placeholder="Search for bank"
+                  options={bankOptions}
+                  id="bank_name"
+                  label="Bank name"
+                  name="bank_name"
+                  error={this.state.form_data.bank_name_error ? true : false}
+                  helperText={this.state.form_data.bank_name_error}
+                  value={this.state.form_data.bank_name || ""}
+                  onChange={this.handleChange("bank_name")}
+                />}
             </div>
 
             <div className="InputField">
