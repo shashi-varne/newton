@@ -62,6 +62,7 @@ class ApplicationSummary extends Component {
     let professional_data = {
       title: "Work details",
       edit_state: "/loan/idfc/edit-professional-details",
+      edit: true,
       data: [
         {
           title: "Company name",
@@ -183,7 +184,7 @@ class ApplicationSummary extends Component {
         {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
-            {this.state.idfc_loan_status === "basic_details_uploaded" && (
+            {this.state.idfc_loan_status === "basic_details_uploaded" && props.edit &&  (
               <div
                 onClick={() => {
                   this.sendEvents("edit");
