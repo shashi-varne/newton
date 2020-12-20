@@ -145,6 +145,7 @@ class SelectLoan extends Component {
                 handleBenefits={this.handleBenefits}
                 handleClick={this.handleClick}
                 isSelected={this.state.selectedIndexs[index]}
+                index={index}
               />
             );
           })}
