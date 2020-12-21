@@ -4,6 +4,7 @@ import { initialize } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
+import Card from "../../../common/ui/Card";
 
 class Home extends Component {
   constructor(props) {
@@ -102,19 +103,11 @@ class Home extends Component {
     }
   }
 
-  onload = () => {
-    let { ongoing_loan_details } = this.state;
-
-    this.setState({
-      loan_exists: ongoing_loan_details.length,
-      show_loader: false,
-    });
-  };
+  onload = () => {};
 
   render() {
     let {
       ongoing_loan_details,
-      loan_exists,
       productName,
       account_exists,
       partnerData,
@@ -129,7 +122,7 @@ class Home extends Component {
       >
         <div className="loan-home">
           <div className="block1-info">
-            {account_exists && loan_exists !== 0 ? (
+            {account_exists && ongoing_loan_details && ongoing_loan_details.length !== 0 ? (
               ongoing_loan_details.map((item, index) => {
                 return (
                   <PartnerCard
@@ -148,24 +141,28 @@ class Home extends Component {
           </div>
 
           {ongoing_loan_details && ongoing_loan_details.length !== 2 && (
-            <div className="block2-info" onClick={() => this.handleClick()}>
+            <div className="block2-info" >
               <div className="top-title">
-                {loan_exists !== 0
+                {ongoing_loan_details && ongoing_loan_details.length !== 0
                   ? "Start a new application"
                   : "What are you looking for ?"}
               </div>
-              <div className="content">
-                <img
-                  src={require(`assets/${productName}/icn_loan_amnt.svg`)}
-                  alt="amount icon"
-                />
-                <div className="data">
-                  <div className="title generic-page-title">Personal loans</div>
-                  <div className="subtitle generic-page-subtitle">
-                    Get loans upto ₹40 lac
+              <Card onClick={() => this.handleClick()}>
+                <div className="content">
+                  <img
+                    src={require(`assets/${productName}/icn_loan_amnt.svg`)}
+                    alt="amount icon"
+                  />
+                  <div className="data">
+                    <div className="title generic-page-title">
+                      Personal loans
+                    </div>
+                    <div className="subtitle generic-page-subtitle">
+                      Get loans upto ₹40 lac
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           )}
 

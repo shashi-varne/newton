@@ -30,7 +30,7 @@ class SelectLoan extends Component {
       idfc: {
         index: 0,
         title: "IDFC FIRST BANK",
-        subtitle: "Competetive interest rate",
+        subtitle: "Competitive Interest rate",
         loan_amount: " ₹40 lac",
         logo: "idfc_logo",
         cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
@@ -144,7 +144,6 @@ class SelectLoan extends Component {
                   handleBenefits={() =>this.handleBenefits(index)}
                   handleClick={this.handleClick}
                   isSelected={this.state.selectedIndexs[index]}
-                  index={index}
                 />
               );
             })}
