@@ -26,7 +26,7 @@ class LoanEligible extends Component {
 
     this.setState({
       vendor_info: vendor_info,
-      application_info: application_info
+      application_info: application_info,
     })
 
   }
@@ -79,7 +79,7 @@ class LoanEligible extends Component {
           />
 
           <div className="loan-eligible">
-            <b>Congratulation!</b> You are eligible for a loan of
+          <b>Congrats, {this.state.first_name}!</b> You are eligible for a loan of
           </div>
 
           <div className="loan-amount">

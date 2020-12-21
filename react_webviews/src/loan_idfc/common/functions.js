@@ -27,7 +27,7 @@ export async function initialize() {
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
-  this.getIndustryList = getIndustryList.bind(this);
+  this.getPickList = getPickList.bind(this);
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
   this.get07State = get07State.bind(this);
@@ -165,7 +165,14 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "loan_status") {
+  if (
+    this.state.screen_name === "loan_status" ||
+    this.state.screen_name === "system_error"
+  ) {
+    this.getUserStatus();
+  }
+
+  if (this.state.screen_name === "loan_eligible") {
     this.getUserStatus();
   }
 
@@ -192,47 +199,77 @@ export async function getInstitutionList() {
       let banklist = result.data;
       let bankOptions = [];
 
-      if (this.state.screen_name === "bank_upload") {
-        bankOptions = banklist.map((item) => {
-          return { name: item.institution_name, value: item.institution_id };
-        });
-      } else {
-        bankOptions = banklist.map((item) => item.institution_name);
-      }
+      bankOptions = banklist.map((item) => {
+        return { key: item.institution_id, value: item.institution_name };
+      });
 
       this.setState({
         bankOptions: bankOptions,
+        show_loader: false,
       });
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
 }
 
-export async function getIndustryList() {
+export async function getPickList() {
   try {
     this.setState({
       show_loader: true,
     });
 
-    const res = await Api.get("relay/api/loan/idfc/list/industry");
+    const res = await Api.get("relay/api/loan/idfc/picklist");
 
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      let industryOptions = result.data;
-
-      this.setState({
-        industryOptions: industryOptions,
+      let tnc = result.tnc;
+      let industryOptions = result.industry.map((element) => {
+        return {
+          key: element,
+          value: element,
+        };
       });
+
+      let companyOptions = Object.keys(result.employer).map((element) => {
+        return {
+          key: element,
+          value: element,
+        };
+      });
+
+      this.setState(
+        {
+          tnc: tnc,
+          industryOptions: industryOptions,
+          companyOptions: companyOptions,
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
 }
@@ -314,46 +351,40 @@ export async function getOrCreate(params) {
       let screens = ["main_landing_screen", "calculator", "know_more_screen"];
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
-      }
-
-      if (params && params.reset) {
+      } else if (params && params.reset) {
         this.navigate("home");
-      }
-
-      if (application_status === "internally_rejected") {
+      } else if (application_status === "internally_rejected") {
         this.navigate("loan-status");
-      }
-
-      if (
+      } else if (
         this.state.screen_name === "loan_bt" ||
         this.state.screen_name === "credit_bt" ||
         this.state.screen_name === "bank_upload"
       ) {
         this.getInstitutionList();
-      }
-
-      if (this.state.screen_name === "document_list") {
+      } else if (this.state.screen_name === "document_list") {
         await this.getDocumentList();
-      }
-
-      if (this.state.screen_name === "document_upload") {
+      } else if (this.state.screen_name === "document_upload") {
         await this.getDocumentList();
-      }
-
-      if (this.state.screen_name === "professional_details_screen") {
-        this.getIndustryList();
+      } else if (
+        this.state.screen_name === "professional_details_screen" ||
+        this.state.screen_name === "mobile_verification"
+      ) {
+        this.getPickList();
+      } else {
+        this.setState({
+          show_loader: false,
+        });
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
-
-  this.setState({
-    show_loader: false,
-  });
 }
 
 export async function getUserStatus(state = "") {
@@ -694,7 +725,7 @@ export async function formCheckUpdate(
     mother_name: "mother name",
     religion: "religion",
     email_id: "email id",
-    company_name: "company name",
+    company_name: "company name from provided list",
     business_name: "business name",
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
@@ -702,7 +733,7 @@ export async function formCheckUpdate(
     constitution: "constitution",
     organisation: "organisation",
     department: "department",
-    industry: "industry",
+    industry: "industry from provided list",
     current_address1: "address line 1",
     current_address2: "address line 2",
     current_address3: "address line 3",
@@ -731,6 +762,12 @@ export async function formCheckUpdate(
     "gender",
     "marital_status",
     "religion",
+    "salary_mode",
+    "constitution",
+    "organisation",
+    "department",
+    "industry",
+    "company_name",
   ];
 
   for (var i = 0; i < keys_to_check.length; i++) {
@@ -771,6 +808,29 @@ export async function formCheckUpdate(
   } else if (form_data.dob && IsFutureDate(form_data.dob)) {
     form_data.dob_error = "Future date is not allowed";
     canSubmitForm = false;
+  }
+
+  if (form_data.industry) {
+    let data = this.state.industryOptions.filter(
+      (data) => data.key.toUpperCase() === form_data.industry.toUpperCase()
+    );
+
+    if (data.length === 0) {
+      form_data.industry_error = "Please select industry from provided list";
+      canSubmitForm = false;
+    }
+  }
+
+  if (form_data.company_name) {
+    let data = this.state.companyOptions.filter(
+      (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
+    );
+
+    if (data.length === 0) {
+      form_data.company_name_error =
+        "Please select company name from provided list";
+      canSubmitForm = false;
+    }
   }
 
   this.setState({

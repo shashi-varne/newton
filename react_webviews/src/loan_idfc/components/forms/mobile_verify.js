@@ -13,9 +13,9 @@ class MobileVerification extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: 'mobile_verification',
+      screen_name: "mobile_verification",
       mobile_no: "",
-      terms_and_conditions_clicked: 'no',
+      terms_and_conditions_clicked: "no",
     };
 
     this.initialize = initialize.bind(this);
@@ -33,7 +33,7 @@ class MobileVerification extends Component {
       properties: {
         user_action: user_action,
         screen_name: "mobile number verification",
-        't&c_clicked': this.state.terms_and_conditions_clicked,
+        "t&c_clicked": this.state.terms_and_conditions_clicked,
       },
     };
 
@@ -73,16 +73,16 @@ class MobileVerification extends Component {
 
     if (canSubmitForm) {
       let params = {
-        mobile_no: mobile_no
+        mobile_no: mobile_no,
       };
-      this.updateApplication(params)
+      this.updateApplication(params);
     }
   };
 
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Mobile verification"
         buttonTitle="GET OTP"
@@ -136,17 +136,25 @@ class MobileVerification extends Component {
                 />
               </Grid>
               <Grid item xs={11}>
-                <div onClick={() => this.setState({terms_and_conditions_clicked : 'yes'})}>
+                <div
+                  onClick={() =>
+                    this.setState({ terms_and_conditions_clicked: "yes" })
+                  }
+                >
                   <span>
                     I accept{" "}
-                    <u style={{ color: "var(--primary)" }}>
+                    <u
+                      onClick={() =>
+                        this.openInBrowser(this.state.tnc, "tnc")
+                      }
+                      style={{ color: "var(--primary)" }}
+                    >
                       Terms & condition
                     </u>
                   </span>
                 </div>
               </Grid>
             </Grid>
-            {/* I accept <u style={{ color: "#3792FC" }}>Terms and condition</u> */}
           </div>
         </div>
       </Container>
