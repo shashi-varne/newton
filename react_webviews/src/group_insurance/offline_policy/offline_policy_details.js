@@ -11,6 +11,7 @@ import toast from  '../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import ReactHtmlParser from 'react-html-parser';
+
 import { getCssMapperReport } from '../constants'
 
 class GroupHealthReportDetails extends Component {
@@ -253,7 +254,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                               {this.state.lead.plan_type === 'Motor' ? 'IDV' : this.state.lead.plan_type === 'Life' ?  'SUM ASSURED'  : 'SUM INSURED'}
+                               {this.state.lead.policy_type === 'Motor' ? 'IDV' : this.state.lead.policy_type === 'Life' ?  'SUM ASSURED'  : 'SUM INSURED'}
                                 </div>
                                 <div className="mtr-bottom">
                                     {numDifferentiationInr(this.state.lead.cover_amount)} 
