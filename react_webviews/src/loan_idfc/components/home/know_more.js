@@ -286,6 +286,7 @@ class LoanKnowMore extends Component {
                 className="Flex block2"
                 onClick={() => {
                   this.sendEvents("documents");
+                  this.navigate('know-more')
                 }}
               >
                 <img
