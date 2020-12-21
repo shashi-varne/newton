@@ -199,7 +199,6 @@ class Report extends Component {
       reportData.push(policy);
     }
 
-    // reportData.push(o2o_applications);
     let o2o_details = o2o_applications || []; 
     for(var i = 0; i< o2o_details.length; i++){
       let policy = this.getProviderObject_offline(o2o_details[i]);
@@ -422,19 +421,22 @@ class Report extends Component {
       reportState[this.state.reportData[i].key] = this.state.reportData[i].status;
     };
 
+    if (insurance_type === 'insurance') {
+      eventObj.properties.policy =  policy_type ? this.state.TitleMaper[policy_type] : ''
+    }
+
+    if (insurance_type !== 'insurance') {
+      eventObj.report = reportState;
+    }
+
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance_report',
         "type": insurance_type ? insurance_type : '',
-        report: reportState
       }
     };
-
-    if (insurance_type === 'insurance') {
-      eventObj.properties.policy =  policy_type ? this.state.TitleMaper[policy_type] : ''
-    }
 
     if (user_action === 'just_set_events') {
       return eventObj;
@@ -453,9 +455,6 @@ class Report extends Component {
 
   onScroll = () => {
     if (this.hasReachedBottom()) {
-
-      console.log(this.state.nextPage)
-
       if (this.state.nextPage) {
         this.loadMore();
       }
