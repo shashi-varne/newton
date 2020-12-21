@@ -5,6 +5,7 @@ import HowToSteps from "../../../common/ui/HowToSteps";
 import JourneySteps from "../../../common/ui/JourneySteps";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
+import { storageService } from "utils/validators";
 
 class LoanKnowMore extends Component {
   constructor(props) {
@@ -25,7 +26,7 @@ class LoanKnowMore extends Component {
   onload = () => {
     let { screenData, provider } = this.state;
 
-    let employement_type = "salaried";
+    let employement_type = storageService().get("employment_type");
     let eligibility = {};
     if (provider === "idfc") {
       employement_type === "salaried"
@@ -166,7 +167,7 @@ class LoanKnowMore extends Component {
         });
       
       } else {
-        // this.navigate(state);
+        this.navigate(state);
       }
     }
 
