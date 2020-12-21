@@ -21,8 +21,8 @@ export function goBackMap(path) {
     "/loan/idfc/doc-list": "/loan/idfc/journey",
     "/loan/idfc/doc-upload": "/loan/idfc/doc-list",
     "/loan/idfc/final-loan": "/loan/idfc/loan-home",
-    "/loan/idfc/reports": "/loan/idfc/loan-home",
-
+    "/loan/idfc/reports": "/loan/idfc/loan-know-more",
+    "/loan/idfc/final-offer": '/loan/idfc/journey',
     "/loan/calculator": "/loan/loan-home",
     "/loan/recommendation": "/loan/loan-home",
     "/loan/select-loan": "/loan/loan-home",

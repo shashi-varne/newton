@@ -90,7 +90,7 @@ const journeyMapper2 = {
     next_state: "doc-list",
   },
   idfc_4_submitted: {
-    index: "3",
+    index: "4",
   },
   idfc_4_accepted: {
     index: "4",
@@ -194,7 +194,7 @@ class JourneyMap extends Component {
               ? "pending"
               : "completed",
           cta:
-            (idfc_loan_status === "idfc_4_accepted") &&
+            (idfc_loan_status === "idfc_4_accepted" || idfc_loan_status === "idfc_4_submitted") &&
             "CHECK",
           id: "sanction_and_disbursal",
         },
