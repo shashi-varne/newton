@@ -323,6 +323,7 @@ const LoginFields = (props) => {
           }}
           value={email}
           type="email"
+          autoFocus
           classes={props.emailFieldClasses || {}}
           onChange={(e) => handleInput(e, 'email')}
         />

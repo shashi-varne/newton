@@ -66,7 +66,7 @@ const Transactions = () => {
     get_transactions();
   }, [filterVal, activePage]);
 
-  const get_transactions = async () => {
+  const get_transactions = debounce(async () => {
     try {
       setIsLoading(true);
 
@@ -88,7 +88,8 @@ const Transactions = () => {
       setHasError(true);
     }
     setIsLoading(false);
-  };
+  },250,
+  { trailing: true });
 
   const onPageSelect = (page) => {
     setActivePage(page);
@@ -104,8 +105,11 @@ const Transactions = () => {
   };
 
   const handleFilterData = (val) => {
-    setPageMap([null, null]); // reset pagination everytime filter is changed
-    setFilterVal({ ...filterVal, ...val });
+    setFilterVal(prevState => {
+      setActivePage(1);
+      setPageMap([null, null]); // reset pagination everytime filter is changed
+     return { ...prevState, ...val }
+    });
   };
 
   const handleDesktopFilterData = debounce(
