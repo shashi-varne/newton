@@ -141,7 +141,7 @@ class SelectLoan extends Component {
                 <PartnerCard
                   key={index}
                   baseData={item}
-                  handleBenefits={this.handleBenefits}
+                  handleBenefits={() =>this.handleBenefits(index)}
                   handleClick={this.handleClick}
                   isSelected={this.state.selectedIndexs[index]}
                   index={index}

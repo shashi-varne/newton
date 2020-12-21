@@ -267,7 +267,7 @@ class ProfessionalDetails extends Component {
                     width="40"
                     placeholder="Search for industry"
                     options={industryOptions}
-                    label="industry"
+                    label="Industry"
                     id="industry"
                     name="industry"
                     error={this.state.form_data.industry_error ? true : false}

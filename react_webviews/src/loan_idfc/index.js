@@ -180,7 +180,6 @@ const Lending = props => {
           <Route path={`${url}/idfc/otp-verify`} component={OtpVerification} />
           <Route path={`${url}/idfc/journey`} component={JourneyMap} />
           <Route path={`${url}/idfc/know-more`} component={KnowMore} />
-          <Route path={`${url}/idfc/calculator`} component={CalculatorIdfc} />
           <Route path={`${url}/idfc/income-details`} component={IncomeDetails} />
           <Route path={`${url}/idfc/upload-bank`} component={UploadBankStatements} />
           <Route path={`${url}/idfc/basic-details`} component={BasicDetails} />
@@ -224,6 +223,7 @@ const Lending = props => {
           <Route path={`${url}/select-loan`} component={SelectLoan} />
           <Route path={`${url}/edit-details`} component={Recommended} />
           <Route path={`${url}/:id/loan-know-more`} component={LoanKnowMore} />
+          <Route path={`${url}/calculator`} component={CalculatorIdfc} />
        
           <Route component={NotFound} />
 

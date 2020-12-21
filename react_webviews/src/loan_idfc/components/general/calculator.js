@@ -27,7 +27,7 @@ class Calculator extends Component {
     let { params } = this.props.location;
 
     if (!params) {
-      this.navigate("home");
+      this.navigate("loan-home");
       return;
     }
 
@@ -196,7 +196,7 @@ class Calculator extends Component {
             <div>You are eligible for loan upto</div>
             <div className="total">
               {inrFormatDecimal(
-                parseInt(Loan_Eligibility) < parseInt("100000")
+                parseInt(Loan_Eligibility) < parseInt("0")
                   ? "0"
                   : Loan_Eligibility
               )}
