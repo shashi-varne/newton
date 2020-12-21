@@ -14,7 +14,7 @@ import Api from "utils/api";
 import Input from "../../../common/ui/Input";
 import { formatDate, dobFormatTest } from "utils/validators";
 import { FormControl } from "material-ui/Form";
-import { getUrlParams } from "utils/validators";
+import { getUrlParams, calculateAge, isValidDate } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
 
 class UploadBank extends Component {
@@ -412,6 +412,28 @@ class UploadBank extends Component {
       if (!form_data[key_check]) {
         form_data[key_check + "_error"] = first_error + keysMapper[key_check];
         canSubmit = false;
+      } else  if(key_check.indexOf('date') >= 0 && !isValidDate(form_data[key_check]))  {
+          canSubmit = false;
+          form_data[key_check + "_error"] = first_error + "valid " + keysMapper[key_check];
+      } else  if(
+        key_check === 'start_date' && 
+        (
+          calculateAge(form_data['start_date'], true).days < 90 || 
+          calculateAge(form_data['start_date'], true).days > 97
+        )
+        )  {
+          canSubmit = false;
+          form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 months from the current date";
+      } else if(
+        key_check === 'end_date' && 
+        form_data[key_check] && 
+        (
+          calculateAge(form_data['end_date'], true).days < 3 || 
+          calculateAge(form_data['end_date'], true).days > 4
+        )
+        ) {
+          canSubmit = false;
+          form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 days before the current date";
       }
     }
 
@@ -505,8 +527,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.start_date_error}
-                // helperText={this.state.form_data.start_date_error}
-                helperText="This date must be 3 months from the current date"
+                helperText={this.state.form_data.start_date_error || "This date must be 3 months from the current date"}
                 type="text"
                 width="40"
                 label="Start date"
@@ -522,7 +543,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.end_date_error}
-                helperText="This date must be 3 days before the current date"
+                helperText={this.state.form_data.end_date_error || "This date must be 3 days before the current date"}
                 type="text"
                 width="40"
                 label="End date"
