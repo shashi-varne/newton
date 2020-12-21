@@ -7,6 +7,8 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
+import Api from "utils/api";
+// import toast from "../../../common/ui/Toast";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -54,6 +56,12 @@ class ProfessionalDetails extends Component {
     this.setState({
       form_data: form_data,
       employment_type: employment_type,
+      companyOptions: [
+        {
+          key: "OTHERS",
+          value: "OTHERS",
+        },
+      ],
     });
   };
 
@@ -112,6 +120,46 @@ class ProfessionalDetails extends Component {
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
   };
 
+  handleSearch = (name) => async (event) => {
+    let value = event.target ? event.target.value : event;
+    let { form_data, companyOptions } = this.state;
+
+    if (name) {
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
+    }
+
+    if (form_data.company_name.length > 3) {
+      const res = await Api.get(
+        "relay/api/loan/idfc/employer/" + form_data.company_name
+      );
+      let resultData = res.pfwresponse.result || "";
+
+      if (res.pfwresponse.status_code === 200) {
+        if (resultData.employer_name.length !== 0) {
+          companyOptions = resultData.employer_name.map((element) => {
+            return {
+              key: element,
+              value: element,
+            };
+          });
+        } else {
+          companyOptions = [
+            {
+              key: "",
+              value: "",
+            },
+          ];
+        }
+      }
+
+      this.setState({
+        form_data: form_data,
+        companyOptions: companyOptions,
+      });
+    }
+  };
+
   render() {
     let { employment_type, industryOptions, companyOptions } = this.state;
 
@@ -132,13 +180,14 @@ class ProfessionalDetails extends Component {
                   width="40"
                   placeholder="Search for company"
                   options={companyOptions}
+                  suggestions_list={companyOptions}
                   label="Company name"
                   id="company_name"
                   name="company_name"
                   error={this.state.form_data.company_name_error ? true : false}
                   helperText={this.state.form_data.company_name_error}
                   value={this.state.form_data.company_name || ""}
-                  onChange={this.handleChange("company_name")}
+                  onChange={this.handleSearch("company_name")}
                 />
               </div>
             )}

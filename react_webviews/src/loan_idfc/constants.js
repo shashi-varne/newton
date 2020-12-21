@@ -4,11 +4,11 @@ let productName = capitalizeFirstLetter(getConfig().productName);
 
 export function goBackMap(path) {
   let mapper = {
-    "/loan/idfc/journey": "/loan/idfc/loan-home",
-    "/loan/idfc/edit-number": "/loan/idfc/loan-home",
+    "/loan/idfc/journey": "/loan/idfc/loan-know-more",
+    "/loan/idfc/edit-number": "/loan/idfc/loan-know-more",
     "/loan/idfc/application-summary": "/loan/idfc/journey",
     "/loan/idfc/personal-details": "/loan/idfc/journey",
-    "/loan/idfc/basic-details": "/loan/idfc/loan-home",
+    "/loan/idfc/basic-details": "/loan/idfc/loan-know-more",
     "/loan/idfc/professional-details": "/loan/idfc/basic-details",
     "/loan/idfc/address-details": "/loan/idfc/personal-details",
     "/loan/idfc/loan-requirement-details": "/loan/idfc/journey",
@@ -20,13 +20,14 @@ export function goBackMap(path) {
     "/loan/idfc/bt-info": "/loan/idfc/journey",
     "/loan/idfc/doc-list": "/loan/idfc/journey",
     "/loan/idfc/doc-upload": "/loan/idfc/doc-list",
-    "/loan/idfc/final-loan": "/loan/idfc/loan-home",
+    "/loan/idfc/final-loan": "/loan/idfc/loan-know-more",
     "/loan/idfc/reports": "/loan/idfc/loan-know-more",
     "/loan/idfc/final-offer": '/loan/idfc/journey',
-    "/loan/calculator": "/loan/loan-home",
-    "/loan/recommendation": "/loan/loan-home",
-    "/loan/select-loan": "/loan/loan-home",
+    "/loan/calculator": "/loan/loan-know-more",
+    "/loan/recommendation": "/loan/loan-know-more",
+    // "/loan/select-loan": "/loan/loan-home",
     "/loan/loan-know-more": "/loan/select-loan",
+    "/loan/idfc/otp-verify": "/loan/idfc/edit-number"
   };
 
   return mapper[path] || false;

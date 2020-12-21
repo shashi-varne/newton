@@ -40,56 +40,7 @@ class Calculator extends Component {
 
   handleClick = () => {
     this.sendEvents("next");
-    let params = {
-      create_new:
-        this.state.application_exists && this.state.otp_verified ? false : true,
-    };
-
-    let {
-      vendor_application_status,
-      pan_status,
-      is_dedupe,
-      rejection_reason,
-    } = this.state;
-
-    let rejection_cases = [
-      "idfc_null_rejected",
-      "idfc_0.5_rejected",
-      "idfc_1.0_rejected",
-      "idfc_1.1_rejected",
-      "idfc_1.7_rejected",
-      "idfc_4_rejected",
-      "idfc_callback_rejected",
-      "Age",
-      "Salary",
-      "Salary reciept mode",
-    ];
-
-    if (this.state.cta_title === "RESUME") {
-      if (
-        rejection_cases.indexOf(
-          vendor_application_status || rejection_reason
-        ) !== -1 ||
-        is_dedupe
-      ) {
-        this.navigate("loan-status");
-      }
-
-      if (rejection_cases.indexOf(rejection_reason) !== -1) {
-        this.navigate("loan-status");
-      }
-
-      if (!pan_status || vendor_application_status === "pan") {
-        this.navigate("basic-details");
-      } else if (
-        rejection_cases.indexOf(vendor_application_status) === -1 &&
-        !is_dedupe
-      ) {
-        this.navigate("journey");
-      }
-    } else {
-      this.getOrCreate(params);
-    }
+    this.navigate('select-loan');
   };
 
   sendEvents(user_action, data = {}) {
@@ -123,14 +74,6 @@ class Calculator extends Component {
     let Loan_Eligibility =
       (((Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40) / 100) *
       Tenor;
-
-    // if(Net_monthly_Income < 30000) {
-    //   Loan_Eligibility = 0;
-    // } else if(Loan_Eligibility > 100000) {
-    //   Loan_Eligibility = 100000;
-    // } else if(Loan_Eligibility <=0) {
-    //   Loan_Eligibility = 0;
-    // }
 
     return (
       <Container

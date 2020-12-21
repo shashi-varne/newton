@@ -24,10 +24,10 @@ class CommonRenderFaqs extends Component {
     componentWillMount() {
         window.scrollTo(0, 0);
         let { params } = this.props.location || {};
-        if (!params || !params.renderData) {
-            this.props.history.goBack();
-            return;
-        }
+        // if (!params || !params.renderData) {
+        //     this.props.history.goBack();
+        //     return;
+        // }
         this.setState({
             renderData: params ? params.renderData : {
                 steps: {
@@ -50,7 +50,7 @@ class CommonRenderFaqs extends Component {
         }
     }
 
-    async handleClick() {
+    handleClick() {
         this.sendEvents('next');
         this.props.history.goBack();
     }
@@ -76,7 +76,7 @@ class CommonRenderFaqs extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
-                buttonTitle={this.state.renderData.cta_title}
+                buttonTitle="OK"
                 onlyButton={true}
                 showLoader={this.state.show_loader}
                 handleClick={() => this.handleClick()}

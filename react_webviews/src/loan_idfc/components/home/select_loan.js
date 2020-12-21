@@ -98,6 +98,16 @@ class SelectLoan extends Component {
     });
   };
 
+  goBack = () => {
+    let { loans_applied } = this.state;
+
+    if (loans_applied === 0) {
+      this.navigate('edit-details')
+    } else {
+      this.navigate('loan-home')
+    }
+  }
+
   handleBenefits = (index) => {
     let { selectedIndexs } = this.state;
     selectedIndexs[index] = !this.state.selectedIndexs[index];
@@ -138,6 +148,9 @@ class SelectLoan extends Component {
         showLoader={this.state.show_loader}
         title="Select loan provider"
         noFooter={true}
+        headerData={{
+          goBack: this.goBack,
+        }}
       >
         <div className="select_loan">
           {this.state.stepContentMapper &&

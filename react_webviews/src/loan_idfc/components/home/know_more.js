@@ -150,7 +150,6 @@ class LoanKnowMore extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { provider } = this.state;
-    console.log(provider)
 
     if (provider === 'dmi') {
       let state =  this.getNextState();
@@ -218,8 +217,8 @@ class LoanKnowMore extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Know more"
         buttonTitle={this.state.top_cta_title}
+        hidePageTitle={true}
         handleClick={this.handleClick}
       >
         <div className="loan-know-more">
@@ -272,6 +271,7 @@ class LoanKnowMore extends Component {
             className="Flex block2"
             onClick={() => {
               this.sendEvents("faq");
+              this.navigate('faq')
             }}
           >
             <img

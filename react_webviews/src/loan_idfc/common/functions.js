@@ -91,11 +91,12 @@ export async function initialize() {
       }
       const res = await Api.post("/relay/api/loan/get/application/dmi", body);
 
-      var resultData = res.pfwresponse.result;
-
       this.setState({
         show_loader: false,
       });
+
+      let resultData = res.pfwresponse.result;
+
       if (res.pfwresponse.status_code === 200) {
         lead = resultData || {};
         let application_id = (lead.application_info || {}).application_id;
@@ -241,18 +242,18 @@ export async function getPickList() {
         };
       });
 
-      let companyOptions = Object.keys(result.employer).map((element) => {
-        return {
-          key: element,
-          value: element,
-        };
-      });
+      // let companyOptions = Object.keys(result.employer).map((element) => {
+      //   return {
+      //     key: element,
+      //     value: element,
+      //   };
+      // });
 
       this.setState(
         {
           tnc: tnc,
           industryOptions: industryOptions,
-          companyOptions: companyOptions,
+          // companyOptions: companyOptions,
           show_loader: false,
         },
         () => {
@@ -1015,6 +1016,7 @@ export async function getSummary() {
         providedPersonalDetails: providedPersonalDetails,
         show_loader: false,
         employment_type: result.employment_type,
+        loans_applied: result.loans_applied
       },
       () => {
         if (this.onload && !this.state.ctaWithProvider) {
