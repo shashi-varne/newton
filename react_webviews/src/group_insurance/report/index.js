@@ -9,7 +9,7 @@ import {
   inrFormatDecimalWithoutIcon, capitalizeFirstLetter , inrFormatDecimal
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getCssMapperReport } from '../constants';
+import { getCssMapperReport , TitleMaper} from '../constants';
 
 class Report extends Component {
 
@@ -18,7 +18,6 @@ class Report extends Component {
     this.state = {
       show_loader: true,
       reportData: [],
-      TitleMaper : {}
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -117,7 +116,7 @@ class Report extends Component {
   getProviderObject_offline(o2o_details){
     let obj = o2o_details;
     obj.key = 'insurance';
-    let top_title = this.state.TitleMaper[o2o_details.policy_type] ? this.state.TitleMaper[o2o_details.policy_type]  : ''
+    let top_title  = TitleMaper(o2o_details.policy_type)
     obj.top_title = top_title
     obj.sum_assured = o2o_details.cover_amount
     let data = getCssMapperReport(obj);
@@ -212,19 +211,6 @@ class Report extends Component {
   }
 
   async componentDidMount() {
-
-    let TitleMaper = {
-      'Health': 'Health insurance',
-      'Life': 'Life insurance',
-      'Motor': 'Motor insurance',
-      'Others': 'General Insurance',
-      'Other': 'General Insurance'
-    }
-
-    this.setState({
-      TitleMaper: TitleMaper
-    })
-
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/get/report');
@@ -435,7 +421,7 @@ class Report extends Component {
     }
 
     if (insurance_type === 'insurance') {
-      eventObj.properties.policy =  policy_type ? this.state.TitleMaper[policy_type] : ''
+      eventObj.properties.policy =  policy_type ? TitleMaper(policy_type) : ''
     }
 
     if (user_action === 'just_set_events') {
