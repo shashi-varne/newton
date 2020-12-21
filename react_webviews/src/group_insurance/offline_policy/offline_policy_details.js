@@ -150,7 +150,7 @@ class GroupHealthReportDetails extends Component {
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             {/* <div className="tc-title">{this.state.lead.provider === 'Hdfc Ergo' ? 'HDFC Ergo'  : capitalizeFirstLetter(this.state.lead.provider)}</div> */}
-                            <div className="tc-subtitle">{this.state.lead.provider === 'Hdfc Ergo' ? 'HDFC Ergo'  : capitalizeFirstLetter(this.state.lead.provider)}</div>
+                            <div className="tc-subtitle">{this.state.lead.provider === 'Hdfc Ergo' ? 'HDFC Ergo' : this.state.lead.provider === 'Religare Health' ? 'Care' : capitalizeFirstLetter(this.state.lead.provider)}</div>
                         </div>
 
                         <div className="tc-right">
