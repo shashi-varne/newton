@@ -100,6 +100,7 @@ class Recommended extends Component {
         user_action: user_action,
         screen_name: "home_loan_requirement",
         employment_type: this.state.form_data.employment_type || '',
+        amount_required: this.state.form_data.loan_amount_required || '',
       },
     };
 
