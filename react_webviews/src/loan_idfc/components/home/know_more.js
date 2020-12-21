@@ -40,6 +40,7 @@ class LoanKnowMore extends Component {
       partnerData: screenData.loan_partners[provider].partnerData,
       journeyData: screenData.loan_partners[provider].journeyData,
       eligibility: eligibility,
+      faqsInfo: screenData.loan_partners[provider].faqsInfo,
       documents: screenData.loan_partners[provider].documents,
     });
 
@@ -211,6 +212,35 @@ class LoanKnowMore extends Component {
     }
   };
 
+  openFaqs = () => {
+    let { provider, faqsInfo } = this.state;
+    let available_vendors = ['idfc', 'dmi'];
+
+    if(!available_vendors.includes(provider)) {
+      return;
+    }
+
+    this.sendEvents('faq')
+    let renderData = {
+      'header_title': faqsInfo.header_title,
+      'header_subtitle': faqsInfo.header_subtitle,
+      'steps': {
+        'options': faqsInfo.faqs
+      },
+      'cta_title': faqsInfo.cta_title,
+    }
+
+    let path_name = provider === 'idfc' ? '/loan/idfc/faq' : '/gold/common/render-faqs';
+
+    this.props.history.push({
+      pathname: path_name,
+      search: getConfig().searchParams,
+      params: {
+        renderData: renderData
+      }
+    });
+  }
+
   render() {
     let { partnerData, eligibility, journeyData, documents } = this.state;
     return (
@@ -271,7 +301,7 @@ class LoanKnowMore extends Component {
             className="Flex block2"
             onClick={() => {
               this.sendEvents("faq");
-              this.navigate('faq')
+              this.openFaqs();
             }}
           >
             <img
