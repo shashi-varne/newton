@@ -735,10 +735,10 @@ class DocumentUpload extends Component {
                 {!getConfig().html_camera && this.renderNativeCamera("doc2")}
               </div>
 
-              <div style={{ display: "none" }}>
+              {/* <div >
                 {getConfig().html_camera && this.renderHtmlCamera()}
                 {!getConfig().html_camera && this.renderNativeCamera()}
-              </div>
+              </div> */}
             </div>
           )}
 
