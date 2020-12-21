@@ -12,7 +12,7 @@ import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import ReactHtmlParser from 'react-html-parser';
 
-import { getCssMapperReport } from '../constants'
+import { getCssMapperReport ,  TitleMaper } from '../constants'
 
 class GroupHealthReportDetails extends Component {
 
@@ -27,7 +27,7 @@ class GroupHealthReportDetails extends Component {
             show_loader: true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits,
-            TitleMaper : {}
+            // TitleMaper : {}
         }
     }
 
@@ -68,17 +68,17 @@ class GroupHealthReportDetails extends Component {
         }
 
 
-        let TitleMaper = {
-            'Health': 'Health insurance',
-            'Life': 'Life insurance',
-            'Motor': 'Motor insurance',
-            'Others': 'General Insurance',
-            'Other': 'General Insurance'
-          }
+        // let TitleMaper = {
+        //     'Health': 'Health insurance',
+        //     'Life': 'Life insurance',
+        //     'Motor': 'Motor insurance',
+        //     'Others': 'General Insurance',
+        //     'Other': 'General Insurance'
+        //   }
 
-        this.setState({
-            TitleMaper : TitleMaper
-        })
+        // this.setState({
+        //     TitleMaper : TitleMaper
+        // })
     }
 
     navigate = (pathname) => {
@@ -131,7 +131,8 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
-                title={ this.state.TitleMaper[this.state.lead.policy_type] ? this.state.TitleMaper[this.state.lead.policy_type]  : ''}
+                // title={ this.state.TitleMaper[this.state.lead.policy_type] ? this.state.TitleMaper[this.state.lead.policy_type]  : ''}
+                title = {TitleMaper(this.state.lead.policy_type)}
                 fullWidthButton={true}
                 buttonTitle="OK"
                 onlyButton={true}

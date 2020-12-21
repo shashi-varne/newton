@@ -824,3 +824,20 @@ export function childeNameMapper(name) {
   return mapper[name] || name;
   
 }
+
+export function TitleMaper(name){
+
+
+  let TitleMaper = {
+    'Health': 'Health insurance',
+    'Life': 'Life insurance',
+    'Motor': 'Motor insurance',
+    'Others': 'General Insurance',
+    'Other': 'General Insurance'
+  }
+
+
+  return TitleMaper[name] || ''
+
+
+}
