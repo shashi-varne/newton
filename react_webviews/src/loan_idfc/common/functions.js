@@ -994,25 +994,11 @@ export async function getSummary() {
       result[element] && selectedVendors.push(element);
     });
 
-    let personal_details =   ['loan_amount_required', 'employment_type'];
-    let providedPersonalDetails = true;
-
-    if(result.employment_type === 'Salaried')  {
-      personal_details.push('monthly_salary')
-    }
-
-    for(let element in personal_details) {
-      if(result[personal_details[element]] === null) {
-        providedPersonalDetails = false;
-      }
-    }
-
     if (status === 200) {
       this.setState({
         account_exists: result.account_exists,
         ongoing_loan_details: result.ongoing_loan_details,
         selectedVendors: selectedVendors,
-        providedPersonalDetails: providedPersonalDetails,
         show_loader: false,
         employment_type: result.employment_type,
       },

@@ -73,9 +73,9 @@ class Home extends Component {
   }
 
   handleClick = () => {
-    let { ongoing_loan_details } = this.state;
+    let { ongoing_loan_details, account_exists } = this.state;
     this.sendEvents("next");
-    if (ongoing_loan_details.length === 0) {
+    if (ongoing_loan_details.length === 0 && !account_exists) {
       this.navigate("edit-details");
     } else {
       this.navigate("select-loan");
