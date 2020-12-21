@@ -257,7 +257,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    SUM INSURED
+                               {this.state.lead.plan_type === 'Motor' ? 'IDV' : this.state.lead.plan_type === 'Life' ?  'SUM ASSURED'  : 'SUM INSURED'}
                                 </div>
                                 <div className="mtr-bottom">
                                     {numDifferentiationInr(this.state.lead.cover_amount)} 
@@ -272,7 +272,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
-                                    {this.state.lead.provider === 'Motor' ? 'IDV' : 'COVER PERIOD'} 
+                                    COVER PERIOD
                                 </div>
                                 <div className="mtr-bottom">
                                     {this.state.lead.cover_period} year{this.state.lead.cover_period>'1' && <span>s</span>}
