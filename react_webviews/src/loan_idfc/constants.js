@@ -446,6 +446,66 @@ export const idfc_config = {
           loan_amount: "₹1 lac",
           logo: "dmi-finance",
         },
+
+        faqsInfo: {
+          header_title: "Frequently asked questions",
+          header_subtitle: '',
+          cta_title: "OK",
+          faqs: [
+            {
+              'title': 'What is the max loan amount for salaried Personal loan ?',
+              'subtitle': 'Max loan amount is 1 lac.'
+            },
+            {
+              'title': 'On what criteria will the loan be sanctioned to me ?',
+              'subtitle': 'The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.'
+            },
+            {
+              'title': `Is ${productName} the lender ?`,
+              'subtitle': `${productName} is not the lender. ${productName} will only facilitate your 
+              loan application for availing credit facilities. ${productName} has a contractual 
+              relationship with DMI Finance Pvt Ltd who offers credit facilities to the users of the app. 
+              Any credit facility offered to you by any lender on App shall be governed by Terms and 
+              Conditions agreed 
+              between you and the lender and ${productName} shall not be a party to the same.`
+            },
+            {
+              'title': `What are the benefits of applying for a personal loan from ${productName} ?`,
+              points: [
+                'Digital loans: Bid farewell to piles of paperwork and branch visits',
+                'Zero documentation: No income documents required',
+                'Money in account within 48 hrs: Submit loan application in 10 mins and get credit within 48 hrs',
+                'Collateral free loan: You don’t have to provide any security for your loan'
+              ]
+            },
+            {
+              'title': `What documents are required to get a Personal loan from ${productName}?`,
+              'subtitle': `You just need to upload a photo of your PAN card to get a Personal 
+              loan from ${productName}. No other documents are required.`
+            },
+            {
+              'title': 'What will be my First EMI payment date ?',
+              'subtitle': `
+              Cases disbursed between 1st to 20th of the month – will have their first EMI on 5th of coming month.</br>
+              Cases disbursed between 21st till last day of month – will have first EMI on 5th of next to next month.</br>
+              Please note – there will be few cases approved on 20th but will get disbursed on 21st or later date 
+              (due to bank holiday or late hours), but their first EMI will be on 5th of next month only.</br>
+              `
+            },
+            {
+              'title': 'Are there any prepayment charges ?',
+              'subtitle': 'Prepayment not allowed for first 6 months. Prepayment charges of 3% flat on the o/s principal to be applied post this.'
+            },
+            {
+              'title': 'What is the minimum and maximum period for repayment?',
+              'subtitle': 'Minimum tenor is 6 months and maximum is 24 months.'
+            },
+            {
+              'title': 'What is the Processing fee? ',
+              'subtitle': 'Processing fee is 2% of gross disbursement amount plus GST as applicable.'
+            }
+          ],
+        }
       },
 
       idfc: {
@@ -496,7 +556,7 @@ export const idfc_config = {
 
         partnerData: {
           title: "IDFC FIRST BANK",
-          subtitle: "Competitive interest rate",
+          subtitle: "Competitive Interest rate",
           loan_amount: " ₹40 lac",
           logo: "idfc_logo",
         },
@@ -533,6 +593,125 @@ export const idfc_config = {
               title: "Sanction and disbursal",
               subtitle:
                 "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
+            },
+          ],
+        },
+
+        faqsInfo: {
+          header_title: "Frequently asked questions",
+          header_subtitle: '',
+          cta_title: "OK",
+          faqs: [
+            {
+              header_title: "Personal Loan from IDFC FIRST Bank",
+              options: [
+                {
+                  title: `Is ${productName} the lender?`,
+                  subtitle: `No, ${productName} is not the lender. It is IDFC FIRST Bank who is offering credit to the users of our app. We have a contractual partnership with IDFC FIRST Bank and we will only facilitate your loan application for availing credit.
+                  <br> <br> <b>Note</b>: Any credit facility offered to you by IDFC FIRST Bank on the ${productName} app shall be governed by Terms and Conditions agreed between you and IDFC FIRST Bank, and ${productName} shall not be a party to the same.`,
+                },
+                {
+                  title:
+                    "How long does it usually take for a loan to get disbursed?",
+                  subtitle: `Usually, loans get sanctioned in less than four hours. If all your documents are in order then the loan amount gets disbursed in 1 to 2 days.
+                  <br> <br> <b>Note</b>: All loan approvals and disbursals are at the sole discretion of IDFC FIRST Bank.`,
+                },
+                {
+                  title: `Can I cancel my loan application post-approval?`,
+                  subtitle: `Yes, you can and it is free of cost. Give us a call on xxxxxxxxxx or write to xxx@xxxx.com should you wish to cancel your loan.`,
+                },
+                {
+                  title: `The interest rate of my personal loan will be flat or reducing?`,
+                  subtitle: `The interest rate that will apply will be reducing in nature. This means as the outstanding principal amount will reduce -- the interest payable will also come down.`,
+                },
+              ],
+            },
+            {
+              header_title: "Eligibility",
+              options: [
+                {
+                  title:
+                    "What is the maximum and minimum loan amount that I can get if I apply for a personal loan?",
+                  subtitle:
+                    "For salaried professionals, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs 40 lakhs. For self-employed, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs. 9 lakhs.",
+                },
+                {
+                  title: "On what criteria will the loan be sanctioned to me ?",
+                  subtitle:
+                    "The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.",
+                },
+                {
+                  title: `Loan sanction depends on what factors?`,
+                  subtitle: `The final amount sanctioned will depend on your income and other factors like credit score, repayment ability, age, employer, etc.`,
+                },
+                {
+                  title: `Is it necessary for me to have a salary account with IDFC FIRST Bank for getting a personal loan?`,
+                  subtitle: `No, it is not mandatory to have a salary account with IDFC FIRST Bank.`,
+                },
+              ],
+            },
+    
+            {
+              header_title: "Fees and charges",
+              is_table: true,
+              options: [
+                {
+                  title: "EMI Bounce charges per presentation",
+                  subtitle: "Rs. 400",
+                },
+                {
+                  title:
+                    "Late payment/Penal charges/ Default interest/Overdue (per month)",
+                  subtitle: "2% of the unpaid EMI or Rs. 300 whichever is higher",
+                },
+                {
+                  title: `Cheque Swap charges (per swap)`,
+                  subtitle: `Rs. 500`,
+                },
+                {
+                  title: `Foreclosure / Prepayment charges`,
+                  subtitle: `You can foreclose personal loan after a lock-in period of 6 months by paying a foreclosure charge of 5% on the outstanding principal amount`,
+                },
+                {
+                  title: "Duplicate No Objection Certificate Issuance Charges",
+                  subtitle: "Rs. 500",
+                },
+                {
+                  title: "Physical Repayment Schedule",
+                  subtitle: "Rs. 500",
+                },
+                {
+                  title: `Physical Statement of Account`,
+                  subtitle: `Rs. 500`,
+                },
+                {
+                  title: `Document retrieval charges (per retrieval)`,
+                  subtitle: "Rs. 500",
+                },
+                {
+                  title: "Processing fees",
+                  subtitle: "Up to 3% of the loan amount",
+                },
+                {
+                  title: `Part Payment charges`,
+                  subtitle: `Part-payment is not allowed`,
+                },
+                {
+                  title: `EMI Pickup / Collection Charges`,
+                  subtitle: "Rs. 350",
+                },
+              ],
+            },
+            {
+              header_title: "Others",
+              options: [
+                {
+                  title: "I have a question that is not listed here, what do I do?",
+                  subtitle: `We will be glad to help you with any questions regarding the personal loan from IDFC FIRST
+                  Bank. Please feel free to contact our customer care representative at xxxxxxxxxx or email us at
+                  xxx@fisdom.com`,
+                },
+              ],
             },
           ],
         },

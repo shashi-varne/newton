@@ -30,7 +30,7 @@ class SelectLoan extends Component {
       idfc: {
         index: 0,
         title: "IDFC FIRST BANK",
-        subtitle: "Competetive intrest rate",
+        subtitle: "Competitive Interest rate",
         loan_amount: " ₹40 lac",
         logo: "idfc_logo",
         cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
@@ -106,12 +106,7 @@ class SelectLoan extends Component {
 
   handleClick = (provider_name) => {
     this.sendEvents("next", { provider_name: provider_name });
-
-    this.navigate(`/loan/${provider_name}/loan-know-more`, {
-      params: {
-        provider: provider_name,
-      },
-    });
+    this.navigate(`/loan/${provider_name}/loan-know-more`);
   };
 
   sendEvents(user_action, data = {}) {
@@ -120,7 +115,7 @@ class SelectLoan extends Component {
       properties: {
         user_action: user_action,
         screen_name: "select_loan_provider",
-        provider_name: data.provider_name,
+        provider_name: data.provider_name || '',
       },
     };
 
