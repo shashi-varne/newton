@@ -102,7 +102,14 @@ class Home extends Component {
     }
   }
 
-  onload = () => {};
+  onload = () => {
+    let { ongoing_loan_details } = this.state;
+
+    this.setState({
+      loan_exists: ongoing_loan_details.length,
+      show_loader: false,
+    });
+  };
 
   render() {
     let {
