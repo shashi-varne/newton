@@ -98,7 +98,7 @@ class Recommended extends Component {
       event_name: "lending",
       properties: {
         user_action: user_action,
-        screen_name: "home_loan_amount_required",
+        screen_name: "home_loan_requirement",
         employment_type: this.state.form_data.employment_type || '',
       },
     };
