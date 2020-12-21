@@ -51,6 +51,7 @@ class Home extends Component {
         subtitle: "Quick disbursal",
         loan_amount: " ₹40 lac",
         logo: "idfc_logo",
+        provider_name: 'idfc',
         cta_title: "RESUME",
       },
       dmi: {
@@ -59,6 +60,7 @@ class Home extends Component {
         subtitle: "Quick money transfer",
         loan_amount: "₹1 lac",
         logo: "dmi-finance",
+        provider_name: 'dmi',
         cta_title: "RESUME",
       },
     };
@@ -70,18 +72,32 @@ class Home extends Component {
   }
 
   handleClick = () => {
+<<<<<<< HEAD
     let { ongoing_loan_details } = this.state;
     this.sendEvents("next");
     if (ongoing_loan_details.length === 0) {
+=======
+    let { providedPersonalDetails } = this.state;
+    this.sendEvents("next");
+    if (providedPersonalDetails) {
+      this.navigate("select-loan");
+    } else {
+>>>>>>> f577ad272fb2e0a5497f5d523b4e7ee3015ab658
       this.navigate("edit-details");
     } else {
       this.navigate("select-loan");
     }
   };
 
+<<<<<<< HEAD
   handleResume = (vendor) => {
     this.sendEvents("resume");
     this.navigate(`${vendor}/loan-know-more`);
+=======
+  handleResume = (provider_name) => {
+    this.sendEvents("resume");
+    this.navigate(`${provider_name}/loan-know-more`);
+>>>>>>> f577ad272fb2e0a5497f5d523b4e7ee3015ab658
   };
 
   sendEvents(user_action) {

@@ -74,11 +74,13 @@ class Recommended extends Component {
     let { form_data } = this.state;
     let keys_to_check = ["loan_amount_required", "employment_type"];
 
-    if (form_data.employment_type === "Salaried")
+    let body = {};
+
+    if (form_data.employment_type === "Salaried") {
       keys_to_check.push("monthly_salary");
+    }
 
     if (this.validateFields(keys_to_check, form_data)) {
-      let body = {};
       this.setState({
         show_loader: true,
       });
@@ -86,7 +88,7 @@ class Recommended extends Component {
         let key = keys_to_check[j];
         body[key] = form_data[key] || "";
       }
-      this.sendEvents('next')
+      this.sendEvents("next");
       this.getRecommendedVendor(body);
     }
   };
@@ -111,7 +113,7 @@ class Recommended extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Help us to provide you with best offers"
         buttonTitle="NEXT"

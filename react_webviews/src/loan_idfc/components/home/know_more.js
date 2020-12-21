@@ -6,7 +6,7 @@ import JourneySteps from "../../../common/ui/JourneySteps";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 
-class IdfcKnowMore extends Component {
+class LoanKnowMore extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -288,4 +288,4 @@ class IdfcKnowMore extends Component {
   }
 }
 
-export default IdfcKnowMore;
+export default LoanKnowMore;
