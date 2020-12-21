@@ -336,7 +336,7 @@ class Report extends Component {
                     ' annually' 
                   }
                 </div>}
-                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimal(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
                   <span style={{textTransform : "lowercase", fontWeight : 'normal'}}>/{props.frequency}</span>
                   }
