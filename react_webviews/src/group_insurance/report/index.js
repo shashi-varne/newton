@@ -222,7 +222,7 @@ class Report extends Component {
 
         var policyData = res.pfwresponse.result.response;
         var next_page = policyData.group_insurance.next_page;
-        var has_more = policyData.group_insurance.more;  console.log(has_more,'has_more')
+        var has_more = policyData.group_insurance.more;
 
         this.setState({
           nextPage: (has_more) ? next_page : ''
