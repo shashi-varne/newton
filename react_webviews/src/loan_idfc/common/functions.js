@@ -753,6 +753,7 @@ export async function formCheckUpdate(
     tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
+    office_pincode: "pincode",
     city: "city",
     mailing_address_preference: "mailing address preference",
   };
