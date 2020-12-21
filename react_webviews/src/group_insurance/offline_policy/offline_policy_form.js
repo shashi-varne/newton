@@ -3,14 +3,13 @@ import Container from '../common/Container';
 import '../common/Style.css';
 import { getConfig } from 'utils/functions';
 import { capitalizeFirstLetter } from 'utils/validators'
-// import { insuranceProductTitleMapper } from '/constants';
 import { nativeCallback } from 'utils/native_callback';
-// import DropdownInModal from '../../common/ui/DropdownInModal'
 import Input from '../../common/ui/Input'
 import Dialog, { DialogContent  } from 'material-ui/Dialog';
 import Api from '../../../src/utils/api';
 import toast from '../../common/ui/Toast'
 import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon'
+
 class AddPolicy extends Component {
 
   constructor(props) {
@@ -28,7 +27,8 @@ class AddPolicy extends Component {
         searching : true,
         lock : false,
         binding : true,
-        o2o_data : ''
+        o2o_data : '',
+        color : ''
     };
     
   }
@@ -68,10 +68,13 @@ componentWillMount() {
 
   let form_data = this.state.form_data
   // form_data.Vendor = 'HDFC Ergo'
+  let color =  this.state.type === 'fisdom' ? '#6650AB' : 'blue' 
+
   form_data.title = 'CONTINUE'
   this.setState({
     vendor_details: vendor_details,
-    form_data : form_data
+    form_data : form_data,
+    color : color
   })
 }
 
@@ -238,6 +241,7 @@ handleClick = async () => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
+          x.item(i).style.border = 'none';
         }
       }, 0);
       this.setState({ binding: false})
@@ -248,6 +252,7 @@ handleClick = async () => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
+          x.item(i).style.border = 'none';
         }
       }, 0);
       this.setState({ binding: false})
@@ -363,7 +368,7 @@ handleClick = async () => {
                     <div>
 
                    {this.state.form_data.notfound &&  <span><p style={{color : 'red'}}> Sorry! Couldn’t find your policy details! </p>
-                    <p style={{color : '#6650AB'}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
+                    <p style={{color : this.state.color}}>If you have bought a policy recently please wait for 2-3 days to check it here. </p></span>}
                     {this.state.form_data.found &&  <span><p style={{color : 'red'}}> This policy already exist in insurance portfolio </p></span>} 
                     </div>
                 </div>

@@ -10,9 +10,7 @@ import Api from 'utils/api';
 import toast from  '../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-// import { initialize } from '../products/group_health/common_data'
 import ReactHtmlParser from 'react-html-parser';
-// import {getCoverageType} from '../products/group_health/constants';
 import { getCssMapperReport } from '../constants'
 
 class GroupHealthReportDetails extends Component {
@@ -95,9 +93,7 @@ class GroupHealthReportDetails extends Component {
             "event_name": 'portfolio',
             "properties": {
                 "user_action": user_action,
-                // "product": this.state.providerConfig.provider_api,
                 'plan_name' :  this.state.lead.provider,
-                // 'provider' : this.state.lead.provider,
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
