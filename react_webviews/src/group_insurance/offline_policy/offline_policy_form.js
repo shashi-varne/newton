@@ -241,7 +241,7 @@ handleClick = async () => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
-          x.item(i).style.border = 'none';
+          x.item(i).style.border = '1px solid';
         }
       }, 0);
       this.setState({ binding: false})
@@ -252,7 +252,7 @@ handleClick = async () => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
-          x.item(i).style.border = 'none';
+          x.item(i).style.border = '1px solid';
         }
       }, 0);
       this.setState({ binding: false})
