@@ -215,6 +215,12 @@ class LoanKnowMore extends Component {
 
   openFaqs = () => {
     let { provider, faqsInfo } = this.state;
+    let available_vendors = ['idfc', 'dmi'];
+
+    if(!available_vendors.includes(provider)) {
+      return;
+    }
+
     this.sendEvents('faq')
     let renderData = {
       'header_title': faqsInfo.header_title,
