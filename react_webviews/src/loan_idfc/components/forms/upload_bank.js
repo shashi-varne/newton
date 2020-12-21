@@ -96,7 +96,7 @@ class UploadBank extends Component {
     }
 
     let loaderData = {
-      title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
+      title: `Hang on, while IDFC finishes analysing your last 3 months' bank statements`,
       subtitle: "It may take 10 to 15 seconds!",
     };
 
@@ -319,7 +319,10 @@ class UploadBank extends Component {
         documents[index].status = "confirmed";
         documents[index].document_id = result.document_id;
         if (documents[index].curr_status === "edit") {
-          documents[index].showButton = false;
+          documents[index].showButton = true;
+          this.setState({
+            confirmed: true,
+          });
         } else if (documents[index].curr_status === "delete") {
           documents.splice(index, 1);
         } else {

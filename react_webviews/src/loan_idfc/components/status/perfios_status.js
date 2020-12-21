@@ -247,7 +247,7 @@ class PerfiosStatus extends Component {
           {perfios_state === "processing" && (
             <div>
               <div className="subtitle">
-                Oops! Something's not right. Please check back in some time.
+                Oops something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>

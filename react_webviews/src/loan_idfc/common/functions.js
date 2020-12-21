@@ -721,11 +721,11 @@ export async function formCheckUpdate(
     last_name: "last name",
     gender: "gender",
     marital_status: "marital status",
-    father_name: "father name",
-    mother_name: "mother name",
+    father_name: "father's name",
+    mother_name: "mother's name",
     religion: "religion",
     email_id: "email id",
-    company_name: "company name from provided list",
+    company_name: this.state.lead.application_info.employment_type !== "self_employed" ?  "company name from provided list" : "business name",
     business_name: "business name",
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
@@ -789,7 +789,7 @@ export async function formCheckUpdate(
 
   if (form_data.maxAmount && form_data.amount_required > form_data.maxAmount) {
     form_data.amount_required_error =
-      "amount cannot be greater than max loan amount";
+      "Amount cannot be greater than max loan amount";
     canSubmitForm = false;
   }
   
@@ -798,7 +798,7 @@ export async function formCheckUpdate(
     // eslint-disable-next-line
     parseInt(form_data.amount_required) < parseInt("100000")
   ) {
-    form_data.amount_required_error = "Minimum loan amount should be ₹1 lakh";
+    form_data.amount_required_error = "Minimum loan amount should be ₹1 Lakh";
     canSubmitForm = false;
   }
 
@@ -821,7 +821,7 @@ export async function formCheckUpdate(
     }
   }
 
-  if (form_data.company_name) {
+  if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
     let data = this.state.companyOptions.filter(
       (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
     );
