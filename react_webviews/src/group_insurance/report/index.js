@@ -421,14 +421,6 @@ class Report extends Component {
       reportState[this.state.reportData[i].key] = this.state.reportData[i].status;
     };
 
-    if (insurance_type === 'insurance') {
-      eventObj.properties.policy =  policy_type ? this.state.TitleMaper[policy_type] : ''
-    }
-
-    if (insurance_type !== 'insurance') {
-      eventObj.report = reportState;
-    }
-
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -437,6 +429,14 @@ class Report extends Component {
         "type": insurance_type ? insurance_type : '',
       }
     };
+
+    if (insurance_type !== 'insurance') {
+      eventObj.properties.report = reportState;
+    }
+
+    if (insurance_type === 'insurance') {
+      eventObj.properties.policy =  policy_type ? this.state.TitleMaper[policy_type] : ''
+    }
 
     if (user_action === 'just_set_events') {
       return eventObj;
