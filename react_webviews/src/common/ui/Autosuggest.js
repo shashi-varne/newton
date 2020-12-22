@@ -17,12 +17,13 @@ class AutosuggestInput extends Component {
     if (prevState.suggestions_list !== this.props.suggestions_list) {
       this.setState({ suggestions_list: this.props.suggestions_list })
     }
-    if (prevState.options !== this.state.suggestions) {
-      this.setState({ suggestions: this.props.options })
-    }
   }
   handleChange = (value) => {
     this.props.onChange(value);
+
+    if (this.props.options !== this.state.suggestions) {
+      this.setState({ suggestions: this.props.options })
+    }
   };
 
   componentDidMount(){

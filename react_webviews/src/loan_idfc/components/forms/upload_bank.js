@@ -157,7 +157,6 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
-          console.log(file);
           try {
             that.setState({
               docType: this.doc_type,
@@ -236,7 +235,6 @@ class UploadBank extends Component {
 
   save(file) {
     let acceptedType = ["application/pdf"];
-    console.log(file);
 
     if (acceptedType.indexOf(file.type) === -1) {
       toast("Please select pdf file only");
@@ -250,7 +248,7 @@ class UploadBank extends Component {
     file.status = "uploaded";
 
     if (editId === "") {
-      file.name = `Bank_statement_${count}.pdf`;
+      file.name = `${file.file_name}.pdf`;
       documents.push(file);
     } else {
       var index = documents.findIndex((item) => item.id === editId);

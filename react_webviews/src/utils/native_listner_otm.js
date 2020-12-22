@@ -57,6 +57,7 @@ if (getConfig().generic_callback) {
         var l = listeners[i];
         if (l.type === 'doc' && (l.doc_type === d.file_name || l.doc_type === d.doc_type)) {
           var file = b64toBlob(d.blobBase64, d.mime_type || d.file_type, '');
+          file.file_name = d.file_name_local;
           l.upload(file);
           listeners.splice(i, 1);
           i--;

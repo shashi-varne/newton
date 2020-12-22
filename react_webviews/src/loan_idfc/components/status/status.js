@@ -191,10 +191,6 @@ class LoanStatus extends Component {
         application_status: application_status,
       });
     } else {
-      // if (vendor_application_status === "idfc_0.5_accepted") {
-      //   commonMapper[vendor_application_status].top_title =
-      //     `${commonMapper[vendor_application_status].top_title} ${first_name}!`;
-      // }
 
       this.setState({
         commonMapper: commonMapper[vendor_application_status] || {},

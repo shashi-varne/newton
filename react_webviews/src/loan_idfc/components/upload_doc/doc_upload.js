@@ -4,13 +4,13 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { getConfig } from "../../../utils/functions";
-import camera_green from "assets/take_pic_green.svg";
-import gallery_green from "assets/go_to_gallery_green.svg";
+// import camera_green from "assets/take_pic_green.svg";
+// import gallery_green from "assets/go_to_gallery_green.svg";
 import { getBase64 } from "utils/functions";
 import Api from "utils/api";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
-import camera_grey from "assets/take_pic_grey.svg";
+// import camera_grey from "assets/take_pic_grey.svg";
 import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
@@ -178,7 +178,7 @@ class DocumentUpload extends Component {
           disbableButton: false,
         });
       }
-console.log(documents)
+
       this.setState({
         docList: docList[selectedIndex],
         docs: docs,
@@ -310,7 +310,7 @@ console.log(documents)
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
     console.log(file);
     let ext = file.type.split("/")[1];
-    name = document.split(" ").join("_") + "." + ext;
+    name = file.file_name + "." + ext;
 
     file.name = name;
     file.category_id = category;
@@ -516,47 +516,6 @@ console.log(documents)
     }
   };
 
-  editDocument = async (file) => {
-    let { documents, image_data, totalUpload, disbableButton } = this.state;
-
-    const data = new FormData();
-    data.append("doc_type", file.doc_name);
-    data.append("file", file, file.name);
-    data.append("doc_id", file.document_id);
-    data.append("category_id", file.category_id);
-    data.append("checklist_doc_type", file.checklist_doc_type);
-    try {
-      const res = await Api.post(
-        `relay/api/loan/idfc/upload/document/${this.state.application_id}?edit=true`,
-        data
-      );
-
-      const { result, status_code: status } = res.pfwresponse;
-
-      if (status === 200) {
-        if (totalUpload < 3) {
-          // image_data[type].integrated = true;
-        } else {
-          let index = documents.findIndex(
-            (item) => item.checklist_doc_type === file.checklist_doc_type
-          );
-          documents[index].id = result.document_id;
-
-          disbableButton = false;
-        }
-
-        this.setState({
-          image_data: image_data,
-          documents: documents,
-          disbableButton: disbableButton,
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      toast("Something went wrong");
-    }
-  };
-
   handleClick = () => {
     this.sendEvents("next");
     this.navigate("doc-list");
@@ -642,27 +601,6 @@ console.log(documents)
                         alt=""
                       />
                       {item.name}
-                      <span
-                        style={{ float: "right" }}
-                        onClick={() => this.startUpload(
-                          "open_file",
-                          item.checklist_doc_type,
-                          item.name,
-                          item.id
-                        )}
-                      >
-                        <input
-                        type="file"
-                        style={{ display: "none" }}
-                        onChange={this.getPdf}
-                        id="myFile1"
-                      />
-                        <img
-                          id={item.doc_type}
-                          src={require(`assets/edit_green.svg`)}
-                          alt=""
-                        />
-                      </span>
                       <span
                         style={{ float: "right" }}
                         onClick={() => this.deleteDocument(index, item)}

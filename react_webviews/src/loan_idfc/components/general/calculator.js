@@ -16,6 +16,7 @@ class Calculator extends Component {
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
+      cta_title: 'APPLY NOW'
     };
 
     this.initialize = initialize.bind(this);
@@ -26,21 +27,29 @@ class Calculator extends Component {
 
     let { params } = this.props.location;
 
-    if (!params) {
-      this.navigate("loan-home");
-      return;
-    }
-
     this.setState({
       ...params,
     });
   }
 
-  onload = async () => {};
+  onload = async () => {
+    let { loans_applied } = this.state;
+
+    this.setState({
+      cta_title: loans_applied > 0 && "RESUME"
+    })
+  };
 
   handleClick = () => {
     this.sendEvents("next");
-    this.navigate('select-loan');
+    let { cta_title } = this.state;
+    
+    if (cta_title === "RESUME") {
+      this.navigate('select-loan');
+    } else {
+      this.navigate('edit-details');
+    }
+    
   };
 
   sendEvents(user_action, data = {}) {

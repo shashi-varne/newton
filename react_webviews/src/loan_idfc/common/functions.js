@@ -166,6 +166,10 @@ export async function initialize() {
     this.getUserStatus();
   }
 
+  if (this.state.screen_name === "calculator") {
+    this.getSummary();
+  }
+
   if (
     this.state.screen_name === "loan_status" ||
     this.state.screen_name === "system_error"
