@@ -149,7 +149,6 @@ export async function initialize() {
     "home_screen",
     "select_loan_screen",
     "recommended",
-    "calculator",
   ];
 
   if (

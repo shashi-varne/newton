@@ -35,7 +35,6 @@ class Calculator extends Component {
   };
 
   handleClick = () => {
-    let { ongoing_loan_details, account_exists } = this.state;
     this.sendEvents("next");
     let { cta_title } = this.state;
     
