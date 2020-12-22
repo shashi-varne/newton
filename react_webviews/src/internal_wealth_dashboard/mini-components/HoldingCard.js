@@ -69,7 +69,7 @@ const HoldingCard = ({
           <div className="iwd-hcni-label">Invested</div>
         </div>
         <div className="iwd-hcn-item">
-          <img src={true ? positive : negative} alt="" />
+          {xirr !== 0 && <img src={xirr > 0 ? positive : negative} alt="" />}
           <div>
             <div className="iwd-hcni-value">{(xirr ? xirr + '%' : '--')}</div>
             <div className="iwd-hcni-label">XIRR</div>
