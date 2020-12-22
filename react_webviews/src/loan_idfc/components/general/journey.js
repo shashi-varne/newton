@@ -320,13 +320,13 @@ class JourneyMap extends Component {
         hidePageTitle={true}
       >
         <div className="journey-track">
-          {index < "4" && <img
+          {index < "3" && <img
             className="center"
             src={require(`assets/${this.state.productName}/icn_journey_start.svg`)}
             alt=""
           />}
 
-          {index >= "4" && <img
+          {index >= "3" && <img
             className="center"
             src={require(`assets/${this.state.productName}/icn_lourney_end.svg`)}
             alt=""

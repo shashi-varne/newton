@@ -83,21 +83,21 @@ class LoanEligible extends Component {
           </div>
 
           <div className="loan-amount">
-            {formatAmountInr(vendor_info.loanAmount)}
+            {formatAmountInr(vendor_info.updated_offer_amount)}
           </div>
 
           <div className="loan-value">
             <div>
               <div>EMI amount</div>
-              <div className="values">{formatAmountInr(vendor_info.EMIAmount)}</div>
+              <div className="values">{formatAmountInr(vendor_info.updated_offer_emi)}</div>
             </div>
             <div>
               <div>Tenure</div>
-              <div className="values">{application_info.tenor} months</div>
+              <div className="values">{application_info.updated_offer_tenor} months</div>
             </div>
             <div>
               <div>Rate of interest</div>
-                <div className="values">{vendor_info.ROI}%</div>
+                <div className="values">{vendor_info.updated_offer_roi}%</div>
             </div>
           </div>
         </div>

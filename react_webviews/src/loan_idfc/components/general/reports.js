@@ -166,6 +166,7 @@ class ReportDetails extends Component {
               <div className="mt-left">
                 <img
                   src={require(`assets/${this.state.productName}/icn_ROI.svg`)}
+                  style={{margin: '0 3px 0 5px'}}
                   alt=""
                 />
               </div>

@@ -145,7 +145,7 @@ class EligibleLoan extends Component {
         <div className="eligible-loan">
           <div className="subtitle">
             Woo-hoo! IDFC is offering you a personal loan of ₹
-            {changeNumberFormat(vendor_info.display_loan_amount || "0")}
+            {changeNumberFormat(vendor_info.displayOffer || "0")}
           </div>
 
           <div
@@ -181,19 +181,19 @@ class EligibleLoan extends Component {
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
-                    <div className="sub-title">{`${vendor_info.netTenor} months`}</div>
+                    <div className="sub-title">{`${vendor_info.initial_offer_tenor} months`}</div>
                   </div>
                 </div>
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
                     <div className="sub-title">
-                      {formatAmountInr(vendor_info.maxAllowedEMI)}/month
+                      {formatAmountInr(vendor_info.initial_offer_emi)}/month
                     </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
-                    <div className="sub-title">{ROI}%</div>
+                    <div className="sub-title">{vendor_info.initial_offer_roi}%</div>
                   </div>
                 </div>
               </Grid>
