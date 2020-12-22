@@ -39,11 +39,16 @@ class Calculator extends Component {
   onload = async () => {};
 
   handleClick = () => {
+    let { ongoing_loan_details, account_exists } = this.state;
     this.sendEvents("next");
-    this.navigate('select-loan');
+    if (ongoing_loan_details.length === 0 && !account_exists) {
+      this.navigate("edit-details");
+    } else {
+      this.navigate("select-loan");
+    }
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
