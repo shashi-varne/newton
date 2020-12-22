@@ -209,13 +209,13 @@ const Lending = props => {
             render={(props) => <BasicDetails {...props} edit={true} />} />
 
           <Route path={`${url}/idfc/edit-professional-details`} 
-            render={(props) => <ProfessionalDetails {...props} edit={true} />} />
+            render={(props) => <ProfessionalDetailsIdfc {...props} edit={true} />} />
 
           <Route path={`${url}/idfc/edit-personal-details`} 
-            render={(props) => <PersonalDetails {...props} edit={true} />} />
+            render={(props) => <PersonalDetailsIdfc {...props} edit={true} />} />
 
           <Route path={`${url}/idfc/edit-address-details`} 
-            render={(props) => <AddressDetails {...props} edit={true} />} />
+            render={(props) => <AddressDetailsIdfc {...props} edit={true} />} />
 
           {/* <Route path={`${url}/dmi`} component={Loan} /> */}
 
