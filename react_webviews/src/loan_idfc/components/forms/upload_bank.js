@@ -187,7 +187,6 @@ class UploadBank extends Component {
   }
 
   startUpload(method_name, doc_type) {
-    console.log(doc_type);
     this.setState({
       type: method_name,
     });
@@ -203,7 +202,6 @@ class UploadBank extends Component {
     e.preventDefault();
 
     let file = e.target.files[0];
-    console.log(file);
 
     let acceptedType = ["application/pdf"];
 
@@ -319,7 +317,7 @@ class UploadBank extends Component {
         documents[index].status = "confirmed";
         documents[index].document_id = result.document_id;
         if (documents[index].curr_status === "edit") {
-          documents[index].showButton = true;
+          documents[index].showButton = false;
           this.setState({
             confirmed: true,
           });

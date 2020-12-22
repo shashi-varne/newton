@@ -15,6 +15,8 @@ import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 
+import { renderHtmlCamera, renderNativeCamera } from "./render_camera";
+
 class DocumentUpload extends Component {
   constructor(props) {
     super(props);
@@ -30,10 +32,13 @@ class DocumentUpload extends Component {
       docs: [],
       category: "",
       doc_type: "",
+      doc_id: ""
     };
 
     this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
+    this.renderHtmlCamera = renderHtmlCamera.bind(this);
+    this.renderNativeCamera = renderNativeCamera.bind(this);
   }
 
   componentWillMount() {
@@ -94,8 +99,6 @@ class DocumentUpload extends Component {
       if (doc_checklist.length !== 0) {
         let file1, file2, file3;
         for (var i = doc_checklist.length - 1; i >= 0; i--) {
-          console.log(documents.length);
-          console.log(documents);
 
           if (
             doc_checklist[i].doc_type === "doc1" &&
@@ -175,7 +178,7 @@ class DocumentUpload extends Component {
           disbableButton: false,
         });
       }
-
+console.log(documents)
       this.setState({
         docList: docList[selectedIndex],
         docs: docs,
@@ -286,6 +289,12 @@ class DocumentUpload extends Component {
       doc_type: type,
     });
 
+    if (id) {
+      this.setState({
+        doc_id: id,
+      });
+    }
+
     if (getConfig().html_camera && method_name !== "open_file") {
       this.openCameraWeb(type);
     } else if (getConfig().html_camera && method_name === "open_file") {
@@ -335,7 +344,7 @@ class DocumentUpload extends Component {
     let file = e.target.files[0] || {};
     let doc_name = this.state.form_data.doc_name;
 
-    let { category, doc_type } = this.state;
+    let { category, doc_type, doc_id } = this.state;
 
     file.doc_name = doc_name;
     file.category_id = category;
@@ -366,14 +375,25 @@ class DocumentUpload extends Component {
       let that = this;
       getBase64(file, function (img) {
         file.imageBaseFile = img;
-        that.uploadDocument(file);
-        console.log(file);
-        documents.push(file);
+        
+
+        if (doc_id === "") {
+          that.uploadDocument(file);
+          documents.push(file);
+        } else {
+          console.log(documents)
+          console.log(doc_id)
+          var index = documents.findIndex((item) => item.document_id === doc_id);
+          file.document_id = doc_id;
+          that.editDocument(file);
+          documents[index] = file;
+        }
 
         that.setState({
           fileUploaded: true,
           documents: documents,
           disbableButton: true,
+          doc_id: ''
         });
       });
     }
@@ -445,9 +465,7 @@ class DocumentUpload extends Component {
           let index = documents.findIndex(
             (item) => item.checklist_doc_type === file.checklist_doc_type
           );
-          console.log(documents[index]);
           documents[index].id = result.document_id;
-          console.log(documents[index]);
 
           disbableButton = false;
         }
@@ -473,6 +491,7 @@ class DocumentUpload extends Component {
     data.append("doc_id", file.id);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
+
     try {
       const res = await Api.post(
         `relay/api/loan/idfc/upload/document/${this.state.application_id}?delete=true`,
@@ -482,8 +501,6 @@ class DocumentUpload extends Component {
       const { status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        // console.log(index)
-        // console.log(documents)
         let index = documents.findIndex(
           (item) => item.checklist_doc_type === file.checklist_doc_type
         );
@@ -499,174 +516,46 @@ class DocumentUpload extends Component {
     }
   };
 
-  renderHtmlCamera(type) {
-    let { image_data } = this.state;
+  editDocument = async (file) => {
+    let { documents, image_data, totalUpload, disbableButton } = this.state;
 
-    return (
-      <div>
-        {!image_data[type] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "10px 0px 0px 0px",
-              textAlign: "center",
-              fontWeight: 600,
-            }}
-          >
-            <div>upload document</div>
-            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{
-                  textAlign: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={this.getPhoto}
-                  id={type ? type : "myFile"}
-                />
-                <img src={camera_green} alt=""></img>
-                <div style={{ color: "#28b24d" }}>Click here to upload</div>
-              </div>
-            </div>
-          </div>
-        )}
-        {image_data[type] && image_data[type].uploaded && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "0px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <img
-                style={{ width: "100%", height: 150 }}
-                src={image_data[type].imageBaseFile || ""}
-                alt=""
-              />
-            </div>
-            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={this.getPhoto}
-                  id={type ? type : "myFile"}
-                />
-                <img src={camera_grey} alt=""></img>
-                <div style={{ color: "#b4b4b4" }}>Click here to upload new</div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
+    const data = new FormData();
+    data.append("doc_type", file.doc_name);
+    data.append("file", file, file.name);
+    data.append("doc_id", file.document_id);
+    data.append("category_id", file.category_id);
+    data.append("checklist_doc_type", file.checklist_doc_type);
+    try {
+      const res = await Api.post(
+        `relay/api/loan/idfc/upload/document/${this.state.application_id}?edit=true`,
+        data
+      );
 
-  renderNativeCamera(type) {
-    let { image_data } = this.state;
-    return (
-      <div>
-        {!image_data[type] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "10px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>Front side of document</div>
-            <div
-              style={{
-                margin: "20px 0 20px 0",
-                fontSize: "12px",
-                lineHeight: "20px",
-              }}
-            >
-              <div
-                onClick={() => this.startUpload("open_camera", type)}
-                style={{
-                  width: "50%",
-                  float: "left",
-                  textAlign: "center",
-                  borderRight: "1px solid #e1e1e1",
-                }}
-              >
-                <img src={camera_green} alt="OTM"></img>
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  OPEN CAMERA
-                </div>
-              </div>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{ textAlign: "center" }}
-              >
-                <img src={gallery_green} alt="OTM"></img>
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  GO TO GALLERY
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {image_data[type] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "0px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <img
-                style={{ width: "100%", height: 150 }}
-                src={image_data[type].imageBaseFile || ""}
-                alt=""
-              />
-            </div>
-            <div
-              style={{
-                margin: "20px 0 20px 0",
-                fontSize: "12px",
-                lineHeight: "20px",
-              }}
-            >
-              <div
-                onClick={() => this.startUpload("open_camera", type)}
-                style={{
-                  width: "50%",
-                  float: "left",
-                  textAlign: "center",
-                  borderRight: "1px solid #e1e1e1",
-                }}
-              >
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  OPEN CAMERA
-                </div>
-              </div>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{ textAlign: "center" }}
-              >
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  GO TO GALLERY
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
+      const { result, status_code: status } = res.pfwresponse;
+
+      if (status === 200) {
+        if (totalUpload < 3) {
+          // image_data[type].integrated = true;
+        } else {
+          let index = documents.findIndex(
+            (item) => item.checklist_doc_type === file.checklist_doc_type
+          );
+          documents[index].id = result.document_id;
+
+          disbableButton = false;
+        }
+
+        this.setState({
+          image_data: image_data,
+          documents: documents,
+          disbableButton: disbableButton,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      toast("Something went wrong");
+    }
+  };
 
   handleClick = () => {
     this.sendEvents("next");
@@ -734,11 +623,6 @@ class DocumentUpload extends Component {
                 {getConfig().html_camera && this.renderHtmlCamera("doc2")}
                 {!getConfig().html_camera && this.renderNativeCamera("doc2")}
               </div>
-
-              {/* <div >
-                {getConfig().html_camera && this.renderHtmlCamera()}
-                {!getConfig().html_camera && this.renderNativeCamera()}
-              </div> */}
             </div>
           )}
 
@@ -760,12 +644,30 @@ class DocumentUpload extends Component {
                       {item.name}
                       <span
                         style={{ float: "right" }}
+                        onClick={() => this.startUpload(
+                          "open_file",
+                          item.checklist_doc_type,
+                          item.name,
+                          item.id
+                        )}
+                      >
+                        <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={this.getPdf}
+                        id="myFile1"
+                      />
+                        <img
+                          id={item.doc_type}
+                          src={require(`assets/edit_green.svg`)}
+                          alt=""
+                        />
+                      </span>
+                      <span
+                        style={{ float: "right" }}
                         onClick={() => this.deleteDocument(index, item)}
                       >
                         <img
-                          // style={{
-                          //   opacity: item.doc_checklist.length !== 0 ? 1 : 0,
-                          // }}
                           id={item.doc_type}
                           src={require(`assets/deleted.svg`)}
                           alt=""

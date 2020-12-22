@@ -414,23 +414,35 @@ export async function getUserStatus(state = "") {
       if (screens.indexOf(this.state.screen_name) !== -1) {
         return result;
       }
+
+      this.setState(
+        {
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     } else {
       toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      this.setState(
+        {
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     }
   } catch (err) {
     console.log(err);
+    this.setState(
+      {
+        show_loader: false,
+      }
+    );
     toast("Something went wrong");
   }
-
-  this.setState(
-    {
-      show_loader: false,
-    },
-    () => {
-      this.onload();
-    }
-  );
 }
 
 export function setEditTitle(string) {

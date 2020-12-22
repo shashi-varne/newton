@@ -26,7 +26,7 @@ export function goBackMap(path) {
     "/loan/calculator": "/loan/loan-know-more",
     "/loan/recommendation": "/loan/loan-know-more",
     // "/loan/select-loan": "/loan/loan-home",
-    "/loan/loan-know-more": "/loan/select-loan",
+    "/loan/idfc/loan-know-more": "/loan/select-loan",
     "/loan/idfc/otp-verify": "/loan/idfc/edit-number"
   };
 

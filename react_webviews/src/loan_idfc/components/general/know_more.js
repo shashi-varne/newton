@@ -68,50 +68,6 @@ class KnowMore extends Component {
         noFooter={true}
       >
         <div className="know-more">
-          {/* <div className="nav-bar">
-            <div id="tab-1" className={`nav-tab ${tab_clicked === 'tab-1' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Features</div>
-            <div id="tab-2" className={`nav-tab ${tab_clicked === 'tab-2' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Eligibility</div>
-            <div id="tab-3" className={`nav-tab ${tab_clicked === 'tab-3' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Documentation</div>
-          </div>
-
-          {tab_clicked === 'tab-1' && <div className="content">
-            {features.content.map((item, index) => (
-              <div className="sub-pts data" key={index}>
-                <div>
-                  <span className="count">{index + 1 + "."}</span>
-                  <span className="subtitle">{item.data ? item.data : item}</span>
-                </div>
-                {item.sub_data &&
-                  item.sub_data.map((element, index) => {
-                    return <div key={index} className="sub-data">{"- " + element}</div>
-                  })
-                }
-              </div>
-            ))}
-          </div>}
-
-          {tab_clicked === 'tab-2' && <div className="content">
-            <div className="sub-head">{eligibility.content1["sub-head"]}</div>
-            <div className="points">
-              {eligibility.content1.points.map((item, index) => (
-                <div className="sub-pts" key={index}>
-                  <span className="count">{index + 1 + "."}</span>
-                  <span className="subtitle">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="sub-head">{eligibility.content2["sub-head"]}</div>
-            <div className="points">
-              {eligibility.content2.points.map((item, index) => (
-                <div className="sub-pts" key={index}>
-                  <span className="count">{index + 1 + "."}</span>
-                  <span className="subtitle">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>}*/}
-
           <div className="content">
             <div className="sub-head">{documentation.content1["sub-head"]}</div>
             <div className="points">
