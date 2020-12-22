@@ -247,7 +247,6 @@ class LoanBtDetails extends Component {
                           }
                           value={
                             this.state.form_data[index].financierName ||
-                            item.financierName ||
                             ""
                           }
                           onChange={this.handleChange("financierName", index)}
