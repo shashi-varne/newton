@@ -49,6 +49,8 @@ class AdditionalDetails extends Component {
     let form_data = this.state.form_data;
 
     form_data.office_address = office_address_data.address;
+    form_data.office_pincode = office_address_data.pincode;
+    form_data.office_city = office_address_data.city;
     form_data.mailing_address_preference = vendor_info.mailing_address_preference;
 
     let bottomButtonData = {
@@ -103,8 +105,8 @@ class AdditionalDetails extends Component {
       }
 
       if (name === "office_pincode") {
-        form_data.city = city;
-        form_data.city_error = "";
+        form_data.office_city = city;
+        form_data.office_city_error = "";
         form_data.office_pincode_error = office_pincode_error;
       }
     }
@@ -150,7 +152,7 @@ class AdditionalDetails extends Component {
     let keys_to_check = [
       "office_address",
       "office_pincode",
-      "city",
+      "office_city",
       "mailing_address_preference",
     ];
 
@@ -221,16 +223,16 @@ class AdditionalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.city_error}
-                helperText={this.state.form_data.city_error}
+                error={!!this.state.form_data.office_city_error}
+                helperText={this.state.form_data.office_city_error}
                 type="text"
                 width="40"
                 label="City"
-                id="city"
-                name="city"
+                id="office_city"
+                name="office_city"
                 disabled={true}
-                value={this.state.form_data.city || ""}
-                onChange={this.handleChange("city")}
+                value={this.state.form_data.office_city || ""}
+                onChange={this.handleChange("office_city")}
               />
             </div>
 

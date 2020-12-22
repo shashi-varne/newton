@@ -258,8 +258,6 @@ class DocumentUpload extends Component {
 
     let { form_data, docsMap, totalUpload } = this.state;
 
-    console.log(value);
-
     form_data[name] = value;
     form_data[name + "_error"] = "";
 
@@ -308,7 +306,7 @@ class DocumentUpload extends Component {
     let document = this.state.form_data.doc_name;
 
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
-    console.log(file);
+
     let ext = file.type.split("/")[1];
     name = file.file_name + "." + ext;
 
@@ -381,8 +379,6 @@ class DocumentUpload extends Component {
           that.uploadDocument(file);
           documents.push(file);
         } else {
-          console.log(documents)
-          console.log(doc_id)
           var index = documents.findIndex((item) => item.document_id === doc_id);
           file.document_id = doc_id;
           that.editDocument(file);
@@ -426,7 +422,6 @@ class DocumentUpload extends Component {
       file.imageBaseFile = img;
       file.uploaded = true;
       image_data[doc_type] = file;
-      console.log(file);
       that.uploadDocument(image_data[doc_type], doc_type);
 
       that.setState({
@@ -484,7 +479,6 @@ class DocumentUpload extends Component {
 
   deleteDocument = async (index, file) => {
     let { documents } = this.state;
-    console.log(file);
 
     const data = new FormData();
     data.append("doc_type", file.doc_type);

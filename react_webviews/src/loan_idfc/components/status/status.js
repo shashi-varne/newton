@@ -206,11 +206,12 @@ class LoanStatus extends Component {
       properties: {
         user_action: user_action,
         screen_name: this.state.commonMapper.screenName,
-        rejection_reason: this.state.rejection_reason || "",
-        stage: this.state.commonMapper.stage || "",
       },
     };
-
+    if(this.state.commonMapper.screenName === 'application_rejected')
+      eventObj.properties.rejection_reason = this.state.rejection_reason || "";
+    if(this.state.commonMapper.screenName === 'system_error')
+      eventObj.properties.stage = this.state.commonMapper.stage || "";
     if (user_action === "just_set_events") {
       return eventObj;
     } else {

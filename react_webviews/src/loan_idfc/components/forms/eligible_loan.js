@@ -109,10 +109,10 @@ class EligibleLoan extends Component {
     let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {
-      form_data.amount_required = vendor_info.displayOffer;
+      form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
-      form_data.maxAmount = vendor_info.displayOffer;
+      form_data.maxAmount = vendor_info.display_loan_amount;
     }
 
     let keys_to_check = ["amount_required"];
@@ -145,7 +145,7 @@ class EligibleLoan extends Component {
         <div className="eligible-loan">
           <div className="subtitle">
             Woo-hoo! IDFC is offering you a personal loan of ₹
-            {changeNumberFormat(vendor_info.displayOffer || "0")}
+            {changeNumberFormat(vendor_info.display_loan_amount || "0")}
           </div>
 
           <div
@@ -176,7 +176,7 @@ class EligibleLoan extends Component {
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
                     <div className="sub-title">
-                      ₹{changeNumberFormat(vendor_info.displayOffer || "0")}
+                      ₹{changeNumberFormat(vendor_info.display_loan_amount || "0")}
                     </div>
                   </div>
                   <div className="sub-content-right">
@@ -234,7 +234,7 @@ class EligibleLoan extends Component {
                     this.state.form_data.amount_required_error || 
                     (this.state.form_data.amount_required && numDifferentiationInr(this.state.form_data.amount_required)) ||
                     `Min ₹1 Lakh to max ₹${changeNumberFormat(
-                      vendor_info.displayOffer || "0"
+                      vendor_info.display_loan_amount || "0"
                     )}`
                   }
                   type="number"

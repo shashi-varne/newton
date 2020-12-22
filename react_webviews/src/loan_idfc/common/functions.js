@@ -772,6 +772,7 @@ export async function formCheckUpdate(
     pincode: "pincode",
     office_pincode: "pincode",
     city: "city",
+    office_city: "city",
     mailing_address_preference: "mailing address preference",
   };
 

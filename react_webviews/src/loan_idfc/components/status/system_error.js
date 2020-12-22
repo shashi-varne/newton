@@ -18,29 +18,13 @@ const commonMapper = {
     stage: "after loan requirement details",
   },
   "idfc_0.5_submitted": {
-    top_icon: "ils_loan_status",
-    // top_title: "Congratulations,",
-    button_title: "NEXT",
-    cta_state: "/loan/idfc/income-details",
-    close_state: "/loan/idfc/home",
-    screenName: "profile_success",
+    stage: "after loan requirement details",
   },
   "idfc_0.5_accepted": {
-    top_icon: "ils_loan_status",
-    top_title: "Congratulations,",
-    button_title: "NEXT",
-    cta_state: "/loan/idfc/income-details",
-    close_state: "/loan/idfc/home",
-    screenName: "profile_success",
+    stage: "after loan requirement details",
   },
   idfc_cancelled: {
-    top_icon: "ils_loan_failed",
-    top_title: "Application Rejected",
-    button_title: "START NEW APPLICATION",
-    icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
-    screenName: "application_rejected",
+    stage: "",
   },
   "idfc_0.5_failed": {
     stage: "after loan requirement details",
@@ -67,7 +51,7 @@ const commonMapper = {
     stage: "after credit card details",
   },
   'idfc_1.0_accepted': {
-    stage: "after loan requirement details",
+    stage: "after credit card details",
   },
 };
 
@@ -91,6 +75,11 @@ class SystemError extends Component {
     let vendor_application_status = this.state.vendor_application_status;
     let rejection_reason = this.state.rejection_reason;
     let is_dedupe = this.state.is_dedupe;
+    let bt_eligible = this.state.bt_eligible;
+    if(!bt_eligible) {
+      commonMapper['idfc_1.0_failed'].stage = "after loan requirement details";
+      commonMapper['idfc_1.0_accepted'].stage = "after loan requirement details";
+    }
     let common_mapper = {}
     if (rejection_reason) {
       common_mapper= commonMapper[rejection_reason] || {};
@@ -106,12 +95,12 @@ class SystemError extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    this.navigate("home");
+    this.navigate("loan-know-more");
   };
 
   goBack = () => {
     this.sendEvents("back")
-    this.navigate("home");
+    this.navigate("loan-know-more");
   };
 
   sendEvents(user_action) {
