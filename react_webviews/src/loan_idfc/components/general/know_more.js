@@ -37,7 +37,7 @@ class KnowMore extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "know_more",
+        screen_name: "documents",
       },
     };
 

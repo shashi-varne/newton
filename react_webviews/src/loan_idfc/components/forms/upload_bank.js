@@ -434,7 +434,6 @@ class UploadBank extends Component {
         const { result } = res.pfwresponse;
 
         if (result) {
-          console.log(result);
           this.navigate("perfios-status");
           // } else {
           // toast(result.error || result.message || "Something went wrong!");
@@ -454,7 +453,6 @@ class UploadBank extends Component {
     let { params } = this.state;
 
     if (params.adminPanel) {
-      console.log(this.state.params.redirect);
       window.location.href = this.state.params.redirect;
     } else {
       this.navigate("income-details");

@@ -115,7 +115,16 @@ class SelectLoan extends Component {
   };
 
   handleClick = (provider_name) => {
-    this.sendEvents("next", { provider_name: provider_name });
+    let { vendors_data, ongoing_loan_details } = this.state;
+    let resume = vendors_data[provider_name].cta_title === 'RESUME' ? 'yes' : 'no';
+    let vendor = ongoing_loan_details.find((element) => element.vendor === provider_name) || {}
+
+    this.sendEvents("next", { 
+      provider_name: provider_name || '',
+      status: vendor.status || 'default',
+      resume: resume || '', 
+    });
+
     this.navigate(`/loan/${provider_name}/loan-know-more`);
   };
 
@@ -125,7 +134,7 @@ class SelectLoan extends Component {
       properties: {
         user_action: user_action,
         screen_name: "select_loan_provider",
-        provider_name: data.provider_name || '',
+        ...data,
       },
     };
 

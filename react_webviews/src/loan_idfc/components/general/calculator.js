@@ -24,19 +24,13 @@ class Calculator extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let { params } = this.props.location;
-
-    this.setState({
-      ...params,
-    });
   }
 
   onload = async () => {
     let { loans_applied } = this.state;
 
     this.setState({
-      cta_title: loans_applied > 0 && "RESUME"
+      cta_title: loans_applied > 0 ? "RESUME" : "APPLY NOW"
     })
   };
 

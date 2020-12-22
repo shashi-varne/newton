@@ -1015,6 +1015,7 @@ export async function getSummary() {
     if (status === 200) {
       storageService().set("employment_type", result.employment_type);
       storageService().set("loans_applied", result.loans_applied);
+      
       this.setState({
         account_exists: result.account_exists,
         ongoing_loan_details: result.ongoing_loan_details,
