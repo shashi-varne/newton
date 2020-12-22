@@ -66,6 +66,10 @@ class LoanBtDetails extends Component {
       }
     }
 
+  //  if (!bt_info.bt_personal_loan) {
+  //    this.navigate('credit-bt')
+  //  }
+
     loan_bt.forEach((data) => {
       this.state.form_data.push({
         is_selected: data.is_selected,
@@ -165,12 +169,10 @@ class LoanBtDetails extends Component {
     let { form_data } = this.state;
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    if(checked)
-      this.validateFields(form_data,index);
-    else
-      this.setState({
-        form_data: form_data,
-      });
+
+    this.setState({
+      form_data: form_data,
+    });
   };
 
   render() {

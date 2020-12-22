@@ -26,6 +26,7 @@ class LoanBtDetails extends Component {
       credit_bt: [],
       bankOptions: [],
       form_checked: [],
+      bt_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -83,6 +84,7 @@ class LoanBtDetails extends Component {
         bt_data_id: data.bt_data_id,
         creditCardExpiryDate: data.creditCardExpiryDate,
         creditCardNumber: data.creditCardNumber,
+        bt_info: bt_info,
       });
     });
 
@@ -163,11 +165,10 @@ class LoanBtDetails extends Component {
 
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    if (checked) this.validateFields(form_data, index);
-    else
-      this.setState({
-        form_data: form_data,
-      });
+
+    this.setState({
+      form_data: form_data,
+    });
   };
 
   handleClick = () => {
@@ -210,14 +211,17 @@ class LoanBtDetails extends Component {
     }
 
     this.sendEvents("next", { no_of_cards_entered: form_checked.length });
-    this.submitApplication(
-      {
-        bt_selection: form_checked,
-      },
-      "one",
-      true,
-      "eligible-loan"
-    );
+
+    if (submit_details) {
+      this.submitApplication(
+        {
+          bt_selection: form_checked,
+        },
+        "one",
+        true,
+        "eligible-loan"
+      );
+    }
   };
 
   render() {
@@ -239,9 +243,9 @@ class LoanBtDetails extends Component {
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
-        current={2}
-        total={2}
-        count={1}
+        current={!this.state.bt_info.bt_personal_loan ? "" : 2}
+        total={!this.state.bt_info.bt_personal_loan ? "" : 2}
+        count={!this.state.bt_info.bt_personal_loan ? "" : 1}
       >
         <div className="loan-bt">
           <div className="subtitle">
