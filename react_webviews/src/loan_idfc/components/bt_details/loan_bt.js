@@ -262,8 +262,7 @@ class LoanBtDetails extends Component {
                         helperText={
                           this.state.form_data[index].principalOutstanding_error ||
                           numDifferentiationInr(
-                            this.state.form_data[index].principalOutstanding ||
-                            item.principalOutstanding
+                            this.state.form_data[index].principalOutstanding 
                           )
                         }
                         type="number"
