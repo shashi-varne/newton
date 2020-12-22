@@ -186,7 +186,7 @@ class Report extends Component {
     }
 
 
-    let hs_policies = health_insurance_policies.insurance_apps || '';
+    let hs_policies = health_insurance_policies.insurance_apps || [];
     for (let i = 0; i < hs_policies.length; i++) {
       let policy = this.getProviderObject(hs_policies[i]);
       reportData.push(policy);
@@ -316,7 +316,7 @@ class Report extends Component {
                 <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
-                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimal(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' &&
                     ' annually' 
                   }
