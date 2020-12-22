@@ -12,6 +12,7 @@ import {
   isValidMonthYear,
   numDifferentiationInr,
   formatAmountInr,
+  IsFutureMonthYear
 } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 import Autosuggests from "../../../common/ui/Autosuggest";
@@ -185,7 +186,7 @@ class LoanBtDetails extends Component {
           submit_details = false;
         }
 
-        if (!isValidMonthYear(data["creditCardExpiryDate"])) {
+        if (!isValidMonthYear(data["creditCardExpiryDate"]) || !IsFutureMonthYear(data["creditCardExpiryDate"])) {
           form_data[index]["creditCardExpiryDate_error"] =
             "please enter valid credit card expiry date";
           submit_details = false;
@@ -368,7 +369,6 @@ class LoanBtDetails extends Component {
                         name="principalOutstanding"
                         value={
                           this.state.form_data[index].principalOutstanding ||
-                          item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(

@@ -107,7 +107,6 @@ class ReportDetails extends Component {
   };
 
   render() {
-    console.log(this.state.cssMapper[this.state.loan_status || ""]);
     return (
       <Container
         showLoader={this.state.show_loader}

@@ -160,9 +160,12 @@ class LoanBtDetails extends Component {
     }
 
     this.sendEvents('next', { no_of_cards_entered: form_checked.length, });
-    this.updateApplication({
-      bt_selection: form_checked,
-    });
+
+    if (submit_details) {
+      this.updateApplication({
+        bt_selection: form_checked,
+      });
+    }
   };
 
   handleCheckbox = (checked, index, id) => {
@@ -271,7 +274,7 @@ class LoanBtDetails extends Component {
                         name="principalOutstanding"
                         value={
                           this.state.form_data[index].principalOutstanding ||
-                          item.principalOutstanding ||
+                          // item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(
