@@ -30,7 +30,11 @@ class PartnerCard extends Component {
         {this.props.baseData.card_tag && this.props.baseData.displayTag && (
           <div className="card-tag">{this.props.baseData.card_tag}</div>
         )}
-        <div className="flex partner">
+        <div className="flex partner" 
+        onClick={() => 
+          this.props.handleClick(this.props.baseData.provider_name)
+        }
+        >
           <div>
             <div>{this.props.baseData.title}</div>
             <div>{this.props.baseData.subtitle}</div>
@@ -40,7 +44,11 @@ class PartnerCard extends Component {
             alt={this.props.baseData.logo}
           />
         </div>
-        <div className="flex">
+        <div className="flex" 
+        onClick={() => 
+          this.props.handleClick(this.props.baseData.provider_name)
+        }
+        >
           <div>
             <span className="sub-text">Loan upto:</span>
             {" " + this.props.baseData.loan_amount}
@@ -49,9 +57,6 @@ class PartnerCard extends Component {
             variant="raised"
             size="large"
             autoFocus
-            onClick={() =>
-              this.props.handleClick(this.props.baseData.provider_name)
-            }
           >
             {this.props.baseData.cta_title}
           </Button>

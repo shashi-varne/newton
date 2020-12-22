@@ -118,13 +118,11 @@ class SelectLoan extends Component {
     let { vendors_data, ongoing_loan_details } = this.state;
     let resume = vendors_data[provider_name].cta_title === 'RESUME' ? 'yes' : 'no';
     let vendor = ongoing_loan_details.find((element) => element.vendor === provider_name) || {}
-
     this.sendEvents("next", { 
       provider_name: provider_name || '',
       status: vendor.status || 'default',
       resume: resume || '', 
     });
-
     this.navigate(`/loan/${provider_name}/loan-know-more`);
   };
 
