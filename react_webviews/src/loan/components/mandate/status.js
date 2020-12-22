@@ -88,14 +88,14 @@ class MandateStatus extends Component {
     let dmi_loan_status = resultData.dmi_loan_status;
 
     if (resultData.callback_status || dmi_loan_status === 'emandate_done') {
-      this.navigate('/loan/reference');
+      this.navigate('/loan/dmi/reference');
     } else {
 
       if (dmi_loan_status === 'emandate_failed') {
         status = 'failed';
       } else if(dmi_loan_status === 'emandate_discrepancy' || 
       dmi_loan_status === 'emandate_exit' ||  dmi_loan_status === 'emandate') {
-        this.navigate('/loan/bank');
+        this.navigate('/loan/dmi/bank');
       } else {
         status = 'pending';
       }

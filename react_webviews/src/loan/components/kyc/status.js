@@ -26,8 +26,8 @@ const commonMapper = {
     'top_title': 'Instant KYC failed!',
     'mid_title': '',
     'button_title': 'RETRY',
-    'cta_state': '/loan/instant-kyc',
-    'close_state': '/loan/journey'
+    'cta_state': '/loan/dmi/instant-kyc',
+    'close_state': '/loan/dmi/journey'
   },
   'not_eligible': {//dropped for now
     'top_icon': 'error_illustration',
@@ -35,7 +35,7 @@ const commonMapper = {
     'mid_title': '',
     'button_title': 'RETRY',
     'cta_state': '/loan/dmi/loan-know-more',
-    'close_state': '/loan/journey'
+    'close_state': '/loan/dmi/journey'
   },
   'sorry': {//dropped for now
     'top_icon': 'error_illustration',
@@ -143,7 +143,7 @@ class KycStatus extends Component {
       }
      
       if (resultData.callback_status || dmi_loan_status === 'okyc_done') {
-        this.navigate('/loan/instant-kyc');
+        this.navigate('/loan/dmi/instant-kyc');
       } else {
         if(dmi_loan_status === 'okyc_failed') {
           status = 'failed';
@@ -151,7 +151,7 @@ class KycStatus extends Component {
           status = 'pending';
         } else {
           status = 'cancelled';
-          this.navigate('/loan/instant-kyc');
+          this.navigate('/loan/dmi/instant-kyc');
           return;
         }
         

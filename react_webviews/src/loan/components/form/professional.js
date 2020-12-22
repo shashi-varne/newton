@@ -74,7 +74,7 @@ class ProfessionalDetails extends Component {
 
         if (this.props.edit) {
             this.setState({
-                next_state: `/loan/form-summary`
+                next_state: `/loan/dmi/form-summary`
             })
         }
 

@@ -340,7 +340,7 @@ class LoanStatus extends Component {
           {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
-                Oops something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
@@ -354,7 +354,7 @@ class LoanStatus extends Component {
                 alt=""
               />
               <div className="subtitle">
-                Oops something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
