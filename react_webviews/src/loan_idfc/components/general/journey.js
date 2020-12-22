@@ -275,7 +275,7 @@ class JourneyMap extends Component {
       }
     }
     // ---step-3
-    if (id === "income_details") {
+    if (id === "income_details" && index <= "2") {
       this.sendEvents('next', {stage: stage});
       if (idfc_loan_status === "idfc_0.5_accepted") {
         this.get05Callback();
@@ -296,7 +296,7 @@ class JourneyMap extends Component {
       }
     }
     // ---step-4
-    if (id === "document_upload") {
+    if (id === "document_upload" && index <= "3") {
       this.sendEvents('next', {stage: stage});
       this.navigate(next_state);
     }

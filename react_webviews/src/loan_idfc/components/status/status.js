@@ -191,10 +191,6 @@ class LoanStatus extends Component {
         application_status: application_status,
       });
     } else {
-      // if (vendor_application_status === "idfc_0.5_accepted") {
-      //   commonMapper[vendor_application_status].top_title =
-      //     `${commonMapper[vendor_application_status].top_title} ${first_name}!`;
-      // }
 
       this.setState({
         commonMapper: commonMapper[vendor_application_status] || {},
@@ -210,11 +206,12 @@ class LoanStatus extends Component {
       properties: {
         user_action: user_action,
         screen_name: this.state.commonMapper.screenName,
-        rejection_reason: this.state.rejection_reason || "",
-        stage: this.state.commonMapper.stage || "",
       },
     };
-
+    if(this.state.commonMapper.screenName === 'application_rejected')
+      eventObj.properties.rejection_reason = this.state.rejection_reason || "";
+    if(this.state.commonMapper.screenName === 'system_error')
+      eventObj.properties.stage = this.state.commonMapper.stage || "";
     if (user_action === "just_set_events") {
       return eventObj;
     } else {
@@ -344,7 +341,7 @@ class LoanStatus extends Component {
           {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
-                Oops something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
@@ -358,7 +355,7 @@ class LoanStatus extends Component {
                 alt=""
               />
               <div className="subtitle">
-                Oops something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>

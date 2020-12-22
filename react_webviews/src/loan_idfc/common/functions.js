@@ -167,6 +167,10 @@ export async function initialize() {
     this.getUserStatus();
   }
 
+  if (this.state.screen_name === "calculator") {
+    this.getSummary();
+  }
+
   if (
     this.state.screen_name === "loan_status" ||
     this.state.screen_name === "system_error"
@@ -354,7 +358,7 @@ export async function getOrCreate(params) {
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       } else if (params && params.reset) {
-        this.navigate("home");
+        this.navigate("loan-know-more");
       } else if (application_status === "internally_rejected") {
         this.navigate("loan-status");
       } else if (
@@ -415,23 +419,35 @@ export async function getUserStatus(state = "") {
       if (screens.indexOf(this.state.screen_name) !== -1) {
         return result;
       }
+
+      this.setState(
+        {
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     } else {
       toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      this.setState(
+        {
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     }
   } catch (err) {
     console.log(err);
+    this.setState(
+      {
+        show_loader: false,
+      }
+    );
     toast("Something went wrong");
   }
-
-  this.setState(
-    {
-      show_loader: false,
-    },
-    () => {
-      this.onload();
-    }
-  );
 }
 
 export function setEditTitle(string) {
@@ -757,6 +773,7 @@ export async function formCheckUpdate(
     pincode: "pincode",
     office_pincode: "pincode",
     city: "city",
+    office_city: "city",
     mailing_address_preference: "mailing address preference",
   };
 
@@ -998,6 +1015,8 @@ export async function getSummary() {
 
     if (status === 200) {
       storageService().set("employment_type", result.employment_type);
+      storageService().set("loans_applied", result.loans_applied);
+      
       this.setState({
         account_exists: result.account_exists,
         ongoing_loan_details: result.ongoing_loan_details,

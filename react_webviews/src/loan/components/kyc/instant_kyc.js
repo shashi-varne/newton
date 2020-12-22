@@ -81,11 +81,11 @@ class InstantKycHome extends Component {
           storageService().set('loan_okyc_id', okyc_id);
 
           let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/loan/redirection-status/kyc` + getConfig().searchParams
+            window.location.origin + `/loan/dmi/redirection-status/kyc` + getConfig().searchParams
           );
 
           let back_url = encodeURIComponent(
-            window.location.origin + `/loan/instant-kyc-status` + getConfig().searchParams + 
+            window.location.origin + `/loan/dmi/instant-kyc-status` + getConfig().searchParams + 
             '&flow=kyc&okyc_id=' + okyc_id
           );
 

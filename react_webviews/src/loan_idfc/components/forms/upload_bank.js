@@ -157,7 +157,6 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
-          console.log(file);
           try {
             that.setState({
               docType: this.doc_type,
@@ -187,7 +186,6 @@ class UploadBank extends Component {
   }
 
   startUpload(method_name, doc_type) {
-    console.log(doc_type);
     this.setState({
       type: method_name,
     });
@@ -203,7 +201,6 @@ class UploadBank extends Component {
     e.preventDefault();
 
     let file = e.target.files[0];
-    console.log(file);
 
     let acceptedType = ["application/pdf"];
 
@@ -238,7 +235,6 @@ class UploadBank extends Component {
 
   save(file) {
     let acceptedType = ["application/pdf"];
-    console.log(file);
 
     if (acceptedType.indexOf(file.type) === -1) {
       toast("Please select pdf file only");
@@ -252,7 +248,7 @@ class UploadBank extends Component {
     file.status = "uploaded";
 
     if (editId === "") {
-      file.name = `Bank_statement_${count}.pdf`;
+      file.name = `${file.file_name}.pdf`;
       documents.push(file);
     } else {
       var index = documents.findIndex((item) => item.id === editId);
@@ -319,7 +315,7 @@ class UploadBank extends Component {
         documents[index].status = "confirmed";
         documents[index].document_id = result.document_id;
         if (documents[index].curr_status === "edit") {
-          documents[index].showButton = true;
+          documents[index].showButton = false;
           this.setState({
             confirmed: true,
           });
@@ -438,7 +434,6 @@ class UploadBank extends Component {
         const { result } = res.pfwresponse;
 
         if (result) {
-          console.log(result);
           this.navigate("perfios-status");
           // } else {
           // toast(result.error || result.message || "Something went wrong!");
@@ -458,7 +453,6 @@ class UploadBank extends Component {
     let { params } = this.state;
 
     if (params.adminPanel) {
-      console.log(this.state.params.redirect);
       window.location.href = this.state.params.redirect;
     } else {
       this.navigate("income-details");

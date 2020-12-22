@@ -52,7 +52,7 @@ class Home extends Component {
         subtitle: "Competitve Interest",
         loan_amount: " ₹40 lac",
         logo: "idfc_logo",
-        provider_name: 'idfc',
+        provider_name: "idfc",
         cta_title: "RESUME",
       },
       dmi: {
@@ -61,7 +61,7 @@ class Home extends Component {
         subtitle: "Quick money transfer",
         loan_amount: "₹1 lac",
         logo: "dmi-finance",
-        provider_name: 'dmi',
+        provider_name: "dmi",
         cta_title: "RESUME",
       },
     };
@@ -122,7 +122,9 @@ class Home extends Component {
       >
         <div className="loan-home">
           <div className="block1-info">
-            {account_exists && ongoing_loan_details && ongoing_loan_details.length !== 0 ? (
+            {account_exists &&
+            ongoing_loan_details &&
+            ongoing_loan_details.length !== 0 ? (
               ongoing_loan_details.map((item, index) => {
                 return (
                   <PartnerCard
@@ -141,7 +143,7 @@ class Home extends Component {
           </div>
 
           {ongoing_loan_details && ongoing_loan_details.length !== 2 && (
-            <div className="block2-info" >
+            <div className="block2-info">
               <div className="top-title">
                 {ongoing_loan_details && ongoing_loan_details.length !== 0
                   ? "Start a new application"
@@ -200,8 +202,8 @@ class Home extends Component {
               <div>
                 <div className="card">
                   <img src={require(`assets/dmi-finance.svg`)} alt="dmi logo" />
-              DMI finance
-                  </div>
+                </div>
+                DMI finance
               </div>
             </div>
           </div>

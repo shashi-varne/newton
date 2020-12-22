@@ -4,16 +4,18 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { getConfig } from "../../../utils/functions";
-import camera_green from "assets/take_pic_green.svg";
-import gallery_green from "assets/go_to_gallery_green.svg";
+// import camera_green from "assets/take_pic_green.svg";
+// import gallery_green from "assets/go_to_gallery_green.svg";
 import { getBase64 } from "utils/functions";
 import Api from "utils/api";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
-import camera_grey from "assets/take_pic_grey.svg";
+// import camera_grey from "assets/take_pic_grey.svg";
 import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
+
+import { renderHtmlCamera, renderNativeCamera } from "./render_camera";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -30,10 +32,13 @@ class DocumentUpload extends Component {
       docs: [],
       category: "",
       doc_type: "",
+      doc_id: ""
     };
 
     this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
+    this.renderHtmlCamera = renderHtmlCamera.bind(this);
+    this.renderNativeCamera = renderNativeCamera.bind(this);
   }
 
   componentWillMount() {
@@ -94,8 +99,6 @@ class DocumentUpload extends Component {
       if (doc_checklist.length !== 0) {
         let file1, file2, file3;
         for (var i = doc_checklist.length - 1; i >= 0; i--) {
-          console.log(documents.length);
-          console.log(documents);
 
           if (
             doc_checklist[i].doc_type === "doc1" &&
@@ -255,8 +258,6 @@ class DocumentUpload extends Component {
 
     let { form_data, docsMap, totalUpload } = this.state;
 
-    console.log(value);
-
     form_data[name] = value;
     form_data[name + "_error"] = "";
 
@@ -286,6 +287,12 @@ class DocumentUpload extends Component {
       doc_type: type,
     });
 
+    if (id) {
+      this.setState({
+        doc_id: id,
+      });
+    }
+
     if (getConfig().html_camera && method_name !== "open_file") {
       this.openCameraWeb(type);
     } else if (getConfig().html_camera && method_name === "open_file") {
@@ -299,9 +306,9 @@ class DocumentUpload extends Component {
     let document = this.state.form_data.doc_name;
 
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
-    console.log(file);
+
     let ext = file.type.split("/")[1];
-    name = document.split(" ").join("_") + "." + ext;
+    name = file.file_name + "." + ext;
 
     file.name = name;
     file.category_id = category;
@@ -335,7 +342,7 @@ class DocumentUpload extends Component {
     let file = e.target.files[0] || {};
     let doc_name = this.state.form_data.doc_name;
 
-    let { category, doc_type } = this.state;
+    let { category, doc_type, doc_id } = this.state;
 
     file.doc_name = doc_name;
     file.category_id = category;
@@ -366,14 +373,23 @@ class DocumentUpload extends Component {
       let that = this;
       getBase64(file, function (img) {
         file.imageBaseFile = img;
-        that.uploadDocument(file);
-        console.log(file);
-        documents.push(file);
+        
+
+        if (doc_id === "") {
+          that.uploadDocument(file);
+          documents.push(file);
+        } else {
+          var index = documents.findIndex((item) => item.document_id === doc_id);
+          file.document_id = doc_id;
+          that.editDocument(file);
+          documents[index] = file;
+        }
 
         that.setState({
           fileUploaded: true,
           documents: documents,
           disbableButton: true,
+          doc_id: ''
         });
       });
     }
@@ -406,7 +422,6 @@ class DocumentUpload extends Component {
       file.imageBaseFile = img;
       file.uploaded = true;
       image_data[doc_type] = file;
-      console.log(file);
       that.uploadDocument(image_data[doc_type], doc_type);
 
       that.setState({
@@ -445,9 +460,7 @@ class DocumentUpload extends Component {
           let index = documents.findIndex(
             (item) => item.checklist_doc_type === file.checklist_doc_type
           );
-          console.log(documents[index]);
           documents[index].id = result.document_id;
-          console.log(documents[index]);
 
           disbableButton = false;
         }
@@ -466,13 +479,13 @@ class DocumentUpload extends Component {
 
   deleteDocument = async (index, file) => {
     let { documents } = this.state;
-    console.log(file);
 
     const data = new FormData();
     data.append("doc_type", file.doc_type);
     data.append("doc_id", file.id);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
+
     try {
       const res = await Api.post(
         `relay/api/loan/idfc/upload/document/${this.state.application_id}?delete=true`,
@@ -482,8 +495,6 @@ class DocumentUpload extends Component {
       const { status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        // console.log(index)
-        // console.log(documents)
         let index = documents.findIndex(
           (item) => item.checklist_doc_type === file.checklist_doc_type
         );
@@ -498,175 +509,6 @@ class DocumentUpload extends Component {
       toast("Something went wrong");
     }
   };
-
-  renderHtmlCamera(type) {
-    let { image_data } = this.state;
-
-    return (
-      <div>
-        {!image_data[type] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "10px 0px 0px 0px",
-              textAlign: "center",
-              fontWeight: 600,
-            }}
-          >
-            <div>upload document</div>
-            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{
-                  textAlign: "center",
-                  cursor: "pointer",
-                }}
-              >
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={this.getPhoto}
-                  id={type ? type : "myFile"}
-                />
-                <img src={camera_green} alt=""></img>
-                <div style={{ color: "#28b24d" }}>Click here to upload</div>
-              </div>
-            </div>
-          </div>
-        )}
-        {image_data[type] && image_data[type].uploaded && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "0px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <img
-                style={{ width: "100%", height: 150 }}
-                src={image_data[type].imageBaseFile || ""}
-                alt=""
-              />
-            </div>
-            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{
-                  textAlign: "center",
-                }}
-              >
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={this.getPhoto}
-                  id={type ? type : "myFile"}
-                />
-                <img src={camera_grey} alt=""></img>
-                <div style={{ color: "#b4b4b4" }}>Click here to upload new</div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  renderNativeCamera(type) {
-    let { image_data } = this.state;
-    return (
-      <div>
-        {!image_data[type] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "10px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>Front side of document</div>
-            <div
-              style={{
-                margin: "20px 0 20px 0",
-                fontSize: "12px",
-                lineHeight: "20px",
-              }}
-            >
-              <div
-                onClick={() => this.startUpload("open_camera", type)}
-                style={{
-                  width: "50%",
-                  float: "left",
-                  textAlign: "center",
-                  borderRight: "1px solid #e1e1e1",
-                }}
-              >
-                <img src={camera_green} alt="OTM"></img>
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  OPEN CAMERA
-                </div>
-              </div>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{ textAlign: "center" }}
-              >
-                <img src={gallery_green} alt="OTM"></img>
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  GO TO GALLERY
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {image_data[type] && (
-          <div
-            style={{
-              border: "1px dashed #e1e1e1",
-              padding: "0px 0px 0px 0px",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <img
-                style={{ width: "100%", height: 150 }}
-                src={image_data[type].imageBaseFile || ""}
-                alt=""
-              />
-            </div>
-            <div
-              style={{
-                margin: "20px 0 20px 0",
-                fontSize: "12px",
-                lineHeight: "20px",
-              }}
-            >
-              <div
-                onClick={() => this.startUpload("open_camera", type)}
-                style={{
-                  width: "50%",
-                  float: "left",
-                  textAlign: "center",
-                  borderRight: "1px solid #e1e1e1",
-                }}
-              >
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  OPEN CAMERA
-                </div>
-              </div>
-              <div
-                onClick={() => this.startUpload("open_gallery", type)}
-                style={{ textAlign: "center" }}
-              >
-                <div style={{ color: "#28b24d", fontWeight: 600 }}>
-                  GO TO GALLERY
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
 
   handleClick = () => {
     this.sendEvents("next");
@@ -734,11 +576,6 @@ class DocumentUpload extends Component {
                 {getConfig().html_camera && this.renderHtmlCamera("doc2")}
                 {!getConfig().html_camera && this.renderNativeCamera("doc2")}
               </div>
-
-              {/* <div >
-                {getConfig().html_camera && this.renderHtmlCamera()}
-                {!getConfig().html_camera && this.renderNativeCamera()}
-              </div> */}
             </div>
           )}
 
@@ -763,9 +600,6 @@ class DocumentUpload extends Component {
                         onClick={() => this.deleteDocument(index, item)}
                       >
                         <img
-                          // style={{
-                          //   opacity: item.doc_checklist.length !== 0 ? 1 : 0,
-                          // }}
                           id={item.doc_type}
                           src={require(`assets/deleted.svg`)}
                           alt=""

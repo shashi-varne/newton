@@ -32,7 +32,7 @@ class LoanRequirementDetails extends Component {
     let form_data = {
       amount_required: application_info.amount_required,
       purpose: application_info.purpose,
-      tenor: application_info.tenor === 'None' ? '' : String(application_info.tenor)
+      tenor: !application_info.tenor ? '' : String(application_info.tenor)
     }
 
     let loaderData = {

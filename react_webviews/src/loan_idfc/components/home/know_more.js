@@ -242,6 +242,16 @@ class LoanKnowMore extends Component {
     });
   }
 
+  goBack = () => {
+    let loans_applied = storageService().get("loans_applied");
+
+    if (loans_applied === "2") {
+      this.navigate('/loan/loan-home')
+    } else {
+      this.navigate('/loan/select-loan')
+    }
+  }
+
   render() {
     let { partnerData, eligibility, journeyData, documents } = this.state;
     return (
@@ -251,6 +261,9 @@ class LoanKnowMore extends Component {
         buttonTitle={this.state.top_cta_title}
         hidePageTitle={true}
         handleClick={this.handleClick}
+        headerData={{
+          goBack: this.goBack,
+        }}
       >
         <div className="loan-know-more">
           <div className="block1-info">
@@ -286,6 +299,7 @@ class LoanKnowMore extends Component {
                 className="Flex block2"
                 onClick={() => {
                   this.sendEvents("documents");
+                  this.navigate('know-more')
                 }}
               >
                 <img

@@ -16,6 +16,7 @@ class Calculator extends Component {
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
+      cta_title: 'APPLY NOW'
     };
 
     this.initialize = initialize.bind(this);
@@ -23,29 +24,27 @@ class Calculator extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let { params } = this.props.location;
-
-    if (!params) {
-      this.navigate("loan-home");
-      return;
-    }
-
-    this.setState({
-      ...params,
-    });
   }
 
-  onload = async () => {};
+  onload = async () => {
+    let { loans_applied } = this.state;
+
+    this.setState({
+      cta_title: loans_applied > 0 ? "RESUME" : "APPLY NOW"
+    })
+  };
 
   handleClick = () => {
     let { ongoing_loan_details, account_exists } = this.state;
     this.sendEvents("next");
-    if (ongoing_loan_details.length === 0 && !account_exists) {
-      this.navigate("edit-details");
+    let { cta_title } = this.state;
+    
+    if (cta_title === "RESUME") {
+      this.navigate('select-loan');
     } else {
-      this.navigate("select-loan");
+      this.navigate('edit-details');
     }
+    
   };
 
   sendEvents(user_action) {
@@ -143,11 +142,7 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              {inrFormatDecimal(
-                parseInt(Loan_Eligibility) < parseInt("0")
-                  ? "0"
-                  : Loan_Eligibility
-              )}
+              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility), 0))}
             </div>
           </div>
         </div>

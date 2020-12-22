@@ -20,10 +20,10 @@ class KnowMore extends Component {
 
     let { params } = this.props.location;
 
-    if (!params) {
-      this.navigate('home')
-      return
-    }
+    // if (!params) {
+    //   this.navigate('home')
+    //   return
+    // }
 
     this.setState({
       ...params
@@ -37,7 +37,7 @@ class KnowMore extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "know_more",
+        screen_name: "documents",
       },
     };
 
@@ -56,119 +56,19 @@ class KnowMore extends Component {
     })
   };
 
-  handleClick = () => {
-    this.sendEvents("next");
-    let params = {
-      create_new:
-        this.state.application_exists && this.state.otp_verified ? false : true,
-    };
-
-    let {
-      vendor_application_status,
-      pan_status,
-      is_dedupe,
-      rejection_reason,
-    } = this.state;
-
-    let rejection_cases = [
-      "idfc_null_rejected",
-      "idfc_0.5_rejected",
-      "idfc_1.0_rejected",
-      "idfc_1.1_rejected",
-      "idfc_1.7_rejected",
-      "idfc_4_rejected",
-      "idfc_callback_rejected",
-      "Age",
-      "Salary",
-      "Salary reciept mode",
-    ];
-
-    if (this.state.cta_title === "RESUME") {
-      if (
-        rejection_cases.indexOf(
-          vendor_application_status || rejection_reason
-        ) !== -1 ||
-        is_dedupe
-      ) {
-        this.navigate("loan-status");
-      }
-
-      if (rejection_cases.indexOf(rejection_reason) !== -1) {
-        this.navigate("loan-status");
-      }
-
-      if (!pan_status || vendor_application_status === "pan") {
-        this.navigate("basic-details");
-      } else if (
-        rejection_cases.indexOf(vendor_application_status) === -1 &&
-        !is_dedupe
-      ) {
-        this.navigate("journey");
-      }
-    } else {
-      this.getOrCreate(params);
-    }
-  };
-
-
   render() {
-    let { features, eligibility, documentation } = this.state.screenData;
-    let { tab_clicked } = this.state;
+    let { documentation } = this.state.screenData;
 
     return (
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="Know More"
+        title="Documents"
         buttonTitle={this.state.cta_title}
-        handleClick={this.handleClick}
+        noFooter={true}
       >
         <div className="know-more">
-          <div className="nav-bar">
-            <div id="tab-1" className={`nav-tab ${tab_clicked === 'tab-1' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Features</div>
-            <div id="tab-2" className={`nav-tab ${tab_clicked === 'tab-2' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Eligibility</div>
-            <div id="tab-3" className={`nav-tab ${tab_clicked === 'tab-3' ? 'clicked' : 'unclicked'}`} onClick={this.handleTab}>Documentation</div>
-          </div>
-
-          {tab_clicked === 'tab-1' && <div className="content">
-            {features.content.map((item, index) => (
-              <div className="sub-pts data" key={index}>
-                <div>
-                  <span className="count">{index + 1 + "."}</span>
-                  <span className="subtitle">{item.data ? item.data : item}</span>
-                </div>
-                {item.sub_data &&
-                  item.sub_data.map((element, index) => {
-                    return <div key={index} className="sub-data">{"- " + element}</div>
-                  })
-                }
-              </div>
-            ))}
-          </div>}
-
-          {tab_clicked === 'tab-2' && <div className="content">
-            <div className="sub-head">{eligibility.content1["sub-head"]}</div>
-            <div className="points">
-              {eligibility.content1.points.map((item, index) => (
-                <div className="sub-pts" key={index}>
-                  <span className="count">{index + 1 + "."}</span>
-                  <span className="subtitle">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="sub-head">{eligibility.content2["sub-head"]}</div>
-            <div className="points">
-              {eligibility.content2.points.map((item, index) => (
-                <div className="sub-pts" key={index}>
-                  <span className="count">{index + 1 + "."}</span>
-                  <span className="subtitle">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>}
-
-          {tab_clicked === 'tab-3' && <div className="content">
+          <div className="content">
             <div className="sub-head">{documentation.content1["sub-head"]}</div>
             <div className="points">
               {documentation.content1.points.map((item, index) => (
@@ -177,7 +77,7 @@ class KnowMore extends Component {
                   <span className="subtitle">{item}</span>
                 </div>
               ))}
-            </div>
+            </div> 
 
             <div className="sub-head">{documentation.content2["sub-head"]}</div>
             <div className="points">
@@ -188,7 +88,7 @@ class KnowMore extends Component {
                 </div>
               ))}
             </div>
-          </div>}
+          </div>
         </div>
       </Container>
     );
