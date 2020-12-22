@@ -70,11 +70,13 @@ class PerfiosStatus extends Component {
     let name = personal_info.first_name;
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-
+    let perfios_info = lead.perfios_info;
+    let perfios_display_rejection_reason = perfios_info.perfios_display_rejection_reason;
     let bt_eligible = vendor_info.bt_eligible;
 
     this.setState({
       commonMapper: commonMapper[perfios_state] || {},
+      perfios_display_rejection_reason: perfios_display_rejection_reason,
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
@@ -179,7 +181,8 @@ class PerfiosStatus extends Component {
   };
 
   render() {
-    let { commonMapper, perfios_state, bt_eligible, name } = this.state;
+    let { commonMapper, perfios_state, bt_eligible, name, perfios_display_rejection_reason } = this.state;
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -228,7 +231,7 @@ class PerfiosStatus extends Component {
           )}
 
           {bt_eligible &&
-            (perfios_state !== "failure" || perfios_state !== "blocked")(
+            (perfios_state !== "failure" || perfios_state !== "blocked") && (
               <div className="subtitle">
                 Before we move to the final loan offer, we have an option of
                 'Balance Transfer - BT' for you. However, it is up to you
@@ -236,11 +239,17 @@ class PerfiosStatus extends Component {
               </div>
             )}
 
-          {perfios_state === "failure" && (
+          {(perfios_state === "failure" && !perfios_display_rejection_reason) && (
             <div className="subtitle">
               Bank statement analysis failed due to some error. We recommend you
               to try again by uploading correct bank statements to proceed with
               the verification process.
+            </div>
+          )}
+
+          {(perfios_state === "failure" && perfios_display_rejection_reason) && (
+            <div className="subtitle">
+              {perfios_display_rejection_reason}
             </div>
           )}
 
