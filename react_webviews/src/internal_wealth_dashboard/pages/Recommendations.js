@@ -21,7 +21,7 @@ const Recommendations = () => {
         }}
         useTemplate={true}
         templateImage={isMobileView ? IlsWipMob : IlsWip}
-        templateErrText="We are in a process of building something best for you, with this you can easily rebalance your funds as per the market ongoings."
+        templateErrText="We’re in the process of building a range of value-added services to enhance your investment experience. Stay tuned!"
       />
     </div>
   );

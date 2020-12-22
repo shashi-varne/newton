@@ -11,7 +11,7 @@ const IwdBubbleChart = ({ data = [] }) => {
       list.push({
         name: upperCase(name),
         value: `${share}`,
-        color: `rgba(57, 183, 171, ${share / 100})`,
+        color: `rgba(57, 183, 171, ${(share / 100) + 0.2})`,
       });
     }
     setDataList(list);
@@ -36,6 +36,7 @@ const IwdBubbleChart = ({ data = [] }) => {
       colorBy='name'
       padding={6}
       animate={false}
+      isInteractive={false}
       motionStiffness={90}
       motionDamping={12}
     />

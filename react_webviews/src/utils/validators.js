@@ -296,7 +296,7 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   val = val.toString();
   // remove .00
   if (!retainLeadingZeroes) {
-    val = val.replace(/\.00([^\d])/g, '$1');
+    val = val.replace(/\.0+([^\d])/g, '$1');
   }
 
   if(withSymbol) {

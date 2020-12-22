@@ -359,7 +359,7 @@ $background: #f9f9f9;
             .dot {
               height: 8px;
               width: 8px;
-              background-color: #4ad0c0;
+              background-color: #39B7A8;
               display: inline-block;
               margin-right: 10px;
             }
@@ -407,7 +407,7 @@ $background: #f9f9f9;
           position: relative;
           margin-right: 40px;
         }
-        
+
         span.iwd-rp-item.selected {
           font-weight: bold;
         }
@@ -533,9 +533,6 @@ $background: #f9f9f9;
     display: flex;
     flex-wrap: wrap;
   }
-  .iwd-holding-header-count {
-    font-weight: normal;
-  }
 }
 
 .iwd-holding-detail {
@@ -591,6 +588,14 @@ $background: #f9f9f9;
     }
   }
 
+  .iwd-hd-label {
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
   .iwd-hdc-info-row {
     display: flex;
     flex-wrap: wrap;
@@ -620,11 +625,7 @@ $background: #f9f9f9;
         }
 
         .iwd-hdcni-label {
-          font-weight: 600;
-          font-size: 11px;
-          line-height: 18px;
-          letter-spacing: 2px;
-          text-transform: uppercase;
+          @extend .iwd-hd-label;
         }
       }
 
@@ -646,6 +647,15 @@ $background: #f9f9f9;
         display: flex;
         flex-direction: column;
         margin-right: 60px;
+
+        .iwd-hdcsi-value {
+          color: $dark;
+          margin-bottom: 6px;
+        }
+
+        .iwd-hdcsi-label {
+          @extend .iwd-hd-label;
+        }
       }
     }
   }
@@ -786,6 +796,14 @@ $background: #f9f9f9;
           .iwd-sali-label {
             font-weight: 500;
           }
+        }
+
+        .iwd-sal-item:nth-of-type(1) {
+          padding-top: 0;
+        }
+
+        .iwd-sal-item:nth-last-of-type(1) {
+          padding-bottom: 0;
         }
       }
     }
@@ -1047,7 +1065,7 @@ $background: #f9f9f9;
 
   .iwd-analysis-debt-holding-logo {
     // background: linear-gradient(135deg,  #AEE5DF, transparent);
-    background-image: linear-gradient(30deg, #C1EBE6 0%, #b5f0ea 30%, #6edacd 60%, #C1EBE6 80%);
+    background-image: linear-gradient(135deg, #AEE6DF 0%, #b5f0ea 0%, #6edacd 0%, #BBF0EA 90%);
     color: #488F87;
     font-size: 20px;
     width: 40px;
@@ -1874,10 +1892,6 @@ $background: #f9f9f9;
         width: 100%;
 
         .iwd-hdcs-item {
-          font-size: 13px;
-          line-height: 21px;
-          color: $grey;
-          display: flex;
           flex-direction: row;
           justify-content: space-between;
           padding: 10px 20px;
@@ -1888,6 +1902,15 @@ $background: #f9f9f9;
             rgba(154, 211, 204, 0.1) 16.15%,
             rgba(154, 211, 204, 0) 100%
           );
+
+          .iwd-hdcsi-value {
+            margin-bottom: 0;
+            order: 1;
+          }
+
+          .iwd-hdcsi-label {
+            order: 0;
+          }
         }
 
         .iwd-hdcs-item:nth-last-child(1) {

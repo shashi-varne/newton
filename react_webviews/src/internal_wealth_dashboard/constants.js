@@ -349,7 +349,7 @@ export const HoldingFilterOptions = [
   },
 ];
 
-const data = {
+const transaction_types = {
   Investment: {
     val: ['purchase', 'divreinvest', 'transferin'],
     img: <img src={require('assets/incr_arrow.svg')} alt={'invest'} />,
@@ -358,18 +358,22 @@ const data = {
     val: ['redemption', 'divpayout', 'transferout'],
     img: <img src={require('assets/decr_arrow.svg')} alt={'invest'} />,
   },
-  Switch: {
-    val: ['switchin', 'switchout'],
-    img: <img src={require('assets/switch_arrow.svg')} alt={'invest'} />,
+  'Switch in': {
+    val: ['switchin'],
+    img: <img src={require('assets/fisdom/arrow-right.svg')} alt={'invest'} />,
+  },
+  'Switch out': {
+    val: ['switchout'],
+    img: <img src={require('assets/fisdom/arrow-left.svg')} alt={'invest'} />,
   },
 };
 
 const invest_type_mapper = (type) => {
-  const ttype = Object.keys(data).find((key) => data[key].val.includes(type));
+  const ttype = Object.keys(transaction_types).find((key) => transaction_types[key].val.includes(type));
   if (ttype) {
     return (
       <div className='iwd-table-type-container'>
-        {data[ttype].img}
+        {transaction_types[ttype].img}
         <div className='iwd-table-type'>{ttype}</div>
       </div>
     );

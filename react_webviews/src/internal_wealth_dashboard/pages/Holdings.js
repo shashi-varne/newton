@@ -96,35 +96,46 @@ const Holdings = () => {
   };
 
   const filter = (data) => {
-    const newData = data.filter((el) => {
-      let bool = true;
-      if (
-        filterVal?.scheme_type &&
-        !checkSchemeType(filterVal?.scheme_type.toLowerCase(), el.scheme_type.toLowerCase())
-      ) {
-        bool = false;
-      }
-      if (bool && filterVal?.fisdom_rating) {
-        let fisdomRating = parseInt(filterVal?.fisdom_rating, 10);
-        bool = fisdomRating === 1 ? el.mf.fisdom_rating <= 3 : el.mf.fisdom_rating >= 4;
-      }
-      if (bool && filterVal?.current_value_type) {
-        let currentValueType = parseInt(filterVal?.current_value_type, 10);
-        if (currentValueType === 4) {
-          bool = el.current > currentValue(currentValueType).max;
-        } else {
-          bool =
-            el.current >= currentValue(currentValueType).min &&
-            el.current <= currentValue(currentValueType).max;
+    setIsLoading(true);
+    let newData = [];
+
+    if (filterVal) {
+      newData = data.filter((el) => {
+        let bool = true;
+        if (
+          filterVal?.scheme_type &&
+          !checkSchemeType(filterVal?.scheme_type.toLowerCase(), el.scheme_type.toLowerCase())
+        ) {
+          bool = false;
         }
-      }
-      return bool;
-    });
-    if (newData?.length > 0) {
-      setFilterData(newData);
+        if (bool && filterVal?.fisdom_rating) {
+          let fisdomRating = parseInt(filterVal?.fisdom_rating, 10);
+          bool = fisdomRating === 1 ? el.mf.fisdom_rating <= 3 : el.mf.fisdom_rating >= 4;
+        }
+        if (bool && filterVal?.current_value_type) {
+          let currentValueType = parseInt(filterVal?.current_value_type, 10);
+          if (currentValueType === 4) {
+            bool = el.current > currentValue(currentValueType).max;
+          } else {
+            bool =
+              el.current >= currentValue(currentValueType).min &&
+              el.current <= currentValue(currentValueType).max;
+          }
+        }
+        return bool;
+      }); 
     } else {
-      setFilterData(null);
+      newData = [...holdingsList];
     }
+    
+    setTimeout(() => {
+      if (newData?.length > 0) {
+        setFilterData(newData);
+      } else {
+        setFilterData(null);
+      }
+      setIsLoading(false);
+    }, 500);
   };
 
   const clickHandler = () => {
@@ -138,7 +149,6 @@ const Holdings = () => {
       <PageHeader>
         <div className='iwd-header-title'>
           Holdings
-          <span className='iwd-holding-header-count'> {holdingsList.length || ''}</span>
         </div>
       </PageHeader>
       <FilterMobile
@@ -165,7 +175,7 @@ const Holdings = () => {
             loadingText='Fetching ...'
             scrollOnChange={true}
           >
-            {filterVal && !filterData && (
+            {!filterData && (
               <ErrorScreen
                 classes={{
                   container: 'iwd-fade',
@@ -175,12 +185,8 @@ const Holdings = () => {
                 templateErrText='Oops! We couldn’t find any data for the selected filter. Try removing or changing the filter.'
               />
             )}
-            <>
-              {filterVal
-                ? filterData?.map((holding, idx) => <HoldingCard {...holding} key={idx} />)
-                : holdingsList.map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
-            </>
-            {isMobileView && (filterData || holdingsList || []).length > 1 && <ScrollTopBtn />}
+            {(filterData || []).map((holding, idx) => <HoldingCard {...holding} key={idx} />)}
+            {isMobileView && (filterData || []).length > 1 && <ScrollTopBtn />}
           </SnapScrollContainer>
           {!open && !hasError && (
             <div className='iwd-filter-button' onClick={() => isOpen(!open)}>

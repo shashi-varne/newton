@@ -11,7 +11,22 @@ import { navigate as navigateFunc } from '../common/commonFunctions';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from '../../utils/native_callback';
-const allTabs = ['dashboard', 'analysis', 'holdings', 'recommendations', 'statements'];
+const allTabs = [{
+  tab:'dashboard',
+  desc: 'Easy view for all your investments',
+}, {
+  tab: 'analysis',
+    desc: 'Anatomy of your equity and debt investments',
+}, {
+  tab: 'holdings',
+    desc: 'Fund summary and transactions',
+}, {
+  tab: 'recommendations',
+    desc: 'Rebalancing, coming soon for you!',
+}, {
+  tab: 'statements',
+  desc: 'Download transactions, capital gain and ELSS report',
+}];
 
 const NavBarMobile = (props) => {
   const name = storageService().get('iwd-user-name') || '';
@@ -85,7 +100,7 @@ const NavBarMobile = (props) => {
           >
             <img src={close} alt="close" />
           </Button>
-          {allTabs.map((tab, idx) =>
+          {allTabs.map(({tab, desc}, idx) =>
             <Link to={`${tab}${props.location.search}`} onClick={() => setExpanded(false)} key={idx}>
               <div
                 className={`
@@ -93,7 +108,7 @@ const NavBarMobile = (props) => {
                 ${currentTab === tab ? 'selected' : ''}
               `}>
                 <div className="iwd-nmbl-label">{tab}</div>
-                <div className="iwd-nmbl-desc">Easy view for all your investments</div>
+                <div className="iwd-nmbl-desc">{desc}</div>
               </div>
             </Link>
           )}

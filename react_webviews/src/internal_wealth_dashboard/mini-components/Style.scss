@@ -330,6 +330,7 @@ $card-padding: 50px;
 }
 
 #iwd-nav-mob {
+  @extend .iwd-fadeFromTop;
   position: absolute;
   top: 0;
   height: 61px;

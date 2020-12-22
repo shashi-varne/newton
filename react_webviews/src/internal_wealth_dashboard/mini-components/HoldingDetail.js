@@ -96,7 +96,7 @@ const HoldingDetail = ({
           <div className="iwd-hd-content">
             <PageCloseBtn clickHandler={onCloseClick} />
             <div className="iwd-hdc-header">
-              <img src={investmentDetail.amcLogo} alt="" height="80" />
+              <img src={investmentDetail.amc_logo} alt="" height="60" />
               <div>
                 <div className="iwd-hdch-title">Holdings</div>
                 <div className="iwd-hdch-fund-name">
@@ -152,19 +152,19 @@ const HoldingDetail = ({
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
                     {nonRoundingToFixed(fundDetail.one_year_return, 2)}%
-              </div>
+                  </div>
                   <div className="iwd-hdcsi-label">1 yr return</div>
                 </div>
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
                     {nonRoundingToFixed(fundDetail.three_year_return, 2)}%
-              </div>
+                  </div>
                   <div className="iwd-hdcsi-label">3 yrs return</div>
                 </div>
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
                     {nonRoundingToFixed(fundDetail.five_year_return, 2)}%
-              </div>
+                  </div>
                   <div className="iwd-hdcsi-label">5 yrs return</div>
                 </div>
               </div>

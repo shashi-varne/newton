@@ -92,7 +92,7 @@ const Dashboard = () => {
         hideFooter={isMobileView}
         onPageChange={pageChanged}
         isLoading={isLoadingOverview}
-        loadingText='Hold tight! Getting you the good stuff ...'
+        loadingText='Please wait...Getting your investment data'
         error={overviewError}
         onErrorBtnClick={fetchAllData}
       >
@@ -154,15 +154,15 @@ const Dashboard = () => {
                   <div className='iwd-daal-item'>
                     <div className='label'>
                       <div className='dot'></div>
-                  Equity
-                </div>
+                      Equity
+                    </div>
                     <div className='value'>{assetAlloc.equity}%</div>
                   </div>
                   <div className='iwd-daal-item'>
                     <div className='label'>
                       <div className='dot'></div>
-                  Debt
-                </div>
+                      Debt
+                      </div>
                     <div className='value'>{assetAlloc.debt}%</div>
                   </div>
                 </div>

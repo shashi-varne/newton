@@ -98,7 +98,7 @@ function Analysis() {
       <SnapScrollContainer
         pages={3}
         isLoading={isLoading}
-        loadingText='Hold tight! Getting you the good stuff ...'
+        loadingText='Please wait...Getting your investment data'
         error={error}
         hideFooter={isMobileView}
         onErrorBtnClick={getPortfolio}

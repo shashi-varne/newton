@@ -22,7 +22,7 @@ function Legends({ data = [], columns = 2, classes = {}, percentage = true, roun
           <header className="iwd-lc-header">
             <div
               className={`iwd-lc-icon ${iconClass}`}
-              style={{ opacity: (share / 100) + 0.3 }}
+              style={{ opacity: (share / 100) + 0.2 }}
             ></div>
             <div className={`iwd-lc-title ${labelClass}`}>{name}</div>
           </header>

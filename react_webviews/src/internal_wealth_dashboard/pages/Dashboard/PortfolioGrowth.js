@@ -14,13 +14,13 @@ import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { CSSTransition } from 'react-transition-group';
 
 const dateFormatMap = {
-  '1 month': "d m'",
-  '3 months': "m yy'",
+  '1 month': "d m",
+  '3 months': "d m",
   '6 months': "m yy'",
   '1 year': "m yy'",
   '3 years': "m yy'",
   '5 years': "m yy'",
-  'ytd': "m yy'",
+  'ytd': "d m",
 };
 const isMobileView = getConfig().isMobileDevice;
 
@@ -30,7 +30,7 @@ const PortfolioGrowth = () => {
   const [growthError, setGrowthError] = useState(false);
   const [xirr, setXirr] = useState('');
   const [isLoadingXirr, setIsLoadingXirr] = useState(true);
-  const [selectedRange, setSelectedRange] = useState('5 years');
+  const [selectedRange, setSelectedRange] = useState('1 month');
 
   useEffect(() => {
     fetchGrowthGraphXirr();
@@ -59,7 +59,8 @@ const PortfolioGrowth = () => {
       const {
         current: current_amount_data,
         invested: invested_amount_data,
-        date_ticks
+        date_ticks,
+        date_ticks_mobile,
       } = await getGrowthData({
         date_range: selectedRange,
       });
@@ -73,7 +74,7 @@ const PortfolioGrowth = () => {
       }
       setGrowthData({
         ...formatGrowthData(current_amount_data, invested_amount_data),
-        date_ticks: filterDateTicks(date_ticks),
+        date_ticks: filterDateTicks(date_ticks, date_ticks_mobile),
       });
     } catch (e) {
       console.error(e);
@@ -83,10 +84,12 @@ const PortfolioGrowth = () => {
     setIsLoadingGrowth(false);
   };
 
-  const filterDateTicks = (ticks = []) => {
+  const filterDateTicks = (ticks = [], mobileTicks = []) => {
     if (!isMobileView) return ticks;
-
-    return [ticks[0], ticks[2], ticks[4], ticks[ticks.length - 2]];
+    if (isEmpty(mobileTicks)) {
+      return [ticks[0], ticks[2], ticks[4], ticks[ticks.length - 2]];
+    }
+    return mobileTicks;
   };
 
   const GraphRangePicker = () => {

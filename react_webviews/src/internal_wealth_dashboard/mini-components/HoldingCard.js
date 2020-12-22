@@ -22,7 +22,7 @@ const HoldingCard = ({
 }) => {
   const [openDetail, setOpenDetail] = useState(false);
   const {
-    amc_logo_big = '',
+    amc_logo_zoomed: amc_logo = '',
     name,
     fisdom_rating,
     isin = 1,
@@ -41,7 +41,7 @@ const HoldingCard = ({
             invested_val,
             xirr,
             fisdom_rating,
-            amcLogo: amc_logo_big,
+            amc_logo,
           }}
           onCloseClick={() => setOpenDetail(false)}
         />
@@ -56,7 +56,7 @@ const HoldingCard = ({
       </div>
       <div className="iwd-hc-title">
         <span>{name}</span>
-        <img src={amc_logo_big} alt="" height="80" />
+        <img src={amc_logo} alt="" height="60" />
       </div>
       <div className="iwd-hc-numbers">
         <div className="iwd-hcn-item">

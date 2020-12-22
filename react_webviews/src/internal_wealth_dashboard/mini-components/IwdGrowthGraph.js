@@ -16,21 +16,21 @@ const IwdGrowthGraph = ({
   isLoading = false
 }) => {
   return (
-    <div style={{ width, height, margin: '0 -20px' }}>
+    <div style={{ width, height, margin: `0 ${isMobileView ? '0 0 -10px' : '-20px'}` }}>
       {isLoading ?
         <IwdCardLoader />
         : 
         (<ResponsiveLine
           data = { data }
           animate = { true }
-          margin = {{ top: 20, right: 20, bottom: 40, left: 70 }}
-          yScale={{
-            type: 'linear',
-            min: params.min || 'auto',
-            max: params.max || 'auto',
-            stacked: false,
-            reverse: false
-          }}
+          margin = {{ top: 20, right: 20, bottom: 40, left: isMobileView ? 50 : 70 }}
+          // yScale={{
+          //   type: 'linear',
+          //   min: params.min || 'auto',
+          //   max: params.max || 'auto',
+          //   stacked: false,
+          //   reverse: false
+          // }}
           axisBottom={{
             format: value => formattedDate(value, params.dateFormat, true),
             tickValues: params.date_ticks,
@@ -40,7 +40,7 @@ const IwdGrowthGraph = ({
           axisLeft={{
             orient: 'left',
             tickValues: 6,
-            format: value => value === 0 ? 0 : numDifferentiationInr(value, 2, value > 100000), //converts 40000 to 40K
+            format: value => value === 0 ? 0 : numDifferentiationInr(value, 1), //converts 40000 to 40K
             tickPadding: 15,
             tickSize: 0,
           }}
@@ -58,7 +58,7 @@ const IwdGrowthGraph = ({
                 text: Object.assign({
                   fontFamily: "'Poppins', 'Roboto', sans-serif",
                   fontWeight: '600',
-                  letterSpacing: '2px',
+                  letterSpacing: '1px',
                   textTransform: 'uppercase',
                 }, !isMobileView ? {
                   fill: "rgb(118, 126, 134)",
