@@ -840,17 +840,17 @@ export async function formCheckUpdate(
     }
   }
 
-  if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
-    let data = this.state.companyOptions.filter(
-      (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
-    );
+  // if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
+  //   let data = this.state.companyOptions.filter(
+  //     (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
+  //   );
 
-    if (data.length === 0) {
-      form_data.company_name_error =
-        "Please select company name from provided list";
-      canSubmitForm = false;
-    }
-  }
+  //   if (data.length === 0) {
+  //     form_data.company_name_error =
+  //       "Please select company name from provided list";
+  //     canSubmitForm = false;
+  //   }
+  // }
 
   this.setState({
     form_data: form_data,
