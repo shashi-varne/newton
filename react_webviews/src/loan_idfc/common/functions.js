@@ -357,7 +357,7 @@ export async function getOrCreate(params) {
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       } else if (params && params.reset) {
-        this.navigate("home");
+        this.navigate("loan-know-more");
       } else if (application_status === "internally_rejected") {
         this.navigate("loan-status");
       } else if (
@@ -1013,6 +1013,7 @@ export async function getSummary() {
 
     if (status === 200) {
       storageService().set("employment_type", result.employment_type);
+      storageService().set("loans_applied", result.loans_applied);
       this.setState({
         account_exists: result.account_exists,
         ongoing_loan_details: result.ongoing_loan_details,

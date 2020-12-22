@@ -100,7 +100,7 @@ class SelectLoan extends Component {
 
   goBack = () => {
     let { loans_applied } = this.state;
-console.log(loans_applied)
+
     if (loans_applied === 0) {
       this.navigate('edit-details')
     } else {
