@@ -147,11 +147,7 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              {inrFormatDecimal(
-                parseInt(Loan_Eligibility) < parseInt("0")
-                  ? "0"
-                  : Loan_Eligibility
-              )}
+              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility), 0))}
             </div>
           </div>
         </div>
