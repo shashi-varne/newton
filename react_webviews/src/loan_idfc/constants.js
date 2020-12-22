@@ -23,7 +23,7 @@ export function goBackMap(path) {
     "/loan/idfc/final-loan": "/loan/idfc/loan-know-more",
     "/loan/idfc/reports": "/loan/idfc/loan-know-more",
     "/loan/idfc/final-offer": '/loan/idfc/journey',
-    "/loan/calculator": "/loan/loan-know-more",
+    "/loan/calculator": "/loan/loan-home",
     "/loan/recommendation": "/loan/loan-know-more",
     // "/loan/select-loan": "/loan/loan-home",
     "/loan/idfc/loan-know-more": "/loan/select-loan",
