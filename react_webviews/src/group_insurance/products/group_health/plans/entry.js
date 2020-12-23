@@ -147,20 +147,20 @@ class HealthInsuranceEntry extends Component {
   console.log(this.state, this.props, 'hellllllloo')
 
     return (
-      <Container
+      <div
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
-        title="Comprehensive health insurance"> 
+        title=""> 
         <div className="group-health-insurance-entry">
           <div className='products'>
-            <div className='health_insurance'>Health insurance plans</div>
+          {/* <div className='health_insurance'> </div> */}
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     );
   }
 }

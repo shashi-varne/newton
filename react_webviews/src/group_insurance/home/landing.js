@@ -62,12 +62,12 @@ class Landing extends Component {
         subtitle: 'Starts from ₹200/year',
         icon: 'ic_personal_accident'
       },
-      {
-        key: 'HOSPICASH',
-        title: 'Hospital Daily Cash',
-        subtitle: 'Starts from ₹750/year',
-        icon: 'ic_hospicash'
-      },
+      // {
+      //   key: 'HOSPICASH',
+      //   title: 'Hospital Daily Cash',
+      //   subtitle: 'Starts from ₹750/year',
+      //   icon: 'ic_hospicash'
+      // },
       {
         key: 'DENGUE',
         title: 'Dengue insurance',
