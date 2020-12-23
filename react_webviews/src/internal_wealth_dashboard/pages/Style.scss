@@ -364,11 +364,11 @@ $background: #f9f9f9;
               margin-right: 10px;
             }
             font-weight: 600;
-            font-size: 11px;
+            font-size: 14px;
             line-height: 18px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: #4ad0c0;
+            color: #39B7A8;
           }
           .value {
             font-size: 30px;
@@ -381,9 +381,7 @@ $background: #f9f9f9;
         .iwd-daal-item:nth-last-child(1) {
           margin-bottom: 0;
           .label {
-            .dot {
             opacity: 0.6;
-            }
           }
         }
       }
