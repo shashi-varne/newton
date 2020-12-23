@@ -6,7 +6,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getDateBreakup } from 'utils/validators';
 import {
-  inrFormatDecimalWithoutIcon, capitalizeFirstLetter , inrFormatDecimal
+  inrFormatDecimalWithoutIcon , inrFormatDecimal
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getCssMapperReport , TitleMaper} from '../constants';
@@ -193,13 +193,13 @@ class Report extends Component {
     } 
 
     let ins_policies = group_insurance_policies.ins_policies || [];
-    for (var i = 0; i < ins_policies.length; i++) {
+    for (let i = 0; i < ins_policies.length; i++) {
       let policy = this.getProviderObject(ins_policies[i]);
       reportData.push(policy);
     }
 
     let o2o_details = o2o_applications || []; 
-    for(var i = 0; i< o2o_details.length; i++){
+    for(let i = 0; i< o2o_details.length; i++){
       let policy = this.getProviderObject_offline(o2o_details[i]);
       reportData.push(policy);
     }
