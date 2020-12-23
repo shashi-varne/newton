@@ -128,7 +128,7 @@ class EligibleLoan extends Component {
 
   render() {
     let { vendor_info } = this.state;
-    let ROI = (vendor_info.ROI / 100) * 100;
+    let ROI = (vendor_info.initial_offer_roi / 100) * 100;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -193,7 +193,7 @@ class EligibleLoan extends Component {
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
-                    <div className="sub-title">{vendor_info.initial_offer_roi}%</div>
+                    <div className="sub-title">{ROI}%</div>
                   </div>
                 </div>
               </Grid>
