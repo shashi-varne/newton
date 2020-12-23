@@ -100,6 +100,7 @@ handleChange = name => event => {
   form_data.notfound = false
   form_data.found = false
   if (name === 'Vendor') {
+    // eslint-disable-next-line
     var value = event
     form_data.index = event
   };
