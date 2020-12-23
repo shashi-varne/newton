@@ -125,7 +125,6 @@ class GroupHealthReportDetails extends Component {
     }
 
     render() {
-        let {provider} = this.state;
 
         return (
             <Container
