@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Filters from './FilterSection';
 import { storageService } from '../../utils/validators';
 
@@ -9,10 +9,22 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
     !isEmpty(storedFilterVal) ? storedFilterVal : null
   );
   const [clearFilter, setClearFilter] = useState(false);
-  const clearCheck = filter_key === 'iwd-holding-filters' ? filterState : filterState?.ttype;
+  const [canClear, setCanClear] = useState(false);
+
+  useEffect(() => {
+    if (filterState) {
+      const isFilterSet = Object.keys(filterState).some(filterKey => filterState[filterKey]);
+      setCanClear(isFilterSet);
+    }
+  }, [filterState]);
 
   const handleFilterSelect = (id, value) => {
-    const filterData = { ...storedFilterVal, [id]: value };
+    let filterData;
+    if (filterState) {
+      filterData = { ...filterState, [id]: value };
+    } else {
+      filterData = { [id]: value };
+    }
     setFilterState(filterData);
     storageService().setObject(filter_key, filterData);
     handleFilterData(filterData);
@@ -20,21 +32,18 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
   };
 
   const clearFilters = () => {
-    const filterData = { ...storedFilterVal, ttype: '' };
-    if (!isEmpty(clearCheck)) {
-      if (filter_key === 'iwd-holding-filters') {
-        handleFilterData(null);
-        setFilterState(null);
-        setClearFilter(true);
-        storageService().setObject(filter_key, null);
-      } else {
-        handleFilterData(filterData);
-        setFilterState(null);
-        setClearFilter(true);
-        storageService().setObject(filter_key, filterData);
-      }
+    if (!canClear) return;
+    if (filter_key === 'iwd-holding-filters') {
+      handleFilterData({ ttype: '' });
+    } else {
+      handleFilterData(null);
     }
+    setFilterState(null);
+    setClearFilter(true);
+    storageService().setObject(filter_key, null);
+    setCanClear(false);
   };
+
   const renderFilters = () => (
     <div>
       {filterOptions?.map((type) => {
@@ -65,7 +74,7 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
       <section className='iwd-filter-head-container'>
         <div className='iwd-filter-head'>Filters</div>
         <div
-          className={`iwd-filter-clear ${isEmpty(clearCheck) && 'iwd-disable-clear'}`}
+          className={`iwd-filter-clear ${!canClear && 'iwd-disable-clear'}`}
           onClick={clearFilters}
         >
           Clear All

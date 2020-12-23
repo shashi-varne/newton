@@ -145,7 +145,26 @@ const Holdings = () => {
     isOpen(false);
   };
   const handleFilterData = (filterData) => {
-    setFilterVal(filterData);
+    if(isEmpty(filterData)) {
+      // For when filter is cleared
+      setFilterVal(null);
+      return;
+    }
+
+    let newFilterObj = {};
+
+    if (filterData) {
+      // eslint-disable-next-line array-callback-return
+      Object.keys(filterData).map(key => {
+        // Only take filter key-value pairs that have a value set (ignore empty ones)
+        if (filterData[key]) newFilterObj[key] = filterData[key];
+      });
+    }
+    if (isEmpty(newFilterObj)) {
+      setFilterVal(null);
+    } else {
+      setFilterVal(newFilterObj);
+    }
   };
   return (
     <div className='iwd-page' id='iwd-holdings'>
