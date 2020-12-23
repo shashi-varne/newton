@@ -24,29 +24,27 @@ class LifeInsuranceEntry extends Component {
     nativeCallback({ action: 'take_control_reset' });
 
     let insuranceProducts = [{
-            key: 'SMART_WALLET',
-            title: 'Smart Wallet(fraud protection)',
-            subtitle: 'Starts from ₹250/year',
-            icon: 'ic_wallet'
-        },
-        {
-            key: 'HOME_INSURANCE',
-            title: 'Home insurance',
-            subtitle: 'Secure your home and interiors',
-            icon: 'home_insurance_icon',
-            disabled: false
-        },
-        {
-            key: 'savings plan',
-            title: 'Insurance Savings plan',
-            subtitle: 'Life coverage with wealth creation',
-            icon: 'money_pig',
-            disabled: false
-        }
+        key: 'SMART_WALLET',
+        title: 'Smart Wallet(fraud protection)',
+        subtitle: 'Starts from ₹250/year',
+        icon: 'ic_wallet'
+      }, 
+      
+      {
+        key: 'PERSONAL_ACCIDENT',
+        title: 'Personal Accident Insurance',
+        subtitle: 'Starts from ₹200/year',
+        icon: 'ic_personal_accident'
+      },
+
+      {
+        key: 'HOME_INSURANCE',
+        title: 'Home insurance',
+        subtitle: 'Secure your home and interiors',
+        icon: 'home_insurance_icon',
+        disabled: false
+      },
     ];
-
-    console.log(this.state.type, ';;;;;;;;;;;;;;;;;;;')
-
       this.setState({
         insuranceProducts: insuranceProducts
       })
@@ -66,16 +64,6 @@ class LifeInsuranceEntry extends Component {
       }
     });
   }
-
- 
-
-
-
-
-
-
-
-
 
   handleClick = (product_key_info) => {
     let product_key = product_key_info.key
@@ -113,13 +101,10 @@ class LifeInsuranceEntry extends Component {
         fullPath = 'home_insurance/general/plan';
     this.navigate('/group-insurance/' + fullPath);
     } else {
-
       // this.navigate(this.state.redirectTermPath);
       this.navigate('/group-insurance/term/intro');
       return;
     }
-
-
     // window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
   }
@@ -159,7 +144,7 @@ class LifeInsuranceEntry extends Component {
 
 
 //     // this.navigate('group-insurance/' + fullPath);
-//   }
+//   } ic_personal_accident.svg
 
   renderPorducts(props, index) {
 
@@ -231,6 +216,5 @@ class LifeInsuranceEntry extends Component {
     );
   }
 }
-// import { from } from 'core-js/fn/array';
 
 export default LifeInsuranceEntry;

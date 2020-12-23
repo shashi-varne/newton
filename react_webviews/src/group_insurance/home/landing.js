@@ -43,6 +43,11 @@ class Landing extends Component {
         title: 'Health Insurance',
         subtitle: 'Starts from ₹4,000/year',
         icon: 'ic_health'
+      },{
+        key: 'Other_Insurance',
+        title: 'Other Insurance',
+        subtitle: 'Insurance plans for specific needs',
+        icon: 'icn_other_insurance'
       },
       {
         key: 'CORONA',
@@ -89,6 +94,8 @@ class Landing extends Component {
 
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
+
+    console.log(params, openModuleData,'openModuleData')
 
     let redirect_url =  decodeURIComponent(getConfig().redirect_url);
     if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
@@ -162,6 +169,10 @@ class Landing extends Component {
           resumeFlagAll: resumeFlagAll
         })
 
+
+        console.log(this.state.openModuleData,'this.state.openModuleData.sub_module')
+
+
         if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
@@ -174,6 +185,10 @@ class Landing extends Component {
 
           let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
             this.state.openModuleData.sub_module;
+
+            console.log(pathname,'<-------------------pathname')
+
+
           this.handleClick(pathname);
         }
 
@@ -295,9 +310,11 @@ class Landing extends Component {
         path = 'plan';
       }
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else if (product_key === 'LIFE_INSURANCE') {
-        fullPath = 'life-insurance/entry';
-    } else if (product_key === 'HEALTH_INSURANCE') {
+    } else if (product_key === 'LIFE_INSURANCE') {           ///Other-Insurance/entry
+        fullPath = 'life-insurance/entry';                                   
+    }  else if (product_key === 'Other_Insurance') {      
+      fullPath = 'other-insurance/entry';                                   
+    }else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
     }    
     else if (product_key === 'HOME_INSURANCE') {
@@ -371,18 +388,18 @@ class Landing extends Component {
         showLoader={this.state.show_loader}
         title="Insurance">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
             < img  src={ require(`assets/ic_hand_insurance_${this.state.type}.svg`)} alt='' />
-          </div>
-          <div style={{
+          </div> */}
+          {/* <div style={{
             marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
             display: 'flex'
           }}>
             <img style={{ margin: '0px 10px 0 0' }} src={ require(`assets/instant_${this.state.type}.svg`)  }alt="" />
             Get instant policy issuance
-            </div>
-          <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | No paperwork</div>
+            </div> */}
+          {/* <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | No paperwork</div> */}
           <div className='products' style={{ marginTop: '50px' }}>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px',marginBottom: '25px'  }}>Get started</h1>
             <div>
