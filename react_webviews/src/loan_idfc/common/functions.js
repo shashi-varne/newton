@@ -16,7 +16,6 @@ export async function initialize() {
   this.navigate = navigate.bind(this);
   this.openPdf = openPdf.bind(this);
   this.openInBrowser = openInBrowser.bind(this);
-  this.openInTabApp = openInTabApp.bind(this);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.updateApplication = updateApplication.bind(this);
   this.submitApplication = submitApplication.bind(this);
@@ -33,6 +32,7 @@ export async function initialize() {
   this.get07State = get07State.bind(this);
   this.getRecommendedVendor = getRecommendedVendor.bind(this);
   this.getSummary = getSummary.bind(this);
+  this.openInTabApp = openInTabApp.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -290,22 +290,28 @@ export async function getDocumentList() {
     );
     const { result } = res.pfwresponse;
 
-    this.setState(
-      {
-        docList: result.doc_list,
-      },
-      () => {
-        this.onload();
-      }
-    );
+    if (result.doc_list.length === 0) {
+      this.submitApplication({}, "four", "", "final-offer");
+    } else {
+      this.setState(
+        {
+          docList: result.doc_list,
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
+    }
+
+    
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
-
-  this.setState({
-    show_loader: false,
-  });
 }
 
 export async function getOrCreate(params) {

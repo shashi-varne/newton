@@ -17,6 +17,16 @@ const commonMapper = {
     screenName: "system_error",
     stage: "after address details"
   },
+  idfc_null_rejected: {
+    top_icon: "ils_loan_failed",
+    top_title: "Application Rejected",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "application_rejected",
+    stage: "after address details",
+  },
   idfc_callback_rejected: {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",

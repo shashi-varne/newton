@@ -428,12 +428,12 @@ class UploadBank extends Component {
     // eslint-disable-next-line radix
     let startDate = form_data.start_date.substring(0, 2) === "01";
 
-    if (!startDate_month || !startDate) {
+    if (!startDate_month || !startDate || form_data.start_date.length !== 10) {
       form_data.start_date_error = "This date must be 3 months from the current date";
       canSubmit = false;
     }
 
-    if (!endDate_days) {
+    if (!endDate_days || form_data.end_date.length !== 10) {
       form_data.end_date_error = "This date must be 3 days before the current date";
       canSubmit = false;
     }
