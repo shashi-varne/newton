@@ -806,7 +806,8 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  if (form_data.maxAmount && form_data.amount_required > form_data.maxAmount) {
+  // eslint-disable-next-line
+  if (form_data.maxAmount && form_data.amount_required > parseInt(form_data.maxAmount)) {
     form_data.amount_required_error =
       "Amount cannot be greater than max loan amount";
     canSubmitForm = false;
