@@ -95,7 +95,10 @@ class ReportDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "loan_report",
-        // status: this.state.vendor_info_ui.cssMapper.disc,
+        status:
+          (this.state.cssMapper[this.state.loan_status || ""] &&
+            this.state.cssMapper[this.state.loan_status || ""].disc) ||
+          "",
       },
     };
 

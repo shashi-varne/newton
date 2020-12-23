@@ -55,7 +55,7 @@ class IncomeDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "income_details",
-        option_selected: data.option_selected,
+        option_selected: data.option_selected || '',
       },
     };
 

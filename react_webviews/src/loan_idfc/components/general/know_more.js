@@ -32,7 +32,7 @@ class KnowMore extends Component {
 
   onload = async () => { };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {

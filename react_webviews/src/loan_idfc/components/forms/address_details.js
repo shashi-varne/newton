@@ -131,10 +131,9 @@ class AddressDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-
     if (this.state.confirm_details) {
       let edited_address = name.split("_")[0];
-      form_data[edited_address + 'address_edited'] = "yes"
+      form_data[edited_address + '_address_edited'] = "yes"
       form_data[name + '_helper'] = 'You need to provide proof for the changed info';
     }
 

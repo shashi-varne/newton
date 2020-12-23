@@ -106,6 +106,7 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {

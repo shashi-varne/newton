@@ -458,6 +458,7 @@ class UploadBank extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back');
     let { params } = this.state;
 
     if (params.adminPanel) {

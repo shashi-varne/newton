@@ -14,7 +14,7 @@ const commonMapper = {
   "idfc_0.5_rejected": {
     stage: "after loan requirement details",
   },
-  "idfc_10_rejected": {
+  "idfc_1.0_rejected": {
     stage: "after loan requirement details",
   },
   "idfc_0.5_submitted": {

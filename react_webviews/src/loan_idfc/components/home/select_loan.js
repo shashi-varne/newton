@@ -30,7 +30,7 @@ class SelectLoan extends Component {
       idfc: {
         index: 0,
         title: "IDFC FIRST BANK",
-        subtitle: "Competitive Interest rate",
+        subtitle: "Competitive interest rate",
         loan_amount: " ₹40 lac",
         logo: "idfc_logo",
         cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
@@ -38,13 +38,13 @@ class SelectLoan extends Component {
         displayTag: true,
         provider_name: "idfc",
         benefits: {
-          benefits_title: "Basic benefits",
+          // benefits_title: "Basic benefits",
           options: [
             {
               data: "Loan up to 40 lakhs:",
               sub_data: [
-                "For salaried, the range is from Rs. 1 lakh to 40 lacs",
-                "For self-employed the max loan amount is Rs. 9 lacs",
+                "For salaried, the range is from Rs. 1 lakh to 40 lakhs",
+                "For self-employed the max loan amount is Rs. 9 lakhs",
               ],
             },
             "Low interest rate starting at 10.75% p.a.",
@@ -99,6 +99,7 @@ class SelectLoan extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back')
     let { loans_applied } = this.state;
 
     if (loans_applied === 0) {
@@ -119,9 +120,9 @@ class SelectLoan extends Component {
     let resume = vendors_data[provider_name].cta_title === 'RESUME' ? 'yes' : 'no';
     let vendor = ongoing_loan_details.find((element) => element.vendor === provider_name) || {}
     this.sendEvents("next", { 
-      provider_name: provider_name || '',
+      provider_name: provider_name,
       status: vendor.status || 'default',
-      resume: resume || '', 
+      resume: resume, 
     });
     this.navigate(`/loan/${provider_name}/loan-know-more`);
   };
@@ -132,7 +133,9 @@ class SelectLoan extends Component {
       properties: {
         user_action: user_action,
         screen_name: "select_loan_provider",
-        ...data,
+        provider_name: data.provider_name || '',
+        status: data.status || '',
+        resume: data.resume || '', 
       },
     };
 

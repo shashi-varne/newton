@@ -37,7 +37,7 @@ const commonMapper = {
     screenName: "application_rejected",
     stage: "after loan requirement details",
   },
-  "idfc_10_rejected": {
+  "idfc_1.0_rejected": {
     top_icon: "ils_loan_failed",
     // top_title: "Sorry",
     button_title: "START NEW APPLICATION",
@@ -208,10 +208,12 @@ class LoanStatus extends Component {
         screen_name: this.state.commonMapper.screenName,
       },
     };
-    if(this.state.commonMapper.screenName === 'application_rejected')
+    if(this.state.commonMapper.screenName === 'application_rejected') {
       eventObj.properties.rejection_reason = this.state.rejection_reason || "";
-    if(this.state.commonMapper.screenName === 'system_error')
       eventObj.properties.stage = this.state.commonMapper.stage || "";
+    } else if(this.state.commonMapper.screenName === 'system_error') {
+      eventObj.properties.stage = this.state.commonMapper.stage || "";
+    }
     if (user_action === "just_set_events") {
       return eventObj;
     } else {
