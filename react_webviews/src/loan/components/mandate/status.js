@@ -26,7 +26,7 @@ const commonMapper = {
     'top_title': 'E-mandate failed',
     'mid_title': '',
     'button_title': 'RETRY',
-    'cta_state': '/loan/bank',
+    'cta_state': '/loan/dmi/bank',
     'close_state': '/loan/dmi/loan-know-more'
   },
   'loan_not_eligible': {
