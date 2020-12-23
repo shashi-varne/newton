@@ -71,40 +71,43 @@ const RiskProfile = () => {
 
   return (
     <>
-      <IwdCard
-        id='iwd-d-risk'
-        headerText='Risk analysis'
-        error={isEmpty(riskData) || riskError}
-        errorText='Something went wrong! Please retry after some time or contact your wealth manager'
-        isLoading={isLoadingRisk}
-      >
-        <div id='iwd-dr-data'>
-          <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
-            <div className='iwd-drb-label'>Return</div>
-            <div className='iwd-drb-value'>{riskData.return}%</div>
+      <div id='iwd-d-risk'>
+        <IwdCard
+          style={{ height: '100%' }}
+          headerText='Risk analysis*'
+          error={isEmpty(riskData) || riskError}
+          errorText='Something went wrong! Please retry after some time or contact your wealth manager'
+          isLoading={isLoadingRisk}
+        >
+          <div id='iwd-dr-data'>
+            <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
+              <div className='iwd-drb-label'>Return</div>
+              <div className='iwd-drb-value'>{riskData.return}%</div>
+            </div>
+            <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
+              <div className='iwd-drb-label'>Alpha</div>
+              <div className='iwd-drb-value'>{riskData.alpha}%</div>
+            </div>
+            <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}>
+              <div className='iwd-drb-label'>Volatility</div>
+              <div className='iwd-drb-value'>{riskData.std_dev}%</div>
+            </div>
+            <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
+              <div className='iwd-drb-label'>Beta</div>
+              <div className='iwd-drb-value'>{riskData.beta}</div>
+            </div>
+            <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
+              <div className='iwd-drb-label'>Sharpe Ratio</div>
+              <div className='iwd-drb-value'>{riskData.sharpe_ratio}</div>
+            </div>
+            <div className='iwd-dr-box'>
+              <div className='iwd-drb-label'>Information Ratio</div>
+              <div className='iwd-drb-value'>{riskData.information_ratio}</div>
+            </div>
           </div>
-          <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom border-right' : ''}`}>
-            <div className='iwd-drb-label'>Alpha</div>
-            <div className='iwd-drb-value'>{riskData.alpha}%</div>
-          </div>
-          <div className={`iwd-dr-box ${!isMobileView ? 'border-bottom' : ''}`}>
-            <div className='iwd-drb-label'>Volatility</div>
-            <div className='iwd-drb-value'>{riskData.std_dev}%</div>
-          </div>
-          <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
-            <div className='iwd-drb-label'>Beta</div>
-            <div className='iwd-drb-value'>{riskData.beta}</div>
-          </div>
-          <div className={`iwd-dr-box ${!isMobileView ? 'border-right' : ''}`}>
-            <div className='iwd-drb-label'>Sharpe Ratio</div>
-            <div className='iwd-drb-value'>{riskData.sharpe_ratio}</div>
-          </div>
-          <div className='iwd-dr-box'>
-            <div className='iwd-drb-label'>Information Ratio</div>
-            <div className='iwd-drb-value'>{riskData.information_ratio}</div>
-          </div>
-        </div>
-      </IwdCard>
+        </IwdCard>
+        <div id="iwd-dr-disclaimer">*Showing risk analysis only for 1 yr</div>
+      </div>
       <IwdCard
         isClickable
         isLoading={isLoadingBlog}

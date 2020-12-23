@@ -108,7 +108,7 @@ const Transactions = () => {
     setFilterVal(prevState => {
       setActivePage(1);
       setPageMap([null, null]); // reset pagination everytime filter is changed
-     return { ...prevState, ...val }
+      return { ...prevState, ...val };
     });
   };
 

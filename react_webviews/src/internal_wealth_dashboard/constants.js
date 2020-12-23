@@ -1,16 +1,18 @@
 // ---------------- Assets ----------------------
 import IcSecFinanceIcon from '../assets/fisdom/ic_sec_finance.svg';
-import IcSecAutoMobileIcon from '../assets/fisdom/ic_sec_automobile.svg';
-// import IcSecChemicalsIcon from '../assets/fisdom/ic_sec_chemicals.svg';
+import IcSecConsCyclicalIcon from '../assets/fisdom/ic_sec_consumer_cyclical.svg';
 import IcSecCommunicationIcon from '../assets/fisdom/ic_sec_communication.svg';
-import IcSecConsDurableIcon from '../assets/fisdom/ic_sec_cons_durable.svg';
-import IcSecConstructionIcon from '../assets/fisdom/ic_sec_construction.svg';
+import IcSecConstructionIcon from '../assets/fisdom/ic_sec_real_estate.svg';
 import IcSecEnergyIcon from '../assets/fisdom/ic_sec_energy.svg';
-import IcSecFMCGIcon from '../assets/fisdom/ic_sec_fmcg.svg';
 import IcSecHealthCare from '../assets/fisdom/ic_sec_healthcare.svg';
-import IcSecServicesIcon from '../assets/fisdom/ic_sec_services.svg';
 import IcSecTechnologyIcon from '../assets/fisdom/ic_sec_technology.svg';
+import IcSecIndustrialsIcon from '../assets/fisdom/ic_sec_industrials.svg';
+import IcSecConsDefensiveIcon from '../assets/fisdom/ic_sec_consumer_defensive.svg';
+import IcSecBasicMaterialsIcon from '../assets/fisdom/ic_sec_basic_materials.svg';
+import IcSecUtilitiesIcon from '../assets/fisdom/ic_sec_utility.svg';
+import IcSecOthersIcon from '../assets/fisdom/ic_sec_others.svg';
 // ----------------------------------------------
+
 import React from 'react';
 import { formatAmountInr } from "utils/validators";
 
@@ -21,14 +23,15 @@ export const topStocksIconMappings = {
   'Financial Services': IcSecFinanceIcon,
   Energy: IcSecEnergyIcon,
   Technology: IcSecTechnologyIcon,
-  'Consumer Defensive': IcSecConsDurableIcon,
+  Industrials: IcSecIndustrialsIcon,
+  'Consumer Defensive': IcSecConsDefensiveIcon,
+  'Basic Materials': IcSecBasicMaterialsIcon,
   'Real Estate': IcSecConstructionIcon,
-  Utilities: IcSecServicesIcon,
-  'Consumer Cyclical': IcSecAutoMobileIcon,
+  Utilities: IcSecUtilitiesIcon,
+  'Consumer Cyclical': IcSecConsCyclicalIcon,
   Healthcare: IcSecHealthCare,
   'Communication Services': IcSecCommunicationIcon,
-  'Basic Materials': IcSecFMCGIcon,
-  Others: IcSecFMCGIcon,
+  Others: IcSecOthersIcon,
 };
 
 export const dummyGrowth = {

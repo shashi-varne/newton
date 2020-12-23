@@ -236,7 +236,7 @@ $background: #f9f9f9;
   text-align: left;
   align-self: flex-start;
   background: $primary;
-  width: 40%;
+  width: 42%;
   height: auto;
   padding: 34px 50px;
   padding-right: 30px;
@@ -498,6 +498,13 @@ $background: #f9f9f9;
       .iwd-dr-box.border-right {
         border-right: 1px solid rgba($light-grey, 0.4);
       }
+    }
+
+    #iwd-dr-disclaimer {
+      font-size: 9px;
+      line-height: 14px;
+      color: rgba(#767E86, 0.7);
+      margin-top: 10px;
     }
   }
 
@@ -1549,6 +1556,10 @@ $background: #f9f9f9;
       margin-bottom: 40px;
       width: 100%;
 
+      .iwd-card {
+        margin-bottom: 0px;
+      }
+
       #iwd-dr-data {
         display: flex;
         flex-wrap: wrap;
@@ -1574,6 +1585,10 @@ $background: #f9f9f9;
             text-align: center;
           }
         }
+      }
+
+      #iwd-dr-disclaimer {
+        text-align: center;
       }
     }
 

@@ -40,6 +40,7 @@ const Holdings = () => {
         setHasError(true);
       }
       setHoldingsList(result);
+      setFilterData(result);
       if (filterVal) {
         filter(result);
       }
@@ -87,7 +88,9 @@ const Holdings = () => {
   }, []);
 
   useEffect(() => {
-    filter(holdingsList);
+    if (holdingsList.length) {
+      filter(holdingsList);
+    }
     scrollElementToPos('iwd-scroll-contain', 0, 0);
   }, [filterVal]);
 
@@ -175,7 +178,7 @@ const Holdings = () => {
             loadingText='Fetching ...'
             scrollOnChange={true}
           >
-            {!filterData && (
+            {!isEmpty(filterVal) && !filterData && (
               <ErrorScreen
                 classes={{
                   container: 'iwd-fade',

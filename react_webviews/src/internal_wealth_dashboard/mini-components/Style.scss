@@ -57,7 +57,8 @@ $card-padding: 50px;
 .iwd-common-page-footer {
   display: flex;
   align-items: center;
-  margin-top: 31px;
+  margin-top: 50px;
+
   img:nth-of-type(2) {
     margin-left: 46px;
   }
@@ -970,6 +971,7 @@ table.iwd-transactions-table {
 .iwd-disable-clear {
   opacity: 0.2;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .iwd-chart-header {
@@ -1025,6 +1027,7 @@ table.iwd-transactions-table {
   }
   
   .iwd-common-page-footer {
+    margin-top: 30px;
     img:nth-of-type(2) {
       margin-left: 20px;
     }
@@ -1204,11 +1207,6 @@ table.iwd-transactions-table {
     justify-content: center;
     border-right: 1px solid rgba(118, 126, 134, 0.1);
   }
-}
-
-.iwd-disable-clear {
-  opacity: 0.2;
-  cursor: not-allowed;
 }
 
 //Autosuggest
@@ -1498,11 +1496,6 @@ table.iwd-transactions-table {
       position: relative;
     }
   }
-}
-
-.iwd-disable-clear {
-  opacity: 0.2;
-  cursor: not-allowed;
 }
 
 //Autosuggest

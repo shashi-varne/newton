@@ -87,7 +87,7 @@ const IwdGrowthGraph = ({
           }}
           sliceTooltip={IwdLineTooltip}
           enableArea={true}
-          areaBaselineValue={params.min}
+          areaBaselineValue={0}
           defs={[
           linearGradientDef('gradientA', [
             { offset: 0, color: 'inherit' },

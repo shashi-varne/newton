@@ -15,7 +15,10 @@ const TopStocks = ({ topStocks }) => {
             ({ holding_sector_name: heading, instrument_name: company, share: percentage }) => (
               <div className='iwd-analysis-portfolio-stock' key={company}>
                 <picture>
-                  <img src={topStocksIconMappings[heading]} alt={heading} />
+                  <img
+                    src={topStocksIconMappings[heading] || topStocksIconMappings['Others']}
+                    alt={heading}
+                  />
                 </picture>
                 <main>
                   <div className='iwd-analysis-portfolio-heading'>{heading}</div>
