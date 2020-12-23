@@ -30,7 +30,7 @@ class Calculator extends Component {
     let { loans_applied } = this.state;
 
     this.setState({
-      cta_title: loans_applied > 0 ? "RESUME" : "APPLY NOW"
+      cta_title: (loans_applied > 0 && (!dmi && !idfc)) ? "RESUME" : "APPLY NOW"
     })
   };
 
@@ -43,7 +43,6 @@ class Calculator extends Component {
     } else {
       this.navigate('edit-details');
     }
-    
   };
 
   sendEvents(user_action) {

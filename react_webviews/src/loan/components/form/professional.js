@@ -81,7 +81,6 @@ class ProfessionalDetails extends Component {
         let lead = this.state.lead || {};
 
         let professional_info = lead.professional_info || {};
-        professional_info.educational_qualification = "uat"
 
         let form_data = {
             company_name: professional_info.company_name || '',
