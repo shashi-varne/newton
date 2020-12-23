@@ -231,7 +231,7 @@ class PerfiosStatus extends Component {
           )}
 
           {bt_eligible &&
-            (perfios_state !== "failure" || perfios_state !== "blocked") && (
+            (perfios_state !== "failure" && perfios_state !== "blocked") && (
               <div className="subtitle">
                 Before we move to the final loan offer, we have an option of
                 'Balance Transfer - BT' for you. However, it is up to you
