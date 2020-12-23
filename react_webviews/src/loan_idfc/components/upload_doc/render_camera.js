@@ -172,3 +172,81 @@ export function renderHtmlCamera(type) {
       </div>
     );
   }
+
+  export function renderMultipleHtmlCamera(type) {
+
+    return (
+          <div
+            style={{
+              border: "1px dashed #e1e1e1",
+              padding: "10px 0px 0px 0px",
+              textAlign: "center",
+              fontWeight: 600,
+            }}
+          >
+            <div style={{ margin: "20px 0 20px 0", cursor: "pointer" }}>
+              <div
+                onClick={() => this.startUpload("open_file", type + '_pdf')}
+                style={{
+                  textAlign: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={this.getPdf}
+                  id={type + '_pdf'}
+                />
+                <img src={camera_green} alt=""></img>
+                <div style={{ color: "#28b24d" }}>Click here to upload</div>
+              </div>
+            </div>
+          </div>
+    );
+  }
+
+  export function renderMultipleNativeCamera(type) {
+
+    return (
+      <div
+      style={{
+        border: "1px dashed #e1e1e1",
+        padding: "10px 0px 0px 0px",
+        textAlign: "center",
+      }}
+    >
+      <div
+        style={{
+          margin: "20px 0 20px 0",
+          fontSize: "12px",
+          lineHeight: "20px",
+        }}
+      >
+        <div
+          onClick={() => this.startUpload("open_camera", type + '_pdf')}
+          style={{
+            width: "50%",
+            float: "left",
+            textAlign: "center",
+            borderRight: "1px solid #e1e1e1",
+          }}
+        >
+          <img src={camera_green} alt="OTM"></img>
+          <div style={{ color: "#28b24d", fontWeight: 600 }}>
+            OPEN CAMERA
+          </div>
+        </div>
+        <div
+          onClick={() => this.startUpload("open_file", type + '_pdf')}
+          style={{ textAlign: "center" }}
+        >
+          <img src={gallery_green} alt="OTM"></img>
+          <div style={{ color: "#28b24d", fontWeight: 600 }}>
+            UPLOAD FROM DEVICE
+          </div>
+        </div>
+      </div>
+    </div>
+    );
+  }

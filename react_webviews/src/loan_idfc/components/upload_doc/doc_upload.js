@@ -4,18 +4,19 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { getConfig } from "../../../utils/functions";
-// import camera_green from "assets/take_pic_green.svg";
-// import gallery_green from "assets/go_to_gallery_green.svg";
 import { getBase64 } from "utils/functions";
 import Api from "utils/api";
-import SVG from "react-inlinesvg";
-import plus from "assets/plus.svg";
-// import camera_grey from "assets/take_pic_grey.svg";
+// import DotDotLoader from "common/ui/DotDotLoader";
 import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
 
-import { renderHtmlCamera, renderNativeCamera } from "./render_camera";
+import {
+  renderHtmlCamera,
+  renderNativeCamera,
+  renderMultipleHtmlCamera,
+  renderMultipleNativeCamera,
+} from "./render_camera";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -32,13 +33,15 @@ class DocumentUpload extends Component {
       docs: [],
       category: "",
       doc_type: "",
-      doc_id: ""
+      doc_id: "",
     };
 
     this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
     this.renderHtmlCamera = renderHtmlCamera.bind(this);
     this.renderNativeCamera = renderNativeCamera.bind(this);
+    this.renderMultipleHtmlCamera = renderMultipleHtmlCamera.bind(this);
+    this.renderMultipleNativeCamera = renderMultipleNativeCamera.bind(this);
   }
 
   componentWillMount() {
@@ -99,7 +102,6 @@ class DocumentUpload extends Component {
       if (doc_checklist.length !== 0) {
         let file1, file2, file3;
         for (var i = doc_checklist.length - 1; i >= 0; i--) {
-
           if (
             doc_checklist[i].doc_type === "doc1" &&
             (!image_data.doc1 || documents.length === 2)
@@ -308,7 +310,15 @@ class DocumentUpload extends Component {
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
 
     let ext = file.type.split("/")[1];
-    name = file.file_name + "." + ext;
+
+    if (file.file_name === undefined) {
+      name = "Image_" + doc_type.substring(3, 1) + "." + ext;
+    }
+    
+
+    if (!file.file_name.includes(ext)) {
+      name = file.file_name + "." + ext;
+    }
 
     file.name = name;
     file.category_id = category;
@@ -373,13 +383,14 @@ class DocumentUpload extends Component {
       let that = this;
       getBase64(file, function (img) {
         file.imageBaseFile = img;
-        
 
         if (doc_id === "") {
           that.uploadDocument(file);
           documents.push(file);
         } else {
-          var index = documents.findIndex((item) => item.document_id === doc_id);
+          var index = documents.findIndex(
+            (item) => item.document_id === doc_id
+          );
           file.document_id = doc_id;
           that.editDocument(file);
           documents[index] = file;
@@ -389,7 +400,7 @@ class DocumentUpload extends Component {
           fileUploaded: true,
           documents: documents,
           disbableButton: true,
-          doc_id: ''
+          doc_id: "",
         });
       });
     }
@@ -492,7 +503,7 @@ class DocumentUpload extends Component {
         data
       );
 
-      const { status_code: status } = res.pfwresponse;
+      const { status_code: status, result } = res.pfwresponse;
 
       if (status === 200) {
         let index = documents.findIndex(
@@ -503,6 +514,8 @@ class DocumentUpload extends Component {
         this.setState({
           documents: documents,
         });
+      } else {
+        toast(result.error);
       }
     } catch (err) {
       console.log(err);
@@ -612,7 +625,7 @@ class DocumentUpload extends Component {
 
               {documents.length < 3 && (
                 <div className="upload-bank-statement">
-                  <div
+                  {/* <div
                     className="pdf-upload"
                     onClick={() =>
                       this.startUpload(
@@ -640,6 +653,19 @@ class DocumentUpload extends Component {
                       />
                     </span>
                     {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
+                  </div> */}
+                  <div
+                    className="loan-mandate-pan"
+                    style={{ marginBottom: "50px" }}
+                  >
+                    {getConfig().html_camera &&
+                      this.renderMultipleHtmlCamera(
+                        `doc${documents.length + 1}`
+                      )}
+                    {!getConfig().html_camera &&
+                      this.renderMultipleNativeCamera(
+                        `doc${documents.length + 1}`
+                      )}
                   </div>
                 </div>
               )}
