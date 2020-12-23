@@ -56,19 +56,23 @@ class ReportDetails extends Component {
         color: "yellow",
         disc: "DATA VERIFICATION PENDING",
       },
-      Underwriting: {
+      underwriting: {
         color: "yellow",
         disc: "Underwriting",
       },
-      Sanctioned: {
+      verification: {
+        color: "yellow",
+        disc: "Verification",
+      },
+      sanctioned: {
         color: "yellow",
         disc: "Sanctioned",
       },
-      "Pre Disbursal stage": {
+      pre_disbursal_stage: {
         color: "yellow",
         disc: "Pre Disbursal stage",
       },
-      Disbursal: {
+      disbursal: {
         color: "green",
         disc: "Disbursal",
       },
