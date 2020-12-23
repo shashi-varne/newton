@@ -423,6 +423,7 @@ class UploadBank extends Component {
         )
         )  {
           canSubmit = false;
+          
           form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 months from the current date";
       } else if(
         key_check === 'end_date' && 
@@ -433,9 +434,11 @@ class UploadBank extends Component {
         )
         ) {
           canSubmit = false;
+          console.log(calculateAge(form_data['end_date'], true).days)
           form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 days before the current date";
       }
     }
+    console.log(calculateAge(form_data['start_date'], true).days)
 
     this.setState({
       form_data: form_data,
