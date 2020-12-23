@@ -157,6 +157,7 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
+          console.log(file)
           try {
             that.setState({
               docType: this.doc_type,
@@ -248,7 +249,12 @@ class UploadBank extends Component {
     file.status = "uploaded";
 
     if (editId === "") {
-      file.name = `${file.file_name}.pdf`;
+      file.name = `${file.file_name}`;
+
+      if (!file.file_name.includes(".pdf")) {
+        file.name = `${file.file_name}.pdf`;
+      }
+
       documents.push(file);
     } else {
       var index = documents.findIndex((item) => item.id === editId);
@@ -286,10 +292,12 @@ class UploadBank extends Component {
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
 
-    let ext = documents[index].type.split("/")[1];
+    // let ext = documents[index].type.split("/")[1];
+
+    // if (documents[index].name.)
 
     if (curr_status.status !== "delete") {
-      data.append("file", documents[index], documents[index].name + ext);
+      data.append("file", documents[index], documents[index].name);
       data.append("password", documents[index].password);
     }
 

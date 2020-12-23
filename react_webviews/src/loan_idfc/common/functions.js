@@ -557,7 +557,7 @@ export async function get10Callback(next_state) {
     if (result.idfc_10_callback) {
       that.navigate("eligible-loan");
     } else if (
-      result.vendor_application_status === "idfc_cancelled" ||
+      result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
       result.is_cancelled === true
     ) {
       that.navigate("loan-status");
