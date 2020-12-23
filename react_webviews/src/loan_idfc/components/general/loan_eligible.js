@@ -60,7 +60,6 @@ class LoanEligible extends Component {
   render() {
 
     let vendor_info = this.state.vendor_info || {};
-    let application_info = this.state.application_info || {};
 
     return (
       <Container
@@ -93,7 +92,7 @@ class LoanEligible extends Component {
             </div>
             <div>
               <div>Tenure</div>
-              <div className="values">{application_info.updated_offer_tenor} months</div>
+              <div className="values">{vendor_info.updated_offer_tenor} months</div>
             </div>
             <div>
               <div>Rate of interest</div>
