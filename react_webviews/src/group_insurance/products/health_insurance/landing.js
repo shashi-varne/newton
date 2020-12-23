@@ -13,7 +13,10 @@ import super_topup_myway from 'assets/super_topup_myway.svg';
 
 import ic_hospicash_fisdom from '../../../assets/ic_hospicash_fisdom.svg'
 
+import icn_diseases_insurance from '../../../assets/fisdom/icn_diseases_insurance.svg'
+
 import HealthInsuranceEntry from '../group_health/plans/entry'
+import DiseasesSpecificPlan from '../health_insurance/diseases_specific_plan'
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -31,6 +34,7 @@ class HealthInsuranceLanding extends Component {
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
       Comprehensive : false,
+      DiseasesSpecificPlan : false
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -57,14 +61,16 @@ class HealthInsuranceLanding extends Component {
         key: 'DISEASE_SPECIFIC_PLANS',
         title: 'Disease specific plans',
         subtitle: 'Tailor-made plans for specific needs',
-        icon: health_suraksha_icon,
+        icon: icn_diseases_insurance,
+        dropdown : back_nav_bar_icon,
+        uparrow : back_nav_bar_icon_up
       },
-      {
-        key: 'CRITICAL_HEALTH_INSURANCE',
-        title: 'Critical illness insurance',
-        subtitle: 'Cover against life threatening diseases',
-        icon: critical_illness_icon
-      },
+      // {
+      //   key: 'CRITICAL_HEALTH_INSURANCE',
+      //   title: 'Critical illness insurance',
+      //   subtitle: 'Cover against life threatening diseases',
+      //   icon: critical_illness_icon
+      // },
       {
         key: 'HEALTH_SUPER_TOPUP',
         title: 'Super Top Up',
@@ -100,7 +106,7 @@ class HealthInsuranceLanding extends Component {
 
   navigate = (pathname, search) => {
 
-    console.log(this.props)
+    console.log(this.props, pathname)
 
     this.props.history.push({
       pathname: pathname,
@@ -113,6 +119,19 @@ class HealthInsuranceLanding extends Component {
 
  
   handleClick = (product_key, title) => {
+
+
+
+
+
+
+     
+     console.log(product_key,'product_key')
+
+
+
+
+
     this.sendEvents('next', title)
     let stateMapper = {
       'HEALTH_SURAKSHA': 'health_suraksha',
@@ -128,24 +147,37 @@ class HealthInsuranceLanding extends Component {
     if (product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
       this.HealthInsuranceEntry();
       return;
-      fullPath = 'group-health/entry';
     }
+
+
+
+    if (product_key === 'DISEASE_SPECIFIC_PLANS' && !getConfig().iOS) {
+      this.DISEASE_SPECIFIC_PLANS();
+      return;
+    }
+
+
     this.navigate('/group-insurance/' + fullPath);
   }
 
   HealthInsuranceEntry = () => {
     let Comprehensive = !this.state.Comprehensive
     this.setState({
-      Comprehensive : Comprehensive
+      Comprehensive : Comprehensive,
+      DiseasesSpecificPlan : this.state.DiseasesSpecificPlan
     })
   }
 
-  renderPorducts(props, index) {
+  DISEASE_SPECIFIC_PLANS = () => {
+    let DiseasesSpecificPlan = !this.state.DiseasesSpecificPlan
+    this.setState({
+      DiseasesSpecificPlan : DiseasesSpecificPlan
+    })
+  }
+
+  renderPorducts(props, index) { console.log(props)
     return (
-
       <div>     
-
-
       <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
@@ -154,18 +186,24 @@ class HealthInsuranceLanding extends Component {
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
           <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 ,  flexGrow : 1 , width : '130%'}}>{props.title} 
-             {props.dropdown && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 ,  flexGrow : 1 }}>{props.title} 
+
+                 {props.key === 'HEALTH_SURAKSHA'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
+                  <img src={props.dropdown} alt="" style={{ marginLeft: '100%' }} />
+                  </span>}
+
+                  {props.key === 'HEALTH_SURAKSHA'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
+                  <img src={props.uparrow} alt="" style={{ marginLeft: '100%' }} />
+                  </span>}
+
+                   { props.key === 'DISEASE_SPECIFIC_PLANS' && !this.state.DiseasesSpecificPlan && <span style={{ "float" : "right" , color : 'blue'}}>                  
                   <img src={props.dropdown} alt="" style={{ marginRight: '15px' }} />
                   </span>}
 
-                  {props.dropdown &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
+                  {props.key === 'DISEASE_SPECIFIC_PLANS' && this.state.DiseasesSpecificPlan &&<span style={{ "float" : "right" , color : 'blue'}}>                  
                   <img src={props.uparrow} alt="" style={{ marginRight: '15px' }} />
                   </span>}
-            {/* {props.key === 'HEALTH_INSURANCE' && 
-            <span style={{    padding: '3px 7px',
-              borderRadius: 10,fontSize: 10,background: '#7f66bf',margin: '0 0 0 10px',color: 'white'
-          }}>3 Plans</span>} */}
+
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
@@ -176,19 +214,25 @@ class HealthInsuranceLanding extends Component {
             textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
           }}>RESUME</div>
         }
-     {/* <div style={{ display: 'flex' }}>{ props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this} /> } </div> */}
       </div>
 
     { props.dropdown && this.state.Comprehensive && 
        <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-        paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer'
+        justifyContent: 'space-between', cursor: 'pointer'
       }}>
-     <div style={{ display: 'flex' }}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this} /> } </div>
-      </div>
-      
-      }
+     <div style={{ display: 'flex' }}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
+
+      </div>}
+      { props.dropdown && this.state.DiseasesSpecificPlan && 
+       <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
+        display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
+        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
+        justifyContent: 'space-between', cursor: 'pointer'
+      }}>
+     <div style={{ display: 'flex' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  parent={this}/> } </div>
+      </div>}
       </div>
     )
   }
@@ -221,8 +265,8 @@ class HealthInsuranceLanding extends Component {
         title="Health insurance">
         <div>
           <div className='products'>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>Insure your health</h1>
-            <div>
+            <h1 style={{ fontWeight: '500', color: '#160d2e', fontSize: '17px', lineHeight : '20.15px' }}>Explore best plans for your health</h1>
+            <div  style={{height : '100vh'}}>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
           </div>

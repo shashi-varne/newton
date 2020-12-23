@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
-import Container from '../common/Container';
+// import Container from '../common/Container';
 import qs from 'qs';
-import { insuranceStateMapper } from '../constants';
+import { insuranceStateMapper } from '../../constants';
 
 import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
-import { getConfig } from 'utils/functions';
-import { getBhartiaxaStatusToState } from '../constants';
-import { nativeCallback } from 'utils/native_callback';
-import '../common/Style.scss'
 
-class Landing extends Component {
+import toast from '../../../common/ui/Toast'
+
+
+import { getConfig } from 'utils/functions';
+import { getBhartiaxaStatusToState } from '../../constants';
+import { nativeCallback } from 'utils/native_callback';
+import '../../common/Style.scss'
+
+class DiseasesSpecificPlan extends Component {
 
   constructor(props) {
     super(props);
@@ -19,7 +22,7 @@ class Landing extends Component {
       type: getConfig().productName,
       insuranceProducts: [],
       partner_code: getConfig().partner_code,
-      params: qs.parse(props.history.location.search.slice(1))
+    //   params: qs.parse(props.history.location.search.slice(1))
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -33,59 +36,65 @@ class Landing extends Component {
     window.sessionStorage.setItem('group_insurance_payment_url', '');
 
     let insuranceProducts = [
-      {
-        key: 'LIFE_INSURANCE',
-        title: 'Life Insurance',
-        subtitle: 'Starts from ₹7,700/year',
-        icon: 'life_insurance'
-      },
-      {
-        key: 'HEALTH_INSURANCE',
-        title: 'Health Insurance',
-        subtitle: 'Starts from ₹4,000/year',
-        icon: 'ic_health'
-      },{
-        key: 'Other_Insurance',
-        title: 'Other Insurance',
-        subtitle: 'Insurance plans for specific needs',
-        icon: 'icn_other_insurance'
-      },
-      // {
-      //   key: 'CORONA',
-      //   title: 'Coronavirus Insurance',
-      //   subtitle: 'Starts from ₹750/year',
-      //   icon: 'ic_coronavirus_insurance'
-      // },
-      // {
-      //   key: 'PERSONAL_ACCIDENT',
-      //   title: 'Personal Accident Insurance',
-      //   subtitle: 'Starts from ₹200/year',
-      //   icon: 'ic_personal_accident'
-      // },
+    //   {
+    //     key: 'LIFE_INSURANCE',
+    //     title: 'Life Insurance',
+    //     subtitle: 'Starts from ₹7,700/year',
+    //     icon: 'life_insurance'
+    //   },
+    //   {
+    //     key: 'HEALTH_INSURANCE',
+    //     title: 'Health Insurance',
+    //     subtitle: 'Starts from ₹4,000/year',
+    //     icon: 'ic_health'
+    //   },{
+    //     key: 'Other_Insurance',
+    //     title: 'Other Insurance',
+    //     subtitle: 'Insurance plans for specific needs',
+    //     icon: 'icn_other_insurance'
+    //   },
+    //   {
+    //     key: 'PERSONAL_ACCIDENT',
+    //     title: 'Personal Accident Insurance',
+    //     subtitle: 'Starts from ₹200/year',
+    //     icon: 'ic_personal_accident'
+    //   },
       // {
       //   key: 'HOSPICASH',
       //   title: 'Hospital Daily Cash',
       //   subtitle: 'Starts from ₹750/year',
       //   icon: 'ic_hospicash'
       // },
-      // {
-      //   key: 'DENGUE',
-      //   title: 'Dengue insurance',
-      //   subtitle: 'Starts from ₹50/year',
-      //   icon: 'dengue_icon'
-      // },
-      // {
-      //   key: 'SMART_WALLET',
-      //   title: 'Smart Wallet(fraud protection)',
-      //   subtitle: 'Starts from ₹250/year',
-      //   icon: 'ic_wallet'
-      // },
-      // {
-      //   key: 'HOME_INSURANCE',
-      //   title: 'Home insurance',
-      //   subtitle: 'Secure your home and interiors',
-      //   icon: 'home_insurance_icon'
-      // },
+      {
+        key: 'CRITICAL_HEALTH_INSURANCE',
+        title: 'Critical illness insurance',
+        subtitle: 'Cover against life threatening diseases',
+        icon: 'icn_critical_illness'
+      },
+      {
+        key: 'DENGUE',
+        title: 'Dengue insurance',
+        subtitle: 'Starts from ₹50/year',
+        icon: 'icn_dengue'
+      },
+      {
+        key: 'CORONA',
+        title: 'Coronavirus Insurance',
+        subtitle: 'Starts from ₹750/year',
+        icon: 'icn_corona'  //icn_corona_fisdom.svg
+      },
+    //   {
+    //     key: 'SMART_WALLET',
+    //     title: 'Smart Wallet(fraud protection)',
+    //     subtitle: 'Starts from ₹250/year',
+    //     icon: 'ic_wallet'  / icn_critical_illness_fisdoma.svg
+    //   },
+    //   {
+    //     key: 'HOME_INSURANCE',
+    //     title: 'Home insurance',
+    //     subtitle: 'Secure your home and interiors',
+    //     icon: 'home_insurance_icon'
+    //   },
     ];
 
     if (this.state.partner_code === 'hbl') {
@@ -109,108 +118,109 @@ class Landing extends Component {
     })
   }
 
-  async componentDidMount() {
+//   async componentDidMount() {
 
-    try {
-      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+//     try {
+//       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
-      console.log(res, 'response buddy')
+//       if (!this.state.openModuleData.sub_module) {
+//         this.setState({
+//           show_loader: false
+//         })
+//       }
 
+//       if (res.pfwresponse.status_code === 200) {
 
-      if (!this.state.openModuleData.sub_module) {
-        this.setState({
-          show_loader: false
-        })
-      }
+//         var resultData = res.pfwresponse.result.response;
 
-      if (res.pfwresponse.status_code === 200) {
+//         let group_insurance = resultData.group_insurance;
+//         let term_insurance = resultData.term_insurance;
+//         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+//         let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
-        var resultData = res.pfwresponse.result.response;
+//         let resumeFlagAll = {
+//           'TERM_INSURANCE': resumeFlagTerm
+//         }
 
-        let group_insurance = resultData.group_insurance;
-        let term_insurance = resultData.term_insurance;
-        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
-        let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
+//         if (!BHARTIAXA) {
+//           BHARTIAXA = {};
+//         }
+//         let BHARTIAXA_APPS = {
+//           'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
+//           'HOSPICASH': BHARTIAXA['HOSPICASH'],
+//           'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
+//           'DENGUE': BHARTIAXA['DENGUE'],
+//           'CORONA': BHARTIAXA['CORONA']
+//         }
 
-        let resumeFlagAll = {
-          'TERM_INSURANCE': resumeFlagTerm
-        }
+//         for (var key in BHARTIAXA_APPS) {
+//           let policy = BHARTIAXA_APPS[key];
+//           if (policy && policy.length > 0) {
+//             let data = policy[0];
+//             if (data.status !== 'complete' && data.lead_payment_status === 'payment_done') {
+//               resumeFlagAll[data.product_name] = true;
+//             } else {
+//               resumeFlagAll[data.product_name] = false;
+//             }
+//           }
+//         }
 
-        if (!BHARTIAXA) {
-          BHARTIAXA = {};
-        }
-        let BHARTIAXA_APPS = {
-          'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
-          'HOSPICASH': BHARTIAXA['HOSPICASH'],
-          'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
-          'DENGUE': BHARTIAXA['DENGUE'],
-          'CORONA': BHARTIAXA['CORONA']
-        }
+//         let insuranceProducts = this.state.insuranceProducts;
+//         for (var i = 0; i < insuranceProducts.length; i++) {
+//           let key = insuranceProducts[i].key;
+//           insuranceProducts[i].resume_flag = resumeFlagAll[key];
+//         }
 
-        for (var key in BHARTIAXA_APPS) {
-          let policy = BHARTIAXA_APPS[key];
-          if (policy && policy.length > 0) {
-            let data = policy[0];
-            if (data.status !== 'complete' && data.lead_payment_status === 'payment_done') {
-              resumeFlagAll[data.product_name] = true;
-            } else {
-              resumeFlagAll[data.product_name] = false;
-            }
-          }
-        }
-
-        let insuranceProducts = this.state.insuranceProducts;
-        for (var i = 0; i < insuranceProducts.length; i++) {
-          let key = insuranceProducts[i].key;
-          insuranceProducts[i].resume_flag = resumeFlagAll[key];
-        }
-
-        this.setState({
-          group_insurance: group_insurance,
-          term_insurance: term_insurance,
-          BHARTIAXA_APPS: BHARTIAXA_APPS,
-          insuranceProducts: insuranceProducts,
-          resumeFlagAll: resumeFlagAll
-        })
+//         this.setState({
+//           group_insurance: group_insurance,
+//           term_insurance: term_insurance,
+//           BHARTIAXA_APPS: BHARTIAXA_APPS,
+//           insuranceProducts: insuranceProducts,
+//           resumeFlagAll: resumeFlagAll
+//         })
 
 
-        console.log(this.state.openModuleData,'this.state.openModuleData.sub_module')
+//         console.log(this.state.openModuleData,'this.state.openModuleData.sub_module')
 
 
-        if (this.state.openModuleData.sub_module) {
-          let navigateMapper = {
-            hospicash: 'HOSPICASH',
-            personal_accident: 'PERSONAL_ACCIDENT',
-            smart_wallet: 'SMART_WALLET',
-            term_insurance: 'TERM_INSURANCE',
-            dengue: 'DENGUE',
-            corona: 'CORONA'
-          };
+//         if (this.state.openModuleData.sub_module) {
+//           let navigateMapper = {
+//             hospicash: 'HOSPICASH',
+//             personal_accident: 'PERSONAL_ACCIDENT',
+//             smart_wallet: 'SMART_WALLET',
+//             term_insurance: 'TERM_INSURANCE',
+//             dengue: 'DENGUE',
+//             corona: 'CORONA'
+//           };
 
-          let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
-            this.state.openModuleData.sub_module;
+//           let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+//             this.state.openModuleData.sub_module;
 
-            console.log(pathname,'<-------------------pathname')
+//             console.log(pathname,'<-------------------pathname')
 
 
-          this.handleClick(pathname);
-        }
+//           this.handleClick(pathname);
+//         }
 
-      } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
-      }
-    } catch (err) {
-      console.log(err)
-      this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
-    }
-  }
+//       } else {
+//         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+//           || 'Something went wrong');
+//       }
+//     } catch (err) {
+//       console.log(err)
+//       this.setState({
+//         show_loader: false
+//       });
+//       toast('Something went wrong');
+//     }
+//   }
 
   navigate = (pathname, search) => {
-    this.props.history.push({
+
+
+    console.log(this.props, 'heeeeeeeeeeeeeee',pathname)
+
+  this.props.parent.props.history.push({  //  this.props.history.push({   //
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
       params: {
@@ -219,10 +229,10 @@ class Landing extends Component {
     });
   }
 
-  policymove = ()=> {
-    this.sendEvents('next', "")
-    this.navigate('/group-insurance/group-insurance/add-policy');
-  }
+//   policymove = ()=> {
+//     this.sendEvents('next', "")
+//     this.navigate('/group-insurance/group-insurance/add-policy');
+//   }
 
   getLeadId(product_key) {
     let id = ''
@@ -328,16 +338,21 @@ class Landing extends Component {
     }    
     else if (product_key === 'HOME_INSURANCE') {
       fullPath = 'home_insurance/general/plan';
-    } else {
-
+    }
+    else if (product_key === 'CORONA'){
+        fullPath = 'corona/plan';                             ///health/critical_illness/plan
+    }
+    else if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
+        fullPath = 'health/critical_illness/plan';
+      }
+    else {
       // this.navigate(this.state.redirectTermPath);
       this.navigate('/group-insurance/term/intro');
       return;
     }
 
-
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
-    this.navigate('group-insurance/' + fullPath);
+    this.navigate('/group-insurance/' + fullPath);
   }
 
   renderPorducts(props, index) {
@@ -350,7 +365,7 @@ class Landing extends Component {
         <div style={{ display: 'flex' }}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '20px' }} />
           <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px', fontWeight: 500 }}>{props.title}
+            <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400 }}>{props.title}
               {props.key === 'CORONA' && !props.resume_flag &&
                 <span style={{
                   padding: '3px 7px',
@@ -391,24 +406,11 @@ class Landing extends Component {
 
 
     return (
-      <Container
-        events={this.sendEvents('just_set_events')}
-        noFooter={true}
-        showLoader={this.state.show_loader}
-        title="Insurance">
-        {/* <div className='health_insurance' style={{fontWeight: '700', color: '#160d2e', fontSize:'20px'}}>Insurance</div> */}
-           <div  style={{ marginTop: '40px' }}>
-           <div onClick={this.policymove}>
-           <img style={{ margin: '-15px 5px 15px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
-           </div>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>What are you looking for ?</h1>
-            <div>
+      <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
-            </div>
-        </div>
-      </Container>
+      </div>
     );
   }
 }
 
-export default Landing;
+export default DiseasesSpecificPlan;
