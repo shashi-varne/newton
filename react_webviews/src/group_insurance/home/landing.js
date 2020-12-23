@@ -8,6 +8,7 @@ import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../constants';
 import { nativeCallback } from 'utils/native_callback';
+import '../common/Style.scss'
 
 class Landing extends Component {
 
@@ -215,6 +216,11 @@ class Landing extends Component {
     });
   }
 
+  policymove = ()=> {
+    this.sendEvents('next', "")
+    this.navigate('/group-insurance/group-insurance/add-policy');
+  }
+
   getLeadId(product_key) {
     let id = ''
     if (product_key !== 'term_insurance') {
@@ -361,7 +367,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents(user_action, insurance_type ) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -387,27 +393,15 @@ class Landing extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Insurance">
-        <div>
-          {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h1 style={{ fontSize: '16px', lineHeight: '24px', color: '#160d2e', margin: 0, fontWeight: '500' }}>Insurance is a priority, <br></br> not an option.</h1>
-            < img  src={ require(`assets/ic_hand_insurance_${this.state.type}.svg`)} alt='' />
-          </div> */}
-          {/* <div style={{
-            marginTop: '10px', fontSize: '14px', lineHeight: '24px', color: '#4a4a4a',
-            display: 'flex'
-          }}>
-            <img style={{ margin: '0px 10px 0 0' }} src={ require(`assets/instant_${this.state.type}.svg`)  }alt="" />
-            Get instant policy issuance
-            </div> */}
-          {/* <div style={{ marginTop: '20px', color: '#4a4a4a', fontSize: '10px', lineHeight: '24px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '2px' }}>Claim assistance | No medical | No paperwork</div> */}
-          <div className='products' style={{ marginTop: '50px' }}>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px',marginBottom: '25px'  }}>Get started</h1>
+        {/* <div className='health_insurance' style={{fontWeight: '700', color: '#160d2e', fontSize:'20px'}}>Insurance</div> */}
+           <div  style={{ marginTop: '40px' }}>
+           <div onClick={this.policymove}>
+           <img style={{ margin: '-15px 5px 15px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           </div>
+            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>What are you looking for ?</h1>
             <div>
-
               {this.state.insuranceProducts.map(this.renderPorducts)}
-
             </div>
-          </div>
         </div>
       </Container>
     );

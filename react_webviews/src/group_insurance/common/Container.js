@@ -527,9 +527,11 @@ class Container extends Component {
         </div>
 
         {!this.state.force_hide_inpage_title && this.state.new_header &&
-          <div id="header-title-page"
+          <div 
+            id="header-title-page"
             style={this.props.styleHeader} 
-            className={`header-title-page  ${this.props.classHeader}`}>
+            className={`header-title-page  ${this.props.classHeader}`}
+            >
                <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
                  {this.props.title}
               </div>
