@@ -99,9 +99,9 @@ class SelectLoan extends Component {
   };
 
   goBack = () => {
-    let { loans_applied } = this.state;
+    let { loans_applied, dmi, idfc } = this.state;
 
-    if (loans_applied === 0) {
+    if (loans_applied === 0 && (!dmi && !idfc)) {
       this.navigate('edit-details')
     } else {
       this.navigate('loan-home')

@@ -1023,7 +1023,9 @@ export async function getSummary() {
         selectedVendors: selectedVendors,
         show_loader: false,
         employment_type: result.employment_type,
-        loans_applied: result.loans_applied
+        loans_applied: result.loans_applied,
+        dmi: result.dmi,
+        idfc: result.idfc
       },
       () => {
         if (this.onload && !this.state.ctaWithProvider) {
