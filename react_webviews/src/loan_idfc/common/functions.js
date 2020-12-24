@@ -239,12 +239,7 @@ export async function getPickList() {
 
     if (status === 200) {
       let tnc = result.tnc;
-      let industryOptions = result.industry.map((element) => {
-        return {
-          key: element,
-          value: element,
-        };
-      });
+      let industryOptions = result.industry.map((element) => element);
 
       // let companyOptions = Object.keys(result.employer).map((element) => {
       //   return {

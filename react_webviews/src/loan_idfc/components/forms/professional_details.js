@@ -310,21 +310,18 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                {industryOptions.length > 0 && (
-                  <Autosuggests
-                    parent={this}
-                    width="40"
-                    placeholder="Search for industry"
-                    options={industryOptions}
-                    label="Industry"
-                    id="industry"
-                    name="industry"
-                    error={this.state.form_data.industry_error ? true : false}
-                    helperText={this.state.form_data.industry_error}
-                    value={this.state.form_data.industry}
-                    onChange={this.handleChange("industry")}
-                  />
-                )}
+                <DropdownWithoutIcon
+                  width="40"
+                  placeholder="Search for industry"
+                  options={industryOptions}
+                  label="Industry"
+                  id="industry"
+                  name="industry"
+                  error={this.state.form_data.industry_error ? true : false}
+                  helperText={this.state.form_data.industry_error}
+                  value={this.state.form_data.industry}
+                  onChange={this.handleChange("industry")}
+                />
               </div>
             )}
           </FormControl>
