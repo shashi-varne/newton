@@ -246,15 +246,17 @@ class LoanKnowMore extends Component {
 
   goBack = () => {
     this.sendEvents('back')
-    let loans_applied = storageService().get("loans_applied");
 
-    if (loans_applied === "2") {
-      this.navigate('/loan/loan-home')
-    } else {
-      this.navigate('/loan/select-loan')
+    let { params } = this.props.location;
+    if(!params) {
+      params = {};
     }
 
-
+    if (params.from_state === "select-loan") {
+      this.navigate("/loan/select-loan")
+    } else {
+      this.navigate("/loan/loan-home")
+    }
   }
 
   render() {

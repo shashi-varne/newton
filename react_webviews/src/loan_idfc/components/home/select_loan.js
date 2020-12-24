@@ -123,7 +123,11 @@ class SelectLoan extends Component {
       status: vendor.status || 'default',
       resume: resume, 
     });
-    this.navigate(`/loan/${provider_name}/loan-know-more`);
+    this.navigate(`/loan/${provider_name}/loan-know-more`, {
+      params: {
+        from_state: 'select-loan'
+      }
+    });
   };
 
   sendEvents(user_action, data = {}) {
