@@ -71,9 +71,9 @@ class AddressDetails extends Component {
     let { confirm_details } = this.state;
     let { form_data } = this.state;
 
-    if (vendor_info.ckyc_state === "success") {
+    // if (vendor_info.ckyc_state === "success") {
       confirm_details = true;
-    }
+    // }
 
     let loaderData = {
       title: `${personal_info.first_name}, hang on while we create your loan application`,
@@ -160,7 +160,7 @@ class AddressDetails extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    let { form_data, loaderData } = this.state;
+    let { form_data } = this.state;
     let keys_to_check = [
       "current_address1",
       "current_address2",
@@ -176,11 +176,12 @@ class AddressDetails extends Component {
       "permanent_state",
     ];
 
+    let keys_to_include;
     if (this.state.confirm_details) {
-      // keys_to_check.push(...['current_address3', 'permanent_address3'])
+      keys_to_include = ['current_address3', 'permanent_address3']
     }
 
-    this.formCheckUpdate(keys_to_check, form_data, "null", true, loaderData);
+    this.formCheckUpdate(keys_to_check, form_data, "null", true, keys_to_include);
   };
 
   handlePincode = (name) => async (event) => {

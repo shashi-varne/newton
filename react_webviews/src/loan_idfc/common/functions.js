@@ -717,7 +717,8 @@ export async function formCheckUpdate(
   keys_to_check,
   form_data,
   state = "",
-  update = ""
+  update = "",
+  keys_to_include = []
 ) {
   if (!form_data) {
     form_data = this.state.form_data;
@@ -862,6 +863,11 @@ export async function formCheckUpdate(
 
     for (var j in keys_to_check) {
       let key = keys_to_check[j];
+      body[key] = form_data[key] || "";
+    }
+
+    for (var j in keys_to_include) {
+      let key = keys_to_include[j];
       body[key] = form_data[key] || "";
     }
 
