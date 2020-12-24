@@ -314,10 +314,11 @@ class DocumentUpload extends Component {
     if (file.file_name === undefined) {
       name = "Image_" + doc_type.split('')[3] + "." + ext;
     }
-
-    if (!file.file_name.includes(ext)) {
+    
+    if (file.file_name !== undefined && !file.file_name.includes(ext)) {
       name = file.file_name + "." + ext;
     }
+    
 
     file.name = name;
     file.category_id = category;
