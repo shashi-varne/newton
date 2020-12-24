@@ -27,10 +27,10 @@ class Calculator extends Component {
   }
 
   onload = async () => {
-    let { loans_applied } = this.state;
+    let { loans_applied, dmi, idfc } = this.state;
 
     this.setState({
-      cta_title: (loans_applied > 0 && (!dmi && !idfc)) ? "RESUME" : "APPLY NOW"
+      cta_title: (loans_applied > 0 && (dmi || idfc)) ? "RESUME" : "APPLY NOW"
     })
   };
 
@@ -105,8 +105,8 @@ class Calculator extends Component {
           />
 
           <SliderWithValues
-            label="Loan tenor"
-            val="Tenor"
+            label="Loan tenure"
+            val="Tenure"
             value={Tenor}
             min="3"
             max="24"
