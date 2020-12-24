@@ -312,9 +312,8 @@ class DocumentUpload extends Component {
     let ext = file.type.split("/")[1];
 
     if (file.file_name === undefined) {
-      name = "Image_" + doc_type.substring(3, 1) + "." + ext;
+      name = "Image_" + doc_type.split('')[3] + "." + ext;
     }
-    
 
     if (!file.file_name.includes(ext)) {
       name = file.file_name + "." + ext;
