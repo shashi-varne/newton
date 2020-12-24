@@ -388,6 +388,9 @@ export async function getOrCreate(params) {
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
@@ -660,6 +663,7 @@ export async function submitApplication(
     } else {
       let rejection_cases = [
         "CreateLoan null API Failed",
+        "CreateLoan null API Rejected",
         "CreateLoan 05 API Failed",
         "CreateLoan 10 API Failed",
         "CreateLoan 11 API Failed",
