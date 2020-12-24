@@ -95,14 +95,17 @@ class LoanBtDetails extends Component {
     });
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "credit_card_details",
-        no_of_cards_entered: data.no_of_cards_entered,
-        skipped_screen: data.no_of_cards_entered !== 0 ? "no" : "yes",
+        no_of_cards_entered: form_checked.length,
+        skipped_screen: form_checked.length !== 0 ? "no" : "yes",
       },
     };
 
@@ -211,7 +214,7 @@ class LoanBtDetails extends Component {
       return;
     }
 
-    this.sendEvents("next", { no_of_cards_entered: form_checked.length });
+    this.sendEvents("next");
 
     if (submit_details) {
       this.submitApplication(

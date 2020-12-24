@@ -243,6 +243,7 @@ class LoanKnowMore extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back')
     let loans_applied = storageService().get("loans_applied");
 
     if (loans_applied === "2") {
@@ -315,7 +316,6 @@ class LoanKnowMore extends Component {
           <div
             className="Flex block2"
             onClick={() => {
-              this.sendEvents("faq");
               this.openFaqs();
             }}
           >
