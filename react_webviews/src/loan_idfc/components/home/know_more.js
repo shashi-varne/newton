@@ -177,7 +177,7 @@ class LoanKnowMore extends Component {
           this.state.application_exists && this.state.otp_verified ? false : true,
       };
   
-      let { vendor_application_status, pan_status, is_dedupe, rejection_reason } = this.state;
+      let { vendor_application_status, pan_status, is_dedupe, rejection_reason, perfios_status } = this.state;
   
       let rejection_cases = [
         "idfc_null_rejected",
@@ -203,10 +203,12 @@ class LoanKnowMore extends Component {
   
         if (pan_status === '' || vendor_application_status === "pan") {
           this.navigate("basic-details");
+        } else if (perfios_status === "failure") {
+          this.navigate("perfios-status");
         } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe) {
           this.navigate("journey");
         }
-  
+
       } else {
         this.getOrCreate(params);
       }

@@ -322,7 +322,7 @@ class DocumentUpload extends Component {
 
     file.name = name;
     file.category_id = category;
-    file.checklist_doc_type = doc_type;
+    file.checklist_doc_type = doc_type.substring(5, 9);
     file.doc_name = document;
     file.doc_type = file.type;
 
