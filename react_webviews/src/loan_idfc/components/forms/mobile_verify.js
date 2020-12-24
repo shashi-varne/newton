@@ -145,7 +145,7 @@ class MobileVerification extends Component {
                     I accept{" "}
                     <u
                       onClick={() =>
-                        window.location.href = this.state.tnc
+                        this.openPdf(this.state.tnc, "tnc")
                       }
                       style={{ color: "var(--primary)" }}
                     >

@@ -174,7 +174,7 @@ class JourneyMap extends Component {
           title: "Upload documents",
           titleCompleted: "Documents uploaded",
           subtitle:
-            "Provide your loan requirements and income details to get the best loan offer. ",
+            "Provide your office address and upload documents to get your loan sanctioned.",
           status:
             index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",

@@ -98,9 +98,9 @@ class Calculator extends Component {
             val="Net_monthly_Income"
             value={Net_monthly_Income}
             min="0"
-            max="2500000"
+            max="1000000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 10 Lacs"
             onChange={this.onChange}
           />
 
@@ -108,9 +108,9 @@ class Calculator extends Component {
             label="Loan tenure"
             val="Tenure"
             value={Tenor}
-            min="3"
+            min="6"
             max="24"
-            minValue="3 MONTHS"
+            minValue="6 MONTHS"
             maxValue="24 MONTHS"
             onChange={this.onChange}
           />
@@ -120,9 +120,9 @@ class Calculator extends Component {
             val="Other_EMIs"
             value={Other_EMIs}
             min="0"
-            max="2500000"
+            max="500000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 5 Lacs"
             onChange={this.onChange}
           />
 
@@ -131,9 +131,9 @@ class Calculator extends Component {
             val="Monthly_expenses"
             value={Monthly_expenses}
             min="0"
-            max="2500000"
+            max="1000000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 10 Lacs"
             onChange={this.onChange}
           />
 

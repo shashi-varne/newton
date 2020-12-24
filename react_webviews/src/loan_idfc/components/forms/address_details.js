@@ -253,20 +253,15 @@ class AddressDetails extends Component {
     let isPermanent_address = yesOrNo_options[event].value;
     let { form_data } = this.state;
 
-    form_data.permanent_address1 =
-      isPermanent_address === "Yes" ? form_data.current_address1 : "";
-    form_data.permanent_address2 =
-      isPermanent_address === "Yes" ? form_data.current_address2 : "";
-    form_data.permanent_address3 =
-      isPermanent_address === "Yes" ? form_data.current_address3 : "";
-    form_data.permanent_landmark =
-      isPermanent_address === "Yes" ? form_data.current_landmark : "";
-    form_data.permanent_pincode =
-      isPermanent_address === "Yes" ? form_data.current_pincode : "";
-    form_data.permanent_city =
-      isPermanent_address === "Yes" ? form_data.current_city : "";
-    form_data.permanent_state =
-      isPermanent_address === "Yes" ? form_data.current_state : "";
+    if (isPermanent_address === "Yes") {
+      form_data.permanent_address1 = form_data.current_address1;
+      form_data.permanent_address2 = form_data.current_address2;
+      form_data.permanent_address3 = form_data.current_address3;
+      form_data.permanent_landmark = form_data.current_landmark;
+      form_data.permanent_pincode = form_data.current_pincode;
+      form_data.permanent_city = form_data.current_city;
+      form_data.permanent_state = form_data.current_state;
+    }
 
     for (var i in form_data) {
       form_data[i + "_error"] = "";

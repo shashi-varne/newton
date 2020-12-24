@@ -58,7 +58,7 @@ class Home extends Component {
       dmi: {
         index: 1,
         title: "DMI Finance",
-        subtitle: "Quick money transfer",
+        subtitle: "Quick disbursal",
         loan_amount: "₹1 lac",
         logo: "dmi-finance",
         provider_name: "dmi",
