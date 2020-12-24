@@ -253,6 +253,8 @@ class LoanKnowMore extends Component {
     } else {
       this.navigate('/loan/select-loan')
     }
+
+    
   }
 
   render() {
