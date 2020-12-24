@@ -34,7 +34,6 @@ class SelectLoan extends Component {
         loan_amount: " ₹40 lacs",
         logo: "idfc_logo",
         cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
-        card_tag: "Recommended",
         displayTag: true,
         provider_name: "idfc",
         benefits: {

@@ -244,16 +244,17 @@ class LoanKnowMore extends Component {
     });
   }
 
-  goBack = () => {
-    this.sendEvents('back')
-    let loans_applied = storageService().get("loans_applied");
+  // goBack = () => {
+  //   this.sendEvents('back')
+  //   let loans_applied = storageService().get("loans_applied");
 
-    if (loans_applied === "2") {
-      this.navigate('/loan/loan-home')
-    } else {
-      this.navigate('/loan/select-loan')
-    }
-  }
+  //   // if (loans_applied === "2") {
+  //   //   this.navigate('/loan/loan-home')
+  //   // } else {
+  //   //   this.navigate('/loan/select-loan')
+  //   // }
+  //   console.log(this.props.history.goBack())
+  // }
 
   render() {
     let { partnerData, eligibility, journeyData, documents } = this.state;
@@ -264,9 +265,9 @@ class LoanKnowMore extends Component {
         buttonTitle={this.state.top_cta_title}
         hidePageTitle={true}
         handleClick={this.handleClick}
-        headerData={{
-          goBack: this.goBack,
-        }}
+        // headerData={{
+        //   goBack: this.goBack,
+        // }}
       >
         <div className="loan-know-more">
           <div className="block1-info">

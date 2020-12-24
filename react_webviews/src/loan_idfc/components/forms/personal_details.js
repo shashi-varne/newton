@@ -83,7 +83,7 @@ class PersonalDetails extends Component {
       first_name: personal_info.first_name,
       middle_name: confirm_details && personal_info.middle_name,
       last_name: personal_info.last_name,
-      dob: confirm_details && timeStampToDate(personal_info.dob || ""),
+      dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
       marital_status: (personal_info.marital_status || "").toUpperCase(),
       father_name: personal_info.father_name,
