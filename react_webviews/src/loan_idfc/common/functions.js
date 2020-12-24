@@ -866,7 +866,7 @@ export async function formCheckUpdate(
       body[key] = form_data[key] || "";
     }
 
-    for (var j in keys_to_include) {
+    for (let j in keys_to_include) {
       let key = keys_to_include[j];
       body[key] = form_data[key] || "";
     }

@@ -71,9 +71,9 @@ class AddressDetails extends Component {
     let { confirm_details } = this.state;
     let { form_data } = this.state;
 
-    // if (vendor_info.ckyc_state === "success") {
+    if (vendor_info.ckyc_state === "success") {
       confirm_details = true;
-    // }
+    }
 
     let loaderData = {
       title: `${personal_info.first_name}, hang on while we create your loan application`,
