@@ -254,7 +254,7 @@ class LoanKnowMore extends Component {
       this.navigate('/loan/select-loan')
     }
 
-    
+
   }
 
   render() {
@@ -266,9 +266,9 @@ class LoanKnowMore extends Component {
         buttonTitle={this.state.top_cta_title}
         hidePageTitle={true}
         handleClick={this.handleClick}
-        // headerData={{
-        //   goBack: this.goBack,
-        // }}
+        headerData={{
+          goBack: this.goBack,
+        }}
       >
         <div className="loan-know-more">
           <div className="block1-info">
