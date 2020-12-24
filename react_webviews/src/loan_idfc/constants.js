@@ -557,8 +557,8 @@ export const idfc_config = {
 
         partnerData: {
           title: "IDFC FIRST BANK",
-          subtitle: "Competitive Interest rate",
-          loan_amount: " ₹40 lac",
+          subtitle: "Competitive interest rate",
+          loan_amount: " ₹40 lacs",
           logo: "idfc_logo",
         },
 

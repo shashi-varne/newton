@@ -50,7 +50,7 @@ class Home extends Component {
         index: 0,
         title: "IDFC FIRST BANK",
         subtitle: "Competitve interest rate",
-        loan_amount: " ₹40 lac",
+        loan_amount: " ₹40 lacs",
         logo: "idfc_logo",
         provider_name: "idfc",
         cta_title: "RESUME",
