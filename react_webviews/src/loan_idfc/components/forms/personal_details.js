@@ -130,7 +130,8 @@ class PersonalDetails extends Component {
     let confirm_fields = ["first_name", "last_name", "middle_name", "dob"]
     if (this.state.confirm_details && confirm_fields.includes(name)) {
       details_changed = 'yes'
-      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+      if (name === 'middle_name')
+        form_data[name + '_helper'] = 'You need to provide proof for the changed info';
     }
 
     this.setState({
@@ -176,6 +177,19 @@ class PersonalDetails extends Component {
     });
   };
 
+  handleCkycMessage(name) {
+    if(name === 'middle_name' && !this.state.form_data['middle_name'])
+      return
+
+    if(this.state.confirm_details) {
+      let { form_data } = this.state;
+      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+      this.setState({
+        form_data: form_data,
+      });
+    }
+  }
+
   render() {
     return (
       <Container
@@ -208,6 +222,7 @@ class PersonalDetails extends Component {
                 name="first_name"
                 value={this.state.form_data.first_name || ""}
                 onChange={this.handleChange("first_name")}
+                onClick={() => this.handleCkycMessage("first_name")}
               />
             </div>
 
@@ -224,6 +239,7 @@ class PersonalDetails extends Component {
                   name="middle_name"
                   value={this.state.form_data.middle_name || ""}
                   onChange={this.handleChange("middle_name")}
+                  onClick={() => this.handleCkycMessage("middle_name")}
                 />
               </div>
             )}
@@ -240,6 +256,7 @@ class PersonalDetails extends Component {
                 name="last_name"
                 value={this.state.form_data.last_name || ""}
                 onChange={this.handleChange("last_name")}
+                onClick={() => this.handleCkycMessage("last_name")}
               />
             </div>
 
@@ -258,6 +275,7 @@ class PersonalDetails extends Component {
                   name="dob"
                   value={this.state.form_data.dob || ""}
                   onChange={this.handleChange("dob")}
+                  onClick={() => this.handleCkycMessage("dob")}
                 />
               </div>
             )}
