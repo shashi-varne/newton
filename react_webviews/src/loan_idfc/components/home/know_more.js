@@ -244,17 +244,16 @@ class LoanKnowMore extends Component {
     });
   }
 
-  // goBack = () => {
-  //   this.sendEvents('back')
-  //   let loans_applied = storageService().get("loans_applied");
+  goBack = () => {
+    this.sendEvents('back')
+    let loans_applied = storageService().get("loans_applied");
 
-  //   // if (loans_applied === "2") {
-  //   //   this.navigate('/loan/loan-home')
-  //   // } else {
-  //   //   this.navigate('/loan/select-loan')
-  //   // }
-  //   console.log(this.props.history.goBack())
-  // }
+    if (loans_applied === "2") {
+      this.navigate('/loan/loan-home')
+    } else {
+      this.navigate('/loan/select-loan')
+    }
+  }
 
   render() {
     let { partnerData, eligibility, journeyData, documents } = this.state;

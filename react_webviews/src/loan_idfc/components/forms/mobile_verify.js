@@ -145,7 +145,9 @@ class MobileVerification extends Component {
                     I accept{" "}
                     <u
                       onClick={() =>
-                        this.openInBrowser(this.state.tnc, "tnc")
+                        this.openInTabApp({
+                          url: this.state.tnc
+                        })
                       }
                       style={{ color: "var(--primary)" }}
                     >
