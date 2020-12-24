@@ -29,7 +29,7 @@ class SelectLoan extends Component {
     let vendors_data = {
       idfc: {
         index: 0,
-        title: "IDFC FIRST BANK",
+        title: "IDFC FIRST Bank",
         subtitle: "Competitive interest rate",
         loan_amount: " ₹40 lacs",
         logo: "idfc_logo",

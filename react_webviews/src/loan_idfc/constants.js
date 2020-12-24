@@ -441,7 +441,7 @@ export const idfc_config = {
 
         partnerData: {
           title: "DMI Finance",
-          subtitle: "Quick money transfer",
+          subtitle: "Quick disbursal",
           loan_amount: "₹1 lac",
           logo: "dmi-finance",
         },
@@ -554,7 +554,7 @@ export const idfc_config = {
         },
 
         partnerData: {
-          title: "IDFC FIRST BANK",
+          title: "IDFC FIRST Bank",
           subtitle: "Competitive interest rate",
           loan_amount: " ₹40 lacs",
           logo: "idfc_logo",

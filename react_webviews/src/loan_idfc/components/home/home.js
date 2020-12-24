@@ -48,7 +48,7 @@ class Home extends Component {
     let partnerData = {
       idfc: {
         index: 0,
-        title: "IDFC FIRST BANK",
+        title: "IDFC FIRST Bank",
         subtitle: "Competitve interest rate",
         loan_amount: " ₹40 lacs",
         logo: "idfc_logo",
@@ -197,7 +197,7 @@ class Home extends Component {
                 <div className="card">
                   <img src={require(`assets/idfc_logo.svg`)} alt="idfc logo" />
                 </div>
-                IDFC First Bank
+                IDFC FIRST Bank
               </div>
               <div>
                 <div className="card">
