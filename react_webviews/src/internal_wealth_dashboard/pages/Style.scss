@@ -1068,6 +1068,10 @@ $background: #f9f9f9;
     margin-top: 50px;
   }
 
+  .iwd-analysis-debt-holding:nth-of-type(1) {
+    margin-top: 0;
+  }
+
   .iwd-analysis-debt-holding-details {
     margin-left: 20px;
     vertical-align: text-top;
@@ -1616,8 +1620,9 @@ $background: #f9f9f9;
       }
     }
 
+
     .iwd-analysis-portfolios-equity {
-      overflow-y: auto;
+      overflow: hidden;
       flex-direction: column;
       height: auto;
 
@@ -1657,6 +1662,7 @@ $background: #f9f9f9;
 
     .iwd-analysis-debt-holding {
       width: 100%;
+      height: auto;
     }
 
     .iwd-analysis-graph-left {

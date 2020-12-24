@@ -934,6 +934,10 @@ table.iwd-transactions-table {
     width: 14px !important;
     height: 14px !important;
   }
+
+  .MuiRadio-colorSecondary.MuiRadio-checked + .MuiFormControlLabel-label {
+    font-weight: bold !important;
+  }
 }
 
 .iwd-filter-clear {

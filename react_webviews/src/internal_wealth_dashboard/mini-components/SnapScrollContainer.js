@@ -79,7 +79,7 @@ const SnapScrollContainer = ({
         <img src={UpwardIcon} alt='' className={currentPage < pages ? 'rotate-90' : ''} />
       </IconButton>
       <div id='iwd-pf-page-nos'>
-        <b>{currentPage}</b>|{pages}
+        <b>0{currentPage}</b>|0{pages}
       </div>
     </div>
   );
@@ -99,8 +99,6 @@ const SnapScrollContainer = ({
           noDataText ||
           "No data found"
         }
-        templateBtnText='Retry'
-        clickHandler={onErrorBtnClick}
       />
     );
   } else if (error) {

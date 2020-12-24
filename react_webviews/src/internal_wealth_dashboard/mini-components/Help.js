@@ -31,11 +31,11 @@ const HelpPage = (props) => {
         <img src={close} alt="close" />
       </Button>
       <div className="iwd-help-contact">
-        <span>Mail us</span>
+        <span>MAIL US</span>
         ask@fisdom.com
       </div>
       <div className="iwd-help-contact">
-        <span>Call us</span>
+        <span>CALL US</span>
         +91 804 809 3070
       </div>
       <img

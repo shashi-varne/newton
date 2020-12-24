@@ -20,27 +20,23 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   const handleFilterSelect = (id, value) => {
     let start = '';
     let end = '';
+    let newFilterObj = { [id]: value || '' };
+    
     if (id === 'viewFor' && value !== '') {
       if (value === 'select_dates') {
-        setStartDate(dateFormater(new Date()));
-        setEndDate(dateFormater(new Date()));
+        [start, end] = [dateFormater(new Date()), dateFormater(new Date())];
+        setStartDate(start);
+        setEndDate(end);
       } else {
         [start, end] = date_range_selector[value]();
         setStartDate(dateFormater(start));
         setEndDate(dateFormater(end));
       }
-    }
-    if (filter_key === 'iwd-holding-filters') {
-      setFilterState({ ...filterState, [id]: value ? value : '' });
-    } else {
-      setFilterState({
-        ...filterState,
-        [id]: value ? value : '',
-        from_tdate: start ? dateFormater(start) : '',
-        to_tdate: end ? dateFormater(end) : '',
-      });
+      newFilterObj.from_tdate = start ? dateFormater(start) : '';
+      newFilterObj.to_tdate = end ? dateFormater(end) : '';
     }
 
+    setFilterState({ ...filterState, ...newFilterObj });
     setClearFilter(false);
   };
 
