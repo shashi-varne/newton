@@ -79,6 +79,12 @@ class PersonalDetails extends Component {
       confirm_details = true;
     }
 
+    let gender = genderMapper[capitalizeFirstLetter(personal_info.gender)];
+
+    if (gender === "Other") {
+      gender = ""
+    }
+
     let form_data = {
       first_name: personal_info.first_name,
       middle_name: confirm_details && personal_info.middle_name,
