@@ -105,9 +105,6 @@ class HealthInsuranceLanding extends Component {
 
 
   navigate = (pathname, search) => {
-
-    console.log(this.props, pathname)
-
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -119,19 +116,6 @@ class HealthInsuranceLanding extends Component {
 
  
   handleClick = (product_key, title) => {
-
-
-
-
-
-
-     
-     console.log(product_key,'product_key')
-
-
-
-
-
     this.sendEvents('next', title)
     let stateMapper = {
       'HEALTH_SURAKSHA': 'health_suraksha',
@@ -175,7 +159,7 @@ class HealthInsuranceLanding extends Component {
     })
   }
 
-  renderPorducts(props, index) { console.log(props)
+  renderPorducts(props, index) {
     return (
       <div>     
       <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
@@ -216,7 +200,7 @@ class HealthInsuranceLanding extends Component {
         }
       </div>
 
-    { props.dropdown && this.state.Comprehensive && 
+    {props.key === 'HEALTH_SURAKSHA' && this.state.Comprehensive && 
        <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
@@ -225,7 +209,7 @@ class HealthInsuranceLanding extends Component {
      <div style={{ display: 'flex' }}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
 
       </div>}
-      { props.dropdown && this.state.DiseasesSpecificPlan && 
+      { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
        <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
