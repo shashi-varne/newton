@@ -255,17 +255,6 @@ class ApplicationSummary extends Component {
         {props.open && (
           <div className="bct-content">
             {props.data.map(this.renderAccordiansubData)}
-            {this.state.idfc_loan_status === "idfc_null_accepted" && (
-              <div
-                onClick={() => {
-                  this.sendEvents("edit");
-                  this.openEdit(props.edit_state);
-                }}
-                className="generic-page-button-small"
-              >
-                EDIT
-              </div>
-            )}
           </div>
         )}
       </div>

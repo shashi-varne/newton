@@ -24,10 +24,10 @@ class CommonRenderFaqs extends Component {
     componentWillMount() {
         window.scrollTo(0, 0);
         let { params } = this.props.location || {};
-        if (!params || !params.renderData) {
-            this.props.history.goBack();
-            return;
-        }
+        // if (!params || !params.renderData) {
+        //     this.props.history.goBack();
+        //     return;
+        // }
         this.setState({
             renderData: params ? params.renderData : {
                 steps: {
@@ -50,12 +50,12 @@ class CommonRenderFaqs extends Component {
         }
     }
 
-    async handleClick() {
+    handleClick() {
         this.sendEvents('next');
         this.props.history.goBack();
     }
 
-    sendEvents(user_action, data = {}) {
+    sendEvents(user_action) {
         let eventObj = {
           event_name: "idfc_lending",
           properties: {
@@ -76,7 +76,7 @@ class CommonRenderFaqs extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
-                buttonTitle={this.state.renderData.cta_title}
+                buttonTitle="OK"
                 onlyButton={true}
                 showLoader={this.state.show_loader}
                 handleClick={() => this.handleClick()}
@@ -86,10 +86,9 @@ class CommonRenderFaqs extends Component {
                     let isSelected = this.state.selectedIndex === index;
                     return <div key={index}
                         className={option.is_table && 'render-faqs-table-content'}
+                        onClick={() => option.is_table && this.showHideSteps(index)}
                     >
-                        <div className="render-faqs-title"
-                            onClick={() => option.is_table && this.showHideSteps(index)}
-                        >
+                        <div className="render-faqs-title" >
                             {option.header_title}
                             {option.is_table && <div className="top-icon">
                                 <img src={require(`assets/${isSelected ? 'minus_icon' : 'plus_icon'}.svg`)} alt="" />

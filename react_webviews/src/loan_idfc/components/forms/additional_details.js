@@ -49,6 +49,8 @@ class AdditionalDetails extends Component {
     let form_data = this.state.form_data;
 
     form_data.office_address = office_address_data.address;
+    form_data.office_pincode = office_address_data.pincode;
+    form_data.office_city = office_address_data.city;
     form_data.mailing_address_preference = vendor_info.mailing_address_preference;
 
     let bottomButtonData = {
@@ -83,8 +85,8 @@ class AdditionalDetails extends Component {
       const res = await Api.get("/relay/api/loan/pincode/get/" + pincode);
       let resultData = res.pfwresponse.result[0] || "";
 
-      let { city, state } = form_data;
-      let pincode_error = "";
+      let { city } = form_data;
+      let office_pincode_error = "";
       if (
         res.pfwresponse.status_code === 200 &&
         res.pfwresponse.result.length > 0
@@ -97,17 +99,15 @@ class AdditionalDetails extends Component {
         } else {
           city = resultData.idfc_city_name;
         }
-        state = resultData.state_name;
       } else {
         city = "";
-        state = "";
-        pincode_error = "Invalid pincode";
+        office_pincode_error = "Invalid pincode";
       }
 
-      if (name === "pincode") {
-        form_data.city = city;
-        form_data.state = state;
-        form_data.pincode_error = pincode_error;
+      if (name === "office_pincode") {
+        form_data.office_city = city;
+        form_data.office_city_error = "";
+        form_data.office_pincode_error = office_pincode_error;
       }
     }
 
@@ -151,8 +151,8 @@ class AdditionalDetails extends Component {
 
     let keys_to_check = [
       "office_address",
-      "pincode",
-      "city",
+      "office_pincode",
+      "office_city",
       "mailing_address_preference",
     ];
 
@@ -208,31 +208,31 @@ class AdditionalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.pincode_error}
-                helperText={this.state.form_data.pincode_error}
+                error={!!this.state.form_data.office_pincode_error}
+                helperText={this.state.form_data.office_pincode_error}
                 type="text"
                 width="40"
                 maxLength={6}
                 label="Pincode"
-                id="pincode"
-                name="pincode"
-                value={this.state.form_data.pincode || ""}
-                onChange={this.handlePincode("pincode")}
+                id="office_pincode"
+                name="office_pincode"
+                value={this.state.form_data.office_pincode || ""}
+                onChange={this.handlePincode("office_pincode")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.city_error}
-                helperText={this.state.form_data.city_error}
+                error={!!this.state.form_data.office_city_error}
+                helperText={this.state.form_data.office_city_error}
                 type="text"
                 width="40"
                 label="City"
-                id="city"
-                name="city"
+                id="office_city"
+                name="office_city"
                 disabled={true}
-                value={this.state.form_data.city || ""}
-                onChange={this.handleChange("city")}
+                value={this.state.form_data.office_city || ""}
+                onChange={this.handleChange("office_city")}
               />
             </div>
 

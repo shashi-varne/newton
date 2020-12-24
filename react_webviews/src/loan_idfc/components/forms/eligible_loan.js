@@ -10,6 +10,7 @@ import {
   changeNumberFormat,
   formatAmountInr,
   inrFormatDecimal,
+  numDifferentiationInr
 } from "utils/validators";
 
 class EligibleLoan extends Component {
@@ -105,13 +106,14 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
+    this.sendEvents('next');
     let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {
-      form_data.amount_required = vendor_info.displayOffer;
+      form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
-      form_data.maxAmount = vendor_info.displayOffer;
+      form_data.maxAmount = vendor_info.display_loan_amount;
     }
 
     let keys_to_check = ["amount_required"];
@@ -127,7 +129,7 @@ class EligibleLoan extends Component {
 
   render() {
     let { vendor_info } = this.state;
-    let ROI = (vendor_info.ROI / 100) * 100;
+    let ROI = (vendor_info.initial_offer_roi / 100) * 100;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -175,19 +177,19 @@ class EligibleLoan extends Component {
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
                     <div className="sub-title">
-                      ₹{changeNumberFormat(vendor_info.displayOffer || "0")}
+                      ₹{changeNumberFormat(vendor_info.display_loan_amount || "0")}
                     </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Tenure</div>
-                    <div className="sub-title">{`${vendor_info.netTenor} months`}</div>
+                    <div className="sub-title">{`${vendor_info.initial_offer_tenor} months`}</div>
                   </div>
                 </div>
                 <div className="content">
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
                     <div className="sub-title">
-                      {formatAmountInr(vendor_info.maxAllowedEMI)}/month
+                      {formatAmountInr(vendor_info.initial_offer_emi)}/month
                     </div>
                   </div>
                   <div className="sub-content-right">
@@ -230,9 +232,10 @@ class EligibleLoan extends Component {
                 <Input
                   error={!!this.state.form_data.amount_required_error}
                   helperText={
-                    this.state.form_data.amount_required_error ||
-                    `Min ₹1 lakh to max ₹${changeNumberFormat(
-                      vendor_info.displayOffer || "0"
+                    this.state.form_data.amount_required_error || 
+                    (this.state.form_data.amount_required && numDifferentiationInr(this.state.form_data.amount_required)) ||
+                    `Min ₹1 Lakh to max ₹${changeNumberFormat(
+                      vendor_info.display_loan_amount || "0"
                     )}`
                   }
                   type="number"

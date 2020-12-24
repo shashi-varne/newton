@@ -11,7 +11,7 @@ import {
   numDifferentiationInr,
   formatAmountInr,
 } from "utils/validators";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+import Autosuggests from "../../../common/ui/Autosuggest";
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -66,6 +66,10 @@ class LoanBtDetails extends Component {
       }
     }
 
+  //  if (!bt_info.bt_personal_loan) {
+  //    this.navigate('credit-bt')
+  //  }
+
     loan_bt.forEach((data) => {
       this.state.form_data.push({
         is_selected: data.is_selected,
@@ -80,14 +84,17 @@ class LoanBtDetails extends Component {
     });
   };
 
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action) {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "select_bt",
-        no_of_loans_selected: data.no_of_loans_selected,
-        skipped_screen: data.no_of_loans_selected !==0 ? "no" : "yes",
+        no_of_loans_selected: form_checked.length,
+        skipped_screen: form_checked.length !== 0 ? "no" : "yes",
       },
     };
 
@@ -155,22 +162,23 @@ class LoanBtDetails extends Component {
       return;
     }
 
-    this.sendEvents('next', { no_of_cards_entered: form_checked.length, });
-    this.updateApplication({
-      bt_selection: form_checked,
-    });
+    this.sendEvents('next');
+
+    if (submit_details) {
+      this.updateApplication({
+        bt_selection: form_checked,
+      });
+    }
   };
 
   handleCheckbox = (checked, index, id) => {
     let { form_data } = this.state;
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    if(checked)
-      this.validateFields(form_data,index);
-    else
-      this.setState({
-        form_data: form_data,
-      });
+
+    this.setState({
+      form_data: form_data,
+    });
   };
 
   render() {
@@ -224,22 +232,29 @@ class LoanBtDetails extends Component {
                   <div className="head">Loan type</div>
                   <div className="sub-head">Personal loan</div>
                   <FormControl fullWidth>
-                    <div className="InputField">
-                      <DropdownWithoutIcon
-                        width="40"
-                        options={this.state.bankOptions}
-                        label="Financer name"
-                        id="financierName"
-                        name="financierName"
-                        error={!!this.state.form_data[index].financierName_error}
-                        helperText={this.state.form_data[index].financierName_error}
-                        value={
-                          this.state.form_data[index].financierName ||
-                          item.financierName ||
-                          ""
-                        }
-                        onChange={this.handleChange("financierName", index)}
-                      />
+                  <div className="InputField">
+                      {this.state.bankOptions.length > 0 && (
+                        <Autosuggests
+                          parent={this}
+                          width="40"
+                          placeholder="Search for financierName"
+                          options={this.state.bankOptions}
+                          label="Financer name"
+                          id="financierName"
+                          name="financierName"
+                          error={
+                            !!this.state.form_data[index].financierName_error
+                          }
+                          helperText={
+                            this.state.form_data[index].financierName_error
+                          }
+                          value={
+                            this.state.form_data[index].financierName ||
+                            ""
+                          }
+                          onChange={this.handleChange("financierName", index)}
+                        />
+                      )}
                     </div>
 
                     <div className="InputField">
@@ -250,8 +265,7 @@ class LoanBtDetails extends Component {
                         helperText={
                           this.state.form_data[index].principalOutstanding_error ||
                           numDifferentiationInr(
-                            this.state.form_data[index].principalOutstanding ||
-                            item.principalOutstanding
+                            this.state.form_data[index].principalOutstanding 
                           )
                         }
                         type="number"
@@ -261,7 +275,7 @@ class LoanBtDetails extends Component {
                         name="principalOutstanding"
                         value={
                           this.state.form_data[index].principalOutstanding ||
-                          item.principalOutstanding ||
+                          // item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(

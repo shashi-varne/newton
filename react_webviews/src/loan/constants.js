@@ -1,16 +1,16 @@
 export function goBackMap(path) {
     let mapper = {
-        '/loan/journey': '/loan/home',
-        '/loan/instant-kyc-status': '/loan/journey',
-        '/loan/loan-eligible': '/loan/journey',
-        '/loan/reference': '/loan/journey',
-        '/loan/loan-summary': '/loan/journey',
-        '/loan/loan-approved': '/loan/home',
-        '/loan/report-details': '/loan/home',
+        '/loan/dmi/journey': '/loan/dmi/loan-know-more',
+        '/loan/dmi/instant-kyc-status': '/loan/dmi/journey',
+        '/loan/dmi/loan-eligible': '/loan/dmi/journey',
+        '/loan/dmi/reference': '/loan/dmi/journey',
+        '/loan/dmi/loan-summary': '/loan/dmi/journey',
+        '/loan/dmi/loan-approved': '/loan/dmi/loan-know-more',
+        '/loan/dmi/report-details': '/loan/dmi/loan-know-more',
         // '/loan/form-otp': '/loan/journey',
-        '/loan/bank': '/loan/journey',
-        '/loan/upload-pan': '/loan/journey',
-        '/loan/permissions': '/loan/home'
+        '/loan/dmi/bank': '/loan/dmi/journey',
+        '/loan/dmi/upload-pan': '/loan/dmi/journey',
+        '/loan/dmi/permissions': '/loan/dmi/loan-know-more'
     }
 
     return mapper[path] || false;

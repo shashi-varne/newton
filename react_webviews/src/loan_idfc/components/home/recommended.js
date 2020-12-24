@@ -1,20 +1,22 @@
 import React, { Component } from "react";
-import Container from "../../common/container";
-import { initialize } from "../../common/functions";
+import Container from "../../common/Container";
+import { initialize, getRecommendedVendor } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import { numDifferentiationInr } from "utils/validators";
+import { nativeCallback } from "utils/native_callback";
 
-class PersonalDetails extends Component {
+class Recommended extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       form_data: {},
-      screen_name: "personal_details",
+      screen_name: "recommended",
     };
 
     this.initialize = initialize.bind(this);
+    this.getRecommendedVendor = getRecommendedVendor.bind(this);
   }
 
   componentWillMount() {
@@ -47,37 +49,96 @@ class PersonalDetails extends Component {
     });
   };
 
-  handleClick = () => {};
+  validateFields(keys_to_check, form_data) {
+    let canSubmitForm = true;
+    let keysMapper = {
+      loan_amount_required: "loan requirement",
+      employment_type: "employment type",
+      monthly_salary: "monthly salary",
+    };
+
+    for (var i = 0; i < keys_to_check.length; i++) {
+      let key_check = keys_to_check[i];
+      if (!form_data[key_check]) {
+        form_data[key_check + "_error"] =
+          "Please enter " + keysMapper[key_check];
+        canSubmitForm = false;
+      }
+    }
+
+    if (!canSubmitForm) this.setState({ form_data: form_data });
+    return canSubmitForm;
+  }
+
+  handleClick = () => {
+    let { form_data } = this.state;
+    let keys_to_check = ["loan_amount_required", "employment_type"];
+
+    let body = {};
+
+    if (form_data.employment_type === "Salaried") {
+      keys_to_check.push("monthly_salary");
+    }
+
+    if (this.validateFields(keys_to_check, form_data)) {
+      this.setState({
+        show_loader: true,
+      });
+      for (var j in keys_to_check) {
+        let key = keys_to_check[j];
+        body[key] = form_data[key] || "";
+      }
+      this.sendEvents("next");
+      this.getRecommendedVendor(body);
+    }
+  };
+
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "lending",
+      properties: {
+        user_action: user_action,
+        screen_name: "home_loan_requirement",
+        employment_type: this.state.form_data.employment_type || '',
+        amount_required: this.state.form_data.loan_amount_required || '',
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   render() {
     return (
       <Container
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Help us to provide you with best offers"
         buttonTitle="NEXT"
         handleClick={this.handleClick}
       >
-        <div className="personal-details">
-          <div className="personal-details-subtitle">
-            Enter the details below:
-          </div>
+        <div className="recommended">
+          <div className="recommended-subtitle">Enter the details below:</div>
           <FormControl fullWidth>
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.loan_requirement_error}
+                error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
-                  this.state.form_data.loan_requirement_error ||
-                  numDifferentiationInr(this.state.form_data.loan_requirement)
+                  this.state.form_data.loan_amount_required_error ||
+                  numDifferentiationInr(this.state.form_data.loan_amount_required)
                 }
                 type="number"
                 width="40"
                 label="Loan requirement"
-                class="loan_requirement"
+                class="loan_amount_required"
                 maxLength={10}
-                id="loan_requirement"
-                name="loan_requirement"
-                value={this.state.form_data.loan_requirement || ""}
-                onChange={this.handleChange("loan_requirement")}
+                id="loan_amount_required"
+                name="loan_amount_required"
+                value={this.state.form_data.loan_amount_required || ""}
+                onChange={this.handleChange("loan_amount_required")}
               />
             </div>
           </FormControl>
@@ -122,21 +183,21 @@ class PersonalDetails extends Component {
               <FormControl fullWidth>
                 <div className="InputField">
                   <Input
-                    error={!!this.state.form_data.net_monthly_salary_error}
+                    error={!!this.state.form_data.monthly_salary_error}
                     helperText={
-                      this.state.form_data.net_monthly_salary_error ||
+                      this.state.form_data.monthly_salary_error ||
                       numDifferentiationInr(
-                        this.state.form_data.net_monthly_salary
+                        this.state.form_data.monthly_salary
                       )
                     }
                     type="number"
                     width="40"
                     label="Net monthly salary (in rupees)"
-                    class="net_monthly_salary"
-                    id="net_monthly_salary"
-                    name="net_monthly_salary"
-                    value={this.state.form_data.net_monthly_salary || ""}
-                    onChange={this.handleChange("net_monthly_salary")}
+                    class="monthly_salary"
+                    id="monthly_salary"
+                    name="monthly_salary"
+                    value={this.state.form_data.monthly_salary || ""}
+                    onChange={this.handleChange("monthly_salary")}
                   />
                 </div>
               </FormControl>
@@ -147,4 +208,4 @@ class PersonalDetails extends Component {
   }
 }
 
-export default PersonalDetails;
+export default Recommended;

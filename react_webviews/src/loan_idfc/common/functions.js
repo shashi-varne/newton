@@ -27,10 +27,12 @@ export async function initialize() {
   this.setEditTitle = setEditTitle.bind(this);
   this.getDocumentList = getDocumentList.bind(this);
   this.getInstitutionList = getInstitutionList.bind(this);
-  this.getIndustryList = getIndustryList.bind(this);
+  this.getPickList = getPickList.bind(this);
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
   this.get07State = get07State.bind(this);
+  this.getRecommendedVendor = getRecommendedVendor.bind(this);
+  this.getSummary = getSummary.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -45,10 +47,17 @@ export async function initialize() {
     });
   }
 
+  let provider = this.props.match.params.id || "";
+
+  this.setState({
+    provider: provider,
+  });
+
   nativeCallback({ action: "take_control_reset" });
 
   this.setState(
     {
+      provider: provider,
       screenData: screenData,
       productName: getConfig().productName,
       count: 0,
@@ -62,14 +71,90 @@ export async function initialize() {
     show_loader: true,
   });
 
+  let lead = {
+    member_base: [],
+  };
+
+  if (provider === 'dmi') {
+    try {
+      this.setState({
+        show_loader: true,
+      });
+
+      let body = {
+        vendor_name: "DMI",
+        application_info: "True",
+      };
+
+      for (var key in this.state.getLeadBodyKeys) {
+        body[this.state.getLeadBodyKeys[key]] = "True";
+      }
+      const res = await Api.post("/relay/api/loan/get/application/dmi", body);
+
+      this.setState({
+        show_loader: false,
+      });
+
+      let resultData = res.pfwresponse.result;
+
+      if (res.pfwresponse.status_code === 200) {
+        lead = resultData || {};
+        let application_id = (lead.application_info || {}).application_id;
+        storageService().set("loan_application_id", application_id);
+        this.setState(
+          {
+            lead: lead || {},
+            application_id: application_id,
+          },
+          () => {
+            if (this.onload && !this.state.ctaWithProvider) {
+              this.onload();
+            }
+          }
+        );
+      } else {
+        toast(resultData.error || resultData.message || "Something went wrong");
+        this.onload();
+      }
+    } catch (err) {
+      console.log(err);
+      this.setState(
+        {
+          show_loader: false,
+          lead: lead,
+          common_data: {},
+        },
+        () => {
+          this.onload();
+        }
+      );
+      toast("Something went wrong");
+    }
+  } else {
+    let application_id = storageService().get("loan_application_id");
+    this.setState({
+      application_id: application_id,
+    });
+  }
+
   let screens = [
     "calculator",
     "know_more_screen",
     "landing_screen",
     "loan_status",
+    "main_landing_screen",
   ];
 
-  if (!screens.includes(this.state.screen_name)) {
+  let idfc_dmi_screens = [
+    "home_screen",
+    "select_loan_screen",
+    "recommended",
+  ];
+
+  if (
+    !screens.includes(this.state.screen_name) &&
+    !idfc_dmi_screens.includes(this.state.screen_name)
+  ) {
     this.getOrCreate();
   } else {
     this.setState({
@@ -81,8 +166,27 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "loan_status") {
+  if (this.state.screen_name === "calculator") {
+    this.getSummary();
+  }
+
+  if (
+    this.state.screen_name === "loan_status" ||
+    this.state.screen_name === "system_error"
+  ) {
     this.getUserStatus();
+  }
+
+  if (this.state.screen_name === "loan_eligible") {
+    this.getUserStatus();
+  }
+
+  if (this.state.screen_name === "main_landing_screen" && provider === 'idfc') {
+    this.getUserStatus();
+  }
+
+  if (idfc_dmi_screens.includes(this.state.screen_name)) {
+    this.getSummary();
   }
 }
 
@@ -100,47 +204,77 @@ export async function getInstitutionList() {
       let banklist = result.data;
       let bankOptions = [];
 
-      if (this.state.screen_name === "bank_upload") {
-        bankOptions = banklist.map((item) => {
-          return { name: item.institution_name, value: item.institution_id };
-        });
-      } else {
-        bankOptions = banklist.map((item) => item.institution_name);
-      }
+      bankOptions = banklist.map((item) => {
+        return { key: item.institution_id, value: item.institution_name };
+      });
 
       this.setState({
         bankOptions: bankOptions,
+        show_loader: false,
       });
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
 }
 
-export async function getIndustryList() {
+export async function getPickList() {
   try {
     this.setState({
       show_loader: true,
     });
 
-    const res = await Api.get("relay/api/loan/idfc/list/industry");
+    const res = await Api.get("relay/api/loan/idfc/picklist");
 
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      let industryOptions = result.data;
-
-      this.setState({
-        industryOptions: industryOptions,
+      let tnc = result.tnc;
+      let industryOptions = result.industry.map((element) => {
+        return {
+          key: element,
+          value: element,
+        };
       });
+
+      // let companyOptions = Object.keys(result.employer).map((element) => {
+      //   return {
+      //     key: element,
+      //     value: element,
+      //   };
+      // });
+
+      this.setState(
+        {
+          tnc: tnc,
+          industryOptions: industryOptions,
+          // companyOptions: companyOptions,
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
 }
@@ -191,7 +325,7 @@ export async function getOrCreate(params) {
       document_info: true,
       vendor_info: true,
       bt_info: true,
-      perfios_info: true
+      perfios_info: true,
     };
 
     let lead = {};
@@ -219,49 +353,43 @@ export async function getOrCreate(params) {
         }
       );
 
-      let screens = ["landing_screen", "calculator", "know_more_screen"];
+      let screens = ["main_landing_screen", "calculator", "know_more_screen"];
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
-      }
-
-      if (params && params.reset) {
-        this.navigate("home");
-      }
-
-      if (application_status === "internally_rejected") {
+      } else if (params && params.reset) {
+        this.navigate("loan-know-more");
+      } else if (application_status === "internally_rejected") {
         this.navigate("loan-status");
-      }
-
-      if (
+      } else if (
         this.state.screen_name === "loan_bt" ||
         this.state.screen_name === "credit_bt" ||
         this.state.screen_name === "bank_upload"
       ) {
         this.getInstitutionList();
-      }
-
-      if (this.state.screen_name === "document_list") {
+      } else if (this.state.screen_name === "document_list") {
         await this.getDocumentList();
-      }
-
-      if (this.state.screen_name === "document_upload") {
+      } else if (this.state.screen_name === "document_upload") {
         await this.getDocumentList();
-      }
-
-      if (this.state.screen_name === "professional_details_screen") {
-        this.getIndustryList();
+      } else if (
+        this.state.screen_name === "professional_details_screen" ||
+        this.state.screen_name === "mobile_verification"
+      ) {
+        this.getPickList();
+      } else {
+        this.setState({
+          show_loader: false,
+        });
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
     }
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
-
-  this.setState({
-    show_loader: false,
-  });
 }
 
 export async function getUserStatus(state = "") {
@@ -290,23 +418,35 @@ export async function getUserStatus(state = "") {
       if (screens.indexOf(this.state.screen_name) !== -1) {
         return result;
       }
+
+      this.setState(
+        {
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     } else {
       toast(result.error || result.message || "Something went wrong!");
-      this.onload();
+      this.setState(
+        {
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
     }
   } catch (err) {
     console.log(err);
+    this.setState(
+      {
+        show_loader: false,
+      }
+    );
     toast("Something went wrong");
   }
-
-  this.setState(
-    {
-      show_loader: false,
-    },
-    () => {
-      this.onload();
-    }
-  );
 }
 
 export function setEditTitle(string) {
@@ -414,10 +554,10 @@ export async function get10Callback(next_state) {
   let that = this;
 
   setTimeout(function () {
-    if (result.idfc_10_callback === true) {
+    if (result.idfc_10_callback) {
       that.navigate("eligible-loan");
     } else if (
-      result.vendor_application_status === "idfc_cancelled" ||
+      result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
       result.is_cancelled === true
     ) {
       that.navigate("loan-status");
@@ -447,7 +587,7 @@ export async function get07State() {
     if (result.perfios_status === "bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (result.idfc_07_state === "failed") {
-      that.navigate('error')
+      that.navigate("error");
     } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
       let body = {
         idfc_loan_status: "bt_init",
@@ -528,6 +668,9 @@ export async function submitApplication(
         typeof result.error === "string" &&
         rejection_cases.indexOf(result.error) === -1
       ) {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error || result.message || "Something went wrong!");
       } else if (
         typeof result.error === "string" &&
@@ -535,6 +678,9 @@ export async function submitApplication(
       ) {
         this.navigate("loan-status");
       } else {
+        this.setState({
+          show_loader: false,
+        });
         toast(result.error[0] || result.message || "Something went wrong!");
       }
     }
@@ -592,11 +738,11 @@ export async function formCheckUpdate(
     last_name: "last name",
     gender: "gender",
     marital_status: "marital status",
-    father_name: "father name",
-    mother_name: "mother name",
+    father_name: "father's name",
+    mother_name: "mother's name",
     religion: "religion",
     email_id: "email id",
-    company_name: "company name",
+    company_name: this.state.lead.application_info.employment_type !== "self_employed" ?  "company name from provided list" : "business name",
     business_name: "business name",
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
@@ -604,7 +750,7 @@ export async function formCheckUpdate(
     constitution: "constitution",
     organisation: "organisation",
     department: "department",
-    industry: "industry",
+    industry: "industry from provided list",
     current_address1: "address line 1",
     current_address2: "address line 2",
     current_address3: "address line 3",
@@ -624,7 +770,9 @@ export async function formCheckUpdate(
     tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
+    office_pincode: "pincode",
     city: "city",
+    office_city: "city",
     mailing_address_preference: "mailing address preference",
   };
 
@@ -633,6 +781,12 @@ export async function formCheckUpdate(
     "gender",
     "marital_status",
     "religion",
+    "salary_mode",
+    "constitution",
+    "organisation",
+    "department",
+    "industry",
+    "company_name",
   ];
 
   for (var i = 0; i < keys_to_check.length; i++) {
@@ -652,15 +806,19 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  if (form_data.maxAmount && form_data.amount_required > form_data.maxAmount) {
+  // eslint-disable-next-line
+  if (form_data.maxAmount && form_data.amount_required > parseInt(form_data.maxAmount)) {
     form_data.amount_required_error =
-      "amount cannot be greater than max loan amount";
+      "Amount cannot be greater than max loan amount";
     canSubmitForm = false;
   }
-
-  // eslint-disable-next-line
-  if (form_data.amount_required && parseInt(form_data.amount_required) < parseInt("100000")) {
-    form_data.amount_required_error = "Minimum loan amount should be ₹1 lakh";
+  
+  if (
+    form_data.amount_required &&
+    // eslint-disable-next-line
+    parseInt(form_data.amount_required) < parseInt("100000")
+  ) {
+    form_data.amount_required_error = "Minimum loan amount should be ₹1 Lakh";
     canSubmitForm = false;
   }
 
@@ -671,6 +829,29 @@ export async function formCheckUpdate(
     form_data.dob_error = "Future date is not allowed";
     canSubmitForm = false;
   }
+
+  if (form_data.industry) {
+    let data = this.state.industryOptions.filter(
+      (data) => data.key.toUpperCase() === form_data.industry.toUpperCase()
+    );
+
+    if (data.length === 0) {
+      form_data.industry_error = "Please select industry from provided list";
+      canSubmitForm = false;
+    }
+  }
+
+  // if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
+  //   let data = this.state.companyOptions.filter(
+  //     (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
+  //   );
+
+  //   if (data.length === 0) {
+  //     form_data.company_name_error =
+  //       "Please select company name from provided list";
+  //     canSubmitForm = false;
+  //   }
+  // }
 
   this.setState({
     form_data: form_data,
@@ -790,5 +971,74 @@ export function navigate(pathname, data = {}) {
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
     });
+  }
+}
+
+export async function getRecommendedVendor(params) {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.post(`relay/api/loan/account/recommendation`, params);
+
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      this.navigate(this.state.next_state);
+    } else {
+      this.setState({ show_loader: false });
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    this.setState({ show_loader: false });
+    console.log(err);
+    toast("Something went wrong");
+  }
+}
+
+export async function getSummary() {
+  try {
+    this.setState({
+      show_loader: true,
+    });
+
+    const res = await Api.get(`relay/api/loan/account/get/summary`);
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    let available_vendors = ["idfc", "dmi"];
+    let selectedVendors = [];
+
+    available_vendors.forEach((element) => {
+      result[element] && selectedVendors.push(element);
+    });
+
+    if (status === 200) {
+      storageService().set("employment_type", result.employment_type);
+      storageService().set("loans_applied", result.loans_applied);
+      
+      this.setState({
+        account_exists: result.account_exists,
+        ongoing_loan_details: result.ongoing_loan_details,
+        selectedVendors: selectedVendors,
+        show_loader: false,
+        employment_type: result.employment_type,
+        loans_applied: result.loans_applied
+      },
+      () => {
+        if (this.onload && !this.state.ctaWithProvider) {
+          this.onload();
+        }
+      });
+    } else {
+      this.setState({ show_loader: false }, () => {
+        this.onload();
+      });
+      toast(result.error || result.message || "Something went wrong!");
+    }
+  } catch (err) {
+    this.setState({ show_loader: false });
+    console.log(err);
+    toast("Something went wrong");
   }
 }

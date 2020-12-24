@@ -11,8 +11,8 @@ const commonMapper = {
     top_title: "System error",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     failed: true,
     screenName: "system_error",
     stage: "after address details"
@@ -22,8 +22,8 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
   },
@@ -32,18 +32,18 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
   },
-  "idfc_10_rejected": {
+  "idfc_1.0_rejected": {
     top_icon: "ils_loan_failed",
     // top_title: "Sorry",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "not_eligible",
     stage: "after loan requirement details",
   },
@@ -52,7 +52,7 @@ const commonMapper = {
     // top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
-    close_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "profile_success",
   },
   "idfc_0.5_accepted": {
@@ -60,7 +60,7 @@ const commonMapper = {
     top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
-    close_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "profile_success",
   },
   idfc_cancelled: {
@@ -68,8 +68,8 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
   },
   "idfc_0.5_failed": {
@@ -77,8 +77,8 @@ const commonMapper = {
     top_title: "System error",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "system_error",
     stage: "after loan requirement details",
   },
@@ -87,8 +87,8 @@ const commonMapper = {
     top_title: "System error",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "system_error",
     stage: "after loan offer",
   },
@@ -97,8 +97,8 @@ const commonMapper = {
     top_title: "System error",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "system_error",
     stage: "after additional details",
   },
@@ -107,8 +107,8 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after basic details",
   },
@@ -117,8 +117,8 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after basic details",
   },
@@ -127,8 +127,8 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after basic details",
   },
@@ -137,8 +137,8 @@ const commonMapper = {
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
   },
@@ -147,8 +147,8 @@ const commonMapper = {
     top_title: "System error",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     screenName: "system_error",
     stage: "after credit card details",
   },
@@ -191,10 +191,6 @@ class LoanStatus extends Component {
         application_status: application_status,
       });
     } else {
-      // if (vendor_application_status === "idfc_0.5_accepted") {
-      //   commonMapper[vendor_application_status].top_title =
-      //     `${commonMapper[vendor_application_status].top_title} ${first_name}!`;
-      // }
 
       this.setState({
         commonMapper: commonMapper[vendor_application_status] || {},
@@ -210,11 +206,14 @@ class LoanStatus extends Component {
       properties: {
         user_action: user_action,
         screen_name: this.state.commonMapper.screenName,
-        rejection_reason: this.state.rejection_reason || "",
-        stage: this.state.commonMapper.stage || "",
       },
     };
-
+    if(this.state.commonMapper.screenName === 'application_rejected') {
+      eventObj.properties.rejection_reason = this.state.rejection_reason || "";
+      eventObj.properties.stage = this.state.commonMapper.stage || "";
+    } else if(this.state.commonMapper.screenName === 'system_error') {
+      eventObj.properties.stage = this.state.commonMapper.stage || "";
+    }
     if (user_action === "just_set_events") {
       return eventObj;
     } else {
@@ -344,7 +343,7 @@ class LoanStatus extends Component {
           {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
-                Oops! Something's not right. Please check back in some time.
+                Oops! something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
@@ -358,7 +357,7 @@ class LoanStatus extends Component {
                 alt=""
               />
               <div className="subtitle">
-                Oops! Something's not right. Please check back in some time.
+                Oops! something's not right. We are checking this with IDFC First Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import Button from "material-ui/Button";
-import Card from "../../common/ui/Card";
+import Card from "../../../common/ui/Card";
+import SVG from "react-inlinesvg";
+import { getConfig } from "utils/functions";
 
 class PartnerCard extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderBenefits = (data, index) => {
     return (
       <div key={index} className="benefits-points">
@@ -32,7 +30,11 @@ class PartnerCard extends Component {
         {this.props.baseData.card_tag && this.props.baseData.displayTag && (
           <div className="card-tag">{this.props.baseData.card_tag}</div>
         )}
-        <div className="flex partner">
+        <div className="flex partner" 
+        onClick={() => 
+          this.props.handleClick(this.props.baseData.provider_name)
+        }
+        >
           <div>
             <div>{this.props.baseData.title}</div>
             <div>{this.props.baseData.subtitle}</div>
@@ -42,17 +44,19 @@ class PartnerCard extends Component {
             alt={this.props.baseData.logo}
           />
         </div>
-        <div className="flex">
+        <div className="flex" 
+        onClick={() => 
+          this.props.handleClick(this.props.baseData.provider_name)
+        }
+        >
           <div>
-            {" "}
-            <span className="sub-text">Loan upto:</span>{" "}
-            {" " + this.props.baseData.loan_amount}{" "}
+            <span className="sub-text">Loan upto:</span>
+            {" " + this.props.baseData.loan_amount}
           </div>
           <Button
             variant="raised"
             size="large"
             autoFocus
-            onClick={() => this.props.handleClick()}
           >
             {this.props.baseData.cta_title}
           </Button>
@@ -60,16 +64,17 @@ class PartnerCard extends Component {
         {this.props.baseData.benefits && (
           <div
             className="benefits"
-            onClick={() => this.props.handleBenefits(this.props.baseData.index)}
+            onClick={() => this.props.handleBenefits()}
           >
             <div className="benefits-header">
-              {" "}
               Benefits
-              <img
+              <SVG
+                preProcessor={(code) =>
+                  code.replace(/fill=".*?"/g, "fill=" + getConfig().primary)
+                }
                 src={require(`assets/${
                   this.props.isSelected ? "minus_icon" : "plus_icon"
                 }.svg`)}
-                alt=""
               />
             </div>
             {this.props.isSelected && (

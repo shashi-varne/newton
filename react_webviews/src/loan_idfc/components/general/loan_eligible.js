@@ -26,7 +26,7 @@ class LoanEligible extends Component {
 
     this.setState({
       vendor_info: vendor_info,
-      application_info: application_info
+      application_info: application_info,
     })
 
   }
@@ -60,7 +60,6 @@ class LoanEligible extends Component {
   render() {
 
     let vendor_info = this.state.vendor_info || {};
-    let application_info = this.state.application_info || {};
 
     return (
       <Container
@@ -79,25 +78,25 @@ class LoanEligible extends Component {
           />
 
           <div className="loan-eligible">
-            <b>Congratulation!</b> You are eligible for a loan of
+          <b>Congrats, {this.state.first_name}!</b> You are eligible for a loan of
           </div>
 
           <div className="loan-amount">
-            {formatAmountInr(vendor_info.loanAmount)}
+            {formatAmountInr(vendor_info.updated_offer_amount)}
           </div>
 
           <div className="loan-value">
             <div>
               <div>EMI amount</div>
-              <div className="values">{formatAmountInr(vendor_info.EMIAmount)}</div>
+              <div className="values">{formatAmountInr(vendor_info.updated_offer_emi)}</div>
             </div>
             <div>
               <div>Tenure</div>
-              <div className="values">{application_info.tenor} months</div>
+              <div className="values">{vendor_info.updated_offer_tenor} months</div>
             </div>
             <div>
               <div>Rate of interest</div>
-                <div className="values">{vendor_info.ROI}%</div>
+                <div className="values">{vendor_info.updated_offer_roi}%</div>
             </div>
           </div>
         </div>

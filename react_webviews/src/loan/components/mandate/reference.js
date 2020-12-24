@@ -115,7 +115,7 @@ class KycStatus extends Component {
 
         let resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200 && !resultData.error) {
-          this.navigate('/loan/loan-summary');
+          this.navigate('/loan/dmi/loan-summary');
         } else {
           this.setState({
             show_loader: false

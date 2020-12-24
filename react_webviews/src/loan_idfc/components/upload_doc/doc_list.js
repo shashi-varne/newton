@@ -8,6 +8,7 @@ import { storageService } from "utils/validators";
 import { numDifferentiationInr } from "utils/validators";
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
+import { getUrlParams } from "utils/validators";
 
 class DocumentList extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class DocumentList extends Component {
       cards: [],
       docList: [],
       disableButton: true,
+      params: getUrlParams(),
     };
 
     this.initialize = initialize.bind(this);
@@ -25,6 +27,14 @@ class DocumentList extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let { params } = this.state;
+
+    if (params.adminPanel) {
+      this.setState({
+        params: params,
+      });
+    }
   }
 
   onload = () => {
@@ -34,6 +44,12 @@ class DocumentList extends Component {
       leftTitle: "Personal loan",
       leftSubtitle: numDifferentiationInr(vendor_info.loanAmount),
     };
+
+    if (this.state.params.adminPanel) {
+      this.setState({
+        application_id: this.state.params.application_id,
+      });
+    }
 
     this.setState({
       bottomButtonData: bottomButtonData,
@@ -54,8 +70,14 @@ class DocumentList extends Component {
 
       if (status === 200) {
         this.navigate('final-offer')
+        this.setState({
+          show_loader: false
+        })
       } else {
         toast(result.error || result.message || "Something went wrong!");
+        this.setState({
+          show_loader: false
+        })
       }
 
     } catch (err) {
@@ -90,6 +112,16 @@ class DocumentList extends Component {
     this.navigate("doc-upload");
   };
 
+  goBack = () => {
+    let { params } = this.state;
+
+    if (params.adminPanel) {
+      window.location.href = this.state.params.redirect;
+    } else {
+      this.navigate('journey')
+    }
+  }
+
   render() {
     let { docList, disableButton } = this.state;
 
@@ -108,9 +140,13 @@ class DocumentList extends Component {
         title="Upload documents"
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
-        withProvider={true}
+        withProvider={!this.state.params.adminPanel? true : false}
         buttonData={this.state.bottomButtonData}
         disable={disableButton}
+        headerData={{
+          icon: this.state.params.adminPanel ? "close" : "",
+          goBack: this.goBack,
+        }}
       >
         <div className="upload-documents">
           {this.state.docList.map((item, index) => (

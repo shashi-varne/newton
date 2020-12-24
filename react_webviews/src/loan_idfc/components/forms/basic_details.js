@@ -76,8 +76,8 @@ class BasicDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "personal_details",
-        employment_type: this.state.form_data.employment_type,
-        dob: this.state.form_data.dob,
+        employment_type: this.state.form_data.employment_type || '',
+        dob: this.state.form_data.dob || '',
       },
     };
 
