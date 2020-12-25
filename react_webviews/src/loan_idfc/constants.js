@@ -364,7 +364,7 @@ export const idfc_config = {
       "Partnership",
       "Private Limited Company",
       "Private Ltd.",
-      "Properitor",
+      "Proprietor",
       "Public Limited Company",
       "Society",
       "Trust",
