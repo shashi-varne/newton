@@ -157,6 +157,7 @@ class Recommended extends Component {
                 id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
+                style={{width: '100%'}}
               />
             </div>
             <div
@@ -172,6 +173,7 @@ class Recommended extends Component {
                 id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
+                style={{width: '100%'}}
               />
             </div>
           </div>
