@@ -770,6 +770,7 @@ export async function formCheckUpdate(
     tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
+    nature_of_business: "nature of business",
     office_pincode: "pincode",
     city: "city",
     office_city: "city",
