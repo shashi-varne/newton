@@ -84,6 +84,7 @@ export async function initialize() {
       let body = {
         vendor_name: "DMI",
         application_info: "True",
+        vendor_info: "True"
       };
 
       for (var key in this.state.getLeadBodyKeys) {
