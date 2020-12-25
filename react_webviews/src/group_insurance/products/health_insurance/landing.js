@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
 import qs from 'qs';
-// import { insuranceStateMapper, getBhartiaxaStatusToState } from '../../constants';
+import { insuranceStateMapper, getBhartiaxaStatusToState } from '../../constants';
 import critical_illness_fisdom from 'assets/critical_illness_fisdom.svg';
 import critical_illness_myway from 'assets/critical_illness_myway.svg';
 
@@ -24,6 +24,10 @@ import { nativeCallback } from 'utils/native_callback';
 import back_nav_bar_icon from '../../../assets/back_nav_bar_icon.png'
 import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 
+
+import Api from '../../../utils/api'
+import toast from '../../../common/ui/Toast'
+
 class HealthInsuranceLanding extends Component {
 
   constructor(props) {
@@ -41,6 +45,11 @@ class HealthInsuranceLanding extends Component {
   }
 
   componentWillMount() {
+
+    window.sessionStorage.setItem('group_insurance_payment_started', '');
+    window.sessionStorage.setItem('group_insurance_payment_urlsafe', '');
+    window.sessionStorage.setItem('group_insurance_plan_final_data', '');
+    window.sessionStorage.setItem('group_insurance_payment_url', '');
 
     nativeCallback({ action: 'take_control_reset' });
     let critical_illness_icon = this.state.type !== 'fisdom' ? critical_illness_myway : critical_illness_fisdom;
@@ -65,12 +74,6 @@ class HealthInsuranceLanding extends Component {
         dropdown : back_nav_bar_icon,
         uparrow : back_nav_bar_icon_up
       },
-      // {
-      //   key: 'CRITICAL_HEALTH_INSURANCE',
-      //   title: 'Critical illness insurance',
-      //   subtitle: 'Cover against life threatening diseases',
-      //   icon: critical_illness_icon
-      // },
       {
         key: 'HEALTH_SUPER_TOPUP',
         title: 'Super Top Up',
@@ -89,6 +92,11 @@ class HealthInsuranceLanding extends Component {
     let { params } = this.props.location || {};
     let openModuleData =  params ? params.openModuleData : {}
 
+    // let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    // if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+    //   window.location.href = redirect_url;
+    // }
+
     if(openModuleData && openModuleData.sub_module) {
       let pathname = openModuleData.sub_module;
       this.handleClick(pathname);
@@ -99,6 +107,7 @@ class HealthInsuranceLanding extends Component {
     }
 
     this.setState({
+      openModuleData: openModuleData || {},
       insuranceProducts: insuranceProducts
     })
   }
@@ -114,15 +123,233 @@ class HealthInsuranceLanding extends Component {
     });
   }
 
- 
+
+  async componentDidMount() {
+
+    try {
+      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+
+// let res = {
+//   'pfwuser_id': 6477767626457089,
+//   'pfwresponse': {
+//     'status_code': 200,
+//     'requestapi': '',
+//     'result': 'message' ,
+//     'response': {
+//       'health_insurance': {
+//         'message': 'success',
+//         'insurance_apps': {}
+//       },
+//       'term_insurance': {
+//         '_code': 303,
+//         'error': 'No applications found.'
+//       },
+//       'group_insurance': {
+//         'message': 'success',
+//         'insurance_apps': {
+//           'BHARTIAXA': {
+//             'CORONA': [{
+//               'lead_status': 'success',
+//               'lead_payment_status': 'payment_done',
+//               'dt_policy_start': '25 December 2020',
+//               'base_plan_title': 'Smart wallet insurance',
+//               'logo': 'https://plutus-insurance-staging.appspot.com/static/img/bharti_axa_logo.svg',
+//               'id': 4848888020205568,
+//               'policy_number': 'SY700155',
+//               'transaction_date': '24-12-2020',
+//               'provider': 'BHARTIAXA',
+//               'dt_policy_end': '24 December 2021',
+//               'product_name': 'CORONA',
+//               'status': 'incomplete',
+//               'premium': 250.0,
+//               'account_id': 'd6477767626457089',
+//               'sum_assured': 50000,
+//               'dt_created': '24-12-2020',
+//               'dt_updated': '24-12-2020',
+//               'product_title': 'Smart wallet insurance',
+//               'lead_id': 5914733311950848,
+//               'dt_updated_1': '24 Dec 2020',
+//               'tenure': 1,
+//               'dt_created_trans': '24-12-2020',
+//               'policy_id': 6694210954592256
+//             }, {
+//               'lead_status': 'success',
+//               'lead_payment_status': 'payment_done',
+//               'dt_policy_start': '25 December 2020',
+//               'base_plan_title': 'Smart wallet insurance',
+//               'logo': 'https://plutus-insurance-staging.appspot.com/static/img/bharti_axa_logo.svg',
+//               'id': 5092346496548864,
+//               'policy_number': 'SY700154',
+//               'transaction_date': '24-12-2020',
+//               'provider': 'BHARTIAXA',
+//               'dt_policy_end': '24 December 2021',
+//               'product_name': 'CORONA',
+//               'status': 'incomplete',
+//               'premium': 500.0,
+//               'account_id': 'd6477767626457089',
+//               'sum_assured': 100000,
+//               'dt_created': '21-12-2020',
+//               'dt_updated': '24-12-2020',
+//               'product_title': 'Smart wallet insurance',
+//               'lead_id': 6328287122948096,
+//               'dt_updated_1': '24 Dec 2020',
+//               'tenure': 1,
+//               'dt_created_trans': '24-12-2020',
+//               'policy_id': 6228764140765184
+//             }]
+//           },
+//           'STAR': {
+//             '': [{
+//               'lead_status': 'payment_done',
+//               'dt_policy_start': '15 October 2020',
+//               'base_plan_title': '',
+//               'logo': 'https://plutus-insurance-staging.appspot.com/static/img/star/star_health_logo.png',
+//               'id': 5670342659932160,
+//               'policy_number': "None",
+//               'transaction_date': '14 October 2020',
+//               'provider': 'STAR',
+//               'dt_policy_end': '15 October 2021',
+//               'product_name': '',
+//               'status': 'incomplete',
+//               'premium': 9260.0,
+//               'account_id': 'd6477767626457089',
+//               'sum_assured': 400000,
+//               'lead_id': 6512813849706496,
+//               'dt_created': '14-10-2020',
+//               'dt_updated': '14-10-2020',
+//               'product_title': 'Family Health Optima',
+//               'total_amount': 10926.0,
+//               'dt_updated_1': '14 Oct 2020',
+//               'tenure': 1,
+//               'dt_created_trans': '14-10-2020',
+//               'policy_id': 6689400960319488
+//             }]
+//           },
+//           'RELIGARE': {
+//             '': [{
+//               'lead_status': 'init',
+//               'dt_policy_start': 'None',
+//               'base_plan_title': 'Care Health',
+//               'logo': 'https://plutus-insurance-staging.appspot.com/static/img/icn_care_logo_3.svg',
+//               'id': 4773194892312576,
+//               'policy_number': 'None',
+//               'transaction_date': 'None',
+//               'provider': 'RELIGARE',
+//               'dt_policy_end': 'None',
+//               'product_name': '',
+//               'status': 'init',
+//               'premium': 16872.04,
+//               'account_id': 'd6477767626457089',
+//               'sum_assured': 1500000,
+//               'lead_id': 6102529146355712,
+//               'dt_created': '08-10-2020',
+//               'dt_updated': '08-10-2020',
+//               'product_title': 'Care',
+//               'total_amount': 19909.0,
+//               'dt_updated_1': '08 Oct 2020',
+//               'tenure': 1,
+//               'dt_created_trans': "None",
+//               'policy_id': ''
+//             }]
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+
+
+      if (!this.state.openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+
+      if (res.pfwresponse.status_code === 200) {
+        // var resultData = res.pfwresponse.result.response;
+        var resultData = res.pfwresponse.response;
+        let group_insurance = resultData.group_insurance;
+        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+
+
+        let resumeFlagAll = {}
+
+        if (!BHARTIAXA) {
+          BHARTIAXA = {};
+        }
+        let BHARTIAXA_APPS = {
+          'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
+          'HOSPICASH': BHARTIAXA['HOSPICASH'],
+          'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
+          'DENGUE': BHARTIAXA['DENGUE'],
+          'CORONA': BHARTIAXA['CORONA']
+        }
+
+        for (var key in BHARTIAXA_APPS) {
+          let policy = BHARTIAXA_APPS[key];
+
+
+          if (policy && policy.length > 0) {
+            let data = policy[0];
+            if (data.status !== 'complete' && data.lead_payment_status === 'payment_done') {
+              resumeFlagAll[data.product_name] = true;
+            } else {
+              resumeFlagAll[data.product_name] = false;
+            }
+          }
+        }
+
+        let insuranceProducts = this.state.insuranceProducts;
+        for (var i = 0; i < insuranceProducts.length; i++) {
+          let key = insuranceProducts[i].key;
+          insuranceProducts[i].resume_flag =   resumeFlagAll[key];
+        }
+
+        this.setState({
+          group_insurance: group_insurance,
+          BHARTIAXA_APPS: BHARTIAXA_APPS,
+          insuranceProducts: insuranceProducts,
+          resumeFlagAll: resumeFlagAll
+        })
+
+        if (this.state.openModuleData.sub_module) {
+          let navigateMapper = {
+            hospicash: 'HOSPICASH',
+            personal_accident: 'PERSONAL_ACCIDENT',
+            smart_wallet: 'SMART_WALLET',
+            dengue: 'DENGUE',
+            corona: 'CORONA'
+          };
+
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+            this.state.openModuleData.sub_module;
+          this.handleClick(pathname);
+        }
+
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
   handleClick = (product_key, title) => {
     this.sendEvents('next', title)
     let stateMapper = {
-      'HEALTH_SURAKSHA': 'health_suraksha',
-      'CRITICAL_HEALTH_INSURANCE': 'critical_illness',
       'HEALTH_SUPER_TOPUP': 'super_topup',
       'HOSPICASH': 'hospicash'
     };
+
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
+    var lead_id = '';
+    var path = '';
+    var fullPath = '';
 
     var fullPath = 'health/' + stateMapper[product_key] + '/plan';
     if (product_key === 'HOSPICASH') {
@@ -133,14 +360,28 @@ class HealthInsuranceLanding extends Component {
       return;
     }
 
-
-
     if (product_key === 'DISEASE_SPECIFIC_PLANS' && !getConfig().iOS) {
       this.DISEASE_SPECIFIC_PLANS();
       return;
     }
 
+    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
+        let data = this.state.BHARTIAXA_APPS[product_key][0];
+        lead_id = data.lead_id;
+        path = getBhartiaxaStatusToState(data);
+        if (data.status === 'complete') {
+          lead_id = '';
+        }
+      } else {
+        path = 'plan';
+      }
 
+      fullPath = insuranceStateMapper[product_key] + '/' + path;
+    }
+
+    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
   }
 
@@ -162,7 +403,7 @@ class HealthInsuranceLanding extends Component {
   renderPorducts(props, index) {
     return (
       <div>     
-      <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
+      <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer'
@@ -192,12 +433,8 @@ class HealthInsuranceLanding extends Component {
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
         </div>
-        {props.resume_flag &&
-          <div style={{
-            background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
-            textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
-          }}>RESUME</div>
-        }
+        {props.resume_flag && <div style={{background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1, textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
+          }}>RESUME</div>}
       </div>
 
     {props.key === 'HEALTH_SURAKSHA' && this.state.Comprehensive && 
@@ -210,7 +447,7 @@ class HealthInsuranceLanding extends Component {
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
-       <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
+       <div key={index + 1} onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'

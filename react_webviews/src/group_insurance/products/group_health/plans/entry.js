@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Container from '../../../common/Container';
-import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
-import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
-import star_logo from '../../../../assets/ic_star_logo.svg'
+// import Container from '../../../common/Container';
+import hdfc_logo from '../../../../assets/ic_hdfc.svg';
+import religare_logo from '../../../../assets/ic_care.svg';
+import star_logo from '../../../../assets/ic_star_health.svg'
 import toast from '../../../../common/ui/Toast'
 import Api from 'utils/api'
 
