@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import Container from  '../../common/Container';
+import qs from 'qs';
 
 import { getConfig } from '../../../utils/functions';
 import { nativeCallback } from '../../../utils/native_callback'
+import Api from '../../../utils/api'
+import toast from '../../../common/ui/Toast'
 
 import { getBhartiaxaStatusToState, insuranceStateMapper } from '../../constants'
 
@@ -15,11 +18,16 @@ class LifeInsuranceEntry extends Component {
       show_loader: false,
       type: getConfig().productName,
       insuranceProducts: [],
+      params: qs.parse(props.history.location.search.slice(1)),
     }
     this.renderPorducts = this.renderPorducts.bind(this);
   }
 
   componentWillMount() {
+    window.sessionStorage.setItem('group_insurance_payment_started', '');
+    window.sessionStorage.setItem('group_insurance_payment_urlsafe', '');
+    window.sessionStorage.setItem('group_insurance_plan_final_data', '');
+    window.sessionStorage.setItem('group_insurance_payment_url', '');
 
     nativeCallback({ action: 'take_control_reset' });
 
@@ -27,14 +35,14 @@ class LifeInsuranceEntry extends Component {
         key: 'SMART_WALLET',
         title: 'Smart Wallet(fraud protection)',
         subtitle: 'Starts from ₹250/year',
-        icon: 'ic_wallet'
+        icon: 'ic_wallet',
       }, 
       
       {
         key: 'PERSONAL_ACCIDENT',
         title: 'Personal Accident Insurance',
         subtitle: 'Starts from ₹200/year',
-        icon: 'ic_personal_accident'
+        icon: 'ic_personal_accident',
       },
 
       {
@@ -45,17 +53,100 @@ class LifeInsuranceEntry extends Component {
         disabled: false
       },
     ];
-      this.setState({
-        insuranceProducts: insuranceProducts
-      })
+
+    let { params } = this.props.location || {};
+    let openModuleData = params ? params.openModuleData : {}
+
+    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+      window.location.href = redirect_url;
+    }
+
+    this.setState({
+      openModuleData: openModuleData || {},
+      insuranceProducts: insuranceProducts,
+    })
   }
 
 
+  async componentDidMount() {
+
+    try {
+      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+
+      if (!this.state.openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+
+      if (res.pfwresponse.status_code === 200) {
+
+        var resultData = res.pfwresponse.result.response;
+
+        let group_insurance = resultData.group_insurance;
+        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+
+        let resumeFlagAll = {};
+
+        if (!BHARTIAXA) {
+          BHARTIAXA = {};
+        }
+        let BHARTIAXA_APPS = {
+          'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
+          'SMART_WALLET': BHARTIAXA['SMART_WALLET']
+        }
+
+        for (var key in BHARTIAXA_APPS) {
+          let policy = BHARTIAXA_APPS[key];
+          if (policy && policy.length > 0) {
+            let data = policy[0];
+            if (data.status !== 'complete' && data.lead_payment_status === 'payment_done') {
+              resumeFlagAll[data.product_name] = true;
+            } else {
+              resumeFlagAll[data.product_name] = false;
+            }
+          }
+        }
+
+        let insuranceProducts = this.state.insuranceProducts;
+        for (var i = 0; i < insuranceProducts.length; i++) {
+          let key = insuranceProducts[i].key;
+          insuranceProducts[i].resume_flag = resumeFlagAll[key];
+        }
+
+        this.setState({
+          group_insurance: group_insurance,
+          BHARTIAXA_APPS: BHARTIAXA_APPS,
+          insuranceProducts: insuranceProducts,
+          resumeFlagAll: resumeFlagAll
+        })
+
+        if (this.state.openModuleData.sub_module) {
+          let navigateMapper = {
+            personal_accident: 'PERSONAL_ACCIDENT',
+            smart_wallet: 'SMART_WALLET'
+          };
+
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+            this.state.openModuleData.sub_module;
+          this.handleClick(pathname);
+        }
+
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
+  }
+
   navigate = (pathname, search) => {
-
-    console.log(this.props , pathname )
-
-
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -67,10 +158,9 @@ class LifeInsuranceEntry extends Component {
 
   handleClick = (product_key_info) => {
     let product_key = product_key_info.key
-    console.log(product_key,'product_key')
-
     this.sendEvents('next', product_key)
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
+
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'SMART_WALLET', 'HEALTH'];
 
     var lead_id = '';
     var path = '';
@@ -90,84 +180,33 @@ class LifeInsuranceEntry extends Component {
         path = 'plan';
       }
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else if (product_key === 'LIFE_INSURANCE') {           ///Other-Insurance/entry
-        fullPath = 'life-insurance/entry';                                   
-    }  else if (product_key === 'Other_Insurance') {      
-      fullPath = 'other-insurance/entry';                                   
-    }else if (product_key === 'HEALTH_INSURANCE') {
-      fullPath = 'health/landing';
-    }    
-    else if (product_key === 'HOME_INSURANCE') {
-        fullPath = 'home_insurance/general/plan';
-    this.navigate('/group-insurance/' + fullPath);
-    } else {
-      // this.navigate(this.state.redirectTermPath);
-      this.navigate('/group-insurance/term/intro');
-      return;
     }
-    // window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+      else if (product_key === 'HOME_INSURANCE') {
+      fullPath = 'home_insurance/general/plan';
+      this.navigate('/group-insurance/' + fullPath);
+    }
+    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
   }
-
-
-
-
-//   handleClick = (data) => {
-
-
-//     console.log(data,'dataaaaaaaaaa')
-
-
-//     let fullPath;
-//     if(data.key === 'term'){
-//       this.sendEvents('next', 'term insurance')
-//     }else{
-//       this.sendEvents('next', data.key)
-//     }
-    
-//     if (data.key === 'savings plan') {
-//       // if(!getConfig().Web && !isFeatureEnabled(getConfig(), 'open_inapp_tab')){
-//         // this.navigate('/group-insurance/life-insurance/app-update')
-//       // }else{
-//         this.navigate('/group-insurance/life-insurance/savings-plan/landing');
-//       // }
-//     }  else if (data.key === 'HOME_INSURANCE') {             // /group-insurance/home_insurance/general/plan
-//         //  fullPath = data.key 
-//         fullPath = 'home_insurance/general/plan';
-
-//         this.navigate('/group-insurance/' + fullPath);
-//       }else {
-//        fullPath = data.key + '/landing';
-//       this.navigate('/group-insurance/life-insurance/' + fullPath);
-//     }
-
-
-
-//     // this.navigate('group-insurance/' + fullPath);
-//   } ic_personal_accident.svg
 
   renderPorducts(props, index) {
 
     if(!props.disabled) {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-        style={{
-           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-        }}
-        >   
+             style={{borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',}}>   
           <div className='insurance_plans_types'>
-       <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
+                  <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
             <div>
               <div className='insurance_plans_logos_text'
-              >{props.title}{props.key === 'term' && !props.resume_flag &&
-              <span style={{
-                padding: '3px 7px',
-                borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
-              }}>Recommended</span>}
+              >{props.title}
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
           </div>
+          {props.resume_flag && <div style={{background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
+           textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
+          }}>RESUME</div>}
         </div>
       )
     }

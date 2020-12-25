@@ -58,9 +58,9 @@ class Landing extends Component {
     this.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
-      params: {
-        fromHome: true
-      }
+      // params: {
+      //   fromHome: true
+      // }
     });
   }
 
