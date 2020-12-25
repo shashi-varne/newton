@@ -232,19 +232,19 @@ class JourneyMap extends Component {
     }
   }
   getCkycState = async () => {
-    this.setState({
-      show_loader: true,
-    });
-    await this.getOrCreate();
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
-    if (vendor_info.ckyc_state !== "init") {
-      this.updateApplication({
-        idfc_loan_status: "ckyc",
-      });
-    } else {
-      this.getCkycState();
-    }
+    // this.setState({
+    //   show_loader: true,
+    // });
+    // await this.getOrCreate();
+    // let lead = this.state.lead || {};
+    // let vendor_info = lead.vendor_info || {};
+    // if (vendor_info.ckyc_state !== "init") {
+    //   this.updateApplication({
+    //     idfc_loan_status: "ckyc",
+    //   });
+    // } else {
+    //   this.getCkycState();
+    // }
   };
   handleClick = (id) => {
     let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
@@ -262,7 +262,7 @@ class JourneyMap extends Component {
     if (id === "create_loan_application") {
       if (ckyc_state === "init") {
         this.sendEvents('next', {stage: stage});
-        this.getCkycState();
+        // this.getCkycState();
       }
       if (index > "1") {
         this.sendEvents('summary', {stage: stage, summary_selected_for: stage});

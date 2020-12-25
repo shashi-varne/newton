@@ -129,7 +129,7 @@ class ProfessionalDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    if (form_data.company_name.length > 3) {
+    if (form_data.company_name.length > 2) {
       const res = await Api.get(
         "relay/api/loan/idfc/employer/" + form_data.company_name
       );

@@ -247,12 +247,9 @@ class LoanKnowMore extends Component {
   goBack = () => {
     this.sendEvents('back')
 
-    let { params } = this.props.location;
-    if(!params) {
-      params = {};
-    }
+    let neftBanks = this.props.location.state ? this.props.location.state.neftBanks : "";
 
-    if (params.from_state === "select-loan") {
+    if (neftBanks === "select-loan") {
       this.navigate("/loan/select-loan")
     } else {
       this.navigate("/loan/loan-home")

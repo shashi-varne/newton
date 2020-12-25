@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
 
 class SelectLoan extends Component {
   constructor(props) {
@@ -123,11 +124,11 @@ class SelectLoan extends Component {
       status: vendor.status || 'default',
       resume: resume, 
     });
-    this.navigate(`/loan/${provider_name}/loan-know-more`, {
-      params: {
-        from_state: 'select-loan'
-      }
-    });
+    
+    this.props.history.push(
+      { pathname: `/loan/${provider_name}/loan-know-more`, search: getConfig().searchParams },
+      { neftBanks: 'select-loan' }
+    );
   };
 
   sendEvents(user_action, data = {}) {

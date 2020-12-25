@@ -233,7 +233,9 @@ export async function getPickList() {
       show_loader: true,
     });
 
-    const res = await Api.get("relay/api/loan/idfc/picklist");
+    let { screen_name } = this.state;
+
+    const res = await Api.get(`relay/api/loan/idfc/picklist${screen_name === "mobile_verification" ? '?tnc=true' : ""}`);
 
     const { result, status_code: status } = res.pfwresponse;
 
