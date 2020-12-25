@@ -1029,6 +1029,7 @@ export async function getSummary() {
         selectedVendors: selectedVendors,
         show_loader: false,
         employment_type: result.employment_type,
+        loan_amount_required: result.loan_amount_required,
         loans_applied: result.loans_applied,
         dmi: result.dmi,
         idfc: result.idfc

@@ -27,10 +27,10 @@ class Calculator extends Component {
   }
 
   onload = async () => {
-    let { loans_applied, dmi, idfc } = this.state;
+    let { loans_applied, dmi, idfc, loan_amount_required } = this.state;
 
     this.setState({
-      cta_title: (loans_applied > 0 && (dmi || idfc)) ? "RESUME" : "APPLY NOW"
+      cta_title: loan_amount_required ? "RESUME" : "APPLY NOW"
     })
   };
 
