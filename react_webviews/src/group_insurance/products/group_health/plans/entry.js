@@ -100,12 +100,13 @@ class HealthInsuranceEntry extends Component {
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
         style={{
            borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
+           marginLeft : '-8px'
         }}
         >
-          <div className='insurance_plans_types'>
+          <div className='insurance_plans_types' style={{width : '500px'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos"/>
             <div>
-              <div className='insurance_plans_logos_text'
+              <div className='insurance_plans_logos_text'  style={{fontWeight : '400'}}
               >{props.title}
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>

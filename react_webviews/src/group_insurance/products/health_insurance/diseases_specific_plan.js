@@ -128,7 +128,7 @@ class DiseasesSpecificPlan extends Component {
       <div key={index} onClick={() => this.handleClick(props.key)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-        paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer' , width : '100%'
+        paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer' , width : '500px'
       }}>
         <div style={{ display: 'flex' }}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
