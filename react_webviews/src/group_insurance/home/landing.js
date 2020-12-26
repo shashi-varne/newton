@@ -69,8 +69,8 @@ class Landing extends Component {
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
-  handleClick = (product_key) => {
-    this.sendEvents('next', product_key)
+  handleClick = (product_key, events) => {
+    this.sendEvents('next', events)
 
     var fullPath = '';
     if (product_key === 'LIFE_INSURANCE') {
@@ -85,7 +85,7 @@ class Landing extends Component {
 
   renderPorducts(props, index) {
     return (
-      <div key={index} onClick={() => this.handleClick(props.key)} style={{
+      <div key={index} onClick={() => this.handleClick(props.key , props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer'

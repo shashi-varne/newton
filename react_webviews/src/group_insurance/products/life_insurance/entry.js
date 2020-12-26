@@ -57,11 +57,8 @@ class LifeInsuranceEntry extends Component {
 
  
   handleClick = (data) => {
-    if(data.key === 'term'){
-      this.sendEvents('next', 'term insurance')
-    }else{
-      this.sendEvents('next', data.key)
-    }
+  
+    this.sendEvents('next', data.title)
     
     if (data.key === 'savings plan') {
       // if(!getConfig().Web && !isFeatureEnabled(getConfig(), 'open_inapp_tab')){

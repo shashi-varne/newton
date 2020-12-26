@@ -39,14 +39,14 @@ class DiseasesSpecificPlan extends Component {
         title: 'Dengue insurance',
         subtitle: 'Starts from ₹50/year',
         icon: 'icn_dengue',
-        resume_flag : this.props.parent.state.resumeFlagAll['DENGUE'] || false
+        resume_flag : this.props.parent.state.resumeFlagAll  ? this.props.parent.state.resumeFlagAll['DENGUE'] : false
       },
       {
         key: 'CORONA',
         title: 'Coronavirus Insurance',
         subtitle: 'Starts from ₹750/year',
         icon: 'icn_corona',
-        resume_flag : this.props.parent.state.resumeFlagAll['CORONA'] || false
+        resume_flag : this.props.parent.state.resumeFlagAll ? this.props.parent.state.resumeFlagAll['CORONA']  : false
       },
     ];
 
@@ -83,7 +83,8 @@ class DiseasesSpecificPlan extends Component {
 
   handleClick = (product_key) => {
 
-    this.sendEvents('next', product_key)
+    // this.sendEvents('next', product_key)
+    
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
 
     var lead_id = '';
@@ -130,7 +131,7 @@ class DiseasesSpecificPlan extends Component {
         paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer' , width : '100%'
       }}>
         <div style={{ display: 'flex' }}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '20px' }} />
+          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
           <div>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400 }}>{props.title}
               {props.key === 'CORONA' && !props.resume_flag &&
@@ -152,22 +153,22 @@ class DiseasesSpecificPlan extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type ) {
-    let eventObj = {
-      "event_name": 'Group Insurance',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'insurance',
-        "insurance_type": insurance_type ? insurance_type : ''
-      }
-    };
+  // sendEvents(user_action, insurance_type ) {
+  //   let eventObj = {
+  //     "event_name": 'Group Insurance',
+  //     "properties": {
+  //       "user_action": user_action,
+  //       "screen_name": 'insurance',
+  //       "insurance_type": insurance_type ? insurance_type : ''
+  //     }
+  //   };
 
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
+  //   if (user_action === 'just_set_events') {
+  //     return eventObj;
+  //   } else {
+  //     nativeCallback({ events: eventObj });
+  //   }
+  // }
 
   render() {
 

@@ -126,6 +126,8 @@ class HealthInsuranceLanding extends Component {
 
   async componentDidMount() {
 
+    this.setState({ show_loader: true });
+    
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
@@ -330,6 +332,11 @@ class HealthInsuranceLanding extends Component {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
       }
+
+      this.setState({
+        show_loader: false
+      });
+
     } catch (err) {
       console.log(err)
       this.setState({
@@ -339,8 +346,10 @@ class HealthInsuranceLanding extends Component {
     }
   }
 
+  handleClick2 = () => { this.setState({ show_loader : true})}
+
   handleClick = (product_key, title) => {
-    this.sendEvents('next', title)
+    // this.sendEvents('next', title)
     let stateMapper = {
       'HEALTH_SUPER_TOPUP': 'super_topup',
       'HOSPICASH': 'hospicash'
@@ -356,11 +365,15 @@ class HealthInsuranceLanding extends Component {
       fullPath = stateMapper[product_key] + '/plan';
     }
     if (product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
+      let user_action = !this.state.Comprehensive ? 'next' : 'back'
+      this.sendEvents(user_action, title)
       this.HealthInsuranceEntry();
       return;
     }
 
     if (product_key === 'DISEASE_SPECIFIC_PLANS' && !getConfig().iOS) {
+      let user_action = !this.state.DiseasesSpecificPlan ? 'next' : 'back'
+      this.sendEvents(user_action, title)
       this.DISEASE_SPECIFIC_PLANS();
       return;
     }
@@ -380,7 +393,7 @@ class HealthInsuranceLanding extends Component {
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     }
-
+    this.sendEvents('next', title)
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
   }
@@ -443,7 +456,7 @@ class HealthInsuranceLanding extends Component {
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
         justifyContent: 'space-between', cursor: 'pointer'
       }}>
-     <div style={{ display: 'flex' }}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex' }}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
@@ -452,7 +465,7 @@ class HealthInsuranceLanding extends Component {
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'
       }}>
-     <div style={{ display: 'flex' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  parent={this}/> } </div>
       </div>}
       </div>
     )

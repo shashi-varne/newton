@@ -158,7 +158,7 @@ class LifeInsuranceEntry extends Component {
 
   handleClick = (product_key_info) => {
     let product_key = product_key_info.key
-    this.sendEvents('next', product_key)
+    this.sendEvents('next', product_key_info.title)
 
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'SMART_WALLET', 'HEALTH'];
 
@@ -214,11 +214,16 @@ class LifeInsuranceEntry extends Component {
   }
 
   sendEvents(user_action, insurance_type) {
+
+    if(insurance_type === 'Smart Wallet(fraud protection)'){
+      insurance_type = 'Wallet insurance'
+    }
+
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'Life Insurance',
+        "screen_name": 'other insurance',
       }
     };
 

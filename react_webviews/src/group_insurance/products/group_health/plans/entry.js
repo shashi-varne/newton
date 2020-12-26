@@ -57,10 +57,6 @@ class HealthInsuranceEntry extends Component {
 
 
   navigate = (pathname, search) => {
-
-    console.log(this.props)
-
-
     this.props.parent.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
@@ -84,11 +80,8 @@ class HealthInsuranceEntry extends Component {
         if(res.pfwresponse.status_code === 200){
           this.sendEvents('next', data.key)
           let fullPath = data.key + '/landing';
-          console.log('/group-insurance/group-health/' + fullPath)
           this.navigate('/group-insurance/group-health/' + fullPath);
-          console.log('secound')
         }else {
-          console.log('hello')
           toast(resultData.error || resultData.message || "Something went wrong");
         }
       } catch (err) {
@@ -144,8 +137,6 @@ class HealthInsuranceEntry extends Component {
   }
 
   render() {
-  console.log(this.state, this.props, 'hellllllloo')
-
     return (
       <div
         events={this.sendEvents('just_set_events')}
