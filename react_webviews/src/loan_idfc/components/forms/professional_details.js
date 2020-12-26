@@ -129,7 +129,7 @@ class ProfessionalDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    if (form_data.company_name.length > 3) {
+    if (form_data.company_name.length > 2) {
       const res = await Api.get(
         "relay/api/loan/idfc/employer/" + form_data.company_name
       );
@@ -180,7 +180,6 @@ class ProfessionalDetails extends Component {
                   width="40"
                   placeholder="Search for company"
                   options={companyOptions}
-                  suggestions_list={companyOptions}
                   label="Company name"
                   id="company_name"
                   name="company_name"
@@ -310,21 +309,16 @@ class ProfessionalDetails extends Component {
 
             {employment_type === "salaried" && (
               <div className="InputField">
-                {industryOptions.length > 0 && (
-                  <Autosuggests
-                    parent={this}
-                    width="40"
-                    placeholder="Search for industry"
-                    options={industryOptions}
-                    label="Industry"
-                    id="industry"
-                    name="industry"
-                    error={this.state.form_data.industry_error ? true : false}
-                    helperText={this.state.form_data.industry_error}
-                    value={this.state.form_data.industry}
-                    onChange={this.handleChange("industry")}
-                  />
-                )}
+                <DropdownWithoutIcon
+                  options={industryOptions}
+                  label="Industry"
+                  id="industry"
+                  name="industry"
+                  error={this.state.form_data.industry_error ? true : false}
+                  helperText={this.state.form_data.industry_error}
+                  value={this.state.form_data.industry || ""}
+                  onChange={this.handleChange("industry")}
+                />
               </div>
             )}
           </FormControl>

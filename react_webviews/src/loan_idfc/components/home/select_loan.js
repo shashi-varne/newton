@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
 
 class SelectLoan extends Component {
   constructor(props) {
@@ -29,12 +30,11 @@ class SelectLoan extends Component {
     let vendors_data = {
       idfc: {
         index: 0,
-        title: "IDFC FIRST BANK",
+        title: "IDFC FIRST Bank",
         subtitle: "Competitive interest rate",
-        loan_amount: " ₹40 lac",
+        loan_amount: " ₹40 lacs",
         logo: "idfc_logo",
         cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
-        card_tag: "Recommended",
         displayTag: true,
         provider_name: "idfc",
         benefits: {
@@ -100,9 +100,9 @@ class SelectLoan extends Component {
 
   goBack = () => {
     this.sendEvents('back')
-    let { loans_applied } = this.state;
+    let { loans_applied, dmi, idfc } = this.state;
 
-    if (loans_applied === 0) {
+    if (loans_applied === 0 && (!dmi && !idfc)) {
       this.navigate('edit-details')
     } else {
       this.navigate('loan-home')
@@ -124,7 +124,11 @@ class SelectLoan extends Component {
       status: vendor.status || 'default',
       resume: resume, 
     });
-    this.navigate(`/loan/${provider_name}/loan-know-more`);
+    
+    this.props.history.push(
+      { pathname: `/loan/${provider_name}/loan-know-more`, search: getConfig().searchParams },
+      { neftBanks: 'select-loan' }
+    );
   };
 
   sendEvents(user_action, data = {}) {

@@ -48,9 +48,9 @@ class Home extends Component {
     let partnerData = {
       idfc: {
         index: 0,
-        title: "IDFC FIRST BANK",
+        title: "IDFC FIRST Bank",
         subtitle: "Competitve interest rate",
-        loan_amount: " ₹40 lac",
+        loan_amount: " ₹40 lacs",
         logo: "idfc_logo",
         provider_name: "idfc",
         cta_title: "RESUME",
@@ -58,7 +58,7 @@ class Home extends Component {
       dmi: {
         index: 1,
         title: "DMI Finance",
-        subtitle: "Quick money transfer",
+        subtitle: "Quick disbursal",
         loan_amount: "₹1 lac",
         logo: "dmi-finance",
         provider_name: "dmi",
@@ -197,7 +197,7 @@ class Home extends Component {
                 <div className="card">
                   <img src={require(`assets/idfc_logo.svg`)} alt="idfc logo" />
                 </div>
-                IDFC First Bank
+                IDFC FIRST Bank
               </div>
               <div>
                 <div className="card">

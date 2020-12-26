@@ -12,7 +12,7 @@ import $ from "jquery";
 import DotDotLoader from "common/ui/DotDotLoader";
 import Api from "utils/api";
 import Input from "../../../common/ui/Input";
-import { formatDate, dobFormatTest } from "utils/validators";
+import { formatDate, dobFormatTest, calculateAge } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import { getUrlParams } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
@@ -422,6 +422,22 @@ class UploadBank extends Component {
       }
     }
 
+    let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
+    let endDate_days = calculateAge(form_data.end_date, true).days <= 7;
+
+    // eslint-disable-next-line radix
+    let startDate = form_data.start_date.substring(0, 2) === "01";
+
+    if (!startDate_month || !startDate || form_data.start_date.length !== 10) {
+      form_data.start_date_error = "This date must be 3 months from the current date";
+      canSubmit = false;
+    }
+
+    if (!endDate_days || form_data.end_date.length !== 10) {
+      form_data.end_date_error = "This date must be 3 days before the current date";
+      canSubmit = false;
+    }
+
     this.setState({
       form_data: form_data,
     });
@@ -512,7 +528,7 @@ class UploadBank extends Component {
               <Input
                 error={!!this.state.form_data.start_date_error}
                 // helperText={this.state.form_data.start_date_error}
-                helperText="This date must be 3 months from the current date"
+                helperText={this.state.form_data.start_date_error || "This date must be 3 months from the current date"}
                 type="text"
                 width="40"
                 label="Start date"
@@ -528,7 +544,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.end_date_error}
-                helperText="This date must be 3 days before the current date"
+                helperText={this.state.form_data.end_date_error || "This date must be 3 days before the current date"}
                 type="text"
                 width="40"
                 label="End date"

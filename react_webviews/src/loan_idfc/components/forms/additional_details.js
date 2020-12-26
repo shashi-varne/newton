@@ -25,8 +25,8 @@ class AdditionalDetails extends Component {
     this.initialize();
 
     let mailingAddressPreferenceOptions = [
-      "CURRENT ADDRESS",
-      "PERMANENT ADDRESS",
+      "Current Address",
+      "Permanent Address",
     ];
 
     this.setState({
@@ -147,7 +147,7 @@ class AdditionalDetails extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    let { form_data } = this.state;
+    let { form_data, employment_type } = this.state;
 
     let keys_to_check = [
       "office_address",
@@ -155,6 +155,10 @@ class AdditionalDetails extends Component {
       "office_city",
       "mailing_address_preference",
     ];
+
+    if (employment_type === "self_employed") {
+      keys_to_check.push("nature_of_business")
+    }
 
     this.formCheckUpdate(keys_to_check, form_data, "one_point_seven", true);
   };
@@ -174,13 +178,14 @@ class AdditionalDetails extends Component {
         loaderData={this.state.loaderData}
       >
         <div className="additional-details">
-          {employment_type === "self employed" && (
+          {employment_type === "self_employed" && (
             <div className="InputField">
-              <Input
+              <DropdownWithoutIcon
+                width="40"
+                options={this.state.screenData.businessOptions}
                 error={!!this.state.form_data.nature_of_business_error}
                 helperText={this.state.form_data.nature_of_business_error}
                 type="text"
-                width="40"
                 label="Nature of business"
                 id="nature_of_business"
                 name="nature_of_business"

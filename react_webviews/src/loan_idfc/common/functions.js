@@ -16,7 +16,6 @@ export async function initialize() {
   this.navigate = navigate.bind(this);
   this.openPdf = openPdf.bind(this);
   this.openInBrowser = openInBrowser.bind(this);
-  this.openInTabApp = openInTabApp.bind(this);
   this.formCheckUpdate = formCheckUpdate.bind(this);
   this.updateApplication = updateApplication.bind(this);
   this.submitApplication = submitApplication.bind(this);
@@ -33,6 +32,7 @@ export async function initialize() {
   this.get07State = get07State.bind(this);
   this.getRecommendedVendor = getRecommendedVendor.bind(this);
   this.getSummary = getSummary.bind(this);
+  this.openInTabApp = openInTabApp.bind(this);
 
   let screenData = {};
   if (this.state.screen_name) {
@@ -233,30 +233,19 @@ export async function getPickList() {
       show_loader: true,
     });
 
-    const res = await Api.get("relay/api/loan/idfc/picklist");
+    let { screen_name } = this.state;
+
+    const res = await Api.get(`relay/api/loan/idfc/picklist${screen_name === "mobile_verification" ? '?tnc=true' : ""}`);
 
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
       let tnc = result.tnc;
-      let industryOptions = result.industry.map((element) => {
-        return {
-          key: element,
-          value: element,
-        };
-      });
-
-      // let companyOptions = Object.keys(result.employer).map((element) => {
-      //   return {
-      //     key: element,
-      //     value: element,
-      //   };
-      // });
 
       this.setState(
         {
           tnc: tnc,
-          industryOptions: industryOptions,
+          industryOptions: result.industry,
           // companyOptions: companyOptions,
           show_loader: false,
         },
@@ -290,22 +279,28 @@ export async function getDocumentList() {
     );
     const { result } = res.pfwresponse;
 
-    this.setState(
-      {
-        docList: result.doc_list,
-      },
-      () => {
-        this.onload();
-      }
-    );
+    if (result.doc_list.length === 0) {
+      this.submitApplication({}, "four", "", "final-offer");
+    } else {
+      this.setState(
+        {
+          docList: result.doc_list,
+          show_loader: false,
+        },
+        () => {
+          this.onload();
+        }
+      );
+    }
+
+    
   } catch (err) {
     console.log(err);
+    this.setState({
+      show_loader: false,
+    });
     toast("Something went wrong");
   }
-
-  this.setState({
-    show_loader: false,
-  });
 }
 
 export async function getOrCreate(params) {
@@ -382,6 +377,9 @@ export async function getOrCreate(params) {
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
+      this.setState({
+        show_loader: false,
+      });
     }
   } catch (err) {
     console.log(err);
@@ -654,6 +652,7 @@ export async function submitApplication(
     } else {
       let rejection_cases = [
         "CreateLoan null API Failed",
+        "CreateLoan null API Rejected",
         "CreateLoan 05 API Failed",
         "CreateLoan 10 API Failed",
         "CreateLoan 11 API Failed",
@@ -720,7 +719,8 @@ export async function formCheckUpdate(
   keys_to_check,
   form_data,
   state = "",
-  update = ""
+  update = "",
+  keys_to_include = []
 ) {
   if (!form_data) {
     form_data = this.state.form_data;
@@ -770,6 +770,7 @@ export async function formCheckUpdate(
     tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
+    nature_of_business: "nature of business",
     office_pincode: "pincode",
     city: "city",
     office_city: "city",
@@ -830,16 +831,16 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  if (form_data.industry) {
-    let data = this.state.industryOptions.filter(
-      (data) => data.key.toUpperCase() === form_data.industry.toUpperCase()
-    );
+  // if (form_data.industry) {
+  //   let data = this.state.industryOptions.filter(
+  //     (data) => data.key.toUpperCase() === form_data.industry.toUpperCase()
+  //   );
 
-    if (data.length === 0) {
-      form_data.industry_error = "Please select industry from provided list";
-      canSubmitForm = false;
-    }
-  }
+  //   if (data.length === 0) {
+  //     form_data.industry_error = "Please select industry from provided list";
+  //     canSubmitForm = false;
+  //   }
+  // }
 
   // if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
   //   let data = this.state.companyOptions.filter(
@@ -865,6 +866,11 @@ export async function formCheckUpdate(
 
     for (var j in keys_to_check) {
       let key = keys_to_check[j];
+      body[key] = form_data[key] || "";
+    }
+
+    for (let j in keys_to_include) {
+      let key = keys_to_include[j];
       body[key] = form_data[key] || "";
     }
 
@@ -1023,7 +1029,9 @@ export async function getSummary() {
         selectedVendors: selectedVendors,
         show_loader: false,
         employment_type: result.employment_type,
-        loans_applied: result.loans_applied
+        loans_applied: result.loans_applied,
+        dmi: result.dmi,
+        idfc: result.idfc
       },
       () => {
         if (this.onload && !this.state.ctaWithProvider) {

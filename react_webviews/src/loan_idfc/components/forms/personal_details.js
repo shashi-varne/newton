@@ -79,11 +79,17 @@ class PersonalDetails extends Component {
       confirm_details = true;
     }
 
+    let gender = genderMapper[capitalizeFirstLetter(personal_info.gender)];
+
+    if (gender === "Other") {
+      gender = ""
+    }
+
     let form_data = {
       first_name: personal_info.first_name,
       middle_name: confirm_details && personal_info.middle_name,
       last_name: personal_info.last_name,
-      dob: confirm_details && timeStampToDate(personal_info.dob || ""),
+      dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
       marital_status: (personal_info.marital_status || "").toUpperCase(),
       father_name: personal_info.father_name,
@@ -120,9 +126,10 @@ class PersonalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, details_changed } = this.state;
 
-    if(name === 'first_name' && value.indexOf(' ') >= 0) {
-      return
-    } else if (name) {
+    // if(name === 'first_name' && value.indexOf(' ') >= 0) {
+    //   return
+    // }
+    if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }

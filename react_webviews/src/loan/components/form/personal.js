@@ -65,6 +65,7 @@ class PersonalDetails extends Component {
             })
         }
 
+        let { maritalStatusOptions } = this.state;
         let lead = this.state.lead || {};
 
         let personal_info = lead.personal_info || {};
@@ -75,7 +76,7 @@ class PersonalDetails extends Component {
             father_name: personal_info.father_name || '',
             dob: personal_info.dob || '',
             gender: (personal_info.gender || '').toUpperCase() || '',
-            marital_status: personal_info.marital_status || ''
+            marital_status: maritalStatusOptions.includes(personal_info.marital_status) ? personal_info.marital_status : '',
         };
 
         form_data['dob'] = form_data['dob'] ? form_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
