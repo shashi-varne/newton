@@ -28,7 +28,7 @@ class LoanKnowMore extends Component {
     this.setState({
       partnerData: screenData.loan_partners[provider].partnerData,
       journeyData: screenData.loan_partners[provider].journeyData,
-      eligibility: screenData.loan_partners[provider].eligibility,
+      stepContentMapper: screenData.loan_partners[provider].stepContentMapper,
       faqsInfo: screenData.loan_partners[provider].faqsInfo,
       documents: screenData.loan_partners[provider].documents,
     });
@@ -245,7 +245,7 @@ class LoanKnowMore extends Component {
   }
 
   render() {
-    let { partnerData, eligibility, journeyData, documents, provider } = this.state;
+    let { partnerData, stepContentMapper, journeyData, provider } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -277,41 +277,38 @@ class LoanKnowMore extends Component {
 
           {journeyData && <JourneySteps static={true} baseData={journeyData} />}
 
-          {eligibility && (
+          {stepContentMapper && (
             <HowToSteps
               style={{ marginTop: 20, marginBottom: 0 }}
-              baseData={eligibility}
+              baseData={stepContentMapper}
             />
           )}
 
-          {provider === 'idfc' && (
-            <div className='eligibility'>
-              <div className="generic-hr"></div>
-              <div
-                className="Flex block2"
-                onClick={() => {
-                  this.sendEvents("eligibility");
-                  this.navigate('eligibility')
-                }}
-              >
-                <img
-                  className="accident-plan-read-icon"
-                  src={require(`assets/${this.state.productName}/eligibility.svg`)}
-                  alt=""
-                />
-                <div className="title">Eligibility</div>
-              </div>
-            </div>
-          )}
-
-          {documents && (
+          {provider === "idfc" && (
             <>
+              <div className="eligibility">
+                <div className="generic-hr"></div>
+                <div
+                  className="Flex block2"
+                  onClick={() => {
+                    this.sendEvents("eligibility");
+                    this.navigate("eligibility");
+                  }}
+                >
+                  <img
+                    className="accident-plan-read-icon"
+                    src={require(`assets/${this.state.productName}/eligibility.svg`)}
+                    alt=""
+                  />
+                  <div className="title">Eligibility</div>
+                </div>
+              </div>
               <div className="generic-hr"></div>
               <div
                 className="Flex block2"
                 onClick={() => {
                   this.sendEvents("documents");
-                  this.navigate('know-more')
+                  this.navigate("know-more");
                 }}
               >
                 <img
@@ -323,6 +320,7 @@ class LoanKnowMore extends Component {
               </div>
             </>
           )}
+          
           <div className="generic-hr"></div>
           <div
             className="Flex block2"

@@ -465,7 +465,7 @@ export const idfc_config = {
   main_landing_screen: {
     loan_partners: {
       dmi: {
-        eligibility: {
+        stepContentMapper: {
           title: "Eligibility criteria",
           options: [
             {
@@ -594,6 +594,21 @@ export const idfc_config = {
               subtitle:
                 "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
             },
+          ],
+        },
+
+        stepContentMapper: {
+          title: "Top features",
+          options: [
+            {
+              icon: "icn_b_1",
+              subtitle: "Interest rates starting as low as 10.75% pa",
+            },
+            {
+              icon: "icn_b_2",
+              subtitle: "Instant eligibility and sanction in less than 4 hrs",
+            },
+            { icon: "icn_b_3", subtitle: "Flexible loan tenure up to 60 months" },
           ],
         },
 
