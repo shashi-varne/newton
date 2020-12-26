@@ -57,6 +57,7 @@ class DocumentList extends Component {
   };
 
   handleClick = async () => {
+    let { params } = this.state;
     this.sendEvents('next');
     this.setState({
       show_loader: true
@@ -69,7 +70,12 @@ class DocumentList extends Component {
       const { result, status_code: status } = res.pfwresponse;
 
       if (status === 200) {
-        this.navigate('final-offer')
+        if (params.adminPanel) {
+          window.location.href = this.state.params.redirect;
+        } else {
+          this.navigate('final-offer')
+        }
+        
         this.setState({
           show_loader: false
         })
