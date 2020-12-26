@@ -5,8 +5,9 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
+import { numDifferentiationInr } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
+// import Autosuggest from "../../common/Autosuggest";
 import Api from "utils/api";
 // import toast from "../../../common/ui/Toast";
 
@@ -20,6 +21,9 @@ class ProfessionalDetails extends Component {
       employment_type: "",
       industryOptions: [],
       companyOptions: [],
+      constitutionOptions: [],
+      organisationTypeOptions: [],
+      salaryRecieptOptions: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -46,10 +50,10 @@ class ProfessionalDetails extends Component {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
-      salary_mode: (professional_info.salary_mode || "").toUpperCase(),
+      salary_mode: professional_info.salary_mode,
       constitution: professional_info.constitution,
-      organisation: capitalizeFirstLetter(professional_info.organisation || ""),
-      department: professional_info.department,
+      organisation: professional_info.organisation,
+      department: "BACKOFFICE",
       industry: professional_info.industry,
     };
 
@@ -188,6 +192,8 @@ class ProfessionalDetails extends Component {
                   value={this.state.form_data.company_name || ""}
                   onChange={this.handleSearch("company_name")}
                 />
+
+                {/* <Autosuggest inputs={industryOptions} /> */}
               </div>
             )}
 
@@ -251,7 +257,7 @@ class ProfessionalDetails extends Component {
               <div className="InputField">
                 <DropdownWithoutIcon
                   width="40"
-                  options={this.state.screenData.salaryRecieptOptions}
+                  options={this.state.salaryRecieptOptions}
                   id="salary-receipt-mode"
                   label="Salary receipt mode"
                   error={this.state.form_data.salary_mode_error ? true : false}
@@ -266,12 +272,12 @@ class ProfessionalDetails extends Component {
             <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
-                options={this.state.screenData.constitutionOptions}
+                options={this.state.constitutionOptions}
                 id="constitution"
                 label="Constitution of company"
                 error={this.state.form_data.constitution_error ? true : false}
                 helperText={this.state.form_data.constitution_error}
-                value={(this.state.form_data.constitution || "").toUpperCase()}
+                value={this.state.form_data.constitution || ""}
                 name="constitution"
                 onChange={this.handleChange("constitution")}
               />
@@ -280,7 +286,7 @@ class ProfessionalDetails extends Component {
             <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
-                options={this.state.screenData.organisationTypeOptions}
+                options={this.state.organisationTypeOptions}
                 id="organisation"
                 label="Organisation type"
                 error={this.state.form_data.organisation_error ? true : false}
@@ -291,7 +297,7 @@ class ProfessionalDetails extends Component {
               />
             </div>
 
-            {employment_type === "salaried" && (
+            {/* {employment_type === "salaried" && (
               <div className="InputField">
                 <DropdownWithoutIcon
                   width="40"
@@ -305,7 +311,7 @@ class ProfessionalDetails extends Component {
                   onChange={this.handleChange("department")}
                 />
               </div>
-            )}
+            )} */}
 
             {employment_type === "salaried" && (
               <div className="InputField">

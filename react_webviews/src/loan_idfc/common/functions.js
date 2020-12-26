@@ -247,7 +247,13 @@ export async function getPickList() {
         {
           tnc: tnc,
           industryOptions: result.industry,
-          // companyOptions: companyOptions,
+          constitutionOptions: result.constitution,
+          designationOptions: result.designation,
+          qualification: result.educational_qualification,
+          businessOptions: result.nature_of_business,
+          organisationTypeOptions: result.organisation,
+          purposeOfLoanOptions: result.purpose,
+          salaryRecieptOptions: result.salary_mode,
           show_loader: false,
         },
         () => {
@@ -350,6 +356,9 @@ export async function getOrCreate(params) {
       );
 
       let screens = ["main_landing_screen", "calculator", "know_more_screen"];
+
+      let picklistScreens = ["basic_details", "professional_details_screen", "mobile_verification", "requirement_details_screen", "additional_details"]
+
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
       } else if (params && params.reset) {
@@ -366,10 +375,7 @@ export async function getOrCreate(params) {
         await this.getDocumentList();
       } else if (this.state.screen_name === "document_upload") {
         await this.getDocumentList();
-      } else if (
-        this.state.screen_name === "professional_details_screen" ||
-        this.state.screen_name === "mobile_verification"
-      ) {
+      } else if (picklistScreens.includes(this.state.screen_name)) {
         this.getPickList();
       } else {
         this.setState({

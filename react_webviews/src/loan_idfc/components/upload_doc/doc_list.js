@@ -42,7 +42,7 @@ class DocumentList extends Component {
     let vendor_info = lead.vendor_info || {};
     let bottomButtonData = {
       leftTitle: "Personal loan",
-      leftSubtitle: numDifferentiationInr(vendor_info.loanAmount),
+      leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
     };
 
     if (this.state.params.adminPanel) {

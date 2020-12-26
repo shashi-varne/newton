@@ -17,6 +17,7 @@ class AdditionalDetails extends Component {
       form_data: {},
       employment_type: "",
       screen_name: "additional_details",
+      businessOptions: []
     };
     this.initialize = initialize.bind(this);
   }
@@ -48,6 +49,7 @@ class AdditionalDetails extends Component {
 
     let form_data = this.state.form_data;
 
+    form_data.nature_of_business = vendor_info.nature_of_business;
     form_data.office_address = office_address_data.address;
     form_data.office_pincode = office_address_data.pincode;
     form_data.office_city = office_address_data.city;
@@ -55,7 +57,7 @@ class AdditionalDetails extends Component {
 
     let bottomButtonData = {
       leftTitle: "Personal loan",
-      leftSubtitle: numDifferentiationInr(vendor_info.loanAmount),
+      leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
     };
 
     this.setState({
@@ -182,7 +184,7 @@ class AdditionalDetails extends Component {
             <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
-                options={this.state.screenData.businessOptions}
+                options={this.state.businessOptions}
                 error={!!this.state.form_data.nature_of_business_error}
                 helperText={this.state.form_data.nature_of_business_error}
                 type="text"
