@@ -39,6 +39,7 @@ import DocumentUpload from './components/upload_doc/doc_upload';
 import CommonRenderFaqs from "./components/general/RenderFaqs";
 import FinalOffer from "./components/general/final_loan";
 import Reports from "./components/general/reports";
+import Eligibility from './components/general/eligibility';
 
 import Landing from "../loan/components/general/landing";
 import Report from "../loan/components/general/report";
@@ -203,6 +204,7 @@ const Lending = props => {
           <Route path={`${url}/idfc/final-offer`} component={FinalOffer} />
           <Route path={`${url}/idfc/reports`} component={Reports} />
           <Route path={`${url}/idfc/error`} component={SystemError} />
+          <Route path={`${url}/idfc/eligibility`} component={Eligibility} />
 
           {/* Edit paths */}
           <Route path={`${url}/idfc/edit-basic-details`} 

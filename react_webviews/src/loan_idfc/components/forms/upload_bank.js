@@ -74,6 +74,7 @@ class UploadBank extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let application_info = lead.application_info || {};
     let progressHeaderData = {
       title: "Income and loan offer",
       steps: [
@@ -109,6 +110,7 @@ class UploadBank extends Component {
     this.setState({
       loaderData: loaderData,
       progressHeaderData: progressHeaderData,
+      employment_type: application_info.employment_type || '',
     });
   };
 
@@ -120,6 +122,10 @@ class UploadBank extends Component {
       "Share respective passwords if your statements are password protected",
       "Upload multiple statements of the same bank account with each file not exceeding 6 MB",
     ];
+
+    if (this.state.employment_type === 'self_employed') {
+      notes[0] = "Provide your latest bank statements from your savings or current account to get the best loan offer"
+    }
 
     return (
       <div style={{ lineHeight: "15px" }}>
@@ -429,12 +435,12 @@ class UploadBank extends Component {
     let startDate = form_data.start_date.substring(0, 2) === "01";
 
     if (!startDate_month || !startDate || form_data.start_date.length !== 10) {
-      form_data.start_date_error = "This date must be 3 months from the current date";
+      form_data.start_date_error = "This date must be 3 months prior to the current month";
       canSubmit = false;
     }
 
     if (!endDate_days || form_data.end_date.length !== 10) {
-      form_data.end_date_error = "This date must be 3 days before the current date";
+      form_data.end_date_error = "This date must be 3 days prior to the current date";
       canSubmit = false;
     }
 

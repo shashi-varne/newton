@@ -8,7 +8,7 @@ class PartnerCard extends Component {
   renderBenefits = (data, index) => {
     return (
       <div key={index} className="benefits-points">
-        <div className="dot"></div>
+        <div><div className="dot"></div></div>
         <div>
           <div>{data.data ? data.data : data}</div>
           {data.sub_data &&

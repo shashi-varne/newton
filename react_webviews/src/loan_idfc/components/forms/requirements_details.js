@@ -112,7 +112,7 @@ class LoanRequirementDetails extends Component {
         handleClick={this.handleClick}
       >
         <div className="requirements-details">
-          <Attention content="Enter correct loan requirements and double-check before you hit the 'submit' button!  Once submitted, you can't make any changes." />
+          <Attention content="Enter and reverify information. Once submitted, you can’t make any changes." />
 
           <FormControl fullWidth>
             <div className="InputField">

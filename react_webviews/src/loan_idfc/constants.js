@@ -465,7 +465,7 @@ export const idfc_config = {
   main_landing_screen: {
     loan_partners: {
       dmi: {
-        eligibility: {
+        stepContentMapper: {
           title: "Eligibility criteria",
           options: [
             {
@@ -554,50 +554,6 @@ export const idfc_config = {
 
       idfc: {
         documents: true,
-        salariedEligibility: {
-          title: "Eligibility criteria",
-          options: [
-            {
-              icon: "icn_b1_m",
-              subtitle:
-                "Must be earning a minimum net monthly salary of Rs. 20,000",
-            },
-            {
-              icon: "icn_b2_m",
-              subtitle: "Should at least be 23 years of age",
-            },
-            {
-              icon: "icn_b3_m",
-              subtitle:
-                "Maximum age at the time of loan maturity should not be >60 years ",
-            },
-          ],
-        },
-
-        selfEmployeeEligibility: {
-          title: "Eligibility criteria",
-          options: [
-            {
-              icon: "icn_b2_m",
-              subtitle: "Should at least be 23 years of age",
-            },
-            {
-              icon: "icn_b3_m",
-              subtitle:
-                "Maximum age at the time of loan maturity should not be >65 years",
-            },
-            {
-              icon: "icn_b4_m",
-              subtitle: "Business must be in operations for at least 3 years",
-            },
-            {
-              icon: "Group 9964",
-              subtitle:
-                "You must be managing your business from the same office premises for at least a year",
-            },
-          ],
-        },
-
         partnerData: {
           title: "IDFC FIRST Bank",
           subtitle: "Competitive interest rate",
@@ -638,6 +594,21 @@ export const idfc_config = {
               subtitle:
                 "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
             },
+          ],
+        },
+
+        stepContentMapper: {
+          title: "Top features",
+          options: [
+            {
+              icon: "icn_b_1",
+              subtitle: "Interest rates starting as low as 10.75% pa",
+            },
+            {
+              icon: "icn_b_2",
+              subtitle: "Instant eligibility and sanction in less than 4 hrs",
+            },
+            { icon: "icn_b_3", subtitle: "Flexible loan tenure up to 60 months" },
           ],
         },
 
@@ -761,5 +732,51 @@ export const idfc_config = {
         },
       },
     },
+  },
+  eligibility_screen: {
+    eligibility: [
+      {
+        title: "Salaried",
+        options: [
+          {
+            icon: "icn_b1_m",
+            subtitle:
+              "Must be earning a minimum net monthly salary of Rs. 20,000",
+          },
+          {
+            icon: "icn_b2_m",
+            subtitle: "Should at least be 23 years of age",
+          },
+          {
+            icon: "icn_b3_m",
+            subtitle:
+              "Maximum age at the time of loan maturity should not be >60 years ",
+          },
+        ],
+      },
+      {
+        title: "Self-employed",
+        options: [
+          {
+            icon: "icn_b2_m",
+            subtitle: "Should at least be 23 years of age",
+          },
+          {
+            icon: "icn_b3_m",
+            subtitle:
+              "Maximum age at the time of loan maturity should not be >65 years",
+          },
+          {
+            icon: "icn_b4_m",
+            subtitle: "Business must be in operations for at least 3 years",
+          },
+          {
+            icon: "Group 9964",
+            subtitle:
+              "You must be managing your business from the same office premises for at least a year",
+          },
+        ],
+      },
+    ],
   },
 };

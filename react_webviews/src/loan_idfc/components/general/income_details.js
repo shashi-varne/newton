@@ -22,7 +22,7 @@ class IncomeDetails extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
-
+    let application_info = lead.application_info || {};
     let progressHeaderData = {
       title: "Income and loan offer",
       steps: [
@@ -46,6 +46,7 @@ class IncomeDetails extends Component {
 
     this.setState({
       progressHeaderData: progressHeaderData,
+      employment_type: application_info.employment_type || '',
     });
   };
 
@@ -84,8 +85,13 @@ class IncomeDetails extends Component {
       >
         <div className="income-details">
           <div className="subtitle">
-            Provide bank statements of your salary account for income assessment
-            in <b>just 2 clicks!</b>
+            Provide bank statements of your
+            {this.state.employment_type === "self_employed"
+              ? " savings or current account "
+              : " salary account "}
+            for income assessment in <b>just 2 clicks! </b>
+            {this.state.employment_type === "self_employed" &&
+              "Best if you can provide your current account statements."}
           </div>
           <Card withtag="true" onClick={() => this.handleClick("netbanking")}>
             <div className="card-content" style={{ padding: "10px 0" }}>
