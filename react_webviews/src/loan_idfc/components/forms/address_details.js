@@ -109,7 +109,6 @@ class AddressDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "kyc_address_details",
-        permanent_address_edited: this.state.form_data.permanent_address_edited || 'no',
         current_address_edited: this.state.form_data.current_address_edited || 'no',
         ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
@@ -131,11 +130,10 @@ class AddressDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    if (this.state.confirm_details) {
-      let edited_address = name.split("_")[0];
-      form_data[edited_address + '_address_edited'] = "yes"
-      if (name === 'current_address3' || name === 'permanent_address3')
-        form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+    let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
+
+    if (this.state.confirm_details && confirm_fields.includes(name)) {
+      form_data['current_address_edited'] = "yes";
     }
 
     this.setState({
@@ -280,12 +278,9 @@ class AddressDetails extends Component {
   };
 
   handleCkycMessage(name) {
-    if((name === 'current_address3' || name === 'permanent_address3') && !this.state.form_data[name])
-      return
-
     if(this.state.confirm_details) {
       let { form_data } = this.state;
-      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+      form_data[name + '_helper'] = 'Document proof will be required if you make any change';
       this.setState({
         form_data: form_data,
       });
@@ -310,7 +305,7 @@ class AddressDetails extends Component {
       >
         <div className="address-details">
           {this.state.confirm_details && (
-            <Attention content="Once submitted, details cannot be changed or modified." />
+            <Attention content="Once submitted, details cannot be modified." />
           )}
 
           <div className="head-title">Current address</div>
@@ -357,7 +352,6 @@ class AddressDetails extends Component {
                   name="fcurrent_address3"
                   value={this.state.form_data.current_address3 || ""}
                   onChange={this.handleChange("current_address3")}
-                  onClick={() => this.handleCkycMessage("current_address3")}
                 />
               </div>
             )}
@@ -450,7 +444,6 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address1 || ""}
                   onChange={this.handleChange("permanent_address1")}
                   disabled={this.state.isPermanent_address === 'Yes'}
-                  onClick={() => this.handleCkycMessage("permanent_address1")}
                 />
               </div>
 
@@ -466,7 +459,6 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address2 || ""}
                   onChange={this.handleChange("permanent_address2")}
                   disabled={this.state.isPermanent_address === 'Yes'}
-                  onClick={() => this.handleCkycMessage("permanent_address2")}
                 />
               </div>
 
@@ -483,7 +475,6 @@ class AddressDetails extends Component {
                     value={this.state.form_data.permanent_address3 || ""}
                     onChange={this.handleChange("permanent_address3")}
                     disabled={this.state.isPermanent_address === 'Yes'}
-                    onClick={() => this.handleCkycMessage("permanent_address3")}
                   />
                 </div>
               )}
@@ -515,7 +506,6 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_pincode || ""}
                   onChange={this.handlePincode("permanent_pincode")}
                   disabled={this.state.isPermanent_address === 'Yes'}
-                  onClick={() => this.handleCkycMessage("permanent_pincode")}
                 />
               </div>
 
