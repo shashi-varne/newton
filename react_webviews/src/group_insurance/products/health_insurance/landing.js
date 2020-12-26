@@ -266,8 +266,8 @@ class HealthInsuranceLanding extends Component {
       }
 
       if (res.pfwresponse.status_code === 200) {
-        // var resultData = res.pfwresponse.result.response;
-        var resultData = res.pfwresponse.response;
+        var resultData = res.pfwresponse.result.response;
+        // var resultData = res.pfwresponse.response;
         let group_insurance = resultData.group_insurance;
         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
 
@@ -410,23 +410,23 @@ class HealthInsuranceLanding extends Component {
       }}>
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
-          <div>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 ,  flexGrow : 1 }}>{props.title} 
+          <div style={{width : '240px'}}>
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} 
 
                  {props.key === 'HEALTH_SURAKSHA'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginLeft: '100%' }} />
+                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
                   </span>}
 
                   {props.key === 'HEALTH_SURAKSHA'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginLeft: '100%' }} />
+                  <img src={props.uparrow} alt="" style={{ marginLeft : '15px' }} />  
                   </span>}
 
                    { props.key === 'DISEASE_SPECIFIC_PLANS' && !this.state.DiseasesSpecificPlan && <span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.dropdown} alt="" style={{ marginRight: '15px' }} />
+                  <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
                   </span>}
 
                   {props.key === 'DISEASE_SPECIFIC_PLANS' && this.state.DiseasesSpecificPlan &&<span style={{ "float" : "right" , color : 'blue'}}>                  
-                  <img src={props.uparrow} alt="" style={{ marginRight: '15px' }} />
+                  <img src={props.uparrow} alt="" style={{ marginLeft: '15px' }} />
                   </span>}
 
             </div>
