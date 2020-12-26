@@ -87,6 +87,7 @@ class AddressDetails extends Component {
     form_data.current_pincode = current_address_data.pincode;
     form_data.current_city = current_address_data.city;
     form_data.current_state = current_address_data.state;
+    form_data.current_country= 'India';
 
     form_data.permanent_address1 = permanent_address_data.address1;
     form_data.permanent_address2 = permanent_address_data.address2;
@@ -95,6 +96,7 @@ class AddressDetails extends Component {
     form_data.permanent_pincode = permanent_address_data.pincode;
     form_data.permanent_city = permanent_address_data.city;
     form_data.permanent_state = permanent_address_data.state;
+    form_data.permanent_country= 'India';
 
     this.setState({
       form_data: form_data,
@@ -178,7 +180,9 @@ class AddressDetails extends Component {
 
     let keys_to_include;
     if (this.state.confirm_details) {
-      keys_to_include = ['current_address3', 'permanent_address3']
+      keys_to_include = ['current_address3', 'permanent_address3', 'current_country', 'permanent_country']
+    } else {
+      keys_to_include = ['current_country', 'permanent_country']
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "null", true, keys_to_include);
@@ -209,7 +213,7 @@ class AddressDetails extends Component {
       const res = await Api.get("/relay/api/loan/pincode/get/" + pincode);
       let resultData = res.pfwresponse.result[0] || "";
 
-      let { city, state } = form_data;
+      let { city, state, country } = form_data;
       let pincode_error = "";
       if (
         res.pfwresponse.status_code === 200 &&
@@ -224,9 +228,11 @@ class AddressDetails extends Component {
           city = resultData.idfc_city_name;
         }
         state = resultData.state_name;
+        country = resultData.country;
       } else {
         city = "";
         state = "";
+        country = ""
         pincode_error = "Invalid pincode";
       }
 
@@ -236,12 +242,14 @@ class AddressDetails extends Component {
         form_data.current_state = state;
         form_data.current_state_error = "";
         form_data.current_pincode_error = pincode_error;
+        form_data.current_country = country || 'India';
       } else if (name === "permanent_pincode") {
         form_data.permanent_city = city;
         form_data.permanent_city_error = "";
         form_data.permanent_state = state;
         form_data.permanent_state_error = "";
         form_data.permanent_pincode_error = pincode_error;
+        form_data.permanent_country = country || 'India';
       }
     }
 
@@ -262,6 +270,7 @@ class AddressDetails extends Component {
       form_data.permanent_pincode = form_data.current_pincode;
       form_data.permanent_city = form_data.current_city;
       form_data.permanent_state = form_data.current_state;
+      form_data.permanent_country = form_data.current_country
     }
 
     for (var i in form_data) {

@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
-// import Autosuggest from "../../common/Autosuggest";
+import Autosuggest from "../../common/Autosuggest";
 import Api from "utils/api";
 // import toast from "../../../common/ui/Toast";
 
@@ -21,6 +21,7 @@ class ProfessionalDetails extends Component {
       employment_type: "",
       industryOptions: [],
       companyOptions: [],
+      companyOptions1: [],
       constitutionOptions: [],
       organisationTypeOptions: [],
       salaryRecieptOptions: [],
@@ -133,7 +134,7 @@ class ProfessionalDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    if (form_data.company_name.length > 2) {
+    if (form_data.company_name.length === 2) {
       const res = await Api.get(
         "relay/api/loan/idfc/employer/" + form_data.company_name
       );
@@ -143,14 +144,14 @@ class ProfessionalDetails extends Component {
         if (resultData.employer_name.length !== 0) {
           companyOptions = resultData.employer_name.map((element) => {
             return {
-              key: element,
+              name: element,
               value: element,
             };
           });
         } else {
           companyOptions = [
             {
-              key: "",
+              name: "",
               value: "",
             },
           ];
@@ -166,7 +167,6 @@ class ProfessionalDetails extends Component {
 
   render() {
     let { employment_type, industryOptions, companyOptions } = this.state;
-
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -192,8 +192,12 @@ class ProfessionalDetails extends Component {
                   value={this.state.form_data.company_name || ""}
                   onChange={this.handleSearch("company_name")}
                 />
-
-                {/* <Autosuggest inputs={industryOptions} /> */}
+{/* 
+                <Autosuggest
+                  inputs={industryOptions}
+                  onChange={this.handleSearch("company_name")}
+                  value={this.state.form_data.company_name || ""}
+                /> */}
               </div>
             )}
 

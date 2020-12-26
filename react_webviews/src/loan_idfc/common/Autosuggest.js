@@ -53,9 +53,7 @@ class Example extends React.Component {
 
   componentWillMount() {
     // this.initialize();
-    this.setState({
-        input: this.props.inputs
-    })
+    
   }
 
 //   componentDidUpdate() {
@@ -67,18 +65,29 @@ class Example extends React.Component {
 
  
   onChange = (event, { newValue }) => {
+
     this.setState({
       value: newValue,
-      input: this.props.inputs
     });
   };
  
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
-      console.log(this.state.input)
+    // let inputs = this.props.inputs.map(item => {
+    //   return {
+    //     name: item,
+    //     value: item
+    //   }
+    // })
+
+    // let inputs = this.props.inputs
+
     this.setState({
-      suggestions: getSuggestions(value, languages)
+      // input: inputs
+    })
+    this.setState({
+      suggestions: getSuggestions(value, this.state.input)
     });
   };
  
