@@ -5,7 +5,6 @@ import HowToSteps from "../../../common/ui/HowToSteps";
 import JourneySteps from "../../../common/ui/JourneySteps";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
-import { storageService } from "utils/validators";
 
 class LoanKnowMore extends Component {
   constructor(props) {
@@ -26,21 +25,10 @@ class LoanKnowMore extends Component {
   onload = () => {
     let { screenData, provider } = this.state;
 
-    let employement_type = storageService().get("employment_type");
-    let eligibility = {};
-    if (provider === "idfc") {
-      employement_type === "salaried"
-        ? (eligibility = screenData.loan_partners[provider].salariedEligibility)
-        : (eligibility =
-            screenData.loan_partners[provider].selfEmployeeEligibility);
-    } else {
-      eligibility = screenData.loan_partners[provider].eligibility;
-    }
-
     this.setState({
       partnerData: screenData.loan_partners[provider].partnerData,
       journeyData: screenData.loan_partners[provider].journeyData,
-      eligibility: eligibility,
+      eligibility: screenData.loan_partners[provider].eligibility,
       faqsInfo: screenData.loan_partners[provider].faqsInfo,
       documents: screenData.loan_partners[provider].documents,
     });
@@ -257,7 +245,7 @@ class LoanKnowMore extends Component {
   }
 
   render() {
-    let { partnerData, eligibility, journeyData, documents } = this.state;
+    let { partnerData, eligibility, journeyData, documents, provider } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -279,7 +267,7 @@ class LoanKnowMore extends Component {
               {partnerData.logo && (
                 <img
                   src={require(`assets/${partnerData.logo}.svg`)}
-                  alt="idfc logo"
+                  alt="logo"
                 />
               )}
             </div>
@@ -294,6 +282,26 @@ class LoanKnowMore extends Component {
               style={{ marginTop: 20, marginBottom: 0 }}
               baseData={eligibility}
             />
+          )}
+
+          {provider === 'idfc' && (
+            <div className='eligibility'>
+              <div className="generic-hr"></div>
+              <div
+                className="Flex block2"
+                onClick={() => {
+                  this.sendEvents("eligibility");
+                  this.navigate('eligibility')
+                }}
+              >
+                <img
+                  className="accident-plan-read-icon"
+                  src={require(`assets/${this.state.productName}/eligibility.svg`)}
+                  alt=""
+                />
+                <div className="title">Eligibility</div>
+              </div>
+            </div>
           )}
 
           {documents && (
