@@ -172,7 +172,7 @@ class Container extends Component {
     let backMapperBharti = {
       '/summary': 'form',
       '/form': 'plan',
-      '/plan' : ''
+      '/plan' : '/group-insurance/other-insurance/entry'
     }
 
     let redirectPath  = backMapperBharti[path] ? backMapperBharti[path] : '/group-insurance';
@@ -199,6 +199,16 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+
+      if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
+        this.navigate('/group-insurance');
+        return;
+      }
+      
+      if (this.checkStringInString('/group-insurance/hospicash/plan')) {
+        this.navigate('/group-insurance/health/landing');
+        return;
+      }
      
     if(this.checkStringInString('group-health')) {
 
@@ -221,7 +231,7 @@ class Container extends Component {
 
 
       if(this.checkStringInString('group-insurance/group-health') && this.checkStringInString('landing')) {
-        this.navigate('/group-insurance/group-health/entry');
+        this.navigate('/group-insurance/health/landing');
         return;
       }
       
@@ -268,7 +278,7 @@ class Container extends Component {
     if(pathname.indexOf('/group-health') < 0) {
       if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
       pathname.indexOf('/plan') >= 0) {
-        this.navigate('/group-insurance');
+        this.navigate('/group-insurance/other-insurance/entry');
         return;
       }
   

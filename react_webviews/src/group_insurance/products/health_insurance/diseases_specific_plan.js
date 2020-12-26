@@ -90,19 +90,7 @@ class DiseasesSpecificPlan extends Component {
     var lead_id = '';
     var path = '';
     var fullPath = '';
-     
-    if (product_key === 'CORONA'){
-        fullPath = 'corona/plan';
-    }
-    else if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
-        fullPath = 'health/critical_illness/plan';
-      }
-    else {
-      // this.navigate(this.state.redirectTermPath);
-      // this.navigate('/group-insurance/term/intro');
-      return;
-    }
-      if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+           if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
       if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
         this.state.BHARTIAXA_APPS[product_key].length > 0) {
         let data = this.state.BHARTIAXA_APPS[product_key][0];
@@ -118,6 +106,22 @@ class DiseasesSpecificPlan extends Component {
       }
       fullPath = insuranceStateMapper[product_key] + '/' + path;
     } 
+
+    if (product_key === 'CORONA'){
+      fullPath = 'corona/plan';
+  }
+  else if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
+      fullPath = 'health/critical_illness/plan';
+    }
+    else if(product_key === 'DENGUE'){
+      fullPath = 'dengue/plan'
+    }
+  else {
+    // this.navigate(this.state.redirectTermPath);   /group-insurance/dengue/plan
+    // this.navigate('/group-insurance/term/intro');
+    return;
+  }
+
 
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
