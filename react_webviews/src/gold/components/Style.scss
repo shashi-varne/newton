@@ -1086,6 +1086,7 @@ img.gold-offer-slide-img {
   font-size: 11px;
   line-height: 13.04px;
   margin-bottom: 10px;
+  letter-spacing: 1px;
 }
 
 .generic-subtitle-heading-IRDAI{
@@ -1096,6 +1097,17 @@ img.gold-offer-slide-img {
   line-height: 9.48px;
   font-weight: normal;
   letter-spacing: 1px;
+}
+
+.generic-subtitle-heading-IRDAI-number{
+  margin-top: auto;
+  font-weight: 700;
+  color: #767E86;
+  margin-bottom: 256px;
+  line-height: 9.48px;
+  font-size: 8px;
+  letter-spacing: 1px;
+  padding-top: 3px;
 }
 
 .gold-trans-card {

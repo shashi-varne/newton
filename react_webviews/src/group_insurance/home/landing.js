@@ -133,9 +133,9 @@ class Landing extends Component {
            <div onClick={this.policymove}>
            <img style={{ margin: '-15px 5px 15px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' }}>What are you looking for ?</h1>
+            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' , margin : '10px 0 9px 0'}}>What are you looking for ?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
-            <div className="generic-page-title" style={{ margin: "40px 0 20px 0" }}> Get Insured with ease </div>
+            <div style={{ margin: "25px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' }}> Get Insured with ease </div>
           <div className="his">
             <div className="horizontal-images-scroll">
               <img className="image"  src={require(`assets/${this.state.type}/icn_free.svg`)} alt=""/>
@@ -144,7 +144,7 @@ class Landing extends Component {
             </div>
           </div>
 
-          <div className="generic-page-title" style={{ margin: "40px 0 20px 0" }}> What our customer says </div>
+          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' }}> What our customer says </div>
           <div className="his"> <div className="horizontal-images-scroll">
               <img className="image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
               <img className="image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
@@ -154,10 +154,10 @@ class Landing extends Component {
 
           <div  className="generic-subtitle-heading">Insurance with fisdom is 100% safe</div>
                     <div style={{display : 'flex' , justifyContent : 'center', height : '20px'}}>
-                     <div><img className="image" src={require(`assets/${this.state.type}/irdanewlogo1.svg`)} alt=""/>  </div>
+                     <div><img className="image" src={require(`assets/${this.state.type}/irdanewlogo1.svg`)} alt="" style={{marginRight : '2px'}}/>  </div>
                      <span className='generic-subtitle-heading-IRDAI'>
-                       <div>IRDAI registered </div>  
-                       <div style={{marginTop :'auto', fontWeight : 700, color: "#767E86"}}>CA0505</div>
+                       <div>IRDAI REGISTERED </div>  
+                       <div className='generic-subtitle-heading-IRDAI-number'>CA0505</div>
                        </span>
                     </div>
          <ContactUs/>
@@ -165,6 +165,6 @@ class Landing extends Component {
       </Container>
     );
   }
-}
+}                     
 
 export default Landing;

@@ -418,7 +418,7 @@ function getPartnerConfig(partner_code) {
       appLink: 'https://fisdom.onelink.me/CQFA/3e75c8f6',
       termsLink: 'https://www.fisdom.com/terms/',
       schemeLink: 'https://www.fisdom.com/scheme-offer-documents/',
-      askEmail: 'ask@fisdom.com',
+      askEmail: 'ASK@FISDOM.COM',
       mobile: '+91-7829228886',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'fisdomBackColor',
