@@ -196,7 +196,7 @@ class ProfessionalDetails extends Component {
                   onChange={(value) => this.handleSearch(value)}
                   value={this.state.form_data.company_name || ""}
                   error={this.state.form_data.company_name_error ? true : false}
-                  helperText={this.state.form_data.company_name_error || isApiRunning ? <DotDotLoader /> : ""}
+                  helperText={this.state.form_data.company_name_error}
                   isApiRunning={isApiRunning}
                 />
               </div>

@@ -2,8 +2,9 @@ import React from "react";
 import Autosuggest from "react-autosuggest";
 import { InputLabel } from "material-ui/Input";
 import { FormControl } from "material-ui/Form";
+import DotDotLoader from "common/ui/DotDotLoader";
 
-const getSuggestions = (value, inputs, isApiRunning) => {
+const getSuggestions = (value, inputs) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
@@ -13,8 +14,8 @@ const getSuggestions = (value, inputs, isApiRunning) => {
 
   return inputLength === 0
     ? []
-    // : list.length === 0
-    // ? (isApiRunning ? [{ name: "", value: "" }] : [{ name: "OTHERS", value: "OTHERS" }])
+    : list.length === 0
+    ? [{ name: "OTHERS", value: "OTHERS" }]
     : list;
 };
 
@@ -41,9 +42,9 @@ class Example extends React.Component {
 
   componentDidUpdate(prevState) {
     if (prevState.inputs !== this.props.inputs) {
-      this.setState({ input: this.props.inputs })
-      console.log(this.props.inputs)
-      this.onSuggestionsFetchRequested()
+      this.setState({ input: this.props.inputs });
+      console.log(this.props.inputs);
+      this.onSuggestionsFetchRequested();
     }
   }
 
@@ -55,10 +56,14 @@ class Example extends React.Component {
   };
 
   onSuggestionsFetchRequested = () => {
-    console.log(this.props.inputs)
-    console.log(this.props.value)
+    console.log(this.props.inputs);
+    console.log(this.props.value);
     this.setState({
-      suggestions: getSuggestions(this.state.value || "", this.props.inputs || [], this.props.isApiRunning),
+      suggestions: getSuggestions(
+        this.state.value || "",
+        this.props.inputs || [],
+        this.props.isApiRunning
+      ),
     });
   };
 
@@ -79,10 +84,15 @@ class Example extends React.Component {
 
     return (
       <FormControl className="Dropdown" disabled={this.props.disabled}>
-        <InputLabel shrink={true} htmlFor={this.props.id}>{this.props.label}</InputLabel>
+        <InputLabel shrink={true} htmlFor={this.props.id}>
+          <div style={{ display: "flex" }}>
+            <span>{this.props.label}</span>
+            <span>{this.props.isApiRunning ? <DotDotLoader /> : ""}</span>
+          </div>
+        </InputLabel>
         <Autosuggest
           suggestions={suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsFetchRequested={!this.props.isApiRunning && this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}
