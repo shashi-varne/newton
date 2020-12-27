@@ -82,15 +82,18 @@ class DiseasesSpecificPlan extends Component {
   }
 
   handleClick = (product_key) => {
-
     // this.sendEvents('next', product_key)
-    
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
+    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
 
     var lead_id = '';
     var path = '';
     var fullPath = '';
-           if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+
+    if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
+      fullPath = 'health/critical_illness/plan';
+    }
+
+    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
       if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
         this.state.BHARTIAXA_APPS[product_key].length > 0) {
         let data = this.state.BHARTIAXA_APPS[product_key][0];
@@ -100,42 +103,22 @@ class DiseasesSpecificPlan extends Component {
         if (data.status === 'complete') {
           lead_id = '';
         }
-
       } else {
         path = 'plan';
       }
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } 
-
-    if (product_key === 'CORONA'){
-      fullPath = 'corona/plan';
-  }
-  else if (product_key === 'CRITICAL_HEALTH_INSURANCE') {
-      fullPath = 'health/critical_illness/plan';
     }
-    else if(product_key === 'DENGUE'){
-      fullPath = 'dengue/plan'
-    }
-  else {
-    // this.navigate(this.state.redirectTermPath);   /group-insurance/dengue/plan
-    // this.navigate('/group-insurance/term/intro');
-    return;
-  }
-
 
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
   }
 
-  renderPorducts(props, index) {  
-
-    console.log(props , props.resume_flag)
-
+  renderPorducts(props, index) {
     return (
       <div key={index} onClick={() => this.handleClick(props.key)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '320px'
+        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '375px'
       }}>
         <div style={{ display: 'flex' }}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>

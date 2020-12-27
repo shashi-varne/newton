@@ -150,7 +150,7 @@ let res = {
         'message': 'success',
         'insurance_apps': {
           'BHARTIAXA': {
-            'CORONA': [{
+            'DENGUE': [{
               'lead_status': 'success',
               'lead_payment_status': 'payment_done',
               'dt_policy_start': '25 December 2020',
@@ -161,7 +161,7 @@ let res = {
               'transaction_date': '24-12-2020',
               'provider': 'BHARTIAXA',
               'dt_policy_end': '24 December 2021',
-              'product_name': 'CORONA',
+              'product_name': 'DENGUE',
               'status': 'incomplete',
               'premium': 250.0,
               'account_id': 'd6477767626457089',
@@ -185,7 +185,7 @@ let res = {
               'transaction_date': '24-12-2020',
               'provider': 'BHARTIAXA',
               'dt_policy_end': '24 December 2021',
-              'product_name': 'CORONA',
+              'product_name': 'DENGUE',
               'status': 'incomplete',
               'premium': 500.0,
               'account_id': 'd6477767626457089',
@@ -280,9 +280,9 @@ let res = {
           BHARTIAXA = {};
         }
         let BHARTIAXA_APPS = {
-          'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
+          // 'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
-          'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
+          // 'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
           'DENGUE': BHARTIAXA['DENGUE'],
           'CORONA': BHARTIAXA['CORONA']
         }
@@ -317,8 +317,8 @@ let res = {
         if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
-            personal_accident: 'PERSONAL_ACCIDENT',
-            smart_wallet: 'SMART_WALLET',
+            // personal_accident: 'PERSONAL_ACCIDENT',
+            // smart_wallet: 'SMART_WALLET',
             dengue: 'DENGUE',
             corona: 'CORONA'
           };
@@ -355,7 +355,7 @@ let res = {
       'HOSPICASH': 'hospicash'
     };
 
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH', 'DENGUE', 'CORONA'];
+    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'HEALTH', 'DENGUE', 'CORONA'];
     var lead_id = '';
     var path = '';
     var fullPath = '';
@@ -419,7 +419,7 @@ let res = {
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer'
+        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' ,
       }}>
         <div style={{ display: 'flex' }}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
@@ -456,7 +456,7 @@ let res = {
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'
       }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex' }}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
