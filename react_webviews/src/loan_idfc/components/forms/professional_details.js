@@ -8,7 +8,7 @@ import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr } from "utils/validators";
 import Autosuggest from "../../common/Autosuggest";
 import Api from "utils/api";
-// import toast from "../../../common/ui/Toast";
+import DotDotLoader from "common/ui/DotDotLoader";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -24,7 +24,8 @@ class ProfessionalDetails extends Component {
       constitutionOptions: [],
       organisationTypeOptions: [],
       salaryRecieptOptions: [],
-      company_name: ""
+      company_name: "",
+      isApiRunning: false
     };
 
     this.initialize = initialize.bind(this);
@@ -132,7 +133,10 @@ class ProfessionalDetails extends Component {
     form_data.company_name = value;
     form_data.company_name_error = "";
 
-    if (value.length === 2) {
+    if (value.length === 3) {
+      this.setState({
+        isApiRunning: true
+      })
       const res = await Api.get(
         "relay/api/loan/idfc/employer/" + form_data.company_name
       );
@@ -146,25 +150,26 @@ class ProfessionalDetails extends Component {
               value: element,
             };
           });
-        } else {
-          companyOptions = [
-            {
-              name: "",
-              value: "",
-            },
-          ];
+        // } else {
+        //   companyOptions = [
+        //     {
+        //       name: "",
+        //       value: "",
+        //     },
+        //   ];
         }
       }
 
       this.setState({
         form_data: form_data,
         companyOptions: companyOptions,
+        isApiRunning: false
       });
     }
   };
 
   render() {
-    let { employment_type, industryOptions, companyOptions } = this.state;
+    let { employment_type, industryOptions, companyOptions, isApiRunning } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -188,7 +193,8 @@ class ProfessionalDetails extends Component {
                   onChange={(value) => this.handleSearch(value)}
                   value={this.state.form_data.company_name || ""}
                   error={this.state.form_data.company_name_error ? true : false}
-                  helperText={this.state.form_data.company_name_error}
+                  helperText={this.state.form_data.company_name_error || isApiRunning ? <DotDotLoader /> : ""}
+                  isApiRunning={isApiRunning}
                 />
               </div>
             )}
@@ -292,22 +298,6 @@ class ProfessionalDetails extends Component {
                 onChange={this.handleChange("organisation")}
               />
             </div>
-
-            {/* {employment_type === "salaried" && (
-              <div className="InputField">
-                <DropdownWithoutIcon
-                  width="40"
-                  options={this.state.screenData.departmentOptions}
-                  id="department"
-                  label="Department"
-                  error={this.state.form_data.department_error ? true : false}
-                  helperText={this.state.form_data.department_error}
-                  value={this.state.form_data.department || ""}
-                  name="department"
-                  onChange={this.handleChange("department")}
-                />
-              </div>
-            )} */}
 
             {employment_type === "salaried" && (
               <div className="InputField">

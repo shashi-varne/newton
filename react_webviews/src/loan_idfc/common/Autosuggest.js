@@ -3,18 +3,18 @@ import Autosuggest from "react-autosuggest";
 import { InputLabel } from "material-ui/Input";
 import { FormControl } from "material-ui/Form";
 
-const getSuggestions = (value, language, others) => {
+const getSuggestions = (value, inputs, isApiRunning) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-  let list = language.filter(
+  let list = inputs.filter(
     (lang) => lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
 
   return inputLength === 0
     ? []
-    : list.length === 0
-    ? [{ name: "OTHERS", value: "OTHERS" }]
+    // : list.length === 0
+    // ? (isApiRunning ? [{ name: "", value: "" }] : [{ name: "OTHERS", value: "OTHERS" }])
     : list;
 };
 
@@ -32,11 +32,19 @@ class Example extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       value: this.props.value,
       input: this.props.inputs,
     });
+  }
+
+  componentDidUpdate(prevState) {
+    if (prevState.inputs !== this.props.inputs) {
+      this.setState({ input: this.props.inputs })
+      console.log(this.props.inputs)
+      this.onSuggestionsFetchRequested()
+    }
   }
 
   onChange = (event, { newValue }) => {
@@ -46,15 +54,11 @@ class Example extends React.Component {
     });
   };
 
-  onSuggestionsFetchRequested = ({ value }) => {
-    let inputs = this.props.inputs;
-
+  onSuggestionsFetchRequested = () => {
+    console.log(this.props.inputs)
+    console.log(this.props.value)
     this.setState({
-      input: inputs,
-    });
-
-    this.setState({
-      suggestions: getSuggestions(value, this.state.input, false),
+      suggestions: getSuggestions(this.state.value || "", this.props.inputs || [], this.props.isApiRunning),
     });
   };
 
@@ -89,7 +93,7 @@ class Example extends React.Component {
             ? this.props.helperText
               ? this.props.helperText
               : "Please select an option"
-            : ""}
+            : this.props.helperText}
         </span>
       </FormControl>
     );
