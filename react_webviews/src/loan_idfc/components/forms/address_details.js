@@ -194,10 +194,9 @@ class AddressDetails extends Component {
     form_data[name] = pincode;
     form_data[name + "_error"] = "";
 
-    if (this.state.confirm_details) {
-      let edited_address = name.split("_")[0];
-      form_data[edited_address + 'address_edited'] = "yes"
-      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+    if (this.state.confirm_details && name === 'current_pincode') {
+      form_data['current_address_edited'] = "yes";
+      this.handleCkycMessage(name);
     }
 
     this.setState({
@@ -279,8 +278,14 @@ class AddressDetails extends Component {
 
   handleCkycMessage(name) {
     if(this.state.confirm_details) {
+      let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
       let { form_data } = this.state;
-      form_data[name + '_helper'] = 'Document proof will be required if you make any change';
+      confirm_fields.forEach(element => {
+        if(element === name)
+          form_data[name + '_helper'] = 'Document proof will be required if you make any change';
+        else 
+          form_data[element + '_helper'] = '';
+      })
       this.setState({
         form_data: form_data,
       });
@@ -352,6 +357,7 @@ class AddressDetails extends Component {
                   name="fcurrent_address3"
                   value={this.state.form_data.current_address3 || ""}
                   onChange={this.handleChange("current_address3")}
+                  onClick={() => this.handleCkycMessage("current_address3")}
                 />
               </div>
             )}
@@ -367,6 +373,7 @@ class AddressDetails extends Component {
                 name="current_landmark"
                 value={this.state.form_data.current_landmark || ""}
                 onChange={this.handleChange("current_landmark")}
+                onClick={() => this.handleCkycMessage("current_landmark")}
               />
             </div>
 
@@ -444,6 +451,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address1 || ""}
                   onChange={this.handleChange("permanent_address1")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_address1")}
                 />
               </div>
 
@@ -459,6 +467,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address2 || ""}
                   onChange={this.handleChange("permanent_address2")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_address2")}
                 />
               </div>
 
@@ -475,6 +484,7 @@ class AddressDetails extends Component {
                     value={this.state.form_data.permanent_address3 || ""}
                     onChange={this.handleChange("permanent_address3")}
                     disabled={this.state.isPermanent_address === 'Yes'}
+                    onClick={() => this.handleCkycMessage("permanent_address3")}
                   />
                 </div>
               )}
@@ -491,6 +501,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_landmark || ""}
                   onChange={this.handleChange("permanent_landmark")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_landmark")}
                 />
               </div>
 
@@ -506,6 +517,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_pincode || ""}
                   onChange={this.handlePincode("permanent_pincode")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_pincode")}
                 />
               </div>
 

@@ -172,8 +172,8 @@ class PersonalDetails extends Component {
     form_data.gender_error = "";
 
     if (this.state.confirm_details) {
-      details_changed = 'yes'
-      form_data['gender_helper'] = 'Document proof will be required if you make any change';
+      details_changed = 'yes';
+      this.handleCkycMessage('gender')
     }
 
     this.setState({
@@ -184,8 +184,14 @@ class PersonalDetails extends Component {
 
   handleCkycMessage(name) {
     if(this.state.confirm_details) {
+      let confirm_fields = ["first_name", "last_name", "dob", "gender"]
       let { form_data } = this.state;
-      form_data[name + '_helper'] = 'Document proof will be required if you make any change';
+      confirm_fields.forEach(element => {
+        if(element === name)
+          form_data[name + '_helper'] = 'Document proof will be required if you make any change';
+        else 
+          form_data[element + '_helper'] = '';
+      })
       this.setState({
         form_data: form_data,
       });
@@ -241,6 +247,7 @@ class PersonalDetails extends Component {
                   name="middle_name"
                   value={this.state.form_data.middle_name || ""}
                   onChange={this.handleChange("middle_name")}
+                  onClick={() => this.handleCkycMessage("middle_name")}
                 />
               </div>
             )}
@@ -326,6 +333,7 @@ class PersonalDetails extends Component {
                 name="father_name"
                 value={this.state.form_data.father_name || ""}
                 onChange={this.handleChange("father_name")}
+                onClick={() => this.handleCkycMessage("father_name")}
               />
             </div>
 
@@ -342,6 +350,7 @@ class PersonalDetails extends Component {
                   name="mother_name"
                   value={this.state.form_data.mother_name || ""}
                   onChange={this.handleChange("mother_name")}
+                  onClick={() => this.handleCkycMessage("mother_name")}
                 />
               </div>
             )}
@@ -372,6 +381,7 @@ class PersonalDetails extends Component {
                 name="email_id"
                 value={this.state.form_data.email_id || ""}
                 onChange={this.handleChange("email_id")}
+                onClick={() => this.handleCkycMessage("email_id")}
               />
             </div>
           </FormControl>
