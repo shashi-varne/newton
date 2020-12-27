@@ -106,7 +106,7 @@ class HealthInsuranceEntry extends Component {
           <div className='insurance_plans_types' style={{width : '500px'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos"/>
             <div>
-              <div className='insurance_plans_logos_text'  style={{fontWeight : '400'}}
+              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', lineHeight : '15.41px'}}
               >{props.title}
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
