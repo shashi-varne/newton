@@ -143,6 +143,9 @@ class ProfessionalDetails extends Component {
       let resultData = res.pfwresponse.result || "";
 
       if (res.pfwresponse.status_code === 200) {
+        this.setState({
+          isApiRunning: false
+        })
         if (resultData.employer_name.length !== 0) {
           companyOptions = resultData.employer_name.map((element) => {
             return {
@@ -163,7 +166,7 @@ class ProfessionalDetails extends Component {
       this.setState({
         form_data: form_data,
         companyOptions: companyOptions,
-        isApiRunning: false
+        
       });
     }
   };
