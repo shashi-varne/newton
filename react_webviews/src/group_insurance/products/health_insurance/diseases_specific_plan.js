@@ -124,11 +124,11 @@ class DiseasesSpecificPlan extends Component {
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
           <div>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400 }}>{props.title}
-              {props.key === 'CORONA' && !props.resume_flag &&
+              {/* {props.key === 'CORONA' && !props.resume_flag &&
                 <span style={{
                   padding: '3px 7px',
                   borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
-                }}>New</span>}
+                }}>New</span>} */}
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>

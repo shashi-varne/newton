@@ -280,9 +280,7 @@ let res = {
           BHARTIAXA = {};
         }
         let BHARTIAXA_APPS = {
-          // 'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
-          // 'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
           'DENGUE': BHARTIAXA['DENGUE'],
           'CORONA': BHARTIAXA['CORONA']
         }
@@ -317,8 +315,6 @@ let res = {
         if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
-            // personal_accident: 'PERSONAL_ACCIDENT',
-            // smart_wallet: 'SMART_WALLET',
             dengue: 'DENGUE',
             corona: 'CORONA'
           };
@@ -415,7 +411,7 @@ let res = {
 
   renderPorducts(props, index) {
     return (
-      <div>     
+      <div key={index}>     
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
@@ -451,7 +447,7 @@ let res = {
       </div>
 
     {props.key === 'HEALTH_SURAKSHA' && this.state.Comprehensive && 
-       <div key={index} onClick={() => this.handleClick(props.key, props.title)} style={{
+       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'
@@ -460,7 +456,7 @@ let res = {
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
-       <div key={index + 1} onClick={() => this.handleClick(props.key, props.title)} style={{
+       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'
