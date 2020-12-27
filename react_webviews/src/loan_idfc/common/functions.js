@@ -30,6 +30,7 @@ export async function initialize() {
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
   this.get07State = get07State.bind(this);
+  this.get07StateForBt = get07StateForBt.bind(this);
   this.getRecommendedVendor = getRecommendedVendor.bind(this);
   this.getSummary = getSummary.bind(this);
   this.openInTabApp = openInTabApp.bind(this);
@@ -144,6 +145,7 @@ export async function initialize() {
     "landing_screen",
     "loan_status",
     "main_landing_screen",
+    "eligibility_screen"
   ];
 
   let idfc_dmi_screens = [
@@ -418,6 +420,7 @@ export async function getUserStatus(state = "") {
         "perfios_state",
         "bt_info_screen",
         "credit_bt",
+        "loan_bt"
       ];
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
@@ -560,7 +563,7 @@ export async function get10Callback(next_state) {
 
   setTimeout(function () {
     if (result.idfc_10_callback) {
-      that.navigate("eligible-loan");
+      that.navigate("/loan/idfc/eligible-loan");
     } else if (
       result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
       result.is_cancelled === true
@@ -573,7 +576,37 @@ export async function get10Callback(next_state) {
 
       that.get10Callback(next_state);
     } else {
-      that.navigate("error");
+      that.navigate("/loan/idfc/error");
+    }
+  }, 3000);
+}
+
+export async function get07StateForBt() {
+  this.setState({
+    show_loader: true,
+  });
+
+  // setTimeout(, 3000)
+  let result = await this.getUserStatus();
+  let { count } = this.state;
+  let that = this;
+  
+  setTimeout(function () { 
+    if ((result.idfc_07_state === "success" || result.idfc_07_state === "triggered") && result.bt_eligible) {
+      let body = {
+        idfc_loan_status: "bt_init",
+      };
+      that.updateApplication(body, "bt-info");
+    } else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
+
+        that.get07StateForBt();
+      } else {
+        that.navigate("error");
+      }
     }
   }, 3000);
 }
@@ -587,18 +620,15 @@ export async function get07State() {
   let result = await this.getUserStatus();
   let { count } = this.state;
   let that = this;
-
+  
   setTimeout(function () {
     if (result.perfios_status === "bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (result.idfc_07_state === "failed") {
       that.navigate("error");
-    } else if (result.idfc_07_state === "triggered" && result.bt_eligible) {
-      let body = {
-        idfc_loan_status: "bt_init",
-      };
-      that.updateApplication(body, "bt-info");
     } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
+      that.submitApplication({}, "one", "", "eligible-loan");
+    }  else if (result.idfc_07_state === "success" && result.vendor_application_status === "bt_bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else {
       if (count < 20) {
@@ -630,6 +660,7 @@ export async function submitApplication(
       "requirement_details_screen",
       "additional_details",
       "credit_bt",
+      "loan_bt",
       "eligible_loan",
       "bank_upload",
     ];

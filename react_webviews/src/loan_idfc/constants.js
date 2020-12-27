@@ -25,7 +25,9 @@ export function goBackMap(path) {
     "/loan/idfc/final-offer": '/loan/idfc/journey',
     "/loan/calculator": "/loan/loan-home",
     "/loan/edit-details": "/loan/loan-home",
-    "/loan/idfc/otp-verify": "/loan/idfc/edit-number"
+    "/loan/idfc/otp-verify": "/loan/idfc/edit-number",
+    "/loan/idfc/loan-bt": "/loan/idfc/journey",
+    "/loan/idfc/credit-bt": "/loan/idfc/loan-bt"
   };
 
   return mapper[path] || false;

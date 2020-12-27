@@ -1,123 +1,97 @@
-import React from 'react';
-import Autosuggest from 'react-autosuggest';
- 
-// Imagine you have a list of languages that you'd like to autosuggest.
-// const languages = [
-//   {
-//     name: 'C',
-//     year: 1972
-//   },
-//   {
-//     name: 'Elm',
-//     year: 2012
-//   },
-// ];
- 
-// Teach Autosuggest how to calculate suggestions for any given input value.
-const getSuggestions = (value, language) => {
+import React from "react";
+import Autosuggest from "react-autosuggest";
+import { InputLabel } from "material-ui/Input";
+import { FormControl } from "material-ui/Form";
+
+const getSuggestions = (value, language, others) => {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
- 
-  return inputLength === 0 ? [] : language.filter(lang =>
-    lang.name.toLowerCase().slice(0, inputLength) === inputValue
+
+  let list = language.filter(
+    (lang) => lang.name.toLowerCase().slice(0, inputLength) === inputValue
   );
+
+  return inputLength === 0
+    ? []
+    : list.length === 0
+    ? [{ name: "OTHERS", value: "OTHERS" }]
+    : list;
 };
- 
-// When suggestion is clicked, Autosuggest needs to populate the input
-// based on the clicked suggestion. Teach Autosuggest how to calculate the
-// input value for every given suggestion.
-const getSuggestionValue = suggestion => suggestion.name;
- 
-// Use your imagination to render suggestions.
-const renderSuggestion = suggestion => (
-  <div>
-    {suggestion.name}
-  </div>
-);
- 
+
+const getSuggestionValue = (suggestion) => suggestion.name;
+
+const renderSuggestion = (suggestion) => <div>{suggestion.name}</div>;
+
 class Example extends React.Component {
   constructor() {
     super();
- 
-    // Autosuggest is a controlled component.
-    // This means that you need to provide an input value
-    // and an onChange handler that updates this value (see below).
-    // Suggestions also need to be provided to the Autosuggest,
-    // and they are initially empty because the Autosuggest is closed.
     this.state = {
-      value: '',
+      value: "",
       suggestions: [],
-      input: []
+      input: [],
     };
   }
 
   componentWillMount() {
-    // this.initialize();
-    
+    this.setState({
+      value: this.props.value,
+      input: this.props.inputs,
+    });
   }
 
-//   componentDidUpdate() {
-//     // this.initialize();
-//     this.setState({
-//         input: this.props.inputs
-//     })
-//   }
-
- 
   onChange = (event, { newValue }) => {
-
+    this.props.onChange(newValue);
     this.setState({
       value: newValue,
     });
   };
- 
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
+
   onSuggestionsFetchRequested = ({ value }) => {
-    // let inputs = this.props.inputs.map(item => {
-    //   return {
-    //     name: item,
-    //     value: item
-    //   }
-    // })
-
-    // let inputs = this.props.inputs
+    let inputs = this.props.inputs;
 
     this.setState({
-      // input: inputs
-    })
+      input: inputs,
+    });
+
     this.setState({
-      suggestions: getSuggestions(value, this.state.input)
+      suggestions: getSuggestions(value, this.state.input, false),
     });
   };
- 
-  // Autosuggest will call this function every time you need to clear suggestions.
+
   onSuggestionsClearRequested = () => {
     this.setState({
-      suggestions: []
+      suggestions: [],
     });
   };
- 
+
   render() {
     const { value, suggestions } = this.state;
- 
-    // Autosuggest will pass through all these props to the input.
+
     const inputProps = {
-      placeholder: 'Type a programming language',
+      placeholder: this.props.placeholder,
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
     };
- 
-    // Finally, render it!
+
     return (
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        inputProps={inputProps}
-      />
+      <FormControl className="Dropdown" disabled={this.props.disabled}>
+        <InputLabel shrink={true} htmlFor={this.props.id}>{this.props.label}</InputLabel>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={inputProps}
+        />
+        <span className="error-radiogrp">
+          {this.props.error
+            ? this.props.helperText
+              ? this.props.helperText
+              : "Please select an option"
+            : ""}
+        </span>
+      </FormControl>
     );
   }
 }

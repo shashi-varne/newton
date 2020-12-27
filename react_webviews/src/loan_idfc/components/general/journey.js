@@ -251,7 +251,7 @@ class JourneyMap extends Component {
     // }
   };
   handleClick = (id) => {
-    let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
+    let { ckyc_state, perfios_state, idfc_loan_status, index, vendor_info } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
     let selected_journey = this.state.journeyData.options.find((data) => data.id === id);
@@ -295,6 +295,8 @@ class JourneyMap extends Component {
           perfios_state !== "init"
         ) {
           next_state = "perfios-status";
+        } else if ((idfc_loan_status === "bt_init" || idfc_loan_status === "bt_processing") && vendor_info.bt_selected) {
+          next_state = "loan-bt"
         }
         this.navigate(next_state);
       }

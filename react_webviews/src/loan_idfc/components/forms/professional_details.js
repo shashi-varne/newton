@@ -7,7 +7,7 @@ import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
-// import Autosuggest from "../../common/Autosuggest";
+import Autosuggest from "../../common/Autosuggest";
 import Api from "utils/api";
 // import toast from "../../../common/ui/Toast";
 
@@ -25,6 +25,7 @@ class ProfessionalDetails extends Component {
       constitutionOptions: [],
       organisationTypeOptions: [],
       salaryRecieptOptions: [],
+      company_name: ""
     };
 
     this.initialize = initialize.bind(this);
@@ -61,9 +62,10 @@ class ProfessionalDetails extends Component {
     this.setState({
       form_data: form_data,
       employment_type: employment_type,
+      company_name: professional_info.company_name,
       companyOptions: [
         {
-          key: "OTHERS",
+          name: "OTHERS",
           value: "OTHERS",
         },
       ],
@@ -125,16 +127,13 @@ class ProfessionalDetails extends Component {
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
   };
 
-  handleSearch = (name) => async (event) => {
-    let value = event.target ? event.target.value : event;
+  handleSearch = async (value) => {
     let { form_data, companyOptions } = this.state;
 
-    if (name) {
-      form_data[name] = value;
-      form_data[name + "_error"] = "";
-    }
+    form_data.company_name = value;
+    form_data.company_name_error = "";
 
-    if (form_data.company_name.length === 2) {
+    if (value.length === 2) {
       const res = await Api.get(
         "relay/api/loan/idfc/employer/" + form_data.company_name
       );
@@ -179,25 +178,19 @@ class ProfessionalDetails extends Component {
           <FormControl fullWidth>
             {employment_type === "salaried" && companyOptions.length > 0 && (
               <div className="InputField">
-                <Autosuggests
-                  parent={this}
+                <Autosuggest
+                  inputs={companyOptions}
                   width="40"
-                  placeholder="Search for company"
-                  options={companyOptions}
                   label="Company name"
+                  class="company_name"
                   id="company_name"
                   name="company_name"
+                  placeholder="Serach for company"
+                  onChange={(value) => this.handleSearch(value)}
+                  value={this.state.form_data.company_name || ""}
                   error={this.state.form_data.company_name_error ? true : false}
                   helperText={this.state.form_data.company_name_error}
-                  value={this.state.form_data.company_name || ""}
-                  onChange={this.handleSearch("company_name")}
                 />
-{/* 
-                <Autosuggest
-                  inputs={industryOptions}
-                  onChange={this.handleSearch("company_name")}
-                  value={this.state.form_data.company_name || ""}
-                /> */}
               </div>
             )}
 

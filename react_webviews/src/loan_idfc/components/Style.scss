@@ -1064,3 +1064,7 @@
     cursor: pointer;
   }
 }
+
+.react-autosuggest__suggestions-container--open{
+  max-height: 400px !important;
+}
