@@ -71,6 +71,10 @@ class LifeInsuranceEntry extends Component {
 
   async componentDidMount() {
 
+    this.setState({
+      show_loader: true
+    })
+
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
@@ -137,6 +141,11 @@ class LifeInsuranceEntry extends Component {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
       }
+
+      this.setState({
+        show_loader: false
+      })
+
     } catch (err) {
       console.log(err)
       this.setState({
