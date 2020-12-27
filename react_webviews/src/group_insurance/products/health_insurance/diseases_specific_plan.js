@@ -44,7 +44,7 @@ class DiseasesSpecificPlan extends Component {
       {
         key: 'CORONA',
         title: 'Coronavirus Insurance',
-        subtitle: 'Starts from ₹750/year',
+        subtitle: 'Keep your savings immune to covid',
         icon: 'icn_corona',
         resume_flag : this.props.parent.state.resumeFlagAll ? this.props.parent.state.resumeFlagAll['CORONA']  : false
       },
@@ -128,11 +128,14 @@ class DiseasesSpecificPlan extends Component {
   }
 
   renderPorducts(props, index) {  
+
+    console.log(props , props.resume_flag)
+
     return (
       <div key={index} onClick={() => this.handleClick(props.key)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-        paddingBottom: '15px', justifyContent: 'space-between', cursor: 'pointer' , width : '500px'
+        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
+        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '320px'
       }}>
         <div style={{ display: 'flex' }}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>

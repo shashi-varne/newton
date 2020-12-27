@@ -33,8 +33,8 @@ class LifeInsuranceEntry extends Component {
 
     let insuranceProducts = [{
         key: 'SMART_WALLET',
-        title: 'Smart Wallet(fraud protection)',
-        subtitle: 'Starts from ₹250/year',
+        title: 'Wallet Insurance',
+        subtitle: 'Secure digital wallets against frauds',
         icon: 'ic_wallet',
       }, 
       
@@ -194,7 +194,7 @@ class LifeInsuranceEntry extends Component {
     if(!props.disabled) {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-             style={{borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',}}>   
+             style={{borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',}}>   
           <div className='insurance_plans_types'>
                   <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
             <div>
@@ -215,9 +215,6 @@ class LifeInsuranceEntry extends Component {
 
   sendEvents(user_action, insurance_type) {
 
-    if(insurance_type === 'Smart Wallet(fraud protection)'){
-      insurance_type = 'Wallet insurance'
-    }
 
     let eventObj = {
       "event_name": 'Group Insurance',

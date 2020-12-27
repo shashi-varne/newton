@@ -205,7 +205,9 @@ class Container extends Component {
         return;
       }
       
-      if (this.checkStringInString('/group-insurance/hospicash/plan')) {
+      if (this.checkStringInString('group-insurance/corona/plan') 
+      || this.checkStringInString('/group-insurance/dengue/plan') 
+      || this.checkStringInString('/group-insurance/hospicash/plan')){
         this.navigate('/group-insurance/health/landing');
         return;
       }

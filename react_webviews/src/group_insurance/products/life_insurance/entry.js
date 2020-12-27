@@ -78,7 +78,7 @@ class LifeInsuranceEntry extends Component {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
         style={{
-           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
+           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '24px',
         }}
         >   
           <div className='insurance_plans_types'>
@@ -91,7 +91,7 @@ class LifeInsuranceEntry extends Component {
                 borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
               }}>Recommended</span>}
               </div>
-              <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
+              <div className='insurance_plans_logos_subtext' style={{ paddingBottom :'8px' }}>{props.subtitle}</div>
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ class LifeInsuranceEntry extends Component {
         styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
           <div className='products'>
-            <div className='health_insurance'>Must have plans for your Family</div>
+            <div className='health_insurance'>Must have plans for your family</div>
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
