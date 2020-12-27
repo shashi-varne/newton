@@ -345,7 +345,7 @@ let res = {
   handleClick2 = () => { this.setState({ show_loader : true})}
 
   handleClick = (product_key, title) => {
-    // this.sendEvents('next', title)
+
     let stateMapper = {
       'HEALTH_SUPER_TOPUP': 'super_topup',
       'HOSPICASH': 'hospicash'
@@ -361,15 +361,11 @@ let res = {
       fullPath = stateMapper[product_key] + '/plan';
     }
     if (product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
-      let user_action = !this.state.Comprehensive ? 'next' : 'back'
-      this.sendEvents(user_action, title)
       this.HealthInsuranceEntry();
       return;
     }
 
     if (product_key === 'DISEASE_SPECIFIC_PLANS' && !getConfig().iOS) {
-      let user_action = !this.state.DiseasesSpecificPlan ? 'next' : 'back'
-      this.sendEvents(user_action, title)
       this.DISEASE_SPECIFIC_PLANS();
       return;
     }
@@ -452,7 +448,7 @@ let res = {
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'
       }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry  parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
@@ -461,13 +457,18 @@ let res = {
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
         justifyContent: 'space-between', cursor: 'pointer'
       }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  onSelectEvent={this.handleEvent} parent={this}/> } </div>
       </div>}
       </div>
     )
   }
 
-  sendEvents(user_action, insurance_type) {
+  handleEvent = (val) => {
+    val.subtitle = val.insurance_type === 'Comprehensive health insurance' ? val.subtitle :  val.Product_name
+    this.sendEvents('next',val.insurance_type,val.subtitle)
+  }
+
+  sendEvents(user_action, insurance_type, product_selected) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -476,6 +477,10 @@ let res = {
         "insurance_type": insurance_type ? insurance_type : ''
       }
     };
+
+    if(product_selected){
+      eventObj.properties['product_selected'] = product_selected;
+    }
 
     if (user_action === 'just_set_events') {
       return eventObj;

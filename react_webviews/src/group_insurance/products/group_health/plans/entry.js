@@ -56,6 +56,10 @@ class HealthInsuranceEntry extends Component {
   }
 
 
+  sendEvents(value){
+    this.props.onSelectEvent(value);
+  }
+
   navigate = (pathname, search) => {
     this.props.parent.props.history.push({
       pathname: pathname,
@@ -78,9 +82,10 @@ class HealthInsuranceEntry extends Component {
 
         let resultData = res.pfwresponse
         if(res.pfwresponse.status_code === 200){
-          this.sendEvents('next', data.key)
+          data.insurance_type = 'Comprehensive health insurance'
+          this.sendEvents(data)
           let fullPath = data.key + '/landing';
-          this.navigate('/group-insurance/group-health/' + fullPath);
+          this.navigate('/group-insurance/group-health/' + fullPath);  
         }else {
           toast(resultData.error || resultData.message || "Something went wrong");
         }
@@ -120,28 +125,9 @@ class HealthInsuranceEntry extends Component {
    
   }
 
-  sendEvents(user_action, insurance_type) {
-    let eventObj = {
-      "event_name": 'Group Insurance',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'comprehensive health insurance',
-        "insurance_provider": insurance_type ? insurance_type : ''
-      }
-    };
-
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
   render() {
     return (
-      <div
-        events={this.sendEvents('just_set_events')}
-        title=""> 
+      <div> 
         <div className="group-health-insurance-entry">
           <div className='products'>
             <div>

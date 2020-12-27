@@ -32,13 +32,15 @@ class DiseasesSpecificPlan extends Component {
         key: 'CRITICAL_HEALTH_INSURANCE',
         title: 'Critical illness insurance',
         subtitle: 'Cover against life threatening diseases',
-        icon: 'icn_critical_illness'
+        icon: 'icn_critical_illness',
+        Product_name : 'Critical illness'
       },
       {
         key: 'DENGUE',
         title: 'Dengue insurance',
         subtitle: 'Starts from ₹50/year',
         icon: 'icn_dengue',
+        Product_name : 'dengue insurance',
         resume_flag : this.props.parent.state.resumeFlagAll  ? this.props.parent.state.resumeFlagAll['DENGUE'] : false
       },
       {
@@ -46,6 +48,7 @@ class DiseasesSpecificPlan extends Component {
         title: 'Coronavirus Insurance',
         subtitle: 'Keep your savings immune to covid',
         icon: 'icn_corona',
+        Product_name : 'coronovirus insurance',
         resume_flag : this.props.parent.state.resumeFlagAll ? this.props.parent.state.resumeFlagAll['CORONA']  : false
       },
     ];
@@ -81,8 +84,14 @@ class DiseasesSpecificPlan extends Component {
     });
   }
 
-  handleClick = (product_key) => {
-    // this.sendEvents('next', product_key)
+  sendEvents(value){
+    this.props.onSelectEvent(value);
+  }
+
+  handleClick = (data) => {
+    let product_key = data.key
+    data.insurance_type = 'Disease specific plans'
+    this.sendEvents(data);
     var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
 
     var lead_id = '';
@@ -115,7 +124,7 @@ class DiseasesSpecificPlan extends Component {
 
   renderPorducts(props, index) {
     return (
-      <div key={index} onClick={() => this.handleClick(props.key)} style={{
+      <div key={index} onClick={() => this.handleClick(props)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
         paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '375px'
@@ -143,32 +152,9 @@ class DiseasesSpecificPlan extends Component {
     )
   }
 
-  // sendEvents(user_action, insurance_type ) {
-  //   let eventObj = {
-  //     "event_name": 'Group Insurance',
-  //     "properties": {
-  //       "user_action": user_action,
-  //       "screen_name": 'insurance',
-  //       "insurance_type": insurance_type ? insurance_type : ''
-  //     }
-  //   };
 
-  //   if (user_action === 'just_set_events') {
-  //     return eventObj;
-  //   } else {
-  //     nativeCallback({ events: eventObj });
-  //   }
-  // }
+  render() { return ( <div> {this.state.insuranceProducts.map(this.renderPorducts)} </div> ) }
 
-  render() {
-
-
-    return (
-      <div>
-              {this.state.insuranceProducts.map(this.renderPorducts)}
-      </div>
-    );
-  }
 }
 
 export default DiseasesSpecificPlan;
