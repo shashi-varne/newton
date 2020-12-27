@@ -240,9 +240,12 @@ handleClick = async () => {
       form_data.notfound = true
       setTimeout(() => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+        var y = document.getElementsByClassName("Footer")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
-          x.item(i).style.border = '1px solid';
+        }
+        for (var i = 0; i < y.length; i++) {
+          y.item(i).style.boxShadow = 'none'
         }
       }, 0);
       this.setState({ binding: false})
@@ -251,9 +254,12 @@ handleClick = async () => {
       form_data.notfound = false
       setTimeout(() => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+        var y = document.getElementsByClassName("Footer")
         for (var i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
-          x.item(i).style.border = '1px solid';
+        }
+        for (var i = 0; i < y.length; i++) {
+          y.item(i).style.boxShadow = 'none'
         }
       }, 0);
       this.setState({ binding: false})
