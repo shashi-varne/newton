@@ -113,7 +113,7 @@ class EligibleLoan extends Component {
       form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
-      form_data.maxAmount = vendor_info.display_loan_amount;
+      form_data.maxAmount = vendor_info.displayOffer;
     }
 
     let keys_to_check = ["amount_required"];
