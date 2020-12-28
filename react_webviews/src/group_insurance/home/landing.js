@@ -42,8 +42,16 @@ class Landing extends Component {
         icon: 'icn_other_insurance'
       }
     ];
+
+    let { params } = this.props.location || {};
+    let openModuleData = params ? params.openModuleData : {}
+    let redirect_url = decodeURIComponent(getConfig().redirect_url);
+    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+      window.location.href = redirect_url;
+    }
     this.setState({
       insuranceProducts: insuranceProducts,
+      openModuleData : openModuleData
     })
   }
 
@@ -91,7 +99,7 @@ class Landing extends Component {
         paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'
       }}>
         <div style={{ display: 'flex' }}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '20px' }} />
+          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '30px' }} />
           <div>
             <div style={{ color: '#160d2e', fontSize: '15px', fontWeight: "500" , lineHeight : '20px' , margin : '5px 0 5px 0'}}>{props.title}
             </div>
@@ -129,11 +137,11 @@ class Landing extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Insurance">
-           <div  style={{ marginTop: '40px' }}>
+           <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
            <img style={{ margin: '-15px 5px 30px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '20px' , marginTop:'10px', marginBottom:'4px'}}>What are you looking for ?</h1>
+            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for ?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' }}> Get Insured with ease </div>
           <div className="his">

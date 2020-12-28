@@ -57,11 +57,6 @@ class LifeInsuranceEntry extends Component {
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
 
-    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
-    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-      window.location.href = redirect_url;
-    }
-
     this.setState({
       openModuleData: openModuleData || {},
       insuranceProducts: insuranceProducts,
@@ -131,10 +126,11 @@ class LifeInsuranceEntry extends Component {
             personal_accident: 'PERSONAL_ACCIDENT',
             smart_wallet: 'SMART_WALLET'
           };
-
+        
           let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
-            this.state.openModuleData.sub_module;
-          this.handleClick(pathname);
+           this.state.openModuleData.sub_module;
+           var product_key_info = pathname === 'SMART_WALLET' ? 'Personal Accident Insurance' : 'Wallet Insurance'
+          this.handleClick(pathname , product_key_info);
         }
 
       } else {
@@ -165,9 +161,9 @@ class LifeInsuranceEntry extends Component {
     });
   }
 
-  handleClick = (product_key_info) => {
-    let product_key = product_key_info.key
-    this.sendEvents('next', product_key_info.title)
+  handleClick = (product_key , product_key_info) => {
+ 
+    this.sendEvents('next', product_key_info ? product_key_info.title : '')
 
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'SMART_WALLET', 'HEALTH'];
 
@@ -202,7 +198,7 @@ class LifeInsuranceEntry extends Component {
 
     if(!props.disabled) {
       return (
-        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
+        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props.key, props)}
              style={{borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',}}>   
           <div className='insurance_plans_types'>
                   <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
