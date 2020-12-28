@@ -78,7 +78,7 @@ class LifeInsuranceEntry extends Component {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
         style={{
-           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '24px',
+           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '24px', paddingBottom : '20px'
         }}
         >   
           <div className='insurance_plans_types'>
