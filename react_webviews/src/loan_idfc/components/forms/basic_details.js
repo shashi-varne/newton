@@ -19,6 +19,7 @@ class BasicDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "basic_details",
+      qualification: []
     };
 
     this.initialize = initialize.bind(this);
@@ -26,21 +27,6 @@ class BasicDetails extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let qualification = [
-      "Doctorate",
-      "Engineer",
-      "Graduate",
-      "Matric",
-      "Post Graduate",
-      "Professional",
-      "Under Graduate",
-      "Others",
-    ];
-
-    this.setState({
-      qualification: qualification,
-    });
   }
 
   onload = () => {
@@ -220,6 +206,7 @@ class BasicDetails extends Component {
                 id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
+                style={{width: '100%'}}
               />
             </div>
             <div
@@ -235,6 +222,7 @@ class BasicDetails extends Component {
                 id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
+                style={{width: '100%'}}
               />
             </div>
           </div>

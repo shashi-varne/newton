@@ -15,7 +15,8 @@ class LoanRequirementDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "requirement_details_screen",
-      loaderData: {}
+      loaderData: {},
+      purposeOfLoanOptions: []
     };
 
     this.initialize = initialize.bind(this);
@@ -135,7 +136,7 @@ class LoanRequirementDetails extends Component {
             <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
-                options={this.state.screenData.purposeOfLoanOptions}
+                options={this.state.purposeOfLoanOptions}
                 id="purpose"
                 label="Purpose of loan"
                 error={this.state.form_data.purpose_error ? true : false}

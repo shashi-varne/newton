@@ -92,6 +92,7 @@ class LoanBtDetails extends Component {
     this.setState({
       credit_bt: credit_bt,
       loaderData: loaderData,
+      bt_info: bt_info,
     });
   };
 
@@ -105,7 +106,7 @@ class LoanBtDetails extends Component {
         user_action: user_action,
         screen_name: "credit_card_details",
         no_of_cards_entered: form_checked.length,
-        skipped_screen: form_checked.length !== 0 ? "no" : "yes",
+        skipped_screen: form_checked.length !== 0 ? "no" : user_action === 'next' ? "yes" : "no",
       },
     };
 
@@ -228,6 +229,15 @@ class LoanBtDetails extends Component {
     }
   };
 
+  goBack = () => {
+    this.sendEvents('back')
+
+    let bt_personal_loan = this.state.bt_info.bt_personal_loan;
+    if (!bt_personal_loan) {
+      this.navigate('journey');
+    }
+  }
+
   render() {
     let form_checked = this.state.form_data.filter(
       (item) => item.is_selected === true
@@ -244,6 +254,7 @@ class LoanBtDetails extends Component {
         handleClick={this.handleClick}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
+          goBack: this.goBack,
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}

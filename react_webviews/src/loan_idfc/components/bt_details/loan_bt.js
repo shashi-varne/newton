@@ -22,6 +22,7 @@ class LoanBtDetails extends Component {
       form_data: [],
       loan_bt: [],
       bankOptions: [],
+      bt_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -55,6 +56,10 @@ class LoanBtDetails extends Component {
 
   onload = async () => {
     let lead = this.state.lead || {};
+    let loaderData = {
+      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
+      subtitle: "This may take around 2 minutes!",
+    };
 
     let bt_info = lead.bt_info;
 
@@ -66,9 +71,9 @@ class LoanBtDetails extends Component {
       }
     }
 
-  //  if (!bt_info.bt_personal_loan) {
-  //    this.navigate('credit-bt')
-  //  }
+    if (!bt_info.bt_personal_loan) {
+      this.navigate('credit-bt')
+    }
 
     loan_bt.forEach((data) => {
       this.state.form_data.push({
@@ -81,6 +86,8 @@ class LoanBtDetails extends Component {
 
     this.setState({
       loan_bt: loan_bt,
+      bt_info: bt_info,
+      loaderData: loaderData,
     });
   };
 
@@ -94,7 +101,7 @@ class LoanBtDetails extends Component {
         user_action: user_action,
         screen_name: "select_bt",
         no_of_loans_selected: form_checked.length,
-        skipped_screen: form_checked.length !== 0 ? "no" : "yes",
+        skipped_screen: form_checked.length !== 0 ? "no" : user_action === 'next' ? "yes" : "no",
       },
     };
 
@@ -136,7 +143,7 @@ class LoanBtDetails extends Component {
   }
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, bt_info } = this.state;
     let form_checked = form_data.filter(
       (item) => item.is_selected === true
     );
@@ -165,9 +172,20 @@ class LoanBtDetails extends Component {
     this.sendEvents('next');
 
     if (submit_details) {
-      this.updateApplication({
-        bt_selection: form_checked,
-      });
+      if (!bt_info.bt_credit_card) {
+        this.submitApplication(
+          {
+            bt_selection: form_checked,
+          },
+          "one",
+          true,
+          "eligible-loan"
+        );
+      } else {
+        this.updateApplication({
+          bt_selection: form_checked,
+        });
+      }
     }
   };
 
@@ -195,12 +213,14 @@ class LoanBtDetails extends Component {
           form_checked.length === 0 ? "SKIP AND CONTINUE" : "CONTINUE"
         }
         handleClick={this.handleClick}
+        loaderData={this.state.loaderData}
+        loaderWithData={this.state.loaderWithData}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
-        current={1}
-        total={2}
-        count={1}
+        current={!this.state.bt_info.bt_credit_card ? "" : 1}
+        total={!this.state.bt_info.bt_credit_card ? "" : 2}
+        count={!this.state.bt_info.bt_credit_card ? "" : 1}
       >
         <div className="loan-bt">
           <div className="subtitle">

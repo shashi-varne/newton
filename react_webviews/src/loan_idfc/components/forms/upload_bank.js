@@ -461,13 +461,26 @@ class UploadBank extends Component {
           `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank[0].key}`
         );
 
-        const { result } = res.pfwresponse;
+        const { result, status_code: status } = res.pfwresponse;
+
+        let { params } = this.state;
 
         if (result) {
-          this.navigate("perfios-status");
-          // } else {
-          // toast(result.error || result.message || "Something went wrong!");
-          // this.onload();
+
+          if (params.adminPanel) {
+            if (status === 200) {
+              window.location.href = this.state.params.redirect;
+            } else {
+              toast(result.error || result.message || "Something went wrong");
+              this.setState({
+                show_loader: false,
+                loaderWithData: false,
+              });
+            }
+
+          } else {
+            this.navigate("perfios-status");
+          }
         }
       } catch (err) {
         console.log(err);

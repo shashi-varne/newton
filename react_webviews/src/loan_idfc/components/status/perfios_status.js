@@ -149,7 +149,7 @@ class PerfiosStatus extends Component {
       }
 
       if (bt_eligible && !idfc_07_state) {
-        this.get07State();
+        this.get07StateForBt();
       }
     }
 

@@ -148,7 +148,7 @@ class InstantKycHome extends Component {
     if (resultData.callback_status) {
       this.triggerDecision();
     } else {
-      let searchParams = getConfig().searchParams + '&status=pending';
+      let searchParams = getConfig().searchParams + '&status=pending&flow=kyc';
       this.navigate('instant-kyc-status', { searchParams: searchParams });
     }
 

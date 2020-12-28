@@ -91,10 +91,10 @@ class PersonalDetails extends Component {
       last_name: personal_info.last_name,
       dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
-      marital_status: (personal_info.marital_status || "").toUpperCase(),
+      marital_status: capitalizeFirstLetter(personal_info.marital_status || ""),
       father_name: personal_info.father_name,
       mother_name: confirm_details && personal_info.mother_name,
-      religion: (personal_info.religion || "").toUpperCase(),
+      religion: capitalizeFirstLetter(personal_info.religion || ""),
       email_id: (personal_info.email_id || "").toLowerCase(),
     };
 
@@ -148,6 +148,10 @@ class PersonalDetails extends Component {
   handleClick = () => {
     this.sendEvents('next');
     let { form_data } = this.state;
+
+    form_data.marital_status = form_data.marital_status.toLowerCase();
+    form_data.religion = form_data.religion.toLowerCase();
+
     let keys_to_check = [
       "first_name",
       "last_name",

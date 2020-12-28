@@ -147,7 +147,7 @@ class LoanKnowMore extends Component {
   
       if (state === 'instant-kyc-status') {
         let searchParams = getConfig().searchParams + '&status=loan_not_eligible';
-        this.navigate(state, {
+        this.navigate(`/loan/dmi/${state}`, {
           searchParams: searchParams,
           params: {
             rejection_reason: rejection_reason
@@ -155,7 +155,7 @@ class LoanKnowMore extends Component {
         });
       
       } else {
-        this.navigate(state);
+        this.navigate(`/loan/dmi/${state}`);
       }
     }
 

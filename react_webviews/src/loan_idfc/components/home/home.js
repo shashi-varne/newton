@@ -152,7 +152,7 @@ class Home extends Component {
               <Card onClick={() => this.handleClick()}>
                 <div className="content">
                   <img
-                    src={require(`assets/${productName}/icn_loan_amnt.svg`)}
+                    src={require(`assets/${productName}/loan_hand.svg`)}
                     alt="amount icon"
                   />
                   <div className="data">
