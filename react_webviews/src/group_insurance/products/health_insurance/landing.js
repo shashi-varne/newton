@@ -410,7 +410,7 @@ class HealthInsuranceLanding extends Component {
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' ,
+        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer'        
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />

@@ -197,11 +197,13 @@ class LifeInsuranceEntry extends Component {
 
     if(!props.disabled) {
       return (
-        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props.key, props)}
-             style={{borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',}}>   
-          <div className='insurance_plans_types'>
-                  <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
-            <div>
+        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props.key, props)} 
+              style={{ width : '100%'}}
+             >   
+          <div className='insurance_plans_types' style={{ width : '100%'}}>
+                  <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{ paddingTop: '22px', paddingBottom : '22px'}} />
+            <div  style={{  borderBottomWidth: '1px',  width : '100%',
+                          borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px' ,   paddingBottom: '22px'}}    >
               <div className='insurance_plans_logos_text'
               >{props.title}
               </div>

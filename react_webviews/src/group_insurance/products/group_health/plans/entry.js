@@ -103,14 +103,16 @@ class HealthInsuranceEntry extends Component {
     if(!props.disabled) {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-        style={{
-           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px', paddingBottom : '20px',
-           marginLeft : '-8px'
-        }}
+        // style={{
+        //    borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px', paddingBottom : '20px',
+        //    marginLeft : '-8px'
+        // }}
         >
           <div className='insurance_plans_types' style={{width : '100%'}}>
-            <img src={props.icon} alt="" className="insurance_plans_logos"/>
-            <div>
+            <img src={props.icon} alt="" className="insurance_plans_logos" style={{  paddingTop: '20px', paddingBottom: '20px' }}/>
+            <div style={{ borderBottomWidth: '1px', width : '100%',
+                  borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   paddingTop: '20px', paddingBottom: '20px',
+                  justifyContent: 'space-between', cursor: 'pointer' }}>
               <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' ,lineHeight : '15.41px'}}
               >{props.title}
               </div>

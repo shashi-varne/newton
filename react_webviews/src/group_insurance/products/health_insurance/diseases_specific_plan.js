@@ -147,13 +147,17 @@ class DiseasesSpecificPlan extends Component {
   renderPorducts(props, index) {
     return (
       <div key={index} onClick={() => this.handleClick(props)} style={{
-        display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '100%'
+        display: 'flex', alignItems: 'center', width : '100%'
+        
+        // borderBottomWidth: '1px',
+        // borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
+        // paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' ,
       }}>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' , width : '100%'}}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
-          <div>
+          <div style={{ borderBottomWidth: '1px', width : '100%',
+                  borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   paddingTop: '20px', paddingBottom: '20px',
+                  justifyContent: 'space-between', cursor: 'pointer' , width : '100%'}}>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400 }}>{props.title}
               {/* {props.key === 'CORONA' && !props.resume_flag &&
                 <span style={{
