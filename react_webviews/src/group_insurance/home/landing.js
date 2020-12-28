@@ -161,7 +161,7 @@ class Landing extends Component {
 
           <div  className="generic-subtitle-heading">Insurance with fisdom is 100% safe</div>
                     <div style={{display : 'flex' , justifyContent : 'center', height : '20px'}}>
-                     <div><img className="image" src={require(`assets/${this.state.type}/irdanewlogo1.svg`)} alt="" style={{marginRight : '2px'}}/>  </div>
+                     <div><img className="image" src={require(`assets/irdanewlogo1.svg`)} alt="" style={{marginRight : '2px'}}/>  </div>
                      <span className='generic-subtitle-heading-IRDAI'>
                        <div>IRDAI REGISTERED </div>  
                        <div className='generic-subtitle-heading-IRDAI-number'>CA0505</div>
