@@ -12,7 +12,7 @@ class Calculator extends Component {
     this.state = {
       show_loader: false,
       Net_monthly_Income: 90000,
-      Tenor: 5,
+      Tenor: 6,
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
@@ -84,7 +84,7 @@ class Calculator extends Component {
         title="Loan eligibility calculator"
         buttonTitle={this.state.cta_title}
         styleFooter={{
-          backgroundColor: "var(--highlight)",
+          backgroundColor: "var(--highlight) !important",
         }}
         styleContainer={{
           backgroundColor: "var(--highlight)",

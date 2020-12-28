@@ -49,10 +49,6 @@ const journeyMapper2 = {
     index: "2",
     next_state: "bt-info",
   },
-  // bt_processing: {
-  //   index: "2",
-  //   next_state: "loan-requirement-details"
-  // },
   "idfc_1.0_failed": {
     index: "2",
     next_state: "eligible-loan",
@@ -78,7 +74,6 @@ const journeyMapper2 = {
     next_state: "loan-eligible",
   },
   offer_accepted: {
-    // "idfc_1.1_failed": {
     index: "3",
     next_state: "additional-details",
   },
@@ -236,6 +231,7 @@ class JourneyMap extends Component {
       nativeCallback({ events: eventObj });
     }
   }
+  
   getCkycState = async () => {
     // this.setState({
     //   show_loader: true,
@@ -251,6 +247,7 @@ class JourneyMap extends Component {
     //   this.getCkycState();
     // }
   };
+
   handleClick = (id) => {
     let { ckyc_state, perfios_state, idfc_loan_status, index, vendor_info } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
@@ -314,6 +311,7 @@ class JourneyMap extends Component {
       this.navigate('reports')
     }
   };
+
   render() {
     let { idfc_loan_status, index, first_name, vendor_info } = this.state;
     return (

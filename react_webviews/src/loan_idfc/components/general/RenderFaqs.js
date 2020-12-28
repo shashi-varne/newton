@@ -23,18 +23,10 @@ class CommonRenderFaqs extends Component {
 
     componentWillMount() {
         window.scrollTo(0, 0);
-        let { params } = this.props.location || {};
-        // if (!params || !params.renderData) {
-        //     this.props.history.goBack();
-        //     return;
-        // }
+        let renderData = this.props.location.state.renderData;
         this.setState({
-            renderData: params ? params.renderData : {
-                steps: {
-                    options: []
-                }
-            },
-            show_loader: false
+            renderData: renderData,
+            show_loader: false,
         })
     }
 

@@ -160,7 +160,7 @@ class Home extends Component {
                       Personal loans
                     </div>
                     <div className="subtitle generic-page-subtitle">
-                      Get loans upto ₹40 lac
+                      Get loans upto ₹40 lacs
                     </div>
                   </div>
                 </div>

@@ -71,10 +71,13 @@ class ProfessionalDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "professional_details",
-        salary_mode: this.state.form_data.salary_mode || "",
-        net_monthly_salary: this.state.form_data.net_monthly_salary || "",
       },
     };
+
+    if (this.state.employment_type === 'salaried') {
+      eventObj.properties.salary_mode =  this.state.form_data.salary_mode || "";
+      eventObj.properties.net_monthly_salary = this.state.form_data.net_monthly_salary || "";
+    }
 
     if (user_action === "just_set_events") {
       return eventObj;
@@ -152,7 +155,6 @@ class ProfessionalDetails extends Component {
       this.setState({
         form_data: form_data,
         companyOptions: companyOptions,
-        
       });
     }
   };

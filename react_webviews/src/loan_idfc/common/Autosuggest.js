@@ -43,7 +43,6 @@ class Example extends React.Component {
   componentDidUpdate(prevState) {
     if (prevState.inputs !== this.props.inputs) {
       this.setState({ input: this.props.inputs });
-      console.log(this.props.inputs);
       this.onSuggestionsFetchRequested();
     }
   }
@@ -56,8 +55,6 @@ class Example extends React.Component {
   };
 
   onSuggestionsFetchRequested = () => {
-    console.log(this.props.inputs);
-    console.log(this.props.value);
     this.setState({
       suggestions: getSuggestions(
         this.state.value || "",
