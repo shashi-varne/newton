@@ -223,12 +223,22 @@ class LoanKnowMore extends Component {
 
     let path_name = provider === 'idfc' ? '/loan/idfc/faq' : '/gold/common/render-faqs';
 
-    this.props.history.push({
-      pathname: path_name,
-      search: getConfig().searchParams,
-    },{
-      renderData: renderData
-    });
+    if(provider === 'idfc') {
+      this.props.history.push({
+        pathname: path_name,
+        search: getConfig().searchParams,
+      },{
+        renderData: renderData
+      });
+    } else {
+      this.props.history.push({
+        pathname: path_name,
+        search: getConfig().searchParams,
+        params: {
+          renderData: renderData
+        }
+      });
+    }
   }
 
   goBack = () => {
