@@ -288,7 +288,8 @@ export async function getDocumentList() {
     );
     const { result } = res.pfwresponse;
 
-    if (result.doc_list.length === 0) {
+    let status = ['idfc_1.7_accepted', 'idfc_1.7_submitted']
+    if (result.doc_list.length === 0 && status.includes(this.state.lead.vendor_info.idfc_loan_status)) {
       this.submitApplication({}, "four", "", "final-offer");
     } else {
       this.setState(
