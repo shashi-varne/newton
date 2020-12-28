@@ -63,12 +63,12 @@ const Main = (props) => {
       }
     } catch (e) {
       console.log(e);
-      setIsLoading(false);
       showError();
     }
   };
 
   const showError = () => {
+    setIsLoading(false);
     setLoginErr(true);
     setTimeout(() => {
       navigate('login');

@@ -276,6 +276,11 @@ $background: #f9f9f9;
     width: 85%;
     float: left;
   }
+
+  .fisdom-ecb-error-title,
+  .fisdom-ecb-error-text {
+    color: white;
+  }
 }
 
 #iwd-dashboard {
@@ -298,21 +303,19 @@ $background: #f9f9f9;
       color: $dark;
     }
   }
-  .fisdom-ecb-error-title,
-  .fisdom-ecb-error-text {
-    color: white;
-  }
-  .iwd-card {
+
+  .iwd-scroll-child:nth-of-type(1) {
+    .fisdom-ecb-btn {
+      background-color: #c0aeea;
+
+      .MuiButton-label {
+        color: $primary;
+      }
+    }
+
     .fisdom-ecb-error-title,
     .fisdom-ecb-error-text {
-      color: #767e86;
-    }
-  }
-  .iwd-scroll-child:nth-of-type(1) .fisdom-ecb-btn {
-    background-color: #c0aeea;
-
-    .MuiButton-label {
-      color: $primary;
+      color: white;
     }
   }
 
@@ -1034,6 +1037,10 @@ $background: #f9f9f9;
       }
     }
 
+    .iwd-analysis-portfolio-stock:nth-of-type(1), .iwd-analysis-portfolio-stock:nth-of-type(2) {
+      margin-top: 0;
+    }
+
     .iwd-analysis-portfolio-heading {
       color: $grey;
       font-weight: 600;
@@ -1096,7 +1103,7 @@ $background: #f9f9f9;
     margin-top: 50px;
   }
 
-  .iwd-analysis-debt-holding:nth-of-type(1) {
+  .iwd-analysis-debt-holding:nth-of-type(1), .iwd-analysis-debt-holding:nth-of-type(2) {
     margin-top: 0;
   }
 
@@ -1553,6 +1560,7 @@ $background: #f9f9f9;
           min-width: 130px;
           display: flex;
           align-items: center;
+          justify-content: center;
           height: 20px;
 
           * {
@@ -1664,8 +1672,9 @@ $background: #f9f9f9;
         justify-content: flex-start;
       }
 
-      .iwd-analysis-portfolio-stock:nth-of-type(1) {
-        margin-top: 0;
+      .iwd-analysis-portfolio-stock:nth-of-type(2) {
+        // overriding desktop styling for 2nd child
+        margin-top: 40px;
       }
     }
 
@@ -1691,6 +1700,11 @@ $background: #f9f9f9;
     .iwd-analysis-debt-holding {
       width: 100%;
       height: auto;
+    }
+
+    .iwd-analysis-debt-holding:nth-of-type(2) {
+      // overriding desktop styles for 2nd element
+      margin-top: 40px;
     }
 
     .iwd-analysis-graph-left {

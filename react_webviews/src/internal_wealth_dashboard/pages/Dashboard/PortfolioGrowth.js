@@ -41,7 +41,6 @@ const PortfolioGrowth = () => {
   const fetchGrowthGraphXirr = async () => {
     try {
       setIsLoadingXirr(true);
-      setGrowthError(false);
       const res = await getGrowthXirr({
         date_range: selectedRange,
       });
@@ -78,8 +77,8 @@ const PortfolioGrowth = () => {
         date_ticks: filterDateTicks(date_ticks, date_ticks_mobile),
       });
     } catch (e) {
-      console.error(e);
       setGrowthError(true);
+      console.error(e);
       // toast(e);
     }
     setIsLoadingGrowth(false);
@@ -132,10 +131,12 @@ const PortfolioGrowth = () => {
                   <DotDotLoader className="iwd-dot-loader" /> :
                   (
                     <>
-                      <img
-                        src={xirr > 0 ? positive : negative}
-                        alt=''
-                      />
+                      {xirr &&
+                        <img
+                          src={xirr > 0 ? positive : negative}
+                          alt=''
+                        />
+                      }
                       {`${xirr ? Number(xirr).toFixed(1) + '%' : '--'}`}
                     </>
                   )

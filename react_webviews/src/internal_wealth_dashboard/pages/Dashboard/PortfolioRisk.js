@@ -43,8 +43,8 @@ const RiskProfile = () => {
       const data = await getPortfolioRisk({ date_range: 'one_year' });
       setRiskData(data);
     } catch (e) {
-      console.log(e);
       setRiskError(true);
+      console.log(e);
       toast(e);
     }
     setIsLoadingRisk(false);

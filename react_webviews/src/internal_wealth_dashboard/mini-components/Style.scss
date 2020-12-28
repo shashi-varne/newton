@@ -725,7 +725,7 @@ ul#iwd-bars {
   background: white url('../../assets/bg_waves_fund.svg') bottom no-repeat;
   background-size: contain;
   margin-bottom: 40px;
-  scroll-snap-align: start;
+  // scroll-snap-align: start;
 
   .iwd-hc-type {
     font-weight: 600;
@@ -1516,8 +1516,11 @@ table.iwd-transactions-table {
   .rs-picker-daterange {
     background-color: rgba($primary, 0.05);
     border-radius: 4px;
+    height: 45px;
     width: 100%;
     a {
+      padding-top: 14px;
+
       .rs-picker-toggle-clean {
         margin-right: 5px;
         margin-left: 5px;
@@ -1534,6 +1537,9 @@ table.iwd-transactions-table {
 .rs-picker-toggle-placeholder,
 .rs-picker-toggle-caret {
   color: $primary !important;
+}
+.rs-picker-toggle-caret {
+  top: 14px;
 }
 .rs-calendar-table-cell-content {
   border-radius: 50% !important;

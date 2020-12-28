@@ -41,8 +41,8 @@ const Dashboard = () => {
         debt: get(data, 'current.bond', ''),
       });
     } catch (e) {
-      console.error(e);
       setOverviewError(true);
+      console.error(e);
       toast(e);
     }
     setIsLoadingOverview(false);

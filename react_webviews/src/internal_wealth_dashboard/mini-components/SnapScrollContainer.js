@@ -84,33 +84,41 @@ const SnapScrollContainer = ({
 
   if (isLoading) {
     return (
-      <div className='iwd-scroll-contain' ref={container}>
-        <IwdScreenLoader loadingText={loadingText} />
+      <div className='iwd-scroll-contain'>
+        <div className="iwd-scroll-child">
+          <IwdScreenLoader loadingText={loadingText} />
+        </div>
       </div>
     );
   } else if (noData) {
     return (
-      <IwdErrorScreen
-        hasNoData={true}
-        templateErrText={
-          noDataText ||
-          "No data found"
-        }
-      />
+      <div className='iwd-scroll-contain'>
+        <div className="iwd-scroll-child">
+          <IwdErrorScreen
+            hasNoData={true}
+            templateErrText={
+              noDataText ||
+              "No data found"
+            }
+          />
+        </div>
+      </div>
     );
   } else if (error) {
     return (
-      <div className='iwd-scroll-contain' ref={container}>
-        <IwdErrorScreen
-          hasError={true}
-          templateErrTitle='Oops!'
-          templateErrText={
-            errorText ||
-            'Something went wrong! Please retry after some time or contact your wealth manager'
-          }
-          templateBtnText='Retry'
-          clickHandler={onErrorBtnClick}
-        />
+      <div className='iwd-scroll-contain'>
+        <div className="iwd-scroll-child">
+          <IwdErrorScreen
+            hasError={true}
+            templateErrTitle='Oops!'
+            templateErrText={
+              errorText ||
+              'Something went wrong! Please retry after some time or contact your wealth manager'
+            }
+            templateBtnText='Retry'
+            clickHandler={onErrorBtnClick}
+          />
+        </div>
       </div>
     );
   }

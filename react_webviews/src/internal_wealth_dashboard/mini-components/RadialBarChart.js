@@ -16,8 +16,9 @@ const RadialBarChart = ({
     });
   }, []);
   const circleRadius = Math.min(radius, 85);
+  const circleRadiusInner = circleRadius - 20;
   const circumference = 2 * 3.14 * circleRadius;
-  const circumferenceInner = 2 * 3.14 * circleRadius - 20;
+  const circumferenceInner = 2 * 3.14 * circleRadiusInner;
   const [strokeLength, setStrokeLength] = useState(0);
   const [strokeLengthInner, setStrokeLengthInner] = useState(0);
 
@@ -51,7 +52,7 @@ const RadialBarChart = ({
           fill='none'
           cx='100'
           cy='100'
-          r={circleRadius - 20}
+          r={circleRadiusInner}
         />
         <circle
           className='radial-chart-progress'
@@ -63,7 +64,7 @@ const RadialBarChart = ({
           strokeOpacity={0.6}
           cx='100'
           cy='100'
-          r={circleRadius - 20}
+          r={circleRadiusInner}
         />
       </svg>
     </div>
