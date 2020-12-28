@@ -3,6 +3,7 @@ $grey: #767e86;
 $light-grey: #d3dbe4;
 $primary: rgb(79, 45, 167);
 $light-green: rgb(154, 211, 204); //9AD3CC
+$dark-green: rgb(57, 183, 168); //39B7A8
 $card-padding-mob: 40px;
 $card-padding: 50px;
 @import '../animate.scss';
@@ -411,7 +412,7 @@ $card-padding: 50px;
         font-size: 20px;
         line-height: 32px;
         margin-bottom: 6px;
-        text-transform: uppercase;
+        text-transform: capitalize;
       }
 
       .iwd-nmbl-desc {
@@ -541,7 +542,7 @@ ul#iwd-bars {
   .iwd-bars-li {
     height: 10px;
     margin-right: 2px;
-    background: turquoise;
+    background: $dark-green;
     transition: flex-basis 0.2s ease-in-out;
     position: relative;
 
@@ -1002,11 +1003,11 @@ table.iwd-transactions-table {
       .iwd-lc-icon {
         width: 8px;
         height: 8px;
-        background: hsla(173, 59, 55, 1);
+        background: $dark-green;
       }
 
       .iwd-lc-title {
-        color: hsla(173, 59, 55, 1);
+        color: $dark-green;
         margin-left: 10px;
         letter-spacing: 2px;
         line-height: 18px;
@@ -1237,12 +1238,11 @@ table.iwd-transactions-table {
         .iwd-lc-icon {
           width: 8px;
           height: 8px;
-          margin-bottom: 10px;
-          background: hsla(173, 59, 55, 1);
+          background: $dark-green;
         }
 
         .iwd-lc-title {
-          color: hsla(173, 59, 55, 1);
+          color: $dark-green;
           margin-left: 0;
           font-size: 11px;
           text-transform: uppercase;
@@ -1253,6 +1253,7 @@ table.iwd-transactions-table {
         color: $dark;
         font-size: 17px;
         text-align: center;
+        margin-top: 0;
       }
     }
   }

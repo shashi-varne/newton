@@ -1,10 +1,7 @@
-// ------------------ Assets --------------------------
-import IlsError from 'assets/fisdom/ils_error.svg';
 import { ButtonBase } from 'material-ui';
-// ----------------------------------------------------
 import React from 'react';
 // import { CSSTransition } from 'react-transition-group';
-import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import IwdErrorScreen from '../mini-components/IwdErrorScreen';
 import IwdCardLoader from './IwdCardLoader';
 
 export default function IwdCard({
@@ -28,12 +25,8 @@ export default function IwdCard({
   
     if (error) {
       return (
-        <ErrorScreen
-          classes={{
-            container: 'iwd-fade'
-          }}
-          useTemplate={true}
-          templateImage={IlsError}
+        <IwdErrorScreen
+          hasError={true}
           templateErrText={errorText}
         />
       )

@@ -31,7 +31,7 @@ export const WhiteButton = withStyles({
     backgroundColor: 'white',
     '&:hover': {
       backgroundColor: 'white',
-      opacity: 0.9,
+      opacity: 1,
     },
     minHeight: '50px',
   },
@@ -61,7 +61,7 @@ export const PrimaryButton = withStyles({
     backgroundColor: '#4F2DA6',
     '&:hover': {
       backgroundColor: 'var(--primary)',
-      opacity: 0.9,
+      opacity: 1,
     },
   },
   disabled: {

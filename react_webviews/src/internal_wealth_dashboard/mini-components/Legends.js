@@ -11,7 +11,7 @@ function Legends({ data = [], columns = 2, classes = {}, percentage = true, roun
 
   return (
     <ul className={`iwd-legend-container ${containerClass}`}>
-      {data.map(({name, share}) => (
+      {data.map(({name, share}, idx) => (
         <li
           key={name}
           className={`iwd-legend-child ${childClass}`}
@@ -22,7 +22,7 @@ function Legends({ data = [], columns = 2, classes = {}, percentage = true, roun
           <header className="iwd-lc-header">
             <div
               className={`iwd-lc-icon ${iconClass}`}
-              style={{ opacity: (share / 100) + 0.2 }}
+              style={{ opacity: 1 - (idx / data.length) }}
             ></div>
             <div className={`iwd-lc-title ${labelClass}`}>{name}</div>
           </header>

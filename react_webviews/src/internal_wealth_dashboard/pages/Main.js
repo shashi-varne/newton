@@ -15,7 +15,7 @@ import { get } from 'lodash';
 import Api from '../../utils/api';
 import { CSSTransition } from 'react-transition-group';
 import IwdScreenLoader from '../mini-components/IwdScreenLoader';
-import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import IwdErrorScreen from '../mini-components/IwdErrorScreen';
 import { nativeCallback } from '../../utils/native_callback';
 const isMobileView = getConfig().isMobileDevice;
 
@@ -49,10 +49,10 @@ const Main = (props) => {
     try {
       setIsLoading(true);
       const res = await Api.get('api/whoami');
+      setIsLoading(false);
       if (isEmpty(res) || res.pfwstatus_code !== 200) {
         showError();
       } else {
-        setIsLoading(false);
         sendEvents();
 
         const { user } = res.pfwresponse.result;
@@ -117,8 +117,7 @@ const Main = (props) => {
   } else if (loginErr) {
     return (
       <div id="iwd-main">
-        <ErrorScreen
-          useTemplate={true}
+        <IwdErrorScreen
           templateErrText="Redirecting to login page..."
           templateErrTitle="You have been logged out."
           classes={{

@@ -95,6 +95,15 @@ $background: #f9f9f9;
       width: 100%;
 
       .iwd-phone-input-dropdown {
+        border-radius: 4px;
+
+        li.search {
+          z-index: 2;
+
+          .search-box {
+            width: 85%;
+          }
+        }
         li > span.country-name {
           color: $grey;
         }
@@ -102,6 +111,17 @@ $background: #f9f9f9;
         li > span.dial-code {
           color: rgba($dark, 0.8);
         }
+      }
+
+      .iwd-phone-input-dropdown::-webkit-scrollbar {
+        width: 10px;
+        height: 4px;
+        background-color: hsla(257, 58%, 73%, 0.4);
+      }
+
+      .iwd-phone-input-dropdown::-webkit-scrollbar-thumb {
+        border-radius: 2.5px;
+        background-color: hsla(257, 58%, 70%, 1);
       }
     }
 
@@ -114,6 +134,10 @@ $background: #f9f9f9;
     .iwd-lr-help {
       display: none;
     }
+  }
+
+  .react-tel-input {
+    z-index: 2;
   }
 }
 
@@ -284,7 +308,7 @@ $background: #f9f9f9;
       color: #767e86;
     }
   }
-  .fisdom-ecb-btn {
+  .iwd-scroll-child:nth-of-type(1) .fisdom-ecb-btn {
     background-color: #c0aeea;
 
     .MuiButton-label {
@@ -380,7 +404,7 @@ $background: #f9f9f9;
 
         .iwd-daal-item:nth-last-child(1) {
           margin-bottom: 0;
-          .label {
+          .label .dot{
             opacity: 0.6;
           }
         }
@@ -464,12 +488,16 @@ $background: #f9f9f9;
     margin-right: 3%;
     height: 85%;
 
+    .iwd-card-header {
+      margin-bottom: 20px;
+    }
+
     #iwd-dr-data {
       display: flex;
       flex-wrap: wrap;
 
       .iwd-dr-box {
-        padding: 35px 40px;
+        padding: 35px 20px;
         flex: 1 0 30%;
         width: 30%;
         box-sizing: border-box;
@@ -743,7 +771,7 @@ $background: #f9f9f9;
           margin-bottom: 40px;
         }
 
-        .iwd-aglc-legend-child:nth-last-child(1) {
+        .iwd-aglc-legend-child:nth-last-of-type(1) {
           margin-bottom: 0;
         }
       }
@@ -755,8 +783,8 @@ $background: #f9f9f9;
 
     .iwd-agl-content {
       .iwd-aglc-legend {
-        .iwd-aglc-legend-child:nth-last-child(1),
-        .iwd-aglc-legend-child:nth-last-child(2) {
+        .iwd-aglc-legend-child:nth-last-of-type(1),
+        .iwd-aglc-legend-child:nth-last-of-type(2) {
           margin-bottom: 0;
         }
         .iwd-aglc-legend-child {
@@ -1685,9 +1713,10 @@ $background: #f9f9f9;
         .iwd-aglc-legend {
           flex: 1 0 auto;
           width: 100%;
-
+          
+          //nth-last-child(n) to override nth-child styles of desktop
           .iwd-aglc-legend-child:nth-last-child(n) {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
           }
         }
       }
@@ -1698,8 +1727,9 @@ $background: #f9f9f9;
 
       .iwd-agl-content {
         .iwd-aglc-legend {
+          //nth-last-child(n) to override nth-child styles of desktop
           .iwd-aglc-legend-child:nth-child(n) {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
           }
           .iwd-aglc-legend-child {
             align-items: center;

@@ -1,13 +1,11 @@
 // -----------------Assets------------------------
 import UpwardIcon from 'assets/ic_up_arrow_purple.svg';
-import IlsError from 'assets/fisdom/ils_error.svg';
-import IlsNoData from 'assets/fisdom/ils_no_data.svg';
 // -----------------------------------------------
 import React, { useEffect, useRef, useState } from 'react';
 import IconButton from 'material-ui/IconButton';
 import { last, get } from 'lodash';
 import { isEmpty, isFunction } from '../../utils/validators';
-import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import IwdErrorScreen from '../mini-components/IwdErrorScreen';
 import IwdScreenLoader from './IwdScreenLoader';
 
 const SnapScrollContainer = ({
@@ -92,9 +90,8 @@ const SnapScrollContainer = ({
     );
   } else if (noData) {
     return (
-      <ErrorScreen
-        useTemplate={true}
-        templateImage={IlsNoData}
+      <IwdErrorScreen
+        hasNoData={true}
         templateErrText={
           noDataText ||
           "No data found"
@@ -104,12 +101,8 @@ const SnapScrollContainer = ({
   } else if (error) {
     return (
       <div className='iwd-scroll-contain' ref={container}>
-        <ErrorScreen
-          useTemplate={true}
-          classes={{
-            container: 'iwd-fade'
-          }}
-          templateImage={IlsError}
+        <IwdErrorScreen
+          hasError={true}
           templateErrTitle='Oops!'
           templateErrText={
             errorText ||

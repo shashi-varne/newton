@@ -12,6 +12,7 @@ import { getGrowthData, getGrowthXirr } from '../../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { CSSTransition } from 'react-transition-group';
+import IwdErrorScreen from '../../mini-components/IwdErrorScreen';
 
 const dateFormatMap = {
   '1 month': "d m",
@@ -116,9 +117,6 @@ const PortfolioGrowth = () => {
     <IwdCard
       id="iwd-d-growth-graph"
       headerText="Portfolio growth"
-      error={growthError}
-      errorText='Something went wrong! Please retry after some time or contact your wealth manager'
-      // isLoading={isLoadingGrowth}
     >
       <>
         <div id="iwd-dgg-filter">
@@ -147,18 +145,26 @@ const PortfolioGrowth = () => {
             XIRR
           </div>
         </div>
-        <IwdGrowthGraph
-          isLoading={isLoadingGrowth}
-          data={growthData.data}
-          width="auto"
-          height="260px"
-          params={{
-            date_ticks: growthData.date_ticks,
-            min: growthData.min,
-            max: growthData.max,
-            dateFormat: dateFormatMap[selectedRange],
-          }}
-        />
+        {growthError ?
+          <IwdErrorScreen
+            hasError={true}
+            templateBtnText='Retry'
+            clickHandler={fetchGrowthGraph}
+            templateErrText='Uh oh! Not enough data to show for this selected time period. Please try changing the time selection or retry'
+          /> :
+          <IwdGrowthGraph
+            isLoading={isLoadingGrowth}
+            data={growthData.data}
+            width="auto"
+            height="260px"
+            params={{
+              date_ticks: growthData.date_ticks,
+              min: growthData.min,
+              max: growthData.max,
+              dateFormat: dateFormatMap[selectedRange],
+            }}
+          />
+        }
       </>
     </IwdCard>
   );

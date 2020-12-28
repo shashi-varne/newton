@@ -2,7 +2,7 @@
 import close from 'assets/ic_close_white.svg';
 import fisdom_logo from 'assets/fisdom/fisdom_logo_white.svg';
 // ----------------------------------------------
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Button, CircularProgress } from 'material-ui';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -29,16 +29,27 @@ const allTabs = [{
 }];
 
 const NavBarMobile = (props) => {
-  const name = storageService().get('iwd-user-name') || '';
-  const email = storageService().get('iwd-user-email') || '';
-  let mobile = storageService().get('iwd-user-mobile') || '';
-  mobile = mobile ? `+91-${mobile}` : '';
-  const pan = storageService().get('iwd-user-pan') || '';
   const { match = {} } = props;
   const navigate = navigateFunc.bind(props);
+  const [userDetail, setUserDetail] = useState({});
   const [expanded, setExpanded] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const { params: { tab: currentTab = 'dashboard' }} = match;
+
+  const initialiseUserData = () => {
+    let mobile = storageService().get('iwd-user-mobile') || '';
+    mobile = mobile ? `+91-${mobile}` : '';
+    setUserDetail({
+      name: storageService().get('iwd-user-name') || '',
+      email: storageService().get('iwd-user-email') || '',
+      pan: storageService().get('iwd-user-pan') || '',
+      mobile,
+    });
+  };
+
+  useEffect(() => {
+    initialiseUserData();
+  }, []);
 
   const sendEvents = (user_action, props) => {
     let eventObj = {
@@ -87,7 +98,7 @@ const NavBarMobile = (props) => {
             <span id="iwd-nmhm-text">Menu</span>
           </Button>
           <div id="iwd-nmh-profile" onClick={() => setExpanded(true)}>
-            {name.charAt(0)}
+            {(userDetail.name || '').charAt(0)}
           </div>
         </div> :
         <div id="iwd-nm-body">
@@ -114,19 +125,19 @@ const NavBarMobile = (props) => {
           )}
           <div id="iwd-nmb-divider" />
           <div id="iwd-nmb-profile">
-            <div id="iwd-nmp-user-name">{name}</div>
-            <div id="iwd-nmp-user-icon">{name.charAt(0)}</div>
+            <div id="iwd-nmp-user-name">{userDetail.name}</div>
+            <div id="iwd-nmp-user-icon">{(userDetail.name || '').charAt(0)}</div>
             <div className="iwd-nmp-user-detail">
               <b>PAN: </b>
-              {pan}
+              {userDetail.pan}
             </div>
             <div className="iwd-nmp-user-detail">
               <b>Email: </b>
-              {email}
+              {userDetail.email}
             </div>
             <div className="iwd-nmp-user-detail">
               <b>Mob.: </b>
-              {'  '}{mobile || '--'}
+              {'  '}{userDetail.mobile || '--'}
             </div>
           </div>
           <Button

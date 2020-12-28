@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageCloseBtn from './PageCloseBtn';
 import Filters from './FilterSection';
 import { PrimaryButton as Button } from '../common/Button';
@@ -15,8 +15,15 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   const [endDate, setEndDate] = useState(storedFilterVal['to_tdate'] || '');
   const [filterState, setFilterState] = useState(storedFilterVal || null);
   const [clearFilter, setClearFilter] = useState(false);
-  const clearCheck =
-    filter_key === 'iwd-holding-filters' ? filterState : filterState?.ttype || filterState?.viewFor;
+  const [canClear, setCanClear] = useState(false);
+
+  useEffect(() => {
+    if (filterState) {
+      const isFilterSet = Object.keys(filterState).some(filterKey => filterState[filterKey]);
+      setCanClear(isFilterSet);
+    }
+  }, [filterState]);
+
   const handleFilterSelect = (id, value) => {
     let start = '';
     let end = '';
@@ -41,17 +48,17 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
   };
 
   const applyFilters = () => {
-    if (!isEmpty(clearCheck)) {
+    if (canClear) {
       storageService().setObject(filter_key, filterState);
       handleFilterData(filterState);
     }
     clickHandler();
   };
+
   const clearFilters = () => {
-    if (!isEmpty(clearCheck)) {
+    if (canClear) {
       if (filter_key === 'iwd-holding-filters') {
         setFilterState(null);
-        setClearFilter(true);
         handleFilterData(null);
         storageService().setObject(filter_key, null);
       } else {
@@ -63,12 +70,13 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
           to_tdate: '',
         };
         setFilterState(filterData);
-        setClearFilter(true);
         setStartDate('');
         setEndDate('');
         handleFilterData(filterData);
         storageService().setObject(filter_key, filterData);
       }
+      setClearFilter(true);
+      setCanClear(false);
     }
   };
 
@@ -81,6 +89,7 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
       setFilterState({ ...filterState, [dateType]: dateFormater(e.target.value) });
     }
   };
+
   const renderFilters = () => (
     <div>
       {filterOptions?.map((type) => {
@@ -153,7 +162,7 @@ const FilterMobile = ({ clickHandler, filterOptions, filter_key, handleFilterDat
             )}
             <div className='iwd-filter-footer'>
               <div
-                className={`iwd-filter-clear ${isEmpty(clearCheck) && 'iwd-disable-clear'}`}
+                className={`iwd-filter-clear ${!canClear && 'iwd-disable-clear'}`}
                 onClick={clearFilters}
               >
                 Clear All

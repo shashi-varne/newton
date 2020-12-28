@@ -8,6 +8,8 @@ import { getConfig } from 'utils/functions';
 
 const isMobileView = getConfig().isMobileDevice;
 function MarketCapAllocation({ data = [], isLoading }) {
+  // Market cap alloc data not pre-sorted from backend, so sorting here
+  data = data.sort(({ share: share1 }, { share: share2 }) => share2 - share1);
   return (
     <IwdCard
       className='iwd-analysis-graph-left'

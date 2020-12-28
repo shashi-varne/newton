@@ -7,13 +7,13 @@ const IwdBubbleChart = ({ data = [] }) => {
 
   const dataFormatter = () => {
     const list = [];
-    for (let { name, share } of data) {
+    data.forEach(({ name, share }, idx) => {
       list.push({
         name: upperCase(name),
         value: `${share}`,
-        color: `rgba(57, 183, 171, ${(share / 100) + 0.2})`,
+        color: `rgba(57, 183, 171, ${1 - ( idx / data.length)})`,
       });
-    }
+    });
     setDataList(list);
   };
 

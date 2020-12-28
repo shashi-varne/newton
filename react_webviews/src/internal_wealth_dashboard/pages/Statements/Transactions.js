@@ -9,7 +9,6 @@ import {
 import { transactionFilterOptions, mobileFilterOptions } from '../../constants';
 import FSTable from 'common/responsive-components/FSTable';
 import { transactionsHeaderMap } from '../../constants';
-import IlsError from 'assets/fisdom/ils_error.svg';
 import { Pagination } from 'rsuite';
 import { isEmpty, storageService } from '../../../utils/validators';
 import IWdScreenLoader from '../../mini-components/IwdScreenLoader';
@@ -18,7 +17,7 @@ import debounce from 'lodash/debounce';
 import filter_sign from 'assets/filter_sign.svg';
 import DateRangeSelector from '../../mini-components/DateRangeSelector';
 import AutoSuggestSearch from '../../mini-components/AutoSuggestSearch';
-import ErrorScreen from '../../../common/responsive-components/ErrorScreen';
+import IwdErrorScreen from '../../mini-components/IwdErrorScreen';
 import download_icon from 'assets/download_icon.svg';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from '../../../utils/functions';
@@ -179,13 +178,9 @@ const Transactions = () => {
       )}
       {hasError && (
         <div className='iwd-statement-trans-error'>
-          <ErrorScreen
-            classes={{
-              container: 'iwd-fade'
-            }}
+          <IwdErrorScreen
+            hasError={true}
             templateErrTitle='Oops!'
-            useTemplate={true}
-            templateImage={IlsError}
             templateErrText='Something went wrong! Please retry.'
             templateBtnText='Retry'
             clickHandler={retry}

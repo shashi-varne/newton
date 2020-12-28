@@ -32,7 +32,7 @@ const IwdLineChart = ({ data, classes = {} }) => {
           <li
             key={idx}
             className={`iwd-bars-li ${childClass}`}
-            style={{ flexBasis: `${share}%`, opacity: (share / 100) + 0.2 }}
+            style={{ flexBasis: `${share}%`, opacity: 1 - (idx / data.length) }}
             // onMouseEnter={() => onElemHover(item, idx)}
             // onMouseLeave={() => onElemLeave()}
           >

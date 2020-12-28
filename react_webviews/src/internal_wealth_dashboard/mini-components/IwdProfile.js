@@ -1,5 +1,5 @@
 import { Button, CircularProgress, ClickAwayListener } from 'material-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { navigate as navigateFunc } from '../common/commonFunctions';
 import { logout } from '../common/ApiCalls';
@@ -8,14 +8,26 @@ import { storageService } from '../../utils/validators';
 import { nativeCallback } from '../../utils/native_callback';
 
 const IwdProfile = (props) => {
-  const name = storageService().get('iwd-user-name') || '';
-  const email = storageService().get('iwd-user-email') || '';
-  let mobile = storageService().get('iwd-user-mobile') || '';
-  mobile = mobile ? `+91-${mobile}` : '';
-  const pan = storageService().get('iwd-user-pan') || '';
   const navigate = navigateFunc.bind(props);
+  const [userDetail, setUserDetail] = useState({});
   const [expanded, setExpanded] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+
+  const initialiseUserData = () => {
+    let mobile = storageService().get('iwd-user-mobile') || '';
+    mobile = mobile ? `+91-${mobile}` : '';
+    setUserDetail({
+      name: storageService().get('iwd-user-name') || '',
+      email: storageService().get('iwd-user-email') || '',
+      pan: storageService().get('iwd-user-pan') || '',
+      mobile,
+    });
+  };
+
+  useEffect(() => {
+    // Time delay for following fix https://fisdom.atlassian.net/browse/QA-2497
+    setTimeout(initialiseUserData, 500);
+  }, []);
 
   const sendEvents = (user_action, props) => {
     let eventObj = {
@@ -46,7 +58,7 @@ const IwdProfile = (props) => {
 
   const profileIcon = (
     <div id='iwd-profile-icon' onClick={!expanded ? toggleExpanded : undefined}>
-      {name.charAt(0)}
+      {(userDetail.name || '').charAt(0)}
     </div>
   );
 
@@ -55,18 +67,18 @@ const IwdProfile = (props) => {
       <ClickAwayListener onClickAway={toggleExpanded}>
         <div id='iwd-profile' className="iwd-fade">
           {profileIcon}
-          <div className='iwd-profile-username'>{name}</div>
+          <div className='iwd-profile-username'>{userDetail.name}</div>
           <div className='iwd-profile-detail' id='pan'>
             <b>PAN: </b>
-            {pan || '--'}
+            {userDetail.pan || '--'}
           </div>
           <div className='iwd-profile-detail'>
             <b>Email: </b>
-            {email}
+            {userDetail.email}
           </div>
           <div className="iwd-profile-detail">
             <b>Mob.:</b>
-            {'  '}{mobile || '--'}
+            {'  '}{userDetail.mobile || '--'}
           </div>
           <div id='iwd-profile-divider'></div>
           <Button
@@ -89,10 +101,10 @@ const IwdProfile = (props) => {
         marginRight: '10px',
       }}>
         <div id="iwd-ps-name">
-          {name}
+          {userDetail.name || '--'}
         </div>
         <div id="iwd-ps-contact">
-          {mobile || email || '--'}
+          {userDetail.mobile || userDetail.email || '--'}
         </div>
       </div>
       {profileIcon}

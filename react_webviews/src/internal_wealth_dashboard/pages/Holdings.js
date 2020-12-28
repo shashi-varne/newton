@@ -1,6 +1,4 @@
 // ----------------- Assets ----------------------
-import IlsNoData from 'assets/fisdom/ils_no_data.svg';
-import IlsNoDataMob from 'assets/fisdom/ils_no_data_mob.svg';
 import filter_sign from 'assets/filter_sign.svg';
 // -----------------------------------------------
 import React, { useEffect, useState } from 'react';
@@ -13,7 +11,7 @@ import FilterMobile from '../mini-components/FilterMobile';
 import { getHoldings } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { isEmpty, storageService } from '../../utils/validators';
-import ErrorScreen from '../../common/responsive-components/ErrorScreen';
+import IwdErrorScreen from '../mini-components/IwdErrorScreen';
 import { HoldingFilterOptions } from './../constants';
 import ScrollTopBtn from '../mini-components/ScrollTopBtn';
 import { scrollElementToPos } from '../common/commonFunctions';
@@ -35,6 +33,7 @@ const Holdings = () => {
   const fetchHoldings = async () => {
     try {
       setIsLoading(true);
+      setHasError(false);
       const result = await getHoldings();
       if (isEmpty(result)) {
         setHasError(true);
@@ -198,12 +197,8 @@ const Holdings = () => {
             scrollOnChange={true}
           >
             {!isEmpty(filterVal) && !filterData && (
-              <ErrorScreen
-                classes={{
-                  container: 'iwd-fade',
-                }}
-                useTemplate={true}
-                templateImage={isMobileView ? IlsNoDataMob : IlsNoData}
+              <IwdErrorScreen
+                hasNoData={true}
                 templateErrText='Oops! We couldn’t find any data for the selected filter. Try removing or changing the filter.'
               />
             )}
