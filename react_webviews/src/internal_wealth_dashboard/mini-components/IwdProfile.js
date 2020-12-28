@@ -6,6 +6,8 @@ import { logout } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { storageService } from '../../utils/validators';
 import { nativeCallback } from '../../utils/native_callback';
+import { get } from 'lodash';
+import Api from '../../utils/api';
 
 const IwdProfile = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -13,15 +15,27 @@ const IwdProfile = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  const initialiseUserData = () => {
+  const initialiseUserData = async () => {
+    let pan = storageService().get('iwd-user-pan') || '';
     let mobile = storageService().get('iwd-user-mobile') || '';
     mobile = mobile ? `+91-${mobile}` : '';
-    setUserDetail({
+    const user = {
       name: storageService().get('iwd-user-name') || '',
       email: storageService().get('iwd-user-email') || '',
-      pan: storageService().get('iwd-user-pan') || '',
       mobile,
-    });
+    };
+
+    setUserDetail(user);
+
+    if (!pan) {
+      const kycDetail = await Api.post(`api/user/account/summary`, {
+        "kyc": ["kyc"],
+        "user": ["user"]
+      });
+      pan = get(kycDetail, 'pfwresponse.result.data.kyc.kyc.data.pan.meta_data.pan_number', '');
+      storageService().set('iwd-user-pan', pan);
+    }
+    setUserDetail({ ...user, pan });
   };
 
   useEffect(() => {

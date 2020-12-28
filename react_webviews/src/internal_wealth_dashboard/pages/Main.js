@@ -11,7 +11,6 @@ import Statements from './Statements';
 import Recommendations from './Recommendations';
 import { isEmpty, storageService } from '../../utils/validators';
 import { navigate as navigateFunc } from '../common/commonFunctions';
-import { get } from 'lodash';
 import Api from '../../utils/api';
 import { CSSTransition } from 'react-transition-group';
 import IwdScreenLoader from '../mini-components/IwdScreenLoader';
@@ -61,16 +60,6 @@ const Main = (props) => {
         storageService().set('iwd-user-name', name || '');
         storageService().set('iwd-user-mobile', mobile.slice(-10) || '');
         setIsLoading(false);
-        
-        const kycDetail = await Api.post(`api/user/account/summary`, {
-          "kyc": ["kyc"],
-          "user": ["user"]
-        });
-        
-        storageService().set(
-          'iwd-user-pan',
-          get(kycDetail, 'pfwresponse.result.data.kyc.kyc.data.pan.meta_data.pan_number', '')
-        );
       }
     } catch (e) {
       console.log(e);
