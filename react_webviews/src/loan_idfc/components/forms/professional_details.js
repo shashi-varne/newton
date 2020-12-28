@@ -8,7 +8,6 @@ import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr } from "utils/validators";
 import Autosuggest from "../../common/Autosuggest";
 import Api from "utils/api";
-import DotDotLoader from "common/ui/DotDotLoader";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -63,12 +62,6 @@ class ProfessionalDetails extends Component {
       form_data: form_data,
       employment_type: employment_type,
       company_name: professional_info.company_name,
-      companyOptions: [
-        {
-          name: "OTHERS",
-          value: "OTHERS",
-        },
-      ],
     });
   };
 
@@ -153,13 +146,6 @@ class ProfessionalDetails extends Component {
               value: element,
             };
           });
-        // } else {
-        //   companyOptions = [
-        //     {
-        //       name: "",
-        //       value: "",
-        //     },
-        //   ];
         }
       }
 
@@ -183,7 +169,7 @@ class ProfessionalDetails extends Component {
       >
         <div className="professional-details">
           <FormControl fullWidth>
-            {employment_type === "salaried" && companyOptions.length > 0 && (
+            {employment_type === "salaried" && (
               <div className="InputField">
                 <Autosuggest
                   inputs={companyOptions}
@@ -192,7 +178,7 @@ class ProfessionalDetails extends Component {
                   class="company_name"
                   id="company_name"
                   name="company_name"
-                  placeholder="Serach for company"
+                  placeholder="Search for company"
                   onChange={(value) => this.handleSearch(value)}
                   value={this.state.form_data.company_name || ""}
                   error={this.state.form_data.company_name_error ? true : false}
