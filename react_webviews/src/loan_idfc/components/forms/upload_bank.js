@@ -12,7 +12,7 @@ import $ from "jquery";
 import DotDotLoader from "common/ui/DotDotLoader";
 import Api from "utils/api";
 import Input from "../../../common/ui/Input";
-import { formatDate, dobFormatTest, calculateAge } from "utils/validators";
+import { formatDate, dobFormatTest, calculateAge, IsFutureDate } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import { getUrlParams } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
@@ -439,7 +439,7 @@ class UploadBank extends Component {
       canSubmit = false;
     }
 
-    if (!endDate_days || form_data.end_date.length !== 10) {
+    if (!endDate_days || form_data.end_date.length !== 10 || !IsFutureDate(form_data.end_date)) {
       form_data.end_date_error = "This date must be 3 days prior to the current date";
       canSubmit = false;
     }
