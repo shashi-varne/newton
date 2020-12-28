@@ -94,13 +94,12 @@ class Landing extends Component {
   renderPorducts(props, index) {
     return (
       <div key={index} onClick={() => this.handleClick(props.key , props.title)} style={{
-        display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px',
-        paddingBottom: '22px', justifyContent: 'space-between', cursor: 'pointer'
+        display: 'flex', alignItems: 'center', width : '100%', justifyContent: 'space-between', cursor: 'pointer'
       }}>
-        <div style={{ display: 'flex' }}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '30px' }} />
-          <div>
+        <div style={{ display: 'flex' , width : '100%' }}>
+          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '26px' }} />
+          <div style={{  borderBottomWidth: '1px',  width : '100%',
+                          borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px' ,   paddingBottom: '22px'}} >
             <div style={{ color: '#160d2e', fontSize: '15px', fontWeight: "500" , lineHeight : '20px' , margin : '5px 0 5px 0'}}>{props.title}
             </div>
             <div style={{ color: '#767E86', fontSize: '13px', fontWeight: '400', lineHeight: '15.41px' }}>{props.subtitle}</div>
