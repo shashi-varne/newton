@@ -73,7 +73,6 @@ const Transactions = () => {
       if (activePage === 1) {
         response = await getTransactions({
           page_size: 10,
-          count: false,
           ...filterVal,
         });
       } else {
@@ -130,7 +129,7 @@ const Transactions = () => {
         const filterData = storageService().getObject(filter_key);
         const baseURL = getConfig().base_url;
         window.open(
-          `${baseURL}/api/rta/download/account/summary/pdf${buildParamsFromObj(filterData)}`,
+          `${baseURL}api/rta/download/account/summary/pdf${buildParamsFromObj(filterData)}`,
           '_blank'
         );
       } catch (err) {
@@ -201,17 +200,19 @@ const Transactions = () => {
               )}
             </div>
             <div className='iwd-transaction-date'>
-              <DateRangeSelector filter_key={filter_key} handleFilterData={handleFilterData} />
+              <DateRangeSelector
+                filter_key={filter_key}
+                handleFilterData={handleFilterData}
+                disabled={isEmpty(transactions)}
+              />
             </div>
           </section>
           <section className='iwd-card iwd-transaction-table-container iwd-animatedFade'>
             <div className='iwd-transaction-header'>
               <div className='iwd-transaction-title'>Transactions</div>
-
               <div className='iwd-transaction-download-report' onClick={downloadTransactions}>
                 Download Report
               </div>
-
               <div className='iwd-trasaction-download-icon' onClick={downloadTransactions}>
                 <img alt='download' src={download_icon} />
               </div>

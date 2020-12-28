@@ -539,6 +539,7 @@ $background: #f9f9f9;
 
   .iwd-d-newsletter {
     @extend .iwd-purple-card;
+    max-height: 85%;
   
     #iwd-dn-gist {
       font-size: 15px;
@@ -573,6 +574,9 @@ $background: #f9f9f9;
     height: 75vh;
     display: flex;
     flex-wrap: wrap;
+  }
+  .iwd-scroll-child {
+    width: 100%;
   }
 }
 

@@ -1,7 +1,7 @@
 import { getConfig } from 'utils/functions';
 import { subDays, startOfMonth, addMonths, endOfMonth, startOfYear } from 'date-fns';
 import moment from 'moment';
-import { isEmpty } from '../../utils/validators';
+import { isEmpty, numDifferentiationInr } from '../../utils/validators';
 
 export function navigate(pathname, params, replace) {
   if (!replace) {
@@ -68,6 +68,11 @@ export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) =>
 
 export const dateFormater = (date) => {
   return moment(date).format('YYYY-MM-DD');
+};
+
+export const formatNumVal = (val) => {
+  if (isEmpty(val) || !val) return '--';
+  return numDifferentiationInr(val);
 };
 
 export const date_range_selector = {

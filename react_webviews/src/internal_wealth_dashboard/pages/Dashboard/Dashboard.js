@@ -12,9 +12,10 @@ import ScrollTopBtn from '../../mini-components/ScrollTopBtn';
 import IwdCard from '../../mini-components/IwdCard';
 import { getOverview } from '../../common/ApiCalls';
 import RadialBarChart from '../../mini-components/RadialBarChart';
-import { isEmpty, numDifferentiationInr, storageService } from '../../../utils/validators';
+import { isEmpty, storageService } from '../../../utils/validators';
 import PortfolioGrowth from './PortfolioGrowth';
 import PortfolioRisk from './PortfolioRisk';
+import { formatNumVal } from '../../common/commonFunctions';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -46,11 +47,6 @@ const Dashboard = () => {
       toast(e);
     }
     setIsLoadingOverview(false);
-  };
-
-  const formatNumVal = (val) => {
-    if (isEmpty(val) || !val) return '--';
-    return numDifferentiationInr(val);
   };
 
   const fetchAllData = () => {

@@ -4,7 +4,7 @@ import { date_range_selector, dateFormater } from '../common/commonFunctions';
 import { storageService } from '../../utils/validators';
 // import isEqual from 'lodash/isEqual';
 import moment from 'moment';
-const DateRangeSelector = ({ filter_key, handleFilterData }) => {
+const DateRangeSelector = ({ filter_key, handleFilterData, disabled }) => {
   const filterVal = storageService().getObject(filter_key);
   const [startDate, setStartDate] = useState(filterVal['from_tdate'] || '');
   const [endDate, setEndDate] = useState(filterVal['to_tdate'] || '');
@@ -34,6 +34,7 @@ const DateRangeSelector = ({ filter_key, handleFilterData }) => {
   return (
     <div className='iwd-date-range-picker'>
       <DateRangePicker
+        disabled={disabled}
         appearance='subtle'
         placement='bottomEnd'
         placeholder='DD-MM-YY ~ DD-MM-YY'

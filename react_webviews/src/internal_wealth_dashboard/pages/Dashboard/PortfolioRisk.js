@@ -65,6 +65,7 @@ const RiskProfile = () => {
   };
 
   const openArticle = (url) => {
+    if (isEmpty(blogData)) return;
     sendEvents('blog_clicked');
     window.open(url, '_blank');
   };

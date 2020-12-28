@@ -300,7 +300,7 @@ export const getPortfolioRisk = async (params = {}) => {
 
 export const getNewsletter = async (params = {}) => {
   try {
-    const res = await Api.get('api/cms/article/category/103?sort=desc', {
+    const res = await Api.get('api/cms/article/category/104?sort=desc', {
       ...params,
     });
 

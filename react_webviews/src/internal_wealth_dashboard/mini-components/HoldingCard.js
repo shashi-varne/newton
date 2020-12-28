@@ -5,11 +5,12 @@ import negative from 'assets/ic_negative.svg';
 // -------------------------------------
 import React, { memo, useState } from 'react';
 import { Button } from 'material-ui';
-import { formattedDate, numDifferentiationInr } from 'utils/validators.js';
+import { formattedDate } from 'utils/validators.js';
 import HoldingDetail from './HoldingDetail';
 import { withRouter } from 'react-router';
 import IwdCard from '../mini-components/IwdCard';
 import RatingStar from '../../fund_details/common/RatingStar';
+import { formatNumVal } from '../common/commonFunctions';
 
 const HoldingCard = ({
   mf: mf_detail = {},
@@ -60,12 +61,12 @@ const HoldingCard = ({
       </div>
       <div className="iwd-hc-numbers">
         <div className="iwd-hcn-item">
-          <div className="iwd-hcni-value">{numDifferentiationInr(current_val)}</div>
+          <div className="iwd-hcni-value">{formatNumVal(current_val)}</div>
           <div className="iwd-hcni-label">Current</div>
         </div>
         <div className="iwd-hcn-item-divider"></div>
         <div className="iwd-hcn-item">
-          <div className="iwd-hcni-value">{numDifferentiationInr(invested_val)}</div>
+          <div className="iwd-hcni-value">{formatNumVal(invested_val)}</div>
           <div className="iwd-hcni-label">Invested</div>
         </div>
         <div className="iwd-hcn-item">

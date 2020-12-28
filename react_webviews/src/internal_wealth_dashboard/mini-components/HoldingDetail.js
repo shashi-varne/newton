@@ -18,6 +18,7 @@ import { Dialog } from 'material-ui';
 import { getConfig } from 'utils/functions';
 import RatingStar from '../../fund_details/common/RatingStar';
 import { Pagination } from 'rsuite';
+import { formatNumVal } from '../common/commonFunctions';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -63,7 +64,6 @@ const HoldingDetail = ({
       if (activePage === 1) {
         response = await getTransactions({
           page_size: 10,
-          count: false,
           amfi: isin,
         });
       } else {
@@ -120,14 +120,14 @@ const HoldingDetail = ({
               <div className="iwd-hdc-numbers">
                 <div className="iwd-hdcn-item">
                   <div className="iwd-hdcni-value current-val">
-                    {numDifferentiationInr(investmentDetail.current_val)}
+                    {formatNumVal(investmentDetail.current_val)}
                   </div>
                   <div className="iwd-hdcni-label">Current</div>
                 </div>
                 <div className="iwd-hdcn-item-divider"></div>
                 <div className="iwd-hdcn-item">
                   <div className="iwd-hdcni-value">
-                    {numDifferentiationInr(investmentDetail.invested_val)}
+                    {formatNumVal(investmentDetail.invested_val)}
                   </div>
                   <div className="iwd-hdcni-label">Invested</div>
                 </div>
@@ -147,25 +147,37 @@ const HoldingDetail = ({
               <div className="iwd-hdc-stats">
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
-                    {formattedDate(fundDetail.start_date, 'd m y')}
+                    {fundDetail.start_date ?
+                      formattedDate(fundDetail.start_date, 'd m y') :
+                      '--'
+                    }
                   </div>
                   <div className="iwd-hdcsi-label">Launch date</div>
                 </div>
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
-                    {nonRoundingToFixed(fundDetail.one_year_return, 2)}%
+                    {fundDetail.one_year_return ? 
+                      `${nonRoundingToFixed(fundDetail.one_year_return, 2)}%` :
+                      '--'
+                    }
                   </div>
                   <div className="iwd-hdcsi-label">1 yr return</div>
                 </div>
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
-                    {nonRoundingToFixed(fundDetail.three_year_return, 2)}%
+                    {fundDetail.one_year_return ?
+                      `${nonRoundingToFixed(fundDetail.three_year_return, 2)}%` :
+                      '--'
+                    }
                   </div>
                   <div className="iwd-hdcsi-label">3 yrs return</div>
                 </div>
                 <div className="iwd-hdcs-item">
                   <div className="iwd-hdcsi-value">
-                    {nonRoundingToFixed(fundDetail.five_year_return, 2)}%
+                    {fundDetail.one_year_return ?
+                      `${nonRoundingToFixed(fundDetail.five_year_return, 2)}%` :
+                      '--'
+                    }
                   </div>
                   <div className="iwd-hdcsi-label">5 yrs return</div>
                 </div>
