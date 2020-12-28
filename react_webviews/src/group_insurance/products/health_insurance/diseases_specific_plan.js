@@ -73,6 +73,23 @@ class DiseasesSpecificPlan extends Component {
     })
   }
 
+  componentDidCatch(){
+    if (this.state.openModuleData.sub_module) {
+      let navigateMapper = {
+        // hospicash: 'HOSPICASH',
+        // personal_accident: 'PERSONAL_ACCIDENT',
+        // smart_wallet: 'SMART_WALLET',
+        // term_insurance: 'TERM_INSURANCE',
+        dengue: 'DENGUE',
+        corona: 'CORONA'
+      };
+
+      let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+        this.state.openModuleData.sub_module;
+      this.handleClick(pathname);
+    }
+  }
+
   navigate = (pathname, search) => {
 
   this.props.parent.props.history.push({
@@ -89,7 +106,12 @@ class DiseasesSpecificPlan extends Component {
   }
 
   handleClick = (data) => {
-    let product_key = data.key
+
+    this.setState({
+      show_loader : true
+    })
+
+    let product_key = data.key ? data.key : data;
     data.insurance_type = 'Disease specific plans'
     this.sendEvents(data);
     var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
@@ -127,7 +149,7 @@ class DiseasesSpecificPlan extends Component {
       <div key={index} onClick={() => this.handleClick(props)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '320px'
+        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' , width : '100%'
       }}>
         <div style={{ display: 'flex' }}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
@@ -153,7 +175,7 @@ class DiseasesSpecificPlan extends Component {
   }
 
 
-  render() { return ( <div> {this.state.insuranceProducts.map(this.renderPorducts)} </div> ) }
+  render() { return ( <div style={{width : '100%'}}> {this.state.insuranceProducts.map(this.renderPorducts)} </div> ) }
 
 }
 

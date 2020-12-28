@@ -108,7 +108,7 @@ class HealthInsuranceEntry extends Component {
            marginLeft : '-8px'
         }}
         >
-          <div className='insurance_plans_types' style={{width : '500px'}}>
+          <div className='insurance_plans_types' style={{width : '100%'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos"/>
             <div>
               <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' ,lineHeight : '15.41px'}}
@@ -126,16 +126,12 @@ class HealthInsuranceEntry extends Component {
   }
 
   render() {
-    return (
-      <div> 
-        <div className="group-health-insurance-entry">
-          <div className='products'>
-            <div>
+    return ( 
+        <div className="group-health-insurance-entry" style={{width : '100%'}}>
+          <div className='products' style={{width : '100%'}}>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
-          </div>
         </div>
-      </div>
     );
   }
 }

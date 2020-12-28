@@ -212,7 +212,11 @@ class HealthInsuranceLanding extends Component {
     }
   }
 
-  handleClick2 = () => { this.setState({ show_loader : true})}
+  handleClick2 = () => {
+    this.setState({
+      show_loader: true
+    })
+  }
 
   handleClick = (product_key, title) => {
 
@@ -277,15 +281,15 @@ class HealthInsuranceLanding extends Component {
 
   renderPorducts(props, index) {
     return (
-      <div key={index}>     
+      <div key={index}>    
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
         display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
         borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
         paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' ,
       }}>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex' , width : '100%'}}>
           <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
-          <div style={{width : '240px'}}>
+          <div style={{width : '100%'}}>
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} 
 
                  {props.key === 'HEALTH_SURAKSHA'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
@@ -312,23 +316,19 @@ class HealthInsuranceLanding extends Component {
           }}>RESUME</div>}
       </div>
 
+     <div style={{display : 'flex' , width : '100%'}}>  
     {props.key === 'HEALTH_SURAKSHA' && this.state.Comprehensive && 
-       <div onClick={() => this.handleClick(props.key, props.title)} style={{
-        display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
-        justifyContent: 'space-between', cursor: 'pointer'
+       <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
       }}>
      <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
-       <div onClick={() => this.handleClick(props.key, props.title)} style={{
-        display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',
-        justifyContent: 'space-between', cursor: 'pointer'
+       <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
       }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  onSelectEvent={this.handleEvent} parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex' , width : '99%' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  onSelectEvent={this.handleEvent} parent={this}/> } </div>
       </div>}
+      </div>
       </div>
     )
   }
