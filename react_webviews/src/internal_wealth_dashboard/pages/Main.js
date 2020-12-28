@@ -49,23 +49,24 @@ const Main = (props) => {
     try {
       setIsLoading(true);
       const res = await Api.get('api/whoami');
-      setIsLoading(false);
       if (isEmpty(res) || res.pfwstatus_code !== 200) {
         showError();
       } else {
         sendEvents();
-
+        
         const { user } = res.pfwresponse.result;
         const { email, name, mobile } = user;
         
         storageService().set('iwd-user-email', email || '');
         storageService().set('iwd-user-name', name || '');
         storageService().set('iwd-user-mobile', mobile.slice(-10) || '');
+        setIsLoading(false);
+        
         const kycDetail = await Api.post(`api/user/account/summary`, {
           "kyc": ["kyc"],
           "user": ["user"]
         });
-
+        
         storageService().set(
           'iwd-user-pan',
           get(kycDetail, 'pfwresponse.result.data.kyc.kyc.data.pan.meta_data.pan_number', '')
