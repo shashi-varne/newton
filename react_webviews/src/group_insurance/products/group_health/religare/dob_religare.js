@@ -13,7 +13,7 @@ import {getInsuredMembersUi, resetInsuredMembers} from '../constants';
 const eldMemOptionMapper = {
     'self': ['self'],
     'family': ['spouse', 'husband', 'wife'],
-    'selfandfamily': ['self', 'spouse', 'husband', 'wife'],
+    'self_family': ['self', 'spouse', 'husband', 'wife'],
     'parents': ['father', 'mother']
 }
 
@@ -107,7 +107,7 @@ class GroupHealthPlanDobReligare extends Component {
 
     handleClick = () => {
         this.sendEvents('next');
-        let { groupHealthPlanData } = this.state || {};
+        let {validation_props, groupHealthPlanData } = this.state || {};
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
 
@@ -131,9 +131,9 @@ class GroupHealthPlanDobReligare extends Component {
             canProceed = false;
         }
 
-        if (calculateAge(this.state.eldest_dob) < 18) {
+        if (calculateAge(this.state.eldest_dob) < validation_props.dob_adult.min || calculateAge(this.state.eldest_dob) > validation_props.dob_adult.max ) {
             this.setState({
-                eldest_dob_error: this.state.default_helper_text
+                eldest_dob_error: `valid age is between ${validation_props.dob_adult.min} and ${validation_props.dob_adult.max - 1} years`
             });
 
             canProceed = false;
@@ -145,21 +145,24 @@ class GroupHealthPlanDobReligare extends Component {
             let post_body = groupHealthPlanData.post_body || {};
 
             let insured_members = getInsuredMembersUi(groupHealthPlanData);
-    
+            let member_details = {}
             for (var i=0; i < insured_members.length; i++){
                 let data = insured_members[i];
     
-                post_body[data.backend_key] = {
-                    relation: data.relation
+                member_details[data.backend_key] = {
+                    relation: data.relation,
+                    gender: 'FEMALE'
                 };
     
                 if(data.key === this.state.eldest_member) {
-                    post_body[data.backend_key].dob = this.state.eldest_dob;
+                    member_details[data.backend_key].dob = this.state.eldest_dob;
                 }
             }
-    
-            if(ui_members.self_gender && post_body.self_account_key) {
-                post_body.self_account_key.gender = ui_members.self_gender;
+            
+            post_body.member_details = member_details;
+
+            if(ui_members.self_gender && post_body.member_details.self_account_key) {
+                post_body.member_details.self_account_key.gender = ui_members.self_gender;
             }
 
             groupHealthPlanData.eldest_dob = this.state.eldest_dob;

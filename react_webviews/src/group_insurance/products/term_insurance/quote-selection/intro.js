@@ -352,8 +352,8 @@ class Intro extends Component {
       "event_name": 'term_insurance ',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'select_provider',
-        'provider_name': quote ? quote.quote_provider : this.state.quoteSelected &&
+        "screen_name": 'term insurance',
+        'insurance_provider': quote ? quote.quote_provider : this.state.quoteSelected &&
           this.state.quoteSelected.quote_provider ? this.state.quoteSelected.quote_provider : '',
         'resume': this.state.termRedirectData.resumeFlag && quote &&
           this.state.termRedirectData.provider === quote.quote_provider ? 'yes' : 'no'

@@ -4,12 +4,12 @@ import Container from '../common/Container';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-
+import { getDateBreakup } from 'utils/validators';
 import {
-  inrFormatDecimalWithoutIcon
+  inrFormatDecimalWithoutIcon , inrFormatDecimal
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getCssMapperReport } from '../constants';
+import { getCssMapperReport , TitleMaper} from '../constants';
 
 class Report extends Component {
 
@@ -17,7 +17,7 @@ class Report extends Component {
     super(props);
     this.state = {
       show_loader: true,
-      reportData: []
+      reportData: [],
     };
 
     this.renderReportCards = this.renderReportCards.bind(this);
@@ -27,7 +27,7 @@ class Report extends Component {
   navigate = (pathname, provider) => {
     this.props.history.push({
       pathname: pathname,
-      search: getConfig().searchParams + '&provider=' + provider,
+      search: getConfig().searchParams,
       params: {
         backToState: 'report'
       }
@@ -35,37 +35,58 @@ class Report extends Component {
   }
 
   getProviderObject = (policy) => {
-    let provider = policy.provider;
+    let provider = policy.vendor || policy.provider;
     let obj = policy;
+    let formatted_valid_from = ''
     obj.key = provider;
 
-    if (provider === 'HDFCERGO') {
+    if(['hdfc_ergo','star','religare'].indexOf(provider) !== -1 ){
+      let valid_from = obj.valid_from ? getDateBreakup(obj.valid_from): '';
+      let formatted_day = valid_from && valid_from.plainDate.toString().length === 1 ? '0'+valid_from.plainDate : valid_from.plainDate ;
+      formatted_valid_from = formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+    }
+    
+    if (provider === 'hdfc_ergo') {
       obj = {
         ...obj,
         product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'HDFCERGO',
-        id: policy.lead_id,
-        premium: policy.total_amount
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
-    } else if (provider === 'RELIGARE') {
+    }else if( provider === 'FYNTUNE'){
       obj = {
         ...obj,
-        product_name: policy.product_title,
-        top_title: 'Health insurance',
-        key: 'RELIGARE',
-        id: policy.lead_id,
+        product_name: policy.base_plan_title,
+        top_title: 'Life Insurance',
+        key: 'FYNTUNE',
+        id: policy.fyntune_ref_id, 
         premium: policy.total_amount
       };
-    }  else if (provider === 'STAR') {
+    } else if (provider === 'religare') {
       obj = {
         ...obj,
-        product_name: 'Star Family Health Optima',
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
         top_title: 'Health insurance',
-        key: 'STAR',
-        status_title: 'Star Health',
-        id: policy.lead_id,
-        premium: policy.total_amount
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
+      };
+    }  else if (provider === 'star') {
+      obj = {
+        ...obj,
+        product_name: policy.base_plan_title + ' ' + policy.product_title,
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
       };
     }  else if (provider === 'BHARTIAXA') {
       obj = {
@@ -92,7 +113,21 @@ class Report extends Component {
     return obj;
   }
 
-  setReportData(termData, group_insurance_policies) {
+  getProviderObject_offline(o2o_details){
+    let obj = o2o_details;
+    obj.key = 'insurance';
+    let top_title  = TitleMaper(o2o_details.policy_type)
+    obj.top_title = top_title
+    obj.sum_assured = o2o_details.cover_amount
+    let data = getCssMapperReport(obj);
+    obj.premium = o2o_details.total_amount;
+    obj.status = data.status;
+    obj.cssMapper = data.cssMapper;
+    obj.product_key = 'offline_insurance' 
+    return obj;
+  }
+
+  setReportData(termData, group_insurance_policies, health_insurance_policies  , o2o_applications ) {
 
 
     let canShowReport = false;
@@ -123,7 +158,7 @@ class Report extends Component {
         pathname = 'intro';
       }
 
-    }
+    } 
 
     let fullPath = '/group-insurance/term/' + pathname;
 
@@ -151,14 +186,23 @@ class Report extends Component {
     }
 
 
+    let hs_policies = health_insurance_policies.insurance_apps || [];
+    for (let i = 0; i < hs_policies.length; i++) {
+      let policy = this.getProviderObject(hs_policies[i]);
+      reportData.push(policy);
+    } 
+
     let ins_policies = group_insurance_policies.ins_policies || [];
-    for (var i = 0; i < ins_policies.length; i++) {
+    for (let i = 0; i < ins_policies.length; i++) {
       let policy = this.getProviderObject(ins_policies[i]);
       reportData.push(policy);
     }
 
-    console.log(reportData);
-
+    let o2o_details = o2o_applications || []; 
+    for(let i = 0; i< o2o_details.length; i++){
+      let policy = this.getProviderObject_offline(o2o_details[i]);
+      reportData.push(policy);
+    }
 
     this.setState({
       reportData: reportData,
@@ -167,10 +211,9 @@ class Report extends Component {
   }
 
   async componentDidMount() {
-
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/get/report')
+      let res = await Api.get('api/ins_service/api/insurance/get/report');
 
       this.setState({
         show_loader: false
@@ -185,12 +228,17 @@ class Report extends Component {
           nextPage: (has_more) ? next_page : ''
         })
 
-        let ins_policies = policyData.group_insurance || {};
+        let o2o_applications = policyData.o2o_applications;          
+        // this.setReportData(policyData.term_insurance, ins_policies, o2o_applications);
+        let group_insurance_policies = policyData.group_insurance || {};
+        let health_insurance_policies = policyData.health_insurance || {};
+        let term_insurance_policies = policyData.term_insurance || {};
 
-        this.setReportData(policyData.term_insurance, ins_policies);
+        this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
       } else {
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong');
+        // this.setState({ nextPage: ''})
       }
 
     } catch (err) {
@@ -213,16 +261,31 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
-    this.sendEvents('next', policy.key);
+    let policy_type = policy.policy_type ? policy.policy_type : ''
+    this.sendEvents('next', policy.key, policy_type);
     let path = '';
     let key = policy.key;
+
     if (key === 'TERM_INSURANCE') {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
     } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
-    } else {
+    } else if(key === 'insurance'){
+      path = `/group-insurance/group-health/offline-to-online-report-details/${policy.id}`;
+    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
+      if(key === 'hdfc_ergo'){
+        key = 'HDFCERGO';
+      }else if(key === 'star'){
+        key = 'STAR';
+      }else if(key === 'religare'){
+        key = 'RELIGARE';
+      }
+      path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
+    }else if(key === 'FYNTUNE'){
+      path =`/group-insurance/life-insurance/savings-plan/report-details/${policy.id}`;
+    }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
@@ -230,7 +293,7 @@ class Report extends Component {
   }
 
   renderReportCards(props, index) {
-    let health_providers = ['HDFCERGO', 'RELIGARE', 'STAR'];
+    let health_providers = ['hdfc_ergo', 'religare', 'star'];
     return (
       <div className="group-insurance-report card"
         onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
@@ -253,9 +316,17 @@ class Report extends Component {
                 <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
-                {props.product_key !== 'CORONA' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimalWithoutIcon(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' &&
-                    ' annually'
+                    ' annually' 
+                  }
+                </div>}
+                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
+                  {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
+                  <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> {props.frequency}</span>
+                  }
+                   {props.key !== 'TERM_INSURANCE' && props.frequency === 'Single' &&
+                  <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> (One Time Payment)</span>
                   }
                 </div>}
                 {props.product_key === 'CORONA' &&
@@ -276,7 +347,7 @@ class Report extends Component {
                     ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                 </div>
                 <div className="report-cover-amount"><span>Premium:
-                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year
+                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}
                   </div>
               </div>
             }
@@ -295,9 +366,7 @@ class Report extends Component {
       this.setState({
         loading_more: true
       });
-
-      let res = await Api.get(this.state.nextPage)
-
+      let res = await Api.get(this.state.nextPage);
       this.setState({
         loading_more: false
       });
@@ -307,9 +376,7 @@ class Report extends Component {
         var next_page = policyData.group_insurance.next_page;
         var has_more = policyData.group_insurance.more;
 
-        this.setState({
-          nextPage: (has_more) ? next_page : null
-        });
+        this.setState({ nextPage: (has_more) ? next_page : null });
 
         var newReportData = [];
 
@@ -326,13 +393,14 @@ class Report extends Component {
       }
     } catch (err) {
       this.setState({
-        loading_more: false
+        loading_more: false,
+        nextPage: ''
       });
       toast('Something went wrong');
     }
   }
 
-  sendEvents(user_action, insurance_type) {
+  sendEvents(user_action, insurance_type, policy_type) {
 
     let reportState = {};
     for (var i = 0; i < this.state.reportData.length; i++) {
@@ -345,14 +413,23 @@ class Report extends Component {
         "user_action": user_action,
         "screen_name": 'insurance_report',
         "type": insurance_type ? insurance_type : '',
-        report: reportState
       }
     };
+
+    if (insurance_type !== 'insurance') {
+      eventObj.properties.report = reportState;
+    }
+
+    if (insurance_type === 'insurance') {
+      eventObj.properties.policy =  policy_type ? TitleMaper(policy_type) : ''
+    }
 
     if (user_action === 'just_set_events') {
       return eventObj;
     } else {
-      nativeCallback({ events: eventObj });
+      nativeCallback({
+        events: eventObj
+      });
     }
   }
 

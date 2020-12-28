@@ -106,6 +106,8 @@ import CoronaPlanDetails from './products/corona';
 import CoronaPlanPayment from './products/corona/payment';
 import CoronaPaymentCallback from './products/corona/payment-callback';
 
+/*************************** Life Insurence **********************************/
+import LifeInsuranceEntry from './products/life_insurance/entry';
 
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
@@ -165,11 +167,22 @@ import GroupHealthPlanStarHealthDetails from './products/group_health/Star/healt
 import GroupHealthPlanStarSumInsured from './products/group_health/Star/star_sum_insured';
 import GroupHealthStarPlanSelectPed from './products/group_health/Star/star_select_ped';
 
+/*****************offline to online ********/
+import AddPolicy from './offline_policy/offline_policy_form'
+import OfflineReport from './offline_policy/offline_policy_details'
+
 // etli
 import EtliPersonalDetails1 from './products/term_insurance/etli/personal_details1';
 import EtliPersonalDetails2 from './products/term_insurance/etli/personal_details2';
 import EtliPersonalDetails3 from './products/term_insurance/etli/personal_details3';
 import EtliAuthFailed from './products/term_insurance/etli/auth_failed';
+
+
+//fyntune
+import FyntuneLanding from './products/life_insurance/landing';
+import ResumeIntermediatePage from './products/life_insurance/resumeIntermediatePage';
+import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
+import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
 
 // common
 
@@ -186,6 +199,8 @@ import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how
 
 import Tooltip from '../common/ui/Tooltip';
 import StarAddress from './products/group_health/Star/star_address';
+
+
 
 
 const generateClassName = createGenerateClassName({
@@ -319,6 +334,15 @@ const Insurance = (props) => {
           <Route path={`${url}/wallet/payment-failed`} component={SmartwalletFailed} />
           <Route path={`${url}/wallet/payment/:status`} component={SmartwalletPlanPayment} />
           <Route path={`${url}/wallet/payment-callback`} component={SmartwalletPaymentCallback} />
+
+           {/********** Life Insurance **********/}
+           <Route path={`${url}/life-insurance/entry`} component={LifeInsuranceEntry} />
+           <Route path={`${url}/life-insurance/term/personal-details-redirect`} component={PersonalDetailsRedirect} />
+           <Route path={`${url}/life-insurance/savings-plan/landing`} component={FyntuneLanding} />
+           <Route path={`${url}/life-insurance/:id/landing`} component={Intro} />      
+           <Route path={`${url}/life-insurance/resume-intermediate`} component={ResumeIntermediatePage}/>   
+           <Route path={`${url}/life-insurance/savings-plan/report-details/:policy_id`} component={FyntuneReportDetails}/>
+           <Route path={`${url}/life-insurance/app-update`} component={LifeInsuranceAppUpdate}/>                                                              
 
           {/********** Health Insurance **********/}
           <Route path={`${url}/health/landing`} component={HealthInsuranceLanding} />
@@ -525,6 +549,10 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/entry`} component={HealthInsuranceEntry} />
           <Route path={`${url}/group-health/:provider/how-to-claim-star`} component={GroupHealthPlanHowToClaimStar} />
           <Route path={`${url}/group-health/:provider/how-to-claim-religare`} component={GroupHealthPlanHowToClaimReligare} />
+
+          {/****    offline to online  ***OfflineReport***/}
+          <Route path={`${url}/group-insurance/add-policy`} component={AddPolicy} />
+          <Route path={`${url}/group-health/offline-to-online-report-details/:policy_id`} component={OfflineReport} />
 
           <Route component={NotFound} />
         </Switch>

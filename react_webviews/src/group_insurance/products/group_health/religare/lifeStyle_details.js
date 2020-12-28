@@ -30,17 +30,18 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   onload() {
 
-
-    let { member_base, account_type } = this.state.lead;
+    let { insured_people_details, quotation_details } = this.state.lead;
+ 
+    let account_type  =  quotation_details.insurance_type
+    let member_base = [];
 
     let none_option_selected = true;
-    for (var mem in member_base) {
-      if(member_base[mem].life_style_question_exists) {
+    for (var mem in insured_people_details) {
+      if(insured_people_details[mem].answers.life_style_details.length >= 0) {
         none_option_selected = false;
         break;
       }
     };
-
     this.setState({
       none_option_selected: none_option_selected
     })
@@ -51,12 +52,47 @@ class GroupHealthPlanLifestyleDetail extends Component {
         life_style_question_exists: none_option_selected
       })
     }
+
+    insured_people_details.forEach((element, index) => {
+      if (element.answers.life_style_details.length >= 1 && element.answers.life_style_details[0].yes_no) {
+        element.insured_person.life_style_question = element.answers.life_style_details[0]
+        element.insured_person.life_style_question.answer = element.insured_person.life_style_question.yes_no
+        element.insured_person.life_style_question.answer_description = element.insured_person.life_style_question.description
+        let since_when = element.insured_person.life_style_question.since_when.split('/');
+        let since_when_lifestyle = `${since_when[1]}/${since_when[2]}`
+        element.insured_person.life_style_question.start_date = since_when_lifestyle
+        element.insured_person.life_style_question.medical_question = "PEDSmokeDetails"
+        element.insured_person.life_style_question.key_mapper = "lifestylye_no_1"
+        element.insured_person.life_style_question_exists = true
+      } else {
+        element.insured_person.life_style_question = {}
+      }
+      member_base.push(element.insured_person)
+    });
+
+    member_base.forEach(element => {
+     let relation = this.state.member_base.find(mem => mem.backend_key === element.relation_key)
+      element.key = relation.key
+    });
+    member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
+
+    if(account_type !== "self") {
+    member_base.push({
+        key: 'none'
+    })
+  }
+
     let list = [];
+   
+   if (account_type === "self") {
 
-    if (account_type === "self") {
+    this.setState({
+      member_base : member_base
+    })
 
-      member_base[0].life_style_question_exists = member_base[0].life_style_question_exists ? 'Yes' : 'No';
 
+      member_base[0].life_style_question_exists = insured_people_details[0].answers.life_style_details.length > 0 && insured_people_details[0].answers.life_style_details[0].yes_no ? 'Yes' : 'No' 
+    
       member_base[0].radio_options =  [
         {
           name: "Yes",
@@ -90,7 +126,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     this.setState({
       account_type: account_type,
       list: list,
-      member_base: member_base
+      member_base: member_base,
     });
 
     this.setState({
@@ -150,13 +186,12 @@ class GroupHealthPlanLifestyleDetail extends Component {
     if(containsSpecialCharacters(value)){
       return;
     }
-
     if (id === "answer_description") {
       member_base[index].life_style_question.answer_description = value;
       member_base[index].life_style_question.answer_description_error = '';
     } else {
       if (!dobFormatTest(value)) {
-        return;
+        return;  //
       }
 
       let input;
@@ -166,6 +201,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
       member_base[index].life_style_question.start_date = event.target.value;
       member_base[index].life_style_question.start_date_error = '';
+
     }
 
     this.setState({
@@ -177,7 +213,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let { member_base, none_option_selected } = this.state;
     member_base[index].life_style_question_exists = event.target.checked;
-
     let isNone = member_base[index].key === 'none';
 
     if (isNone) {
@@ -186,7 +221,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
         if (member_base[key].key !== 'none') {
           member_base[key].life_style_question_exists = false;  //setting other to un check other than none
         }
-
       }
     }
 
@@ -198,7 +232,7 @@ class GroupHealthPlanLifestyleDetail extends Component {
     }
 
 
-    this.setState({
+    this.setState({ 
       member_base: member_base,
       none_option_selected: none_option_selected
     });
@@ -206,6 +240,9 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   validateMonthYear = (date, dob) => {
 
+    if(!date){
+      return 'please enter the valid date'
+    }
     if (!isValidMonthYear(date)) {
       return "please enter valid month and year";
     } else if (IsFutureMonthYear(date)) {
@@ -233,15 +270,15 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
     let atlOneOption = none_option_selected || false;
 
-    
     if (!none_option_selected) {
       for (let key in member_base) {
 
         let member_data = member_base[key];
-        if ((member_data.life_style_question_exists  === 'Yes' ||
-         member_data.life_style_question_exists === true) && member_data.key !== 'none') {
+
+        if ((member_data.life_style_question_exists === 'Yes' ||
+            member_data.life_style_question_exists === true) && member_data.key !== 'none') {
           member_data.life_style_question.answer_description_error = this.validateDescription(member_data.life_style_question.answer_description);
-          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date, member_data.dob);
+          member_data.life_style_question.start_date_error = this.validateMonthYear(member_data.life_style_question.start_date, member_data.dob.replace(/\//g, "-"))
 
           if (member_data.life_style_question.answer_description_error || member_data.life_style_question.start_date_error) {
             canProceed = false;
@@ -254,7 +291,6 @@ class GroupHealthPlanLifestyleDetail extends Component {
         }
 
       }
-
     }
 
     this.setState({
@@ -266,37 +302,55 @@ class GroupHealthPlanLifestyleDetail extends Component {
       canProceed = false;
       toast("Select atleast one option");
     }
+ 
 
-
-    let body = {};
-
-    this.sendEvents("next", {member_base: member_base});
-    if (canProceed) {
-
-      for (var i in member_base) {
-        let member_data = member_base[i];
-
-        if (member_data.key !== 'none') {
-          let backend_key = member_data.backend_key;
-          body[backend_key] = {};
-
-          if ((member_data.life_style_question_exists  === 'Yes' ||
-          member_data.life_style_question_exists === true) && !none_option_selected) {
-            body[backend_key].life_style_question_exists = 'true';
-            body[backend_key].life_style_question = {
-              answer: 'true',
-              answer_description: member_data.life_style_question.answer_description,
-              start_date: member_data.life_style_question.start_date
-            }
-          } else {
-            body[backend_key].life_style_question_exists = 'false';
-            body[backend_key].life_style_question = {}
-          }
-        }
-
-      }
-      this.updateLead(body);
+    let body = {
     }
+    this.sendEvents("next", {member_base: member_base});
+ 
+   if (canProceed) {
+     body["answers"] = {}
+     let insured_people_details = []
+     for (var i in member_base) {
+       let member_data = member_base[i];
+       if (member_data.key !== 'none') {
+         let backend_key = member_data.relation_key;
+
+         if ((member_data.life_style_question_exists === 'Yes' ||
+             member_data.life_style_question_exists === true) && !none_option_selected) {
+              let date =  member_data.life_style_question.start_date.split('/'); console.log(date,'date')
+              if(isNaN(date[1]) || date[1].length < 4){
+              toast('Enter Valid date');
+              return;
+              }
+
+           body["answers"][backend_key] = {};
+           let obj = {
+             "yes_no": true,
+             "since_when": member_data.life_style_question.start_date,
+             "description": member_data.life_style_question.answer_description,
+             "question_id": "religare_lsd_smoke"
+           }
+           insured_people_details.push({"relation_key": backend_key, "life_style_details_flag" : true})
+
+           body["answers"][backend_key] = {
+            "life_style_details": [obj]
+          };
+
+        }else{
+          insured_people_details.push({"relation_key": backend_key, "life_style_details_flag" : false})
+          body["answers"][backend_key] = {
+            "life_style_details": [{
+              "yes_no": false,
+              "question_id": "religare_lsd_smoke"
+            }]
+          }
+        } 
+      }
+      body['insured_people_details'] = insured_people_details;
+    }
+      this.updateLead(body);
+   }
   };
 
   handleClose = () => {
@@ -314,6 +368,8 @@ class GroupHealthPlanLifestyleDetail extends Component {
 
   render() {
     let { account_type, list } = this.state;
+
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}

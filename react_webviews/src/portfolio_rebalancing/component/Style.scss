@@ -1,0 +1,403 @@
+// Landing Page
+
+.sub-bold-heading {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 20px !important;
+  letter-spacing: 0px !important;
+  text-align: left !important;
+  margin-bottom: 20px !important;
+  margin-top: 20px !important;
+}
+.pr-switch-container {
+  .card-switch {
+    height: 158px;
+    width: 140px;
+    margin-right: 15px !important;
+  }
+}
+.rebalance-step-container {
+  margin-bottom: 48px;
+}
+.pr-note-text {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #767e86;
+  .note-bold-text {
+    color: #0a1d32;
+    font-weight: 500;
+  }
+}
+.pr-switch-secure-container {
+  .secure-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0px;
+    text-align: center;
+    color: #767e86;
+  }
+
+  .secure-image--container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+}
+
+.pr-rebalance-steps {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin-bottom: 20px;
+  .rebalance-steps-text {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0px;
+    color: #767e86;
+  }
+  .rebalance-steps-img {
+    height: 60px;
+    width: 100px;
+    border-radius: 0px;
+    margin-right: 14px;
+  }
+}
+// Landing Page End
+
+// Error Page
+.pr-error-container {
+  .image-cover {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .error-page {
+      height: 100%;
+      width: 100%;
+      margin-top: 40px;
+      max-width: 500px;
+      max-height: 500px;
+    }
+  }
+
+  .error-text-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 17px !important;
+    letter-spacing: 0px !important;
+    text-align: center !important;
+    color: #0a1d32 !important;
+    margin-top: 2em !important;
+  }
+  .error-text {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    line-height: 22px !important;
+    letter-spacing: 0px !important;
+    text-align: left !important;
+    color: #767e86 !important;
+    margin-top: 0.6em !important;
+  }
+}
+//Error Page End
+
+.pr-help-container {
+  max-width: 400px;
+  width: 100%;
+  margin: 20px auto;
+  margin-top: 40px;
+}
+
+.help-text {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 19px !important;
+  letter-spacing: 0px !important;
+  text-align: center !important;
+  color: #767e86 !important;
+}
+.help-contact-email {
+  justify-content: space-around !important;
+  margin-top: 10px;
+  flex-basis: 0;
+  .help-contact,
+  .help-email {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    line-height: 12px !important;
+    letter-spacing: 1px !important;
+    color: #767e86 !important;
+  }
+}
+
+// Rebalance Success
+.image-success-cover {
+  max-height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  .success-switch-img {
+    height: 100%;
+    margin: 0 auto;
+  }
+}
+
+.success-info-container {
+  flex-direction: column;
+  .success-message {
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 22px !important;
+    letter-spacing: 0px !important;
+    text-align: left !important;
+    color: #0a1d32 !important;
+    width: 100%;
+  }
+}
+.switch-transaction-container {
+  justify-content: flex-start;
+  align-items: flex-start !important;
+  width: 100%;
+  flex-direction: column;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  .transaction-heading {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 17px !important;
+    letter-spacing: 0px !important;
+    text-align: left !important;
+  }
+  .transaction-data {
+    font-size: 13px !important;
+    font-weight: 300 !important;
+    line-height: 17px !important;
+    letter-spacing: 0px !important;
+    text-align: left !important;
+    color: #0a1d32 !important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .check-success-status-message {
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 22px !important;
+    letter-spacing: 0px !important;
+    text-align: left !important;
+  }
+}
+///Rebalance Success End
+
+/// OTP Page/////
+.pr-otp-container {
+  .otp-successful-section {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    .otp-success-msg {
+      font-size: 13px !important;
+      font-weight: 400 !important;
+      line-height: 22px !important;
+      letter-spacing: 0px !important;
+
+      color: #767e86 !important;
+    }
+  }
+
+  .otp-container {
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .otp-input {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 4px;
+    border: 1.5px solid #bbbbbb;
+    margin-right: 10px;
+    font-size: 24px;
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .otp-resend-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px !important;
+  }
+  .otp-error {
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
+  }
+}
+//OTP End
+
+//Sip-Date
+
+.pr-sip-date {
+  .dropdown-in-modal {
+    .error-radiogrp {
+      display: none;
+    }
+  }
+  .input-box-port-reb {
+    padding: 13px 10px 10px 10px !important;
+    background-color: #f8f8f8;
+    color: var(--primary) !important;
+    border-bottom: 2px solid !important;
+    margin-top: 5px !important;
+    .input-value {
+      color: var(--primary) !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      line-height: 19px !important;
+      letter-spacing: 0px !important;
+      position: relative !important;
+      width: 100%;
+    }
+  }
+  .card {
+    border-radius: 6px;
+    height: auto;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.12), 0px 2px 2px rgba(0, 0, 0, 0.0483186);
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+
+  .fund-switch-from {
+    .fund-switch-name {
+      font-size: 14px !important;
+      font-weight: 400 !important;
+      line-height: 20px !important;
+      letter-spacing: 0px !important;
+      color: #0a1d32 !important;
+    }
+  }
+
+  .fund-invest-amount-container {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+
+    .amount-container {
+      margin-left: 18px;
+    }
+  }
+
+  .sub-head {
+    color: #767e86 !important;
+  }
+
+  .light-bold {
+    font-size: 10px !important;
+    font-weight: 400 !important;
+    line-height: 17px !important;
+    letter-spacing: 0px !important;
+  }
+  .sub-value {
+    color: #0a1d32 !important;
+  }
+
+  .arrow-separator {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .recommended-switch-fund {
+    .recommended-fund-detail {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .recommended-fund-name {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        line-height: 17px !important;
+        letter-spacing: 0px !important;
+        color: #0a1d32 !important;
+        width: 62% !important;
+      }
+      .recommended-fund-amount {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        line-height: 15px !important;
+        letter-spacing: 0px !important;
+        color: #767e86 !important;
+      }
+    }
+  }
+
+  .sip-date-container {
+    margin-top: 20px;
+  }
+
+  .sip-auto-debit {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    line-height: 15px !important;
+    letter-spacing: 0px !important;
+    color: #051d34 !important;
+  }
+
+  .pr-input-append-text {
+    color: #767e86;
+    width: max-content !important;
+    height: 20px !important;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 15px;
+    letter-spacing: 0px;
+    margin-left: 6px;
+  }
+}
+
+.pr-sip-date-imp-info {
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  line-height: 17px !important;
+  letter-spacing: 0px !important;
+  color: #767e86 !important;
+
+  .sip-date-note {
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    line-height: 17px !important;
+    letter-spacing: 0px !important;
+    color: #0a1d32 !important;
+  }
+}
+
+.pr-sip-transaction {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  line-height: 22px !important;
+  margin-bottom: 30px !important;
+}
+// Sip End
+
+@media screen and (min-width: 370px) {
+  .pr-error-container {
+    .error-text {
+      text-align: center !important;
+    }
+  }
+  .success-info-container {
+    .success-message {
+      text-align: center !important;
+    }
+  }
+}

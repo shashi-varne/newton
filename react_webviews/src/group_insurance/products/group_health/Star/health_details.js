@@ -163,7 +163,7 @@ class GroupHealthPlanStarHealthDetails extends Component {
             groupHealthPlanData.plan_selected = {
                 copay: ' 0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is above 60 yrs',
                 recommendation_tag: '',
-                plan_title: "Family Health Optima",
+                plan_title: "Star Health",
                 plan_type: "FHONEW",
                 sum_assured: "500000",
                 claim_settlement_ratio: '78.15'
