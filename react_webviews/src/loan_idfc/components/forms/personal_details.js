@@ -135,8 +135,10 @@ class PersonalDetails extends Component {
     }
 
     let confirm_fields = ["first_name", "last_name", "dob"]
-    if (this.state.confirm_details && confirm_fields.includes(name)) {
-      details_changed = 'yes'
+    if (this.state.confirm_details) {
+      this.handleCkycMessage(name);
+      if(confirm_fields.includes(name))
+        details_changed = 'yes'
     }
 
     this.setState({

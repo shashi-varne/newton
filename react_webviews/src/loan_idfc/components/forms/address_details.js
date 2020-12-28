@@ -134,8 +134,10 @@ class AddressDetails extends Component {
 
     let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
 
-    if (this.state.confirm_details && confirm_fields.includes(name)) {
-      form_data['current_address_edited'] = "yes";
+    if (this.state.confirm_details) {
+      this.handleCkycMessage(name)
+      if(confirm_fields.includes(name))
+        form_data['current_address_edited'] = "yes";
     }
 
     this.setState({
@@ -198,8 +200,9 @@ class AddressDetails extends Component {
     form_data[name] = pincode;
     form_data[name + "_error"] = "";
 
-    if (this.state.confirm_details && name === 'current_pincode') {
-      form_data['current_address_edited'] = "yes";
+    if (this.state.confirm_details) {
+      if(name === 'current_pincode')
+        form_data['current_address_edited'] = "yes";
       this.handleCkycMessage(name);
     }
 

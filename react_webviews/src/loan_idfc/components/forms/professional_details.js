@@ -8,7 +8,6 @@ import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr } from "utils/validators";
 import Autosuggest from "../../common/Autosuggest";
 import Api from "utils/api";
-import DotDotLoader from "common/ui/DotDotLoader";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -78,10 +77,13 @@ class ProfessionalDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "professional_details",
-        salary_mode: this.state.form_data.salary_mode || "",
-        net_monthly_salary: this.state.form_data.net_monthly_salary || "",
       },
     };
+
+    if (this.state.employment_type === 'salaried') {
+      eventObj.properties.salary_mode =  this.state.form_data.salary_mode || "";
+      eventObj.properties.net_monthly_salary = this.state.form_data.net_monthly_salary || "";
+    }
 
     if (user_action === "just_set_events") {
       return eventObj;
@@ -166,7 +168,6 @@ class ProfessionalDetails extends Component {
       this.setState({
         form_data: form_data,
         companyOptions: companyOptions,
-        
       });
     }
   };
@@ -192,7 +193,7 @@ class ProfessionalDetails extends Component {
                   class="company_name"
                   id="company_name"
                   name="company_name"
-                  placeholder="Serach for company"
+                  placeholder="Search for company"
                   onChange={(value) => this.handleSearch(value)}
                   value={this.state.form_data.company_name || ""}
                   error={this.state.form_data.company_name_error ? true : false}

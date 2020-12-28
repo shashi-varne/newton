@@ -226,9 +226,8 @@ class LoanKnowMore extends Component {
     this.props.history.push({
       pathname: path_name,
       search: getConfig().searchParams,
-      params: {
-        renderData: renderData
-      }
+    },{
+      renderData: renderData
     });
   }
 
