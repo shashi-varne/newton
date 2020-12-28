@@ -38,11 +38,17 @@ class Container extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
-    if (pathname.indexOf('group-insurance') >= 0) {
+
+    if (pathname === '/group-insurance' 
+       || pathname.indexOf('other-insurance') >= 0 
+       || pathname.indexOf('life-insurance') >= 0 
+       || pathname.includes('/group-insurance/group-health')
+       || pathname === '/group-insurance/group-insurance/add-policy' 
+       || pathname === '/group-insurance/health/landing') {
       this.setState({
         new_header: true,
         inPageTitle: true,
-        force_show_inpage_title : true
+        force_show_inpage_title: true
       }, () => {
         this.onScroll();
       })
@@ -51,6 +57,7 @@ class Container extends Component {
         new_header: false
       })
     }
+
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
