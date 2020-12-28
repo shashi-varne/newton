@@ -82,7 +82,6 @@ class LifeInsuranceEntry extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
-
         let group_insurance = resultData.group_insurance;
         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
 

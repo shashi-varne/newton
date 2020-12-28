@@ -61,10 +61,10 @@ class DiseasesSpecificPlan extends Component {
     let { params } = this.props.location || {};
     let openModuleData = params ? params.openModuleData : {}
 
-    let redirect_url =  decodeURIComponent(getConfig().redirect_url);
-    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-      window.location.href = redirect_url;
-    }
+    // let redirect_url =  decodeURIComponent(getConfig().redirect_url);
+    // if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+    //   window.location.href = redirect_url;
+    // }
 
     this.setState({
       openModuleData: openModuleData || {},
@@ -73,7 +73,7 @@ class DiseasesSpecificPlan extends Component {
     })
   }
 
-  componentDidCatch(){
+  componentDidMount(){
     if (this.state.openModuleData.sub_module) {
       let navigateMapper = {
         // hospicash: 'HOSPICASH',
@@ -112,7 +112,7 @@ class DiseasesSpecificPlan extends Component {
     })
 
     let product_key = data.key ? data.key : data;
-    data.insurance_type = 'Disease specific plans'
+    typeof data === 'object' ? data.insurance_type = 'Disease specific plans'  : data = {"insurance_type" : 'Disease specific plans'}
     this.sendEvents(data);
     var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
 
