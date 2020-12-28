@@ -50,7 +50,6 @@
     "jquery": "^3.3.1",
     "jss": "^9.8.1",
     "material-ui": "next",
-    "material-ui-password-field": "^2.1.2",
     "moment": "^2.29.0",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
