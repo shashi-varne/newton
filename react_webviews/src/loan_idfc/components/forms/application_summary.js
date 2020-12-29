@@ -44,11 +44,11 @@ class ApplicationSummary extends Component {
           subtitle: personal_info.pan_no,
           common_field: true,
         },
-        {
-          title: "Education qualification",
-          subtitle: professional_info.educational_qualification,
-          common_field: true,
-        },
+        // {
+        //   title: "Education qualification",
+        //   subtitle: professional_info.educational_qualification,
+        //   common_field: true,
+        // },
         {
           title: "Employment type",
           subtitle: capitalizeFirstLetter(application_info.employment_type.split('_').join(' ') || ""),
@@ -84,21 +84,21 @@ class ApplicationSummary extends Component {
           subtitle: capitalize(professional_info.salary_mode || ""),
           common_field: false,
         },
-        {
-          title: "Company constitution",
-          subtitle: capitalize(professional_info.constitution || ""),
-          common_field: true,
-        },
+        // {
+        //   title: "Company constitution",
+        //   subtitle: capitalize(professional_info.constitution || ""),
+        //   common_field: true,
+        // },
         {
           title: "Organisation",
           subtitle: capitalize(professional_info.organisation || ""),
           common_field: true,
         },
-        {
-          title: "Department",
-          subtitle: capitalize(professional_info.department || ""),
-          common_field: false,
-        },
+        // {
+        //   title: "Department",
+        //   subtitle: capitalize(professional_info.department || ""),
+        //   common_field: false,
+        // },
         {
           title: "Industry",
           subtitle: capitalize(professional_info.industry || ""),

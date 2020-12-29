@@ -117,7 +117,9 @@ class BasicDetails extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { form_data, pan_state } = this.state;
-    let keys_to_check = ["dob", "educational_qualification", "employment_type"];
+    let keys_to_check = ["dob", 
+    // "educational_qualification",
+     "employment_type"];
     if (pan_state !== "success") {
       keys_to_check.push("pan_no");
     }
@@ -171,7 +173,7 @@ class BasicDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
+            {/* <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
                 options={this.state.qualification}
@@ -189,7 +191,7 @@ class BasicDetails extends Component {
                 name="educational_qualification"
                 onChange={this.handleChange("educational_qualification")}
               />
-            </div>
+            </div> */}
           </FormControl>
           <div className="sub-head">Employment type</div>
           <div className="employment-type">
