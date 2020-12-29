@@ -704,6 +704,30 @@ export function getCssMapperReport(policy) {
       color: 'yellow',
       disc: 'Status awaited from'
     },
+    'Issued': {
+      color: 'green',
+      disc: 'Issued'
+    },
+    'Pending': {
+      color: 'yellow',
+      disc: 'Pending'
+    },
+    'In_Process': {
+      color: 'yellow',
+      disc: 'In process'
+    },
+    'Rejected': {
+      color: 'red',
+      disc: 'Rejected'
+    },
+    'Declined': {
+      color: 'red',
+      disc: 'Declined'
+    },
+    'Cancelled': {
+      color: 'red',
+      disc: 'Cancelled'
+    },
     'incomplete': {
       color: 'yellow',
       disc: 'Policy Pending'
@@ -711,7 +735,7 @@ export function getCssMapperReport(policy) {
     'policy_issued': {
       color: 'green',
       disc: 'Policy Issued'
-    },
+    }, 
     'success': {
       color: 'green',
       disc: 'Policy Issued'
@@ -799,4 +823,21 @@ export function childeNameMapper(name) {
 
   return mapper[name] || name;
   
+}
+
+export function TitleMaper(name){
+
+
+  let TitleMaper = {
+    'Health': 'Health insurance',
+    'Life': 'Life insurance',
+    'Motor': 'Motor insurance',
+    'Others': 'General Insurance',
+    'Other': 'General Insurance'
+  }
+
+
+  return TitleMaper[name] || ''
+
+
 }
