@@ -27,7 +27,9 @@ class Landing extends Component {
 
   componentWillMount() {
 
+    window.localStorage.setItem('group_insurance_plan_final_data', '');
     nativeCallback({ action: 'take_control_reset' });
+    window.localStorage.setItem('group_insurance_payment_url', '');
     
     let insuranceProducts = [
       {
@@ -154,6 +156,18 @@ class Landing extends Component {
     });
   }
 
+  getLeadId(product_key) {
+    let id = ''
+    if (product_key !== 'term_insurance') {
+      if (this.state.BHARTIAXA_APPS[product_key] &&
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
+        id = this.state.BHARTIAXA_APPS[product_key][0].lead_id;
+      }
+    }
+
+    return id;
+  }
+
   policymove = ()=> {
     this.sendEvents('next', "")
     this.navigate('/group-insurance/group-insurance/add-policy');
@@ -241,22 +255,17 @@ class Landing extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else {
-      this.navigate(this.state.redirectTermPath);
-
-      return;
-    }
-
-    this.sendEvents('next', events)
-
-    var fullPath = '';
-    if (product_key === 'LIFE_INSURANCE') {
-      fullPath = 'life-insurance/entry';
-    } else if (product_key === 'Other_Insurance') {
-      fullPath = 'other-insurance/entry';
-    } else if (product_key === 'HEALTH_INSURANCE') {
-      fullPath = 'health/landing';
-    }
+    } else if (product_key === 'LIFE_INSURANCE') {
+        fullPath = 'life-insurance/entry';
+      } else if (product_key === 'Other_Insurance') {
+        fullPath = 'other-insurance/entry';
+      } else if (product_key === 'HEALTH_INSURANCE') {
+        fullPath = 'health/landing';
+      }
+      else {
+        this.navigate(this.state.redirectTermPath);
+        return;
+      }
 
     window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('group-insurance/' + fullPath);
