@@ -22,7 +22,7 @@ class DiseasesSpecificPlan extends Component {
       params: qs.parse(props.parent.props.history.location.search.slice(1))
     }
 
-    this.renderPorducts = this.renderPorducts.bind(this);
+    this.renderProducts = this.renderProducts.bind(this);
   }
 
   componentWillMount() {
@@ -144,7 +144,7 @@ class DiseasesSpecificPlan extends Component {
     this.navigate('/group-insurance/' + fullPath);
   }
 
-  renderPorducts(props, index) {
+  renderProducts(props, index) {
     return (
       <div key={index} onClick={() => this.handleClick(props)} style={{
         display: 'flex', alignItems: 'center', width : '100%'
@@ -179,7 +179,7 @@ class DiseasesSpecificPlan extends Component {
   }
 
 
-  render() { return ( <div style={{width : '100%'}}> {this.state.insuranceProducts.map(this.renderPorducts)} </div> ) }
+  render() { return ( <div style={{width : '100%'}}> {this.state.insuranceProducts.map(this.renderProducts)} </div> ) }
 
 }
 
