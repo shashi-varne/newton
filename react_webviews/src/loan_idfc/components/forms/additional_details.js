@@ -52,6 +52,7 @@ class AdditionalDetails extends Component {
     form_data.nature_of_business = vendor_info.nature_of_business;
     form_data.office_address1 = office_address_data.address1;
     form_data.office_address2 = office_address_data.address2;
+    form_data.office_landmark = office_address_data.landmark;
     form_data.office_pincode = office_address_data.pincode;
     form_data.office_city = office_address_data.city;
     form_data.office_state = office_address_data.state;
@@ -164,6 +165,7 @@ class AdditionalDetails extends Component {
     let keys_to_check = [
       "office_address1",
       "office_address2",
+      "office_landmark",
       "office_pincode",
       "office_city",
       "office_state",
@@ -173,6 +175,12 @@ class AdditionalDetails extends Component {
 
     if (employment_type === "self_employed") {
       keys_to_check.push("nature_of_business")
+    }
+
+    if(form_data.office_pincode.length !== 6) {
+      form_data['office_pincode_error'] = 'Please enter valid pincode';
+      this.setState({form_data : form_data});
+      return
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "one_point_seven", true);
@@ -251,6 +259,20 @@ class AdditionalDetails extends Component {
                 name="office_address2"
                 value={this.state.form_data.office_address2 || ""}
                 onChange={this.handleChange("office_address2")}
+              />
+            </div>
+
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.office_landmark_error}
+                helperText={this.state.form_data.office_landmark_error}
+                type="text"
+                width="40"
+                label="Landmark"
+                id="office_landmark"
+                name="office_landmark"
+                value={this.state.form_data.office_landmark || ""}
+                onChange={this.handleChange("office_landmark")}
               />
             </div>
 
