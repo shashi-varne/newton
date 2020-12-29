@@ -249,12 +249,12 @@ export async function getPickList() {
         {
           tnc: tnc,
           industryOptions: result.industry,
-          constitutionOptions: result.constitution,
+          // constitutionOptions: result.constitution,
           designationOptions: result.designation,
-          qualification: result.educational_qualification,
+          // qualification: result.educational_qualification,
           businessOptions: result.nature_of_business,
           organisationTypeOptions: result.organisation,
-          purposeOfLoanOptions: result.purpose,
+          // purposeOfLoanOptions: result.purpose,
           salaryRecieptOptions: result.salary_mode,
           show_loader: false,
         },
@@ -359,7 +359,12 @@ export async function getOrCreate(params) {
 
       let screens = ["main_landing_screen", "calculator", "know_more_screen"];
 
-      let picklistScreens = ["basic_details", "professional_details_screen", "mobile_verification", "requirement_details_screen", "additional_details"]
+      let picklistScreens = [
+        // "basic_details",
+         "professional_details_screen",
+          // "mobile_verification",
+          //  "requirement_details_screen",
+            "additional_details"]
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
@@ -770,14 +775,18 @@ export async function formCheckUpdate(
     dob: "dob",
     pan_no: "pan number",
     employment_type: "employment type",
-    educational_qualification: "educational qualification",
+    // educational_qualification: "educational qualification",
     first_name: "first name",
     middle_name: "middle name",
     last_name: "last name",
     gender: "gender",
     marital_status: "marital status",
-    father_name: "father's name",
-    mother_name: "mother's name",
+    // father_name: "father's name",
+    // mother_name: "mother's name",
+    father_first_name: "father's first name",
+    father_last_name: "father's last name",
+    mother_first_name: "mother's first name",
+    mother_last_name: "mother's last name",
     religion: "religion",
     email_id: "email id",
     company_name: this.state.lead.application_info.employment_type !== "self_employed" ?  "company name from provided list" : "business name",
@@ -785,7 +794,7 @@ export async function formCheckUpdate(
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
     salary_mode: "salary receipt mode",
-    constitution: "constitution",
+    // constitution: "constitution",
     organisation: "organisation",
     department: "department",
     industry: "industry from provided list",
@@ -804,7 +813,7 @@ export async function formCheckUpdate(
     permanent_city: "city",
     permanent_state: "state",
     amount_required: "loan amount",
-    purpose: "purpose",
+    // purpose: "purpose",
     tenor: "tenor",
     office_address: "office address",
     pincode: "pincode",
@@ -816,12 +825,12 @@ export async function formCheckUpdate(
   };
 
   let selectTypeInput = [
-    "educational_qualification",
+    // "educational_qualification",
     "gender",
     "marital_status",
     "religion",
     "salary_mode",
-    "constitution",
+    // "constitution",
     "organisation",
     "department",
     "industry",
