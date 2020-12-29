@@ -96,8 +96,8 @@ class HealthInsuranceLanding extends Component {
     let openModuleData =  params ? params.openModuleData : {}
 
 
-    if(  true ||  openModuleData && openModuleData.sub_module) {
-      let pathname =      'HEALTH_SUPER_TOPUP'           //openModuleData.sub_module;
+    if(openModuleData && openModuleData.sub_module) {
+      let pathname = openModuleData.sub_module;
       this.handleClick(pathname);
     } else {
       this.setState({
