@@ -169,9 +169,9 @@ class HealthInsuranceLanding extends Component {
         }
 
         let insuranceProducts = this.state.insuranceProducts;
-        for (var i = 0; i < insuranceProducts.length; i++) {
-          let key = insuranceProducts[i].key;
-          insuranceProducts[i].resume_flag =   resumeFlagAll[key];
+  
+        for (const ele of insuranceProducts) {
+          ele.resume_flag = resumeFlagAll[ele.key];
         }
 
         this.setState({
@@ -267,17 +267,14 @@ class HealthInsuranceLanding extends Component {
   }
 
   HealthInsuranceEntry = () => {
-    let Comprehensive = !this.state.Comprehensive
     this.setState({
-      Comprehensive : Comprehensive,
-      DiseasesSpecificPlan : this.state.DiseasesSpecificPlan
+      Comprehensive : !this.state.Comprehensive
     })
   }
 
   DISEASE_SPECIFIC_PLANS = () => {
-    let DiseasesSpecificPlan = !this.state.DiseasesSpecificPlan
     this.setState({
-      DiseasesSpecificPlan : DiseasesSpecificPlan
+      DiseasesSpecificPlan : !this.state.DiseasesSpecificPlan
     })
   }
 
