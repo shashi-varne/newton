@@ -52,9 +52,9 @@ class ProfessionalDetails extends Component {
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
       salary_mode: professional_info.salary_mode,
-      constitution: professional_info.constitution,
+      // constitution: professional_info.constitution,
       organisation: professional_info.organisation,
-      department: "BACKOFFICE",
+      // department: "BACKOFFICE",
       industry: professional_info.industry,
     };
 
@@ -103,14 +103,17 @@ class ProfessionalDetails extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { form_data, employment_type } = this.state;
-    let keys_to_check = ["constitution", "organisation"];
+    let keys_to_check = [
+      // "constitution",
+       "organisation"
+      ];
 
     let salaried = [
       "company_name",
       "office_email",
       "net_monthly_salary",
       "salary_mode",
-      "department",
+      // "department",
       "industry",
     ];
 
@@ -262,7 +265,7 @@ class ProfessionalDetails extends Component {
               </div>
             )}
 
-            <div className="InputField">
+            {/* <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
                 options={this.state.constitutionOptions}
@@ -274,7 +277,7 @@ class ProfessionalDetails extends Component {
                 name="constitution"
                 onChange={this.handleChange("constitution")}
               />
-            </div>
+            </div> */}
 
             <div className="InputField">
               <DropdownWithoutIcon

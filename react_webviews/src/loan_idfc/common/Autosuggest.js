@@ -43,7 +43,8 @@ class Example extends React.Component {
   componentDidUpdate(prevState) {
     if (prevState.inputs !== this.props.inputs) {
       this.setState({ input: this.props.inputs });
-      this.onSuggestionsFetchRequested();
+      let value = this.state.value;
+      this.onSuggestionsFetchRequested({ value: value });
     }
   }
 
@@ -51,15 +52,16 @@ class Example extends React.Component {
     this.props.onChange(newValue);
     this.setState({
       value: newValue,
+    }, () => {
+      this.onSuggestionsFetchRequested({ value: newValue })
     });
   };
 
-  onSuggestionsFetchRequested = () => {
+  onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: getSuggestions(
-        this.state.value || "",
+        value || "",
         this.props.inputs || [],
-        this.props.isApiRunning
       ),
     });
   };
@@ -89,7 +91,7 @@ class Example extends React.Component {
         </InputLabel>
         <Autosuggest
           suggestions={suggestions}
-          onSuggestionsFetchRequested={!this.props.isApiRunning && this.onSuggestionsFetchRequested}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           getSuggestionValue={getSuggestionValue}
           renderSuggestion={renderSuggestion}

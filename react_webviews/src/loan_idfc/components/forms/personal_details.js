@@ -92,8 +92,12 @@ class PersonalDetails extends Component {
       dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
       marital_status: capitalizeFirstLetter(personal_info.marital_status || ""),
-      father_name: personal_info.father_name,
-      mother_name: confirm_details && personal_info.mother_name,
+      // father_name: personal_info.father_name,
+      // mother_name: confirm_details && personal_info.mother_name,
+      father_first_name: personal_info.father_first_name,
+      father_last_name: personal_info.father_last_name,
+      mother_first_name: confirm_details && personal_info.mother_first_name,
+      mother_last_name: confirm_details && personal_info.mother_last_name,
       religion: capitalizeFirstLetter(personal_info.religion || ""),
       email_id: (personal_info.email_id || "").toLowerCase(),
     };
@@ -159,13 +163,19 @@ class PersonalDetails extends Component {
       "last_name",
       "gender",
       "marital_status",
-      "father_name",
+      // "father_name",
+      "father_first_name",
+      "father_last_name",
       "religion",
       "email_id",
     ];
     
     if (this.state.confirm_details) {
-      keys_to_check.push(...["dob", "mother_name", "middle_name"]);
+      keys_to_check.push(...["dob",
+      //  "mother_name", 
+      "mother_first_name", 
+      "mother_last_name", 
+       "middle_name"]);
     }
 
     this.formCheckUpdate(keys_to_check, form_data);
@@ -327,7 +337,8 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
+
+            {/* <div className="InputField">
               <Input
                 error={!!this.state.form_data.father_name_error}
                 helperText={this.state.form_data.father_name_error}
@@ -341,9 +352,9 @@ class PersonalDetails extends Component {
                 onChange={this.handleChange("father_name")}
                 onClick={() => this.handleCkycMessage("father_name")}
               />
-            </div>
+            </div> */}
 
-            {this.state.confirm_details && (
+            {/* {this.state.confirm_details && (
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.mother_name_error}
@@ -359,6 +370,74 @@ class PersonalDetails extends Component {
                   onClick={() => this.handleCkycMessage("mother_name")}
                 />
               </div>
+            )} */}
+
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.father_first_name_error}
+                helperText={this.state.form_data.father_first_name_error}
+                type="text"
+                width="40"
+                label="Father's first name"
+                class="father_first_name"
+                id="name"
+                name="father_first_name"
+                value={this.state.form_data.father_first_name || ""}
+                onChange={this.handleChange("father_first_name")}
+                onClick={() => this.handleCkycMessage("father_first_name")}
+              />
+            </div>
+
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.father_last_name_error}
+                helperText={this.state.form_data.father_last_name_error}
+                type="text"
+                width="40"
+                label="Father's last name"
+                class="father_last_name"
+                id="name"
+                name="father_last_name"
+                value={this.state.form_data.father_last_name || ""}
+                onChange={this.handleChange("father_last_name")}
+                onClick={() => this.handleCkycMessage("father_last_name")}
+              />
+            </div>
+
+            {this.state.confirm_details && (
+              <>
+                <div className="InputField">
+                  <Input
+                    error={!!this.state.form_data.mother_first_name_error}
+                    helperText={this.state.form_data.mother_first_name_error}
+                    type="text"
+                    width="40"
+                    label="Mother's first name"
+                    class="mother_first_name"
+                    id="name"
+                    name="mother_first_name"
+                    value={this.state.form_data.mother_first_name || ""}
+                    onChange={this.handleChange("mother_first_name")}
+                    onClick={() => this.handleCkycMessage("mother_first_name")}
+                  />
+                </div>
+
+                <div className="InputField">
+                  <Input
+                    error={!!this.state.form_data.mother_last_name_error}
+                    helperText={this.state.form_data.mother_last_name_error}
+                    type="text"
+                    width="40"
+                    label="Mother's last name"
+                    class="mother_last_name"
+                    id="name"
+                    name="mother_last_name"
+                    value={this.state.form_data.mother_last_name || ""}
+                    onChange={this.handleChange("mother_last_name")}
+                    onClick={() => this.handleCkycMessage("mother_last_name")}
+                  />
+                </div>
+              </>
             )}
 
             <div className="InputField">

@@ -26,11 +26,11 @@ class Calculator extends Component {
     this.initialize();
   }
 
-  onload = async () => {
-    let { loans_applied, dmi, idfc, loan_amount_required } = this.state;
+  onload = () => {
+    let cta_title = this.props.location.state ? this.props.location.state.cta_title : "APPLY NOW";
 
     this.setState({
-      cta_title: loan_amount_required ? "RESUME" : "APPLY NOW"
+      cta_title: cta_title
     })
   };
 
