@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import ContactUs from '../../common/components/contact_us'
+import qs from 'qs'; 
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -14,6 +15,7 @@ class Landing extends Component {
       show_loader: true,
       type: getConfig().productName,
       insuranceProducts: [],
+      params: qs.parse(props.history.location.search.slice(1)) 
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -43,7 +45,7 @@ class Landing extends Component {
       }
     ];
 
-    let { params } = this.props.location || {};
+    let { params } = this.props.location || {}
     let openModuleData = params ? params.openModuleData : {}
     let redirect_url = decodeURIComponent(getConfig().redirect_url);
     if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
@@ -56,10 +58,86 @@ class Landing extends Component {
   }
 
 
-  componentDidMount() {
-    this.setState({
-      show_loader: false
-    })
+  async componentDidMount() {
+
+    try {
+      const res = await Api.get('/api/ins_service/api/insurance/application/summary')
+
+      if(!this.state.openModuleData.sub_module) {
+        this.setState({
+          show_loader: false
+        })
+      }
+      
+      if (res.pfwresponse.status_code === 200) {
+
+        var resultData = res.pfwresponse.result.response;
+
+        let group_insurance = resultData.group_insurance;
+        let term_insurance = resultData.term_insurance;
+        let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        // let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
+
+        let resumeFlagAll = {
+          'TERM_INSURANCE': resumeFlagTerm
+        }
+        
+        if (!BHARTIAXA) {
+          BHARTIAXA = {};
+        }
+        let BHARTIAXA_APPS = {
+          'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
+          'HOSPICASH': BHARTIAXA['HOSPICASH'],
+          'SMART_WALLET': BHARTIAXA['SMART_WALLET']
+        }
+
+        for (var key in BHARTIAXA_APPS) {
+          let policy = BHARTIAXA_APPS[key];
+          if (policy && policy.length > 0) {
+            let data = policy[0];
+            if (data.status !== 'complete' && data.lead_payment_status === 'payment_done') {
+              resumeFlagAll[data.product_name] = true;
+            } else {
+              resumeFlagAll[data.product_name] = false;
+            }
+          }
+        }
+
+        let insuranceProducts = this.state.insuranceProducts;
+        for (var i = 0; i < insuranceProducts.length; i++) {
+          let key = insuranceProducts[i].key;
+          insuranceProducts[i].resume_flag = resumeFlagAll[key];
+        }
+
+        this.setState({
+          group_insurance: group_insurance,
+          term_insurance: term_insurance,
+          BHARTIAXA_APPS: BHARTIAXA_APPS,
+          insuranceProducts: insuranceProducts
+        })
+
+        if(this.state.openModuleData.sub_module) {
+          let navigateMapper = {
+            hospicash: 'HOSPICASH',
+            personal_accident: 'PERSONAL_ACCIDENT',
+            smart_wallet: 'SMART_WALLET'
+          };
+
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
+          this.handleClick(pathname);
+        }
+
+      } else {
+        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong');
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast('Something went wrong');
+    }
   }
 
   navigate = (pathname, search) => {
