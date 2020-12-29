@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import ContactUs from '../../common/components/contact_us'
 import qs from 'qs'; 
+import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -79,7 +81,7 @@ class Landing extends Component {
         // let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
         let resumeFlagAll = {
-          'TERM_INSURANCE': resumeFlagTerm
+          'TERM_INSURANCE':  false
         }
         
         if (!BHARTIAXA) {
