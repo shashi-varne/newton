@@ -62,7 +62,7 @@ class HealthInsuranceLanding extends Component {
 
     let insuranceProducts = [
       {
-        key: 'HEALTH_SURAKSHA',
+        key: 'HealthInsuranceEntry',
         title: 'Comprehensive',
         subtitle: 'Complete healthcare in one policy',
         icon: health_suraksha_icon,
@@ -129,135 +129,6 @@ class HealthInsuranceLanding extends Component {
     
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
-
-      // let res = {
-      //   'pfwuser_id': 6477767626457089,
-      //    'pfwresponse': {
-      //      'status_code': 200,
-      //      'requestapi': '',
-      //      'result': 'message' ,
-      //      'response': {
-      //        'health_insurance': {
-      //          'message': 'success',
-      //          'insurance_apps': {}
-      //        },
-      //        'term_insurance': {
-      //          '_code': 303,
-      //          'error': 'No applications found.'
-      //        },
-      //        'group_insurance': {
-      //          'message': 'success',
-      //          'insurance_apps': {
-      //            'BHARTIAXA': {
-      //              'CORONA': [{
-      //                'lead_status': 'success',
-      //                'lead_payment_status': 'payment_done',
-      //                'dt_policy_start': '25 December 2020',
-      //                'base_plan_title': 'Smart wallet insurance',
-      //                'logo': 'https://plutus-insurance-staging.appspot.com/static/img/bharti_axa_logo.svg',
-      //                'id': 4848888020205568,
-      //                'policy_number': 'SY700155',
-      //                'transaction_date': '24-12-2020',
-      //                'provider': 'BHARTIAXA',
-      //                'dt_policy_end': '24 December 2021',
-      //                'product_name': 'CORONA',
-      //                'status': 'incomplete',
-      //                'premium': 250.0,
-      //                'account_id': 'd6477767626457089',
-      //                'sum_assured': 50000,
-      //                'dt_created': '24-12-2020',
-      //                'dt_updated': '24-12-2020',
-      //                'product_title': 'Smart wallet insurance',
-      //                'lead_id': 5914733311950848,
-      //                'dt_updated_1': '24 Dec 2020',
-      //                'tenure': 1,
-      //                'dt_created_trans': '24-12-2020',
-      //                'policy_id': 6694210954592256
-      //              }, {
-      //                'lead_status': 'success',
-      //                'lead_payment_status': 'payment_done',
-      //                'dt_policy_start': '25 December 2020',
-      //                'base_plan_title': 'Smart wallet insurance',
-      //                'logo': 'https://plutus-insurance-staging.appspot.com/static/img/bharti_axa_logo.svg',
-      //                'id': 5092346496548864,
-      //                'policy_number': 'SY700154',
-      //                'transaction_date': '24-12-2020',
-      //                'provider': 'BHARTIAXA',
-      //                'dt_policy_end': '24 December 2021',
-      //                'product_name': 'CORONA',
-      //                'status': 'incomplete',
-      //                'premium': 500.0,
-      //                'account_id': 'd6477767626457089',
-      //                'sum_assured': 100000,
-      //                'dt_created': '21-12-2020',
-      //                'dt_updated': '24-12-2020',
-      //                'product_title': 'Smart wallet insurance',
-      //                'lead_id': 6328287122948096,
-      //                'dt_updated_1': '24 Dec 2020',
-      //                'tenure': 1,
-      //                'dt_created_trans': '24-12-2020',
-      //                'policy_id': 6228764140765184
-      //              }]
-      //            },
-      //            'STAR': {
-      //              '': [{
-      //                'lead_status': 'payment_done',
-      //                'dt_policy_start': '15 October 2020',
-      //                'base_plan_title': '',
-      //                'logo': 'https://plutus-insurance-staging.appspot.com/static/img/star/star_health_logo.png',
-      //                'id': 5670342659932160,
-      //                'policy_number': "None",
-      //                'transaction_date': '14 October 2020',
-      //                'provider': 'STAR',
-      //                'dt_policy_end': '15 October 2021',
-      //                'product_name': '',
-      //                'status': 'incomplete',
-      //                'premium': 9260.0,
-      //                'account_id': 'd6477767626457089',
-      //                'sum_assured': 400000,
-      //                'lead_id': 6512813849706496,
-      //                'dt_created': '14-10-2020',
-      //                'dt_updated': '14-10-2020',
-      //                'product_title': 'Family Health Optima',
-      //                'total_amount': 10926.0,
-      //                'dt_updated_1': '14 Oct 2020',
-      //                'tenure': 1,
-      //                'dt_created_trans': '14-10-2020',
-      //                'policy_id': 6689400960319488
-      //              }]
-      //            },
-      //            'RELIGARE': {
-      //              '': [{
-      //                'lead_status': 'init',
-      //                'dt_policy_start': 'None',
-      //                'base_plan_title': 'Care Health',
-      //                'logo': 'https://plutus-insurance-staging.appspot.com/static/img/icn_care_logo_3.svg',
-      //                'id': 4773194892312576,
-      //                'policy_number': 'None',
-      //                'transaction_date': 'None',
-      //                'provider': 'RELIGARE',
-      //                'dt_policy_end': 'None',
-      //                'product_name': '',
-      //                'status': 'init',
-      //                'premium': 16872.04,
-      //                'account_id': 'd6477767626457089',
-      //                'sum_assured': 1500000,
-      //                'lead_id': 6102529146355712,
-      //                'dt_created': '08-10-2020',
-      //                'dt_updated': '08-10-2020',
-      //                'product_title': 'Care',
-      //                'total_amount': 19909.0,
-      //                'dt_updated_1': '08 Oct 2020',
-      //                'tenure': 1,
-      //                'dt_created_trans': "None",
-      //                'policy_id': ''
-      //              }]
-      //            }
-      //          }
-      //        }
-      //      }
-      //    }
-      //  }
 
       if (!this.state.openModuleData.sub_module) {
         this.setState({
@@ -350,7 +221,9 @@ class HealthInsuranceLanding extends Component {
 
     let stateMapper = {
       'HEALTH_SUPER_TOPUP': 'super_topup',
-      'HOSPICASH': 'hospicash'
+      'HOSPICASH': 'hospicash',
+      'HEALTH_SURAKSHA': 'health_suraksha',
+      'CRITICAL_HEALTH_INSURANCE': 'critical_illness',
     };
 
     var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'HEALTH', 'DENGUE', 'CORONA'];
@@ -362,7 +235,8 @@ class HealthInsuranceLanding extends Component {
     if (product_key === 'HOSPICASH') {
       fullPath = stateMapper[product_key] + '/plan';
     }
-    if (product_key === 'HEALTH_SURAKSHA' && !getConfig().iOS) {
+
+    if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA') && !getConfig().iOS) {
       this.HealthInsuranceEntry();
       return;
     }
@@ -420,11 +294,11 @@ class HealthInsuranceLanding extends Component {
           <div style={{width : '100%'}}>
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} 
 
-                 {props.key === 'HEALTH_SURAKSHA'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
+                 {props.key === 'HealthInsuranceEntry'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
                   <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
                   </span>}
 
-                  {props.key === 'HEALTH_SURAKSHA'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
+                  {props.key === 'HealthInsuranceEntry'  &&  this.state.Comprehensive &&<span style={{ "float" : "right" , color : 'blue'}}>                  
                   <img src={props.uparrow} alt="" style={{ marginLeft : '15px' }} />  
                   </span>}
 
@@ -445,10 +319,10 @@ class HealthInsuranceLanding extends Component {
       </div>
 
      <div style={{display : 'flex' , width : '100%'}}>  
-    {props.key === 'HEALTH_SURAKSHA' && this.state.Comprehensive && 
+    {props.key === 'HealthInsuranceEntry' && this.state.Comprehensive && 
        <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
       }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HEALTH_SURAKSHA' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HealthInsuranceEntry' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 

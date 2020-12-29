@@ -593,7 +593,6 @@ export function getBhartiaxaStatusToState(policy) {
   } else {
     path = 'plan';
   }
-  path = 'payment-success';
   return path;
 }
 
