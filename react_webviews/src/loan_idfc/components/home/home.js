@@ -5,6 +5,7 @@ import HowToSteps from "../../../common/ui/HowToSteps";
 import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
 import Card from "../../../common/ui/Card";
+import { getConfig } from "utils/functions";
 
 class Home extends Component {
   constructor(props) {
@@ -69,8 +70,12 @@ class Home extends Component {
     this.setState({
       stepContentMapper: stepContentMapper,
       partnerData: partnerData,
+    }, () => {
+      this.onload();
     });
   }
+
+  onload = () => {};
 
   handleClick = () => {
     let { ongoing_loan_details, account_exists } = this.state;
@@ -102,8 +107,6 @@ class Home extends Component {
       nativeCallback({ events: eventObj });
     }
   }
-
-  onload = () => {};
 
   render() {
     let {
@@ -177,11 +180,10 @@ class Home extends Component {
             className="block1-info"
             onClick={() => {
               this.sendEvents("calculator");
-              this.navigate("calculator", {
-                params: {
-                  cta_title: "APPLY NOW",
-                },
-              });
+              this.props.history.push(
+                { pathname: `/loan/calculator`, search: getConfig().searchParams },
+                { cta_title: this.state.loan_amount_required ? "RESUME" : "APPLY NOW" }
+              );
             }}
           >
             <img

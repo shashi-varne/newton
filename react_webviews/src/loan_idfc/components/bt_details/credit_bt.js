@@ -235,6 +235,8 @@ class LoanBtDetails extends Component {
     let bt_personal_loan = this.state.bt_info.bt_personal_loan;
     if (!bt_personal_loan) {
       this.navigate('journey');
+    } else {
+      this.navigate('loan-bt');
     }
   }
 

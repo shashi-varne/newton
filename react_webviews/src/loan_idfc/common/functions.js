@@ -145,13 +145,14 @@ export async function initialize() {
     "landing_screen",
     "loan_status",
     "main_landing_screen",
-    "eligibility_screen"
+    "eligibility_screen",
+    "recommended"
   ];
 
   let idfc_dmi_screens = [
     "home_screen",
     "select_loan_screen",
-    "recommended",
+    // "recommended",
   ];
 
   if (
@@ -170,7 +171,7 @@ export async function initialize() {
   }
 
   if (this.state.screen_name === "calculator") {
-    this.getSummary();
+    this.onload();
   }
 
   if (
