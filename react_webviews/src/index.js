@@ -11,6 +11,7 @@ import { isMobile } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import './common/theme/Style.scss';
 import "./common/ui/style.scss";
+import { getConfig } from './utils/functions';
 $(document).ready(function () {
   if (isMobile.Android()) {
     window.addEventListener('resize', function () {
@@ -19,8 +20,10 @@ $(document).ready(function () {
       let foot = document.getElementsByClassName('Footer') && document.getElementsByClassName('Footer')[0] ? document.getElementsByClassName('Footer')[0].offsetHeight: 0;
       let banner = document.getElementsByClassName('Banner') ?  document.getElementsByClassName('Banner')[0] : {};
       let bannerHeight = (banner) ? banner.offsetHeight : 0;
-
-      document.getElementsByClassName('Container')[0].style.height = body - bannerHeight - head - foot - 40 + 'px';
+      let Container = document.getElementsByClassName('Container') ? document.getElementsByClassName('Container')[0] : '';
+      if (Container) {
+        Container.style.height = body - bannerHeight - head - foot - 40 + 'px';
+      }
     });
 
     function scrollToActiveElement() {
@@ -32,12 +35,14 @@ $(document).ready(function () {
         inline: 'nearest',
         behavior: 'smooth',
         // scrollMode: 'if-needed'
-      })
+      });
     }
     window.addEventListener("resize", () => {
-      setTimeout(scrollToActiveElement, 100)
-      setTimeout(scrollToActiveElement, 1000) // just in case browser is slow
-    }, false)
+      if (!['w-report', 'iw-dashboard'].includes(getConfig().project)) {
+        setTimeout(scrollToActiveElement, 100);
+        setTimeout(scrollToActiveElement, 1000); // just in case browser is slow
+      }
+    }, false);
   }
 });
 

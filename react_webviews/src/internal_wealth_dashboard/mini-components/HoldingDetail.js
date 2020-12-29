@@ -6,7 +6,7 @@ import bg_waves_small from 'assets/bg_waves_fund.svg';
 // -------------------------------------
 import React, { useEffect, useState } from 'react';
 import PageCloseBtn from './PageCloseBtn';
-import { formattedDate, numDifferentiationInr, nonRoundingToFixed } from 'utils/validators.js';
+import { formattedDate, nonRoundingToFixed } from 'utils/validators.js';
 import toast from '../../common/ui/Toast';
 import { getFundDetail, getTransactions, hitNextPage } from '../common/ApiCalls';
 import IwdScreenLoader from './IwdScreenLoader';

@@ -19,7 +19,7 @@ export default function ScrollTopBtn({
   }, []);
   const scrollUp = () => scrollContainer.scrollTo(0, 0);
   return (
-    <div id="iwd-page-footer" style={{ paddingBottom: '40px' }}>
+    <div id="iwd-page-footer">
       <IconButton className="iwd-pf-btn" onClick={scrollUp}>
         <img
           src={UpwardIcon}

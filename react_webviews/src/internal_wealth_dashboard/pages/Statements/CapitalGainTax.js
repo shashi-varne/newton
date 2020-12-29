@@ -21,7 +21,7 @@ const CapitalGainTax = () => {
         setNoData(true);
       } else {
         setNoData(false);
-        setYears(tax_statement?.capital_gains);
+        setYears(tax_statement?.capital_gains.sort());
       }
       setIsLoading(false);
     } catch (err) {
@@ -46,11 +46,9 @@ const CapitalGainTax = () => {
         noData={noData}
         noDataText="No Tax reports to display"
       >
-        <div className='iwd-statement-reports'>
-          {years.map((el, idx) => (
-            <StatementCard key={idx} year={el} sType='capital_gains' />
-          ))}
-        </div>
+        {years.map((el, idx) => (
+          <StatementCard key={idx} year={el} sType='capital_gains' />
+        ))}
         {isMobileView && years?.length > 3 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>

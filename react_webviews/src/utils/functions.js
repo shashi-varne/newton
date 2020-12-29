@@ -614,6 +614,8 @@ export const getConfig = () => {
   } else if (main_pathname.indexOf('portfolio-rebalancing') >= 0) {
     project = 'portfolio-rebalancing';
     generic_callback = 'true';
+  } else if (main_pathname.indexOf('iw-dashboard') >= 0) {
+    project = 'iw-dashboard';
   }
 
   let search = window.location.search;

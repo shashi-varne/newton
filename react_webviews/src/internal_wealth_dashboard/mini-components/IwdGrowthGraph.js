@@ -16,7 +16,7 @@ const IwdGrowthGraph = ({
   isLoading = false
 }) => {
   return (
-    <div style={{ width, height, margin: `0 ${isMobileView ? '0 0 -10px' : '-20px'}` }}>
+    <div style={{ width, height, margin: `0 ${isMobileView ? '0 0 -5px' : '-20px'}` }}>
       {isLoading ?
         <IwdCardLoader />
         : 

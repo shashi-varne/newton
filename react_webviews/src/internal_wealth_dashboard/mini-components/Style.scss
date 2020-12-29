@@ -500,7 +500,7 @@ $card-padding: 50px;
   height: 10vh;
   display: flex;
   align-items: center;
-  padding-top: 10px;
+  margin: 30px 0 40px;
   position: relative;
   justify-content: flex-end;
 
@@ -725,7 +725,7 @@ ul#iwd-bars {
   background: white url('../../assets/bg_waves_fund.svg') bottom no-repeat;
   background-size: contain;
   margin-bottom: 40px;
-  // scroll-snap-align: start;
+  scroll-snap-align: start;
 
   .iwd-hc-type {
     font-weight: 600;
@@ -1153,7 +1153,7 @@ table.iwd-transactions-table {
   padding: 40px;
   height: 224px;
   width: 279px;
-  margin: 15px;
+  margin: 30px 30px 0 0;
   cursor: pointer;
 }
 .iwd-statement-text-container {
@@ -1351,8 +1351,7 @@ table.iwd-transactions-table {
   .iwd-statement-card {
     //flex: 1;
     width: 100%;
-    margin: 0px;
-    margin-bottom: 40px;
+    margin: 0 0 40px 0;
     padding: 40px;
   }
   .iwd-filter-mobile {
@@ -1538,7 +1537,7 @@ table.iwd-transactions-table {
 .rs-picker-toggle-caret {
   color: $primary !important;
 }
-.rs-picker-toggle-caret {
+.rs-picker-toggle-caret, .rs-picker-toggle-clean {
   top: 14px !important;
 }
 .rs-calendar-table-cell-content {

@@ -323,6 +323,7 @@ export const getNewsletter = async (params = {}) => {
 export const getHoldings = async (params = {}) => {
   try {
     const res = await Api.get('api/invest/reportv4/portfolio/funds', {
+      exclude_zero_units: true,
       ...params,
     });
 

@@ -36,7 +36,7 @@ const SnapScrollContainer = ({
       const options = {
         root: rootElem,
         // rootMargin: '220px 0px 60px 0px',
-        threshold: 0.6,
+        threshold: [0.4, 0.6],
       };
   
       const childElems = [].slice
@@ -72,7 +72,7 @@ const SnapScrollContainer = ({
   };
 
   const Footer = (
-    <div id='iwd-page-footer'>
+    <div id='iwd-scroll-contain-footer'>
       <IconButton className='iwd-pf-btn' onClick={scrollPage}>
         <img src={UpwardIcon} alt='' className={currentPage < pages ? 'rotate-90' : ''} />
       </IconButton>

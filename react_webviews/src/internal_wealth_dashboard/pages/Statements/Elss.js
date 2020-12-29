@@ -22,7 +22,7 @@ const Elss = () => {
         setNoData(true);
       } else {
         setNoData(false);
-        setYears(tax_statement?.elss);
+        setYears(tax_statement?.elss.sort());
       }
       setIsLoading(false);
     } catch (err) {
@@ -46,11 +46,9 @@ const Elss = () => {
         noData={noData}
         noDataText="No ELSS reports to display"
       >
-        <div className='iwd-statement-reports'>
-          {years.map((el, idx) => (
-            <StatementCard key={idx} year={el} sType='elss' />
-          ))}
-        </div>
+        {years.map((el, idx) => (
+          <StatementCard key={idx} year={el} sType='elss' />
+        ))}
         {isMobileView && years?.length > 3 && <ScrollTopBtn />}
       </SnapScrollContainer>
     </div>
