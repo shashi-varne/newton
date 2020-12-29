@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import ContactUs from '../../common/components/contact_us'
+import { insuranceStateMapper } from '../constants';
 import qs from 'qs'; 
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 
 import { getConfig } from 'utils/functions';
+import { getBhartiaxaStatusToState } from '../constants';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss'
 
@@ -78,10 +80,10 @@ class Landing extends Component {
         let group_insurance = resultData.group_insurance;
         let term_insurance = resultData.term_insurance;
         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
-        // let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
+        let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
         let resumeFlagAll = {
-          'TERM_INSURANCE':  false
+          'TERM_INSURANCE':  resumeFlagTerm
         }
         
         if (!BHARTIAXA) {
@@ -157,7 +159,94 @@ class Landing extends Component {
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
-  handleClick = (product_key, events) => {
+  setTermInsData(termData) {
+
+    window.localStorage.setItem('excluded_providers', '');
+    window.localStorage.setItem('required_providers', '');
+    window.localStorage.setItem('quoteSelected', '');
+    window.localStorage.setItem('quoteData', '');
+    let pathname = '';
+    let resumeFlagTerm = false;
+
+    if (!termData.error) {
+      let insurance_apps = termData.insurance_apps;
+      let application, required_fields;
+      required_fields = termData.required;
+      if (insurance_apps.complete.length > 0) {
+        application = insurance_apps.complete[0];
+        pathname = 'report';
+      } else if (insurance_apps.failed.length > 0) {
+        application = insurance_apps.failed[0];
+        pathname = 'report';
+      } else if (insurance_apps.init.length > 0) {
+        application = insurance_apps.init[0];
+        resumeFlagTerm = true;
+        pathname = 'journey';
+      } else if (insurance_apps.submitted.length > 0) {
+        resumeFlagTerm = true;
+        application = insurance_apps.submitted[0];
+        pathname = 'journey';
+      } else {
+        // intro
+        pathname = 'intro';
+        return;
+      }
+
+      if (application) {
+        let data = {
+          application: application,
+          required_fields: required_fields
+        }
+        window.localStorage.setItem('cameFromHome', true);
+        window.localStorage.setItem('homeApplication', JSON.stringify(data));
+        pathname = 'journey';
+      }
+    } else {
+      pathname = 'intro';
+    }
+
+    let fullPath = '/group-insurance/term/' + pathname;
+
+    this.setState({
+      redirectTermPath: fullPath
+    })
+
+    return resumeFlagTerm;
+
+  }
+
+
+  handleClick = (product_key , events) => {
+
+    this.sendEvents('next',  events ? events : product_key)
+
+    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH'];
+
+    var lead_id = '';
+    var path = '';
+    var fullPath = '';
+    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
+      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
+        let data = this.state.BHARTIAXA_APPS[product_key][0];
+        lead_id = data.lead_id;
+
+        path = getBhartiaxaStatusToState(data);
+        if (data.status === 'complete') {
+          lead_id = '';
+        }
+
+      } else {
+        path = 'plan';
+      }
+
+      fullPath = insuranceStateMapper[product_key] + '/' + path;
+    } else {
+      this.navigate(this.state.redirectTermPath);
+
+      return;
+    }
+
     this.sendEvents('next', events)
 
     var fullPath = '';
@@ -168,6 +257,8 @@ class Landing extends Component {
     } else if (product_key === 'HEALTH_INSURANCE') {
       fullPath = 'health/landing';
     }
+
+    window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('group-insurance/' + fullPath);
   }
 
