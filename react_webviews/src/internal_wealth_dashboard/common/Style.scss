@@ -1,0 +1,182 @@
+$primary: rgb(79, 45, 167);
+.iwd-phone-input {
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: bold !important;
+  line-height: 24px !important;
+  color: white;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  padding: 18px 18px 18px 78px !important;
+  border: none !important;
+  height: 60px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.iwd-phone-btn {
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+  background-color: transparent !important;
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+  border: none !important;
+
+  div.arrow {
+    border-top: 4px solid white !important;
+    border-bottom: none !important;
+  }
+
+  div.selected-flag {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+}
+
+.iwd-phone-btn.open {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.iwd-phone-input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: red;
+  opacity: 1; /* Firefox */
+}
+
+.iwd-otp-container {
+  justify-content: space-between;
+
+  > div {
+    flex-basis: 22%;
+    margin-right: 5px;
+  }
+
+  > div:nth-child(4) {
+    margin-right: 0;
+  }
+}
+
+.iwd-otp-input {
+  font-family: 'Poppins', 'Roboto', sans-serif !important;
+  width: 100% !important;
+  border: none;
+  height: 60px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+div:nth-child(4) > .iwd-otp-input {
+  margin-right: 0;
+}
+
+input.iwd-otp-input:focus {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.iwd-radio-box-parent {
+  width: 14px;
+  height: 14px;
+  // border-radius: 2px;
+  border: 1px solid #767e86;
+  box-sizing: border-box;
+  position: relative;
+  .iwd-radio-box-child {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: auto;
+    background-color: #767e86;
+    border-radius: 1px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+  }
+}
+
+//Page Header Navbar
+.iwd-page-header-nav {
+  display: flex;
+  .iwd-page-header-nav-title {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 40px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #0a1d32;
+  }
+  .iwd-page-header-path-list {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-left: 50px;
+    .iwd-header-nav-button {
+      height: 30px;
+      width: max-content;
+      border-radius: 100px;
+      font-family: Poppins;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 21px;
+      letter-spacing: 1px;
+      text-align: center;
+      padding: 5px 18px 4px 18px;
+      text-transform: uppercase;
+      border: none;
+      margin-right: 20px;
+      background-color: #F1ECFF;
+      cursor: pointer;
+      color: $primary;
+    }
+    .iwd-header-nav-button.selected {
+      background-color: $primary;
+      color: white;
+      font-weight: 700;
+    }
+    .iwd-header-nav-button:last-child() {
+      margin-right: 0px;
+    }
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .iwd-page-header-nav {
+    flex-direction: column;
+    .iwd-page-header-nav-title {
+      font-family: Poppins;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 32px;
+      letter-spacing: 0em;
+    }
+
+    .iwd-page-header-path-list {
+      margin-left: 0px;
+      margin-top: 10px;
+      width: 100%;
+      overflow-y: auto;
+      .iwd-header-nav-button {
+        font-size: 13px;
+        white-space: nowrap;
+      }
+    }
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .iwd-page-header-path-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .iwd-page-header-path-list {
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  }
+
+  .iwd-transaction-container .iwd-transaction-pagination {
+    display: flex;
+    justify-content: center !important;
+  }
+}
