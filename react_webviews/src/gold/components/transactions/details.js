@@ -29,7 +29,7 @@ class GoldTransactionDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       goldInfo: {},
       userInfo: {},
       goldSellInfo: {},
@@ -109,13 +109,13 @@ class GoldTransactionDetail extends Component {
       order.cssMapper = this.statusMapper(order);
       let journeyData = setTransationsSteps(order);
       this.setState({
-        show_loader: false,
+        skelton: false,
         order: order,
         journeyData: journeyData
       });
     } else {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
     }
@@ -124,7 +124,7 @@ class GoldTransactionDetail extends Component {
   async componentDidMount() {
 
     this.setState({
-      show_loader: true,
+      skelton: true,
     });
 
     let { provider } = this.props.match.params;
@@ -159,7 +159,7 @@ class GoldTransactionDetail extends Component {
           this.getOrderData(baseData);
         } else {
           this.setState({
-            show_loader: false
+            skelton: false
           });
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
         }
@@ -170,7 +170,7 @@ class GoldTransactionDetail extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -325,7 +325,8 @@ class GoldTransactionDetail extends Component {
 
     return (
       <Container
-        showLoader={this.state.show_loader}
+        // showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={this.state.order.cssMapper.title}
         noFooter={true}
         events={this.sendEvents('just_set_events')}

@@ -8,11 +8,13 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import { storageService, inrFormatDecimal2 } from 'utils/validators';
 import { gold_providers } from '../../constants';
+import {Imgc} from '../../../common/ui/Imgc';
+
 class DeliveryOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       openResponseDialog: false,
       disabled: false,
       disabledText: 'MAKE PAYMENT',
@@ -48,7 +50,7 @@ class DeliveryOrder extends Component {
       const res = await Api.post('/api/gold/user/redeem/verify/' + this.state.provider, options);
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
         this.setState({
-          show_loader: false
+          skelton: false
         })
         let redeem_body = res.pfwresponse.result.redeem_body || {};
         orderData.transact_id = redeem_body.transact_id;
@@ -63,7 +65,7 @@ class DeliveryOrder extends Component {
 
         let disabledText = res.pfwresponse.result.message || res.pfwresponse.result.error || 'Insufficient Balance';
         this.setState({
-          show_loader: false,
+          skelton: false,
           disabled: true,
           disabledText: disabledText
         });
@@ -73,7 +75,7 @@ class DeliveryOrder extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -167,6 +169,7 @@ class DeliveryOrder extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Summary"
         handleClick={this.handleClick}
         edit={this.props.edit}
@@ -179,7 +182,7 @@ class DeliveryOrder extends Component {
           <div style={{ margin: '30px 0 30px 0' }} className="highlight-text highlight-color-info">
             <div style={{ textAlign: 'right', fontSize: 10, color: getConfig().primary }}>{this.state.providerData.karat}</div>
             <div className="highlight-text1">
-              <img className="highlight-text11" style={{ width: 34 }}
+              <Imgc className="highlight-text11" style={{ width: 34,height:34 }}
                 src={this.state.orderData.media.images[0]} alt="info" />
               <div className="highlight-text12" style={{ display: 'grid' }}>
                 <div>{this.state.orderData.description}</div>

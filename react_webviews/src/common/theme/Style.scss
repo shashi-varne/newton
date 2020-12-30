@@ -12,12 +12,19 @@
 .ContainerWrapper {
   background-color: #fff;
 }
+@mixin fadein-animation-base {
+  animation: container-animation-fadein ease 0.15s; 
+  // animation: container-animation-left-to-right ease 0.2s;
 
+  animation-iteration-count: 1; 
+  animation-fill-mode: forwards;
+}
 html,
 body,
 #root {
   height: 100%;
   background-color: #fff;
+  @include fadein-animation-base()
 }
 
 /* web-app changes */
@@ -151,6 +158,43 @@ body[data-device="web"] {
   cursor: pointer;
 }
 
+
+
+
+.fadein-animation {
+  @include fadein-animation-base();
+}
+
+@keyframes container-animation-fadein {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes container-animation-left-to-right {
+  0% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes container-animation-top-to-bottom {
+  0% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .Container {
   padding: 20px 20px;
   /* margin-bottom: 60px;
@@ -159,6 +203,8 @@ body[data-device="web"] {
   overflow-y: scroll;
   // margin-bottom: 56px !important;
   padding-bottom: 56px !important;
+  @include fadein-animation-base();
+ 
 }
 
 .Container .container-padding {
@@ -880,6 +926,48 @@ input#pan {
   }
 }
 
+.common-landing-steps {
+  margin: 50px 0 40px 0;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  padding: 20px 0 20px 0;
+
+  .top-tile {
+    display: flex;
+    justify-content: space-between;
+  }
+  .top-title {
+    color: #0a1c32;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .top-icon {
+    width: 14px;
+  }
+  .common-steps-images {
+    margin: 40px 0 0 0;
+  }
+  .common-steps-images_steps{
+    margin: 20px 0 0 0;
+  }
+
+
+  .common-steps-images {
+
+    .tile_step {
+      margin: 0px;
+    }
+    .content_step {
+      margin: 0px 0px 0px 20px;
+      border-bottom: 1px solid #ededed;
+      padding: 20px 0px 20px 0px;
+    }
+    .content-title{
+      margin: 0px;
+    }
+  }
+}
+
 .generic-page-title {
   color: #0a1d32;
   font-size: 16px;
@@ -899,6 +987,7 @@ input#pan {
     // color: #767e86;
     // font-size: 13px;
     margin: 0 0 0 20px;
+    width: -webkit-fill-available;
   }
 
   .content_step{
@@ -928,6 +1017,8 @@ input#pan {
     font-weight: 400;
     line-height: 1.6;
   }
+
+ 
 }
 
 .his {
@@ -1138,7 +1229,7 @@ input#pan {
   position: absolute;
 }
 
-.generic-page-button-small {
+@mixin generic-page-button-small-base {
   color: var(--secondary);
   font-size: 12px;
   font-weight: 700;
@@ -1151,6 +1242,15 @@ input#pan {
   align-items: center;
 }
 
+.generic-page-button-small {
+  @include generic-page-button-small-base();
+}
+
+.generic-page-button-small-withoutborder {
+  @include generic-page-button-small-base();
+  border: unset;
+
+}
 .generic-page-button-large {
   color: var(--secondary);
   font-size: 12px;
