@@ -884,17 +884,6 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  // if (form_data.industry) {
-  //   let data = this.state.industryOptions.filter(
-  //     (data) => data.key.toUpperCase() === form_data.industry.toUpperCase()
-  //   );
-
-  //   if (data.length === 0) {
-  //     form_data.industry_error = "Please select industry from provided list";
-  //     canSubmitForm = false;
-  //   }
-  // }
-
   // if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
   //   let data = this.state.companyOptions.filter(
   //     (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
@@ -973,18 +962,12 @@ export async function startTransaction(transaction_type) {
         this.netBanking(result.netbanking_url || "");
       }
     } else {
-      // toast(result.error || result.message || "Something went wrong!");
-      // this.onload();
       this.navigate("perfios-status");
     }
   } catch (err) {
     console.log(err);
     toast("Something went wrong");
   }
-
-  // this.setState({
-  //   show_loader: false,
-  // });
 }
 
 export function openPdf(url, type) {

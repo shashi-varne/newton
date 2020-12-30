@@ -118,7 +118,6 @@ class BasicDetails extends Component {
     this.sendEvents("next");
     let { form_data, pan_state } = this.state;
     let keys_to_check = ["dob", 
-    // "educational_qualification",
      "employment_type"];
     if (pan_state !== "success") {
       keys_to_check.push("pan_no");
@@ -172,27 +171,8 @@ class BasicDetails extends Component {
                 disabled={this.state.pan_state}
               />
             </div>
-
-            {/* <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.qualification}
-                id="education_qualification"
-                label="Education Qualification"
-                error={
-                  this.state.form_data.educational_qualification_error
-                    ? true
-                    : false
-                }
-                helperText={
-                  this.state.form_data.educational_qualification_error
-                }
-                value={this.state.form_data.educational_qualification || ""}
-                name="educational_qualification"
-                onChange={this.handleChange("educational_qualification")}
-              />
-            </div> */}
           </FormControl>
+
           <div className="sub-head">Employment type</div>
           <div className="employment-type">
             <div

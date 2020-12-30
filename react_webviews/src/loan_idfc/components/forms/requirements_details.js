@@ -32,7 +32,6 @@ class LoanRequirementDetails extends Component {
 
     let form_data = {
       amount_required: application_info.amount_required,
-      // purpose: application_info.purpose,
       tenor: !application_info.tenor ? '' : String(application_info.tenor)
     }
 
@@ -132,20 +131,6 @@ class LoanRequirementDetails extends Component {
                 onChange={this.handleChange("amount_required")}
               />
             </div>
-
-            {/* <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.purposeOfLoanOptions}
-                id="purpose"
-                label="Purpose of loan"
-                error={this.state.form_data.purpose_error ? true : false}
-                helperText={this.state.form_data.purpose_error}
-                value={this.state.form_data.purpose || ""}
-                name="purpose"
-                onChange={this.handleChange("purpose")}
-              />
-            </div> */}
 
             <div className="InputField">
               <DropdownWithoutIcon

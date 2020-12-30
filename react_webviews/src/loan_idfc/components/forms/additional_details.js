@@ -220,19 +220,6 @@ class AdditionalDetails extends Component {
 
           <div className="head-title">Office address</div>
           <FormControl fullWidth>
-            {/* <div className="InputField">
-              <Input
-                error={!!this.state.form_data.office_address_error}
-                helperText={this.state.form_data.office_address_error}
-                type="text"
-                width="40"
-                label="Address"
-                id="office_address"
-                name="office_address"
-                value={this.state.form_data.office_address || ""}
-                onChange={this.handleChange("office_address")}
-              />
-            </div> */}
 
             <div className="InputField">
               <Input

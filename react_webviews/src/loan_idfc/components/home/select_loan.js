@@ -38,7 +38,6 @@ class SelectLoan extends Component {
         displayTag: true,
         provider_name: "idfc",
         benefits: {
-          // benefits_title: "Basic benefits",
           options: [
             {
               data: "Loan up to 40 lakhs:",

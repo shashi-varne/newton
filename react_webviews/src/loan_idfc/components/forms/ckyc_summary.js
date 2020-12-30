@@ -67,16 +67,6 @@ class ApplicationSummary extends Component {
           subtitle: capitalizeFirstLetter(personal_info.marital_status),
           common_field: true,
         },
-        // {
-        //   title: "Father name",
-        //   subtitle: capitalizeFirstLetter(personal_info.father_name),
-        //   common_field: true,
-        // },
-        // {
-        //   title: "Mother name",
-        //   subtitle: capitalizeFirstLetter(personal_info.mother_name),
-        //   common_field: false,
-        // },
         {
           title: "Father first name",
           subtitle: capitalizeFirstLetter(personal_info.father_first_name),

@@ -78,7 +78,7 @@ class LoanEligible extends Component {
           />
 
           <div className="loan-eligible">
-          <b>Congrats, {this.state.first_name}!</b> You are eligible for a loan of
+          <b>Congrats, {this.state.first_name.trim(" ")}!</b> You are eligible for a loan of
           </div>
 
           <div className="loan-amount">

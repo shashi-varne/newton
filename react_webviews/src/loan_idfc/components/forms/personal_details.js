@@ -92,8 +92,6 @@ class PersonalDetails extends Component {
       dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
       marital_status: capitalizeFirstLetter(personal_info.marital_status || ""),
-      // father_name: personal_info.father_name,
-      // mother_name: confirm_details && personal_info.mother_name,
       father_first_name: personal_info.father_first_name,
       father_last_name: personal_info.father_last_name,
       mother_first_name: confirm_details && personal_info.mother_first_name,
@@ -336,41 +334,6 @@ class PersonalDetails extends Component {
                 onChange={this.handleChange("marital_status")}
               />
             </div>
-
-
-            {/* <div className="InputField">
-              <Input
-                error={!!this.state.form_data.father_name_error}
-                helperText={this.state.form_data.father_name_error}
-                type="text"
-                width="40"
-                label="Father's name"
-                class="father_name"
-                id="name"
-                name="father_name"
-                value={this.state.form_data.father_name || ""}
-                onChange={this.handleChange("father_name")}
-                onClick={() => this.handleCkycMessage("father_name")}
-              />
-            </div> */}
-
-            {/* {this.state.confirm_details && (
-              <div className="InputField">
-                <Input
-                  error={!!this.state.form_data.mother_name_error}
-                  helperText={this.state.form_data.mother_name_error}
-                  type="text"
-                  width="40"
-                  label="Mother's name"
-                  class="mother_name"
-                  id="name"
-                  name="mother_name"
-                  value={this.state.form_data.mother_name || ""}
-                  onChange={this.handleChange("mother_name")}
-                  onClick={() => this.handleCkycMessage("mother_name")}
-                />
-              </div>
-            )} */}
 
             <div className="InputField">
               <Input
