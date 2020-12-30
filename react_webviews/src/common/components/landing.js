@@ -32,6 +32,8 @@ class CommonLanding extends Component {
         }
 
         let navigateMapper = {
+            'health-insurance-comprehensive' : '/group-insurance/health/landing',
+            'health-webview-other' : '/group-insurance/other-insurance/entry', // (For : PERSONAL_ACCIDENT and SMART_WALLET)
             'group-insurance': '/group-insurance',
             'health-insurance': '/group-insurance/health/landing',
             'term-insurance': '/group-insurance/life-insurance/term/landing',
@@ -42,7 +44,7 @@ class CommonLanding extends Component {
             'gold-delivery': '/gold/delivery',
             'loan': '/loan/home',
             'health-insurance-landing': '/group-insurance/health/landing',
-            'health-insurance-comprehensive': '/group-insurance/group-health/entry',
+            // 'health-insurance-comprehensive': '/group-insurance/group-health/entry',
             'health-insurance-hdfcergo': '/group-insurance/group-health/HDFCERGO/landing',
             'health-insurance-religare': '/group-insurance/group-health/RELIGARE/landing',
             'health-insurance-star': '/group-insurance/group-health/STAR/landing',

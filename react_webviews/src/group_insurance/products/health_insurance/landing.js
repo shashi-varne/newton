@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import qs from 'qs';
 import { insuranceStateMapper, getBhartiaxaStatusToState } from '../../constants';
-import critical_illness_fisdom from 'assets/critical_illness_fisdom.svg';
-import critical_illness_myway from 'assets/critical_illness_myway.svg';
+// import critical_illness_fisdom from 'assets/critical_illness_fisdom.svg';
+// import critical_illness_myway from 'assets/critical_illness_myway.svg';
 
 import health_suraksha_fisdom from 'assets/health_suraksha_fisdom.svg';
 import health_suraksha_myway from 'assets/health_suraksha_myway.svg';
@@ -54,7 +54,7 @@ class HealthInsuranceLanding extends Component {
     window.sessionStorage.setItem('group_insurance_payment_url', '');
 
     nativeCallback({ action: 'take_control_reset' });
-    let critical_illness_icon = this.state.type !== 'fisdom' ? critical_illness_myway : critical_illness_fisdom;
+    // let critical_illness_icon = this.state.type !== 'fisdom' ? critical_illness_myway : critical_illness_fisdom;
     let health_suraksha_icon = this.state.type !== 'fisdom' ? health_suraksha_myway : health_suraksha_fisdom;
     let super_topup_icon = this.state.type !== 'fisdom' ? super_topup_myway : super_topup_fisdom;
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
@@ -138,7 +138,6 @@ class HealthInsuranceLanding extends Component {
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
-        // var resultData = res.pfwresponse.response;
         let group_insurance = resultData.group_insurance;
         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
 
