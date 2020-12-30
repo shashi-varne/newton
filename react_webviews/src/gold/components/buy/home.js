@@ -20,6 +20,7 @@ import GoldOnloadAndTimer from '../ui_components/onload_and_timer';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+import {Imgc} from '../../../common/ui/Imgc';
 
 const plusOptionsAmount = [
   500, 1000, 2000, 5000
@@ -40,7 +41,7 @@ class GoldBuyHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: 'g',
       openPopup: false,
       popupText: '',
       apiError: '',
@@ -140,7 +141,7 @@ class GoldBuyHome extends Component {
       
       } else {
         this.setState({
-          show_loader: false
+          skelton: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
       }
@@ -148,7 +149,7 @@ class GoldBuyHome extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -407,7 +408,7 @@ class GoldBuyHome extends Component {
   renderInfoSteps =(props, index) => {
     return(
       <div key={index} className="tile">
-        <img className="icon" 
+        <Imgc className="icon gold-common-stepes-icon" 
         src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
           {props.content}
@@ -426,6 +427,7 @@ class GoldBuyHome extends Component {
         handleClick={this.handleClick}
         updateChild={this.updateChild}
         buttonTitle="PROCEED"
+        skelton={this.state.skelton}
         events={this.sendEvents('just_set_events')}
       >
 

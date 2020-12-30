@@ -4,6 +4,7 @@ import { getConfig } from 'utils/functions';
 import down_arrow from 'assets/down_arrow.svg';
 import SVG from 'react-inlinesvg';
 import { gold_providers } from '../../constants';
+import {SkeltonRect} from '../../../common/ui/Skelton';
 
 class GoldProviderFilterClass extends Component {
     constructor(props) {
@@ -45,10 +46,14 @@ class GoldProviderFilterClass extends Component {
                     <div className="tile2-left">
                         {this.state.providerInfo.subtitle}
                     </div>
-                    {this.props.parent.state.orderType !== 'buy' && 
-                     <div className="tile2-right">
+                    {!this.props.parent.state.skelton && this.props.parent.state.orderType !== 'buy' && 
+                        <div className="tile2-right">
                         {this.props.parent.state.provider_info.gold_balance || 0} gms in {this.state.providerInfo.title}
-                    </div>}
+                        </div>
+                    }
+                     <SkeltonRect className="tile2-right-skelton" 
+                        hide={!this.props.parent.state.skelton} 
+                    />
                 </div>
             </div>
         )
