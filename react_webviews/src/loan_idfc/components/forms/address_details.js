@@ -127,8 +127,8 @@ class AddressDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3',
-    'current_address1', 'current_address2', 'current_address3'];
+    let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3', 'current_landmark',
+    'current_address1', 'current_address2', 'current_address3', 'permanent_landmark'];
 
     var format = /[^a-zA-Z0-9 ,]/g;
 

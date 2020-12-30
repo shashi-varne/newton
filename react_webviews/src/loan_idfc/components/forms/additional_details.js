@@ -150,7 +150,7 @@ class AdditionalDetails extends Component {
 
     let { form_data } = this.state;
 
-    let validate = ['office_address1', 'office_address2'];
+    let validate = ['office_address1', 'office_address2', 'office_landmark'];
 
     var format = /[^a-zA-Z0-9 ,]/g;
 

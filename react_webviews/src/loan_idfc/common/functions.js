@@ -777,14 +777,11 @@ export async function formCheckUpdate(
     dob: "dob",
     pan_no: "pan number",
     employment_type: "employment type",
-    // educational_qualification: "educational qualification",
     first_name: "first name",
     middle_name: "middle name",
     last_name: "last name",
     gender: "gender",
     marital_status: "marital status",
-    // father_name: "father's name",
-    // mother_name: "mother's name",
     father_first_name: "father's first name",
     father_last_name: "father's last name",
     mother_first_name: "mother's first name",
@@ -796,7 +793,6 @@ export async function formCheckUpdate(
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
     salary_mode: "salary receipt mode",
-    // constitution: "constitution",
     organisation: "organisation",
     department: "department",
     industry: "industry from provided list",
@@ -815,9 +811,7 @@ export async function formCheckUpdate(
     permanent_city: "city",
     permanent_state: "state",
     amount_required: "loan amount",
-    // purpose: "purpose",
     tenor: "tenor",
-    // office_address: "office address",
     office_address1: "address line 1",
     office_address2: "address line 2",
     office_landmark: "landmark",
@@ -831,17 +825,21 @@ export async function formCheckUpdate(
   };
 
   let selectTypeInput = [
-    // "educational_qualification",
     "gender",
     "marital_status",
     "religion",
     "salary_mode",
-    // "constitution",
     "organisation",
     "department",
     "industry",
     "company_name",
   ];
+
+  let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3', 'permanent_landmark',
+    'current_address1', 'current_address2', 'current_address3', 'current_landmark',
+    'office_address1', 'office_address2', 'office_address3', 'office_landmark',];
+
+  var format = /[^a-zA-Z0-9 ,]/g;
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -851,6 +849,19 @@ export async function formCheckUpdate(
         : "Please enter ";
     if (!form_data[key_check] && key_check !== "middle_name") {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
+      canSubmitForm = false;
+    }
+
+    if (validate.includes(key_check) && format.test(form_data[key_check])) {
+      form_data[key_check + "_error"] = "special characters are not allowed except ( , ) commas.";
+      canSubmitForm = false;
+    }
+  }
+
+  for (var j = 0; j < keys_to_include.length; j++) {
+    let key = keys_to_include[i];
+    if (validate.includes(key) && format.test(form_data[key])) {
+      form_data[key + "_error"] = "special characters are not allowed except ( , ) commas.";
       canSubmitForm = false;
     }
   }
@@ -906,7 +917,7 @@ export async function formCheckUpdate(
       show_loader: true,
     });
 
-    for (var j in keys_to_check) {
+    for (let j in keys_to_check) {
       let key = keys_to_check[j];
       body[key] = form_data[key] || "";
     }
