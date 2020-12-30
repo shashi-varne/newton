@@ -26,10 +26,11 @@ class Landing extends Component {
   }
 
   componentWillMount() {
-
-    window.localStorage.setItem('group_insurance_plan_final_data', '');
+    window.sessionStorage.setItem('group_insurance_payment_started', '');
+    window.sessionStorage.setItem('group_insurance_payment_urlsafe', '');
+    window.sessionStorage.setItem('group_insurance_plan_final_data', '');
     nativeCallback({ action: 'take_control_reset' });
-    window.localStorage.setItem('group_insurance_payment_url', '');
+    window.sessionStorage.setItem('group_insurance_payment_url', '');
     
     let insuranceProducts = [
       {
@@ -53,6 +54,7 @@ class Landing extends Component {
 
     let { params } = this.props.location || {}
     let openModuleData = params ? params.openModuleData : {}
+
     let redirect_url = decodeURIComponent(getConfig().redirect_url);
     if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
       window.location.href = redirect_url;
@@ -69,12 +71,12 @@ class Landing extends Component {
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
-      if(!this.state.openModuleData.sub_module) {
+      if (!this.state.openModuleData.sub_module) {
         this.setState({
           show_loader: false
         })
       }
-      
+
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
@@ -85,16 +87,18 @@ class Landing extends Component {
         let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
         let resumeFlagAll = {
-          'TERM_INSURANCE':  resumeFlagTerm
+          'TERM_INSURANCE': resumeFlagTerm
         }
-        
+
         if (!BHARTIAXA) {
           BHARTIAXA = {};
         }
         let BHARTIAXA_APPS = {
           'PERSONAL_ACCIDENT': BHARTIAXA['PERSONAL_ACCIDENT'],
           'HOSPICASH': BHARTIAXA['HOSPICASH'],
-          'SMART_WALLET': BHARTIAXA['SMART_WALLET']
+          'SMART_WALLET': BHARTIAXA['SMART_WALLET'],
+          'DENGUE': BHARTIAXA['DENGUE'],
+          'CORONA': BHARTIAXA['CORONA']
         }
 
         for (var key in BHARTIAXA_APPS) {
@@ -119,17 +123,22 @@ class Landing extends Component {
           group_insurance: group_insurance,
           term_insurance: term_insurance,
           BHARTIAXA_APPS: BHARTIAXA_APPS,
-          insuranceProducts: insuranceProducts
+          insuranceProducts: insuranceProducts,
+          resumeFlagAll: resumeFlagAll
         })
 
-        if(this.state.openModuleData.sub_module) {
+        if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
             personal_accident: 'PERSONAL_ACCIDENT',
-            smart_wallet: 'SMART_WALLET'
+            smart_wallet: 'SMART_WALLET',
+            term_insurance: 'TERM_INSURANCE',
+            dengue: 'DENGUE',
+            corona: 'CORONA'
           };
 
-          let pathname = navigateMapper[this.state.openModuleData.sub_module] || '';
+          let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
+            this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
 
@@ -145,6 +154,7 @@ class Landing extends Component {
       toast('Something went wrong');
     }
   }
+
 
   navigate = (pathname, search) => {
     this.props.history.push({
@@ -173,12 +183,24 @@ class Landing extends Component {
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
+  getLeadId(product_key) {
+    let id = ''
+    if (product_key !== 'term_insurance') {
+      if (this.state.BHARTIAXA_APPS[product_key] &&
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
+        id = this.state.BHARTIAXA_APPS[product_key][0].lead_id;
+      }
+    }
+
+    return id;
+  }
+
   setTermInsData(termData) {
 
-    window.localStorage.setItem('excluded_providers', '');
-    window.localStorage.setItem('required_providers', '');
-    window.localStorage.setItem('quoteSelected', '');
-    window.localStorage.setItem('quoteData', '');
+    window.sessionStorage.setItem('excluded_providers', '');
+    window.sessionStorage.setItem('required_providers', '');
+    window.sessionStorage.setItem('quoteSelected', '');
+    window.sessionStorage.setItem('quoteData', '');
     let pathname = '';
     let resumeFlagTerm = false;
 
@@ -203,7 +225,6 @@ class Landing extends Component {
       } else {
         // intro
         pathname = 'intro';
-        return;
       }
 
       if (application) {
@@ -211,9 +232,12 @@ class Landing extends Component {
           application: application,
           required_fields: required_fields
         }
-        window.localStorage.setItem('cameFromHome', true);
-        window.localStorage.setItem('homeApplication', JSON.stringify(data));
+        window.sessionStorage.setItem('cameFromHome', true);
+        window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
         pathname = 'journey';
+        this.setState({
+          termApplication: application
+        })
       }
     } else {
       pathname = 'intro';
@@ -263,7 +287,8 @@ class Landing extends Component {
         fullPath = 'health/landing';
       }
       else {
-        this.navigate(this.state.redirectTermPath);
+         // this.navigate(this.state.redirectTermPath);
+         this.navigate('/group-insurance/term/intro');
         return;
       }
 
