@@ -9,7 +9,8 @@ class LoanEligible extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: 'loan_eligible'
+      screen_name: 'loan_eligible',
+      first_name: ""
     }
 
     this.initialize = initialize.bind(this);

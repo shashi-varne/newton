@@ -431,15 +431,16 @@ class UploadBank extends Component {
     let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
     let endDate_days = calculateAge(form_data.end_date, true).days <= 7;
 
+    let month = calculateAge(form_data.start_date, true).months;
     // eslint-disable-next-line radix
     let startDate = form_data.start_date.substring(0, 2) === "01";
 
-    if (!startDate_month || !startDate || form_data.start_date.length !== 10) {
+    if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
       form_data.start_date_error = "This date must be 3 months prior to the current month";
       canSubmit = false;
     }
 
-    if (!endDate_days || form_data.end_date.length !== 10 || !IsFutureDate(form_data.end_date)) {
+    if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
       form_data.end_date_error = "This date must be 3 days prior to the current date";
       canSubmit = false;
     }

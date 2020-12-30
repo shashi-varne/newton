@@ -183,6 +183,7 @@ class LoanStatus extends Component {
       commonMapper: {},
       vendor_application_status: "",
       screen_name: "loan_status",
+      first_name: ""
     };
 
     this.initialize = initialize.bind(this);
