@@ -117,10 +117,13 @@ class JourneyMap extends Component {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
     let personal_info = lead.personal_info || {};
+    let application_info = lead.application_info || {};
+    let bt_info = lead.bt_info || {}
 
     let idfc_loan_status = vendor_info.idfc_loan_status || "";
     let ckyc_state = vendor_info.ckyc_state || "";
     let perfios_state = vendor_info.perfios_state || "";
+    let application_complete = application_info.application_status === "application_complete";
 
     let index =
       (idfc_loan_status && journeyMapper2[idfc_loan_status].index) || "0";
@@ -198,7 +201,7 @@ class JourneyMap extends Component {
               ? "pending"
               : "completed",
           cta:
-            (idfc_loan_status === "idfc_4_accepted" || idfc_loan_status === "idfc_4_submitted") &&
+            (idfc_loan_status === "idfc_4_accepted" || idfc_loan_status === "idfc_4_submitted" || application_complete) &&
             "CHECK",
           id: "sanction_and_disbursal",
         },
@@ -212,6 +215,8 @@ class JourneyMap extends Component {
       index: index,
       first_name: personal_info.first_name,
       vendor_info: vendor_info,
+      bt_info: bt_info,
+      application_complete: application_complete
     });
   };
 
@@ -249,7 +254,7 @@ class JourneyMap extends Component {
   };
 
   handleClick = (id) => {
-    let { ckyc_state, perfios_state, idfc_loan_status, index, vendor_info } = this.state;
+    let { ckyc_state, perfios_state, idfc_loan_status, index, vendor_info, bt_info } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
     let selected_journey = this.state.journeyData.options.find((data) => data.id === id);
@@ -294,7 +299,7 @@ class JourneyMap extends Component {
         ) {
           next_state = "perfios-status";
         } else if ((idfc_loan_status === "bt_init" || idfc_loan_status === "bt_processing") && vendor_info.bt_selected) {
-          next_state = "loan-bt"
+          next_state = vendor_info.bt_updated ? !bt_info.bt_personal_loan ? "credit-bt": 'loan-bt' : 'bt-info'
         }
         this.navigate(next_state);
       }

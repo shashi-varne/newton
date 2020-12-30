@@ -11,7 +11,6 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "RETRY",
     icon: "close",
-    // cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 1",
   },
@@ -20,7 +19,6 @@ const commonMapper = {
     top_title: "Bank statement verification successful",
     button_title: "NEXT",
     icon: "close",
-    // cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
     status: "success",
   },
@@ -38,7 +36,6 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "NEXT",
     icon: "close",
-    // cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
   },
@@ -165,14 +162,10 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "failure") {
-      // if (bt_eligible) {
-      //   this.navigate("bt-info");
-      // } else {
       let body = {
         perfios_state: "init",
       };
       this.updateApplication(body, "income-details");
-      // }
     }
 
     if (perfios_state === "blocked") {
@@ -208,11 +201,6 @@ class PerfiosStatus extends Component {
               and your income details have been safely updated.
             </div>
           )}
-          {/* <div className="subtitle">
-            Before we move to the final loan offer, we have an option of
-            <b> 'Balance Transfer - BT'</b> for you. However, it is up to you
-            whether you want to opt for it or not.
-          </div> */}
 
           {perfios_state === "bypass" && (
             <div className="subtitle">

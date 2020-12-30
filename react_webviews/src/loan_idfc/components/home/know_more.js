@@ -165,7 +165,7 @@ class LoanKnowMore extends Component {
           this.state.application_exists && this.state.otp_verified ? false : true,
       };
   
-      let { vendor_application_status, pan_status, is_dedupe, rejection_reason, perfios_status } = this.state;
+      let { vendor_application_status, pan_status, is_dedupe, rejection_reason, perfios_status, application_status } = this.state;
   
       let rejection_cases = [
         "idfc_null_rejected",
@@ -181,6 +181,9 @@ class LoanKnowMore extends Component {
       ];
   
       if (this.state.top_cta_title === "RESUME") {
+
+        let application_complete = application_status === "application_complete";
+
         if (rejection_cases.indexOf(vendor_application_status || rejection_reason) !== -1 || is_dedupe) {
           this.navigate("loan-status");
         }
@@ -193,8 +196,10 @@ class LoanKnowMore extends Component {
           this.navigate("basic-details");
         } else if (perfios_status === "failure") {
           this.navigate("perfios-status");
-        } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe) {
+        } else if (rejection_cases.indexOf(vendor_application_status) === -1 && !is_dedupe && !application_complete) {
           this.navigate("journey");
+        } else if (application_complete) {
+          this.navigate('reports')
         }
 
       } else {

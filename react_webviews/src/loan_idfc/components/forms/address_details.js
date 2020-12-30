@@ -127,7 +127,18 @@ class AddressDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    if (name) {
+    let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3',
+    'current_address1', 'current_address2', 'current_address3'];
+
+    var format = /[^a-zA-Z0-9 ,]/g;
+
+    if (validate.includes(name)) {
+      let error = format.test(value);
+      
+      form_data[name] = value;
+      form_data[name + "_error"] = error ? "special characters are not allowed except ( , ) commas." : '';
+
+    } else {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }

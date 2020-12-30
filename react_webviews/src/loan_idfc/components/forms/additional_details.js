@@ -150,8 +150,20 @@ class AdditionalDetails extends Component {
 
     let { form_data } = this.state;
 
-    form_data[name] = value;
-    form_data[name + "_error"] = "";
+    let validate = ['office_address1', 'office_address2'];
+
+    var format = /[^a-zA-Z0-9 ,]/g;
+
+    if (validate.includes(name)) {
+      let error = format.test(value);
+      
+      form_data[name] = value;
+      form_data[name + "_error"] = error ? "special characters are not allowed except ( , ) commas." : '';
+
+    } else {
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
+    }
 
     this.setState({
       form_data: form_data,
