@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { getConfig } from 'utils/functions';
-``
 class ContactUsClass extends Component {
     render() {
         return (

@@ -241,10 +241,10 @@ handleClick = async () => {
       setTimeout(() => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         var y = document.getElementsByClassName("Footer")
-        for (var i = 0; i < x.length; i++) {
+        for (let i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
         }
-        for (var i = 0; i < y.length; i++) {
+        for (let i = 0; i < y.length; i++) {
           y.item(i).style.boxShadow = 'none'
         }
       }, 0);
@@ -255,10 +255,10 @@ handleClick = async () => {
       setTimeout(() => {
         var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
         var y = document.getElementsByClassName("Footer")
-        for (var i = 0; i < x.length; i++) {
+        for (let i = 0; i < x.length; i++) {
           x.item(i).style.backgroundColor = "#CDF4D7";
         }
-        for (var i = 0; i < y.length; i++) {
+        for (let i = 0; i < y.length; i++) {
           y.item(i).style.boxShadow = 'none'
         }
       }, 0);

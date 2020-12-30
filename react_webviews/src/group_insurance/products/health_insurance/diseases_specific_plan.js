@@ -155,7 +155,7 @@ class DiseasesSpecificPlan extends Component {
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
-          <div style={{ borderBottomWidth: '1px', width : '100%',
+          <div style={{ borderBottomWidth: '1px',
                   borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   paddingTop: '20px', paddingBottom: '20px',
                   justifyContent: 'space-between', cursor: 'pointer' , width : '100%'}}>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400 }}>{props.title}

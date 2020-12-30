@@ -230,7 +230,7 @@ class HealthInsuranceLanding extends Component {
     var path = '';
     var fullPath = '';
 
-    var fullPath = 'health/' + stateMapper[product_key] + '/plan';
+       fullPath = 'health/' + stateMapper[product_key] + '/plan';
     if (product_key === 'HOSPICASH') {
       fullPath = stateMapper[product_key] + '/plan';
     }
