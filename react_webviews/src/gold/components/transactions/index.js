@@ -317,6 +317,7 @@ class Transactions extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Gold Transactions"
         edit={this.props.edit}
         buttonTitle="PROCEED"

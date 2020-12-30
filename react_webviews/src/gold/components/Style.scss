@@ -530,8 +530,14 @@ img.gold-offer-slide-img {
   }
   .mid-img {
     margin: 0 0 20px 0;
+    // height: 192px !important;
     img {
       width: 100%;
+    }
+
+    .mid-img-class {
+      width: 100%;
+      height: 192px !important;
     }
   }
 }
@@ -877,6 +883,10 @@ img.gold-offer-slide-img {
   .tile2-right {
     color: #767e86;
     font-size: 13px;
+  }
+  .tile2-right-skelton {
+    width: 130px !important;
+    height: 10px !important;
   }
 }
 
@@ -1231,6 +1241,7 @@ img.gold-offer-slide-img {
     position: relative;
     line-height: 1.6;
     cursor: pointer;
+    min-height: 233px;
     .inner {
       // position: absolute;
       // top: 50px;
@@ -1241,6 +1252,7 @@ img.gold-offer-slide-img {
       margin: 10px 0 0px 0;
       position: absolute;
       top: 18%;
+      color: white;
     }
     .button {
       position: absolute;
@@ -1251,7 +1263,7 @@ img.gold-offer-slide-img {
       }
     }
     .bottom-content {
-      color: #9e6e1d;
+      color: white;
       font-size: 8px;
       font-weight: 800;
       // margin: 50px 0 0 0;
@@ -1259,11 +1271,17 @@ img.gold-offer-slide-img {
       position: absolute;
       text-transform: uppercase;
       letter-spacing: 1px;
+      word-spacing: 1px;
     }
   }
 
   .block3 {
-    margin: 30px 0 0 0;
+    margin: 0 0 0 0;
+
+    .steps-icon {
+      width: 80px !important;
+      height: 60px !important;
+    }
 
     .title {
       font-size: 16px;
@@ -1282,7 +1300,7 @@ img.gold-offer-slide-img {
     }
 
     .benefites {
-      margin: 20px 0 0 0;
+      margin: 0 0 0 0;
     }
 
     .benefit-tile-title {
@@ -1297,10 +1315,14 @@ img.gold-offer-slide-img {
       margin: 7px 0 0 0;
     }
 
-    img {
-      width: 70px;
-      margin: 0 20px 0 0;
+    .common-how-steps {
+      padding: 20px 0 10px 0;
     }
+
+    .infoimage-block1 {
+      margin: 0px 0 30px 0;
+    }
+
   }
 
   .block2 {
@@ -1308,6 +1330,11 @@ img.gold-offer-slide-img {
     background: white;
     padding: 10px 15px 20px 15px;
     border-radius: 10px;
+
+    .steps-icon {
+      width: 40px !important;
+      height: 40px !important;
+    }
     .want-to {
       color: #0a1c32;
       font-size: 16px;
@@ -1337,14 +1364,43 @@ img.gold-offer-slide-img {
       box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
       margin: -24px 0 20px 0;
     }
+
+    .highlight-text2 {
+      height: 20px;
+    }
+
+    .onload-error {
+      display: flex;
+      color: #767E86;
+      font-weight: 400;
+    }
+
+    .balance-skelton {
+      margin: 3px 0 0 8px;
+      border-radius: 6px;
+      width: 200px !important;
+      height: 15px !important;
+    }
+    .balance-skelton2 {
+      margin: 3px 0 0 8px;
+      border-radius: 6px;
+      width: 140px !important;
+      height: 15px !important;
+    }
   }
 
   .block4 {
     background: #fff;
-    padding: 10px 15px 20px 15px;
-    margin: 20px -15px 0 -15px;
+    // padding: 0px 15px 20px 15px;
+    // margin: 0px -15px 0 -15px;
+    padding: 0px 0px 20px 0px;
+    margin: 0px 0px 0 0px;
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
+
+    .gold-bottom-secure-info {
+      margin: 0px 0px 10px 0px;
+    }
   }
 }
 
@@ -1360,6 +1416,12 @@ img.gold-offer-slide-img {
   cursor: pointer;
 }
 
+.gold-common-stepes-icon {
+    width: 100px !important;
+    height: 60px !important;
+    margin-right: 0px;
+}
+
 .gold-delivery-products {
   .delivery-products-tiles {
     display: flex;
@@ -1372,12 +1434,13 @@ img.gold-offer-slide-img {
       width: 43%;
       margin: 0 0 20px 0;
     }
-    img {
+    .delivery-icon {
       box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
       width: 100%;
       margin: 0 0 10px 0;
       border-radius: 4px;
     }
+    
     .disc {
       color: #0a1d32;
       font-size: 14px;
@@ -1398,6 +1461,19 @@ img.gold-offer-slide-img {
       color: #0a1d32;
       text-align: left;
       margin: 3px 0 0 0;
+    }
+  }
+
+  .skelton-tiles {
+    .st1 {
+      height: 144px !important;
+    }
+    .st2 {
+      height: 20px !important;
+      margin: 10px 0 10px 0;
+    }
+    .st3 {
+      height: 20px !important;
     }
   }
 }
@@ -1435,6 +1511,8 @@ img.gold-offer-slide-img {
         cursor: pointer;
       }
     }
+
+    
   }
 
   .page-title {

@@ -9,6 +9,8 @@ import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 import GoldProviderFilter from '../ui_components/provider_filter';
 import { default_provider, gold_providers, isUserRegistered } from '../../constants';
 import { storageService, inrFormatDecimal2} from 'utils/validators';
+import {SkeltonRect} from '../../../common/ui/Skelton';
+import {Imgc} from '../../../common/ui/Imgc';
 
 const stepsContentMapper = [
   { 'icon': 'ic_gold_provider', 'content': 'Select gold coin' },
@@ -20,7 +22,7 @@ class GoldDeliveryProducts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       gold_products: [],
       gold_providers: gold_providers,
       orderType: 'delivery',
@@ -50,7 +52,7 @@ class GoldDeliveryProducts extends Component {
         });
       } else {
         this.setState({
-          // show_loader: false,
+          // skelton: false,
           error: true,
           errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
             'Something went wrong'
@@ -62,12 +64,12 @@ class GoldDeliveryProducts extends Component {
       const res4 = await Api.get('/api/gold/delivery/products/' + this.state.provider);
       if (res4.pfwresponse.status_code === 200) {
         this.setState({
-          show_loader: false,
+          skelton: false,
           gold_products: res4.pfwresponse.result.delivery_products
         });
       } else {
         this.setState({
-          // show_loader: false,
+          // skelton: false,
           error: true,
           errorMessage: res4.pfwresponse.result.error || res4.pfwresponse.result.message ||
             'Something went wrong'
@@ -88,7 +90,7 @@ class GoldDeliveryProducts extends Component {
           });
         } else {
           this.setState({
-            // show_loader: false,
+            // skelton: false,
             error: true,
             errorMessage: res3.pfwresponse.result.error || res3.pfwresponse.result.message ||
               'Something went wrong'
@@ -100,7 +102,7 @@ class GoldDeliveryProducts extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false,
+        skelton: false,
         error: true,
         errorMessage: 'Something went wrong'
       });
@@ -108,7 +110,7 @@ class GoldDeliveryProducts extends Component {
     }
 
     this.setState({
-      show_loader: false
+      skelton: false
     });
   }
 
@@ -153,13 +155,26 @@ class GoldDeliveryProducts extends Component {
 
   renderDeliveryProducts =(props, index)  =>{
     return (
-      <div key={index} onClick={() => this.selectGoldProduct(index)} className="delivery-tile">
+      <div key={index} className="delivery-tile" onClick={() => this.selectGoldProduct(index)} >
         {props.media.images && 
-        <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
+        // <img alt="Gold" className="delivery-icon" src={props.media.images[0]} width="80" />}
+        <Imgc alt="Gold" className="delivery-icon st1" src={props.media.images[0]} width="80" />}
 
         <div className="disc">{props.description}</div>
         <div className="making-charges">Making charges</div>
         <div className="making-cost">{inrFormatDecimal2(props.delivery_minting_cost)}</div>
+      </div>
+    )
+  }
+
+  renderDeliverySkelton =(props, index)  =>{
+    return (
+      <div key={index} 
+      className="delivery-tile skelton-tile">
+
+        <SkeltonRect className="delivery-icon st1" />
+        <SkeltonRect className="disc st2" />
+        <SkeltonRect className="making-charges st3" />
       </div>
     )
   }
@@ -180,7 +195,7 @@ class GoldDeliveryProducts extends Component {
   renderInfoSteps =(props, index) => {
     return(
       <div key={index} className="tile">
-        <img className="icon" 
+         <Imgc className="icon gold-common-stepes-icon" 
         src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
           {index + 1}.  {props.content}
@@ -194,6 +209,7 @@ class GoldDeliveryProducts extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        // skelton={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
         headerType="provider-filter"
@@ -207,9 +223,15 @@ class GoldDeliveryProducts extends Component {
         <div className="generic-page-title">
         Select gold coin
         </div>
-        <div className="delivery-products-tiles">
+
+       {!this.state.skelton && <div className="delivery-products-tiles skelton-tiles">
             {this.state.gold_products && this.state.gold_products.map(this.renderDeliveryProducts)}
-        </div>
+        </div>}
+
+        {this.state.skelton &&
+         <div className="delivery-products-tiles skelton-tiles">
+            {['a', 'b', 'c', 'd'].map(this.renderDeliverySkelton)}
+        </div>}
 
         {/* <div className="show-more">
           SHOW MORE

@@ -18,7 +18,7 @@ class GoldLocker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       user_info: {},
       params: qs.parse(props.history.location.search.slice(1)),
       value: 0,
@@ -133,7 +133,7 @@ class GoldLocker extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false,
+        skelton: false,
       });
       toast('Something went wrong');
     }
@@ -234,7 +234,7 @@ class GoldLocker extends Component {
       selected_provider_info: selected_provider_info,
       next_page: selected_provider_info.report ? selected_provider_info.report.next_page : '',
       loading_more: false,
-      show_loader: false
+      skelton: false
     })
   }
 
@@ -383,7 +383,8 @@ class GoldLocker extends Component {
 
     return (
       <Container
-        showLoader={this.state.show_loader}
+        // showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Gold locker"
         noFooter={true}
         events={this.sendEvents('just_set_events')}
