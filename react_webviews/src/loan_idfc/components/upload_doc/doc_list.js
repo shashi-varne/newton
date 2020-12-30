@@ -115,11 +115,11 @@ class DocumentList extends Component {
   goBack = () => {
     let { params } = this.state;
 
-    // if (params.adminPanel) {
-    //   window.location.href = this.state.params.redirect;
-    // } else {
+    if (params.adminPanel) {
+      window.location.href = this.state.params.redirect;
+    } else {
       this.navigate('journey')
-    // }
+    }
   }
 
   render() {
@@ -145,7 +145,7 @@ class DocumentList extends Component {
         disable={disableButton}
         headerData={{
           icon: this.state.params.adminPanel ? "close" : "",
-          goBack: this.goBack(),
+          goBack: this.goBack,
         }}
       >
         <div className="upload-documents">
