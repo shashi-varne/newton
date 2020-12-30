@@ -132,7 +132,7 @@ class WhatsappOtpVerification extends Component {
   };
 
   resendOtp = async () => {
-    this.state.openDialog && this.sendEvents("retry")
+    this.sendEvents("retry")
     let { otpBaseData } = this.state;
 
     this.setState(

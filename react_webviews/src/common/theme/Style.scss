@@ -1249,6 +1249,33 @@ input#pan {
 .generic-page-button-small-withoutborder {
   @include generic-page-button-small-base();
   border: unset;
+
+}
+.generic-page-button-large {
+  color: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 5% 20% 5% 20%;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.generic-page-button-small-with-green {
+  background: var(--secondary);
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid;
+  width: fit-content;
+  padding: 5% 20% 5% 20%;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: white;
 }
 
 .generic-page-button-small-with-back {
