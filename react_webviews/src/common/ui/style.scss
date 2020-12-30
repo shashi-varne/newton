@@ -237,6 +237,13 @@
   background: white !important;
   border: 1px solid white !important;
 }
+
+.generic-carousel {
+  .offer-slide-img {
+    width: 100%;
+    border-radius: 6px;
+  }
+}
 .CircularProgressbar .CircularProgressbar-text {
   fill: var(--primary) !important;
   font-size: 35px !important;
@@ -691,5 +698,112 @@ body[data-device="mobile"] {
     span {
       width: 270px;
     }
+  }
+}
+
+.show-loading-animation.rect-shape, .show-loading-animation.round-shape, .show-loading-animation.text-row, .show-loading-animation .rect-shape, .show-loading-animation .round-shape, .show-loading-animation .text-row {
+  border-radius: 6px;
+  margin-right: 0px !important;
+  animation: react-placeholder-pulse 1.0s infinite !important;
+}
+
+.rect-shape.show-loading-animation:empty::after {
+  content: ".";
+  visibility: hidden;
+}
+.generic-fallback-img {
+  background: var(--skelton-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 25% !important;
+  }
+}
+
+.generic-skelton {
+  padding: 20px;
+  margin: 20px 0 0 0;
+  background: #fff;
+  height: 100%;
+
+  .single-full-image-skelton {
+    border-radius: 6px;
+  }
+
+  .image-and-lines {
+
+    display: flex;
+    justify-content: space-between;
+    width: -webkit-fill-available;
+    margin: 40px 0 0 0;
+
+    .mid-right {
+      width: inherit;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      margin: 0 0 0 20px;
+    }
+    .mid-left-skelton {
+      width: 54px !important;
+      height: 54px !important;
+      border-radius: 6px;
+    }
+    .mid-right-skelton1 {
+        width: 75% !important;
+        height: 25px !important;
+        margin-top: 0px !important;
+        border-radius: 6px;
+    }
+    .mid-right-skelton2 {
+      width: 100% !important;
+      height: 18px !important;
+      margin-top: 0px !important;
+      border-radius: 6px;
+    }
+  }
+
+  .two-lines {
+
+    display: flex;
+    justify-content: space-between;
+    width: -webkit-fill-available;
+    margin: 40px 0 0 0;
+    flex-direction: column;
+
+    .mid-right {
+      width: inherit;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      margin: 0 0 0 20px;
+    }
+    .mid-left-skelton {
+      width: 50px !important;
+      height: 50px !important;
+      border-radius: 6px;
+    }
+    .mid-right-skelton1 {
+        width: 100% !important;
+        height: 18px !important;
+        margin-top: 0px !important;
+        border-radius: 6px;
+    }
+    .mid-right-skelton2 {
+      width: 75% !important;
+      height: 18px !important;
+      margin-top: 10px !important;
+      border-radius: 6px;
+    }
+  }
+
+  .products-listing {
+    
+    .mid {
+      margin: 40px 0 0 0;
+    }
+
   }
 }

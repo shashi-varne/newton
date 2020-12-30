@@ -7,17 +7,16 @@ import toast from '../../../common/ui/Toast';
 import { inrFormatDecimal, storageService } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
 import TextField from 'material-ui/TextField';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 
+import ReactResponsiveCarousel from "../../../common/ui/carousel";
 class DeliverySelectedProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       product:storageService().getObject('deliveryData') || {},
       openResponseDialog: false,
       disabledText: 'PROCEED TO ADDRESS SELECTION',
@@ -73,7 +72,7 @@ class DeliverySelectedProduct extends Component {
           disabled = false;
         }
         this.setState({
-          show_loader: false,
+          skelton: false,
           maxWeight: maxWeight,
           disabled:disabled,
           disabledText: disabledText
@@ -88,13 +87,13 @@ class DeliverySelectedProduct extends Component {
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
 
     this.setState({
-      show_loader: false
+      skelton: false
     });
   }
 
@@ -197,7 +196,7 @@ class DeliverySelectedProduct extends Component {
         }
       } catch (err) {
         this.setState({
-          show_loader: false
+          pincodeLoading: false
         });
         toast('Something went wrong');
       }
@@ -220,10 +219,19 @@ class DeliverySelectedProduct extends Component {
     });
   }
 
+  carouselSwipe_count = (index) => {
+    this.setState({
+      selectedIndex: index,
+      card_swipe: "yes",
+      card_swipe_count: this.state.card_swipe_count + 1,
+    });
+  };
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={this.state.product.description}
         handleClick={this.handleClick}
         edit={this.props.edit}
@@ -233,22 +241,12 @@ class DeliverySelectedProduct extends Component {
       >
         <div className="delivery-select-product">
           <div className="block1">
-            <Carousel
-
-              showStatus={false} showThumbs={false}
-              showArrows={true}
-              infiniteLoop={false}
-              selectedItem={this.state.selectedIndex}
-              onChange={(index) => {
-                this.setState({
-                  selectedIndex: index,
-                  card_swipe: 'yes',
-                  card_swipe_count: this.state.card_swipe_count + 1
-                });
-              }}
-            >
-              {(this.state.product.media.images || []).map(this.renderOfferImages)}
-            </Carousel>
+            <ReactResponsiveCarousel
+                CarouselImg={this.state.product.media.images || []}
+                callbackFromParent={this.carouselSwipe_count}
+                selectedIndexvalue={this.state.selectedIndex}
+                directImgLink={true}
+              />
           </div>
 
 

@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
-
+import {Imgc} from '../../../common/ui/Imgc';
 const stepsContentMapper = [
   { 'icon': 'ic_gold_provider', 'content': 'Select gold coin' },
   { 'icon': 'ic_make_payment', 'content': 'Pay making charges' },
   { 'icon': 'deliver', 'content': 'Get home delivery' }
 ];
+
 
 class DeliveryIntro extends Component {
   constructor(props) {
@@ -48,7 +49,7 @@ class DeliveryIntro extends Component {
   renderInfoSteps = (props, index) => {
     return (
       <div key={index} className="tile">
-        <img className="icon"
+         <Imgc className="icon gold-common-stepes-icon" 
           src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
           {index + 1}. {props.content}

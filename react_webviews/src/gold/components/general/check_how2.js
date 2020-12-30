@@ -5,6 +5,9 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import LeftRightFooter from '../../../common/ui/leftRightFooter';
 
+
+import {Imgc} from '../../../common/ui/Imgc';
+
 class CheckHow2 extends Component {
     constructor(props) {
         super(props);
@@ -72,7 +75,10 @@ class CheckHow2 extends Component {
                 <div className="check-how-gold">
 
                     <div className="mid-img">
-                        <img src={require(`assets/${this.state.productName}/ils_alternate_assets.svg`)} alt="Gold" />
+                        <Imgc 
+                        className='mid-img-class'
+                        src={require(`assets/${this.state.productName}/ils_alternate_assets.svg`)}
+                         />
                     </div>
                     <div className="title">
                         Gold is an alternate asset
