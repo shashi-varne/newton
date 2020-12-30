@@ -292,7 +292,7 @@ class Landing extends Component {
         return;
       }
 
-    window.localStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
+    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('group-insurance/' + fullPath);
   }
 
