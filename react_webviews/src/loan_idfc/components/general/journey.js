@@ -99,6 +99,12 @@ const journeyMapper2 = {
   idfc_4_accepted: {
     index: "4",
   },
+  idfc_3_submitted: {
+    index: "4",
+  },
+  idfc_3_accepted: {
+    index: "4",
+  },
 };
 class JourneyMap extends Component {
   constructor(props) {
