@@ -3,6 +3,7 @@ import positive from 'assets/ic_positive.svg';
 import negative from 'assets/ic_negative.svg';
 // -------------------------------------------------
 import React, { useEffect, useState } from 'react';
+import moment from 'moment';
 import { genericErrMsg, GraphDateRanges } from '../../constants';
 import { formatGrowthData } from '../../common/commonFunctions';
 import IwdGrowthGraph from '../../mini-components/IwdGrowthGraph';
@@ -17,11 +18,11 @@ import IwdErrorScreen from '../../mini-components/IwdErrorScreen';
 const dateFormatMap = {
   '1 month': "d m",
   '3 months': "d m",
-  '6 months': "m yy'",
-  '1 year': "m yy'",
-  '3 years': "m yy'",
-  '5 years': "m yy'",
-  'ytd': "d m",
+  '6 months': "d m y",
+  '1 year': "d m y",
+  '3 years': "d m y",
+  '5 years': "d m y",
+  'ytd': "d m y",
 };
 const isMobileView = getConfig().isMobileDevice;
 
@@ -85,7 +86,7 @@ const PortfolioGrowth = () => {
   };
 
   const filterDateTicks = (ticks = [], mobileTicks = []) => {
-    if (!isMobileView) return ticks;
+    if (['5 years', '3 years'].includes(selectedRange) && !isMobileView) return ticks;
     if (isEmpty(mobileTicks)) {
       return [ticks[0], ticks[2], ticks[4], ticks[ticks.length - 2]];
     }
@@ -93,11 +94,15 @@ const PortfolioGrowth = () => {
   };
 
   const GraphRangePicker = () => {
+    let dateRanges = [...GraphDateRanges.reverse()];
+    if (moment().month() === 0) {
+      dateRanges = dateRanges.slice(1);
+    }
     return (
       <div
         id="iwd-range-picker"
         style={{ cursor: isLoadingGrowth ? "not-allowed" : "pointer" }}>
-        {[...GraphDateRanges].reverse().map((rangeObj, idx) => (
+        {dateRanges.map((rangeObj, idx) => (
           <span
             key={idx}
             onClick={() => isLoadingGrowth ? '' : setSelectedRange(rangeObj.value)}
@@ -157,7 +162,7 @@ const PortfolioGrowth = () => {
             isLoading={isLoadingGrowth}
             data={growthData.data}
             width="auto"
-            height="260px"
+            height="76%"
             params={{
               date_ticks: growthData.date_ticks,
               min: growthData.min,

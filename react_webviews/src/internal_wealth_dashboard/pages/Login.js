@@ -41,7 +41,15 @@ const Login = (props) => {
 
   return (
     <>
-      {openForgotPwd && <ForgotPasswordPage onClose={() => toggleForgotPwd(false)} />}
+      {/* {openForgotPwd && <ForgotPasswordPage onClose={() => toggleForgotPwd(false)} />} */}
+      <CSSTransition
+        in={openForgotPwd}
+        unmountOnExit
+        classNames="circularExpand"
+        timeout={1000}
+        >
+        <ForgotPasswordPage onClose={() => toggleForgotPwd(false)} />
+      </CSSTransition>
       <CSSTransition
         in={openHelpPage}
         unmountOnExit

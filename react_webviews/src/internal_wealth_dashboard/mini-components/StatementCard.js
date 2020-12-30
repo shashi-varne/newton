@@ -8,7 +8,7 @@ import { nativeCallback } from '../../utils/native_callback';
 const StatementCard = ({ sType, year }) => {
   const handleDownloadReport = async () => {
     sendEvents('download_report', sType);
-    window.open(`${getConfig().base_url}printpage/invest/export/mine/${sType}?year=${year}`, '_blank');
+    window.open(`${getConfig().base_url}/printpage/invest/export/mine/${sType}?year=${year}`, '_blank');
   };
 
   const sendEvents = (user_action, sType) => {

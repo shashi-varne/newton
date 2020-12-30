@@ -16,8 +16,8 @@ function MarketCapAllocation({ data = [], isLoading }) {
       id='iwd-market-alloc'
       isLoading={isLoading}
       headerText='Market cap allocation'
-      error={isEmpty(data)}
-      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+      noData={isEmpty(data)}
+      noDataText="Oops! There is no data to show here currently."
     >
       <section className='iwd-agl-content'>
         <div className='iwd-chart'>
@@ -42,8 +42,8 @@ function TopSectorAllocation({ data = [], isLoading }) {
       className='iwd-analysis-graph-right'
       id='iwd-sector-alloc'
       isLoading={isLoading}
-      error={isEmpty(data)}
-      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+      noData={isEmpty(data)}
+      noDataText="Oops! There is no data to show here currently."
       headerText='Top sector allocation'
     >
       <section className='iwd-agr-content'>
@@ -68,8 +68,8 @@ function RatingWiseExposure({ data = [], isLoading }) {
     <IwdCard
       className='iwd-analysis-graph-left'
       id='iwd-rating-exposure'
-      error={isEmpty(data)}
-      errorText="Something went wrong! Please retry after some time or contact your wealth manager"
+      noData={isEmpty(data)}
+      noDataText="Oops! There is no data to show here currently."
       isLoading={isLoading}
       headerText='Rating wise exposure'
     >

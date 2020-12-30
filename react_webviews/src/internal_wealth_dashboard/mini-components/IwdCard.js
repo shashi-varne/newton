@@ -9,6 +9,8 @@ export default function IwdCard({
   children,
   error = false,
   errorText = '',
+  noData = false,
+  noDataText = '',
   isLoading = false,
   className = '',
   id = '',
@@ -30,6 +32,18 @@ export default function IwdCard({
           templateErrText={errorText}
         />
       )
+    }
+
+    if (noData) {
+      return (
+        <IwdErrorScreen
+          hasNoData={true}
+          templateErrText={
+            noDataText ||
+            "No data found"
+          }
+        />
+      );
     }
 
     return children;

@@ -28,11 +28,11 @@
   clip-path: circle(100%);
 }
 .shrink {
-  clip-path: circle(0% at bottom 100px left 120px);
+  clip-path: circle(0% at bottom left);
 }
 
 .circularExpand-enter {
-  clip-path: circle(0% at bottom 100px left 120px);
+  clip-path: circle(0% at top right);
 }
 .circularExpand-enter-active {
   clip-path: circle(100%);
@@ -42,7 +42,7 @@
   clip-path: circle(100%);
 }
 .circularExpand-exit-active {
-  clip-path: circle(0% at bottom 100px left 120px);
+  clip-path: circle(0% at top right);
   transition: clip-path 0.8s ease-in-out 0.1s;
 }
 

@@ -28,12 +28,16 @@ const IwdProfile = (props) => {
     setUserDetail(user);
 
     if (!pan) {
-      const kycDetail = await Api.post(`api/user/account/summary`, {
-        "kyc": ["kyc"],
-        "user": ["user"]
-      });
-      pan = get(kycDetail, 'pfwresponse.result.data.kyc.kyc.data.pan.meta_data.pan_number', '');
-      storageService().set('iwd-user-pan', pan);
+      try {
+        const kycDetail = await Api.post(`api/user/account/summary`, {
+          "kyc": ["kyc"],
+          "user": ["user"]
+        });
+        pan = get(kycDetail, 'pfwresponse.result.data.kyc.kyc.data.pan.meta_data.pan_number', '');
+        storageService().set('iwd-user-pan', pan);
+      } catch (err) {
+        console.log(err);
+      }
     }
     setUserDetail({ ...user, pan });
   };

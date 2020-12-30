@@ -16,14 +16,14 @@ const IwdGrowthGraph = ({
   isLoading = false
 }) => {
   return (
-    <div style={{ width, height, margin: `0 ${isMobileView ? '0 0 -5px' : '-20px'}` }}>
+    <div style={{ width, height, margin: `0 ${isMobileView ? '0 0 -5px' : '-20px 0 -30px'}` }}>
       {isLoading ?
         <IwdCardLoader />
         : 
         (<ResponsiveLine
           data = { data }
           animate = { true }
-          margin = {{ top: 20, right: 20, bottom: 40, left: isMobileView ? 50 : 70 }}
+          margin = {{ top: 20, right: 40, bottom: 40, left: isMobileView ? 50 : 70 }}
           // yScale={{
           //   type: 'linear',
           //   min: params.min || 'auto',
@@ -34,17 +34,17 @@ const IwdGrowthGraph = ({
           axisBottom={{
             format: value => formattedDate(value, params.dateFormat, true),
             tickValues: params.date_ticks,
-            tickPadding: 20,
-            tickSize: 0,
+            tickPadding: 15,
+            tickSize: 4,
           }}
           axisLeft={{
             orient: 'left',
-            tickValues: 6,
+            tickValues: 5,
             format: value => value === 0 ? 0 : numDifferentiationInr(value, 1), //converts 40000 to 40K
             tickPadding: 15,
             tickSize: 0,
           }}
-          curve="basis"
+          curve="linear"
           enableGridX={false}
           colors={['#4F2DA6', '#4AD0C0']}
           enablePoints={false}

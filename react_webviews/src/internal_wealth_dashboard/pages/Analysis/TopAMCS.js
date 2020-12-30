@@ -7,7 +7,8 @@ const TopAMCS = ({ topAMCs }) => {
       <IwdCard
         className='iwd-analysis-card'
         headerText='Top AMC exposure'
-        error={isEmpty(topAMCs)}
+        noData={isEmpty(topAMCs)}
+        noDataText='Oops! There is no data to show here currently.'
       >
         <div className='iwd-analysis-top-amcs'>
           {topAMCs?.map(({ amc_logo: logo, amc_name: name, share: percentage }) => (

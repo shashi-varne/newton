@@ -21,7 +21,18 @@ const ForgotPasswordPage = ({ onClose }) => {
     setEmail(e.target.value);
   };
 
+  const onKeyDown = (event) => {
+    var code = event.keyCode;
+    if (code === 13) {
+      resetPassword();
+    }
+  };
+
   const resetPassword = async () => {
+    if (emailSent) {
+      return onClose();
+    }
+
     try {
       if (!validateEmail(email)) {
         return setEmailErr("Please enter a valid email");
@@ -67,6 +78,7 @@ const ForgotPasswordPage = ({ onClose }) => {
               input: 'iwd-text-field-input',
             }}
             onChange={(e) => handleInput(e, 'email')}
+            onKeyDown={onKeyDown}
           />
           {emailErr && <span id="iwd-fpc-err">{emailErr}</span>}
         </FormControl>}

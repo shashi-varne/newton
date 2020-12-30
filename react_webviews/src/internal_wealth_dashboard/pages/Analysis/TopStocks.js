@@ -8,7 +8,8 @@ const TopStocks = ({ topStocks }) => {
       <IwdCard
         className='iwd-analysis-card'
         headerText='Top stocks in portfolio'
-        error={isEmpty(topStocks)}
+        noData={isEmpty(topStocks)}
+        noDataText="Oops! There is no data to show here currently."
       >
         <div className='iwd-analysis-portfolios-equity'>
           {topStocks?.map(
