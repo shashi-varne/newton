@@ -18,6 +18,7 @@ import CommonLanding from './common/components/landing';
 
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
+import InternalWealthDashboard from './internal_wealth_dashboard';
 import Loan from './loan';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
@@ -47,6 +48,7 @@ class App extends Component {
           <Route path='/pg' component={Payment} />
           <Route path='/kyc-esign' component={KycEsign} />
           <Route path='/whatsapp/' component={Whatsapp} />
+          <Route path="/iw-dashboard" component={InternalWealthDashboard} />
           <Route path='/webview/:main_module/:sub_module' component={CommonLanding} />
           <Route path='/webview/:main_module' component={CommonLanding} />
           {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
