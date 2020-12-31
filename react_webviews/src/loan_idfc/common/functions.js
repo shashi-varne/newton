@@ -364,7 +364,7 @@ export async function getOrCreate(params) {
       let picklistScreens = [
         // "basic_details",
          "professional_details_screen",
-          // "mobile_verification",
+          "mobile_verification",
           //  "requirement_details_screen",
             "additional_details"]
 
