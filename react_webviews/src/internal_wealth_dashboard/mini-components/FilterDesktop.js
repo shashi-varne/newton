@@ -33,7 +33,7 @@ const FilterDesktop = ({ filterOptions, filter_key, handleFilterData }) => {
 
   const clearFilters = () => {
     if (!canClear) return;
-    if (filter_key === 'iwd-holding-filters') {
+    if (filter_key === 'iwd-transaction-filters') {
       handleFilterData({ ttype: '' });
     } else {
       handleFilterData(null);

@@ -27,7 +27,7 @@
     font-size: 13px;
     line-height: 21px;
     color: #767E86;
-    margin: 20px 0 50px;
+    margin-top: 20px;
   }
 
   .fisdom-ecb-btn {
@@ -36,6 +36,7 @@
     min-height: 50px;
     padding: 13px;
     box-sizing: border-box;
+    margin-top: 50px;
 
     .MuiButton-label {
       font-weight: bold;
@@ -58,8 +59,8 @@
     margin-top: 0;
     max-width: 280px;
       
-    .fisdom-ecb-error-text {
-      margin-bottom: 30px;
+    .fisdom-ecb-btn {
+      margin-top: 30px;
     }
   }
 }
