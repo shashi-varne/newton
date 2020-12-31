@@ -12,9 +12,9 @@ import $ from "jquery";
 import DotDotLoader from "common/ui/DotDotLoader";
 import Api from "utils/api";
 import Input from "../../../common/ui/Input";
-import { formatDate, dobFormatTest } from "utils/validators";
+import { formatDate, dobFormatTest, calculateAge, IsFutureDate } from "utils/validators";
 import { FormControl } from "material-ui/Form";
-import { getUrlParams, calculateAge, isValidDate } from "utils/validators";
+import { getUrlParams, isValidDate } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
 
 class UploadBank extends Component {
@@ -74,6 +74,7 @@ class UploadBank extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let application_info = lead.application_info || {};
     let progressHeaderData = {
       title: "Income and loan offer",
       steps: [
@@ -96,7 +97,7 @@ class UploadBank extends Component {
     }
 
     let loaderData = {
-      title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
+      title: `Hang on, while IDFC finishes analysing your last 3 months' bank statements`,
       subtitle: "It may take 10 to 15 seconds!",
     };
 
@@ -109,6 +110,7 @@ class UploadBank extends Component {
     this.setState({
       loaderData: loaderData,
       progressHeaderData: progressHeaderData,
+      employment_type: application_info.employment_type || '',
     });
   };
 
@@ -120,6 +122,10 @@ class UploadBank extends Component {
       "Share respective passwords if your statements are password protected",
       "Upload multiple statements of the same bank account with each file not exceeding 6 MB",
     ];
+
+    if (this.state.employment_type === 'self_employed') {
+      notes[0] = "Provide your latest bank statements from your savings or current account to get the best loan offer"
+    }
 
     return (
       <div style={{ lineHeight: "15px" }}>
@@ -157,7 +163,7 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
-          console.log(file);
+          console.log(file)
           try {
             that.setState({
               docType: this.doc_type,
@@ -187,7 +193,6 @@ class UploadBank extends Component {
   }
 
   startUpload(method_name, doc_type) {
-    console.log(doc_type);
     this.setState({
       type: method_name,
     });
@@ -203,7 +208,6 @@ class UploadBank extends Component {
     e.preventDefault();
 
     let file = e.target.files[0];
-    console.log(file);
 
     let acceptedType = ["application/pdf"];
 
@@ -238,7 +242,6 @@ class UploadBank extends Component {
 
   save(file) {
     let acceptedType = ["application/pdf"];
-    console.log(file);
 
     if (acceptedType.indexOf(file.type) === -1) {
       toast("Please select pdf file only");
@@ -252,7 +255,12 @@ class UploadBank extends Component {
     file.status = "uploaded";
 
     if (editId === "") {
-      file.name = `Bank_statement_${count}.pdf`;
+      file.name = `${file.file_name}`;
+
+      if (!file.file_name.includes(".pdf")) {
+        file.name = `${file.file_name}.pdf`;
+      }
+
       documents.push(file);
     } else {
       var index = documents.findIndex((item) => item.id === editId);
@@ -290,10 +298,12 @@ class UploadBank extends Component {
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
 
-    let ext = documents[index].type.split("/")[1];
+    // let ext = documents[index].type.split("/")[1];
+
+    // if (documents[index].name.)
 
     if (curr_status.status !== "delete") {
-      data.append("file", documents[index], documents[index].name + ext);
+      data.append("file", documents[index], documents[index].name);
       data.append("password", documents[index].password);
     }
 
@@ -320,6 +330,9 @@ class UploadBank extends Component {
         documents[index].document_id = result.document_id;
         if (documents[index].curr_status === "edit") {
           documents[index].showButton = false;
+          this.setState({
+            confirmed: true,
+          });
         } else if (documents[index].curr_status === "delete") {
           documents.splice(index, 1);
         } else {
@@ -440,6 +453,23 @@ class UploadBank extends Component {
     }
     console.log(calculateAge(form_data['start_date'], true).days)
 
+    let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
+    let endDate_days = calculateAge(form_data.end_date, true).days <= 7;
+
+    let month = calculateAge(form_data.start_date, true).months;
+    // eslint-disable-next-line radix
+    let startDate = form_data.start_date.substring(0, 2) === "01";
+
+    if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
+      form_data.start_date_error = "This date must be 3 months prior to the current month";
+      canSubmit = false;
+    }
+
+    if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
+      form_data.end_date_error = "This date must be 3 days prior to the current date";
+      canSubmit = false;
+    }
+
     this.setState({
       form_data: form_data,
     });
@@ -457,14 +487,26 @@ class UploadBank extends Component {
           `relay/api/loan/idfc/perfios/upload/${this.state.application_id}?institution_id=${bank[0].key}`
         );
 
-        const { result } = res.pfwresponse;
+        const { result, status_code: status } = res.pfwresponse;
+
+        let { params } = this.state;
 
         if (result) {
-          console.log(result);
-          this.navigate("perfios-status");
-          // } else {
-          // toast(result.error || result.message || "Something went wrong!");
-          // this.onload();
+
+          if (params.adminPanel) {
+            if (status === 200) {
+              window.location.href = this.state.params.redirect;
+            } else {
+              toast(result.error || result.message || "Something went wrong");
+              this.setState({
+                show_loader: false,
+                loaderWithData: false,
+              });
+            }
+
+          } else {
+            this.navigate("perfios-status");
+          }
         }
       } catch (err) {
         console.log(err);
@@ -477,10 +519,10 @@ class UploadBank extends Component {
   };
 
   goBack = () => {
+    this.sendEvents('back');
     let { params } = this.state;
 
     if (params.adminPanel) {
-      console.log(this.state.params.redirect);
       window.location.href = this.state.params.redirect;
     } else {
       this.navigate("income-details");

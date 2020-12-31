@@ -42,7 +42,7 @@ class DocumentList extends Component {
     let vendor_info = lead.vendor_info || {};
     let bottomButtonData = {
       leftTitle: "Personal loan",
-      leftSubtitle: numDifferentiationInr(vendor_info.loanAmount),
+      leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
     };
 
     if (this.state.params.adminPanel) {
@@ -70,8 +70,14 @@ class DocumentList extends Component {
 
       if (status === 200) {
         this.navigate('final-offer')
+        this.setState({
+          show_loader: false
+        })
       } else {
         toast(result.error || result.message || "Something went wrong!");
+        this.setState({
+          show_loader: false
+        })
       }
 
     } catch (err) {

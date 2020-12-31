@@ -12,10 +12,11 @@ class Calculator extends Component {
     this.state = {
       show_loader: false,
       Net_monthly_Income: 90000,
-      Tenor: 5,
+      Tenor: 6,
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
+      cta_title: 'APPLY NOW'
     };
 
     this.initialize = initialize.bind(this);
@@ -23,76 +24,28 @@ class Calculator extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let { params } = this.props.location;
-
-    if (!params) {
-      this.navigate("home");
-      return;
-    }
-
-    this.setState({
-      ...params,
-    });
   }
 
-  onload = async () => {};
+  onload = () => {
+    let cta_title = this.props.location.state ? this.props.location.state.cta_title : "APPLY NOW";
+
+    this.setState({
+      cta_title: cta_title
+    })
+  };
 
   handleClick = () => {
     this.sendEvents("next");
-    let params = {
-      create_new:
-        this.state.application_exists && this.state.otp_verified ? false : true,
-    };
-
-    let {
-      vendor_application_status,
-      pan_status,
-      is_dedupe,
-      rejection_reason,
-    } = this.state;
-
-    let rejection_cases = [
-      "idfc_null_rejected",
-      "idfc_0.5_rejected",
-      "idfc_1.0_rejected",
-      "idfc_1.1_rejected",
-      "idfc_1.7_rejected",
-      "idfc_4_rejected",
-      "idfc_callback_rejected",
-      "Age",
-      "Salary",
-      "Salary reciept mode",
-    ];
-
-    if (this.state.cta_title === "RESUME") {
-      if (
-        rejection_cases.indexOf(
-          vendor_application_status || rejection_reason
-        ) !== -1 ||
-        is_dedupe
-      ) {
-        this.navigate("loan-status");
-      }
-
-      if (rejection_cases.indexOf(rejection_reason) !== -1) {
-        this.navigate("loan-status");
-      }
-
-      if (!pan_status || vendor_application_status === "pan") {
-        this.navigate("basic-details");
-      } else if (
-        rejection_cases.indexOf(vendor_application_status) === -1 &&
-        !is_dedupe
-      ) {
-        this.navigate("journey");
-      }
+    let { cta_title } = this.state;
+    
+    if (cta_title === "RESUME") {
+      this.navigate('select-loan');
     } else {
-      this.getOrCreate(params);
+      this.navigate('edit-details');
     }
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
@@ -124,14 +77,6 @@ class Calculator extends Component {
       (((Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40) / 100) *
       Tenor;
 
-    // if(Net_monthly_Income < 30000) {
-    //   Loan_Eligibility = 0;
-    // } else if(Loan_Eligibility > 100000) {
-    //   Loan_Eligibility = 100000;
-    // } else if(Loan_Eligibility <=0) {
-    //   Loan_Eligibility = 0;
-    // }
-
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -139,7 +84,7 @@ class Calculator extends Component {
         title="Loan eligibility calculator"
         buttonTitle={this.state.cta_title}
         styleFooter={{
-          backgroundColor: "var(--highlight)",
+          backgroundColor: "var(--highlight) !important",
         }}
         styleContainer={{
           backgroundColor: "var(--highlight)",
@@ -153,19 +98,19 @@ class Calculator extends Component {
             val="Net_monthly_Income"
             value={Net_monthly_Income}
             min="0"
-            max="2500000"
+            max="1000000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 10 Lacs"
             onChange={this.onChange}
           />
 
           <SliderWithValues
-            label="Loan tenor"
-            val="Tenor"
+            label="Loan tenure"
+            val="Tenure"
             value={Tenor}
-            min="3"
+            min="6"
             max="24"
-            minValue="3 MONTHS"
+            minValue="6 MONTHS"
             maxValue="24 MONTHS"
             onChange={this.onChange}
           />
@@ -175,9 +120,9 @@ class Calculator extends Component {
             val="Other_EMIs"
             value={Other_EMIs}
             min="0"
-            max="2500000"
+            max="500000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 5 Lacs"
             onChange={this.onChange}
           />
 
@@ -186,20 +131,16 @@ class Calculator extends Component {
             val="Monthly_expenses"
             value={Monthly_expenses}
             min="0"
-            max="2500000"
+            max="1000000"
             minValue="0"
-            maxValue="₹ 25 Lacs"
+            maxValue="₹ 10 Lacs"
             onChange={this.onChange}
           />
 
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              {inrFormatDecimal(
-                parseInt(Loan_Eligibility) < parseInt("100000")
-                  ? "0"
-                  : Loan_Eligibility
-              )}
+              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility), 0))}
             </div>
           </div>
         </div>

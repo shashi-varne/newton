@@ -22,6 +22,7 @@ class LoanBtDetails extends Component {
       form_data: [],
       loan_bt: [],
       bankOptions: [],
+      bt_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -55,6 +56,10 @@ class LoanBtDetails extends Component {
 
   onload = async () => {
     let lead = this.state.lead || {};
+    let loaderData = {
+      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
+      subtitle: "This may take around 2 minutes!",
+    };
 
     let bt_info = lead.bt_info;
 
@@ -64,6 +69,10 @@ class LoanBtDetails extends Component {
       if (bt_info[item].typeOfLoan === "PersonalLoan") {
         loan_bt.push({ ...bt_info[item] });
       }
+    }
+
+    if (!bt_info.bt_personal_loan) {
+      this.navigate('credit-bt')
     }
 
     loan_bt.forEach((data) => {
@@ -77,17 +86,22 @@ class LoanBtDetails extends Component {
 
     this.setState({
       loan_bt: loan_bt,
+      bt_info: bt_info,
+      loaderData: loaderData,
     });
   };
 
-  sendEvents(user_action, data={}) {
+  sendEvents(user_action) {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "select_bt",
-        no_of_loans_selected: data.no_of_loans_selected,
-        skipped_screen: data.no_of_loans_selected !==0 ? "no" : "yes",
+        no_of_loans_selected: form_checked.length,
+        skipped_screen: form_checked.length !== 0 ? "no" : user_action === 'next' ? "yes" : "no",
       },
     };
 
@@ -129,7 +143,7 @@ class LoanBtDetails extends Component {
   }
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, bt_info } = this.state;
     let form_checked = form_data.filter(
       (item) => item.is_selected === true
     );
@@ -155,22 +169,34 @@ class LoanBtDetails extends Component {
       return;
     }
 
-    this.sendEvents('next', { no_of_cards_entered: form_checked.length, });
-    this.updateApplication({
-      bt_selection: form_checked,
-    });
+    this.sendEvents('next');
+
+    if (submit_details) {
+      if (!bt_info.bt_credit_card) {
+        this.submitApplication(
+          {
+            bt_selection: form_checked,
+          },
+          "one",
+          true,
+          "eligible-loan"
+        );
+      } else {
+        this.updateApplication({
+          bt_selection: form_checked,
+        });
+      }
+    }
   };
 
   handleCheckbox = (checked, index, id) => {
     let { form_data } = this.state;
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    if(checked)
-      this.validateFields(form_data,index);
-    else
-      this.setState({
-        form_data: form_data,
-      });
+
+    this.setState({
+      form_data: form_data,
+    });
   };
 
   render() {
@@ -187,12 +213,14 @@ class LoanBtDetails extends Component {
           form_checked.length === 0 ? "SKIP AND CONTINUE" : "CONTINUE"
         }
         handleClick={this.handleClick}
+        loaderData={this.state.loaderData}
+        loaderWithData={this.state.loaderWithData}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
-        current={1}
-        total={2}
-        count={1}
+        current={!this.state.bt_info.bt_credit_card ? "" : 1}
+        total={!this.state.bt_info.bt_credit_card ? "" : 2}
+        count={!this.state.bt_info.bt_credit_card ? "" : 1}
       >
         <div className="loan-bt">
           <div className="subtitle">
@@ -242,7 +270,6 @@ class LoanBtDetails extends Component {
                           }
                           value={
                             this.state.form_data[index].financierName ||
-                            item.financierName ||
                             ""
                           }
                           onChange={this.handleChange("financierName", index)}
@@ -258,8 +285,7 @@ class LoanBtDetails extends Component {
                         helperText={
                           this.state.form_data[index].principalOutstanding_error ||
                           numDifferentiationInr(
-                            this.state.form_data[index].principalOutstanding ||
-                            item.principalOutstanding
+                            this.state.form_data[index].principalOutstanding 
                           )
                         }
                         type="number"
@@ -269,7 +295,7 @@ class LoanBtDetails extends Component {
                         name="principalOutstanding"
                         value={
                           this.state.form_data[index].principalOutstanding ||
-                          item.principalOutstanding ||
+                          // item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(

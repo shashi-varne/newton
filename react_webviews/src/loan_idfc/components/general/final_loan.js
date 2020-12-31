@@ -73,10 +73,10 @@ class FinalOffer extends Component {
           />
 
           <div className="subtitle">
-            {this.state.first_name}, you application no. {this.state.application_id} for a personal loan of {formatAmountInr(this.state.vendor_info.loanAmount)} has been submitted and is currently under process.
+            {this.state.first_name}, your application no. {this.state.application_id} for a personal loan of {formatAmountInr(this.state.vendor_info.loanAmount)} has been submitted and is currently under process.
           </div>
           <div className="subtitle">
-            You will soon get a call from IDFC First Bank's sales representative
+            You will soon get a call from IDFC FIRST Bank's sales representative
             who will guide you through the remaining process until the loan
             amount is disbursed to your bank account.
           </div>

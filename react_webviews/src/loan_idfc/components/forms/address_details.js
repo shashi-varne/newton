@@ -87,6 +87,7 @@ class AddressDetails extends Component {
     form_data.current_pincode = current_address_data.pincode;
     form_data.current_city = current_address_data.city;
     form_data.current_state = current_address_data.state;
+    form_data.current_country= 'India';
 
     form_data.permanent_address1 = permanent_address_data.address1;
     form_data.permanent_address2 = permanent_address_data.address2;
@@ -95,6 +96,7 @@ class AddressDetails extends Component {
     form_data.permanent_pincode = permanent_address_data.pincode;
     form_data.permanent_city = permanent_address_data.city;
     form_data.permanent_state = permanent_address_data.state;
+    form_data.permanent_country= 'India';
 
     this.setState({
       form_data: form_data,
@@ -109,7 +111,6 @@ class AddressDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "kyc_address_details",
-        permanent_address_edited: this.state.form_data.permanent_address_edited || 'no',
         current_address_edited: this.state.form_data.current_address_edited || 'no',
         ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
@@ -126,16 +127,28 @@ class AddressDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    if (name) {
+    let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3', 'current_landmark',
+    'current_address1', 'current_address2', 'current_address3', 'permanent_landmark'];
+
+    var format = /[^a-zA-Z0-9 ,]/g;
+
+    if (validate.includes(name)) {
+      let error = format.test(value);
+      
+      form_data[name] = value;
+      form_data[name + "_error"] = error ? "special characters are not allowed except ( , ) commas." : '';
+
+    } else {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
 
+    let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
 
     if (this.state.confirm_details) {
-      let edited_address = name.split("_")[0];
-      form_data[edited_address + 'address_edited'] = "yes"
-      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+      this.handleCkycMessage(name)
+      if(confirm_fields.includes(name))
+        form_data['current_address_edited'] = "yes";
     }
 
     this.setState({
@@ -161,7 +174,7 @@ class AddressDetails extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    let { form_data, loaderData } = this.state;
+    let { form_data } = this.state;
     let keys_to_check = [
       "current_address1",
       "current_address2",
@@ -177,11 +190,14 @@ class AddressDetails extends Component {
       "permanent_state",
     ];
 
+    let keys_to_include;
     if (this.state.confirm_details) {
-      // keys_to_check.push(...['current_address3', 'permanent_address3'])
+      keys_to_include = ['current_address3', 'permanent_address3', 'current_country', 'permanent_country']
+    } else {
+      keys_to_include = ['current_country', 'permanent_country']
     }
 
-    this.formCheckUpdate(keys_to_check, form_data, "null", true, loaderData);
+    this.formCheckUpdate(keys_to_check, form_data, "null", true, keys_to_include);
   };
 
   handlePincode = (name) => async (event) => {
@@ -196,9 +212,9 @@ class AddressDetails extends Component {
     form_data[name + "_error"] = "";
 
     if (this.state.confirm_details) {
-      let edited_address = name.split("_")[0];
-      form_data[edited_address + 'address_edited'] = "yes"
-      form_data[name + '_helper'] = 'You need to provide proof for the changed info';
+      if(name === 'current_pincode')
+        form_data['current_address_edited'] = "yes";
+      this.handleCkycMessage(name);
     }
 
     this.setState({
@@ -209,7 +225,7 @@ class AddressDetails extends Component {
       const res = await Api.get("/relay/api/loan/pincode/get/" + pincode);
       let resultData = res.pfwresponse.result[0] || "";
 
-      let { city, state } = form_data;
+      let { city, state, country } = form_data;
       let pincode_error = "";
       if (
         res.pfwresponse.status_code === 200 &&
@@ -224,9 +240,11 @@ class AddressDetails extends Component {
           city = resultData.idfc_city_name;
         }
         state = resultData.state_name;
+        country = resultData.country;
       } else {
         city = "";
         state = "";
+        country = ""
         pincode_error = "Invalid pincode";
       }
 
@@ -236,12 +254,14 @@ class AddressDetails extends Component {
         form_data.current_state = state;
         form_data.current_state_error = "";
         form_data.current_pincode_error = pincode_error;
+        form_data.current_country = country || 'India';
       } else if (name === "permanent_pincode") {
         form_data.permanent_city = city;
         form_data.permanent_city_error = "";
         form_data.permanent_state = state;
         form_data.permanent_state_error = "";
         form_data.permanent_pincode_error = pincode_error;
+        form_data.permanent_country = country || 'India';
       }
     }
 
@@ -254,20 +274,16 @@ class AddressDetails extends Component {
     let isPermanent_address = yesOrNo_options[event].value;
     let { form_data } = this.state;
 
-    form_data.permanent_address1 =
-      isPermanent_address === "Yes" ? form_data.current_address1 : "";
-    form_data.permanent_address2 =
-      isPermanent_address === "Yes" ? form_data.current_address2 : "";
-    form_data.permanent_address3 =
-      isPermanent_address === "Yes" ? form_data.current_address3 : "";
-    form_data.permanent_landmark =
-      isPermanent_address === "Yes" ? form_data.current_landmark : "";
-    form_data.permanent_pincode =
-      isPermanent_address === "Yes" ? form_data.current_pincode : "";
-    form_data.permanent_city =
-      isPermanent_address === "Yes" ? form_data.current_city : "";
-    form_data.permanent_state =
-      isPermanent_address === "Yes" ? form_data.current_state : "";
+    if (isPermanent_address === "Yes") {
+      form_data.permanent_address1 = form_data.current_address1;
+      form_data.permanent_address2 = form_data.current_address2;
+      form_data.permanent_address3 = form_data.current_address3;
+      form_data.permanent_landmark = form_data.current_landmark;
+      form_data.permanent_pincode = form_data.current_pincode;
+      form_data.permanent_city = form_data.current_city;
+      form_data.permanent_state = form_data.current_state;
+      form_data.permanent_country = form_data.current_country
+    }
 
     for (var i in form_data) {
       form_data[i + "_error"] = "";
@@ -282,6 +298,22 @@ class AddressDetails extends Component {
       }
     });
   };
+
+  handleCkycMessage(name) {
+    if(this.state.confirm_details) {
+      let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
+      let { form_data } = this.state;
+      confirm_fields.forEach(element => {
+        if(element === name)
+          form_data[name + '_helper'] = 'Document proof will be required if you make any change';
+        else 
+          form_data[element + '_helper'] = '';
+      })
+      this.setState({
+        form_data: form_data,
+      });
+    }
+  }
 
   render() {
     return (
@@ -301,7 +333,7 @@ class AddressDetails extends Component {
       >
         <div className="address-details">
           {this.state.confirm_details && (
-            <Attention content="Once submitted, details cannot be changed or modified." />
+            <Attention content="Once submitted, details cannot be modified." />
           )}
 
           <div className="head-title">Current address</div>
@@ -317,6 +349,7 @@ class AddressDetails extends Component {
                 name="current_address1"
                 value={this.state.form_data.current_address1 || ""}
                 onChange={this.handleChange("current_address1")}
+                onClick={() => this.handleCkycMessage("current_address1")}
               />
             </div>
 
@@ -331,6 +364,7 @@ class AddressDetails extends Component {
                 name="current_address2"
                 value={this.state.form_data.current_address2 || ""}
                 onChange={this.handleChange("current_address2")}
+                onClick={() => this.handleCkycMessage("current_address2")}
               />
             </div>
 
@@ -346,6 +380,7 @@ class AddressDetails extends Component {
                   name="fcurrent_address3"
                   value={this.state.form_data.current_address3 || ""}
                   onChange={this.handleChange("current_address3")}
+                  onClick={() => this.handleCkycMessage("current_address3")}
                 />
               </div>
             )}
@@ -361,6 +396,7 @@ class AddressDetails extends Component {
                 name="current_landmark"
                 value={this.state.form_data.current_landmark || ""}
                 onChange={this.handleChange("current_landmark")}
+                onClick={() => this.handleCkycMessage("current_landmark")}
               />
             </div>
 
@@ -375,6 +411,7 @@ class AddressDetails extends Component {
                 name="current_pincode"
                 value={this.state.form_data.current_pincode || ""}
                 onChange={this.handlePincode("current_pincode")}
+                onClick={() => this.handleCkycMessage("current_pincode")}
               />
             </div>
 
@@ -437,6 +474,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address1 || ""}
                   onChange={this.handleChange("permanent_address1")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_address1")}
                 />
               </div>
 
@@ -452,6 +490,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_address2 || ""}
                   onChange={this.handleChange("permanent_address2")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_address2")}
                 />
               </div>
 
@@ -468,6 +507,7 @@ class AddressDetails extends Component {
                     value={this.state.form_data.permanent_address3 || ""}
                     onChange={this.handleChange("permanent_address3")}
                     disabled={this.state.isPermanent_address === 'Yes'}
+                    onClick={() => this.handleCkycMessage("permanent_address3")}
                   />
                 </div>
               )}
@@ -484,6 +524,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_landmark || ""}
                   onChange={this.handleChange("permanent_landmark")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_landmark")}
                 />
               </div>
 
@@ -499,6 +540,7 @@ class AddressDetails extends Component {
                   value={this.state.form_data.permanent_pincode || ""}
                   onChange={this.handlePincode("permanent_pincode")}
                   disabled={this.state.isPermanent_address === 'Yes'}
+                  onClick={() => this.handleCkycMessage("permanent_pincode")}
                 />
               </div>
 

@@ -63,6 +63,7 @@ class BtInformation extends Component {
     this.sendEvents('not_opt_for_bt');
     let body = {
       idfc_loan_status: "bt_bypass",
+      bt_selected: false,
     };
 
     this.updateApplication(body)

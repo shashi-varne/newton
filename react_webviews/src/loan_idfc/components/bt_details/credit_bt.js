@@ -12,6 +12,7 @@ import {
   isValidMonthYear,
   numDifferentiationInr,
   formatAmountInr,
+  IsFutureMonthYear
 } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 import Autosuggests from "../../../common/ui/Autosuggest";
@@ -26,6 +27,7 @@ class LoanBtDetails extends Component {
       credit_bt: [],
       bankOptions: [],
       form_checked: [],
+      bt_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -83,23 +85,28 @@ class LoanBtDetails extends Component {
         bt_data_id: data.bt_data_id,
         creditCardExpiryDate: data.creditCardExpiryDate,
         creditCardNumber: data.creditCardNumber,
+        bt_info: bt_info,
       });
     });
 
     this.setState({
       credit_bt: credit_bt,
       loaderData: loaderData,
+      bt_info: bt_info,
     });
   };
 
-  sendEvents(user_action, data = {}) {
+  sendEvents(user_action) {
+    let form_checked = this.state.form_data.filter(
+      (item) => item.is_selected === true
+    );
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "credit_card_details",
-        no_of_cards_entered: data.no_of_cards_entered,
-        skipped_screen: data.no_of_cards_entered !== 0 ? "no" : "yes",
+        no_of_cards_entered: form_checked.length,
+        skipped_screen: form_checked.length !== 0 ? "no" : user_action === 'next' ? "yes" : "no",
       },
     };
 
@@ -163,11 +170,10 @@ class LoanBtDetails extends Component {
 
     form_data[index]["is_selected"] = checked;
     form_data[index]["bt_data_id"] = id;
-    if (checked) this.validateFields(form_data, index);
-    else
-      this.setState({
-        form_data: form_data,
-      });
+
+    this.setState({
+      form_data: form_data,
+    });
   };
 
   handleClick = () => {
@@ -184,7 +190,7 @@ class LoanBtDetails extends Component {
           submit_details = false;
         }
 
-        if (!isValidMonthYear(data["creditCardExpiryDate"])) {
+        if (!isValidMonthYear(data["creditCardExpiryDate"]) || !IsFutureMonthYear(data["creditCardExpiryDate"])) {
           form_data[index]["creditCardExpiryDate_error"] =
             "please enter valid credit card expiry date";
           submit_details = false;
@@ -209,16 +215,31 @@ class LoanBtDetails extends Component {
       return;
     }
 
-    this.sendEvents("next", { no_of_cards_entered: form_checked.length });
-    this.submitApplication(
-      {
-        bt_selection: form_checked,
-      },
-      "one",
-      true,
-      "eligible-loan"
-    );
+    this.sendEvents("next");
+
+    if (submit_details) {
+      this.submitApplication(
+        {
+          bt_selection: form_checked,
+        },
+        "one",
+        true,
+        "eligible-loan"
+      );
+    }
   };
+
+  goBack = () => {
+    this.sendEvents('back')
+
+    let bt_personal_loan = this.state.bt_info.bt_personal_loan;
+    if (!bt_personal_loan) {
+      this.navigate('journey');
+    } else {
+      this.navigate('loan-bt');
+    }
+
+  }
 
   render() {
     let form_checked = this.state.form_data.filter(
@@ -236,12 +257,13 @@ class LoanBtDetails extends Component {
         handleClick={this.handleClick}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
+          goBack: this.goBack,
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
-        current={2}
-        total={2}
-        count={1}
+        current={!this.state.bt_info.bt_personal_loan ? "" : 2}
+        total={!this.state.bt_info.bt_personal_loan ? "" : 2}
+        count={!this.state.bt_info.bt_personal_loan ? "" : 1}
       >
         <div className="loan-bt">
           <div className="subtitle">
@@ -291,7 +313,6 @@ class LoanBtDetails extends Component {
                           }
                           value={
                             this.state.form_data[index].financierName ||
-                            item.financierName ||
                             ""
                           }
                           onChange={this.handleChange("financierName", index)}
@@ -364,7 +385,6 @@ class LoanBtDetails extends Component {
                         name="principalOutstanding"
                         value={
                           this.state.form_data[index].principalOutstanding ||
-                          item.principalOutstanding ||
                           ""
                         }
                         onChange={this.handleChange(

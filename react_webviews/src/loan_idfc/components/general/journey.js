@@ -49,11 +49,11 @@ const journeyMapper2 = {
     index: "2",
     next_state: "bt-info",
   },
-  // bt_processing: {
-  //   index: "2",
-  //   next_state: "loan-requirement-details"
-  // },
   "idfc_1.0_failed": {
+    index: "2",
+    next_state: "eligible-loan",
+  },
+  "idfc_1.0_submitted": {
     index: "2",
     next_state: "eligible-loan",
   },
@@ -61,21 +61,25 @@ const journeyMapper2 = {
     index: "2",
     next_state: "eligible-loan",
   },
-  // "idfc_1.1_submitted": {
-  //   index: "2",
-  //   next_state: "loan-requirement-details"
-  // },
+  "idfc_1.1_failed": {
+    index: "2",
+    next_state: "eligible-loan"
+  },
+  "idfc_1.1_submitted": {
+    index: "2",
+    next_state: "loan-requirement-details"
+  },
   "idfc_1.1_accepted": {
     index: "2",
     next_state: "loan-eligible",
   },
   offer_accepted: {
-    // "idfc_1.1_failed": {
     index: "3",
     next_state: "additional-details",
   },
   "idfc_1.7_submitted": {
     index: "3",
+    next_state: "doc-list",
   },
   "idfc_1.7_accepted": {
     index: "3",
@@ -90,9 +94,15 @@ const journeyMapper2 = {
     next_state: "doc-list",
   },
   idfc_4_submitted: {
-    index: "3",
+    index: "4",
   },
   idfc_4_accepted: {
+    index: "4",
+  },
+  idfc_3_submitted: {
+    index: "4",
+  },
+  idfc_3_accepted: {
     index: "4",
   },
 };
@@ -113,10 +123,13 @@ class JourneyMap extends Component {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
     let personal_info = lead.personal_info || {};
+    let application_info = lead.application_info || {};
+    let bt_info = lead.bt_info || {}
 
     let idfc_loan_status = vendor_info.idfc_loan_status || "";
     let ckyc_state = vendor_info.ckyc_state || "";
     let perfios_state = vendor_info.perfios_state || "";
+    let application_complete = application_info.application_status === "application_complete";
 
     let index =
       (idfc_loan_status && journeyMapper2[idfc_loan_status].index) || "0";
@@ -128,7 +141,7 @@ class JourneyMap extends Component {
           title: "Enter basic details",
           titleCompleted: "Basic details uploaded ",
           subtitle:
-            "Fill in basic and work details to get started with your loan application.",
+            "Fill in basic and work details to get started with your loan application",
           status: index && index >= "0" ? "completed" : "init",
           id: "basic_details",
           cta: "SUMMARY",
@@ -138,7 +151,7 @@ class JourneyMap extends Component {
           title: "Create loan application",
           titleCompleted: "Loan application created",
           subtitle:
-            "Check your KYC status to proceed with your loan application.",
+            "Provide/confirm your personal and address details to  proceed with your loan application.",
           status:
             index === "1" ? "init" : index > "1" ? "completed" : "pending",
           id: "create_loan_application",
@@ -154,7 +167,7 @@ class JourneyMap extends Component {
           title: "Provide income details",
           titleCompleted: "Provided income details",
           subtitle:
-            "Enter your loan requirements and income details to get the best loan offer.",
+            "Provide your loan requirements and income details to get the best loan offer. ",
           status:
             index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
@@ -186,7 +199,7 @@ class JourneyMap extends Component {
           title: "Sanction and disbursal",
           titleCompleted: "",
           subtitle:
-            "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
+            "IDFC FIRST Bank will verify your application. This may require a personal discussion/interaction with you.",
           status:
             index && index === "4"
               ? "init"
@@ -194,7 +207,7 @@ class JourneyMap extends Component {
               ? "pending"
               : "completed",
           cta:
-            (idfc_loan_status === "idfc_4_accepted") &&
+            (idfc_loan_status === "idfc_4_accepted" || idfc_loan_status === "idfc_4_submitted" || application_complete) &&
             "CHECK",
           id: "sanction_and_disbursal",
         },
@@ -208,6 +221,8 @@ class JourneyMap extends Component {
       index: index,
       first_name: personal_info.first_name,
       vendor_info: vendor_info,
+      bt_info: bt_info,
+      application_complete: application_complete
     });
   };
 
@@ -227,6 +242,7 @@ class JourneyMap extends Component {
       nativeCallback({ events: eventObj });
     }
   }
+  
   getCkycState = async () => {
     this.setState({
       show_loader: true,
@@ -242,8 +258,9 @@ class JourneyMap extends Component {
       this.getCkycState();
     }
   };
+
   handleClick = (id) => {
-    let { ckyc_state, perfios_state, idfc_loan_status, index } = this.state;
+    let { ckyc_state, perfios_state, idfc_loan_status, index, vendor_info, bt_info } = this.state;
     let next_state = journeyMapper2[idfc_loan_status].next_state;
 
     let selected_journey = this.state.journeyData.options.find((data) => data.id === id);
@@ -271,7 +288,7 @@ class JourneyMap extends Component {
       }
     }
     // ---step-3
-    if (id === "income_details") {
+    if (id === "income_details" && index <= "2") {
       this.sendEvents('next', {stage: stage});
       if (idfc_loan_status === "idfc_0.5_accepted") {
         this.get05Callback();
@@ -287,12 +304,14 @@ class JourneyMap extends Component {
           perfios_state !== "init"
         ) {
           next_state = "perfios-status";
+        } else if ((idfc_loan_status === "bt_init" || idfc_loan_status === "bt_processing") && vendor_info.bt_selected) {
+          next_state = vendor_info.bt_updated ? !bt_info.bt_personal_loan ? "credit-bt": 'loan-bt' : 'bt-info'
         }
         this.navigate(next_state);
       }
     }
     // ---step-4
-    if (id === "document_upload") {
+    if (id === "document_upload" && index <= "3") {
       this.sendEvents('next', {stage: stage});
       this.navigate(next_state);
     }
@@ -303,6 +322,7 @@ class JourneyMap extends Component {
       this.navigate('reports')
     }
   };
+
   render() {
     let { idfc_loan_status, index, first_name, vendor_info } = this.state;
     return (
@@ -316,13 +336,13 @@ class JourneyMap extends Component {
         hidePageTitle={true}
       >
         <div className="journey-track">
-          {index < "4" && <img
+          {index < "3" && <img
             className="center"
             src={require(`assets/${this.state.productName}/icn_journey_start.svg`)}
             alt=""
           />}
 
-          {index >= "4" && <img
+          {index >= "3" && <img
             className="center"
             src={require(`assets/${this.state.productName}/icn_lourney_end.svg`)}
             alt=""

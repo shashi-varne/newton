@@ -15,7 +15,8 @@ class LoanRequirementDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "requirement_details_screen",
-      loaderData: {}
+      loaderData: {},
+      purposeOfLoanOptions: []
     };
 
     this.initialize = initialize.bind(this);
@@ -31,8 +32,7 @@ class LoanRequirementDetails extends Component {
 
     let form_data = {
       amount_required: application_info.amount_required,
-      purpose: application_info.purpose,
-      tenor: String(application_info.tenor)
+      tenor: !application_info.tenor ? '' : String(application_info.tenor)
     }
 
     let loaderData = {
@@ -92,7 +92,7 @@ class LoanRequirementDetails extends Component {
     let { form_data } = this.state;
     let keys_to_check = [
       "amount_required",
-      "purpose",
+      // "purpose",
       "tenor"
     ];
 
@@ -111,7 +111,7 @@ class LoanRequirementDetails extends Component {
         handleClick={this.handleClick}
       >
         <div className="requirements-details">
-          <Attention content="Enter correct loan requirements and double-check before you hit the 'submit' button!  Once submitted, you can't make any changes." />
+          <Attention content="Enter and reverify information. Once submitted, you can’t make any changes." />
 
           <FormControl fullWidth>
             <div className="InputField">
@@ -129,20 +129,6 @@ class LoanRequirementDetails extends Component {
                 name="amount_required"
                 value={this.state.form_data.amount_required || ""}
                 onChange={this.handleChange("amount_required")}
-              />
-            </div>
-
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.screenData.purposeOfLoanOptions}
-                id="purpose"
-                label="Purpose of loan"
-                error={this.state.form_data.purpose_error ? true : false}
-                helperText={this.state.form_data.purpose_error}
-                value={this.state.form_data.purpose || ""}
-                name="purpose"
-                onChange={this.handleChange("purpose")}
               />
             </div>
 

@@ -17,6 +17,7 @@ class AdditionalDetails extends Component {
       form_data: {},
       employment_type: "",
       screen_name: "additional_details",
+      businessOptions: []
     };
     this.initialize = initialize.bind(this);
   }
@@ -25,8 +26,8 @@ class AdditionalDetails extends Component {
     this.initialize();
 
     let mailingAddressPreferenceOptions = [
-      "CURRENT ADDRESS",
-      "PERMANENT ADDRESS",
+      "Current Address",
+      "Permanent Address",
     ];
 
     this.setState({
@@ -48,12 +49,19 @@ class AdditionalDetails extends Component {
 
     let form_data = this.state.form_data;
 
-    form_data.office_address = office_address_data.address;
+    form_data.nature_of_business = vendor_info.nature_of_business;
+    form_data.office_address1 = office_address_data.address1;
+    form_data.office_address2 = office_address_data.address2;
+    form_data.office_landmark = office_address_data.landmark;
+    form_data.office_pincode = office_address_data.pincode;
+    form_data.office_city = office_address_data.city;
+    form_data.office_state = office_address_data.state;
+    form_data.office_country= 'India';
     form_data.mailing_address_preference = vendor_info.mailing_address_preference;
 
     let bottomButtonData = {
       leftTitle: "Personal loan",
-      leftSubtitle: numDifferentiationInr(vendor_info.loanAmount),
+      leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
     };
 
     this.setState({
@@ -83,8 +91,8 @@ class AdditionalDetails extends Component {
       const res = await Api.get("/relay/api/loan/pincode/get/" + pincode);
       let resultData = res.pfwresponse.result[0] || "";
 
-      let { city, state } = form_data;
-      let pincode_error = "";
+      let { city, state, country } = form_data;
+      let office_pincode_error = "";
       if (
         res.pfwresponse.status_code === 200 &&
         res.pfwresponse.result.length > 0
@@ -98,16 +106,21 @@ class AdditionalDetails extends Component {
           city = resultData.idfc_city_name;
         }
         state = resultData.state_name;
+        country = resultData.country;
       } else {
         city = "";
         state = "";
-        pincode_error = "Invalid pincode";
+        country = "";
+        office_pincode_error = "Invalid pincode";
       }
 
-      if (name === "pincode") {
-        form_data.city = city;
-        form_data.state = state;
-        form_data.pincode_error = pincode_error;
+      if (name === "office_pincode") {
+        form_data.office_city = city;
+        form_data.office_city_error = "";
+        form_data.office_state = state;
+        form_data.office_state_error = "";
+        form_data.office_pincode_error = office_pincode_error;
+        form_data.office_country = country || 'India';
       }
     }
 
@@ -137,8 +150,20 @@ class AdditionalDetails extends Component {
 
     let { form_data } = this.state;
 
-    form_data[name] = value;
-    form_data[name + "_error"] = "";
+    let validate = ['office_address1', 'office_address2', 'office_landmark'];
+
+    var format = /[^a-zA-Z0-9 ,]/g;
+
+    if (validate.includes(name)) {
+      let error = format.test(value);
+      
+      form_data[name] = value;
+      form_data[name + "_error"] = error ? "special characters are not allowed except ( , ) commas." : '';
+
+    } else {
+      form_data[name] = value;
+      form_data[name + "_error"] = "";
+    }
 
     this.setState({
       form_data: form_data,
@@ -147,14 +172,28 @@ class AdditionalDetails extends Component {
 
   handleClick = () => {
     this.sendEvents('next');
-    let { form_data } = this.state;
+    let { form_data, employment_type } = this.state;
 
     let keys_to_check = [
-      "office_address",
-      "pincode",
-      "city",
+      "office_address1",
+      "office_address2",
+      "office_landmark",
+      "office_pincode",
+      "office_city",
+      "office_state",
+      "office_country",
       "mailing_address_preference",
     ];
+
+    if (employment_type === "self_employed") {
+      keys_to_check.push("nature_of_business")
+    }
+
+    if(form_data.office_pincode.length !== 6) {
+      form_data['office_pincode_error'] = 'Please enter valid pincode';
+      this.setState({form_data : form_data});
+      return
+    }
 
     this.formCheckUpdate(keys_to_check, form_data, "one_point_seven", true);
   };
@@ -174,13 +213,14 @@ class AdditionalDetails extends Component {
         loaderData={this.state.loaderData}
       >
         <div className="additional-details">
-          {employment_type === "self employed" && (
+          {employment_type === "self_employed" && (
             <div className="InputField">
-              <Input
+              <DropdownWithoutIcon
+                width="40"
+                options={this.state.businessOptions}
                 error={!!this.state.form_data.nature_of_business_error}
                 helperText={this.state.form_data.nature_of_business_error}
                 type="text"
-                width="40"
                 label="Nature of business"
                 id="nature_of_business"
                 name="nature_of_business"
@@ -192,47 +232,91 @@ class AdditionalDetails extends Component {
 
           <div className="head-title">Office address</div>
           <FormControl fullWidth>
+
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.office_address_error}
-                helperText={this.state.form_data.office_address_error}
+                error={!!this.state.form_data.office_address1_error}
+                helperText={this.state.form_data.office_address1_error}
                 type="text"
                 width="40"
-                label="Address"
-                id="office_address"
-                name="office_address"
-                value={this.state.form_data.office_address || ""}
-                onChange={this.handleChange("office_address")}
+                label="Address line 1"
+                id="address"
+                name="office_address1"
+                value={this.state.form_data.office_address1 || ""}
+                onChange={this.handleChange("office_address1")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.pincode_error}
-                helperText={this.state.form_data.pincode_error}
+                error={!!this.state.form_data.office_address2_error}
+                helperText={this.state.form_data.office_address2_error}
+                type="text"
+                width="40"
+                label="Address line 2"
+                id="address"
+                name="office_address2"
+                value={this.state.form_data.office_address2 || ""}
+                onChange={this.handleChange("office_address2")}
+              />
+            </div>
+
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.office_landmark_error}
+                helperText={this.state.form_data.office_landmark_error}
+                type="text"
+                width="40"
+                label="Landmark"
+                id="office_landmark"
+                name="office_landmark"
+                value={this.state.form_data.office_landmark || ""}
+                onChange={this.handleChange("office_landmark")}
+              />
+            </div>
+
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.office_pincode_error}
+                helperText={this.state.form_data.office_pincode_error}
                 type="text"
                 width="40"
                 maxLength={6}
                 label="Pincode"
-                id="pincode"
-                name="pincode"
-                value={this.state.form_data.pincode || ""}
-                onChange={this.handlePincode("pincode")}
+                id="office_pincode"
+                name="office_pincode"
+                value={this.state.form_data.office_pincode || ""}
+                onChange={this.handlePincode("office_pincode")}
               />
             </div>
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.city_error}
-                helperText={this.state.form_data.city_error}
+                error={!!this.state.form_data.office_city_error}
+                helperText={this.state.form_data.office_city_error}
                 type="text"
                 width="40"
                 label="City"
-                id="city"
-                name="city"
+                id="office_city"
+                name="office_city"
                 disabled={true}
-                value={this.state.form_data.city || ""}
-                onChange={this.handleChange("city")}
+                value={this.state.form_data.office_city || ""}
+                onChange={this.handleChange("office_city")}
+              />
+            </div>
+
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.office_state_error}
+                helperText={this.state.form_data.office_state_error}
+                type="text"
+                width="40"
+                label="State"
+                id="office_state"
+                name="office_state"
+                value={this.state.form_data.office_state || ""}
+                onChange={this.handleChange("office_state")}
+                disabled={true}
               />
             </div>
 

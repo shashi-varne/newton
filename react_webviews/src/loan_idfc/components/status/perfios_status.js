@@ -11,8 +11,7 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "RETRY",
     icon: "close",
-    // cta_state: "/loan/idfc/income-details",
-    close_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 1",
   },
   success: {
@@ -20,8 +19,7 @@ const commonMapper = {
     top_title: "Bank statement verification successful",
     button_title: "NEXT",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/loan-know-more",
     status: "success",
   },
   blocked: {
@@ -29,8 +27,8 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "OK",
     icon: "close",
-    cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
   },
   bypass: {
@@ -38,8 +36,7 @@ const commonMapper = {
     top_title: "Bank statement verification failed",
     button_title: "NEXT",
     icon: "close",
-    // cta_state: "/loan/idfc/home",
-    close_state: "/loan/idfc/home",
+    close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
   },
 };
@@ -70,11 +67,13 @@ class PerfiosStatus extends Component {
     let name = personal_info.first_name;
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
-
+    let perfios_info = lead.perfios_info;
+    let perfios_display_rejection_reason = perfios_info.perfios_display_rejection_reason;
     let bt_eligible = vendor_info.bt_eligible;
 
     this.setState({
       commonMapper: commonMapper[perfios_state] || {},
+      perfios_display_rejection_reason: perfios_display_rejection_reason,
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
@@ -147,7 +146,7 @@ class PerfiosStatus extends Component {
       }
 
       if (bt_eligible && !idfc_07_state) {
-        this.get07State();
+        this.get07StateForBt();
       }
     }
 
@@ -163,14 +162,10 @@ class PerfiosStatus extends Component {
     }
 
     if (perfios_state === "failure") {
-      // if (bt_eligible) {
-      //   this.navigate("bt-info");
-      // } else {
       let body = {
         perfios_state: "init",
       };
       this.updateApplication(body, "income-details");
-      // }
     }
 
     if (perfios_state === "blocked") {
@@ -179,7 +174,8 @@ class PerfiosStatus extends Component {
   };
 
   render() {
-    let { commonMapper, perfios_state, bt_eligible, name } = this.state;
+    let { commonMapper, perfios_state, bt_eligible, name, perfios_display_rejection_reason } = this.state;
+
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -205,11 +201,6 @@ class PerfiosStatus extends Component {
               and your income details have been safely updated.
             </div>
           )}
-          {/* <div className="subtitle">
-            Before we move to the final loan offer, we have an option of
-            <b> 'Balance Transfer - BT'</b> for you. However, it is up to you
-            whether you want to opt for it or not.
-          </div> */}
 
           {perfios_state === "bypass" && (
             <div className="subtitle">
@@ -228,7 +219,7 @@ class PerfiosStatus extends Component {
           )}
 
           {bt_eligible &&
-            (perfios_state !== "failure" || perfios_state !== "blocked")(
+            (perfios_state !== "failure" && perfios_state !== "blocked") && (
               <div className="subtitle">
                 Before we move to the final loan offer, we have an option of
                 'Balance Transfer - BT' for you. However, it is up to you
@@ -236,7 +227,7 @@ class PerfiosStatus extends Component {
               </div>
             )}
 
-          {perfios_state === "failure" && (
+          {(perfios_state === "failure" && !perfios_display_rejection_reason) && (
             <div className="subtitle">
               Bank statement analysis failed due to some error. We recommend you
               to try again by uploading correct bank statements to proceed with
@@ -244,10 +235,16 @@ class PerfiosStatus extends Component {
             </div>
           )}
 
+          {(perfios_state === "failure" && perfios_display_rejection_reason) && (
+            <div className="subtitle">
+              {perfios_display_rejection_reason}
+            </div>
+          )}
+
           {perfios_state === "processing" && (
             <div>
               <div className="subtitle">
-                Oops! Something's not right. Please check back in some time.
+                Oops! something's not right. We are checking this with IDFC FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>

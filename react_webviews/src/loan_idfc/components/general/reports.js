@@ -56,19 +56,23 @@ class ReportDetails extends Component {
         color: "yellow",
         disc: "DATA VERIFICATION PENDING",
       },
-      Underwriting: {
+      underwriting: {
         color: "yellow",
         disc: "Underwriting",
       },
-      Sanctioned: {
+      verification: {
+        color: "yellow",
+        disc: "Verification",
+      },
+      sanctioned: {
         color: "yellow",
         disc: "Sanctioned",
       },
-      "Pre Disbursal stage": {
+      pre_disbursal_stage: {
         color: "yellow",
         disc: "Pre Disbursal stage",
       },
-      Disbursal: {
+      disbursal: {
         color: "green",
         disc: "Disbursal",
       },
@@ -91,7 +95,10 @@ class ReportDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "loan_report",
-        // status: this.state.vendor_info_ui.cssMapper.disc,
+        status:
+          (this.state.cssMapper[this.state.loan_status || ""] &&
+            this.state.cssMapper[this.state.loan_status || ""].disc) ||
+          "",
       },
     };
 
@@ -107,7 +114,6 @@ class ReportDetails extends Component {
   };
 
   render() {
-    console.log(this.state.cssMapper[this.state.loan_status || ""]);
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -167,6 +173,7 @@ class ReportDetails extends Component {
               <div className="mt-left">
                 <img
                   src={require(`assets/${this.state.productName}/icn_ROI.svg`)}
+                  style={{margin: '0 3px 0 5px'}}
                   alt=""
                 />
               </div>

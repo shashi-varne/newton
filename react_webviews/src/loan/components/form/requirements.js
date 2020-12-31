@@ -77,15 +77,18 @@ class ContactDetails extends Component {
 
         if (this.props.edit) {
             this.setState({
-                next_state: `/loan/form-summary`
+                next_state: `/loan/dmi/form-summary`
             })
         }
+
+        let { purposeOptions } = this.state;
 
         let lead = this.state.lead || {};
 
         let application_info = lead.application_info || {};
+
         let form_data = {
-            purpose: application_info.purpose || '',
+            purpose: purposeOptions.includes(application_info.purpose) ? application_info.purpose : '',
             amount_required: application_info.amount_required || '',
             tenor: application_info.tenor || '',
             employment_type: application_info.employment_type || '',

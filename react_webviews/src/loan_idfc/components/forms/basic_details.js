@@ -4,7 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+// import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import {
   dobFormatTest,
   formatDate,
@@ -19,6 +19,7 @@ class BasicDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "basic_details",
+      qualification: []
     };
 
     this.initialize = initialize.bind(this);
@@ -26,21 +27,6 @@ class BasicDetails extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let qualification = [
-      "DOCTORATE",
-      "ENGINEER",
-      "GRADUATE",
-      "MATRIC",
-      "POST GRADUATE",
-      "PROFESSIONAL",
-      "UNDER GRADUATE",
-      "OTHERS",
-    ];
-
-    this.setState({
-      qualification: qualification,
-    });
   }
 
   onload = () => {
@@ -76,8 +62,8 @@ class BasicDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "personal_details",
-        employment_type: this.state.form_data.employment_type,
-        dob: this.state.form_data.dob,
+        employment_type: this.state.form_data.employment_type || "",
+        dob: this.state.form_data.dob || "",
       },
     };
 
@@ -129,9 +115,10 @@ class BasicDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let { form_data, pan_state } = this.state;
-    let keys_to_check = ["dob", "educational_qualification", "employment_type"];
+    let keys_to_check = ["dob", 
+     "employment_type"];
     if (pan_state !== "success") {
       keys_to_check.push("pan_no");
     }
@@ -142,7 +129,7 @@ class BasicDetails extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title={this.setEditTitle("Let's start by getting to know you a bit...")}
         buttonTitle="NEXT"
@@ -184,27 +171,8 @@ class BasicDetails extends Component {
                 disabled={this.state.pan_state}
               />
             </div>
-
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.qualification}
-                id="education_qualification"
-                label="Education Qualification"
-                error={
-                  this.state.form_data.educational_qualification_error
-                    ? true
-                    : false
-                }
-                helperText={
-                  this.state.form_data.educational_qualification_error
-                }
-                value={this.state.form_data.educational_qualification || ""}
-                name="educational_qualification"
-                onChange={this.handleChange("educational_qualification")}
-              />
-            </div>
           </FormControl>
+
           <div className="sub-head">Employment type</div>
           <div className="employment-type">
             <div
@@ -220,6 +188,7 @@ class BasicDetails extends Component {
                 id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
+                style={{width: '100%'}}
               />
             </div>
             <div
@@ -235,6 +204,7 @@ class BasicDetails extends Component {
                 id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
+                style={{width: '100%'}}
               />
             </div>
           </div>

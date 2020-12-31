@@ -5,8 +5,9 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { numDifferentiationInr, capitalizeFirstLetter } from "utils/validators";
-import Autosuggests from "../../../common/ui/Autosuggest";
+import { numDifferentiationInr } from "utils/validators";
+import Autosuggest from "../../common/Autosuggest";
+import Api from "utils/api";
 
 class ProfessionalDetails extends Component {
   constructor(props) {
@@ -18,6 +19,12 @@ class ProfessionalDetails extends Component {
       employment_type: "",
       industryOptions: [],
       companyOptions: [],
+      companyOptions1: [],
+      constitutionOptions: [],
+      organisationTypeOptions: [],
+      salaryRecieptOptions: [],
+      company_name: "",
+      isApiRunning: false
     };
 
     this.initialize = initialize.bind(this);
@@ -44,16 +51,15 @@ class ProfessionalDetails extends Component {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
       net_monthly_salary: application_info.net_monthly_salary,
-      salary_mode: (professional_info.salary_mode || "").toUpperCase(),
-      constitution: professional_info.constitution,
-      organisation: capitalizeFirstLetter(professional_info.organisation || ""),
-      department: professional_info.department,
+      salary_mode: professional_info.salary_mode,
+      organisation: professional_info.organisation,
       industry: professional_info.industry,
     };
 
     this.setState({
       form_data: form_data,
       employment_type: employment_type,
+      company_name: professional_info.company_name,
     });
   };
 
@@ -95,14 +101,15 @@ class ProfessionalDetails extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { form_data, employment_type } = this.state;
-    let keys_to_check = ["constitution", "organisation"];
+    let keys_to_check = [
+       "organisation"
+      ];
 
     let salaried = [
       "company_name",
       "office_email",
       "net_monthly_salary",
       "salary_mode",
-      "department",
       "industry",
     ];
 
@@ -115,9 +122,44 @@ class ProfessionalDetails extends Component {
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
   };
 
-  render() {
-    let { employment_type, industryOptions, companyOptions } = this.state;
+  handleSearch = async (value) => {
+    let { form_data, companyOptions } = this.state;
 
+    form_data.company_name = value;
+    form_data.company_name_error = "";
+
+    if (value.length === 3) {
+      this.setState({
+        isApiRunning: true
+      })
+      const res = await Api.get(
+        "relay/api/loan/idfc/employer/" + form_data.company_name
+      );
+      let resultData = res.pfwresponse.result || "";
+
+      if (res.pfwresponse.status_code === 200) {
+        this.setState({
+          isApiRunning: false
+        })
+        if (resultData.employer_name.length !== 0) {
+          companyOptions = resultData.employer_name.map((element) => {
+            return {
+              name: element,
+              value: element,
+            };
+          });
+        }
+      }
+
+      this.setState({
+        form_data: form_data,
+        companyOptions: companyOptions,
+      });
+    }
+  };
+
+  render() {
+    let { employment_type, industryOptions, companyOptions, isApiRunning } = this.state;
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -128,20 +170,21 @@ class ProfessionalDetails extends Component {
       >
         <div className="professional-details">
           <FormControl fullWidth>
-            {employment_type === "salaried" && companyOptions.length > 0 && (
+            {employment_type === "salaried" && (
               <div className="InputField">
-                <Autosuggests
-                  parent={this}
+                <Autosuggest
+                  inputs={companyOptions}
                   width="40"
-                  placeholder="Search for company"
-                  options={companyOptions}
                   label="Company name"
+                  class="company_name"
                   id="company_name"
                   name="company_name"
+                  placeholder="Search for company"
+                  onChange={(value) => this.handleSearch(value)}
+                  value={this.state.form_data.company_name || ""}
                   error={this.state.form_data.company_name_error ? true : false}
                   helperText={this.state.form_data.company_name_error}
-                  value={this.state.form_data.company_name || ""}
-                  onChange={this.handleChange("company_name")}
+                  isApiRunning={isApiRunning}
                 />
               </div>
             )}
@@ -206,7 +249,7 @@ class ProfessionalDetails extends Component {
               <div className="InputField">
                 <DropdownWithoutIcon
                   width="40"
-                  options={this.state.screenData.salaryRecieptOptions}
+                  options={this.state.salaryRecieptOptions}
                   id="salary-receipt-mode"
                   label="Salary receipt mode"
                   error={this.state.form_data.salary_mode_error ? true : false}
@@ -221,21 +264,7 @@ class ProfessionalDetails extends Component {
             <div className="InputField">
               <DropdownWithoutIcon
                 width="40"
-                options={this.state.screenData.constitutionOptions}
-                id="constitution"
-                label="Constitution of company"
-                error={this.state.form_data.constitution_error ? true : false}
-                helperText={this.state.form_data.constitution_error}
-                value={(this.state.form_data.constitution || "").toUpperCase()}
-                name="constitution"
-                onChange={this.handleChange("constitution")}
-              />
-            </div>
-
-            <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                options={this.state.screenData.organisationTypeOptions}
+                options={this.state.organisationTypeOptions}
                 id="organisation"
                 label="Organisation type"
                 error={this.state.form_data.organisation_error ? true : false}
@@ -249,36 +278,15 @@ class ProfessionalDetails extends Component {
             {employment_type === "salaried" && (
               <div className="InputField">
                 <DropdownWithoutIcon
-                  width="40"
-                  options={this.state.screenData.departmentOptions}
-                  id="department"
-                  label="Department"
-                  error={this.state.form_data.department_error ? true : false}
-                  helperText={this.state.form_data.department_error}
-                  value={this.state.form_data.department || ""}
-                  name="department"
-                  onChange={this.handleChange("department")}
+                  options={industryOptions}
+                  label="Industry"
+                  id="industry"
+                  name="industry"
+                  error={this.state.form_data.industry_error ? true : false}
+                  helperText={this.state.form_data.industry_error}
+                  value={this.state.form_data.industry || ""}
+                  onChange={this.handleChange("industry")}
                 />
-              </div>
-            )}
-
-            {employment_type === "salaried" && (
-              <div className="InputField">
-                {industryOptions.length > 0 && (
-                  <Autosuggests
-                    parent={this}
-                    width="40"
-                    placeholder="Search for industry"
-                    options={industryOptions}
-                    label="Industry"
-                    id="industry"
-                    name="industry"
-                    error={this.state.form_data.industry_error ? true : false}
-                    helperText={this.state.form_data.industry_error}
-                    value={this.state.form_data.industry}
-                    onChange={this.handleChange("industry")}
-                  />
-                )}
               </div>
             )}
           </FormControl>
