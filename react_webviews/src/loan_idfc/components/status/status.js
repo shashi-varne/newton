@@ -162,7 +162,17 @@ const commonMapper = {
     screenName: "system_error",
     stage: "after credit card details",
   },
-  "idfc_pincode_rejected": {
+  "pincode": {
+    top_icon: "ils_loan_failed",
+    top_title: "Application Rejected",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "application_rejected",
+    stage: "after loan requirement details",
+  },
+  "internally_rejected": {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -199,7 +209,7 @@ class LoanStatus extends Component {
     let rejection_reason = this.state.rejection_reason;
     let first_name = this.state.first_name;
     let is_dedupe = this.state.is_dedupe;
-    let idfc_pincode_rejected = this.state.idfc_pincode_rejected;
+    let idfc_rejection_reason = this.state.idfc_rejection_reason;
 
     if (rejection_reason) {
       this.setState({
@@ -212,10 +222,11 @@ class LoanStatus extends Component {
         commonMapper: commonMapper["is_dedupe"] || {},
         application_status: application_status,
       });
-    }  else if (idfc_pincode_rejected) {
+    }  else if (idfc_rejection_reason === 'pincode') {
       this.setState({
-        commonMapper: commonMapper["idfc_pincode_rejected"] || {},
+        commonMapper: commonMapper["pincode"] || {},
         application_status: application_status,
+        idfc_rejection_reason: idfc_rejection_reason
       });
     } else {
       this.setState({
@@ -283,7 +294,7 @@ class LoanStatus extends Component {
       rejection_reason,
       is_dedupe,
       first_name,
-      idfc_pincode_rejected
+      idfc_rejection_reason
     } = this.state;
 
     if (vendor_application_status === "idfc_0.5_accepted") {
@@ -360,14 +371,14 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {commonMapper.top_title === "Application Rejected" && !rejection_reason && !idfc_pincode_rejected &&(
+          {commonMapper.top_title === "Application Rejected" && !rejection_reason && idfc_rejection_reason !== 'pincode' && (
             <div className="subtitle">
               We're so sorry to inform you that IDFC has rejected your loan
               application as it did not meet their loan policy.
             </div>
           )}
 
-          {commonMapper.top_title === "Application Rejected" && !rejection_reason && idfc_pincode_rejected && (
+          {commonMapper.top_title === "Application Rejected" && !rejection_reason && idfc_rejection_reason === 'pincode' && (
             <div>
               <p className="subtitle">Sorry! We don't serve in the selected location yet.</p>
               <p className="subtitle">
