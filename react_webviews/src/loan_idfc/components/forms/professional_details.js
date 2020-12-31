@@ -6,7 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { numDifferentiationInr } from "utils/validators";
-import Autosuggest from "../../common/Autosuggest";
+import Autosuggest from "../../../common/ui/SearchBar";
 import Api from "utils/api";
 
 class ProfessionalDetails extends Component {

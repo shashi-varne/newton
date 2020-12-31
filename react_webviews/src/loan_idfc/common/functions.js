@@ -10,6 +10,7 @@ import {
   isValidDate,
   getEditTitle,
   IsFutureDate,
+  numDifferentiationInr
 } from "utils/validators";
 
 export async function initialize() {
@@ -883,7 +884,7 @@ export async function formCheckUpdate(
     // eslint-disable-next-line
     parseInt(form_data.amount_required) < parseInt("100000")
   ) {
-    form_data.amount_required_error = "Minimum loan amount should be ₹1 Lakh";
+    form_data.amount_required_error = `Minimum loan amount should be ${numDifferentiationInr(100000)}`;
     canSubmitForm = false;
   }
 

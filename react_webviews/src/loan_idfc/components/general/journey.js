@@ -247,16 +247,30 @@ class JourneyMap extends Component {
     this.setState({
       show_loader: true,
     });
-    await this.getOrCreate();
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
-    if (vendor_info.ckyc_state !== "init") {
-      this.updateApplication({
-        idfc_loan_status: "ckyc",
-      });
-    } else {
-      this.getCkycState();
-    }
+    
+    let result = await this.getUserStatus();
+
+    let { count } = this.state;
+    let that = this;
+
+    setTimeout(function () { 
+      if (result.ckyc_status !== "init") {
+        let body = {
+          idfc_loan_status: "ckyc",
+        };
+        that.updateApplication(body, "personal-details");
+      } else {
+        if (count < 20) {
+          that.setState({
+            count: count + 1,
+          });
+  
+          that.getCkycState();
+        } else {
+          that.navigate("error");
+        }
+      }
+    }, 3000);
   };
 
   handleClick = (id) => {
