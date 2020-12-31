@@ -154,9 +154,7 @@ const PortfolioGrowth = () => {
         {growthError ?
           <IwdErrorScreen
             hasError={true}
-            templateBtnText='Retry'
-            clickHandler={fetchGrowthGraph}
-            templateErrText='Uh oh! Not enough data to show for this selected time period. Please try changing the time selection or retry'
+            templateErrText='Uh oh! Not enough data to show for this selected time period. Please try changing the time selection or retry later'
           /> :
           <IwdGrowthGraph
             isLoading={isLoadingGrowth}

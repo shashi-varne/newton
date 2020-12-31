@@ -203,6 +203,15 @@ $background: #f9f9f9;
   border-radius: $card-border-radius;
   padding: $card-padding;
   box-sizing: border-box;
+
+  .fisdom-error-container {
+    min-height: 0;
+    height: 80%;
+
+    .fisdom-ecb-img {
+      height: 160px;
+    }
+  }
 }
 
 .MuiButtonBase-root.iwd-card {
@@ -227,8 +236,8 @@ $background: #f9f9f9;
   overflow-y: auto;
   width: 100%;
   scroll-padding-top: 20px;
-
 }
+
 #iwd-scroll-contain-footer {
   width: 100%;
   height: 10vh;

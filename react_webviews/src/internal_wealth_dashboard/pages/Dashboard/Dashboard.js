@@ -16,6 +16,7 @@ import { isEmpty, storageService } from '../../../utils/validators';
 import PortfolioGrowth from './PortfolioGrowth';
 import PortfolioRisk from './PortfolioRisk';
 import { formatNumVal } from '../../common/commonFunctions';
+import { genericErrMsg } from '../../constants';
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -26,21 +27,30 @@ const Dashboard = () => {
   const [isLoadingOverview, setIsLoadingOverview] = useState(true);
   const [overviewError, setOverviewError] = useState(false);
 
+  const hasAllEmptyProps = (obj) => {
+    return Object.entries(obj).every(([, val]) => !val); 
+  };
+
   const fetchOverview = async () => {
     try {
       setIsLoadingOverview(true);
       setOverviewError(false);
       const data = await getOverview();
-      setOverviewData({
+      const overviewObj = {
         current_val: get(data, 'current.current', ''),
         invested_val: get(data, 'current.invested', ''),
         total_realised: get(data, 'past.earnings', ''),
         xirr: get(data, 'earnings_percent', '--'),
-      });
-      setAssetAlloc({
+      };
+      const allocObj = {
         equity: get(data, 'current.stock', ''),
         debt: get(data, 'current.bond', ''),
-      });
+      };
+      if (hasAllEmptyProps(overviewObj) || hasAllEmptyProps(allocObj)) {
+        throw (genericErrMsg);
+      }
+      setOverviewData(overviewObj);
+      setAssetAlloc(allocObj);
     } catch (e) {
       setOverviewError(true);
       console.error(e);
