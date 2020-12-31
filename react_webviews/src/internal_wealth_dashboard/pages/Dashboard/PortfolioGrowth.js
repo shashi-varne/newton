@@ -94,7 +94,7 @@ const PortfolioGrowth = () => {
   };
 
   const GraphRangePicker = () => {
-    let dateRanges = [...GraphDateRanges.reverse()];
+    let dateRanges = [...GraphDateRanges].reverse();
     if (moment().month() === 0) {
       dateRanges = dateRanges.slice(1);
     }
