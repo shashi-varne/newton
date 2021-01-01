@@ -128,11 +128,11 @@ class PersonalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, details_changed } = this.state;
 
-    // let names = ['first_name', 'middle_name', 'last_name', 'father_first_name', 'father_last_name', 'mother_first_name', 'mother_last_name']
+    let names = ['first_name', 'last_name', 'father_first_name', 'father_last_name', 'mother_first_name', 'mother_last_name']
 
-    // if(names.includes(name) && value.includes(' ')) {
-    //   return
-    // }
+    if(names.includes(name) && value.includes(' ')) {
+      return
+    }
 
     if (name) {
       form_data[name] = value;
@@ -164,7 +164,6 @@ class PersonalDetails extends Component {
       "last_name",
       "gender",
       "marital_status",
-      // "father_name",
       "father_first_name",
       "father_last_name",
       "religion",
@@ -173,7 +172,6 @@ class PersonalDetails extends Component {
     
     if (this.state.confirm_details) {
       keys_to_check.push(...["dob",
-      //  "mother_name", 
       "mother_first_name", 
       "mother_last_name", 
        "middle_name"]);
@@ -251,23 +249,21 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            {this.state.confirm_details && (
-              <div className="InputField">
-                <Input
-                  error={!!this.state.form_data.middle_name_error}
-                  helperText={this.state.form_data.middle_name_error || this.state.form_data.middle_name_helper}
-                  type="text"
-                  width="40"
-                  label="Middle name"
-                  class="middle_name"
-                  id="name"
-                  name="middle_name"
-                  value={this.state.form_data.middle_name || ""}
-                  onChange={this.handleChange("middle_name")}
-                  onClick={() => this.handleCkycMessage("middle_name")}
-                />
-              </div>
-            )}
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.middle_name_error}
+                helperText={this.state.form_data.middle_name_error || this.state.form_data.middle_name_helper}
+                type="text"
+                width="40"
+                label="Middle name"
+                class="middle_name"
+                id="name"
+                name="middle_name"
+                value={this.state.form_data.middle_name || ""}
+                onChange={this.handleChange("middle_name")}
+                onClick={() => this.handleCkycMessage("middle_name")}
+              />
+            </div>
 
             <div className="InputField">
               <Input

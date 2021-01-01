@@ -15,7 +15,8 @@ import {
   IsFutureMonthYear
 } from "utils/validators";
 import toast from "../../../common/ui/Toast";
-import Autosuggests from "../../../common/ui/Autosuggest";
+import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
+
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -296,12 +297,9 @@ class LoanBtDetails extends Component {
                   <div className="sub-head">₹40 lacs</div>
                   <FormControl fullWidth>
                     <div className="InputField">
-                      {this.state.bankOptions.length > 0 && (
-                        <Autosuggests
-                          parent={this}
+                    <DropdownWithoutIcon
                           width="40"
-                          placeholder="Search for financierName"
-                          options={this.state.bankOptions}
+                          options={this.state.screenData.bankOptions}
                           label="Financer name"
                           id="financierName"
                           name="financierName"
@@ -317,7 +315,6 @@ class LoanBtDetails extends Component {
                           }
                           onChange={this.handleChange("financierName", index)}
                         />
-                      )}
                     </div>
 
                     <div className="InputField">

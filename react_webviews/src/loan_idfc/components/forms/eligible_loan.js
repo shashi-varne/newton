@@ -235,7 +235,7 @@ class EligibleLoan extends Component {
                     this.state.form_data.amount_required_error || 
                     (this.state.form_data.amount_required && numDifferentiationInr(this.state.form_data.amount_required)) ||
                     `Min ₹1 Lakh to max ₹${changeNumberFormat(
-                      vendor_info.display_loan_amount || "0"
+                      vendor_info.displayOffer || "0"
                     )}`
                   }
                   type="number"
