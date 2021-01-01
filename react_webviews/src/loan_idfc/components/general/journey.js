@@ -105,6 +105,9 @@ const journeyMapper2 = {
   idfc_3_accepted: {
     index: "4",
   },
+  application_submitted: {
+    index: "4",
+  }
 };
 class JourneyMap extends Component {
   constructor(props) {
@@ -207,7 +210,7 @@ class JourneyMap extends Component {
               ? "pending"
               : "completed",
           cta:
-            (idfc_loan_status === "idfc_4_accepted" || idfc_loan_status === "idfc_4_submitted" || application_complete) &&
+            index === "4" &&
             "CHECK",
           id: "sanction_and_disbursal",
         },
