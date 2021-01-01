@@ -1,7 +1,11 @@
 import React, { Fragment } from 'react';
 import './style.scss';
+import { disableBodyTouch } from 'utils/validators';
 
 const DotDotLoader = (props) => {
+
+  disableBodyTouch();
+
   const { size = '' } = props;
    // eslint-disable-next-line
   let sizeObj = {};
@@ -12,10 +16,8 @@ const DotDotLoader = (props) => {
 
   return (
     <Fragment>
-      <div className={`spinner ${props.className}`} style={props.style}>
-        <div className="bounce1" />
-        <div className="bounce2" />
-        <div className="bounce3" />
+      <div className="dot-flashing-parent" >
+          <div className={`dot-flashing ${props.className}`} style={props.style}></div>
       </div>
       {
         props.text && <div className={`${props.textClass}`} style={props.textStyle}>

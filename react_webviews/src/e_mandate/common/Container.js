@@ -16,6 +16,7 @@ import Dialog, {
 import '../../utils/native_listner_otm';
 import { getConfig, setHeights } from 'utils/functions';
 import { renderPageLoader } from '../../common/components/container_functions';
+import UiSkelton from '../../common/ui/Skelton';
 
 class Container extends Component {
 
@@ -253,13 +254,25 @@ class Container extends Component {
 
         </div>
 
-        {/* Children Block */}
-        <div className={`Container ${this.props.classOverRideContainer}`}>
-          {this.props.children}
-        </div>
+        { this.props.skelton && 
+            <UiSkelton 
+            type={this.props.skelton}
+            />
+          }
 
+        {/* Children Block */}
+        <div 
+        style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial'}}
+        className={`Container ${this.props.classOverRideContainer}`}>
+           <div 
+            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
+            style={{display: this.props.skelton ? 'none': ''}}
+            > {this.props.children}
+             </div>
+        </div>
+        
         {/* Footer Block */}
-        {!this.props.noFooter &&
+        {!this.props.noFooter && !this.props.skelton &&
           <Footer
             fullWidthButton={this.props.fullWidthButton}
             logo={this.props.logo}

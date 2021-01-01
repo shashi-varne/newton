@@ -7,7 +7,7 @@ import SVG from 'react-inlinesvg';
 import './style.scss';
 import { getConfig } from 'utils/functions';
 
-import DotDotLoader from './DotDotLoader';
+import DotDotLoaderNew from './DotDotLoaderNew';
 import { disableBodyTouch } from 'utils/validators';
 
 
@@ -17,6 +17,7 @@ class CustomButton extends Component {
 
     let showLoader = props.showLoader;
     showLoader = showLoader === 'button' ? true : false;
+    // showLoader= true;
 
     if(!showLoader){
       disableBodyTouch(true); //touch enabled
@@ -100,7 +101,7 @@ class CustomButton extends Component {
             disabled={props.disable}
           >
             {!showLoader && props.buttonTitle}
-            {showLoader && <DotDotLoader
+            {showLoader && <DotDotLoaderNew
             styleBounce={{backgroundColor:'white'}}
             />}
             {
