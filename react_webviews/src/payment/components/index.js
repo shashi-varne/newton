@@ -234,7 +234,7 @@ class PaymentOption extends React.Component {
       showCancelModal: false,
       showDebitLoader: false,
       showBilldeskLoader: false,
-      show_loader: true
+      skelton: true
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -254,7 +254,7 @@ class PaymentOption extends React.Component {
   componentDidMount = async () => {
     window.PlutusInitState.page = this.props.page;
     this.setState({
-      show_loader: true
+      skelton: true
     })
     let url = getConfig().base_url + '/api/invest/pg/paynow/' + getConfig().pc_urlsafe;
     try {
@@ -286,7 +286,7 @@ class PaymentOption extends React.Component {
       });
       let activeIndex = store.banks.findIndex(x => x.is_primary_bank === true);
       this.setState({
-        show_loader: false,
+        skelton: false,
         notSupportedBankCount: unSupportedBanks.length,
         supportedBanks: supportedBanks,
         unSupportedBanks: unSupportedBanks,
@@ -298,7 +298,7 @@ class PaymentOption extends React.Component {
       })
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       })
       toast("Something went wrong");
     }
@@ -377,7 +377,7 @@ class PaymentOption extends React.Component {
       pushEvent(eventObj);
 
       // show loader
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -468,7 +468,7 @@ class PaymentOption extends React.Component {
 
   goToPayment(type) {
     if (type === "debit") {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -477,7 +477,7 @@ class PaymentOption extends React.Component {
       });
       window.location.href = store.url + '&gateway_type=HMP';
     } else if (type === "netbanking") {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -491,7 +491,7 @@ class PaymentOption extends React.Component {
         { store: store, neftBanks: this.state.neftBanks }
       );
     } else if (type === "upi") {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -519,7 +519,7 @@ class PaymentOption extends React.Component {
       };
       pushEvent(eventObj);
       toast('Pay using bank a/c - ' + this.state.selectedBank.obscured_account_number + ' only');
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       let that = this;
       Api.get(store.intent_url + '?bank_id=' + this.state.selectedBank.bank_id + `&gateway_type=UPI`).then(data => {
         if (data.pfwresponse.status_code === 200) {
@@ -578,7 +578,7 @@ class PaymentOption extends React.Component {
 
     // show loader
     if (item.bank_code) {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -611,6 +611,7 @@ class PaymentOption extends React.Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         header={true}
         noFooter={true}
         page="pg_option"

@@ -185,15 +185,14 @@ class Container extends Component {
   
           {/* Children Block */}
             <div
-            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial',
-            // backgroundImage: this.props.skelton ? 'unset': 'initial'
-          }}
+            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial'}}
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
             >
             <div 
             className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
             style={{display: this.props.skelton ? 'none': ''}}
-            > {this.props.children} </div>
+            > {this.props.children}
+             </div>
           </div>
   
           {/* Footer Block */}

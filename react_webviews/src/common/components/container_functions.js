@@ -218,14 +218,37 @@ export function renderPopup() {
 };
 
 export function renderPageLoader() {
-    if (this.props.showLoader) {
+    let quotes_data = [
+        'Risk comes from not knowing what you are doing.',
+        'Money is a terrible master but an excellent servant.',
+        'Wealth is the ability to fully experience life.',
+        'I’d like to live as a poor man with lots of money.',
+        'Don’t stay in bed, unless you can make money in bed.',
+        'It takes as much energy to wish as it does to plan.',
+        'The best thing money can buy is financial freedom.'
+    ]
+    var quote = quotes_data[Math.floor(Math.random() * quotes_data.length)];
+
+    let loaderData = this.props.loaderData || {};
+    let loadingText = loaderData.loadingText;
+
+    if (this.props.showLoader === true) {
         return (
-            <div className={`Loader ${this.props.loaderData ? this.props.loaderData.loaderClass : ''}`}>
+            <div className={`Loader ${loaderData ? loaderData.loaderClass : ''}`}>
                 <div className="LoaderOverlay">
                     <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-                    {this.props.loaderData && this.props.loaderData.loadingText &&
-                        <div className="LoaderOverlayText">{this.props.loaderData.loadingText}</div>
+                    {loadingText &&
+                        <div className="LoaderOverlayText">{loadingText}</div>
                     }
+                </div>
+            </div>
+        );
+    } else if (this.props.showLoader === 'page') {
+        return (
+            <div className={`generic-page-loader ${loaderData ? loaderData.loaderClass : ''}`}>
+                <div className="LoaderOverlay">
+                    <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+                        <div className="LoaderOverlayText">{loadingText || quote}</div>
                 </div>
             </div>
         );
