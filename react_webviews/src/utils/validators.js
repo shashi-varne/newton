@@ -938,3 +938,15 @@ export function containsSpecialCharactersAndNumbers(value){
 export function countChars(line) {
   return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
 }
+
+export function disableBodyTouch(enable) {
+  if(!enable) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    document.body.style.pointerEvents = 'none';
+  } else {
+    document.body.style.overflow = 'auto';
+    document.body.style.touchAction = 'unset';
+    document.body.style.pointerEvents = 'unset';
+  }
+}

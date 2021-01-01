@@ -7,9 +7,21 @@ import SVG from 'react-inlinesvg';
 import './style.scss';
 import { getConfig } from 'utils/functions';
 
+import DotDotLoader from './DotDotLoader';
+import { disableBodyTouch } from 'utils/validators';
+
+
 class CustomButton extends Component {
   render() {
-    const props = this.props;
+    let props = this.props;
+
+    let showLoader = props.showLoader;
+    showLoader = showLoader === 'button' ? true : false;
+
+    if(!showLoader){
+      disableBodyTouch(true); //touch enabled
+    }
+
     const { button: buttonClass, ...classes } = props.classes || {};
     if (props.twoButton && props.dualbuttonwithouticon) {
       return (
@@ -87,7 +99,10 @@ class CustomButton extends Component {
             classes={classes}
             disabled={props.disable}
           >
-            {props.buttonTitle}
+            {!showLoader && props.buttonTitle}
+            {showLoader && <DotDotLoader
+            styleBounce={{backgroundColor:'white'}}
+            />}
             {
               props.arrow &&
               <img alt="" src={arrow} width={20} className="FooterButtonArrow" />

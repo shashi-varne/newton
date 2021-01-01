@@ -651,7 +651,7 @@ input#pan {
     z-index: 200;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, #FFFFFF 25.91%, #FFFFFF 100%);
     opacity: 0.96;
-    // touch-action: none;
+    touch-action: none;
     .LoaderOverlay {
       position: absolute;
       top: 50%;

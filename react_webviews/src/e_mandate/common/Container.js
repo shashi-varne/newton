@@ -15,7 +15,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner_otm';
 import { getConfig, setHeights } from 'utils/functions';
-
+import { renderPageLoader } from '../../common/components/container_functions';
 
 class Container extends Component {
 
@@ -29,6 +29,7 @@ class Container extends Component {
       productName: getConfig().productName
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
+    this.renderPageLoader = renderPageLoader.bind(this);
   }
 
   componentDidMount() {
@@ -202,20 +203,6 @@ class Container extends Component {
     })
   }
 
-  renderPageLoader = () => {
-    if (this.props.showLoader) {
-      return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
   componentDidUpdate(prevProps) {
     setHeights({ 'header': true, 'container': false });
   }
@@ -286,7 +273,9 @@ class Container extends Component {
             handleReset={this.props.handleReset}
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled} />
+            isDisabled={this.props.isDisabled}
+            showLoader={this.props.showLoader}
+            />
         }
         {/* No Internet */}
         {this.renderDialog()}
