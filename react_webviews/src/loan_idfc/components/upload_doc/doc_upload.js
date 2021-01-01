@@ -308,7 +308,6 @@ class DocumentUpload extends Component {
     let document = this.state.form_data.doc_name;
 
     let { category, doc_type, documents, totalUpload, image_data } = this.state;
-console.log(file)
     let ext = file.type.split("/")[1];
 
     if (file.file_name === undefined) {
@@ -356,7 +355,7 @@ console.log(file)
 
     file.doc_name = doc_name;
     file.category_id = category;
-    file.checklist_doc_type = doc_type;
+    file.checklist_doc_type = doc_type.length === 4 ? doc_type : doc_type.slice(0, 4);
 
     let acceptedType = [
       "application/pdf",
@@ -417,7 +416,7 @@ console.log(file)
 
     file.doc_name = doc_name;
     file.category_id = category;
-    file.checklist_doc_type = doc_type;
+    file.checklist_doc_type = doc_type.length === 4 ? doc_type : doc_type.slice(0, 4);
 
     let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
 
