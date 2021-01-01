@@ -2136,8 +2136,13 @@ $background: #f9f9f9;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.iwd-growth-graph{
+  height:calc(80vh - 300px);
+}
 @media only screen and (max-width: 450px) {
-  
+  .iwd-growth-graph{
+    height: calc(100vh - 420px);
+  }
   .iwd-transaction-header{
     margin-left: -20px;
     margin-right: -20px;
