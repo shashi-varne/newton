@@ -81,12 +81,13 @@ componentWillMount() {
 
 
 handleChange = name => event => {
-  setTimeout(() => {
-    var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-    for (var i = 0; i < x.length; i++) {
-      x.item(i).style.backgroundColor = "#35CB5D";
-    }
-  }, 0);
+  document.getElementsByClassName("MuiButtonBase-root MuiButton-root")[0].style.backgroundColor = "#35CB5D";
+  // setTimeout(() => {
+  //   var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+  //   for (var i = 0; i < x.length; i++) {
+  //     x.item(i).style.backgroundColor = "#35CB5D";
+  //   }
+  // }, 0);
 
   if (!name) {
     return
