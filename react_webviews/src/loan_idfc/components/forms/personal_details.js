@@ -87,7 +87,7 @@ class PersonalDetails extends Component {
 
     let form_data = {
       first_name: personal_info.first_name,
-      middle_name: confirm_details && personal_info.middle_name,
+      middle_name: personal_info.middle_name,
       last_name: personal_info.last_name,
       dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
@@ -173,11 +173,12 @@ class PersonalDetails extends Component {
     if (this.state.confirm_details) {
       keys_to_check.push(...["dob",
       "mother_first_name", 
-      "mother_last_name", 
-       "middle_name"]);
+      "mother_last_name"]);
     }
 
-    this.formCheckUpdate(keys_to_check, form_data);
+    let keys_to_include = ["middle_name"]
+
+    this.formCheckUpdate(keys_to_check, form_data, "", "", keys_to_include);
   };
 
   handleChangeRadio = (event) => {
