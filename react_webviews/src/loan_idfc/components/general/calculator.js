@@ -75,7 +75,7 @@ class Calculator extends Component {
 
     let Loan_Eligibility =
       (((Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40) / 100) * Tenure;
-    
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -139,7 +139,7 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility), 0))}
+              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility < 4000000 ? Loan_Eligibility : 4000000 ), 0))}
             </div>
           </div>
         </div>
