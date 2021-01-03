@@ -422,9 +422,12 @@ class HealthInsuranceLanding extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'health insurance',
-        "insurance_type": insurance_type ? insurance_type : ''
       }
     };
+
+    if(insurance_type){
+      eventObj.properties['insurance_type'] = insurance_type;
+    }
 
     if(product_selected){
       eventObj.properties['product_selected'] = product_selected;
