@@ -548,7 +548,7 @@ class UploadBank extends Component {
               <Input
                 error={!!this.state.form_data.start_date_error}
                 // helperText={this.state.form_data.start_date_error}
-                helperText={this.state.form_data.start_date_error || "This date must be 3 months from the current date"}
+                helperText={this.state.form_data.start_date_error || "This date must be 3 months prior to the current month"}
                 type="text"
                 width="40"
                 label="Start date"
@@ -564,7 +564,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.end_date_error}
-                helperText={this.state.form_data.end_date_error || "This date must be 3 days before the current date"}
+                helperText={this.state.form_data.end_date_error || "This date must be 3 days prior to the current date"}
                 type="text"
                 width="40"
                 label="End date"
