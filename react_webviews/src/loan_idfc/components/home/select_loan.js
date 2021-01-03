@@ -40,18 +40,18 @@ class SelectLoan extends Component {
         benefits: {
           options: [
             {
-              data: "Loan up to 40 lakhs:",
+              data: "Loan up to 40 lacs:",
               sub_data: [
-                "For salaried, the range is from Rs. 1 lakh to 40 lakhs",
-                "For self-employed the max loan amount is Rs. 9 lakhs",
+                "For salaried, the range is from Rs. 1 lakh to 40 lacs",
+                "For self-employed, the range is from Rs. 1 lakh to 9 lacs",
               ],
             },
             "Low interest rate starting at 10.75% p.a.",
-            "Flexible loan tenure min 12 months to max 60 months",
+            "Flexible loan tenure -- min 12 months to max 60 months",
             "Option of ‘balance transfer’ at attractive rates",
             "Loan sanction in less than 4 hrs",
             "100% digital with easy documentation",
-            "Top-up facility to avail extra funds on the existing loan% digital with easy documentation",
+            "Top-up facility to avail extra funds on the existing loan",
           ],
         },
       },
@@ -65,7 +65,9 @@ class SelectLoan extends Component {
         provider_name: "dmi",
         benefits: {
           options: [
-            "Complete Digital and Presenceless process",
+            "Get loan upto 1 lac with no human interaction",
+            "No income documents required",
+            "Complete easy loan application process and get money within 48 hrs",
             "You don't have to provide any security money for your loan",
           ],
         },
