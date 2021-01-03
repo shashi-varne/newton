@@ -304,11 +304,6 @@ class HealthInsuranceLanding extends Component {
 
     fullPath = 'health/' + stateMapper[product_key] + '/plan';
 
-    if (product_key === 'HEALTH_SUPER_TOPUP') {
-      this.navigate('/group-insurance/' + fullPath);
-      return
-    }
-
     if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA') && !getConfig().iOS) {
       this.HealthInsuranceEntry();
       return;
@@ -320,6 +315,11 @@ class HealthInsuranceLanding extends Component {
     }
 
     this.sendEvents('next', title ? title : '')
+
+    if (product_key === 'HEALTH_SUPER_TOPUP') {
+      this.navigate('/group-insurance/' + fullPath);
+      return
+    }
 
     if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
       if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
