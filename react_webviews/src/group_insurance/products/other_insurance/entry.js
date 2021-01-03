@@ -82,10 +82,14 @@ class LifeInsuranceEntry extends Component {
       if (res.pfwresponse.status_code === 200) {
 
         var resultData = res.pfwresponse.result.response;
+        let term_insurance = resultData.term_insurance;
         let group_insurance = resultData.group_insurance;
         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
-        let resumeFlagAll = {};
+        let resumeFlagAll = {
+          'TERM_INSURANCE': resumeFlagTerm
+        }
 
         if (!BHARTIAXA) {
           BHARTIAXA = {};
@@ -150,6 +154,65 @@ class LifeInsuranceEntry extends Component {
     }
   }
 
+
+  setTermInsData(termData) {
+
+    window.sessionStorage.setItem('excluded_providers', '');
+    window.sessionStorage.setItem('required_providers', '');
+    window.sessionStorage.setItem('quoteSelected', '');
+    window.sessionStorage.setItem('quoteData', '');
+    let pathname = '';
+    let resumeFlagTerm = false;
+
+    if (!termData.error) {
+      let insurance_apps = termData.insurance_apps;
+      let application, required_fields;
+      required_fields = termData.required;
+      if (insurance_apps.complete.length > 0) {
+        application = insurance_apps.complete[0];
+        pathname = 'report';
+      } else if (insurance_apps.failed.length > 0) {
+        application = insurance_apps.failed[0];
+        pathname = 'report';
+      } else if (insurance_apps.init.length > 0) {
+        application = insurance_apps.init[0];
+        resumeFlagTerm = true;
+        pathname = 'journey';
+      } else if (insurance_apps.submitted.length > 0) {
+        resumeFlagTerm = true;
+        application = insurance_apps.submitted[0];
+        pathname = 'journey';
+      } else {
+        // intro
+        pathname = 'intro';
+      }
+
+      if (application) {
+        let data = {
+          application: application,
+          required_fields: required_fields
+        }
+        window.sessionStorage.setItem('cameFromHome', true);
+        window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
+        pathname = 'journey';
+        this.setState({
+          termApplication: application
+        })
+      }
+    } else {
+      pathname = 'intro';
+    }
+
+    let fullPath = '/group-insurance/term/' + pathname;
+
+    this.setState({
+      redirectTermPath: fullPath
+    })
+
+    return resumeFlagTerm;
+
+  }
+
   navigate = (pathname, search) => {
     this.props.history.push({
       pathname: pathname,
@@ -188,6 +251,10 @@ class LifeInsuranceEntry extends Component {
       else if (product_key === 'HOME_INSURANCE') {
       fullPath = 'home_insurance/general/plan';
       this.navigate('/group-insurance/' + fullPath);
+    } else {
+      // this.navigate(this.state.redirectTermPath);
+      this.navigate('/group-insurance/term/intro');
+      return;
     }
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);

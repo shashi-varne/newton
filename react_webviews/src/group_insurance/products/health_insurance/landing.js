@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import qs from 'qs';
 import { insuranceStateMapper, getBhartiaxaStatusToState } from '../../constants';
-// import critical_illness_fisdom from 'assets/critical_illness_fisdom.svg';
-// import critical_illness_myway from 'assets/critical_illness_myway.svg';
 
 import health_suraksha_fisdom from 'assets/health_suraksha_fisdom.svg';
 import health_suraksha_myway from 'assets/health_suraksha_myway.svg';
@@ -54,7 +52,7 @@ class HealthInsuranceLanding extends Component {
     window.sessionStorage.setItem('group_insurance_payment_url', '');
 
     nativeCallback({ action: 'take_control_reset' });
-    // let critical_illness_icon = this.state.type !== 'fisdom' ? critical_illness_myway : critical_illness_fisdom;
+
     let health_suraksha_icon = this.state.type !== 'fisdom' ? health_suraksha_myway : health_suraksha_fisdom;
     let super_topup_icon = this.state.type !== 'fisdom' ? super_topup_myway : super_topup_fisdom;
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
@@ -122,6 +120,63 @@ class HealthInsuranceLanding extends Component {
     });
   }
 
+  setTermInsData(termData) {
+
+    window.sessionStorage.setItem('excluded_providers', '');
+    window.sessionStorage.setItem('required_providers', '');
+    window.sessionStorage.setItem('quoteSelected', '');
+    window.sessionStorage.setItem('quoteData', '');
+    let pathname = '';
+    let resumeFlagTerm = false;
+
+    if (!termData.error) {
+      let insurance_apps = termData.insurance_apps;
+      let application, required_fields;
+      required_fields = termData.required;
+      if (insurance_apps.complete.length > 0) {
+        application = insurance_apps.complete[0];
+        pathname = 'report';
+      } else if (insurance_apps.failed.length > 0) {
+        application = insurance_apps.failed[0];
+        pathname = 'report';
+      } else if (insurance_apps.init.length > 0) {
+        application = insurance_apps.init[0];
+        resumeFlagTerm = true;
+        pathname = 'journey';
+      } else if (insurance_apps.submitted.length > 0) {
+        resumeFlagTerm = true;
+        application = insurance_apps.submitted[0];
+        pathname = 'journey';
+      } else {
+        // intro
+        pathname = 'intro';
+      }
+
+      if (application) {
+        let data = {
+          application: application,
+          required_fields: required_fields
+        }
+        window.sessionStorage.setItem('cameFromHome', true);
+        window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
+        pathname = 'journey';
+        this.setState({
+          termApplication: application
+        })
+      }
+    } else {
+      pathname = 'intro';
+    }
+
+    let fullPath = '/group-insurance/term/' + pathname;
+
+    this.setState({
+      redirectTermPath: fullPath
+    })
+
+    return resumeFlagTerm;
+
+  }
 
   async componentDidMount() {
 
@@ -138,11 +193,15 @@ class HealthInsuranceLanding extends Component {
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
+        let term_insurance = resultData.term_insurance;
         let group_insurance = resultData.group_insurance;
         let BHARTIAXA = group_insurance && group_insurance.insurance_apps ? group_insurance.insurance_apps.BHARTIAXA : {};
+        let resumeFlagTerm = this.setTermInsData(term_insurance, BHARTIAXA);
 
 
-        let resumeFlagAll = {}
+        let resumeFlagAll = {
+          'TERM_INSURANCE': resumeFlagTerm
+        }
 
         if (!BHARTIAXA) {
           BHARTIAXA = {};
@@ -210,6 +269,18 @@ class HealthInsuranceLanding extends Component {
     }
   }
 
+  getLeadId(product_key) {
+    let id = ''
+    if (product_key !== 'term_insurance') {
+      if (this.state.BHARTIAXA_APPS[product_key] &&
+        this.state.BHARTIAXA_APPS[product_key].length > 0) {
+        id = this.state.BHARTIAXA_APPS[product_key][0].lead_id;
+      }
+    }
+
+    return id;
+  }
+
   handleClick2 = () => {
     this.setState({
       show_loader: true
@@ -259,7 +330,12 @@ class HealthInsuranceLanding extends Component {
       }
 
       fullPath = insuranceStateMapper[product_key] + '/' + path;
+    } else {
+      // this.navigate(this.state.redirectTermPath);
+      this.navigate('/group-insurance/term/intro');
+      return;
     }
+
     this.sendEvents('next', title ? title : '')
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);

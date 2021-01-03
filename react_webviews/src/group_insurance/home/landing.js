@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import Container from '../common/Container';
 import ContactUs from '../../common/components/contact_us'
-import { insuranceStateMapper } from '../constants';
 import qs from 'qs'; 
-// import Api from 'utils/api';
-// import toast from '../../common/ui/Toast';
 
 import { getConfig } from 'utils/functions';
-import { getBhartiaxaStatusToState } from '../constants';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss'
 
@@ -85,29 +81,9 @@ class Landing extends Component {
   handleClick = (product_key , events) => {
 
     this.sendEvents('next',  events ? events : product_key)
-
-    var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'HOSPICASH', 'SMART_WALLET', 'HEALTH'];
-
-    var lead_id = '';
-    var path = '';
     var fullPath = '';
-    if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
-      if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
-        this.state.BHARTIAXA_APPS[product_key].length > 0) {
-        let data = this.state.BHARTIAXA_APPS[product_key][0];
-        lead_id = data.lead_id;
 
-        path = getBhartiaxaStatusToState(data);
-        if (data.status === 'complete') {
-          lead_id = '';
-        }
-
-      } else {
-        path = 'plan';
-      }
-
-      fullPath = insuranceStateMapper[product_key] + '/' + path;
-    } else if (product_key === 'LIFE_INSURANCE') {
+      if (product_key === 'LIFE_INSURANCE') {
         fullPath = 'life-insurance/entry';
       } else if (product_key === 'Other_Insurance') {
         fullPath = 'other-insurance/entry';
@@ -115,12 +91,10 @@ class Landing extends Component {
         fullPath = 'health/landing';
       }
       else {
-         // this.navigate(this.state.redirectTermPath);
          this.navigate('/group-insurance/term/intro');
         return;
       }
 
-    window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('group-insurance/' + fullPath);
   }
 
@@ -138,7 +112,6 @@ class Landing extends Component {
             <div style={{ color: '#767E86', fontSize: '13px', fontWeight: '400', lineHeight: '15.41px' }}>{props.subtitle}</div>
           </div>
         </div>
-        {props.resume_flag && <div style={{background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1, textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3 }}>RESUME</div>}
       </div>
     )
   }

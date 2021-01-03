@@ -541,7 +541,7 @@ const Insurance = (props) => {
           <Route path={`${url}/group-health/:provider/edit-star-select-ped`}
             render={(props) => <GroupHealthStarPlanSelectPed  {...props} edit={true} />} />
 
-            { /*Other Insurance*/}
+            { /********** Other Insurance-page **********/}
             <Route path={`${url}/other-insurance/entry`} component={OtherInsuranceEntry} />
 
           {/* common */}
