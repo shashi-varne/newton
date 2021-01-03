@@ -319,6 +319,8 @@ class HealthInsuranceLanding extends Component {
       return;
     }
 
+    this.sendEvents('next', title ? title : '')
+
     if (BHARTIAXA_PRODUCTS.indexOf(product_key) !== -1) {
       if (this.state.BHARTIAXA_APPS && this.state.BHARTIAXA_APPS[product_key] &&
         this.state.BHARTIAXA_APPS[product_key].length > 0) {
@@ -339,7 +341,6 @@ class HealthInsuranceLanding extends Component {
       return;
     }
 
-    this.sendEvents('next', title ? title : '')
     window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id || '');
     this.navigate('/group-insurance/' + fullPath);
   }
