@@ -238,35 +238,18 @@ handleClick = async () => {
     } else if (!resultData.found) {
       form_data.found = false
       form_data.notfound = true
-      setTimeout(() => {
-        var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-        var y = document.getElementsByClassName("Footer")
-        for (let i = 0; i < x.length; i++) {
-          x.item(i).style.backgroundColor = "#CDF4D7";
-        }
-        for (let i = 0; i < y.length; i++) {
-          y.item(i).style.boxShadow = 'none'
-        }
-      }, 0);
+      document.getElementsByClassName("MuiButtonBase-root MuiButton-root")[0].style.backgroundColor = "#CDF4D7";
+      document.getElementsByClassName("Footer")[0].style.boxShadow = 'none'
       this.setState({ binding: false})
     } else if (resultData.found) {
       form_data.found = true
       form_data.notfound = false
-      setTimeout(() => {
-        var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-        var y = document.getElementsByClassName("Footer")
-        for (let i = 0; i < x.length; i++) {
-          x.item(i).style.backgroundColor = "#CDF4D7";
-        }
-        for (let i = 0; i < y.length; i++) {
-          y.item(i).style.boxShadow = 'none'
-        }
-      }, 0);
+      document.getElementsByClassName("MuiButtonBase-root MuiButton-root")[0].style.backgroundColor = "#CDF4D7";
+      document.getElementsByClassName("Footer")[0].style.boxShadow = 'none'
       this.setState({ binding: false})
     } else {
       toast(resultData.error || resultData.message || "Something went wrong");
     }
-
     this.setState({
       form_data: form_data,
       show_loader : false
