@@ -243,7 +243,8 @@ class HealthInsuranceLanding extends Component {
           let navigateMapper = {
             hospicash: 'HOSPICASH',
             dengue: 'DENGUE',
-            corona: 'CORONA'
+            corona: 'CORONA',
+            term_insurance: 'TERM_INSURANCE',
           };
 
           let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
@@ -301,9 +302,11 @@ class HealthInsuranceLanding extends Component {
     var path = '';
     var fullPath = '';
 
-       fullPath = 'health/' + stateMapper[product_key] + '/plan';
-    if (product_key === 'HOSPICASH') {
-      fullPath = stateMapper[product_key] + '/plan';
+    fullPath = 'health/' + stateMapper[product_key] + '/plan';
+
+    if (product_key === 'HEALTH_SUPER_TOPUP') {
+      this.navigate('/group-insurance/' + fullPath);
+      return
     }
 
     if ( (product_key === 'HealthInsuranceEntry' || product_key === 'HEALTH_SURAKSHA') && !getConfig().iOS) {

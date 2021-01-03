@@ -127,12 +127,14 @@ class LifeInsuranceEntry extends Component {
         if (this.state.openModuleData.sub_module) {
           let navigateMapper = {
             personal_accident: 'PERSONAL_ACCIDENT',
-            smart_wallet: 'SMART_WALLET'
+            smart_wallet: 'SMART_WALLET',
+            term_insurance: 'TERM_INSURANCE'
           };
         
           let pathname = navigateMapper[this.state.openModuleData.sub_module] ||
            this.state.openModuleData.sub_module;
-           var product_key_info = pathname === 'SMART_WALLET' ? 'Personal Accident Insurance' : 'Wallet Insurance'
+          var product_key_info = {}
+          product_key_info.title = pathname === 'SMART_WALLET' ? 'Personal Accident Insurance' :  pathname === 'Wallet Insurance' ? 'Wallet Insurance' : 'Term Insurance'
           this.handleClick(pathname , product_key_info);
         }
 
@@ -224,7 +226,6 @@ class LifeInsuranceEntry extends Component {
   }
 
   handleClick = (product_key , product_key_info) => {
- 
     this.sendEvents('next', product_key_info ? product_key_info.title : '')
 
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'SMART_WALLET', 'HEALTH'];
