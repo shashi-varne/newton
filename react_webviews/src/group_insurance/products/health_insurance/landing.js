@@ -361,13 +361,11 @@ class HealthInsuranceLanding extends Component {
     return (
       <div key={index}>    
       <div onClick={() => this.handleClick(props.key, props.title)} style={{
-        display: 'flex', alignItems: 'center', borderBottomWidth: '1px',
-        borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer'        
-      }}>
+        display: 'flex', alignItems: 'center'}}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={props.icon} alt="" style={{ marginRight: '15px' }} />
-          <div style={{width : '100%'}}>
+          <img src={props.icon} alt="" style={{ marginRight: '15px' ,paddingTop: '20px', paddingBottom: '20px' }} />
+          <div style={{width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   
+                       paddingTop: '20px', paddingBottom: '18px', justifyContent: 'space-between', cursor: 'pointer' }}>
             <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} 
 
                  {props.key === 'HealthInsuranceEntry'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
