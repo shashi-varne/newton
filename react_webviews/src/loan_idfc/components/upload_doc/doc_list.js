@@ -96,7 +96,7 @@ class DocumentList extends Component {
         user_action: user_action,
         screen_name: "upload_docs",
         docs_list : this.state.docList.map((category) => category.category_name),
-        doc_card_selected: data.doc_card_selected,
+        doc_card_selected: data.doc_card_selected || "",
       },
     };
 
@@ -118,6 +118,7 @@ class DocumentList extends Component {
     if (params.adminPanel) {
       window.location.href = this.state.params.redirect;
     } else {
+      this.sendEvents("back");
       this.navigate('journey')
     }
   }

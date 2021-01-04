@@ -258,20 +258,16 @@ class UploadBank extends Component {
     file.id = count++;
 
     file.status = "uploaded";
+    file.name = !file.file_name ? "bank" : `${file.file_name}`;
+
+    if (!file.name.includes(".pdf")) {
+      file.name = `${file.name}.pdf`;
+    }
 
     if (editId === "") {
-      file.name = !file.file_name ? "bank" : `${file.file_name}`;
-
-      if (!file.name.includes(".pdf")) {
-        
-        file.name = `${file.name}.pdf`;
-      }
-      
       documents.push(file);
-
     } else {
       var index = documents.findIndex((item) => item.id === editId);
-      file.name = documents[index].name;
       file.curr_status = "edit";
       file.document_id = doc_id;
       documents[index] = file;
@@ -304,10 +300,6 @@ class UploadBank extends Component {
 
     const data = new FormData();
     data.append("doc_type", "perfios_bank_statement");
-
-    // let ext = documents[index].type.split("/")[1];
-
-    // if (documents[index].name.)
 
     if (curr_status.status !== "delete") {
       data.append("file", documents[index], documents[index].name);
@@ -501,12 +493,13 @@ class UploadBank extends Component {
   };
 
   goBack = () => {
-    this.sendEvents('back');
+    
     let { params } = this.state;
 
     if (params.adminPanel) {
       window.location.href = this.state.params.redirect;
     } else {
+      this.sendEvents('back');
       this.navigate("income-details");
     }
   };
