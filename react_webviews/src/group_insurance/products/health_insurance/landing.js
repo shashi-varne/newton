@@ -96,7 +96,9 @@ class HealthInsuranceLanding extends Component {
 
     if(openModuleData && openModuleData.sub_module) {
       let pathname = openModuleData.sub_module;
-      this.handleClick(pathname);
+      if(pathname !== 'HEALTH_SURAKSHA'){
+        this.handleClick(pathname);
+      }
     } else {
       this.setState({
         show_loader: false
