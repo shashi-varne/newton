@@ -135,13 +135,16 @@ class About extends Component {
     })
     try {
       const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
-      if (res.pfwresponse.result) {
+      if (res.pfwresponse.result && res.pfwresponse.status_code === 200) {
         let params = {
           banks: res.pfwresponse.result.banks
         }
         this.navigate('e-mandate/select-bank', params);
       }
       else {
+        this.setState({
+          show_loader: false
+        })
         toast(res.pfwresponse.result.error || 
           res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
