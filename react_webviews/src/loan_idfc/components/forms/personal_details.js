@@ -169,15 +169,17 @@ class PersonalDetails extends Component {
       "religion",
       "email_id",
     ];
+
+    let keys_to_include = ["middle_name", "father_middle_name"];
     
     if (this.state.confirm_details) {
       keys_to_check.push(...["dob",
       "mother_first_name", 
       "mother_last_name"]);
+
+      keys_to_check.push(...["mother_middle_name"]);
     }
-
-    let keys_to_include = ["middle_name"]
-
+    
     this.formCheckUpdate(keys_to_check, form_data, "", "", keys_to_include);
   };
 

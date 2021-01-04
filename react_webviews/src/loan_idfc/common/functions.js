@@ -251,12 +251,9 @@ export async function getPickList() {
         {
           tnc: tnc,
           industryOptions: result.industry,
-          // constitutionOptions: result.constitution,
           designationOptions: result.designation,
-          // qualification: result.educational_qualification,
           businessOptions: result.nature_of_business,
           organisationTypeOptions: result.organisation,
-          // purposeOfLoanOptions: result.purpose,
           salaryRecieptOptions: result.salary_mode,
           show_loader: false,
         },

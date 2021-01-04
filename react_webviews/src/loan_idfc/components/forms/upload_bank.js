@@ -71,6 +71,12 @@ class UploadBank extends Component {
     });
   }
 
+  stopLoaderNative() {
+    this.setState({
+      show_loader: false,
+    });
+  }
+
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
@@ -163,7 +169,6 @@ class UploadBank extends Component {
         doc_type: doc_type,
         // callbacks from native
         upload: function upload(file) {
-          console.log(file)
           try {
             that.setState({
               docType: this.doc_type,
@@ -255,13 +260,15 @@ class UploadBank extends Component {
     file.status = "uploaded";
 
     if (editId === "") {
-      file.name = `${file.file_name}`;
+      file.name = !file.file_name ? "bank" : `${file.file_name}`;
 
-      if (!file.file_name.includes(".pdf")) {
-        file.name = `${file.file_name}.pdf`;
+      if (!file.name.includes(".pdf")) {
+        
+        file.name = `${file.name}.pdf`;
       }
-
+      
       documents.push(file);
+
     } else {
       var index = documents.findIndex((item) => item.id === editId);
       file.name = documents[index].name;
@@ -436,12 +443,12 @@ class UploadBank extends Component {
     let startDate = form_data.start_date.substring(0, 2) === "01";
 
     if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
-      form_data.start_date_error = "This date must be 3 months prior to the current month";
+      form_data.start_date_error = "This date must be 3 months prior to the current month.";
       canSubmit = false;
     }
 
     if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
-      form_data.end_date_error = "This date must be 3 days prior to the current date";
+      form_data.end_date_error = "This date must be 3 days prior to the current date.";
       canSubmit = false;
     }
 
@@ -547,8 +554,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.start_date_error}
-                // helperText={this.state.form_data.start_date_error}
-                helperText={this.state.form_data.start_date_error || "This date must be 3 months prior to the current month"}
+                helperText={this.state.form_data.start_date_error || "This date must be 3 months prior to the current month."}
                 type="text"
                 width="40"
                 label="Start date"
@@ -564,7 +570,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.end_date_error}
-                helperText={this.state.form_data.end_date_error || "This date must be 3 days prior to the current date"}
+                helperText={this.state.form_data.end_date_error || "This date must be 3 days prior to the current date."}
                 type="text"
                 width="40"
                 label="End date"
@@ -602,8 +608,6 @@ class UploadBank extends Component {
 
               <div className="InputField">
                 <Input
-                  // error={!!this.state.password_error}
-                  // helperText={this.state.password}
                   type="password"
                   width="40"
                   label="Enter password (if any)"
