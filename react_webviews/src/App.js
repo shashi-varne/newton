@@ -26,6 +26,8 @@ import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 
+import Login from './login_and_registration/login'
+
 class App extends Component {
   render() {
     return (
@@ -54,6 +56,7 @@ class App extends Component {
           {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
+          <Route path='/login' component={Login} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
