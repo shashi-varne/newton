@@ -1,0 +1,140 @@
+.common-login-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  .cli-header {
+    font-family: 'Poppins', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 27px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .cli-email-form-1 {
+    margin-bottom: 10px;
+  }
+
+  .cli-forgot-pwd {
+    @extend #login-clickable-elem;
+    margin-top: 20px;
+  }
+
+  #cli-otp-subheader {
+    font-size: 15px;
+    line-height: 24px;
+    color: #D3DBE4;
+    margin: -10px 0 30px;
+
+    span {
+      display: inline-block;
+      margin-left: 20px;
+      text-transform: uppercase;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 18px;
+      letter-spacing: 2px;
+      color: white;
+    }
+  }
+
+  #cli-otp-resend, #cli-otp-back {
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 21px;
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin-top: 20px;
+
+    span {
+      text-transform: uppercase;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  #cli-otp-back {
+    margin-top: 40px;
+    text-transform: uppercase;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  #cli-pwd-toggle {
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: rgba(211, 219, 228, 0.9);
+    cursor: pointer;
+  }
+}
+
+.common-login-err {
+  background-color: rgba(235, 77, 77, 0.1);
+  color: rgba(235, 77, 77, 1);
+  padding: 10px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 13px;
+  line-height: 21px;
+  border-radius: 6px;
+  margin-bottom: 40px;
+}
+
+#login-clickable-elem {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 21px;
+  letter-spacing: 0.1em;
+  text-decoration-line: underline;
+  text-transform: uppercase;
+  color: white;
+  cursor: pointer;
+}
+
+.common-login-opts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 40px;
+  width: 100%;
+
+  a, a:visited, a:hover {
+    @extend #login-clickable-elem;
+  }
+
+  span#or-opt {
+    color: #D3DBE4;
+    font-weight: normal;
+    text-transform: none;
+    text-decoration-line: none;
+    letter-spacing: 0;
+    cursor: default;
+  }
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 1200px) {
+  .common-login-opts {
+    a, a:visited {
+      flex: 1;
+      text-align: center;
+    }
+    
+    span#or-opt {
+      flex-basis: 100%;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  }
+}

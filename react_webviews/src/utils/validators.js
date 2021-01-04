@@ -286,7 +286,8 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   if (!val) {
     val = '';
   }
-
+  const isNegativeVal = val < 0;
+  val = Math.abs(val);
   if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + ' Cr';
   else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + ' L';
   else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + ' K';
@@ -295,11 +296,15 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   val = val.toString();
   // remove .00
   if (!retainLeadingZeroes) {
-    val = val.replace(/\.00([^\d])/g, '$1');
+    val = val.replace(/\.0+([^\d])/g, '$1');
   }
 
   if(withSymbol) {
     val = '₹' + val;
+  }
+
+  if (isNegativeVal) {
+    val = '-' + val;
   }
   return val;
 }
@@ -911,6 +916,7 @@ export function isEmpty(value) {
 }
 
 export function nonRoundingToFixed(val, decimalPlaces) {
+  if (!val) return '';
   return (Math.floor(100 * val) / 100).toFixed(decimalPlaces);
 }
 
@@ -929,3 +935,6 @@ export function containsSpecialCharactersAndNumbers(value){
   return format.test(value);
 }
 
+export function countChars(line) {
+  return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
+}
