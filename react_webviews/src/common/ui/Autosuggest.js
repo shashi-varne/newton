@@ -36,7 +36,7 @@ class AutosuggestInput extends Component {
           placeholder={this.props.placeholder}
           data={this.props.value && this.props.value.length >= 2 ? this.state.suggestions : []}
           // onSelect={record => console.log(record)}
-          onSelect={(record) => this.props.onSelect(record)}
+          // onSelect={(record) => this.props.onSelect ? this.props.onSelect(record) : this.props.onChange(record)}
           // onFocus={() => {
           //   console.log('This function is called when is focussed')
           // }}
