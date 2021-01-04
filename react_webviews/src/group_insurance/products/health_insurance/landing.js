@@ -27,7 +27,7 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 
 import Api from '../../../utils/api'
 import toast from '../../../common/ui/Toast'
-import { setTermInsData } from '../group_health/commonFunction'
+import { setTermInsData } from '../../common/commonFunction'
 
 class HealthInsuranceLanding extends Component {
 

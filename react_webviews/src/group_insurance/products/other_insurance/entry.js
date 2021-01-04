@@ -8,7 +8,7 @@ import Api from '../../../utils/api'
 import toast from '../../../common/ui/Toast'
 
 import { getBhartiaxaStatusToState, insuranceStateMapper } from '../../constants'
-import { setTermInsData } from '../group_health/commonFunction'
+import { setTermInsData } from '../../common/commonFunction'
 
 
 class LifeInsuranceEntry extends Component {
