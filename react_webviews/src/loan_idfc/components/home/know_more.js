@@ -175,6 +175,7 @@ class LoanKnowMore extends Component {
         "idfc_1.7_rejected",
         "idfc_4_rejected",
         "idfc_callback_rejected",
+        "idfc_cancelled",
         "Age",
         "Salary",
         "Salary reciept mode"
