@@ -7,6 +7,7 @@ import { validateNumber } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import Checkbox from "material-ui/Checkbox";
 import Grid from "material-ui/Grid";
+import { getConfig } from "utils/functions";
 
 class MobileVerification extends Component {
   constructor(props) {
@@ -149,7 +150,72 @@ class MobileVerification extends Component {
                       }
                       style={{ color: "var(--primary)" }}
                     >
-                      Terms & condition
+                      pdf viewer
+                    </u>
+                  </span>
+                </div>
+              </Grid>
+              <Grid item xs={11}>
+                <div
+                  onClick={() =>
+                    this.setState({ terms_and_conditions_clicked: "yes" })
+                  }
+                >
+                  <span>
+                    I accept{" "}
+                    <u
+                      onClick={() =>
+                        this.openInBrowser(this.state.tnc)
+                      }
+                      style={{ color: "var(--primary)" }}
+                    >
+                      open in browser
+                    </u>
+                  </span>
+                </div>
+              </Grid>
+              <Grid item xs={11}>
+                <div
+                  onClick={() =>
+                    this.setState({ terms_and_conditions_clicked: "yes" })
+                  }
+                >
+                  <span>
+                    I accept{" "}
+                    <u
+                      onClick={() =>
+                        {
+                          let back_url = 
+                            window.location.origin + `/loan/idfc/edit-number?` + getConfig().searchParams
+                          
+                          this.openInTabApp({
+                            url: this.state.tnc,
+                            back_url: back_url
+                          })
+                        }
+                      }
+                      style={{ color: "var(--primary)" }}
+                    >
+                      open in tab
+                    </u>
+                  </span>
+                </div>
+              </Grid>
+              <Grid item xs={11}>
+                <div
+                  // onClick={() =>
+                  //   window.location.href = this.state.tnc
+                  // }
+                >
+                  <span>
+                    I accept{" "}
+                    <u
+                      onClick={() =>
+                        window.location.href = this.state.tnc
+                      }
+                      style={{ color: "var(--primary)" }}
+                    >
+                      one click download
                     </u>
                   </span>
                 </div>
