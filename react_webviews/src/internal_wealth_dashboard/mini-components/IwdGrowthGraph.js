@@ -24,13 +24,13 @@ const IwdGrowthGraph = ({
           data = { data }
           animate = { true }
           margin = {{ top: 20, right: 40, bottom: 40, left: isMobileView ? 50 : 70 }}
-          // yScale={{
-          //   type: 'linear',
-          //   min: params.min || 'auto',
-          //   max: params.max || 'auto',
-          //   stacked: false,
-          //   reverse: false
-          // }}
+          yScale={{
+            type: 'linear',
+            min: params.min || 'auto',
+            max: params.max || 'auto',
+            stacked: false,
+            reverse: false
+          }}
           axisBottom={{
             format: value => formattedDate(value, params.dateFormat, true),
             tickValues: params.date_ticks,
@@ -87,7 +87,7 @@ const IwdGrowthGraph = ({
           }}
           sliceTooltip={IwdLineTooltip}
           enableArea={true}
-          areaBaselineValue={0}
+          areaBaselineValue={params.min || 0}
           defs={[
           linearGradientDef('gradientA', [
             { offset: 0, color: 'inherit' },
