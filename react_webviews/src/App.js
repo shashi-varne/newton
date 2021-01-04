@@ -26,7 +26,8 @@ import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 
-import Login from './login_and_registration/login'
+import Login from './login_and_registration/login';
+import Register from './login_and_registration/register';
 
 class App extends Component {
   render() {
@@ -57,6 +58,7 @@ class App extends Component {
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/login' component={Login} />
+          <Route path='/register' component={Register} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

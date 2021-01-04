@@ -5,33 +5,47 @@ import { countries } from "./constants";
 import Select from "@material-ui/core/Select";
 import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
+import Checkbox from "../common/ui/Checkbox";
+import FormControl from "@material-ui/core/FormControl";
+import InputUI from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
-class Login extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
       productName: getConfig().productName,
-      loginType: "mobile",
+      registerType: "mobile",
       country: {
         name: "India",
         code: "91",
       },
       form_data: {},
+      referralCheck: false,
     };
   }
 
   componentWillMount() {}
 
-  setLoginType = (loginType) => {
+  setLoginType = (registerType) => {
     this.setState({
-      loginType: loginType,
+      registerType: registerType,
     });
   };
 
   handleChange = (name) => {};
 
+  handleCheckbox = () => {
+    this.setState({
+      referralCheck: !this.state.referralCheck,
+    });
+  };
+
+  verifyCode = () => {};
+
   render() {
-    let { loginType, country, form_data } = this.state;
+    let { registerType, country, form_data, referralCheck } = this.state;
     return (
       <div className="login">
         <div className="header">
@@ -43,36 +57,36 @@ class Login extends Component {
         <div className="login-details">
           <div className="left-image">
             <img
-              src={require(`assets/${this.state.productName}/ils_login.svg`)}
-              alt="login"
+              src={require(`assets/${this.state.productName}/ils_register.svg`)}
+              alt="register"
             />
           </div>
           <div className="login-form">
-            <div className="header-text">LOGIN</div>
+            <div className="header-text">REGISTER</div>
             <div className="login-type">
               <div
                 className="text"
                 style={{
-                  fontWeight: loginType === "mobile" ? "bold" : "normal",
+                  fontWeight: registerType === "mobile" ? "bold" : "normal",
                 }}
                 onClick={() => this.setLoginType("mobile")}
               >
                 MOBILE
-                {loginType === "mobile" && <div className="underline"></div>}
+                {registerType === "mobile" && <div className="underline"></div>}
               </div>
               <div
                 className="text"
                 style={{
-                  fontWeight: loginType === "email" ? "bold" : "normal",
+                  fontWeight: registerType === "email" ? "bold" : "normal",
                 }}
                 onClick={() => this.setLoginType("email")}
               >
                 EMAIL
-                {loginType === "email" && <div className="underline"></div>}
+                {registerType === "email" && <div className="underline"></div>}
               </div>
             </div>
             <div className="form">
-              {loginType === "mobile" && (
+              {registerType === "mobile" && (
                 <div className="form-field">
                   <Select value={country.code}>
                     {countries.map((data, index) => {
@@ -97,7 +111,7 @@ class Login extends Component {
                   />
                 </div>
               )}
-              {loginType === "email" && (
+              {registerType === "email" && (
                 <>
                   <div className="form-field">
                     <Input
@@ -127,20 +141,63 @@ class Login extends Component {
                       onChange={() => this.handleChange("password")}
                     />
                   </div>
-                  <div className="forgot_password" href="#!/forgotpassword">
-                    FORGOT PASSWORD?
+                  <div className="form-field">
+                    <Input
+                      // error='This is required.'
+                      type="text"
+                      value={form_data.mobile}
+                      // helperText='This is required.'
+                      // placeholder='Enter mobile number'
+                      class="input"
+                      id="Re-type Password"
+                      label="Re-type Password"
+                      name="confirmPassword"
+                      onChange={() => this.handleChange("confirmPassword")}
+                    />
                   </div>
                 </>
               )}
-              <Button>LOGIN</Button>
+              {referralCheck && (
+                <div className="form-field">
+                  <FormControl className="referral-form">
+                    <InputLabel>Enter referral/partner code</InputLabel>
+                    <InputUI
+                      className="input"
+                      id="input-with-adornment"
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <div
+                            className="verify-button"
+                            onClick={this.verifyCode}
+                          >
+                            VERIFY
+                          </div>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                </div>
+              )}
+              <div className="referral-code">
+                <Checkbox
+                  checked={referralCheck}
+                  color="default"
+                  value="checked"
+                  name="checked"
+                  handleChange={this.handleCheckbox}
+                  class="checkbox"
+                />
+                <div className="">I have a referral/promo/partner code</div>
+              </div>
+              <Button>REGISTER</Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
               </div>
             </div>
             <div class="footer text-center">
-              <span href="#!/register">
-                NEW USER? <span>REGISTER</span>
+              <span href="#!/login">
+                EXISTING USER? <span>LOGIN</span>
               </span>
             </div>
             <div class="agree-terms">
@@ -160,4 +217,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Register;
