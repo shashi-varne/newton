@@ -274,11 +274,12 @@ class DocumentUpload extends Component {
     }
     
 
-    file.name = name;
+    file.name = name || file.file_name;
     file.category_id = category;
     file.checklist_doc_type = doc_type.length === 4 ? doc_type : doc_type.slice(0, 4);
     file.doc_name = document;
     file.doc_type = file.type;
+    console.log(file)
 
     let that = this;
     getBase64(file, function (img) {
