@@ -25,7 +25,7 @@ const ErrorScreen = ({
       {templateImage &&
         <img
           src={templateImage}
-          className={imageClass}
+          className={`fisdom-ecb-img ${imageClass}`}
           alt="error"
         />
       }

@@ -104,10 +104,11 @@ const Transactions = () => {
 
   const handleFilterData = (val) => {
     setFilterVal(prevState => {
-      setActivePage(1);
+			setActivePage(1);
       setPageMap([null, null]); // reset pagination everytime filter is changed
+			setIsLoading(true);
       return { ...prevState, ...val };
-    });
+		});
   };
 
   const handleDesktopFilterData = debounce(
@@ -129,7 +130,7 @@ const Transactions = () => {
         const filterData = storageService().getObject(filter_key);
         const baseURL = getConfig().base_url;
         window.open(
-          `${baseURL}api/rta/download/account/summary/pdf${buildParamsFromObj(filterData)}`,
+          `${baseURL}/api/rta/download/account/summary/pdf${buildParamsFromObj(filterData)}`,
           '_blank'
         );
       } catch (err) {
@@ -154,6 +155,42 @@ const Transactions = () => {
     setHasError(false);
     get_transactions();
     fetch_fund_names();
+	};
+	
+	const isFilterSet = () => {
+    return Object.entries(filterVal).some(([, val]) => !!val);
+	};
+
+  const renderChild = () => {
+    if (isLoading) {
+      return (
+        <IWdScreenLoader loadingText='Fetching transactions...' />
+      );
+    }
+    if (isFilterSet() && isEmpty(transactions)) {
+      return (
+        <IwdErrorScreen
+          hasNoData={true}
+          templateErrText='Oops! We couldn’t find any data for the selected filter. Try removing or changing the filters.'
+        />
+      );
+    } else if (isEmpty(transactions)) {
+      return (
+        <IwdErrorScreen
+          hasNoData={true}
+          templateErrText='No transactions to show'
+        />
+      );
+    }
+    return (
+      <FSTable
+        className='iwd-transactions-table iwd-statement-transaction-table'
+        serializeData
+        serialOffset={(activePage - 1) * 10}
+        headersMap={transactionMapper}
+        data={transactions}
+      />
+    );
   };
 
   return (
@@ -180,7 +217,7 @@ const Transactions = () => {
           <IwdErrorScreen
             hasError={true}
             templateErrTitle='Oops!'
-            templateErrText='Something went wrong! Please retry.'
+            templateErrText='Something went wrong! Please retry after some time or contact your wealth manager'
             templateBtnText='Retry'
             clickHandler={retry}
           />
@@ -203,7 +240,7 @@ const Transactions = () => {
               <DateRangeSelector
                 filter_key={filter_key}
                 handleFilterData={handleFilterData}
-                disabled={isEmpty(transactions)}
+                disabled={isLoading}
               />
             </div>
           </section>
@@ -218,17 +255,7 @@ const Transactions = () => {
               </div>
             </div>
             <div className='iwd-transaction-table-data'>
-              {!isLoading ? (
-                <FSTable
-                  className='iwd-transactions-table iwd-statement-transaction-table'
-                  serializeData
-                  serialOffset={(activePage - 1) * 10}
-                  headersMap={transactionMapper}
-                  data={transactions}
-                />
-              ) : (
-                <IWdScreenLoader loadingText='Fetching...' />
-              )}
+              {renderChild()}
             </div>
           </section>
           {!isLoading && (
