@@ -60,6 +60,7 @@ class Landing extends Component {
       "idfc_callback_rejected",
       "Age",
       "Salary",
+      "idfc_cancelled",
       "Salary reciept mode"
     ];
 
