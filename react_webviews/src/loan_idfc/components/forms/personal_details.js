@@ -170,14 +170,12 @@ class PersonalDetails extends Component {
       "email_id",
     ];
 
-    let keys_to_include = ["middle_name", "father_middle_name"];
+    let keys_to_include = ["middle_name"];
     
     if (this.state.confirm_details) {
       keys_to_check.push(...["dob",
       "mother_first_name", 
       "mother_last_name"]);
-
-      keys_to_check.push(...["mother_middle_name"]);
     }
     
     this.formCheckUpdate(keys_to_check, form_data, "", "", keys_to_include);
@@ -355,22 +353,6 @@ class PersonalDetails extends Component {
 
             <div className="InputField">
               <Input
-                error={!!this.state.form_data.father_middle_name_error}
-                helperText={this.state.form_data.father_middle_name_error}
-                type="text"
-                width="40"
-                label="Father's middle name"
-                class="father_middle_name"
-                id="name"
-                name="father_middle_name"
-                value={this.state.form_data.father_middle_name || ""}
-                onChange={this.handleChange("father_middle_name")}
-                onClick={() => this.handleCkycMessage("father_middle_name")}
-              />
-            </div>
-
-            <div className="InputField">
-              <Input
                 error={!!this.state.form_data.father_last_name_error}
                 helperText={this.state.form_data.father_last_name_error}
                 type="text"
@@ -400,22 +382,6 @@ class PersonalDetails extends Component {
                     value={this.state.form_data.mother_first_name || ""}
                     onChange={this.handleChange("mother_first_name")}
                     onClick={() => this.handleCkycMessage("mother_first_name")}
-                  />
-                </div>
-
-                <div className="InputField">
-                  <Input
-                    error={!!this.state.form_data.mother_middle_name_error}
-                    helperText={this.state.form_data.mother_middle_name_error}
-                    type="text"
-                    width="40"
-                    label="Mother's middle name"
-                    class="mother_middle_name"
-                    id="name"
-                    name="mother_middle_name"
-                    value={this.state.form_data.mother_middle_name || ""}
-                    onChange={this.handleChange("mother_middle_name")}
-                    onClick={() => this.handleCkycMessage("mother_middle_name")}
                   />
                 </div>
 
