@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Container from '../../../common/Container';
 import hdfc_logo from '../../../../assets/ic_hdfc.svg';
 import religare_logo from '../../../../assets/ic_care.svg';
 import star_logo from '../../../../assets/ic_star_health.svg'
@@ -102,12 +101,7 @@ class HealthInsuranceEntry extends Component {
   renderPorducts(props, index) {
     if(!props.disabled) {
       return (
-        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-        // style={{
-        //    borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px', paddingBottom : '20px',
-        //    marginLeft : '-8px'
-        // }}
-        >
+        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}>
           <div className='insurance_plans_types' style={{width : '100%'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
             <div style={{ borderBottomWidth: '1px', width : '100%',

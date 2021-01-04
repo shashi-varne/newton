@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-// import Container from '../common/Container';
 import qs from 'qs';
 import { insuranceStateMapper } from '../../constants';
 
-// import Api from 'utils/api';
-// import toast from '../../../common/ui/Toast'
 import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -76,10 +73,6 @@ class DiseasesSpecificPlan extends Component {
   componentDidMount(){
     if (this.state.openModuleData.sub_module) {
       let navigateMapper = {
-        // hospicash: 'HOSPICASH',
-        // personal_accident: 'PERSONAL_ACCIDENT',
-        // smart_wallet: 'SMART_WALLET',
-        // term_insurance: 'TERM_INSURANCE',
         dengue: 'DENGUE',
         corona: 'CORONA'
       };
@@ -148,10 +141,6 @@ class DiseasesSpecificPlan extends Component {
     return (
       <div key={index} onClick={() => this.handleClick(props)} style={{
         display: 'flex', alignItems: 'center', width : '100%'
-        
-        // borderBottomWidth: '1px',
-        // borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px',
-        // paddingBottom: '20px', justifyContent: 'space-between', cursor: 'pointer' ,
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
@@ -159,11 +148,6 @@ class DiseasesSpecificPlan extends Component {
                   borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   paddingTop: '20px', paddingBottom: '20px',
                   justifyContent: 'space-between', cursor: 'pointer' , width : '100%'}}>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400 }}>{props.title}
-              {/* {props.key === 'CORONA' && !props.resume_flag &&
-                <span style={{
-                  padding: '3px 7px',
-                  borderRadius: 10, fontSize: 10, background: getConfig().primary, margin: '0 0 0 10px', color: 'white'
-                }}>New</span>} */}
             </div>
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
