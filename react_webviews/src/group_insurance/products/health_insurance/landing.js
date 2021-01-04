@@ -27,6 +27,7 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 
 import Api from '../../../utils/api'
 import toast from '../../../common/ui/Toast'
+import { setTermInsData } from '../group_health/commonFunction'
 
 class HealthInsuranceLanding extends Component {
 
@@ -42,6 +43,7 @@ class HealthInsuranceLanding extends Component {
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
+    this.setTermInsData = setTermInsData.bind(this);
   }
 
   componentWillMount() {
@@ -122,63 +124,6 @@ class HealthInsuranceLanding extends Component {
     });
   }
 
-  setTermInsData(termData) {
-
-    window.sessionStorage.setItem('excluded_providers', '');
-    window.sessionStorage.setItem('required_providers', '');
-    window.sessionStorage.setItem('quoteSelected', '');
-    window.sessionStorage.setItem('quoteData', '');
-    let pathname = '';
-    let resumeFlagTerm = false;
-
-    if (!termData.error) {
-      let insurance_apps = termData.insurance_apps;
-      let application, required_fields;
-      required_fields = termData.required;
-      if (insurance_apps.complete.length > 0) {
-        application = insurance_apps.complete[0];
-        pathname = 'report';
-      } else if (insurance_apps.failed.length > 0) {
-        application = insurance_apps.failed[0];
-        pathname = 'report';
-      } else if (insurance_apps.init.length > 0) {
-        application = insurance_apps.init[0];
-        resumeFlagTerm = true;
-        pathname = 'journey';
-      } else if (insurance_apps.submitted.length > 0) {
-        resumeFlagTerm = true;
-        application = insurance_apps.submitted[0];
-        pathname = 'journey';
-      } else {
-        // intro
-        pathname = 'intro';
-      }
-
-      if (application) {
-        let data = {
-          application: application,
-          required_fields: required_fields
-        }
-        window.sessionStorage.setItem('cameFromHome', true);
-        window.sessionStorage.setItem('homeApplication', JSON.stringify(data));
-        pathname = 'journey';
-        this.setState({
-          termApplication: application
-        })
-      }
-    } else {
-      pathname = 'intro';
-    }
-
-    let fullPath = '/group-insurance/term/' + pathname;
-
-    this.setState({
-      redirectTermPath: fullPath
-    })
-
-    return resumeFlagTerm;
-
-  }
 
   async componentDidMount() {
 
