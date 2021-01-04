@@ -83,7 +83,7 @@ class PlanDetailsClass extends Component {
     this.state = {
       selectedIndex: 0,
       checked: true,
-      show_loader: true,
+      skelton: true,
       parent: this.props.parent || {
         'plan_data': {
 
@@ -244,12 +244,12 @@ class PlanDetailsClass extends Component {
           this.setPremiumData(premium_details, leadData);
           this.setState({
             leadData: leadData,
-            show_loader: false
+            skelton: false
           })
 
         } else {
           this.setState({
-            show_loader: false
+            skelton: false
           })
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -263,14 +263,14 @@ class PlanDetailsClass extends Component {
         this.setPremiumData(premium_details, data || {});
 
         this.setState({
-          show_loader: false
+          skelton: false
         })
       }
 
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -432,14 +432,16 @@ class PlanDetailsClass extends Component {
     window.sessionStorage.setItem('group_insurance_plan_final_data',
       JSON.stringify(group_insurance_plan_final_data));
 
-    this.setState({
-      show_loader: true
-    })
+   
 
     if (this.state.isRedirectionModal) {
       this.navigate('form-redirection', '', final_data);
       return;
     }
+
+    this.setState({
+      show_loader: 'button'
+    });
 
     try {
 
@@ -576,9 +578,9 @@ class PlanDetailsClass extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle={this.props.parent.state.provider === 'hdfcergo' ? 'Get Free Quote' : 'Get this Plan'}
         onlyButton={true}
-        hide_header={this.state.show_loader}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         handleClick={() => this.handleClickCurrent()}
         title={this.state.productTitle || ''}
         classOverRideContainer="accident-plan">

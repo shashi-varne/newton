@@ -17,7 +17,7 @@ class PlanSummaryClass extends Component {
     super(props);
     this.state = {
       checked: false,
-      show_loader: true,
+      skelton: true,
       parent: this.props.parent,
       summaryData: {},
       type: getConfig().productName,
@@ -56,7 +56,7 @@ class PlanSummaryClass extends Component {
     try {
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
       this.setState({
-        show_loader: false
+        skelton: false
       });
       if (res.pfwresponse.status_code === 200) {
 
@@ -74,7 +74,7 @@ class PlanSummaryClass extends Component {
 
         this.setState({
           summaryData: summaryData,
-          show_loader: false
+          skelton: false
         })
 
       } else {
@@ -83,7 +83,7 @@ class PlanSummaryClass extends Component {
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -113,7 +113,7 @@ class PlanSummaryClass extends Component {
 
     try {
       this.setState({
-        show_loader: true
+        show_loader: 'button'
       })
       let res2;
       res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
@@ -208,8 +208,8 @@ class PlanSummaryClass extends Component {
         onlyButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
-        hide_header={this.state.show_loader}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"
         classOverRide="fullHeight"

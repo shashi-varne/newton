@@ -12,6 +12,8 @@ import Dialog, {
     DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
+import { disableBodyOverflow } from 'utils/validators';
+import {Imgc} from '../../common/ui/Imgc';
 
 let start_time = '';
 
@@ -34,7 +36,7 @@ export function didmount() {
     this.setState({
         productName: getConfig().productName,
         mounted: true,
-        force_show_inpage_title : true,
+        force_show_inpage_title: true,
         inPageTitle: true
     }, () => {
         this.onScroll();
@@ -114,9 +116,9 @@ export function getHeightFromTop() {
 
 export function onScroll() {
 
-    if(!this.state.new_header) {
+    if (!this.state.new_header) {
         this.setState({
-          inPageTitle: false
+            inPageTitle: false
         })
         return;
     }
@@ -130,16 +132,16 @@ export function onScroll() {
         inPageTitle = false;
     }
 
-    if(this.state.force_show_inpage_title) {
+    if (this.state.force_show_inpage_title) {
         inPageTitle = true;
         let that = this;
-        setTimeout(function(){ 
-          that.setState({
-            force_show_inpage_title: false
-          })
-       }, 100);
-        
-      }
+        setTimeout(function () {
+            that.setState({
+                force_show_inpage_title: false
+            })
+        }, 100);
+
+    }
 
     this.setState({
         inPageTitle: inPageTitle
@@ -217,6 +219,53 @@ export function renderPopup() {
     );
 };
 
+export function renderGenericError() {
+
+    let errorData = this.props.errorData || {};
+    let { title1, title2 , button_text1, button_text2, 
+        handleClick2, handleClick1, two_button} = errorData;
+
+    if (this.props.showError === true) {
+
+        
+        disableBodyOverflow(); //touch disabled
+        return (
+            <div className={`generic-error-dialog ${errorData ? errorData.errorClass : ''}`}>
+                <div className="overlay">
+                    <Imgc className="top-image" src={require(`assets/generic_error.svg`)} alt="" />
+                    <div className="title1">{title1 || 'Something went wrong'}</div>
+                    <div className="title2">{title2 || 'Sorry, we could not process your request'}</div>
+
+                    <div className="actions">
+                      {two_button &&    
+                      <div  
+                      className={`generic-page-button-large button`}
+                        style={{margin: '0 20px 0 0'}}
+                        onClick={() => {
+                            disableBodyOverflow(true); //touch enabled
+                            handleClick2();
+                        }}>
+                            {button_text2 || 'Close'}
+                        </div>}
+                        <div 
+                        className={`generic-page-button-small-with-green button ${(!two_button ? 'single-button' : '')}`}
+                        onClick={() => {
+                            disableBodyOverflow(true); //touch enabled
+                            handleClick1();
+                        }}>
+                            {button_text1 || 'Retry'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    } else {
+        disableBodyOverflow(true); //touch enabled
+        return null;
+    }
+}
+
+
 export function renderPageLoader() {
     let quotes_data = [
         'Risk comes from not knowing what you are doing.',
@@ -248,7 +297,7 @@ export function renderPageLoader() {
             <div className={`generic-page-loader ${loaderData ? loaderData.loaderClass : ''}`}>
                 <div className="LoaderOverlay">
                     <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-                        <div className="LoaderOverlayText">{loadingText || quote}</div>
+                    <div className="LoaderOverlayText">{loadingText || quote}</div>
                 </div>
             </div>
         );
@@ -275,19 +324,19 @@ export function new_header_scroll() {
     return (
 
         <div id="header-title-page"
-        style={this.props.styleHeader} 
-        className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{width: this.props.count ? '75%': ''}}>
-              {this.props.title}
+            style={this.props.styleHeader}
+            className={`header-title-page  ${this.props.classHeader}`}>
+            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '' }}>
+                {this.props.title}
             </div>
-          
-          {this.state.inPageTitle && this.props.count &&
-            <span color="inherit" 
-            className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-            style={{ fontSize: 10 }}>
-              <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
-            </span>}
-      </div>
+
+            {this.state.inPageTitle && this.props.count &&
+                <span color="inherit"
+                    className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
+                    style={{ fontSize: 10 }}>
+                    <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
+                </span>}
+        </div>
 
     )
 }

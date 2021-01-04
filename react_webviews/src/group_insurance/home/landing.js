@@ -15,7 +15,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: 'p',
       type: getConfig().productName,
       insuranceProducts: [],
       partner_code: getConfig().partner_code,
@@ -109,7 +109,7 @@ class Landing extends Component {
 
       if (!this.state.openModuleData.sub_module) {
         this.setState({
-          show_loader: false
+          skelton: false
         })
       }
 
@@ -185,7 +185,7 @@ class Landing extends Component {
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -374,7 +374,7 @@ class Landing extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Insurance">
         {/* <div className='health_insurance' style={{fontWeight: '700', color: '#160d2e', fontSize:'20px'}}>Insurance</div> */}
            <div  style={{ marginTop: '40px' }}>

@@ -950,3 +950,29 @@ export function disableBodyTouch(enable) {
     document.body.style.pointerEvents = 'unset';
   }
 }
+
+export function disableBodyOverflow(enable) {
+  if(!enable) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+}
+
+export function disableContainerTouch(enable) {
+
+  let Container = document.getElementsByClassName('Container') ? document.getElementsByClassName('Container')[0] : '';
+
+  if(!Container) {
+    return;
+  }
+  if(!enable) {
+    Container.style.overflow = 'hidden';
+    Container.style.touchAction = 'none';
+    Container.style.pointerEvents = 'none';
+  } else {
+    Container.style.overflow = 'auto';
+    Container.style.touchAction = 'unset';
+    Container.style.pointerEvents = 'unset';
+  }
+}

@@ -25,7 +25,7 @@ class ReportDetails extends Component {
 
         }
       },
-      show_loader: true,
+      skelton: true,
       noFooter: true,
       icn_call: getConfig().productName !== 'fisdom' ? icn_call_myway : icn_call_fisdom,
       params: getUrlParams()
@@ -63,7 +63,7 @@ class ReportDetails extends Component {
       '/policy/get/' + this.state.policy_id);
       
       this.setState({
-        show_loader: false
+        skelton: false
       })
       if (res.pfwresponse.status_code === 200) {
 
@@ -103,7 +103,7 @@ class ReportDetails extends Component {
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -170,7 +170,7 @@ class ReportDetails extends Component {
         buttonTitle={this.state.buttonTitle}
         onlyButton={true}
         title={this.state.policyData.provider === 'EDELWEISS' ?  'Term insurance' : this.state.policyData.product_title}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         classOverRideContainer="report-detail"
       >
         <div className="card">

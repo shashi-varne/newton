@@ -25,7 +25,7 @@ class PaymentSuccessClass extends Component {
       checked: false,
       parent: this.props.parent,
       address_details_data: {},
-      show_loader: true,
+      skelton: true,
       pincode: '',
       addressline: '',
       landmark: '',
@@ -67,7 +67,7 @@ class PaymentSuccessClass extends Component {
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
       this.setState({
-        show_loader: false
+        skelton: false
       })
       if (res.pfwresponse.status_code === 200) {
 
@@ -96,7 +96,7 @@ class PaymentSuccessClass extends Component {
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -234,7 +234,7 @@ class PaymentSuccessClass extends Component {
 
 
         this.setState({
-          show_loader: true
+          show_loader: 'button'
         })
         let res2 = {};
         res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
@@ -298,6 +298,7 @@ class PaymentSuccessClass extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         buttonTitle='Generate Policy'
         onlyButton={true}
         handleClick={() => this.handleClickCurrent()}

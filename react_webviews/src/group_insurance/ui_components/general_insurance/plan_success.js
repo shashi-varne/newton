@@ -45,7 +45,7 @@ class PlanSuccessClass extends Component {
       lead_data: {
         nominee: {}
       },
-      show_loader: true,
+      skelton: true,
       accordians_data: [],
       type: getConfig().productName
     };
@@ -84,7 +84,7 @@ class PlanSuccessClass extends Component {
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
       this.setState({
-        show_loader: false
+        skelton: false
       })
       if (res.pfwresponse.status_code === 200) {
 
@@ -127,7 +127,7 @@ class PlanSuccessClass extends Component {
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -317,7 +317,7 @@ class PlanSuccessClass extends Component {
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
       >
         <div className="plan-success-heading">
           <div className="plan-success-heading-icon"><img src={this.state.congratulations_icon} alt="" /></div>
