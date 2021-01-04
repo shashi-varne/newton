@@ -109,7 +109,7 @@ class HealthInsuranceEntry extends Component {
         // }}
         >
           <div className='insurance_plans_types' style={{width : '100%'}}>
-            <img src={props.icon} alt="" className="insurance_plans_logos" style={{  paddingTop: '20px', paddingBottom: '20px' }}/>
+            <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
             <div style={{ borderBottomWidth: '1px', width : '100%',
                   borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   paddingTop: '20px', paddingBottom: '20px',
                   justifyContent: 'space-between', cursor: 'pointer' }}>
