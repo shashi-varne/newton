@@ -42,8 +42,8 @@ class SelectLoan extends Component {
             {
               data: "Loan up to 40 lacs:",
               sub_data: [
-                "For salaried, the range is from Rs. 1 lakh to 40 lacs",
-                "For self-employed, the range is from Rs. 1 lakh to 9 lacs",
+                "For salaried, the range is from Rs. 1 lac to 40 lacs",
+                "For self-employed, the range is from Rs. 1 lac to 9 lacs",
               ],
             },
             "Low interest rate starting at 10.75% p.a.",
