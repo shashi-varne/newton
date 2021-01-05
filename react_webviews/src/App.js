@@ -28,6 +28,7 @@ import Whatsapp from './whatsapp';
 
 import Login from './login_and_registration/login';
 import Register from './login_and_registration/register';
+import Otp from './login_and_registration/otp';
 
 class App extends Component {
   render() {
@@ -59,6 +60,7 @@ class App extends Component {
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/login' component={Login} />
           <Route path='/register' component={Register} />
+          <Route path='/mobile/verify' component={Otp} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
