@@ -238,18 +238,14 @@ export async function getPickList() {
       show_loader: true,
     });
 
-    let { screen_name } = this.state;
-
-    const res = await Api.get(`relay/api/loan/idfc/picklist${screen_name === "mobile_verification" ? '?tnc=true' : ""}`);
+    const res = await Api.get(`relay/api/loan/idfc/picklist`);
 
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      let tnc = result.tnc;
 
       this.setState(
         {
-          tnc: tnc,
           industryOptions: result.industry,
           designationOptions: result.designation,
           businessOptions: result.nature_of_business,
@@ -360,11 +356,8 @@ export async function getOrCreate(params) {
       let screens = ["main_landing_screen", "calculator", "know_more_screen"];
 
       let picklistScreens = [
-        // "basic_details",
-         "professional_details_screen",
-          "mobile_verification",
-          //  "requirement_details_screen",
-            "additional_details"]
+        "professional_details_screen",
+        "additional_details"]
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);

@@ -67,6 +67,39 @@
   .mobile {
     margin-bottom: 15px;
   }
+
+  .agreement-block {
+    height: 180px;
+    overflow: scroll;
+    overflow-y: scroll;
+
+    #link {
+      color: blue;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .agree-tiles {
+      display: -webkit-box;
+      margin: 0 0 10px 0;
+    }
+  
+    .agree-tiles-left {
+      color: #0a1d32;
+      height: 6px;
+      width: 6px;
+      background-color: #0a1d32;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .agree-tiles-right {
+      margin: 0 0 0 10px;
+      color: #767e86;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  }
 }
 
 .verify-mobile,

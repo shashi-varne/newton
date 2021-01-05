@@ -7,7 +7,8 @@ import { validateNumber } from "utils/validators";
 import { FormControl } from "material-ui/Form";
 import Checkbox from "material-ui/Checkbox";
 import Grid from "material-ui/Grid";
-import { getConfig } from "utils/functions";
+import scrollIntoView from 'scroll-into-view-if-needed';
+import ReactHtmlParser from 'react-html-parser';
 
 class MobileVerification extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class MobileVerification extends Component {
       screen_name: "mobile_verification",
       mobile_no: "",
       terms_and_conditions_clicked: "no",
+      checked: false
     };
 
     this.initialize = initialize.bind(this);
@@ -24,9 +26,35 @@ class MobileVerification extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let tnc1 = [
+      'I/we authorise IDFC First Bank to submit application/other relevant documents submitted by me to CERSAI. I/we hereby provide my consent to IDFC First Bank to receive my KYC information from the Central KYC Registry.',
+      'I hereby authorise the Bank, without any notice to me to conduct credit checks, references, make enquiries, in its sole discretion and also authorise the Bank and its agents to share and obtain information, records from any agencies, statutory bodies, credit bureau, bank, financial institutions, or any third party in respect of the application, as it may consider necessary. The Bank shall not be liable for use/ sharing of the information.',
+      'I confirm that laws in relation to the unsolicited communication referred in “National Do Not Call Registry” as laid down by Telecom Regulatory of India will not be applicable for such communications/ calls/ SMSs received from IDFC FIRST Bank Limited, its representatives, agents. I hereby provide consent to send SMS confirmation to reference contacts provided by me as part of the loan application process. I hereby consent to receive information about my loans and offers on WhatsApp on my registered number. The Bank reserves the right to retain the photograph and documents submitted with the Application and shall not be returned back. IDFC FIRST Bank Limited shall be entitled at its sole and absolute discretion to approve/reject this Application Form submitted by Applicant/Co-Applicant /Guarantor.'
+    ]
+
+    this.setState({
+      tnc1: tnc1
+    })
   }
 
   onload = () => {};
+
+  handleScroll = () => {
+    setTimeout(function () {
+        let element = document.getElementById('agreeScroll');
+        if (!element || element === null) {
+            return;
+        }
+
+        scrollIntoView(element, {
+            block: 'start',
+            inline: 'nearest',
+            behavior: 'smooth'
+        })
+
+    }, 50);
+}
 
   sendEvents(user_action) {
     let eventObj = {
@@ -80,6 +108,24 @@ class MobileVerification extends Component {
     }
   };
 
+  renderAgreement = (props, index) => {
+    return (
+        <div key={index} id={'agreement_' + index} className="agree-tiles"
+            onClick={() => this.handleAgreement(props)}>
+            <div className="agree-tiles-left"></div>
+            <div className="agree-tiles-right">{ReactHtmlParser(props)}</div>
+        </div>
+    )
+  }
+
+  handleCheckbox = () => {
+    let { checked } = this.state;
+
+    this.setState({
+      checked: !checked
+    })
+  }
+
   render() {
     return (
       <Container
@@ -88,7 +134,7 @@ class MobileVerification extends Component {
         title="Mobile verification"
         buttonTitle="GET OTP"
         handleClick={this.handleClick}
-        disable={this.state.mobile_no.length !== 10}
+        disable={this.state.mobile_no.length !== 10 || !this.state.checked}
       >
         <div className="verify-mobile">
           <div className="subtitle">
@@ -118,105 +164,35 @@ class MobileVerification extends Component {
             </div>
           </FormControl>
 
-          <div className="subtitle">
-            By ticking the checkbox below you acknowledge that you have read,
-            and do hereby accept the Terms and Conditions set by IDFC FIRST Bank
-            to apply for a loan.
+          <div className="generic-page-title" style={{
+              margin: '0 0 20px 0 ',
+              opacity: this.state.confirm_details_check ? 1 : 0.4
+          }}>
+            Terms & Conditions
+          </div>
+          <div id="agreement" className="agreement-block" style={{
+              opacity: this.state.confirm_details_check ? 1 : 0.4
+            }} onScroll={this.onScroll}>
+              {this.state.tnc1.map(this.renderAgreement)}
           </div>
 
           <div className="subtitle">
             <Grid container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">
                 <Checkbox
-                  defaultChecked
-                  checked={true}
+                  // defaultChecked
+                  checked={this.state.checked}
                   color="primary"
                   value="confirm_details_check"
                   name="confirm_details_check"
                   className="Checkbox"
+                  onChange={this.handleCheckbox}
                 />
               </Grid>
               <Grid item xs={11}>
-                <div
-                  onClick={() =>
-                    this.setState({ terms_and_conditions_clicked: "yes" })
-                  }
-                >
+                <div>
                   <span>
-                    I accept{" "}
-                    <u
-                      onClick={() =>
-                        this.openPdf(this.state.tnc, "tnc")
-                      }
-                      style={{ color: "var(--primary)" }}
-                    >
-                      pdf viewer
-                    </u>
-                  </span>
-                </div>
-              </Grid>
-              <Grid item xs={11}>
-                <div
-                  onClick={() =>
-                    this.setState({ terms_and_conditions_clicked: "yes" })
-                  }
-                >
-                  <span>
-                    I accept{" "}
-                    <u
-                      onClick={() =>
-                        this.openInBrowser(this.state.tnc)
-                      }
-                      style={{ color: "var(--primary)" }}
-                    >
-                      open in browser
-                    </u>
-                  </span>
-                </div>
-              </Grid>
-              <Grid item xs={11}>
-                <div
-                  onClick={() =>
-                    this.setState({ terms_and_conditions_clicked: "yes" })
-                  }
-                >
-                  <span>
-                    I accept{" "}
-                    <u
-                      onClick={() =>
-                        {
-                          let back_url = 
-                            window.location.origin + `/loan/idfc/edit-number?` + getConfig().searchParams
-                          
-                          this.openInTabApp({
-                            url: this.state.tnc,
-                            back_url: back_url
-                          })
-                        }
-                      }
-                      style={{ color: "var(--primary)" }}
-                    >
-                      open in tab
-                    </u>
-                  </span>
-                </div>
-              </Grid>
-              <Grid item xs={11}>
-                <div
-                  // onClick={() =>
-                  //   window.location.href = this.state.tnc
-                  // }
-                >
-                  <span>
-                    I accept{" "}
-                    <u
-                      onClick={() =>
-                        window.location.href = this.state.tnc
-                      }
-                      style={{ color: "var(--primary)" }}
-                    >
-                      one click download
-                    </u>
+                    I accept <b>Terms & Conditions</b>
                   </span>
                 </div>
               </Grid>
