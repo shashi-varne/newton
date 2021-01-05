@@ -6,6 +6,7 @@ import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
 import { formCheckFields } from "./function";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
+import DotDotLoader from "../common/ui/DotDotLoader";
 
 class Login extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class Login extends Component {
       productName: getConfig().productName,
       loginType: "mobile",
       form_data: {},
+      isApiRunning: false,
     };
     this.formCheckFields = formCheckFields.bind(this);
   }
@@ -46,7 +48,7 @@ class Login extends Component {
   };
 
   render() {
-    let { loginType, form_data } = this.state;
+    let { loginType, form_data, isApiRunning } = this.state;
     return (
       <div className="login">
         <div className="header">
@@ -92,7 +94,7 @@ class Login extends Component {
                   <div className="country-code">
                     <DropdownWithoutIcon
                       onChange={this.handleChange("code")}
-                      error={!!form_data.code_error || ""}
+                      error={!!form_data.code_error ? true : false}
                       helperText={form_data.code_error || ""}
                       options={countries}
                       value={form_data.code || "91"}
@@ -103,7 +105,7 @@ class Login extends Component {
                     />
                   </div>
                   <Input
-                    error={form_data.mobile_error || ""}
+                    error={form_data.mobile_error ? true : false}
                     type="number"
                     value={form_data.mobile}
                     helperText={form_data.mobile_error || ""}
@@ -119,7 +121,7 @@ class Login extends Component {
                 <>
                   <div className="form-field">
                     <Input
-                      error={form_data.email_error || ""}
+                      error={form_data.email_error ? true : false}
                       type="text"
                       value={form_data.email}
                       helperText={form_data.email_error || ""}
@@ -132,7 +134,7 @@ class Login extends Component {
                   </div>
                   <div className="form-field">
                     <Input
-                      error={form_data.password_error || ""}
+                      error={form_data.password_error ? true : false}
                       type="password"
                       value={form_data.password}
                       helperText={form_data.password_error || ""}
@@ -148,7 +150,12 @@ class Login extends Component {
                   </div>
                 </>
               )}
-              <Button onClick={() => this.handleClick()}>LOGIN</Button>
+              <Button
+                disabled={isApiRunning}
+                onClick={() => this.handleClick()}
+              >
+                {isApiRunning && <DotDotLoader />} LOGIN
+              </Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
