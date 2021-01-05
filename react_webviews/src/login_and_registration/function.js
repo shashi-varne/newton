@@ -13,6 +13,7 @@ export function initialize() {
   this.mobileLogin = mobileLogin.bind(this);
   this.verifyCode = verifyCode.bind(this);
   this.emailRegister = emailRegister.bind(this);
+  this.resendVerificationLink = resendVerificationLink.bind(this);
   this.navigate = navigate.bind(this);
 }
 
@@ -89,6 +90,7 @@ export async function emailLogin(body) {
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+    this.setState({ isApiRunning: false });
   }
 }
 
@@ -138,6 +140,7 @@ export async function emailRegister(body) {
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
+    this.setState({ isApiRunning: false });
   }
 }
 
@@ -173,6 +176,37 @@ export async function verifyCode(form_data) {
     console.log(error);
     toast("Something went wrong!");
     this.setState({ isPromoApiRunning: false });
+  }
+}
+
+export async function resendVerificationLink() {
+  let { loginType, form_data } = this.state;
+  if (loginType === "mobile") return;
+  if (loginType === "email" && !validateEmail(form_data["email"])) {
+    toast("Invalid email");
+    return;
+  }
+
+  this.setState({ resendVerificationApi: true });
+
+  let body = {
+    email: form_data["email"],
+  };
+  try {
+    const res = await Api.get(`${servletUrl}/api/resendverfication`, body);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      toast(
+        "Please click on the verification link sent to your email account."
+      );
+    } else {
+      toast(result.message || result.error || "Something went wrong!");
+    }
+    this.setState({ resendVerificationApi: false });
+  } catch (error) {
+    console.log(error);
+    toast("Something went wrong!");
+    this.setState({ resendVerificationApi: false });
   }
 }
 

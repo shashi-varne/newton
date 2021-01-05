@@ -223,6 +223,17 @@ class Register extends Component {
               >
                 {isApiRunning && <DotDotLoader />}REGISTER
               </Button>
+              {this.state.resendVerification && (
+                <div
+                  className="resend-verification"
+                  onClick={() => this.resendVerificationLink()}
+                >
+                  <span>Resend verification link</span>{" "}
+                  <span>
+                    {this.state.resendVerificationApi && <DotDotLoader />}
+                  </span>
+                </div>
+              )}
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
