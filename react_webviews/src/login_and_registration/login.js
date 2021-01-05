@@ -45,7 +45,7 @@ class Login extends Component {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (loginType === "email") keys_to_check = ["email", "password"];
-    this.formCheckFields(keys_to_check, form_data, loginType);
+    this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
   };
 
   render() {

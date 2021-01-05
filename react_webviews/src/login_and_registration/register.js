@@ -11,6 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
 import { initialize } from "./function";
+import DotDotLoader from "../common/ui/DotDotLoader";
 
 class Register extends Component {
   constructor(props) {
@@ -20,6 +21,8 @@ class Register extends Component {
       registerType: "mobile",
       form_data: {},
       referralCheck: false,
+      isApiRunning: false,
+      isPromoApiRunning: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -46,12 +49,11 @@ class Register extends Component {
   };
 
   handleClick = () => {
-    let { form_data, registerType, referralCheck } = this.state;
+    let { form_data, registerType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (registerType === "email")
-      keys_to_check = ["email", "password", "confirmPassword"];
-    if (referralCheck) keys_to_check.push("referral_code");
-    this.formCheckFields(keys_to_check, form_data, registerType);
+      keys_to_check = ["email", "password", "confirm_password"];
+    this.formCheckFields(keys_to_check, form_data, "REGISTER", registerType);
   };
 
   handleCheckbox = () => {
@@ -60,10 +62,14 @@ class Register extends Component {
     });
   };
 
-  verifyCode = () => {};
-
   render() {
-    let { registerType, form_data, referralCheck } = this.state;
+    let {
+      registerType,
+      form_data,
+      referralCheck,
+      isApiRunning,
+      isPromoApiRunning,
+    } = this.state;
     return (
       <div className="login">
         <div className="header">
@@ -138,7 +144,7 @@ class Register extends Component {
                     <Input
                       error={form_data.email_error ? true : false}
                       type="text"
-                      value={form_data.mobile}
+                      value={form_data.email}
                       helperText={form_data.email_error || ""}
                       class="input"
                       id="email"
@@ -150,8 +156,8 @@ class Register extends Component {
                   <div className="form-field">
                     <Input
                       error={form_data.password_error ? true : false}
-                      type="text"
-                      value={form_data.mobile}
+                      type="password"
+                      value={form_data.password}
                       helperText={form_data.password_error || ""}
                       class="input"
                       id="password"
@@ -163,14 +169,14 @@ class Register extends Component {
                   <div className="form-field">
                     <Input
                       error={form_data.confirmPassword_error ? true : false}
-                      type="text"
-                      value={form_data.mobile}
-                      helperText={form_data.confirmPassword_error || ""}
+                      type="password"
+                      value={form_data.confirmPassword}
+                      helperText={form_data.confirm_password_error || ""}
                       class="input"
                       id="Re-type Password"
                       label="Re-type Password"
-                      name="confirmPassword"
-                      onChange={this.handleChange("confirmPassword")}
+                      name="confirm_password"
+                      onChange={this.handleChange("confirm_password")}
                     />
                   </div>
                 </>
@@ -185,13 +191,14 @@ class Register extends Component {
                       error={form_data.referral_code_error ? true : false}
                       // helperText={form_data.referral_code_error || ""}
                       onChange={this.handleChange("referral_code")}
+                      value={form_data.referral_code || ""}
                       endAdornment={
                         <InputAdornment position="end">
                           <div
                             className="verify-button"
-                            onClick={this.verifyCode}
+                            onClick={() => this.verifyCode(form_data)}
                           >
-                            VERIFY
+                            {isPromoApiRunning ? <DotDotLoader /> : "VERIFY"}
                           </div>
                         </InputAdornment>
                       }
@@ -210,7 +217,12 @@ class Register extends Component {
                 />
                 <div>I have a referral/promo/partner code</div>
               </div>
-              <Button onClick={() => this.handleClick()}>REGISTER</Button>
+              <Button
+                disabled={isApiRunning}
+                onClick={() => this.handleClick()}
+              >
+                {isApiRunning && <DotDotLoader />}REGISTER
+              </Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
