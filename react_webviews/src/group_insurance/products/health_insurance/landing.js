@@ -395,7 +395,7 @@ class HealthInsuranceLanding extends Component {
         showLoader={this.state.show_loader}
         title="Health insurance">
         <div>
-          <div className='products'>
+          <div className='products' style={{marginTop : '10px'}}>
             <h1 style={{ fontWeight: '500', color: '#160d2e', fontSize: '17px', lineHeight : '20.15px', marginBottom : '15px'}}>Explore best plans for your health</h1>
             <div  style={{height : '100vh'}}>
               {this.state.insuranceProducts.map(this.renderPorducts)}
