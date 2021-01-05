@@ -81,6 +81,10 @@
           align-items: baseline;
           margin-bottom: 20px;
 
+          .country-code {
+            width: fit-content;
+          }
+
           .input {
             width: 100%;
           }
@@ -105,7 +109,7 @@
           align-items: center;
 
           .checkbox {
-            left: -12px;
+            left: -12px !important;
           }
         }
 

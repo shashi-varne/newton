@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./Style.scss";
 import { getConfig } from "utils/functions";
 import { countries } from "./constants";
-import Select from "@material-ui/core/Select";
 import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
 import Checkbox from "../common/ui/Checkbox";
@@ -10,6 +9,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputUI from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import { formCheckFields } from "./function";
+import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
 
 class Register extends Component {
   constructor(props) {
@@ -17,24 +18,39 @@ class Register extends Component {
     this.state = {
       productName: getConfig().productName,
       registerType: "mobile",
-      country: {
-        name: "India",
-        code: "91",
-      },
       form_data: {},
       referralCheck: false,
     };
+    this.formCheckFields = formCheckFields.bind(this);
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    let { form_data } = this.state;
+    form_data.code = "91";
+    this.setState({ form_data: form_data });
+  }
 
-  setLoginType = (registerType) => {
+  setRegistrationType = (registerType) => {
     this.setState({
       registerType: registerType,
     });
   };
 
-  handleChange = (name) => {};
+  handleChange = (name) => (event) => {
+    let value = event.target ? event.target.value : event;
+    let { form_data } = this.state;
+    form_data[name] = value;
+    form_data[`${name}_error`] = "";
+    this.setState({ form_data: form_data });
+  };
+
+  handleClick = () => {
+    let { form_data, registerType, referralCheck } = this.state;
+    let keys_to_check = ["mobile", "code"];
+    if (registerType === "email") keys_to_check = ["email", "password", 'confirmPassword'];
+    if (referralCheck) keys_to_check.push("referral_code");
+    this.formCheckFields(keys_to_check, form_data, registerType);
+  };
 
   handleCheckbox = () => {
     this.setState({
@@ -45,7 +61,7 @@ class Register extends Component {
   verifyCode = () => {};
 
   render() {
-    let { registerType, country, form_data, referralCheck } = this.state;
+    let { registerType, form_data, referralCheck } = this.state;
     return (
       <div className="login">
         <div className="header">
@@ -69,7 +85,7 @@ class Register extends Component {
                 style={{
                   fontWeight: registerType === "mobile" ? "bold" : "normal",
                 }}
-                onClick={() => this.setLoginType("mobile")}
+                onClick={() => this.setRegistrationType("mobile")}
               >
                 MOBILE
                 {registerType === "mobile" && <div className="underline"></div>}
@@ -79,7 +95,7 @@ class Register extends Component {
                 style={{
                   fontWeight: registerType === "email" ? "bold" : "normal",
                 }}
-                onClick={() => this.setLoginType("email")}
+                onClick={() => this.setRegistrationType("email")}
               >
                 EMAIL
                 {registerType === "email" && <div className="underline"></div>}
@@ -88,26 +104,29 @@ class Register extends Component {
             <div className="form">
               {registerType === "mobile" && (
                 <div className="form-field">
-                  <Select value={country.code}>
-                    {countries.map((data, index) => {
-                      return (
-                        <option key={index} value={data.code}>
-                          {data.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                  <div className="country-code">
+                    <DropdownWithoutIcon
+                      onChange={this.handleChange("code")}
+                      error={form_data.code_error ? true : false}
+                      helperText={form_data.code_error || ""}
+                      options={countries}
+                      value={form_data.code || "91"}
+                      width={20}
+                      id="code"
+                      name="code"
+                      isAOB={true}
+                    />
+                  </div>
                   <Input
-                    // error='This is required.'
+                    error={form_data.mobile_error ? true : false}
                     type="number"
                     value={form_data.mobile}
-                    // helperText='This is required.'
-                    // placeholder='Enter mobile number'
+                    helperText={form_data.mobile_error || ""}
                     class="input"
                     id="mobile"
                     label="Enter mobile number"
                     name="mobile"
-                    onChange={() => this.handleChange("mobile")}
+                    onChange={this.handleChange("mobile")}
                   />
                 </div>
               )}
@@ -115,44 +134,41 @@ class Register extends Component {
                 <>
                   <div className="form-field">
                     <Input
-                      // error='This is required.'
+                      error={form_data.email_error  ? true : false}
                       type="text"
                       value={form_data.mobile}
-                      // helperText='This is required.'
-                      // placeholder='Enter mobile number'
+                      helperText={form_data.email_error || ""}
                       class="input"
                       id="email"
                       label="Enter email address"
                       name="email"
-                      onChange={() => this.handleChange("email")}
+                      onChange={this.handleChange("email")}
                     />
                   </div>
                   <div className="form-field">
                     <Input
-                      // error='This is required.'
+                      error={form_data.password_error  ? true : false}
                       type="text"
                       value={form_data.mobile}
-                      // helperText='This is required.'
-                      // placeholder='Enter mobile number'
+                      helperText={form_data.password_error || ""}
                       class="input"
                       id="password"
                       label="Password"
                       name="email"
-                      onChange={() => this.handleChange("password")}
+                      onChange={this.handleChange("password")}
                     />
                   </div>
                   <div className="form-field">
                     <Input
-                      // error='This is required.'
+                      error={form_data.confirmPassword_error ? true : false}
                       type="text"
                       value={form_data.mobile}
-                      // helperText='This is required.'
-                      // placeholder='Enter mobile number'
+                      helperText={form_data.confirmPassword_error || ""}
                       class="input"
                       id="Re-type Password"
                       label="Re-type Password"
                       name="confirmPassword"
-                      onChange={() => this.handleChange("confirmPassword")}
+                      onChange={this.handleChange("confirmPassword")}
                     />
                   </div>
                 </>
@@ -163,7 +179,10 @@ class Register extends Component {
                     <InputLabel>Enter referral/partner code</InputLabel>
                     <InputUI
                       className="input"
-                      id="input-with-adornment"
+                      id="referral_code"
+                      error={form_data.referral_code_error  ? true : false}
+                      // helperText={form_data.referral_code_error || ""}
+                      onChange={this.handleChange("referral_code")}
                       endAdornment={
                         <InputAdornment position="end">
                           <div
@@ -187,26 +206,34 @@ class Register extends Component {
                   handleChange={this.handleCheckbox}
                   class="checkbox"
                 />
-                <div className="">I have a referral/promo/partner code</div>
+                <div>I have a referral/promo/partner code</div>
               </div>
-              <Button>REGISTER</Button>
+              <Button onClick={() => this.handleClick()} >REGISTER</Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
               </div>
             </div>
-            <div class="footer text-center">
+            <div className="footer text-center">
               <span href="#!/login">
                 EXISTING USER? <span>LOGIN</span>
               </span>
             </div>
-            <div class="agree-terms">
+            <div className="agree-terms">
               By signing in, you agree to fisdom's{" "}
-              <a href="https://www.fisdom.com/terms/" target="_blank">
+              <a
+                href="https://www.fisdom.com/terms/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Terms and Conditions
               </a>{" "}
               and{" "}
-              <a href="https://www.fisdom.com/privacy/" target="_blank">
+              <a
+                href="https://www.fisdom.com/privacy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Privacy Policy
               </a>
             </div>

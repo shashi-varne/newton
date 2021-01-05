@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import "./Style.scss";
 import { getConfig } from "utils/functions";
 import { countries } from "./constants";
-import Select from "@material-ui/core/Select";
 import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
+import { formCheckFields } from "./function";
+import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
 
 class Login extends Component {
   constructor(props) {
@@ -12,15 +13,16 @@ class Login extends Component {
     this.state = {
       productName: getConfig().productName,
       loginType: "mobile",
-      country: {
-        name: "India",
-        code: "91",
-      },
       form_data: {},
     };
+    this.formCheckFields = formCheckFields.bind(this);
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    let { form_data } = this.state;
+    form_data.code = "91";
+    this.setState({ form_data: form_data });
+  }
 
   setLoginType = (loginType) => {
     this.setState({
@@ -28,10 +30,23 @@ class Login extends Component {
     });
   };
 
-  handleChange = (name) => {};
+  handleChange = (name) => (event) => {
+    let value = event.target ? event.target.value : event;
+    let { form_data } = this.state;
+    form_data[name] = value;
+    form_data[`${name}_error`] = "";
+    this.setState({ form_data: form_data });
+  };
+
+  handleClick = () => {
+    let { form_data, loginType } = this.state;
+    let keys_to_check = ["mobile", "code"];
+    if (loginType === "email") keys_to_check = ["email", "password"];
+    this.formCheckFields(keys_to_check, form_data, loginType);
+  };
 
   render() {
-    let { loginType, country, form_data } = this.state;
+    let { loginType, form_data } = this.state;
     return (
       <div className="login">
         <div className="header">
@@ -74,26 +89,29 @@ class Login extends Component {
             <div className="form">
               {loginType === "mobile" && (
                 <div className="form-field">
-                  <Select value={country.code}>
-                    {countries.map((data, index) => {
-                      return (
-                        <option key={index} value={data.code}>
-                          {data.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                  <div className="country-code">
+                    <DropdownWithoutIcon
+                      onChange={this.handleChange("code")}
+                      error={!!form_data.code_error || ""}
+                      helperText={form_data.code_error || ""}
+                      options={countries}
+                      value={form_data.code || "91"}
+                      width={20}
+                      id="code"
+                      name="code"
+                      isAOB={true}
+                    />
+                  </div>
                   <Input
-                    // error='This is required.'
+                    error={form_data.mobile_error || ""}
                     type="number"
                     value={form_data.mobile}
-                    // helperText='This is required.'
-                    // placeholder='Enter mobile number'
+                    helperText={form_data.mobile_error || ""}
                     class="input"
                     id="mobile"
                     label="Enter mobile number"
                     name="mobile"
-                    onChange={() => this.handleChange("mobile")}
+                    onChange={this.handleChange("mobile")}
                   />
                 </div>
               )}
@@ -101,30 +119,28 @@ class Login extends Component {
                 <>
                   <div className="form-field">
                     <Input
-                      // error='This is required.'
+                      error={form_data.email_error || ""}
                       type="text"
-                      value={form_data.mobile}
-                      // helperText='This is required.'
-                      // placeholder='Enter mobile number'
+                      value={form_data.email}
+                      helperText={form_data.email_error || ""}
                       class="input"
                       id="email"
                       label="Enter email address"
                       name="email"
-                      onChange={() => this.handleChange("email")}
+                      onChange={this.handleChange("email")}
                     />
                   </div>
                   <div className="form-field">
                     <Input
-                      // error='This is required.'
-                      type="text"
-                      value={form_data.mobile}
-                      // helperText='This is required.'
-                      // placeholder='Enter mobile number'
+                      error={form_data.password_error || ""}
+                      type="password"
+                      value={form_data.password}
+                      helperText={form_data.password_error || ""}
                       class="input"
                       id="password"
                       label="Password"
                       name="email"
-                      onChange={() => this.handleChange("password")}
+                      onChange={this.handleChange("password")}
                     />
                   </div>
                   <div className="forgot_password" href="#!/forgotpassword">
@@ -132,24 +148,32 @@ class Login extends Component {
                   </div>
                 </>
               )}
-              <Button>LOGIN</Button>
+              <Button onClick={() => this.handleClick()}>LOGIN</Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
               </div>
             </div>
-            <div class="footer text-center">
+            <div className="footer text-center">
               <span href="#!/register">
                 NEW USER? <span>REGISTER</span>
               </span>
             </div>
-            <div class="agree-terms">
+            <div className="agree-terms">
               By signing in, you agree to fisdom's{" "}
-              <a href="https://www.fisdom.com/terms/" target="_blank">
+              <a
+                href="https://www.fisdom.com/terms/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Terms and Conditions
               </a>{" "}
               and{" "}
-              <a href="https://www.fisdom.com/privacy/" target="_blank">
+              <a
+                href="https://www.fisdom.com/privacy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Privacy Policy
               </a>
             </div>
