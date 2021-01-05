@@ -4,7 +4,7 @@ import { getConfig } from "utils/functions";
 import { countries } from "./constants";
 import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
-import { formCheckFields } from "./function";
+import { initialize } from "./function";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
 import DotDotLoader from "../common/ui/DotDotLoader";
 
@@ -17,10 +17,11 @@ class Login extends Component {
       form_data: {},
       isApiRunning: false,
     };
-    this.formCheckFields = formCheckFields.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
+    this.initialize();
     let { form_data } = this.state;
     form_data.code = "91";
     this.setState({ form_data: form_data });
@@ -161,7 +162,7 @@ class Login extends Component {
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
               </div>
             </div>
-            <div className="footer text-center">
+            <div className="footer" onClick={() => this.navigate("register")}>
               <span href="#!/register">
                 NEW USER? <span>REGISTER</span>
               </span>

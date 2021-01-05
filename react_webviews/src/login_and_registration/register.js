@@ -9,8 +9,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputUI from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import { formCheckFields } from "./function";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
+import { initialize } from "./function";
 
 class Register extends Component {
   constructor(props) {
@@ -21,10 +21,11 @@ class Register extends Component {
       form_data: {},
       referralCheck: false,
     };
-    this.formCheckFields = formCheckFields.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
+    this.initialize();
     let { form_data } = this.state;
     form_data.code = "91";
     this.setState({ form_data: form_data });
@@ -47,7 +48,8 @@ class Register extends Component {
   handleClick = () => {
     let { form_data, registerType, referralCheck } = this.state;
     let keys_to_check = ["mobile", "code"];
-    if (registerType === "email") keys_to_check = ["email", "password", 'confirmPassword'];
+    if (registerType === "email")
+      keys_to_check = ["email", "password", "confirmPassword"];
     if (referralCheck) keys_to_check.push("referral_code");
     this.formCheckFields(keys_to_check, form_data, registerType);
   };
@@ -134,7 +136,7 @@ class Register extends Component {
                 <>
                   <div className="form-field">
                     <Input
-                      error={form_data.email_error  ? true : false}
+                      error={form_data.email_error ? true : false}
                       type="text"
                       value={form_data.mobile}
                       helperText={form_data.email_error || ""}
@@ -147,7 +149,7 @@ class Register extends Component {
                   </div>
                   <div className="form-field">
                     <Input
-                      error={form_data.password_error  ? true : false}
+                      error={form_data.password_error ? true : false}
                       type="text"
                       value={form_data.mobile}
                       helperText={form_data.password_error || ""}
@@ -180,7 +182,7 @@ class Register extends Component {
                     <InputUI
                       className="input"
                       id="referral_code"
-                      error={form_data.referral_code_error  ? true : false}
+                      error={form_data.referral_code_error ? true : false}
                       // helperText={form_data.referral_code_error || ""}
                       onChange={this.handleChange("referral_code")}
                       endAdornment={
@@ -208,13 +210,13 @@ class Register extends Component {
                 />
                 <div>I have a referral/promo/partner code</div>
               </div>
-              <Button onClick={() => this.handleClick()} >REGISTER</Button>
+              <Button onClick={() => this.handleClick()}>REGISTER</Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
                 <a className="socialSignupBtns googleBtn">GOOGLE</a>
               </div>
             </div>
-            <div className="footer text-center">
+            <div className="footer" onClick={() => this.navigate("login")}>
               <span href="#!/login">
                 EXISTING USER? <span>LOGIN</span>
               </span>

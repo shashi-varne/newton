@@ -7,9 +7,14 @@ const isMobileView = getConfig().isMobileDevice;
 
 let servletUrl = "https://sdk-dot-plutus-staging.appspot.com";
 
+export function initialize() {
+    this.formCheckFields = formCheckFields.bind(this);
+    this.emailLogin = emailLogin.bind(this);
+    this.mobileLogin = mobileLogin.bind(this);
+    this.navigate = navigate.bind(this);
+}
+
 export function formCheckFields(keys_to_check, form_data, loginType) {
-  this.emailLogin = emailLogin.bind(this);
-  this.mobileLogin = mobileLogin.bind(this);
   let canSubmit = true;
   for (let key of keys_to_check) {
     if (!form_data[key]) {
@@ -44,7 +49,7 @@ export function formCheckFields(keys_to_check, form_data, loginType) {
     redirectUrl: redirectUrl,
   };
 
-  this.setState({isApiRunning : true });
+  this.setState({ isApiRunning: true });
   if (loginType === "email") {
     body.email = form_data["email"];
     body.password = form_data["password"];
@@ -68,7 +73,7 @@ export async function emailLogin(body) {
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({isApiRunning : false });
+    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
@@ -77,18 +82,32 @@ export async function emailLogin(body) {
 
 export async function mobileLogin(body) {
   try {
-    const res = await Api.get(`${servletUrl}/api/iam/userauthstatus?auth_type=mobile&auth_value=${body.mobile_number}`);
+    const res = await Api.get(
+      `${servletUrl}/api/iam/userauthstatus?auth_type=mobile&auth_value=${body.mobile_number}`
+    );
     const { result, status_code: status } = res.pfwresponse;
-    console.log(res)
+    console.log(res);
     if (status === 200) {
-        toast('OTP is sent successfully to your mobile number.')
+      toast("OTP is sent successfully to your mobile number.");
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
-    this.setState({isApiRunning : false });
+    this.setState({ isApiRunning: false });
   } catch (error) {
     console.log(error);
     toast("Something went wrong!");
-    this.setState({isApiRunning : false });
+    this.setState({ isApiRunning: false });
+  }
+}
+
+export function navigate(pathname, data = {}) {
+  if (this.props.edit || data.edit) {
+    this.props.history.replace({
+      pathname: pathname,
+    });
+  } else {
+    this.props.history.push({
+      pathname: pathname,
+    });
   }
 }
