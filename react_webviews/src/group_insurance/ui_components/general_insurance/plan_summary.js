@@ -113,7 +113,7 @@ class PlanSummaryClass extends Component {
 
     try {
       this.setState({
-        show_loader: 'button'
+        show_loader: 'page'
       })
       let res2;
       res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)

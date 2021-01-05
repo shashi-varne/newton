@@ -474,6 +474,8 @@ class BasicDetailsForm extends Component {
         canSubmitForm = false;
         basic_details_data.nominee['relation_error'] = 'Please enter relationship';
       }
+
+      basic_details_data.nominee = '';  // #TODO REMOVE THIS
     }
 
     this.setState({
