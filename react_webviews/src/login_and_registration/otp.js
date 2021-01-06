@@ -65,29 +65,20 @@ class Otp extends Component {
           </div>
         )}
         <div className={`${!isMobileView && "content"} otp-content`}>
-          {isMobileView && (
-            <>
-              {this.state.productName !== "finity" ? (
-                <div class="logo">
-                  <img
-                    src={require(`assets/logo_highres_f.png`)}
-                    alt="fisdom"
-                  />
-                  <h5>Join 1000’s of Smart Investors</h5>
-                </div>
-              ) : (
-                <div class="logo">
-                  <img
-                    src={require(`assets/finity_navlogo.png`)}
-                    alt="finity"
-                  />
-                  <h5>Direct Mutual Funds | NPS</h5>
-                </div>
-              )}
-            </>
-          )}
           <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
-            <div>Enter OTP</div>
+            {this.state.productName === "finity" && (
+              <div class="logo">
+                <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
+                <h5>Direct Mutual Funds | NPS</h5>
+              </div>
+            )}
+            {isMobileView && this.state.productName !== "finity" && (
+              <div class="logo">
+                <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
+                <h5>Join 1000’s of Smart Investors</h5>
+              </div>
+            )}
+            <div className="otp-text">Enter OTP</div>
             <Input
               error={otp_error ? true : false}
               type="number"

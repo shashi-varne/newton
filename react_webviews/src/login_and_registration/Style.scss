@@ -269,8 +269,7 @@
     flex-direction: column;
 
     .logo {
-      padding-top: 60px;
-      margin-bottom: 20px;
+      padding-top: 20px;
       text-align: center;
 
       img {
@@ -291,10 +290,14 @@
       width: 400px;
       height: auto;
       border-radius: 8px;
-      padding: 60px 0;
+      padding: 20px 0 60px 0;
       box-shadow: -2px 2px 13px 0 rgba(209, 209, 209, 0.3);
       border: 0.5px solid #f0f0f0;
       font-size: 16px;
+
+      .otp-text {
+        padding-top: 60px;
+      }
 
       .input {
         margin: 10px 0 20px 0;
@@ -313,7 +316,7 @@
         margin-left: auto;
         display: table;
         margin-right: auto;
-        margin-bottom: 60px;
+        margin-bottom: 50px;
       }
 
       button {
