@@ -11,7 +11,7 @@ class Otp extends Component {
     super(props);
     this.state = {
       productName: getConfig().productName,
-      form_data: {},
+      otp: '',
       isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
@@ -23,16 +23,18 @@ class Otp extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
-    form_data[name] = value;
-    form_data[`${name}_error`] = "";
-    this.setState({ form_data: form_data });
+    if (value.length > 4) return;
+    let { otp, otp_error } = this.state;
+    otp = value;
+    otp_error = "";
+    this.setState({ otp: otp, otp_error: otp_error });
   };
 
   handleClick = () => {};
 
   render() {
-    let { form_data, isApiRunning } = this.state;
+    let { isApiRunning, otp, otp_error } = this.state;
+    let disabled = isApiRunning || otp.length !== 4;
     return (
       <div className="login otp">
         <div className="header">
@@ -45,15 +47,20 @@ class Otp extends Component {
           <div className="otp-model">
             <div>Enter OTP</div>
             <Input
-              error={form_data.otp_error ? true : false}
+              error={otp_error ? true : false}
               type="number"
-              value={form_data.otp}
-              helperText={form_data.otp_error || ""}
+              value={otp}
+              helperText={otp_error || ""}
               class="input"
               onChange={this.handleChange("otp")}
             />
             <div className="resend-otp">Resend OTP</div>
-            <Button>VERIFY {isApiRunning && <DotDotLoader />}</Button>
+            <Button
+              className={disabled ? "disabled" : "button"}
+              disabled={disabled}
+            >
+              VERIFY {isApiRunning && <DotDotLoader />}
+            </Button>
           </div>
         </div>
       </div>

@@ -239,9 +239,18 @@
         margin-bottom: 60px;
       }
 
-      button {
+      .button {
         color: #ffffff;
         background-color: var(--secondary);
+        font-size: 18px;
+        padding: 13px 15px;
+        min-width: 180px;
+        margin-bottom: 20px;
+      }
+
+      .disabled {
+        color: rgba(0, 0, 0, 0.26);
+        background-color: rgba(0, 0, 0, 0.12);
         font-size: 18px;
         padding: 13px 15px;
         min-width: 180px;
