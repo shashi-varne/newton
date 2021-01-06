@@ -47,6 +47,25 @@ export function formCheckFields(
     toast("Invalid mobile number");
     return;
   }
+
+  if (userAction === "REGISTER" && loginType === "email") {
+    let passwordCheck = ["password", "confirm_password"];
+    for (let key of passwordCheck) {
+      if (form_data[key].length < 8) {
+        form_data[`${key}_error`] = "Minimum 8 characters required.";
+        canSubmit = false;
+      }
+    }
+    if (!canSubmit) {
+      this.setState({ form_data: form_data });
+      return;
+    }
+    if (form_data.password !== form_data.confirm_password) {
+      toast("Passwords do not match");
+      return;
+    }
+  }
+
   let redirectUrl = encodeURIComponent(
     window.location.protocol +
       "://" +

@@ -168,9 +168,9 @@ class Register extends Component {
                   </div>
                   <div className="form-field">
                     <Input
-                      error={form_data.confirmPassword_error ? true : false}
+                      error={form_data.confirm_password_error ? true : false}
                       type="password"
-                      value={form_data.confirmPassword}
+                      value={form_data.confirm_password}
                       helperText={form_data.confirm_password_error || ""}
                       class="input"
                       id="Re-type Password"
