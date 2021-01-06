@@ -294,13 +294,15 @@ class HealthInsuranceLanding extends Component {
 
   HealthInsuranceEntry = () => {
     this.setState({
-      Comprehensive : !this.state.Comprehensive
+      Comprehensive : !this.state.Comprehensive,
+      DiseasesSpecificPlan : false
     })
   }
 
   DISEASE_SPECIFIC_PLANS = () => {
     this.setState({
-      DiseasesSpecificPlan : !this.state.DiseasesSpecificPlan
+      DiseasesSpecificPlan : !this.state.DiseasesSpecificPlan,
+      Comprehensive : false
     })
   }
 
