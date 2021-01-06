@@ -7,13 +7,14 @@ import moment from 'moment';
 import { genericErrMsg, GraphDateRanges } from '../../constants';
 import { formatGrowthData } from '../../common/commonFunctions';
 import IwdGrowthGraph from '../../mini-components/IwdGrowthGraph';
-import { isEmpty } from '../../../utils/validators';
+import { isEmpty, storageService } from '../../../utils/validators';
 import IwdCard from '../../mini-components/IwdCard';
 import { getGrowthData, getGrowthXirr } from '../../common/ApiCalls';
 import { getConfig } from 'utils/functions';
 import DotDotLoader from '../../../common/ui/DotDotLoader';
 import { CSSTransition } from 'react-transition-group';
 import IwdErrorScreen from '../../mini-components/IwdErrorScreen';
+import { isEmpty as isEmptyLodash } from 'lodash';
 
 const dateFormatMap = {
   '1 month': "d m",
@@ -32,7 +33,16 @@ const PortfolioGrowth = () => {
   const [growthError, setGrowthError] = useState(false);
   const [xirr, setXirr] = useState('');
   const [isLoadingXirr, setIsLoadingXirr] = useState(true);
-  const [selectedRange, setSelectedRange] = useState('1 month');
+  const [selectedRange, setSelectedRange] = useState('');
+
+  useEffect(() => {
+    const firstInvestment = storageService().get('iwd-user-first-invest');
+    if (!firstInvestment || isEmpty(firstInvestment) || moment().year() - moment(firstInvestment).year() <= 1) {
+      setSelectedRange('1 month');
+    } else {
+      setSelectedRange('1 year');
+    }
+  }, []);
 
   useEffect(() => {
     fetchGrowthGraphXirr();
@@ -54,6 +64,7 @@ const PortfolioGrowth = () => {
   };
 
   const fetchGrowthGraph = async () => {
+    if (!selectedRange) return;
     try {
       setIsLoadingGrowth(true);
       setGrowthError(false);
@@ -136,13 +147,15 @@ const PortfolioGrowth = () => {
                   <DotDotLoader className="iwd-dot-loader" /> :
                   (
                     <>
-                      {xirr &&
+                      {xirr ?
                         <img
                           src={xirr > 0 ? positive : negative}
                           alt=''
-                        />
+                        /> :
+                        ''
                       }
-                      {`${xirr ? Number(xirr).toFixed(1) + '%' : '--'}`}
+                      {`${isEmptyLodash(xirr) ? Number(xirr).toFixed(1) + '%' : '--'}`}
+                      {/* Using Lodash isEmpty here to allow zero value to go through */}
                     </>
                   )
                 }
@@ -157,19 +170,19 @@ const PortfolioGrowth = () => {
             templateErrText='Uh oh! Not enough data to show for this selected time period. Please try changing the time selection or retry later'
           /> :
           <div className="iwd-growth-graph">
-          <IwdGrowthGraph
-            isLoading={isLoadingGrowth}
-            data={growthData.data}
-            width="auto"
-            height="100%"
-            params={{
-              date_ticks: growthData.date_ticks,
-              min: growthData.min,
-              max: growthData.max,
-              dateFormat: dateFormatMap[selectedRange],
-            }}
+            <IwdGrowthGraph
+              isLoading={isLoadingGrowth}
+              data={growthData.data}
+              width="auto"
+              height="100%"
+              params={{
+                date_ticks: growthData.date_ticks,
+                min: growthData.min,
+                max: growthData.max,
+                dateFormat: dateFormatMap[selectedRange],
+              }}
             />
-            </div>
+          </div>
         }
       </>
     </IwdCard>
