@@ -11,7 +11,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
 import { initialize } from "./function";
-import DotDotLoader from "../common/ui/DotDotLoader";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Register extends Component {
   constructor(props) {
@@ -198,7 +198,13 @@ class Register extends Component {
                             className="verify-button"
                             onClick={() => this.verifyCode(form_data)}
                           >
-                            {isPromoApiRunning ? <DotDotLoader /> : "VERIFY"}
+                            {isPromoApiRunning ? (
+                              <div className="loader">
+                                <CircularProgress size={15} thickness={3} />
+                              </div>
+                            ) : (
+                              "VERIFY"
+                            )}
                           </div>
                         </InputAdornment>
                       }
@@ -218,19 +224,27 @@ class Register extends Component {
                 <div>I have a referral/promo/partner code</div>
               </div>
               <Button
+                className={isApiRunning ? "disabled" : "button"}
                 disabled={isApiRunning}
                 onClick={() => this.handleClick()}
               >
-                {isApiRunning && <DotDotLoader />}REGISTER
+                REGISTER
+                {isApiRunning && (
+                  <div className="loader">
+                    <CircularProgress size={20} thickness={3} />
+                  </div>
+                )}
               </Button>
               {this.state.resendVerification && (
                 <div
                   className="resend-verification"
                   onClick={() => this.resendVerificationLink()}
                 >
-                  <span>Resend verification link</span>{" "}
-                  <span>
-                    {this.state.resendVerificationApi && <DotDotLoader />}
+                  <span>Resend verification link </span>
+                  <span className="loader">
+                    {this.state.resendVerificationApi && (
+                      <CircularProgress size={15} thickness={5} />
+                    )}
                   </span>
                 </div>
               )}

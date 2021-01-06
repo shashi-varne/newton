@@ -3,9 +3,9 @@ import "./Style.scss";
 import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./function";
-import DotDotLoader from "../common/ui/DotDotLoader";
 import { getConfig } from "utils/functions";
 import toast from "../common/ui/Toast";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Otp extends Component {
   constructor(props) {
@@ -68,13 +68,20 @@ class Otp extends Component {
               class="input"
               onChange={this.handleChange("otp")}
             />
-            <div className="resend-otp" onClick={() => this.resendOtp()}>Resend OTP</div>
+            <div className="resend-otp" onClick={() => this.resendOtp()}>
+              Resend OTP
+            </div>
             <Button
               className={disabled ? "disabled" : "button"}
               disabled={disabled}
               onClick={() => this.handleClick()}
             >
-              VERIFY {isApiRunning && <DotDotLoader />}
+              VERIFY{" "}
+              {isApiRunning && (
+                <div className="loader">
+                  <CircularProgress size={20} thickness={3} />
+                </div>
+              )}
             </Button>
           </div>
         </div>

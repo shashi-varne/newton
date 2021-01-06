@@ -6,7 +6,7 @@ import Input from "../common/ui/Input";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./function";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
-import DotDotLoader from "../common/ui/DotDotLoader";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Login extends Component {
   constructor(props) {
@@ -152,10 +152,16 @@ class Login extends Component {
                 </>
               )}
               <Button
+                className={isApiRunning ? "disabled" : "button"}
                 disabled={isApiRunning}
                 onClick={() => this.handleClick()}
               >
-                {isApiRunning && <DotDotLoader />} LOGIN
+                LOGIN
+                {isApiRunning && (
+                  <div className="loader">
+                    <CircularProgress size={20} thickness={3} />
+                  </div>
+                )}
               </Button>
               <div className="social-block">
                 <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
