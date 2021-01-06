@@ -218,14 +218,15 @@ class LifeInsuranceEntry extends Component {
             <div  style={{  borderBottomWidth: '1px',  width : '100%',
                           borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px' ,   paddingBottom: '22px'}}    >
               <div className='insurance_plans_logos_text'
-              >{props.title}
+              >{props.title} {' '}
+               {props.resume_flag && <span style={{background: '#ff6868', letterSpacing: 0.1, fontSize : '8px', lineHeight : '10.06px', position : 'relative', top:'-3px',
+                 borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
+             }}>Resume</span>}
+
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
           </div>
-          {props.resume_flag && <div style={{background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
-           textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
-          }}>RESUME</div>}
         </div>
       )
     }

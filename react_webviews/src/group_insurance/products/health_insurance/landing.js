@@ -315,8 +315,10 @@ class HealthInsuranceLanding extends Component {
           <img src={props.icon} alt="" style={{ marginRight: '15px' ,paddingTop: '20px', paddingBottom: '20px' }} />
           <div style={{width : '100%' ,borderBottomWidth: '1px', borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   
                        paddingTop: '20px', paddingBottom: '18px', justifyContent: 'space-between', cursor: 'pointer' }}>
-            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} 
-
+            <div style={{ color: '#160d2e', fontSize: '16px', marginBottom: '5px',fontWeight:500 , flexGrow : 1}}>{props.title} {' '}
+               {props.resume_flag && <span style={{background: '#ff6868', letterSpacing: 0.1, fontSize : '8px', lineHeight : '10.06px', position : 'relative', top:'-3px',
+                 borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
+             }}>Resume</span>}
                  {props.key === 'HealthInsuranceEntry'  && !this.state.Comprehensive && <span style={{ "float" : "right" , color : 'blue'}}>                  
                   <img src={props.dropdown} alt="" style={{ marginLeft: '15px' }} />
                   </span>}
@@ -337,8 +339,6 @@ class HealthInsuranceLanding extends Component {
             <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
           </div>
         </div>
-        {props.resume_flag && <div style={{background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1, textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
-          }}>RESUME</div>}
       </div>
 
      <div style={{display : 'flex' , width : '100%'}}>  
