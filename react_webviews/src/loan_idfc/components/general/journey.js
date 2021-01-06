@@ -307,12 +307,14 @@ class JourneyMap extends Component {
     // ---step-3
     if (id === "income_details" && index <= "2") {
       this.sendEvents('next', {stage: stage});
-      if (idfc_loan_status === "idfc_0.5_accepted") {
+      if (idfc_loan_status === "idfc_0.5_accepted" || idfc_loan_status === "idfc_0.5_submitted") {
         this.get05Callback();
-      } else if (idfc_loan_status === "idfc_1.0_accepted") {
+      } else if (idfc_loan_status === "idfc_1.0_accepted" || idfc_loan_status === "idfc_1.0_submitted") {
         this.get10Callback();
       } else if (idfc_loan_status === "idfc_1.0_failed") {
         this.submitApplication({}, "one", "", "eligible-loan");
+      } else if (idfc_loan_status === "idfc_1.1_accepted" || idfc_loan_status === "idfc_1.1_submitted") {
+        this.get11Callback();
       } else {
         if (
           idfc_loan_status === "perfios" &&

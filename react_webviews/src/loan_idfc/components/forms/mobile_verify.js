@@ -165,8 +165,7 @@ class MobileVerification extends Component {
           </FormControl>
 
           <div className="generic-page-title" style={{
-              margin: '0 0 20px 0 ',
-              opacity: this.state.confirm_details_check ? 1 : 0.4
+            margin: '0 0 20px 0 ',
           }}>
             Terms & Conditions
           </div>

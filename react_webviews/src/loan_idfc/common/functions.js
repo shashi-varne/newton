@@ -30,6 +30,7 @@ export async function initialize() {
   this.getPickList = getPickList.bind(this);
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
+  this.get11Callback = get11Callback.bind(this);
   this.get07State = get07State.bind(this);
   this.get07StateForBt = get07StateForBt.bind(this);
   this.getRecommendedVendor = getRecommendedVendor.bind(this);
@@ -532,7 +533,9 @@ export async function get05Callback() {
     if (
       result.is_dedupe === true ||
       result.idfc_05_callback === true ||
-      result.vendor_application_status === "idfc_callback_rejected"
+      result.vendor_application_status === "idfc_callback_rejected" ||
+      result.vendor_application_status === "idfc_cancelled" ||
+      result.is_cancelled === true
     ) {
       that.navigate("loan-status");
     } else {
@@ -575,6 +578,38 @@ export async function get10Callback(next_state) {
       that.get10Callback(next_state);
     } else {
       that.navigate("/loan/idfc/error");
+    }
+  }, 3000);
+}
+
+export async function get11Callback() {
+  this.setState({
+    show_loader: true,
+  });
+
+  // setTimeout(, 3000)
+  let result = await this.getUserStatus();
+  let { count } = this.state;
+  let that = this;
+
+  setTimeout(function () {
+    if (result.idfc_11_callback) {
+      that.navigate("/loan/idfc/loan-eligible");
+    } else if (
+      result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
+      result.is_cancelled === true
+    ) {
+      that.navigate("loan-status");
+    }  else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
+
+        that.get11Callback();
+      } else {
+        that.navigate("error");
+      }
     }
   }, 3000);
 }
