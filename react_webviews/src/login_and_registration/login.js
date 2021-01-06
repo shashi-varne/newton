@@ -151,7 +151,10 @@ class Login extends Component {
                       onChange={this.handleChange("password")}
                     />
                   </div>
-                  <div className="forgot_password" onClick={() => this.navigate('forgot-password')}>
+                  <div
+                    className="forgot_password"
+                    onClick={() => this.navigate("forgot-password")}
+                  >
                     FORGOT PASSWORD?
                   </div>
                 </>
@@ -185,27 +188,27 @@ class Login extends Component {
             {productName === "finity" && (
               <div className="features">
                 <div className="item">
-                  <img src={require(`assets/icons-07.png`)} width="15" />
+                  <img src={require(`assets/icons-07.png`)} alt="" />
                   <div className="title">Bank Grade Security</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/icons-09.png`)} width="15" />
+                  <img src={require(`assets/icons-09.png`)} alt="" />
                   <div className="title">Track & Withdraw 24/7</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/portfolio-rebal.png`)} width="15" />
+                  <img src={require(`assets/portfolio-rebal.png`)} alt="" />
                   <div className="title">Portfolio Rebalancing</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/insta_switch.png`)} width="15" />
+                  <img src={require(`assets/insta_switch.png`)} alt="" />
                   <div className="title">Insta Switch</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/smart_reco.png`)} width="15" />
+                  <img src={require(`assets/smart_reco.png`)} alt="" />
                   <div className="title">Smart Recommendation Engine</div>
                 </div>
                 <div className="item">
-                  <img src={require(`assets/icons-08.png`)} width="15" />
+                  <img src={require(`assets/icons-08.png`)} alt="" />
                   <div className="title">Paperless KYC in 5 minutes</div>
                 </div>
               </div>

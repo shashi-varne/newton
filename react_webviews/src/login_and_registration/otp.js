@@ -30,7 +30,11 @@ class Otp extends Component {
       return;
     }
     let mobile_number = state.mobile_number;
-    this.setState({ mobile_number: mobile_number });
+    let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
+    this.setState({
+      mobile_number: mobile_number,
+      rebalancing_redirect_url: rebalancing_redirect_url,
+    });
     this.initialize();
   }
 

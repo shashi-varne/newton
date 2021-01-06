@@ -5,7 +5,6 @@ import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
-const servletUrl = "https://sdk-dot-plutus-staging.appspot.com";
 
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
@@ -67,14 +66,7 @@ export function formCheckFields(
     }
   }
 
-  let redirectUrl = encodeURIComponent(
-    window.location.protocol +
-      "://" +
-      window.location.host +
-      ":" +
-      window.location.port +
-      "/#!/"
-  );
+  let redirectUrl = encodeURIComponent(window.location.href);
   let body = {
     redirect_url: redirectUrl,
   };
@@ -102,7 +94,7 @@ export function formCheckFields(
 
 export async function emailLogin(body) {
   try {
-    const res = await Api.post(`${servletUrl}/api/user/login`, body);
+    const res = await Api.post(`/api/user/login`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       storageService().setObject("user", result.user);
@@ -111,6 +103,7 @@ export async function emailLogin(body) {
       }
       storageService().set("currentUser", true);
       toast("Login Successful");
+      // handle user kyc
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -125,7 +118,7 @@ export async function emailLogin(body) {
 export async function mobileLogin(body) {
   try {
     const res = await Api.get(
-      `${servletUrl}/api/iam/userauthstatus?auth_type=mobile&auth_value=${body.mobile_number}`
+      `/api/iam/userauthstatus?auth_type=mobile&auth_value=${body.mobile_number}`
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
@@ -142,15 +135,21 @@ export async function mobileLogin(body) {
         var item = {
           promo_code: this.state.referral_code,
         };
-        storageService().set("user_promo", item);
+        storageService().setObject("user_promo", item);
       }
+      let rebalancing_redirect_url =
+        getConfig().redirect_url !== undefined
+          ? getConfig().redirect_url
+          : false;
 
       this.props.history.push(
         {
           pathname: "mobile/verify",
+          search: getConfig().searchParams,
         },
         {
           mobile_number: body.mobile_number,
+          rebalancing_redirect_url: rebalancing_redirect_url,
         }
       );
     } else {
@@ -167,11 +166,15 @@ export async function mobileLogin(body) {
 export async function emailRegister(body) {
   try {
     const res = await Api.post(
-      `${servletUrl}/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirectUrl}&referrer_code=${body.referrer_code}`,
+      `/api/user/register?email=${body.email}&password=${body.password}&redirect_url=${body.redirectUrl}&referrer_code=${body.referrer_code}`,
       body
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      // if (getConfig().redirect_url !== undefined) {
+      //   window.location = getConfig().redirect_url;
+      //   return;
+      // }
       if (this.state.isPromoSuccess) {
         var item = {
           user_id: result.user.user_id,
@@ -206,7 +209,7 @@ export async function verifyCode(form_data) {
     code: form_data.referral_code,
   };
   try {
-    const res = await Api.get(`${servletUrl}/api/checkpromocode`, body);
+    const res = await Api.get(`/api/checkpromocode`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast("Success");
@@ -244,7 +247,7 @@ export async function resendVerificationLink() {
     email: form_data["email"],
   };
   try {
-    const res = await Api.get(`${servletUrl}/api/resendverfication`, body);
+    const res = await Api.get(`/api/resendverfication`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast(
@@ -265,12 +268,19 @@ export async function otpVerification(body) {
   this.setState({ isApiRunning: true });
   try {
     const res = await Api.post(
-      `${servletUrl}/api/mobile/login?mobile_number=${body.mobile_number}&otp=${body.otp}`
+      `/api/mobile/login?mobile_number=${body.mobile_number}&otp=${body.otp}`
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      storageService.setObject("user", result.user);
-      storageService.set("currentUser", true);
+      toast("Login Successful");
+      applyCode(result.user);
+      storageService().setObject("user", result.user);
+      storageService().set("currentUser", true);
+      if (this.state.rebalancing_redirect_url) {
+        window.location.href = this.state.rebalancing_redirect_url;
+        return;
+      }
+      // handle user kyc
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -282,10 +292,27 @@ export async function otpVerification(body) {
   }
 }
 
+export async function applyCode(user) {
+  if (userPromo && user.user_id) {
+    try {
+      var userPromo = storageService().getObject("user_promo");
+      const res = await Api.post(`/api/referral/apply`, {
+        code: userPromo.promo_code,
+      });
+      const { result, status_code: status } = res.pfwresponse;
+      if (status === 200) {
+        storageService.remove("user_promo");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
 export async function resendOtp() {
   this.setState({ isApiRunning: true });
   try {
-    const res = await Api.get(`${servletUrl}/api/resendotp`);
+    const res = await Api.get(`/api/resendotp`);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast(result.message || "Success!");
@@ -302,7 +329,7 @@ export async function resendOtp() {
 
 export async function forgotPassword(body) {
   try {
-    const res = await Api.get(`${servletUrl}/api/forgotpassword`, body);
+    const res = await Api.get(`/api/forgotpassword`, body);
     const { result, status_code: status } = res.pfwresponse;
     let { loginType } = this.state;
     if (status === 200) {
@@ -311,6 +338,7 @@ export async function forgotPassword(body) {
         this.props.history.push(
           {
             pathname: "mobile/verify",
+            search: getConfig().searchParams,
           },
           {
             mobile_number: body.mobile_number,
@@ -332,10 +360,13 @@ export function navigate(pathname, data = {}) {
   if (this.props.edit || data.edit) {
     this.props.history.replace({
       pathname: pathname,
+      search: getConfig().searchParams,
     });
   } else {
     this.props.history.push({
       pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
     });
   }
 }
