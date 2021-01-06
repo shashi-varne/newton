@@ -51,20 +51,20 @@ class Login extends Component {
   };
 
   render() {
-    let { loginType, form_data, isApiRunning } = this.state;
+    let { loginType, form_data, isApiRunning, productName } = this.state;
     return (
       <div className="login">
         <ToastContainer autoClose={3000} />
         <div className="header">
           <img
-            src={require(`assets/${this.state.productName}_white_logo.png`)}
+            src={require(`assets/${productName}_white_logo.png`)}
             alt="logo"
           />
         </div>
         <div className="login-details">
           <div className="left-image">
             <img
-              src={require(`assets/${this.state.productName}/ils_login.svg`)}
+              src={require(`assets/${productName}/ils_login.svg`)}
               alt="login"
             />
           </div>
@@ -81,16 +81,18 @@ class Login extends Component {
                 MOBILE
                 {loginType === "mobile" && <div className="underline"></div>}
               </div>
-              <div
-                className="text"
-                style={{
-                  fontWeight: loginType === "email" ? "bold" : "normal",
-                }}
-                onClick={() => this.setLoginType("email")}
-              >
-                EMAIL
-                {loginType === "email" && <div className="underline"></div>}
-              </div>
+              {productName !== "finity" && (
+                <div
+                  className="text"
+                  style={{
+                    fontWeight: loginType === "email" ? "bold" : "normal",
+                  }}
+                  onClick={() => this.setLoginType("email")}
+                >
+                  EMAIL
+                  {loginType === "email" && <div className="underline"></div>}
+                </div>
+              )}
             </div>
             <div className="form">
               {loginType === "mobile" && (
@@ -166,16 +168,48 @@ class Login extends Component {
                   </div>
                 )}
               </Button>
-              <div className="social-block">
-                <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
-                <a className="socialSignupBtns googleBtn">GOOGLE</a>
+              {productName !== "finity" && (
+                <div className="social-block">
+                  <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
+                  <a className="socialSignupBtns googleBtn">GOOGLE</a>
+                </div>
+              )}
+            </div>
+            {productName !== "finity" && (
+              <div className="footer" onClick={() => this.navigate("register")}>
+                <span href="#!/register">
+                  NEW USER? <span>REGISTER</span>
+                </span>
               </div>
-            </div>
-            <div className="footer" onClick={() => this.navigate("register")}>
-              <span href="#!/register">
-                NEW USER? <span>REGISTER</span>
-              </span>
-            </div>
+            )}
+            {productName === "finity" && (
+              <div className="features">
+                <div className="item">
+                  <img src={require(`assets/icons-07.png`)} width="15" />
+                  <div className="title">Bank Grade Security</div>
+                </div>
+                <div className="item">
+                  <img src={require(`assets/icons-09.png`)} width="15" />
+                  <div className="title">Track & Withdraw 24/7</div>
+                </div>
+                <div className="item">
+                  <img src={require(`assets/portfolio-rebal.png`)} width="15" />
+                  <div className="title">Portfolio Rebalancing</div>
+                </div>
+                <div className="item">
+                  <img src={require(`assets/insta_switch.png`)} width="15" />
+                  <div className="title">Insta Switch</div>
+                </div>
+                <div className="item">
+                  <img src={require(`assets/smart_reco.png`)} width="15" />
+                  <div className="title">Smart Recommendation Engine</div>
+                </div>
+                <div className="item">
+                  <img src={require(`assets/icons-08.png`)} width="15" />
+                  <div className="title">Paperless KYC in 5 minutes</div>
+                </div>
+              </div>
+            )}
             <div className="agree-terms">
               By signing in, you agree to fisdom's{" "}
               <a

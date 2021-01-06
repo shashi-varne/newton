@@ -221,6 +221,24 @@
         }
       }
 
+      .features {
+        margin: 30px auto 0px auto;
+        .item {
+          display: -ms-flexbox;
+          display: flex;
+          -ms-flex-align: center;
+          align-items: center;
+          -ms-flex: 1 0 100%;
+          flex: 1 0 100%;
+          padding: 5px 0;
+
+          img {
+            vertical-align: middle;
+            margin-right: 10px;
+          }
+        }
+      }
+
       .agree-terms {
         margin-top: 50px;
         margin-bottom: 30px;
