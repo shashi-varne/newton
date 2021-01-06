@@ -47,7 +47,7 @@ class ForgotPassword extends Component {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
     if (loginType === "email") keys_to_check = ["email"];
-    // this.formCheckFields(keys_to_check, form_data, "RESET", loginType);
+    this.formCheckFields(keys_to_check, form_data, "RESET", loginType);
   };
 
   render() {

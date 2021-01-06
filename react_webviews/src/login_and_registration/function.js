@@ -16,6 +16,7 @@ export function initialize() {
   this.resendVerificationLink = resendVerificationLink.bind(this);
   this.otpVerification = otpVerification.bind(this);
   this.resendOtp = resendOtp.bind(this);
+  this.forgotPassword = forgotPassword.bind(this);
   this.navigate = navigate.bind(this);
 }
 
@@ -88,6 +89,11 @@ export function formCheckFields(
     body.password = form_data["password"];
     body.referrer_code = form_data["referral_code"] || "";
     this.emailRegister(body);
+  } else if (userAction === "RESET") {
+    if (loginType === "mobile")
+      body.mobile_number = `${form_data["code"]}|${form_data["mobile"]}`;
+    else body.email = form_data.email;
+    this.forgotPassword(body);
   } else {
     body.mobile_number = `${form_data["code"]}|${form_data["mobile"]}`;
     this.mobileLogin(body);
@@ -283,6 +289,34 @@ export async function resendOtp() {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       toast(result.message || "Success!");
+    } else {
+      toast(result.message || result.error || "Something went wrong!");
+    }
+    this.setState({ isApiRunning: false });
+  } catch (error) {
+    console.log(error);
+    toast("Something went wrong!");
+    this.setState({ isApiRunning: false });
+  }
+}
+
+export async function forgotPassword(body) {
+  try {
+    const res = await Api.get(`${servletUrl}/api/forgotpassword`, body);
+    const { result, status_code: status } = res.pfwresponse;
+    let { loginType } = this.state;
+    if (status === 200) {
+      if (loginType === "email") toast(`A link has been sent to ${body.email}`);
+      else {
+        this.props.history.push(
+          {
+            pathname: "mobile/verify",
+          },
+          {
+            mobile_number: body.mobile_number,
+          }
+        );
+      }
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
