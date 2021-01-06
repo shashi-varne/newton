@@ -5,7 +5,7 @@ import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
-let servletUrl = "https://sdk-dot-plutus-staging.appspot.com";
+const servletUrl = "https://sdk-dot-plutus-staging.appspot.com";
 
 export function initialize() {
   this.formCheckFields = formCheckFields.bind(this);
@@ -14,6 +14,8 @@ export function initialize() {
   this.verifyCode = verifyCode.bind(this);
   this.emailRegister = emailRegister.bind(this);
   this.resendVerificationLink = resendVerificationLink.bind(this);
+  this.otpVerification = otpVerification.bind(this);
+  this.resendOtp = resendOtp.bind(this);
   this.navigate = navigate.bind(this);
 }
 
@@ -101,7 +103,29 @@ export async function mobileLogin(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      // if ($scope.referrer) {
+      //   var item = {
+      //     'promo_code': $scope.referrer
+      //   };
+      //   storageService.set('user_promo', item);
+      // }
+
+      if (this.state.isPromoSuccess && this.state.referral_code !== "") {
+        var item = {
+          promo_code: this.state.referral_code,
+        };
+        storageService().set("user_promo", item);
+      }
+
       toast("OTP is sent successfully to your mobile number.");
+      this.props.history.push(
+        {
+          pathname: "mobile/verify",
+        },
+        {
+          mobile_number: body.mobile_number,
+        }
+      );
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -207,6 +231,45 @@ export async function resendVerificationLink() {
     console.log(error);
     toast("Something went wrong!");
     this.setState({ resendVerificationApi: false });
+  }
+}
+
+export async function otpVerification(body) {
+  this.setState({ isApiRunning: true });
+  try {
+    const res = await Api.post(
+      `${servletUrl}/api/mobile/login?mobile_number=${body.mobile_number}&otp=${body.otp}`
+    );
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      storageService.setObject("user", result.user);
+      storageService.set("currentUser", true);
+    } else {
+      toast(result.message || result.error || "Something went wrong!");
+    }
+    this.setState({ isApiRunning: false });
+  } catch (error) {
+    console.log(error);
+    toast("Something went wrong!");
+    this.setState({ isApiRunning: false });
+  }
+}
+
+export async function resendOtp() {
+  this.setState({ isApiRunning: true });
+  try {
+    const res = await Api.get(`${servletUrl}/api/resendotp`);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      toast(result.message || "Success!");
+    } else {
+      toast(result.message || result.error || "Something went wrong!");
+    }
+    this.setState({ isApiRunning: false });
+  } catch (error) {
+    console.log(error);
+    toast("Something went wrong!");
+    this.setState({ isApiRunning: false });
   }
 }
 
