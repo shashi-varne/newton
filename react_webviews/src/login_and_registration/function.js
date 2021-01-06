@@ -104,6 +104,7 @@ export async function emailLogin(body) {
         storageService().setObject("first_login", result.firstLogin);
       }
       storageService().set("currentUser", true);
+      toast("Login Successful");
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -129,6 +130,8 @@ export async function mobileLogin(body) {
       //   storageService.set('user_promo', item);
       // }
 
+      toast("OTP is sent successfully to your mobile number.");
+
       if (this.state.isPromoSuccess && this.state.referral_code !== "") {
         var item = {
           promo_code: this.state.referral_code,
@@ -136,7 +139,6 @@ export async function mobileLogin(body) {
         storageService().set("user_promo", item);
       }
 
-      toast("OTP is sent successfully to your mobile number.");
       this.props.history.push(
         {
           pathname: "mobile/verify",

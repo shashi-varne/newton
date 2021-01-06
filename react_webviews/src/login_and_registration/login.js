@@ -7,6 +7,8 @@ import Button from "@material-ui/core/Button";
 import { initialize } from "./function";
 import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 class Login extends Component {
   constructor(props) {
@@ -52,6 +54,7 @@ class Login extends Component {
     let { loginType, form_data, isApiRunning } = this.state;
     return (
       <div className="login">
+        <ToastContainer autoClose={3000} />
         <div className="header">
           <img
             src={require(`assets/${this.state.productName}_white_logo.png`)}

@@ -6,6 +6,8 @@ import { initialize } from "./function";
 import { getConfig } from "utils/functions";
 import toast from "../common/ui/Toast";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -53,6 +55,7 @@ class Otp extends Component {
     let disabled = isApiRunning || otp.length !== 4;
     return (
       <div className="login otp">
+        <ToastContainer autoClose={3000} />
         {!isMobileView && (
           <div className="header">
             <img
@@ -61,23 +64,29 @@ class Otp extends Component {
             />
           </div>
         )}
-        <div className= {`${!isMobileView && "content"} otp-content`}>
+        <div className={`${!isMobileView && "content"} otp-content`}>
           {isMobileView && (
             <>
               {this.state.productName !== "finity" ? (
                 <div class="logo">
-                  <img src={require(`assets/logo_highres_f.png`)} alt="fisdom" />
+                  <img
+                    src={require(`assets/logo_highres_f.png`)}
+                    alt="fisdom"
+                  />
                   <h5>Join 1000’s of Smart Investors</h5>
                 </div>
               ) : (
                 <div class="logo">
-                  <img src={require(`assets/finity_navlogo.png`)} alt="finity" />
+                  <img
+                    src={require(`assets/finity_navlogo.png`)}
+                    alt="finity"
+                  />
                   <h5>Direct Mutual Funds | NPS</h5>
                 </div>
               )}
             </>
           )}
-          <div className= {`${isMobileView && "otp-model-mini"} otp-model`}>
+          <div className={`${isMobileView && "otp-model-mini"} otp-model`}>
             <div>Enter OTP</div>
             <Input
               error={otp_error ? true : false}
