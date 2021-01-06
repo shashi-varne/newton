@@ -261,8 +261,11 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
+
+    console.log(policy)  //this
+
     let policy_type = policy.policy_type ? policy.policy_type : ''
-    this.sendEvents('next', policy.key, policy_type);
+    this.sendEvents('next', policy.key, policy_type , policy);  //this
     let path = '';
     let key = policy.key;
 
@@ -400,29 +403,34 @@ class Report extends Component {
     }
   }
 
-  sendEvents(user_action, insurance_type, policy_type) {
+  sendEvents(user_action, insurance_type, policy_type, policy) {
 
-    let reportState = {};
-    for (var i = 0; i < this.state.reportData.length; i++) {
-      reportState[this.state.reportData[i].key] = this.state.reportData[i].status;
-    };
+    let policy_name = policy ? policy.top_title : undefined
+    let policy_status = policy ? policy.status : '' 
+
+    // let reportState = {};             //this
+    // for (var i = 0; i < this.state.reportData.length; i++) {
+    //   reportState[this.state.reportData[i].key] = this.state.reportData[i].status;
+    // };
 
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance_report',
-        "type": insurance_type ? insurance_type : '',
+        "provider_name": insurance_type ? insurance_type : '',
+        'policy' : policy_name ? policy_name : policy_type ? TitleMaper(policy_type) : '',
+        'policy_status' : policy_status
       }
     };
 
-    if (insurance_type !== 'insurance') {
-      eventObj.properties.report = reportState;
-    }
+    // if (insurance_type !== 'insurance') {                 //this
+    //   eventObj.properties.report = reportState;
+    // }
 
-    if (insurance_type === 'insurance') {
-      eventObj.properties.policy =  policy_type ? TitleMaper(policy_type) : ''
-    }
+    // if (insurance_type === 'insurance') {
+    //   eventObj.properties.policy =  policy_type ? TitleMaper(policy_type) : ''         //this
+    // }
 
     if (user_action === 'just_set_events') {
       return eventObj;
