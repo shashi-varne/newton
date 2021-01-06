@@ -10,7 +10,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
-class Login extends Component {
+class ForgotPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,8 +46,8 @@ class Login extends Component {
   handleClick = () => {
     let { form_data, loginType } = this.state;
     let keys_to_check = ["mobile", "code"];
-    if (loginType === "email") keys_to_check = ["email", "password"];
-    this.formCheckFields(keys_to_check, form_data, "LOGIN", loginType);
+    if (loginType === "email") keys_to_check = ["email"];
+    // this.formCheckFields(keys_to_check, form_data, "RESET", loginType);
   };
 
   render() {
@@ -69,7 +69,7 @@ class Login extends Component {
             />
           </div>
           <div className="login-form">
-            <div className="header-text">LOGIN</div>
+            <div className="header-text">RESET PASSWORD</div>
             <div className="login-type">
               <div
                 className="text"
@@ -124,109 +124,37 @@ class Login extends Component {
                 </div>
               )}
               {loginType === "email" && (
-                <>
-                  <div className="form-field">
-                    <Input
-                      error={form_data.email_error ? true : false}
-                      type="text"
-                      value={form_data.email}
-                      helperText={form_data.email_error || ""}
-                      class="input"
-                      id="email"
-                      label="Enter email address"
-                      name="email"
-                      onChange={this.handleChange("email")}
-                    />
-                  </div>
-                  <div className="form-field">
-                    <Input
-                      error={form_data.password_error ? true : false}
-                      type="password"
-                      value={form_data.password}
-                      helperText={form_data.password_error || ""}
-                      class="input"
-                      id="password"
-                      label="Password"
-                      name="email"
-                      onChange={this.handleChange("password")}
-                    />
-                  </div>
-                  <div className="forgot_password" onClick={() => this.navigate('forgot-password')}>
-                    FORGOT PASSWORD?
-                  </div>
-                </>
+                <div className="form-field">
+                  <Input
+                    error={form_data.email_error ? true : false}
+                    type="text"
+                    value={form_data.email}
+                    helperText={form_data.email_error || ""}
+                    class="input"
+                    id="email"
+                    label="Enter email address"
+                    name="email"
+                    onChange={this.handleChange("email")}
+                  />
+                </div>
               )}
               <Button
                 className={isApiRunning ? "disabled" : "button"}
                 disabled={isApiRunning}
                 onClick={() => this.handleClick()}
               >
-                LOGIN
+                RESET PASSWORD
                 {isApiRunning && (
                   <div className="loader">
                     <CircularProgress size={20} thickness={3} />
                   </div>
                 )}
               </Button>
-              {productName !== "finity" && (
-                <div className="social-block">
-                  <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
-                  <a className="socialSignupBtns googleBtn">GOOGLE</a>
-                </div>
-              )}
             </div>
-            {productName !== "finity" && (
-              <div className="footer" onClick={() => this.navigate("register")}>
-                <span href="#!/register">
-                  NEW USER? <span>REGISTER</span>
-                </span>
-              </div>
-            )}
-            {productName === "finity" && (
-              <div className="features">
-                <div className="item">
-                  <img src={require(`assets/icons-07.png`)} width="15" />
-                  <div className="title">Bank Grade Security</div>
-                </div>
-                <div className="item">
-                  <img src={require(`assets/icons-09.png`)} width="15" />
-                  <div className="title">Track & Withdraw 24/7</div>
-                </div>
-                <div className="item">
-                  <img src={require(`assets/portfolio-rebal.png`)} width="15" />
-                  <div className="title">Portfolio Rebalancing</div>
-                </div>
-                <div className="item">
-                  <img src={require(`assets/insta_switch.png`)} width="15" />
-                  <div className="title">Insta Switch</div>
-                </div>
-                <div className="item">
-                  <img src={require(`assets/smart_reco.png`)} width="15" />
-                  <div className="title">Smart Recommendation Engine</div>
-                </div>
-                <div className="item">
-                  <img src={require(`assets/icons-08.png`)} width="15" />
-                  <div className="title">Paperless KYC in 5 minutes</div>
-                </div>
-              </div>
-            )}
-            <div className="agree-terms">
-              By signing in, you agree to fisdom's{" "}
-              <a
-                href="https://www.fisdom.com/terms/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Terms and Conditions
-              </a>{" "}
-              and{" "}
-              <a
-                href="https://www.fisdom.com/privacy/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Privacy Policy
-              </a>
+            <div className="footer" onClick={() => this.navigate("login")}>
+              <span href="#!/register">
+                EXSISTING USER? <span>LOGIN</span>
+              </span>
             </div>
           </div>
         </div>
@@ -235,4 +163,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default ForgotPassword;
