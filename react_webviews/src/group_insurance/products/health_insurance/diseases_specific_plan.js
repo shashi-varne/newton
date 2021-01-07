@@ -146,13 +146,13 @@ class DiseasesSpecificPlan extends Component {
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
           <div style={{ borderBottomWidth: '1px',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: '20px',
-                  justifyContent: 'space-between', cursor: 'pointer' , width: this.state.insuranceProducts.length - 1 !== index ? '75%' : '100%'}}>
+                  justifyContent: 'space-between', cursor: 'pointer' , width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%' }}>
             <div style={{ color: '#160D2E', fontSize: '13px', marginBottom: '5px', fontWeight: 400, lineHeight : '15.41px' }}>{props.title} {' '}
                {props.resume_flag && <span style={{background: '#ff6868', letterSpacing: 0.1, fontSize : '8px', lineHeight : '10.06px', position : 'relative', top:'-3px',
                  borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
              }}>Resume</span>}
             </div>
-            <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
+            <div style={{ color: '#7e7e7e', fontSize: '13px', fontWeight: 300, lineHeight: '15.41px' }}>{props.subtitle}</div>
           </div>
         </div>
       </div>
