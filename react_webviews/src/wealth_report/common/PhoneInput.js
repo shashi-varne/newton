@@ -14,7 +14,7 @@ class WrPhoneInput extends Component {
     const result = CountryData.allCountries.filter(
       (code, index) => code.format !== undefined
     );
-    let { phone, format, number } = this.props;
+    let { phone, format, number,disabled } = this.props;
     return (
       <div className="wr-input-form">
         <FormControl className="wr-code-input">
@@ -26,6 +26,7 @@ class WrPhoneInput extends Component {
             inputProps={{
               name: "phone",
             }}
+            disabled={disabled}
             classes={{ root: "wr-select-input" }}
           >
             {result.map((code, index) => (
