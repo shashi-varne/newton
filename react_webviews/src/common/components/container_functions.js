@@ -223,17 +223,22 @@ export function renderGenericError() {
 
     let errorData = this.props.errorData || {};
     let { title1, title2 , button_text1, button_text2, 
-        handleClick2, handleClick1, two_button} = errorData;
+        handleClick2, handleClick1} = errorData;
 
+    let two_button  = handleClick2 ? true: false
     if (this.props.showError === true) {
 
         
         disableBodyOverflow(); //touch disabled
         return (
-            <div className={`generic-error-dialog ${errorData ? errorData.errorClass : ''}`}>
+            <div className={`generic-error-dialog fadein-animation ${errorData ? errorData.errorClass : ''}`}>
                 <div className="overlay">
-                    <Imgc className="top-image" src={require(`assets/generic_error.svg`)} alt="" />
-                    <div className="title1">{title1 || 'Something went wrong'}</div>
+
+                    <div className="top-part">
+                        <div className="title1">{title1 || 'Something went wrong'}</div>
+                        <Imgc className="top-image" src={require(`assets/generic_error.svg`)} alt="" />
+                    </div>
+                    
                     <div className="title2">{title2 || 'Sorry, we could not process your request'}</div>
 
                     <div className="actions">

@@ -9,7 +9,6 @@ import {
   inrFormatDecimal
 } from '../../../utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -45,7 +44,6 @@ class PlanSuccessClass extends Component {
       lead_data: {
         nominee: {}
       },
-      skelton: true,
       accordians_data: [],
       type: getConfig().productName
     };
@@ -77,8 +75,34 @@ class PlanSuccessClass extends Component {
     });
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
+
+  onload = async() => {
+    this.setErrorData('onload');
+    this.setState({
+      skelton: true
+    })
+
+    let error = '';
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
@@ -120,21 +144,33 @@ class PlanSuccessClass extends Component {
           accordians_data: accordians_data
         })
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || 'Something went wrong';
       }
 
+
     } catch (err) {
-      console.log(err)
       this.setState({
-        skelton: false
+        skelton: false,
+        showError: true
       });
-      toast('Something went wrong');
     }
 
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
+    }
+  }
 
-
+  async componentDidMount() {
+    this.onload();
   }
 
   async handleClickCurrent() {
@@ -312,6 +348,8 @@ class PlanSuccessClass extends Component {
         events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClickOne={() => this.handleClickOne()}
         handleClickTwo={() => this.handleClickTwo()}
         title="Success"

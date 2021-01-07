@@ -690,22 +690,29 @@ input#pan {
     background-color: rgba(0, 0, 0, 0.5);
     
     .overlay {
-      position: relative;
-      transform: translate(0%, -50%);
-      text-align: center;
+      position: fixed;
+      
       background: white;
-      margin: 0 auto;
-      margin: 0px 20px 20px 20px;
       margin-top: 0 auto;
-      top: 50%;
-      border-radius: 8px;
       padding: 30px 20px 30px 20px;
+      bottom: 0;
+      width: -webkit-fill-available;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .top-part {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 10px 0;
     }
     .title1 {
       color: #160D2E;
-      font-size: 15px;
-      font-weight: 400;
-      line-height: 24px;
+      font-size: 17px;
+      font-weight: bold;
+      line-height: 27px;
+      margin: 0 20px 0 0;
     }
     
     img.top-image {
@@ -715,9 +722,10 @@ input#pan {
     }
     
     .title2 {
-        color: #767E86;
-        font-size: 11px;
-        line-height: 18px;
+      color: #767E86;
+      font-size: 13px;
+      line-height: 21px;
+      text-align: left;
     }
 
     .actions {
@@ -725,6 +733,7 @@ input#pan {
       justify-content: space-between;
       align-items: center;
       margin: 20px 0 0 0;
+      text-align: center;
     }
 
     .button{

@@ -32,12 +32,10 @@ class BasicDetailsForm extends Component {
       basic_details_data: {
         nominee: {}
       },
-      skelton: true,
       premium_details: {},
       inputDisabled: {},
       relationshipOptions: [],
       age: 0,
-      // showError: true
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -267,7 +265,13 @@ class BasicDetailsForm extends Component {
 
   };
 
-  async componentDidMount() {
+  onload = async () => {
+    
+    this.setState({
+      skelton: true
+    })
+
+    this.setErrorData('onload');
 
     this.setRelationshipOptions('male');
     let basic_details_data = {
@@ -287,6 +291,8 @@ class BasicDetailsForm extends Component {
       premium: this.state.premium_details.premium,
       tax_amount: this.state.premium_details.tax_amount
     }
+
+    let error = '';
     try {
   
       if (this.state.lead_id) { 
@@ -351,15 +357,28 @@ class BasicDetailsForm extends Component {
 
     } catch (err) {
       this.setState({
-        skelton: false
+        skelton: false,
+        showError: true
       });
-      toast('Something went wrong');
     }
 
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
+    }
     this.setState({
       basic_details_data: basic_details_data
     })
-
+  }
+  async componentDidMount() {
+    this.onload();
   }
 
   calculateAge = (birthday) => {
@@ -373,11 +392,43 @@ class BasicDetailsForm extends Component {
     return age;
   }
 
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
 
   async handleClickCurrent() {
 
 
+    this.setErrorData('submit');
+
+  
     this.setState({
       showError: false
     })
@@ -475,7 +526,6 @@ class BasicDetailsForm extends Component {
         basic_details_data.nominee['relation_error'] = 'Please enter relationship';
       }
 
-      basic_details_data.nominee = '';  // #TODO REMOVE THIS
     }
 
     this.setState({
@@ -504,6 +554,7 @@ class BasicDetailsForm extends Component {
           "relation": basic_details_data.nominee.relation
         }
         final_data['nominee'] = obj;
+        final_data['nominee'] = {};  //TODO remove
       } else {
         final_data['nominee'] = {};
       }
@@ -511,6 +562,8 @@ class BasicDetailsForm extends Component {
       final_data.product_name = this.props.parent.state.product_key;
       final_data.nominee_details = this.state.checked;
 
+
+      let error = '';
       try {
         this.setState({
           show_loader: 'button'
@@ -531,22 +584,17 @@ class BasicDetailsForm extends Component {
         } else {
           this.setState({
             show_loader: false,
-            showError:true
+            
           })
+          
           if ('error' in res2.pfwresponse.result) {
             if (Array.isArray(res2.pfwresponse.result.error)) {
-              this.setState({
-                errorText1: res2.pfwresponse.result.error[0]['message'] || res2.pfwresponse.result.error[0]['error']
-              })
+                error = res2.pfwresponse.result.error[0]['message'] || res2.pfwresponse.result.error[0]['error']
             } else {
-              this.setState({
-                errorText1: res2.pfwresponse.result.error
-              })
+                error = res2.pfwresponse.result.error
             }
           } else {
-            this.setState({
-              errorText1: res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong'
-            })
+            error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong'
           }
         }
 
@@ -555,8 +603,16 @@ class BasicDetailsForm extends Component {
           show_loader: false,
           showError: true
         });
+      }
+
+      // set error data
+      if(error) {
         this.setState({
-          errorText1: 'Something went wrong'
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError:true
         })
       }
 
@@ -610,20 +666,7 @@ class BasicDetailsForm extends Component {
         buttonTitle='Go to Summary'
         onlyButton={true}
         showError={this.state.showError}
-        errorData={
-          {
-            handleClick1: this.handleClickCurrent,
-            button_text1: 'Retry',
-            handleClick2: () => {
-              this.setState({
-                showError: false
-              })
-            },
-            button_text2: 'check again',
-            title1: this.state.errorText1,
-            two_button: true
-          }
-        }
+        errorData={this.state.errorData}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         handleClick={() => this.handleClickCurrent()}

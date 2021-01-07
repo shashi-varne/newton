@@ -46,13 +46,46 @@ class PlanSummaryClass extends Component {
 
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
+
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Okay'
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
+
+  onload = async() => {
+    this.setErrorData('onload');
 
     if (this.state.group_insurance_payment_started) {
       this.navigate('payment-callback');
       return;
     }
 
+    let error = '';
     try {
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
       this.setState({
@@ -78,16 +111,30 @@ class PlanSummaryClass extends Component {
         })
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || 'Something went wrong';
       }
     } catch (err) {
       this.setState({
-        skelton: false
+        skelton: false,
+        showError:true
       });
-      toast('Something went wrong');
     }
 
+     // set error data
+     if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
+    }
+
+  }
+  async componentDidMount() {
+    this.onload();
   }
 
 
@@ -111,6 +158,7 @@ class PlanSummaryClass extends Component {
 
   async handleClickCurrent() {
 
+    this.setErrorData('submit');
     try {
       this.setState({
         show_loader: 'page'

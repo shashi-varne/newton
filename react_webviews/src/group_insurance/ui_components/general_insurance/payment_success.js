@@ -25,7 +25,6 @@ class PaymentSuccessClass extends Component {
       checked: false,
       parent: this.props.parent,
       address_details_data: {},
-      skelton: true,
       pincode: '',
       addressline: '',
       landmark: '',
@@ -49,7 +48,34 @@ class PaymentSuccessClass extends Component {
 
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
+
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
+
+  onload = async() => {
+
+    this.setErrorData('onload');
+
+    this.setState({
+      skelton: true
+    })
 
     let address_details_data = {
       "product_name": this.props.parent.state.product_key,
@@ -62,6 +88,8 @@ class PaymentSuccessClass extends Component {
     // this.setState({
     //   address_details_data: address_details_data
     // })
+
+    let error = '';
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
@@ -90,19 +118,32 @@ class PaymentSuccessClass extends Component {
         })
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error  = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || 'Something went wrong';
       }
 
     } catch (err) {
       this.setState({
-        skelton: false
+        skelton: false,
+        showError: true
       });
-      toast('Something went wrong');
     }
 
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
+    }
+  }
 
+  async componentDidMount() {
+    this.onload();
   }
 
   handlePincode = name => async (event) => {
@@ -161,7 +202,11 @@ class PaymentSuccessClass extends Component {
 
   async handleClickCurrent() {
 
+    this.setErrorData('submit');
+
     this.sendEvents('next');
+    
+    let error = '';
     try {
       let keysMapper = {
         'addressline': 'address line',
@@ -247,14 +292,28 @@ class PaymentSuccessClass extends Component {
           this.navigate('summary-success')
         } else {
 
-          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong';
         }
 
       }
     }
     catch (err) {
-      toast('Something went wrong');
+      this.setState({
+        show_loader: false
+      })
+      error = 'Something went wrong';
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
     }
 
   }
@@ -299,6 +358,8 @@ class PaymentSuccessClass extends Component {
         disableBack={!this.state.fromHome}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         buttonTitle='Generate Policy'
         onlyButton={true}
         handleClick={() => this.handleClickCurrent()}
