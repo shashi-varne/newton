@@ -91,6 +91,13 @@
           }
         }
 
+        .referral-code-input {
+          flex-direction: column;
+          .helper-text {
+            color: #f44336;
+          }
+        }
+
         .referral-form {
           width: 100%;
 

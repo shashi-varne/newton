@@ -71,6 +71,8 @@ class Register extends Component {
       referralCheck,
       isApiRunning,
       isPromoApiRunning,
+      facebookUrl,
+      googleUrl,
     } = this.state;
     return (
       <div className="login">
@@ -185,14 +187,13 @@ class Register extends Component {
                 </>
               )}
               {referralCheck && (
-                <div className="form-field">
+                <div className="form-field referral-code-input">
                   <FormControl className="referral-form">
                     <InputLabel>Enter referral/partner code</InputLabel>
                     <InputUI
                       className="input"
                       id="referral_code"
                       error={form_data.referral_code_error ? true : false}
-                      // helperText={form_data.referral_code_error || ""}
                       onChange={this.handleChange("referral_code")}
                       value={form_data.referral_code || ""}
                       endAdornment={
@@ -213,6 +214,11 @@ class Register extends Component {
                       }
                     />
                   </FormControl>
+                  {form_data.referral_code_error && (
+                    <div className="helper-text">
+                      {form_data.referral_code_error}
+                    </div>
+                  )}
                 </div>
               )}
               <div className="referral-code">
@@ -252,8 +258,12 @@ class Register extends Component {
                 </div>
               )}
               <div className="social-block">
-                <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
-                <a className="socialSignupBtns googleBtn">GOOGLE</a>
+                <a className="socialSignupBtns facebookBtn" href={facebookUrl}>
+                  FACEBOOK
+                </a>
+                <a className="socialSignupBtns googleBtn" href={googleUrl}>
+                  GOOGLE
+                </a>
               </div>
             </div>
             <div className="footer" onClick={() => this.navigate("login")}>

@@ -1,7 +1,7 @@
 import { validateEmail } from "utils/validators";
 import toast from "../common/ui/Toast";
 import Api from "utils/api";
-import { storageService } from "utils/validators";
+import { storageService, getUrlParams } from "utils/validators";
 import { getConfig } from "utils/functions";
 
 const isMobileView = getConfig().isMobileDevice;
@@ -17,6 +17,35 @@ export function initialize() {
   this.resendOtp = resendOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
   this.navigate = navigate.bind(this);
+  let main_query_params = getUrlParams();
+  let { referrer } = main_query_params;
+  let referrerParam = referrer || "";
+  let rebalancing_redirect_url =
+    getConfig().redirect_url !== undefined
+      ? "?redirect_url=" + getConfig().redirect_url
+      : "";
+
+  let socialRedirectUrl = encodeURIComponent(
+    window.location.href + "/#/social/callback" + rebalancing_redirect_url
+  );
+
+  let facebookUrl =
+    getConfig().base_url +
+    "/auth/facebook?redirect_url=" +
+    socialRedirectUrl +
+    "&referrer=" +
+    referrerParam;
+  let googleUrl =
+    getConfig().base_url +
+    "/auth/google?redirect_url=" +
+    socialRedirectUrl +
+    "&referrer=" +
+    referrerParam;
+  this.setState({
+    referrer: referrerParam,
+    facebookUrl: facebookUrl,
+    googleUrl: googleUrl,
+  });
 }
 
 export function formCheckFields(
@@ -75,11 +104,13 @@ export function formCheckFields(
   if (loginType === "email" && userAction === "LOGIN") {
     body.email = form_data["email"];
     body.password = form_data["password"];
+    body.referrer = this.state.referrer;
     this.emailLogin(body);
   } else if (loginType === "email" && userAction === "REGISTER") {
     body.email = form_data["email"];
     body.password = form_data["password"];
     body.referrer_code = form_data["referral_code"] || "";
+    body.referrer = this.state.referrer;
     this.emailRegister(body);
   } else if (userAction === "RESET") {
     if (loginType === "mobile")
@@ -122,17 +153,16 @@ export async function mobileLogin(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      // if ($scope.referrer) {
-      //   var item = {
-      //     'promo_code': $scope.referrer
-      //   };
-      //   storageService.set('user_promo', item);
-      // }
-
       toast("OTP is sent successfully to your mobile number.");
+      if (this.state.referrer) {
+        let item = {
+          promo_code: this.state.referrer,
+        };
+        storageService.setObject("user_promo", item);
+      }
 
       if (this.state.isPromoSuccess && this.state.referral_code !== "") {
-        var item = {
+        let item = {
           promo_code: this.state.referral_code,
         };
         storageService().setObject("user_promo", item);
@@ -293,13 +323,13 @@ export async function otpVerification(body) {
 }
 
 export async function applyCode(user) {
+  var userPromo = storageService().getObject("user_promo");
   if (userPromo && user.user_id) {
     try {
-      var userPromo = storageService().getObject("user_promo");
       const res = await Api.post(`/api/referral/apply`, {
         code: userPromo.promo_code,
       });
-      const { result, status_code: status } = res.pfwresponse;
+      const { status_code: status } = res.pfwresponse;
       if (status === 200) {
         storageService.remove("user_promo");
       }

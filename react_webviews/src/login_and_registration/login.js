@@ -51,7 +51,14 @@ class Login extends Component {
   };
 
   render() {
-    let { loginType, form_data, isApiRunning, productName } = this.state;
+    let {
+      loginType,
+      form_data,
+      isApiRunning,
+      productName,
+      facebookUrl,
+      googleUrl,
+    } = this.state;
     return (
       <div className="login">
         <ToastContainer autoClose={3000} />
@@ -173,8 +180,15 @@ class Login extends Component {
               </Button>
               {productName !== "finity" && (
                 <div className="social-block">
-                  <a className="socialSignupBtns facebookBtn">FACEBOOK</a>
-                  <a className="socialSignupBtns googleBtn">GOOGLE</a>
+                  <a
+                    className="socialSignupBtns facebookBtn"
+                    href={facebookUrl}
+                  >
+                    FACEBOOK
+                  </a>
+                  <a className="socialSignupBtns googleBtn" href={googleUrl}>
+                    GOOGLE
+                  </a>
                 </div>
               )}
             </div>
