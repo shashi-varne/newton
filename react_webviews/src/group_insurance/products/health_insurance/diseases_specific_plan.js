@@ -160,7 +160,7 @@ class DiseasesSpecificPlan extends Component {
   }
 
 
-  render() { return ( <div style={{width : '100%'}}> {this.state.insuranceProducts.map(this.renderProducts)} </div> ) }
+  render() { return ( <div style={{width : '100%' , marginTop : '-8px'}}> {this.state.insuranceProducts.map(this.renderProducts)} </div> ) }
 
 }
 

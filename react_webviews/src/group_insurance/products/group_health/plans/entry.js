@@ -124,7 +124,7 @@ class HealthInsuranceEntry extends Component {
   render() {
     return ( 
         <div className="group-health-insurance-entry" style={{width : '100%'}}>
-          <div className='products' style={{width : '100%'}}>
+          <div className='products' style={{width : '100%' , marginTop : '-8px'}}>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
         </div>
