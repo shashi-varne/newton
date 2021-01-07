@@ -125,7 +125,7 @@ class Landing extends Component {
         "insurance_type": insurance_type ? insurance_type : ''
       }
     };
-
+    // eslint-disable-next-line
     banner_clicked ? eventObj.properties.user_action = [ user_action, banner_clicked ] : ''
     if (user_action === 'just_set_events') {
       return eventObj;
