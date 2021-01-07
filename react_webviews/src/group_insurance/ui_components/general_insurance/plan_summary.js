@@ -161,7 +161,7 @@ class PlanSummaryClass extends Component {
     this.setErrorData('submit');
     try {
       this.setState({
-        show_loader: 'page'
+        show_loader: 'button'
       })
       let res2;
       res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)

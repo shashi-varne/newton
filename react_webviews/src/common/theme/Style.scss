@@ -715,10 +715,10 @@ input#pan {
       margin: 0 20px 0 0;
     }
     
-    img.top-image {
+    .top-image {
         margin: 0px 0 20px 0;
-        width: 138px;
-        height: 94px;
+        width: 138px !important;
+        height: 94px !important;
     }
     
     .title2 {
