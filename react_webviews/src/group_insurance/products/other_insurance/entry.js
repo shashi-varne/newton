@@ -3,6 +3,7 @@ import Container from  '../../common/Container';
 import qs from 'qs';
 
 import { getConfig } from '../../../utils/functions';
+import { capitalizeFirstLetter } from '../../../utils/validators'
 import { nativeCallback } from '../../../utils/native_callback'
 import Api from '../../../utils/api'
 import toast from '../../../common/ui/Toast'
@@ -245,7 +246,7 @@ class LifeInsuranceEntry extends Component {
     };
 
     if(insurance_type){
-      eventObj.properties['insurance_type'] = insurance_type;
+      eventObj.properties['insurance_type'] = capitalizeFirstLetter(insurance_type.toLowerCase())
     }
 
     if (user_action === 'just_set_events') {

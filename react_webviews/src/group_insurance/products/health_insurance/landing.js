@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import qs from 'qs';
 import { insuranceStateMapper, getBhartiaxaStatusToState } from '../../constants';
+import { capitalizeFirstLetter } from '../../../utils/validators'
 
 import health_suraksha_fisdom from 'assets/health_suraksha_fisdom.svg';
 import health_suraksha_myway from 'assets/health_suraksha_myway.svg';
@@ -373,11 +374,11 @@ class HealthInsuranceLanding extends Component {
     };
 
     if(insurance_type){
-      eventObj.properties['insurance_type'] = insurance_type;
+      eventObj.properties['insurance_type'] =  capitalizeFirstLetter(insurance_type.toLowerCase())
     }
 
     if(product_selected){
-      eventObj.properties['product_selected'] = product_selected;
+      eventObj.properties['product_selected'] = product_selected.toLowerCase();
     }
 
     if (user_action === 'just_set_events') {
