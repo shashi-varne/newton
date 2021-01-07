@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="26px" viewBox="0 0 22 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>export_transaction_icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="7.1_new_otm_required" transform="translate(-268.000000, -404.000000)">
+            <g id="export_transaction_icon" transform="translate(271.000000, 407.000000)">
+                <path d="M0.5,0.5 L0.5,19.5 L15.5,19.5 L15.5,3.20710678 L12.7928932,0.5 L0.5,0.5 Z" id="Rectangle-3" stroke="#878787"></path>
+                <rect id="Rectangle-4" fill="#878787" x="3" y="15" width="10" height="1"></rect>
+                <rect id="Rectangle-4" fill="#878787" x="3" y="13" width="10" height="1"></rect>
+                <polygon id="Shape" stroke="#878787" stroke-width="0.2" fill="#878787" fill-rule="nonzero" transform="translate(10.000000, 7.500000) scale(1, -1) translate(-10.000000, -7.500000) " points="9.79169528 10 10.2083047 10 10.2083047 9.59417167 10.2083047 5.83100689 11.6959849 7.4176455 12 7.13313892 10 5 8 7.13313892 8.30401506 7.4176455 9.79169528 5.83100689 9.79169528 9.59417167"></polygon>
+                <polygon id="Shape" stroke="#878787" stroke-width="0.2" fill="#878787" fill-rule="nonzero" points="4.79169528 10 5.20830473 10 5.20830473 9.59417167 5.20830473 5.83100689 6.69598495 7.4176455 7 7.13313892 5.00000001 5 3 7.13313892 3.30401506 7.4176455 4.79169528 5.83100689 4.79169528 9.59417167"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

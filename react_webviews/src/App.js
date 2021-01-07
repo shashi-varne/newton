@@ -31,6 +31,8 @@ import Register from './login_and_registration/register';
 import Otp from './login_and_registration/otp';
 import ForgotPassword from './login_and_registration/forgot_password';
 
+import MyAccount from './dashboard/components/my_account';
+
 class App extends Component {
   render() {
     return (
@@ -63,6 +65,7 @@ class App extends Component {
           <Route path='/register' component={Register} />
           <Route path='/mobile/verify' component={Otp} />
           <Route path='/forgot-password' component={ForgotPassword} />
+          <Route path='/my-account' component={MyAccount} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

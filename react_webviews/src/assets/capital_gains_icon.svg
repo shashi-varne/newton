@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="26px" viewBox="0 0 22 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>capital_gains_icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="assets" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="7.1_new_otm_required" transform="translate(-168.000000, -404.000000)">
+            <g id="capital_gains_icon" transform="translate(171.000000, 407.000000)">
+                <path d="M0.5,0.5 L0.5,19.5 L15.5,19.5 L15.5,3.20710678 L12.7928932,0.5 L0.5,0.5 Z" id="Rectangle-3" stroke="#878787"></path>
+                <rect id="Rectangle-4" fill="#878787" x="3" y="15" width="10" height="1"></rect>
+                <rect id="Rectangle-4" fill="#878787" x="3" y="13" width="10" height="1"></rect>
+                <g id="Group" transform="translate(4.000000, 4.000000)">
+                    <polyline id="Path-2" stroke="#878787" stroke-linecap="round" stroke-linejoin="round" points="0 6 2 4 5 5 7 2"></polyline>
+                    <path d="M5.00392294,1.5 L5.00392294,1.5 C5.00177329,1.22601571 5.22213881,1.00216492 5.4961231,1.00001527 C5.49742051,1.00000509 5.49871795,1 5.50001539,1 L8,1 L8,3.5 C8,3.77614237 7.77614237,4 7.5,4 L7.5,4 C7.22385763,4 7,3.77614237 7,3.5 L7,2 L5.50786128,2 C5.23107809,2 5.00609449,1.77677467 5.00392294,1.5 Z" id="Shape" fill="#878787" fill-rule="nonzero" transform="translate(6.500000, 2.500000) rotate(-20.000000) translate(-6.500000, -2.500000) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
