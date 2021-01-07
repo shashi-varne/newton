@@ -74,7 +74,7 @@ class Landing extends Component {
 
 
   policymove = ()=> {
-    this.sendEvents('next', "" , 'banner_clicked')
+    this.sendEvents('next', "" , true)
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
@@ -122,11 +122,11 @@ class Landing extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance',
-        "insurance_type": insurance_type ? insurance_type : ''
+        "insurance_type": insurance_type ? insurance_type : '',
+        'banner_clicked' : banner_clicked ? true : false
       }
     };
-    // eslint-disable-next-line
-    banner_clicked ? eventObj.properties.user_action = [ user_action, banner_clicked ] : ''
+
     if (user_action === 'just_set_events') {
       return eventObj;
     } else {
