@@ -2136,13 +2136,12 @@ $background: #f9f9f9;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 .iwd-growth-graph{
-  height:calc(80vh - 300px);
+  height: 76%;
 }
+
 @media only screen and (max-width: 450px) {
-  .iwd-growth-graph{
-    height: calc(100vh - 420px);
-  }
   .iwd-transaction-header{
     margin-left: -20px;
     margin-right: -20px;
@@ -2154,6 +2153,7 @@ $background: #f9f9f9;
     width: 100%;
     z-index: -1;
   }
+
   .iwd-statements-container {
     align-items: flex-start;
     margin-top: 35px;
@@ -2218,5 +2218,9 @@ $background: #f9f9f9;
   .iwd-statement-report-container .iwd-statement-reports {
     margin-left: 0px;
     justify-content: center;
+  }
+
+  .iwd-growth-graph{
+    height: calc(100vh - 420px);
   }
 }
