@@ -74,7 +74,7 @@ class Landing extends Component {
 
 
   policymove = ()=> {
-    this.sendEvents('next', "")
+    this.sendEvents('next', "" , 'banner_clicked')
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
@@ -116,7 +116,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type ) {
+  sendEvents(user_action, insurance_type, banner_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -126,6 +126,7 @@ class Landing extends Component {
       }
     };
 
+    banner_clicked ? eventObj.properties.user_action = [ user_action, banner_clicked ] : ''
     if (user_action === 'just_set_events') {
       return eventObj;
     } else {
