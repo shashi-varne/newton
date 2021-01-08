@@ -32,6 +32,7 @@ import Otp from './login_and_registration/otp';
 import ForgotPassword from './login_and_registration/forgot_password';
 
 import MyAccount from './dashboard/components/my_account';
+import Notification from './dashboard/components/notification';
 
 class App extends Component {
   render() {
@@ -66,6 +67,7 @@ class App extends Component {
           <Route path='/mobile/verify' component={Otp} />
           <Route path='/forgot-password' component={ForgotPassword} />
           <Route path='/my-account' component={MyAccount} />
+          <Route path='/notification' component={Notification} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
