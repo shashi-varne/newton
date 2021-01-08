@@ -33,7 +33,6 @@ const Login = (props) => {
     if(event.target.value === "-"){
       return;
     }
-    console.log(event.target.value)
     setNumber(event.target.value);
   };
   const validatePhone = () => {
