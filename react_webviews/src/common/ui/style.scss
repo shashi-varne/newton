@@ -662,7 +662,7 @@ body[data-device="mobile"] {
 }
 
 .MuiMenuItem-root {
-  overflow: scroll !important;
+  overflow: auto !important;
 }
 
 .__react_component_tooltip .multi-line {
