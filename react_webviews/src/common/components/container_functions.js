@@ -301,7 +301,9 @@ export function renderPageLoader() {
         return (
             <div className={`generic-page-loader ${loaderData ? loaderData.loaderClass : ''}`}>
                 <div className="LoaderOverlay">
-                    <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+                    
+                    {/* <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" /> */}
+                    <div className="generic-circle-loader-component"></div>
                     <div className="LoaderOverlayText">{loadingText || quote}</div>
                 </div>
             </div>
