@@ -4,6 +4,12 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+.fd-landing-border-bottom{
+  border-bottom: 2px solid var(--primary);
+  width:20px;
+  margin-left: auto;
+  margin-right: auto;
+}
 .fd-partner-back{
   display:none;
 }
@@ -359,5 +365,8 @@ margin-bottom: 60px;
   .fd-landing-continue{
     width: 100%;
     max-width: 100%;
+  }
+  .fd-landing-border-bottom{
+    display: none;
   }
 }

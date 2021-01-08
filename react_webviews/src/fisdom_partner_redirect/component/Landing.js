@@ -35,6 +35,7 @@ const Landing = (props) => {
         <div className='fd-landing-heading'>
           If you’ve already made investments via the OBC-mPay app then:
         </div>
+        <div className="fd-landing-border-bottom"/>
         <div className='fd-landing-steps-container'>
           <div className='fd-landing-steps'>
             <img className='fd-landing-step-img' src={pointer_icon} alt='s' />
@@ -88,6 +89,7 @@ const Landing = (props) => {
               <div className='fd-landing-footer-text'>
                 Association of Mutual Funds of India registered mutual fund distributor ARN:103168
               </div>
+              
             </div>
             <div className='fd-landing-footer-sub'>
               <img className='fd-landing-step-img' src={bombay_stock_exchange_logo} alt='s' />

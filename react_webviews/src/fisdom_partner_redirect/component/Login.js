@@ -14,6 +14,7 @@ const Login = (props) => {
   const [format, setFormat] = useState('99999-99999');
   const [phoneErr, setPhoneErr] = useState('');
   const [number, setNumber] = useState('');
+  const [loading,setLoading] = useState(false);
   // const navigate = navigateFunc.bind(props);
   // const nextPage = () => {
   //   navigate(props, '');
@@ -22,7 +23,7 @@ const Login = (props) => {
     let value = event.target.value.split('/');
     let code = value[0];
     let format = code.length <= 2 ? value[1].slice(code.length + 1) + '99' : '9999 9999 9999';
-
+    
     setCountryCode(event.target.value);
     setFormat(format.split('.').join('9'));
     setPhoneErr('');
@@ -54,6 +55,7 @@ const Login = (props) => {
       return;
     }
     try {
+      setLoading(true);
       const user = await validate_user(number);
       if (user.msg) {
         alert('successful');
@@ -62,6 +64,8 @@ const Login = (props) => {
       }
     } catch (err) {
       toast(err)
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -98,7 +102,6 @@ const Login = (props) => {
               number={number}
               onKeyDown={onKeyDown}
               autoFocus={true}
-              disabled
             />
             <div style={{ color: 'red' }}>{phoneErr}</div>
           </div>
@@ -108,6 +111,7 @@ const Login = (props) => {
               onClick={clickContinue}
               color='default'
               autoFocus
+              disabled={loading}
             >
               CONTINUE
             </Button>

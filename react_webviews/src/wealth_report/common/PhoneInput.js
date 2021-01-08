@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import {
   FormControl,
   Select,
-  MenuItem,
   TextField
 } from "material-ui";
+import MenuItem from "@material-ui/core/MenuItem"
 import CountryData from "country-telephone-data";
 import InputMask from "react-input-mask";
 
