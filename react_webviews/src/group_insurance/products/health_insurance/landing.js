@@ -340,7 +340,7 @@ class HealthInsuranceLanding extends Component {
                   </span>}
 
             </div>
-            <div style={{ color: '#7e7e7e', fontSize: '13px' }}>{props.subtitle}</div>
+            <div style={{ color: '#7e7e7e', fontSize: '13px', fontWeight: '400', lineHeight: '15.41px' }}>{props.subtitle}</div>
           </div>
         </div>
       </div>
