@@ -34,6 +34,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   img {
     margin: 2rem;
@@ -368,5 +370,8 @@ margin-bottom: 60px;
   }
   .fd-landing-border-bottom{
     display: none;
+  }
+  .fd-landing-header-img-container{
+    display: flex;
   }
 }
