@@ -1,6 +1,5 @@
-export function navigate(pathname, params) {
-      this.history.push({
-        pathname: `/partner-landing/${pathname}`,
-        params,
-      });
-  }
+export function navigate(pathname) {
+  this.history.push({
+    pathname: `/partner-landing/${pathname}`,
+  });
+}

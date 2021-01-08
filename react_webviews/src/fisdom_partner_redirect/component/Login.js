@@ -6,19 +6,19 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 import Button from '@material-ui/core/Button';
 import { validate_user } from '../common/api';
-// import { navigate as navigateFunc} from '../common/commonFunction';
 import PhoneInput from '../../wealth_report/common/PhoneInput';
 import toast from 'common/ui/Toast';
+const fisdom_url = "https://fisdom.onelink.me/CQFA/3e75c8f6";
 const Login = (props) => {
   const [countryCode, setCountryCode] = useState('91');
   const [format, setFormat] = useState('99999-99999');
   const [phoneErr, setPhoneErr] = useState('');
   const [number, setNumber] = useState('');
   const [loading,setLoading] = useState(false);
-  // const navigate = navigateFunc.bind(props);
-  // const nextPage = () => {
-  //   navigate(props, '');
-  // };
+
+  const nextPage = () => {
+    return window.location.href = fisdom_url;
+  };
   const handleCodeChange = (event) => {
     let value = event.target.value.split('/');
     let code = value[0];
@@ -30,6 +30,10 @@ const Login = (props) => {
   };
   const handleNumberChange = (event) => {
     setPhoneErr('');
+    if(event.target.value === "-"){
+      return;
+    }
+    console.log(event.target.value)
     setNumber(event.target.value);
   };
   const validatePhone = () => {
@@ -56,9 +60,11 @@ const Login = (props) => {
     }
     try {
       setLoading(true);
-      const user = await validate_user(number);
+      const newNumber = number.toString().replace(/\D/g,'');
+      const user = await validate_user(newNumber);
       if (user.msg) {
         alert('successful');
+        nextPage();
       } else {
         setPhoneErr('Sorry, it seems you are not an existing OBC-mPay customer.');
       }

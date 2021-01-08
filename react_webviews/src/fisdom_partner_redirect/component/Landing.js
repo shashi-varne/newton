@@ -72,7 +72,11 @@ const Landing = (props) => {
             <div className='fd-landing-footer-sub'>
             <div className='fd-landing-footer-contact-sub'>
               <div className='fd-landing-footer-contact'>Contact us:</div>
-              <div className='fd-landing-footer-num'>ask@fisdom.com | +918048093070</div>
+              <div className='fd-landing-footer-num'>
+                <div>ask@fisdom.com</div> 
+                <span className="fd-landing-contact-divider">|</span> 
+                <div>+918048093070</div>
+                </div>
             </div>
           </div>
             <div className='fd-landing-footer-sub'>
