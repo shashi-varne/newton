@@ -9,7 +9,6 @@ class FHC {
   name = '';
   email = '';
   age = '';
-  dob = '';
   gender = '';
   mobile_number = '';
   company = '';
