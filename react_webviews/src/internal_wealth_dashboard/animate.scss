@@ -128,6 +128,20 @@
   }
 }
 
+@keyframes iwd-glow {
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 1px 12px rgba(#9F86DF, 0.8);
+  }
+}
+
+@-webkit-keyframes iwd-glow {
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 1px 12px rgba(#9F86DF, 0.8);
+  }
+}
+
 .iwd-fade-entrance {
   animation: iwd-fade-entrance 1.8s 
   // cubic-bezier(1,-0.49, 0.49, 0.49);

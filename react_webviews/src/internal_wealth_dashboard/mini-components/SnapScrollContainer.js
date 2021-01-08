@@ -23,11 +23,15 @@ const SnapScrollContainer = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentPageHeight, setCurrentPageHeight] = useState(0);
+  const [showBtnGlow, setShowBtnGlow] = useState(false);
   const container = useRef();
 
   useEffect(() => {
     createObserver();
     // Todo: Need to unobserve
+    if (!isLoading && !error) {
+      setTimeout(() => setShowBtnGlow(true), 4000);
+    }
   }, [isLoading, error]);
 
   const createObserver = () => {
@@ -62,6 +66,7 @@ const SnapScrollContainer = ({
   };
 
   const scrollPage = () => {
+    setShowBtnGlow(false);
     const [container] = document.getElementsByClassName('iwd-scroll-contain');
 
     if (currentPage === pages) {
@@ -73,7 +78,7 @@ const SnapScrollContainer = ({
 
   const Footer = (
     <div id='iwd-scroll-contain-footer'>
-      <IconButton className='iwd-pf-btn' onClick={scrollPage}>
+      <IconButton className={`${showBtnGlow ? 'iwd-btn-glow' : ''} iwd-pf-btn`} onClick={scrollPage}>
         <img src={UpwardIcon} alt='' className={currentPage < pages ? 'rotate-90' : ''} />
       </IconButton>
       <div id='iwd-pf-page-nos'>
