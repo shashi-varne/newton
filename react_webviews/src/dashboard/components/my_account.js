@@ -49,7 +49,7 @@ class MyAccount extends Component {
             {isReadyToInvestBase && (
               <div className="account-options">
                 <img src={require(`assets/address_icon.svg`)} alt="" />
-                <div>Change Adress</div>
+                <div>Change Address</div>
               </div>
             )}
             {(isReadyToInvestBase || bank.doc_status === "rejected") && (

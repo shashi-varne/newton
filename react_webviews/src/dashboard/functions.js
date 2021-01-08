@@ -12,6 +12,7 @@ export async function initialize() {
     });
   }
   this.getMyAccount = getMyAccount.bind(this);
+  this.getNotifications = getNotifications.bind(this);
   let currentUser = storageService().getObject("user");
   this.setState({ currentUser: currentUser });
   if (this.onload) this.onload();
@@ -147,4 +148,61 @@ export async function getMyAccount() {
     toast("Something went wrong!");
     this.setState({ showLoader: false });
   }
+}
+
+export async function getNotifications() {
+  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
+  try {
+    const res = await Api.post(`/api/user/account/summary`, {
+      campaign: ["user_campaign"],
+    });
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      this.setState({ showLoader: false });
+      let campSections = ["notification", "profile"];
+      let notifications = filterCampaignTargetsBySection(
+        campSections,
+        result.data.campaign.user_campaign.data
+      );
+      this.setState({ notifications: notifications });
+      storageService().set("campaign", notifications);
+    } else {
+      this.setState({ showLoader: false });
+      toast(result.message || result.error || "Something went wrong!");
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ showLoader: false });
+    toast("Something went wrong!");
+  }
+}
+
+export function filterCampaignTargetsBySection(sections, notifications) {
+  if (!notifications) {
+    notifications = storageService().get("campaign") || [];
+  }
+
+  let notificationsData = [];
+
+  for (let i = 0; i < notifications.length; i++) {
+    if (
+      notifications[i].notification_visual_data &&
+      notifications[i].notification_visual_data.target
+    ) {
+      for (
+        let j = 0;
+        j < notifications[i].notification_visual_data.target.length;
+        j++
+      ) {
+        let camTarget = notifications[i].notification_visual_data.target[j];
+        if (sections.indexOf(camTarget.section) !== -1) {
+          camTarget.campaign_name = notifications[i].campaign.name;
+          notificationsData.push(camTarget);
+          break;
+        }
+      }
+    }
+  }
+
+  return notificationsData;
 }

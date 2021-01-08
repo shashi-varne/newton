@@ -11,6 +11,7 @@ class Notification extends Component {
     this.state = {
       productName: getConfig().productName,
       showLoader: false,
+      notifications: [],
     };
     this.initialize = initialize.bind(this);
   }
@@ -19,23 +20,12 @@ class Notification extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    this.getNotifications();
+  };
 
   render() {
-    let notifications = [
-      {
-        title: "Welcome",
-        subtitle: "have a nice day",
-      },
-      {
-        title: "Welcome",
-        subtitle: "have a nice day",
-      },
-      {
-        title: "Welcome",
-        subtitle: "have a nice day",
-      },
-    ];
+    let { notifications } = this.state;
     return (
       <div className="notification">
         <ToastContainer autoClose={3000} />
@@ -51,7 +41,10 @@ class Notification extends Component {
               return (
                 <div key={index} className="content">
                   <div className="icon">
-                    <img alt="icon" src={require(`assets/catchup.png`)} />
+                    {!target.image && (
+                      <img alt="icon" src={require(`assets/catchup.png`)} />
+                    )}
+                    {target.image && <img alt="icon" src={target.image} />}
                   </div>
                   <div className="text">
                     <h4>{target.title}</h4>

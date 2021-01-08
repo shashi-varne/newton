@@ -58,11 +58,12 @@
 
     .content {
       display: flex;
+      cursor: pointer;
+      align-items: center;
+      border-top: 1px solid #b2b2b2;
+      padding-bottom: 15px;
 
       .icon {
-        margin-top: 10px;
-        padding: 10px 0;
-
         img {
           width: 50px;
           vertical-align: middle;
@@ -76,9 +77,10 @@
         h4 {
           margin: 0;
           font-size: 16px;
-          font-family: "Roboto";
+          // font-family: "Roboto";
           color: #4f2da7;
           font-weight: 500;
+          line-height: 1.1;
         }
 
         p {
@@ -86,9 +88,12 @@
           font-size: 14px;
           margin-top: 5px;
           line-height: normal;
-          min-height: 32px;
         }
       }
+    }
+
+    .content:first-child {
+      border: none;
     }
   }
 }
