@@ -63,7 +63,6 @@ const Login = (props) => {
       const newNumber = number.toString().replace(/\D/g,'');
       const user = await validate_user(newNumber);
       if (user.msg) {
-        alert('successful');
         nextPage();
       } else {
         setPhoneErr('Sorry, it seems you are not an existing OBC-mPay customer.');
