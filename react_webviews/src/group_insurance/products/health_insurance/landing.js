@@ -97,16 +97,16 @@ class HealthInsuranceLanding extends Component {
     let openModuleData =  params ? params.openModuleData : {}
 
 
-    if(openModuleData && openModuleData.sub_module) {
-      let pathname = openModuleData.sub_module;
-      if(pathname !== 'HEALTH_SURAKSHA'){
-        this.handleClick(pathname);
-      }
-    } else {
-      this.setState({
-        show_loader: false
-      })
-    }
+    // if(openModuleData && openModuleData.sub_module) {
+    //   let pathname = openModuleData.sub_module;
+    //   if(pathname !== 'HEALTH_SURAKSHA'){
+    //     this.handleClick(pathname);
+    //   }
+    // } else {
+    //   this.setState({
+    //     show_loader: false
+    //   })
+    // }
 
     this.setState({
       openModuleData: openModuleData || {},
