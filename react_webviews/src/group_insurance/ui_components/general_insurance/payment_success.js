@@ -42,11 +42,15 @@ class PaymentSuccessClass extends Component {
 
     let { params } = this.props.parent.props.location || {};
     let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
-    this.setState({
-      lead_id: lead_id || '',
-      fromHome: params && params.fromHome ? true : false,
-    })
 
+    if(lead_id){
+      this.setState({
+        lead_id: lead_id || '',
+        fromHome: params && params.fromHome ? true : false,
+      })
+    }else{
+      this.navigate('/group-insurance');
+    }
   }
 
   async componentDidMount() {
