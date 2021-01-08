@@ -102,14 +102,12 @@ class HealthInsuranceEntry extends Component {
     if(!props.disabled) {
       return (
         <div className='insurance_plans' style={{width : '100%'}} key={index} onClick={() => this.handleClick(props)}>
-          <div className='insurance_plans_types' style={{width : '100%'}}>
+          <div className='insurance_plans_types' style={{width : '100%', padding : '0px'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
-            <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 65px)` : '100%',
+            <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' }}>
-              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' ,lineHeight : '15.41px'}}
-              >{props.title}
-              </div>
+              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' , lineHeight : '15.41px', width : '100%'}}>{props.title}</div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
           </div>

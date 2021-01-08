@@ -349,7 +349,7 @@ class HealthInsuranceLanding extends Component {
     {props.key === 'HealthInsuranceEntry' && this.state.Comprehensive && 
        <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
       }}>
-     <div onClick={() => this.handleClick2()} style={{ display: 'flex'}}>{props.key === 'HealthInsuranceEntry' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex' , width : '100%' }}>{props.key === 'HealthInsuranceEntry' && <HealthInsuranceEntry onSelectEvent={this.handleEvent} parent={this}/> } </div>
 
       </div>}
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
