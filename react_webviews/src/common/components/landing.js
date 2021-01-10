@@ -47,7 +47,12 @@ class CommonLanding extends Component {
             'health-insurance-hdfcergo': '/group-insurance/group-health/HDFCERGO/landing',
             'health-insurance-religare': '/group-insurance/group-health/RELIGARE/landing',
             'health-insurance-star': '/group-insurance/group-health/STAR/landing',
-            'life-insurance-fyntune': '/group-insurance/life-insurance/savings-plan/landing'
+            'life-insurance-fyntune': '/group-insurance/life-insurance/savings-plan/landing',
+            'health-critical-illness': '/group-insurance/health/critical_illness/plan',
+            'health-super-top-up': '/group-insurance/health/super_topup/plan',
+            'other-insurance-home': '/group-insurance/home_insurance/general/plan',
+            'insurance-reports-list': '/group-insurance/common/report',
+            'life-insurance-landing': 'group-insurance/life-insurance/entry',
         };
 
         let pathname = navigateMapper[main_module] || '';
