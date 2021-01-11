@@ -239,7 +239,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="First name"
                 class="first_name"
-                id="name"
+                id="first_name"
                 name="first_name"
                 value={this.state.form_data.first_name || ""}
                 onChange={this.handleChange("first_name")}
@@ -255,7 +255,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Middle name"
                 class="middle_name"
-                id="name"
+                id="middle_name"
                 name="middle_name"
                 value={this.state.form_data.middle_name || ""}
                 onChange={this.handleChange("middle_name")}
@@ -271,7 +271,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Last name"
                 class="last_name"
-                id="name"
+                id="last_name"
                 name="last_name"
                 value={this.state.form_data.last_name || ""}
                 onChange={this.handleChange("last_name")}
@@ -340,7 +340,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Father's first name"
                 class="father_first_name"
-                id="name"
+                id="father_first_name"
                 name="father_first_name"
                 value={this.state.form_data.father_first_name || ""}
                 onChange={this.handleChange("father_first_name")}
@@ -356,7 +356,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Father's last name"
                 class="father_last_name"
-                id="name"
+                id="father_last_name"
                 name="father_last_name"
                 value={this.state.form_data.father_last_name || ""}
                 onChange={this.handleChange("father_last_name")}
@@ -374,7 +374,7 @@ class PersonalDetails extends Component {
                     width="40"
                     label="Mother's first name"
                     class="mother_first_name"
-                    id="name"
+                    id="mother_first_name"
                     name="mother_first_name"
                     value={this.state.form_data.mother_first_name || ""}
                     onChange={this.handleChange("mother_first_name")}
@@ -390,7 +390,7 @@ class PersonalDetails extends Component {
                     width="40"
                     label="Mother's last name"
                     class="mother_last_name"
-                    id="name"
+                    id="mother_last_name"
                     name="mother_last_name"
                     value={this.state.form_data.mother_last_name || ""}
                     onChange={this.handleChange("mother_last_name")}

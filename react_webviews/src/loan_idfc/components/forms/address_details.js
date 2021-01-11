@@ -345,7 +345,7 @@ class AddressDetails extends Component {
                 type="text"
                 width="40"
                 label="Address line 1"
-                id="address"
+                id="current_address1"
                 name="current_address1"
                 value={this.state.form_data.current_address1 || ""}
                 onChange={this.handleChange("current_address1")}
@@ -360,7 +360,7 @@ class AddressDetails extends Component {
                 type="text"
                 width="40"
                 label="Address line 2"
-                id="address"
+                id="current_address2"
                 name="current_address2"
                 value={this.state.form_data.current_address2 || ""}
                 onChange={this.handleChange("current_address2")}
@@ -376,8 +376,8 @@ class AddressDetails extends Component {
                   type="text"
                   width="40"
                   label="Address line 3"
-                  id="address"
-                  name="fcurrent_address3"
+                  id="current_address3"
+                  name="current_address3"
                   value={this.state.form_data.current_address3 || ""}
                   onChange={this.handleChange("current_address3")}
                   onClick={() => this.handleCkycMessage("current_address3")}
@@ -469,7 +469,7 @@ class AddressDetails extends Component {
                   type="text"
                   width="40"
                   label="Address line 1"
-                  id="address"
+                  id="permanent_address1"
                   name="permanent_address1"
                   value={this.state.form_data.permanent_address1 || ""}
                   onChange={this.handleChange("permanent_address1")}
@@ -485,7 +485,7 @@ class AddressDetails extends Component {
                   type="text"
                   width="40"
                   label="Address line 2"
-                  id="address"
+                  id="permanent_address2"
                   name="permanent_address2"
                   value={this.state.form_data.permanent_address2 || ""}
                   onChange={this.handleChange("permanent_address2")}
@@ -502,7 +502,7 @@ class AddressDetails extends Component {
                     type="text"
                     width="40"
                     label="Address line 3"
-                    id="address"
+                    id="permanent_address3"
                     name="permanent_address3"
                     value={this.state.form_data.permanent_address3 || ""}
                     onChange={this.handleChange("permanent_address3")}
