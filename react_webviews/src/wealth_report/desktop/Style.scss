@@ -886,17 +886,6 @@
   }
 }
 
-@-webkit-keyframes fadeInUp {
-  from {
-    transform: translate3d(0,40px,0);
-  }
-
-  to {
-    transform: translate3d(0,0,0);
-    opacity: 1;
-  }
-}
-
 @include animatedDelay(10, 0.6);
 
 #wr-no-pan-screen {
