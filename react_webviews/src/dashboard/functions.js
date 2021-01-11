@@ -11,8 +11,12 @@ export async function initialize() {
       search: getConfig().searchParams,
     });
   }
+
   this.getMyAccount = getMyAccount.bind(this);
   this.getNotifications = getNotifications.bind(this);
+  this.navigate = navigate.bind(this);
+  this.authenticate = authenticate.bind(this);
+
   let currentUser = storageService().getObject("user");
   this.setState({ currentUser: currentUser });
   if (this.onload) this.onload();
@@ -55,7 +59,9 @@ export async function getMyAccount() {
         let npsMandate = result.razorpay_mandates.mandates;
         let npsMandatePaymentLink =
           result.razorpay_mandates.pending_mandate_link;
-        // $scope.$emit('nps_pending_mandate_link', { newvalue: $scope.npsMandatePaymentLink });
+        this.setState({
+          nps_pending_mandate_link: npsMandatePaymentLink,
+        });
         storageService().setObject("nps_mandates", npsMandate);
       } else {
         storageService().remove("nps_mandates");
@@ -129,7 +135,6 @@ export async function getMyAccount() {
           pendingMandate = { show_status: false };
         }
         storageService.setObject("pending_mandate", pendingMandate);
-        // $scope.$emit('pending_mandate', { newvalue: $scope.pendingMandate });
       }
       this.setState({
         pendingMandate: pendingMandate,
@@ -205,4 +210,53 @@ export function filterCampaignTargetsBySection(sections, notifications) {
   }
 
   return notificationsData;
+}
+
+export function navigate(pathname, data = {}) {
+  if (this.props.edit || data.edit) {
+    this.props.history.replace({
+      pathname: pathname,
+      search: getConfig().searchParams,
+    });
+  } else {
+    this.props.history.push({
+      pathname: pathname,
+      search: data.searchParams || getConfig().searchParams,
+      params: data.params || {},
+    });
+  }
+}
+
+export async function authenticate() {
+  if (this.state.npsMandatePaymentLink !== "") {
+    window.location.href = this.state.npsMandatePaymentLink;
+  } else {
+    this.setState({ showLoader: true, loadingMessage: "Please wait..." });
+    try {
+      const res = await Api.post(`/api/nps/invest/mandate/requestmandate`, {
+        amount: 50000,
+      });
+      const { result, status_code: status } = res.pfwresponse;
+      if (status === 200) {
+        this.setState({ showLoader: false });
+        let paymentRedirectUrl = encodeURIComponent(
+          window.location.href + "nps/mandate/callback"
+        );
+        let pgLink = result.payment_link;
+        pgLink +=
+          // eslint-disable-next-line
+          (pgLink.match(/[\?]/g) ? "&" : "?") +
+          "plutus_redirect_url=" +
+          paymentRedirectUrl;
+        window.location.href = pgLink;
+      } else {
+        this.setState({ showLoader: false });
+        toast(result.message || result.error || "Something went wrong!");
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ showLoader: false });
+      toast("Something went wrong!");
+    }
+  }
 }
