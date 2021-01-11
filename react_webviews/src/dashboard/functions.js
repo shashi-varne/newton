@@ -228,6 +228,7 @@ export function navigate(pathname, data = {}) {
 }
 
 export async function authenticate() {
+  this.setState({ showLoader: true, loadingMessage: "Please wait..." });
   if (this.state.npsMandatePaymentLink !== "") {
     window.location.href = this.state.npsMandatePaymentLink;
   } else {
@@ -259,4 +260,39 @@ export async function authenticate() {
       toast("Something went wrong!");
     }
   }
+}
+
+export function getRedirectionUrlWebview(
+  url,
+  redirect_path,
+  type,
+  redirect_url
+) {
+  let webRedirectionUrl = url;
+  let is_secure = storageService().get("is_secure");
+  let plutus_redirect_url = window.location.href;
+  if (redirect_path) {
+    plutus_redirect_url += redirect_path;
+  }
+  plutus_redirect_url += "?is_secure=" + is_secure;
+  plutus_redirect_url = encodeURIComponent(plutus_redirect_url);
+  if (redirect_url) {
+    webRedirectionUrl +=
+      // eslint-disable-next-line
+      (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
+      "generic_callback=true&redirect_url=" +
+      plutus_redirect_url;
+  } else {
+    webRedirectionUrl +=
+      // eslint-disable-next-line
+      (webRedirectionUrl.match(/[\?]/g) ? "&" : "?") +
+      "generic_callback=true&plutus_redirect_url=" +
+      plutus_redirect_url;
+  }
+
+  if (type === "campaigns") {
+    webRedirectionUrl += "&campaign_version=1";
+  }
+
+  return webRedirectionUrl;
 }

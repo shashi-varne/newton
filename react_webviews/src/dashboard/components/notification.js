@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../Style.scss";
 import { getConfig } from "utils/functions";
-import { initialize } from "../functions";
+import { initialize, getRedirectionUrlWebview } from "../functions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -24,6 +24,26 @@ class Notification extends Component {
     this.getNotifications();
   };
 
+  handleClick = (target) => {
+    this.setState({ showLoader: true });
+    let campLink = "";
+    if (target.campaign_name === "whatsapp_consent") {
+      campLink = getRedirectionUrlWebview(
+        target.url,
+        "notification",
+        "campaigns",
+        true
+      );
+    } else {
+      campLink = getRedirectionUrlWebview(
+        target.url,
+        "notification",
+        "campaigns"
+      );
+    }
+    window.location.href = campLink;
+  };
+
   render() {
     let { notifications } = this.state;
     return (
@@ -39,7 +59,11 @@ class Notification extends Component {
           <div className="list">
             {notifications.map((target, index) => {
               return (
-                <div key={index} className="content">
+                <div
+                  key={index}
+                  className="content"
+                  onClick={() => this.handleClick(target)}
+                >
                   <div className="icon">
                     {!target.image && (
                       <img alt="icon" src={require(`assets/catchup.png`)} />
