@@ -52,7 +52,7 @@ class CommonLanding extends Component {
             'health-super-top-up': '/group-insurance/health/super_topup/plan',
             'other-insurance-home': '/group-insurance/home_insurance/general/plan',
             'insurance-reports-list': '/group-insurance/common/report',
-            'life-insurance-landing': 'group-insurance/life-insurance/entry',
+            'life-insurance-landing': '/group-insurance/life-insurance/entry',
         };
 
         let pathname = navigateMapper[main_module] || '';
