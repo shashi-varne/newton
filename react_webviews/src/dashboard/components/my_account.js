@@ -4,6 +4,12 @@ import { getConfig } from "utils/functions";
 import { initialize } from "../functions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import Button from "material-ui/Button";
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from "material-ui/Dialog";
 
 class MyAccount extends Component {
   constructor(props) {
@@ -14,6 +20,7 @@ class MyAccount extends Component {
       mandate: {},
       pendingMandate: {},
       userkyc: {},
+      openDialog: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -50,6 +57,74 @@ class MyAccount extends Component {
         this.navigate("blank-mandate/upload");
         break;
     }
+  };
+
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+    });
+  };
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+        className="my-account-dialog"
+      >
+        <DialogContent className="content">
+          <DialogContentText className="subtitle">
+            {this.state.subtitle}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className="action">
+          {this.state.twoButton && (
+            <Button
+              className="cancel"
+              onClick={() => this.handleClick2()}
+              color="secondary"
+              autoFocus
+            >
+              {this.state.buttonTitle2}
+            </Button>
+          )}
+          <Button
+            className="confirm"
+            onClick={() => this.handleClick1(this.state.twoButton)}
+            color="secondary"
+            autoFocus
+          >
+            {this.state.buttonTitle1}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  confirmTransactions = () => {
+    this.setState({
+      openDialog: true,
+      buttonTitle1: "OK",
+      buttonTitle2: "CANCEL",
+      subtitle: "You will receive an email with transaction list",
+      twoButton: true,
+    });
+  };
+
+  handleClick1 = (result) => {
+    if (result) {
+      this.exportTransactions();
+    } else {
+      this.handleClick2();
+    }
+  };
+
+  handleClick2 = () => {
+    this.setState({
+      openDialog: false,
+    });
   };
 
   render() {
@@ -112,7 +187,10 @@ class MyAccount extends Component {
                 </div>
               )}
             {isReadyToInvestBase && currentUser.active_investment && (
-              <div className="account-options" onClick={() => {}}>
+              <div
+                className="account-options"
+                onClick={() => this.confirmTransactions()}
+              >
                 <img
                   src={require(`assets/export_transaction_icon.svg`)}
                   alt=""
@@ -163,6 +241,7 @@ class MyAccount extends Component {
               )}
             </div>
           )}
+          {this.renderDialog()}
         </div>
       </div>
     );

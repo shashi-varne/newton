@@ -16,6 +16,7 @@ export async function initialize() {
   this.getNotifications = getNotifications.bind(this);
   this.navigate = navigate.bind(this);
   this.authenticate = authenticate.bind(this);
+  this.exportTransactions = exportTransactions.bind(this);
 
   let currentUser = storageService().getObject("user");
   this.setState({ currentUser: currentUser });
@@ -295,4 +296,29 @@ export function getRedirectionUrlWebview(
   }
 
   return webRedirectionUrl;
+}
+
+export async function exportTransactions() {
+  this.setState({ showLoader: true });
+  try {
+    const res = await Api.get(`/api/rta/mine/getaccountsummary`);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      this.setState({
+        showLoader: false,
+        openDialog: true,
+        buttonTitle1: "Got it!",
+        twoButton: false,
+        subtitle:
+          "Your tax statement has been generated and sent to your registered email.",
+      });
+    } else {
+      this.setState({ showLoader: false });
+      toast(result.message || result.error || "Something went wrong!");
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ showLoader: false });
+    toast("Something went wrong!");
+  }
 }
