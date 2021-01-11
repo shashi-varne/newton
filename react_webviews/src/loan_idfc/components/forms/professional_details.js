@@ -60,6 +60,10 @@ class ProfessionalDetails extends Component {
       form_data: form_data,
       employment_type: employment_type,
       company_name: professional_info.company_name,
+      companyOptions: [{
+        name: professional_info.company_name,
+        value: professional_info.company_name
+      }]
     });
   };
 

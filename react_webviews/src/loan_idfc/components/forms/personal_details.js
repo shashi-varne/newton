@@ -156,9 +156,6 @@ class PersonalDetails extends Component {
     this.sendEvents('next');
     let { form_data } = this.state;
 
-    form_data.marital_status = form_data.marital_status.toLowerCase();
-    form_data.religion = form_data.religion.toLowerCase();
-
     let keys_to_check = [
       "first_name",
       "last_name",
