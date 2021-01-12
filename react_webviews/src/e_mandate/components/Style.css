@@ -125,13 +125,16 @@
   margin: 20px 0;
 }
 .success-bottom {
-  margin: 50px 0 20px 0;
+  margin: 56px 0 20px 0;
   text-align: center;
 }
 .success-bottom1 {
-  font-size: 13px;
+  font-size: 11px;
   color: #767E86;
-  margin-bottom: 11px;
+  margin-bottom: 14px;
+  font-weight: 500;
+  line-height: 13.04px;
+  letter-spacing: 1px;
 }
 .success-bottom2 {
   display: flex;
@@ -141,10 +144,12 @@
 .success-bottom2a {
   font-size: 10px;
   color: #767E86;
-  font-weight: 600;
+  font-weight: 700;
+  line-height: 11.72px;
+  letter-spacing: 1px;
 }
 .success-bottom2b {
-  margin: 0 20px 0 20px;
+  margin: 0 40px 0 40px;
   color: #767E86;
 }
 .payment-failed-subtitle {
