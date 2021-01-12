@@ -246,10 +246,21 @@ class Container extends Component {
       
     }
 
+    if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0 && ( pathname === '/group-insurance/accident/payment-success' || 
+        pathname === '/group-insurance/wallet/payment-success') &&
+      this.props.disableBack) {
+      this.setState({
+        callbackType: 'web_home_other_page',
+        openPopup: true,
+        popupText: 'Address is mandatory for policy document, are you sure you want to go back?'
+      })
+      return;
+    }
+    
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
       && this.props.disableBack) {
       this.setState({
-        callbackType: 'web_home',
+        callbackType: 'web_home_health_page',
         openPopup: true,
         popupText: 'Address is mandatory for policy document, are you sure you want to go back?'
       })
@@ -260,6 +271,18 @@ class Container extends Component {
       && this.props.disableBack) {
         this.navigate('/group-insurance');
       return;
+    }
+
+    if(pathname === '/group-insurance/accident/payment-success' || pathname === '/group-insurance/wallet/payment-success'){
+      this.navigate('/group-insurance/other-insurance/entry')
+      return
+    }
+
+    if(pathname === '/group-insurance/dengue/payment-success'
+    || pathname === '/group-insurance/corona/payment-success'
+    || pathname === '/group-insurance/hospicash/payment-success'){
+      this.navigate('/group-insurance/health/landing')
+      return
     }
 
     if (pathname.indexOf('payment-success') >= 0 ||
@@ -442,6 +465,10 @@ class Container extends Component {
       this.navigate('/group-insurance/term/quote');
     } else if (this.state.callbackType === 'web_home') {
       this.navigate('/group-insurance')
+    } else if(this.state.callbackType === 'web_home_other_page'){
+      this.navigate('/group-insurance/other-insurance/entry')
+    } else if(this.state.callbackType === 'web_home_health_page'){
+      this.navigate('/group-insurance/health/landing')
     }
 
 

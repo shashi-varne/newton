@@ -16,21 +16,21 @@ const IwdGrowthGraph = ({
   isLoading = false
 }) => {
   return (
-    <div style={{ width, height, margin: `0 ${isMobileView ? '0 0 -5px' : '-20px 0 -30px'}` }}>
+    <div style={{ width, height, margin: `0 ${isMobileView ? '-15px 0 -10px' : '-20px 0 -30px'}` }}>
       {isLoading ?
         <IwdCardLoader />
         : 
         (<ResponsiveLine
           data = { data }
           animate = { true }
-          margin = {{ top: 20, right: 40, bottom: 40, left: isMobileView ? 50 : 70 }}
-          // yScale={{
-          //   type: 'linear',
-          //   min: params.min || 'auto',
-          //   max: params.max || 'auto',
-          //   stacked: false,
-          //   reverse: false
-          // }}
+          margin = {{ top: 20, right: 40, bottom: 40, left: isMobileView ? 60 : 70 }}
+          yScale={{
+            type: 'linear',
+            min: params.min || 'auto',
+            max: params.max || 'auto',
+            stacked: false,
+            reverse: false
+          }}
           axisBottom={{
             format: value => formattedDate(value, params.dateFormat, true),
             tickValues: params.date_ticks,
@@ -40,8 +40,8 @@ const IwdGrowthGraph = ({
           axisLeft={{
             orient: 'left',
             tickValues: 5,
-            format: value => value === 0 ? 0 : numDifferentiationInr(value, 1), //converts 40000 to 40K
-            tickPadding: 15,
+            format: value => value === 0 ? 0 : numDifferentiationInr(value, 2), //converts 40000 to 40K
+            tickPadding: 10,
             tickSize: 0,
           }}
           curve="linear"
@@ -87,7 +87,7 @@ const IwdGrowthGraph = ({
           }}
           sliceTooltip={IwdLineTooltip}
           enableArea={true}
-          areaBaselineValue={0}
+          areaBaselineValue={params.min || 0}
           defs={[
           linearGradientDef('gradientA', [
             { offset: 0, color: 'inherit' },

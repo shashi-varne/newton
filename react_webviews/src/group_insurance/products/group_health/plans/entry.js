@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import hdfc_logo from '../../../../assets/ic_hdfc.svg';
+import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../assets/ic_care.svg';
 import star_logo from '../../../../assets/ic_star_health.svg'
 import toast from '../../../../common/ui/Toast'
@@ -101,16 +101,14 @@ class HealthInsuranceEntry extends Component {
   renderPorducts(props, index) {
     if(!props.disabled) {
       return (
-        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}>
-          <div className='insurance_plans_types' style={{width : '100%'}}>
+        <div className='insurance_plans' style={{width : '100%'}} key={index} onClick={() => this.handleClick(props)}>
+          <div className='insurance_plans_types' style={{width : '100%', padding : '0px'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
-            <div style={{ borderBottomWidth: '1px', width : '100%',
-                  borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '',   paddingTop: '20px', paddingBottom: '20px',
+            <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%',
+                  borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' }}>
-              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' ,lineHeight : '15.41px'}}
-              >{props.title}
-              </div>
-              <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
+              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' , lineHeight : '15.41px', width : '100%'}}>{props.title}</div>
+              <div className='insurance_plans_logos_subtext' style={{fontWeight: '300'}}>{props.subtitle}</div>
             </div>
           </div>
         </div>
@@ -124,7 +122,7 @@ class HealthInsuranceEntry extends Component {
   render() {
     return ( 
         <div className="group-health-insurance-entry" style={{width : '100%'}}>
-          <div className='products' style={{width : '100%'}}>
+          <div className='products' style={{width : '100%' , marginTop : '-8px'}}>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
         </div>

@@ -3,6 +3,7 @@ import Container from  '../../common/Container';
 import qs from 'qs';
 
 import { getConfig } from '../../../utils/functions';
+import { capitalizeFirstLetter } from '../../../utils/validators'
 import { nativeCallback } from '../../../utils/native_callback'
 import Api from '../../../utils/api'
 import toast from '../../../common/ui/Toast'
@@ -218,14 +219,15 @@ class LifeInsuranceEntry extends Component {
             <div  style={{  borderBottomWidth: '1px',  width : '100%',
                           borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px' ,   paddingBottom: '22px'}}    >
               <div className='insurance_plans_logos_text'
-              >{props.title}
+              >{props.title} {' '}
+               {props.resume_flag && <span style={{background: '#ff6868', letterSpacing: 0.1, fontSize : '8px', lineHeight : '10.06px', position : 'relative', top:'-3px',
+                 borderRadius: 7 , padding: '2px 4px', marginTop : '-30px' , color : 'white', fontWeight : '700' , width :'40px' , left:'6px', height:'14px', 
+             }}>Resume</span>}
+
               </div>
               <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
             </div>
           </div>
-          {props.resume_flag && <div style={{background: '#ff6868', color: '#fff', fontSize: 8, letterSpacing: 0.1,
-           textTransform: 'uppercase', padding: '2px 5px', borderRadius: 3
-          }}>RESUME</div>}
         </div>
       )
     }
@@ -244,7 +246,7 @@ class LifeInsuranceEntry extends Component {
     };
 
     if(insurance_type){
-      eventObj.properties['insurance_type'] = insurance_type;
+      eventObj.properties['insurance_type'] = capitalizeFirstLetter(insurance_type.toLowerCase())
     }
 
     if (user_action === 'just_set_events') {
@@ -266,7 +268,7 @@ class LifeInsuranceEntry extends Component {
         styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
           <div className='products'>
-            <div className='health_insurance'>Unique plans for specific needs</div>
+            <div className='health_insurance'>Insurance plans for specific needs</div>
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>

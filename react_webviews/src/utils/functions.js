@@ -440,7 +440,7 @@ function getPartnerConfig(partner_code) {
       appLink: 'https://myway.onelink.me/W4GN/1f539fd2',
       termsLink: 'https://finity.in/terms/',
       schemeLink: 'https://finity.in/scheme/',
-      askEmail: 'ask@finity.in',
+      askEmail: 'ASK@FINITY.in',
       configPrimaryColorClass: 'configPrimaryColorClass',
       configPrimaryBackgroundColorClass: 'mywayBackColor',
       webAppUrl: 'https://app.mywaywealth.com/#!/',
