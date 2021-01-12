@@ -16,6 +16,7 @@ export function initialize() {
   this.otpVerification = otpVerification.bind(this);
   this.resendOtp = resendOtp.bind(this);
   this.forgotPassword = forgotPassword.bind(this);
+  this.verifyForgotOtp = verifyForgotOtp.bind(this);
   this.navigate = navigate.bind(this);
   let main_query_params = getUrlParams();
   let { referrer } = main_query_params;
@@ -180,6 +181,7 @@ export async function mobileLogin(body) {
         {
           mobile_number: body.mobile_number,
           rebalancing_redirect_url: rebalancing_redirect_url,
+          forgot: false,
         }
       );
     } else {
@@ -202,7 +204,7 @@ export async function emailRegister(body) {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       // if (getConfig().redirect_url !== undefined) {
-      //   window.location = getConfig().redirect_url;
+      //   window.location.href = getConfig().redirect_url;
       //   return;
       // }
       if (this.state.isPromoSuccess) {
@@ -372,9 +374,29 @@ export async function forgotPassword(body) {
           },
           {
             mobile_number: body.mobile_number,
+            forgot: true,
           }
         );
       }
+    } else {
+      toast(result.message || result.error || "Something went wrong!");
+    }
+    this.setState({ isApiRunning: false });
+  } catch (error) {
+    console.log(error);
+    toast("Something went wrong!");
+    this.setState({ isApiRunning: false });
+  }
+}
+
+export async function verifyForgotOtp(body) {
+  this.setState({ isApiRunning: true });
+  try {
+    const res = await Api.post(`/api/user/verifymobile?otp=${body.otp}`);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      toast("Login to continue");
+      this.navigate("/login");
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }

@@ -31,9 +31,11 @@ class Otp extends Component {
     }
     let mobile_number = state.mobile_number;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
+    let forgot =  state.forgot;
     this.setState({
       mobile_number: mobile_number,
       rebalancing_redirect_url: rebalancing_redirect_url,
+      forgot: forgot,
     });
     this.initialize();
   }
@@ -48,10 +50,16 @@ class Otp extends Component {
   };
 
   handleClick = () => {
-    this.otpVerification({
-      mobile_number: this.state.mobile_number,
-      otp: this.state.otp,
-    });
+    if(this.state.forgot) {
+      this.verifyForgotOtp({
+        otp: this.state.otp,
+      });
+    } else {
+      this.otpVerification({
+        mobile_number: this.state.mobile_number,
+        otp: this.state.otp,
+      });
+    }
   };
 
   render() {

@@ -153,7 +153,7 @@ class ForgotPassword extends Component {
             </div>
             <div className="footer" onClick={() => this.navigate("login")}>
               <span href="#!/register">
-                EXSISTING USER? <span>LOGIN</span>
+                EXISTING USER? <span>LOGIN</span>
               </span>
             </div>
           </div>
