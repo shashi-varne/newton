@@ -133,6 +133,11 @@ class Landing extends Component {
     }
   }
 
+  callBackScreen = () =>{
+    this.sendEvents('callback_clicked', "");
+    this.navigate('/group-insurance/call-back');
+  }
+
   render() {
 
 
@@ -155,6 +160,10 @@ class Landing extends Component {
               <img className="image" src={require(`assets/${this.state.type}/icn_assistance.svg`)} alt="" />
               <img className="image" src={require(`assets/${this.state.type}/icn_zero_paper.svg`)} alt="" />
             </div>
+          </div>
+
+          <div className="callback-button-container">
+            <img className="image" src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} onClick={() => this.callBackScreen()} alt=""/>
           </div>
 
           <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customer says </div>
