@@ -226,6 +226,33 @@ export function renderGenericError() {
         handleClick2, handleClick1} = errorData;
 
     let two_button  = handleClick2 ? true: false
+
+    function genericErrorActions() {
+        return(
+                        <div className="actions">
+                          {two_button &&    
+                          <div  
+                          className={`generic-page-button-large button`}
+                            style={{margin: '0 20px 0 0'}}
+                            onClick={() => {
+                                disableBodyOverflow(true); //touch enabled
+                                handleClick2();
+                            }}>
+                                {button_text2 || 'Close'}
+                            </div>}
+                            <div 
+                            className={`generic-page-button-small-with-green button ${(!two_button ? 'single-button' : '')}`}
+                            onClick={() => {
+                                disableBodyOverflow(true); //touch enabled
+                                handleClick1();
+                            }}>
+                                {button_text1 || 'Retry'}
+                            </div>
+                        </div>
+        )
+    }
+
+   
     if (this.props.showError === true) {
 
         
@@ -241,26 +268,23 @@ export function renderGenericError() {
                     
                     <div className="title2">{title2 || 'Sorry, we could not process your request'}</div>
 
-                    <div className="actions">
-                      {two_button &&    
-                      <div  
-                      className={`generic-page-button-large button`}
-                        style={{margin: '0 20px 0 0'}}
-                        onClick={() => {
-                            disableBodyOverflow(true); //touch enabled
-                            handleClick2();
-                        }}>
-                            {button_text2 || 'Close'}
-                        </div>}
-                        <div 
-                        className={`generic-page-button-small-with-green button ${(!two_button ? 'single-button' : '')}`}
-                        onClick={() => {
-                            disableBodyOverflow(true); //touch enabled
-                            handleClick1();
-                        }}>
-                            {button_text1 || 'Retry'}
-                        </div>
-                    </div>
+                    {genericErrorActions()}
+                </div>
+            </div>
+        );
+    }  if (this.props.showError === 'page') {
+
+        
+        disableBodyOverflow(); //touch disabled
+        return (
+            <div className={`generic-error-dialog generic-error-dialog-page fadein-animation ${errorData ? errorData.errorClass : ''}`}>
+                <div className="overlay ovarlay-page">
+                    <Imgc className="top-image top-image-page" src={require(`assets/generic_error.svg`)} alt="" />
+                    <div className="title1 title1-page">{title1 || 'Something went wrong'}</div>
+
+                    <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
+
+                    {genericErrorActions()}
                 </div>
             </div>
         );

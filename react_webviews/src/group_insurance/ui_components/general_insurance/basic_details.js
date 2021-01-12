@@ -665,7 +665,8 @@ class BasicDetailsForm extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle='Go to Summary'
         onlyButton={true}
-        showError={this.state.showError}
+        // showError={this.state.showError}
+        showError="page"
         errorData={this.state.errorData}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}

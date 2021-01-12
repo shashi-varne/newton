@@ -770,6 +770,29 @@ input#pan {
     
 }
 
+.generic-error-dialog-page {
+  background: white;
+  margin: 56px 0 0 0;
+  .ovarlay-page {
+    position: relative;
+    padding: 100px 20px 30px 20px;
+    text-align: center;
+
+  }
+  .top-image-page {
+    margin: 0px 0 30px 0;
+  }
+  .title1-page {
+    margin: 0px;
+  }
+  .title2-page {
+    text-align: center;
+  }
+  .actions {
+    margin: 30px 0 0px 0;
+  }
+}
+
 .Loader-Dialog {
   opacity: 0.9;
   z-index: 999999;
