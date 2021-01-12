@@ -268,7 +268,7 @@ class LifeInsuranceEntry extends Component {
         styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
           <div className='products'>
-            <div className='health_insurance'>Unique plans for specific needs</div>
+            <div className='health_insurance'>Insurance plans for specific needs</div>
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
