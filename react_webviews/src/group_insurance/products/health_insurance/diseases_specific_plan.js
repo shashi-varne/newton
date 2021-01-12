@@ -42,7 +42,7 @@ class DiseasesSpecificPlan extends Component {
       },
       {
         key: 'CORONA',
-        title: 'Coronavirus Insurance',
+        title: 'Coronavirus insurance',
         subtitle: 'Keep your savings immune to covid',
         icon: 'icn_corona',
         Product_name : 'coronovirus insurance',
