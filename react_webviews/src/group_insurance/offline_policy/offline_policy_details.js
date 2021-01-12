@@ -67,18 +67,6 @@ class GroupHealthReportDetails extends Component {
             toast('Something went wrong');
         }
 
-
-        // let TitleMaper = {
-        //     'Health': 'Health insurance',
-        //     'Life': 'Life insurance',
-        //     'Motor': 'Motor insurance',
-        //     'Others': 'General Insurance',
-        //     'Other': 'General Insurance'
-        //   }
-
-        // this.setState({
-        //     TitleMaper : TitleMaper
-        // })
     }
 
     navigate = (pathname) => {
@@ -94,12 +82,12 @@ class GroupHealthReportDetails extends Component {
             "event_name": 'portfolio',
             "properties": {
                 "user_action": user_action,
-                'plan_name' :  this.state.lead.provider,
-                "flow": this.state.insured_account_type || '',
+                'policy': TitleMaper(this.state.lead.policy_type),
+                'policy_status': this.state.lead.status,
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
-                'download_policy' : 'no'
+                'download_policy': 'no'
             }
         };
 
