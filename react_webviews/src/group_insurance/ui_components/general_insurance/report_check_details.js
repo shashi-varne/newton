@@ -10,7 +10,7 @@ import icn_call_myway from 'assets/icn_call_myway.svg';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { numDifferentiation, inrFormatDecimal, getUrlParams } from '../../../utils/validators';
+import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -120,12 +120,14 @@ class ReportDetails extends Component {
         url: url
       }
     });
+    this.setState({ download : true})
   }
 
   toggleAccordion = () => {
     this.sendEvents('how_to_claim')
     this.setState(prevState => ({
-      accordionTab: !prevState.accordionTab
+      accordionTab: !prevState.accordionTab,
+      how_to_claim: true
     }));
   }
 
@@ -149,7 +151,14 @@ class ReportDetails extends Component {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
-        "screen_name": 'policy_details'
+        "screen_name": 'policy_details',
+        'policy': this.state.policyData.product_title ? this.state.policyData.product_title: '',
+        'policy_status':  this.state.policyData.status === 'init' ? 'Pending' : this.state.policyData.status === 'policy_issued' ? 'Issued' : 'Rejected',
+        'provider_name': this.state.policyData.provider ? capitalizeFirstLetter(this.state.policyData.provider.toLowerCase()) : '',
+        'how_to_claim': this.state.how_to_claim ? true : false,
+        'download_policy': this.state.download ? true : false,
+        'plan_details': 'no'
+
       }
     };
 
