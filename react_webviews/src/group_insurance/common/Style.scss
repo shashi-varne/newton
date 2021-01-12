@@ -1074,7 +1074,7 @@
   align-items: center;
   border-bottom-width: 1px;
   border-bottom-color:#EFEDF2 ;
-  padding-bottom: 15px;
+  // padding-bottom: 15px;
   justify-content: space-between;
   cursor: pointer;
 }
@@ -1090,6 +1090,17 @@
     height: 40px;
     border-radius: 2px;
   }
+
+  .insurance_plans_logos_small{
+    margin-right:25px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    margin-top: 20px;
+    margin-left: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+  }
   
   .insurance_plans_logos_text{
     color: #160d2e;
@@ -1102,14 +1113,15 @@
    color: #757474;
    font-weight: 400; 
    font-size: 13.6px;
-   margin-top: 8px;
+  //  margin-top: 8px;
   }
   .health_insurance{
     font-weight: 500;
     padding: 0 10px;
     color: #160d2e; 
     font-size: 17px;
-    margin-bottom: 30px;
+    margin-bottom: 16px;
+    margin-top: 10px;
   }
 }
 
