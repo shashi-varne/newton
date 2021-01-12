@@ -74,7 +74,7 @@ class Landing extends Component {
 
 
   policymove = ()=> {
-    this.sendEvents('next', "")
+    this.sendEvents('next', "" , true)
     this.navigate('/group-insurance/group-insurance/add-policy');
   }
 
@@ -106,7 +106,7 @@ class Landing extends Component {
         <div style={{ display: 'flex' , width : '100%' }}>
           <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{ marginRight: '26px' }} />
           <div style={{  borderBottomWidth: '1px',  width : '100%',
-                          borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '22px' ,   paddingBottom: '22px'}} >
+                          borderBottomColor: '#EFEDF2', borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '25px' ,   paddingBottom: '25px'}} >
             <div style={{ color: '#160d2e', fontSize: '15px', fontWeight: "500" , lineHeight : '20px' , margin : '5px 0 5px 0'}}>{props.title}
             </div>
             <div style={{ color: '#767E86', fontSize: '13px', fontWeight: '400', lineHeight: '15.41px' }}>{props.subtitle}</div>
@@ -116,13 +116,14 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type ) {
+  sendEvents(user_action, insurance_type, banner_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance',
-        "insurance_type": insurance_type ? insurance_type : ''
+        "insurance_type": insurance_type ? insurance_type : '',
+        'banner_clicked' : banner_clicked ? true : false
       }
     };
 
@@ -151,7 +152,7 @@ class Landing extends Component {
            <div onClick={this.policymove}>
            <img style={{ margin: '-15px 5px 30px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
-            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for ?</h1>
+            <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">

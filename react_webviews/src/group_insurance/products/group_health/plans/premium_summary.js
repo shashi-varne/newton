@@ -100,12 +100,18 @@ class GroupHealthPlanPremiumSummary extends Component {
     let properties = {};
     let lead = this.state.lead;
     let groupHealthPlanDataProp = this.state.groupHealthPlanData;
+    var add_ons_order = ['uar', 'opd', 'ped_wait_period', 'ncb'];
 
     if (this.state.get_lead) {
       let add_ons_data = [];
       let add_ons = lead.add_ons;
-      for(var key in add_ons){
-        add_ons_data.push(add_ons[key])
+      
+      for(var addOnOrder of add_ons_order){
+        for(var key in add_ons){
+        if(key.includes(addOnOrder)){
+          add_ons_data.push(add_ons[key])
+          }
+        }
       }
       
       properties.add_ons = add_ons_data;
@@ -122,16 +128,20 @@ class GroupHealthPlanPremiumSummary extends Component {
     } else {
       var final_add_ons_data = []
       if(post_body){
-        for(var addOn in post_body.add_ons){
-          if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
-            let temp = {
-              title: this.state.providerConfig.add_on_title[addOn],
-              price: post_body.add_ons[addOn]
+        for(let addOnOrder of add_ons_order){
+          for(var addOn in post_body.add_ons){
+            if(addOn === addOnOrder){
+              if(addOn !== 'total' && post_body.add_ons[addOn] !== 0){
+                let temp = {
+                  title: this.state.providerConfig.add_on_title[addOn],
+                  price: post_body.add_ons[addOn]
+                }
+                final_add_ons_data.push(temp);
+              }
             }
-            final_add_ons_data.push(temp);
-          } 
-       }
-  
+          }
+        }
+
         properties.add_ons = final_add_ons_data || [];
         properties.type_of_plan = groupHealthPlanDataProp.type_of_plan === 'floater' ? "WF" : "NF";
         properties.sum_assured = groupHealthPlanDataProp.sum_assured;
