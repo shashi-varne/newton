@@ -840,3 +840,16 @@ export function TitleMaper(name){
 
 
 }
+
+export function ProviderName(name) {
+  let ProviderName = {
+    'Religare': 'Care',
+    'Hdfc_ergo': 'HDFC ergo',
+    'Bharti Axa General': 'Bhartiaxa',
+    'Edelweiss Tokio': 'Edelweiss tokio life',
+    'Hdfc Ergo': 'HDFC ergo',
+    'Star Health': 'Star',
+    'Religare Health': 'Care',
+  }
+  return ProviderName[name] ? ProviderName[name] : name ? name.toLowerCase() : ''
+}
