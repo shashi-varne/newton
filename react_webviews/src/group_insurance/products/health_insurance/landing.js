@@ -257,7 +257,7 @@ class HealthInsuranceLanding extends Component {
       return;
     }
 
-    if (product_key === 'DISEASE_SPECIFIC_PLANS') {
+    if (product_key === 'DISEASE_SPECIFIC_PLANS' || product_key === 'disease-Specific-plan' ) {
       this.DISEASE_SPECIFIC_PLANS();
       return;
     }
