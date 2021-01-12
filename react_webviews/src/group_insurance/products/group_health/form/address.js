@@ -238,7 +238,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         }
 
-        for (var i = 0; i < keys_to_check.length; i++) {
+        for (let i = 0; i < keys_to_check.length; i++) {
             let key_check = keys_to_check[i];
             let first_error = 'Please enter ';
             if (!form_data[key_check]) {

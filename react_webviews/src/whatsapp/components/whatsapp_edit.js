@@ -4,10 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize, getContact } from "../common/functions";
 import Input from "../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import {
-  validateNumber,
-  storageService,
-} from "utils/validators";
+import { validateNumber, storageService } from "utils/validators";
 import Api from "utils/api";
 import toast from "../../common/ui/Toast";
 
@@ -26,11 +23,11 @@ class WnatsappEditNumber extends Component {
       params = {};
     }
 
-    let mobile = params.mobile || storageService().get('mobile') || "";
+    let mobile = params.mobile || storageService().get("mobile") || "";
     this.setState(
       {
         mobile_no: mobile.length > 10 ? mobile.slice(3) : mobile,
-        original_no: mobile
+        original_no: mobile,
       },
       () => {
         this.initialize();
@@ -50,7 +47,7 @@ class WnatsappEditNumber extends Component {
     if (user_action === "just_set_events") {
       return eventObj;
     } else {
-      nativeCallback({ event: eventObj });
+      nativeCallback({ events: eventObj });
     }
   }
 
@@ -73,16 +70,15 @@ class WnatsappEditNumber extends Component {
   };
 
   handleClick = async () => {
-    this.sendEvents("next");
     let canProceed = true;
     let mobile = this.state.mobile_no;
 
     let { mobile_no, original_no } = this.state;
 
-    storageService().set('mobile', `91|${mobile}`);
+    storageService().set("mobile", `91|${mobile}`);
     if (
       mobile.length !== 10 ||
-      !validateNumber(mobile) 
+      !validateNumber(mobile)
       // !numberShouldStartWith(mobile)
     ) {
       canProceed = false;
@@ -92,7 +88,7 @@ class WnatsappEditNumber extends Component {
     }
 
     if (canProceed) {
-
+      this.sendEvents("next");
       if (mobile_no === original_no) {
         let id = await this.getContact();
 
@@ -102,7 +98,7 @@ class WnatsappEditNumber extends Component {
             consent: true,
             communication_type: "whatsapp",
           };
-  
+
           try {
             this.setState({
               show_loader: true,
@@ -112,12 +108,12 @@ class WnatsappEditNumber extends Component {
               body
             );
             let resultData = res.pfwresponse.result || {};
-  
+
             if (res.pfwresponse.status_code === 200 && !resultData.error) {
               this.setState({
                 show_loader: true,
               });
-  
+
               this.navigate("otp-success");
             } else {
               this.setState({
@@ -135,7 +131,6 @@ class WnatsappEditNumber extends Component {
           }
         }
       } else {
-
         let body = {
           mobile: mobile,
         };
@@ -143,11 +138,11 @@ class WnatsappEditNumber extends Component {
           this.setState({
             show_loader: true,
           });
-  
+
           let res = await Api.post("/api/communication/send/otp", body);
-  
+
           var resultData = res.pfwresponse.result;
-  
+
           if (res.pfwresponse.status_code === 200 && !resultData.error) {
             let otp_id = resultData.otp_id || "";
             this.navigate("otp-verify", {
@@ -206,7 +201,7 @@ class WnatsappEditNumber extends Component {
                 maxLength={14}
                 id="number"
                 name="mobile_no"
-                value={"+91 " + (mobile_no !== 'null' ? mobile_no : '')}
+                value={"+91 " + (mobile_no !== "null" ? mobile_no : "")}
                 onChange={this.handleChange("mobile_no")}
                 inputMode="numeric"
               />

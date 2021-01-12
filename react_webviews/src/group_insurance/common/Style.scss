@@ -587,11 +587,6 @@
       margin: 30px 0 0 0;
   }
 
-  .offer-slide-img {
-    width: 100%;
-    border-radius: 6px;
-    // height: 165px;
-  }
   .faq {
     align-items: center;
     padding: 10px 0 10px 0;
@@ -1061,6 +1056,14 @@
       font-weight: 400;
       margin: 20px 0 20px 0;
       line-height: 1.2;
+  }
+
+  .content-large-offline-page{
+    color: #767E86;
+    font-size: 12px;
+    font-weight: 400;
+    // margin: 20px 0 20px 0;
+    line-height: 24px;
   }
 }
 

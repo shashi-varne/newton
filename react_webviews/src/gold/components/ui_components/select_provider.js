@@ -7,6 +7,7 @@ import { getUrlParams } from 'utils/validators';
 import {stateMapper, default_provider, gold_providers_array} from  '../../constants';
 import {storageService, getIndexArray} from "utils/validators";
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from '../../../common/ui/Imgc';
 
 class GoldSelectProviderClass extends Component {
     constructor(props) {
@@ -48,7 +49,7 @@ class GoldSelectProviderClass extends Component {
                 style={{ opacity: props.status === 'pending' ? 0.4 : 1 }}
             >
                 <div className="left-icon">
-                    <img style={{ width: '40px', margin: '0 7px 0 0' }}
+                    <Imgc style={{ width: '40px',height: 40, margin: '0 7px 0 0 !important' }}
                         src={require(`assets/${props.logo}`)} alt="Gold"
                     />
 

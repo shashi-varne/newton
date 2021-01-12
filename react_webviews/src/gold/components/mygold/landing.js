@@ -11,27 +11,13 @@ import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
-import goldOfferImageFisdom from 'assets/gold_offer_fisdom.jpg';
-import goldOfferImageMyway from 'assets/gold_offer_myway.jpg';
+import HowToSteps from "../../../common/ui/HowToSteps";
+import LandingSteps from "../../../common/ui/LandingSteps";
 
-
-import goldOfferSafegoldFisdom from 'assets/Gold_banner2.jpg';
-import goldOfferSafegoldMyway from 'assets/Gold_banner2.jpg';
-
-import goldOfferImageFisdom2 from 'assets/gold_offer2.png';
-import goldOfferImageMyway2 from 'assets/gold_offer2.png';
-
-import goldOfferImage from 'assets/gold_offer.jpg';
-
-import mmtcOfferImage from 'assets/MMTC-PAMP-offer.png';
-
-import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
 
 import gold_pattern_fisdom from 'assets/fisdom/gold_pattern.png';
 import gold_pattern_myway from 'assets/finity/gold_pattern.png';
-import crd_gold_info from 'assets/crd_gold_info.svg';
 import {isUserRegistered, gold_providers} from '../../constants';
 import { inrFormatDecimal2, storageService} from 'utils/validators';
 
@@ -40,6 +26,11 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+import {SkeltonRect} from '../../../common/ui/Skelton';
+import {Imgc} from '../../../common/ui/Imgc';
+
+import ReactResponsiveCarousel from "../../../common/ui/carousel";
 
 let eventToStateMapper = {
   'check-how1': 'check-how',
@@ -51,11 +42,12 @@ let eventToStateMapper = {
 };
 
 
+
 class GoldSummary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: 'p',
       openPopup: false,
       popupText: '',
       apiError: '',
@@ -72,7 +64,6 @@ class GoldSummary extends Component {
       bottom_carousel: true //to intechange check how and carousel
     }
 
-    this.renderOfferImages = this.renderOfferImages.bind(this);
   }
 
 
@@ -91,24 +82,6 @@ class GoldSummary extends Component {
     let type = getConfig().productName;
     let typeCaps = type === 'fisdom' ? 'Fisdom' : 'Finity';
     
-    var gold_offer_terms1 = [
-      'For a transaction to be valid, there must be a minimum purchase of Rs 1,000 for each offer.',
-      'Gold-back will be in the form of SafeGold balance and will be 5% of the value of gold purchased and upto a maximum of Rs 1000.',
-      "Gold-back will be credited to the customer's account within 14 days of the end date of the offer.",
-      "If an existing customer has transacted for purchase of Digital Gold through his/her " + typeCaps + " account prior to the launch of this gold-back offer, s/he will not be eligible for this offer",
-      "Any conditions which are not explicitly covered would be at the sole discretion of SafeGold. The decision of SafeGold in this regard will be final and the company has the right to change the terms and conditions at any time.",
-      "In case of any customer query or dispute, SafeGold reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion."
-    ];
-
-    var gold_offer_terms2 = [
-      'For a transaction to be valid, there must be a minimum purchase of Rs 1,000.',
-      'Offer is only valid till  23:59 hrs 10th May 2020.',
-      'This offer can be availed only once ( per device, per user, per account) during the offer period.',
-      '5 Lucky customers will be selected as a winner of flat Rs 1000 Gold-back.',
-      'Gold-back amounts for lucky winners will be credited to the customers MMTC-PAMP account by 20th May 2020.',
-      'Any conditions which are not explicitly covered would be at the sole discretion of ' + typeCaps + '. The decision of ' + typeCaps + ' in this regard will be final and the company has the right to change terms and conditions at any time.',
-      'In case of any customer query or dispute, ' + typeCaps + ' reserves the right to resolve the same on the basis of the terms and conditions of the offer at its sole discretion.'
-    ]
 
     var gold_offer_terms_mmtc = [
       'For a transaction to be valid, there must be a minimum purchase of Rs 1,000.',
@@ -141,45 +114,32 @@ class GoldSummary extends Component {
 
     let offerImageDataBase = [
       {
-        src: type === 'fisdom' ? goldOfferImageFisdom : goldOfferImageMyway,
+        src: 'Gold_banner2.jpg',
         link: '',
-        terms: gold_offer_terms1,
-        key: '5buy',
-        canShow: false
+        terms: gold_offer_terms_safegold_november,
+        key: 'safegold_november',
+        canShow: true
       },
       {
-        src: goldOfferImage,
-        link: '',
-        terms: gold_offer_terms2,
-        key: '50delivery',
-        canShow: false
-      },
-      {
-        src: type === 'fisdom' ? goldOfferImageFisdom2 : goldOfferImageMyway2,
+        src: 'gold_offer2.png',
         link: type === 'fisdom' ? 'https://www.fisdom.com/candere-gold-2019/' : 'https://finity.in/candere-gold-2019/',
         terms: '',
         key: 'candere',
-        canShow: false
+        canShow: true //remove
       },
       {
-        src: mmtcOfferImage,
+        src: 'gold_offer2.png',
         link: '',
         terms: gold_offer_terms_mmtc,
         key: 'mmtc_offer',
-        canShow: false,
+        canShow: true,// remove
         tableData: [
           {'c1': '1000-1999', 'c2': '10'},
           {'c1': '2000-4999', 'c2': '25'},
           {'c1': '5000 and above', 'c2': '100'}
         ]
-      },
-      {
-        src: type === 'fisdom' ? goldOfferSafegoldFisdom : goldOfferSafegoldMyway,
-        link: '',
-        terms: gold_offer_terms_safegold_november,
-        key: 'safegold_november',
-        canShow: false
-      },
+      }
+      
     ];
 
     let offerImageData = [];
@@ -190,9 +150,56 @@ class GoldSummary extends Component {
       }
     }
 
+    let stepsContentMapperBlock3 = {
+      title: `Benefits of digital gold`,
+      options: [
+        {
+          icon: "ic_benefit_gold",
+          // title: "Affordability",
+          subtitle: "Buy gold at live international market prices as per your budget",
+        },
+        {
+          icon: "ic_secure_vault",
+          // title: "Easy sell or conversion",
+          subtitle: "Sell to get the amount credited or convert to gold coins",
+        },
+        {
+          icon: "ic_purity",
+          // title: "100% insured & secured",
+          subtitle: "Assurance of 24 karat gold with no making or storage charges",
+        },
+      ],
+    };
+
+    let stepsContentMapperBlock2 = {
+      title: `I want to`,
+      img_alt:"Gold",
+      options: [
+        {
+          icon: "ic_buy_gold",
+          title: "Buy gold",
+          next_state: '/gold/buy'
+        },
+        {
+          icon: "ic_sell_gold",
+          title: "Sell gold",
+          next_state: '/gold/sell'
+        },
+        {
+          icon: "ic_delivery",
+          title: "Get delivery",
+          next_state: '/gold/delivery'
+        },
+      ],
+    };
+
+
+
     this.setState({
       offerImageData: offerImageData,
-      gold_pattern: this.state.productName !== 'fisdom'  ? gold_pattern_myway : gold_pattern_fisdom
+      gold_pattern: this.state.productName !== 'fisdom'  ? gold_pattern_myway : gold_pattern_fisdom,
+      stepsContentMapperBlock3: stepsContentMapperBlock3,
+      stepsContentMapperBlock2: stepsContentMapperBlock2
     })
   }
 
@@ -216,9 +223,9 @@ class GoldSummary extends Component {
     });
 
 
-    if(provider === 'safegold') {
+    if(provider === 'mmtc') {
       this.setState({
-        show_loader: false
+        skelton: false
       })
     }
 
@@ -236,6 +243,7 @@ class GoldSummary extends Component {
       } else {
         this.setState({
           error: true,
+          onloadError: true,
           errorMessage: res.pfwresponse.result.error || res.pfwresponse.result.message ||
             'Something went wrong'
         });
@@ -245,6 +253,9 @@ class GoldSummary extends Component {
       if (res2.pfwresponse.status_code === 200) {
         result2 = res2.pfwresponse.result;
       } else {
+        this.setState({
+          onloadError: true
+        });
         toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message || 'Something went wrong');
       }
 
@@ -254,19 +265,28 @@ class GoldSummary extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false,
+        skelton: false,
+        onloadError: true
       });
       toast('Something went wrong');
     }
   }
 
 
-  async componentDidMount() {
+  onload = async () => {
+    this.setState({
+      skelton: 'p',
+      onloadError: false
+    })
     storageService().remove('forceBackState');
     storageService().remove('buyData');
     storageService().remove('sellData');
     this.onloadProvider('mmtc');
     this.onloadProvider('safegold');
+  }
+
+  async componentDidMount() {
+    this.onload(); 
   }
 
 
@@ -297,7 +317,17 @@ class GoldSummary extends Component {
     });
   }
 
-  handleClickOffer(offer, index) {
+  handleClickBlock2 = () => {
+    if(!this.state.skelton) {
+      if(this.state.onloadError) {
+        this.onload();
+      } else {
+        this.navigate('gold-locker');
+      }
+    }
+  }
+
+  handleClickOffer = (offer, index) => {
 
     this.sendEvents('next', 'marketing_banner', index);
 
@@ -327,7 +357,7 @@ class GoldSummary extends Component {
     )
   }
 
-  renderOfferImages(props, index) {
+  renderOfferImages = (props, index) => {
     return (
       <div key={index} onClick={() => this.handleClickOffer(props, index)} className="gold-offer-slider">
         <img className="gold-offer-slide-img"
@@ -409,54 +439,59 @@ class GoldSummary extends Component {
     )
   }
 
+  handleClickNext = (option,index) => {
+    this.navigate(option.next_state);
+  }
+
   renderBlock2() {
     return(
       <div className="block2">
-      <div onClick={() => this.navigate('gold-locker')}
+      <div onClick={() => this.handleClickBlock2()}
        className="highlight-text highlight-color-info">
-        <img 
-          src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold" />
+        <Imgc 
+          src={ require(`assets/${this.state.productName}/ic_locker.svg`)} alt="Gold"
+          style={{width: '40px', height: '40px'}}
+          />
         <div style={{display: 'grid', margin: '0 0 0 10px'}}>
+          {!this.state.skelton && !this.state.onloadError && 
           <div className="highlight-text12">
             Your gold locker
             <img  style={{margin: '0 0 0 8px', width: 11}}
           src={ require(`assets/lock_icn.svg`)} alt="Gold" />
           </div>
+          }
+
+          {!this.state.skelton && !this.state.onloadError && 
           <div className="highlight-text2" style={{margin: '4px 0 0 8px'}}>
           {this.state.user_info.total_balance || 0} gms = { inrFormatDecimal2(parseFloat(this.state.mmtc_info.sell_value) + parseFloat(this.state.safegold_info.sell_value))}
           </div>
+          }
+
+          {!this.state.skelton && this.state.onloadError && 
+            <div className="highlight-text2 onload-error"
+            style={{margin: '4px 0 0 8px'}}>
+            Something went wrong. <div className="generic-page-button-small-withoutborder">RETRY</div>
+            </div>
+          }
+
+          <SkeltonRect className="balance-skelton" 
+            hide={!this.state.skelton} 
+          />
+          <SkeltonRect className="balance-skelton2" 
+            hide={!this.state.skelton} 
+          />
         </div>
 
       </div>
 
-      <div className="want-to">
-      I want to
-      </div>
-      <div className="common-hr"></div>
+      <LandingSteps
+            style={{ margin: "20px 0px 0px 0px", cursor:'pointer' }}
+            baseData={this.state.stepsContentMapperBlock2}
+            classNameIcon="steps-icon"
+            handleClick={this.handleClickNext}
+      />
 
-      <div className="tile2" onClick={() => this.navigate('/gold/buy')}>
-          <img className="icon"
-            src={ require(`assets/${this.state.productName}/ic_buy_gold.svg`)} alt="Gold" />
-          <div className="title">
-            Buy gold
-          </div>
-      </div>
-
-      <div className="tile2" onClick={() => this.navigate('/gold/sell')}>
-          <img className="icon"
-            src={ require(`assets/${this.state.productName}/ic_sell_gold.svg`)} alt="Gold" />
-          <div className="title">
-          Sell gold
-          </div>
-      </div>
-
-      <div className="tile2" onClick={() => this.navigate('/gold/delivery')}>
-          <img className="icon"
-            src={ require(`assets/${this.state.productName}/ic_delivery.svg`)} alt="Gold" />
-          <div className="title">
-          Get delivery
-          </div>
-      </div>
+     
   </div>
     )
   }
@@ -465,66 +500,40 @@ class GoldSummary extends Component {
     return(
      
       <div className="block3">
-      <div className="title">
-        Benefits of digital gold
-      </div>
-      <div className="subtitle">
-        Bringing convenience and safety to digital gold
-      </div>
-
       {!this.state.bottom_carousel && this.rendertopInfoImage()}
 
       <div className="benefites">
 
-        <div className="tile">
-            <img 
-            src={ require(`assets/${this.state.productName}/ic_benefit_gold.svg`)} alt="Gold" />
-          <div className="benefit-tile">
-            <div className="benefit-tile-title">
-              Affordability
-            </div>
-            <div className="benefit-tile-subtitle">
-              Buy gold at live international market prices as per your budget
-            </div>
-          </div>
-        </div>
-
-        <div className="tile">
-            <img 
-            src={ require(`assets/${this.state.productName}/ic_secure_vault.svg`)} alt="Gold" />
-          <div className="benefit-tile">
-            <div className="benefit-tile-title">
-            Easy sell or conversion
-            </div>
-            <div className="benefit-tile-subtitle">
-            Sell to get the amount credited or convert to gold coins
-            </div>
-          </div>
-        </div>
-
-        <div className="tile">
-            <img 
-            src={ require(`assets/${this.state.productName}/ic_purity.svg`)} alt="Gold" />
-          <div className="benefit-tile">
-            <div className="benefit-tile-title">
-            100% insured & secured
-            </div>
-            <div className="benefit-tile-subtitle">
-            Assurance of 24 karat gold with no making or storage charges
-            </div>
-          </div>
-        </div>
-
+      <HowToSteps
+            style={{ margin: "0px 0px 0px 0px",paddingTop:0 }}
+            baseData={this.state.stepsContentMapperBlock3}
+            classNameIcon="steps-icon"
+            showSkelton={true}
+          />
       </div>
     </div>
     )
   }
 
+  callbackImgc = (type) => {
+    this.setState({
+      [type + '_loaded'] : true
+    })
+  }
+
   rendertopInfoImage() {
     return(
       <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
-            <img style={{width:'100%',cursor:'pointer'}} src={crd_gold_info} alt="" />
-            <div className="inner">
+            <Imgc 
+            style={{width:'100%',cursor:'pointer', minHeight: 233}} 
+            src={ require(`assets/${this.state.productName}/crd_gold_info.svg`)}
+            alt="" 
+            type="gold_check_how_icon"
+            callbackImgc={this.callbackImgc}
+            />
+           
+            {this.state.gold_check_how_icon_loaded &&
+             <div className="inner">
               <div className="title generic-page-title">
                 Buy 24K gold to create long term wealth
               </div>
@@ -538,34 +547,36 @@ class GoldSummary extends Component {
                 Buy-sell anytime | 24K 99.99% pure | 100% secure
               </div>
             </div>
+            }
         </div>
     )
   }
 
-  renderCarousel() {
-    return(
-      <div>
-        {this.state.showOffers && this.state.offerImageData && 
-        <div style={{ margin: '20px 0 0 0', cursor: 'pointer' }}>
-          <Carousel
+  carouselSwipe_count = (index) => {
+    this.setState({
+      selectedIndex: index,
+      card_swipe: "yes",
+      card_swipe_count: this.state.card_swipe_count + 1,
+    });
+  };
 
-            showStatus={false} showThumbs={false}
-            showArrows={true}
-            infiniteLoop={false}
-            selectedItem={this.state.selectedIndex}
-            onChange={(index) => {
-              this.setState({
-                selectedIndex: index,
-                card_swipe: 'yes',
-                card_swipe_count: this.state.card_swipe_count + 1
-              });
-            }}
-          >
-            {this.state.offerImageData.map(this.renderOfferImages)}
-          </Carousel>
-        </div>}
-      </div>
-    )
+  renderCarousel() {
+
+    if(this.state.showOffers && this.state.offerImageData) {
+      return(
+          <div style={{ margin: '0px 0px 20px 0px', cursor: 'pointer' }}>
+            <ReactResponsiveCarousel
+                CarouselImg={this.state.offerImageData}
+                callbackFromParent={this.carouselSwipe_count}
+                selectedIndexvalue={this.state.selectedIndex}
+                handleClick={this.handleClickOffer}
+              />
+            </div>
+      )
+    }
+
+    return null;
+    
   }
 
   renderBlock4() {
@@ -573,7 +584,7 @@ class GoldSummary extends Component {
       <div className="block4">
 
       {this.state.bottom_carousel && this.renderCarousel()}
-      <div style={{margin: '30px 0 20px 0'}}>
+      <div style={{margin: 0}}>
         <GoldBottomSecureInfo parent={this} />
       </div>
 
@@ -584,20 +595,13 @@ class GoldSummary extends Component {
   render() {
     return (
       <Container
-        showLoader={this.state.show_loader}
+        // skelton={this.state.skelton}
         title="Gold"
-        noHeader={this.state.show_loader}
+        // noHeader={this.state.skelton}
         noFooter={true}
         events={this.sendEvents('just_set_events')}
-        classOverRide="gold-landing-container gold-landing-container-background"
-        classOverRideContainer="gold-landing-container gold-landing-container-background"
-        styleContainer={{
-          backgroundImage: `url(${this.state.gold_pattern})`,
-        }}
-        styleHeader={{
-          backgroundImage: `url(${this.state.gold_pattern})`,
-        }}
-        classHeader="gold-landing-header gold-landing-container-background"
+        classOverRide="gold-landing-container"
+        classOverRideContainer="gold-landing-container"
       >
         <div className="gold-landing" id="goldSection">
             
