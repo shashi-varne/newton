@@ -61,8 +61,8 @@ class ProfessionalDetails extends Component {
       employment_type: employment_type,
       company_name: professional_info.company_name,
       companyOptions: [{
-        name: professional_info.company_name,
-        value: professional_info.company_name
+        name: professional_info.company_name || "",
+        value: professional_info.company_name || ""
       }]
     });
   };
