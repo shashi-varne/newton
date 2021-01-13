@@ -31,8 +31,8 @@ const Landing = (props) => {
                 bondSplit: data.recommendation.debt,
                 flow: "build wealth"
             }
+            storageService().setObject("graphData",graphData)
             setData(graphData);
-            console.log("data is",data)
         }
         catch(err){
             console.log("the err is ",err)
@@ -40,6 +40,7 @@ const Landing = (props) => {
     }
 
     useEffect(()=>{
+        storageService().setObject("graphData",{})
         fetchRecommendedFunds()
     },[])
     const goNext = () => {

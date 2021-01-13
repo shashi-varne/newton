@@ -239,6 +239,9 @@
             margin-right: 10px;
             box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
             border-radius: 2px;
+            img{
+                width: 80px;
+            }
         }
 
         .recommendations-funds-item-info{
@@ -271,6 +274,41 @@
     align-items: center;
     font-size: 18px;
     padding:10px 0px;
+}
+
+.recommendations-disclaimer{
+    display: flex;
+    flex-direction: column;
+    .recommendations-disclaimer-morning{
+        margin-bottom: 13px;
+        img{
+            margin-right: 5px;
+        }
+    }
+
+    .recommendations-disclaimer-tc{
+        img{
+            margin-right: 5px;
+        }
+
+        span{
+            font-size: 13px;
+        }
+    }
+}
+
+.recommendations-trust-icons{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    div{
+        font-size: 14px;
+        color: #767E86;
+        margin: 0 0 5px 0;
+        font-weight: 500;
+    }
 }
 /////// End of Recommendation Funds /////
 
@@ -305,3 +343,121 @@
     }
 }
 ///// End of Recommendation Edit //////
+
+
+// Alternate-funds //////////////
+.alternate-funds-item{
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    padding:0px 10px;
+    margin: 0px !important;
+    margin-bottom: 10px !important;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    .recommendations-funds-item{
+        box-shadow: none;
+        margin-bottom: 0px;
+        padding:10px 10px 0px 10px;
+
+        .recommendations-funds-item-icon{
+            img{
+                width: 60px;
+            }
+        }
+
+        .recommendations-funds-item-info{
+            .recommendations-funds-item-name{
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+/// End of Alternate-funds ////////////
+
+
+///////////Invest Journey ////////////////
+.invest-journey-container{
+    display: flex;
+    flex-direction: column;
+    margin:-20px;
+}
+
+.invest-journey-header{
+    display: flex;
+    padding:20px;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    align-items: center;
+
+    &>div:first-child{
+        flex: 1 1 20%;
+        margin-right: 10px;
+        text-align: center;
+        img{
+            width: 60px;
+        }
+    }
+
+    &>div:last-child{
+        flex: 1 1 80%;
+        font-size: 18px;
+    }
+}
+
+.invest-journey-connect{
+    display: flex;
+    flex-direction: column;
+    padding:20px;
+    position: relative;
+    .invest-journey-connect-content{
+        display: flex;
+        flex-direction: row;
+        padding:10px;
+        align-items: center;
+        margin-bottom: 40px;
+
+        .invest-journey-connect-icon{
+            flex: 1 1 15%;
+            margin-right: 20px;
+            img{
+                width: 60px;
+            }
+        }
+        .invest-journey-connect-step{
+            flex: 1 1 85%;
+
+            p{
+                color:grey;
+                padding-top: 0;
+                margin-bottom: 5px;
+            }
+            div:nth-child(2){
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+            div:nth-last-child(1){
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+    .invest-journey-connect-content:last-child{
+        margin-bottom: 0px;
+    }
+}
+
+.invest-journey-connect::before{
+    content: "";
+    width: 5px;
+    height: 70%;
+    transform: scaleY(1);
+    transform-origin: top;
+    transition: transform 0.5s ease;
+    position: absolute;
+    top: 15%;
+    left: 59px;
+    background-color: #35cb5d;
+    z-index: -1;
+}
+///////// End of Invest Journey /////////

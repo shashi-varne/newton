@@ -9,12 +9,15 @@ import './style.scss';
 const EditFunds = (props) => {
   const {recommendation,alternatives} = storageService().getObject("graphData");
   const navigate = navigateFunc.bind(props);
-  const showAlternateFunds = (mfType) => e => {
-    navigate("alternate-funds",mfType)
+  const showAlternateFunds = ({amount,mf:{mfid,mftype}}) => e => {
+    navigate("alternate-funds",{mftype,mfid,amount})
+  }
+  const goBack = () =>{
+    navigate("recommendations")
   }
   return (
     <Container
-      //goBack={()=>{}}
+      goBack={goBack}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Done'
@@ -22,7 +25,7 @@ const EditFunds = (props) => {
       hideInPageTitle
       hidePageTitle
       title='Edit Funds'
-      // handleClick={retry}
+      handleClick={goBack}
       classOverRideContainer='pr-container'
     >
       <section className='recommendations-common-container-edit'>
@@ -30,7 +33,7 @@ const EditFunds = (props) => {
           {recommendation?.map(( el, idx ) => (
             <div key={idx} className='recommendations-funds-item-edit'>
               <FundCard  classOverRide="recommendation-edit-replace" fund={el}/>
-              <div className='recommendations-funds-item-replace' onClick={showAlternateFunds(el.mftype)}>
+              <div className='recommendations-funds-item-replace' onClick={showAlternateFunds(el)}>
                 <img alt='replaceFund' src={replaceFund} />
                 <div>Replace</div>
               </div>

@@ -11,17 +11,17 @@ const InvestAmount = (props) => {
     const [corpus,setCorpus] = useState(null);
     const navigate = navigateFunc.bind(props);
     const handleChange = (e) => {
-      setAmount(e.target.value)
+      setAmount(parseInt(e.target.value))
     }
+    const graphData = storageService().getObject("graphData");
     useEffect(()=>{
-      console.log(props.location.state.graphData)
-      const{amount,corpus,year} = props.location.state.graphData;
+      const{amount,corpus,year} = graphData;
       setAmount(amount)
       setYear(year)
       setCorpus(corpus)
     },[])
     const fetchRecommendedFunds = async () => {
-      const{investType} = props.location.state.graphData;
+      const{investType} = graphData;
       try{
         const params={
           amount,
@@ -38,8 +38,9 @@ const InvestAmount = (props) => {
 
 
     const goNext = () => {
-      fetchRecommendedFunds()
-      navigate("invested-amount",props.location.state.graphData)
+      fetchRecommendedFunds();
+      storageService().setObject("graphData",{...graphData,amount});
+      navigate("invested-amount",{...graphData,amount})
     }
   return (
     <Container

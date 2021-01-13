@@ -6,14 +6,15 @@ import withdraw_anytime_icon from 'assets/withdraw_anytime_icon.png';
 import no_lock_in_icon from 'assets/no_lock_in_icon.png';
 import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
 import one_time_icon_dark from 'assets/one_time_icon_dark.png';
-import SliderWithValues from 'common/ui/Slider';
+import Slider from 'common/ui/Slider';
 import {navigate as navigateFunc} from "./common/commonFunction"
 import {get_recommended_funds} from "./common/api"
 import './style.scss';
 const stockReturns = 15;
 const bondReturns = 8;
 const InvestedAmount = (props) => {
-    const { amount, investType, term, stockSplit } = props.location.state.graphData; 
+  let graphData = storageService().getObject("graphData");
+  const { amount, investType, term, stockSplit } = graphData;
   const [stockSplitVal, setStockSplitVal] = useState(stockSplit || 0);
   const [termYear,setTermYear] = useState(term || "");
   const [potentialValue,setPotentialValue] = useState(0);
@@ -39,7 +40,8 @@ const InvestedAmount = (props) => {
     try{
 
         const data = await get_recommended_funds(params);
-        storageService().setObject("graphData",data);
+        graphData = {...graphData,...data};
+        storageService().setObject("graphData",graphData);
         navigate("recommendations",data)
         console.log("data is",data)
     }
@@ -144,7 +146,7 @@ const InvestedAmount = (props) => {
         <div className='invested-amount-display'>
           <div className='invested-amount-display-left'>
             <div className='invested-amount-display-left-text'>Invested Amount</div>
-            <div className='invested-amount-display-left-val'>{amount} per month</div>
+            <div className='invested-amount-display-left-val'>{formatAmountInr(amount)} per month</div>
           </div>
           <div className='invested-amount-display-right'>
             <img style={{ width: '50px' }} alt='' src={monthly_sip_icon_dark} />
@@ -195,7 +197,7 @@ const InvestedAmount = (props) => {
         <div className='invested-amount-slider-container'>
           <div className='invested-amount-slider-head'>{risk}</div>
           <div className='invested-amount-slider'>
-            <SliderWithValues
+            <Slider
               label='Net monthly income'
               val='Net_monthly_Income'
               default={stockSplitVal}
@@ -203,8 +205,10 @@ const InvestedAmount = (props) => {
               min='0'
               max='100'
               minValue='0'
+              disabled={investType === "savetaxsip"}
               maxValue='₹ 10 Lacs'
               onChange={handleChange}
+
             />
           </div>
           <div className='invested-amount-slider-range'>
