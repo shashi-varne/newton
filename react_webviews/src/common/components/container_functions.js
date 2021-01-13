@@ -225,7 +225,33 @@ export function renderGenericError() {
     let { title1, title2 , button_text1, button_text2, 
         handleClick2, handleClick1} = errorData;
 
-    let two_button  = handleClick2 ? true: false
+    let type = errorData.type || 'generic';
+    let mapper = {
+        'generic': {
+            'title1': 'Error',
+            'button_text2': 'CANCEL',
+            'button_text1': 'RETRY'
+        },
+        'form': {
+            'title1': 'Error',
+            'button_text2': 'EDIT',
+            'button_text1': 'RETRY'
+        },
+        'internet': {
+            'title1': 'We aren’t currently available. Check back in some time.',
+            'button_text1': 'RETRY'
+        },
+        'crash': {
+            'title1': 'Something went wrong',
+            'button_text1': 'OKAY'
+        }
+    }
+    let map_data = mapper[type];
+
+    let two_button  = handleClick2 ? true: false;
+
+    button_text2 = button_text2 || map_data.button_text2 || 'CLOSE';
+    button_text1 = button_text1 || map_data.button_text1 || 'RETRY';
 
     function genericErrorActions() {
         return(
@@ -238,7 +264,7 @@ export function renderGenericError() {
                                 disableBodyOverflow(true); //touch enabled
                                 handleClick2();
                             }}>
-                                {button_text2 || 'Close'}
+                                {button_text2}
                             </div>}
                             <div 
                             className={`generic-page-button-small-with-green button ${(!two_button ? 'single-button' : '')}`}
@@ -246,11 +272,20 @@ export function renderGenericError() {
                                 disableBodyOverflow(true); //touch enabled
                                 handleClick1();
                             }}>
-                                {button_text1 || 'Retry'}
+                                {button_text1}
                             </div>
                         </div>
         )
     }
+
+    this.navigate = navigate.bind(this);
+    function redirectToHelp() {
+        // let path = '/help/writetous';
+        let path = '/help';
+        this.navigate(path);
+    }
+
+    this.redirectToHelp = redirectToHelp.bind(this);
 
    
     if (this.props.showError === true) {
@@ -262,12 +297,19 @@ export function renderGenericError() {
                 <div className="overlay">
 
                     <div className="top-part">
-                        <div className="title1">{title1 || 'Something went wrong'}</div>
-                        <Imgc className="top-image" src={require(`assets/generic_error.svg`)} alt="" />
+                        <div className="t-left">
+                            <div className="title1">{title1 || 'Error'}</div>
+                            {title2 && 
+                            <div className="title2">{title2}</div>}
+                        </div>
+                        <div className="t-right">
+                            <Imgc className="top-image" src={require(`assets/generic_error2.svg`)} alt="" />
+                        </div>
                     </div>
                     
-                    <div className="title2">{title2 || 'Sorry, we could not process your request'}</div>
+                    
 
+                    <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>
                     {genericErrorActions()}
                 </div>
             </div>
@@ -279,11 +321,12 @@ export function renderGenericError() {
         return (
             <div className={`generic-error-dialog generic-error-dialog-page fadein-animation ${errorData ? errorData.errorClass : ''}`}>
                 <div className="overlay ovarlay-page">
-                    <Imgc className="top-image top-image-page" src={require(`assets/generic_error.svg`)} alt="" />
+                    <Imgc className="top-image top-image-page" src={require(`assets/generic_error2.svg`)} alt="" />
                     <div className="title1 title1-page">{title1 || 'Something went wrong'}</div>
 
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
+                    <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>
                     {genericErrorActions()}
                 </div>
             </div>

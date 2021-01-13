@@ -55,9 +55,8 @@ class BasicDetailsForm extends Component {
     }
 
     let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
-    let { params } = this.props.parent.props.location || {};
     this.setState({
-      premium_details: params ? params.premium_details : {},
+      premium_details: this.props.parent.props.location.state ? this.props.parent.props.location.state.premium_details : '',
       lead_id: lead_id || '',
       inputDisabled: inputDisabled
     })
@@ -267,11 +266,14 @@ class BasicDetailsForm extends Component {
 
   onload = async () => {
     
-    this.setState({
-      skelton: true
-    })
+  
 
     this.setErrorData('onload');
+
+    console.log(this.state.premium_details)
+
+    let premium_details = this.state.premium_details;
+    let leadData = premium_details.lead || '';
 
     this.setRelationshipOptions('male');
     let basic_details_data = {
@@ -287,39 +289,47 @@ class BasicDetailsForm extends Component {
         "relation": ""
       },
       "nominee_checked": false,
-      cover_amount: this.state.premium_details.cover_amount,
-      premium: this.state.premium_details.premium,
-      tax_amount: this.state.premium_details.tax_amount
+      cover_amount: premium_details.cover_amount,
+      premium: premium_details.premium,
+      tax_amount: premium_details.tax_amount
     }
 
     let error = '';
     try {
   
       if (this.state.lead_id) { 
-        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-    
-        this.setState({
-          skelton: false
-        })
-        if (res.pfwresponse.status_code === 200) {
 
-          var leadData = res.pfwresponse.result.lead;
-
-          Object.keys(basic_details_data).forEach((key) => {
-            basic_details_data[key] = leadData[key]
-          })
-
-          this.setRelationshipOptions(basic_details_data.gender);
-          basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
-          let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        if(!leadData) {
           this.setState({
-            age: age,
-            checked: leadData.nominee_details || false
+            skelton: true
           })
-        } else {
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+    
+          leadData = res.pfwresponse.result.lead;
+          this.setState({
+            skelton: false
+          })
+          if (res.pfwresponse.status_code === 200) {
+  
+            
+          } else {
+            toast(res.pfwresponse.result.error || res.pfwresponse.result.message
+              || 'Something went wrong');
+          }
         }
+  
+        Object.keys(basic_details_data).forEach((key) => {
+          basic_details_data[key] = leadData[key]
+        })
+
+        this.setRelationshipOptions(basic_details_data.gender);
+        basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+        let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        this.setState({
+          age: age,
+          checked: leadData.nominee_details || false
+        })
+       
       } else {
         let res = await Api.get('api/ins_service/api/insurance/account/summary')
 
@@ -580,7 +590,7 @@ class BasicDetailsForm extends Component {
         if (res2.pfwresponse.status_code === 200) {
           var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
           window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
-          this.navigate('summary')
+          this.navigate('summary', {lead: res2.pfwresponse.result.updated_lead || {}})
         } else {
           this.setState({
             show_loader: false,
@@ -620,11 +630,12 @@ class BasicDetailsForm extends Component {
 
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, data) => {
+    console.log(data)
     this.props.parent.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
-    });
+    }, data);
   }
 
   sendEvents(user_action) {
@@ -665,8 +676,8 @@ class BasicDetailsForm extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle='Go to Summary'
         onlyButton={true}
-        // showError={this.state.showError}
-        showError="page"
+        showError={this.state.showError}
+        // showError={true}
         errorData={this.state.errorData}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}

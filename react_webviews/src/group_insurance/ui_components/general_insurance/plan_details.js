@@ -455,14 +455,12 @@ class PlanDetailsClass extends Component {
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
       params: {
-        premium_details: premium_details || {},
         diseasesData: diseasesData || {}
       }
-    });
+    }, {premium_details: premium_details});
   }
 
   async handleClickCurrent() { 
-    console.log("aaaaaa") 
     this.sendEvents('next');
 
     this.setErrorData('submit');
@@ -506,6 +504,8 @@ class PlanDetailsClass extends Component {
           let createdAge = calculateAge(dt_created);
           let ageRef = calculateAge('18/11/2020');
           let diffAge = ageRef - createdAge;
+
+          final_data.lead  = res2.pfwresponse.result.updated_lead || {};
 
 
           if(this.props.parent.state.product_key === 'CORONA' && diffAge <= 0){
@@ -641,6 +641,7 @@ class PlanDetailsClass extends Component {
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         showError={this.state.showError}
+        // showError={true}
         errorData={this.state.errorData}
         handleClick={() => this.handleClickCurrent()}
         title={this.state.productTitle || ''}

@@ -710,10 +710,9 @@ input#pan {
     
     .overlay {
       position: fixed;
-      
       background: white;
       margin-top: 0 auto;
-      padding: 30px 20px 30px 20px;
+      padding: 10px 20px 30px 20px;
       bottom: 0;
       width: -webkit-fill-available;
       border-top-left-radius: 8px;
@@ -723,7 +722,7 @@ input#pan {
     .top-part {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      // align-items: center;
       margin: 0 0 10px 0;
     }
     .title1 {
@@ -731,13 +730,19 @@ input#pan {
       font-size: 17px;
       font-weight: bold;
       line-height: 27px;
-      margin: 0 20px 0 0;
+      margin: 20px 0px 0px 0;
+    }
+    .t-left {
+      margin: 0 15px 0 0;
+    }
+    .t-right {
+      margin: 0 -10px 0 0;
     }
     
     .top-image {
-        margin: 0px 0 20px 0;
-        width: 138px !important;
-        height: 94px !important;
+        // margin: 0px 0 20px 0;
+        width: 120px !important;
+        height: 56px !important;
     }
     
     .title2 {
@@ -755,6 +760,15 @@ input#pan {
       text-align: center;
     }
 
+    .help {
+      color: #73cd60;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 14px;
+      margin: 20px 0 0 0;
+      cursor: pointer;
+    }
+
     .button{
       font-size: 12px;
       line-height: 14px;
@@ -764,7 +778,7 @@ input#pan {
       text-transform: uppercase;
     }
     .single-button {
-      width: 50%;
+      width: 100%;
     margin: 0 auto;
     }
     

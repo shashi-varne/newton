@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 import '../../common/Style.css';
 import provider from 'assets/provider.svg';
-import { numDifferentiation } from '../../../utils/validators';
+import { numDifferentiationInr } from '../../../utils/validators';
 
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -17,9 +17,9 @@ class PlanSummaryClass extends Component {
     super(props);
     this.state = {
       checked: false,
-      skelton: true,
       parent: this.props.parent,
       summaryData: {},
+      leadData: this.props.parent.props.location.state ? this.props.parent.props.location.state.lead : '',
       type: getConfig().productName,
       group_insurance_payment_started: window.sessionStorage.getItem('group_insurance_payment_started') || ''
     };
@@ -85,53 +85,68 @@ class PlanSummaryClass extends Component {
       return;
     }
 
-    let error = '';
-    try {
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+    var lead = this.state.leadData;
+    console.log(lead)
+    console.log(this)
+   
+    if(!this.state.leadData) {
       this.setState({
-        skelton: false
-      });
-      if (res.pfwresponse.status_code === 200) {
-
-        var lead = res.pfwresponse.result.lead;
-        let summaryData = {
-          "product_title": lead.product_title || '',
-          "cover_amount": lead.cover_amount || '',
-          "product_coverage": lead.product_coverage || '',
-          "dt_policy_start": lead.dt_policy_start || '',
-          "dt_policy_end": lead.dt_policy_end || '',
-          "base_premium": lead.base_premium || '',
-          "tax_amount": lead.tax_amount || '',
-          "premium": lead.premium || ''
-        }
-
-        this.setState({
-          summaryData: summaryData,
-          skelton: false
-        })
-
-      } else {
-        error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
-      }
-    } catch (err) {
-      this.setState({
-        skelton: false,
-        showError:true
-      });
-    }
-
-     // set error data
-     if(error) {
-      this.setState({
-        errorData: {
-          ...this.state.errorData,
-          title2: error
-        },
-        showError:true
+        skelton: true
       })
+      let error = '';
+      try {
+        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        this.setState({
+          skelton: false
+        });
+        if (res.pfwresponse.status_code === 200) {
+  
+          lead = res.pfwresponse.result.lead;
+          this.setState({
+            skelton: false
+          })
+
+  
+        } else {
+          error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong';
+        }
+      } catch (err) {
+        this.setState({
+          skelton: false,
+          showError:true
+        });
+      }
+  
+       // set error data
+       if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError:true
+        })
+      }
+  
     }
 
+    let summaryData = {
+      "product_title": lead.product_title || '',
+      "cover_amount": lead.cover_amount || '',
+      "product_coverage": lead.product_coverage || '',
+      "dt_policy_start": lead.dt_policy_start || '',
+      "dt_policy_end": lead.dt_policy_end || '',
+      "base_premium": lead.base_premium || '',
+      "tax_amount": lead.tax_amount || '',
+      "premium": lead.premium || ''
+    }
+
+    this.setState({
+      summaryData: summaryData
+    })
+
+    
   }
   async componentDidMount() {
     this.onload();
@@ -275,7 +290,7 @@ class PlanSummaryClass extends Component {
             {this.props.parent.state.product_key === 'CORONA' &&
               <div className="plan-summary-mid11">Sum assured</div>
             }
-            <div className="plan-summary-mid12">{numDifferentiation(String(this.state.summaryData.cover_amount || 0))}
+            <div className="plan-summary-mid12">{numDifferentiationInr(String(this.state.summaryData.cover_amount || 0))}
               {this.props.parent.state.product_key === 'HOSPICASH' && <span>/day</span>}
             </div>
           </div>
@@ -296,16 +311,16 @@ class PlanSummaryClass extends Component {
           <div className="plan-summary-premium-heading">Premium details:</div>
           <div className="plan-summary-premium-list">
             <div className="plan-summary-premium-list1">Base premium</div>
-            <div className="plan-summary-premium-list2">₹{this.state.summaryData.base_premium}</div>
+            <div className="plan-summary-premium-list2">{numDifferentiationInr(this.state.summaryData.base_premium)}</div>
           </div>
           <div className="plan-summary-premium-list">
             <div className="plan-summary-premium-list1">GST & taxes</div>
-            <div className="plan-summary-premium-list2">₹{this.state.summaryData.tax_amount}</div>
+            <div className="plan-summary-premium-list2">{numDifferentiationInr(this.state.summaryData.tax_amount)}</div>
           </div>
           <div className="divider"></div>
           <div className="plan-summary-premium-list">
             <div className="plan-summary-premium-list1 plan-summary-premium-font">Total payable</div>
-            <div className="plan-summary-premium-list2 plan-summary-premium-amount">₹ {this.state.summaryData.premium}</div>
+            <div className="plan-summary-premium-list2 plan-summary-premium-amount">{numDifferentiationInr(this.state.summaryData.premium)}</div>
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center', margin: '10px 0 0 0' }}>
