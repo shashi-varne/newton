@@ -5,7 +5,7 @@ class ContactUsClass extends Component {
         return (
             <div className="success-bottom">
                 <div className="success-bottom1">
-                    FOR ANY QUERY, REACH US AT
+                For any query, reach us at
                 </div>
                 <div className="success-bottom2">
                     <div className="success-bottom2a">
