@@ -27,6 +27,8 @@ import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 
+import Invest from "./dashboard/invest"
+
 class App extends Component {
   render() {
     return (
@@ -56,6 +58,7 @@ class App extends Component {
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
+          <Route path='/invest' component={Invest}/>
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
