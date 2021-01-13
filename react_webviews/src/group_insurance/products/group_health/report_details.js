@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -16,7 +16,7 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
-import { childeNameMapper } from '../../constants';
+import { childeNameMapper , ProviderName } from '../../constants';
 import {getCoverageType} from './constants';
 
 class GroupHealthReportDetails extends Component {
@@ -281,17 +281,19 @@ class GroupHealthReportDetails extends Component {
 
 
     sendEvents(user_action) {
+        let providor_name = ProviderName(this.state.providerConfig.provider_api)
+
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
                 'policy': 'Health insurance',
-                'policy_status':  this.state.policy_data.status || '' ,
-                "provider_name": this.state.providerConfig.provider_api,
-                "flow": this.state.insured_account_type || '',
+                'policy_status': this.state.policy_data.status ? capitalizeFirstLetter(this.state.policy_data.status.toLowerCase()) : '',
+                "provider_name":  capitalizeFirstLetter(providor_name),
                 "screen_name": 'report details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
-                "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
+                "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
+                "download_policy": 'no',
             }
         };
 

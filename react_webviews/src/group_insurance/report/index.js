@@ -404,8 +404,8 @@ class Report extends Component {
   sendEvents(user_action, insurance_type, policy_type, policy) {
 
     let policy_name = policy ? policy.top_title : undefined
-    let policy_status = policy ? policy.status : '' 
-    let InsuranceNameEvent = policy ? ProviderName(policy.provider) : ProviderName(insurance_type)
+    let policy_status = policy ? policy.status : ''
+    let InsuranceNameEvent = policy ? ProviderName(policy.provider) : ProviderName(insurance_type);
 
     let eventObj = {
       "event_name": 'Group Insurance',
@@ -413,8 +413,8 @@ class Report extends Component {
         "user_action": user_action,
         "screen_name": 'insurance_report',
         "provider_name": InsuranceNameEvent ? capitalizeFirstLetter(InsuranceNameEvent) : '',
-        'policy' : policy_name ? policy_name : policy_type ? TitleMaper(policy_type) : '',
-        'policy_status' :  policy_status === "complete" ? 'Issued': capitalizeFirstLetter(policy_status.toLowerCase())
+        'policy': policy_name ? policy_name : policy_type ? TitleMaper(policy_type) : '',
+        'policy_status': policy_status === "complete" ? 'Issued' : policy_status === "incomplete" ? 'Pending' : capitalizeFirstLetter(policy_status.toLowerCase()),
       }
     };
 

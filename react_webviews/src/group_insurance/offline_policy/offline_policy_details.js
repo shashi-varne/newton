@@ -83,11 +83,11 @@ class GroupHealthReportDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 'policy': TitleMaper(this.state.lead.policy_type),
-                'policy_status': this.state.lead.status === 'Cancelled' ? 'Rejected': this.state.lead.status,
+                'policy_status': this.state.lead.status,
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
-                'download_policy': 'no'
+                'download_policy': 'no',
             }
         };
 

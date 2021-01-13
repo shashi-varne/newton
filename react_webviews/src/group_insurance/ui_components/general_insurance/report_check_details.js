@@ -155,10 +155,9 @@ class ReportDetails extends Component {
         'policy': this.state.policyData.product_title ? this.state.policyData.product_title: '',
         'policy_status':  this.state.policyData.status === 'init' ? 'Pending' : this.state.policyData.status === 'policy_issued' ? 'Issued' : 'Rejected',
         'provider_name': this.state.policyData.provider ? capitalizeFirstLetter(this.state.policyData.provider.toLowerCase()) : '',
-        'how_to_claim': this.state.how_to_claim ? true : false,
-        'download_policy': this.state.download ? true : false,
-        'plan_details': 'no'
-
+        'how_to_claim': this.state.how_to_claim ? 'yes' : 'no',
+        'download_policy': this.state.download ? 'yes' : 'no',
+        'plan_details': 'no',
       }
     };
 
