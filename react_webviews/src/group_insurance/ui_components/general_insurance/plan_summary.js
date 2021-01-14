@@ -114,7 +114,7 @@ class PlanSummaryClass extends Component {
       } catch (err) {
         this.setState({
           skelton: false,
-          showError:true
+          showError:'page'
         });
       }
   
@@ -125,7 +125,7 @@ class PlanSummaryClass extends Component {
             ...this.state.errorData,
             title2: error
           },
-          showError:true
+          showError:'page'
         })
       }
   

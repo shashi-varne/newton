@@ -365,10 +365,11 @@ class BasicDetailsForm extends Component {
         }
       }
 
+
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: true
+        showError: 'page'
       });
     }
 
@@ -380,7 +381,7 @@ class BasicDetailsForm extends Component {
           ...this.state.errorData,
           title2: error
         },
-        showError:true
+        showError:'page'
       })
     }
     this.setState({

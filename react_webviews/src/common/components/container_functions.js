@@ -246,7 +246,7 @@ export function renderGenericError() {
             'button_text1': 'OKAY'
         }
     }
-    let map_data = mapper[type];
+    let map_data = mapper[type] || mapper['generic'];
 
     let two_button  = handleClick2 ? true: false;
 
