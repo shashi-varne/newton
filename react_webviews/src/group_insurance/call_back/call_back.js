@@ -147,7 +147,7 @@ class CallBackDetails extends Component {
           show_loader: true
         })
         var body = {
-          "interest": '',
+          "interest": this.state.form_data.insuranceType,
           "mobile_no": this.state.form_data.mobile,
           "name": this.state.form_data.name
         } 
