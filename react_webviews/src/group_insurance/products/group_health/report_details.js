@@ -142,7 +142,7 @@ class GroupHealthReportDetails extends Component {
 
 
         if (this.state.download_link || url) {
-            this.sendEvents('download');
+            // this.sendEvents('download');
             nativeCallback({
                 action: 'open_in_browser',
                 message: {
@@ -152,6 +152,10 @@ class GroupHealthReportDetails extends Component {
         } else {
             this.getDownloadLink();
         }
+
+        this.setState({
+            download_policy: true
+        })
 
     }
 
@@ -288,12 +292,12 @@ class GroupHealthReportDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 'policy': 'Health insurance',
-                'policy_status': this.state.policy_data.status ? capitalizeFirstLetter(this.state.policy_data.status.toLowerCase()) : '',
+                'policy_status': this.state.policy_data.status ? this.state.policy_data.status === 'policy_issued' ? 'Issued': capitalizeFirstLetter(this.state.policy_data.status.toLowerCase()) : '',
                 "provider_name":  capitalizeFirstLetter(providor_name),
                 "screen_name": 'report details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
-                "download_policy": 'no',
+                "download_policy":  this.state.download_policy ? 'yes' : 'no',
             }
         };
 

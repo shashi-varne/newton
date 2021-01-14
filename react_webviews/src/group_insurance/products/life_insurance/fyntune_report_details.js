@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
 import {
-    numDifferentiationInr, formatAmountInr
+    numDifferentiationInr, formatAmountInr , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -89,9 +89,9 @@ class FyntuneReportDetails extends Component {
             "event_name": 'portfolio',
             "properties": {
                 "user_action": user_action,
-                'policy': '"Life insurance"',
-                'provider_name': 'HDFC Life' ,
-                'policy_status': this.state.policy_data.status,
+                'policy': 'Life insurance',
+                'provider_name': 'HDFC Life',
+                'policy_status': this.state.policy_data.status ? capitalizeFirstLetter(this.state.policy_data.status) : '',
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',

@@ -414,7 +414,7 @@ class Report extends Component {
         "screen_name": 'insurance_report',
         "provider_name": InsuranceNameEvent ? capitalizeFirstLetter(InsuranceNameEvent) : '',
         'policy': policy_name ? policy_name : policy_type ? TitleMaper(policy_type) : '',
-        'policy_status': policy_status === "complete" ? 'Issued' : policy_status === "incomplete" ? 'Pending' : capitalizeFirstLetter(policy_status.toLowerCase()),
+        'policy_status': policy_status === "complete" || policy_status === 'policy_issued'  ? 'Issued' : policy_status === "incomplete" ? 'Pending' : capitalizeFirstLetter(policy_status.toLowerCase()),
       }
     };
 

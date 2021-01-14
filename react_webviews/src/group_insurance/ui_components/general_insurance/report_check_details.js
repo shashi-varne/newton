@@ -112,24 +112,24 @@ class ReportDetails extends Component {
   }
 
   openInBrowser(url) {
-
-    this.sendEvents('download');
+    this.setState({ download : true})
+    // this.sendEvents('download');
     nativeCallback({
       action: 'open_in_browser',
       message: {
         url: url
       }
     });
-    this.setState({ download : true})
   }
 
   toggleAccordion = () => {
-    this.sendEvents('how_to_claim')
     this.setState(prevState => ({
       accordionTab: !prevState.accordionTab,
       how_to_claim: true
     }));
+    // this.sendEvents('how_to_claim')
   }
+
 
   handleClick = () => {
 
