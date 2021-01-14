@@ -186,6 +186,29 @@ class Landing extends Component {
                 )}
             </>
           )}
+          {render_cards.includes("popular_cards") && popular_cards && (
+            <>
+              <div className="main-top-title">More investment options</div>
+              <div className="bottom-scroll-cards">
+                <div className="list">
+                  {popular_cards.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="card popular"
+                        onClick={() => this.clickCard(item.key, item.title)}
+                        style={{
+                          backgroundImage: `url(${require(`assets/${productName}/${item.icon}`)})`,
+                        }}
+                      >
+                        <div className="title">{item.title}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          )}
           <div className="secure-invest-bottom">
             <div className="content">
               Investments with {productName} are 100% secure
