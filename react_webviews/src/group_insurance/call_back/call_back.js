@@ -4,7 +4,10 @@ import Input from '../../common/ui/Input';
 import { nativeCallback } from 'utils/native_callback';
 import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
 import Dialog, {DialogContent} from 'material-ui/Dialog';
+import MobileInputWithoutIcon from '../../common/ui/MobileInputWithoutIcon';
 import { getConfig } from 'utils/functions';
+import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
 
 class CallBackDetails extends Component {
 
@@ -14,16 +17,19 @@ class CallBackDetails extends Component {
             insurance_details: {},
             productName: getConfig().productName,
             form_data: {},
-            openConfirmDialog: false
+            openConfirmDialog: false,
+            showPrefix: false,
+            show_loader: false,
+
         }
     }
 
     componentWillMount(){
         var insurance_details = [
-            {'name': 'Life Insurance', 'value': 'life'},
-            {'name': 'Health Insurance', 'value': 'health'},
-            {'name': 'Covid Insurance', 'value': 'covid'},
-            {'name': 'Anything else', 'value': 'anything'}
+            {'name': 'Life Insurance', 'value': 'Life Insurance'},
+            {'name': 'Health Insurance', 'value': 'Health Insurance'},
+            {'name': 'Covid Insurance', 'value': 'Covid Insurance'},
+            {'name': 'Anything else', 'value': 'Anything else'}
         ]
 
         this.setState({
@@ -61,14 +67,14 @@ class CallBackDetails extends Component {
             <DialogContent>
               <div className="group-health-bmi-dialog" id="alert-dialog-description">
     
-                <div className="top-content flex-between">
+                <div className="top-content flex-between" style={{marginBottom: '20px'}}>
                   <div className="generic-page-title">
-                    <h4>Great!</h4>
+                    <p className="call-back-popup-heading">Great!</p>
                   </div>
                   <img className=""
                     src={require(`assets/${this.state.productName}/call_back_confirm.svg`)} alt="" />
                 </div>
-                <div className="content-mid" style={{marginBottom: '20px'}}>
+                <div className="content-mid" style={{margin: '0 10px 20px 10px'}}>
                     We'll be calling you shortly. Please keep your phone handy so you don't miss our call.
                 </div>
                 <div style={{margin: '0 5px'}}>
@@ -96,26 +102,22 @@ class CallBackDetails extends Component {
         }
 
         if (name === 'mobile') {
-            console.log('out')
             if (value.length <= 10) {
-                console.log('here')
                 form_data[name] = value;
                 form_data[name + '_error'] = '';
             }
         } else {
-            console.log('else')
             form_data[name] = value;
             form_data[name + '_error'] = '';
         }
 
-        console.log(this.state.form_data)
         this.setState({
             form_data: form_data
         })
 
     }
 
-    handleClick = () =>{
+    handleClick = async () =>{
 
       this.sendEvents('next','personal_details')
       var form_data = this.state.form_data;
@@ -128,7 +130,7 @@ class CallBackDetails extends Component {
       }
 
       if((form_data && form_data.mobile && form_data.mobile.length < 10) || (!form_data.mobile)){
-        form_data.mobile_error = 'Enter valid full mobile number';
+        form_data.mobile_error = 'Enter valid mobile number';
         canSubmitForm = false;
       }
       if(!form_data.insuranceType){
@@ -138,14 +140,39 @@ class CallBackDetails extends Component {
 
       this.setState({
         form_data: form_data
-      }, ()=>{
-        console.log('form', form_data)
       })
       
       if(canSubmitForm){
         this.setState({
-          openConfirmDialog: true
+          show_loader: true
         })
+        var body = {
+          "interest": '',
+          "mobile_no": this.state.form_data.mobile,
+          "name": this.state.form_data.name
+        } 
+
+        try{
+          let res = await Api.post('api/insurancev2/api/insurance/create/advisor/callback', body);
+            if (res.pfwresponse.status_code === 200) {
+              if(res.pfwresponse.result.message === 'success'){
+                this.setState({
+                  show_loader: false,
+                  openConfirmDialog: true
+                })
+              }
+          } else {
+            toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+            this.setState({
+              show_loader: false
+            });
+          }
+        }catch(err){
+          this.setState({
+            show_loader: false
+          });
+          toast('Something went wrong');
+        }
       }
         
     }
@@ -168,15 +195,32 @@ class CallBackDetails extends Component {
         }
     }
 
+    addMobilePrefix = () =>{
+      this.setState({
+        showPrefix: true
+      })
+    }
+    removeMobilePrefix = () =>{
+      var form_data = this.state.form_data;
+
+      if(form_data && form_data.mobile && form_data.mobile.length !== 0){
+        return
+      }else{
+        this.setState({
+          showPrefix: false
+        })
+      }
+    }
+    
     render() {
         return (
-        
         <Container
         events={this.sendEvents('just_set_events')}
         fullWidthButton={true}
         onlyButton={true}
         handleClick={() => this.handleClick()}
         buttonTitle="GIVE ME A CALL"
+        showLoader={this.state.show_loader}
         title="Let's talk &#38; help you out">
         
         <p style={{marginTop: '-10px', color: '#767E86'}}>Enter your details &#38; we'll call you in 15 mins</p>
@@ -196,25 +240,28 @@ class CallBackDetails extends Component {
               onChange={this.handleChange("name")}
             />
             </div>
-            <div className="InputField">
-            <Input
+            <div className="InputField" style={{position: 'relative'}}>
+            {this.state.showPrefix && <span className="mobile-number-prefix">+91-</span> }
+            <MobileInputWithoutIcon
+              error={this.state.form_data.mobile_error ? true : false}
+              helperText={this.state.form_data.mobile_error}
               type="number"
               width="40"
               label="Mobile number"
-              class="mobileNumber"
-              id="mobileNumber"
-              name="mobileNumber"
-              error={this.state.form_data.mobile_error ? true : false}
-              helperText={this.state.form_data.mobile_error}
+              class="mobile"
+              maxLength="10"
+              onFocus={()=>this.addMobilePrefix()}
+              onBlur={()=>this.removeMobilePrefix()}
+              id="call-back-mobile-number"
+              name="phone_number"
               value={this.state.form_data.mobile || ""}
-              onChange={this.handleChange("mobile")}
+              onChange={this.handleChange('mobile')} 
             />
             </div>
             <div className="InputField">
             <DropdownWithoutIcon
               parent={this}
               header_title="What you're interested in"
-            //   cta_title="SAVE"
               selectedIndex = {this.state.form_data.index || 0}
               width="40"
               dataType="AOB"

@@ -246,7 +246,7 @@ const Insurance = (props) => {
           <Route exact path={`${url}`} component={Landing} />
 
           {/********** CALL BACK **********/}
-          <Route path={`${url}/call-back`} component={CallBackDetails}/>
+          <Route path={`${url}/call-back-details`} component={CallBackDetails}/>
 
           {/********** TERM INSURANCE **********/}
           <Route path={`${url}/term/resume`} component={Resume} />

@@ -45,7 +45,7 @@ class Container extends Component {
        || pathname.includes('/group-insurance/group-health')
        || pathname === '/group-insurance/group-insurance/add-policy' 
        || pathname === '/group-insurance/health/landing'
-       || pathname === '/group-insurance/call-back') {
+       || pathname === '/group-insurance/call-back-details') {
       this.setState({
         new_header: true,
         inPageTitle: true,

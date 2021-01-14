@@ -116,14 +116,15 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance',
         "insurance_type": insurance_type ? insurance_type : '',
-        'banner_clicked' : banner_clicked ? true : false
+        'banner_clicked' : banner_clicked ? true : false,
+        'callback_clicked' : callback_clicked ?  true : false
       }
     };
 
@@ -135,8 +136,8 @@ class Landing extends Component {
   }
 
   callBackScreen = () =>{
-    this.sendEvents('callback_clicked', "");
-    this.navigate('/group-insurance/call-back');
+    this.sendEvents('next', "", "", true);
+    this.navigate('/group-insurance/call-back-details');
   }
 
   render() {
