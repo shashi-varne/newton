@@ -298,11 +298,11 @@ class BasicDetailsForm extends Component {
     try {
   
       if (this.state.lead_id) { 
-
+        this.setState({
+          skelton: true
+        })
         if(!leadData) {
-          this.setState({
-            skelton: true
-          })
+         
           let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
           leadData = res.pfwresponse.result.lead;
@@ -327,10 +327,14 @@ class BasicDetailsForm extends Component {
         let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
         this.setState({
           age: age,
-          checked: leadData.nominee_details || false
+          checked: leadData.nominee_details || false,
+          skelton: false
         })
        
       } else {
+        this.setState({
+          skelton: true
+        })
         let res = await Api.get('api/ins_service/api/insurance/account/summary')
 
         this.setState({

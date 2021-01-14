@@ -8,6 +8,7 @@ import { getConfig } from 'utils/functions'
 const myHistory = createBrowserHistory();
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
 
+base_url = 'https://religare-dot-plutus-staging.appspot.com'  // TODO remove
 let redirect_url = getConfig().redirect_url;
 let sdk_capabilities = getConfig().sdk_capabilities;
 let is_secure = false;
