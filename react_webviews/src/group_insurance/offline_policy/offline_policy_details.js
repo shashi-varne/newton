@@ -12,7 +12,7 @@ import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import ReactHtmlParser from 'react-html-parser';
 
-import { getCssMapperReport ,  TitleMaper } from '../constants'
+import { getCssMapperReport ,  TitleMaper , ProviderName } from '../constants'
 
 class GroupHealthReportDetails extends Component {
 
@@ -78,11 +78,13 @@ class GroupHealthReportDetails extends Component {
 
 
     sendEvents(user_action) {
+        let providor_name = ProviderName(this.state.lead.provider)
         let eventObj = {
             "event_name": 'portfolio',
             "properties": {
                 "user_action": user_action,
                 'policy': TitleMaper(this.state.lead.policy_type),
+                'provider_name': providor_name,
                 'policy_status': this.state.lead.status,
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
