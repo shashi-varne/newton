@@ -12,7 +12,7 @@ class Calculator extends Component {
     this.state = {
       show_loader: false,
       Net_monthly_Income: 90000,
-      Tenor: 6,
+      Tenure: 6,
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
@@ -68,14 +68,13 @@ class Calculator extends Component {
   render() {
     const {
       Net_monthly_Income,
-      Tenor,
+      Tenure,
       Other_EMIs,
       Monthly_expenses,
     } = this.state;
 
     let Loan_Eligibility =
-      (((Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40) / 100) *
-      Tenor;
+      (((Net_monthly_Income - Other_EMIs - Monthly_expenses) * 40) / 100) * Tenure;
 
     return (
       <Container
@@ -107,7 +106,7 @@ class Calculator extends Component {
           <SliderWithValues
             label="Loan tenure"
             val="Tenure"
-            value={Tenor}
+            value={Tenure}
             min="6"
             max="24"
             minValue="6 MONTHS"
@@ -140,7 +139,7 @@ class Calculator extends Component {
           <div className="total-amount">
             <div>You are eligible for loan upto</div>
             <div className="total">
-              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility), 0))}
+              {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility < 4000000 ? Loan_Eligibility : 4000000 ), 0))}
             </div>
           </div>
         </div>

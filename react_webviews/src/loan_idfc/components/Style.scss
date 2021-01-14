@@ -67,6 +67,39 @@
   .mobile {
     margin-bottom: 15px;
   }
+
+  .agreement-block {
+    height: 180px;
+    overflow: scroll;
+    overflow-y: scroll;
+
+    #link {
+      color: blue;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .agree-tiles {
+      display: -webkit-box;
+      margin: 0 0 10px 0;
+    }
+  
+    .agree-tiles-left {
+      color: #0a1d32;
+      height: 6px;
+      width: 6px;
+      background-color: #0a1d32;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .agree-tiles-right {
+      margin: 0 0 0 10px;
+      color: #767e86;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+  }
 }
 
 .verify-mobile,
@@ -1117,90 +1150,18 @@
   }
 }
 
-.render-html-camera {
+.Camera {
   .block1 {
+    border: 1px dashed #e1e1e1;
+    padding: 10px 0px 0px 0px;
+    text-align: center;
     font-weight: 600;
+  }
+
+  .block2 {
+    border: 1px dashed #e1e1e1;
+    padding: 0px 0px 0px 0px;
+    text-align: center;
   }
 }
 
-// .render-html-camera {
-//   .block1 {
-//     border: 1px dashed #e1e1e1;
-//     padding: 10px 0px 0px 0px;
-//     text-align: center;
-//     font-weight: 600;
-
-//     .gallery {
-//       margin: 20px 0 20px 0;
-//       cursor: pointer;
-
-//       .content {
-//         text-align: center;
-//         cursor: pointer;
-
-//         .text {
-//           color: #28b24d;
-//         }
-//       }
-//     }
-//   }
-
-//   .block2 {
-//     border: 1px dashed #e1e1e1;
-//     padding: 0px 0px 0px 0px;
-//     text-align: center;
-
-//     .img {
-//       width: 100%; 
-//       height: 150;
-//     }
-
-//     .content {
-//       margin: 20px 0 20px 0;
-//       cursor: pointer;
-
-//       .gallery {
-//         text-align: "center";
-
-//         .text {
-//           color: #b4b4b4;
-//         }
-//       }
-//     }
-//   }
-// }
-
-// .render-native-camera {
-//   .block1 {
-//     border: 1px dashed #e1e1e1;
-//     padding: 10px 0px 0px 0px;  
-//     text-align: center;
-
-//     .content {
-//       margin: 20px 0 20px 0;
-//       font-size: 12px;
-//       line-height: 20px;
-
-//       .camera {
-//         width: 50%;
-//         float: left;
-//         text-align: center;
-//         border-right: 1px solid #e1e1e1;
-//       }
-
-//       .text {
-//         color: #28b24d;
-//         font-weight: 600;
-//       }
-
-//       .center {
-//         text-align: center;
-//       }
-//     }
-
-//     .img {
-//       width: 100%; 
-//       height: 150;
-//     }
-//   }
-// }

@@ -105,6 +105,9 @@ const journeyMapper2 = {
   idfc_3_accepted: {
     index: "4",
   },
+  application_submitted: {
+    index: "4",
+  }
 };
 class JourneyMap extends Component {
   constructor(props) {
@@ -207,7 +210,7 @@ class JourneyMap extends Component {
               ? "pending"
               : "completed",
           cta:
-            (idfc_loan_status === "idfc_4_accepted" || idfc_loan_status === "idfc_4_submitted" || application_complete) &&
+            index === "4" &&
             "CHECK",
           id: "sanction_and_disbursal",
         },
@@ -247,16 +250,30 @@ class JourneyMap extends Component {
     this.setState({
       show_loader: true,
     });
-    await this.getOrCreate();
-    let lead = this.state.lead || {};
-    let vendor_info = lead.vendor_info || {};
-    if (vendor_info.ckyc_state !== "init") {
-      this.updateApplication({
-        idfc_loan_status: "ckyc",
-      });
-    } else {
-      this.getCkycState();
-    }
+    
+    let result = await this.getUserStatus();
+
+    let { count } = this.state;
+    let that = this;
+
+    setTimeout(function () { 
+      if (result.ckyc_status !== "init") {
+        let body = {
+          idfc_loan_status: "ckyc",
+        };
+        that.updateApplication(body, "personal-details");
+      } else {
+        if (count < 20) {
+          that.setState({
+            count: count + 1,
+          });
+  
+          that.getCkycState();
+        } else {
+          that.navigate("error");
+        }
+      }
+    }, 3000);
   };
 
   handleClick = (id) => {
@@ -290,12 +307,14 @@ class JourneyMap extends Component {
     // ---step-3
     if (id === "income_details" && index <= "2") {
       this.sendEvents('next', {stage: stage});
-      if (idfc_loan_status === "idfc_0.5_accepted") {
+      if (idfc_loan_status === "idfc_0.5_accepted" || idfc_loan_status === "idfc_0.5_submitted") {
         this.get05Callback();
-      } else if (idfc_loan_status === "idfc_1.0_accepted") {
+      } else if (idfc_loan_status === "idfc_1.0_accepted" || idfc_loan_status === "idfc_1.0_submitted") {
         this.get10Callback();
       } else if (idfc_loan_status === "idfc_1.0_failed") {
         this.submitApplication({}, "one", "", "eligible-loan");
+      } else if (idfc_loan_status === "idfc_1.1_accepted" || idfc_loan_status === "idfc_1.1_submitted") {
+        this.get11Callback();
       } else {
         if (
           idfc_loan_status === "perfios" &&

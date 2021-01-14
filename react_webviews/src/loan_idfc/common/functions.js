@@ -10,6 +10,7 @@ import {
   isValidDate,
   getEditTitle,
   IsFutureDate,
+  numDifferentiationInr
 } from "utils/validators";
 
 export async function initialize() {
@@ -29,6 +30,7 @@ export async function initialize() {
   this.getPickList = getPickList.bind(this);
   this.get05Callback = get05Callback.bind(this);
   this.get10Callback = get10Callback.bind(this);
+  this.get11Callback = get11Callback.bind(this);
   this.get07State = get07State.bind(this);
   this.get07StateForBt = get07StateForBt.bind(this);
   this.getRecommendedVendor = getRecommendedVendor.bind(this);
@@ -237,25 +239,18 @@ export async function getPickList() {
       show_loader: true,
     });
 
-    let { screen_name } = this.state;
-
-    const res = await Api.get(`relay/api/loan/idfc/picklist${screen_name === "mobile_verification" ? '?tnc=true' : ""}`);
+    const res = await Api.get(`relay/api/loan/idfc/picklist`);
 
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      let tnc = result.tnc;
 
       this.setState(
         {
-          tnc: tnc,
           industryOptions: result.industry,
-          // constitutionOptions: result.constitution,
           designationOptions: result.designation,
-          // qualification: result.educational_qualification,
           businessOptions: result.nature_of_business,
           organisationTypeOptions: result.organisation,
-          // purposeOfLoanOptions: result.purpose,
           salaryRecieptOptions: result.salary_mode,
           show_loader: false,
         },
@@ -362,11 +357,8 @@ export async function getOrCreate(params) {
       let screens = ["main_landing_screen", "calculator", "know_more_screen"];
 
       let picklistScreens = [
-        // "basic_details",
-         "professional_details_screen",
-          "mobile_verification",
-          //  "requirement_details_screen",
-            "additional_details"]
+        "professional_details_screen",
+        "additional_details"]
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
@@ -541,7 +533,9 @@ export async function get05Callback() {
     if (
       result.is_dedupe === true ||
       result.idfc_05_callback === true ||
-      result.vendor_application_status === "idfc_callback_rejected"
+      result.vendor_application_status === "idfc_callback_rejected" ||
+      result.vendor_application_status === "idfc_cancelled" ||
+      result.is_cancelled === true
     ) {
       that.navigate("loan-status");
     } else {
@@ -584,6 +578,38 @@ export async function get10Callback(next_state) {
       that.get10Callback(next_state);
     } else {
       that.navigate("/loan/idfc/error");
+    }
+  }, 3000);
+}
+
+export async function get11Callback() {
+  this.setState({
+    show_loader: true,
+  });
+
+  // setTimeout(, 3000)
+  let result = await this.getUserStatus();
+  let { count } = this.state;
+  let that = this;
+
+  setTimeout(function () {
+    if (result.idfc_11_callback) {
+      that.navigate("/loan/idfc/loan-eligible");
+    } else if (
+      result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
+      result.is_cancelled === true
+    ) {
+      that.navigate("loan-status");
+    }  else {
+      if (count < 20) {
+        that.setState({
+          count: count + 1,
+        });
+
+        that.get11Callback();
+      } else {
+        that.navigate("error");
+      }
     }
   }, 3000);
 }
@@ -704,6 +730,7 @@ export async function submitApplication(
         "CreateLoan 17 API Failed",
         "CreateLoan 3 API Failed",
         "CreateLoan 4 API Failed",
+        "idfc_cancelled",
         "Age",
         "Salary",
         "Salary receipt mode",
@@ -883,7 +910,7 @@ export async function formCheckUpdate(
     // eslint-disable-next-line
     parseInt(form_data.amount_required) < parseInt("100000")
   ) {
-    form_data.amount_required_error = "Minimum loan amount should be ₹1 Lakh";
+    form_data.amount_required_error = `Minimum loan amount should be ${numDifferentiationInr(100000)}`;
     canSubmitForm = false;
   }
 
@@ -895,17 +922,17 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  // if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
-  //   let data = this.state.companyOptions.filter(
-  //     (data) => data.key.toUpperCase() === form_data.company_name.toUpperCase()
-  //   );
+  if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
+    let data = this.state.companyOptions.filter(
+      (data) => data.name === form_data.company_name
+    );
 
-  //   if (data.length === 0) {
-  //     form_data.company_name_error =
-  //       "Please select company name from provided list";
-  //     canSubmitForm = false;
-  //   }
-  // }
+    if (data.length === 0) {
+      form_data.company_name_error =
+        "Please select company name from provided list";
+      canSubmitForm = false;
+    }
+  }
 
   this.setState({
     form_data: form_data,

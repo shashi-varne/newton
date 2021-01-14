@@ -40,13 +40,15 @@ class CommonLanding extends Component {
             'gold-locker': '/gold/gold-locker',
             'gold-sell': '/gold/sell',
             'gold-delivery': '/gold/delivery',
-            'loan': '/loan/home',
+            'loan': '/loan/loan-home',
             'health-insurance-landing': '/group-insurance/health/landing',
             'health-insurance-comprehensive': '/group-insurance/group-health/entry',
             'health-insurance-hdfcergo': '/group-insurance/group-health/HDFCERGO/landing',
             'health-insurance-religare': '/group-insurance/group-health/RELIGARE/landing',
             'health-insurance-star': '/group-insurance/group-health/STAR/landing',
-            'life-insurance-fyntune': '/group-insurance/life-insurance/savings-plan/landing'
+            'life-insurance-fyntune': '/group-insurance/life-insurance/savings-plan/landing',
+            'idfc-landing': '/loan/idfc/loan-know-more',
+            'idfc-journey': '/loan/idfc/journey'
         };
 
         let pathname = navigateMapper[main_module] || '';

@@ -51,12 +51,16 @@ class IncomeDetails extends Component {
   };
 
   sendEvents(user_action, data = {}) {
+    let details = {
+      "netbanking": "fetch details using netbanking",
+      "manual_upload": "upload bank statement"
+    }
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "income_details",
-        option_selected: data.option_selected || '',
+        option_selected: details[data.option_selected] || '',
       },
     };
 

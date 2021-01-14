@@ -87,7 +87,7 @@ class PersonalDetails extends Component {
 
     let form_data = {
       first_name: personal_info.first_name,
-      middle_name: confirm_details && personal_info.middle_name,
+      middle_name: personal_info.middle_name,
       last_name: personal_info.last_name,
       dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
@@ -128,11 +128,11 @@ class PersonalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, details_changed } = this.state;
 
-    // let names = ['first_name', 'middle_name', 'last_name', 'father_first_name', 'father_last_name', 'mother_first_name', 'mother_last_name']
+    let names = ['first_name', 'last_name', 'father_first_name', 'father_last_name', 'mother_first_name', 'mother_last_name']
 
-    // if(names.includes(name) && value.includes(' ')) {
-    //   return
-    // }
+    if(names.includes(name) && value.includes(' ')) {
+      return
+    }
 
     if (name) {
       form_data[name] = value;
@@ -156,30 +156,26 @@ class PersonalDetails extends Component {
     this.sendEvents('next');
     let { form_data } = this.state;
 
-    form_data.marital_status = form_data.marital_status.toLowerCase();
-    form_data.religion = form_data.religion.toLowerCase();
-
     let keys_to_check = [
       "first_name",
       "last_name",
       "gender",
       "marital_status",
-      // "father_name",
       "father_first_name",
       "father_last_name",
       "religion",
       "email_id",
     ];
+
+    let keys_to_include = ["middle_name"];
     
     if (this.state.confirm_details) {
       keys_to_check.push(...["dob",
-      //  "mother_name", 
       "mother_first_name", 
-      "mother_last_name", 
-       "middle_name"]);
+      "mother_last_name"]);
     }
-
-    this.formCheckUpdate(keys_to_check, form_data);
+    
+    this.formCheckUpdate(keys_to_check, form_data, "", "", keys_to_include);
   };
 
   handleChangeRadio = (event) => {
@@ -243,7 +239,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="First name"
                 class="first_name"
-                id="name"
+                id="first_name"
                 name="first_name"
                 value={this.state.form_data.first_name || ""}
                 onChange={this.handleChange("first_name")}
@@ -251,23 +247,21 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            {this.state.confirm_details && (
-              <div className="InputField">
-                <Input
-                  error={!!this.state.form_data.middle_name_error}
-                  helperText={this.state.form_data.middle_name_error || this.state.form_data.middle_name_helper}
-                  type="text"
-                  width="40"
-                  label="Middle name"
-                  class="middle_name"
-                  id="name"
-                  name="middle_name"
-                  value={this.state.form_data.middle_name || ""}
-                  onChange={this.handleChange("middle_name")}
-                  onClick={() => this.handleCkycMessage("middle_name")}
-                />
-              </div>
-            )}
+            <div className="InputField">
+              <Input
+                error={!!this.state.form_data.middle_name_error}
+                helperText={this.state.form_data.middle_name_error || this.state.form_data.middle_name_helper}
+                type="text"
+                width="40"
+                label="Middle name"
+                class="middle_name"
+                id="middle_name"
+                name="middle_name"
+                value={this.state.form_data.middle_name || ""}
+                onChange={this.handleChange("middle_name")}
+                onClick={() => this.handleCkycMessage("middle_name")}
+              />
+            </div>
 
             <div className="InputField">
               <Input
@@ -277,7 +271,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Last name"
                 class="last_name"
-                id="name"
+                id="last_name"
                 name="last_name"
                 value={this.state.form_data.last_name || ""}
                 onChange={this.handleChange("last_name")}
@@ -346,7 +340,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Father's first name"
                 class="father_first_name"
-                id="name"
+                id="father_first_name"
                 name="father_first_name"
                 value={this.state.form_data.father_first_name || ""}
                 onChange={this.handleChange("father_first_name")}
@@ -362,7 +356,7 @@ class PersonalDetails extends Component {
                 width="40"
                 label="Father's last name"
                 class="father_last_name"
-                id="name"
+                id="father_last_name"
                 name="father_last_name"
                 value={this.state.form_data.father_last_name || ""}
                 onChange={this.handleChange("father_last_name")}
@@ -380,7 +374,7 @@ class PersonalDetails extends Component {
                     width="40"
                     label="Mother's first name"
                     class="mother_first_name"
-                    id="name"
+                    id="mother_first_name"
                     name="mother_first_name"
                     value={this.state.form_data.mother_first_name || ""}
                     onChange={this.handleChange("mother_first_name")}
@@ -396,7 +390,7 @@ class PersonalDetails extends Component {
                     width="40"
                     label="Mother's last name"
                     class="mother_last_name"
-                    id="name"
+                    id="mother_last_name"
                     name="mother_last_name"
                     value={this.state.form_data.mother_last_name || ""}
                     onChange={this.handleChange("mother_last_name")}

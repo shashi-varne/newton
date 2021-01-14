@@ -204,7 +204,7 @@ class PerfiosStatus extends Component {
 
           {perfios_state === "bypass" && (
             <div className="subtitle">
-              Due to an error your bank statements couldn't be verfied. No
+              Due to an error your bank statements couldn't be verified. No
               worries, you can still go ahead with your loan application.
               However, do upload your bank statements later.
             </div>

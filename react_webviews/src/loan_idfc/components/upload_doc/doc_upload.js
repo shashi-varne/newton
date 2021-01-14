@@ -4,18 +4,18 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { getConfig } from "../../../utils/functions";
+import DotDotLoader from "common/ui/DotDotLoader";
 import { getBase64 } from "utils/functions";
 import Api from "utils/api";
-// import DotDotLoader from "common/ui/DotDotLoader";
 import $ from "jquery";
 import { storageService } from "../../../utils/validators";
 import { nativeCallback } from "utils/native_callback";
-
 import {
   renderHtmlCamera,
   renderNativeCamera,
   renderMultipleHtmlCamera,
   renderMultipleNativeCamera,
+  getPhoto, getPdf
 } from "./render_camera";
 
 class DocumentUpload extends Component {
@@ -26,14 +26,10 @@ class DocumentUpload extends Component {
       screen_name: "document_upload",
       form_data: {},
       image_data: {},
-      totalUpload: "",
       docList: [],
-      documents: [],
-      disbableButton: true,
+      disableButton: true,
       docs: [],
-      category: "",
-      doc_type: "",
-      doc_id: "",
+      documents: []
     };
 
     this.initialize = initialize.bind(this);
@@ -42,6 +38,8 @@ class DocumentUpload extends Component {
     this.renderNativeCamera = renderNativeCamera.bind(this);
     this.renderMultipleHtmlCamera = renderMultipleHtmlCamera.bind(this);
     this.renderMultipleNativeCamera = renderMultipleNativeCamera.bind(this);
+    this.getPhoto = getPhoto.bind(this);
+    this.getPdf = getPdf.bind(this);
   }
 
   componentWillMount() {
@@ -190,7 +188,7 @@ class DocumentUpload extends Component {
         category: category,
       });
     }
-  };
+  }
 
   sendEvents(user_action) {
     let type = (this.state.type === "open_camera" ? "camera" : "gallery") || "";
@@ -211,6 +209,12 @@ class DocumentUpload extends Component {
     }
   }
 
+  showLoaderNative() {
+    this.setState({
+      show_loader: true,
+    });
+  }
+
   native_call_handler(method_name, doc_type, doc_name) {
     let that = this;
     if (getConfig().generic_callback) {
@@ -226,6 +230,13 @@ class DocumentUpload extends Component {
               docName: this.doc_name,
               show_loader: true,
             });
+            if (file.size > 5000000) {
+              alert("Please select file less than 5mb");
+              that.setState({
+                show_loader: false,
+              });
+              return;
+            }
             switch (file.type) {
               case "application/pdf":
               case "image/jpeg":
@@ -237,7 +248,6 @@ class DocumentUpload extends Component {
               default:
                 alert("Please select pdf/img file");
                 that.setState({
-                  docType: this.doc_type,
                   show_loader: false,
                 });
             }
@@ -249,10 +259,76 @@ class DocumentUpload extends Component {
     }
   }
 
-  showLoaderNative() {
-    this.setState({
-      show_loader: true,
+  save = (file, name) => {
+    let document = this.state.form_data.doc_name;
+
+    let { category, doc_type, documents, totalUpload, image_data } = this.state;
+    let ext = file.type.split("/")[1];
+
+    if (file.file_name === undefined) {
+      name = "Image_" + doc_type.split('')[3] + "." + ext;
+    }
+    
+    if (file.file_name !== undefined && !file.file_name.includes(ext)) {
+      name = file.file_name + "." + ext;
+    }
+    
+
+    file.name = name || file.file_name;
+    file.category_id = category;
+    file.checklist_doc_type = doc_type.length === 4 ? doc_type : doc_type.slice(0, 4);
+    file.doc_name = document;
+    file.doc_type = file.type;
+    console.log(file)
+
+    let that = this;
+    getBase64(file, function (img) {
+      file.imageBaseFile = img;
+
+      let duplicate = documents.filter(item => {
+        return item.checklist_doc_type === file.checklist_doc_type
+      })
+
+      if (duplicate.length === 0) {
+        that.uploadDocument(file, doc_type);
+
+        if (totalUpload < 3) {
+          image_data[doc_type] = file;
+        } else {
+          documents.push(file);
+        }
+  
+        that.setState({
+          documents: documents,
+          image_data: image_data,
+          show_loader: false,
+          fileUploaded: true,
+          disableButton: true,
+        });
+      } else {
+        that.setState({
+          show_loader: false,
+        });
+      }
+      
     });
+  };
+
+  openCameraWeb(type) {
+    $(`#${type}`).trigger("click")
+  }
+
+  startUpload(method_name, type) {
+    this.setState({
+      type: method_name,
+      doc_type: type
+    });
+
+    if (getConfig().html_camera) {
+      this.openCameraWeb(type);
+    } else {
+      this.native_call_handler(method_name, type)
+    }
   }
 
   handleChange = (name) => (event) => {
@@ -275,180 +351,12 @@ class DocumentUpload extends Component {
     });
   };
 
-  openCameraWeb(id = "") {
-    if (!id) {
-      $("input").trigger("click");
-    } else {
-      $(`#${id}`).trigger("click");
-    }
-  }
+  uploadDocument = async (file) => {
+    let {totalUpload, documents, category} = this.state;
 
-  startUpload(method_name, type = "", name = "", id = "") {
     this.setState({
-      type: method_name,
-      doc_type: type,
-    });
-
-    if (id) {
-      this.setState({
-        doc_id: id,
-      });
-    }
-
-    if (getConfig().html_camera && method_name !== "open_file") {
-      this.openCameraWeb(type);
-    } else if (getConfig().html_camera && method_name === "open_file") {
-      this.openCameraWeb();
-    } else {
-      this.native_call_handler(method_name, type, name);
-    }
-  }
-
-  save = (file, name) => {
-    let document = this.state.form_data.doc_name;
-
-    let { category, doc_type, documents, totalUpload, image_data } = this.state;
-
-    let ext = file.type.split("/")[1];
-
-    if (file.file_name === undefined) {
-      name = "Image_" + doc_type.split('')[3] + "." + ext;
-    }
-    
-    if (file.file_name !== undefined && !file.file_name.includes(ext)) {
-      name = file.file_name + "." + ext;
-    }
-    
-
-    file.name = name;
-    file.category_id = category;
-    file.checklist_doc_type = doc_type.substring(5, 9);
-    file.doc_name = document;
-    file.doc_type = file.type;
-
-    let that = this;
-    getBase64(file, function (img) {
-      file.imageBaseFile = img;
-      that.uploadDocument(file, doc_type);
-
-      if (totalUpload < 3) {
-        image_data[doc_type] = file;
-      } else {
-        documents.push(file);
-      }
-
-      that.setState({
-        documents: documents,
-        image_data: image_data,
-        show_loader: false,
-        fileUploaded: true,
-        disbableButton: true,
-      });
-    });
-  };
-
-  getPdf = (e) => {
-    e.preventDefault();
-    let file = e.target.files[0] || {};
-    let doc_name = this.state.form_data.doc_name;
-
-    let { category, doc_type, doc_id } = this.state;
-
-    file.doc_name = doc_name;
-    file.category_id = category;
-    file.checklist_doc_type = doc_type;
-
-    let acceptedType = [
-      "application/pdf",
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/bmp",
-    ];
-
-    if (
-      Object.keys(file).length !== "0" &&
-      acceptedType.indexOf(file.type) === -1
-    ) {
-      toast("Please select pdf file only");
-      return;
-    }
-
-    let { documents, count } = this.state;
-    if (Object.keys(file).length !== "0") {
-      file.doc_type = file.type;
-      file.status = "uploaded";
-      file.id = count++;
-
-      let that = this;
-      getBase64(file, function (img) {
-        file.imageBaseFile = img;
-
-        if (doc_id === "") {
-          that.uploadDocument(file);
-          documents.push(file);
-        } else {
-          var index = documents.findIndex(
-            (item) => item.document_id === doc_id
-          );
-          file.document_id = doc_id;
-          that.editDocument(file);
-          documents[index] = file;
-        }
-
-        that.setState({
-          fileUploaded: true,
-          documents: documents,
-          disbableButton: true,
-          doc_id: "",
-        });
-      });
-    }
-  };
-
-  getPhoto = (e) => {
-    e.preventDefault();
-
-    let { image_data, category, doc_type } = this.state;
-    image_data[doc_type] = {};
-    let doc_name = this.state.form_data.doc_name;
-
-    let file = e.target.files[0];
-
-    file.doc_name = doc_name;
-    file.category_id = category;
-    file.checklist_doc_type = doc_type;
-
-    let acceptedType = ["image/jpeg", "image/jpg", "image/png", "image/bmp"];
-
-    if (acceptedType.indexOf(file.type) === -1) {
-      toast("Please select image file only");
-      return;
-    }
-
-    let that = this;
-    file.doc_type = doc_type;
-
-    getBase64(file, function (img) {
-      file.imageBaseFile = img;
-      file.uploaded = true;
-      image_data[doc_type] = file;
-      that.uploadDocument(image_data[doc_type], doc_type);
-
-      that.setState({
-        image_data: image_data,
-      });
-    });
-  };
-
-  uploadDocument = async (file, type) => {
-    let {
-      image_data,
-      totalUpload,
-      disbableButton,
-      documents,
-      category,
-    } = this.state;
+      isApiRunning: true
+    })
 
     const data = new FormData();
     data.append("doc_type", file.doc_name);
@@ -465,34 +373,40 @@ class DocumentUpload extends Component {
       const { status_code: status, result } = res.pfwresponse;
 
       if (status === 200) {
-        if (totalUpload < 3) {
-          image_data[type].integrated = true;
-        } else {
+        if (totalUpload > 2) {
           let index = documents.findIndex(
             (item) => item.checklist_doc_type === file.checklist_doc_type
           );
+  
           documents[index].id = result.document_id;
-
-          disbableButton = false;
+          this.setState({
+            documents: documents,
+            isApiRunning: false
+          })
+        } else {
+          return result;
         }
-
-        this.setState({
-          image_data: image_data,
-          documents: documents,
-          disbableButton: disbableButton,
-        });
+        
+      } else {
+        toast(result.error || result.message || "Something went wrong")
       }
     } catch (err) {
       console.log(err);
       toast("Something went wrong");
     }
-  };
+  }
 
   deleteDocument = async (index, file) => {
     let { documents } = this.state;
 
+    documents[index].show_loader = true;
+    this.setState({
+      documents: documents,
+      isApiRunning: true
+    })
+
     const data = new FormData();
-    data.append("doc_type", file.doc_type);
+    data.append("doc_type", this.state.form_data.doc_name);
     data.append("doc_id", file.id);
     data.append("category_id", file.category_id);
     data.append("checklist_doc_type", file.checklist_doc_type);
@@ -513,6 +427,7 @@ class DocumentUpload extends Component {
 
         this.setState({
           documents: documents,
+          isApiRunning: false
         });
       } else {
         toast(result.error);
@@ -523,22 +438,40 @@ class DocumentUpload extends Component {
     }
   };
 
-  handleClick = () => {
+  handleClick = async () => {
     this.sendEvents("next");
-    this.navigate("doc-list");
-  };
+    let { totalUpload, image_data } = this.state;
 
-  render() {
-    let { image_data, documents, totalUpload, disbableButton } = this.state;
-
-    if (totalUpload < 3 && Object.keys(image_data).length !== totalUpload) {
-      for (var i in image_data) {
-        if (!image_data[i].integrated) {
-          disbableButton = true;
-        } else {
-          disbableButton = false;
+    this.setState({
+      show_loader: true
+    })
+    if (totalUpload < 3) {
+      let count = 0;
+      for (var item in image_data) {
+        let res = await this.uploadDocument(image_data[item]);
+        if (res) {
+          count++
         }
       }
+      
+      // eslint-disable-next-line radix
+      if (count === parseInt(totalUpload))
+        this.navigate('doc-list')
+    } else {
+      this.navigate('doc-list')
+    }
+    
+  }
+
+  render() {
+    let { image_data, documents, totalUpload, disableButton, isApiRunning } = this.state;
+    // eslint-disable-next-line radix
+    if (totalUpload < 3 && Object.keys(image_data).length !== parseInt(totalUpload)) {
+      disableButton = true;
+    } else if (totalUpload > 2 && (documents.length === 0 || isApiRunning)) {
+      disableButton = true;
+    } else {
+      disableButton = false;
     }
 
     return (
@@ -547,7 +480,7 @@ class DocumentUpload extends Component {
         showLoader={this.state.show_loader}
         title={this.state.docList.category_name}
         buttonTitle="CONTINUE"
-        disable={disbableButton}
+        disable={disableButton}
         handleClick={this.handleClick}
       >
         <div className="idfc-document-upload">
@@ -567,8 +500,8 @@ class DocumentUpload extends Component {
 
           {totalUpload === "1" && (
             <div className="loan-mandate-pan" style={{ marginBottom: "50px" }}>
-              {getConfig().html_camera && this.renderHtmlCamera("doc1")}
-              {!getConfig().html_camera && this.renderNativeCamera("doc1")}
+              {getConfig().html_camera && this.renderHtmlCamera("doc1", "Front")}
+              {!getConfig().html_camera && this.renderNativeCamera("doc1", "Front")}
             </div>
           )}
 
@@ -578,16 +511,16 @@ class DocumentUpload extends Component {
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera("doc1")}
-                {!getConfig().html_camera && this.renderNativeCamera("doc1")}
+                {getConfig().html_camera && this.renderHtmlCamera("doc1", "Front")}
+                {!getConfig().html_camera && this.renderNativeCamera("doc1", "Front")}
               </div>
 
               <div
                 className="loan-mandate-pan"
                 style={{ marginBottom: "50px" }}
               >
-                {getConfig().html_camera && this.renderHtmlCamera("doc2")}
-                {!getConfig().html_camera && this.renderNativeCamera("doc2")}
+                {getConfig().html_camera && this.renderHtmlCamera("doc2", "Back")}
+                {!getConfig().html_camera && this.renderNativeCamera("doc2", "Back")}
               </div>
             </div>
           )}
@@ -608,7 +541,7 @@ class DocumentUpload extends Component {
                         alt=""
                       />
                       {item.name}
-                      <span
+                      {item.id && !item.show_loader ? <span
                         style={{ float: "right" }}
                         onClick={() => this.deleteDocument(index, item)}
                       >
@@ -617,7 +550,7 @@ class DocumentUpload extends Component {
                           src={require(`assets/deleted.svg`)}
                           alt=""
                         />
-                      </span>
+                      </span> : <DotDotLoader style={{ float: "right" }}/>}
                     </div>
                   </div>
                 </div>
@@ -625,47 +558,12 @@ class DocumentUpload extends Component {
 
               {documents.length < 3 && (
                 <div className="upload-bank-statement">
-                  {/* <div
-                    className="pdf-upload"
-                    onClick={() =>
-                      this.startUpload(
-                        "open_file",
-                        `doc${documents.length + 1}`,
-                        `document_${documents.length + 1}`
-                      )
-                    }
-                  >
-                    <span className="plus-sign">
-                      <input
-                        type="file"
-                        style={{ display: "none" }}
-                        onChange={this.getPdf}
-                        id="myFile"
-                      />
-                      <SVG
-                        preProcessor={(code) =>
-                          code.replace(
-                            /fill=".*?"/g,
-                            "fill=" + getConfig().secondary
-                          )
-                        }
-                        src={plus}
-                      />
-                    </span>
-                    {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
-                  </div> */}
                   <div
                     className="loan-mandate-pan"
                     style={{ marginBottom: "50px" }}
                   >
-                    {getConfig().html_camera &&
-                      this.renderMultipleHtmlCamera(
-                        `doc${documents.length + 1}`
-                      )}
-                    {!getConfig().html_camera &&
-                      this.renderMultipleNativeCamera(
-                        `doc${documents.length + 1}`
-                      )}
+                    {getConfig().html_camera && this.renderMultipleHtmlCamera(`doc${documents.length + 1}`)}
+                    {!getConfig().html_camera && this.renderMultipleNativeCamera(`doc${documents.length + 1}`)}
                   </div>
                 </div>
               )}
