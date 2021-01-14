@@ -83,7 +83,7 @@ class FyntuneReportDetails extends Component {
         })
     }
 
-    sendEvents(user_action) { 
+    sendEvents(user_action) {
  
         let eventObj = {
             "event_name": 'portfolio',
@@ -91,7 +91,7 @@ class FyntuneReportDetails extends Component {
                 "user_action": user_action,
                 'policy': '"Life insurance"',
                 'provider_name': 'HDFC Life' ,
-                'policy_status': this.state.policy_data.status ? this.state.policy_data.status === 'init' ? 'Pending' : this.state.policy_data.status === 'policy_issued' ? 'Issued' : 'Rejected' : '',
+                'policy_status': this.state.policy_data.status,
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
