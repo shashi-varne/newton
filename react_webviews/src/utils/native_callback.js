@@ -128,7 +128,7 @@ export const nativeCallback = async ({ action = null, message = null, events = n
       callbackData.data = message;
     }
 
-    if (['mandate-otm', 'isip', 'w-report'].includes(project)) {
+    if (['mandate-otm', 'isip', 'w-report', 'iw-dashboard'].includes(project)) {
 
       // For only events, if actions is present, then proceed to next block
       if (events) {
