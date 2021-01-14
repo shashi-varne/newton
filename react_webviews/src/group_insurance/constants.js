@@ -852,7 +852,8 @@ export function ProviderName(name) {
     'hdfc ergo': 'HDFC ergo',
     'star health': 'Star',
     'religare health': 'Care',
-    'fyntune': 'HDFC Life'
+    'fyntune': 'HDFC Life',
+    'hdfc life': 'HDFC Life',
   }
 
   return ProviderName[NameData] ? ProviderName[NameData] : NameData

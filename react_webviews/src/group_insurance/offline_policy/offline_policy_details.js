@@ -84,7 +84,7 @@ class GroupHealthReportDetails extends Component {
             "properties": {
                 "user_action": user_action,
                 'policy': TitleMaper(this.state.lead.policy_type),
-                'provider_name': providor_name,
+                'provider_name': capitalizeFirstLetter(providor_name),
                 'policy_status': this.state.lead.status,
                 "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
