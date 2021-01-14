@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  webview:
+    container_name: webview
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/webview
+      - /webview/node_modules
+    restart: always
+    networks:
+      - sbmf-net
+    environment:
+      BUILD_ENV: start
+
+networks:
+  sbmf-net:
+    driver: bridge
