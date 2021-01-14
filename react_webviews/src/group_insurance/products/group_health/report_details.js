@@ -281,7 +281,7 @@ class GroupHealthReportDetails extends Component {
 
 
     sendEvents(user_action) {
-        let providor_name = ProviderName(this.state.providerConfig.provider_api)
+        let providor_name = this.state.providerConfig.provider_api ? ProviderName(this.state.providerConfig.provider_api) : '';
 
         let eventObj = {
             "event_name": 'health_insurance',
