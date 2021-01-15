@@ -72,7 +72,7 @@ class CallBackDetails extends Component {
                     <p className="call-back-popup-heading">Great!</p>
                   </div>
                   <img className=""
-                    src={require(`assets/${this.state.productName}/call_back_confirm.svg`)} alt="" />
+                    src={require(`assets/${this.state.productName}/call_back_confirm.png`)} alt="" />
                 </div>
                 <div className="content-mid" style={{margin: '0 10px 20px 10px'}}>
                     We'll be calling you shortly. Please keep your phone handy so you don't miss our call.
