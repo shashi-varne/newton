@@ -519,6 +519,20 @@ class Container extends Component {
     }
   }
 
+  renderLoaderOnSameScreen = () => {
+    if (this.props.showLoaderModal) {
+      return (
+        <div className="Loader-callback">
+          <div className="LoaderOverlay-callback">
+            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+
   componentDidUpdate(prevProps) {
     setHeights({ 'header': true, 'container': false });
   }
@@ -537,7 +551,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        {!this.props.hide_header && !this.props.showLoader && <Header
+        {!this.props.hide_header && !this.props.showLoader && !this.props.showLoaderModal && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
@@ -561,15 +575,18 @@ class Container extends Component {
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 56 }}>
 
-          {/* Loader Block */}
+          {/* Loader Block in a modal window */}
+          {this.renderLoaderOnSameScreen()}
+
+          {/* Loader Block covering entire screen*/}
           {this.renderPageLoader()}
 
-          {!this.props.showLoader && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+          {!this.props.showLoader && !this.props.showLoaderModal && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
             {steps}
           </div>}
 
           {/* Banner Block */}
-          {!this.props.showLoader && this.props.banner && <Banner text={this.props.bannerText} />}
+          {!this.props.showLoader && !this.props.showLoaderModal && this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 

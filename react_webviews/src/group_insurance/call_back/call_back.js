@@ -8,6 +8,11 @@ import MobileInputWithoutIcon from '../../common/ui/MobileInputWithoutIcon';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
+import Slide from '@material-ui/core/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 class CallBackDetails extends Component {
 
@@ -63,6 +68,7 @@ class CallBackDetails extends Component {
             onClose={this.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            TransitionComponent={Transition}
           >
             <DialogContent>
               <div className="group-health-bmi-dialog" id="alert-dialog-description">
@@ -220,7 +226,7 @@ class CallBackDetails extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
         buttonTitle="GIVE ME A CALL"
-        showLoader={this.state.show_loader}
+        showLoaderModal={this.state.show_loader}
         title="Let's talk &#38; help you out">
         
         <p style={{marginTop: '-10px', color: '#767E86'}}>Enter your details &#38; we'll call you in 15 mins</p>

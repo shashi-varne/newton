@@ -627,6 +627,30 @@ input#pan {
   z-index: 200;
 }
 
+.Loader-callback{
+  background-color: rgba(0, 0, 0, 0.42);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+}
+
+.LoaderOverlay-callback{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  img{
+    width: 75%;
+    height: 70%;
+  }
+}
+
 .LoaderOverlay {
   position: absolute;
   top: 50%;
