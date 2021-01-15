@@ -165,7 +165,7 @@ class Landing extends Component {
           </div>
 
           <div className="callback-button-container">
-            <img className="image" src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} onClick={() => this.callBackScreen()} alt=""/>
+            <img className="image" style={{cursor: 'pointer'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} onClick={() => this.callBackScreen()} alt=""/>
           </div>
 
           <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customers say </div>
