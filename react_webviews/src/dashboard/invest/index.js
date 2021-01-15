@@ -10,6 +10,7 @@ import NotFound from "../../common/components/NotFound";
 
 import "./Style.scss";
 import Landing from "./landing";
+import InstaRedeem from "./insta_redeem";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -49,6 +50,7 @@ const Invest = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
+          <Route exact path={`${url}/instaredeem`} component={InstaRedeem} />
 
           <Route component={NotFound} />
         </Switch>

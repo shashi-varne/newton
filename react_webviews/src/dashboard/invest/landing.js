@@ -4,6 +4,7 @@ import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./functions";
 import InvestCard from "./components/invest_card";
+import SecureInvest from "./components/SecureInvest";
 
 class Landing extends Component {
   constructor(props) {
@@ -209,16 +210,7 @@ class Landing extends Component {
               </div>
             </>
           )}
-          <div className="secure-invest-bottom">
-            <div className="content">
-              Investments with {productName} are 100% secure
-            </div>
-            <img
-              className="trust-icons-invest"
-              alt=""
-              src={require(`assets/${productName}/trust_icons.svg`)}
-            />
-          </div>
+          <SecureInvest />
           {productName !== "fisdom" &&
             productName !== "finity" &&
             productName !== "ktb" && (

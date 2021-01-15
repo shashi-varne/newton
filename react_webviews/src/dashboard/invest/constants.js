@@ -1,7 +1,7 @@
 export const apiConstants = {
   accountSummary: "/api/user/account/summary",
   npsInvestStatus: "/api/nps/invest/status/v2",
-  getRecommendation: '/api/invest/recommendv2',
+  getRecommendation: "/api/invest/recommendv2",
 };
 
 export const investCardsBase = {
@@ -118,4 +118,41 @@ export const keyPathMapper = {
   diyv2: "invest/explore",
   parkmoney: "invest/parkmoney",
   savegoal: "invest/savegoal",
+};
+
+export const investRedeemData = {
+  benefits: [
+    {
+      disc: "Upto 6%* return",
+      key: "return",
+      icon: "ic_higher_returns.svg",
+    },
+    {
+      disc: "Zero exposure to equity",
+      key: "risk",
+      icon: "ic_low_risk.svg",
+    },
+    {
+      disc: "Get money back into your account within 30 mins",
+      key: "withdrawal",
+      icon: "ic_withdrawal.svg",
+    },
+  ],
+  faqData: [
+    {
+      title: "What are the steps for investment?",
+      subtitle:
+        "It is a simple three-step process, first select the mode of investment (SIP/one-time), second enter the amount and finally make the payment.",
+    },
+    {
+      title: "Is there any lock-in period for investment?",
+      subtitle:
+        "No, there is no lock-in period for investment but if you withdraw within 7 days of investment, a nominal exit load applies.",
+    },
+    {
+      title: "Can I withdraw my money on holidays?",
+      subtitle:
+        "Yes, you can withdraw your money even on holidays and it will be processed to your bank account.",
+    },
+  ],
 };
