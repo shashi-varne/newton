@@ -155,4 +155,19 @@ export const investRedeemData = {
         "Yes, you can withdraw your money even on holidays and it will be processed to your bank account.",
     },
   ],
+  withdrawSteps: {
+    title: "How to withdraw?",
+    options: [
+      {
+        subtitle: "1. Go to Instant withdraw in portfolio and enter amount",
+        key: "portfolio",
+        icon: "ic_gold_provider",
+      },
+      {
+        subtitle: "2. Money will be credited to your bank a/c within 30 mins",
+        key: "withdrawal",
+        icon: "ic_auth_bank",
+      },
+    ],
+  },
 };

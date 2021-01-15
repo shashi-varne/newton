@@ -5,6 +5,9 @@ import { initialize } from "../functions";
 import Faqs from "../../../common/ui/Faqs";
 import SecureInvest from "../components/SecureInvest";
 import { investRedeemData } from "../constants";
+import Button from "material-ui/Button";
+import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
+import HowToSteps from "../../../common/ui/HowToSteps";
 
 class InstaRedeem extends Component {
   constructor(props) {
@@ -14,6 +17,7 @@ class InstaRedeem extends Component {
       productName: getConfig().productName,
       screenName: "insta_redeem",
       partner: getConfig().partner,
+      openDialog: false,
       instaRecommendation: {
         amc_logo_big:
           "https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/high-res/icici_new.png",
@@ -55,6 +59,59 @@ class InstaRedeem extends Component {
     this.navigate("instaredeem/type");
   };
 
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+    });
+  };
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+        className="invest-redeem-dialog"
+      >
+        <DialogContent className="dialog-content">
+          <div className="head-bar">
+            <div className="text-left">Instant withdrawal</div>
+            <img
+              src={require(`assets/${this.state.productName}/ic_instant_withdrawal.svg`)}
+              alt=""
+            />
+          </div>
+          <div className="subtitle">
+            Get your money whenever you need in two easy steps
+          </div>
+          <HowToSteps
+            baseData={investRedeemData.withdrawSteps}
+            style={{ margin: "0", padding: "5px 0 0 0" }}
+          />
+          <div className="sub-text">
+            Max limit is 50 k or 90% of folio value with redemption time of 30
+            mins. Additional amount can be withdrawn from systematic/manual
+            withdraw where amount is credited in 3-4 working days.
+          </div>
+          <div className="sub-text">
+            Exit load on withdrawal amount is 0.0070% to 0.0045% before seven
+            days and 0% seven days onwards
+          </div>
+        </DialogContent>
+        <DialogActions className="action">
+          <Button onClick={this.handleClose} className="button">
+            OKAY
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  knowMore = () => {
+    this.setState({ openDialog: true });
+  };
+
   render() {
     let { partner, productName, instaRecommendation } = this.state;
     let { benefits, faqData } = investRedeemData;
@@ -86,7 +143,9 @@ class InstaRedeem extends Component {
                 <div className="text">
                   {data.disc}
                   {data.key === "withdrawal" && (
-                    <div className="know-more">KNOW MORE</div>
+                    <div className="know-more" onClick={this.knowMore}>
+                      KNOW MORE
+                    </div>
                   )}
                 </div>
               </div>
@@ -141,6 +200,7 @@ class InstaRedeem extends Component {
             <Faqs options={faqData} />
           </div>
           <SecureInvest />
+          {this.renderDialog()}
         </div>
       </Container>
     );

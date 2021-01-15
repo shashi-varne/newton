@@ -3,7 +3,7 @@ import Container from "../../fund_details/common/Container";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./functions";
-import InvestCard from "./components/invest_card";
+import InvestCard from "./components/InvestCard";
 import SecureInvest from "./components/SecureInvest";
 
 class Landing extends Component {
