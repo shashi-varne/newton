@@ -523,7 +523,7 @@ class Container extends Component {
     if (this.props.showLoaderModal) {
       return (
         <div className="Loader-callback">
-          <div className="LoaderOverlay-callback">
+          <div className="LoaderOverlay">
             <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
           </div>
         </div>
