@@ -411,26 +411,27 @@
   padding: 30px 0;
 }
 
-.invest-type {
-  .header {
-    display: flex;
-    justify-content: space-between;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    .step {
-      .count {
-        font-size: 15px;
-        color: #160d2e;
-        font-weight: 600;
-      }
+  .step {
+    .count {
+      font-size: 15px;
+      color: #160d2e;
+      font-weight: 600;
+    }
 
-      .total {
-        font-size: 13px;
-        color: #767e86;
-        font-weight: normal;
-      }
+    .total {
+      font-size: 13px;
+      color: #767e86;
+      font-weight: normal;
     }
   }
+}
 
+.invest-type {
   .type {
     display: flex;
     column-gap: 20px;
@@ -457,6 +458,35 @@
         font-size: 15px;
         font-weight: 600;
       }
+    }
+  }
+}
+
+.insta-redeem-invest-amount {
+  .form-field {
+    background-color: #f8f8f8;
+    margin-top: 30px;
+    padding: 0 10px;
+
+    label {
+      padding: 10px 0 0 10px;
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    padding: 10px 0;
+
+    .tag {
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 4px;
+      padding: 10px 15px;
+      cursor: pointer;
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
     }
   }
 }

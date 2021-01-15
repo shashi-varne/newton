@@ -40,7 +40,7 @@ class Type extends Component {
   onload = () => {};
 
   handleClick = () => {
-    this.navigate("instaredeem/type");
+    this.navigate(`amount/${this.state.investType}`);
   };
 
   handleChange = (type) => {

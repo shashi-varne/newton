@@ -12,6 +12,7 @@ import "./Style.scss";
 import Landing from "./landing";
 import InstaRedeem from "./insta_redeem";
 import Type from "./insta_redeem/type";
+import Amount from "./insta_redeem/amount";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -53,6 +54,7 @@ const Invest = (props) => {
           <Route exact path={`${url}`} component={Landing} />
           <Route exact path={`${url}/instaredeem`} component={InstaRedeem} />
           <Route path={`${url}/instaredeem/type`} component={Type} />
+          <Route path={`${url}/instaredeem/amount/:investType`} component={Amount} />
 
           <Route component={NotFound} />
         </Switch>
