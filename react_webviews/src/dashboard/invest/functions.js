@@ -146,8 +146,7 @@ export async function setNpsData(response) {
       const res = await Api.get(apiConstants.npsInvestStatus);
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
-        console.log(result);
-        if (!result.data.registration_details.additional_details_status) {
+        if (!result.registration_details.additional_details_status) {
           storageService().set("nps_additional_details_required", true);
         } else {
           storageService().set("nps_additional_details_required", false);
@@ -452,7 +451,7 @@ export async function getRecommendedPlans() {
         investType: this.state.investType,
         name: this.state.investName, // not initailised
         subType: this.state.subType,
-        graphType: this.state.graphType, // not initailised
+        graphType: this.state.investType,
         investTypeDisplay: this.state.investTypeDisplay, // not initailised
         stock: this.state.stockSplit,
         bond: this.state.bondSplit,
