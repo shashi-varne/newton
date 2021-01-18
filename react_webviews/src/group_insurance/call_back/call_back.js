@@ -226,7 +226,7 @@ class CallBackDetails extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
         buttonTitle="GIVE ME A CALL"
-        showLoaderModal={this.state.show_loader}
+        showLoader={this.state.show_loader}
         title="Let's talk &#38; help you out">
         
         <p style={{marginTop: '-10px', color: '#767E86'}}>Enter your details &#38; we'll call you in 15 mins</p>

@@ -519,20 +519,6 @@ class Container extends Component {
     }
   }
 
-  renderLoaderOnSameScreen = () => {
-    if (this.props.showLoaderModal) {
-      return (
-        <div className="Loader-callback">
-          <div className="LoaderOverlay">
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
   componentDidUpdate(prevProps) {
     setHeights({ 'header': true, 'container': false });
   }
@@ -575,8 +561,6 @@ class Container extends Component {
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 56 }}>
 
-          {/* Loader Block in a modal window */}
-          {this.renderLoaderOnSameScreen()}
 
           {/* Loader Block covering entire screen*/}
           {this.renderPageLoader()}
