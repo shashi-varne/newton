@@ -227,4 +227,20 @@ export const nfoData = {
       icon: "innovative_products_icon.png",
     },
   ],
+  scheme: [
+    {
+      title: "Growth",
+      subtitle:
+        "All your gains continue to grow in the fund & benefit from the compounding effect",
+      icon: "growth_icon.png",
+      value: "growth",
+    },
+    {
+      title: "Dividend",
+      subtitle:
+        "The fund to pay out fractions of your gains in form of periodic dividends",
+      icon: "dividend_icon.png",
+      value: "dividend",
+    },
+  ],
 };
