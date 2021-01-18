@@ -145,6 +145,23 @@ class LoanEligible extends Component {
             </Grid>
 
             <div className='inner-checkbox'>
+            <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
+                <Grid item xs={1} className="TextCenter">
+                  <Checkbox
+                    defaultChecked
+                    checked={this.state.checked}
+                    color="primary"
+                    value="confirm_details_check"
+                    name="confirm_details_check"
+                    onChange={this.handleChange}
+                    className="Checkbox" />
+                </Grid>
+                <Grid item xs={11}>
+                  <label>In order to secure the interest of my legal heir(s). I hereby declare, request and authorise Edelweiss General Insurance Company for the following:
+                    1. that I have authorized DMi
+                  </label>
+                </Grid>
+              </Grid>
               <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
                 <Grid item xs={1} className="TextCenter">
                   <Checkbox

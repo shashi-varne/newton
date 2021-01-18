@@ -78,13 +78,14 @@ class Home extends Component {
   onload = () => {};
 
   handleClick = () => {
-    let { ongoing_loan_details, account_exists } = this.state;
-    this.sendEvents("next");
-    if (ongoing_loan_details.length === 0 && !account_exists) {
-      this.navigate("edit-details");
-    } else {
-      this.navigate("select-loan");
-    }
+    // let { ongoing_loan_details, account_exists } = this.state;
+    // this.sendEvents("next");
+    // if (ongoing_loan_details.length === 0 && !account_exists) {
+    //   this.navigate("edit-details");
+    // } else {
+    //   this.navigate("select-loan");
+    // }
+    this.navigate('/loan/dmi/tnc')
   };
 
   handleResume = (vendor) => {

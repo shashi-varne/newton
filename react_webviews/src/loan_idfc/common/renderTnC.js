@@ -40,7 +40,7 @@ class TermsAndCondition extends Component {
             >
                 <div className="tnc">
                     <Document
-                        file="https://dmi-idfc-dot-plutus-staging.appspot.com/api/res/download/AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg?filename=AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg"
+                        file="https://idfc-dev-dot-plutus-staging.appspot.com/api/res/download/AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg?filename=AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg"
                         onLoadSuccess={this.onDocumentLoadSuccess}
                     >
                         {Array.from(
