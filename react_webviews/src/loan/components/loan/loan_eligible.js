@@ -139,7 +139,7 @@ class LoanEligible extends Component {
         tncClicked: false
       })
     } else {
-      this.navigate('loan/dmi/journey')
+      this.navigate('/loan/dmi/journey')
     }
   }
 
@@ -160,7 +160,7 @@ class LoanEligible extends Component {
           goBack: this.goBack
         }}
         styleContainer={{
-          overflow: 'hidden'
+          overflow: this.state.tncClicked && 'hidden'
         }}
       >
         {!this.state.tncClicked && <div className="loan-status">

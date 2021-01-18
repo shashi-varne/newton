@@ -40,7 +40,6 @@ import CommonRenderFaqs from "./components/general/RenderFaqs";
 import FinalOffer from "./components/general/final_loan";
 import Reports from "./components/general/reports";
 import Eligibility from './components/general/eligibility';
-import TermsAndCondition from "./common/renderTnC";
 
 import Landing from "../loan/components/general/landing";
 import Report from "../loan/components/general/report";
@@ -206,7 +205,6 @@ const Lending = props => {
           <Route path={`${url}/idfc/reports`} component={Reports} />
           <Route path={`${url}/idfc/error`} component={SystemError} />
           <Route path={`${url}/idfc/eligibility`} component={Eligibility} />
-          <Route path={`${url}/dmi/tnc`} component={TermsAndCondition} />
 
           {/* Edit paths */}
           <Route path={`${url}/idfc/edit-basic-details`} 
