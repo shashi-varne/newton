@@ -376,6 +376,7 @@ class BasicDetailsForm extends Component {
       });
     }
 
+    // error = 'aaaaaaa'
 
     // set error data
     if(error) {
@@ -384,7 +385,7 @@ class BasicDetailsForm extends Component {
           ...this.state.errorData,
           title2: error
         },
-        showError:'page'
+        showError: true
       })
     }
     this.setState({
@@ -431,7 +432,7 @@ class BasicDetailsForm extends Component {
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 

@@ -1,6 +1,8 @@
 
 import { getConfig, setHeights } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
+import $ from  'jquery';
+
 
 import React from "react";
 
@@ -221,6 +223,7 @@ export function renderPopup() {
 
 export function renderGenericError() {
 
+
     let errorData = this.props.errorData || {};
     let { title1, title2 , button_text1, button_text2, 
         handleClick2, handleClick1} = errorData;
@@ -252,6 +255,26 @@ export function renderGenericError() {
 
     button_text2 = button_text2 || map_data.button_text2 || 'CLOSE';
     button_text1 = button_text1 || map_data.button_text1 || 'RETRY';
+
+
+
+    if(this.props.showError !== false || this.props.showError) {
+        var that = this;
+
+        function clickfunction(e) {
+            if (e.target.id === "error-dialog-parent" || $(e.target).parents("#error-dialog-parent").length) {
+                // alert("Inside div");
+                } else {
+                    disableBodyOverflow(true); //touch enabled
+                    that.props.errorData.setErrorData('');
+                    document.removeEventListener('click', clickfunction, false);
+        
+                }
+        }
+
+        document.addEventListener('click',clickfunction, false);
+    }
+  
 
     function genericErrorActions() {
         return(
@@ -293,8 +316,8 @@ export function renderGenericError() {
         
         disableBodyOverflow(); //touch disabled
         return (
-            <div className={`generic-error-dialog fadein-animation ${errorData ? errorData.errorClass : ''}`}>
-                <div className="overlay">
+            <div  className={`generic-error-dialog fadein-animation ${errorData ? errorData.errorClass : ''}`}>
+                <div id="error-dialog-parent" className="overlay">
 
                     <div className="top-part">
                         <div className="t-left">
@@ -319,8 +342,8 @@ export function renderGenericError() {
         
         disableBodyOverflow(); //touch disabled
         return (
-            <div className={`generic-error-dialog generic-error-dialog-page fadein-animation ${errorData ? errorData.errorClass : ''}`}>
-                <div className="overlay ovarlay-page">
+            <div  className={`generic-error-dialog generic-error-dialog-page fadein-animation ${errorData ? errorData.errorClass : ''}`}>
+                <div id="error-dialog-parent" className="overlay ovarlay-page">
                     <Imgc className="top-image top-image-page" src={require(`assets/generic_error2.svg`)} alt="" />
                     <div className="title1 title1-page">{title1 || 'Something went wrong'}</div>
 
