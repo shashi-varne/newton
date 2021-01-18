@@ -30,6 +30,7 @@ import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Invest from "./dashboard/invest"
 import NfoInfo from "./dashboard/invest/nfo"
 import NfoScheme from "./dashboard/invest/nfo/scheme"
+import NfoFunds from "./dashboard/invest/nfo/funds"
 
 class App extends Component {
   render() {
@@ -63,6 +64,7 @@ class App extends Component {
           <Route path='/invest' component={Invest}/>
           <Route path={`/advanced-investing/new-fund-offers/info`} component={NfoInfo} />
           <Route path={`/advanced-investing/new-fund-offers/scheme`} component={NfoScheme} />
+          <Route path={`/advanced-investing/new-fund-offers/:scheme/funds`} component={NfoFunds} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
