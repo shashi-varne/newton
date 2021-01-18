@@ -5,6 +5,8 @@ import { initialize } from '../../common/functions';
 import {  formatAmountInr } from "../../../utils/validators";
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
+import Grid from 'material-ui/Grid';
+import Checkbox from 'material-ui/Checkbox';
 
 class LoanEligible extends Component {
   constructor(props) {
@@ -13,6 +15,7 @@ class LoanEligible extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
+      checked: false
     }
 
     this.initialize = initialize.bind(this);
@@ -58,7 +61,7 @@ class LoanEligible extends Component {
     });
     try {
 
-      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}`);
+      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}${this.state.checked ? '?is_insured=true' : ''}`);
 
       var resultData = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200 && !resultData.error) {
@@ -82,8 +85,16 @@ class LoanEligible extends Component {
 
 
   handleClick = () => {
-      this.sendEvents('next');
-      this.triggerConversion();
+    this.sendEvents('next');
+    this.triggerConversion();
+  }
+
+  handleChange = () => {
+    let { checked } = this.state;
+
+    this.setState({
+      checked: !checked
+    })
   }
 
   render() {
@@ -116,7 +127,44 @@ class LoanEligible extends Component {
             {formatAmountInr(vendor_info.approved_amount_decision)}
           </div>
 
-          <div className="loan-value">
+          <div style={{background:'var(--highlight)', margin:'0 -20px', padding: '0 20px 40px'}}>
+            <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
+              <Grid item xs={1} className="TextCenter">
+                <Checkbox
+                  defaultChecked
+                  checked={this.state.checked}
+                  color="primary"
+                  value="confirm_details_check"
+                  name="confirm_details_check"
+                  onChange={this.handleChange}
+                  className="Checkbox" />
+              </Grid>
+              <Grid item xs={11}>
+                <label><b>Opt-in for Credit Insurance</b></label>
+              </Grid>
+            </Grid>
+
+            <div style={{background:'#ffffff', padding:'0 6px'}}>
+              <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
+                <Grid item xs={1} className="TextCenter">
+                  <Checkbox
+                    defaultChecked
+                    checked={this.state.checked}
+                    color="primary"
+                    value="confirm_details_check"
+                    name="confirm_details_check"
+                    onChange={this.handleChange}
+                    className="Checkbox" />
+                </Grid>
+                <Grid item xs={11}>
+                  <label>I declare that I am of good health and i do not have any physical defect</label>
+                </Grid>
+              </Grid>
+            </div>
+          </div>
+          
+
+          <div className="loan-value" style={{marginTop: '30px'}}>
             <div>
               <div>EMI amount</div>
               <div className="values">{formatAmountInr(vendor_info.approved_emi)}</div>
@@ -141,11 +189,15 @@ class LoanEligible extends Component {
                 <div>{formatAmountInr(vendor_info.approved_amount_decision)}</div>
               </div>
               <div className="items">
+                <div>Credit insurance (@1%)</div>
+                <div>{this.state.checked ? '- '+formatAmountInr(vendor_info.insurance_premium_decision) : '- ₹0'}</div>
+              </div>
+              <div className="items">
                 <div>Processing fee</div>
                 <div>{'- '+formatAmountInr(vendor_info.processing_fee_decision)}</div>
               </div>
               <div className="items">
-                <div>GST(18%)</div>
+                <div>GST (@18%)</div>
                 <div>{'- '+formatAmountInr(vendor_info.gst_decision)}</div>
               </div>
               <hr style={{background:"#ccd3db"}} />
