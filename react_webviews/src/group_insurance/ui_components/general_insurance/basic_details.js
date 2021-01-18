@@ -270,7 +270,6 @@ class BasicDetailsForm extends Component {
 
     this.setErrorData('onload');
 
-    console.log(this.state.premium_details)
 
     let premium_details = this.state.premium_details;
     let leadData = premium_details.lead || '';

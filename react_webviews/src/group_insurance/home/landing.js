@@ -12,7 +12,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      skelton: 'p',
+      // skelton: 'p',
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)) 
