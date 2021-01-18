@@ -18,33 +18,7 @@ class InstaRedeem extends Component {
       screenName: "insta_redeem",
       partner: getConfig().partner,
       openDialog: false,
-      instaRecommendation: {
-        amc_logo_big:
-          "https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/high-res/icici_new.png",
-        amc_logo_small:
-          "https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png",
-        default_date: 10,
-        isin: "INF109K01VQ1",
-        mfamountmultiple: 100,
-        mfid: "103340",
-        mfname: "Icici Prudential Liquid Fund",
-        mftype: "insta-redeem",
-        mftype_name: "Bond",
-        min_purchase: 500,
-        rating: 5,
-        returns: {
-          five_year: 6.46647,
-          isin: "INF109K01VQ1",
-          lifetime: 7.55343,
-          one_month: 0.24191,
-          one_year: 4.18316,
-          six_month: 1.56606,
-          three_month: 0.74491,
-          three_year: 6.02864,
-        },
-        sip_dates: [1, 2, 3, 4],
-        the_hindu_rating: 0,
-      },
+      instaRecommendation: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -53,7 +27,9 @@ class InstaRedeem extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    this.initializeInstaRedeem();
+  };
 
   handleClick = () => {
     this.navigate("instaredeem/type");
@@ -151,50 +127,59 @@ class InstaRedeem extends Component {
               </div>
             );
           })}
-          <div className="title">Money will be deposited in</div>
-          <div className="card fund-card">
-            <div className="text">
-              <h1>{instaRecommendation.mfname}</h1>
-              <div className="flex">
-                <div className="common-badge bond">
-                  {instaRecommendation.mftype_name}
-                </div>
-                {partner.code !== "hbl" && instaRecommendation.rating > 0 && (
-                  <div className="common-badge rating">
-                    <div className="img">
-                      <img src={require(`assets/ic_star.svg`)} alt="" />
+          {instaRecommendation && (
+            <>
+              <div className="title">Money will be deposited in</div>
+              <div
+                className="card fund-card"
+                onClick={() => this.showFundInfo(instaRecommendation)}
+              >
+                <div className="text">
+                  <h1>{instaRecommendation.mfname}</h1>
+                  <div className="flex">
+                    <div className="common-badge bond">
+                      {instaRecommendation.mftype_name}
                     </div>
-                    <div className="value">{instaRecommendation.rating}</div>
-                  </div>
-                )}
-                {partner.code === "hbl" &&
-                  instaRecommendation.the_hindu_rating > 0 && (
-                    <div className="common-badge rating">
-                      <div className="img">
-                        <img src={require(`assets/ic_star.svg`)} alt="" />
+                    {partner.code !== "hbl" && instaRecommendation.rating > 0 && (
+                      <div className="common-badge rating">
+                        <div className="img">
+                          <img src={require(`assets/ic_star.svg`)} alt="" />
+                        </div>
+                        <div className="value">
+                          {instaRecommendation.rating}
+                        </div>
                       </div>
-                      <div className="value">
-                        {instaRecommendation.the_hindu_rating}
-                      </div>
-                    </div>
-                  )}
-                <div className="returns">
-                  {instaRecommendation.returns &&
-                    instaRecommendation.returns.five_year && (
-                      <span className="highlight-return">
-                        {instaRecommendation.returns.five_year.toFixed(2)}%
-                      </span>
                     )}
-                  in 5yrs
+                    {partner.code === "hbl" &&
+                      instaRecommendation.the_hindu_rating > 0 && (
+                        <div className="common-badge rating">
+                          <div className="img">
+                            <img src={require(`assets/ic_star.svg`)} alt="" />
+                          </div>
+                          <div className="value">
+                            {instaRecommendation.the_hindu_rating}
+                          </div>
+                        </div>
+                      )}
+                    <div className="returns">
+                      {instaRecommendation.returns &&
+                        instaRecommendation.returns.five_year && (
+                          <span className="highlight-return">
+                            {instaRecommendation.returns.five_year.toFixed(2)}%
+                          </span>
+                        )}
+                      in 5yrs
+                    </div>
+                  </div>
                 </div>
+                <img
+                  className="icon"
+                  src={instaRecommendation.amc_logo_small}
+                  alt="logo"
+                />
               </div>
-            </div>
-            <img
-              className="icon"
-              src={instaRecommendation.amc_logo_small}
-              alt="logo"
-            />
-          </div>
+            </>
+          )}
           <div className="title">Frequently asked questions</div>
           <div className="generic-render-faqs">
             <Faqs options={faqData} />

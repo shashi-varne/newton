@@ -7,6 +7,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
+import { investRedeemData } from "../constants";
 
 class InvestAmount extends Component {
   constructor(props) {
@@ -24,29 +25,22 @@ class InvestAmount extends Component {
   }
 
   onload = () => {
-    let tagsMapper = {
-      sip: [
-        { name: "500", value: 500 },
-        { name: "1000", value: 1000 },
-        { name: "2000", value: 2000 },
-        { name: "5000", value: 5000 },
-      ],
-      onetime: [
-        { name: "1000", value: 1000 },
-        { name: "5000", value: 5000 },
-        { name: "10K", value: 10000 },
-        { name: "15K", value: 15000 },
-      ],
-    };
     let investType = this.props.match.params.investType || "";
-    let tags = tagsMapper[investType];
+    let tags = investRedeemData.tagsMapper[investType];
     let amount = 50000;
     if (investType === "sip") amount = 5000;
-    this.setState({ tags: tags, amount: amount, investType: investType });
+    this.setState({
+      tags: tags,
+      amount: amount,
+      investType: investType,
+      stockReturns: 15,
+      bondReturns: 8,
+      term: 15,
+    });
   };
 
   handleClick = () => {
-    this.navigate(`/recommendations`);
+    this.getRecommendation();
   };
 
   handleChange = (name) => (event) => {
@@ -55,11 +49,12 @@ class InvestAmount extends Component {
     if (!value) {
       amount_error = "This is required";
       amount = "";
+      this.setState({ amount: amount, amount_error: amount_error });
     } else {
-      amount_error = "";
       amount = value;
+      this.validateAmount(amount);
+      this.setState({ amount: amount });
     }
-    this.setState({ amount: amount, amount_error: amount_error });
   };
 
   updateAmount = (value) => {
@@ -76,6 +71,7 @@ class InvestAmount extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
+        disable={amount_error ? true : false}
       >
         <div className="insta-redeem-invest-amount">
           <div className="header">

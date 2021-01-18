@@ -2,6 +2,7 @@ export const apiConstants = {
   accountSummary: "/api/user/account/summary",
   npsInvestStatus: "/api/nps/invest/status/v2",
   getRecommendation: "/api/invest/recommendv2",
+  getInstaRecommendation: "/api/invest/insta-redeem/getfunds",
 };
 
 export const investCardsBase = {
@@ -167,6 +168,37 @@ export const investRedeemData = {
         subtitle: "2. Money will be credited to your bank a/c within 30 mins",
         key: "withdrawal",
         icon: "ic_auth_bank",
+      },
+    ],
+  },
+  tagsMapper: {
+    sip: [
+      { name: "500", value: 500 },
+      { name: "1000", value: 1000 },
+      { name: "2000", value: 2000 },
+      { name: "5000", value: 5000 },
+    ],
+    onetime: [
+      { name: "1000", value: 1000 },
+      { name: "5000", value: 5000 },
+      { name: "10K", value: 10000 },
+      { name: "15K", value: 15000 },
+    ],
+  },
+  investTypeData: {
+    title: "How would you like to invest?",
+    count: "1",
+    total: "2",
+    options: [
+      {
+        text: "SIP",
+        value: "sip",
+        icon: "ic_sip.svg",
+      },
+      {
+        text: "One Time",
+        value: "onetime",
+        icon: "ic_onetime.svg",
       },
     ],
   },

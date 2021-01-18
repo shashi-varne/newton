@@ -751,7 +751,7 @@ export const getConfig = () => {
   returnConfig.searchParamsMustAppend = searchParamsMustAppend;
 
   returnConfig.isWebCode = returnConfig.Web || returnConfig.redirect_url;
-  returnConfig.partner = partnersConfigBase[partner_code || 'fisdom'];
+  returnConfig.partner = partnersConfigBase[partner_code || 'fisdom'] || partnersConfigBase['fisdom'];
 
   return returnConfig;
 };

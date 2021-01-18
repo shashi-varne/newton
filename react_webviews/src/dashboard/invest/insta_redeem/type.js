@@ -3,6 +3,7 @@ import Container from "../../../fund_details/common/Container";
 import { getConfig } from "utils/functions";
 import { initialize } from "../functions";
 import InvestType from "../components/InvestType";
+import { investRedeemData } from "../constants";
 
 class Type extends Component {
   constructor(props) {
@@ -12,23 +13,6 @@ class Type extends Component {
       productName: getConfig().productName,
       screenName: "insta_redeem_invest_type",
       investType: "onetime",
-      renderData: {
-        title: "How would you like to invest?",
-        count: "1",
-        total: "2",
-        options: [
-          {
-            text: "SIP",
-            value: "sip",
-            icon: "ic_sip.svg",
-          },
-          {
-            text: "One Time",
-            value: "onetime",
-            icon: "ic_onetime.svg",
-          },
-        ],
-      },
     };
     this.initialize = initialize.bind(this);
   }
@@ -48,7 +32,7 @@ class Type extends Component {
   };
 
   render() {
-    let { investType, renderData } = this.state;
+    let { investType } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -57,7 +41,7 @@ class Type extends Component {
       >
         <div className="insta-redeem-invest-type">
           <InvestType
-            baseData={renderData}
+            baseData={investRedeemData.investTypeData}
             selected={investType}
             handleChange={this.handleChange}
           />

@@ -3,6 +3,7 @@ import { storageService } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { apiConstants, investCardsBase, keyPathMapper } from "./constants";
+import { formatAmountInr } from "utils/validators";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -23,6 +24,13 @@ export async function initialize() {
   this.corpusValue = corpusValue.bind(this);
   this.navigate = navigate.bind(this);
   this.clickCard = clickCard.bind(this);
+  this.initializeInstaRedeem = initializeInstaRedeem.bind(this);
+  this.getInstaRecommendation = getInstaRecommendation.bind(this);
+  this.getRecommendation = getRecommendation.bind(this);
+  this.validateAmount = validateAmount.bind(this);
+  this.validateOsipAmount = validateOsipAmount.bind(this);
+  this.validateSipAmount = validateSipAmount.bind(this);
+  this.showFundInfo = showFundInfo.bind(this);
   if (this.state.screenName === "invest_landing") {
     this.getSummary();
   }
@@ -482,5 +490,128 @@ export function navigate(pathname, data = {}) {
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
     });
+  }
+}
+
+export function initializeInstaRedeem() {
+  if (storageService().get("instaRecommendations")) {
+    let instaRecommendation = storageService().getObject(
+      "instaRecommendations"
+    )[0];
+    this.setState({
+      instaRecommendation: instaRecommendation,
+    });
+  } else {
+    this.getInstaRecommendation();
+  }
+}
+
+export async function getInstaRecommendation() {
+  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
+  try {
+    const res = await Api.get(apiConstants.getInstaRecommendation);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      storageService().setObject("instaRecommendations", result.mfs);
+      storageService().setObject("goalRecommendations", result.itag);
+      let instaRecommendation = result.mfs[0];
+      this.setState({
+        showLoader: false,
+        instaRecommendation: instaRecommendation,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ showLoader: false });
+    toast(errorMessage);
+  }
+}
+
+export function showFundInfo(data) {
+  let recommendation = { mf: data };
+  let dataCopy = Object.assign({}, recommendation);
+  dataCopy.diy_type = "recommendation";
+  dataCopy.invest_type_from = "instaredeem";
+  storageService().setObject("diystore_fundInfo", dataCopy);
+  this.props.history.push({
+    pathname: "/fund-details",
+    search: `${getConfig().searchParams}&isins=${data.isin}`,
+  });
+}
+
+export async function getRecommendation() {
+  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
+  let instaRecommendations = storageService().get("instaRecommendations")[0];
+  let { amount, investType, term } = this.state;
+  let allocations = [{ amount: amount, mf: instaRecommendations }];
+  let recommendations = {
+    allocations: allocations,
+    term: term,
+    investType: "insta-redeem",
+    name: "Insta Redeem",
+    investTypeDisplay: investType,
+    bondstock: "",
+    amount: parseInt(amount, 10),
+    type: "insta-redeem",
+    order_type: investType,
+    subtype: "",
+  };
+  storageService().setObject("recommendations", recommendations);
+  this.navigate(`/recommendations`);
+}
+
+function getGoalRecommendations() {
+  let goal = storageService().get("goalRecommendations");
+  if (!goal) {
+    goal = {};
+  }
+
+  let result = {
+    min_sip_amount: goal.min_sip_amount ? goal.min_sip_amount : 500,
+    max_sip_amount: goal.max_sip_amount ? goal.max_sip_amount : 500000,
+    min_ot_amount: goal.min_ot_amount ? goal.min_ot_amount : 5000,
+    max_ot_amount: goal.max_ot_amount ? goal.max_ot_amount : 2000000,
+  };
+  return result;
+}
+
+function validateSipAmount(amount) {
+  let goal = getGoalRecommendations();
+  let { amount_error } = this.state;
+  if (amount > goal.max_sip_amount) {
+    amount_error =
+      "Investment amount cannot be more than " +
+      formatAmountInr(goal.max_sip_amount);
+  } else if (amount < goal.min_sip_amount) {
+    amount_error =
+      "Minimum amount should be atleast " +
+      formatAmountInr(goal.min_sip_amount);
+  } else {
+    amount_error = "";
+  }
+  this.setState({ amount_error: amount_error });
+}
+
+function validateOsipAmount(amount) {
+  let goal = getGoalRecommendations();
+  let { amount_error } = this.state;
+  if (amount > goal.max_ot_amount) {
+    amount_error =
+      "Investment amount cannot be more than " +
+      formatAmountInr(goal.max_ot_amount);
+  } else if (amount < goal.min_ot_amount) {
+    amount_error =
+      "Minimum amount should be atleast " + formatAmountInr(goal.min_ot_amount);
+  } else {
+    amount_error = "";
+  }
+  this.setState({ amount_error: amount_error });
+}
+
+function validateAmount(amount) {
+  if (this.state.investType === "sip") {
+    this.validateSipAmount(amount);
+  } else {
+    this.validateOsipAmount(amount);
   }
 }
