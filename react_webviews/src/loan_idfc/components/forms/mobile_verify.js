@@ -27,14 +27,14 @@ class MobileVerification extends Component {
   componentWillMount() {
     this.initialize();
 
-    let tnc1 = [
+    let tnc = [
       'I/we authorise IDFC First Bank to submit application/other relevant documents submitted by me to CERSAI. I/we hereby provide my consent to IDFC First Bank to receive my KYC information from the Central KYC Registry.',
       'I hereby authorise the Bank, without any notice to me to conduct credit checks, references, make enquiries, in its sole discretion and also authorise the Bank and its agents to share and obtain information, records from any agencies, statutory bodies, credit bureau, bank, financial institutions, or any third party in respect of the application, as it may consider necessary. The Bank shall not be liable for use/ sharing of the information.',
       'I confirm that laws in relation to the unsolicited communication referred in “National Do Not Call Registry” as laid down by Telecom Regulatory of India will not be applicable for such communications/ calls/ SMSs received from IDFC FIRST Bank Limited, its representatives, agents. I hereby provide consent to send SMS confirmation to reference contacts provided by me as part of the loan application process. I hereby consent to receive information about my loans and offers on WhatsApp on my registered number. The Bank reserves the right to retain the photograph and documents submitted with the Application and shall not be returned back. IDFC FIRST Bank Limited shall be entitled at its sole and absolute discretion to approve/reject this Application Form submitted by Applicant/Co-Applicant /Guarantor.'
     ]
 
     this.setState({
-      tnc1: tnc1
+      tnc: tnc
     })
   }
 
@@ -172,7 +172,7 @@ class MobileVerification extends Component {
           <div id="agreement" className="agreement-block" style={{
               opacity: this.state.confirm_details_check ? 1 : 0.4
             }} onScroll={this.onScroll}>
-              {this.state.tnc1.map(this.renderAgreement)}
+              {this.state.tnc.map(this.renderAgreement)}
           </div>
 
           <div className="subtitle">
