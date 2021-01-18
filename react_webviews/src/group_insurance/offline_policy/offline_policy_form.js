@@ -81,12 +81,13 @@ componentWillMount() {
 
 
 handleChange = name => event => {
-  setTimeout(() => {
-    var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-    for (var i = 0; i < x.length; i++) {
-      x.item(i).style.backgroundColor = "#35CB5D";
-    }
-  }, 0);
+  document.getElementsByClassName("MuiButtonBase-root MuiButton-root")[0].style.backgroundColor = "#35CB5D";
+  // setTimeout(() => {
+  //   var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
+  //   for (var i = 0; i < x.length; i++) {
+  //     x.item(i).style.backgroundColor = "#35CB5D";
+  //   }
+  // }, 0);
 
   if (!name) {
     return
@@ -238,29 +239,18 @@ handleClick = async () => {
     } else if (!resultData.found) {
       form_data.found = false
       form_data.notfound = true
-      setTimeout(() => {
-        var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-        for (var i = 0; i < x.length; i++) {
-          x.item(i).style.backgroundColor = "#CDF4D7";
-          x.item(i).style.border = '1px solid';
-        }
-      }, 0);
+      document.getElementsByClassName("MuiButtonBase-root MuiButton-root")[0].style.backgroundColor = "#CDF4D7";
+      document.getElementsByClassName("Footer")[0].style.boxShadow = 'none'
       this.setState({ binding: false})
     } else if (resultData.found) {
       form_data.found = true
       form_data.notfound = false
-      setTimeout(() => {
-        var x = document.getElementsByClassName("MuiButtonBase-root MuiButton-root")
-        for (var i = 0; i < x.length; i++) {
-          x.item(i).style.backgroundColor = "#CDF4D7";
-          x.item(i).style.border = '1px solid';
-        }
-      }, 0);
+      document.getElementsByClassName("MuiButtonBase-root MuiButton-root")[0].style.backgroundColor = "#CDF4D7";
+      document.getElementsByClassName("Footer")[0].style.boxShadow = 'none'
       this.setState({ binding: false})
     } else {
       toast(resultData.error || resultData.message || "Something went wrong");
     }
-
     this.setState({
       form_data: form_data,
       show_loader : false

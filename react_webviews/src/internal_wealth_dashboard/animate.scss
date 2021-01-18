@@ -95,17 +95,6 @@
   }
 }
 
-@-webkit-keyframes iwd-fadeInUp {
-  from {
-    transform: translate3d(0, 20px, 0);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-
 .iwd-fade {
   @include iwd-fadeCreator(0.6, ease-out, 0);
 }
@@ -119,12 +108,10 @@
   }
 }
 
-@-webkit-keyframes iwd-fade {
-  from {
-    opacity: 0;
-  }
-  to {
+@keyframes iwd-glow {
+  50% {
     opacity: 1;
+    box-shadow: 0 0 1px 12px rgba(#9F86DF, 0.8);
   }
 }
 
@@ -149,15 +136,6 @@
   }
 }
 
-@-webkit-keyframes iwd-fade-entrance {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .iwd-fadeFromTop {
   animation: iwd-fadeFromTop 0.8s
   cubic-bezier(0.29, 0.83, 0.51, 0.97);
@@ -178,17 +156,6 @@
   }
 }
 
-@-webkit-keyframes iwd-fadeFromTop{
-  from {
-    opacity: 0;
-    transform: translate3d(0, -80px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 .iwd-fadeFromLeft {
   animation: iwd-fadeFromLeft 0.6s
   cubic-bezier(0.29, 0.83, 0.51, 0.97);
@@ -199,17 +166,6 @@
 }
 
 @keyframes iwd-fadeFromLeft{
-  from {
-    opacity: 0;
-    transform: translate3d(-80px, 0, 0);
-  }
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-@-webkit-keyframes iwd-fadeFromLeft{
   from {
     opacity: 0;
     transform: translate3d(-80px, 0, 0);

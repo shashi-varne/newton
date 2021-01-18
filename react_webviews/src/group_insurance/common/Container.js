@@ -42,11 +42,17 @@ class Container extends Component {
 
     window.addEventListener("scroll", this.onScroll, false);
     let pathname = this.props.history.location.pathname;
-    if (pathname.indexOf('group-health') >= 0 || pathname.indexOf('life-insurance') >= 0) {
+
+    if (pathname === '/group-insurance' 
+       || pathname.indexOf('other-insurance') >= 0 
+       || pathname.indexOf('life-insurance') >= 0 
+       || pathname.includes('/group-insurance/group-health')
+       || pathname === '/group-insurance/group-insurance/add-policy' 
+       || pathname === '/group-insurance/health/landing') {
       this.setState({
         new_header: true,
         inPageTitle: true,
-        force_show_inpage_title : true
+        force_show_inpage_title: true
       }, () => {
         this.onScroll();
       })
@@ -55,6 +61,7 @@ class Container extends Component {
         new_header: false
       })
     }
+
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -176,7 +183,7 @@ class Container extends Component {
     let backMapperBharti = {
       '/summary': 'form',
       '/form': 'plan',
-      '/plan' : ''
+      '/plan' : '/group-insurance/other-insurance/entry'
     }
 
     let redirectPath  = backMapperBharti[path] ? backMapperBharti[path] : '/group-insurance';
@@ -203,6 +210,18 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+
+      if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
+        this.navigate('/group-insurance');
+        return;
+      }
+      
+      if (this.checkStringInString('group-insurance/corona/plan') 
+      || this.checkStringInString('/group-insurance/dengue/plan') 
+      || this.checkStringInString('/group-insurance/hospicash/plan')){
+        this.navigate('/group-insurance/health/landing');
+        return;
+      }
      
     if(this.checkStringInString('group-health')) {
 
@@ -225,16 +244,27 @@ class Container extends Component {
 
 
       if(this.checkStringInString('group-insurance/group-health') && this.checkStringInString('landing')) {
-        this.navigate('/group-insurance/group-health/entry');
+        this.navigate('/group-insurance/health/landing');
         return;
       }
       
     }
 
+    if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0 && ( pathname === '/group-insurance/accident/payment-success' || 
+        pathname === '/group-insurance/wallet/payment-success') &&
+      this.props.disableBack) {
+      this.setState({
+        callbackType: 'web_home_other_page',
+        openPopup: true,
+        popupText: 'Address is mandatory for policy document, are you sure you want to go back?'
+      })
+      return;
+    }
+    
     if (project_child === 'bhartiaxa' && pathname.indexOf('payment-success') >= 0
       && this.props.disableBack) {
       this.setState({
-        callbackType: 'web_home',
+        callbackType: 'web_home_health_page',
         openPopup: true,
         popupText: 'Address is mandatory for policy document, are you sure you want to go back?'
       })
@@ -245,6 +275,18 @@ class Container extends Component {
       && this.props.disableBack) {
         this.navigate('/group-insurance');
       return;
+    }
+
+    if(pathname === '/group-insurance/accident/payment-success' || pathname === '/group-insurance/wallet/payment-success'){
+      this.navigate('/group-insurance/other-insurance/entry')
+      return
+    }
+
+    if(pathname === '/group-insurance/dengue/payment-success'
+    || pathname === '/group-insurance/corona/payment-success'
+    || pathname === '/group-insurance/hospicash/payment-success'){
+      this.navigate('/group-insurance/health/landing')
+      return
     }
 
     if (pathname.indexOf('payment-success') >= 0 ||
@@ -272,7 +314,7 @@ class Container extends Component {
     if(pathname.indexOf('/group-health') < 0) {
       if (project_child === 'bhartiaxa' && pathname.indexOf('/home_insurance') >= 0 && 
       pathname.indexOf('/plan') >= 0) {
-        this.navigate('/group-insurance');
+        this.navigate('/group-insurance/other-insurance/entry');
         return;
       }
   
@@ -427,6 +469,10 @@ class Container extends Component {
       this.navigate('/group-insurance/term/quote');
     } else if (this.state.callbackType === 'web_home') {
       this.navigate('/group-insurance')
+    } else if(this.state.callbackType === 'web_home_other_page'){
+      this.navigate('/group-insurance/other-insurance/entry')
+    } else if(this.state.callbackType === 'web_home_health_page'){
+      this.navigate('/group-insurance/health/landing')
     }
 
 

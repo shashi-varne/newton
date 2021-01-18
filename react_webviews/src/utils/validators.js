@@ -860,7 +860,7 @@ export function calculateAge(val, withBreakup) {
   const duration = moment.duration(today.diff(birthDate));
   const age = duration.asYears();
 
-  if(withBreakup) {
+  if (withBreakup) {
     return {
       age,
       months: parseInt(duration.asMonths(), 10),

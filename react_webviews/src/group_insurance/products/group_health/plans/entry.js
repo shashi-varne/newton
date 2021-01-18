@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import Container from '../../../common/Container';
 import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
-import religare_logo from '../../../../assets/ic_religare_logo_card.svg';
-import star_logo from '../../../../assets/ic_star_logo.svg'
+import religare_logo from '../../../../assets/ic_care.svg';
+import star_logo from '../../../../assets/ic_star_health.svg'
 import toast from '../../../../common/ui/Toast'
 import Api from 'utils/api'
 
@@ -56,8 +55,12 @@ class HealthInsuranceEntry extends Component {
   }
 
 
+  sendEvents(value){
+    this.props.onSelectEvent(value);
+  }
+
   navigate = (pathname, search) => {
-    this.props.history.push({
+    this.props.parent.props.history.push({
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
       params: {
@@ -78,13 +81,15 @@ class HealthInsuranceEntry extends Component {
 
         let resultData = res.pfwresponse
         if(res.pfwresponse.status_code === 200){
-          this.sendEvents('next', data.key)
+          data.insurance_type = 'Comprehensive health insurance'
+          this.sendEvents(data)
           let fullPath = data.key + '/landing';
-          this.navigate('/group-insurance/group-health/' + fullPath);
+          this.navigate('/group-insurance/group-health/' + fullPath);  
         }else {
           toast(resultData.error || resultData.message || "Something went wrong");
         }
       } catch (err) {
+        console.log(err)
         this.setState({
           show_loader: false,
         });
@@ -96,18 +101,14 @@ class HealthInsuranceEntry extends Component {
   renderPorducts(props, index) {
     if(!props.disabled) {
       return (
-        <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-        style={{
-           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-        }}
-        >
-          <div className='insurance_plans_types'>
-            <img src={props.icon} alt="" className="insurance_plans_logos"/>
-            <div>
-              <div className='insurance_plans_logos_text'
-              >{props.title}
-              </div>
-              <div className='insurance_plans_logos_subtext'>{props.subtitle}</div>
+        <div className='insurance_plans' style={{width : '100%'}} key={index} onClick={() => this.handleClick(props)}>
+          <div className='insurance_plans_types' style={{width : '100%', padding : '0px'}}>
+            <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
+            <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%',
+                  borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
+                  justifyContent: 'space-between', cursor: 'pointer' }}>
+              <div className='insurance_plans_logos_text' style={{fontWeight : '400', fontSize : '13px', marginBottom :'5px' , lineHeight : '15.41px', width : '100%'}}>{props.title}</div>
+              <div className='insurance_plans_logos_subtext' style={{fontWeight: '300'}}>{props.subtitle}</div>
             </div>
           </div>
         </div>
@@ -118,41 +119,13 @@ class HealthInsuranceEntry extends Component {
    
   }
 
-  sendEvents(user_action, insurance_type) {
-    let eventObj = {
-      "event_name": 'Group Insurance',
-      "properties": {
-        "user_action": user_action,
-        "screen_name": 'comprehensive health insurance',
-        "insurance_provider": insurance_type ? insurance_type : ''
-      }
-    };
-
-    if (user_action === 'just_set_events') {
-      return eventObj;
-    } else {
-      nativeCallback({ events: eventObj });
-    }
-  }
-
   render() {
-
-
-    return (
-      <Container
-        events={this.sendEvents('just_set_events')}
-        noFooter={true}
-        showLoader={this.state.show_loader}
-        title="Comprehensive health insurance"> 
-        <div className="group-health-insurance-entry">
-          <div className='products'>
-            <div className='health_insurance'>Health insurance plans</div>
-            <div>
+    return ( 
+        <div className="group-health-insurance-entry" style={{width : '100%'}}>
+          <div className='products' style={{width : '100%' , marginTop : '-8px'}}>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>
-          </div>
         </div>
-      </Container>
     );
   }
 }

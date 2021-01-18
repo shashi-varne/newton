@@ -54,9 +54,10 @@ const Main = (props) => {
         sendEvents();
         
         const { user } = res.pfwresponse.result;
-        const { email, name, mobile = '' } = user;
+        const { email, name, mobile = '', dt_first_investment } = user;
         
         storageService().set('iwd-user-email', email || '');
+        storageService().set('iwd-user-first-invest', dt_first_investment || '');
         storageService().set('iwd-user-name', name || '');
         storageService().set('iwd-user-mobile', (mobile || '').slice(-10) || '');
         setIsLoading(false);

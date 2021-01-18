@@ -109,6 +109,9 @@ import CoronaPaymentCallback from './products/corona/payment-callback';
 /*************************** Life Insurence **********************************/
 import LifeInsuranceEntry from './products/life_insurance/entry';
 
+/******************************* Other Insurnace ******************/
+import OtherInsuranceEntry from './products/other_insurance/entry';
+
 /*******************  Health ******************/
 import HealthInsuranceLanding from './products/health_insurance/landing';
 
@@ -537,6 +540,9 @@ const Insurance = (props) => {
 
           <Route path={`${url}/group-health/:provider/edit-star-select-ped`}
             render={(props) => <GroupHealthStarPlanSelectPed  {...props} edit={true} />} />
+
+            { /********** Other Insurance-page **********/}
+            <Route path={`${url}/other-insurance/entry`} component={OtherInsuranceEntry} />
 
           {/* common */}
           <Route path={`${url}/common/report`} component={Report} />

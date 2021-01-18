@@ -52,7 +52,7 @@ export const formatGrowthData = (current_amt_arr = [], invested_amt_arr = []) =>
 
   return {
     min: min * 0.98, // Multiplying by a factor to provide some padding area
-    max: max * 1.1, // Multiplying by a factor to provide some padding area
+    max: max * 1.02, // Multiplying by a factor to provide some padding area
     data: [
       {
         id: 'current_amount',
