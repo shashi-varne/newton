@@ -236,6 +236,13 @@
   }
 }
 
+.tnc {
+  .react-pdf__Page__canvas {
+    width: 100% !important;
+    height: 700px !important;
+  }
+}
+
 .loan-summary {
   .container {
     width: 100%;
@@ -308,6 +315,21 @@
     padding-bottom: 20px;
   }
 
+  .opt-in-checkbox {
+    background-color: var(--highlight);
+    margin: 0 -20px;
+    padding: 0 20px 40px;
+  }
+
+  .inner-checkbox {
+    background-color: #ffffff;
+    padding: 0 6px;
+  }
+
+  .tnc {
+    padding-bottom: 20px;
+  }
+
   .head {
     font-size: 13px;
     font-weight: bold;
@@ -345,6 +367,7 @@
 
   .loan-value {
     font-size: 13px;
+    margin-top: 30px;
     display: flex;
     justify-content: space-between;
     font-weight: 500;

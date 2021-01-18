@@ -127,7 +127,7 @@ class LoanEligible extends Component {
             {formatAmountInr(vendor_info.approved_amount_decision)}
           </div>
 
-          <div style={{background:'var(--highlight)', margin:'0 -20px', padding: '0 20px 40px'}}>
+          <div className="opt-in-checkbox">
             <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
               <Grid item xs={1} className="TextCenter">
                 <Checkbox
@@ -144,7 +144,7 @@ class LoanEligible extends Component {
               </Grid>
             </Grid>
 
-            <div style={{background:'#ffffff', padding:'0 6px'}}>
+            <div className='inner-checkbox'>
               <Grid id="agreeScroll" ref={this.agreeRef} container spacing={16} alignItems="center">
                 <Grid item xs={1} className="TextCenter">
                   <Checkbox
@@ -160,11 +160,14 @@ class LoanEligible extends Component {
                   <label>I declare that I am of good health and i do not have any physical defect</label>
                 </Grid>
               </Grid>
+              <div className="tnc">I hereby declare the I have read policy 
+                <b style={{color:'var(--primary'}} onClick={() => this.navigate('/loan/dmi/tnc')}> Terms and Conditions </b>
+               carefully.</div>
             </div>
           </div>
           
 
-          <div className="loan-value" style={{marginTop: '30px'}}>
+          <div className="loan-value">
             <div>
               <div>EMI amount</div>
               <div className="values">{formatAmountInr(vendor_info.approved_emi)}</div>
