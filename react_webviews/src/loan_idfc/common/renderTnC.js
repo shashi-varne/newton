@@ -46,11 +46,13 @@ class TermsAndCondition extends Component {
                         {Array.from(
                             new Array(this.state.numPages),
                             (el, index) => (
-                                <Page
-                                    key={`page_${index + 1}`}
-                                    pageNumber={index + 1}
-                                    loading=''
-                                />
+                                <div style={{ marginBottom: '20px' }}>
+                                    <Page
+                                        key={`page_${index + 1}`}
+                                        pageNumber={index + 1}
+                                        loading=''
+                                    />
+                                </div>
                             ),
                         )}
                     </Document>
