@@ -203,3 +203,28 @@ export const investRedeemData = {
     ],
   },
 };
+
+export const nfoData = {
+  info: [
+    {
+      title: "Low NAV",
+      subtitle: "Accumulate more units at lower NAV",
+      icon: "low_nav_icon.png",
+    },
+    {
+      title: "Growth Journey",
+      subtitle: "Be a part of the fund's growth journey",
+      icon: "growth_journey_icon.png",
+    },
+    {
+      title: "Interesting Themes",
+      subtitle: "Many NFOs are launched to manage new opportunities",
+      icon: "interesting_themes_icon.png",
+    },
+    {
+      title: "Innovative Products",
+      subtitle: "Products with unique features",
+      icon: "innovative_products_icon.png",
+    },
+  ],
+};
