@@ -11,10 +11,9 @@ import {
 } from '@material-ui/core/styles';
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
-import InvestAmount from "./InvestAmount"
-import InvestedAmount from "./InvestedAmount"
-import Landing from "./Landing"
-import InvestJourney from "./InvestJourney"
+import RecommendationFunds from "./RecommendationFunds"
+import EditFunds from "./EditFunds"
+import AlternateFunds from "./ReplaceFunds"
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -39,10 +38,9 @@ const PortfolioRebalancing = ({ match }) => {
         <ToastContainer autoClose={3000} />
         <ScrollToTop />
           <Switch>
-          <Route exact path={`${url}`} component={Landing} />
-            <Route path={`${url}/amount`} component={InvestAmount} />
-            <Route path={`${url}/funds`} component={InvestedAmount} />
-            <Route path={`${url}/invest-journey`} component={InvestJourney}/>
+            <Route exact path={url} component={RecommendationFunds} />
+            <Route path={`${url}/edit-funds`} component={EditFunds} />
+            <Route path={`${url}/alternate-funds`} component={AlternateFunds} />
           </Switch>
       </MuiThemeProvider>
     </JssProvider>

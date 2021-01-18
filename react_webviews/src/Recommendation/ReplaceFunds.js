@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Container from '../fund_details/common/Container';
 import { storageService } from 'utils/validators';
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
-import FundCard from './FundCard';
+import FundCard from '../mf_journey_common/FundCard';
 import './style.scss';
-import { navigate as navigateFunc } from './common/commonFunction';
+import { navigate as navigateFunc } from '../mf_journey_common/common/commonFunction';
 const ReplaceFunds = (props) => {
   const [alternateFunds, setAlternateFunds] = useState(null);
   const [selectedFund, setSelectedFund] = useState('');
-  const { recommendation, alternatives } = storageService().getObject('graphData');
+  const { recommendation, alternatives,investType } = storageService().getObject('graphData');
   const { graphData: {mftype,mfid,amount} } = props.location.state;
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
@@ -44,7 +44,8 @@ const ReplaceFunds = (props) => {
         graphData.recommendation = newData;
         storageService().setObject("graphData",graphData);
       }
-        navigate("edit-funds");
+      props.history.goBack();
+        //navigate(`${investType}/edit-funds`);
   }
   return (
     <Container

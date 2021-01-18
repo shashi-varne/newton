@@ -2,16 +2,18 @@ import React, { useState,useEffect } from 'react';
 import Container from '../fund_details/common/Container';
 import { storageService } from 'utils/validators';
 import {formatAmountInr} from "../utils/validators"
-import FundCard from "./FundCard"
+import FundCard from "../mf_journey_common/FundCard"
 import single_star from "assets/single_star.png"
 import morning_text from "assets/morning_text.png"
 import check_mark from "assets/check_mark.png"
 import trust_icons from "assets/trust_icons.svg"
+import EditFunds from "./EditFunds"
 
 import "./style.scss"
 import { navigate as navigateFunc} from './common/commonFunction';
+import { Route } from 'react-router-dom';
 const Recommendations = (props) => {
-    const {recommendation,alternatives,amount} = storageService().getObject("graphData");
+    const {recommendation,alternatives,amount,investType} = storageService().getObject("graphData");
     const [isins,setIsins] = useState("");
 
     useEffect(()=>{
@@ -23,11 +25,16 @@ const Recommendations = (props) => {
     },[])
     const navigate = navigateFunc.bind(props);
     const EditFund = () => {
-        const data= {
-            recommendation,
-            alternatives
-        }
-        navigate("edit-funds",data)
+        console.log("location is",props.location)
+        // const data= {
+        //     recommendation,
+        //     alternatives
+        // }
+        // props.history.push({
+        //     pathname:`${props.match.url}/edit-funds`,
+        //     state:data
+        // })
+        navigate('edit-funds')
     }
 
   return (
@@ -89,6 +96,9 @@ const Recommendations = (props) => {
             <img alt="trust_sebi_secure" src={trust_icons} />
         </div>
      </section>
+     {/* <section>
+         <Route path={`${props.match.path}/edit-funds`} component={EditFunds}/>
+     </section> */}
     </Container>
   );
 };

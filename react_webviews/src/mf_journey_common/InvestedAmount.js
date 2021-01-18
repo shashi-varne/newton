@@ -1,11 +1,11 @@
-import React, { useState,useEffect,useMemo } from 'react';
+import React, { useState,useEffect} from 'react';
 import Container from '../fund_details/common/Container';
 import { storageService } from 'utils/validators';
 import { formatAmountInr } from '../utils/validators';
 import withdraw_anytime_icon from 'assets/withdraw_anytime_icon.png';
 import no_lock_in_icon from 'assets/no_lock_in_icon.png';
 import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
-import one_time_icon_dark from 'assets/one_time_icon_dark.png';
+// import one_time_icon_dark from 'assets/one_time_icon_dark.png';
 import Slider from 'common/ui/Slider';
 import {navigate as navigateFunc} from "./common/commonFunction"
 import {get_recommended_funds} from "./common/api"
@@ -14,13 +14,12 @@ const stockReturns = 15;
 const bondReturns = 8;
 const InvestedAmount = (props) => {
   let graphData = storageService().getObject("graphData");
-  const { amount, investType, term, stockSplit } = graphData;
+  const { amount, investType, term, stockSplit,isRecurring } = graphData;
   const [stockSplitVal, setStockSplitVal] = useState(stockSplit || 0);
   const [termYear,setTermYear] = useState(term || "");
   const [potentialValue,setPotentialValue] = useState(0);
   const [risk,setRisk] = useState("");
   const navigate = navigateFunc.bind(props);
-  let isRecurring;
   useEffect(() => {
     setPotentialValue(getPotentialValue(termYear));
     getRiskTitle();
@@ -35,15 +34,17 @@ const InvestedAmount = (props) => {
         type:investType,
         equity:stockSplitVal,
         debt:(100 - stockSplitVal),
-        term:termYear
+        term:termYear,
+      }
+      if(investType === "saveforgoal"){
+        params.subtype = graphData?.subtype;
       }
     try{
 
         const data = await get_recommended_funds(params);
         graphData = {...graphData,...data};
         storageService().setObject("graphData",graphData);
-        navigate("recommendations",data)
-        console.log("data is",data)
+        navigate(`/invest/recommendations`,{},true)
     }
     catch(err){
         console.log("the err is ",err)
@@ -52,34 +53,7 @@ const InvestedAmount = (props) => {
   const showFunds = () =>{
     fetchRecommendedFunds();
   }
-  switch (investType) {
-    case 'sectoralsip':
-      isRecurring = true;
-      break;
-    case 'midcapsip':
-      isRecurring = true;
-      break;
-    case 'balancedsip':
-      isRecurring = true;
-      break;
-    case 'indexsip':
-      isRecurring = true;
-      break;
-    case 'shariahsip':
-      isRecurring = true;
-      break;
-    case 'savetaxsip':
-      isRecurring = true;
-      break;
-    case 'buildwealth':
-      isRecurring = true;
-      break;
-    case 'saveforgoal':
-      isRecurring = true;
-      break;
-    default:
-      isRecurring = false;
-  }
+  
   const getPotentialValue = (term) => {
     setTermYear(term)
     let principle = amount;

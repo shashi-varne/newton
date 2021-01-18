@@ -12,6 +12,7 @@ const FundCard = ({ classOverRide, fund,history,graph,isins }) => {
       return history.push({
         pathname: '/fund-details',
         search: `?isins=${isins}&selected_isin=${isin}`,
+        state:{flow:"mf journey"}
       })
     // return <Redirect
     //   to={{

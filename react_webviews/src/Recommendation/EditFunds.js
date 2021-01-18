@@ -3,21 +3,22 @@ import Container from '../fund_details/common/Container';
 import { storageService } from 'utils/validators';
 import { formatAmountInr } from '../utils/validators';
 import replaceFund from "assets/replace_bfdl.png"
-import FundCard from './FundCard';
+import FundCard from '../mf_journey_common/FundCard';
 import { navigate as navigateFunc} from './common/commonFunction';
 import './style.scss';
 const EditFunds = (props) => {
-  const {recommendation,alternatives} = storageService().getObject("graphData");
+  const {recommendation,alternatives,investType} = storageService().getObject("graphData");
   const navigate = navigateFunc.bind(props);
   const showAlternateFunds = ({amount,mf:{mfid,mftype}}) => e => {
-    navigate("alternate-funds",{mftype,mfid,amount})
+    navigate('alternate-funds',{mftype,mfid,amount})
   }
   const goBack = () =>{
-    navigate("recommendations")
+    //navigate(`${investType}/recommendations`)
+    props.history.goBack();
   }
   return (
     <Container
-      goBack={goBack}
+      //goBack={goBack}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Done'

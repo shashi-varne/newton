@@ -1,31 +1,50 @@
 import React, { useState ,useEffect} from 'react';
 import Container from '../fund_details/common/Container';
-import { storageService } from 'utils/validators';
-import {formatAmountInr} from "../utils/validators"
-import {navigate as navigateFunc} from "./common/commonFunction"
+import { storageService,numDifferentiationInr ,formatAmountInr} from 'utils/validators';
+import {navigate as navigateFunc, corpusValue,validateOtAmount,validateSipAmount} from "./common/commonFunction"
 import {get_recommended_funds} from "./common/api"
 import "./style.scss"
+import Input from "common/ui/Input"
 const InvestAmount = (props) => {
-    const [amount,setAmount] = useState("");
-    const [year,setYear] = useState(null);
-    const [corpus,setCorpus] = useState(null);
+  const graphData = storageService().getObject("graphData");
+  const{investType,year,stockSplit,term,isRecurring} = graphData;
+    const [amount,setAmount] = useState(graphData?.amount || "");
+    const [corpus,setCorpus] = useState(graphData?.corpus || "");
+    const [error,setError] = useState(false);
+    const [errorMsg,setErrorMsg] = useState("");
     const navigate = navigateFunc.bind(props);
     const handleChange = (e) => {
       setAmount(parseInt(e.target.value))
     }
-    const graphData = storageService().getObject("graphData");
-    useEffect(()=>{
-      const{amount,corpus,year} = graphData;
-      setAmount(amount)
-      setYear(year)
-      setCorpus(corpus)
-    },[])
+    useEffect(() => {
+      if(!amount){
+        setErrorMsg("This is a required field");
+        return;
+      }
+      const result = validateOtAmount(amount);
+      if(result?.error){
+        setError(true);
+        setErrorMsg(result?.message)
+        return;
+      } else{
+        const valueOfCorpus = corpusValue(stockSplit,amount,investType,isRecurring,term)
+        setCorpus(valueOfCorpus)
+        setErrorMsg("");
+        setError(false);
+      }
+    },[amount])
     const fetchRecommendedFunds = async () => {
-      const{investType} = graphData;
       try{
         const params={
           amount,
-          type:investType,
+          type:investType
+        }
+        if(investType === "saveforgoal"){
+          params.subtype = graphData?.subtype;
+          params.term = graphData?.term;
+        } else if(investType === "investsurplus"){
+          graphData['term'] = 3;
+          params.term = 3; //  has to be modified (temp value)
         }
           const data = await get_recommended_funds(params);
           console.log("data is",data);
@@ -38,9 +57,12 @@ const InvestAmount = (props) => {
 
 
     const goNext = () => {
+      if(!amount){
+        return;
+      }
       fetchRecommendedFunds();
       storageService().setObject("graphData",{...graphData,amount});
-      navigate("invested-amount",{...graphData,amount})
+      navigate(`${investType}/funds`,{...graphData,amount})
     }
   return (
     <Container
@@ -51,6 +73,7 @@ const InvestAmount = (props) => {
       helpContact
       hideInPageTitle
       hidePageTitle
+      disable={error}
       title="Some heading"
      handleClick={goNext}
       classOverRideContainer='pr-container'
@@ -58,14 +81,22 @@ const InvestAmount = (props) => {
      <section className="invest-amount-common">
         <div className="invest-amount-input">
             <p className="invest-amount-input-head">I want to invest</p>
-            <div>
-                <input inputMode="numeric" className="invest-amount-num" onChange={handleChange} value={amount} type="text" />
+            <div className="invest-amount-container">
+              <Input
+                id="invest-amount"
+                class="invest-amount-num"
+                value={amount}
+                onChange={handleChange}
+                type="number"
+                error={error}
+                helperText={error && errorMsg}
+              />
             </div>
             <p className="invest-amount-input-duration">per month</p>
         </div>
         <div className="invest-amount-corpus">
             <div className="invest-amount-corpus-duration">Corpus in {year}:</div>
-            <div className="invest-amount-corpus-amount">₹ {corpus} Lac</div>
+            <div className="invest-amount-corpus-amount">{numDifferentiationInr(corpus)}</div>
         </div>
      </section>
     </Container>

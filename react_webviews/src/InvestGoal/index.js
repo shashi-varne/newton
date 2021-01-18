@@ -11,10 +11,9 @@ import {
 } from '@material-ui/core/styles';
 import { themeConfig } from 'utils/constants';
 import { ToastContainer } from 'react-toastify';
-import InvestAmount from "./InvestAmount"
-import InvestedAmount from "./InvestedAmount"
-import Landing from "./Landing"
-import InvestJourney from "./InvestJourney"
+import Landing from "./component/Landing"
+import GoalType from "./component/GoalType"
+import SaveGoal from "./component/SaveGoal"
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -31,7 +30,7 @@ const ScrollToTopWithoutRouter = (props) => {
 };
 const ScrollToTop = withRouter(ScrollToTopWithoutRouter);
 
-const PortfolioRebalancing = ({ match }) => {
+const InvestGoal = ({ match }) => {
   const { url } = match;
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
@@ -40,13 +39,13 @@ const PortfolioRebalancing = ({ match }) => {
         <ScrollToTop />
           <Switch>
           <Route exact path={`${url}`} component={Landing} />
-            <Route path={`${url}/amount`} component={InvestAmount} />
-            <Route path={`${url}/funds`} component={InvestedAmount} />
-            <Route path={`${url}/invest-journey`} component={InvestJourney}/>
+          <Route exact path={`${url}/:subtype`} component={GoalType} />
+          <Route path={`${url}/:subtype/:year`} component={SaveGoal} />
+
           </Switch>
       </MuiThemeProvider>
     </JssProvider>
   );
 };
 
-export default PortfolioRebalancing;
+export default InvestGoal;
