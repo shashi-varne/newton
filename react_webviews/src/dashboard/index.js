@@ -18,6 +18,7 @@ import Amount from "./invest/insta_redeem/amount";
 import NfoInfo from "./invest/nfo";
 import NfoScheme from "./invest/nfo/scheme";
 import NfoFunds from "./invest/nfo/funds";
+import NfoFundDetail from "./invest/nfo/FundDetail";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -78,6 +79,10 @@ const Invest = (props) => {
           <Route
             path={`${url}advanced-investing/new-fund-offers/:scheme/funds`}
             component={NfoFunds}
+          />
+          <Route
+            path={`${url}advanced-investing/new-fund-offers/fund`}
+            component={NfoFundDetail}
           />
 
           <Route component={NotFound} />
