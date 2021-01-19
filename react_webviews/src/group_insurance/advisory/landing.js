@@ -32,10 +32,8 @@ class AdvisoryLanding extends Component {
         return(
             <Container
             events={this.sendEvents('just_set_events')}
-            // inPageTitle={false}
-            // force_hide_inpage_title={true}
+            force_hide_inpage_title={true}
             fullWidthButton={true}
-            headerType='insurance-advisory-start'
             onlyButton={true}
             buttonTitle="LET'S GET STARTED"
             >
