@@ -70,7 +70,7 @@ class LoanEligible extends Component {
     });
     try {
 
-      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}${this.state.checked ? '?is_insured=true' : ''}`);
+      let res = await Api.get(`/relay/api/loan/dmi/accept_offer/${this.state.application_id}${this.state.checkbox.one ? '?is_insured=true' : ''}`);
 
       var resultData = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200 && !resultData.error) {
