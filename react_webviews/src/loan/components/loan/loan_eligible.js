@@ -282,8 +282,8 @@ class LoanEligible extends Component {
                 <div>{formatAmountInr(vendor_info.approved_amount_decision)}</div>
               </div>
               <div className="items">
-                <div>Credit insurance (@1%)</div>
-                <div>{this.state.checkbox ? '- ' + formatAmountInr(vendor_info.insurance_premium_decision) : '- ₹0'}</div>
+                <div>Insurance Premium (with GST)</div>
+                <div>{this.state.checkbox.one ? '- ' + formatAmountInr(vendor_info.insurance_premium_decision) : '- ₹0'}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>
@@ -305,7 +305,7 @@ class LoanEligible extends Component {
 
         {this.state.tncClicked && <div className="tnc">
           <Document
-            file="https://dmi-idfc-dot-plutus-staging.appspot.com/api/res/download/AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg?filename=AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg"
+            file="https://dmi-be-dot-plutus-staging.appspot.com/api/res/download/AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg?filename=AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg"
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             {Array.from(

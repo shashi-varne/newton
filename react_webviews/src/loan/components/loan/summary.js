@@ -212,7 +212,7 @@ class LoanSummary extends Component {
                 <div>{formatAmountInr(vendor_info.approved_amount_final)}</div>
               </div>
               <div className="items">
-                <div>Credit insurance (@1%)</div>
+                <div>Insurance Premium (with GST)</div>
                 <div>{vendor_info.is_insured ? '- '+formatAmountInr(vendor_info.insurance_premium_decision) : '- ₹0'}</div>
               </div>
               <div className="items">
