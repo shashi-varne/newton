@@ -19,6 +19,7 @@ import NfoInfo from "./invest/nfo";
 import NfoScheme from "./invest/nfo/scheme";
 import NfoFunds from "./invest/nfo/funds";
 import NfoFundDetail from "./invest/nfo/FundDetail";
+import NfoCheckout from "./invest/nfo/checkout";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -83,6 +84,10 @@ const Invest = (props) => {
           <Route
             path={`${url}advanced-investing/new-fund-offers/fund`}
             component={NfoFundDetail}
+          />
+          <Route
+            path={`${url}advanced-investing/new-fund-offers/funds/checkout`}
+            component={NfoCheckout}
           />
 
           <Route component={NotFound} />

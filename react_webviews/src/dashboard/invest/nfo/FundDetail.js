@@ -21,7 +21,6 @@ class FundDetail extends Component {
   onload = () => {
     let { state } = this.props.location || {};
     let fund = storageService().getObject("nfo_detail_fund");
-    console.log(fund);
     if (state && state.mfid && fund) {
       this.setState({ fund: fund });
     } else {
@@ -30,7 +29,9 @@ class FundDetail extends Component {
     }
   };
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate("funds/checkout");
+  };
 
   render() {
     let { fund } = this.state;
@@ -58,7 +59,7 @@ class FundDetail extends Component {
               </span>
               {fund.tax_plan === "elss" && <span>Tax saving</span>}
             </div>
-            <Button>INVEST</Button>
+            <Button onClick={this.handleClick}>INVEST</Button>
             <div className="risk">
               <div className="text">
                 <b>Risk</b>

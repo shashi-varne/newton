@@ -124,7 +124,9 @@ class NfoFunds extends Component {
     this.initialize();
   }
 
-  handleClick = () => {};
+  handleClick = () => {
+    this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
+  };
 
   render() {
     let { nfoFunds } = this.state;
@@ -159,7 +161,7 @@ class NfoFunds extends Component {
                         <p>Category: {data.tax_plan}</p>
                       </div>
                       <div className="invest">
-                        <Button>INVEST</Button>
+                        <Button onClick={this.handleClick}>INVEST</Button>
                       </div>
                     </div>
                     <div className="date">
