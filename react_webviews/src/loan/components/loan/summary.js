@@ -213,7 +213,7 @@ class LoanSummary extends Component {
               </div>
               <div className="items">
                 <div>Insurance Premium (with GST)</div>
-                <div>{vendor_info.is_insured ? '- '+formatAmountInr(vendor_info.insurance_premium_decision) : '- ₹0'}</div>
+                <div>{vendor_info.is_insured ? '- '+formatAmountInr(vendor_info.insurance_premium_final) : '- ₹0'}</div>
               </div>
               <div className="items">
                 <div>Processing fee</div>
@@ -226,7 +226,7 @@ class LoanSummary extends Component {
               <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(vendor_info.net_amount_final)}</div>
+                <div>{vendor_info.is_insured ? formatAmountInr(vendor_info.net_amount_final - vendor_info.insurance_premium_final) : formatAmountInr(vendor_info.net_amount_final)}</div>
               </div>
             </div>
           </div>

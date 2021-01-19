@@ -296,7 +296,7 @@ class LoanEligible extends Component {
               <hr style={{ background: "#ccd3db" }} />
               <div className="credit">
                 <div>Amount credited to bank a/c</div>
-                <div>{formatAmountInr(vendor_info.net_amount_decision)}</div>
+                <div>{this.state.checkbox.one ? formatAmountInr(vendor_info.net_amount_decision - vendor_info.insurance_premium_decision) : formatAmountInr(vendor_info.net_amount_decision)}</div>
               </div>
             </div>
           </div>
