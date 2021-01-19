@@ -2,17 +2,22 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import "../../common/theme/Style.scss";
+import "../common/theme/Style.scss";
 import { themeConfig } from "utils/constants";
 import { ToastContainer } from "react-toastify";
 
-import NotFound from "../../common/components/NotFound";
+import NotFound from "../common/components/NotFound";
 
 import "./Style.scss";
-import Landing from "./landing";
-import InstaRedeem from "./insta_redeem";
-import Type from "./insta_redeem/type";
-import Amount from "./insta_redeem/amount";
+import Landing from "./invest/landing";
+
+import InstaRedeem from "./invest/insta_redeem";
+import Type from "./invest/insta_redeem/type";
+import Amount from "./invest/insta_redeem/amount";
+
+import NfoInfo from "./invest/nfo";
+import NfoScheme from "./invest/nfo/scheme";
+import NfoFunds from "./invest/nfo/funds";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -51,10 +56,29 @@ const Invest = (props) => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route exact path={`${url}`} component={Landing} />
-          <Route exact path={`${url}/instaredeem`} component={InstaRedeem} />
-          <Route path={`${url}/instaredeem/type`} component={Type} />
-          <Route path={`${url}/instaredeem/amount/:investType`} component={Amount} />
+          <Route exact path={`${url}invest`} component={Landing} />
+          <Route
+            exact
+            path={`${url}invest/instaredeem`}
+            component={InstaRedeem}
+          />
+          <Route path={`${url}invest/instaredeem/type`} component={Type} />
+          <Route
+            path={`${url}invest/instaredeem/amount/:investType`}
+            component={Amount}
+          />
+          <Route
+            path={`${url}advanced-investing/new-fund-offers/info`}
+            component={NfoInfo}
+          />
+          <Route
+            path={`${url}advanced-investing/new-fund-offers/scheme`}
+            component={NfoScheme}
+          />
+          <Route
+            path={`${url}advanced-investing/new-fund-offers/:scheme/funds`}
+            component={NfoFunds}
+          />
 
           <Route component={NotFound} />
         </Switch>
