@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 60 75" xmlns="http://www.w3.org/2000/svg">
+<title>diy_equity_icon</title>
+<desc>Created with Sketch.</desc>
+<defs>
+<linearGradient id="f" x1="50%" x2="50%" y1="-1.2645%" y2="100%">
+<stop stop-color="#A9F1EB" offset="0"/>
+<stop stop-color="#96B6DC" offset=".6458"/>
+<stop stop-color="#8D9BD5" offset="1"/>
+</linearGradient>
+<linearGradient id="e" x1="50%" x2="50%" y1="-1.2645%" y2="100%">
+<stop stop-color="#9DCDE2" offset="0"/>
+<stop stop-color="#96B6DC" offset=".48047"/>
+<stop stop-color="#8D9BD5" offset="1"/>
+</linearGradient>
+<linearGradient id="d" x1="64.901%" x2="27.54%" y1="-15.056%" y2="75.154%">
+<stop stop-color="#99C0DF" offset="0"/>
+<stop stop-color="#91A6D8" offset="1"/>
+</linearGradient>
+<linearGradient id="c" x1="50%" x2="50%" y1="-2.4895e-15%" y2="100%">
+<stop stop-color="#A1D7E4" offset="0"/>
+<stop stop-color="#9DCBE2" offset="1"/>
+</linearGradient>
+<linearGradient id="b" x1="50%" x2="50%" y1="-2.4895e-15%" y2="100%">
+<stop stop-color="#9AC4E0" offset="0"/>
+<stop stop-color="#91A7D8" offset="1"/>
+</linearGradient>
+<linearGradient id="a" x1="50%" x2="50%" y1="-2.4895e-15%" y2="100%">
+<stop stop-color="#A6E7E9" offset="0"/>
+<stop stop-color="#9FD4E3" offset="1"/>
+</linearGradient>
+</defs>
+<g fill="none" fill-rule="evenodd">
+<g transform="translate(-150 -126)">
+<g transform="translate(150 126)">
+<rect width="60" height="75" fill-rule="nonzero"/>
+<path d="m1 74h58v-56c0-1.6569-1.3431-3-3-3h-17c-1.6569 0-3 1.3431-3 3v12h-12v-26c0-1.6569-1.3431-3-3-3h-17c-1.6569 0-3 1.3431-3 3v70z" fill="#fff" stroke="url(#f)" stroke-width="2"/>
+<path d="m15 74h26v-41c0-1.6569-1.3431-3-3-3h-20c-1.6569 0-3 1.3431-3 3v41z" fill="#fff" stroke="url(#e)" stroke-width="2"/>
+<rect transform="translate(14.5 60.5) rotate(-45) translate(-14.5 -60.5)" x="2" y="57" width="25" height="7" fill="#fff" fill-rule="nonzero"/>
+<rect transform="translate(40.5 51.5) rotate(-45) translate(-40.5 -51.5)" x="28" y="48" width="25" height="7" fill="#fff" fill-rule="nonzero"/>
+<rect transform="translate(27.5 55.5) rotate(28) translate(-27.5 -55.5)" x="18" y="52" width="19" height="7" fill="#fff" fill-rule="nonzero"/>
+<rect x="39" y="37" width="4" height="6" fill="#fff" fill-rule="nonzero"/>
+<path transform="translate(32.285 55.916) rotate(-45) translate(-32.285 -55.916)" d="m32.218 57.382h21.951l-5.4366-5.4366 1.6374-1.6374 8.2766 8.2766-1.6374 1.6374-0.035781-0.035781-6.5497 6.5497-1.6553-1.6553 5.383-5.383h-23.545l-0.11272 0.07109-4.1548-11.707-20.415-0.6498v-2.3157l22.089 0.70307 0.11353-0.067056 4.0922 11.649z" fill="url(#d)" fill-rule="nonzero"/>
+<path d="m49 20h6v2h-6v-2zm0 5h6v2h-6v-2zm0 5h6v2h-6v-2z" fill="url(#c)" fill-rule="nonzero"/>
+<path d="m25 37h6v2h-6v-2zm0 5h6v2h-6v-2zm0 5h6v2h-6v-2zm0 17h6v2h-6v-2z" fill="url(#b)" fill-rule="nonzero"/>
+<path d="m5 7h6v2h-6v-2zm0 5h6v2h-6v-2zm0 5h6v2h-6v-2zm0 5h6v2h-6v-2z" fill="url(#a)" fill-rule="nonzero"/>
+</g>
+</g>
+</g>
+</svg>

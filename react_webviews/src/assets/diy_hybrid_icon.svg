@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+<title>diy_hybrid_icon</title>
+<desc>Created with Sketch.</desc>
+<defs>
+<linearGradient id="d" x1="50%" x2="50%" y2="100%">
+<stop stop-color="#A8F0EA" offset="0"/>
+<stop stop-color="#A3DEE6" offset="1"/>
+</linearGradient>
+<linearGradient id="c" x1="50%" x2="50%" y2="100%">
+<stop stop-color="#9FD3E3" offset="0"/>
+<stop stop-color="#90A5D7" offset="1"/>
+</linearGradient>
+<linearGradient id="b" x1="50%" x2="50%" y2="100%">
+<stop stop-color="#9CCBE1" offset="0"/>
+<stop stop-color="#93AED9" offset="1"/>
+</linearGradient>
+<linearGradient id="a" x1="50%" x2="50%" y2="100%">
+<stop stop-color="#99C1DE" offset="0"/>
+<stop stop-color="#96B8DC" offset="1"/>
+</linearGradient>
+</defs>
+<g fill="none" fill-rule="evenodd">
+<g transform="translate(-148 -449)" fill-rule="nonzero">
+<g transform="translate(148 449)">
+<rect x="25" y="10" width="14" height="6" fill="#fff" stroke="#A0D5E4" stroke-width="2"/>
+<path d="m6.618 4 3 6h44.764l3-6h-50.764z" fill="#fff" stroke="url(#d)" stroke-width="2"/>
+<rect x="1" y="1" width="62" height="4" fill="#fff" stroke="#A8F0EA" stroke-width="2"/>
+<rect x="40" y="57" width="16" height="6" rx="2" fill="#fff" stroke="#8D9BD5" stroke-width="2"/>
+<rect x="8" y="57" width="16" height="6" rx="2" fill="#fff" stroke="#8D9BD5" stroke-width="2"/>
+<path d="m13.871 16c-1.4075 0-2.6257 0.97849-2.9294 2.3528l-7.8578 35.569c-0.078248 0.35419-0.11772 0.71585-0.11772 1.0786 0 2.7614 2.2386 5 5 5h48.066c0.36274 0 0.72439-0.039473 1.0786-0.11772 2.6964-0.59569 4.3994-3.2645 3.8037-5.9609l-7.8578-35.569c-0.30362-1.3744-1.5219-2.3528-2.9294-2.3528h-36.256z" fill="#fff" stroke="url(#c)" stroke-width="2"/>
+<circle cx="32" cy="38" r="16" fill="#fff" stroke="url(#b)" stroke-width="2"/>
+<circle cx="32" cy="38" r="3" fill="#fff" stroke="url(#a)" stroke-width="2"/>
+<path d="m29 37 3-13 3 13c-1-1.3333-2-2-3-2s-2 0.66667-3 2z" fill="#9BCAE0"/>
+</g>
+</g>
+</g>
+</svg>

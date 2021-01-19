@@ -15,6 +15,7 @@ import InvestAmount from "./InvestAmount"
 import InvestedAmount from "./InvestedAmount"
 import Landing from "./Landing"
 import InvestJourney from "./InvestJourney"
+import InvestExplore from "./InvestExplore"
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -39,10 +40,11 @@ const PortfolioRebalancing = ({ match }) => {
         <ToastContainer autoClose={3000} />
         <ScrollToTop />
           <Switch>
-          <Route exact path={`${url}`} component={Landing} />
-            <Route path={`${url}/amount`} component={InvestAmount} />
-            <Route path={`${url}/funds`} component={InvestedAmount} />
-            <Route path={`${url}/invest-journey`} component={InvestJourney}/>
+            <Route exact path={`${url}/amount`} component={InvestAmount} />
+            <Route exact path={`${url}/funds`} component={InvestedAmount} />
+            <Route exact path={`${url}/invest-journey`} component={InvestJourney}/>
+            <Route exact path={`${url}/explore`} component={InvestExplore} />
+            <Route path={`${url}`} component={Landing} />
           </Switch>
       </MuiThemeProvider>
     </JssProvider>

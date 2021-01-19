@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 60 59" xmlns="http://www.w3.org/2000/svg">
+<title>diy_debt_icon</title>
+<desc>Created with Sketch.</desc>
+<defs>
+<linearGradient id="a" x1="50%" x2="50%" y1="-3.7587%" y2="103.76%">
+<stop stop-color="#A9F1EB" offset="0"/>
+<stop stop-color="#96B6DC" offset=".6458"/>
+<stop stop-color="#8D9BD5" offset="1"/>
+</linearGradient>
+<linearGradient id="b" x1="50%" x2="50%" y1="-3.7587%" y2="101.53%">
+<stop stop-color="#9DCBE1" offset="0"/>
+<stop stop-color="#98BCDE" offset=".6458"/>
+<stop stop-color="#95B2DB" offset="1"/>
+</linearGradient>
+</defs>
+<g fill="none" fill-rule="evenodd">
+<g transform="translate(-150 -257)">
+<g transform="translate(150 257)">
+<path d="m5 19v36h51c1.6569 0 3-1.3431 3-3v-30c0-1.6569-1.3431-3-3-3h-51z" fill="#fff" stroke="url(#a)" stroke-width="2"/>
+<path transform="translate(24.88 20.702) rotate(-23) translate(-24.88 -20.702)" d="m5.8803 13.648v19.89l38-5.7826v-19.89l-38 5.7826z" fill="#fff" stroke="url(#a)" stroke-width="2"/>
+<path transform="translate(28.47 22.112) rotate(-23) translate(-28.47 -22.112)" d="m6.4697 12.112v20h44v-20h-44z" fill="#fff" stroke="#A5E5E8" stroke-width="2"/>
+<circle transform="translate(29.179 23.179) rotate(-23) translate(-29.179 -23.179)" cx="29.179" cy="23.179" r="6" fill="#fff" stroke="#A5E5E8" stroke-width="2"/>
+<path d="m5.1 19h-1.1c-1.6569 0-3 1.3431-3 3v33c0 1.6569 1.3431 3 3 3l48 2e-7c1.6569-1e-7 3-1.3431 3-3l-2.1e-6 -29c-1e-7 -1.6569-1.3431-3-3-3l-42-2e-7c-2.419 0-4.4367-1.7178-4.9-4z" fill="#fff" stroke="url(#a)" stroke-width="2"/>
+<path d="m43 36c-0.55228 0-1 0.44772-1 1v8c0 0.55228 0.44772 1 1 1h12c0.55228 0 1-0.44772 1-1v-8c0-0.55228-0.44772-1-1-1h-12z" fill="#fff" stroke="url(#b)" stroke-width="2"/>
+<rect x="8" y="47" width="16" height="2" fill="#95B2DB" fill-rule="nonzero"/>
+<rect x="8" y="41" width="16" height="2" fill="#98BEDE" fill-rule="nonzero"/>
+<rect x="8" y="35" width="16" height="2" fill="#9CCAE1" fill-rule="nonzero"/>
+</g>
+</g>
+</g>
+</svg>

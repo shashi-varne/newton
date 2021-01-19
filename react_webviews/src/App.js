@@ -61,7 +61,7 @@ class App extends Component {
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
           <Route path="/savegoal" component={InvestGoal}/>
           <Route path="/invest/recommendations" component={Recommendations}/>
-          <Route path="/invest/:type" component={MFJourney}/>
+          <Route path="/invest" component={MFJourney}/>
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
