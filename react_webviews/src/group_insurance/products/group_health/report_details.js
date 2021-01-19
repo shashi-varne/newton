@@ -294,7 +294,7 @@ class GroupHealthReportDetails extends Component {
                 'policy': 'Health insurance',
                 'policy_status': this.state.policy_data.status ? this.state.policy_data.status === 'policy_issued' ? 'Issued': capitalizeFirstLetter(this.state.policy_data.status.toLowerCase()) : '',
                 "provider_name":  capitalizeFirstLetter(providor_name),
-                "screen_name": 'report details',
+                "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
                 "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
                 "download_policy":  this.state.download_policy ? 'yes' : 'no',
