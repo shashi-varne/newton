@@ -158,7 +158,7 @@ class Landing extends Component {
             </div>
           </div>
 
-          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customer says </div>
+          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}>What our customers say</div>
           <div className="his"> <div className="horizontal-images-scroll">
               <img className="image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
               <img className="image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
