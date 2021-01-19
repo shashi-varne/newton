@@ -325,14 +325,13 @@
 
   .inner-checkbox {
     background-color: #ffffff;
-    padding: 0 10px;
-    // margin-top: 20px;
-
-    .label {
-      margin-top: 15px;
-      font-size: 13px;
-      line-height: 15px;
-      color: #767e86;
+      padding: 0px 10px;
+  
+      .label {
+        margin-top: 15px;
+        font-size: 13px;
+        line-height: 15px;
+        color: #767e86;
     }
   }
 
@@ -340,12 +339,8 @@
     height: 180px;
     overflow: scroll;
     overflow-y: scroll;
-
-    #link {
-      color: blue;
-      cursor: pointer;
-      font-weight: 400;
-    }
+    border: solid 1px #ffffff;
+    border-radius: 6px;
 
     .agree-tiles {
       display: -webkit-box;

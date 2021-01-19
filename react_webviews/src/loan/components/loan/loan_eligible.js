@@ -99,7 +99,7 @@ class LoanEligible extends Component {
   }
 
   handleChange = (name) => {
-    let {checkbox} = this.state;
+    let { checkbox } = this.state;
 
     checkbox[name] = !checkbox[name];
 
@@ -108,11 +108,11 @@ class LoanEligible extends Component {
     } else if (name !== 'one' && (!checkbox.two || !checkbox.three)) {
       checkbox.one = false;
     }
-    
+
     if (name === 'one') {
       checkbox.two = checkbox.one;
       checkbox.three = checkbox.one;
-    } 
+    }
 
     this.setState({
       checkbox: checkbox
@@ -144,7 +144,7 @@ class LoanEligible extends Component {
   }
 
   render() {
-    let {checkbox} = this.state;
+    let { checkbox } = this.state;
     let vendor_info = this.state.vendor_info || {};
     return (
       <Container
@@ -195,8 +195,7 @@ class LoanEligible extends Component {
               </Grid>
             </Grid>
 
-            <div id="agreement" className="agreement-block" style={{
-            }} onScroll={this.onScroll}>
+            <div id="agreement" className="agreement-block">
               <div className='inner-checkbox'>
                 <Grid container spacing={16}>
                   <Grid item xs={1}>
