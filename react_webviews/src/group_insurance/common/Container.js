@@ -44,7 +44,9 @@ class Container extends Component {
        || pathname.indexOf('life-insurance') >= 0 
        || pathname.includes('/group-insurance/group-health')
        || pathname === '/group-insurance/group-insurance/add-policy' 
-       || pathname === '/group-insurance/health/landing') {
+       || pathname === '/group-insurance/health/landing'
+       || pathname === '/group-insurance/advisory-landing'
+       ) {
       this.setState({
         new_header: true,
         inPageTitle: true,
@@ -102,7 +104,7 @@ class Container extends Component {
 
   check_hide_header_title() {
     let force_hide_inpage_title;
-    let restrict_in_page_titles = [];
+    let restrict_in_page_titles = ['insurance-advisory-start'];
     if(restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
       force_hide_inpage_title = true;
     }

@@ -134,6 +134,10 @@ class Landing extends Component {
     }
   }
 
+  goToAdvisory = () =>{
+    this.navigate('/group-insurance/advisory-landing')
+  }
+
   render() {
 
 
@@ -149,6 +153,10 @@ class Landing extends Component {
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
+            <div className="advisory-entry-container">
+              <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
+              <button className="advisory-entry-button" onClick={()=>this.goToAdvisory()}>LET'S FIND OUT</button>
+            </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">
             <div className="horizontal-images-scroll">

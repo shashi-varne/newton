@@ -187,6 +187,9 @@ import ResumeIntermediatePage from './products/life_insurance/resumeIntermediate
 import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
 import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
 
+//Advisory
+import AdvisoryLanding from './advisory/landing';
+
 // common
 
 import Report from './report';
@@ -241,6 +244,9 @@ const Insurance = (props) => {
         <Tooltip />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
+
+          {/* INSURANCE ADVISORY */}
+          <Route path={`${url}/advisory-landing`} component={AdvisoryLanding} />
 
           {/********** TERM INSURANCE **********/}
           <Route path={`${url}/term/resume`} component={Resume} />

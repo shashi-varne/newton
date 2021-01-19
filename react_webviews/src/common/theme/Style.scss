@@ -1036,6 +1036,51 @@ input#pan {
   }
 }
 
+.advisory-entry-container{
+  width: 100%;
+  margin: 20px 0;
+  position: relative;
+  img{
+    width: 100%;
+    object-fit: cover;
+  }
+  .advisory-entry-button{
+    position: absolute;
+    padding: 10px 12px;
+    left: 6%;
+    top: 58%;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    color: white;
+    background-color: #4F2DA7;
+    border-radius: 5px;
+  }
+}
+
+.advisory-landing-container{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  img{
+    position: relative;
+    width: 100%;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+  }
+  .advisory-landing-title{
+    position: absolute;
+    font-family: 'Roboto';
+    top: 7%;
+    left: 20px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #160D2E;
+  }
+}
+
 
 .common-faqs {
   .common-faqs-tile {
