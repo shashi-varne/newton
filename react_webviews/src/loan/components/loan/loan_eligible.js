@@ -212,17 +212,17 @@ class LoanEligible extends Component {
                   </Grid>
 
                   <Grid item xs={11}>
-                    <div className="label">In order to secure the interest of my legal heir(s). I hereby declare, request and authorise Edelweiss General Insurance Company for the following:</div>
+                    <div className="label">In order to secure the interest of my legal heir(s). I hereby declare, request and authorize Edelweiss General Insurance Company for the following:</div>
                     <div className="label">1. that I authorized DMI Finance to submit requests on my behalf, in relation to the benefits available under my Policy. May
                     accept and act in accordance with the request submitted, under my Policy, through DMI Finance, without sending any notice or seeking any further confirmation from me/ my legal heirs.
                   </div>
                     <div className="label">2. To make any payout that is due and payable under my Policy, including claim payout/ refund, in the following manner: by crediting such amount, as is equivalent to the outstanding loan amount with the Financer, in my Loan Account Number held with
-                    the Financer, or the remaining balance, i.e differential amount between the amount payable under my Policy and the outstanding loan amount, to myself or to my nominee, as may be applicable.
+                    the Financer, or the remaining balance, i.e differential amount between the amount payable under my Policy; and the outstanding loan amount, to myself or to my nominee, as may be applicable.
                   </div>
                   </Grid>
                 </Grid>
 
-                <div className="label">By acting on my request in accordance with this Autorization, I hereby agree to indemnify Edelweiss General Insurance in case it incurs/ suffers any loss. Further, I relinquish my rights towards any and all claims and shall discharge from any and all liabilites under
+                <div className="label">By acting on my request in accordance with this Authorization, I hereby agree to indemnify Edelweiss General Insurance in case it incurs/ suffers any loss. Further, I relinquish my rights towards any and all claims and shall discharge from any and all liabilites under
                 my Policy and the same shall be binding on me and my heirs, executors, administrators, successors or legal representatives, as the case may be.
               </div>
 
@@ -305,7 +305,7 @@ class LoanEligible extends Component {
 
         {this.state.tncClicked && <div className="tnc">
           <Document
-            file="https://dmi-be-dot-plutus-staging.appspot.com/api/res/download/AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg?filename=AMIfv95R_sFMFEfgAWjeiM1xjquEE5d7rNNMP_Oetbqv77ff8-31mQnqm08xaBNbgeE6xz4Wp0tVh2MkNYUzio_k3NzqTuluyE2THsT6XwiK03l_K-qwnoHeJvRT70Oge66c437VyKwDjC_ih1aBo5LKB16EDQlXsvBWeuG9mUFVbGfUdMaeYMg"
+            file={vendor_info.insurance_tnc}
             onLoadSuccess={this.onDocumentLoadSuccess}
           >
             {Array.from(
