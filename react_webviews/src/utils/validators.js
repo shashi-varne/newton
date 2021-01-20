@@ -935,7 +935,6 @@ export function containsSpecialCharactersAndNumbers(value){
   return format.test(value);
 }
 
-<<<<<<< HEAD
 export function bytesToSize(bytes, decimals = 2) {
   if (bytes === 0) return "0 Bytes";
 
@@ -981,8 +980,8 @@ export function changeNumberFormat(number, decimals, recursiveCall) {
   }
 
   return displayStr;
-=======
+}
+
 export function countChars(line) {
   return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
->>>>>>> master
 }
