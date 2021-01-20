@@ -35,8 +35,7 @@ const InvestExplore = () => {
   return (
     <Container
       classOverRIde="pr-error-container"
-      fullWidthButton
-      buttonTitle="Continue to KYC"
+      noFooter
       helpContact
       hideInPageTitle
       title="Explore All Mutual Funds"

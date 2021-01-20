@@ -328,3 +328,82 @@
         text-align: center;
     }
 }
+
+#invest-explore-fund-type {
+    .heading {
+        margin: 20px 0;
+        color: #333333;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .scroll {
+        display: flex;
+        flex-direction: row;
+        box-sizing: border-box;
+        overflow-x: auto;
+        position: relative;
+    }
+
+    .scroll .item {
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        flex: 1 1 auto;
+        margin: 10px;
+        min-width: 250px;
+    }
+
+    .item .item-details {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    .item-details .title {
+        font-weight: bold;
+        font-size: 14px;
+        margin-right: 10px;
+        margin-bottom: 0;
+        -ms-flex: 1;
+        flex: 1; 
+    }
+
+    .item .cart-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #e8e8e8;
+        padding: 4px;
+    }
+
+    .cart-actions .stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .stats .desc {
+        margin-left: 5px;
+        font-size: 14px;
+        color: #9b9b93;
+    }
+
+    .categories-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .categories-container .card {
+        flex: 1 1 50%;
+    }
+
+    .categories-container .card .name {
+        margin-top: 20px;
+        font-weight: bold;
+        word-break: break-word;
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+}
