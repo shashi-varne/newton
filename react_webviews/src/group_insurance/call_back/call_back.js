@@ -5,6 +5,7 @@ import { nativeCallback } from 'utils/native_callback';
 import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
 import Dialog, {DialogContent} from 'material-ui/Dialog';
 import MobileInputWithoutIcon from '../../common/ui/MobileInputWithoutIcon';
+import { numberShouldStartWith, validateNumber, containsSpecialCharactersAndNumbers} from 'utils/validators';
 import { getConfig } from 'utils/functions';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
@@ -99,14 +100,17 @@ class CallBackDetails extends Component {
         
         let form_data = this.state.form_data
         var value = '';
-
+        
         if(name !== 'insuranceType'){
             value = event ? event.target.value : event;
         }else{
             value = event
             form_data.index = event;
         }
-
+        if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
+          return;
+        }
+        
         if (name === 'mobile') {
             if (value.length <= 10) {
                 form_data[name] = value;
@@ -128,14 +132,9 @@ class CallBackDetails extends Component {
       this.sendEvents('next','personal_details')
       var form_data = this.state.form_data;
       var canSubmitForm = true;
-      
 
-      if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
-        form_data.name_error = 'Enter valid full name';
-        canSubmitForm = false;
-      }
-
-      if((form_data && form_data.mobile && form_data.mobile.length < 10) || (!form_data.mobile)){
+      if((form_data && form_data.mobile && form_data.mobile.length < 10) || (!form_data.mobile) || !validateNumber(this.state.form_data.mobile) ||
+      !numberShouldStartWith(this.state.form_data.mobile)){
         form_data.mobile_error = 'Enter valid mobile number';
         canSubmitForm = false;
       }
@@ -209,6 +208,10 @@ class CallBackDetails extends Component {
     removeMobilePrefix = () =>{
       var form_data = this.state.form_data;
 
+      if(form_data){
+        if(form_data.mobile && form_data.mobile.includes('e')){
+        }
+      }
       if(form_data && form_data.mobile && form_data.mobile.length !== 0){
         return
       }else{
@@ -229,7 +232,7 @@ class CallBackDetails extends Component {
         showLoader={this.state.show_loader}
         title="Let's talk &#38; help you out">
         
-        <p style={{marginTop: '-10px', color: '#767E86'}}>Enter your details &#38; we'll call you in 15 mins</p>
+        <p style={{marginTop: '-10px', color: '#767E86'}}>Enter your details &#38; we'll call you in 15 minutes</p>
         
         <div style={{marginTop: '20px'}}>
         <div className="InputField">
