@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
+import Container from "../../../../fund_details/common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../functions";
+import { initialize } from "../../functions";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import { formatAmountInr } from "utils/validators";
-import { investRedeemData } from "../constants";
+import { investRedeemData } from "../../constants";
 
 class InvestAmount extends Component {
   constructor(props) {
@@ -72,6 +72,7 @@ class InvestAmount extends Component {
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         disable={amount_error ? true : false}
+        hideInPageTitle
       >
         <div className="insta-redeem-invest-amount">
           <div className="header">

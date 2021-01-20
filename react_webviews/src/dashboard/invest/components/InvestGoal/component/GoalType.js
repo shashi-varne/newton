@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Container from '../../../../fund_details/common/Container';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import Container from 'fund_details/common/Container';
+import { navigate as navigateFunc } from '../../../common/commonFunction';
 import Input from 'common/ui/Input';
 import './style.scss';
 const currentYear = new Date().getFullYear();

@@ -131,7 +131,11 @@ class NfoFunds extends Component {
   render() {
     let { nfoFunds } = this.state;
     return (
-      <Container showLoader={this.state.show_loader} noFooter={true}>
+      <Container
+        showLoader={this.state.show_loader}
+        noFooter={true}
+        hideInPageTitle
+      >
         <div className="nfo-funds">
           {!nfoFunds && (
             <div className="message">

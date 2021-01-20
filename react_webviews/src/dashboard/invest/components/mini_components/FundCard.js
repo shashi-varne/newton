@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatAmountInr } from 'utils/validators';
-import RatingStar from '../../../fund_details/common/RatingStar';
+import RatingStar from '../../../../fund_details/common/RatingStar';
 const FundCard = ({ classOverRide, fund,history,graph,isins }) => {
   const {
     amount,

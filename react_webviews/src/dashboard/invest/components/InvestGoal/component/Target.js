@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Container from '../../../../fund_details/common/Container';
+import Container from 'fund_details/common/Container';
 import { storageService } from 'utils/validators';
-import {getRateOfInterest,navigate as navigateFunc,isRecurring} from "../../common/commonFunction"
-import {get_recommended_funds} from "../../common/api"
+import {getRateOfInterest,navigate as navigateFunc,isRecurring} from "../../../common/commonFunction"
+import {get_recommended_funds} from "../../../common/api"
 import Input from 'common/ui/Input';
 import './style.scss';
 import { parse } from 'qs';

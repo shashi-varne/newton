@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
+import Container from "fund_details/common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../functions";
-import Faqs from "../../../common/ui/Faqs";
-import SecureInvest from "../components/SecureInvest";
-import { investRedeemData } from "../constants";
+import { initialize } from "../../functions";
+import Faqs from "common/ui/Faqs";
+import SecureInvest from "../mini_components/SecureInvest";
+import { investRedeemData } from "../../constants";
 import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
-import HowToSteps from "../../../common/ui/HowToSteps";
+import HowToSteps from "common/ui/HowToSteps";
 
 class InstaRedeem extends Component {
   constructor(props) {
@@ -97,6 +97,7 @@ class InstaRedeem extends Component {
         noHeader={this.state.show_loader}
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
+        hideInPageTitle
       >
         <div className="invest-redeem">
           <div className="main-top-title">

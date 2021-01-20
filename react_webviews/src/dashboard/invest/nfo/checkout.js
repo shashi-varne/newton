@@ -70,6 +70,7 @@ class Checkout extends Component {
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
         disable={form_data.amount_error ? true : false}
+        hideInPageTitle
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">

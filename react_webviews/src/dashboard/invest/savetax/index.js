@@ -3,7 +3,7 @@ import Container from '../../../fund_details/common/Container';
 import { storageService } from 'utils/validators';
 import { navigate as navigateFunc, isRecurring } from '../common/commonFunction';
 import { get_recommended_funds } from '../common/api';
-import InvestType from '../components/InvestType';
+import InvestType from '../components/mini_components/InvestType';
 const term = 15;
 const date = new Date();
 const month = date.getMonth();

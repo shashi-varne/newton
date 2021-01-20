@@ -25,6 +25,7 @@ class NfoInfo extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
+        hideInPageTitle
       >
         <div className="nfo-info">
           <div

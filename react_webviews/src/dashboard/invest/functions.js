@@ -558,7 +558,7 @@ export async function getRecommendation() {
     subtype: "",
   };
   storageService().setObject("recommendations", recommendations);
-  this.navigate(`/recommendations`);
+  this.navigate(`/invest/recommendations`);
 }
 
 function getGoalRecommendations() {

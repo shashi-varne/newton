@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
+import Container from "../../../../fund_details/common/Container";
 import { getConfig } from "utils/functions";
-import { initialize } from "../functions";
-import InvestType from "../components/InvestType";
-import { investRedeemData } from "../constants";
+import { initialize } from "../../functions";
+import InvestType from "../mini_components/InvestType";
+import { investRedeemData } from "../../constants";
 
 class Type extends Component {
   constructor(props) {
@@ -38,6 +38,7 @@ class Type extends Component {
         showLoader={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
+        hideInPageTitle
       >
         <div className="insta-redeem-invest-type">
           <InvestType

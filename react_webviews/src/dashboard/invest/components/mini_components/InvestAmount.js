@@ -1,8 +1,8 @@
 import React, { useState ,useEffect} from 'react';
-import Container from '../../../fund_details/common/Container';
+import Container from '../../../../fund_details/common/Container';
 import { storageService,numDifferentiationInr ,formatAmountInr} from 'utils/validators';
-import {navigate as navigateFunc, corpusValue,validateOtAmount,validateSipAmount} from "../common/commonFunction"
-import {get_recommended_funds} from "../common/api"
+import {navigate as navigateFunc, corpusValue,validateOtAmount,validateSipAmount} from "../../common/commonFunction"
+import {get_recommended_funds} from "../../common/api"
 import InputAdornment from "@material-ui/core/InputAdornment"
 // import "./style.scss"
 import Input from "common/ui/Input"

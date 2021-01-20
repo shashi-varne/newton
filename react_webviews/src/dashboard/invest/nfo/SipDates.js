@@ -143,6 +143,7 @@ class SipDates extends Component {
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         buttonTitle="CONFIRM DATE"
+        hideInPageTitle
       >
         <div className="sip-dates">
           <div className="main-top-title">Select investment date</div>

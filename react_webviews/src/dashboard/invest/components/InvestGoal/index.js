@@ -1,6 +1,6 @@
 import React from 'react';
-import Container from '../../../fund_details/common/Container';
-import { navigate as navigateFunc} from '../common/commonFunction';
+import Container from 'fund_details/common/Container';
+import { navigate as navigateFunc} from '../../common/commonFunction';
 
 const saveGoal = {
   "Retirement":{

@@ -1,9 +1,9 @@
 import React,{useState} from 'react';
-import Container from '../../../../fund_details/common/Container';
+import Container from 'fund_details/common/Container';
 import { formatAmountInr,numDifferentiationInr } from 'utils/validators';
-import {getRateOfInterest,navigate as navigateFunc,isRecurring} from "../../common/commonFunction"
+import {getRateOfInterest,navigate as navigateFunc,isRecurring} from "../../../common/commonFunction"
 import { storageService } from 'utils/validators';
-import {get_recommended_funds} from "../../common/api"
+import {get_recommended_funds} from "../../../common/api"
 import {saveGoalMapper} from "../constants"
 const SaveGoal = (props) => {
     // const [amount,setAmount] = useState(0);

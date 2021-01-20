@@ -3,8 +3,8 @@ import Container from "../../fund_details/common/Container";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./functions";
-import InvestCard from "./components/InvestCard";
-import SecureInvest from "./components/SecureInvest";
+import InvestCard from "./components/mini_components/InvestCard";
+import SecureInvest from "./components/mini_components/SecureInvest";
 
 class Landing extends Component {
   constructor(props) {
@@ -48,6 +48,7 @@ class Landing extends Component {
         showLoader={this.state.show_loader}
         noHeader={this.state.show_loader}
         noFooter={true}
+        hideInPageTitle
       >
         <div className="invest-landing">
           <div className="main-top-title">Start Investing</div>

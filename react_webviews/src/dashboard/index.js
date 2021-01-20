@@ -8,12 +8,8 @@ import { ToastContainer } from "react-toastify";
 
 import NotFound from "../common/components/NotFound";
 
-import "./Style.scss";
+import "./invest/Style.scss";
 import Landing from "./invest";
-
-import InstaRedeem from "./invest/insta_redeem";
-import Type from "./invest/insta_redeem/type";
-import Amount from "./invest/insta_redeem/amount";
 
 import NfoInfo from "./invest/nfo";
 import NfoScheme from "./invest/nfo/scheme";

@@ -36,7 +36,11 @@ class FundDetail extends Component {
   render() {
     let { fund } = this.state;
     return (
-      <Container showLoader={this.state.show_loader} noFooter={true}>
+      <Container
+        showLoader={this.state.show_loader}
+        noFooter={true}
+        hideInPageTitle
+      >
         {fund && (
           <div className="nfo-fund-detail">
             <img
