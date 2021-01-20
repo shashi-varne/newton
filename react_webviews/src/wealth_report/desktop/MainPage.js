@@ -47,8 +47,8 @@ const MainPage = (props) => {
     const link_click_time = storage_val ? new Date(storage_val) : null;
     const current_time = new Date();
 
-    // If link is clicked again within 30 mins, will not log/trigger the event
-    if (!link_click_time || (current_time - link_click_time) / 60000 > 30) {
+    // If user lands on this page again within 6 hours, will not log/trigger the event
+    if (!link_click_time || (current_time - link_click_time) / 60000 > 6 * 60) {
       storageService().set('wr-link-click-time', current_time);
       nativeCallback({ events: eventObj });
     }
@@ -118,7 +118,6 @@ const MainPage = (props) => {
   const { params } = props.match;
   const [pan, setPan] = useState('');
   useEffect(() => {
-    sendEvents();
     setScrollEvent(true);
     (async() => {
       try {
@@ -129,6 +128,7 @@ const MainPage = (props) => {
           const { user } = res.pfwresponse.result;
           const username = user.mobile ? `+${user.mobile.split('|').join('-')}` : user.email;
           storageService().set('wr-username', username);
+          sendEvents();
         }
       } catch(err) {
         console.log(err);

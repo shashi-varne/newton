@@ -18,6 +18,7 @@ import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import GoldBottomSecureInfo from '../ui_components/gold_bottom_secure_info';
+import {Imgc} from '../../../common/ui/Imgc';
 
 const stepsContentMapper = [
   {'icon': 'ic_gold_provider', 'content': '1. Select your preferred gold provider'},
@@ -30,7 +31,7 @@ class GoldSellHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       popupText: '',
       apiError: '',
       provider_info: {},
@@ -193,7 +194,7 @@ class GoldSellHome extends Component {
     }
 
     this.setState({
-      show_loader: false
+      skelton: false
     });
   }
 
@@ -402,7 +403,7 @@ class GoldSellHome extends Component {
   renderInfoSteps =(props, index) => {
     return(
       <div key={index} className="tile">
-        <img className="icon" 
+         <Imgc className="icon gold-common-stepes-icon" 
         src={require(`assets/${this.state.productName}/${props.icon}.svg`)} alt="Gold" />
         <div className="content">
           {props.content}
@@ -417,6 +418,7 @@ class GoldSellHome extends Component {
       <Container
         noFooter={true}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         buttonTitle="PROCEED"
         headerType="provider-filter"
         handleClick={this.handleClick}

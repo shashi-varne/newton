@@ -23,7 +23,7 @@ class GoldRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       user_info: {},
       name: "",
       name_error: '',
@@ -91,9 +91,7 @@ class GoldRegister extends Component {
 
       const res = await Api.get('/api/gold/user/account/' + this.state.provider);
 
-      this.setState({
-        show_loader: false
-      });
+    
       if (res.pfwresponse.status_code === 200) {
         let result = res.pfwresponse.result;
         let isRegistered = true;
@@ -112,7 +110,7 @@ class GoldRegister extends Component {
         // this.checkPincode(pin_code);
 
         this.setState({
-          show_loader: false,
+          skelton: false,
           provider_info: provider_info,
           user_info: user_info,
           isRegistered: isRegistered,
@@ -130,14 +128,14 @@ class GoldRegister extends Component {
 
       } else {
         this.setState({
-          show_loader: false
+          skelton: false
         });
         toast(res.pfwresponse.result.error || res.pfwresponse.result.message ||
           'Something went wrong');
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -417,6 +415,7 @@ class GoldRegister extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Buy gold"
         handleClick={this.handleClick}
         handleClick2={this.handleClick2}

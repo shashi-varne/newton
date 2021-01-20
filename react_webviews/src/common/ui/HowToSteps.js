@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './style.scss';
 import '../theme/Style.scss';
 import { getConfig } from 'utils/functions';
+import {Imgc} from './Imgc';
 
 class HowToStepsClass extends Component {
   constructor(props) {
@@ -15,10 +16,10 @@ class HowToStepsClass extends Component {
   renderList = (option, index) => {
     return (
       <div key={index} className="tile tile_step">
-        {option.icon && <img className="icon"
-          src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Gold" />}
-        {option.img && <img className="icon"
-          src={option.img} alt="Gold" />}
+        {option.icon && <Imgc hideSkelton={!this.props.showSkelton} className={`icon ${this.props.classNameIcon}`}
+          src={require(`assets/${this.state.productName}/${option.icon}.svg`)} alt="Icon" />}
+        {option.img && <Imgc hideSkelton={!this.props.showSkelton} className={`icon ${this.props.classNameIcon}`}
+          src={option.img} alt="Icon" />}
         <div className="content content_step">
           {this.state.baseData.show_index && <span> {index + 1}. </span>}
           <div className="content content_step">

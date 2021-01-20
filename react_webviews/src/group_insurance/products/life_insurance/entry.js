@@ -21,6 +21,13 @@ class LifeInsuranceEntry extends Component {
   componentWillMount() {
 
     nativeCallback({ action: 'take_control_reset' });
+    var life_insurance_option = {
+      key: 'savings plan',
+      title: 'Insurance Savings plan',
+      subtitle: 'Enjoy wealth creation cum life coverage',
+      icon: 'money_pig',
+      disabled: false
+    }
 
     let insuranceProducts = [
       {
@@ -29,19 +36,16 @@ class LifeInsuranceEntry extends Component {
         subtitle: 'Get comprehensive life coverage',
         icon: 'ic_term_insurance',
         disabled: false
-      },
-      {
-        key: 'savings plan',
-        title: 'Insurance Savings plan',
-        subtitle: 'Life coverage with wealth creation',
-        icon: 'money_pig',
-        disabled: false
       }
     ];
 
-      this.setState({
-        insuranceProducts: insuranceProducts
-      })
+    if(!getConfig().iOS){
+      insuranceProducts.push(life_insurance_option);
+    }
+
+    this.setState({
+      insuranceProducts: insuranceProducts
+    })
   }
 
 
@@ -57,11 +61,8 @@ class LifeInsuranceEntry extends Component {
 
  
   handleClick = (data) => {
-    if(data.key === 'term'){
-      this.sendEvents('next', 'term insurance')
-    }else{
-      this.sendEvents('next', data.key)
-    }
+  
+    this.sendEvents('next', data.title)
     
     if (data.key === 'savings plan') {
       // if(!getConfig().Web && !isFeatureEnabled(getConfig(), 'open_inapp_tab')){
@@ -80,13 +81,11 @@ class LifeInsuranceEntry extends Component {
     if(!props.disabled) {
       return (
         <div className='insurance_plans' key={index} onClick={() => this.handleClick(props)}
-        style={{
-           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '15px',
-        }}
-        >   
-          <div className='insurance_plans_types'>
-       <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" />
-            <div>
+        style={{ width : '100%'}}>   
+          <div className='insurance_plans_types' style={{width : '100%'}}>
+       <img src={require(`assets/${this.state.type}/${props.icon}.svg`)} alt='' className="insurance_plans_logos" style={{marginTop: '20px', marginBottom : '15px'}} />
+            <div    style={{ width : '100%',  cursor: 'pointer',  borderBottomWidth: '1px',
+           borderBottomStyle: this.state.insuranceProducts.length - 1 !== index ? 'solid' : '', paddingTop: '20px', paddingBottom : '20px',   borderBottomColor: '#EFEDF2'}}>
               <div className='insurance_plans_logos_text'
               >{props.title}{props.key === 'term' && !props.resume_flag &&
               <span style={{
@@ -135,7 +134,7 @@ class LifeInsuranceEntry extends Component {
         styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
           <div className='products'>
-            <div className='health_insurance'>Must have plans for your Family</div>
+            <div className='health_insurance'>Must have plans for your family</div>
             <div>
               {this.state.insuranceProducts.map(this.renderPorducts)}
             </div>

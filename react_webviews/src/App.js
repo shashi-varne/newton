@@ -19,11 +19,13 @@ import CommonLanding from './common/components/landing';
 import Fhc from './fhc';
 import WealthReport from './wealth_report';
 import Loan from './loan_idfc';
+import InternalWealthDashboard from './internal_wealth_dashboard';
 import Payment from './payment';
 import KycEsign from './kyc_esign';
 import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
+import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 
 class App extends Component {
   render() {
@@ -47,11 +49,13 @@ class App extends Component {
           <Route path='/pg' component={Payment} />
           <Route path='/kyc-esign' component={KycEsign} />
           <Route path='/whatsapp/' component={Whatsapp} />
+          <Route path="/iw-dashboard" component={InternalWealthDashboard} />
           <Route path='/webview/:main_module/:sub_module' component={CommonLanding} />
           <Route path='/webview/:main_module' component={CommonLanding} />
           {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
+          <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>

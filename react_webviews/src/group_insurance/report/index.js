@@ -4,12 +4,12 @@ import Container from '../common/Container';
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
-import { getDateBreakup } from 'utils/validators';
+import { getDateBreakup, capitalizeFirstLetter } from 'utils/validators';
 import {
-  inrFormatDecimalWithoutIcon, capitalizeFirstLetter , inrFormatDecimal
+  inrFormatDecimalWithoutIcon , inrFormatDecimal
 } from '../../utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getCssMapperReport , TitleMaper} from '../constants';
+import { getCssMapperReport , TitleMaper , ProviderName} from '../constants';
 
 class Report extends Component {
 
@@ -186,20 +186,20 @@ class Report extends Component {
     }
 
 
-    let hs_policies = health_insurance_policies.insurance_apps || '';
+    let hs_policies = health_insurance_policies.insurance_apps || [];
     for (let i = 0; i < hs_policies.length; i++) {
       let policy = this.getProviderObject(hs_policies[i]);
       reportData.push(policy);
     } 
 
     let ins_policies = group_insurance_policies.ins_policies || [];
-    for (var i = 0; i < ins_policies.length; i++) {
+    for (let i = 0; i < ins_policies.length; i++) {
       let policy = this.getProviderObject(ins_policies[i]);
       reportData.push(policy);
     }
 
     let o2o_details = o2o_applications || []; 
-    for(var i = 0; i< o2o_details.length; i++){
+    for(let i = 0; i< o2o_details.length; i++){
       let policy = this.getProviderObject_offline(o2o_details[i]);
       reportData.push(policy);
     }
@@ -261,8 +261,9 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
+
     let policy_type = policy.policy_type ? policy.policy_type : ''
-    this.sendEvents('next', policy.key, policy_type);
+    this.sendEvents('next', policy.key, policy_type , policy);
     let path = '';
     let key = policy.key;
 
@@ -316,7 +317,7 @@ class Report extends Component {
                 <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
-                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> ₹{inrFormatDecimal(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' &&
                     ' annually' 
                   }
@@ -400,29 +401,22 @@ class Report extends Component {
     }
   }
 
-  sendEvents(user_action, insurance_type, policy_type) {
+  sendEvents(user_action, insurance_type, policy_type, policy) {
 
-    let reportState = {};
-    for (var i = 0; i < this.state.reportData.length; i++) {
-      reportState[this.state.reportData[i].key] = this.state.reportData[i].status;
-    };
+    let policy_name = policy ? policy.top_title : undefined
+    let policy_status = policy ? policy.status : ''
+    let InsuranceNameEvent = policy ? ProviderName(policy.provider) : ProviderName(insurance_type);
 
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance_report',
-        "type": insurance_type ? insurance_type : '',
+        "provider_name": InsuranceNameEvent ? capitalizeFirstLetter(InsuranceNameEvent) : '',
+        'policy': policy_name ? policy_name : policy_type ? TitleMaper(policy_type) : '',
+        'policy_status': policy_status === "complete" || policy_status === 'policy_issued'  ? 'Issued' : policy_status === "incomplete" ? 'Pending' : capitalizeFirstLetter(policy_status.toLowerCase()),
       }
     };
-
-    if (insurance_type !== 'insurance') {
-      eventObj.properties.report = reportState;
-    }
-
-    if (insurance_type === 'insurance') {
-      eventObj.properties.policy =  policy_type ? TitleMaper(policy_type) : ''
-    }
 
     if (user_action === 'just_set_events') {
       return eventObj;

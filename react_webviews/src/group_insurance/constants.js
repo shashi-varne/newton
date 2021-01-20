@@ -593,7 +593,6 @@ export function getBhartiaxaStatusToState(policy) {
   } else {
     path = 'plan';
   }
-
   return path;
 }
 
@@ -839,5 +838,24 @@ export function TitleMaper(name){
 
   return TitleMaper[name] || ''
 
+
+}
+
+export function ProviderName(name) {
+
+  let NameData = name ? name.toLowerCase() : ''
+  let ProviderName = {
+    'religare': 'Care',
+    'hdfc_ergo': 'HDFC ergo',
+    'bharti axa general': 'Bhartiaxa',
+    'edelweiss tokio': 'Edelweiss tokio life',
+    'hdfc ergo': 'HDFC ergo',
+    'star health': 'Star',
+    'religare health': 'Care',
+    'fyntune': 'HDFC Life',
+    'hdfc life': 'HDFC Life',
+  }
+
+  return ProviderName[NameData] ? ProviderName[NameData] : NameData
 
 }

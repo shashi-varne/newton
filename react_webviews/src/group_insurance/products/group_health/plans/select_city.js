@@ -150,7 +150,7 @@ class GroupHealthPlanSelectCity extends Component {
     }
     handleChange = name => value => {
         this.setState({
-            [name]: value,
+            [name]: (value || '').toUpperCase(),
             [name + '_error']: ''
         });
     };
