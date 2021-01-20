@@ -6,6 +6,44 @@ import Button from '@material-ui/core/Button'
 import heart_icon from '../assets/trending_heart_icon.png'
 import overnight_icon from '../assets/fisdom/Overnight.svg'
 
+const TrendingCard = ({ name, src, likePercentage }) => {
+  return (
+    <div className="item">
+      <div className="item-details">
+        <Typography color="primary" className="title">
+          {name}
+        </Typography>
+        <img src={src} alt="name" width="80" />
+      </div>
+      <div className="cart-actions">
+        <div className="stats">
+          <img
+            src={heart_icon}
+            alt={`${likePercentage}% investors like this`}
+            width="15"
+          />
+          <article className="desc">{likePercentage}% investors</article>
+        </div>
+        <Button color="secondary" variant="raised">
+          Add to Cart
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const CategoryCard = ({ name, duration, icon }) => {
+  return (
+    <div className="card">
+      <img src={icon} alt={name} className="icon" />
+      <Typography variant="title" color="primary" className="name" gutterBottom>
+        {name}
+      </Typography>
+      <Typography variant="caption">{duration}</Typography>
+    </div>
+  )
+}
+
 const FundType = () => {
   const trends = [
     {
@@ -35,18 +73,18 @@ const FundType = () => {
   ]
 
   const categories = [
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-    {name: 'Overnight', duration: 'For a day', icon: overnight_icon }
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
+    { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
   ]
-  
+
   return (
     <Container
       classOverRIde="pr-error-container"
@@ -59,37 +97,15 @@ const FundType = () => {
       <section id="invest-explore-fund-type">
         <h6 className="heading">Top trending debt funds</h6>
         <div className="scroll">
-          {trends.map(({ name, src, likePercentage }) => (
-            <div className="item">
-              <div className="item-details">
-                <Typography color="primary" className="title">
-                  {name}
-                </Typography>
-                <img src={src} alt="name" width="80" />
-              </div>
-              <div className="cart-actions">
-                <div className="stats">
-                  <img
-                    src={heart_icon}
-                    alt={`${likePercentage}% investors like this`}
-                    width="15"
-                  />
-                  <article className="desc">{likePercentage}% investors</article>
-                </div>
-                <Button color="secondary" variant="raised">Add to Cart</Button>
-              </div>
-            </div>
+          {trends.map(({ name, src, likePercentage }, idx) => (
+            <TrendingCard key={idx} name={name} src={src} likePercentage={likePercentage} />
           ))}
         </div>
         <section className="categories">
           <h6 className="heading">Categories</h6>
           <div className="categories-container">
-            {categories.map(({name, duration, icon, idx}) => (
-              <div key={idx} className="card">
-                <img src={icon} alt={name} className="icon" />
-                <Typography variant="title" color="primary" className="name" gutterBottom>{name}</Typography>
-                <Typography variant="caption">{duration}</Typography>
-              </div>
+            {categories.map(({ name, duration, icon, idx }) => (
+              <CategoryCard key={idx} name={name} duration={duration} icon={icon} />
             ))}
           </div>
         </section>
