@@ -195,7 +195,8 @@ class LoanEligible extends Component {
               </Grid>
             </Grid>
 
-            <div id="agreement" className="agreement-block">
+            <div className="insurance-agreement">
+              <div id="agreement" className="agreement-block">
               <div className='inner-checkbox'>
                 <Grid container spacing={16}>
                   <Grid item xs={1}>
@@ -250,8 +251,10 @@ class LoanEligible extends Component {
                 <b style={{ color: 'var(--primary', cursor: 'pointer' }} onClick={() => this.handleTnC()}> Terms and Conditions </b>
                carefully.</div>
               </div>
+              </div>
             </div>
           </div>
+            
 
 
 

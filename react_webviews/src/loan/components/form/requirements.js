@@ -48,7 +48,7 @@ class ContactDetails extends Component {
         ];
 
         let tenorOptions = [
-            6,12,18,24
+            12,18,24
         ]
 
         let empTypeOptions = [
