@@ -39,7 +39,7 @@ const PortfolioRebalancing = ({ match }) => {
         <ToastContainer autoClose={3000} />
         <ScrollToTop />
           <Switch>
-          <Route exact path={`${url}`} component={Landing} />
+          {/* <Route exact path={`${url}`} component={Landing} /> */}
             <Route path={`${url}/amount`} component={InvestAmount} />
             <Route path={`${url}/funds`} component={InvestedAmount} />
             <Route path={`${url}/invest-journey`} component={InvestJourney}/>

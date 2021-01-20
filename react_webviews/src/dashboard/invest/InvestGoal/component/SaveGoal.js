@@ -1,14 +1,10 @@
 import React,{useState} from 'react';
-import Container from '../../fund_details/common/Container';
-import { navigate as navigateFunc} from '../common/commonFunction';
+import Container from '../../../../fund_details/common/Container';
 import { formatAmountInr,numDifferentiationInr } from 'utils/validators';
-import {getRateOfInterest} from "../../mf_journey_common/common/commonFunction"
+import {getRateOfInterest,navigate as navigateFunc,isRecurring} from "../../common/commonFunction"
 import { storageService } from 'utils/validators';
-import {get_recommended_funds} from "../../mf_journey_common/common/api"
+import {get_recommended_funds} from "../../common/api"
 import {saveGoalMapper} from "../constants"
-import "./style.scss"
-const stockReturns = 15;
-  const bondReturns = 8;
 const SaveGoal = (props) => {
     // const [amount,setAmount] = useState(0);
     // const [stockSplitVal, setStockSplitVal] = useState(0);
@@ -38,10 +34,10 @@ const SaveGoal = (props) => {
         type:"saveforgoal",
         subtype,
         term
-      }
+      } 
+        const recurring = isRecurring("saveforgoal");
         const {recommendation} = await get_recommended_funds(params);
         const monthlyAmount = getMonthlyCommitmentNew(amount,recommendation.equity)
-        console.log("monthly amount is",monthlyAmount)
         const graphData = {
           year,
           amount:monthlyAmount,
@@ -49,8 +45,10 @@ const SaveGoal = (props) => {
           stockSplit:recommendation.equity,
           subtype,
           term,
-          investType:"saveforgoal"
+          investType:"saveforgoal",
+          isRecurring: recurring
         }
+        storageService().setObject("goalRecommendations",recommendation.goal)
         storageService().setObject("graphData",graphData);
         goNext();
     }
@@ -59,7 +57,7 @@ const SaveGoal = (props) => {
     }
 }
   const goNext = () => {
-      navigate(`/invest/savegoal/amount`,true)
+      navigate(`savegoal/${subtype}/amount`,true)
   }
   const calculateCorpusValue = (amount) => {
     return Math.round(amount * Math.pow(1 + 0.05, parseInt(year - new Date().getFullYear())));
@@ -67,9 +65,13 @@ const SaveGoal = (props) => {
 
   
   const handleInvestedAmount = (type) => () =>{
-    const amount =  calculateCorpusValue(type.corpus,type.name);
+    const amount =  calculateCorpusValue(type.corpus);
     fetchRecommendedFunds(amount)
-    console.log("invested amount is",amount)
+  }
+
+  const setYourTarget = () =>{
+    
+    navigate(`savegoal/${subtype}/target`)
   }
   return (
     <Container
@@ -87,7 +89,7 @@ const SaveGoal = (props) => {
     >
      <section className="invest-goal-save-container">
         <div className="invest-goal-save-header">
-        How much money do you want to save for retirement?
+        How much money do you want to save for {subtype}?
         </div>
 
         <div className="invest-goal-save-list">
@@ -103,7 +105,7 @@ const SaveGoal = (props) => {
                 })
             }
         </div>
-        <div className="invest-goal-set-target">
+        <div className="invest-goal-set-target" onClick={setYourTarget}>
             Let me set my target
         </div>
      </section>

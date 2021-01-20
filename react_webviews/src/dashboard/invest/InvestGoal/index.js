@@ -1,8 +1,6 @@
 import React from 'react';
-import Container from '../../fund_details/common/Container';
+import Container from '../../../fund_details/common/Container';
 import { navigate as navigateFunc} from '../common/commonFunction';
-import {Link} from "react-router-dom"
-import "./style.scss"
 
 const saveGoal = {
   "Retirement":{
@@ -29,7 +27,7 @@ const saveGoal = {
 const InvestGoal = (props) => {
   const navigate = navigateFunc.bind(props);
   const goNext = (name) => ()=> {
-    navigate(name)
+    navigate(`savegoal/${name}`)
   }
   return (
     <Container

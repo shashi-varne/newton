@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../fund_details/common/Container';
-import { storageService } from 'utils/validators';
-import { formatAmountInr } from '../utils/validators';
+import Container from '../../../fund_details/common/Container';
+import { storageService,formatAmountInr } from 'utils/validators';
 import withdraw_anytime_icon from 'assets/withdraw_anytime_icon.png';
 import no_lock_in_icon from 'assets/no_lock_in_icon.png';
 import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
 // import one_time_icon_dark from 'assets/one_time_icon_dark.png';
 import Slider from 'common/ui/Slider';
-import { navigate as navigateFunc } from './common/commonFunction';
-import { get_recommended_funds } from './common/api';
-import './style.scss';
+import { navigate as navigateFunc } from '../common/commonFunction';
+import { get_recommended_funds } from '../common/api';
 const stockReturns = 15;
 const bondReturns = 8;
 const InvestedAmount = (props) => {

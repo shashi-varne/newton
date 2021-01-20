@@ -19,31 +19,11 @@
     }
     .invest-amount-input-duration{
         font-size: 14px;
+        margin-top: 10px;
     }
 
-    .invest-amount-container{
-        .invest-amount-num{
-            input{
-                text-align: center !important;
-                font-size: 30px;
-                
-            }
-            .MuiInput-underline:before{
-                display: none;
-            }
-            .MuiInput-underline:after{
-                width: max-content;
-                min-width: 200px;
-                margin-left: auto;
-                margin-right: auto;
-
-            }
-            p{
-                text-align: center;
-            }
-        }
-    }
 }
+
 .invest-amount-corpus{
     margin-top: 30px;
 
@@ -55,6 +35,26 @@
     .invest-amount-corpus-amount{
         font-size: 24px;
         color: var(--primary);
+    }
+}
+.invest-amount-num{
+    input{
+        text-align: center !important;
+        font-size: 30px;
+        
+    }
+    .MuiInput-underline:before{
+        display: none;
+    }
+    .MuiInput-underline:after{
+        width: max-content;
+        min-width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+    p{
+        text-align: center;
     }
 }
 

@@ -1,27 +1,39 @@
 import React, { useState ,useEffect} from 'react';
-import Container from '../fund_details/common/Container';
+import Container from '../../../fund_details/common/Container';
 import { storageService,numDifferentiationInr ,formatAmountInr} from 'utils/validators';
-import {navigate as navigateFunc, corpusValue,validateOtAmount,validateSipAmount} from "./common/commonFunction"
-import {get_recommended_funds} from "./common/api"
-import "./style.scss"
+import {navigate as navigateFunc, corpusValue,validateOtAmount,validateSipAmount} from "../common/commonFunction"
+import {get_recommended_funds} from "../common/api"
+import InputAdornment from "@material-ui/core/InputAdornment"
+// import "./style.scss"
 import Input from "common/ui/Input"
+const date = new Date();
+
 const InvestAmount = (props) => {
   const graphData = storageService().getObject("graphData");
   const goalRecommendation = storageService().getObject("goalRecommendations");
   const{investType,year,stockSplit,term,isRecurring,investTypeDisplay} = graphData;
     const [amount,setAmount] = useState(graphData?.amount || "");
-    const [corpus,setCorpus] = useState(graphData?.corpus || "");
+    const [corpus,setCorpus] = useState("");
     const [error,setError] = useState(false);
     const [errorMsg,setErrorMsg] = useState("");
     const navigate = navigateFunc.bind(props);
     const handleChange = (e) => {
-      setAmount(parseInt(e.target.value))
+      if(!isNaN(parseInt(e.target.value))){
+
+        setAmount(parseInt(e.target.value))
+      }else{
+        setAmount("")
+      }
     }
+
     useEffect(() => {
       if(!amount){
         setErrorMsg("This is a required field");
         return;
       }
+      if(isNaN(amount)){
+        return;
+      } 
       let result;
       if(investTypeDisplay === "sip"){
         result = validateSipAmount(amount)
@@ -31,12 +43,18 @@ const InvestAmount = (props) => {
       if(result?.error){
         setError(true);
         setErrorMsg(result?.message)
-        return;
       } else{
-        const valueOfCorpus = corpusValue(stockSplit,amount,investType,isRecurring,term)
-        setCorpus(valueOfCorpus)
         setErrorMsg("");
         setError(false);
+      }
+      if(goalRecommendation.id === "savetax"){
+        calculateTax(graphData?.corpus)
+      } else if(goalRecommendation.itype==="saveforgoal"){
+        setCorpus(graphData?.corpus);
+      }
+      else{
+        const valueOfCorpus = corpusValue(stockSplit,amount,goalRecommendation.id,isRecurring,term)
+        setCorpus(valueOfCorpus)
       }
     },[amount])
     const fetchRecommendedFunds = async () => {
@@ -69,6 +87,30 @@ const InvestAmount = (props) => {
       storageService().setObject("graphData",{...graphData,amount});
       navigate(`${goalRecommendation.id}/funds`,{...graphData,amount})
     }
+
+    const calculateTax = (eligibleAmount) => {
+      console.log("eligible amount is",eligibleAmount)
+      let d = new Date();
+      let month = d.getMonth();
+      let currentMonth = month
+      let duration = (currentMonth > 3) ? 15 - currentMonth : 3 - currentMonth;
+      if (duration === 0) {
+        duration = 1;
+      }
+      let tempAmount = 0;
+      if (investType === 'savetaxsip') {
+        tempAmount = amount;
+        tempAmount = tempAmount * duration;
+      } else {
+        tempAmount = amount;
+      }
+      if (tempAmount > eligibleAmount) {
+        tempAmount = eligibleAmount;
+      }
+      let taxsaved = tempAmount * 0.303;
+      setCorpus(taxsaved)
+      //return taxsaved;
+    };
   return (
     <Container
      //goBack={()=>{}}
@@ -92,15 +134,25 @@ const InvestAmount = (props) => {
                 class="invest-amount-num"
                 value={amount}
                 onChange={handleChange}
-                type="number"
+                type="text"
                 error={error}
                 helperText={error && errorMsg}
+                autoFocus
+                inputMode="numeric"
+                pattern='[0-9]*'
               />
             </div>
+            {
+              goalRecommendation.id === "investsurplus" ? 
+              <p className="invest-amount-input-duration">from my savings</p>
+              :
             <p className="invest-amount-input-duration">per month</p>
+            }
         </div>
         <div className="invest-amount-corpus">
-            <div className="invest-amount-corpus-duration">Corpus in {year}:</div>
+            {goalRecommendation.id === "savetax" ?<div className="invest-amount-corpus-duration">till Mar {date.getFullYear()} to save tax upto:</div>
+          :  <div className="invest-amount-corpus-duration">Corpus in {year}:</div>
+          }
             <div className="invest-amount-corpus-amount">{numDifferentiationInr(corpus)}</div>
         </div>
      </section>
