@@ -390,6 +390,10 @@
       font-size: 10px;
       padding: 5px 0;
     }
+
+    .text {
+      margin-top: 40px;
+    }
   }
 
   .action {
@@ -702,7 +706,6 @@
       padding: 7px 15px;
       font-size: 14px;
       color: #4a4a4a;
-      // font-family: "LatoM";
       display: inline-block;
       margin: 0 10px;
       font-weight: 500;
@@ -740,7 +743,6 @@
       .subtitle {
         margin-bottom: 0;
         font-size: 24px;
-        // font-family: "LatoT";
         color: #878787;
         font-weight: lighter;
         padding-top: 10px;
@@ -819,7 +821,6 @@
 
     h3 {
       font-size: 18px;
-      // font-family: 'LatoM';
       margin: 10px;
       color: #878787;
       height: 38px;
@@ -874,7 +875,6 @@
       -ms-flex: 5;
 
       h4 {
-        // font-family: "LatoB";
         font-size: 18px;
         margin-bottom: 10px;
         font-weight: 700;
@@ -903,10 +903,79 @@
         left: 50%;
         color: #fff;
         font-size: 18px;
-        // font-family: "LatoM";
         width: 100%;
         text-align: center;
       }
     }
+  }
+}
+
+.sip-dates {
+  padding: 20px 0;
+
+  .content {
+    margin-top: 20px;
+
+    .text {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -ms-flex-align: end;
+      align-items: flex-end;
+
+      .title {
+        color: #160d2e;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 1.6;
+      }
+
+      .subtitle {
+        min-width: -webkit-fit-content;
+        min-width: fit-content;
+        color: #333333;
+        font-size: 16px;
+      }
+    }
+
+    .mid-content {
+      color: #160d2e;
+      font-size: 13px;
+      font-weight: 300;
+      margin: 15px 0 0 0;
+    }
+
+    .input-box {
+      padding: 10px 15px 3px 15px;
+      background: #f8f8f8;
+      margin-top: 10px;
+
+      .input-value {
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .appened-text {
+        color: #767e86;
+        font-size: 13px;
+        font-weight: 300;
+        margin: 1px 0 0 20px;
+      }
+    }
+  }
+}
+
+.content {
+  .content-selected {
+    font-weight: 600 !important;
+    font-size: 16px;
+  }
+
+  .appened-text {
+    color: #767e86;
+    font-size: 13px;
+    font-weight: 300;
+    margin: 1px 0 0 20px;
   }
 }

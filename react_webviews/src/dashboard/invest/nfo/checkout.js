@@ -32,10 +32,15 @@ class Checkout extends Component {
       this.props.history.goBack();
       return;
     }
-    console.log(getConfig());
   };
 
-  handleClick = () => {};
+  handleClick = () => {
+    if (this.state.form_data.investType === "sip") {
+      this.navigate("/sipdates");
+    } else {
+      // this.navigate("/pg/home");
+    }
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -63,6 +68,7 @@ class Checkout extends Component {
       <Container
         showLoader={this.state.show_loader}
         buttonTitle={ctc_title}
+        handleClick={this.handleClick}
         disable={form_data.amount_error ? true : false}
       >
         <div className="nfo-checkout">
@@ -157,7 +163,11 @@ class Checkout extends Component {
                 <img src={require(`assets/check_mark.png`)} alt="" /> By
                 clicking on the button below, I agree that I have read and
                 accepted the
-                <a href="https://www.fisdom.com/terms/" target="_blank">
+                <a
+                  href="https://www.fisdom.com/terms/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {" "}
                   terms & conditions
                 </a>{" "}
@@ -165,6 +175,7 @@ class Checkout extends Component {
                 <a
                   href="https://www.fisdom.com/scheme-offer-documents/"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   scheme offer documents
                 </a>
