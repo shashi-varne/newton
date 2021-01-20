@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import NotFound from "../common/components/NotFound";
 
 import "./Style.scss";
-import Landing from "./invest/landing";
+import Landing from "./invest";
 
 import InstaRedeem from "./invest/insta_redeem";
 import Type from "./invest/insta_redeem/type";
@@ -52,24 +52,14 @@ const ScrollToTop = withRouter(
 
 const Invest = (props) => {
   const { url } = props.match;
-
+  
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route exact path={`${url}invest`} component={Landing} />
-          <Route
-            exact
-            path={`${url}invest/instaredeem`}
-            component={InstaRedeem}
-          />
-          <Route path={`${url}invest/instaredeem/type`} component={Type} />
-          <Route
-            path={`${url}invest/instaredeem/amount/:investType`}
-            component={Amount}
-          />
+          <Route path={`${url}invest`} component={Landing} />
           <Route
             path={`${url}advanced-investing/new-fund-offers/info`}
             component={NfoInfo}

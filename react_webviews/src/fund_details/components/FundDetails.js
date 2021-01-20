@@ -39,8 +39,11 @@ const FundDetails = ({ classes, history }) => {
         setLoading(true);
         const { isins, selected_isin } = getUrlParams();
         const response = await fetch_fund_details(isins);
-        const index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
-console.log(isins)
+        let index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
+        if(isins === selected_isin){
+          index = -1;
+        }
+
         const { idx, array } = swap_fund_index(index, response?.text_report);
         if (idx) {
           setReports(array);

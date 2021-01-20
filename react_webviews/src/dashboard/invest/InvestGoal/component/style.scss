@@ -1,0 +1,114 @@
+// Invest Goal ///////////////
+.invest-goal-list-type{
+    display: flex;
+    flex-direction: column;
+}
+
+.invest-goal-list-item{
+    display: flex;
+    padding:10px;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    text-align: left;
+    div:first-child{
+
+        flex:2;
+        img{
+            margin-right: 20px;
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+    }
+
+    div:last-child{
+        flex:8;
+        font-size: 18px;
+    }
+}
+
+// End of Invest Goal //////////////
+
+// Invest Goal type //////////////
+.invest-goal-type-container{
+    display: flex;
+    flex-direction: column;
+    &> div:first-child{
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+    }
+    .invest-goal-type-input{
+        margin-top: 20px;
+        width:100%;
+        input {
+            width: 100%;
+                padding:10px;
+                border:none;
+                outline: none;
+                text-align: center;
+                font-size: 30px;
+                line-height: 1;
+                height: auto;
+                font-weight: 400;
+        }
+    }
+}
+
+///// End of Invest Goal Type ////////////
+
+/// Invest Goal Save Type ////////////////
+.invest-goal-save-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.invest-goal-save-header{
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.invest-goal-save-list{
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    width: 100%;
+
+    .invest-goal-save-item{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 30px;
+        width: 100%;
+        cursor: pointer;
+
+        p{
+            margin:10px 0px;
+            font-size: 16px;
+        }
+        .invest-goal-save-item-corpus{
+                font-size: 16px;
+            span{
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.invest-goal-set-target{
+    text-align: center;
+    color:#35cb5d;
+    font-size: 16px;
+    margin-top: 50px;
+    cursor: pointer;
+    font-weight: bold;
+}
+//// End of Goal Save Type //////////////
