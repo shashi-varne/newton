@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
+import Container from "fund_details/common/Container";
 import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
-import { initialize, getFormattedEndDate, getSchemeOption } from "../functions";
+import { initialize, getFormattedEndDate, getSchemeOption } from "../../functions";
 
 class FundDetail extends Component {
   constructor(props) {

@@ -11,12 +11,12 @@ import NotFound from "../common/components/NotFound";
 import "./invest/Style.scss";
 import Landing from "./invest";
 
-import NfoInfo from "./invest/nfo";
-import NfoScheme from "./invest/nfo/scheme";
-import NfoFunds from "./invest/nfo/funds";
-import NfoFundDetail from "./invest/nfo/FundDetail";
-import NfoCheckout from "./invest/nfo/checkout";
-import SipDates from "./invest/nfo/SipDates";
+import NfoInfo from "./invest/components/nfo";
+import NfoScheme from "./invest/components/nfo/scheme";
+import NfoFunds from "./invest/components/nfo/funds";
+import NfoFundDetail from "./invest/components/nfo/FundDetail";
+import NfoCheckout from "./invest/components/nfo/checkout";
+import SipDates from "./invest/components/nfo/SipDates";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";

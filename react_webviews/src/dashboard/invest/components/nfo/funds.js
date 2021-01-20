@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
+import Container from "fund_details/common/Container";
 import Button from "@material-ui/core/Button";
 import {
   initialize,
   getFormattedEndDate,
   getFormattedStartDate,
   getSchemeOption,
-} from "../functions";
+} from "../../functions";
 
 class NfoFunds extends Component {
   constructor(props) {

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../../fund_details/common/Container';
+import Container from 'fund_details/common/Container';
 import { storageService } from 'utils/validators';
-import { navigate as navigateFunc, isRecurring } from '../common/commonFunction';
-import { get_recommended_funds } from '../common/api';
-import InvestType from '../components/mini_components/InvestType';
+import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
+import { get_recommended_funds } from '../../common/api';
+import InvestType from '../mini_components/InvestType';
 const term = 15;
 const date = new Date();
 const month = date.getMonth();
@@ -39,16 +39,13 @@ const renderData = {
 const Landing = (props) => {
   const [data, setData] = useState(null);
   const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
-  const otiAmount = 150000;
-  const sipAmount = parseInt(Math.floor(otiAmount / duration));
+  const otiAmount = 50000;
+  const sipAmount = 5000;
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     const params = {
-      type: "savetaxsip",
+      type: "buildwealth",
     };
-    if (investTypeDisplay === 'onetime') {
-      params.type = 'savetax';
-    }
     try {
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
@@ -58,7 +55,7 @@ const Landing = (props) => {
         term,
         // eslint-disable-next-line radix
         year: parseInt(date.getFullYear() + term),
-        corpus: 150000,
+        corpus: otiAmount,
         investType: params.type,
         stockSplit: data.recommendation.equity,
         bondSplit: data.recommendation.debt,
@@ -75,7 +72,7 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('savetax/amount', data);
+    navigate('buildwealth/amount', data);
   };
   const handleChange = (type) => {
     setInvestTypeDisplay(type);

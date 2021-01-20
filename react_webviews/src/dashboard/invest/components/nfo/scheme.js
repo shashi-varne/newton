@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
+import Container from "fund_details/common/Container";
 import { getConfig } from "utils/functions";
-import { nfoData } from "../constants";
+import { nfoData } from "../../constants";
 
 class NfoScheme extends Component {
   constructor(props) {

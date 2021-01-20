@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Container from "../../../fund_details/common/Container";
-import { initialize } from "../functions";
-import DropdownInModal from "../../../common/ui/DropdownInModal";
+import Container from "fund_details/common/Container";
+import { initialize } from "../../functions";
+import DropdownInModal from "common/ui/DropdownInModal";
 import { formatAmountInr } from "utils/validators";
 import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";

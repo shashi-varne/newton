@@ -1,35 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../../fund_details/common/Container';
+import Container from 'fund_details/common/Container';
 import { storageService } from 'utils/validators';
-import { navigate as navigateFunc, isRecurring } from '../common/commonFunction';
-import { get_recommended_funds } from '../common/api';
-import InvestType from '../components/mini_components/InvestType';
-const term = 15;
+import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
+import { get_recommended_funds } from '../../common/api';
+import InvestType from '../mini_components/InvestType';
+const term = 3;
 const date = new Date();
-const month = date.getMonth();
-const currentMonth = month + 1;
 let currentYear = date.getFullYear();
-let duration = currentMonth > 3 ? 15 - currentMonth : 3 - currentMonth;
-if (duration === 0) {
-  duration = 1;
-}
-if (currentMonth > 3) {
-  currentYear = currentYear + 1;
-}
 
 const renderData = {
-  title: 'How would you like to invest?',
-  count: '1',
-  total: '2',
+  title: 'I will likely need the money',
   options: [
     {
-      text: 'SIP',
-      value: 'sip',
+      text: 'Within a year',
+      value: '1Y',
       icon: 'ic_sip.svg',
     },
     {
-      text: 'One Time',
-      value: 'onetime',
+      text: 'Between 1-3 years',
+      value: '3Y',
       icon: 'ic_onetime.svg',
     },
   ],
@@ -38,24 +27,21 @@ const renderData = {
 
 const Landing = (props) => {
   const [data, setData] = useState(null);
-  const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
-  const otiAmount = 50000;
-  const sipAmount = 5000;
+  const [investTypeDisplay, setInvestTypeDisplay] = useState('3Y');
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     const params = {
-      type: "buildwealth",
+      type: "investsurplus",
     };
     try {
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
       const graphData = {
         recommendation: data.recommendation,
-        amount: investTypeDisplay === "sip" ? sipAmount : otiAmount,
-        term,
+        amount: 50000,
+        term:investTypeDisplay === "3Y" ? 3 : 1,
         // eslint-disable-next-line radix
-        year: parseInt(date.getFullYear() + term),
-        corpus: otiAmount,
+        year: investTypeDisplay === "3Y" ? parseInt(currentYear + term): parseInt(currentYear + 1),
         investType: params.type,
         stockSplit: data.recommendation.equity,
         bondSplit: data.recommendation.debt,
@@ -72,7 +58,7 @@ const Landing = (props) => {
   };
 
   const goNext = () => {
-    navigate('buildwealth/amount', data);
+    navigate('investsurplus/amount', data);
   };
   const handleChange = (type) => {
     setInvestTypeDisplay(type);
