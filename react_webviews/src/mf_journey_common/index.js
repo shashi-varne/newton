@@ -15,6 +15,8 @@ import InvestAmount from "./InvestAmount"
 import InvestedAmount from "./InvestedAmount"
 import Landing from "./Landing"
 import InvestJourney from "./InvestJourney"
+import InvestExplore from "./InvestExplore"
+import FundType from './FundType'
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
@@ -43,6 +45,12 @@ const PortfolioRebalancing = ({ match }) => {
             <Route path={`${url}/amount`} component={InvestAmount} />
             <Route path={`${url}/funds`} component={InvestedAmount} />
             <Route path={`${url}/invest-journey`} component={InvestJourney}/>
+            <Route exact path={`${url}/amount`} component={InvestAmount} />
+            <Route exact path={`${url}/funds`} component={InvestedAmount} />
+            <Route exact path={`${url}/invest-journey`} component={InvestJourney}/>
+            <Route exact path={`${url}/explore`} component={InvestExplore} />
+            <Route exact path={`${url}/explore/:type`} component={FundType} />
+            <Route path={`${url}`} component={Landing} />
           </Switch>
       </MuiThemeProvider>
     </JssProvider>

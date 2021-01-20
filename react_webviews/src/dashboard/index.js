@@ -17,7 +17,7 @@ import NfoFunds from "./invest/components/nfo/funds";
 import NfoFundDetail from "./invest/components/nfo/FundDetail";
 import NfoCheckout from "./invest/components/nfo/checkout";
 import SipDates from "./invest/components/nfo/SipDates";
-
+import DIY from "./diy"
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
@@ -48,7 +48,6 @@ const ScrollToTop = withRouter(
 
 const Invest = (props) => {
   const { url } = props.match;
-  
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
@@ -56,6 +55,7 @@ const Invest = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route path={`${url}invest`} component={Landing} />
+          <Route path={`${url}diy`} component={DIY} />
           <Route
             path={`${url}advanced-investing/new-fund-offers/info`}
             component={NfoInfo}

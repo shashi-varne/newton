@@ -27,8 +27,9 @@ class Landing extends Component {
   onload = () => {
     this.setInvestCardsData();
   };
-
+  
   render() {
+    console.log("hello hi")
     let {
       isReadyToInvestBase,
       productName,

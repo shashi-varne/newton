@@ -17,6 +17,8 @@ import InvestAmount from "./components/mini_components/InvestAmount";
 import InvestedAmount from "./components/mini_components/InvestedAmount";
 import GoalType from "./components/InvestGoal/component/GoalType";
 import SaveGoal from "./components/InvestGoal/component/SaveGoal";
+import ExploreFunds from  "./components/explore"
+import FundType from "./components/explore/FundType"
 import Recommendations from "../../Recommendation";
 import Target from "./components/InvestGoal/component/Target";
 
@@ -30,6 +32,8 @@ const Invest = (props) => {
       <Route exact path={`${url}/savetax`} component={SaveTax} />
       <Route exact path={`${url}/buildwealth`} component={BuildWealth} />
       <Route exact path={`${url}/parkmoney`} component={ParkMoney} />
+      <Route exact path={`${url}/explore`} component={ExploreFunds} />
+      <Route exact path={`${url}/explore/:type`} component={FundType} />
       <Route path={`${url}/recommendations`} component={Recommendations} />
       <Route path={`${url}/instaredeem/type`} component={Type} />
       <Route path={`${url}/instaredeem/amount/:investType`} component={Amount} />
