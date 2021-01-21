@@ -41,7 +41,8 @@ class GroupHealthLanding extends Component {
       selectedIndex: 0,
       providerConfig: getGhProviderConfig(this.props.match.params.provider),
       card_swipe_count: 0,
-      tncChecked: false
+      tncChecked: false,
+      isiOS: false,
     };
     this.openInBrowser = openInBrowser.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
@@ -71,6 +72,13 @@ class GroupHealthLanding extends Component {
         },
       ],
     };
+
+    if(getConfig().iOS){
+      this.setState({
+        isiOS: true
+      })
+    }
+
     this.setState({
       stepsContentMapper: stepsContentMapper,
       offerImageData: screenData.offerImageData,
@@ -254,6 +262,25 @@ class GroupHealthLanding extends Component {
         })
 
     }, 50);
+  }
+
+  openInAppTab = (type)=>{
+    let pdfFileLink = '';
+    if(type === 'policy'){
+      pdfFileLink = this.state.common.details_doc
+    }else if(type === 'tnc'){
+      pdfFileLink = this.state.common.tnc
+    }
+
+    if(pdfFileLink){
+      nativeCallback({
+        action: 'open_inapp_tab',
+        message: {
+            url: pdfFileLink  || '',
+            back_url: ''
+        }
+      });
+    }
   }
 
   render() {
@@ -469,7 +496,8 @@ class GroupHealthLanding extends Component {
           </div>
           <div className="generic-hr" style={{ margin: "0px 0 40px 0" }}></div>
 
-          <div
+          {!this.state.isiOS ? 
+            <div
             className="accident-plan-read"
             style={{ padding: 0, margin: "20px 0 10px 0" }}
             onClick={() =>
@@ -487,7 +515,25 @@ class GroupHealthLanding extends Component {
             >
               Read full-policy description
             </div>
+          </div>: 
+          <div
+          className="accident-plan-read"
+          style={{ padding: 0, margin: "20px 0 10px 0" }}
+          onClick={() =>this.openInAppTab('policy')}
+           >
+          <img
+            className="accident-plan-read-icon"
+            src={require(`assets/${this.state.productName}/ic_read.svg`)}
+            alt=""
+          />
+          <div
+            className="accident-plan-read-text"
+            style={{ color: getConfig().primary }}
+          >
+            Read full-policy description
           </div>
+          </div>
+          }
           <div
             className="CheckBlock2 accident-plan-terms"
             style={{ padding: 0, margin : '10px 0px 34px 0px' }}
@@ -508,7 +554,7 @@ class GroupHealthLanding extends Component {
               <Grid item xs={11}>
                 <div className="accident-plan-terms-text" style={{}}>
                   I agree to the{" "}
-                  <span
+                  {!this.state.isiOS ? <span
                     onClick={() =>
                       this.openInBrowser(this.state.common.tnc, "tnc")
                     }
@@ -516,7 +562,18 @@ class GroupHealthLanding extends Component {
                     style={{ color: getConfig().primary }}
                   >
                     Terms and conditions
+                  </span> : 
+                  
+                  <span
+                    onClick={() =>
+                      this.openInAppTab('tnc')
+                    }
+                    className="accident-plan-terms-bold"
+                    style={{ color: getConfig().primary }}
+                  >
+                    Terms and conditions
                   </span>
+                  }
                 </div>
               </Grid>
             </Grid>

@@ -61,16 +61,16 @@ class HealthInsuranceLanding extends Component {
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
     let icn_diseases = this.state.type !== 'fisdom' ? icn_diseases_insurance_finity : icn_diseases_insurance_fisdom
 
-    var health_insurance_option = {
-      key: 'HealthInsuranceEntry',
-      title: 'Comprehensive',
-      subtitle: 'Complete healthcare in one policy',
-      icon: health_suraksha_icon,
-      dropdown : back_nav_bar_icon,
-      uparrow : back_nav_bar_icon_up
-    }
 
     let insuranceProducts = [
+      {
+        key: 'HealthInsuranceEntry',
+        title: 'Comprehensive',
+        subtitle: 'Complete healthcare in one policy',
+        icon: health_suraksha_icon,
+        dropdown : back_nav_bar_icon,
+        uparrow : back_nav_bar_icon_up
+      },
       {
         key: 'DISEASE_SPECIFIC_PLANS',
         title: 'Disease specific plans',
@@ -93,9 +93,6 @@ class HealthInsuranceLanding extends Component {
       }
     ];
 
-    if(!getConfig().iOS){
-      insuranceProducts.unshift(health_insurance_option);
-    }
 
 
     let { params } = this.props.location || {};
