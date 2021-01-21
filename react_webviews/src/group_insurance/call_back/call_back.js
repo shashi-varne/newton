@@ -138,6 +138,12 @@ class CallBackDetails extends Component {
         form_data.mobile_error = 'Enter valid mobile number';
         canSubmitForm = false;
       }
+
+      if((form_data && form_data.name && form_data.name.length < 3 || !form_data.name)){
+        form_data.name_error = "Enter valid name";
+        canSubmitForm = false;
+      }
+
       if(!form_data.insuranceType){
         form_data.insuranceType_error = 'Select type of insurance';
         canSubmitForm = false;
