@@ -19,31 +19,11 @@
     }
     .invest-amount-input-duration{
         font-size: 14px;
+        margin-top: 10px;
     }
 
-    .invest-amount-container{
-        .invest-amount-num{
-            input{
-                text-align: center !important;
-                font-size: 30px;
-                
-            }
-            .MuiInput-underline:before{
-                display: none;
-            }
-            .MuiInput-underline:after{
-                width: max-content;
-                min-width: 200px;
-                margin-left: auto;
-                margin-right: auto;
-
-            }
-            p{
-                text-align: center;
-            }
-        }
-    }
 }
+
 .invest-amount-corpus{
     margin-top: 30px;
 
@@ -55,6 +35,26 @@
     .invest-amount-corpus-amount{
         font-size: 24px;
         color: var(--primary);
+    }
+}
+.invest-amount-num{
+    input{
+        text-align: center !important;
+        font-size: 30px;
+        
+    }
+    .MuiInput-underline:before{
+        display: none;
+    }
+    .MuiInput-underline:after{
+        width: max-content;
+        min-width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+
+    }
+    p{
+        text-align: center;
     }
 }
 
@@ -367,6 +367,11 @@
         margin-bottom: 0;
         -ms-flex: 1;
         flex: 1; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        -webkit-box-orient: vertical;
     }
 
     .item .cart-actions {
@@ -392,11 +397,15 @@
     .categories-container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     .categories-container .card {
-        flex: 1 1 50%;
+        flex-basis:45%;
+    }
+    .categories-container .card:nth-child(even){
+        margin-left: 10px;
+        
     }
 
     .categories-container .card:hover {

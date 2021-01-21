@@ -1,0 +1,47 @@
+.diy-fund-card {
+  display: flex;
+  padding:15px;
+  margin-bottom: 10px;
+}
+
+.diy-fund-card-img {
+  flex-basis: 30%;
+  min-width: 100px;
+  img {
+    border: 0;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+
+.diy-fund-card-details{
+    flex:1;
+    .diy-fund-card-name{
+        margin: 0;
+        line-height: 1.25em;
+        font-weight: bold;
+        font-size: 18px;
+    }
+}
+
+.diy-fund-card-info-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    .diy-fund-card-info{
+        display: flex;
+        flex-direction: column;
+        p{
+            font-size: 16px;
+            span{
+                color:#34ca5c;
+            }
+        }
+        & > p{
+            margin-top: 0;
+            margin-bottom: 0;
+            padding-top: 0;
+            color: #727272;
+        }
+    }
+}

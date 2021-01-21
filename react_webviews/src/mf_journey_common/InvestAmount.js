@@ -7,7 +7,8 @@ import "./style.scss"
 import Input from "common/ui/Input"
 const InvestAmount = (props) => {
   const graphData = storageService().getObject("graphData");
-  const{investType,year,stockSplit,term,isRecurring} = graphData;
+  const goalRecommendation = storageService().getObject("goalRecommendations");
+  const{investType,year,stockSplit,term,isRecurring,investTypeDisplay} = graphData;
     const [amount,setAmount] = useState(graphData?.amount || "");
     const [corpus,setCorpus] = useState(graphData?.corpus || "");
     const [error,setError] = useState(false);
@@ -21,7 +22,12 @@ const InvestAmount = (props) => {
         setErrorMsg("This is a required field");
         return;
       }
-      const result = validateOtAmount(amount);
+      let result;
+      if(investTypeDisplay === "sip"){
+        result = validateSipAmount(amount)
+      } else{
+        result = validateOtAmount(amount)
+      }
       if(result?.error){
         setError(true);
         setErrorMsg(result?.message)
@@ -46,8 +52,7 @@ const InvestAmount = (props) => {
           graphData['term'] = 3;
           params.term = 3; //  has to be modified (temp value)
         }
-          const data = await get_recommended_funds(params);
-          console.log("data is",data);
+        await get_recommended_funds(params);
 
       }
       catch(err){
@@ -62,7 +67,7 @@ const InvestAmount = (props) => {
       }
       fetchRecommendedFunds();
       storageService().setObject("graphData",{...graphData,amount});
-      navigate(`${investType}/funds`,{...graphData,amount})
+      navigate(`${goalRecommendation.id}/funds`,{...graphData,amount})
     }
   return (
     <Container
