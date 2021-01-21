@@ -5,6 +5,7 @@ import { initialize } from "../../functions";
 import Input from "common/ui/Input";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
+import toast from "common/ui/Toast";
 
 class Checkout extends Component {
   constructor(props) {
@@ -13,9 +14,9 @@ class Checkout extends Component {
       show_loader: false,
       screenName: "nfo_checkout",
       ctc_title: "INVEST",
-      form_data: {
-        investType: "onetime",
-      },
+      form_data: {},
+      investType: "onetime",
+      partner: getConfig().partner,
     };
     this.initialize = initialize.bind(this);
   }
@@ -32,59 +33,85 @@ class Checkout extends Component {
       this.props.history.goBack();
       return;
     }
+    this.getNfoPurchaseLimit({
+      investType: this.state.investType,
+      isins: fund.isin,
+    });
   };
 
   handleClick = () => {
-    if (this.state.form_data.investType === "sip") {
-      this.navigate("/sipdates");
+    let { fund } = this.state;
+    if (!fund.amount) {
+      toast("Please enter valid amount");
     } else {
-      // this.navigate("/pg/home");
+      this.proceedInvestment();
     }
   };
 
-  handleChange = (name) => (event) => {
+  handleChange = (name) => async (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, ctc_title } = this.state;
+    let { form_data, ctc_title, fund, investType } = this.state;
     if (id === "sip" || id === "onetime") {
-      form_data.investType = id;
+      investType = id;
       form_data.investType_error = "";
+      await this.getNfoPurchaseLimit({ investType: id, isins: fund.isin });
+      if (fund.amount) this.checkLimit(fund.amount);
       if (id === "sip") {
         ctc_title = "SELECT SIP DATE";
       } else {
         ctc_title = "INVEST";
       }
-      this.setState({ form_data: form_data, ctc_title: ctc_title });
+      this.setState({
+        form_data: form_data,
+        ctc_title: ctc_title,
+        investType: investType,
+      });
     } else if (name) {
-      form_data[name] = value;
-      form_data[`${name}_error`] = "";
-      this.setState({ form_data: form_data });
+      if (!value) {
+        fund.amount = "";
+        form_data[`${name}_error`] = "This is required";
+        this.setState({ form_data: form_data, fund: fund });
+      } else {
+        fund.amount = value;
+        this.setState({ form_data: form_data, fund: fund });
+        this.checkLimit(value);
+      }
     }
   };
 
   render() {
-    let { form_data, ctc_title, fund, disabled } = this.state;
+    let {
+      form_data,
+      investType,
+      ctc_title,
+      fund,
+      showFundnotSupported,
+      disableInputSummary,
+      loadingText,
+    } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
-        disable={form_data.amount_error ? true : false}
+        disable={disableInputSummary}
         hideInPageTitle
+        loaderData={{
+          loadingText,
+        }}
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">
             <div
               id="sip"
               onClick={this.handleChange()}
-              className={
-                form_data.investType === "sip" ? "selected item" : "item"
-              }
+              className={investType === "sip" ? "selected item" : "item"}
             >
-              {form_data.investType === "sip" && (
+              {investType === "sip" && (
                 <img alt="" src={require(`assets/sip_icn.png`)} />
               )}
-              {form_data.investType !== "sip" && (
+              {investType !== "sip" && (
                 <img
                   id="sip"
                   alt=""
@@ -92,7 +119,7 @@ class Checkout extends Component {
                 />
               )}
               <h3 id="sip">SIP / Monthly</h3>
-              {form_data.investType === "sip" && (
+              {investType === "sip" && (
                 <img
                   className="icon"
                   alt=""
@@ -103,14 +130,12 @@ class Checkout extends Component {
             <div
               id="onetime"
               onClick={this.handleChange()}
-              className={
-                form_data.investType === "onetime" ? "selected item" : "item"
-              }
+              className={investType === "onetime" ? "selected item" : "item"}
             >
-              {form_data.investType === "onetime" && (
+              {investType === "onetime" && (
                 <img alt="" src={require(`assets/one_time_icn.png`)} />
               )}
-              {form_data.investType !== "onetime" && (
+              {investType !== "onetime" && (
                 <img
                   id="onetime"
                   alt=""
@@ -118,7 +143,7 @@ class Checkout extends Component {
                 />
               )}
               <h3 id="onetime">One Time</h3>
-              {form_data.investType === "onetime" && (
+              {investType === "onetime" && (
                 <img
                   className="icon"
                   alt=""
@@ -141,16 +166,15 @@ class Checkout extends Component {
                     name="amount"
                     id="amount"
                     class="input"
-                    value={form_data.amount || ""}
+                    value={fund.amount || ""}
                     error={form_data.amount_error ? true : false}
                     helperText={
-                      form_data.amount_error ||
-                      formatAmountInr(form_data.amount)
+                      form_data.amount_error || formatAmountInr(fund.amount)
                     }
                     onChange={this.handleChange("amount")}
                   />
                 </div>
-                {disabled && (
+                {showFundnotSupported && (
                   <div className="disabled">
                     <div className="text">This fund is not supported</div>
                   </div>

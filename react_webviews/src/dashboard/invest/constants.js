@@ -3,6 +3,9 @@ export const apiConstants = {
   npsInvestStatus: "/api/nps/invest/status/v2",
   getRecommendation: "/api/invest/recommendv2",
   getInstaRecommendation: "/api/invest/insta-redeem/getfunds",
+  getNfoRecommendation: '/api/invest/nfo/recommendations',
+  getNfoPurchaseLimit: '/api/mf/funddata/',
+  triggerInvestment: '/api/invest',
 };
 
 export const investCardsBase = {

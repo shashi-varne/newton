@@ -35,6 +35,7 @@ class Landing extends Component {
       invest_show_data,
       partner,
       render_cards,
+      loadingText,
     } = this.state;
     let {
       our_recommendations,
@@ -49,6 +50,9 @@ class Landing extends Component {
         noHeader={this.state.show_loader}
         noFooter={true}
         hideInPageTitle
+        loaderData={{
+          loadingText,
+        }}
       >
         <div className="invest-landing">
           <div className="main-top-title">Start Investing</div>

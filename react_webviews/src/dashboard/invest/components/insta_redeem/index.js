@@ -89,7 +89,7 @@ class InstaRedeem extends Component {
   };
 
   render() {
-    let { partner, productName, instaRecommendation } = this.state;
+    let { partner, productName, instaRecommendation, loadingText } = this.state;
     let { benefits, faqData } = investRedeemData;
     return (
       <Container
@@ -98,6 +98,9 @@ class InstaRedeem extends Component {
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
         hideInPageTitle
+        loaderData={{
+          loadingText,
+        }}
       >
         <div className="invest-redeem">
           <div className="main-top-title">
