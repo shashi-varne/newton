@@ -45,7 +45,7 @@ class SipDates extends Component {
       form_data.push(data.sip_dates.indexOf(data.sip_date));
     });
 
-    let buttonTitle = sips.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
+    let buttonTitle = finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
 
     this.setState({
       form_data: form_data,
