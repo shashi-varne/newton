@@ -12,7 +12,7 @@ import { transactionsHeaderMap } from '../../constants';
 import { Pagination } from 'rsuite';
 import { isEmpty, storageService } from '../../../utils/validators';
 import IWdScreenLoader from '../../mini-components/IwdScreenLoader';
-import 'rsuite/dist/styles/rsuite-default.css';
+import './rsuite.scss';
 import debounce from 'lodash/debounce';
 import filter_sign from 'assets/filter_sign.svg';
 import DateRangeSelector from '../../mini-components/DateRangeSelector';
