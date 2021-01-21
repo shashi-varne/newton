@@ -139,7 +139,7 @@ class CallBackDetails extends Component {
         canSubmitForm = false;
       }
 
-      if((form_data && form_data.name && form_data.name.length < 3 || !form_data.name)){
+      if((form_data && form_data.name && form_data.name.length < 3) || (!form_data.name)){
         form_data.name_error = "Enter valid name";
         canSubmitForm = false;
       }
