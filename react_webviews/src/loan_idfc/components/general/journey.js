@@ -116,6 +116,8 @@ class JourneyMap extends Component {
       show_loader: false,
       screen_name: "journey_screen",
       count: 0,
+      loaderWithData: false,
+      loaderData: {}
     };
     this.initialize = initialize.bind(this);
   }
@@ -136,6 +138,11 @@ class JourneyMap extends Component {
 
     let index =
       (idfc_loan_status && journeyMapper2[idfc_loan_status].index) || "0";
+
+      let loaderData = {
+        title: "We're are fetching your kyc details from CKYC repository",
+        subtitle: 'Please confirm the details on the next screen to proceed with your loan application.'
+      }
 
     let journeyData = {
       options: [
@@ -225,7 +232,8 @@ class JourneyMap extends Component {
       first_name: personal_info.first_name,
       vendor_info: vendor_info,
       bt_info: bt_info,
-      application_complete: application_complete
+      application_complete: application_complete,
+      loaderData: loaderData
     });
   };
 
@@ -249,6 +257,7 @@ class JourneyMap extends Component {
   getCkycState = async () => {
     this.setState({
       show_loader: true,
+      loaderWithData: true
     });
     
     let result = await this.getUserStatus();
@@ -293,15 +302,16 @@ class JourneyMap extends Component {
       if (ckyc_state === "init") {
         this.sendEvents('next', {stage: stage});
         this.getCkycState();
-      }
-      if (index > "1") {
-        this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
-        this.navigate("ckyc-summary");
       } else {
-        this.sendEvents('next', {stage: stage});
-        this.updateApplication({
-          idfc_loan_status: "ckyc",
-        });
+        if (index > "1") {
+          this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
+          this.navigate("ckyc-summary");
+        } else {
+          this.sendEvents('next', {stage: stage});
+          this.updateApplication({
+            idfc_loan_status: "ckyc",
+          });
+        }
       }
     }
     // ---step-3
@@ -353,6 +363,8 @@ class JourneyMap extends Component {
           icon: "close",
         }}
         hidePageTitle={true}
+        loaderData={this.state.loaderData}
+        loaderWithData={this.state.loaderWithData}
       >
         <div className="journey-track">
           {index < "3" && <img
