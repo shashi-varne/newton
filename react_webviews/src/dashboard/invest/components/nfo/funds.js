@@ -8,6 +8,7 @@ import {
   getSchemeOption,
 } from "../../functions";
 import { storageService } from "utils/validators";
+import { getConfig } from "utils/functions";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -37,7 +38,15 @@ class NfoFunds extends Component {
 
   handleClick = (fund) => () => {
     storageService().setObject("nfo_detail_fund", fund);
-    this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
+    this.props.history.push(
+      {
+        pathname: "/advanced-investing/new-fund-offers/funds/checkout",
+        search: getConfig().searchParams,
+      },
+      {
+        type: "nfo",
+      }
+    );
   };
 
   render() {

@@ -15,9 +15,10 @@ class Checkout extends Component {
       show_loader: false,
       screenName: "nfo_checkout",
       ctc_title: "INVEST",
-      form_data: {},
+      form_data: [],
       investType: "onetime",
       partner: getConfig().partner,
+      disableInput: [],
     };
     this.initialize = initialize.bind(this);
   }
@@ -27,17 +28,33 @@ class Checkout extends Component {
   }
 
   onload = () => {
-    let fund = storageService().getObject("nfo_detail_fund");
-    if (fund) {
-      this.setState({ fund: fund });
+    let { state } = this.props.location || {};
+    let type = "";
+    if (state && state.type) {
+      type = state.type;
+      this.setState({ type: state.type });
     } else {
       this.props.history.goBack();
       return;
     }
-    this.getNfoPurchaseLimit({
-      investType: this.state.investType,
-      isins: fund.isin,
-    });
+    if (type === "nfo") {
+      let fund = storageService().getObject("nfo_detail_fund");
+      if (fund) {
+        let fundsData = [];
+        let { form_data } = this.state;
+        fundsData.push(fund);
+        fundsData.forEach(() => form_data.push({}));
+        this.setState({ fundsData: fundsData, form_data: form_data }, () =>
+          this.getNfoPurchaseLimit({
+            investType: this.state.investType,
+            isins: fund.isin,
+          })
+        );
+      } else {
+        this.props.history.goBack();
+        return;
+      }
+    }
   };
 
   handleClick = () => {
@@ -49,15 +66,14 @@ class Checkout extends Component {
     }
   };
 
-  handleChange = (name) => async (event) => {
+  handleChange = (name, index = 0) => async (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, ctc_title, fund, investType } = this.state;
+    let { form_data, ctc_title, fundsData, investType } = this.state;
     if (id === "sip" || id === "onetime") {
       if (id === investType) return;
       investType = id;
-      form_data.investType_error = "";
-      if (fund.amount) this.checkLimit(fund.amount);
+      form_data[index].investType_error = "";
       if (id === "sip") {
         ctc_title = "SELECT SIP DATE";
       } else {
@@ -68,16 +84,24 @@ class Checkout extends Component {
         ctc_title: ctc_title,
         investType: investType,
       });
-      await this.getNfoPurchaseLimit({ investType: id, isins: fund.isin });
+      await this.getNfoPurchaseLimit({
+        investType: id,
+        isins: fundsData[index].isin,
+      });
+      fundsData.forEach((fund, index) => {
+        if (fund.amount) {
+          this.checkLimit(fundsData[index].amount, index);
+        }
+      });
     } else if (name) {
       if (!isNaN(parseInt(value, 10))) {
-        fund.amount = parseInt(value, 10);
-        this.setState({ form_data: form_data, fund: fund });
-        this.checkLimit(fund.amount);
+        fundsData[index].amount = parseInt(value, 10);
+        this.setState({ form_data: form_data, fundsData: fundsData });
+        this.checkLimit(fundsData[index].amount, index);
       } else {
-        fund.amount = "";
+        fundsData[index].amount = "";
         form_data[`${name}_error`] = "This is required";
-        this.setState({ form_data: form_data, fund: fund });
+        this.setState({ form_data: form_data, fundsData: fundsData });
       }
     }
   };
@@ -87,8 +111,7 @@ class Checkout extends Component {
       form_data,
       investType,
       ctc_title,
-      fund,
-      showFundnotSupported,
+      fundsData,
       disableInputSummary,
       loadingText,
     } = this.state;
@@ -138,36 +161,49 @@ class Checkout extends Component {
             })}
           </div>
           <div className="cart-items">
-            {fund && (
-              <div className="item card">
-                <div className="icon">
-                  <img alt={fund.friendly_name} src={fund.amc_logo_small} />
-                </div>
-                <div className="text">
-                  <h4>{fund.friendly_name}</h4>
-                  <small>Enter amount</small>
-                  <Input
-                    type="text"
-                    name="amount"
-                    id="amount"
-                    class="input"
-                    value={fund.amount || ""}
-                    error={form_data.amount_error ? true : false}
-                    helperText={
-                      form_data.amount_error || formatAmountInr(fund.amount)
-                    }
-                    onChange={this.handleChange("amount")}
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                  />
-                </div>
-                {showFundnotSupported && (
-                  <div className="disabled">
-                    <div className="text">This fund is not supported</div>
+            {fundsData &&
+              fundsData.map((fund, index) => {
+                return (
+                  <div className="item card" key={index}>
+                    <div className="icon">
+                      <img alt={fund.friendly_name} src={fund.amc_logo_small} />
+                    </div>
+                    <div className="text">
+                      <h4>
+                        {fund.friendly_name}
+                        {false && (
+                          <img
+                            className="icon"
+                            alt=""
+                            src={require(`assets/delete_new.png`)}
+                          />
+                        )}
+                      </h4>
+                      <small>Enter amount</small>
+                      <Input
+                        type="text"
+                        name="amount"
+                        id="amount"
+                        class="input"
+                        value={fund.amount || ""}
+                        error={form_data[index].amount_error ? true : false}
+                        helperText={
+                          form_data[index].amount_error ||
+                          formatAmountInr(fund.amount)
+                        }
+                        onChange={this.handleChange("amount", index)}
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                      />
+                    </div>
+                    {!fund.allow_purchase && (
+                      <div className="disabled">
+                        <div className="text">This fund is not supported</div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            )}
+                );
+              })}
           </div>
           <div className="nfo-disclaimer">
             {getConfig().Web && getConfig().productName !== "finity" && (

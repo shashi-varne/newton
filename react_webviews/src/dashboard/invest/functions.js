@@ -3,6 +3,7 @@ import { storageService, formatAmountInr } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { apiConstants, investCardsBase, keyPathMapper } from "./constants";
+import { element } from "prop-types";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -547,7 +548,9 @@ export function showFundInfo(data) {
 
 export async function getRecommendation() {
   this.setState({ show_loader: true, loadingText: "Please wait..." });
-  let instaRecommendations = storageService().getObject("instaRecommendations")[0];
+  let instaRecommendations = storageService().getObject(
+    "instaRecommendations"
+  )[0];
   let { amount, investType, term } = this.state;
   let allocations = [{ amount: amount, mf: instaRecommendations }];
   let recommendations = {
@@ -567,7 +570,7 @@ export async function getRecommendation() {
 }
 
 function getGoalRecommendations() {
-  let goal = storageService().get("goalRecommendations");
+  let goal = storageService().getObject("goalRecommendations");
   if (!goal) {
     goal = {};
   }
@@ -731,20 +734,20 @@ export async function getNfoPurchaseLimit(data) {
   this.setState({ show_loader: true });
   try {
     const res = await Api.get(
-      `${apiConstants.getNfoPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
+      `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
+    let { fundsData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data[0];
-      let showFundnotSupported = true;
+      let purchaseLimitData = result.funds_data;
       let disableInputSummary = true;
-      if (purchaseLimitData.ot_sip_flag) {
-        showFundnotSupported = false;
+      if (purchaseLimitData[0].ot_sip_flag) {
+        fundsData[0].allow_purchase = true;
         disableInputSummary = false;
       }
       this.setState({
         show_loader: false,
-        showFundnotSupported: showFundnotSupported,
+        fundsData: fundsData,
         purchaseLimitData: purchaseLimitData,
         disableInputSummary: disableInputSummary,
       });
@@ -756,26 +759,40 @@ export async function getNfoPurchaseLimit(data) {
   }
 }
 
-export function checkLimit(amount) {
-  let { purchaseLimitData, form_data, disableInputSummary } = this.state;
-  var limitData = purchaseLimitData;
-  var min = limitData.addl_purchase.min;
-  var max = limitData.addl_purchase.max;
-  var mul = limitData.addl_purchase.mul;
+export function checkLimit(amount, index) {
+  let {
+    purchaseLimitData,
+    form_data,
+    disableInputSummary,
+    disableInput,
+  } = this.state;
+  let limitData = purchaseLimitData[index];
+  if (!limitData) return;
+  let min = limitData.addl_purchase.min;
+  let max = limitData.addl_purchase.max;
+  let mul = limitData.addl_purchase.mul;
 
   if (amount < min) {
-    form_data.amount_error = "Please add atleast ₹" + min + " to proceed.";
-    disableInputSummary = true;
+    form_data[index].amount_error =
+      "Please add atleast ₹" + min + " to proceed.";
+    disableInput[index] = 1;
   } else if (amount % mul !== 0) {
-    form_data.amount_error = "Amount must be multiple of ₹" + mul;
-    disableInputSummary = true;
+    form_data[index].amount_error = "Amount must be multiple of ₹" + mul;
+    disableInput[index] = 1;
   } else if (amount > max) {
-    form_data.amount_error = "Maximum amount for this fund is ₹" + max;
-    disableInputSummary = true;
+    disableInput[index] = 1;
+    form_data[index].amount_error = "Maximum amount for this fund is ₹" + max;
   } else {
-    form_data.amount_error = "";
-    disableInputSummary = false;
+    disableInput[index] = 0;
+    form_data[index].amount_error = "";
   }
+
+  let value = disableInput.reduce((total, num) => {
+    return total + num;
+  });
+
+  if (value === 0) disableInputSummary = false;
+  else disableInputSummary = true;
 
   this.setState({
     disableInputSummary: disableInputSummary,

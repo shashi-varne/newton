@@ -4,7 +4,7 @@ export const apiConstants = {
   getRecommendation: "/api/invest/recommendv2",
   getInstaRecommendation: "/api/invest/insta-redeem/getfunds",
   getNfoRecommendation: "/api/invest/nfo/recommendations",
-  getNfoPurchaseLimit: "/api/mf/funddata/",
+  getPurchaseLimit: "/api/mf/funddata/",
   triggerInvestment: "/api/invest",
 };
 
