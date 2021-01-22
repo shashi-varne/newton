@@ -98,6 +98,11 @@ class DropdownInModalClass extends Component {
           <div className='flex-between'>
             <div className={isSelected ? 'content-selected' : ''}>
               <span>{props.name}</span>
+              {this.props.isSelectedText && isSelected && (
+                <span className={this.props.class}>
+                  {this.props.isSelectedText}
+                </span>
+              )}
             </div>
 
             {isSelected && (
