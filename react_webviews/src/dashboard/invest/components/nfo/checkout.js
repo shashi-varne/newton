@@ -95,7 +95,6 @@ class Checkout extends Component {
     }
     let submit = true;
     fundsData.forEach((data) => {
-      console.log(data.amount);
       if (!data.amount) {
         submit = false;
       }

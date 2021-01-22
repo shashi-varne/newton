@@ -865,7 +865,7 @@ function isInvestRefferalRequired(partner_code) {
 }
 
 export async function proceedInvestment(event, isReferralGiven) {
-  let { partner, fund, purchaseLimitData, investType } = this.state;
+  let { partner, fundsData, purchaseLimitData, investType } = this.state;
   if (isInvestRefferalRequired(partner.code) && !isReferralGiven) {
     let investCtaEvents = event;
     // $rootScope.openPopupInvestReferral(refOnKey);
@@ -874,15 +874,15 @@ export async function proceedInvestment(event, isReferralGiven) {
 
   let allocations = [
     {
-      mfid: purchaseLimitData.mfid,
-      mfname: purchaseLimitData.mfname,
-      amount: fund.amount,
-      default_date: purchaseLimitData.addl_purchase.default_date,
-      sip_dates: purchaseLimitData.addl_purchase.sip_dates,
+      mfid: purchaseLimitData[0].mfid,
+      mfname: purchaseLimitData[0].mfname,
+      amount: fundsData[0].amount,
+      default_date: purchaseLimitData[0].addl_purchase.default_date,
+      sip_dates: purchaseLimitData[0].addl_purchase.sip_dates,
     },
   ];
   let investment = {};
-  investment.amount = parseFloat(fund.amount);
+  investment.amount = parseFloat(fundsData[0].amount);
   let investment_type = "";
   if (investType === "onetime") {
     investment.type = "diy";
@@ -908,7 +908,12 @@ export async function proceedInvestment(event, isReferralGiven) {
 }
 
 export async function makeInvestment(event, nfo_investment, isReferralGiven) {
-  let { isRedirectToPayment, fund, investment_type, invRefData } = this.state;
+  let {
+    isRedirectToPayment,
+    fundsData,
+    investment_type,
+    invRefData,
+  } = this.state;
 
   isRedirectToPayment = true;
   let investmentObj = nfo_investment;
@@ -917,7 +922,7 @@ export async function makeInvestment(event, nfo_investment, isReferralGiven) {
   };
 
   let investmentEventData = {
-    amount: parseFloat(fund.amount),
+    amount: parseFloat(fundsData[0].amount),
     investment_type: investment_type,
     investment_subtype: "",
     journey_name: "nfo",
@@ -934,6 +939,7 @@ export async function makeInvestment(event, nfo_investment, isReferralGiven) {
       sipOrOnetime: investment_type,
       body: body,
       isRedirectToPayment: isRedirectToPayment,
+      investmentEventData: investmentEventData,
     },
     () => this.proceedInvestmentChild(event)
   );
@@ -953,7 +959,7 @@ export async function proceedInvestmentChild(ev) {
   } else {
     let { investmentEventData } = this.state;
     if (investmentEventData) {
-      investmentEventData = storageService().get("mf_invest_data");
+      investmentEventData = storageService().getObject("mf_invest_data") || {};
     }
 
     try {
