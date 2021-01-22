@@ -458,7 +458,7 @@ export async function getRecommendedPlans() {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       let graphdata = {
-        allocations: result.recommendation,
+        recommendation: result.recommendation,
         alternatives: result.alternatives,
         amount: result.amount,
         term: this.state.term,
@@ -470,8 +470,8 @@ export async function getRecommendedPlans() {
         stock: this.state.stockSplit,
         bond: this.state.bondSplit,
       };
-      storageService().setObject("recommendations", graphdata);
-      this.navigate("/recommendations");
+      storageService().setObject("graphdata", graphdata);
+      this.navigate("/invest/recommendations");
       this.setState({ show_loader: false });
     } else {
       this.setState({ show_loader: false });
@@ -547,11 +547,11 @@ export function showFundInfo(data) {
 
 export async function getRecommendation() {
   this.setState({ show_loader: true, loadingText: "Please wait..." });
-  let instaRecommendations = storageService().get("instaRecommendations")[0];
+  let instaRecommendations = storageService().getObject("instaRecommendations")[0];
   let { amount, investType, term } = this.state;
   let allocations = [{ amount: amount, mf: instaRecommendations }];
   let recommendations = {
-    allocations: allocations,
+    recommendation: allocations,
     term: term,
     investType: "insta-redeem",
     name: "Insta Redeem",
@@ -562,7 +562,7 @@ export async function getRecommendation() {
     order_type: investType,
     subtype: "",
   };
-  storageService().setObject("recommendations", recommendations);
+  storageService().setObject("graphData", recommendations);
   this.navigate(`/invest/recommendations`);
 }
 
