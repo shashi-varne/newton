@@ -21,13 +21,6 @@ class LifeInsuranceEntry extends Component {
   componentWillMount() {
 
     nativeCallback({ action: 'take_control_reset' });
-    var life_insurance_option = {
-      key: 'savings plan',
-      title: 'Insurance Savings plan',
-      subtitle: 'Enjoy wealth creation cum life coverage',
-      icon: 'money_pig',
-      disabled: false
-    }
 
     let insuranceProducts = [
       {
@@ -36,12 +29,15 @@ class LifeInsuranceEntry extends Component {
         subtitle: 'Get comprehensive life coverage',
         icon: 'ic_term_insurance',
         disabled: false
+      },
+      {
+        key: 'savings plan',
+        title: 'Insurance Savings plan',
+        subtitle: 'Enjoy wealth creation cum life coverage',
+        icon: 'money_pig',
+        disabled: false
       }
     ];
-
-    if(!getConfig().iOS){
-      insuranceProducts.push(life_insurance_option);
-    }
 
     this.setState({
       insuranceProducts: insuranceProducts
