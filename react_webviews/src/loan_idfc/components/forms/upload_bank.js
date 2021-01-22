@@ -430,8 +430,8 @@ class UploadBank extends Component {
       } else  if(
         key_check === 'start_date' && 
         (
-          calculateAge(form_data['start_date'], true).days < 90 || 
-          calculateAge(form_data['start_date'], true).days > 97
+          calculateAge(form_data['start_date'], true).days < 90 
+          // calculateAge(form_data['start_date'], true).days > 97
         )
         )  {
           canSubmit = false;
@@ -441,8 +441,9 @@ class UploadBank extends Component {
         key_check === 'end_date' && 
         form_data[key_check] && 
         (
-          calculateAge(form_data['end_date'], true).days < 3 || 
-          calculateAge(form_data['end_date'], true).days > 4
+          calculateAge(form_data['end_date'], true).days < 3 
+          // || 
+          // calculateAge(form_data['end_date'], true).days > 4
         )
         ) {
           canSubmit = false;
@@ -458,6 +459,7 @@ class UploadBank extends Component {
     let month = calculateAge(form_data.start_date, true).months;
     // eslint-disable-next-line radix
     let startDate = form_data.start_date.substring(0, 2) === "01";
+    console.log(calculateAge(form_data['start_date'], true).days)
 
     if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
       form_data.start_date_error = "This date must be 3 months prior to the current month.";
