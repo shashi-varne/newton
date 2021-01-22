@@ -189,6 +189,7 @@ import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
 
 //Advisory
 import AdvisoryLanding from './advisory/landing';
+import AdvisoryBasicDetails from './advisory/basic_details';
 
 // common
 
@@ -246,7 +247,8 @@ const Insurance = (props) => {
           <Route exact path={`${url}`} component={Landing} />
 
           {/* INSURANCE ADVISORY */}
-          <Route path={`${url}/advisory-landing`} component={AdvisoryLanding} />
+          <Route path={`${url}/advisory/landing`} component={AdvisoryLanding} />
+          <Route path={`${url}/advisory/basic-details`} component={AdvisoryBasicDetails} />
 
           {/********** TERM INSURANCE **********/}
           <Route path={`${url}/term/resume`} component={Resume} />

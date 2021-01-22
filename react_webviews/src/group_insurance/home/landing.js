@@ -135,7 +135,7 @@ class Landing extends Component {
   }
 
   goToAdvisory = () =>{
-    this.navigate('/group-insurance/advisory-landing')
+    this.navigate('/group-insurance/advisory/landing')
   }
 
   render() {
