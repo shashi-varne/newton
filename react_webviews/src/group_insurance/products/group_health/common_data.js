@@ -498,6 +498,21 @@ export function openInBrowser(url, type) {
     
 }
 
+export function openPdf(pdfLink, pdfType){
+    
+    if(getConfig().iOS){
+        nativeCallback({
+          action: 'open_inapp_tab',
+          message: {
+              url: pdfLink  || '',
+              back_url: ''
+          }
+        });
+    }else{
+        this.openInBrowser(pdfLink, pdfType);
+    }
+}
+
 export function setEditTitle(string) {
 
     if(this.props.edit) {

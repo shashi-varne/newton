@@ -18,7 +18,7 @@ import down_arrow from "assets/down_arrow.svg";
 import up_arrow from "assets/up_arrow.svg";
 import scrollIntoView from 'scroll-into-view-if-needed';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { openInBrowser } from "./common_data";
+import { openInBrowser, openPdf } from "./common_data";
 import ReactResponsiveCarousel from "../../../common/ui/carousel";
 import { getGhProviderConfig } from "./constants";
 import {  setLocalProviderData } from "./common_data";
@@ -45,6 +45,7 @@ class GroupHealthLanding extends Component {
       isiOS: false,
     };
     this.openInBrowser = openInBrowser.bind(this);
+    this.openPdf = openPdf.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
   }
   componentWillMount() {
@@ -256,31 +257,6 @@ class GroupHealthLanding extends Component {
         })
 
     }, 50);
-  }
-
-  openPdf = (type)=>{
-    let pdfFileLink = '';
-    if(type === 'policy'){
-      pdfFileLink = this.state.common.details_doc
-    }else if(type === 'tnc'){
-      pdfFileLink = this.state.common.tnc
-    }
-    
-    if(getConfig().iOS){
-        nativeCallback({
-          action: 'open_inapp_tab',
-          message: {
-              url: pdfFileLink  || '',
-              back_url: ''
-          }
-        });
-    }else{
-      if(type === 'policy'){
-        this.openInBrowser(pdfFileLink, "read_document")
-      }else if(type === 'tnc'){
-        this.openInBrowser(pdfFileLink, "tnc")    
-      }
-    }
   }
 
   render() {
@@ -499,7 +475,7 @@ class GroupHealthLanding extends Component {
             <div
             className="accident-plan-read"
             style={{ padding: 0, margin: "20px 0 10px 0" }}
-            onClick={() =>this.openPdf("policy")}
+            onClick={() =>this.openPdf(this.state.common.details_doc, "read_document")}
             >
             <img
               className="accident-plan-read-icon"
@@ -535,7 +511,7 @@ class GroupHealthLanding extends Component {
                   I agree to the{" "}
                    <span
                     onClick={() =>
-                      this.openPdf("tnc")
+                      this.openPdf(this.state.common.tnc, "tnc")
                     }
                     className="accident-plan-terms-bold"
                     style={{ color: getConfig().primary }}
