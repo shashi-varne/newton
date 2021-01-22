@@ -38,6 +38,8 @@ export async function initialize() {
   this.proceedInvestment = proceedInvestment.bind(this);
   this.makeInvestment = makeInvestment.bind(this);
   this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
+  this.getDiyPurchaseLimit = getDiyPurchaseLimit.bind(this);
+  this.deleteFund = deleteFund.bind(this);
   if (this.state.screenName === "invest_landing") {
     this.getSummary();
   }
@@ -757,6 +759,61 @@ export async function getNfoPurchaseLimit(data) {
     this.setState({ show_loader: false });
     toast(errorMessage);
   }
+}
+
+export async function getDiyPurchaseLimit(data) {
+  this.setState({ show_loader: true });
+  try {
+    const res = await Api.get(
+      `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
+    );
+    const { result, status_code: status } = res.pfwresponse;
+    let { fundsData } = this.state;
+    if (status === 200) {
+      let purchaseLimitData = result.funds_data;
+      purchaseLimitData = purchaseLimitData.map((dict) => {
+        var results = fundsData.filter((obj) => {
+          if (obj.isin == dict["isin"]) {
+            obj["allow_purchase"] = dict["ot_sip_flag"];
+          }
+          return;
+        });
+        dict["addedToCart"] = false;
+        dict["allow_purchase"] = true;
+        if (results.length == 0) {
+          dict["addedToCart"] = false;
+        }
+        return dict;
+      });
+
+      let isDisabledFundCount = 0;
+      this.setState({
+        show_loader: false,
+        fundsData: fundsData,
+        purchaseLimitData: purchaseLimitData,
+        isDisabledFundCount: isDisabledFundCount,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ show_loader: false });
+    toast(errorMessage);
+  }
+}
+
+export function deleteFund(item, index) {
+  let { fundsData, cartCount, fundsArray } = this.state;
+  let fundName = item.legalName || item.legal_name;
+  fundsData.splice(index, 1);
+  cartCount = fundsData.length;
+  this.setState({
+    fundName: fundName,
+    fundsData: fundsData,
+    cartCount: cartCount,
+  });
+  storageService().setObject("diystore_fundsList", fundsArray); // need to ask
+  storageService().setObject("diystore_cart", fundsData);
+  storageService().set("diystore_cartCount", fundsData.length);
 }
 
 export function checkLimit(amount, index) {

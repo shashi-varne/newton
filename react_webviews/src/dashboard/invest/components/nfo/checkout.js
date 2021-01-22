@@ -19,6 +19,7 @@ class Checkout extends Component {
       investType: "onetime",
       partner: getConfig().partner,
       disableInput: [],
+      fundsData: [],
     };
     this.initialize = initialize.bind(this);
   }
@@ -37,11 +38,11 @@ class Checkout extends Component {
       this.props.history.goBack();
       return;
     }
+    let fundsData = [];
+    let { form_data } = this.state;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
-        let fundsData = [];
-        let { form_data } = this.state;
         fundsData.push(fund);
         fundsData.forEach(() => form_data.push({}));
         this.setState({ fundsData: fundsData, form_data: form_data }, () =>
@@ -55,25 +56,65 @@ class Checkout extends Component {
         return;
       }
     }
+    if (type === "diy") {
+      let schemeType = storageService().getObject("diystore_category") || "";
+      let categoryName =
+        storageService().getObject("diystore_subCategoryScreen") || "";
+      fundsData =
+        storageService().getObject("diystore_cart") == false
+          ? [storageService().getObject("diystore_fundInfo")]
+          : storageService().getObject("diystore_cart");
+      fundsData.forEach(() => form_data.push({}));
+      let fundsArray = storageService().getObject("diystore_fundsList");
+      let isinArr = fundsData.map((data) => {
+        return data.isin;
+      });
+      let isins = isinArr.join(",");
+      this.setState(
+        {
+          fundsData: fundsData,
+          categoryName: categoryName,
+          schemeType: schemeType,
+          fundsArray: fundsArray,
+          form_data: form_data,
+        },
+        () =>
+          this.getDiyPurchaseLimit({
+            investType: this.state.investType,
+            isins: isins,
+          })
+      );
+    }
   };
 
   handleClick = () => {
-    let { fund } = this.state;
-    if (!fund.amount) {
-      toast("Please enter valid amount");
-    } else {
+    let { fundsData, type } = this.state;
+    if (fundsData.length === 0) {
+      this.props.history.goBack();
+      return;
+    }
+    let submit = true;
+    fundsData.forEach((data) => {
+      console.log(data.amount);
+      if (!data.amount) {
+        submit = false;
+      }
+    });
+    if (submit) {
       this.proceedInvestment();
+    } else {
+      if (type === "nfo") toast("Please enter valid amount");
+      else toast("Please fill in all the amount field(s).");
     }
   };
 
   handleChange = (name, index = 0) => async (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, ctc_title, fundsData, investType } = this.state;
+    let { form_data, ctc_title, fundsData, investType, type } = this.state;
     if (id === "sip" || id === "onetime") {
       if (id === investType) return;
       investType = id;
-      form_data[index].investType_error = "";
       if (id === "sip") {
         ctc_title = "SELECT SIP DATE";
       } else {
@@ -84,10 +125,11 @@ class Checkout extends Component {
         ctc_title: ctc_title,
         investType: investType,
       });
-      await this.getNfoPurchaseLimit({
-        investType: id,
-        isins: fundsData[index].isin,
-      });
+      if (type === "nfo")
+        await this.getNfoPurchaseLimit({
+          investType: id,
+          isins: fundsData[index].isin,
+        });
       fundsData.forEach((fund, index) => {
         if (fund.amount) {
           this.checkLimit(fundsData[index].amount, index);
@@ -114,7 +156,10 @@ class Checkout extends Component {
       fundsData,
       disableInputSummary,
       loadingText,
+      type,
+      partner,
     } = this.state;
+    if (fundsData && fundsData.length === 0) ctc_title = "BACK";
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -129,6 +174,8 @@ class Checkout extends Component {
         <div className="nfo-checkout">
           <div className="checkout-invest-type">
             {nfoData.checkoutInvestType.map((data, index) => {
+              if (type !== "nfo" && partner.code === "bfdlmobile")
+                data.selected_icon = "bfdl_selected.png";
               return (
                 <div
                   key={index}
@@ -153,7 +200,7 @@ class Checkout extends Component {
                     <img
                       className="icon"
                       alt=""
-                      src={require(`assets/selected.png`)}
+                      src={require(`assets/${data.selected_icon}`)}
                     />
                   )}
                 </div>
@@ -171,12 +218,15 @@ class Checkout extends Component {
                     <div className="text">
                       <h4>
                         {fund.friendly_name}
-                        {false && (
-                          <img
-                            className="icon"
-                            alt=""
-                            src={require(`assets/delete_new.png`)}
-                          />
+                        {type === "diy" && (
+                          <span>
+                            <img
+                              onClick={() => this.deleteFund(fund, index)}
+                              className="icon"
+                              alt=""
+                              src={require(`assets/delete_new.png`)}
+                            />
+                          </span>
                         )}
                       </h4>
                       <small>Enter amount</small>

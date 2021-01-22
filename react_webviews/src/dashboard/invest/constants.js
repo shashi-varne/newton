@@ -252,12 +252,14 @@ export const nfoData = {
       name: "SIP / Monthly",
       icon: "sip_icn.png",
       icon_light: "sip_icn_light.png",
+      selected_icon: "selected.png",
     },
     {
       value: "onetime",
       name: "One Time",
       icon: "one_time_icn.png",
       icon_light: "one_time_icn_light.png",
+      selected_icon: "selected.png",
     },
   ],
 };
