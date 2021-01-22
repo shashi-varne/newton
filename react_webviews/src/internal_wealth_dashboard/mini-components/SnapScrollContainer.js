@@ -79,7 +79,7 @@ const SnapScrollContainer = ({
   const Footer = (
     <div id='iwd-scroll-contain-footer'>
       <IconButton className={`${showBtnGlow ? 'iwd-btn-glow' : ''} iwd-pf-btn`} onClick={scrollPage}>
-        <img src={UpwardIcon} alt='' className={currentPage < pages ? 'rotate-90' : ''} />
+        <img src={UpwardIcon} alt='' className={currentPage < pages ? 'iwd-rotate-180' : 'iwd-rotate-180-reverse'} />
       </IconButton>
       <div id='iwd-pf-page-nos'>
         <b>0{currentPage}</b>|0{pages}

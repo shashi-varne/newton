@@ -68,7 +68,7 @@ function Analysis() {
     },
   };
 
-  const renderTabCard = () => {
+  const renderTabNavCard = () => {
     const redirectTo = pageType === 'equity' ? 'debt' : 'equity';
 
     return (
@@ -106,7 +106,7 @@ function Analysis() {
         <ChartsContainer data={graphData} page={pageType} />
         {pageTypeMapper[pageType].component}
         <TopAMCS topAMCs={topAMCs[pageType]} />
-        {renderTabCard()}
+        {renderTabNavCard()}
         {isMobileView && <ScrollTopBtn />}
       </SnapScrollContainer>
     </section>

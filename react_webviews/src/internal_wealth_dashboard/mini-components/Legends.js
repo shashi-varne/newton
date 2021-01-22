@@ -1,6 +1,7 @@
 import React from 'react' 
+import { formatPercentVal } from '../common/commonFunctions';
 
-function Legends({ data = [], columns = 2, classes = {}, percentage = true, round = 0 }) {
+function Legends({ data = [], columns = 2, classes = {} }) {
   const {
     container: containerClass,
     child: childClass,
@@ -26,7 +27,7 @@ function Legends({ data = [], columns = 2, classes = {}, percentage = true, roun
             ></div>
             <div className={`iwd-lc-title ${labelClass}`}>{name}</div>
           </header>
-        <div className={`iwd-lc-value ${valueClass}`}>{Math.round(share, round)}{percentage ? '%': ''}</div>
+        <div className={`iwd-lc-value ${valueClass}`}>{formatPercentVal(share)}</div>
         </li>
       ))}
     </ul>
