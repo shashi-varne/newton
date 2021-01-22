@@ -6,6 +6,7 @@ import Input from "common/ui/Input";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
+import { nfoData } from "../../constants";
 
 class Checkout extends Component {
   constructor(props) {
@@ -53,9 +54,9 @@ class Checkout extends Component {
     let id = (event.target && event.target.id) || "";
     let { form_data, ctc_title, fund, investType } = this.state;
     if (id === "sip" || id === "onetime") {
+      if (id === investType) return;
       investType = id;
       form_data.investType_error = "";
-      await this.getNfoPurchaseLimit({ investType: id, isins: fund.isin });
       if (fund.amount) this.checkLimit(fund.amount);
       if (id === "sip") {
         ctc_title = "SELECT SIP DATE";
@@ -67,15 +68,16 @@ class Checkout extends Component {
         ctc_title: ctc_title,
         investType: investType,
       });
+      await this.getNfoPurchaseLimit({ investType: id, isins: fund.isin });
     } else if (name) {
-      if (!value) {
+      if (!isNaN(parseInt(value, 10))) {
+        fund.amount = parseInt(value, 10);
+        this.setState({ form_data: form_data, fund: fund });
+        this.checkLimit(fund.amount);
+      } else {
         fund.amount = "";
         form_data[`${name}_error`] = "This is required";
         this.setState({ form_data: form_data, fund: fund });
-      } else {
-        fund.amount = value;
-        this.setState({ form_data: form_data, fund: fund });
-        this.checkLimit(value);
       }
     }
   };
@@ -103,54 +105,37 @@ class Checkout extends Component {
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">
-            <div
-              id="sip"
-              onClick={this.handleChange()}
-              className={investType === "sip" ? "selected item" : "item"}
-            >
-              {investType === "sip" && (
-                <img alt="" src={require(`assets/sip_icn.png`)} />
-              )}
-              {investType !== "sip" && (
-                <img
-                  id="sip"
-                  alt=""
-                  src={require(`assets/sip_icn_light.png`)}
-                />
-              )}
-              <h3 id="sip">SIP / Monthly</h3>
-              {investType === "sip" && (
-                <img
-                  className="icon"
-                  alt=""
-                  src={require(`assets/selected.png`)}
-                />
-              )}
-            </div>
-            <div
-              id="onetime"
-              onClick={this.handleChange()}
-              className={investType === "onetime" ? "selected item" : "item"}
-            >
-              {investType === "onetime" && (
-                <img alt="" src={require(`assets/one_time_icn.png`)} />
-              )}
-              {investType !== "onetime" && (
-                <img
-                  id="onetime"
-                  alt=""
-                  src={require(`assets/one_time_icn_light.png`)}
-                />
-              )}
-              <h3 id="onetime">One Time</h3>
-              {investType === "onetime" && (
-                <img
-                  className="icon"
-                  alt=""
-                  src={require(`assets/selected.png`)}
-                />
-              )}
-            </div>
+            {nfoData.checkoutInvestType.map((data, index) => {
+              return (
+                <div
+                  key={index}
+                  id={data.value}
+                  onClick={this.handleChange()}
+                  className={
+                    investType === data.value ? "selected item" : "item"
+                  }
+                >
+                  {investType === data.value && (
+                    <img alt="" src={require(`assets/${data.icon}`)} />
+                  )}
+                  {investType !== data.value && (
+                    <img
+                      id={data.value}
+                      alt=""
+                      src={require(`assets/${data.icon_light}`)}
+                    />
+                  )}
+                  <h3 id={data.value}>{data.name}</h3>
+                  {investType === data.value && (
+                    <img
+                      className="icon"
+                      alt=""
+                      src={require(`assets/selected.png`)}
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
           <div className="cart-items">
             {fund && (
@@ -162,7 +147,7 @@ class Checkout extends Component {
                   <h4>{fund.friendly_name}</h4>
                   <small>Enter amount</small>
                   <Input
-                    type="number"
+                    type="text"
                     name="amount"
                     id="amount"
                     class="input"
@@ -172,6 +157,8 @@ class Checkout extends Component {
                       form_data.amount_error || formatAmountInr(fund.amount)
                     }
                     onChange={this.handleChange("amount")}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                   />
                 </div>
                 {showFundnotSupported && (

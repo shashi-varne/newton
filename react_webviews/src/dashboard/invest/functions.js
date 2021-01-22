@@ -701,17 +701,14 @@ export async function getNfoRecommendation() {
     if (status === 200) {
       storageService().remove("nfo_cart");
       storageService().remove("nfo_cartCount");
-      console.log(result);
       let sortedArray = result.recommendations.filter((item) => {
         return item.growth_or_dividend === this.state.scheme;
       });
-      console.log(sortedArray);
       var newArray = sortedArray.map((dict) => {
         dict["addedToCart"] = false;
         dict["allow_purchase"] = true;
         return dict;
       });
-      console.log(newArray);
       storageService().setObject("nfo_fundsList", newArray);
       let nfoFunds = newArray;
       let cartCount = 0;
@@ -769,7 +766,7 @@ export function checkLimit(amount) {
   if (amount < min) {
     form_data.amount_error = "Please add atleast ₹" + min + " to proceed.";
     disableInputSummary = true;
-  } else if (amount % mul != 0) {
+  } else if (amount % mul !== 0) {
     form_data.amount_error = "Amount must be multiple of ₹" + mul;
     disableInputSummary = true;
   } else if (amount > max) {
@@ -813,7 +810,7 @@ export async function proceedInvestment(event, isReferralGiven) {
   let investment = {};
   investment.amount = parseFloat(fund.amount);
   let investment_type = "";
-  if (investType == "onetime") {
+  if (investType === "onetime") {
     investment.type = "diy";
     investment_type = "onetime";
   } else {
@@ -858,7 +855,12 @@ export async function makeInvestment(event, nfo_investment, isReferralGiven) {
     body.referral_code = invRefData.code;
   }
   this.setState(
-    { isApiRunning: true, sipOrOnetime: investment_type, body: body },
+    {
+      isApiRunning: true,
+      sipOrOnetime: investment_type,
+      body: body,
+      isRedirectToPayment: isRedirectToPayment,
+    },
     () => this.proceedInvestmentChild(event)
   );
 
@@ -871,7 +873,6 @@ export async function proceedInvestmentChild(ev) {
     // this.state.redirectToKyc();
     return;
   }
-  console.log(this.state.sipOrOnetime);
   if (this.state.sipOrOnetime === "sip" && !this.state.isSipDatesScreen) {
     storageService().setObject("investmentObjSipDates", this.state.body);
     this.navigate("/sipdates");
@@ -890,6 +891,7 @@ export async function proceedInvestmentChild(ev) {
       if (status === 200) {
         let pgLink = result.investments[0].pg_link;
         pgLink +=
+          // eslint-disable-next-line
           (pgLink.match(/[\?]/g) ? "&" : "?") +
           "redirect_url=" +
           this.state.paymentRedirectUrl;

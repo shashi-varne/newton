@@ -7,6 +7,7 @@ import {
   getFormattedStartDate,
   getSchemeOption,
 } from "../../functions";
+import { storageService } from "utils/validators";
 
 class NfoFunds extends Component {
   constructor(props) {
@@ -34,7 +35,8 @@ class NfoFunds extends Component {
     this.getNfoRecommendation();
   };
 
-  handleClick = () => {
+  handleClick = (fund) => () => {
+    storageService().setObject("nfo_detail_fund", fund);
     this.navigate("/advanced-investing/new-fund-offers/funds/checkout");
   };
 
@@ -76,7 +78,7 @@ class NfoFunds extends Component {
                         <p>Category: {data.tax_plan}</p>
                       </div>
                       <div className="invest">
-                        <Button onClick={this.handleClick}>INVEST</Button>
+                        <Button onClick={this.handleClick(data)}>INVEST</Button>
                       </div>
                     </div>
                     <div className="date">
