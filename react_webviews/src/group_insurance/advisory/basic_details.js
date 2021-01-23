@@ -4,6 +4,7 @@ import Input from '../../common/ui/Input';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import {containsSpecialCharactersAndNumbers} from 'utils/validators';
 import PlusMinusInput from '../../common/ui/PlusMinusInput';
 import { genderOptions, yesNoOptions } from '../../group_insurance/constants' 
 import {advisoryConstants} from './constants';
@@ -18,8 +19,25 @@ class AdvisoryBasicDetails extends Component {
             type: getConfig().productName,
             ageOptions: advisoryConstants.ageOptions,
             metroCityOptions: advisoryConstants.metroCityOptions,
-            form_data: {}
+            dependents_data: advisoryConstants.dependents_data,
+            form_data: {}, 
+            spouse_checked: false,
+            none_checked: false
         }
+    }
+
+    componentDidMount(){
+        var dependents_data = this.state.dependents_data;
+        this.setState({
+            Kids_max: dependents_data.kids_max,
+            Kids_total: 0,
+            // kids_checked: false,
+            Parents_max: dependents_data.parents_max,
+            Parents_total: 0,
+            // parents_checked: false,
+            none_checked: false, 
+            // spouse_checked: false
+        })
     }
 
     handleChange = name => event => {
@@ -29,43 +47,41 @@ class AdvisoryBasicDetails extends Component {
         if (!name) {
           name = event.target.name;
         }
-        var value = event.target ? event.target.value : event;
-        console.log('name', name)
-        console.log('event', event.target.value)
 
-        form_data[name] = value;
-        form_data[name + '_error'] = ''
+        var value = event.target ? event.target.value : event;
+    
+        if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
+            return;
+        }
+
+        if(name === 'city' || name === 'age'){
+            var value = event
+            form_data[name] = event;
+            form_data[name + '_index'] = event;
+
+        }else{
+            form_data[name] = value;
+            form_data[name + '_error'] = ''
+        }
+
 
         this.setState({
             form_data: form_data
         })
 
     
-    }
-
-    handleClick = () =>{
-        var form_data = this.state.form_data;
-        var canSubmitForm = true;
-
-        if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
-            form_data.name_error = 'Enter valid full name';
-            canSubmitForm = false;
-        }
-        if(form_data && !form_data.city){
-            form_data.city_error = 'Please enter city name'
-        }
-        this.setState({
-            form_data: form_data
-        })
     }
 
     handleChangeRadio = name => event => {
         var form_data = this.state.form_data || {};
     
-        let optionsMapper = {
-          'gender': genderOptions
+        let options = yesNoOptions;
+
+        if(name === 'gender'){
+            options = genderOptions
         }
-        form_data[name] = optionsMapper[name][event].value;
+
+        form_data[name] = options[event].value;
         form_data[name + '_error'] = '';
     
         this.setState({
@@ -73,6 +89,106 @@ class AdvisoryBasicDetails extends Component {
         })
     
       };
+
+    navigate = (pathname, search) => {
+      this.props.history.push({
+        pathname: pathname,
+        search: search ? search : getConfig().searchParams,
+      });
+    }
+
+    setMinMax = () => {
+
+        if (this.state.kids_total === 4) {
+            this.setState({
+                kids_ismax: true,
+            });
+        } else if (this.state.parents_total === 2){
+            this.setState({
+                parents_ismax: true,
+            });
+        }
+    };
+
+    updateParent = (key, value) => {
+        this.setState({
+            [key]: value,
+            none_checked: false 
+        }, () => {
+            this.setMinMax();
+        });
+    };
+
+    handleRegularCheckbox = (name) =>{
+        var none_checked = this.state.none_checked;
+        var spouse_checked = this.state.spouse_checked;
+
+        if(name === 'spouse'){
+            this.setState({
+                spouse_checked: !spouse_checked,
+                none_checked: false
+            })
+        }else if(name === 'none'){
+            none_checked = !none_checked;
+            
+            if(none_checked){
+                this.setState({
+                    Kids_checked: false, 
+                    Kids_total: 0,
+                    Parents_checked: false,
+                    Parents_total: 0,
+                    spouse_checked: false,
+                })
+            }
+
+            this.setState({
+                none_checked: none_checked
+            })
+        }
+        
+    }
+
+    handleClick = () =>{
+        var form_data = this.state.form_data;
+        var canSubmitForm = true;
+
+        let spouse_count = 0;
+        if(this.state.spouse_checked){
+            spouse_count = 1;
+        }
+        console.log('kids:', this.state.Kids_total, 'parents:',this.state.Parents_total, 'spouse:', spouse_count)
+        if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
+            form_data.name_error = 'Enter valid full name';
+            canSubmitForm = false;
+        }
+        if(form_data && !form_data.gender){
+            form_data.gender_error = 'Please select gender'
+            canSubmitForm = false;
+        }
+        if(form_data && !form_data.illness){
+            form_data.illness_error = 'Please select an option'
+            canSubmitForm = false;
+        }
+        if(form_data && !form_data.married){
+            form_data.married_error = 'Please select an option'
+            canSubmitForm = false;
+        }
+        if(form_data && !form_data.age){
+            form_data.age_error = 'Please select age'
+            canSubmitForm = false;
+        }
+        if(form_data && !form_data.city){
+            form_data.city_error = 'Please select city'
+            canSubmitForm = false;
+        }
+        this.setState({
+            form_data: form_data
+        })
+
+        if(canSubmitForm){
+            this.navigate('/group-insurance/advisory/income-details')
+        }
+    }
 
     render() {
         return(
@@ -124,61 +240,61 @@ class AdvisoryBasicDetails extends Component {
             <div className="InputField">
             <DropdownWithoutIcon
               parent={this}
-            //   header_title="What you're interested in"
-            //   selectedIndex = {this.state.form_data.index || 0}
+              header_title="What you're interested in"
+              selectedIndex = {this.state.form_data.age_index || 0}
               width="140"
               dataType="AOB"
               options={this.state.ageOptions}
-              id="insurance"
+              id="age"
               label="What is your age?"
-            //   error={this.state.form_data.insuranceType_error ? true : false}
-            //   helperText={this.state.form_data.insuranceType_error}
-              name="insuranceType"
-              value={''}
-            //   onChange={this.handleChange("insuranceType")}
+              error={this.state.form_data.age_error ? true : false}
+              helperText={this.state.form_data.age_error}
+              name="age"
+              value={this.state.form_data.age || ''}
+              onChange={this.handleChange("age")}
             />
             </div>
              <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
                   label="Are you married?"
-                  class="Gender:"
+                  class="married"
                   options={yesNoOptions}
-                  id="gender"
-                  name="gender"
-                //   error={this.state.form_data.gender_error ? true : false}
-                //   helperText={this.state.form_data.gender_error}
-                //   value={this.state.form_data.gender || ""}
-                //   onChange={this.handleChangeRadio("gender")}
+                  id="married"
+                  name="married"
+                  error={this.state.form_data.married_error ? true : false}
+                  helperText={this.state.form_data.married_error}
+                  value={this.state.form_data.married || ""}
+                  onChange={this.handleChangeRadio("married")}
                 />
             </div>
 
-            <p style={{color: '#767E86', marginBottom: '15px', fontSize: '12.8px'}}>Do you have any dependents?</p>
             <div className="InputField">
             <DropdownWithoutIcon
               parent={this}
-            //   header_title="What you're interested in"
-            //   selectedIndex = {this.state.form_data.index || 0}
+              selectedIndex = {this.state.form_data.city_index || 0}
               width="140"
               dataType="AOB"
               options={this.state.metroCityOptions}
-              id="insurance"
+              id="city"
               label="Where do you live?"
-            //   error={this.state.form_data.insuranceType_error ? true : false}
-            //   helperText={this.state.form_data.insuranceType_error}
+              error={this.state.form_data.city_error ? true : false}
+              helperText={this.state.form_data.city_error}
               name="city"
-              value={''}
-            //   onChange={this.handleChange("insuranceType")}
+              value={this.state.form_data.city || ''}
+              onChange={this.handleChange("city")}
             />
             </div>
             <div style={{ marginBottom: '10px'}}>
+            <p style={{color: '#767E86', marginBottom: '15px', fontSize: '12.8px'}}>Do you have any dependents?</p>
+
             <div className="checkbox-container">
             <Checkbox
-                //   checked={this.state.tncChecked}
+                  checked={this.state.spouse_checked}
                   color="default"
                   value="checked"
-                  name="checked"
-                //   onChange={this.handleTermsAndConditions}
+                  name="spouse"
+                  onChange={()=>this.handleRegularCheckbox('spouse')}
                   className="Checkbox"
             />
             <p className="checkbox-option">Spouse</p>
@@ -188,11 +304,11 @@ class AdvisoryBasicDetails extends Component {
 
             <div className="checkbox-container">
             <Checkbox
-                //   checked={this.state.tncChecked}
+                  checked={this.state.none_checked}
                   color="default"
                   value="checked"
-                  name="checked"
-                //   onChange={this.handleTermsAndConditions}
+                  name="none"
+                  onChange={()=>this.handleRegularCheckbox('none')}
                   className="Checkbox"
             />
             <p className="checkbox-option">None</p>
@@ -203,14 +319,14 @@ class AdvisoryBasicDetails extends Component {
                 <RadioWithoutIcon
                   width="40"
                   label="Any family history of critical illness?"
-                  class="Gender:"
+                  class="illness:"
                   options={yesNoOptions}
-                  id="gender"
-                  name="gender"
-                //   error={this.state.form_data.gender_error ? true : false}
-                //   helperText={this.state.form_data.gender_error}
-                //   value={this.state.form_data.gender || ""}
-                //   onChange={this.handleChangeRadio("gender")}
+                  id="illness"
+                  name="illness"
+                  error={this.state.form_data.illness_error ? true : false}
+                  helperText={this.state.form_data.illness_error}
+                  value={this.state.form_data.illness || ""}
+                  onChange={this.handleChangeRadio("illness")}
                 />
             </div>
 

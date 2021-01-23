@@ -48,6 +48,7 @@ class AdvisoryLanding extends Component {
             <Container
             events={this.sendEvents('just_set_events')}
             fullWidthButton={true}
+            // force_hide_inpage_title={true}
             onlyButton={true}
             title="Let's find the right coverage for you"
             buttonTitle="LET'S GET STARTED"
@@ -56,7 +57,7 @@ class AdvisoryLanding extends Component {
             <div className="advisory-landing-container">
 
               <img className="advisory-entry-hero" src={require(`assets/${this.state.type}/advisory_entry_hero.svg`)}/>
-              <p className="advisory-hero-desc">We'll recommend insurance coverage options that work for you, based on your profile</p>
+              <p className="advisory-hero-desc">We'll recommend insurance coverage options that work for you, based on your profile.</p>
             <p className="" style={{marginBottom: '20px', color: 'black', fontWeight: '600', fontSize: '16px' }}>Find the right coverage in 5 easy steps</p>
               <div className="steps-to-follow-container">
               {

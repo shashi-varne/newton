@@ -1103,27 +1103,27 @@ input#pan {
   }
 }
 
+.advisory-title-container{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  color: #0A1C32;
+  font-weight: 700;
+  min-height: 50px;
+  font-size: 20px;
+  text-align: left;
+  transition: 0.3s transform ease-in-out;
+
+  span{
+    color: #767E86;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
 .advisory-basic-details-container{
   margin-bottom: 50px;
-  .advisory-title-container{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #0A1C32;
-    font-weight: 700;
-    min-height: 50px;
-    font-size: 20px;
-    text-align: left;
-    transition: 0.3s transform ease-in-out;
-
-    span{
-      color: #767E86;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 20px;
-    }
-  }
-
   .InputField{
 
     .RadioWithIcon{
@@ -1139,7 +1139,27 @@ input#pan {
     }
   }
 }
+.advisory-liability-details-container{
+  #loan_amount, #total_amount{
+    padding-left: 12.5px;
+  }
+  .InputField{
+    .RadioWithIcon{
+      color: #767E86;
+    }
+  }
+}
 
+.advisory-income-details-container{
+  #income, #expense{
+    padding-left: 12.5px;
+  }
+}
+.advisory-asset-details-container{
+  #asset_amount, #health_cover_amount, #term_cover_amount, #critical_cover_amount, #corona_cover_amount{
+    padding-left: 12.5px;
+  }
+}
 
 .common-faqs {
   .common-faqs-tile {

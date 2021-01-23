@@ -47,6 +47,9 @@ class Container extends Component {
        || pathname === '/group-insurance/health/landing'
        || pathname === '/group-insurance/advisory/landing'
        || pathname === '/group-insurance/advisory/basic-details'
+       || pathname === '/group-insurance/advisory/income-details'
+       || pathname === '/group-insurance/advisory/liability-details'
+       || pathname === '/group-insurance/advisory/asset-details'
        ) {
       this.setState({
         new_header: true,

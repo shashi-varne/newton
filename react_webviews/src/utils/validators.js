@@ -199,7 +199,9 @@ export function formatAmount(amount) {
   if (!amount) {
     return '';
   }
-
+  if(amount.includes(',')){
+    amount = amount.replace(/,/g, "");
+  }
   amount = Number(amount);
   amount = amount.toFixed(0);
   amount = amount.toString();
@@ -922,6 +924,11 @@ export function nonRoundingToFixed(val, decimalPlaces) {
 
 export function containsSpecialCharacters(value){
   var format = /[$&+,:;=?@#|'<>.^*()%!"-]/g;
+  return format.test(value);
+}
+
+export function containsNumbersAndComma(value){
+  var format = /^[0-9,]*$/g;
   return format.test(value);
 }
 
