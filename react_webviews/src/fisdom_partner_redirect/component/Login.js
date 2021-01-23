@@ -61,7 +61,7 @@ const Login = (props) => {
       setLoading(true);
       const newNumber = number.toString().replace(/\D/g,'');
       const user = await validate_user(newNumber);
-      if (user.msg) {
+      if (user.obc_user) {
         nextPage();
       } else {
         setPhoneErr(<div>Sorry, it seems you have not invested in Mutual Fund through eOBC mPAY. Please click <a href="https://www.pnbindia.in/MF-Disclaimer.html">here</a> to proceed to PNB website.</div>);
