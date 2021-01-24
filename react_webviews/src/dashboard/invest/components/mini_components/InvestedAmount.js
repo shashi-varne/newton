@@ -126,7 +126,7 @@ const InvestedAmount = (props) => {
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle={
-        loader ? <CircularProgress size={22} thickness={4} color='white' /> : 'Show My Funds'
+        loader ? <CircularProgress size={22} thickness={4} /> : 'Show My Funds'
       }
       helpContact
       hideInPageTitle

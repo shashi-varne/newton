@@ -108,7 +108,7 @@ const Target = (props) => {
       hideInPageTitle
       hidePageTitle
       title='Some heading'
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} color='white' /> : 'Next'}
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
       handleClick={goNext}
       classOverRideContainer='pr-container'
       disable={!targetAmount || loader}

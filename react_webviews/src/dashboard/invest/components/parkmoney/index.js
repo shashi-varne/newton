@@ -73,7 +73,7 @@ const Landing = (props) => {
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} color='white' /> : 'Next'}
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
       helpContact
       hideInPageTitle
       hidePageTitle
