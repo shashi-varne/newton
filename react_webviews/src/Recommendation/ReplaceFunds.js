@@ -1,62 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Container from '../fund_details/common/Container';
-import { storageService } from 'utils/validators';
 import { FormControl, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
-import FundCard from '../mf_journey_common/FundCard';
+import FundCard from '../dashboard/invest/components/mini_components/FundCard';
+
+import { storageService } from 'utils/validators';
+
 import './style.scss';
-import { navigate as navigateFunc } from '../mf_journey_common/common/commonFunction';
+
 const ReplaceFunds = (props) => {
-  const [alternateFunds, setAlternateFunds] = useState(null);
   const [selectedFund, setSelectedFund] = useState('');
-  const { recommendation, alternatives,investType } = storageService().getObject('graphData');
-  const { graphData: {mftype,mfid,amount} } = props.location.state;
-  const navigate = navigateFunc.bind(props);
-  useEffect(() => {
-    filterAlternateFunds();
-  }, []);
-  const filterAlternateFunds = () => {
-    // eslint-disable-next-line no-unused-expressions
-    recommendation?.forEach((el) => {
-      return alternatives[mftype]?.forEach((alt, idx) => {
-        if (alt.mf.mfid === el.mf.mfid) {
-          // eslint-disable-next-line no-unused-expressions
-          alternatives[mftype].splice(idx, 1);
-        }
-      });
-    });
-    setAlternateFunds(alternatives[mftype]);
-  };
+  const { recommendation, alternatives } = storageService().getObject('graphData');
+  const {
+    graphData: { mftype, mfid, amount, alternateFunds },
+  } = props.location.state;
   const handleChange = (e) => {
     setSelectedFund(e.target.value);
   };
   const replaceFund = () => {
-      const alternateFund = alternatives[mftype].find(el => el.mf.mfid === selectedFund);
-      if(alternateFund){
-
-        alternateFund.amount = amount;
-        const newData = recommendation?.map(el => {
-          if(el.mf.mfid === mfid){
-            return alternateFund
-          } 
-          return el;
-        })
-        const graphData = storageService().getObject("graphData");
-        graphData.recommendation = newData;
-        storageService().setObject("graphData",graphData);
-      }
-      props.history.goBack();
-        //navigate(`${investType}/edit-funds`);
-  }
+    const alternateFund = alternatives[mftype].find((el) => el.mf.mfid === selectedFund);
+    if (alternateFund) {
+      alternateFund.amount = amount;
+      const newData = recommendation?.map((el) => {
+        if (el.mf.mfid === mfid) {
+          return alternateFund;
+        }
+        return el;
+      });
+      const graphData = storageService().getObject('graphData');
+      graphData.recommendation = newData;
+      storageService().setObject('graphData', graphData);
+    }
+    props.history.goBack();
+  };
   return (
     <Container
-      //goBack={()=>{}}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Done'
       helpContact
       hideInPageTitle
       hidePageTitle
-      title='Some heading'
+      title='Replace fund'
       handleClick={replaceFund}
       classOverRideContainer='pr-container'
     >
@@ -74,18 +58,13 @@ const ReplaceFunds = (props) => {
                 key={idx}
                 value={el?.mf?.mfid}
                 labelPlacement='start'
-                control={<Radio />}
+                control={<Radio color="primary"/>}
                 label={<FundCard fund={el} history={props.history} />}
               />
             ))}
-            
           </RadioGroup>
         </FormControl>
-        <div>
-        {
-          alternateFunds?.length === 0 && <h1>No alternative fund</h1>
-        }
-        </div>
+        <div>{alternateFunds?.length === 0 && <h1>No alternative fund</h1>}</div>
       </section>
     </Container>
   );

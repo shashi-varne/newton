@@ -1,24 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '../fund_details/common/Container';
+import FundCard from '../dashboard/invest/components/mini_components/FundCard';
+import Button from '@material-ui/core/Button';
+import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
+
+import replaceFund from 'assets/replace_bfdl.png';
+
 import { storageService } from 'utils/validators';
-import { formatAmountInr } from '../utils/validators';
-import replaceFund from "assets/replace_bfdl.png"
-import FundCard from '../mf_journey_common/FundCard';
-import { navigate as navigateFunc} from './common/commonFunction';
+import { navigate as navigateFunc } from './common/commonFunction';
+import isEmpty from 'lodash/isEmpty';
+
 import './style.scss';
+
 const EditFunds = (props) => {
-  const {recommendation,alternatives,investType} = storageService().getObject("graphData");
+  const [open, setOpen] = useState(false);
+  const { recommendation, alternatives } = storageService().getObject('graphData');
   const navigate = navigateFunc.bind(props);
-  const showAlternateFunds = ({amount,mf:{mfid,mftype}}) => e => {
-    navigate('alternate-funds',{mftype,mfid,amount})
-  }
-  const goBack = () =>{
-    //navigate(`${investType}/recommendations`)
+
+  const filterAlternateFunds = (mftype) => {
+    // eslint-disable-next-line no-unused-expressions
+    recommendation?.forEach((el) => {
+      return alternatives[mftype]?.forEach((alt, idx) => {
+        if (alt.mf.mfid === el.mf.mfid) {
+          // eslint-disable-next-line no-unused-expressions
+          alternatives[mftype].splice(idx, 1);
+        }
+      });
+    });
+    return alternatives[mftype];
+  };
+  const showAlternateFunds = ({ amount, mf: { mfid, mftype } }) => (e) => {
+    const alternateFunds = filterAlternateFunds(mftype);
+    if (isEmpty(alternateFunds)) {
+      setOpen(true);
+    } else {
+      navigate('alternate-funds', { mftype, mfid, amount, alternateFunds });
+    }
+  };
+  const goBack = () => {
     props.history.goBack();
-  }
+  };
+  const onClose = () => {
+    setOpen(!open);
+  };
   return (
     <Container
-      //goBack={goBack}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Done'
@@ -31,9 +57,9 @@ const EditFunds = (props) => {
     >
       <section className='recommendations-common-container-edit'>
         <div className='recommendations-funds-lists-edit'>
-          {recommendation?.map(( el, idx ) => (
+          {recommendation?.map((el, idx) => (
             <div key={idx} className='recommendations-funds-item-edit'>
-              <FundCard  classOverRide="recommendation-edit-replace" fund={el}/>
+              <FundCard classOverRide='recommendation-edit-replace' fund={el} />
               <div className='recommendations-funds-item-replace' onClick={showAlternateFunds(el)}>
                 <img alt='replaceFund' src={replaceFund} />
                 <div>Replace</div>
@@ -41,8 +67,29 @@ const EditFunds = (props) => {
             </div>
           ))}
         </div>
+        <div>
+          <DialogContainer open={open} onClose={onClose} />
+        </div>
       </section>
     </Container>
   );
 };
 export default EditFunds;
+
+const DialogContainer = ({ open, onClose }) => {
+  return (
+    <Dialog
+      fullScreen={false}
+      open={open}
+      onClose={onClose}
+      aria-labelledby='responsive-dialog-title'
+    >
+      <DialogTitle id='form-dialog-title'>No alternative funds available</DialogTitle>
+      <DialogActions>
+        <Button className='DialogButtonFullWidth' onClick={onClose} color='default' autoFocus>
+          GOT IT!
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};

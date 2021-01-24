@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from 'fund_details/common/Container';
+
 import { navigate as navigateFunc} from '../../common/commonFunction';
 
 const saveGoal = {
@@ -31,16 +32,14 @@ const InvestGoal = (props) => {
   }
   return (
     <Container
-     //goBack={()=>{}}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Next'
       helpContact
       hideInPageTitle
       hidePageTitle
-      title="Some heading"
+      title="Save for a Goal"
       noFooter
-    //  handleClick={goNext}
       classOverRideContainer='pr-container'
     >
      <section className="invest-goal-container">
