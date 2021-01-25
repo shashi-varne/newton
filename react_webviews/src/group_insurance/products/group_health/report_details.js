@@ -11,7 +11,7 @@ import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import { initialize } from './common_data';
+import { initialize, openPdf } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
@@ -46,6 +46,7 @@ class GroupHealthReportDetails extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.openPdf = openPdf.bind(this);
 
     }
 
@@ -626,7 +627,7 @@ class GroupHealthReportDetails extends Component {
                              <span
                                style={{ color: getConfig().primary }}
                                onClick={() =>
-                                 this.openInBrowser(
+                                 this.openPdf(
                                    this.state.common_data.policy_prospectus,
                                    "read_document"
                                  )
