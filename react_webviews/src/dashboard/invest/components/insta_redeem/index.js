@@ -94,7 +94,6 @@ class InstaRedeem extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        noHeader={this.state.show_loader}
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
         hideInPageTitle

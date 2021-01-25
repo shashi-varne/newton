@@ -3,7 +3,6 @@ import { storageService, formatAmountInr } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { apiConstants, investCardsBase, keyPathMapper } from "./constants";
-import { element } from "prop-types";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -773,14 +772,14 @@ export async function getDiyPurchaseLimit(data) {
       let purchaseLimitData = result.funds_data;
       purchaseLimitData = purchaseLimitData.map((dict) => {
         var results = fundsData.filter((obj) => {
-          if (obj.isin == dict["isin"]) {
+          if (obj.isin === dict["isin"]) {
             obj["allow_purchase"] = dict["ot_sip_flag"];
           }
-          return;
+          return obj;
         });
         dict["addedToCart"] = false;
         dict["allow_purchase"] = true;
-        if (results.length == 0) {
+        if (results.length === 0) {
           dict["addedToCart"] = false;
         }
         return dict;

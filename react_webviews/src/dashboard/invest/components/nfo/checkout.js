@@ -20,6 +20,7 @@ class Checkout extends Component {
       partner: getConfig().partner,
       disableInput: [],
       fundsData: [],
+      renderData: nfoData.checkoutInvestType,
     };
     this.initialize = initialize.bind(this);
   }
@@ -39,7 +40,7 @@ class Checkout extends Component {
       return;
     }
     let fundsData = [];
-    let { form_data } = this.state;
+    let { form_data, renderData, partner } = this.state;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -60,16 +61,20 @@ class Checkout extends Component {
       let schemeType = storageService().getObject("diystore_category") || "";
       let categoryName =
         storageService().getObject("diystore_subCategoryScreen") || "";
-      fundsData =
-        storageService().getObject("diystore_cart") == false
-          ? [storageService().getObject("diystore_fundInfo")]
-          : storageService().getObject("diystore_cart");
+      fundsData = !storageService().getObject("diystore_cart")
+        ? [storageService().getObject("diystore_fundInfo")]
+        : storageService().getObject("diystore_cart");
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject("diystore_fundsList");
       let isinArr = fundsData.map((data) => {
         return data.isin;
       });
       let isins = isinArr.join(",");
+      if (partner.code === "bfdlmobile") {
+        renderData = renderData.map((data) => {
+          data.selected_icon = "bfdl_selected.png";
+        });
+      }
       this.setState(
         {
           fundsData: fundsData,
@@ -77,6 +82,7 @@ class Checkout extends Component {
           schemeType: schemeType,
           fundsArray: fundsArray,
           form_data: form_data,
+          renderData: renderData,
         },
         () =>
           this.getDiyPurchaseLimit({
@@ -124,11 +130,21 @@ class Checkout extends Component {
         ctc_title: ctc_title,
         investType: investType,
       });
-      if (type === "nfo")
+      if (type === "nfo") {
         await this.getNfoPurchaseLimit({
           investType: id,
           isins: fundsData[index].isin,
         });
+      } else {
+        let isinArr = fundsData.map((data) => {
+          return data.isin;
+        });
+        let isins = isinArr.join(",");
+        await this.getDiyPurchaseLimit({
+          investType: id,
+          isins: isins,
+        });
+      }
       fundsData.forEach((fund, index) => {
         if (fund.amount) {
           this.checkLimit(fundsData[index].amount, index);
@@ -156,7 +172,7 @@ class Checkout extends Component {
       disableInputSummary,
       loadingText,
       type,
-      partner,
+      renderData,
     } = this.state;
     if (fundsData && fundsData.length === 0) ctc_title = "BACK";
     return (
@@ -172,9 +188,7 @@ class Checkout extends Component {
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">
-            {nfoData.checkoutInvestType.map((data, index) => {
-              if (type !== "nfo" && partner.code === "bfdlmobile")
-                data.selected_icon = "bfdl_selected.png";
+            {renderData.map((data, index) => {
               return (
                 <div
                   key={index}

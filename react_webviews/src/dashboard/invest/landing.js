@@ -47,7 +47,6 @@ class Landing extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        noHeader={this.state.show_loader}
         noFooter={true}
         hideInPageTitle
         loaderData={{
@@ -62,11 +61,11 @@ class Landing extends Component {
               : "Invest in your future"}
           </div>
           {render_cards &&
-            render_cards.map((element) => {
+            render_cards.map((element, index) => {
               switch (element) {
                 case "kyc":
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {!isReadyToInvestBase && (
                         <div
                           className="kyc"
@@ -84,11 +83,11 @@ class Landing extends Component {
                           <Button>CREATE NOW</Button>
                         </div>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 case "our_recommendations":
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {our_recommendations && (
                         <>
                           <div className="main-top-title">
@@ -107,11 +106,11 @@ class Landing extends Component {
                           })}
                         </>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 case "diy":
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {diy && (
                         <>
                           <div className="main-top-title">Do it yourself</div>
@@ -128,11 +127,11 @@ class Landing extends Component {
                           })}
                         </>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 case "bottom_scroll_cards":
                   return (
-                    <div className="bottom-scroll-cards">
+                    <div className="bottom-scroll-cards" key={index}>
                       <div className="list">
                         {bottom_scroll_cards &&
                           bottom_scroll_cards.map((item, index) => {
@@ -164,7 +163,7 @@ class Landing extends Component {
                   );
                 case "bottom_cards":
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {bottom_cards &&
                         bottom_cards.map((item, index) => {
                           return (
@@ -177,11 +176,11 @@ class Landing extends Component {
                             />
                           );
                         })}
-                    </>
+                    </React.Fragment>
                   );
                 case "financial_tools":
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {partner.invest_screen_cards &&
                         partner.invest_screen_cards.risk_profile && (
                           <div className="main-top-title">Financial tools</div>
@@ -236,11 +235,11 @@ class Landing extends Component {
                             </div>
                           </div>
                         )}
-                    </>
+                    </React.Fragment>
                   );
                 case "popular_cards":
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       {popular_cards && (
                         <>
                           <div className="main-top-title">
@@ -268,7 +267,7 @@ class Landing extends Component {
                           </div>
                         </>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 default:
                   return <></>;
