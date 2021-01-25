@@ -397,15 +397,13 @@ export async function getRecommendationApi(amount) {
         bondSplit: result.recommendation.debt,
         graphType: data.investType,
       };
-      storageService().setObject("graphdata", graphdata);
+      storageService().setObject("graphData", graphdata);
       if (amount === 300) {
-        this.navigate(
-          `/invest/buildwealth/${graphdata.amount}/${graphdata.year}/${graphdata.investType}/${graphdata.corpus}/${graphdata.stockSplit}`
-        );
+        this.navigate(`/invest/buildwealth/amount`);
+        this.setState({ show_loader: false });
       } else {
-        this.getRecommendedPlans();
+        this.getRecommendedPlans(amount);
       }
-      this.setState({ show_loader: false });
     } else {
       this.setState({ show_loader: false });
       toast(result.message || result.error || errorMessage);
@@ -447,11 +445,11 @@ export function corpusValue(data) {
   return corpus_value;
 }
 
-export async function getRecommendedPlans() {
+export async function getRecommendedPlans(amount) {
   try {
     const res = await Api.get(apiConstants.getRecommendation, {
       type: this.state.investType,
-      amount: this.state.amount,
+      amount: amount,
       term: this.state.term,
       subType: this.state.subType, // not initailised
       equity: this.state.stockSplit,
@@ -472,7 +470,7 @@ export async function getRecommendedPlans() {
         stock: this.state.stockSplit,
         bond: this.state.bondSplit,
       };
-      storageService().setObject("graphdata", graphdata);
+      storageService().setObject("graphData", graphdata);
       this.navigate("/invest/recommendations");
       this.setState({ show_loader: false });
     } else {
