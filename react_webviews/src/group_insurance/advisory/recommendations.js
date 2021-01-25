@@ -16,6 +16,13 @@ class AdivsoryRecommendations extends Component {
         }
     }
 
+    navigate = (pathname, search) => {
+        this.props.history.push({
+          pathname: pathname,
+          search: search ? search : getConfig().searchParams,
+        });
+    }
+
     render(){
         return(
             <Container
@@ -53,13 +60,13 @@ class AdivsoryRecommendations extends Component {
                     <RecommendationResult/>
                     <div className="recommendation-extras">
                         <div className="download-report">
-                            <img src={download} /> Download report
+                            <img src={download} style={{marginRight: '5px'}} /> Download report
                         </div>
                         <div className="recommendation-extras-divider" style={{color: '#D6D6D6'}}>
                             |
                         </div>
-                        <div className="email-report">
-                            <img src={download} /> Email report 
+                        <div className="email-report"  onClick={() => this.navigate('/group-insurance/advisory/email-report')}>
+                            <img src={launch} style={{marginRight: '5px'}}/> Email report 
                         </div>
                     </div>
                 </div>

@@ -6,9 +6,6 @@ import StatusBar from '../../../common/ui/StatusBar';
 import Dialog, {DialogContent} from 'material-ui/Dialog';
 import Slide from '@material-ui/core/Slide';
 
-// import {advisoryConstants} from '../'
-
-
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -55,6 +52,7 @@ class RecommendationResult extends Component {
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Premium starts at</p>
                             <p className="coverage-detail-value">₹ 4,000/year</p>
+
                         </div>
                     </div>
                     <div className="why-recommend">
@@ -76,8 +74,8 @@ class RecommendationResult extends Component {
                             <p className="diamont-bullet-text">High coverage at affordable premiums</p>
                         </div>
                     </div>
-                    <div style={{margin: '0 5px'}}>
-                        <button  className="call-back-popup-button">GOT IT</button> 
+                    <div style={{margin: '0 5px', marginTop: '20px'}}>
+                        <button  className="call-back-popup-button">GET THE PLAN</button> 
                     </div>
 
                 </div>

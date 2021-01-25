@@ -1238,13 +1238,12 @@ input#pan {
     font-size: 16px;
     color: #160D2E;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 0px;
   }
   .coverage-details{
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin-bottom: 30px;
     .individual-coverage-detail{
       .coverage-detail-heading{
         color: #767E86;
@@ -1289,6 +1288,18 @@ input#pan {
     }
   }
   
+}
+.email-report-container{
+  .email-report-heading{
+    font-size: 22px;
+    color: #160D2E;
+    font-weight: bold;
+  }
+  .email-report-sub-text{
+    color: #8D879B;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
 }
 
 .advisory-income-details-container{
