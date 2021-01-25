@@ -5,6 +5,8 @@ import { nativeCallback } from 'utils/native_callback';
 import {formatAmount, containsNumbersAndComma} from 'utils/validators';
 import {advisoryConstants} from '../constants';
 import RecommendationResult from './components/recommendation_result';
+import download from 'assets/download.svg';
+import launch from 'assets/launch.svg';
 
 class AdivsoryRecommendations extends Component { 
     constructor(props){
@@ -13,6 +15,7 @@ class AdivsoryRecommendations extends Component {
             type: getConfig().productName,
         }
     }
+
     render(){
         return(
             <Container
@@ -45,6 +48,20 @@ class AdivsoryRecommendations extends Component {
                     <p style={{fontSize: '17px', fontWeight: 'bold', margin:'30px 0 20px 0', color: '#160D2E' }}>Here's what we recommend</p>
                     
                     <RecommendationResult/>
+                    <RecommendationResult/>
+                    <RecommendationResult/>
+                    <RecommendationResult/>
+                    <div className="recommendation-extras">
+                        <div className="download-report">
+                            <img src={download} /> Download report
+                        </div>
+                        <div className="recommendation-extras-divider" style={{color: '#D6D6D6'}}>
+                            |
+                        </div>
+                        <div className="email-report">
+                            <img src={download} /> Email report 
+                        </div>
+                    </div>
                 </div>
             </Container>
         )

@@ -1169,7 +1169,6 @@ input#pan {
       font-weight: 700;
       padding-bottom: 12px;
     }
-
     .rec-profile{
       display: flex;
 
@@ -1181,13 +1180,116 @@ input#pan {
     }
   }
 
-  .recommentation-result{
-    margin: -0 -20px 0 -20px;
-    padding: 0 20px;
+  .recommendation-result{
+    margin-bottom: 40px;
     
+    .recommendation-info-container{
+      margin-top: 20px;
+      margin: 0 -20px 0 -20px;
+      padding: 10px 20px 20px 20px;
+      background-color: #FAF9FE;
+      .recommendation-info{
+        margin-bottom: 5px;
+        .recommendation-info-heading{
+          font-size: 14px;
+          color: #767E86;
+        }
+        .recommendation-info-value{
+          font-size: 14px;
+          color: #160D2E;
+          font-weight: bold;
+          transform: translateY(-6px)
+        }
+      }
+      .recommendation-cta-container{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 10px;
+        .more-details{
+          color: #35CB5D;
+          font-weight: bold;
+          padding: 15px 25px;
+          border-radius: 5px;
+        }
+        .get-the-plan{
+          background-color: #35CB5D;
+          color: #FFFFFF;
+          font-weight: bold;
+          padding: 15px 25px;
+          border-radius: 5px;
+        }
+      }
+      
+    }
+  }
+  .recommendation-extras{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: -20px;
+    color: #35CB5D;
+    font-weight: bold;
   }
 }
-
+.more-details-container{
+  padding: 10px;
+  .more-details-heading{
+    font-size: 16px;
+    color: #160D2E;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .coverage-details{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+    .individual-coverage-detail{
+      .coverage-detail-heading{
+        color: #767E86;
+        font-size: 14px;
+      }
+      .coverage-detail-value{
+        color: #160D2E;
+        font-size: 14px;
+        text-align: center;
+      }
+    }
+  }
+  .why-recommend{
+    margin-bottom: 20px;
+  }
+  .more-details-sub-heading{
+    color: #160D2E;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .more-details-sub-text{
+    color: #747D86;
+    line-height: 20px;
+    text-align: justify;
+    margin: 0;
+  }
+  .more-details-bullets{
+    display: flex;
+    align-items: center;
+    .diamont-bullet-text{
+      color: #747D86;
+      text-align: justify;
+      margin: 5px 0;
+    }
+    .diamond-bullet{
+      width: 5px; 
+      height: 5px; 
+      background-color: #767E86;
+      margin-right: 10px;
+      transform: rotate(135deg);
+    }
+  }
+  
+}
 
 .advisory-income-details-container{
   #income, #expense{
