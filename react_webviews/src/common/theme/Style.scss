@@ -1290,6 +1290,7 @@ input#pan {
   
 }
 .email-report-container{
+  margin-top: -40px;
   .email-report-heading{
     font-size: 22px;
     color: #160D2E;
@@ -1298,6 +1299,8 @@ input#pan {
   .email-report-sub-text{
     color: #8D879B;
     font-size: 14px;
+    line-height: 21px;
+    margin-top: -10px;
     margin-bottom: 20px;
   }
 }
