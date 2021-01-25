@@ -50,6 +50,7 @@ class Container extends Component {
        || pathname === '/group-insurance/advisory/income-details'
        || pathname === '/group-insurance/advisory/liability-details'
        || pathname === '/group-insurance/advisory/asset-details'
+       || pathname === '/group-insurance/advisory/recommendations'
        ) {
       this.setState({
         new_header: true,

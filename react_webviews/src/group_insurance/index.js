@@ -193,6 +193,7 @@ import AdvisoryBasicDetails from './advisory/basic_details';
 import AdvisoryIncomeDetails from './advisory/income_details';
 import AdvisoryLiabilityDetails from './advisory/liability_details.js';
 import AdvisoryAssetDetails from './advisory/asset_details.js';
+import AdivsoryRecommendations from './advisory/recommendations.js';
 
 // common
 
@@ -255,6 +256,7 @@ const Insurance = (props) => {
           <Route path={`${url}/advisory/income-details`} component={AdvisoryIncomeDetails} />
           <Route path={`${url}/advisory/liability-details`} component={AdvisoryLiabilityDetails} />
           <Route path={`${url}/advisory/asset-details`} component={AdvisoryAssetDetails} />
+          <Route path={`${url}/advisory/recommendations`} component={AdivsoryRecommendations} />
 
           {/********** TERM INSURANCE **********/}
           <Route path={`${url}/term/resume`} component={Resume} />

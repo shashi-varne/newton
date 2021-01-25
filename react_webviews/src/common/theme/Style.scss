@@ -1150,6 +1150,45 @@ input#pan {
   }
 }
 
+.advisory-recommendations-container{
+  margin-top: -18px;
+
+  .advisory-sub-text{
+    color: #767E86;
+    font-size: 13px;
+  }
+  .rec-profile-container{
+    border: 1.5px solid #c8c8c8;
+    border-radius: 5px;
+    padding: 18px 15px;
+    margin-top: 20px;
+
+    .rec-profile-heading{
+      font-size: 15px;
+      color: #160D2E;
+      font-weight: 700;
+      padding-bottom: 12px;
+    }
+
+    .rec-profile{
+      display: flex;
+
+      .rec-profile-right{
+        padding-left: 15px;
+        color: #767E86;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .recommentation-result{
+    margin: -0 -20px 0 -20px;
+    padding: 0 20px;
+    
+  }
+}
+
+
 .advisory-income-details-container{
   #income, #expense{
     padding-left: 12.5px;

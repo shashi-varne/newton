@@ -72,8 +72,6 @@ class AdvisoryAssetDetails extends Component {
         this.setState({
             form_data: form_data
         })
-
-    
     }
     
     handleChangeRadio = name => event => {

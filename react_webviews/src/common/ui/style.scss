@@ -347,6 +347,70 @@ input.default-otp-input {
   left: 2px;
 }
 
+.status-bar-container{
+  // background-color: yellow;
+  margin: -0 -20px 0 -20px;
+  padding: 20px;
+
+  .status-bar-heading-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .status-bar-heading{
+      font-size: 16px;
+      color: #160D2E;
+      font-weight: 600;
+    }
+    .status-bar-tag{
+      font-size: 9px;
+      background-color: #4F2DA7;
+      color: white;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin-top: -5px;
+    }
+  }
+
+  .status-bar{
+    margin-top: 20px;
+    .status-bar-background{
+      position: relative;
+      height: 8px;
+      border-radius: 5px;
+    }
+    .status-bar-progress{
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 5px;
+    }
+    .status-bar-numbers{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .status-bar-info-container{
+    .status-bar-info{
+      display: flex;
+      align-items: center;
+
+      .status-bar-info-circle{
+        border-radius: 999px;
+        width: 10px;
+        height: 10px;
+      }
+      .status-bar-info-text{
+        margin: 0 0 0 10px;
+        span{
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
 .MuiInput-underline.MuiInput-disabled:before {
   background-image: none !important;
   border-bottom: 1px solid #d3dbe4;
