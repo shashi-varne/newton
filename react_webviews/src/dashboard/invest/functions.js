@@ -542,11 +542,11 @@ export function showFundInfo(data) {
 
 export async function getRecommendation() {
   this.setState({ showLoader: true, loaderMessage: "Please wait..." });
-  let instaRecommendations = storageService().get("instaRecommendations")[0];
+  let instaRecommendations = storageService().getObject("instaRecommendations")[0];
   let { amount, investType, term } = this.state;
   let allocations = [{ amount: amount, mf: instaRecommendations }];
   let recommendations = {
-    allocations: allocations,
+    recommendation: allocations,
     term: term,
     investType: "insta-redeem",
     name: "Insta Redeem",
@@ -557,7 +557,7 @@ export async function getRecommendation() {
     order_type: investType,
     subtype: "",
   };
-  storageService().setObject("recommendations", recommendations);
+  storageService().setObject("graphData", recommendations);
   this.navigate(`/invest/recommendations`);
 }
 

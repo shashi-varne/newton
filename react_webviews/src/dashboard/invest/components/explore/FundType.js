@@ -43,45 +43,7 @@ const CategoryCard = ({ name, duration, icon }) => {
     </div>
   )
 }
-const trends = [
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-]
 
-const categories = [
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-]
 const FundType = ({match}) => {
 
   const type = match.params?.type.toLowerCase();

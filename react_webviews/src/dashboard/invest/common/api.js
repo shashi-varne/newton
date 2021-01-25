@@ -1,6 +1,5 @@
 import Api from 'utils/api';
-import { storageService, isEmpty } from 'utils/validators';
-import { getConfig } from 'utils/functions';
+import { isEmpty } from 'utils/validators';
 const genericErrMsg = 'Something went wrong';
 
 export const get_recommended_funds = async (params) => {

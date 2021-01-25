@@ -1,30 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../../../fund_details/common/Container';
-import { storageService,formatAmountInr } from 'utils/validators';
+import Slider from 'common/ui/Slider';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import toast from 'common/ui/Toast'
+
 import withdraw_anytime_icon from 'assets/withdraw_anytime_icon.png';
 import no_lock_in_icon from 'assets/no_lock_in_icon.png';
 import monthly_sip_icon_dark from 'assets/monthly_sip_icon_dark.png';
-// import one_time_icon_dark from 'assets/one_time_icon_dark.png';
-import Slider from 'common/ui/Slider';
-import { navigate as navigateFunc } from '../../common/commonFunction';
+import one_time_icon_dark from 'assets/one_time_icon_dark.png';
+
+import { storageService, formatAmountInr } from 'utils/validators';
+import { navigate as navigateFunc, selectTitle } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
+import './style.scss';
+
 const stockReturns = 15;
 const bondReturns = 8;
 const InvestedAmount = (props) => {
   let graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { amount, investType, term, stockSplit, isRecurring } = graphData;
+  const { amount, investType, term, stockSplit, isRecurring, investTypeDisplay } = graphData;
   const [stockSplitVal, setStockSplitVal] = useState(stockSplit || 0);
   const [termYear, setTermYear] = useState(term || '');
   const [potentialValue, setPotentialValue] = useState(0);
   const [investedValue, setInvestedValue] = useState(0);
   const [risk, setRisk] = useState('');
+  const [loader, setLoader] = useState(false);
+  const [title, setTitle] = useState('');
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
     getPotentialValue(termYear);
     getInvestedValue(termYear);
     getRiskTitle();
   }, [stockSplitVal, termYear]);
+  useEffect(() => {
+    const investTitle = selectTitle(investType);
+    setTitle(investTitle);
+  }, []);
   const handleChange = (value) => {
     setStockSplitVal(value);
   };
@@ -41,14 +53,18 @@ const InvestedAmount = (props) => {
       params.subtype = graphData?.subtype;
     }
     try {
+      setLoader(true);
       const data = await get_recommended_funds(params);
       graphData = { ...graphData, ...data };
       storageService().setObject('graphData', graphData);
+      setLoader(false);
       navigate(`/invest/recommendations`, {}, true);
     } catch (err) {
-      console.log('the err is ', err);
+      setLoader(false);
+      toast(err)
     }
   };
+
   const showFunds = () => {
     fetchRecommendedFunds();
   };
@@ -69,6 +85,7 @@ const InvestedAmount = (props) => {
     }
     setPotentialValue(corpus_value);
   };
+
   const getRateOfInterest = () => {
     var range = Math.abs(stockReturns - bondReturns);
     if (stockSplitVal < 1) {
@@ -80,6 +97,7 @@ const InvestedAmount = (props) => {
       return bondReturns + rateOffset;
     }
   };
+
   const getRiskTitle = () => {
     if (investType === 'arbitrage') {
       setRisk("'Moderate risk (Moderately high returns)'");
@@ -93,25 +111,30 @@ const InvestedAmount = (props) => {
       }
     }
   };
+
   const getInvestedValue = (term) => {
     const value = isRecurring ? amount * 12 * term : amount;
     setInvestedValue(value);
   };
+
   const handlePotentialValue = (val) => (e) => {
     setTermYear(val);
   };
+
   return (
     <Container
-      //goBack={()=>{}}
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle='Show My Funds'
+      buttonTitle={
+        loader ? <CircularProgress size={22} thickness={4} /> : 'Show My Funds'
+      }
       helpContact
       hideInPageTitle
       hidePageTitle
-      title='Some heading'
+      title={title}
       handleClick={showFunds}
       classOverRideContainer='pr-container'
+      disable={loader}
     >
       <section className='invested-amount-common-container'>
         <div className='invested-amount-display'>
@@ -122,7 +145,11 @@ const InvestedAmount = (props) => {
             </div>
           </div>
           <div className='invested-amount-display-right'>
-            <img style={{ width: '50px' }} alt='' src={monthly_sip_icon_dark} />
+            <img
+              width='50'
+              alt=''
+              src={investTypeDisplay === 'onetime' ? one_time_icon_dark : monthly_sip_icon_dark}
+            />
           </div>
         </div>
 
