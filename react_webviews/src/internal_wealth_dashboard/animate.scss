@@ -176,6 +176,40 @@
   }
 }
 
+.iwd-rotate-180 {
+  animation: iwd-rotate-180 .4s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.iwd-rotate-180-reverse {
+  animation: iwd-rotate-180-reverse .4s ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes iwd-rotate-180 {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(90deg) scale(0.4);
+  }
+  100% {
+    transform: rotate(180deg) scale(1);
+  }
+}
+
+@keyframes iwd-rotate-180-reverse {
+  0% {
+    transform: rotate(180deg) scale(1);
+  }
+  50% {
+    transform: rotate(90deg) scale(0.4);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
 .example-appear, .example-enter {
   @extend .iwd-animatedFade;
 }
