@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from 'fund_details/common/Container';
+import Container from '../../../common/Container';
 
 import { navigate as navigateFunc} from '../../common/commonFunction';
 

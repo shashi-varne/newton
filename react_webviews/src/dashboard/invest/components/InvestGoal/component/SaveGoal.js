@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Container from 'fund_details/common/Container';
+import Container from '../../../../common/Container';
 import toast from "common/ui/Toast"
 
 import {getRateOfInterest,navigate as navigateFunc,isRecurring} from '../../../common/commonFunction';

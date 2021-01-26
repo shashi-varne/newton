@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Container from '../fund_details/common/Container';
-import FundCard from '../dashboard/invest/components/mini_components/FundCard';
+import Container from '../common/Container';
+import FundCard from '../invest/components/mini_components/FundCard';
 import Button from '@material-ui/core/Button';
 import Dialog, { DialogActions, DialogTitle } from 'material-ui/Dialog';
 
 import replaceFund from 'assets/replace_bfdl.png';
 
 import { storageService } from 'utils/validators';
-import { navigate as navigateFunc } from './common/commonFunction';
+import { navigate as navigateFunc } from '../invest/common/commonFunction';
 import isEmpty from 'lodash/isEmpty';
 
 import './style.scss';
@@ -34,7 +34,7 @@ const EditFunds = (props) => {
     if (isEmpty(alternateFunds)) {
       setOpen(true);
     } else {
-      navigate('alternate-funds', { mftype, mfid, amount, alternateFunds });
+      navigate('recommendations/alternate-funds', { mftype, mfid, amount, alternateFunds });
     }
   };
   const goBack = () => {

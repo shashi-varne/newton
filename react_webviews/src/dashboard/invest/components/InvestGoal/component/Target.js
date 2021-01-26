@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Container from 'fund_details/common/Container';
+import Container from '../../../../common/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
@@ -9,12 +9,14 @@ import {getRateOfInterest, navigate as navigateFunc, isRecurring} from '../../..
 import { get_recommended_funds } from '../../../common/api';
 import './style.scss';
 
-const term = 15;
 // eslint-disable-next-line radix
-const year = parseInt(new Date().getFullYear() + 15);
+const currentYear = parseInt(new Date().getFullYear())
 const Target = (props) => {
+  const graphData = storageService().getObject("graphData");
   const [targetAmount, setTargetAmount] = useState(0);
   const [loader, setLoader] = useState(false);
+  const term= graphData?.year ? graphData?.year-  currentYear :  15;
+  const year = graphData?.year || currentYear + 15;
   const navigate = navigateFunc.bind(props);
   const { subtype } = props.match?.params;
 
@@ -85,6 +87,7 @@ const Target = (props) => {
         term,
         investType: 'saveforgoal',
         isRecurring: recurring,
+        investTypeDisplay:"sip"
       };
       storageService().setObject('goalRecommendations', recommendation.goal);
       storageService().setObject('graphData', graphData);

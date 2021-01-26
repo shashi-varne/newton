@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { nfoData } from "../../constants";
 

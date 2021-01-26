@@ -436,6 +436,8 @@
 }
 
 .invest-type {
+  width: 100%;
+
   .type {
     display: flex;
     column-gap: 20px;
@@ -876,6 +878,16 @@
         margin-bottom: 10px;
         font-weight: 700;
         line-height: 1.1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 5px;
+
+        img {
+          width: 25px;
+          margin-right: 15px;
+          cursor: pointer;
+        }
       }
 
       .input {

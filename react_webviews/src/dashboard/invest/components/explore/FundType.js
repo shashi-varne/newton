@@ -1,5 +1,5 @@
 import React from 'react'
-import Container from '../../../../fund_details/common/Container'
+import Container from '../../../common/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {storageService} from "utils/validators"

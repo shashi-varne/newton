@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { initialize } from "../../functions";
 import Faqs from "common/ui/Faqs";
@@ -89,15 +89,17 @@ class InstaRedeem extends Component {
   };
 
   render() {
-    let { partner, productName, instaRecommendation } = this.state;
+    let { partner, productName, instaRecommendation, loadingText } = this.state;
     let { benefits, faqData } = investRedeemData;
     return (
       <Container
         showLoader={this.state.show_loader}
-        noHeader={this.state.show_loader}
         buttonTitle="START INVESTING"
         handleClick={this.handleClick}
         hideInPageTitle
+        loaderData={{
+          loadingText,
+        }}
       >
         <div className="invest-redeem">
           <div className="main-top-title">

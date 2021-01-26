@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Container from '../../../fund_details/common/Container'
+import Container from '../../common/Container'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';

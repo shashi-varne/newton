@@ -1,9 +1,8 @@
 import Api from "utils/api";
-import { storageService } from "utils/validators";
+import { storageService, formatAmountInr } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
 import { apiConstants, investCardsBase, keyPathMapper } from "./constants";
-import { formatAmountInr } from "utils/validators";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -32,6 +31,14 @@ export async function initialize() {
   this.validateSipAmount = validateSipAmount.bind(this);
   this.showFundInfo = showFundInfo.bind(this);
   this.detailView = detailView.bind(this);
+  this.getNfoRecommendation = getNfoRecommendation.bind(this);
+  this.getNfoPurchaseLimit = getNfoPurchaseLimit.bind(this);
+  this.checkLimit = checkLimit.bind(this);
+  this.proceedInvestment = proceedInvestment.bind(this);
+  this.makeInvestment = makeInvestment.bind(this);
+  this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
+  this.getDiyPurchaseLimit = getDiyPurchaseLimit.bind(this);
+  this.deleteFund = deleteFund.bind(this);
   if (this.state.screenName === "invest_landing") {
     this.getSummary();
   }
@@ -39,7 +46,7 @@ export async function initialize() {
 }
 
 export async function getSummary() {
-  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
+  this.setState({ show_loader: true, loadingText: "Please wait..." });
   try {
     const res = await Api.post(apiConstants.accountSummary, {
       campaign: ["user_campaign"],
@@ -53,14 +60,14 @@ export async function getSummary() {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       this.setSummaryData(result);
-      this.setState({ showLoader: false });
+      this.setState({ show_loader: false });
     } else {
-      this.setState({ showLoader: false });
+      this.setState({ show_loader: false });
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    this.setState({ showLoader: false });
+    this.setState({ show_loader: false });
     toast(errorMessage);
   }
 }
@@ -358,8 +365,8 @@ export async function getRecommendationApi(amount) {
     amount: amount,
   };
   this.setState({
-    showLoader: true,
-    loaderMessage: "Please wait...",
+    show_loader: true,
+    loadingText: "Please wait...",
     investType: data.investType,
     term: data.term,
     stockReturns: data.stockReturns,
@@ -390,22 +397,20 @@ export async function getRecommendationApi(amount) {
         bondSplit: result.recommendation.debt,
         graphType: data.investType,
       };
-      storageService().setObject("graphdata", graphdata);
+      storageService().setObject("graphData", graphdata);
       if (amount === 300) {
-        this.navigate(
-          `/invest/buildwealth/${graphdata.amount}/${graphdata.year}/${graphdata.investType}/${graphdata.corpus}/${graphdata.stockSplit}`
-        );
+        this.navigate(`/invest/buildwealth/amount`);
+        this.setState({ show_loader: false });
       } else {
-        this.getRecommendedPlans();
+        this.getRecommendedPlans(amount);
       }
-      this.setState({ showLoader: false });
     } else {
-      this.setState({ showLoader: false });
+      this.setState({ show_loader: false });
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    this.setState({ showLoader: false });
+    this.setState({ show_loader: false });
     toast(errorMessage);
   }
 }
@@ -440,11 +445,11 @@ export function corpusValue(data) {
   return corpus_value;
 }
 
-export async function getRecommendedPlans() {
+export async function getRecommendedPlans(amount) {
   try {
     const res = await Api.get(apiConstants.getRecommendation, {
       type: this.state.investType,
-      amount: this.state.amount,
+      amount: amount,
       term: this.state.term,
       subType: this.state.subType, // not initailised
       equity: this.state.stockSplit,
@@ -453,7 +458,7 @@ export async function getRecommendedPlans() {
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
       let graphdata = {
-        allocations: result.recommendation,
+        recommendation: result.recommendation,
         alternatives: result.alternatives,
         amount: result.amount,
         term: this.state.term,
@@ -465,16 +470,16 @@ export async function getRecommendedPlans() {
         stock: this.state.stockSplit,
         bond: this.state.bondSplit,
       };
-      storageService().setObject("recommendations", graphdata);
-      this.navigate("/recommendations");
-      this.setState({ showLoader: false });
+      storageService().setObject("graphData", graphdata);
+      this.navigate("/invest/recommendations");
+      this.setState({ show_loader: false });
     } else {
-      this.setState({ showLoader: false });
+      this.setState({ show_loader: false });
       toast(result.message || result.error || errorMessage);
     }
   } catch (error) {
     console.log(error);
-    this.setState({ showLoader: false });
+    this.setState({ show_loader: false });
     toast(errorMessage);
   }
 }
@@ -508,7 +513,7 @@ export function initializeInstaRedeem() {
 }
 
 export async function getInstaRecommendation() {
-  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
+  this.setState({ show_loader: true, loadingText: "Please wait..." });
   try {
     const res = await Api.get(apiConstants.getInstaRecommendation);
     const { result, status_code: status } = res.pfwresponse;
@@ -517,13 +522,13 @@ export async function getInstaRecommendation() {
       storageService().setObject("goalRecommendations", result.itag);
       let instaRecommendation = result.mfs[0];
       this.setState({
-        showLoader: false,
+        show_loader: false,
         instaRecommendation: instaRecommendation,
       });
     }
   } catch (error) {
     console.log(error);
-    this.setState({ showLoader: false });
+    this.setState({ show_loader: false });
     toast(errorMessage);
   }
 }
@@ -541,8 +546,10 @@ export function showFundInfo(data) {
 }
 
 export async function getRecommendation() {
-  this.setState({ showLoader: true, loaderMessage: "Please wait..." });
-  let instaRecommendations = storageService().getObject("instaRecommendations")[0];
+  this.setState({ show_loader: true, loadingText: "Please wait..." });
+  let instaRecommendations = storageService().getObject(
+    "instaRecommendations"
+  )[0];
   let { amount, investType, term } = this.state;
   let allocations = [{ amount: amount, mf: instaRecommendations }];
   let recommendations = {
@@ -562,7 +569,7 @@ export async function getRecommendation() {
 }
 
 function getGoalRecommendations() {
-  let goal = storageService().get("goalRecommendations");
+  let goal = storageService().getObject("goalRecommendations");
   if (!goal) {
     goal = {};
   }
@@ -685,5 +692,304 @@ export function getSchemeOption(text) {
     return null;
   } else {
     return text.split("_").join(" ");
+  }
+}
+
+export async function getNfoRecommendation() {
+  this.setState({ show_loader: true });
+  try {
+    const res = await Api.get(apiConstants.getNfoRecommendation);
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      storageService().remove("nfo_cart");
+      storageService().remove("nfo_cartCount");
+      let sortedArray = result.recommendations.filter((item) => {
+        return item.growth_or_dividend === this.state.scheme;
+      });
+      var newArray = sortedArray.map((dict) => {
+        dict["addedToCart"] = false;
+        dict["allow_purchase"] = true;
+        return dict;
+      });
+      storageService().setObject("nfo_fundsList", newArray);
+      let nfoFunds = newArray;
+      let cartCount = 0;
+      let showFunds = nfoFunds.length > 0;
+      this.setState({
+        show_loader: false,
+        nfoFunds: nfoFunds,
+        cartCount: cartCount,
+        showFunds: showFunds,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ show_loader: false });
+    toast(errorMessage);
+  }
+}
+
+export async function getNfoPurchaseLimit(data) {
+  this.setState({ show_loader: true });
+  try {
+    const res = await Api.get(
+      `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
+    );
+    const { result, status_code: status } = res.pfwresponse;
+    let { fundsData } = this.state;
+    if (status === 200) {
+      let purchaseLimitData = result.funds_data;
+      let disableInputSummary = true;
+      if (purchaseLimitData[0].ot_sip_flag) {
+        fundsData[0].allow_purchase = true;
+        disableInputSummary = false;
+      }
+      this.setState({
+        show_loader: false,
+        fundsData: fundsData,
+        purchaseLimitData: purchaseLimitData,
+        disableInputSummary: disableInputSummary,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ show_loader: false });
+    toast(errorMessage);
+  }
+}
+
+export async function getDiyPurchaseLimit(data) {
+  this.setState({ show_loader: true });
+  try {
+    const res = await Api.get(
+      `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
+    );
+    const { result, status_code: status } = res.pfwresponse;
+    let { fundsData } = this.state;
+    if (status === 200) {
+      let purchaseLimitData = result.funds_data;
+      purchaseLimitData = purchaseLimitData.map((dict) => {
+        var results = fundsData.filter((obj) => {
+          if (obj.isin === dict["isin"]) {
+            obj["allow_purchase"] = dict["ot_sip_flag"];
+          }
+          return obj;
+        });
+        dict["addedToCart"] = false;
+        dict["allow_purchase"] = true;
+        if (results.length === 0) {
+          dict["addedToCart"] = false;
+        }
+        return dict;
+      });
+
+      let isDisabledFundCount = 0;
+      this.setState({
+        show_loader: false,
+        fundsData: fundsData,
+        purchaseLimitData: purchaseLimitData,
+        isDisabledFundCount: isDisabledFundCount,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    this.setState({ show_loader: false });
+    toast(errorMessage);
+  }
+}
+
+export function deleteFund(item, index) {
+  let { fundsData, cartCount, fundsArray } = this.state;
+  let fundName = item.legalName || item.legal_name;
+  fundsData.splice(index, 1);
+  cartCount = fundsData.length;
+  this.setState({
+    fundName: fundName,
+    fundsData: fundsData,
+    cartCount: cartCount,
+  });
+  storageService().setObject("diystore_fundsList", fundsArray); // need to ask
+  storageService().setObject("diystore_cart", fundsData);
+  storageService().set("diystore_cartCount", fundsData.length);
+}
+
+export function checkLimit(amount, index) {
+  let {
+    purchaseLimitData,
+    form_data,
+    disableInputSummary,
+    disableInput,
+  } = this.state;
+  let limitData = purchaseLimitData[index];
+  if (!limitData) return;
+  let min = limitData.addl_purchase.min;
+  let max = limitData.addl_purchase.max;
+  let mul = limitData.addl_purchase.mul;
+
+  if (amount < min) {
+    form_data[index].amount_error =
+      "Please add atleast ₹" + min + " to proceed.";
+    disableInput[index] = 1;
+  } else if (amount % mul !== 0) {
+    form_data[index].amount_error = "Amount must be multiple of ₹" + mul;
+    disableInput[index] = 1;
+  } else if (amount > max) {
+    disableInput[index] = 1;
+    form_data[index].amount_error = "Maximum amount for this fund is ₹" + max;
+  } else {
+    disableInput[index] = 0;
+    form_data[index].amount_error = "";
+  }
+
+  let value = disableInput.reduce((total, num) => {
+    return total + num;
+  });
+
+  if (value === 0) disableInputSummary = false;
+  else disableInputSummary = true;
+
+  this.setState({
+    disableInputSummary: disableInputSummary,
+    form_data: form_data,
+  });
+}
+
+function isInvestRefferalRequired(partner_code) {
+  if (partner_code === "ktb") {
+    return true;
+  }
+  return false;
+}
+
+export async function proceedInvestment(event, isReferralGiven) {
+  let { partner, fundsData, purchaseLimitData, investType } = this.state;
+  if (isInvestRefferalRequired(partner.code) && !isReferralGiven) {
+    let investCtaEvents = event;
+    // $rootScope.openPopupInvestReferral(refOnKey);
+    return;
+  }
+
+  let allocations = [
+    {
+      mfid: purchaseLimitData[0].mfid,
+      mfname: purchaseLimitData[0].mfname,
+      amount: fundsData[0].amount,
+      default_date: purchaseLimitData[0].addl_purchase.default_date,
+      sip_dates: purchaseLimitData[0].addl_purchase.sip_dates,
+    },
+  ];
+  let investment = {};
+  investment.amount = parseFloat(fundsData[0].amount);
+  let investment_type = "";
+  if (investType === "onetime") {
+    investment.type = "diy";
+    investment_type = "onetime";
+  } else {
+    investment.type = "diysip";
+    investment_type = "sip";
+  }
+
+  let paymentRedirectUrl = encodeURIComponent(
+    `${window.location.protocol}//${window.location.host}/page/callback/${investment_type}/${investment.amount}`
+  );
+
+  investment.allocations = allocations;
+  window.localStorage.setItem("investment", JSON.stringify(investment));
+  this.setState(
+    {
+      investment_type: investment_type,
+      paymentRedirectUrl: paymentRedirectUrl,
+    },
+    () => this.makeInvestment(event, investment, isReferralGiven)
+  );
+}
+
+export async function makeInvestment(event, nfo_investment, isReferralGiven) {
+  let {
+    isRedirectToPayment,
+    fundsData,
+    investment_type,
+    invRefData,
+  } = this.state;
+
+  isRedirectToPayment = true;
+  let investmentObj = nfo_investment;
+  let body = {
+    investment: investmentObj,
+  };
+
+  let investmentEventData = {
+    amount: parseFloat(fundsData[0].amount),
+    investment_type: investment_type,
+    investment_subtype: "",
+    journey_name: "nfo",
+  };
+
+  storageService().setObject("mf_invest_data", investmentEventData);
+
+  if (isReferralGiven && invRefData.code) {
+    body.referral_code = invRefData.code;
+  }
+  this.setState(
+    {
+      isApiRunning: true,
+      sipOrOnetime: investment_type,
+      body: body,
+      isRedirectToPayment: isRedirectToPayment,
+      investmentEventData: investmentEventData,
+    },
+    () => this.proceedInvestmentChild(event)
+  );
+
+  // let sipOrOnetime = investment_type;
+  // $broadcast ('parentChildCommunication', {key: 'proceedInvestmentChild'});
+}
+
+export async function proceedInvestmentChild(ev) {
+  if (this.state.isKycNeeded) {
+    // this.state.redirectToKyc();
+    return;
+  }
+  if (this.state.sipOrOnetime === "sip" && !this.state.isSipDatesScreen) {
+    storageService().setObject("investmentObjSipDates", this.state.body);
+    this.navigate("/sipdates");
+  } else {
+    let { investmentEventData } = this.state;
+    if (investmentEventData) {
+      investmentEventData = storageService().getObject("mf_invest_data") || {};
+    }
+
+    try {
+      const res = await Api.post(
+        apiConstants.triggerInvestment,
+        this.state.body
+      );
+      const { result, status_code: status } = res.pfwresponse;
+      if (status === 200) {
+        let pgLink = result.investments[0].pg_link;
+        pgLink +=
+          // eslint-disable-next-line
+          (pgLink.match(/[\?]/g) ? "&" : "?") +
+          "redirect_url=" +
+          this.state.paymentRedirectUrl;
+
+        investmentEventData["payment_id"] = result.investments[0].id;
+        storageService().setObject("mf_invest_data", investmentEventData);
+
+        // if (this.state.isSipDatesScreen) {
+        //   $scope.successDialog(ev);
+        //   $scope.$parent.investResponse = data;
+        //   return;
+        // }
+
+        //  handle callbackWeb.isWeb()
+      } else {
+        // handle error
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ show_loader: false });
+      toast(errorMessage);
+    }
   }
 }
