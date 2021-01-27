@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { yesNoOptions } from '../constants'; 
 import InputPrefix from '../../common/ui/InputPrefix';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
-import {formatAmount, containsNumbersAndComma} from 'utils/validators';
+import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
 
 class AdvisoryLiabilityDetails extends Component {
 
@@ -123,23 +123,19 @@ class AdvisoryLiabilityDetails extends Component {
             if(!form_data.homeloan){
                 form_data.homeloan_error = 'Please enter appropriate value';
                 canSubmitForm = false;
-                console.log('5555')
             }
             if(!form_data.liability){
                 form_data.liability_error = 'Please enter appropriate value';
                 canSubmitForm = false;
-                console.log('666')
             }
 
-            if(form_data.homeloan === 'YES' && !form_data.loan_amount){
+            if(form_data.homeloan === 'YES' && (!form_data.loan_amount || formatAmountToNumber(form_data.loan_amount) === 0)){
                 form_data.loan_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
-                console.log(form_data)
             }
-            if(form_data.liability === 'YES' && !form_data.total_amount){
+            if(form_data.liability === 'YES' && (!form_data.total_amount || formatAmountToNumber(form_data.loan_amount) === 0)){
                 form_data.total_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
-                console.log('8888')
             }
         }
 

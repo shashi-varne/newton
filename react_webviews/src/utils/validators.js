@@ -199,7 +199,8 @@ export function formatAmount(amount) {
   if (!amount) {
     return '';
   }
-  if(amount.includes(',')){
+  console.log(typeof amount)
+  if(typeof amount === 'string' && amount.includes(',')){
     amount = amount.replace(/,/g, "");
   }
   amount = Number(amount);
@@ -944,4 +945,10 @@ export function containsSpecialCharactersAndNumbers(value){
 
 export function countChars(line) {
   return line.split(' ').filter(word => !isEmpty(word)).reduce((acc, cur) => acc += cur.length, 0)
+}
+
+export function formatAmountToNumber(value){
+  if(value){
+    return parseFloat(value.replace(/,/g,""))
+  }
 }

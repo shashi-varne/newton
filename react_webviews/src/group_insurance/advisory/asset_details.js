@@ -6,9 +6,10 @@ import { nativeCallback } from 'utils/native_callback';
 import { yesNoOptions } from '../constants'; 
 import InputPrefix from '../../common/ui/InputPrefix';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
-import {formatAmount, containsNumbersAndComma} from 'utils/validators';
+import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
 import {advisoryConstants} from './constants';
 import Checkbox from "material-ui/Checkbox";
+import { formatMonthandYear } from '../../utils/validators';
 
 class AdvisoryAssetDetails extends Component {
 
@@ -146,6 +147,10 @@ class AdvisoryAssetDetails extends Component {
             })
         }else{
             ins_checkbox['none'] = false
+
+            if(!ins_checkbox[name]){
+                form_data[name] = 0
+            }
         }
 
         this.setState({
@@ -204,21 +209,26 @@ class AdvisoryAssetDetails extends Component {
         var showCoverAmountError = true;
 
         if(form_data){
+            console.log(form_data)
+            
             if(!form_data.assets){
                 form_data.assets_error = 'Please enter appropriate value'
             } 
 
-            if(form_data.assets === 'YES' && (!form_data.asset_amount || form_data.asset_amount === '0' )){
+            if(form_data.assets === 'YES' && (!form_data.asset_amount || formatAmountToNumber(form_data.asset_amount) === 0)){
                 form_data.asset_amount_error = 'We need some details to move forward!'
+                canSubmitForm = false;
             } 
-
+            
             var check_box_list = ['term_cover_amount','health_cover_amount','critical_cover_amount','corona_cover_amount']
             for(var amount of check_box_list){
-                if(this.state.ins_checkbox[amount] && !form_data[amount]){
+                if(this.state.ins_checkbox[amount] && (!form_data[amount] || formatAmountToNumber(form_data[amount]) === 0)){
                     form_data[amount + '_error'] = ' We need some details to move forward!'
+                    canSubmitForm = false;
                 }
                 if(this.state.ins_checkbox[amount] || this.state.ins_checkbox['none']){
                     showCoverAmountError = false;
+                    canSubmitForm = false;
                 }
             }
         }
@@ -229,7 +239,7 @@ class AdvisoryAssetDetails extends Component {
         })
 
         if(canSubmitForm){
-            this.navigate('/group-insurance/advisory/recommendations')
+            // this.navigate('/group-insurance/advisory/recommendations')
         }
     }
 
@@ -290,7 +300,7 @@ class AdvisoryAssetDetails extends Component {
             <div style={{marginBottom: '50px'}}>
                 {this.state.insuranceList.map(this.renderInsuranceList)}
             </div>
-            {this.state.showCoverAmountError && <p style={{color: '#f44336', fontSize: '0.75rem', textAlign: 'left', margin: '-2px 0 25px 0'}}>We need some details to move forward!</p>}   
+            {this.state.showCoverAmountError && <p style={{color: '#f44336', fontSize: '0.75rem', textAlign: 'left', margin: '-55px 0 25px 0'}}>We need some details to move forward!</p>}   
             </div>
             </Container>
         )

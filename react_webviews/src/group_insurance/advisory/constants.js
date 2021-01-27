@@ -1,6 +1,12 @@
-function computeAgeOptions(){
+function computeAgeOptions(type){
+  var ageLimit = 0;
+  if(type === 'age'){
+    ageLimit = 65;
+  }else if(type === 'retire'){
+    ageLimit = 99;
+  }
     var ageOptions = [];
-        for(var i = 18; i < 100; i++){
+        for(var i = 18; i <= ageLimit; i++){
             var temp = {'name': `${i} years`,'value': i};
             ageOptions.push(temp);
         }
@@ -39,7 +45,7 @@ export var advisoryConstants = {
           subtitle: "",
         },
     ],
-    ageOptions: computeAgeOptions(),
+    ageOptions: computeAgeOptions('age'),
     metroCityOptions: [
         {'name':'Delhi' ,'value': 'delhi'},
         {'name':'Mumbai' ,'value': 'mumbai'},
@@ -51,7 +57,7 @@ export var advisoryConstants = {
     ],
     dependents_data: {kids_max: 4, parents_max: 2, total_plus_minus_max: 6},
     incomeGrowthOptions: computeIncomeGrowthOptions(),
-    retireOptions: computeAgeOptions(),
+    retireOptions: computeAgeOptions('retire'),
     insuranceList: [{'value': 'Term Insurance', 'name': 'term_cover_amount'},{'value': 'Health Insurance', 'name': 'health_cover_amount'},{'value': 'Critical Insurance', 'name': 'critical_cover_amount'},{'value': 'Coronavirus Insurance', 'name': 'corona_cover_amount'},{'value': 'None', 'name': 'none'},]
 
 }

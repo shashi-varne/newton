@@ -296,15 +296,17 @@ class AdvisoryBasicDetails extends Component {
               onChange={this.handleChange("city")}
             />
             </div>
-            <div className="advisory-basic-dependents" style={{ marginBottom: '10px'}}>
+            
             <p style={{color: '#767E86', marginBottom: '15px', fontSize: '12.8px'}}>Do you have any dependents?</p>
-
-            <div className="checkbox-container">
+            
+            <div className="advisory-basic-dependents" style={{ marginBottom: '10px'}}>
+            <div className="checkbox-container" id="spouse-checkbox">
             <Checkbox
                   checked={this.state.spouse_checked}
                   color="default"
                   value="checked"
                   name="spouse"
+                  id="spouse-checkbox"
                   onChange={()=>this.handleRegularCheckbox('spouse')}
                   className="basic-checkbox"
             />
@@ -313,7 +315,7 @@ class AdvisoryBasicDetails extends Component {
             <PlusMinusInput name="Kids" parent={this} />
             <PlusMinusInput name="Parents" parent={this} />
 
-            <div className="checkbox-container">
+            <div className="checkbox-container" id="none-checkbox">
             <Checkbox
                   checked={this.state.none_checked}
                   color="default"

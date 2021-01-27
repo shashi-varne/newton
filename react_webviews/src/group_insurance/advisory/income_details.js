@@ -6,7 +6,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {advisoryConstants} from './constants';
 import InputPrefix from '../../common/ui/InputPrefix';
-import {formatAmount, containsNumbersAndComma} from 'utils/validators';
+import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
 
 class AdvisoryIncomeDetails extends Component {
 
@@ -108,7 +108,7 @@ class AdvisoryIncomeDetails extends Component {
                 form_data.expense_error = "We need some details to move forward!";
                 canSubmitForm = false
             }
-            if(!form_data.income){
+            if(!form_data.income || formatAmountToNumber(form_data.income) < 100000){
                 form_data.income_error = "Annual income needs to be more than Rs 1 lac for this analysis!";
                 canSubmitForm = false;
             }

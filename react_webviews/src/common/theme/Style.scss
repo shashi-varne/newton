@@ -1105,7 +1105,7 @@ input#pan {
 
 .advisory-title-container{
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   color: #0A1C32;
   font-weight: 700;
@@ -1133,11 +1133,24 @@ input#pan {
   .checkbox-container{
     display: flex;
     align-items: center;
-    margin: -30px 0;
+    // margin: -30px 0;
     .checkbox-option{
       transform: translateX(-17px);
       color: #160D2E;
     }
+  }
+  .advisory-basic-dependents{
+    margin-top: -18px;
+    .CheckBlock2{
+      margin-top: -32px;
+    }
+    #none-checkbox{
+      margin-top: -26px;
+    }
+    #spouse-checkbox{
+      margin-bottom: 10px;
+    }
+
   }
 }
 .advisory-liability-details-container{
