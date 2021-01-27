@@ -3,12 +3,13 @@ import { getConfig } from "utils/functions";
 export function navigate(pathname, data, redirect) {
   if (redirect) {
     this.history.push({
-      pathname,
+      pathname: pathname,
+      search: data?.searchParams || getConfig().searchParams,
     });
   } else {
     this.history.push({
       pathname: `/invest/${pathname}`,
-      search: data.searchParams || getConfig().searchParams,
+      search: data?.searchParams || getConfig().searchParams,
       state: { graphData: data },
     });
   }

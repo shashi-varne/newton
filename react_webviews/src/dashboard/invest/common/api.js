@@ -77,3 +77,27 @@ export const getTerms = async (docType) => {
     throw err;
   }
 };
+
+export const querySearch = async (name) => {
+  try {
+    const res = await Api.get(
+      `/api/funds/search?search_key=${encodeURIComponent(name)}`
+    );
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw genericErrMsg;
+    }
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      return null;
+    }
+  } catch (err) {
+    return null;
+  }
+};
