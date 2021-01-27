@@ -4,7 +4,10 @@ import FundCard from '../invest/components/mini_components/FundCard';
 import TermsAndCond from "../mini-components/TermsAndCond"
 
 import trust_icons from 'assets/trust_icons.svg';
+import single_star from 'assets/single_star.png';
+import morning_text from 'assets/morning_text.png';
 
+import { getConfig } from 'utils/functions';
 import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
@@ -13,6 +16,7 @@ import './style.scss';
 const Recommendations = (props) => {
   const { recommendation, amount, investType } = storageService().getObject('graphData');
   const [isins, setIsins] = useState('');
+  const partner_code = getConfig().partner_code;
   
   useEffect(() => {
     const isinsVal = recommendation?.map((el) => {
@@ -62,9 +66,16 @@ const Recommendations = (props) => {
           <div>{formatAmountInr(amount)}</div>
         </div>
         <div>
-          <TermsAndCond/>
+          <div className="recommendations-disclaimer-morning">
+            <img alt="single_star" src={single_star} />
+            {partner_code !== "hbl" ? (
+              <img alt="morning_star" width="100" src={morning_text} />
+            ) : (
+              <div>BL Portfolio Star Track MF Ratings</div>
+            )}
+          </div>
+          <TermsAndCond />
         </div>
-
         <div className='recommendations-trust-icons'>
           <div>Investments with fisdom are 100% secure</div>
           <img alt='trust_sebi_secure' src={trust_icons} />

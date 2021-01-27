@@ -862,9 +862,9 @@ function isInvestRefferalRequired(partner_code) {
 }
 
 export async function proceedInvestment(event, isReferralGiven) {
-  let { partner, fundsData, purchaseLimitData, investType } = this.state;
-  if (isInvestRefferalRequired(partner.code) && !isReferralGiven) {
-    let investCtaEvents = event;
+  let { partner_code, fundsData, purchaseLimitData, investType } = this.state;
+  if (isInvestRefferalRequired(partner_code) && !isReferralGiven) {
+    // let investCtaEvents = event;
     // $rootScope.openPopupInvestReferral(refOnKey);
     return;
   }
@@ -966,6 +966,7 @@ export async function proceedInvestmentChild(ev) {
       );
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
+        // eslint-disable-next-line
         let pgLink = result.investments[0].pg_link;
         pgLink +=
           // eslint-disable-next-line

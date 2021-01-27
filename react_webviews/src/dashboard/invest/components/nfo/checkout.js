@@ -7,6 +7,7 @@ import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
+import TermsAndCond from "../../../mini-components/TermsAndCond";
 
 class Checkout extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Checkout extends Component {
       ctc_title: "INVEST",
       form_data: [],
       investType: "onetime",
-      partner: getConfig().partner,
+      partner_code: getConfig().partner_code,
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
@@ -40,7 +41,7 @@ class Checkout extends Component {
       return;
     }
     let fundsData = [];
-    let { form_data, renderData, partner } = this.state;
+    let { form_data, renderData, partner_code } = this.state;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -70,10 +71,10 @@ class Checkout extends Component {
         return data.isin;
       });
       let isins = isinArr.join(",");
-      if (partner.code === "bfdlmobile") {
-        renderData = renderData.map((data) => {
-          data.selected_icon = "bfdl_selected.png";
-        });
+      if (partner_code === "bfdlmobile") {
+        renderData = renderData.map(
+          (data) => (data.selected_icon = "bfdl_selected.png")
+        );
       }
       this.setState(
         {
@@ -268,54 +269,7 @@ class Checkout extends Component {
                 );
               })}
           </div>
-          <div className="nfo-disclaimer">
-            {getConfig().Web && getConfig().productName !== "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the
-                <a
-                  href="https://www.fisdom.com/terms/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {" "}
-                  terms & conditions
-                </a>{" "}
-                and understood the{" "}
-                <a
-                  href="https://www.fisdom.com/scheme-offer-documents/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  scheme offer documents
-                </a>
-              </div>
-            )}
-            {getConfig().Web && getConfig().productName === "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the <span>terms</span> and understood the <br />
-                <span> scheme offer documents</span>
-              </div>
-            )}
-            {!getConfig().Web && getConfig().productName === "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the <span>terms.</span>
-              </div>
-            )}
-            {!getConfig().Web && getConfig().productName !== "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the <a>terms & conditions</a> and understood the{" "}
-                <a>scheme offer documents</a>
-              </div>
-            )}
-          </div>
+          <TermsAndCond />
         </div>
       </Container>
     );

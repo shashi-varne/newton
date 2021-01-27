@@ -8,8 +8,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
-import single_star from 'assets/single_star.png';
-import morning_text from 'assets/morning_text.png';
 import check_mark from 'assets/check_mark.png';
 
 import { getTerms } from '../invest/common/api';
@@ -51,14 +49,6 @@ const TermsAndCond = () => {
   return (
     <div>
       <div className='recommendations-disclaimer'>
-        <div className='recommendations-disclaimer-morning'>
-          <img alt='single_star' src={single_star} />
-          {partner_code !== 'hbl' ? (
-            <img alt='morning_star' width='100' src={morning_text} />
-          ) : (
-            <div>BL Portfolio Star Track MF Ratings</div>
-          )}
-        </div>
         <div className='recommendations-disclaimer-tc'>
           <img alt='check_mark' src={check_mark} width='15' />
           <span>

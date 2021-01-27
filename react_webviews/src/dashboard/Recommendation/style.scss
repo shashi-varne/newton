@@ -82,17 +82,18 @@
   padding: 10px 0px;
 }
 
+.recommendations-disclaimer-morning {
+  display: flex;
+  margin-bottom: 13px;
+  font-size: 13px;
+  img {
+    margin-right: 5px;
+  }
+}
+
 .recommendations-disclaimer {
   display: flex;
   flex-direction: column;
-  .recommendations-disclaimer-morning {
-    display: flex;
-    margin-bottom: 13px;
-    img {
-      margin-right: 5px;
-    }
-  }
-
   .recommendations-disclaimer-tc {
     a {
       color: var(--primary);
