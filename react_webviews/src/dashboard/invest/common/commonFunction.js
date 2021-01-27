@@ -8,7 +8,7 @@ export function navigate(pathname, data, redirect) {
   } else {
     this.history.push({
       pathname: `/invest/${pathname}`,
-      search: data.searchParams || getConfig().searchParams,
+      search: data?.searchParams || getConfig().searchParams,
       state: { graphData: data },
     });
   }
