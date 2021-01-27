@@ -1,14 +1,16 @@
 import React from 'react';
-import Container from '../fund_details/common/Container';
+import Container from '../common/Container';
+
 import account_icon from "assets/account_icon.png"
 import bse_icon from "assets/bse_icon.png"
 import fund_house_icon from "assets/fund_house_icon.png"
 import safe_secure_journey from "assets/safe_secure_journey.png"
+
 import "./style.scss"
+
 const InvestJourney = (props) => {
   return (
     <Container
-     //goBack={()=>{}}
       classOverRide='pr-error-container'
       fullWidthButton
       buttonTitle='Continue to KYC'
@@ -16,7 +18,6 @@ const InvestJourney = (props) => {
       hideInPageTitle
       hidePageTitle
       title="How it works"
-     //handleClick={goNext}
       classOverRideContainer='pr-container'
     >
      <section className="invest-journey-container">

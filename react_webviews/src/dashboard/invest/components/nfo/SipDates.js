@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { initialize } from "../../functions";
 import DropdownInModal from "common/ui/DropdownInModal";
-import { formatAmountInr } from "utils/validators";
 import Button from "material-ui/Button";
 import Dialog, { DialogActions, DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
-import { dateOrdinal } from "utils/validators";
+import { dateOrdinal, storageService, formatAmountInr } from "utils/validators";
 
 class SipDates extends Component {
   constructor(props) {
@@ -15,40 +14,7 @@ class SipDates extends Component {
       show_loader: false,
       productName: getConfig().productName,
       screenName: "sip_dates",
-      sips: [
-        {
-          fundName:
-            "Aditya Birla Sun Life Asset Allocator FoF- Regular Plan - Dividend Option",
-          amount: 5000,
-          sip_date: 1,
-        },
-        {
-          fundName:
-            "Aditya Birla Sun Life Asset Allocator FoF- Regular Plan - Dividend Option",
-          amount: 5000,
-          sip_date: 1,
-        },
-        {
-          fundName:
-            "Aditya Birla Sun Life Asset Allocator FoF- Regular Plan - Dividend Option",
-          amount: 5000,
-          sip_date: 1,
-        },
-      ],
-      options: [
-        {
-          name: "1st",
-          value: 1,
-        },
-        {
-          name: "2nd",
-          value: 2,
-        },
-        {
-          name: "3rd",
-          value: 3,
-        },
-      ],
+      isSipDatesScreen: true,
     };
     this.initialize = initialize.bind(this);
   }
@@ -58,12 +24,37 @@ class SipDates extends Component {
   }
 
   onload = () => {
-    let { sips } = this.state;
+    let sipBaseData = storageService().getObject("investmentObjSipDates");
+    let orderType = sipBaseData.investment.type;
+    let sipOrOnetime = "sip";
+
+    let finalPurchases = [];
+    let newPurchases = sipBaseData.investment.allocations;
+    for (let dict of newPurchases) {
+      let data = {};
+      data.id = dict.id || "";
+      data.amount = dict.amount;
+      data.sip_date = dict.default_date;
+      data.fundName = dict.mfname;
+      data.sip_dates = dict.sip_dates;
+      finalPurchases.push(data);
+    }
+
     let form_data = [];
-    sips.forEach(() => {
-      form_data.push(0);
+    finalPurchases.forEach((data) => {
+      form_data.push(data.sip_dates.indexOf(data.sip_date));
     });
-    this.setState({ form_data: form_data });
+
+    let buttonTitle =
+      finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
+
+    this.setState({
+      form_data: form_data,
+      sips: finalPurchases,
+      orderType: orderType,
+      sipOrOnetime: sipOrOnetime,
+      buttonTitle: buttonTitle,
+    });
   };
 
   handleClick = () => {
@@ -79,9 +70,9 @@ class SipDates extends Component {
   };
 
   handleChange = (key) => (index) => {
-    let { form_data, options, sips } = this.state;
+    let { form_data, sips } = this.state;
     form_data[key] = index;
-    sips[key].sip_date = options[index].value;
+    sips[key].sip_date = sips[key].sip_dates[index];
     this.setState({
       form_data: form_data,
       sips: sips,
@@ -137,40 +128,47 @@ class SipDates extends Component {
   };
 
   render() {
-    let { sips, form_data, options } = this.state;
+    let { sips, form_data, buttonTitle } = this.state;
     return (
       <Container
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
-        buttonTitle="CONFIRM DATE"
+        buttonTitle={buttonTitle}
         hideInPageTitle
       >
         <div className="sip-dates">
           <div className="main-top-title">Select investment date</div>
-          {sips.map((sip, index) => {
-            return (
-              <div className="card content" key={index}>
-                <div className="text">
-                  <div className="title">{sip.fundName}</div>
-                  <div className="subtitle">{formatAmountInr(sip.amount)}</div>
+          {sips &&
+            sips.map((sip, index) => {
+              let options = [];
+              sip.sip_dates.forEach((date) => {
+                options.push({ name: dateOrdinal(date) });
+              });
+              return (
+                <div className="card content" key={index}>
+                  <div className="text">
+                    <div className="title">{sip.fundName}</div>
+                    <div className="subtitle">
+                      {formatAmountInr(sip.amount)}
+                    </div>
+                  </div>
+                  <div className="mid-content">Investment date</div>
+                  <DropdownInModal
+                    options={options}
+                    header_title="Available dates"
+                    cta_title="SELECT DATE"
+                    selectedIndex={form_data[index]}
+                    value={dateOrdinal(sip.sip_date)}
+                    id="date"
+                    name="date"
+                    onChange={this.handleChange(index)}
+                    isAppendText="of every month"
+                    class="appened-text"
+                    isSelectedText="of every month"
+                  />
                 </div>
-                <div className="mid-content">Investment date</div>
-                <DropdownInModal
-                  options={options}
-                  header_title="Available dates"
-                  cta_title="SELECT DATE"
-                  selectedIndex={form_data[index]}
-                  value={dateOrdinal(sip.sip_date)}
-                  id="date"
-                  name="date"
-                  onChange={this.handleChange(index)}
-                  isAppendText="of every month"
-                  class="appened-text"
-                  isSelectedText="of every month"
-                />
-              </div>
-            );
-          })}
+              );
+            })}
           {this.renderDialog()}
         </div>
       </Container>

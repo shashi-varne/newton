@@ -26,7 +26,6 @@ import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
-import MFJourney from "./mf_journey_common"
 import Landing from "./dashboard"
 
 class App extends Component {

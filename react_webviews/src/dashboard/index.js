@@ -17,7 +17,8 @@ import NfoFunds from "./invest/components/nfo/funds";
 import NfoFundDetail from "./invest/components/nfo/FundDetail";
 import NfoCheckout from "./invest/components/nfo/checkout";
 import SipDates from "./invest/components/nfo/SipDates";
-import DIY from "./diy";
+import InvestJourney from "./investJourney"
+import DIY from "./diy"
 import Nps from "./nps";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -57,6 +58,7 @@ const Invest = (props) => {
         <Switch>
           <Route path={`${url}invest`} component={Landing} />
           <Route path={`${url}diy`} component={DIY} />
+          <Route path={`${url}invest-journey`} component={InvestJourney} />
           <Route path={`${url}nps`} component={Nps} />
           <Route
             path={`${url}advanced-investing/new-fund-offers/info`}

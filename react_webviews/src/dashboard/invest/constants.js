@@ -3,6 +3,9 @@ export const apiConstants = {
   npsInvestStatus: "/api/nps/invest/status/v2",
   getRecommendation: "/api/invest/recommendv2",
   getInstaRecommendation: "/api/invest/insta-redeem/getfunds",
+  getNfoRecommendation: "/api/invest/nfo/recommendations",
+  getPurchaseLimit: "/api/mf/funddata/",
+  triggerInvestment: "/api/invest",
 };
 
 export const investCardsBase = {
@@ -241,6 +244,22 @@ export const nfoData = {
         "The fund to pay out fractions of your gains in form of periodic dividends",
       icon: "dividend_icon.png",
       value: "dividend",
+    },
+  ],
+  checkoutInvestType: [
+    {
+      value: "sip",
+      name: "SIP / Monthly",
+      icon: "sip_icn.png",
+      icon_light: "sip_icn_light.png",
+      selected_icon: "selected.png",
+    },
+    {
+      value: "onetime",
+      name: "One Time",
+      icon: "one_time_icn.png",
+      icon_light: "one_time_icn_light.png",
+      selected_icon: "selected.png",
     },
   ],
 };

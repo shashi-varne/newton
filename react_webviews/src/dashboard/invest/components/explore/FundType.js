@@ -1,5 +1,5 @@
 import React from 'react'
-import Container from '../../../../fund_details/common/Container'
+import Container from '../../../common/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import {storageService} from "utils/validators"
@@ -43,45 +43,7 @@ const CategoryCard = ({ name, duration, icon }) => {
     </div>
   )
 }
-const trends = [
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-  {
-    name: 'ICICI Prudential Liquid Growth Fund',
-    src:
-      'https://sdk-dot-plutus-staging.appspot.com/static/img/amc-logo/low-res/icici_new.png',
-    likePercentage: 34,
-  },
-]
 
-const categories = [
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-  { name: 'Overnight', duration: 'For a day', icon: overnight_icon },
-]
 const FundType = ({match}) => {
 
   const type = match.params?.type.toLowerCase();

@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Container from 'fund_details/common/Container';
+import React, { useState } from 'react';
+import Container from '../../../common/Container';
+import InvestType from '../mini_components/InvestType';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import toast from 'common/ui/Toast'
+
 import { storageService } from 'utils/validators';
 import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
-import InvestType from '../mini_components/InvestType';
+
 const term = 3;
 const date = new Date();
 let currentYear = date.getFullYear();
@@ -24,24 +28,24 @@ const renderData = {
   ],
 };
 
-
 const Landing = (props) => {
-  const [data, setData] = useState(null);
+  const [loader, setLoader] = useState(false);
   const [investTypeDisplay, setInvestTypeDisplay] = useState('3Y');
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     const params = {
-      type: "investsurplus",
+      type: 'investsurplus',
     };
     try {
+      setLoader(true);
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
       const graphData = {
         recommendation: data.recommendation,
         amount: 50000,
-        term:investTypeDisplay === "3Y" ? 3 : 1,
+        term: investTypeDisplay === '3Y' ? 3 : 1,
         // eslint-disable-next-line radix
-        year: investTypeDisplay === "3Y" ? parseInt(currentYear + term): parseInt(currentYear + 1),
+        year: investTypeDisplay === '3Y' ? parseInt(currentYear + term) : parseInt(currentYear + 1),
         investType: params.type,
         stockSplit: data.recommendation.equity,
         bondSplit: data.recommendation.debt,
@@ -50,29 +54,31 @@ const Landing = (props) => {
       };
       storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
-      setData(graphData);
+      setLoader(false);
       goNext();
     } catch (err) {
-      console.log('the err is ', err);
+      setLoader(false);
+      toast(err)
     }
   };
 
   const goNext = () => {
-    navigate('investsurplus/amount', data);
+    navigate('investsurplus/amount');
   };
+
   const handleChange = (type) => {
     setInvestTypeDisplay(type);
   };
   return (
     <Container
-      //goBack={()=>{}}
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle='Next'
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
       helpContact
       hideInPageTitle
       hidePageTitle
-      title='Some heading'
+      disable={loader}
+      title='Park Money'
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'
     >

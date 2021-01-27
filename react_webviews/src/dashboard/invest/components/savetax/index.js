@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Container from 'fund_details/common/Container';
+import React, { useState } from 'react';
+import Container from '../../../common/Container';
+import InvestType from '../mini_components/InvestType';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import toast from 'common/ui/Toast';
+
 import { storageService } from 'utils/validators';
 import { navigate as navigateFunc, isRecurring } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
-import InvestType from '../mini_components/InvestType';
+
 const term = 15;
 const date = new Date();
 const month = date.getMonth();
@@ -19,8 +23,6 @@ if (currentMonth > 3) {
 
 const renderData = {
   title: 'How would you like to invest?',
-  count: '1',
-  total: '2',
   options: [
     {
       text: 'SIP',
@@ -35,26 +37,28 @@ const renderData = {
   ],
 };
 
-
 const Landing = (props) => {
   const [data, setData] = useState(null);
   const [investTypeDisplay, setInvestTypeDisplay] = useState('sip');
+  const [loader, setLoader] = useState(false);
   const otiAmount = 150000;
+  // eslint-disable-next-line radix
   const sipAmount = parseInt(Math.floor(otiAmount / duration));
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     const params = {
-      type: "savetaxsip",
+      type: 'savetaxsip',
     };
     if (investTypeDisplay === 'onetime') {
       params.type = 'savetax';
     }
     try {
+      setLoader(true);
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
       const graphData = {
         recommendation: data.recommendation,
-        amount: investTypeDisplay === "sip" ? sipAmount : otiAmount,
+        amount: investTypeDisplay === 'sip' ? sipAmount : otiAmount,
         term,
         // eslint-disable-next-line radix
         year: parseInt(date.getFullYear() + term),
@@ -68,8 +72,11 @@ const Landing = (props) => {
       storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
       setData(graphData);
+      setLoader(false);
       goNext();
     } catch (err) {
+      setLoader(false);
+      toast(err);
       console.log('the err is ', err);
     }
   };
@@ -82,14 +89,14 @@ const Landing = (props) => {
   };
   return (
     <Container
-      //goBack={()=>{}}
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle='Next'
+      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
       helpContact
+      disable={loader}
       hideInPageTitle
       hidePageTitle
-      title='Some heading'
+      title='Save Tax'
       handleClick={fetchRecommendedFunds}
       classOverRideContainer='pr-container'
     >
