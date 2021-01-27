@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
-import Input from '../../../common/ui/Input';
+import Input from "../../../common/ui/Input";
 
 class EnterAmount extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      form_data: {},
-      pan: "",
-      dob: "",
-      mobile_no: "",
-      is_nps_contributed: "",
+      amount: ''
     };
+  }
+
+  handleChange = event => {
+    let value = event.target.value;
+
+    this.setState({
+        amount: value,
+        amount_error: value < parseInt(500) ? 'Minimum amount is ₹500' : ''
+    })
   }
 
   render() {
@@ -29,14 +34,30 @@ class EnterAmount extends Component {
               <div className="nps-card">
                 <div className="inner-container">
                   <div className="title">Enter amount to invest in NPS</div>
+                  <Input
+                    error={!!this.state.amount_error}
+                    helperText={this.state.amount_error}
+                    type="number"
+                    width="40"
+                    // label="Personal email id"
+                    id="amount"
+                    name="amount"
+                    value={this.state.amount || ""}
+                    onChange={this.handleChange}
+                  />
                 </div>
-
 
                 <div className="tags">
                   <div className="tag-container">
-                    <div
-                      className="tag"
-                    ></div>
+                    <div className="tag">
+                        ₹ 5000
+                    </div>
+                    <div className="tag">
+                        ₹ 5000
+                    </div>
+                    <div className="tag">
+                        ₹ 5000
+                    </div>
                   </div>
                 </div>
               </div>

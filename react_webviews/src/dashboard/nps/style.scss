@@ -84,7 +84,16 @@
 
   .nps-card {
     .inner-container {
-      padding: 10px 20px; 
+      padding: 10px 20px;
+
+      .MuiInput-input {
+        font-size: 25px;
+      }
+      
+      .MuiFormHelperText-root {
+        font-size: 16px;
+        margin-top: 10px;
+      }
     }
   }
 }
@@ -122,6 +131,8 @@
       align-items: center;
       text-align: center;
       padding-left: 15px;
+      background-color: var(--primary);
+      width: max-content;
 
       .tag {
         color: #fff;

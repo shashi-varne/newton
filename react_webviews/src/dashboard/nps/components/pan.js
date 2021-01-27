@@ -101,6 +101,7 @@ class PanDetails extends Component {
               <InputWithIcon
                 icon={phone}
                 width="30"
+                type="number"
                 id="mobile_no"
                 label="Enter Mobile Number"
                 onChange={this.handleChange("mobile_no")}
