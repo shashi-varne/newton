@@ -6,6 +6,7 @@
   }
 
   ul {
+    padding-inline-start: 0px;
     li {
       display: flex;
       flex-direction: row;
@@ -17,10 +18,11 @@
 
       .text {
         flex: 1;
-        s h4 {
-          font-size: 20px;
+        h4 {
+          font-size: 18px;
           color: #160d2e;
           font-weight: 600;
+          margin-block-start: 0px;
         }
 
         p {
