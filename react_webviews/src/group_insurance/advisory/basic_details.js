@@ -22,7 +22,8 @@ class AdvisoryBasicDetails extends Component {
             dependents_data: advisoryConstants.dependents_data,
             form_data: {}, 
             spouse_checked: false,
-            none_checked: false
+            none_checked: false,
+            showDependentsError: false
         }
     }
 
@@ -58,7 +59,7 @@ class AdvisoryBasicDetails extends Component {
             var value = event
             form_data[name] = event;
             form_data[name + '_index'] = event;
-
+            form_data[name = '_error'] = ''
         }else{
             form_data[name] = value;
             form_data[name + '_error'] = ''
@@ -113,7 +114,8 @@ class AdvisoryBasicDetails extends Component {
     updateParent = (key, value) => {
         this.setState({
             [key]: value,
-            none_checked: false 
+            none_checked: false,
+            showDependentsError: false
         }, () => {
             this.setMinMax();
         });
@@ -126,7 +128,10 @@ class AdvisoryBasicDetails extends Component {
         if(name === 'spouse'){
             this.setState({
                 spouse_checked: !spouse_checked,
-                none_checked: false
+                none_checked: false,
+                showDependentsError: false
+            }, ()=>{
+                console.log('sp', this.state.spouse_checked)
             })
         }else if(name === 'none'){
             none_checked = !none_checked;
@@ -138,9 +143,9 @@ class AdvisoryBasicDetails extends Component {
                     Parents_checked: false,
                     Parents_total: 0,
                     spouse_checked: false,
+                    showDependentsError: false
                 })
             }
-
             this.setState({
                 none_checked: none_checked
             })
@@ -158,32 +163,38 @@ class AdvisoryBasicDetails extends Component {
         }
         console.log('kids:', this.state.Kids_total, 'parents:',this.state.Parents_total, 'spouse:', spouse_count)
         if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
-            form_data.name_error = 'Enter valid full name';
+            form_data.name_error = 'Please enter full name';
             canSubmitForm = false;
         }
         if(form_data && !form_data.gender){
-            form_data.gender_error = 'Please select gender'
+            form_data.gender_error = 'We need some details to move forward!'
             canSubmitForm = false;
         }
         if(form_data && !form_data.illness){
-            form_data.illness_error = 'Please select an option'
+            form_data.illness_error = 'We need some details to move forward!'
             canSubmitForm = false;
         }
         if(form_data && !form_data.married){
-            form_data.married_error = 'Please select an option'
+            form_data.married_error = 'We need some details to move forward!'
             canSubmitForm = false;
         }
         if(form_data && !form_data.age){
-            form_data.age_error = 'Please select age'
+            form_data.age_error = 'We need some details to move forward!'
             canSubmitForm = false;
         }
         if(form_data && !form_data.city){
-            form_data.city_error = 'Please select city'
+            form_data.city_error = 'We need some details to move forward!'
             canSubmitForm = false;
+        }
+        if(!this.state.none_checked && !this.state.spouse_checked && !this.state.Kids_checked && !this.state.Parents_total){
+            this.setState({
+                showDependentsError: true,
+            })    
         }
         this.setState({
             form_data: form_data
         })
+
 
         if(canSubmitForm){
             this.navigate('/group-insurance/advisory/income-details')
@@ -285,7 +296,7 @@ class AdvisoryBasicDetails extends Component {
               onChange={this.handleChange("city")}
             />
             </div>
-            <div style={{ marginBottom: '10px'}}>
+            <div className="advisory-basic-dependents" style={{ marginBottom: '10px'}}>
             <p style={{color: '#767E86', marginBottom: '15px', fontSize: '12.8px'}}>Do you have any dependents?</p>
 
             <div className="checkbox-container">
@@ -295,7 +306,7 @@ class AdvisoryBasicDetails extends Component {
                   value="checked"
                   name="spouse"
                   onChange={()=>this.handleRegularCheckbox('spouse')}
-                  className="Checkbox"
+                  className="basic-checkbox"
             />
             <p className="checkbox-option">Spouse</p>
             </div>
@@ -309,10 +320,11 @@ class AdvisoryBasicDetails extends Component {
                   value="checked"
                   name="none"
                   onChange={()=>this.handleRegularCheckbox('none')}
-                  className="Checkbox"
+                  className="basic-checkbox"
             />
             <p className="checkbox-option">None</p>
             </div>
+            {this.state.showDependentsError && <p style={{color: '#f44336', fontSize: '0.75rem', textAlign: 'left', margin: '-2px 0 25px 0'}}>We need some details to move forward!</p>}
             </div>
 
             <div className="InputField">

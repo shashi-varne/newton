@@ -1098,7 +1098,7 @@ input#pan {
       color:rgb(0, 0, 0)
     }
     .FiveStepPlan-Number{
-      padding: 6.5px 12px;
+      padding: 6px 10px;
     }
   }
 }
@@ -1133,6 +1133,7 @@ input#pan {
   .checkbox-container{
     display: flex;
     align-items: center;
+    margin: -30px 0;
     .checkbox-option{
       transform: translateX(-17px);
       color: #160D2E;

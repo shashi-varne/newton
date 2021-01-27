@@ -25,6 +25,7 @@ class AdvisoryAssetDetails extends Component {
                 health_cover_amount: false,
                 none: false,
                 term_cover_amount: false,
+                showCoverAmountError: false
             }
         }
     }
@@ -71,6 +72,8 @@ class AdvisoryAssetDetails extends Component {
 
         this.setState({
             form_data: form_data
+        },()=>{
+            console.log(form_data)
         })
     }
     
@@ -148,7 +151,10 @@ class AdvisoryAssetDetails extends Component {
         this.setState({
             ins_checkbox: ins_checkbox,
             form_data: form_data,
-            showPrefix: showPrefix
+            showPrefix: showPrefix,
+            showCoverAmountError: false
+        }, ()=>{
+            console.log(this.state.form_data)
         })
     }
 
@@ -188,8 +194,6 @@ class AdvisoryAssetDetails extends Component {
                         </InputPrefix>
                     </div>
                 )}
-                
-                
             </div>
         )
     }
@@ -197,23 +201,36 @@ class AdvisoryAssetDetails extends Component {
     handleClick = () =>{
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        
+        var showCoverAmountError = true;
+
         if(form_data){
-            if(form_data.assets === 'YES' && !form_data.asset_amount){
-                form_data.asset_amount_error = 'error'
+            if(!form_data.assets){
+                form_data.assets_error = 'Please enter appropriate value'
+            } 
+
+            if(form_data.assets === 'YES' && (!form_data.asset_amount || form_data.asset_amount === '0' )){
+                form_data.asset_amount_error = 'We need some details to move forward!'
             } 
 
             var check_box_list = ['term_cover_amount','health_cover_amount','critical_cover_amount','corona_cover_amount']
             for(var amount of check_box_list){
                 if(this.state.ins_checkbox[amount] && !form_data[amount]){
-                    form_data[amount + '_error'] = 'error'
+                    form_data[amount + '_error'] = ' We need some details to move forward!'
+                }
+                if(this.state.ins_checkbox[amount] || this.state.ins_checkbox['none']){
+                    showCoverAmountError = false;
                 }
             }
         }
 
         this.setState({
-            form_data: form_data
+            form_data: form_data,
+            showCoverAmountError: showCoverAmountError
         })
+
+        if(canSubmitForm){
+            this.navigate('/group-insurance/advisory/recommendations')
+        }
     }
 
 
@@ -270,9 +287,10 @@ class AdvisoryAssetDetails extends Component {
              </InputPrefix>
              </div>
             )}
-            {this.state.insuranceList.map(this.renderInsuranceList)}
-            
-            
+            <div style={{marginBottom: '50px'}}>
+                {this.state.insuranceList.map(this.renderInsuranceList)}
+            </div>
+            {this.state.showCoverAmountError && <p style={{color: '#f44336', fontSize: '0.75rem', textAlign: 'left', margin: '-2px 0 25px 0'}}>We need some details to move forward!</p>}   
             </div>
             </Container>
         )

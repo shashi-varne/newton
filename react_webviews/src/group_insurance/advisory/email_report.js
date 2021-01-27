@@ -24,27 +24,35 @@ class EmailReport extends Component {
         }
 
         var value = event.target ? event.target.value : event;
-        console.log(value)
         form_data[name] = value;
         form_data[name + '_error'] = ''
 
         this.setState({
             form_data: form_data
         })
-
-    
     }
-    
+
+    navigate = (pathname, search) => {
+        this.props.history.push({
+          pathname: pathname,
+          search: search ? search : getConfig().searchParams,
+        });
+    }    
+
     handleClick = () =>{
-        
         var form_data = this.state.form_data;
-        
+        var canSubmitForm = true;        
         if(form_data){
-            if (form_data.email && (form_data.email.length < 10 || !validateEmail(this.state.form_data.email))) {
-                form_data['email_error'] = 'Please enter valid email';
+            if (!form_data.email || (form_data.email && (form_data.email.length < 10 || !validateEmail(this.state.form_data.email)))) {
+                form_data.email_error = 'We need some details to move forward!';
+                canSubmitForm = false
             }
         }
-        this.setState({form_data: form_data})        
+        this.setState({form_data: form_data})       
+        if(canSubmitForm){
+            this.navigate('/group-insurance/advisory/recommendations')
+        }
+
     }
     render(){
         return(

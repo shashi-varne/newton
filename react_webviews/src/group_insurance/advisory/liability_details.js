@@ -76,10 +76,13 @@ class AdvisoryLiabilityDetails extends Component {
         form_data[name + '_error'] = '';
     
         if(form_data[name] === 'NO'){
+            
             if(name === 'homeloan'){
                 form_data.loan_amount_error = '';
+                form_data.homeloan_error = ''
             }else if(name === 'liability'){
                 form_data.total_amount_error = '';
+                form_data.liability_error = ''
             }
         }
         this.setState({
@@ -115,28 +118,38 @@ class AdvisoryLiabilityDetails extends Component {
     handleClick = () =>{
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        
+        console.log('111')
         if(form_data){
             if(!form_data.homeloan){
                 form_data.homeloan_error = 'Please enter appropriate value';
                 canSubmitForm = false;
+                console.log('5555')
             }
             if(!form_data.liability){
                 form_data.liability_error = 'Please enter appropriate value';
                 canSubmitForm = false;
+                console.log('666')
             }
 
-            if(form_data.homeloan && !form_data.loan_amount){
-                form_data.loan_amount_error = 'Please enter appropriate value'
+            if(form_data.homeloan === 'YES' && !form_data.loan_amount){
+                form_data.loan_amount_error = 'We need some details to move forward!';
+                canSubmitForm = false;
+                console.log(form_data)
             }
-            if(form_data.liability && !form_data.total_amount){
-                form_data.total_amount_error = 'Please enter appropriate value'
+            if(form_data.liability === 'YES' && !form_data.total_amount){
+                form_data.total_amount_error = 'We need some details to move forward!';
+                canSubmitForm = false;
+                console.log('8888')
             }
         }
 
         this.setState({
             form_data: form_data
         })
+
+        if(canSubmitForm){
+            this.navigate('/group-insurance/advisory/asset-details')
+        }
     }
 
 

@@ -3,8 +3,13 @@ import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {formatAmount, containsNumbersAndComma} from 'utils/validators';
-import {advisoryConstants} from '../constants';
 import RecommendationResult from './components/recommendation_result';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText
+} from 'material-ui/Dialog';
+import Button from 'material-ui/Button';
 import download from 'assets/download.svg';
 import launch from 'assets/launch.svg';
 
@@ -13,6 +18,7 @@ class AdivsoryRecommendations extends Component {
         super(props);
         this.state = {
             type: getConfig().productName,
+            openDialogReset: false
         }
     }
 
@@ -23,6 +29,47 @@ class AdivsoryRecommendations extends Component {
         });
     }
 
+    resetQuote = () =>{
+        console.log('reset')
+    }
+    handleClose = () => {
+            // this.sendEvents('next');
+        this.setState({
+            openDialogReset: false,
+        })
+    }
+
+    renderDialog = () => {
+        return (
+            <Dialog
+                fullScreen={false}
+                open={this.state.openDialogReset}
+                onClose={this.handleClose}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogContent>
+                    <DialogContentText>
+                    Restarting will delete all existing data. Do you want to restart? 
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.resetQuote} color="default">
+                        YES
+                    </Button>
+                    <Button onClick={this.handleClose} color="default" autoFocus>
+                        CANCEL
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+    showDialog = () => {
+        this.setState({
+            openDialogReset: true,
+        }, () => {
+            // this.sendEvents('next');
+        });
+    }
     render(){
         return(
             <Container
@@ -30,6 +77,9 @@ class AdivsoryRecommendations extends Component {
                 fullWidthButton={true}
                 onlyButton={true}
                 title="Our recommendations"
+                resetpage={true}
+                handleReset={this.showDialog}
+                disableBack={true}
                 noFooter={true}
                 handleClick={()=>this.handleClick()}
             >
@@ -70,6 +120,7 @@ class AdivsoryRecommendations extends Component {
                         </div>
                     </div>
                 </div>
+                {this.renderDialog()}
             </Container>
         )
     }

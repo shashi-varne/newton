@@ -105,25 +105,28 @@ class AdvisoryIncomeDetails extends Component {
         
         if(form_data){
             if(!form_data.expense){
-                form_data.expense_error = "a";
+                form_data.expense_error = "We need some details to move forward!";
                 canSubmitForm = false
             }
             if(!form_data.income){
-                form_data.income_error = "b";
+                form_data.income_error = "Annual income needs to be more than Rs 1 lac for this analysis!";
                 canSubmitForm = false;
             }
             if(!form_data.income_growth){
-                form_data.income_growth_error = "c";
+                form_data.income_growth_error = "We need some details to move forward!";
                 canSubmitForm = false;
             }
             if(!form_data.retire){
-                form_data.retire_error = "d";
+                form_data.retire_error = "Please select appropriate retirement age!";
                 canSubmitForm = false;
             }
         }
         this.setState({
             form_data: form_data
         })
+        if(canSubmitForm){
+            this.navigate('/group-insurance/advisory/liability-details')
+        }
     }
 
     render() {
