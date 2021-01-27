@@ -72,3 +72,65 @@
     }
   }
 }
+
+.nps {
+  .container-padding { 
+    padding: 0px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .nps-card {
+    .inner-container {
+      padding: 10px 20px; 
+    }
+  }
+}
+
+.nps-card {
+  padding-top: 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+
+  p {
+    margin: 0;
+    color: #4a4a4a;
+  }
+
+  .help-text {
+    font-family: 'LatoM';
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    color: #4a4a4a;
+
+    span {
+      font-family: 'Lato';
+    }
+  }
+
+  .tags {
+    padding: 10px 0;
+    background: #f9f9f9;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    .tag-container {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      padding-left: 15px;
+
+      .tag {
+        color: #fff;
+        border-radius: 50px;
+        padding: 5px 15px;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
