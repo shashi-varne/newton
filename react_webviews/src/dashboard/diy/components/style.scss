@@ -1,7 +1,13 @@
 .diy-fund-card {
   display: flex;
-  padding:15px;
+  padding: 15px;
   margin-bottom: 10px;
+}
+
+.diy-fund-card .cart {
+  img {
+    width: 20px;
+  }
 }
 
 .diy-fund-card-img {
@@ -13,35 +19,140 @@
   }
 }
 
-.diy-fund-card-details{
-    flex:1;
-    .diy-fund-card-name{
-        margin: 0;
-        line-height: 1.25em;
-        font-weight: bold;
-        font-size: 18px;
-    }
+.diy-fund-card-details {
+  flex: 1;
+  .diy-fund-card-name {
+    margin: 0;
+    line-height: 1.25em;
+    font-weight: bold;
+    font-size: 18px;
+  }
 }
 
-.diy-fund-card-info-container{
+.diy-fund-card-info-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+
+  .diy-fund-card-info {
+    display: flex;
+    flex-direction: column;
+    p {
+      font-size: 16px;
+      span {
+        color: #34ca5c;
+      }
+    }
+    & > p {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 0;
+      color: #727272;
+    }
+  }
+}
+
+.diy-cart-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px;
+}
+
+.diy-cart-footer .button {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 100px;
+  padding: 8px 15px;
+
+  img {
+    width: 20px;
+  }
+
+  .title {
+    margin-left: 10px;
+  }
+
+  .icon {
+    width: 20px;
+    svg {
+      fill: #4f2da7;
+    }
+  }
+}
+
+.diy-filter-button {
+  background-color: #fff;
+}
+
+.diy-cart-footer .button:nth-of-type(2) {
+  margin-left: 10px;
+}
+
+#diy-dialog {
+  .MuiDialog-paper {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .MuiDialog-paperWidthSm {
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .diy-bottom-sheet {
+    width: 100%;
+  }
+
+  .diy-bottom-sheet .header {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    align-items: center;
+  }
 
-    .diy-fund-card-info{
-        display: flex;
-        flex-direction: column;
-        p{
-            font-size: 16px;
-            span{
-                color:#34ca5c;
-            }
-        }
-        & > p{
-            margin-top: 0;
-            margin-bottom: 0;
-            padding-top: 0;
-            color: #727272;
-        }
+  .diy-bottom-sheet .header .text {
+    font-weight: bold;
+    color: #333333;
+  }
+
+  .diy-bottom-sheet .filter {
+    display: flex;
+    border-top: 1px solid #e8e8e8;
+    background-color: #fff;
+  }
+
+  .diy-bottom-sheet .filter .title {
+    flex: 1;
+    background-color: #e8e8e8;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      .selected {
+        background-color: #fff;
+      }
     }
+
+    ul li {
+      padding: 20px;
+      list-style-type: none;
+      text-align: center;
+      font-weight: bold;
+      box-sizing: border-box;
+    }
+  }
+
+  .diy-bottom-sheet .filter .body {
+    flex: 4;
+  }
+
+  .diy-sort-filter,
+  .diy-option-filter {
+    margin: 0 10px;
+  }
 }
