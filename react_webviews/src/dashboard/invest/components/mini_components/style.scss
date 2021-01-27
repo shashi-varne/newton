@@ -104,11 +104,11 @@
         text-align: center;
         padding:6px 10px;
         font-size: 14px;
-        color:#35cb5d;
+        color: var(--secondary);
         cursor: pointer;
     }
     span.selected{
-        background-color: #35cb5d;
+        background-color: var(--secondary);
         border-radius: 100px;
         color:white
     }
