@@ -1,7 +1,7 @@
 import { getConfig } from 'utils/functions';
 import { subDays, startOfMonth, addMonths, endOfMonth, startOfYear } from 'date-fns';
 import moment from 'moment';
-import { isEmpty, numDifferentiationInr } from '../../utils/validators';
+import { isEmpty, numDifferentiationInr, nonRoundingToFixed } from '../../utils/validators';
 
 export function navigate(pathname, params, replace) {
   if (!replace) {
@@ -73,6 +73,12 @@ export const dateFormater = (date) => {
 export const formatNumVal = (val) => {
   if (isEmpty(val) || !val) return '--';
   return numDifferentiationInr(val);
+};
+
+export const formatPercentVal = (val) => {
+  if (isEmpty(val) || !val) return '0%';
+  else if (val < 0.1) return '<0.1%';
+  return `${nonRoundingToFixed(val, 2)}%`;
 };
 
 export const date_range_selector = {
