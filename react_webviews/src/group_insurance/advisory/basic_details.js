@@ -58,13 +58,13 @@ class AdvisoryBasicDetails extends Component {
         if(name === 'city' || name === 'age'){
             var value = event
             form_data[name] = event;
-            form_data[name + '_index'] = event;
-            form_data[name = '_error'] = ''
+            form_data[name + '_index'] = value;
+            form_data[name + '_error'] = ''
         }else{
             form_data[name] = value;
             form_data[name + '_error'] = ''
         }
-
+        
 
         this.setState({
             form_data: form_data
@@ -161,7 +161,6 @@ class AdvisoryBasicDetails extends Component {
         if(this.state.spouse_checked){
             spouse_count = 1;
         }
-        console.log('kids:', this.state.Kids_total, 'parents:',this.state.Parents_total, 'spouse:', spouse_count)
         if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
             form_data.name_error = 'Please enter full name';
             canSubmitForm = false;
@@ -190,11 +189,11 @@ class AdvisoryBasicDetails extends Component {
             this.setState({
                 showDependentsError: true,
             })    
+            canSubmitForm = false;
         }
         this.setState({
             form_data: form_data
         })
-
 
         if(canSubmitForm){
             this.navigate('/group-insurance/advisory/income-details')

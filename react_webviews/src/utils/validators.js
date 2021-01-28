@@ -199,7 +199,6 @@ export function formatAmount(amount) {
   if (!amount) {
     return '';
   }
-  console.log(typeof amount)
   if(typeof amount === 'string' && amount.includes(',')){
     amount = amount.replace(/,/g, "");
   }
@@ -939,7 +938,7 @@ export function charsNotAllowedHDFC(value){
 }
 
 export function containsSpecialCharactersAndNumbers(value){
-  var format = /[$&+,:;=?@#|'<>.^*()%!"-\d]/g;
+  var format = /[$&+,:;=[\]{}\\/_?@#|'<>.^*()%!"-\d]/g;
   return format.test(value);
 }
 

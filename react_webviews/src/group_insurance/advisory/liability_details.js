@@ -133,7 +133,7 @@ class AdvisoryLiabilityDetails extends Component {
                 form_data.loan_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }
-            if(form_data.liability === 'YES' && (!form_data.total_amount || formatAmountToNumber(form_data.loan_amount) === 0)){
+            if(form_data.liability === 'YES' && (!form_data.total_amount || formatAmountToNumber(form_data.total_amount) === 0)){
                 form_data.total_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }

@@ -1046,7 +1046,7 @@ input#pan {
   }
   .advisory-entry-button{
     position: absolute;
-    padding: 10px 12px;
+    padding: 14px 18px;
     left: 6%;
     top: 58%;
     font-size: 10px;
@@ -1054,6 +1054,7 @@ input#pan {
     letter-spacing: 0.5px;
     cursor: pointer;
     color: white;
+    border: none;
     background-color: #4F2DA7;
     border-radius: 5px;
   }
@@ -1077,6 +1078,7 @@ input#pan {
   .advisory-hero-desc{
     color: #767E86;
     margin: 20px 0 30px 0;
+    line-height: 20px;
   }
   .advisory-landing-title{
     position: absolute;
@@ -1089,18 +1091,22 @@ input#pan {
   }
   .steps-to-follow-container{
     margin-bottom: 50px;
-  }
-  .FiveStepPlan-Container {
-    .FiveStepPlan-title{
-      padding: 10px 0;
-      font-size: 16px;
-      font-family: 'Roboto';
-      color:rgb(0, 0, 0)
+    .FiveStepPlan-Container {
+      .FiveStepPlan-title{
+        padding: 10px 0;
+        font-size: 15px;
+        font-family: 'Roboto';
+        color:rgb(0, 0, 0)
+      }
+      .FiveStepPlan-subtitle{
+        font-size: 15px !important;
+      }
+      .FiveStepPlan-Number{
+        padding: 6px 10px;
+      }
     }
-    .FiveStepPlan-Number{
-      padding: 6px 10px;
-    }
   }
+  
 }
 
 .advisory-title-container{
@@ -1232,6 +1238,7 @@ input#pan {
           font-weight: bold;
           padding: 15px 25px;
           border-radius: 5px;
+          font-size: 12px;
         }
       }
       

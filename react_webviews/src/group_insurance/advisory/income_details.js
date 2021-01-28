@@ -104,7 +104,7 @@ class AdvisoryIncomeDetails extends Component {
         var canSubmitForm = true;
         
         if(form_data){
-            if(!form_data.expense){
+            if(!form_data.expense || formatAmountToNumber(form_data.expense) === 0){
                 form_data.expense_error = "We need some details to move forward!";
                 canSubmitForm = false
             }
