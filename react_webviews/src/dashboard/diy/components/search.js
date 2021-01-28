@@ -13,6 +13,7 @@ const Search = (props) => {
   const [fundResult, setFundResult] = useState();
   const [showLoader, setShowLoader] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+
   const handleChange = (event) => {
     let value = event.target.value || "";
     if (!value) setShowErrorMessage(false);
@@ -49,36 +50,33 @@ const Search = (props) => {
   return (
     <Container noFooter helpContact hideInPageTitle title="Search">
       <div className="diy-search">
-        <div className="search-option">
-          <div className="search-input">
-            <input
-              placeholder="Fund Search..."
-              value={value}
-              onChange={handleChange}
-            />
-            {value && value.length !== 0 && (
-              <Close
-                className="close-icon"
-                size={22}
-                thickness={4}
-                onClick={() => setValue("")}
+        <div className="search-content">
+          <div className="search-option">
+            <div className="search-input">
+              <input
+                placeholder="Fund Search..."
+                value={value}
+                onChange={handleChange}
               />
-            )}
+              {value && value.length !== 0 && (
+                <Close className="close-icon" onClick={() => setValue("")} />
+              )}
+            </div>
+            <div
+              className="search-button"
+              style={{
+                cursor: value && value.length > 3 ? "pointer" : "not-allowed",
+              }}
+            >
+              <SearchIcon className="search-icon" />
+            </div>
           </div>
-          <div
-            className="search-button"
-            style={{
-              cursor: value && value.length > 3 ? "pointer" : "not-allowed",
-            }}
-          >
-            <SearchIcon className="search-icon" />
-          </div>
+          {showErrorMessage && (
+            <div className="error-message message">
+              Minimum 4 characters required
+            </div>
+          )}
         </div>
-        {showErrorMessage && (
-          <div className="error-message message">
-            Minimum 3 characters is required
-          </div>
-        )}
         {showLoader && (
           <div className="search-loader">
             <CircularProgress
