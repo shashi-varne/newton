@@ -419,7 +419,8 @@ export async function getUserStatus(state = "") {
         "perfios_state",
         "bt_info_screen",
         "credit_bt",
-        "loan_bt"
+        "loan_bt",
+        "eligible_loan"
       ];
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
