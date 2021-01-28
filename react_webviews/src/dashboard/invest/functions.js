@@ -27,8 +27,6 @@ export async function initialize() {
   this.getInstaRecommendation = getInstaRecommendation.bind(this);
   this.getRecommendation = getRecommendation.bind(this);
   this.validateAmount = validateAmount.bind(this);
-  this.validateOsipAmount = validateOsipAmount.bind(this);
-  this.validateSipAmount = validateSipAmount.bind(this);
   this.showFundInfo = showFundInfo.bind(this);
   this.detailView = detailView.bind(this);
   this.getNfoRecommendation = getNfoRecommendation.bind(this);
@@ -583,45 +581,27 @@ function getGoalRecommendations() {
   return result;
 }
 
-function validateSipAmount(amount) {
-  let goal = getGoalRecommendations();
-  let { amount_error } = this.state;
-  if (amount > goal.max_sip_amount) {
-    amount_error =
-      "Investment amount cannot be more than " +
-      formatAmountInr(goal.max_sip_amount);
-  } else if (amount < goal.min_sip_amount) {
-    amount_error =
-      "Minimum amount should be atleast " +
-      formatAmountInr(goal.min_sip_amount);
-  } else {
-    amount_error = "";
-  }
-  this.setState({ amount_error: amount_error });
-}
-
-function validateOsipAmount(amount) {
-  let goal = getGoalRecommendations();
-  let { amount_error } = this.state;
-  if (amount > goal.max_ot_amount) {
-    amount_error =
-      "Investment amount cannot be more than " +
-      formatAmountInr(goal.max_ot_amount);
-  } else if (amount < goal.min_ot_amount) {
-    amount_error =
-      "Minimum amount should be atleast " + formatAmountInr(goal.min_ot_amount);
-  } else {
-    amount_error = "";
-  }
-  this.setState({ amount_error: amount_error });
-}
-
 function validateAmount(amount) {
+  let goal = getGoalRecommendations();
+  let max = 0;
+  let min = 0;
   if (this.state.investType === "sip") {
-    this.validateSipAmount(amount);
+    max = goal.max_sip_amount;
+    min = goal.min_sip_amount;
   } else {
-    this.validateOsipAmount(amount);
+    max = goal.max_ot_amount;
+    min = goal.min_ot_amount;
   }
+  let { amount_error } = this.state;
+  if (amount > max) {
+    amount_error =
+      "Investment amount cannot be more than " + formatAmountInr(max);
+  } else if (amount < min) {
+    amount_error = "Minimum amount should be atleast " + formatAmountInr(min);
+  } else {
+    amount_error = "";
+  }
+  this.setState({ amount_error: amount_error });
 }
 
 export function detailView(fund) {
@@ -828,14 +808,16 @@ export function checkLimit(amount, index) {
 
   if (amount < min) {
     form_data[index].amount_error =
-      "Please add atleast ₹" + min + " to proceed.";
+      "Please add atleast " + formatAmountInr(min) + " to proceed.";
     disableInput[index] = 1;
   } else if (amount % mul !== 0) {
-    form_data[index].amount_error = "Amount must be multiple of ₹" + mul;
+    form_data[index].amount_error =
+      "Amount must be multiple of " + formatAmountInr(mul);
     disableInput[index] = 1;
   } else if (amount > max) {
     disableInput[index] = 1;
-    form_data[index].amount_error = "Maximum amount for this fund is ₹" + max;
+    form_data[index].amount_error =
+      "Maximum amount for this fund is " + formatAmountInr(max);
   } else {
     disableInput[index] = 0;
     form_data[index].amount_error = "";

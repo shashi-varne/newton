@@ -21,7 +21,12 @@ class NfoScheme extends Component {
 
   render() {
     return (
-      <Container showLoader={this.state.show_loader} noFooter={true} hideInPageTitle>
+      <Container
+        showLoader={this.state.show_loader}
+        noFooter={true}
+        hideInPageTitle
+        title="Select Scheme"
+      >
         <div className="nfo-scheme">
           <div className="info">
             {nfoData.scheme.map((data, index) => {
