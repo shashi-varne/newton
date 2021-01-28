@@ -186,7 +186,7 @@ class Checkout extends Component {
         handleClick={this.handleClick}
         disable={disableInputSummary}
         hideInPageTitle
-        title='Your Mutual Fund Plan'
+        title="Your Mutual Fund Plan"
         loaderData={{
           loadingText,
         }}
@@ -226,6 +226,11 @@ class Checkout extends Component {
             })}
           </div>
           <div className="cart-items">
+            {fundsData && fundsData.length === 0 && (
+              <p className="message">
+                Please add atleast one fund to make an investment.
+              </p>
+            )}
             {fundsData &&
               fundsData.map((fund, index) => {
                 return (
