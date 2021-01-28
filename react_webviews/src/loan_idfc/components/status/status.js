@@ -4,6 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import ContactUs from "../../../common/components/contact_us";
+import toast from "../../../common/ui/Toast";
 
 const commonMapper = {
   idfc_null_failed: {
@@ -267,6 +268,7 @@ class LoanStatus extends Component {
     this.sendEvents("next");
     let { commonMapper, vendor_application_status, is_dedupe } = this.state;
     if (!is_dedupe && vendor_application_status === "idfc_0.5_accepted") {
+      toast('A mail has been sent to your official mail ID. Verify the same for faster loan sanction.')
       let body = {
         perfios_state: "init",
         idfc_loan_status: "perfios",
