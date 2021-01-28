@@ -8,7 +8,7 @@ const DiyCartButton = (props) => {
     <Button variant="raised" color="secondary" {...props}>
       <img src={add_cart_icon} alt="Add to cart" />
       <div className="title">
-        Add to Cart
+        Cart
       </div>
     </Button>
   )

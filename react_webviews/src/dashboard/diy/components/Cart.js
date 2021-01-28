@@ -1,19 +1,54 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import DiyDialog from './DiyDialog'
+import Button from '@material-ui/core/Button'
+import { storageService } from '../../../utils/validators'
 
-const Cart = () => {
+import delete_new from '../../../assets/delete_new.png'
+import { CART } from '../constants'
+
+const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
+  const handleRemoveFromCart = (item) => () => {
+    if (cart.length > 0) {
+      const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin)
+      setCart(updatedCartItems)
+      storageService().setObject(CART, updatedCartItems)
+    }
+  }
+
+  const close = () => {
+    setCartActive(false)
+  }
+
   return (
-    <DiyDialog>
-      <section>
-        <div className="diy-cart-container">
-          <div className="diy-cart-item">
-            <div className="item">
-              item
+    <DiyDialog close={close} open={isOpen}>
+      <section className="diy-bottom-sheet">
+        <header className="header">
+          <div className="text">Fund Name</div>
+          <div className="text">Remove</div>
+        </header>
+        <main>
+          {cart.map((item) => (
+            <div key={item.isin} className="cart-item">
+              <div className="title">{item.legal_name}</div>
+              <img
+                src={delete_new}
+                alt={`Delete ${item.isin} from cart`}
+                className="delete-icon"
+                role="button"
+                onClick={handleRemoveFromCart(item)}
+              />
             </div>
-            <div className="remove" role="button">
-              delete
-            </div>
-          </div>
-        </div>
+          ))}
+        </main>
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={cart.length === 0}
+          color="secondary"
+          onClick={() => {}}
+        >
+          Proceed to Checkout
+        </Button>
       </section>
     </DiyDialog>
   )

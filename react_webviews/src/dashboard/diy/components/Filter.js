@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 
 import SortFilter from './SortFilter'
 import OptionFilter from './OptionFilter'
+import FundHouse from './FundHouse'
 
 const Filter = ({ isOpen, setFilterActive }) => {
   const [activeTab, setActiveTab] = useState('sort')
@@ -50,6 +51,7 @@ const Filter = ({ isOpen, setFilterActive }) => {
           <div className="body">
             {activeTab === 'sort' && <SortFilter />}
             {activeTab === 'fundOption' && <OptionFilter />}
+            {activeTab === 'fundHouse' && <FundHouse />}
           </div>
         </main>
         <Button

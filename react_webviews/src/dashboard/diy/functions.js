@@ -1,10 +1,13 @@
 import Api from 'utils/api'
-import { storageService } from '../../utils/validators'
+import { isEmpty, storageService } from '../../utils/validators'
 
 const genericErrorMessage = 'Something went wrong!!!'
 
 export async function getFundList() {
-  const res = await Api.get(`/api/funds/Equity/Large_cap/sip`)
+  const sub = storageService().get('diystore_subCategpry')
+  const cat = storageService().get('diystore_category')
+  const type = storageService().get('diystore_investmentType')
+  const res = await Api.get(`/api/funds/Equity/Multi_Cap/sip`)
   if (
     res.pfwresponse.result.message === 'success' &&
     res.pfwresponse.status_code === 200
@@ -14,20 +17,27 @@ export async function getFundList() {
   throw new Error(res.pfwresponse.result.message || genericErrorMessage)
 }
 
-export function addToCart(item) {
+export function removeFromCart(item) {
   const currentCartItems = storageService().getObject('diystore_cart') || []
-  currentCartItems.push(item)
-  storageService().setObject(currentCartItems)
-}
-
-export function deleteItemFromCart(isinNo) {
-  const cartItems = storageService().getObject('diystore_cart')
-  if (cartItems.length) {
-    const updatedCartItems = cartItems.filter(({ isin }) => {
-      return isin === isinNo
-    })
+  const index = currentCartItems.findIndex(({ isin }) => isin === item.isin)
+  if (index !== -1) {
+    const updatedCartItems = currentCartItems.filter(
+      ({ isin }) => isin !== item.isin
+    )
     storageService().setObject('diystore_cart', updatedCartItems)
   }
+}
+
+export function getFundHouses() {
+  const fundsList = storageService().getObject('diystore_fundsList')
+
+  if (fundsList.length > 0) {
+    const fundsHouseArr = fundsList.map((item) => item.fund_house)
+    const uniqueSet = new Set(fundsHouseArr)
+    const uniqueArr = Array.from(uniqueSet)
+    return uniqueArr
+  }
+  return []
 }
 
 export function resetDiy() {

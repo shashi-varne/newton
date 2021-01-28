@@ -8,7 +8,7 @@ function Transition(props) {
   return <Slide direction="up" {...props} />
 }
 
-const DiyDialog = ({ close, open, children }) => {
+const DiyDialog = ({ close, open, children, ...props }) => {
   return (
     <Dialog
       onClose={() => close()}
