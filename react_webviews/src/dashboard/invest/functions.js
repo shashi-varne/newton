@@ -779,7 +779,7 @@ export async function getDiyPurchaseLimit(data) {
 }
 
 export function deleteFund(item, index) {
-  let { fundsData, cartCount, fundsArray } = this.state;
+  let { fundsData, cartCount } = this.state;
   let fundName = item.legalName || item.legal_name;
   fundsData.splice(index, 1);
   cartCount = fundsData.length;
@@ -788,7 +788,6 @@ export function deleteFund(item, index) {
     fundsData: fundsData,
     cartCount: cartCount,
   });
-  storageService().setObject("diystore_fundsList", fundsArray); // need to ask
   storageService().setObject("diystore_cart", fundsData);
   storageService().set("diystore_cartCount", fundsData.length);
 }
@@ -799,8 +798,11 @@ export function checkLimit(amount, index) {
     form_data,
     disableInputSummary,
     disableInput,
+    fundsData,
   } = this.state;
-  let limitData = purchaseLimitData[index];
+  let limitData = purchaseLimitData.find(
+    (data) => data.isin === fundsData[index].isin
+  );
   if (!limitData) return;
   let min = limitData.addl_purchase.min;
   let max = limitData.addl_purchase.max;
@@ -844,24 +846,38 @@ function isInvestRefferalRequired(partner_code) {
 }
 
 export async function proceedInvestment(event, isReferralGiven) {
-  let { partner_code, fundsData, purchaseLimitData, investType } = this.state;
+  let {
+    partner_code,
+    fundsData,
+    purchaseLimitData,
+    investType,
+    totalAmount,
+  } = this.state;
   if (isInvestRefferalRequired(partner_code) && !isReferralGiven) {
     // let investCtaEvents = event;
     // $rootScope.openPopupInvestReferral(refOnKey);
     return;
   }
 
-  let allocations = [
-    {
-      mfid: purchaseLimitData[0].mfid,
-      mfname: purchaseLimitData[0].mfname,
-      amount: fundsData[0].amount,
-      default_date: purchaseLimitData[0].addl_purchase.default_date,
-      sip_dates: purchaseLimitData[0].addl_purchase.sip_dates,
-    },
-  ];
+  let allocations = [];
+  fundsData
+    .filter((data) => data.allow_purchase)
+    .forEach((fund) => {
+      let limitData = purchaseLimitData.find(
+        (element) => element.isin === fund.isin
+      );
+      if (!limitData) return;
+      let allocation = {
+        mfid: limitData.mfid,
+        mfname: limitData.mfname,
+        amount: totalAmount,
+        default_date: limitData.addl_purchase.default_date,
+        sip_dates: limitData.addl_purchase.sip_dates,
+      };
+      allocations.push(allocation);
+    });
   let investment = {};
-  investment.amount = parseFloat(fundsData[0].amount);
+  investment.amount = parseFloat(totalAmount);
   let investment_type = "";
   if (investType === "onetime") {
     investment.type = "diy";
@@ -886,28 +902,39 @@ export async function proceedInvestment(event, isReferralGiven) {
   );
 }
 
-export async function makeInvestment(event, nfo_investment, isReferralGiven) {
+export async function makeInvestment(event, investment, isReferralGiven) {
   let {
     isRedirectToPayment,
-    fundsData,
     investment_type,
     invRefData,
+    totalAmount,
+    type,
+    currentUser,
+    partner_code,
   } = this.state;
 
   isRedirectToPayment = true;
-  let investmentObj = nfo_investment;
+  let investmentObj = investment;
   let body = {
     investment: investmentObj,
   };
 
   let investmentEventData = {
-    amount: parseFloat(fundsData[0].amount),
+    amount: parseFloat(totalAmount),
     investment_type: investment_type,
     investment_subtype: "",
-    journey_name: "nfo",
+    journey_name: type,
   };
 
   storageService().setObject("mf_invest_data", investmentEventData);
+
+  if (
+    !currentUser.active_investment &&
+    partner_code !== "bfdlmobile" &&
+    type === "diy"
+  ) {
+    this.navigate("/invest-journey");
+  }
 
   if (isReferralGiven && invRefData.code) {
     body.referral_code = invRefData.code;
@@ -923,7 +950,6 @@ export async function makeInvestment(event, nfo_investment, isReferralGiven) {
     () => this.proceedInvestmentChild(event)
   );
 
-  // let sipOrOnetime = investment_type;
   // $broadcast ('parentChildCommunication', {key: 'proceedInvestmentChild'});
 }
 

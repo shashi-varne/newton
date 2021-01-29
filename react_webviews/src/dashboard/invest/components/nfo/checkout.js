@@ -22,7 +22,8 @@ class Checkout extends Component {
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
-      type: props.type
+      type: props.type,
+      currentUser: storageService().getObject("user") || {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -33,7 +34,15 @@ class Checkout extends Component {
 
   onload = () => {
     let fundsData = [];
-    let { form_data, renderData, partner_code, ctc_title, type } = this.state;
+    let {
+      form_data,
+      renderData,
+      partner_code,
+      ctc_title,
+      type,
+      currentUser,
+    } = this.state;
+    console.log(type);
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -64,7 +73,6 @@ class Checkout extends Component {
           (data) => (data.selected_icon = "bfdl_selected.png")
         );
       }
-      let currentUser = storageService().getObject("user");
       if (!currentUser.active_investment && partner_code !== "bfdlmobile")
         ctc_title = "HOW IT WORKS?";
       this.setState(
@@ -91,22 +99,28 @@ class Checkout extends Component {
       return data.isin;
     });
     return isinArr.join(",");
-  }
+  };
 
   handleClick = () => {
     let { fundsData, type } = this.state;
-    if (fundsData.length === 0) {
+    let allowedFunds = fundsData.filter((data) => data.allow_purchase);
+    if (fundsData.length === 0 || allowedFunds.length === 0) {
       this.props.history.goBack();
       return;
     }
     let submit = true;
-    fundsData.forEach((data) => {
+    let totalAmount = 0;
+    allowedFunds.forEach((data) => {
       if (!data.amount) {
         submit = false;
+      } else {
+        totalAmount = totalAmount + data.amount;
       }
     });
     if (submit) {
-      this.proceedInvestment();
+      this.setState({ totalAmount: totalAmount }, () =>
+        this.proceedInvestment()
+      );
     } else {
       if (type === "nfo") toast("Please enter valid amount");
       else toast("Please fill in all the amount field(s).");
