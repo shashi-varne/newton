@@ -125,6 +125,7 @@ const FundType = (props) => {
           setCartActive={setCartActive}
           cart={cart}
           setCart={setCart}
+          history={props.history}
         />
       </footer>
     </Container>

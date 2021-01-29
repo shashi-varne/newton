@@ -6,7 +6,7 @@ import { storageService } from '../../../utils/validators'
 import delete_new from '../../../assets/delete_new.png'
 import { CART } from '../constants'
 
-const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
+const Cart = ({ isOpen, setCartActive, cart, setCart, history }) => {
   const handleRemoveFromCart = (item) => () => {
     if (cart.length > 0) {
       const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin)
@@ -20,7 +20,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
   }
 
   const handleCheckoutProceed = () => {
-    // navigate to diy/invest
+    history.push('/diy/invest/')
   }
 
   return (

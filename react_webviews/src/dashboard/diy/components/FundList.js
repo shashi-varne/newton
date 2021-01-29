@@ -37,7 +37,7 @@ function TabContainer(props) {
     </Typography>
   )
 }
-const FundList = ({ match, classes }) => {
+const FundList = ({ match, classes, history }) => {
   const [value, setValue] = useState(0)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -168,6 +168,7 @@ const FundList = ({ match, classes }) => {
         setFundHouse={setFundHouse}
         setFundsList={setFundOption}
         setFundOption={setFundOption}
+        history={history}
       />
     </Container>
   )

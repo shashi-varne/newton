@@ -1,5 +1,5 @@
 import Api from 'utils/api'
-import { isEmpty, storageService } from '../../utils/validators'
+import { storageService } from '../../utils/validators'
 
 const genericErrorMessage = 'Something went wrong!!!'
 
@@ -14,17 +14,6 @@ export async function getFundList({ key, name, type }) {
   throw new Error(res.pfwresponse.result.message || genericErrorMessage)
 }
 
-export function removeFromCart(item) {
-  const currentCartItems = storageService().getObject('diystore_cart') || []
-  const index = currentCartItems.findIndex(({ isin }) => isin === item.isin)
-  if (index !== -1) {
-    const updatedCartItems = currentCartItems.filter(
-      ({ isin }) => isin !== item.isin
-    )
-    storageService().setObject('diystore_cart', updatedCartItems)
-  }
-}
-
 export function getFundHouses() {
   const fundsList = storageService().getObject('diystore_fundsList')
 
@@ -35,10 +24,4 @@ export function getFundHouses() {
     return uniqueArr
   }
   return []
-}
-
-export function resetDiy() {
-  storageService().set('diystore_sortFilter', 'returns')
-  storageService().set('diystore_fundOption', 'growth')
-  storageService().set('diystore_fundHouse', '')
 }
