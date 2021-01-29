@@ -14,7 +14,7 @@ const CartFooter = ({
   fundOption,
   sortFilter,
   setSortFilter,
-  history
+  ...props
 }) => {
   const [filterActive, setFilterActive] = useState(false)
   const [cartActive, setCartActive] = useState(false)
@@ -40,7 +40,7 @@ const CartFooter = ({
         setCartActive={setCartActive}
         cart={cart}
         setCart={setCart}
-        history={history}
+        {...props}
       />
     </footer>
   )

@@ -8,6 +8,8 @@ import { CART } from '../../../diy/constants'
 import DiyCartButton from '../../../diy/components/CartButton'
 import Cart from '../../../diy/components/Cart'
 
+import { navigate as navigateFunc } from '../../common/commonFunction'
+
 const TrendingCard = ({ cart, setCart, ...props }) => {
   const handleAddToCart = () => {
     setCart((cart) => {
@@ -57,8 +59,10 @@ const TrendingCard = ({ cart, setCart, ...props }) => {
 }
 
 const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
+  const navigate = navigateFunc.bind(props)
   const handleNavigate = () => {
-    props.history.push(`/diy/fundlist/${type}/${name}/${label}`)
+    console.log(props.location.search)
+    navigate(`/diy/fundlist/${type}/${name}/${label}`, null, true, props.location.search)
   }
 
   return (
@@ -125,7 +129,7 @@ const FundType = (props) => {
           setCartActive={setCartActive}
           cart={cart}
           setCart={setCart}
-          history={props.history}
+          {...props}
         />
       </footer>
     </Container>

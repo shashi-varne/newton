@@ -16,6 +16,8 @@ import {
   SORTFILTER,
   FUNDHOUSE,
   CART_LIMIT,
+  CATEGORY,
+  SUBCATEGORY,
 } from '../constants'
 
 import add_cart_icon from '../../../assets/add_cart_icon.png'
@@ -37,7 +39,9 @@ function TabContainer(props) {
     </Typography>
   )
 }
-const FundList = ({ match, classes, history }) => {
+const FundList = (props) => {
+  const { match, classes, ...parentProps } = props
+  console.log(parentProps)
   const [value, setValue] = useState(0)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -45,7 +49,7 @@ const FundList = ({ match, classes, history }) => {
   const [sortFilter, setSortFilter] = useState('returns')
   const [fundOption, setFundOption] = useState('growth')
   const [fundHouse, setFundHouse] = useState('')
- 
+
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
   const handleChange = (_, value) => {
@@ -54,17 +58,25 @@ const FundList = ({ match, classes, history }) => {
 
   useEffect(() => {
     const { key, name, type } = match.params
-    fetchFunds({ key, name, type })
+    const category = storageService().get(CATEGORY)
+    const subCategory = storageService().get(SUBCATEGORY)
+    if (
+      !category ||
+      !subCategory ||
+      (category !== type || subCategory !== key)
+    ) {
+      fetchFunds({ key, name, type })
+    }
   }, [])
 
   const fetchFunds = async ({ key, name, type }) => {
     try {
       setShowLoader(true)
-      if (fundsList.length === 0) {
-        const funds = await getFundList({ key, name, type })
-        setFundsList([...funds])
-        storageService().setObject(FUNDSLIST, funds)
-      }
+      const funds = await getFundList({ key, name, type })
+      setFundsList([...funds])
+      storageService().setObject(FUNDSLIST, funds)
+      storageService().set(CATEGORY, type)
+      storageService().set(SUBCATEGORY, key)
     } catch (err) {
       console.log('Error', err.message)
     } finally {
@@ -93,9 +105,12 @@ const FundList = ({ match, classes, history }) => {
       noFooter
       helpContact
       hideInPageTitle
-      title="Explore All Mutual Funds"
+      title={
+        match.params.type.charAt(0).toUpperCase() + match.params.type.slice(1)
+      }
       showLoader={showLoader}
       classOverRideContainer="pr-containe>r"
+      id="diy-fundlist-container"
     >
       <div style={{ margin: '-20px' }}>
         <Tabs
@@ -123,18 +138,28 @@ const FundList = ({ match, classes, history }) => {
           {fundsList
             .filter((item) => {
               if (!fundHouse) {
-                return item.hasOwnProperty(returnField[value]) && item.three_year_return !== null && item.growth_or_dividend === fundOption && item.sip === true
+                return (
+                  item.hasOwnProperty(returnField[value]) &&
+                  item.three_year_return !== null &&
+                  item.growth_or_dividend === fundOption &&
+                  item.sip === true
+                )
               }
 
-                return item.hasOwnProperty(returnField[value]) && item.three_year_return !== null && item.growth_or_dividend === fundOption && item.sip === true && item.fund_house === fundHouse
-              
+              return (
+                item.hasOwnProperty(returnField[value]) &&
+                item.three_year_return !== null &&
+                item.growth_or_dividend === fundOption &&
+                item.sip === true &&
+                item.fund_house === fundHouse
+              )
             })
-            .sort(
-              (a, b) => {
-                return Number(b[returnField[value]]) - Number(a[returnField[value]])
-              }
-            ).
-            sort((a, b) => {
+            .sort((a, b) => {
+              return (
+                Number(b[returnField[value]]) - Number(a[returnField[value]])
+              )
+            })
+            .sort((a, b) => {
               if (sortFilter === 'returns') {
                 return a.three_year_return - b.three_year_return
               }
@@ -168,7 +193,7 @@ const FundList = ({ match, classes, history }) => {
         setFundHouse={setFundHouse}
         setFundsList={setFundOption}
         setFundOption={setFundOption}
-        history={history}
+        {...parentProps}
       />
     </Container>
   )

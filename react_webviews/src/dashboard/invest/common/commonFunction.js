@@ -1,8 +1,9 @@
 import { storageService, formatAmountInr } from 'utils/validators';
-export function navigate(pathname, data, redirect) {
+export function navigate(pathname, data, redirect, search = null) {
   if (redirect) {
     this.history.push({
       pathname,
+      search
     });
   } else {
     this.history.push({
