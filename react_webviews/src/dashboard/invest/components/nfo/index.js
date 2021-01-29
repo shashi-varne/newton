@@ -26,6 +26,7 @@ class NfoInfo extends Component {
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         hideInPageTitle
+        title='Invest in NFO'
       >
         <div className="nfo-info">
           <div

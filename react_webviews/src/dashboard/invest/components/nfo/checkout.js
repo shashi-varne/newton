@@ -41,7 +41,7 @@ class Checkout extends Component {
       return;
     }
     let fundsData = [];
-    let { form_data, renderData, partner_code } = this.state;
+    let { form_data, renderData, partner_code, ctc_title } = this.state;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -57,8 +57,7 @@ class Checkout extends Component {
         this.props.history.goBack();
         return;
       }
-    }
-    if (type === "diy") {
+    } else if (type === "diy") {
       let schemeType = storageService().getObject("diystore_category") || "";
       let categoryName =
         storageService().getObject("diystore_subCategoryScreen") || "";
@@ -76,6 +75,9 @@ class Checkout extends Component {
           (data) => (data.selected_icon = "bfdl_selected.png")
         );
       }
+      let currentUser = storageService().getObject("user");
+      if (!currentUser.active_investment && partner_code != "bfdlmobile")
+        ctc_title = "HOW IT WORKS?";
       this.setState(
         {
           fundsData: fundsData,
@@ -84,6 +86,7 @@ class Checkout extends Component {
           fundsArray: fundsArray,
           form_data: form_data,
           renderData: renderData,
+          ctc_title: ctc_title,
         },
         () =>
           this.getDiyPurchaseLimit({
@@ -183,6 +186,7 @@ class Checkout extends Component {
         handleClick={this.handleClick}
         disable={disableInputSummary}
         hideInPageTitle
+        title="Your Mutual Fund Plan"
         loaderData={{
           loadingText,
         }}
@@ -222,6 +226,11 @@ class Checkout extends Component {
             })}
           </div>
           <div className="cart-items">
+            {fundsData && fundsData.length === 0 && (
+              <p className="message">
+                Please add atleast one fund to make an investment.
+              </p>
+            )}
             {fundsData &&
               fundsData.map((fund, index) => {
                 return (

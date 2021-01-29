@@ -56,6 +56,7 @@ class NfoFunds extends Component {
         showLoader={this.state.show_loader}
         noFooter={true}
         hideInPageTitle
+        title="NFO Funds"
       >
         <div className="nfo-funds">
           {!showFunds && (
