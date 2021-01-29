@@ -7,7 +7,6 @@ import {
   getFormattedEndDate,
   getSchemeOption,
 } from "../../functions";
-import { getConfig } from "utils/functions";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -35,15 +34,7 @@ class FundDetail extends Component {
   };
 
   handleClick = () => {
-    this.props.history.push(
-      {
-        pathname: "funds/checkout",
-        search: getConfig().searchParams,
-      },
-      {
-        type: "nfo",
-      }
-    );
+    this.navigate("/advanced-investing/new-fund-offers/funds/checkout")
   };
 
   render() {

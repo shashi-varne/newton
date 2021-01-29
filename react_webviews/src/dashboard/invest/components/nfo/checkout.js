@@ -22,6 +22,7 @@ class Checkout extends Component {
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
+      type: props.type
     };
     this.initialize = initialize.bind(this);
   }
@@ -31,17 +32,8 @@ class Checkout extends Component {
   }
 
   onload = () => {
-    let { state } = this.props.location || {};
-    let type = "";
-    if (state && state.type) {
-      type = state.type;
-      this.setState({ type: state.type });
-    } else {
-      this.props.history.goBack();
-      return;
-    }
     let fundsData = [];
-    let { form_data, renderData, partner_code, ctc_title } = this.state;
+    let { form_data, renderData, partner_code, ctc_title, type } = this.state;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -66,17 +58,14 @@ class Checkout extends Component {
         : storageService().getObject("diystore_cart");
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject("diystore_fundsList");
-      let isinArr = fundsData.map((data) => {
-        return data.isin;
-      });
-      let isins = isinArr.join(",");
+      let isins = this.getIsins(fundsData);
       if (partner_code === "bfdlmobile") {
         renderData = renderData.map(
           (data) => (data.selected_icon = "bfdl_selected.png")
         );
       }
       let currentUser = storageService().getObject("user");
-      if (!currentUser.active_investment && partner_code != "bfdlmobile")
+      if (!currentUser.active_investment && partner_code !== "bfdlmobile")
         ctc_title = "HOW IT WORKS?";
       this.setState(
         {
@@ -96,6 +85,13 @@ class Checkout extends Component {
       );
     }
   };
+
+  getIsins = (fundsData) => {
+    let isinArr = fundsData.map((data) => {
+      return data.isin;
+    });
+    return isinArr.join(",");
+  }
 
   handleClick = () => {
     let { fundsData, type } = this.state;
@@ -140,10 +136,7 @@ class Checkout extends Component {
           isins: fundsData[index].isin,
         });
       } else {
-        let isinArr = fundsData.map((data) => {
-          return data.isin;
-        });
-        let isins = isinArr.join(",");
+        let isins = this.getIsins(fundsData);
         await this.getDiyPurchaseLimit({
           investType: id,
           isins: isins,
@@ -240,7 +233,7 @@ class Checkout extends Component {
                     </div>
                     <div className="text">
                       <h4>
-                        {fund.friendly_name}
+                        {fund.friendly_name || fund.legal_name}
                         {type === "diy" && (
                           <span>
                             <img

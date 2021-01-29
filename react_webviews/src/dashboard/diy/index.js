@@ -1,14 +1,20 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import FundList from "./components/FundList";
-import Search from './components/search';
+import Search from "./components/search";
+import Checkout from "../invest/components/nfo/checkout";
 
 const DIY = (props) => {
-  const { url } = props.match
+  const { url } = props.match;
 
   return (
     <Switch>
       {/* <Route exact path={`${url}/fundlist`} component={FundList} /> */}
+      <Route
+        exact
+        path={`${url}/invest`}
+        render={(props) => <Checkout {...props} type="diy" />}
+      />
       <Route exact path={`${url}/invest/search`} component={Search} />
       <Route
         exact
@@ -16,7 +22,7 @@ const DIY = (props) => {
         component={FundList}
       />
     </Switch>
-  )
-}
+  );
+};
 
-export default DIY
+export default DIY;
