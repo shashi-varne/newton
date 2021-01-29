@@ -4,14 +4,19 @@ import FundList from "./components/FundList";
 import Search from './components/search';
 
 const DIY = (props) => {
-  const { url } = props.match;
+  const { url } = props.match
 
   return (
     <Switch>
-      <Route exact path={`${url}/fundlist`} component={FundList} />
+      {/* <Route exact path={`${url}/fundlist`} component={FundList} /> */}
       <Route exact path={`${url}/invest/search`} component={Search} />
+      <Route
+        exact
+        path={`${url}/fundList/:type/:name/:key`}
+        component={FundList}
+      />
     </Switch>
-  );
-};
+  )
+}
 
-export default DIY;
+export default DIY
