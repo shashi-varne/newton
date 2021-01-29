@@ -1,33 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '../../../../fund_details/common/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { storageService } from 'utils/validators'
 import heart_icon from 'assets/trending_heart_icon.png'
+import { CART } from '../../../diy/constants'
+import DiyCartButton from '../../../diy/components/CartButton'
+import Cart from '../../../diy/components/Cart'
 
-import { navigate as navigateFunc } from '../../common/commonFunction'
-import { getConfig } from '../../../../utils/functions'
-
-const TrendingCard = ({ name, src, likePercentage }) => {
+const TrendingCard = ({ cart, setCart, ...props }) => {
+  const handleAddToCart = () => {
+    setCart((cart) => {
+      const index = cart.findIndex(({ isin }) => props.isin === isin)
+      if (index !== -1) {
+        const updatedCart = cart.filter(({ isin }) => isin !== props.isin)
+        setCart(updatedCart)
+        storageService().setObject(CART, updatedCart)
+      } else {
+        const updatedCart = [...cart, props]
+        setCart(updatedCart)
+        storageService().setObject(CART, updatedCart)
+      }
+    })
+  }
+  const addedToCart = cart.find(({ isin }) => isin === props.isin)
   return (
     <div className="item">
       <div className="item-details">
         <Typography color="primary" className="title">
-          {name}
+          {props.legal_name}
         </Typography>
-        <img src={src} alt="name" width="80" />
+        <img src={props.amc_logo_big} alt="name" width="80" />
       </div>
       <div className="cart-actions">
         <div className="stats">
           <img
             src={heart_icon}
-            alt={`${likePercentage}% investors like this`}
+            alt={`${props.purchase_percent}% investors like this`}
             width="15"
           />
-          <article className="desc">{likePercentage}% investors</article>
+          <article className="desc">
+            {props.purchase_percent}% investors
+          </article>
         </div>
-        <Button color="secondary" variant="raised">
-          Add to Cart
+        <Button
+          color="secondary"
+          variant="raised"
+          onClick={handleAddToCart}
+          disabled={addedToCart}
+        >
+          {addedToCart ? 'Added' : 'Add to Cart'}
         </Button>
       </div>
     </div>
@@ -35,8 +57,6 @@ const TrendingCard = ({ name, src, likePercentage }) => {
 }
 
 const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
-  const navigate = navigateFunc.bind(props)
-
   const handleNavigate = () => {
     props.history.push(`/diy/fundlist/${type}/${name}/${label}`)
   }
@@ -54,6 +74,8 @@ const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
 
 const FundType = (props) => {
   const type = props.match.params?.type.toLowerCase()
+  const [cart, setCart] = useState(storageService().getObject(CART) || [])
+  const [cartActive, setCartActive] = useState(false)
   const trendingFunds = storageService().getObject('diystore_trending')
   const categories = storageService().getObject('diystore_categoryList')
   const { sub_categories } = categories?.find(
@@ -71,16 +93,9 @@ const FundType = (props) => {
       <section id="invest-explore-fund-type">
         <h6 className="heading">Top trending {type} funds</h6>
         <div className="scroll">
-          {trendingFunds[type]?.map(
-            ({ legal_name, amc_logo_big, purchase_percent }, idx) => (
-              <TrendingCard
-                key={idx}
-                name={legal_name}
-                src={amc_logo_big}
-                likePercentage={purchase_percent}
-              />
-            )
-          )}
+          {trendingFunds[type]?.map((fund, idx) => (
+            <TrendingCard key={idx} cart={cart} setCart={setCart} {...fund} />
+          ))}
         </div>
         <section className="categories">
           <h6 className="heading">Categories</h6>
@@ -99,6 +114,19 @@ const FundType = (props) => {
           </div>
         </section>
       </section>
+      <footer className="diy-cart-footer">
+        <DiyCartButton
+          className="button"
+          onClick={() => setCartActive(true)}
+          cartLength={cart.length}
+        />
+        <Cart
+          isOpen={cartActive && cart.length > 0}
+          setCartActive={setCartActive}
+          cart={cart}
+          setCart={setCart}
+        />
+      </footer>
     </Container>
   )
 }

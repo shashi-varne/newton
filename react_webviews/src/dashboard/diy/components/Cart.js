@@ -19,6 +19,10 @@ const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
     setCartActive(false)
   }
 
+  const handleCheckoutProceed = () => {
+    // navigate to diy/invest
+  }
+
   return (
     <DiyDialog close={close} open={isOpen}>
       <section className="diy-bottom-sheet">
@@ -45,7 +49,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
           fullWidth
           disabled={cart.length === 0}
           color="secondary"
-          onClick={() => {}}
+          onClick={handleCheckoutProceed}
         >
           Proceed to Checkout
         </Button>
