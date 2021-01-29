@@ -5,18 +5,11 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import { storageService } from '../../../utils/validators'
 
-const SortFilter = () => {
-  const [sortFilter, setSortFilter] = useState('')
+const SortFilter = ({ localSortFilter, setLocalSortFilter}) => {
+  
   const handleChange = (event) => {
-    storageService().set('diystore_sortFilter', event.target.value)
-    setSortFilter(event.target.value)
+    setLocalSortFilter(event.target.value)
   }
-  useEffect(() => {
-    const diySortFilter = storageService().get('diystore_sortFilter')
-    if (diySortFilter) {
-      setSortFilter(diySortFilter)
-    }
-  }, [])
 
   return (
     <FormControl component="fieldset" className="diy-sort-filter">
@@ -25,7 +18,7 @@ const SortFilter = () => {
         name="sortFilter"
         className=""
         onChange={handleChange}
-        value={sortFilter}
+        value={localSortFilter}
       >
         <FormControlLabel
           value="returns"

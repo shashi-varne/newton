@@ -16,8 +16,6 @@ import {
   SORTFILTER,
   FUNDHOUSE,
   CART_LIMIT,
-  CATEGORY,
-  SUBCATEGORY,
 } from '../constants'
 
 import add_cart_icon from '../../../assets/add_cart_icon.png'
@@ -44,18 +42,22 @@ const FundList = ({ match, classes }) => {
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
   )
+  const [sortFilter, setSortFilter] = useState('returns')
+  const [fundOption, setFundOption] = useState('growth')
+  const [fundHouse, setFundHouse] = useState('')
+ 
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
   const handleChange = (_, value) => {
     setValue(value)
   }
-  
+
   useEffect(() => {
-    const { key, name, type }  = match.params
+    const { key, name, type } = match.params
     fetchFunds({ key, name, type })
   }, [])
 
-  const fetchFunds = async ({ key, name, type}) => {
+  const fetchFunds = async ({ key, name, type }) => {
     try {
       setShowLoader(true)
       if (fundsList.length === 0) {
@@ -67,9 +69,6 @@ const FundList = ({ match, classes }) => {
       console.log('Error', err.message)
     } finally {
       setShowLoader(false)
-      storageService().set(SORTFILTER, 'returns')
-      storageService().set(FUNDOPTION, 'growth')
-      storageService().set(FUNDHOUSE, '')
     }
   }
 
@@ -123,12 +122,29 @@ const FundList = ({ match, classes }) => {
         <TabContainer>
           {fundsList
             .filter((item) => {
-              return item.hasOwnProperty(returnField[value])
+              if (!fundHouse) {
+                return item.hasOwnProperty(returnField[value]) && item.three_year_return !== null && item.growth_or_dividend === fundOption && item.sip === true
+              }
+
+                return item.hasOwnProperty(returnField[value]) && item.three_year_return !== null && item.growth_or_dividend === fundOption && item.sip === true && item.fund_house === fundHouse
+              
             })
             .sort(
-              (a, b) =>
-                Number(b[returnField[value]]) - Number(a[returnField[value]])
-            )
+              (a, b) => {
+                return Number(b[returnField[value]]) - Number(a[returnField[value]])
+              }
+            ).
+            sort((a, b) => {
+              if (sortFilter === 'returns') {
+                return a.threeY - b.threeY
+              }
+              if (sortFilter === 'rating') {
+                return a.rating - b.rating
+              }
+              if (sortFilter === 'fundsize') {
+                return a.aum - b.aum
+              }
+            })
             .map((item) => (
               <DiyFundCard
                 {...item}
@@ -145,6 +161,13 @@ const FundList = ({ match, classes }) => {
         fundsList={fundsList}
         setCart={setCart}
         setFundsList={setFundsList}
+        sortFilter={sortFilter}
+        fundHouse={fundHouse}
+        fundOption={fundOption}
+        setSortFilter={setSortFilter}
+        setFundHouse={setFundHouse}
+        setFundsList={setFundOption}
+        setFundOption={setFundOption}
       />
     </Container>
   )
@@ -168,23 +191,23 @@ const DiyFundCard = ({ value, handleCart, addedToCart, ...props }) => {
             </p>
             <RatingStar value={props.fisdom_rating} />
           </div>
+          <div
+            className={
+              addedToCart
+                ? 'diy-fund-card-button diy-fund-card-added'
+                : 'diy-fund-card-button'
+            }
+            role="button"
+            onClick={handleCart(props)}
+          >
+            <img
+              src={addedToCart ? remove_cart_icon : add_cart_icon}
+              alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
+              width="20"
+            />
+            <div className="action">{!addedToCart ? '+' : '-'}</div>
+          </div>
         </div>
-      </div>
-      <div
-        className={
-          addedToCart
-            ? 'diy-fund-card-button diy-fund-card-added'
-            : 'diy-fund-card-button'
-        }
-        role="button"
-        onClick={handleCart(props)}
-      >
-        <img
-          src={addedToCart ? remove_cart_icon : add_cart_icon}
-          alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
-          width="20"
-        />
-        <div className="action">{!addedToCart ? '+' : '-'}</div>
       </div>
     </div>
   )

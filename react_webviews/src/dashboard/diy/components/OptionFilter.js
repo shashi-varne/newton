@@ -3,31 +3,20 @@ import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
-import { storageService } from '../../../utils/validators'
 
-const OptionFilter = () => {
-  const [fundOption, setFundOption] = useState('')
-
-  useEffect(() => {
-    const diyFundOption = storageService().get('diystore_fundOption')
-    if (diyFundOption) {
-      setFundOption(diyFundOption)
-    }
-  }, [])
-
+const OptionFilter = ({ localFundOption, setLocalFundOption }) => {
   const handleChange = (event) => {
-    storageService().set('diy_fundOption', event.target.value)
-    setFundOption(event.target.value)
+    setLocalFundOption(event.target.value)
   }
 
   return (
     <FormControl component="fieldset" className="diy-option-filter">
       <RadioGroup
         aria-label="Fund Options"
-        name="diyOptionFilter"
+        name="localFundOption"
         className=""
         onChange={handleChange}
-        value={fundOption}
+        value={localFundOption}
       >
         <FormControlLabel
           value="growth"

@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import CheckIcon from '@material-ui/icons/Done'
 import { getFundHouses } from '../functions'
 
-const FundHouse = () => {
+const FundHouse = ({ localFundHouse, setLocalFundHouse }) => {
   const fundHouses = getFundHouses()
-  const [selected, setSelected] = useState('')
+
   return (
     <section className="diy-fund-houses">
       {fundHouses.map((house) => (
-        <div className="house" onClick={() => setSelected(house)}>
+        <div className="house" onClick={() => setLocalFundHouse(house)}>
           <CheckIcon
-            className={selected === house ? 'checked' : ''}
+            className={house === localFundHouse ? 'checked' : ''}
           />
           <div className="house-name">{house}</div>
         </div>

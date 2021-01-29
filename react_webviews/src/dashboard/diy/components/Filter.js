@@ -6,10 +6,38 @@ import SortFilter from './SortFilter'
 import OptionFilter from './OptionFilter'
 import FundHouse from './FundHouse'
 
-const Filter = ({ isOpen, setFilterActive }) => {
+const Filter = ({
+  isOpen,
+  setFilterActive,
+  fundHouse,
+  sortFilter,
+  fundOption,
+  setFundHouse,
+  setSortFilter,
+  setFundOption,
+}) => {
   const [activeTab, setActiveTab] = useState('sort')
+  const [localFundHouse, setLocalFundHouse] = useState(fundHouse)
+  const [localSortFilter, setLocalSortFilter] = useState(sortFilter)
+  const [localFundOption, setLocalFundOption] = useState(fundOption)
+
   const close = () => {
     setFilterActive(false)
+  }
+
+  const apply = () => {
+    setFundHouse(localFundHouse)
+    setSortFilter(localSortFilter)
+    setFundOption(localFundOption)
+  }
+
+  const reset = () => {
+    setFundOption('growth')
+    setSortFilter('returns')
+    setFundHouse('')
+    setLocalFundOption('growth')
+    setLocalSortFilter('returns')
+    setLocalFundHouse('')
   }
 
   return (
@@ -17,7 +45,7 @@ const Filter = ({ isOpen, setFilterActive }) => {
       <section className="diy-bottom-sheet">
         <header className="header">
           <div className="text">Filter</div>
-          <Button color="secondary">Reset</Button>
+          <Button color="secondary" onClick={reset}>Reset</Button>
         </header>
         <main className="filter">
           <div className="title">
@@ -49,16 +77,31 @@ const Filter = ({ isOpen, setFilterActive }) => {
             </ul>
           </div>
           <div className="body">
-            {activeTab === 'sort' && <SortFilter />}
-            {activeTab === 'fundOption' && <OptionFilter />}
-            {activeTab === 'fundHouse' && <FundHouse />}
+            {activeTab === 'sort' && (
+              <SortFilter
+                localSortFilter={localSortFilter}
+                setLocalSortFilter={setLocalSortFilter}
+              />
+            )}
+            {activeTab === 'fundOption' && (
+              <OptionFilter
+                localFundOption={localFundOption}
+                setLocalFundOption={setLocalFundOption}
+              />
+            )}
+            {activeTab === 'fundHouse' && (
+              <FundHouse
+                localFundHouse={localFundHouse}
+                setLocalFundHouse={setLocalFundHouse}
+              />
+            )}
           </div>
         </main>
         <Button
           variant="contained"
           fullWidth
           color="secondary"
-          onClick={() => {}}
+          onClick={apply}
         >
           Apply
         </Button>

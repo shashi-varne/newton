@@ -5,19 +5,37 @@ import Cart from './Cart'
 import DiyCartButton from './CartButton'
 import FilterButton from './FilterButton'
 
-const CartFooter = ({ cart, fundsList, setCart, setFundsList }) => {
+const CartFooter = ({
+  cart,
+  setCart,
+  fundHouse,
+  setFundHouse,
+  setFundOption,
+  fundOption,
+  sortFilter,
+  setSortFilter,
+}) => {
   const [filterActive, setFilterActive] = useState(false)
   const [cartActive, setCartActive] = useState(false)
   return (
     <footer className="diy-cart-footer">
-      <DiyCartButton className="button" onClick={() => setCartActive(true)} />
       <FilterButton
         className="button diy-filter-button"
         onClick={() => setFilterActive(true)}
       />
-      <Filter isOpen={filterActive} setFilterActive={setFilterActive} />
+      <DiyCartButton className="button" onClick={() => setCartActive(true)} cartLength={cart.length} />
+      <Filter
+        isOpen={filterActive}
+        setFilterActive={setFilterActive}
+        fundHouse={fundHouse}
+        sortFilter={sortFilter}
+        fundOption={fundOption}
+        setFundHouse={setFundHouse}
+        setFundOption={setFundOption}
+        setSortFilter={setSortFilter}
+      />
       <Cart
-        isOpen={cartActive}
+        isOpen={cartActive && cart.length > 0}
         setCartActive={setCartActive}
         cart={cart}
         setCart={setCart}
