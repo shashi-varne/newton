@@ -26,10 +26,7 @@ class SystemMaintainence extends Component {
         noFooter={true}
       >
         <div className="system-maintainence">
-          We'll be back shortly...
-          <div style={{ fontSize: "15px", marginTop: "10px" }}>
-            New personal loan that works for you - coming soon!
-          </div>
+          <img src={require("assets/Group 252.svg")} alt="" />
         </div>
       </Container>
     );
