@@ -136,10 +136,10 @@ const FundList = ({ match, classes }) => {
             ).
             sort((a, b) => {
               if (sortFilter === 'returns') {
-                return a.threeY - b.threeY
+                return a.three_year_return - b.three_year_return
               }
               if (sortFilter === 'rating') {
-                return a.rating - b.rating
+                return a.fisdom_rating - b.fisdom_rating
               }
               if (sortFilter === 'fundsize') {
                 return a.aum - b.aum
