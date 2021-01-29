@@ -3,11 +3,8 @@ import { isEmpty, storageService } from '../../utils/validators'
 
 const genericErrorMessage = 'Something went wrong!!!'
 
-export async function getFundList() {
-  const sub = storageService().get('diystore_subCategpry')
-  const cat = storageService().get('diystore_category')
-  const type = storageService().get('diystore_investmentType')
-  const res = await Api.get(`/api/funds/Equity/Multi_Cap/sip`)
+export async function getFundList({ key, name, type }) {
+  const res = await Api.get(`/api/funds/${type}/${key}/sip`)
   if (
     res.pfwresponse.result.message === 'success' &&
     res.pfwresponse.status_code === 200

@@ -16,6 +16,8 @@ import {
   SORTFILTER,
   FUNDHOUSE,
   CART_LIMIT,
+  CATEGORY,
+  SUBCATEGORY,
 } from '../constants'
 
 import add_cart_icon from '../../../assets/add_cart_icon.png'
@@ -47,17 +49,17 @@ const FundList = ({ match, classes }) => {
   const handleChange = (_, value) => {
     setValue(value)
   }
+  
   useEffect(() => {
-    fetchFunds()
+    const { key, name, type }  = match.params
+    fetchFunds({ key, name, type })
   }, [])
 
-  useEffect(() => {}, [])
-
-  const fetchFunds = async () => {
+  const fetchFunds = async ({ key, name, type}) => {
     try {
       setShowLoader(true)
       if (fundsList.length === 0) {
-        const funds = await getFundList()
+        const funds = await getFundList({ key, name, type })
         setFundsList([...funds])
         storageService().setObject(FUNDSLIST, funds)
       }

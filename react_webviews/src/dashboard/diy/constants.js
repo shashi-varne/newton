@@ -1,4 +1,4 @@
-export const FUNDSLIST = 'diystore_fundList'
+export const FUNDSLIST = 'diystore_fundsList'
 export const CART = 'diystore_cart'
 export const FUNDHOUSE = 'diystore_fundHouse'
 export const SUBCATEGORY = 'diystore_subCategory'
