@@ -41,7 +41,6 @@ function TabContainer(props) {
 }
 const FundList = (props) => {
   const { match, classes, ...parentProps } = props
-  console.log(parentProps)
   const [value, setValue] = useState(0)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -67,7 +66,7 @@ const FundList = (props) => {
     ) {
       fetchFunds({ key, name, type })
     }
-  }, [])
+  }, [match.params.key, match.params.type])
 
   const fetchFunds = async ({ key, name, type }) => {
     try {
@@ -79,6 +78,8 @@ const FundList = (props) => {
       storageService().set(SUBCATEGORY, key)
     } catch (err) {
       console.log('Error', err.message)
+      storageService().remove(CATEGORY)
+      storageService().remove(SUBCATEGORY)
     } finally {
       setShowLoader(false)
     }

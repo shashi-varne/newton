@@ -24,7 +24,12 @@ const CartFooter = ({
         className="button diy-filter-button"
         onClick={() => setFilterActive(true)}
       />
-      <DiyCartButton className="button" onClick={() => setCartActive(true)} cartLength={cart.length} />
+      <DiyCartButton
+        className="button"
+        onClick={() => setCartActive(true)}
+        cartLength={cart.length}
+        disabled={cart.length === 0}
+      />
       <Filter
         isOpen={filterActive}
         setFilterActive={setFilterActive}

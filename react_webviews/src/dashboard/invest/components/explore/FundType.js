@@ -62,7 +62,12 @@ const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
   const navigate = navigateFunc.bind(props)
   const handleNavigate = () => {
     console.log(props.location.search)
-    navigate(`/diy/fundlist/${type}/${name}/${label}`, null, true, props.location.search)
+    navigate(
+      `/diy/fundlist/${type}/${name}/${label}`,
+      null,
+      true,
+      props.location.search
+    )
   }
 
   return (
@@ -119,11 +124,14 @@ const FundType = (props) => {
         </section>
       </section>
       <footer className="diy-cart-footer">
-        <DiyCartButton
-          className="button"
-          onClick={() => setCartActive(true)}
-          cartLength={cart.length}
-        />
+        {cart.length > 0 && (
+          <DiyCartButton
+            className="button"
+            onClick={() => setCartActive(true)}
+            cartLength={cart.length}
+          />
+        )}
+
         <Cart
           isOpen={cartActive && cart.length > 0}
           setCartActive={setCartActive}
