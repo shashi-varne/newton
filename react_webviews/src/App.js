@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 
 import NotFound from './common/components/NotFound';
 import Insurance from './insurance';
@@ -34,7 +34,7 @@ class App extends Component {
   
   render() {
     return (
-      <BrowserRouter basename={basename}>
+      <HashRouter >
         <Switch>
           <Route path='/insurance' component={Insurance} />
           <Route path='/group-insurance' component={GroupInsurance} />
@@ -62,7 +62,7 @@ class App extends Component {
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
           <Route component={NotFound} />
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }
