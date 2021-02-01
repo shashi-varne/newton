@@ -171,7 +171,7 @@ const FundList = (props) => {
                   : -1
               }
               if (sortFilter === 'rating') {
-                return Number(b.fisdom_rating) - Number(a.fisdom_rating) > 0
+                return Number(b.morning_star_rating) - Number(a.morning_star_rating) > 0
                   ? 1
                   : -1
               }
@@ -249,7 +249,7 @@ const DiyFundCard = ({
             <p>
               Return: <span>{props[returnField[value]]}</span>
             </p>
-            <RatingStar value={props.fisdom_rating} />
+            <RatingStar value={props.morning_star_rating} />
           </div>
           <div
             className={
