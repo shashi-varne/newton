@@ -10,7 +10,15 @@ import Cart from '../../../diy/components/Cart'
 
 import { navigate as navigateFunc } from '../../common/commonFunction'
 
-const TrendingCard = ({ cart, setCart, ...props }) => {
+const TrendingCard = ({ cart, setCart, parentProps, ...props }) => {
+  const navigate = navigateFunc.bind(parentProps)
+  const handleNavigate = () => {
+    navigate(
+      `/fund-details`,
+      { searchParams: `${parentProps.location.search}&isins=${props.isin}` },
+      true
+    )
+  }
   const handleAddToCart = () => {
     setCart((cart) => {
       const index = cart.findIndex(({ isin }) => props.isin === isin)
@@ -29,7 +37,7 @@ const TrendingCard = ({ cart, setCart, ...props }) => {
   return (
     <div className="item">
       <div className="item-details">
-        <Typography color="primary" className="title">
+        <Typography color="primary" className="title" onClick={handleNavigate}>
           {props.legal_name}
         </Typography>
         <img src={props.amc_logo_big} alt="name" width="80" />
@@ -63,7 +71,7 @@ const CategoryCard = ({ label, name, trivia, icon, type, ...props }) => {
   const handleNavigate = () => {
     console.log(props.location.search)
     navigate(
-      `/diy/fundlist/${type}/${name}/${label}`,
+      `/diy/fundlist/${type}/${label}`,
       null,
       true,
       props.location.search
@@ -103,7 +111,7 @@ const FundType = (props) => {
         <h6 className="heading">Top trending {type} funds</h6>
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (
-            <TrendingCard key={idx} cart={cart} setCart={setCart} {...fund} />
+            <TrendingCard key={idx} cart={cart} setCart={setCart} {...fund} parentProps={props} />
           ))}
         </div>
         <section className="categories">

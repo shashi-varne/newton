@@ -12,7 +12,7 @@ const DIY = (props) => {
       <Route exact path={`${url}/invest/search`} component={Search} />
       <Route
         exact
-        path={`${url}/fundList/:type/:name/:key`}
+        path={`${url}/fundList/:type/:key`}
         component={FundList}
       />
     </Switch>
