@@ -41,6 +41,7 @@ const FundDetails = ({ classes, history }) => {
   const FUND_ADDED = 'FUND_ADDED';
   const ADD_CART = '+ Add to Cart';
   const ENTER_AMOUNT = 'Enter Amount';
+  const CART_LIMIT = 24;
 
   const funds = storageService().getObject('diystore_cart') || [];
   const fund = storageService().getObject('diystore_fundInfo') || {};
@@ -151,6 +152,10 @@ const FundDetails = ({ classes, history }) => {
       let stage = status;
       switch (stage) {
         case "EMPTY_CART":
+          if(cart.length >= CART_LIMIT) {
+            toast(`You can only invest in ${CART_LIMIT} funds at a time. Please change one of the funds.`);
+            return
+          }
           let updatedList = [...cart, fund];
           setCart(updatedList);
           storageService().setObject("diystore_cart", updatedList);

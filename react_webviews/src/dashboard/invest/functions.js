@@ -329,7 +329,7 @@ export function clickCard(state, title) {
       window.location.href = getPath(riskProfilePath);
       break;
     case "top_equity":
-      this.navigate(`/diy/fundlist/Top equity funds/Multi_Cap/Equity`);
+      this.navigate(`/diy/fundlist/Equity/Multi_Cap`);
       break;
     default:
       this.navigate(keyPathMapper[state] || state);

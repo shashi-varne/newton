@@ -5,9 +5,11 @@ import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
 import diy_goal_icon from 'assets/diy_goal_icon.svg'
+import search from "assets/search.png";
 import { navigate as navigateFunc } from '../../common/commonFunction'
 import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
+import { getConfig } from "utils/functions";
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
 import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../diy/constants'
@@ -63,6 +65,14 @@ const InvestExplore = (props) => {
   const goNext = (title) => () => {
     navigate(`explore/${title}`, null, false, props.location.search)
   }
+
+  const handleRightIconClick = () => {
+    props.history.push({
+      pathname: `/diy/invest/search`,
+      search: getConfig().searchParams,
+    });
+  }
+
   return (
     <Container
       classOverRIde="pr-error-container"
@@ -73,6 +83,8 @@ const InvestExplore = (props) => {
       classOverRideContainer="pr-container"
       handleClick={goNext}
       showLoader={loader}
+      rightIcon={search}
+      handleRightIconClick={handleRightIconClick}
     >
       <section className="invest-explore-cards" id="invest-explore">
         {exploreMFMappings.map(({ title, description, src }) => (

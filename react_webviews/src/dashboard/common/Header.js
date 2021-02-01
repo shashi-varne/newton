@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons/Close';
 import restart from 'assets/restart_nav_icn.svg';
+import Search from '@material-ui/icons/Search';
 
 const Header = ({
   classes,
@@ -24,6 +25,8 @@ const Header = ({
   provider,
   topIcon,
   handleTopIcon,
+  handleRightIconClick,
+  rightIcon
 }) => (
   <AppBar position='fixed' color='primary' className={`Header ${classes.root}`}>
     <Toolbar>
@@ -62,6 +65,15 @@ const Header = ({
         <span color='inherit'>
           {current}/{total}
         </span>
+      )}
+      {rightIcon && (
+        <IconButton
+          color="inherit"
+          aria-label="Menu"
+          onClick={handleRightIconClick}
+        >
+          <Search />
+        </IconButton>
       )}
     </Toolbar>
   </AppBar>
