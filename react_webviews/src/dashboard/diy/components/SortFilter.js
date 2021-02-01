@@ -26,14 +26,14 @@ const SortFilter = ({ localSortFilter, setLocalSortFilter}) => {
           label="Returns - High to Low"
         />
         <FormControlLabel
-          value="options"
+          value="rating"
           control={<Radio color="secondary" />}
-          label="Options - High to Low"
+          label="Rating - High to Low"
         />
         <FormControlLabel
-          value="choice"
+          value="fundsize"
           control={<Radio color="secondary" />}
-          label="Choice - High to Low"
+          label="Fund Size - High to Low"
         />
       </RadioGroup>
     </FormControl>
