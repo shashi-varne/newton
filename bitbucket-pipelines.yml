@@ -1,5 +1,5 @@
 image:
-  name: node:12.20.0-slim
+  name: node:12.20.0
 
 definitions:
   caches:
@@ -14,7 +14,7 @@ definitions:
           - cd react_webviews
           - npm install
           - npm run build &
-          - sleep 180
+          - sleep 60
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
