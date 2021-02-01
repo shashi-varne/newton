@@ -5,11 +5,12 @@ import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'
 import diy_hybrid_icon from 'assets/diy_hybrid_icon.svg'
 import diy_goal_icon from 'assets/diy_goal_icon.svg'
-import {navigate as navigateFunc} from "../../common/commonFunction"
-import {storageService} from "utils/validators"
+import { navigate as navigateFunc } from '../../common/commonFunction'
+import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 
-import {getTrendingFunds,getSubCategories} from "../../common/api"
+import { getTrendingFunds, getSubCategories } from '../../common/api'
+import { CART, FUNDSLIST } from '../../../diy/constants'
 export const exploreMFMappings = [
   {
     title: 'Equity',
@@ -34,28 +35,31 @@ export const exploreMFMappings = [
 ]
 
 const InvestExplore = (props) => {
-  const [loader,setLoader] = useState(true);
+  const [loader, setLoader] = useState(true)
 
   useEffect(() => {
+    storageService().remove(FUNDSLIST)
+    storageService().remove(CART)
     fetchTrendingFunds()
-  },[])
+  }, [])
 
   const fetchTrendingFunds = async () => {
-    try{
-      const data =await getTrendingFunds();
+    try {
+      const data = await getTrendingFunds()
       const categories = await getSubCategories()
-      storageService().setObject('diystore_trending', data.trends);
-      storageService().setObject('diystore_categoryList', categories.result);
+      storageService().setObject('diystore_trending', data.trends)
+      storageService().setObject('diystore_categoryList', categories.result)
       setLoader(false)
-      console.log("data is",data.trends);
-    } catch(err) {
+      console.log('data is', data.trends)
+      
+    } catch (err) {
       setLoader(false)
-      console.log("the error is",err);
+      console.log('the error is', err)
     }
   }
-  const navigate = navigateFunc.bind(props);
-  const goNext = (title) => () =>{
-    navigate(`explore/${title}`)
+  const navigate = navigateFunc.bind(props)
+  const goNext = (title) => () => {
+    navigate(`explore/${title}`, null, false, props.location.search)
   }
   return (
     <Container
@@ -70,17 +74,16 @@ const InvestExplore = (props) => {
     >
       <section className="invest-explore-cards" id="invest-explore">
         {exploreMFMappings.map(({ title, description, src }) => (
-          <div
-            key={title} onClick={goNext(title)}>
-          <InvestExploreCard
-            title={title}
-            description={description}
-            src={src}
+          <div key={title} onClick={goNext(title)}>
+            <InvestExploreCard
+              title={title}
+              description={description}
+              src={src}
             />
-            </div>
+          </div>
         ))}
         <article className="invest-explore-quote">
-        "When you invest you are buying a day you don’t have to work"
+          "When you invest you are buying a day you don’t have to work"
         </article>
       </section>
     </Container>

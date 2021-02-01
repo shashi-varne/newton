@@ -7,6 +7,7 @@ import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
+import TermsAndCond from "../../../mini-components/TermsAndCond";
 
 class Checkout extends Component {
   constructor(props) {
@@ -17,10 +18,12 @@ class Checkout extends Component {
       ctc_title: "INVEST",
       form_data: [],
       investType: "onetime",
-      partner: getConfig().partner,
+      partner_code: getConfig().partner_code,
       disableInput: [],
       fundsData: [],
       renderData: nfoData.checkoutInvestType,
+      type: props.type,
+      currentUser: storageService().getObject("user") || {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -30,17 +33,15 @@ class Checkout extends Component {
   }
 
   onload = () => {
-    let { state } = this.props.location || {};
-    let type = "";
-    if (state && state.type) {
-      type = state.type;
-      this.setState({ type: state.type });
-    } else {
-      this.props.history.goBack();
-      return;
-    }
     let fundsData = [];
-    let { form_data, renderData, partner } = this.state;
+    let {
+      form_data,
+      renderData,
+      partner_code,
+      ctc_title,
+      type,
+      currentUser,
+    } = this.state;
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -56,25 +57,23 @@ class Checkout extends Component {
         this.props.history.goBack();
         return;
       }
-    }
-    if (type === "diy") {
-      let schemeType = storageService().getObject("diystore_category") || "";
+    } else if (type === "diy") {
+      let schemeType = storageService().get("diystore_category") || "";
       let categoryName =
-        storageService().getObject("diystore_subCategoryScreen") || "";
+        storageService().get("diystore_subCategoryScreen") || "";
       fundsData = !storageService().getObject("diystore_cart")
         ? [storageService().getObject("diystore_fundInfo")]
         : storageService().getObject("diystore_cart");
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject("diystore_fundsList");
-      let isinArr = fundsData.map((data) => {
-        return data.isin;
-      });
-      let isins = isinArr.join(",");
-      if (partner.code === "bfdlmobile") {
-        renderData = renderData.map((data) => {
-          data.selected_icon = "bfdl_selected.png";
-        });
+      let isins = this.getIsins(fundsData);
+      if (partner_code === "bfdlmobile") {
+        renderData = renderData.map(
+          (data) => (data.selected_icon = "bfdl_selected.png")
+        );
       }
+      if (!currentUser.active_investment && partner_code !== "bfdlmobile")
+        ctc_title = "HOW IT WORKS?";
       this.setState(
         {
           fundsData: fundsData,
@@ -83,6 +82,7 @@ class Checkout extends Component {
           fundsArray: fundsArray,
           form_data: form_data,
           renderData: renderData,
+          ctc_title: ctc_title,
         },
         () =>
           this.getDiyPurchaseLimit({
@@ -93,20 +93,33 @@ class Checkout extends Component {
     }
   };
 
+  getIsins = (fundsData) => {
+    let isinArr = fundsData.map((data) => {
+      return data.isin;
+    });
+    return isinArr.join(",");
+  };
+
   handleClick = () => {
     let { fundsData, type } = this.state;
-    if (fundsData.length === 0) {
+    let allowedFunds = fundsData.filter((data) => data.allow_purchase);
+    if (fundsData.length === 0 || allowedFunds.length === 0) {
       this.props.history.goBack();
       return;
     }
     let submit = true;
-    fundsData.forEach((data) => {
+    let totalAmount = 0;
+    allowedFunds.forEach((data) => {
       if (!data.amount) {
         submit = false;
+      } else {
+        totalAmount = totalAmount + data.amount;
       }
     });
     if (submit) {
-      this.proceedInvestment();
+      this.setState({ totalAmount: totalAmount }, () =>
+        this.proceedInvestment()
+      );
     } else {
       if (type === "nfo") toast("Please enter valid amount");
       else toast("Please fill in all the amount field(s).");
@@ -136,10 +149,7 @@ class Checkout extends Component {
           isins: fundsData[index].isin,
         });
       } else {
-        let isinArr = fundsData.map((data) => {
-          return data.isin;
-        });
-        let isins = isinArr.join(",");
+        let isins = this.getIsins(fundsData);
         await this.getDiyPurchaseLimit({
           investType: id,
           isins: isins,
@@ -182,6 +192,7 @@ class Checkout extends Component {
         handleClick={this.handleClick}
         disable={disableInputSummary}
         hideInPageTitle
+        title="Your Mutual Fund Plan"
         loaderData={{
           loadingText,
         }}
@@ -221,6 +232,11 @@ class Checkout extends Component {
             })}
           </div>
           <div className="cart-items">
+            {fundsData && fundsData.length === 0 && (
+              <p className="message">
+                Please add atleast one fund to make an investment.
+              </p>
+            )}
             {fundsData &&
               fundsData.map((fund, index) => {
                 return (
@@ -230,7 +246,7 @@ class Checkout extends Component {
                     </div>
                     <div className="text">
                       <h4>
-                        {fund.friendly_name}
+                        {fund.friendly_name || fund.legal_name}
                         {type === "diy" && (
                           <span>
                             <img
@@ -268,54 +284,7 @@ class Checkout extends Component {
                 );
               })}
           </div>
-          <div className="nfo-disclaimer">
-            {getConfig().Web && getConfig().productName !== "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the
-                <a
-                  href="https://www.fisdom.com/terms/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {" "}
-                  terms & conditions
-                </a>{" "}
-                and understood the{" "}
-                <a
-                  href="https://www.fisdom.com/scheme-offer-documents/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  scheme offer documents
-                </a>
-              </div>
-            )}
-            {getConfig().Web && getConfig().productName === "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the <span>terms</span> and understood the <br />
-                <span> scheme offer documents</span>
-              </div>
-            )}
-            {!getConfig().Web && getConfig().productName === "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the <span>terms.</span>
-              </div>
-            )}
-            {!getConfig().Web && getConfig().productName !== "finity" && (
-              <div className="text">
-                <img src={require(`assets/check_mark.png`)} alt="" /> By
-                clicking on the button below, I agree that I have read and
-                accepted the <a>terms & conditions</a> and understood the{" "}
-                <a>scheme offer documents</a>
-              </div>
-            )}
-          </div>
+          <TermsAndCond />
         </div>
       </Container>
     );

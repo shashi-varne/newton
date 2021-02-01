@@ -29,7 +29,6 @@ class Landing extends Component {
   };
   
   render() {
-    console.log("hello hi")
     let {
       isReadyToInvestBase,
       productName,

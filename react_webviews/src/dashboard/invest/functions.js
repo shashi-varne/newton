@@ -27,8 +27,6 @@ export async function initialize() {
   this.getInstaRecommendation = getInstaRecommendation.bind(this);
   this.getRecommendation = getRecommendation.bind(this);
   this.validateAmount = validateAmount.bind(this);
-  this.validateOsipAmount = validateOsipAmount.bind(this);
-  this.validateSipAmount = validateSipAmount.bind(this);
   this.showFundInfo = showFundInfo.bind(this);
   this.detailView = detailView.bind(this);
   this.getNfoRecommendation = getNfoRecommendation.bind(this);
@@ -583,45 +581,27 @@ function getGoalRecommendations() {
   return result;
 }
 
-function validateSipAmount(amount) {
-  let goal = getGoalRecommendations();
-  let { amount_error } = this.state;
-  if (amount > goal.max_sip_amount) {
-    amount_error =
-      "Investment amount cannot be more than " +
-      formatAmountInr(goal.max_sip_amount);
-  } else if (amount < goal.min_sip_amount) {
-    amount_error =
-      "Minimum amount should be atleast " +
-      formatAmountInr(goal.min_sip_amount);
-  } else {
-    amount_error = "";
-  }
-  this.setState({ amount_error: amount_error });
-}
-
-function validateOsipAmount(amount) {
-  let goal = getGoalRecommendations();
-  let { amount_error } = this.state;
-  if (amount > goal.max_ot_amount) {
-    amount_error =
-      "Investment amount cannot be more than " +
-      formatAmountInr(goal.max_ot_amount);
-  } else if (amount < goal.min_ot_amount) {
-    amount_error =
-      "Minimum amount should be atleast " + formatAmountInr(goal.min_ot_amount);
-  } else {
-    amount_error = "";
-  }
-  this.setState({ amount_error: amount_error });
-}
-
 function validateAmount(amount) {
+  let goal = getGoalRecommendations();
+  let max = 0;
+  let min = 0;
   if (this.state.investType === "sip") {
-    this.validateSipAmount(amount);
+    max = goal.max_sip_amount;
+    min = goal.min_sip_amount;
   } else {
-    this.validateOsipAmount(amount);
+    max = goal.max_ot_amount;
+    min = goal.min_ot_amount;
   }
+  let { amount_error } = this.state;
+  if (amount > max) {
+    amount_error =
+      "Investment amount cannot be more than " + formatAmountInr(max);
+  } else if (amount < min) {
+    amount_error = "Minimum amount should be atleast " + formatAmountInr(min);
+  } else {
+    amount_error = "";
+  }
+  this.setState({ amount_error: amount_error });
 }
 
 export function detailView(fund) {
@@ -799,7 +779,7 @@ export async function getDiyPurchaseLimit(data) {
 }
 
 export function deleteFund(item, index) {
-  let { fundsData, cartCount, fundsArray } = this.state;
+  let { fundsData, cartCount } = this.state;
   let fundName = item.legalName || item.legal_name;
   fundsData.splice(index, 1);
   cartCount = fundsData.length;
@@ -808,7 +788,6 @@ export function deleteFund(item, index) {
     fundsData: fundsData,
     cartCount: cartCount,
   });
-  storageService().setObject("diystore_fundsList", fundsArray); // need to ask
   storageService().setObject("diystore_cart", fundsData);
   storageService().set("diystore_cartCount", fundsData.length);
 }
@@ -819,8 +798,11 @@ export function checkLimit(amount, index) {
     form_data,
     disableInputSummary,
     disableInput,
+    fundsData,
   } = this.state;
-  let limitData = purchaseLimitData[index];
+  let limitData = purchaseLimitData.find(
+    (data) => data.isin === fundsData[index].isin
+  );
   if (!limitData) return;
   let min = limitData.addl_purchase.min;
   let max = limitData.addl_purchase.max;
@@ -828,14 +810,16 @@ export function checkLimit(amount, index) {
 
   if (amount < min) {
     form_data[index].amount_error =
-      "Please add atleast ₹" + min + " to proceed.";
+      "Please add atleast " + formatAmountInr(min) + " to proceed.";
     disableInput[index] = 1;
   } else if (amount % mul !== 0) {
-    form_data[index].amount_error = "Amount must be multiple of ₹" + mul;
+    form_data[index].amount_error =
+      "Amount must be multiple of " + formatAmountInr(mul);
     disableInput[index] = 1;
   } else if (amount > max) {
     disableInput[index] = 1;
-    form_data[index].amount_error = "Maximum amount for this fund is ₹" + max;
+    form_data[index].amount_error =
+      "Maximum amount for this fund is " + formatAmountInr(max);
   } else {
     disableInput[index] = 0;
     form_data[index].amount_error = "";
@@ -862,24 +846,38 @@ function isInvestRefferalRequired(partner_code) {
 }
 
 export async function proceedInvestment(event, isReferralGiven) {
-  let { partner, fundsData, purchaseLimitData, investType } = this.state;
-  if (isInvestRefferalRequired(partner.code) && !isReferralGiven) {
-    let investCtaEvents = event;
+  let {
+    partner_code,
+    fundsData,
+    purchaseLimitData,
+    investType,
+    totalAmount,
+  } = this.state;
+  if (isInvestRefferalRequired(partner_code) && !isReferralGiven) {
+    // let investCtaEvents = event;
     // $rootScope.openPopupInvestReferral(refOnKey);
     return;
   }
 
-  let allocations = [
-    {
-      mfid: purchaseLimitData[0].mfid,
-      mfname: purchaseLimitData[0].mfname,
-      amount: fundsData[0].amount,
-      default_date: purchaseLimitData[0].addl_purchase.default_date,
-      sip_dates: purchaseLimitData[0].addl_purchase.sip_dates,
-    },
-  ];
+  let allocations = [];
+  fundsData
+    .filter((data) => data.allow_purchase)
+    .forEach((fund) => {
+      let limitData = purchaseLimitData.find(
+        (element) => element.isin === fund.isin
+      );
+      if (!limitData) return;
+      let allocation = {
+        mfid: limitData.mfid,
+        mfname: limitData.mfname,
+        amount: totalAmount,
+        default_date: limitData.addl_purchase.default_date,
+        sip_dates: limitData.addl_purchase.sip_dates,
+      };
+      allocations.push(allocation);
+    });
   let investment = {};
-  investment.amount = parseFloat(fundsData[0].amount);
+  investment.amount = parseFloat(totalAmount);
   let investment_type = "";
   if (investType === "onetime") {
     investment.type = "diy";
@@ -904,28 +902,39 @@ export async function proceedInvestment(event, isReferralGiven) {
   );
 }
 
-export async function makeInvestment(event, nfo_investment, isReferralGiven) {
+export async function makeInvestment(event, investment, isReferralGiven) {
   let {
     isRedirectToPayment,
-    fundsData,
     investment_type,
     invRefData,
+    totalAmount,
+    type,
+    currentUser,
+    partner_code,
   } = this.state;
 
   isRedirectToPayment = true;
-  let investmentObj = nfo_investment;
+  let investmentObj = investment;
   let body = {
     investment: investmentObj,
   };
 
   let investmentEventData = {
-    amount: parseFloat(fundsData[0].amount),
+    amount: parseFloat(totalAmount),
     investment_type: investment_type,
     investment_subtype: "",
-    journey_name: "nfo",
+    journey_name: type,
   };
 
   storageService().setObject("mf_invest_data", investmentEventData);
+
+  if (
+    !currentUser.active_investment &&
+    partner_code !== "bfdlmobile" &&
+    type === "diy"
+  ) {
+    this.navigate("/invest-journey");
+  }
 
   if (isReferralGiven && invRefData.code) {
     body.referral_code = invRefData.code;
@@ -941,7 +950,6 @@ export async function makeInvestment(event, nfo_investment, isReferralGiven) {
     () => this.proceedInvestmentChild(event)
   );
 
-  // let sipOrOnetime = investment_type;
   // $broadcast ('parentChildCommunication', {key: 'proceedInvestmentChild'});
 }
 
@@ -966,6 +974,7 @@ export async function proceedInvestmentChild(ev) {
       );
       const { result, status_code: status } = res.pfwresponse;
       if (status === 200) {
+        // eslint-disable-next-line
         let pgLink = result.investments[0].pg_link;
         pgLink +=
           // eslint-disable-next-line

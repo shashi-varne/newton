@@ -58,7 +58,7 @@ const InvestedAmount = (props) => {
       graphData = { ...graphData, ...data };
       storageService().setObject('graphData', graphData);
       setLoader(false);
-      navigate(`/invest/recommendations`, {}, true);
+      navigate(`recommendations`);
     } catch (err) {
       setLoader(false);
       toast(err)

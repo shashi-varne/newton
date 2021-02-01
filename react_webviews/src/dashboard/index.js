@@ -78,7 +78,7 @@ const Invest = (props) => {
           />
           <Route
             path={`${url}advanced-investing/new-fund-offers/funds/checkout`}
-            component={NfoCheckout}
+            render={(props) => <NfoCheckout {...props} type="nfo" />}
           />
           <Route path={`${url}sipdates`} component={SipDates} />
 

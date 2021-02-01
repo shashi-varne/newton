@@ -215,6 +215,8 @@ const Container = (props) => {
           onlyButton={props.onlyButton}
           disable={props.disable}
           buttonData={props.buttonData}
+          twoButton={props.twoButton}
+          buttonTitle2={props.buttonTitle2}
         />
       )}
       {/* No Internet */}

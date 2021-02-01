@@ -41,6 +41,7 @@ const InvestAmount = (props) => {
       setAmount(parseInt(e.target.value));
     } else {
       setAmount('');
+      setCorpus(0);
     }
   };
 
