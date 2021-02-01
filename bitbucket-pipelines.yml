@@ -15,7 +15,7 @@ definitions:
           - npm start &
           - sleep 10
           - ls
-          - mv public $BITBUCKET_COMMIT
+          - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
             variables:
               KEY_FILE: $KEY_FILE
