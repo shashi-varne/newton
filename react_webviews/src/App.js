@@ -27,10 +27,14 @@ import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 
+
+var basename = window.sessionStorage.getItem('base_href') || '';
+console.log("basename : "+ basename);
 class App extends Component {
+  
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Switch>
           <Route path='/insurance' component={Insurance} />
           <Route path='/group-insurance' component={GroupInsurance} />
