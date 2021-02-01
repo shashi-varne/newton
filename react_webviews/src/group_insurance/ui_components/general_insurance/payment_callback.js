@@ -42,7 +42,7 @@ class PaymentCallbackClass extends Component {
           show_loader: true
         })
         let res;
-        res = await Api.get('api/ins_service/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
+        res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
         
         this.setState({
             show_loader: false
@@ -72,7 +72,7 @@ class PaymentCallbackClass extends Component {
         show_loader: true
       })
       let res2;
-      res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
       
       if (res2.pfwresponse.status_code === 200) {

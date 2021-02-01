@@ -68,7 +68,7 @@ class PaymentSuccessClass extends Component {
     // })
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
       this.setState({
         show_loader: false
@@ -87,7 +87,7 @@ class PaymentSuccessClass extends Component {
 
         })
 
-        address_details_data.addressline = leadData.permanent_address.address_line;
+        address_details_data.addressline = leadData.permanent_address.addr_line1;
         this.setState({
           leadData: leadData,
           address_details_data: address_details_data
@@ -241,7 +241,7 @@ class PaymentSuccessClass extends Component {
           show_loader: true
         })
         let res2 = {};
-        res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
         this.setState({
           show_loader: false
         })

@@ -290,7 +290,7 @@ class BasicDetailsForm extends Component {
     try {
   
       if (this.state.lead_id) { 
-        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
         this.setState({
           show_loader: false
@@ -515,9 +515,9 @@ class BasicDetailsForm extends Component {
         let res2 = {};
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
-          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
         } else {
-          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/create', final_data)
         }
 
         this.setState({
@@ -530,9 +530,9 @@ class BasicDetailsForm extends Component {
         } else {
           if ('error' in res2.pfwresponse.result) {
             if (Array.isArray(res2.pfwresponse.result.error)) {
-              toast(res2.pfwresponse.result.error[0]['message']);
+              toast(res2.pfwresponse.result.error[0]['error']);
             } else {
-              toast(res2.pfwresponse.result.error);
+              toast(res2.pfwresponse.result.error.error || res2.pfwresponse.result.error);
             }
           } else {
             toast(res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong');
