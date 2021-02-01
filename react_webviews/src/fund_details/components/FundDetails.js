@@ -79,6 +79,8 @@ const FundDetails = ({ classes, history }) => {
       if(item.isin === fund.isin) {
         setStatus(EMPTY_CART)
         setButtonTitle(ADD_CART)  
+      } else {
+        setButtonTitle(buttonData(updatedCartItems.length))
       }
       if(updatedCartItems.length === 0) close();
     }

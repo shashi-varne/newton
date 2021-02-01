@@ -1,5 +1,5 @@
 import React from "react";
-import Dialog, { DialogContent } from "material-ui/Dialog";
+import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import delete_new from "assets/delete_new.png";
 import Button from "@material-ui/core/Button";
 
@@ -19,11 +19,11 @@ const CartDialog = ({
       aria-describedby="fund-detail-dialog-slide-selection"
       id="fund-detail-dialog"
     >
-      <DialogContent>
+      <DialogContent className="fund-detail-dilaog-content">
         <section className="fund-detail-bottom-sheet">
           <header className="header">
             <div className="text">Fund Name</div>
-            <div className="text">Remove</div>
+            <div className="text remove">Remove</div>
           </header>
           <main>
             {cart.map((item) => (
@@ -39,17 +39,19 @@ const CartDialog = ({
               </div>
             ))}
           </main>
-          <Button
-            variant="contained"
-            fullWidth
-            disabled={cart.length === 0}
-            color="secondary"
-            onClick={() => handleClick()}
-          >
-            Enter Amount
-          </Button>
         </section>
       </DialogContent>
+      <DialogActions>
+        <Button
+          variant="contained"
+          fullWidth
+          disabled={cart.length === 0}
+          color="secondary"
+          onClick={() => handleClick()}
+        >
+          Enter Amount
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
