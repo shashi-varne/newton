@@ -9,12 +9,17 @@ definitions:
     - step: &pod-deploy
         name: Pipeline-on-demand deploy steps
         script:
+          - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
           - apt-get update
+          - sudo apt install yarn
+          - yarn set version 1.21.1
           - npm config set strict-ssl false;
           - cd react_webviews
           - npm install
-          - npm run build &
-          - sleep 60
+          - yarn
+          - yarn build &
+          - sleep 240
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
