@@ -81,7 +81,6 @@ import Home from "./components/home/home";
 import SelectLoan from "./components/home/select_loan";
 import Recommended from "./components/home/recommended";
 import LoanKnowMore from "./components/home/know_more";
-import System from "./components/home/system_maintain";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";

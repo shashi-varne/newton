@@ -227,9 +227,13 @@ class UploadBank extends Component {
     file.uploaded = true;
     file.id = count++;
 
+    let duplicate = documents.filter(item => {
+      return item.name === file.name
+    })
+    
     if (editId === "") {
-      documents.push(file);
-    } else {
+      duplicate.length === 0 && documents.push(file) 
+    } else if (duplicate.length === 0) {
       var index = documents.findIndex((item) => item.id === editId);
       file.curr_status = "edit";
       file.document_id = doc_id;
@@ -239,7 +243,7 @@ class UploadBank extends Component {
     this.setState({
       fileUploaded: true,
       documents: documents,
-      confirmed: false,
+      confirmed: (duplicate.length !== 0) ? true : false,
       editId: "",
       count: count,
     });
@@ -255,18 +259,22 @@ class UploadBank extends Component {
 
     let { documents, editId, doc_id, count } = this.state;
     file.doc_type = file.type;
-    file.id = count++;
 
     file.status = "uploaded";
-    file.name = !file.file_name ? "bank" : `${file.file_name}`;
+    file.name = !file.file_name ? `bank statement ${count}` : `${file.file_name}`;
+    file.id = count++;
 
     if (!file.name.includes(".pdf")) {
       file.name = `${file.name}.pdf`;
     }
 
+    let duplicate = documents.filter(item => {
+      return item.name === file.name
+    })
+
     if (editId === "") {
-      documents.push(file);
-    } else {
+      duplicate.length === 0 && documents.push(file);
+    } else if (duplicate.length === 0) {
       var index = documents.findIndex((item) => item.id === editId);
       file.curr_status = "edit";
       file.document_id = doc_id;
@@ -277,7 +285,7 @@ class UploadBank extends Component {
       fileUploaded: true,
       documents: documents,
       show_loader: false,
-      confirmed: false,
+      confirmed: (duplicate.length !== 0) ? true : false,
       editId: "",
       count: count,
     });

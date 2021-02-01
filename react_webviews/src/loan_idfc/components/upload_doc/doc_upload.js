@@ -447,10 +447,14 @@ class DocumentUpload extends Component {
     })
     if (totalUpload < 3) {
       let count = 0;
-      for (var item in image_data) {
-        let res = await this.uploadDocument(image_data[item]);
-        if (res) {
-          count++
+      if (!image_data.doc1.doc_name) { 
+        this.navigate('doc-list')
+      } else {
+        for (var item in image_data) {
+          let res = await this.uploadDocument(image_data[item]);
+          if (res) {
+            count++
+          }
         }
       }
       
