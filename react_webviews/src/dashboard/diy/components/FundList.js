@@ -61,11 +61,7 @@ const FundList = (props) => {
     const { key, name, type } = match.params
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
-    if (
-      !category ||
-      !subCategory ||
-      (category !== type || subCategory !== key)
-    ) {
+    if (!category || !subCategory || category !== type || subCategory !== key) {
       fetchFunds({ key, name, type })
     }
   }, [match.params.key, match.params.type])
@@ -206,18 +202,36 @@ const FundList = (props) => {
 
 export default FundList
 
-const DiyFundCard = ({ value, handleCart, addedToCart, parentProps, ...props }) => {
+const DiyFundCard = ({
+  value,
+  handleCart,
+  addedToCart,
+  parentProps,
+  ...props
+}) => {
   const handleClick = () => {
     const navigate = navigateFunc.bind(parentProps)
-    navigate('/diy/fundinfo', props, true)
+    console.log(parentProps.location.search + '&isins=' + props.isin)
+    navigate(
+      `/fund-details`,
+      { searchParams: `${parentProps.location.search}&isins=${props.isin}` },
+      true
+    )
   }
   return (
     <div className="diy-fund-card">
       <div className="diy-fund-card-img">
-        <img src={props.amc_logo_small} alt="some" width="90" />
+        <img
+          src={props.amc_logo_small}
+          alt="some"
+          width="90"
+          onClick={handleClick}
+        />
       </div>
       <div className="diy-fund-card-details">
-        <div className="diy-fund-card-name" onClick={handleClick}>{props.legal_name}</div>
+        <div className="diy-fund-card-name" onClick={handleClick}>
+          {props.legal_name}
+        </div>
         <div className="diy-fund-card-info-container">
           <div className="diy-fund-card-info">
             <p>AUM: {Math.round(props.aum, 0)} Crs</p>

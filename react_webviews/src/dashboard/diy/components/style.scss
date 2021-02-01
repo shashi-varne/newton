@@ -19,6 +19,9 @@
   box-sizing: border-box;
   background-color: var(--secondary);
   align-self: flex-start;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .diy-fund-card-added {
@@ -36,6 +39,9 @@
   img {
     border: 0;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
