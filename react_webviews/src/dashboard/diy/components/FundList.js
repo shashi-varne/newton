@@ -64,6 +64,15 @@ const FundList = (props) => {
     if (!category || !subCategory || category !== type || subCategory !== key) {
       fetchFunds({ key, name, type })
     }
+  }, [])
+
+  useEffect(() => {
+    const { key, name, type } = match.params
+    const category = storageService().get(CATEGORY)
+    const subCategory = storageService().get(SUBCATEGORY)
+    if (!category || !subCategory || category !== type || subCategory !== key) {
+      fetchFunds({ key, name, type })
+    }
   }, [match.params.key, match.params.type])
 
   const fetchFunds = async ({ key, name, type }) => {
@@ -181,7 +190,6 @@ const FundList = (props) => {
               />
             ))}
         </TabContainer>
-        )
       </div>
       <CartFooter
         cart={cart}
@@ -215,7 +223,7 @@ const DiyFundCard = ({
     console.log(parentProps.location.search + '&isins=' + props.isin)
     navigate(
       `/fund-details`,
-      { searchParams: `${parentProps.location.search}&isins=${props.isin}` },
+      { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` },
       true
     )
   }
