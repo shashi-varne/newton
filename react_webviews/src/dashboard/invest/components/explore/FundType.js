@@ -15,7 +15,7 @@ const TrendingCard = ({ cart, setCart, parentProps, ...props }) => {
   const handleNavigate = () => {
     navigate(
       `/fund-details`,
-      { searchParams: `${parentProps.location.search}&isins=${props.isin}` },
+      { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` },
       true
     )
   }
