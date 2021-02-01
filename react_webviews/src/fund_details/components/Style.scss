@@ -268,3 +268,55 @@
     margin: 10px;
   }
 }
+
+#fund-detail-dialog {
+  .MuiDialog-paper {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .MuiDialog-paperWidthSm {
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .fund-detail-bottom-sheet {
+    width: 100%;
+  }
+
+  .fund-detail-bottom-sheet {
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+
+      .text {
+        font-weight: bold;
+        color: #333333;
+      }
+    }
+
+    button {
+      min-height: 47px;
+      margin-top: 10px;
+    }
+
+    .cart-item {
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .title {
+        font-size: 16px;
+      }
+
+      .delete-icon {
+        display: block;
+        width: 30px;
+        cursor: pointer;
+      }
+    }
+  }
+}
