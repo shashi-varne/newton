@@ -14,7 +14,7 @@ definitions:
           - cd react_webviews
           - npm install
           - npm run build &
-          - sleep 18-
+          - sleep 180
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
