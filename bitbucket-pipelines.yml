@@ -11,6 +11,7 @@ definitions:
         script:
           - apt-get update
           - npm config set strict-ssl false;
+          - cd react_webviews
           - npm install
           - npm start &
           - sleep 10
