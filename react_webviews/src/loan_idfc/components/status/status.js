@@ -268,13 +268,21 @@ class LoanStatus extends Component {
     this.sendEvents("next");
     let { commonMapper, vendor_application_status, is_dedupe } = this.state;
     if (!is_dedupe && vendor_application_status === "idfc_0.5_accepted") {
+      this.setState({
+        show_loader: true
+      })
       toast('A mail has been sent to your official mail ID. Verify the same for faster loan sanction.')
       let body = {
         perfios_state: "init",
         idfc_loan_status: "perfios",
       };
 
-      this.updateApplication(body, "income-details");
+      setTimeout(updateFunc, 3000);
+
+      let that = this;
+      function updateFunc() {
+        that.updateApplication(body, "income-details");
+      }
     }
 
     if (commonMapper.button_title === "START NEW APPLICATION") {

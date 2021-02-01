@@ -163,7 +163,7 @@ class Home extends Component {
                       Personal loans
                     </div>
                     <div className="subtitle generic-page-subtitle">
-                      Get loans upto ₹1 lac
+                      Get loans upto ₹40 lacs
                     </div>
                   </div>
                 </div>
@@ -195,18 +195,18 @@ class Home extends Component {
           <div className="block3-info">
             <div className="top-title">Our partners</div>
             <div className="partners">
-              {/* <div>
+              <div>
                 <div className="card">
                   <img src={require(`assets/idfc_logo.svg`)} alt="idfc logo" />
                 </div>
                 IDFC FIRST Bank
-              </div> */}
-              <div>
+              </div>
+              {/* <div>
                 <div className="card">
                   <img src={require(`assets/dmi-finance.svg`)} alt="dmi logo" />
                 </div>
                 DMI finance
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

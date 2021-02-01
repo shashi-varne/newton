@@ -151,7 +151,7 @@ export const idfc_config = {
             },
             {
               title: `Can I cancel my loan application post-approval?`,
-              subtitle: `Yes, you can and it is free of cost. Give us a call on xxxxxxxxxx or write to xxx@xxxx.com should you wish to cancel your loan.`,
+              subtitle: `Yes, you can and it is free of cost. Give us a call on ${getConfig().mobile} or write to ${getConfig().askEmail} should you wish to cancel your loan.`,
             },
             {
               title: `The interest rate of my personal loan will be flat or reducing?`,
@@ -717,7 +717,7 @@ export const idfc_config = {
                 },
                 {
                   title: `Can I cancel my loan application post-approval?`,
-                  subtitle: `Yes, you can and it is free of cost. Give us a call on xxxxxxxxxx or write to xxx@xxxx.com should you wish to cancel your loan.`,
+                  subtitle: `Yes, you can and it is free of cost. Give us a call on ${getConfig().mobile} or write to ${getConfig().askEmail} should you wish to cancel your loan.`,
                 },
                 {
                   title: `The interest rate of my personal loan will be flat or reducing?`,
@@ -807,8 +807,8 @@ export const idfc_config = {
                 {
                   title: "I have a question that is not listed here, what do I do?",
                   subtitle: `We will be glad to help you with any questions regarding the personal loan from IDFC FIRST
-                  Bank. Please feel free to contact our customer care representative at xxxxxxxxxx or email us at
-                  xxx@fisdom.com`,
+                  Bank. Please feel free to contact our customer care representative at ${getConfig().mobile} or email us at
+                  ${getConfig().askEmail}`,
                 },
               ],
             },
