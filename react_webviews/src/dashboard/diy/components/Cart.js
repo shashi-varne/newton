@@ -5,7 +5,7 @@ import { storageService } from '../../../utils/validators'
 
 import delete_new from '../../../assets/delete_new.png'
 import { CART } from '../constants'
-import { navigate, navigate as navigateFunc } from '../../invest/common/commonFunction'
+import { navigate as navigateFunc } from '../../invest/common/commonFunction'
 
 const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
   const handleRemoveFromCart = (item) => () => {

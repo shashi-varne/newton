@@ -7,6 +7,8 @@ import RatingStar from '../../../fund_details/common/RatingStar'
 import './style.scss'
 import { storageService } from '../../../utils/validators'
 
+import { navigate as navigateFunc } from '../../invest/common/commonFunction'
+
 import CartFooter from '../components/CartFooter'
 import { getFundList } from '../functions'
 import {
@@ -177,6 +179,7 @@ const FundList = (props) => {
                 value={value}
                 handleCart={handleCart}
                 addedToCart={cart.map(({ isin }) => isin).includes(item.isin)}
+                parentProps={parentProps}
               />
             ))}
         </TabContainer>
@@ -202,14 +205,18 @@ const FundList = (props) => {
 
 export default FundList
 
-const DiyFundCard = ({ value, handleCart, addedToCart, ...props }) => {
+const DiyFundCard = ({ value, handleCart, addedToCart, parentProps, ...props }) => {
+  const handleClick = () => {
+    const navigate = navigateFunc.bind(parentProps)
+    navigate('/diy/fundinfo', props, true)
+  }
   return (
     <div className="diy-fund-card">
       <div className="diy-fund-card-img">
         <img src={props.amc_logo_small} alt="some" width="90" />
       </div>
       <div className="diy-fund-card-details">
-        <div className="diy-fund-card-name">{props.legal_name}</div>
+        <div className="diy-fund-card-name" onClick={handleClick}>{props.legal_name}</div>
         <div className="diy-fund-card-info-container">
           <div className="diy-fund-card-info">
             <p>AUM: {Math.round(props.aum, 0)} Crs</p>
