@@ -172,7 +172,8 @@
   .diy-bottom-sheet .filter .body {
     flex: 4;
     height: 250px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .diy-sort-filter,

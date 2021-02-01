@@ -175,6 +175,7 @@ const FundList = (props) => {
             })
             .map((item) => (
               <DiyFundCard
+                key={item.isin}
                 {...item}
                 value={value}
                 handleCart={handleCart}
