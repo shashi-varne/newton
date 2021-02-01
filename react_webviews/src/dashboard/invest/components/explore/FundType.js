@@ -57,7 +57,7 @@ const TrendingCard = ({ cart, setCart, parentProps, ...props }) => {
           color="secondary"
           variant="raised"
           onClick={handleAddToCart}
-          disabled={addedToCart}
+          disabled={addedToCart ? true : false}
         >
           {addedToCart ? 'Added' : 'Add to Cart'}
         </Button>
