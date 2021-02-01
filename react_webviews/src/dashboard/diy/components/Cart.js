@@ -13,6 +13,9 @@ const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
       const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin)
       setCart(updatedCartItems)
       storageService().setObject(CART, updatedCartItems)
+      if (cart.length === 1) {
+        close()
+      }
     }
   }
 

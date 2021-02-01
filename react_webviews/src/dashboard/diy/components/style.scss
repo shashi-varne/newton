@@ -173,6 +173,9 @@
       font-weight: bold;
       box-sizing: border-box;
       background-color: #e8e8e8;
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
@@ -210,6 +213,7 @@
       display: flex;
       align-items: center;
       padding: 15px;
+      cursor: pointer;
     }
     
     svg {
