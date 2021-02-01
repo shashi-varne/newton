@@ -51,6 +51,7 @@
     "fs-extra": "3.0.1",
     "history": "^4.7.2",
     "html-webpack-plugin": "^4.0.0-beta.5",
+    "idempotent-babel-polyfill": "^7.4.4",
     "jest": "20.0.4",
     "jquery": "^3.3.1",
     "jss": "^9.8.1",

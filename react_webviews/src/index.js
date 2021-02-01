@@ -1,4 +1,5 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
+import 'idempotent-babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "typeface-roboto";
