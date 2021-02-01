@@ -29,6 +29,7 @@ const Filter = ({
     setFundHouse(localFundHouse)
     setSortFilter(localSortFilter)
     setFundOption(localFundOption)
+    close()
   }
 
   const reset = () => {

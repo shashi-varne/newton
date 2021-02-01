@@ -154,19 +154,20 @@ const FundList = (props) => {
               )
             })
             .sort((a, b) => {
-              return (
-                Number(b[returnField[value]]) - Number(a[returnField[value]])
-              )
-            })
-            .sort((a, b) => {
               if (sortFilter === 'returns') {
-                return a.three_year_return - b.three_year_return
+                return Number(b[returnField[value]]) -
+                  Number(a[returnField[value]]) >
+                  0
+                  ? 1
+                  : -1
               }
               if (sortFilter === 'rating') {
-                return a.fisdom_rating - b.fisdom_rating
+                return Number(b.fisdom_rating) - Number(a.fisdom_rating) > 0
+                  ? 1
+                  : -1
               }
               if (sortFilter === 'fundsize') {
-                return a.aum - b.aum
+                return Number(b.aum) - Number(a.aum) > 0 ? 1 : -1
               }
             })
             .map((item) => (
