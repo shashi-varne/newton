@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Container from '../../common/Container';
 
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 import {
-    numDifferentiationInr, formatAmountInr
+    numDifferentiationInr, formatAmountInr , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -82,10 +83,34 @@ class FyntuneReportDetails extends Component {
         })
     }
 
+    sendEvents(user_action) {
+ 
+        let eventObj = {
+            "event_name": 'portfolio',
+            "properties": {
+                "user_action": user_action,
+                'policy': 'Life insurance',
+                'provider_name': 'HDFC Life',
+                'policy_status': this.state.policy_data.status ? capitalizeFirstLetter(this.state.policy_data.status) : '',
+                "screen_name": 'policy_details',
+                "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
+                "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
+                'download_policy': 'no',
+            }
+        };
+
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    }
+
     render() {
         
         return (
             <Container
+                events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
                 title={'Insurance Savings Plan'}
                 fullWidthButton={true}

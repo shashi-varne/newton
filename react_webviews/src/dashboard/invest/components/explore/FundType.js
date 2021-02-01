@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import Container from '../../../../fund_details/common/Container'
+import React,{useState} from 'react'
+import Container from '../../../common/Container'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { storageService } from 'utils/validators'
@@ -128,7 +128,7 @@ const FundType = (props) => {
           <DiyCartButton
             className="button"
             onClick={() => setCartActive(true)}
-            cartLength={cart.length}
+            cartlength={cart.length}
           />
         )}
 

@@ -187,6 +187,9 @@ import ResumeIntermediatePage from './products/life_insurance/resumeIntermediate
 import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
 import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
 
+//call back
+import CallBackDetails from './call_back/call_back';
+
 // common
 
 import Report from './report';
@@ -241,6 +244,9 @@ const Insurance = (props) => {
         <Tooltip />
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
+
+          {/********** CALL BACK **********/}
+          <Route path={`${url}/call-back-details`} component={CallBackDetails}/>
 
           {/********** TERM INSURANCE **********/}
           <Route path={`${url}/term/resume`} component={Resume} />

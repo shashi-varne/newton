@@ -1,5 +1,5 @@
 import React from 'react';
-import Container from '../../fund_details/common/Container';
+import Container from '../common/Container';
 
 import account_icon from "assets/account_icon.png"
 import bse_icon from "assets/bse_icon.png"

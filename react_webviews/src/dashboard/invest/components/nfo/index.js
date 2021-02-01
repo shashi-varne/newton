@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { nfoData } from "../../constants";
 
@@ -26,6 +26,7 @@ class NfoInfo extends Component {
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         hideInPageTitle
+        title='Invest in NFO'
       >
         <div className="nfo-info">
           <div

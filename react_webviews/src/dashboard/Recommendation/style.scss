@@ -22,7 +22,7 @@
   .edit-recommendation-funds {
     flex: 1 1 20%;
     text-align: right;
-    color: #35cb5d;
+    color: var(--secondary);
     font-size: 16px;
     text-decoration: underline;
     cursor: pointer;
@@ -82,17 +82,18 @@
   padding: 10px 0px;
 }
 
+.recommendations-disclaimer-morning {
+  display: flex;
+  margin-bottom: 13px;
+  font-size: 13px;
+  img {
+    margin-right: 5px;
+  }
+}
+
 .recommendations-disclaimer {
   display: flex;
   flex-direction: column;
-  .recommendations-disclaimer-morning {
-    display: flex;
-    margin-bottom: 13px;
-    img {
-      margin-right: 5px;
-    }
-  }
-
   .recommendations-disclaimer-tc {
     a {
       color: var(--primary);

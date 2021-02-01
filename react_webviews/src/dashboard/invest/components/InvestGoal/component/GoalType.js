@@ -1,11 +1,12 @@
 /* eslint-disable radix */
 import React, { useState } from 'react';
-import Container from 'fund_details/common/Container';
+import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
 
 import { navigate as navigateFunc } from '../../../common/commonFunction';
 
 import './style.scss';
+import { storageService } from 'utils/validators';
 
 const currentYear = new Date().getFullYear();
 const GoalType = (props) => {
@@ -14,13 +15,16 @@ const GoalType = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const subtype = props.match?.params?.subtype;
   const navigate = navigateFunc.bind(props);
+  const graphData = storageService().getObject("graphData")
 
   const goNext = () => {
+    storageService().setObject("graphData",{...graphData,year})
     if (subtype === 'other') {
       navigate(`savegoal/${subtype}/target`);
     } else {
       navigate(`savegoal/${subtype}/${year}`);
     }
+
   };
 
   const handleChange = (e) => {

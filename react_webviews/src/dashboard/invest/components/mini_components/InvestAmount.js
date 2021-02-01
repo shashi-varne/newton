@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../../../fund_details/common/Container';
+import Container from '../../../common/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
@@ -20,7 +20,7 @@ const date = new Date();
 const InvestAmount = (props) => {
   const graphData = storageService().getObject('graphData');
   const goalRecommendation = storageService().getObject('goalRecommendations');
-  const { investType, year, stockSplit, term, isRecurring, investTypeDisplay } = graphData;
+  const { investType, year, stockSplit, term, isRecurring, investTypeDisplay,...moreData } = graphData;
   const [amount, setAmount] = useState(graphData?.amount || '');
   const [title, setTitle] = useState('');
   const [corpus, setCorpus] = useState('');
@@ -41,6 +41,7 @@ const InvestAmount = (props) => {
       setAmount(parseInt(e.target.value));
     } else {
       setAmount('');
+      setCorpus(0);
     }
   };
 
@@ -67,8 +68,6 @@ const InvestAmount = (props) => {
     }
     if (goalRecommendation.id === 'savetax') {
       calculateTax(graphData?.corpus);
-    } else if (goalRecommendation.itype === 'saveforgoal') {
-      setCorpus(graphData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
         stockSplit,

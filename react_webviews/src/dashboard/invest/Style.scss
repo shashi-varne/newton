@@ -436,6 +436,8 @@
 }
 
 .invest-type {
+  width: 100%;
+
   .type {
     display: flex;
     column-gap: 20px;
@@ -774,24 +776,6 @@
 .nfo-checkout {
   padding: 20px 0;
   margin-top: -20px;
-
-  .nfo-disclaimer {
-    padding: 20px 0;
-    .text {
-      margin-bottom: 15px;
-      font-size: 13px;
-      color: #727272;
-
-      img {
-        margin-right: 5px;
-        width: 15px;
-      }
-
-      span {
-        text-decoration: underline;
-      }
-    }
-  }
 }
 
 .checkout-invest-type {
@@ -847,6 +831,13 @@
   margin-top: 40px;
   padding-bottom: 20px;
 
+  .message {
+    margin: 10px 0;
+    text-align: center;
+    font-size: 16px;
+    color: #333333;
+  }
+
   .item {
     display: flex;
     margin: 0 -10px 15px -10px;
@@ -876,6 +867,16 @@
         margin-bottom: 10px;
         font-weight: 700;
         line-height: 1.1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 5px;
+
+        img {
+          width: 25px;
+          margin-right: 15px;
+          cursor: pointer;
+        }
       }
 
       .input {

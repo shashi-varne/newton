@@ -1,8 +1,13 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import Button from "@material-ui/core/Button";
 import { storageService } from "utils/validators";
-import { initialize, getFormattedEndDate, getSchemeOption } from "../../functions";
+import {
+  initialize,
+  getFormattedEndDate,
+  getSchemeOption,
+} from "../../functions";
+import { getConfig } from "utils/functions";
 
 class FundDetail extends Component {
   constructor(props) {
@@ -30,7 +35,15 @@ class FundDetail extends Component {
   };
 
   handleClick = () => {
-    this.navigate("funds/checkout");
+    this.props.history.push(
+      {
+        pathname: "funds/checkout",
+        search: getConfig().searchParams,
+      },
+      {
+        type: "nfo",
+      }
+    );
   };
 
   render() {
@@ -40,6 +53,7 @@ class FundDetail extends Component {
         showLoader={this.state.show_loader}
         noFooter={true}
         hideInPageTitle
+        title="Fund Details"
       >
         {fund && (
           <div className="nfo-fund-detail">

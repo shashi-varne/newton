@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Container from '../../../../fund_details/common/Container';
+import Container from '../../../common/Container';
 import Slider from 'common/ui/Slider';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import toast from 'common/ui/Toast'
@@ -58,7 +58,7 @@ const InvestedAmount = (props) => {
       graphData = { ...graphData, ...data };
       storageService().setObject('graphData', graphData);
       setLoader(false);
-      navigate(`/invest/recommendations`, {}, true);
+      navigate(`recommendations`);
     } catch (err) {
       setLoader(false);
       toast(err)

@@ -27,7 +27,7 @@ const CartFooter = ({
       <DiyCartButton
         className="button"
         onClick={() => setCartActive(true)}
-        cartLength={cart.length}
+        cartlength={cart.length}
         disabled={cart.length === 0}
       />
       <Filter

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "../../../../fund_details/common/Container";
+import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { initialize } from "../../functions";
 import Input from "@material-ui/core/Input";
@@ -46,14 +46,14 @@ class InvestAmount extends Component {
   handleChange = (name) => (event) => {
     let value = event.target.value;
     let { amount_error, amount } = this.state;
-    if (!value) {
+    if (!isNaN(parseInt(value, 10))) {
+      amount = parseInt(value, 10);
+      this.validateAmount(amount);
+      this.setState({ amount: amount });
+    } else {
       amount_error = "This is required";
       amount = "";
       this.setState({ amount: amount, amount_error: amount_error });
-    } else {
-      amount = value;
-      this.validateAmount(amount);
-      this.setState({ amount: amount });
     }
   };
 
@@ -61,7 +61,8 @@ class InvestAmount extends Component {
     let { amount } = this.state;
     if (!amount) amount = value;
     else amount += value;
-    this.setState({ amount: amount, amount_error: "" });
+    this.validateAmount(amount);
+    this.setState({ amount: amount });
   };
 
   render() {
@@ -88,8 +89,9 @@ class InvestAmount extends Component {
             </InputLabel>
             <Input
               id="amount"
-              type="number"
+              type="text"
               inputMode="numeric"
+              pattern="[0-9]*"
               value={amount}
               error={amount_error ? true : false}
               onChange={this.handleChange("amount")}

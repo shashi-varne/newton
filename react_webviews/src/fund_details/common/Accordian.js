@@ -33,7 +33,7 @@ const Accordian = ({ title, children, classes }) => {
             <RemoveIcon
               style={{
                 border: '2px #878787 solid',
-                fontSize: '10px',
+                fontSize: '15px',
                 borderRadius: '3px',
                 color: '#878787',
               }}
@@ -42,7 +42,7 @@ const Accordian = ({ title, children, classes }) => {
             <AddIcon
               style={{
                 border: '2px #878787 solid',
-                fontSize: '10px',
+                fontSize: '15px',
                 borderRadius: '3px',
                 color: '#878787',
               }}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import Container from '../../../../fund_details/common/Container'
+import React,{useState,useEffect} from 'react'
+import Container from '../../../common/Container'
 
 import diy_equity_icon from 'assets/diy_equity_icon.svg'
 import diy_debt_icon from 'assets/diy_debt_icon.svg'

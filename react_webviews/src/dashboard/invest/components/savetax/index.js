@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Container from 'fund_details/common/Container';
+import Container from '../../../common/Container';
 import InvestType from '../mini_components/InvestType';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import toast from 'common/ui/Toast';

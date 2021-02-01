@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { getConfig } from "utils/functions";
 import { nfoData } from "../../constants";
 
@@ -21,7 +21,12 @@ class NfoScheme extends Component {
 
   render() {
     return (
-      <Container showLoader={this.state.show_loader} noFooter={true} hideInPageTitle>
+      <Container
+        showLoader={this.state.show_loader}
+        noFooter={true}
+        hideInPageTitle
+        title="Select Scheme"
+      >
         <div className="nfo-scheme">
           <div className="info">
             {nfoData.scheme.map((data, index) => {
