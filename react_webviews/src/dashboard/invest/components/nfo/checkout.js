@@ -42,7 +42,6 @@ class Checkout extends Component {
       type,
       currentUser,
     } = this.state;
-    console.log(type);
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
@@ -59,9 +58,9 @@ class Checkout extends Component {
         return;
       }
     } else if (type === "diy") {
-      let schemeType = storageService().getObject("diystore_category") || "";
+      let schemeType = storageService().get("diystore_category") || "";
       let categoryName =
-        storageService().getObject("diystore_subCategoryScreen") || "";
+        storageService().get("diystore_subCategoryScreen") || "";
       fundsData = !storageService().getObject("diystore_cart")
         ? [storageService().getObject("diystore_fundInfo")]
         : storageService().getObject("diystore_cart");
