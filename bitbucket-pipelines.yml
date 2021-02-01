@@ -1,0 +1,31 @@
+image:
+  name: node:12.20.0-slim
+
+definitions:
+  caches:
+    image: node
+
+  steps:
+    - step: &pod-deploy
+        name: Pipeline-on-demand deploy steps
+        script:
+          - apt-get update
+          - npm config set strict-ssl false;
+          - npm install
+          - npm start &
+          - sleep 10
+          - ls
+          - mv public $BITBUCKET_COMMIT
+          - pipe: atlassian/google-cloud-storage-deploy:0.4.5
+            variables:
+              KEY_FILE: $KEY_FILE
+              PROJECT: 'plutus-admin'
+              BUCKET: 'plutus-webview'
+              SOURCE: '$BITBUCKET_COMMIT'
+
+pipelines:
+  custom:
+    pod-deploy:
+      - step:
+          <<: *pod-deploy
+          name: Pipeline-on-demand deploy
