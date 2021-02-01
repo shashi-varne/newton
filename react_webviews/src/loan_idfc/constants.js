@@ -843,7 +843,7 @@ export const idfc_config = {
         options: [
           {
             icon: "icn_b2_m",
-            subtitle: "Should at least be 23 years of age",
+            subtitle: "Should at least be 25 years of age",
           },
           {
             icon: "icn_b3_m",
