@@ -7,6 +7,8 @@ import RatingStar from '../../../fund_details/common/RatingStar'
 import './style.scss'
 import { storageService } from '../../../utils/validators'
 
+import { navigate as navigateFunc } from '../../invest/common/commonFunction'
+
 import CartFooter from '../components/CartFooter'
 import { getFundList } from '../functions'
 import {
@@ -16,6 +18,8 @@ import {
   SORTFILTER,
   FUNDHOUSE,
   CART_LIMIT,
+  CATEGORY,
+  SUBCATEGORY,
 } from '../constants'
 
 import add_cart_icon from '../../../assets/add_cart_icon.png'
@@ -37,7 +41,8 @@ function TabContainer(props) {
     </Typography>
   )
 }
-const FundList = ({ match, classes }) => {
+const FundList = (props) => {
+  const { match, classes, ...parentProps } = props
   const [value, setValue] = useState(0)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
@@ -45,7 +50,7 @@ const FundList = ({ match, classes }) => {
   const [sortFilter, setSortFilter] = useState('returns')
   const [fundOption, setFundOption] = useState('growth')
   const [fundHouse, setFundHouse] = useState('')
- 
+
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
   const handleChange = (_, value) => {
@@ -54,19 +59,29 @@ const FundList = ({ match, classes }) => {
 
   useEffect(() => {
     const { key, name, type } = match.params
-    fetchFunds({ key, name, type })
-  }, [])
+    const category = storageService().get(CATEGORY)
+    const subCategory = storageService().get(SUBCATEGORY)
+    if (
+      !category ||
+      !subCategory ||
+      (category !== type || subCategory !== key)
+    ) {
+      fetchFunds({ key, name, type })
+    }
+  }, [match.params.key, match.params.type])
 
   const fetchFunds = async ({ key, name, type }) => {
     try {
       setShowLoader(true)
-      if (fundsList.length === 0) {
-        const funds = await getFundList({ key, name, type })
-        setFundsList([...funds])
-        storageService().setObject(FUNDSLIST, funds)
-      }
+      const funds = await getFundList({ key, name, type })
+      setFundsList([...funds])
+      storageService().setObject(FUNDSLIST, funds)
+      storageService().set(CATEGORY, type)
+      storageService().set(SUBCATEGORY, key)
     } catch (err) {
       console.log('Error', err.message)
+      storageService().remove(CATEGORY)
+      storageService().remove(SUBCATEGORY)
     } finally {
       setShowLoader(false)
     }
@@ -93,9 +108,12 @@ const FundList = ({ match, classes }) => {
       noFooter
       helpContact
       hideInPageTitle
-      title="Explore All Mutual Funds"
+      title={
+        match.params.type.charAt(0).toUpperCase() + match.params.type.slice(1)
+      }
       showLoader={showLoader}
       classOverRideContainer="pr-containe>r"
+      id="diy-fundlist-container"
     >
       <div style={{ margin: '-20px' }}>
         <Tabs
@@ -123,18 +141,28 @@ const FundList = ({ match, classes }) => {
           {fundsList
             .filter((item) => {
               if (!fundHouse) {
-                return item.hasOwnProperty(returnField[value]) && item.three_year_return !== null && item.growth_or_dividend === fundOption && item.sip === true
+                return (
+                  item.hasOwnProperty(returnField[value]) &&
+                  item.three_year_return !== null &&
+                  item.growth_or_dividend === fundOption &&
+                  item.sip === true
+                )
               }
 
-                return item.hasOwnProperty(returnField[value]) && item.three_year_return !== null && item.growth_or_dividend === fundOption && item.sip === true && item.fund_house === fundHouse
-              
+              return (
+                item.hasOwnProperty(returnField[value]) &&
+                item.three_year_return !== null &&
+                item.growth_or_dividend === fundOption &&
+                item.sip === true &&
+                item.fund_house === fundHouse
+              )
             })
-            .sort(
-              (a, b) => {
-                return Number(b[returnField[value]]) - Number(a[returnField[value]])
-              }
-            ).
-            sort((a, b) => {
+            .sort((a, b) => {
+              return (
+                Number(b[returnField[value]]) - Number(a[returnField[value]])
+              )
+            })
+            .sort((a, b) => {
               if (sortFilter === 'returns') {
                 return a.three_year_return - b.three_year_return
               }
@@ -147,10 +175,12 @@ const FundList = ({ match, classes }) => {
             })
             .map((item) => (
               <DiyFundCard
+                key={item.isin}
                 {...item}
                 value={value}
                 handleCart={handleCart}
                 addedToCart={cart.map(({ isin }) => isin).includes(item.isin)}
+                parentProps={parentProps}
               />
             ))}
         </TabContainer>
@@ -168,6 +198,7 @@ const FundList = ({ match, classes }) => {
         setFundHouse={setFundHouse}
         setFundsList={setFundOption}
         setFundOption={setFundOption}
+        {...parentProps}
       />
     </Container>
   )
@@ -175,14 +206,18 @@ const FundList = ({ match, classes }) => {
 
 export default FundList
 
-const DiyFundCard = ({ value, handleCart, addedToCart, ...props }) => {
+const DiyFundCard = ({ value, handleCart, addedToCart, parentProps, ...props }) => {
+  const handleClick = () => {
+    const navigate = navigateFunc.bind(parentProps)
+    navigate('/diy/fundinfo', props, true)
+  }
   return (
     <div className="diy-fund-card">
       <div className="diy-fund-card-img">
         <img src={props.amc_logo_small} alt="some" width="90" />
       </div>
       <div className="diy-fund-card-details">
-        <div className="diy-fund-card-name">{props.legal_name}</div>
+        <div className="diy-fund-card-name" onClick={handleClick}>{props.legal_name}</div>
         <div className="diy-fund-card-info-container">
           <div className="diy-fund-card-info">
             <p>AUM: {Math.round(props.aum, 0)} Crs</p>

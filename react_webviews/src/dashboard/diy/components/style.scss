@@ -1,3 +1,7 @@
+.capitalize {
+  text-transform: capitalize;
+}
+
 .diy-fund-card {
   display: flex;
   padding: 15px;
@@ -42,6 +46,9 @@
     line-height: 1.25em;
     font-weight: bold;
     font-size: 18px;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
@@ -166,7 +173,8 @@
   .diy-bottom-sheet .filter .body {
     flex: 4;
     height: 250px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .diy-sort-filter,

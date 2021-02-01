@@ -59,7 +59,7 @@ const InvestExplore = (props) => {
   }
   const navigate = navigateFunc.bind(props)
   const goNext = (title) => () => {
-    navigate(`explore/${title}`)
+    navigate(`explore/${title}`, null, false, props.location.search)
   }
   return (
     <Container

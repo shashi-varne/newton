@@ -15,7 +15,6 @@ const DiyDialog = ({ close, open, children, ...props }) => {
       open={open}
       aria-labelledby="diy-dialog"
       TransitionComponent={Transition}
-      keepMounted
       aria-describedby="diy-dialog-slide-selection"
       id="diy-dialog"
     >

@@ -5,8 +5,9 @@ import { storageService } from '../../../utils/validators'
 
 import delete_new from '../../../assets/delete_new.png'
 import { CART } from '../constants'
+import { navigate as navigateFunc } from '../../invest/common/commonFunction'
 
-const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
+const Cart = ({ isOpen, setCartActive, cart, setCart, ...props }) => {
   const handleRemoveFromCart = (item) => () => {
     if (cart.length > 0) {
       const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin)
@@ -17,6 +18,11 @@ const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
 
   const close = () => {
     setCartActive(false)
+  }
+
+  const handleCheckoutProceed = () => {
+    const navigate = navigateFunc.bind(props)
+    navigate('/diy/invest', null, true, props.location.search)
   }
 
   return (
@@ -45,7 +51,7 @@ const Cart = ({ isOpen, setCartActive, cart, setCart }) => {
           fullWidth
           disabled={cart.length === 0}
           color="secondary"
-          onClick={() => {}}
+          onClick={handleCheckoutProceed}
         >
           Proceed to Checkout
         </Button>
