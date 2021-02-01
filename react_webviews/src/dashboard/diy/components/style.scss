@@ -236,7 +236,7 @@
   margin: -20px -20px -56px -20px;
   background-color: #fafafa;
   padding: 20px 20px 56px 20px;
-  height: 100%;
+  height: calc(100vh - 70px);
 
   .search-content {
     padding-bottom: 20px;
@@ -269,14 +269,14 @@
           cursor: pointer;
           display: none;
         }
-
-        input:hover + .close-icon {
-          display: inline-block;
-        }
-
+        
         input:focus + .close-icon {
           display: inline-block;
         }
+      }
+
+      .search-input:hover .close-icon {
+        display: inline-block;
       }
 
       .search-button {
@@ -308,6 +308,8 @@
 
   .search-list {
     padding-bottom: 20px;
+    height: 100%;
+    overflow: auto;
     .text {
       padding: 10px 0;
       max-width: 100%;

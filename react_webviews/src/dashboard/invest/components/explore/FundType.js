@@ -10,9 +10,13 @@ import Cart from '../../../diy/components/Cart'
 
 import { navigate as navigateFunc } from '../../common/commonFunction'
 
-const TrendingCard = ({ cart, setCart, parentProps, ...props }) => {
+const TrendingCard = ({ cart, setCart, type, parentProps, ...props }) => {
   const navigate = navigateFunc.bind(parentProps)
-  const handleNavigate = () => {
+  const handleNavigate = (data) => {
+    let dataCopy = Object.assign({}, data);
+    dataCopy.category = "scheme carousel";
+    dataCopy.diy_type = type;
+    storageService().setObject("diystore_fundInfo", dataCopy);
     navigate(
       `/fund-details`,
       { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` },
@@ -37,7 +41,7 @@ const TrendingCard = ({ cart, setCart, parentProps, ...props }) => {
   return (
     <div className="item">
       <div className="item-details">
-        <Typography color="primary" className="title" onClick={handleNavigate}>
+        <Typography color="primary" className="title" onClick={() => handleNavigate(props)}>
           {props.legal_name}
         </Typography>
         <img src={props.amc_logo_big} alt="name" width="80" />
@@ -111,7 +115,7 @@ const FundType = (props) => {
         <h6 className="heading">Top trending {type} funds</h6>
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (
-            <TrendingCard key={idx} cart={cart} setCart={setCart} {...fund} parentProps={props} />
+            <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
           ))}
         </div>
         <section className="categories">

@@ -804,6 +804,7 @@ export function checkLimit(amount, index) {
     (data) => data.isin === fundsData[index].isin
   );
   if (!limitData) return;
+  if (!limitData.ot_sip_flag || !limitData.addl_purchase) return;
   let min = limitData.addl_purchase.min;
   let max = limitData.addl_purchase.max;
   let mul = limitData.addl_purchase.mul;
@@ -870,7 +871,7 @@ export async function proceedInvestment(event, isReferralGiven) {
       let allocation = {
         mfid: limitData.mfid,
         mfname: limitData.mfname,
-        amount: totalAmount,
+        amount: fund.amount,
         default_date: limitData.addl_purchase.default_date,
         sip_dates: limitData.addl_purchase.sip_dates,
       };

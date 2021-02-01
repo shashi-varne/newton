@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Container from "../../common/Container";
 import { getConfig } from "utils/functions";
 import Close from "@material-ui/icons/Close";
@@ -7,25 +7,31 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { storageService } from "utils/validators";
 import "./style.scss";
 import { querySearch } from "../../invest/common/api";
+import debounce from "lodash/debounce";
 
 const Search = (props) => {
   const [value, setValue] = useState("");
   const [fundResult, setFundResult] = useState();
   const [showLoader, setShowLoader] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [showNoFundmessage, setShowNoFundmessage] = useState(false);
 
   const handleChange = (event) => {
     let value = event.target.value || "";
+    setValue(value);
     if (!value) setShowErrorMessage(false);
     else if (value.length > 3) {
       setShowLoader(true);
       setShowErrorMessage(false);
+      if (!showNoFundmessage) setShowNoFundmessage(true);
       search(value);
-    } else if (value.length < 4) setShowErrorMessage(true);
-    setValue(value);
+    } else if (value.length < 4) {
+      setShowErrorMessage(true);
+      setShowNoFundmessage(false);
+    }
   };
 
-  const search = async (value) => {
+  const searchFunc = async (value) => {
     let data = await querySearch(value);
     setShowLoader(false);
     if (data && data.funds) {
@@ -36,6 +42,13 @@ const Search = (props) => {
       setFundResult([]);
     }
   };
+
+  const search = useCallback(
+    debounce((value) => {
+      searchFunc(value);
+    }, 1500),
+    []
+  );
 
   const showFundInfo = (data) => {
     let dataCopy = Object.assign({}, data);
@@ -59,7 +72,13 @@ const Search = (props) => {
                 onChange={handleChange}
               />
               {value && value.length !== 0 && (
-                <Close className="close-icon" onClick={() => setValue("")} />
+                <Close
+                  className="close-icon"
+                  onClick={() => {
+                    setValue("");
+                    setShowNoFundmessage(false);
+                  }}
+                />
               )}
             </div>
             <div
@@ -103,7 +122,7 @@ const Search = (props) => {
                 })}
               </div>
             )}
-            {fundResult.length === 0 && (
+            {fundResult.length === 0 && showNoFundmessage && (
               <div className="message">No result found</div>
             )}
           </>
