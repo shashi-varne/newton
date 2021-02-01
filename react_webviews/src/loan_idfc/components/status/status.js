@@ -292,7 +292,7 @@ class LoanStatus extends Component {
       };
 
       this.getOrCreate(params);
-    } else {
+    } else if (vendor_application_status !== "idfc_0.5_accepted") {
       this.navigate(this.state.commonMapper.cta_state);
     }
   };
