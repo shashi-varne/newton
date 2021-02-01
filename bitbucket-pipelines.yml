@@ -13,8 +13,8 @@ definitions:
           - npm config set strict-ssl false;
           - cd react_webviews
           - npm install
-          - npm start &
-          - sleep 10
+          - npm run build &
+          - sleep 2m
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
