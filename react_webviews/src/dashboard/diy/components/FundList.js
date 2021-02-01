@@ -58,27 +58,27 @@ const FundList = (props) => {
   }
 
   useEffect(() => {
-    const { key, name, type } = match.params
+    const { key, type } = match.params
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
-    if (!category || !subCategory || category !== type || subCategory !== key) {
-      fetchFunds({ key, name, type })
+    if (!category || !subCategory || category !== type || subCategory !== key || fundsList.length === 0) {
+      fetchFunds({ key, type })
     }
   }, [])
 
   useEffect(() => {
-    const { key, name, type } = match.params
+    const { key, type } = match.params
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
-    if (!category || !subCategory || category !== type || subCategory !== key) {
-      fetchFunds({ key, name, type })
+    if (!category || !subCategory || category !== type || subCategory !== key || fundsList.length === 0) {
+      fetchFunds({ key, type })
     }
   }, [match.params.key, match.params.type])
 
-  const fetchFunds = async ({ key, name, type }) => {
+  const fetchFunds = async ({ key, type }) => {
     try {
       setShowLoader(true)
-      const funds = await getFundList({ key, name, type })
+      const funds = await getFundList({ key, type })
       setFundsList([...funds])
       storageService().setObject(FUNDSLIST, funds)
       storageService().set(CATEGORY, type)
@@ -223,7 +223,9 @@ const DiyFundCard = ({
     console.log(parentProps.location.search + '&isins=' + props.isin)
     navigate(
       `/fund-details`,
-      { searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy` },
+      {
+        searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy`,
+      },
       true
     )
   }
