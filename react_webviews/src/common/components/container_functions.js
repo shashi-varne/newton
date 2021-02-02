@@ -266,6 +266,7 @@ export function renderGenericError() {
                 // alert("Inside div");
                 } else {
                     disableBodyOverflow(true); //touch enabled
+                    // eslint-disable-next-line
                     that.props.errorData && that.props.errorData.setErrorData ? that.props.errorData.setErrorData(''): () => {};
                     document.removeEventListener('click', clickfunction, false);
         

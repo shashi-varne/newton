@@ -385,7 +385,7 @@ class BasicDetailsForm extends Component {
           ...this.state.errorData,
           title2: error
         },
-        showError: true
+        showError: 'page'
       })
     }
     this.setState({
