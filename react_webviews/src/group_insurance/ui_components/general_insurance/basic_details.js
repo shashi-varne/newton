@@ -363,8 +363,8 @@ class BasicDetailsForm extends Component {
         } else if (res.pfwresponse.status_code === 401) {
 
         } else {
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong';
         }
       }
 
@@ -636,7 +636,6 @@ class BasicDetailsForm extends Component {
   }
 
   navigate = (pathname, data) => {
-    console.log(data)
     this.props.parent.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
