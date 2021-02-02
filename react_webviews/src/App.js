@@ -29,12 +29,15 @@ import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 
 
 var basename = window.sessionStorage.getItem('base_href') || '';
-console.log("basename : "+ basename);
+if(basename && basename.indexOf('appl/webview') !== -1) {
+  basename = basename ? basename + 'view/' : '';
+}
+
 class App extends Component {
   
   render() {
     return (
-      <BrowserRouter basename={basename ? basename + '/view/' : ''}>
+      <BrowserRouter basename={basename}>
         <Switch>
           <Route path='/insurance' component={Insurance} />
           <Route path='/group-insurance' component={GroupInsurance} />
