@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>14x14_icons/success_icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="14x14_icons/success_icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="14x14_icons">
+            <rect id="Rectangle-2" fill-rule="nonzero" x="0" y="0" width="14" height="14"></rect>
+            <path d="M7,0 C10.85,0 14,3.15 14,7 C14,10.85 10.85,14 7,14 C3.15,14 0,10.85 0,7 C0,3.15 3.15,0 7,0 Z M10.0570131,4.59924637 L5.97058824,8.65161774 L3.94298685,6.64091304 C3.64147913,6.34191788 3.15263852,6.34191788 2.85113079,6.64091304 C2.54962307,6.9399082 2.54962307,7.42467514 2.85113079,7.7236703 L5.42466021,10.2757536 C5.72616793,10.5747488 6.21500854,10.5747488 6.51651626,10.2757536 L11.1488692,5.68200363 C11.4503769,5.38300847 11.4503769,4.89824153 11.1488692,4.59924637 C10.8473615,4.30025121 10.3585209,4.30025121 10.0570131,4.59924637 Z" id="icon_color" fill="#7ED321"></path>
+        </g>
+    </g>
+</svg>

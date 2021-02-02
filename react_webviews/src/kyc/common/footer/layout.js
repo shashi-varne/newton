@@ -7,6 +7,9 @@ import Dialog, {
   DialogContent,
   DialogContentText,
 } from 'material-ui/Dialog'
+import Buttons from 'material-ui/Button'
+import CircularProgress from "@material-ui/core/CircularProgress";
+import '../Style.scss'
 
 export class DefaultLayout extends Component {
   constructor(props) {
@@ -74,11 +77,21 @@ export class DefaultLayout extends Component {
         }}
       >
         <div className="FlexItem2">
-          <Button
+          <Buttons
+            variant="raised"
+            size="large"
+            color="secondary"
             type={props.type}
             disable={props.disable}
-            {...props}
-          />
+            className={`footer-button ${props.disable && "disabled"}`}
+          >
+            {props.buttonTitle}
+            {props.isApiRunning && (
+              <div className="loader">
+                <CircularProgress size={20} thickness={5} />
+              </div>
+            )}
+          </Buttons>
         </div>
         {this.renderDialog()}
       </div>

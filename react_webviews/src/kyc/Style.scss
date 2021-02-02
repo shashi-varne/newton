@@ -1,0 +1,44 @@
+.kyc-home {
+  line-height: 1.5;
+  .kyc-main-title {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+  }
+
+  .kyc-main-subtitle {
+    font-size: 13px;
+    color: #8d879b;
+    padding: 0 15px 0 0px;
+    margin-bottom: 20px;
+  }
+
+  main {
+    .input {
+      margin: 20px 0;
+    }
+
+    .status-info {
+      display: flex;
+      column-gap: 10px;
+      align-items: flex-start;
+      padding: 15px 15px 20px 15px;
+      border: 1px solid #fff5f6;
+      border-radius: 4px;
+
+      img {
+        width: 14px;
+      }
+
+      .text {
+        color: #160d2e;
+        font-size: 14px;
+
+        .title {
+          font-weight: 700;
+          margin: -2px 0 0 0;
+        }
+      }
+    }
+  }
+}
