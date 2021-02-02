@@ -313,11 +313,18 @@ export function getPdf(e) {
     getBase64(file, function (img) {
       file.imageBaseFile = img;
 
+      let duplicate = documents.filter(item => {
+        return item.name === file.name
+      })
+
+      if (duplicate.length === 0) {
         that.uploadDocument(file);
         documents.push(file);
+      }
 
       that.setState({
         documents: documents,
+        add_file: true
       });
     });
   }

@@ -17,6 +17,8 @@ import {
   renderMultipleNativeCamera,
   getPhoto, getPdf
 } from "./render_camera";
+import SVG from "react-inlinesvg";
+import plus from "assets/plus.svg";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -29,7 +31,8 @@ class DocumentUpload extends Component {
       docList: [],
       disableButton: true,
       docs: [],
-      documents: []
+      documents: [],
+      add_file: true
     };
 
     this.initialize = initialize.bind(this);
@@ -379,6 +382,7 @@ class DocumentUpload extends Component {
           );
   
           documents[index].id = result.document_id;
+          console.log(result.document_id)
           this.setState({
             documents: documents,
             isApiRunning: false
@@ -467,6 +471,13 @@ class DocumentUpload extends Component {
     
   }
 
+  openUploadInput = () => {
+    console.log('hi')
+    this.setState({
+      add_file: false
+    })
+  }
+
   render() {
     let { image_data, documents, totalUpload, disableButton, isApiRunning } = this.state;
     // eslint-disable-next-line radix
@@ -477,7 +488,7 @@ class DocumentUpload extends Component {
     } else {
       disableButton = false;
     }
-
+console.log(documents)
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -562,13 +573,29 @@ class DocumentUpload extends Component {
 
               {documents.length < 3 && (
                 <div className="upload-bank-statement">
-                  <div
+                  {this.state.add_file && <div className="pdf-upload"
+                  onClick={() => this.openUploadInput()}>
+                    <span className="plus-sign">
+                      <SVG
+                        preProcessor={(code) =>
+                          code.replace(
+                            /fill=".*?"/g,
+                            "fill=" + getConfig().secondary
+                          )
+                        }
+                        src={plus}
+                      />
+                    </span>
+                    {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
+                  </div>}
+
+                  {!this.state.add_file && <div
                     className="loan-mandate-pan"
                     style={{ marginBottom: "50px" }}
                   >
                     {getConfig().html_camera && this.renderMultipleHtmlCamera(`doc${documents.length + 1}`)}
                     {!getConfig().html_camera && this.renderMultipleNativeCamera(`doc${documents.length + 1}`)}
-                  </div>
+                  </div>}
                 </div>
               )}
             </div>

@@ -303,6 +303,9 @@ class JourneyMap extends Component {
         this.sendEvents('next', {stage: stage});
         this.getCkycState();
       } else {
+        this.setState({
+          loaderWithData: true
+        });
         if (index > "1") {
           this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
           this.navigate("ckyc-summary");
