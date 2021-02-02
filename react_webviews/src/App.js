@@ -34,7 +34,7 @@ class App extends Component {
   
   render() {
     return (
-      <BrowserRouter basename={basename}>
+      <BrowserRouter basename={basename ? basename + '/view/' : ''}>
         <Switch>
           <Route path='/insurance' component={Insurance} />
           <Route path='/group-insurance' component={GroupInsurance} />
