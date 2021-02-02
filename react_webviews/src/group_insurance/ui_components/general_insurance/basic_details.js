@@ -315,7 +315,7 @@ class BasicDetailsForm extends Component {
             || 'Something went wrong');
         }
       } else {
-        let res = await Api.get('api/ins_service/api/insurance/account/summary')
+        let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
 
         this.setState({
           show_loader: false
