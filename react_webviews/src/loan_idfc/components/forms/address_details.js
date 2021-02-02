@@ -239,7 +239,7 @@ class AddressDetails extends Component {
         } else {
           city = resultData.idfc_city_name;
         }
-        state = resultData.state_name;
+        state = resultData.idfc_state_name || resultData.state_name;
         country = resultData.country;
       } else {
         city = "";
