@@ -46,6 +46,10 @@ const Recommendations = (props) => {
     }
   };
 
+  const getFormatted = (value) => {
+    return value.split('_').join(' ').replace(/\b\w/g, function (l) { return l.toUpperCase() })
+  };
+
   return (
     <Container
       classOverRide="pr-error-container"
@@ -74,71 +78,69 @@ const Recommendations = (props) => {
         </div>
       </div>
 
-      <div class="fund-detail">
-        <div class="risk">
+      <div className="fund-detail">
+        <div className="risk">
           <p >
-            <b>Risk:</b> {`{"getFormatted('recommended.risk')"}`}
+            <b>Risk:</b> {getFormatted(recommendations.risk || "")}
           </p>
           <span
-            class="edit-icon edit"
-            ng-click="showMenu($event)"
-            ng-show="alternatives.length > 0"
+            className="edit-icon edit"
           >
             Edit
           </span>
         </div>
-        <div class="allocation">
-          <div class="graph">
+        <div className="allocation">
+          <div className="graph">
             <canvas
               id="doughnut"
-              class="chart chart-doughnut"
+              className="chart chart-doughnut"
               chart-data="data"
               chart-labels="labels"
               chart-colors="colors"
               chart-options="options"
             ></canvas>
             <div
-              class="text-center"
-              style="color: rgb(135, 135, 135);margin-top: 10px;"
+              className="text-center"
+              style={{color: "rgb(135, 135, 135)", marginTop: "10px"}}
             >
               Asset allocation
             </div>
           </div>
-          <div class="stats">
+          <div className="stats">
             <ul>
               <li>
-                <div class="">
+                <div className="">
                   <b>Class E</b>
                 </div>
-                <div class="">
-                  <span class="color3">{"{'recommended.e_allocation'}"}%</span>{" "}
+                <div className="">
+                  <span className="color3">{recommendations && recommendations.e_allocation}%</span>{" "}
                   in equity
                 </div>
               </li>
               <li>
-                <div class="">
+                <div className="">
                   <b>Class C</b>
                 </div>
-                <div class="">
-                  <span class="color4">{"{'recommended.c_allocation'}"}%</span>{" "}
+                <div className="">
+                  <span className="color4">{recommendations && recommendations.c_allocation}%</span>{" "}
                   in corporate debt
                 </div>
               </li>
               <li>
-                <div class="">
+                <div className="">
                   <b>Class G</b>
                 </div>
-                <div class="">
-                  <span class="color2">{"{'recommended.g_allocation'}"}%</span>{" "}
+                <div className="">
+                  <span className="color2">{recommendations && recommendations.g_allocation}%</span>{" "}
                   in govt. bonds
                 </div>
               </li>
               <li>
-                <div class="">
+                <div className="">
                   <b>Class A</b>
                 </div>
-                <div class="">
-                  <span class="color1">{"{'recommended.a_allocation'}"}%</span>{" "}
+                <div className="">
+                  <span className="color1">{recommendations && recommendations.a_allocation}%</span>{" "}
                   in AIFs
                 </div>
               </li>
@@ -146,6 +148,61 @@ const Recommendations = (props) => {
           </div>
         </div>
       </div>
+
+      <div class="bill">
+      {/* <!-- <div class="heading">
+        <div class="flex-box">
+          <div class="left">Total payable amount</div>
+          <div class="right">{{ paymentDetail.total_amount | inrFormat }}</div>
+        </div>
+      </div>
+      <div class="flex-box">
+        <div class="left">Investment amount</div>
+        <div class="right">{{ paymentDetail.amount }}</div>
+      </div>
+      <div class="flex-box">
+        <div class="left">Onboarding charges (One-time)</div>
+        <div class="right">{{ paymentDetail.onboarding_charges }}</div>
+      </div>
+      <div class="flex-box">
+        <div class="left">Transaction charges</div>
+        <div class="right">{{ paymentDetail.transaction_charges }}</div>
+      </div>
+      <div class="flex-box">
+        <div class="left">GST (18%)</div>
+        <div class="right">{{ paymentDetail.gst }}</div>
+      </div> --> */}
+      <div class="flex-box" ng-repeat="charge in paymentDetail track by $index"
+        ng-class="{'heading' : charge.key === 'total_amount'}" ng-if="charge.value > 0">
+        <div class="left">{"{ 'charge.text' }"}</div>
+        <div class="right">{"{ 'charge.value' | inrFormatDecimal }"}</div>
+      </div>
+      <div class="note">
+        <div class="heading">Note:</div>
+        <div><span>1.</span> Your subsequent investments will go into the above selected pension fund house. Switch
+          facility can be availed only once per year.</div>
+        <div><span>2.</span> At this point, we are only catering customers who will be onboarded by us.</div>
+        <div><span>3.</span> Standard charges stipulated by PFRDA will apply on your investment.</div>
+        {/* //<div class="more" ng-click="more()">Know More...</div> */}
+      </div>
+      <div class="terms">
+        <img src="../assets/img/terms_agree.png" alt="" width="25" />
+        <div ng-if="!finity && isWeb">
+          By tapping on proceed, I agree that I have read the <br /><a href="https://www.fisdom.com/terms/"
+            target="_blank">terms & conditions</a>.
+        </div>
+        <div ng-if="!finity && !isWeb">
+          By tapping on proceed, I agree that I have read the <br /><a
+            ng-click="native_Intent('https://www.fisdom.com/terms/')">terms & conditions</a>.
+        </div>
+        <div ng-if="finity">
+          By tapping on accept, I agree that I have read the <br /><a ng-class="{'button-loading' : showTncLoader}"
+            style={{textDecoration: 'underline'}} ng-click="showTnC($event)">terms & conditions.</a>
+          By tapping on proceed, I agree that I have read the <br /><a ng-class="{'button-loading' : showTncLoader}"
+            style={{textDecoration: 'underline'}} ng-click="showTnC($event)">terms & conditions.</a>
+        </div>
+      </div>
+    </div>
     </Container>
   );
 };

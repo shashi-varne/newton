@@ -191,3 +191,142 @@
     color: rgb(53, 203, 93);
   }
 }
+
+.fund-detail {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  align-items: center;
+  // box-shadow: 0pt 0pt 4pt 1pt rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+
+  .risk {
+    padding: 15px;
+    font-size: 18px;
+    border-bottom: 1px solid #e8e8e8;
+    position: relative;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    .edit-icon {
+      position: absolute;
+      right: 15px;
+      top: 13px;
+      cursor: pointer;
+    }
+
+    .edit {
+      font-size: 16px;
+      letter-spacing: 0.5px;
+      color: rgb(53, 203, 93);
+    }
+  }
+
+  .allocation {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+
+    .graph {
+      width: 200px;
+    }
+
+    .stats {
+      padding: 0px;
+
+      ul {
+        li {
+          font-size: 16px;
+          color: rgb(135, 135, 135);
+          margin-bottom: 10px;
+
+          .color1 {
+            color: rgb(185, 176, 64);
+          }
+
+          .color2 {
+            color: rgb(131, 90, 237);
+          }
+
+          .color3 {
+            color: rgb(74, 144, 226);
+          }
+
+          .color4 {
+            color: rgb(51, 191, 159);
+          }
+        }
+      }
+    }
+  }
+}
+
+.bill {
+  padding: 15px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  margin-bottom: 30px;
+
+  .heading {
+    margin-bottom: 20px;
+    font-family: 'LatoB';
+
+    .flex-box {
+      color: #4a4a4a;
+    }
+  }
+
+  .flex-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #878787;
+    margin-bottom: 15px;
+  }
+
+  .flex-box:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.note {
+  padding: 15px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  color: #878787;
+  line-height: 21px;
+
+  .heading {
+    color: #878787;
+    margin-bottom: 10px;
+    font-family: 'LatoB';
+  }
+
+  span {
+    font-family: 'LatoB';
+  }
+
+  .more {
+    color: #4a90e2;
+    margin-top: 5px;
+  }
+}
+
+.terms {
+  color: #878787;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 10px;
+  }
+
+  a {
+    text-decoration: underline;
+    color: #878787;
+  }
+}
