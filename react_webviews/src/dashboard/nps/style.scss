@@ -74,7 +74,7 @@
 }
 
 .nps {
-  .container-padding { 
+  .container-padding {
     padding: 0px;
   }
 
@@ -89,7 +89,7 @@
       .MuiInput-input {
         font-size: 25px;
       }
-      
+
       .MuiFormHelperText-root {
         font-size: 16px;
         margin-top: 10px;
@@ -109,14 +109,14 @@
   }
 
   .help-text {
-    font-family: 'LatoM';
+    font-family: "LatoM";
     font-size: 14px;
     margin-top: 10px;
     margin-bottom: 15px;
     color: #4a4a4a;
 
     span {
-      font-family: 'Lato';
+      font-family: "Lato";
     }
   }
 
@@ -145,3 +145,49 @@
   }
 }
 
+.fund {
+  padding: 15px;
+  align-items: center;
+  // box-shadow: 0pt 0pt 4pt 1pt rgba(0, 0, 0, 0.05);
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+
+  .name {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+    .icon {
+      flex: 1;
+
+      img {
+        border: 1px solid #e8e8e8;
+      }
+
+      margin-right: 30px;
+      flex-direction: column;
+      display: flex;
+      align-items: center;
+    }
+
+    .text {
+      flex: 3;
+
+      h3 {
+        margin-top: 0;
+        color: rgb(74, 74, 74);
+        word-break: break-word;
+        font-size: 18px;
+        line-height: 22px;
+      }
+    }
+  }
+
+  .replace {
+    text-align: right;
+    margin-bottom: 10px;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: rgb(53, 203, 93);
+  }
+}
