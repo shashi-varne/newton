@@ -54,7 +54,7 @@ class BtInformation extends Component {
     this.sendEvents('opt_for_bt');
     let body = {
       idfc_loan_status: "bt_processing",
-      bt_selected: true,
+      bt_selected: 'True',
     };
     this.updateApplication(body, "loan-bt");
   };
@@ -63,7 +63,7 @@ class BtInformation extends Component {
     this.sendEvents('not_opt_for_bt');
     let body = {
       idfc_loan_status: "bt_bypass",
-      bt_selected: false,
+      bt_selected: 'False',
     };
 
     this.updateApplication(body)

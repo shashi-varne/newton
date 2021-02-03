@@ -332,10 +332,6 @@ const Agreement = (props) => {
                     <td>{formatAmountInr(parentState.vendor_info.approved_amount_final)}</td>
                 </tr>
                 <tr>
-                    <td>Insurance Premium (with GST)</td>
-                    <td>{parentState.vendor_info.is_insured ? formatAmountInr(parentState.vendor_info.insurance_premium_final) : '₹0'}</td>
-                </tr>
-                <tr>
                     <td>Processing fee</td>
                     <td>{formatAmountInr(parentState.vendor_info.processing_fee_final)}</td>
                 </tr>

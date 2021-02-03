@@ -152,8 +152,6 @@ class ProfessionalDetails extends Component {
               value: element,
             };
           });
-
-          companyOptions.push({ name: "OTHERS", value: "OTHERS" })
         }
       }
 
