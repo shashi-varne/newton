@@ -482,7 +482,6 @@ class UploadBank extends Component {
       form_data: form_data,
     });
 
-    canSubmit = false;
     if (canSubmit) {
       let bank = bankOptions.filter((item) => item.value === form_data.bank_name);
 
@@ -548,7 +547,7 @@ class UploadBank extends Component {
         showLoader={this.state.show_loader}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
-        // disable={documents.length === 0 || !confirmed || isApiRunning}
+        disable={documents.length === 0 || !confirmed || isApiRunning}
         headerData={{
           progressHeaderData: !params.adminPanel
             ? this.state.progressHeaderData
