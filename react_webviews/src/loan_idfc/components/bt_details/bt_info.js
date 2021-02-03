@@ -10,6 +10,8 @@ class BtInformation extends Component {
     this.state = {
       show_loader: false,
       screen_name: "bt_info_screen",
+      loaderWithData: false,
+      loaderData: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -45,8 +47,14 @@ class BtInformation extends Component {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
 
+    let loaderData = {
+      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
+      subtitle: "This may take around 2 minutes!",
+    };
+
     this.setState({
-      "idfc_07_state": vendor_info.idfc_07_state
+      "idfc_07_state": vendor_info.idfc_07_state,
+      loaderData: loaderData
     })
   };
 
@@ -61,6 +69,9 @@ class BtInformation extends Component {
 
   handleClickOne = () => {
     this.sendEvents('not_opt_for_bt');
+    this.setState({
+      loaderWithData: true
+    })
     let body = {
       idfc_loan_status: "bt_bypass",
       bt_selected: 'False',
@@ -104,6 +115,8 @@ class BtInformation extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="bt-info">
           <div className="head">How does BT work?</div>
