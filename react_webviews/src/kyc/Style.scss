@@ -1,17 +1,18 @@
+.kyc-main-title {
+  font-size: 20px;
+  color: #160d2e;
+  font-weight: 600;
+}
+
+.kyc-main-subtitle {
+  font-size: 13px;
+  color: #8d879b;
+  padding: 0 15px 0 0px;
+  margin-bottom: 20px;
+}
+
 .kyc-home {
   line-height: 1.5;
-  .kyc-main-title {
-    font-size: 20px;
-    color: #160d2e;
-    font-weight: 600;
-  }
-
-  .kyc-main-subtitle {
-    font-size: 13px;
-    color: #8d879b;
-    padding: 0 15px 0 0px;
-    margin-bottom: 20px;
-  }
 
   main {
     .input {
@@ -83,6 +84,14 @@
 
     .cancel:hover {
       background-color: rgba(158, 158, 158, 0.2);
+    }
+  }
+}
+
+.kyc-nominee {
+  main {
+    .input {
+      margin-top: 20px;
     }
   }
 }

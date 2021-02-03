@@ -134,7 +134,6 @@ const Home = (props) => {
   };
 
   const savePan = async (is_nri) => {
-    console.log("in pan");
     try {
       let result = await savePanData({ is_nri: is_nri });
       if (!result) return;
