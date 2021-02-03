@@ -10,7 +10,7 @@ import "./components/Style.scss";
 import NotFound from "../common/components/NotFound";
 
 
-import Landing from "./components/general/landing";
+// import Landing from "./components/general/landing";
 import Report from "./components/general/report";
 import Journey from "./components/general/journey";
 import Calculator from "./components/general/calculator";
