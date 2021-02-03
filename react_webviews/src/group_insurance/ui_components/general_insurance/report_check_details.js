@@ -58,8 +58,9 @@ class ReportDetails extends Component {
   async componentDidMount() {
 
     try {
+      let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
 
-      let res = await Api.get('api/insurancev2/api/insurance/' + (this.state.provider).toLowerCase() + 
+      let res = await Api.get('api/'+ service +'/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
       this.setState({
