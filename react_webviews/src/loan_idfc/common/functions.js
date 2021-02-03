@@ -12,6 +12,7 @@ import {
   IsFutureDate,
   numDifferentiationInr
 } from "utils/validators";
+import { getUrlParams } from "utils/validators";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -330,8 +331,9 @@ export async function getOrCreate(params) {
     };
 
     let lead = {};
+    let params = getUrlParams();
 
-    const res = await Api.post("relay/api/loan/get/application/idfc", body);
+    const res = await Api.post(`relay/api/loan/get/application/idfc${params.user ? "?user_id=" + params.user : ''}`, body);
     const { result, status_code: status } = res.pfwresponse;
 
     lead = result || {};

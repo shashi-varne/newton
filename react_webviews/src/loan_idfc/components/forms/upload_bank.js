@@ -107,12 +107,6 @@ class UploadBank extends Component {
       subtitle: "It may take 10 to 15 seconds!",
     };
 
-    if (this.state.params.adminPanel) {
-      this.setState({
-        application_id: this.state.params.application_id,
-      });
-    }
-
     this.setState({
       loaderData: loaderData,
       progressHeaderData: progressHeaderData,

@@ -19,6 +19,7 @@ import {
 } from "./render_camera";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
+import { getUrlParams } from "utils/validators";
 
 class DocumentUpload extends Component {
   constructor(props) {
@@ -32,7 +33,8 @@ class DocumentUpload extends Component {
       disableButton: true,
       docs: [],
       documents: [],
-      add_file: true
+      add_file: true,
+      params: getUrlParams(),
     };
 
     this.initialize = initialize.bind(this);
@@ -47,6 +49,14 @@ class DocumentUpload extends Component {
 
   componentWillMount() {
     this.initialize();
+
+    let { params } = this.state;
+
+    if (params.adminPanel) {
+      this.setState({
+        params: params,
+      });
+    }
   }
 
   componentDidMount() {
@@ -382,7 +392,6 @@ class DocumentUpload extends Component {
           );
   
           documents[index].id = result.document_id;
-          console.log(result.document_id)
           this.setState({
             documents: documents,
             isApiRunning: false
@@ -444,7 +453,12 @@ class DocumentUpload extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
-    let { totalUpload, image_data } = this.state;
+    let { totalUpload, image_data, params } = this.state;
+    let current_params = '';
+
+    if (this.state.params.adminPanel) {
+      current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect=' + params.redirect;
+    }
 
     this.setState({
       show_loader: true
@@ -452,7 +466,9 @@ class DocumentUpload extends Component {
     if (totalUpload < 3) {
       let count = 0;
       if (!image_data.doc1.doc_name) { 
-        this.navigate('doc-list')
+        this.navigate('doc-list', {
+          searchParams: current_params
+        })
       } else {
         for (var item in image_data) {
           let res = await this.uploadDocument(image_data[item]);
@@ -461,22 +477,34 @@ class DocumentUpload extends Component {
           }
         }
       }
-      
+
       // eslint-disable-next-line radix
-      if (count === parseInt(totalUpload))
-        this.navigate('doc-list')
+      if (count === parseInt(totalUpload)) {
+        this.navigate('doc-list', {
+          searchParams: current_params
+        })
+      }
     } else {
-      this.navigate('doc-list')
+      this.navigate('doc-list', {
+        searchParams: current_params
+      })
     }
     
   }
 
   openUploadInput = () => {
-    console.log('hi')
     this.setState({
       add_file: false
     })
   }
+
+  goBack = () => {
+    let { params } = this.state;
+    let current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect=' + params.redirect;
+    this.navigate('doc-list', {
+      searchParams: current_params
+    })
+  };
 
   render() {
     let { image_data, documents, totalUpload, disableButton, isApiRunning } = this.state;
@@ -488,7 +516,7 @@ class DocumentUpload extends Component {
     } else {
       disableButton = false;
     }
-console.log(documents)
+
     return (
       <Container
         events={this.sendEvents("just_set_events")}
@@ -497,6 +525,9 @@ console.log(documents)
         buttonTitle="CONTINUE"
         disable={disableButton}
         handleClick={this.handleClick}
+        headerData={{
+          goBack: this.goBack,
+        }}
       >
         <div className="idfc-document-upload">
           <div className="InputField">

@@ -45,12 +45,6 @@ class DocumentList extends Component {
       leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
     };
 
-    if (this.state.params.adminPanel) {
-      this.setState({
-        application_id: this.state.params.application_id,
-      });
-    }
-
     this.setState({
       bottomButtonData: bottomButtonData,
     });
@@ -58,6 +52,7 @@ class DocumentList extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
+    let params = this.state.params;
     this.setState({
       show_loader: true
     })
@@ -68,8 +63,13 @@ class DocumentList extends Component {
 
       const { result, status_code: status } = res.pfwresponse;
 
-      if (status === 200) {
-        this.navigate('final-offer')
+      if (status !== 200) {
+        if (params.adminPanel) {
+            window.location.href = params.redirect;
+        } else {
+          this.navigate('final-offer')
+        }
+
         this.setState({
           show_loader: false
         })
@@ -108,8 +108,11 @@ class DocumentList extends Component {
   }
 
   handleCard = (category) => {
+    let { params } = this.state;
     storageService().set("category", category);
-    this.navigate("doc-upload");
+    this.navigate("doc-upload", {
+      searchParams: 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect=' + params.redirect
+    });
   };
 
   goBack = () => {
