@@ -14,7 +14,7 @@ definitions:
           - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
           - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
           - apt-get install yarn && echo "Y"
-          - yarn set version 1.21.1
+          - yarn policies set-version 1.21.1
           - npm config set strict-ssl false;
           - cd react_webviews
           - npm install
