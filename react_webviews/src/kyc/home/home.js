@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan } from "utils/validators";
 import Input from "common/ui/Input";
-import { getPan } from "../common/api";
+import { getPan, savePanData } from "../common/api";
 import { storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
@@ -18,12 +18,13 @@ const Home = (props) => {
   const [panError, setPanError] = useState("");
   const [openResident, setOpenResident] = useState(false);
 
-  let userKyc = storageService().getObject(storageConstants.KYC);
   let currentUser = storageService().getObject(storageConstants.USER);
   let npsDetailsRequired = false;
   let investType = "mutual fund";
   let title = "Are you investment ready?";
   let subtitle = "We need your PAN to check if you’re investment ready";
+  let kycConfirmPanScreen = false;
+
   if (
     currentUser.nps_investment &&
     storageService().getObject("nps_additional_details_required")
@@ -124,10 +125,42 @@ const Home = (props) => {
 
   const cancel = () => {
     setOpenResident(false);
+    savePan(true);
   };
 
   const aadharKyc = () => {
     setOpenResident(false);
+    savePan(false);
+  };
+
+  const savePan = async (is_nri) => {
+    console.log("in pan");
+    try {
+      let result = await savePanData({ is_nri: is_nri });
+      if (!result) return;
+      currentUser.name = result.kyc.pan.meta_data.name;
+      if (
+        (isUserCompliant || result.kyc.kyc_status === "compliant") &&
+        (kycConfirmPanScreen || isPremiumFlow)
+      ) {
+        // $state.go("kyc-compliant-personal-details");
+      } else {
+        if (isUserCompliant || result.kyc.kyc_status === "compliant") {
+          // $state.go("kyc-journey");
+        } else {
+          if (is_nri) {
+            // $state.go("kyc-journey", { show_aadhaar: false });
+          } else {
+            // $state.go("kyc-journey", { show_aadhaar: true });
+          }
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      toast(err || genericErrorMessage);
+    } finally {
+      setIsApiRunning(false);
+    }
   };
 
   return (
