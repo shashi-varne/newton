@@ -13,13 +13,6 @@ class LoanEligible extends Component {
       show_loader: false,
       get_lead: true,
       getLeadBodyKeys: ['vendor_info'],
-      checkbox: {
-        one: true,
-        two: true,
-        three: true
-      },
-      tncClicked: false,
-      numPages: null,
     }
 
     this.initialize = initialize.bind(this);
@@ -93,33 +86,6 @@ class LoanEligible extends Component {
     this.triggerConversion();
   }
 
-  handleChange = (name) => {
-    let { checkbox } = this.state;
-
-    checkbox[name] = !checkbox[name];
-
-    if (name !== 'one' && (checkbox.two && checkbox.three)) {
-      checkbox.one = true;
-    } else if (name !== 'one' && (!checkbox.two || !checkbox.three)) {
-      checkbox.one = false;
-    }
-
-    if (name === 'one') {
-      checkbox.two = checkbox.one;
-      checkbox.three = checkbox.one;
-    }
-
-    this.setState({
-      checkbox: checkbox
-    })
-  }
-
-  handleTnC = () => {
-    this.setState({
-      tncClicked: true
-    })
-  }
-
   onDocumentLoadSuccess = ({ numPages }) => {
     this.setState({
       numPages: numPages
@@ -139,7 +105,6 @@ class LoanEligible extends Component {
   }
 
   render() {
-    let { checkbox } = this.state;
     let vendor_info = this.state.vendor_info || {};
     return (
       <Container
