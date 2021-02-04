@@ -255,7 +255,7 @@ class LoanKnowMore extends Component {
     if (neftBanks === "select-loan") {
       this.navigate("/loan/select-loan")
     } else {
-      this.navigate("/loan/home")
+      this.navigate("/loan/loan-home")
     }
   }
 
