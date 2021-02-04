@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 import { Imgc } from "common/ui/Imgc";
 import { getConfig } from "utils/functions";
+import { reportCardDetails } from "../constants";
 
 const productName = getConfig().productName;
 const partner = getConfig().partner;
@@ -13,34 +14,6 @@ const Report = (props) => {
   const [is_nri, setIsNri] = useState(true);
 
   const handleClick = () => {};
-
-  const cards = [
-    {
-      key: "personal",
-      title: "Personal",
-      click_image: "plus_icon.svg",
-    },
-    {
-      key: "address",
-      title: "Address",
-      click_image: "plus_icon.svg",
-    },
-    {
-      key: "nominee",
-      title: "Nominee",
-      click_image: "plus_icon.svg",
-    },
-    {
-      key: "bank",
-      title: "Bank details",
-      click_image: "plus_icon.svg",
-    },
-    {
-      key: "docs",
-      title: "Documents",
-      click_image: "next_arrow_icon.svg",
-    },
-  ];
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -209,7 +182,7 @@ const Report = (props) => {
             Approves in one working day
           </div>
           <section>
-            {cards.map((item, index) => {
+            {reportCardDetails.map((item, index) => {
               return (
                 <div
                   key={index}

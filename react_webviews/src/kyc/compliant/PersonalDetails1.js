@@ -3,92 +3,55 @@ import Container from "../common/Container";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
+import {
+  occupationOptions,
+  incomeOptions,
+  residentialOptions,
+} from "../constants";
+import Dialog, { DialogContent } from "material-ui/Dialog";
+import Button from "@material-ui/core/Button";
+import { getConfig } from "utils/functions";
 
+const partner = getConfig().partner;
 const PersonalDetails1 = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
 
-  const occupationOptions = [
-    {
-      name: "Private Sector",
-      value: "PRIVATE SECTOR",
-    },
-    {
-      name: "Professional",
-      value: "PROFESSIONAL",
-    },
-    {
-      name: "Business",
-      value: "BUSINESS",
-    },
-    {
-      name: "House Wife",
-      value: "HOUSE WIFE",
-    },
-    {
-      name: "Public Sector",
-      value: "PUBLIC SECTOR",
-    },
-    {
-      name: "Government",
-      value: "GOVERNMENT",
-    },
-    {
-      name: "Student",
-      value: "STUDENT",
-    },
-    {
-      name: "Retired",
-      value: "RETIRED",
-    },
-    {
-      name: "Others",
-      value: "OTHERS",
-    },
-  ];
-
-  const incomeOptions = [
-    {
-      name: "Below 1L",
-      value: "BELOW 1L",
-    },
-    {
-      name: "1-5L",
-      value: "1-5L",
-    },
-    {
-      name: "5-10L",
-      value: "5-10L",
-    },
-    {
-      name: "10-25L",
-      value: "10-25L",
-    },
-    {
-      name: "25-100L",
-      value: "25-100L",
-    },
-    {
-      name: ">100L",
-      value: ">100L",
-    },
-  ];
-
-  const residentialOptions = [
-    {
-      name: "Indian",
-      value: true,
-    },
-    {
-      name: "Non indian",
-      value: false,
-    },
-  ];
+  const close = () => {
+    setIsOpen(false);
+  };
 
   const handleClick = () => {};
 
   const handleChange = (name) => (event) => {};
+
+  const helpPopup = (
+    <Dialog
+      onClose={() => close()}
+      open={isOpen}
+      aria-labelledby="help-dialog"
+      keepMounted
+      aria-describedby="help-dialog"
+      className="help-dialog"
+      id="kyc-pan-help-dialog"
+    >
+      <DialogContent className="help-content">
+        <div className="title">Hey,</div>
+        <div className="subtitle">
+          To change the PAN: AAAAA1234A, <br />
+          please reach us at :
+        </div>
+        <div className="partner-info">
+          <div>{partner.mobile}</div>
+          <div>|</div>
+          <div>{partner.email}</div>
+        </div>
+        <Button onClick={() => close()}>OK</Button>
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <Container
@@ -100,14 +63,16 @@ const PersonalDetails1 = (props) => {
       disable={isApiRunning || showLoader}
       handleClick={handleClick}
     >
-      <div className="kyc-complaint-personal-details-1">
+      <div className="kyc-complaint-personal-details">
         <div className="kyc-main-title">Basic details</div>
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>
             <div className="pan">AAAAA1234A</div>
           </div>
-          <div className="help">HELP</div>
+          <div className="help" onClick={() => setIsOpen(true)}>
+            HELP
+          </div>
         </div>
         <main>
           <Input
@@ -182,6 +147,7 @@ const PersonalDetails1 = (props) => {
             PEP(politically exposed person)
           </footer>
         </main>
+        {helpPopup}
       </div>
     </Container>
   );
