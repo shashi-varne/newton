@@ -72,6 +72,7 @@ export async function initData() {
 }
 
 async function setSummaryData(result) {
+  console.log(result)
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
   if (userKyc.firstlogin) {
@@ -85,6 +86,7 @@ async function setSummaryData(result) {
     result.data.campaign.user_campaign.data
   )
   storageService().setObject('campaign', campaignData)
+  setNpsData(result)
 }
 
 async function getCampaignBySection(notifications, sections) {
@@ -122,8 +124,8 @@ function setSDKSummaryData(result) {
 
 async function setNpsData(result) {
   if (
-    result.data.user.user.data.nps_investment &&
-    result.data.nps.nps_user.data.is_doc_required
+    result?.data?.user?.user?.data?.nps_investment &&
+    result?.data?.nps?.nps_user?.data?.is_doc_required
   ) {
     const data = await getNPSInvestmentStatus()
     if (!data.registration_details.additional_details_status) {

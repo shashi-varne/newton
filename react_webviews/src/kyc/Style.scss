@@ -288,3 +288,72 @@
     margin-top: 10px;
   }
 }
+
+
+.kyc-journey {
+  color: #8d879b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.kyc-journey-caption {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 10px;
+  color: black;
+}
+
+.kyc-journey-title {
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.kyc-journey .steps-container {
+  margin-top: 40px;
+}
+
+.kyc-journey .steps-container .step {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding-bottom: 14px;
+}
+
+.kyc-journey .steps-container .step:not(:last-child) {
+  border-left: 2px solid #eeeeee;
+}
+
+.kyc-journey .steps-container .step .icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  color: var(--label);
+  border: 1px solid #eeeeee;
+  background-color: white;
+  position: relative;
+  left: -10px;
+  top: -13px;
+  font-weight: bold;
+}
+
+.kyc-journey .steps-container .step .icon__active {
+  background-color: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+}
+
+.kyc-journey .steps-container .step .title {
+  margin-left: 40px;
+  position: relative;
+  top: -13px;
+}
+
+.kyc-journey .steps-container .step .title__selected {
+  color: black;
+  font-weight: 500;
+} 
