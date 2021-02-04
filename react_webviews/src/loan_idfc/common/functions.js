@@ -331,9 +331,9 @@ export async function getOrCreate(params) {
     };
 
     let lead = {};
-    let params = getUrlParams();
+    let urlParams = getUrlParams();
 
-    const res = await Api.post(`relay/api/loan/get/application/idfc${params.user ? "?user_id=" + params.user : ''}`, body);
+    const res = await Api.post(`relay/api/loan/get/application/idfc${urlParams.user ? "?user_id=" + urlParams.user : ''}`, body);
     const { result, status_code: status } = res.pfwresponse;
 
     lead = result || {};

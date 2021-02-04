@@ -10,7 +10,7 @@ import "./components/Style.scss";
 import NotFound from "../common/components/NotFound";
 
 
-import LandingIdfc from "./components/general/landing";
+// import LandingIdfc from "./components/general/landing";
 import MobileVerify from "./components/forms/mobile_verify";
 import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
@@ -41,41 +41,36 @@ import FinalOffer from "./components/general/final_loan";
 import Reports from "./components/general/reports";
 import Eligibility from './components/general/eligibility';
 
-import Landing from "../loan/components/general/landing";
-import Report from "../loan/components/general/report";
-import Journey from "../loan/components/general/journey";
-import Calculator from "../loan/components/general/calculator";
-import Help from "../loan/components/general/help";
-import AppUpdate from "../loan/components/general/app_update";
-import ScheduleDoc from "../loan/components/general/schedule_doc";
-import Permissions from "../loan/components/general/permissions";
-import Transaction from "../loan/components/general/transactions";
-import RedirectionStatus from "../loan/components/general/redirection_status";
-
-import ReportDetails from "../loan/components/loan/report_details";
-import LoanApprvoed from "../loan/components/loan/approved";
-import LoanOtp from "../loan/components/loan/otp";
-import LoanStatus from "../loan/components/loan/status";
-import LoanSummary from "../loan/components/loan/summary";
-import LoanEligible from "../loan/components/loan/loan_eligible";
-
-import ContactDetails from "../loan/components/form/contact";
-import PersonalDetails from "../loan/components/form/personal";
-import ProfessionalDetails from "../loan/components/form/professional";
-import AddressDetails from "../loan/components/form/address";
-import ReqDetails from "../loan/components/form/requirements";
-import FormSummary from "../loan/components/form/summary";
-import FormOtp from "../loan/components/form/otp";
-import FormCreateProfile from "../loan/components/form/create_profile";
-
-
-import InstantKycHome from "../loan/components/kyc/instant_kyc";
-import KycStatus from "../loan/components/kyc/status";
-
-import Pan from "../loan/components/mandate/pan";
-import Bank from "../loan/components/mandate/bank";
-import Reference from "../loan/components/mandate/reference";
-import MandateStatus from "../loan/components/mandate/status";
+// import Landing from "../loan/components/general/landing";
+// import Report from "../loan/components/general/report";
+// import Journey from "../loan/components/general/journey";
+// import Calculator from "../loan/components/general/calculator";
+// import Help from "../loan/components/general/help";
+// import AppUpdate from "../loan/components/general/app_update";
+// import ScheduleDoc from "../loan/components/general/schedule_doc";
+// import Permissions from "../loan/components/general/permissions";
+// import Transaction from "../loan/components/general/transactions";
+// import RedirectionStatus from "../loan/components/general/redirection_status";
+// import ReportDetails from "../loan/components/loan/report_details";
+// import LoanApprvoed from "../loan/components/loan/approved";
+// import LoanOtp from "../loan/components/loan/otp";
+// import LoanStatus from "../loan/components/loan/status";
+// import LoanSummary from "../loan/components/loan/summary";
+// import LoanEligible from "../loan/components/loan/loan_eligible";
+// import ContactDetails from "../loan/components/form/contact";
+// import PersonalDetails from "../loan/components/form/personal";
+// import ProfessionalDetails from "../loan/components/form/professional";
+// import AddressDetails from "../loan/components/form/address";
+// import ReqDetails from "../loan/components/form/requirements";
+// import FormSummary from "../loan/components/form/summary";
+// import FormOtp from "../loan/components/form/otp";
+// import FormCreateProfile from "../loan/components/form/create_profile";
+// import InstantKycHome from "../loan/components/kyc/instant_kyc";
+// import KycStatus from "../loan/components/kyc/status";
+// import Pan from "../loan/components/mandate/pan";
+// import Bank from "../loan/components/mandate/bank";
+// import Reference from "../loan/components/mandate/reference";
+// import MandateStatus from "../loan/components/mandate/status";
 
 import Home from "./components/home/home";
 import SelectLoan from "./components/home/select_loan";
@@ -121,7 +116,7 @@ const Lending = props => {
         <Switch>
 
           {/* // DMI */}
-          <Route path={`${url}/dmi/home`} component={Landing} />
+          {/* <Route path={`${url}/dmi/home`} component={Landing} />
           <Route path={`${url}/dmi/app-update`} component={AppUpdate} />
           <Route path={`${url}/dmi/journey`} component={Journey} />
           <Route path={`${url}/dmi/calculator`} component={Calculator} />
@@ -132,33 +127,28 @@ const Lending = props => {
           <Route path={`${url}/dmi/report`} component={Report} />
           <Route path={`${url}/dmi/transactions`} component={Transaction} />
           <Route path={`${url}/dmi/redirection-status/:flow`} component={RedirectionStatus} />
-
           <Route path={`${url}/dmi/instant-kyc`} component={InstantKycHome} />
           <Route path={`${url}/dmi/instant-kyc-status`} component={KycStatus} />
-
           <Route path={`${url}/dmi/loan-Approved`} component={LoanApprvoed} />
           <Route path={`${url}/dmi/loan-Otp`} component={LoanOtp} />
           <Route path={`${url}/dmi/loan-Status`} component={LoanStatus} />
           <Route path={`${url}/dmi/loan-Summary`} component={LoanSummary} />
           <Route path={`${url}/dmi/loan-eligible`} component={LoanEligible} />
-
           <Route path={`${url}/dmi/requirements-details`} component={ReqDetails} />
           <Route path={`${url}/dmi/personal-details`} component={PersonalDetails} />
           <Route path={`${url}/dmi/contact-details`} component={ContactDetails} />
           <Route path={`${url}/dmi/professional-details`} component={ProfessionalDetails} />
           <Route path={`${url}/dmi/address-details`} component={AddressDetails} />
-
           <Route path={`${url}/dmi/form-otp`} component={FormOtp} />
           <Route path={`${url}/dmi/form-create-profile`} component={FormCreateProfile} />
-
           <Route path={`${url}/dmi/reference`} component={Reference} />
           <Route path={`${url}/dmi/bank`} component={Bank} />
           <Route path={`${url}/dmi/upload-pan`} component={Pan} />
-          <Route path={`${url}/dmi/mandate-status`} component={MandateStatus} />
+          <Route path={`${url}/dmi/mandate-status`} component={MandateStatus} /> */}
 
           {/* Edit paths */}
 
-         <Route path={`${url}/dmi/edit-requirements-details`} 
+         {/* <Route path={`${url}/dmi/edit-requirements-details`} 
           render={(props) => <ReqDetails {...props} edit={true} />} />
 
           <Route path={`${url}/dmi/edit-personal-details`} 
@@ -173,10 +163,10 @@ const Lending = props => {
           <Route path={`${url}/dmi/edit-address-details`} 
           render={(props) => <AddressDetails {...props} edit={true} />} />
 
-          <Route path={`${url}/dmi/form-summary`} component={FormSummary} />
+          <Route path={`${url}/dmi/form-summary`} component={FormSummary} /> */}
 
           {/* // IDFC */}
-          <Route path={`${url}/idfc/home`} component={LandingIdfc} />
+          {/* <Route path={`${url}/idfc/home`} component={LandingIdfc} /> */}
           <Route path={`${url}/idfc/edit-number`} component={MobileVerify} />
           <Route path={`${url}/idfc/otp-verify`} component={OtpVerification} />
           <Route path={`${url}/idfc/journey`} component={JourneyMap} />
@@ -221,7 +211,7 @@ const Lending = props => {
 
           {/* <Route path={`${url}/dmi`} component={Loan} /> */}
 
-          <Route path={`${url}/loan-home`} component={Home} />
+          <Route path={`${url}/home`} component={Home} />
           <Route path={`${url}/select-loan`} component={SelectLoan} />
           <Route path={`${url}/edit-details`} component={Recommended} />
           <Route path={`${url}/:id/loan-know-more`} component={LoanKnowMore} />
