@@ -468,7 +468,7 @@ class UploadBank extends Component {
     }
 
     if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
-      form_data.end_date_error = "This date must be 3 days prior to the current date.";
+      form_data.end_date_error = "This date must not be 3 days prior to the current date.";
       canSubmit = false;
     }
 
