@@ -5,6 +5,7 @@ import PanDetails from "./components/pan";
 import EnterAmount from "./components/amount";
 import ReplaceFund from "./components/fund_replace";
 import Recommendations from "./components/recommendations";
+import NpsIdentity from "./components/identity";
 import "../../common/theme/Style.scss";
 import "./style.scss";
 
@@ -18,6 +19,7 @@ const Nps = (props) => {
       <Route exact path={`${url}/amount`} component={EnterAmount} />
       <Route exact path={`${url}/fundreplace`} component={ReplaceFund} />
       <Route exact path={`${url}/recommendations`} component={Recommendations} />
+      <Route exact path={`${url}/identity`} component={NpsIdentity} />
     </Switch>
   );
 };
