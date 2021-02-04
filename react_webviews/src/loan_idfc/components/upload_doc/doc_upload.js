@@ -457,7 +457,7 @@ class DocumentUpload extends Component {
     let current_params = '';
 
     if (this.state.params.adminPanel) {
-      current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect;
+      current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect_url;
     }
 
     this.setState({
