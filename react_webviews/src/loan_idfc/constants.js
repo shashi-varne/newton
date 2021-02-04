@@ -317,7 +317,7 @@ export const idfc_config = {
           "Should at least be 25 years of age",
           "Maximum age at the time of loan maturity should not be more than 65 years",
           "Business must be in operations for at least 3 years",
-          "You must be managing your business from the same office premises for at least a year",
+          "Must be managing your business from the same office premises for at least a year",
         ],
       },
     },

@@ -451,7 +451,7 @@ class UploadBank extends Component {
         ) {
           canSubmit = false;
           console.log(calculateAge(form_data['end_date'], true).days)
-          form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 days before the current date";
+          form_data[key_check + "_error"] = keysMapper[key_check] + " must not be 3 days before the current date";
       }
     }
 
@@ -591,7 +591,7 @@ class UploadBank extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.end_date_error}
-                helperText={this.state.form_data.end_date_error || "This date must be 3 days prior to the current date."}
+                helperText={this.state.form_data.end_date_error || "This date must not be 3 days prior to the current date."}
                 type="text"
                 width="40"
                 label="End date"

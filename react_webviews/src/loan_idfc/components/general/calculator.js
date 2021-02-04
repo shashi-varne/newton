@@ -12,7 +12,7 @@ class Calculator extends Component {
     this.state = {
       show_loader: false,
       Net_monthly_Income: 90000,
-      Tenure: 6,
+      Tenure: 12,
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
@@ -107,9 +107,9 @@ class Calculator extends Component {
             label="Loan tenure"
             val="Tenure"
             value={Tenure}
-            min="6"
+            min="12"
             max="24"
-            minValue="6 MONTHS"
+            minValue="12 MONTHS"
             maxValue="24 MONTHS"
             onChange={this.onChange}
           />
