@@ -9,7 +9,7 @@ const Aadhar = (props) => {
 
   const handleClick = () => {};
 
-  const handleChange = () => {}
+  const handleChange = () => {};
 
   return (
     <Container
@@ -23,7 +23,7 @@ const Aadhar = (props) => {
     >
       <div className="aadhar">
         <header>
-          <img src={require(`assets/aadhar.png`)} />
+          <img src={require(`assets/aadhar.png`)} alt="" />
           <div>
             Please enter you aadhar card details. Use the same mobile number as
             given in your aadhar
@@ -32,9 +32,9 @@ const Aadhar = (props) => {
         <main>
           <Input
             label="Aadhar card number"
-            placeholder='XXXXXXXXXXXX'
+            placeholder="XXXXXXXXXXXX"
             class="input"
-            value=''
+            value=""
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("aadhar")}
@@ -43,9 +43,9 @@ const Aadhar = (props) => {
           />
           <Input
             label="Mobile number"
-            placeholder='0000000000'
+            placeholder="0000000000"
             class="input"
-            value=''
+            value=""
             error={form_data.mobile_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("mobile")}

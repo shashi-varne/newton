@@ -223,3 +223,53 @@
     }
   }
 }
+
+.kyc-complaint-personal-details-1 {
+  line-height: 1.5;
+  padding-bottom: 40px;
+
+  .kyc-main-subtitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+
+    .pan {
+      font-weight: 700;
+    }
+
+    .help {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+  }
+
+  main {
+    .input {
+      margin-top: 20px;
+    }
+
+    .RadioWithIcon {
+      font-size: 16px;
+      color: #8d879b;
+      margin-bottom: 10px;
+    }
+
+    .RadioLabelChecked {
+      font-weight: 600;
+    }
+
+    .RadioButton label {
+      font-size: 14px;
+      border-color: #767e86;
+    }
+  }
+
+  footer {
+    font-size: 13px;
+    line-height: 21px;
+    color: #8d879b;
+    margin-top: 10px;
+  }
+}
