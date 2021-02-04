@@ -63,9 +63,9 @@ class DocumentList extends Component {
 
       const { result, status_code: status } = res.pfwresponse;
 
-      if (status !== 200) {
+      if (status === 200) {
         if (params.adminPanel) {
-            window.location.href = params.redirect;
+            window.location.href = params.redirect_url;
         } else {
           this.navigate('final-offer')
         }
@@ -111,7 +111,7 @@ class DocumentList extends Component {
     let { params } = this.state;
     storageService().set("category", category);
     this.navigate("doc-upload", {
-      searchParams: 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect
+      searchParams: 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect_url
     });
   };
 

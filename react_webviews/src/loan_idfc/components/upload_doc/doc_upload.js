@@ -500,7 +500,7 @@ class DocumentUpload extends Component {
 
   goBack = () => {
     let { params } = this.state;
-    let current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect;
+    let current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect_url;
     this.navigate('doc-list', {
       searchParams: current_params
     })

@@ -497,7 +497,7 @@ class UploadBank extends Component {
 
           if (params.adminPanel) {
             if (status === 200) {
-              window.location.href = this.state.params.redirect;
+              window.location.href = this.state.params.redirect_url;
             } else {
               toast(result.error || result.message || "Something went wrong");
               this.setState({

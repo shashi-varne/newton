@@ -300,7 +300,7 @@ export function getPdf(e) {
     Object.keys(file).length !== "0" &&
     acceptedType.indexOf(file.type) === -1
   ) {
-    toast("Please select pdf file only");
+    toast("Please select pdf/img file only");
     return;
   }
 
