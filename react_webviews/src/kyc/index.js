@@ -21,6 +21,7 @@ import Nominee from './nominee'
 import Report from './report'
 import Aadhar from './aadhar'
 import PersonalDetails1 from './compliant/PersonalDetails1'
+import PersonalDetails2 from './compliant/PersonalDetails2'
 import './Style.scss'
 
 const theme = createMuiTheme(themeConfig)
@@ -46,7 +47,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/:userType/nominee-details`} component={Nominee} />
           <Route exact path={`${url}/report`} component={Report} />
           <Route exact path={`${url}/aadhar`} component={Aadhar} />
-          <Route exact path={`${url}/compliant-personal-details`} component={PersonalDetails1} />                   
+          <Route exact path={`${url}/compliant-personal-details`} component={PersonalDetails1} />
+          <Route exact path={`${url}/compliant-personal-details2`} component={PersonalDetails2} />                   
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

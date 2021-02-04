@@ -90,6 +90,21 @@
 
 .kyc-nominee {
   main {
+    .nominee-checkbox {
+      font-size: 13px;
+      line-height: 21px;
+      color: #8d879b;
+      padding-top: 20px;
+
+      .MuiIconButton-root {
+        width: auto;
+        height: auto;
+      }
+
+      .checkbox {
+        margin-right: 10px;
+      }
+    }
     .input {
       margin-top: 20px;
     }
