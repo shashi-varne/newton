@@ -110,87 +110,87 @@ class DocumentUpload extends Component {
         }
       });
 
-      if (doc_checklist.length !== 0) {
-        let file1, file2, file3;
-        for (var i = doc_checklist.length - 1; i >= 0; i--) {
-          if (
-            doc_checklist[i].doc_type === "doc1" &&
-            (!image_data.doc1 || documents.length === 2)
-          ) {
-            if (totalUpload < 3) {
-              image_data.doc1 = {
-                uploaded: true,
-                integrated: true,
-                imageBaseFile: doc_checklist[i].doc_url,
-              };
-            } else {
-              file1 = {
-                uploaded: true,
-                integrated: true,
-                imageBaseFile: doc_checklist[i].doc_url,
-                category_id: category,
-                id: doc_checklist[i].doc_id,
-                checklist_doc_type: doc_checklist[i].doc_type,
-                name:
-                  doc_checklist[i].display_name +
-                  "." +
-                  doc_checklist[i].extension,
-              };
+      // if (doc_checklist.length !== 0) {
+      //   let file1, file2, file3;
+      //   for (var i = doc_checklist.length - 1; i >= 0; i--) {
+      //     if (
+      //       doc_checklist[i].doc_type === "doc1" &&
+      //       (!image_data.doc1 || documents.length === 2)
+      //     ) {
+      //       if (totalUpload < 3) {
+      //         image_data.doc1 = {
+      //           uploaded: true,
+      //           integrated: true,
+      //           imageBaseFile: doc_checklist[i].doc_url,
+      //         };
+      //       } else {
+      //         file1 = {
+      //           uploaded: true,
+      //           integrated: true,
+      //           imageBaseFile: doc_checklist[i].doc_url,
+      //           category_id: category,
+      //           id: doc_checklist[i].doc_id,
+      //           checklist_doc_type: doc_checklist[i].doc_type,
+      //           name:
+      //             doc_checklist[i].display_name +
+      //             "." +
+      //             doc_checklist[i].extension,
+      //         };
 
-              documents.push(file1);
-            }
-          }
+      //         documents.push(file1);
+      //       }
+      //     }
 
-          if (
-            doc_checklist[i].doc_type === "doc2" &&
-            (!image_data.doc2 || documents.length === 1)
-          ) {
-            if (totalUpload < 3) {
-              image_data.doc2 = {
-                uploaded: true,
-                integrated: true,
-                imageBaseFile: doc_checklist[i].doc_url,
-              };
-            } else {
-              file2 = {
-                uploaded: true,
-                integrated: true,
-                imageBaseFile: doc_checklist[i].doc_url,
-                category_id: category,
-                id: doc_checklist[i].doc_id,
-                checklist_doc_type: doc_checklist[i].doc_type,
-                name:
-                  doc_checklist[i].display_name +
-                  "." +
-                  doc_checklist[i].extension,
-              };
+      //     if (
+      //       doc_checklist[i].doc_type === "doc2" &&
+      //       (!image_data.doc2 || documents.length === 1)
+      //     ) {
+      //       if (totalUpload < 3) {
+      //         image_data.doc2 = {
+      //           uploaded: true,
+      //           integrated: true,
+      //           imageBaseFile: doc_checklist[i].doc_url,
+      //         };
+      //       } else {
+      //         file2 = {
+      //           uploaded: true,
+      //           integrated: true,
+      //           imageBaseFile: doc_checklist[i].doc_url,
+      //           category_id: category,
+      //           id: doc_checklist[i].doc_id,
+      //           checklist_doc_type: doc_checklist[i].doc_type,
+      //           name:
+      //             doc_checklist[i].display_name +
+      //             "." +
+      //             doc_checklist[i].extension,
+      //         };
 
-              documents.push(file2);
-            }
-          }
+      //         documents.push(file2);
+      //       }
+      //     }
 
-          if (doc_checklist[i].doc_type === "doc3" && documents.length === 0) {
-            file3 = {
-              uploaded: true,
-              integrated: true,
-              imageBaseFile: doc_checklist[i].doc_url,
-              category_id: category,
-              id: doc_checklist[i].doc_id,
-              checklist_doc_type: doc_checklist[i].doc_type,
-              name:
-                doc_checklist[i].display_name +
-                "." +
-                doc_checklist[i].extension,
-            };
+      //     if (doc_checklist[i].doc_type === "doc3" && documents.length === 0) {
+      //       file3 = {
+      //         uploaded: true,
+      //         integrated: true,
+      //         imageBaseFile: doc_checklist[i].doc_url,
+      //         category_id: category,
+      //         id: doc_checklist[i].doc_id,
+      //         checklist_doc_type: doc_checklist[i].doc_type,
+      //         name:
+      //           doc_checklist[i].display_name +
+      //           "." +
+      //           doc_checklist[i].extension,
+      //       };
 
-            documents.push(file3);
-          }
-        }
+      //       documents.push(file3);
+      //     }
+      //   }
 
-        this.setState({
-          disbableButton: false,
-        });
-      }
+      //   this.setState({
+      //     disbableButton: false,
+      //   });
+      // }
 
       this.setState({
         docList: docList[selectedIndex],

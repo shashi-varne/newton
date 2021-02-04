@@ -231,7 +231,7 @@ export function getPhoto(e) {
   image_data[doc_type] = {};
   let doc_name = this.state.form_data.doc_name;
 
-  let file = e.target.files[0];
+  let file = e.target.files[0] || {};
 
   if (file.size > 5000000) {
     toast("Please select file less than 5mb");
@@ -250,6 +250,9 @@ export function getPhoto(e) {
 
   if (acceptedType.indexOf(file.type) === -1) {
     toast("Please select image file only");
+    this.setState({
+      image_data: {}
+    })
     return;
   }
 
