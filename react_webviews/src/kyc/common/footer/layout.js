@@ -82,7 +82,7 @@ export class DefaultLayout extends Component {
             size="large"
             color="secondary"
             type={props.type}
-            disable={props.disable}
+            disabled={props.disable}
             className={`footer-button ${props.disable && "disabled"}`}
           >
             {props.buttonTitle}

@@ -1,17 +1,18 @@
+.kyc-main-title {
+  font-size: 20px;
+  color: #160d2e;
+  font-weight: 600;
+}
+
+.kyc-main-subtitle {
+  font-size: 13px;
+  color: #8d879b;
+  padding: 0 15px 0 0px;
+  margin-bottom: 20px;
+}
+
 .kyc-home {
   line-height: 1.5;
-  .kyc-main-title {
-    font-size: 20px;
-    color: #160d2e;
-    font-weight: 600;
-  }
-
-  .kyc-main-subtitle {
-    font-size: 13px;
-    color: #8d879b;
-    padding: 0 15px 0 0px;
-    margin-bottom: 20px;
-  }
 
   main {
     .input {
@@ -40,5 +41,250 @@
         }
       }
     }
+  }
+}
+
+.resident-dialog-content {
+  main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h1 {
+      margin: 25px 0;
+      width: 55%;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    img {
+      margin: -10px -10px 0 0;
+    }
+  }
+
+  footer {
+    display: flex;
+    padding: 15px;
+
+    button {
+      border-radius: 6px;
+      background-color: var(--secondary);
+      color: white;
+      min-height: 36px;
+      padding: 12px 15px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .cancel {
+      color: #878787;
+      background-color: white;
+    }
+
+    .cancel:hover {
+      background-color: rgba(158, 158, 158, 0.2);
+    }
+  }
+}
+
+.kyc-nominee {
+  main {
+    .nominee-checkbox {
+      font-size: 13px;
+      line-height: 21px;
+      color: #8d879b;
+      padding-top: 20px;
+
+      .MuiIconButton-root {
+        width: auto;
+        height: auto;
+      }
+
+      .checkbox {
+        margin-right: 10px;
+      }
+    }
+    .input {
+      margin-top: 20px;
+    }
+  }
+}
+
+.kyc-report {
+  padding-bottom: 40px;
+  line-height: 1.5;
+
+  main {
+    .img {
+      width: 100%;
+      margin: 20px 0 10px 0;
+    }
+
+    .congrats {
+      font-size: 14px;
+      color: #160d2e;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .text {
+      font-size: 14px;
+      color: #8d879b;
+      margin: 1px 0 10px 0px;
+      text-align: center;
+    }
+
+    .message {
+      display: flex;
+      justify-content: center;
+      margin: 0 0 20px 0;
+      column-gap: 2px;
+
+      img {
+        width: 24px;
+      }
+    }
+
+    section {
+      margin-top: 20px;
+
+      .tile-info {
+        border-top: 1px solid #f6f2ff;
+        padding: 15px 0 15px 0;
+        cursor: pointer;
+
+        .unzipped-title {
+          display: flex;
+          justify-content: space-between;
+          color: #160d2e;
+          font-size: 14px;
+        }
+
+        .unzipped {
+          margin: 20px 0 0 10px;
+          .unzipped-title {
+            color: #8d879b;
+            font-size: 16px;
+            margin: 0 0 10px 0;
+          }
+
+          .unzipped-box {
+            margin: 20px 0 0 0;
+
+            .title {
+              color: #8d879b;
+              font-size: 10px;
+              font-weight: bold;
+              margin: 0 0 3px 0;
+            }
+            .subtitle {
+              color: #8d879b;
+              font-size: 14px;
+            }
+          }
+
+          .row-align {
+            display: flex;
+            .unzipped-box {
+              width: 50%;
+            }
+          }
+        }
+      }
+
+      .tile-info:last-child {
+        border-bottom: 1px solid #f6f2ff;
+      }
+    }
+  }
+
+  footer {
+    color: #8d879b;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
+
+    .partner-info {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-around;
+      color: #8d879b;
+      font-size: 10px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+  }
+}
+
+.aadhar {
+  line-height: 1.5;
+  header {
+    margin: -20px -20px 10px -20px;
+    padding: 20px 30px 30px 30px;
+    background: #f4f5f6;
+    text-align: center;
+    font-size: 16px;
+    color: #333333;
+    img {
+      width: 80px;
+      margin-bottom: 20px;
+    }
+  }
+
+  main {
+    .input {
+      margin-top: 20px;
+    }
+  }
+}
+
+.kyc-complaint-personal-details-1 {
+  line-height: 1.5;
+  padding-bottom: 40px;
+
+  .kyc-main-subtitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+
+    .pan {
+      font-weight: 700;
+    }
+
+    .help {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+  }
+
+  main {
+    .input {
+      margin-top: 20px;
+    }
+
+    .RadioWithIcon {
+      font-size: 16px;
+      color: #8d879b;
+      margin-bottom: 10px;
+    }
+
+    .RadioLabelChecked {
+      font-weight: 600;
+    }
+
+    .RadioButton label {
+      font-size: 14px;
+      border-color: #767e86;
+    }
+  }
+
+  footer {
+    font-size: 13px;
+    line-height: 21px;
+    color: #8d879b;
+    margin-top: 10px;
   }
 }
