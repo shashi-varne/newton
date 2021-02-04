@@ -1,3 +1,5 @@
+import { getConfig } from "utils/functions";
+
 export const navigate = (pathname, data, replace) => {
   if (!replace) {
     props.history.push({

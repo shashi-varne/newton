@@ -18,6 +18,7 @@ import Upload from './upload'
 import { themeConfig } from 'utils/constants'
 import Home from './home'
 import Nominee from './nominee'
+import Report from './report'
 import './Style.scss'
 
 const theme = createMuiTheme(themeConfig)
@@ -40,7 +41,8 @@ const FundInfo = (props) => {
           <Route exact path={`${url}/address`} component={Address} />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/home-kyc`} component={Home} />
-          <Route exact path={`${url}/:userType/nominee-details`} component={Nominee} />          
+          <Route exact path={`${url}/:userType/nominee-details`} component={Nominee} />
+          <Route exact path={`${url}/report`} component={Report} />          
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
