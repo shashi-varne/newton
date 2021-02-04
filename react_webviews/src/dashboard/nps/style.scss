@@ -271,7 +271,7 @@
 
   .heading {
     margin-bottom: 20px;
-    font-family: 'LatoB';
+    font-family: "LatoB";
 
     .flex-box {
       color: #4a4a4a;
@@ -302,11 +302,11 @@
   .heading {
     color: #878787;
     margin-bottom: 10px;
-    font-family: 'LatoB';
+    font-family: "LatoB";
   }
 
   span {
-    font-family: 'LatoB';
+    font-family: "LatoB";
   }
 
   .more {
@@ -328,5 +328,32 @@
   a {
     text-decoration: underline;
     color: #878787;
+  }
+}
+
+.page-heading {
+  background-color: #faf7ff;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+
+  .text {
+    padding: 15px;
+  }
+
+  .bold {
+    font-weight: 600;
+  }
+}
+
+.InputField {
+  // margin-top: 20px;
+}
+
+.nps-delivery-details {
+  .title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 20px;
   }
 }

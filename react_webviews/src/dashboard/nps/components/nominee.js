@@ -5,30 +5,21 @@ import InputWithIcon from "../../../common/ui/InputWithIcon";
 import person from "../../../assets/person.png";
 import "../style.scss";
 
-const NpsIdentity = (props) => {
+const NpsNominee = (props) => {
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     return () => {};
   }, []);
 
-  // const handleChange = (name) => (event) => {
-  //   let value = event.target ? event.target.value : event;
-
-  //   this.setState({
-  //     [name]: value,
-  //     [name + 'error']: ''
-  //   });
-  // };
-
   return (
     <Container
       classOverRide="pr-error-container"
       fullWidthButton
-      buttonTitle="PROCEED"
+      buttonTitle="SAVE AND CONTINUE"
       hideInPageTitle
       hidePageTitle
-      title="Additional Details"
+      title="Nominee Details"
       showLoader={loader}
       // handleClick={replaceFund}
       classOverRideContainer="pr-container"
@@ -36,29 +27,37 @@ const NpsIdentity = (props) => {
       <div class="page-heading">
         <img src={require("assets/hand_icon.png")} alt="" width="50" />
         <div class="text">
-          Please <span class="bold">confirm</span> your personal details.
+          Please <span class="bold">confirm</span> the nominee details.
         </div>
       </div>
 
-      <div className="nps-identity">
+      <div className="nps-nominee">
         <div className="InputField">
           <InputWithIcon
             icon={person}
             width="30"
             id="name"
-            label="Mother's name"
+            label="Nominee Name"
             // onChange={handleChange("pan")}
           />
         </div>
 
-        <div>Marital Status</div>
+        <div className="InputField">
+          <InputWithIcon
+            icon={person}
+            width="30"
+            id="name"
+            label="Nominee DOB (DD/MM/YYYY)"
+            // onChange={handleChange("pan")}
+          />
+        </div>
 
         <div className="InputField">
           <InputWithIcon
             icon={person}
             width="30"
             id="name"
-            label="Spouse's name"
+            label="Relationship"
             // onChange={handleChange("pan")}
           />
         </div>
@@ -67,4 +66,4 @@ const NpsIdentity = (props) => {
   );
 };
 
-export default NpsIdentity;
+export default NpsNominee;
