@@ -109,9 +109,15 @@ class DocumentList extends Component {
 
   handleCard = (category) => {
     let { params } = this.state;
+    let current_params = '';
     storageService().set("category", category);
+
+    if (this.state.params.adminPanel) {
+      current_params = 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect_url;
+    }
+
     this.navigate("doc-upload", {
-      searchParams: 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect_url
+      searchParams: current_params
     });
   };
 
