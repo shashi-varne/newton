@@ -1,8 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { initData } from '../services'
 
 import Container from '../common/Container'
 const Journey = (props) => {
   const [showLoader, setShowLoader] = useState(false)
+  const [error, setError] = useState('')
+  useEffect(() => {
+    // fetchAccountSummary()
+    initData()
+  }, [])
+
+  // const fetchAccountSummary = async () => {
+  //   try {
+  //     setShowLoader(true)
+  //     const summary = await getAccountSummary()
+  //     if (error) {
+  //       setError('')
+  //     }
+  //   } catch(err) {
+  //     setError(err.message)
+  //   } finally {
+  //     setShowLoader(false)
+  //   }
+  // }
   return (
     <Container
       classOverRIde="pr-error-container"

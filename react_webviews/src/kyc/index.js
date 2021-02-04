@@ -30,7 +30,7 @@ const generateClassName = createGenerateClassName({
 
 const jss = create(jssPreset())
 
-const FundInfo = (props) => {
+const Kyc = (props) => {
   const { url } = props.match
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
@@ -50,4 +50,4 @@ const FundInfo = (props) => {
   )
 }
 
-export default FundInfo
+export default Kyc
