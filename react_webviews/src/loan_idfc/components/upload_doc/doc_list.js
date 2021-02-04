@@ -111,7 +111,7 @@ class DocumentList extends Component {
     let { params } = this.state;
     storageService().set("category", category);
     this.navigate("doc-upload", {
-      searchParams: 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect=' + params.redirect
+      searchParams: 'base_url=' + params.base_url + '&adminPanel=' + params.adminPanel + '&user=' + params.user + '&redirect_url=' + params.redirect
     });
   };
 
@@ -119,7 +119,7 @@ class DocumentList extends Component {
     let { params } = this.state;
     this.sendEvents('back')
     if (params.adminPanel) {
-      window.location.href = this.state.params.redirect;
+      window.location.href = this.state.params.redirect_url;
     } else {
       this.sendEvents("back");
       this.navigate('journey')
