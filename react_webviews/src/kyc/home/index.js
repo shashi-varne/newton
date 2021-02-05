@@ -6,6 +6,7 @@ import { getPan, savePanData } from "../common/api";
 import { storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
+import Alert from '../mini_components/Alert'
 
 const Home = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -54,15 +55,11 @@ const Home = (props) => {
 
   let renderData = {
     incomplete: {
-      bgColor: "#fff5f6",
-      icon: "error_icon.svg",
       title: "KYC is incomplete!",
       subtitle:
         "As per Govt norm. you need to do a one-time registration process to complete KYC.",
     },
     success: {
-      bgColor: "#f9fff1",
-      icon: "success_icon.svg",
       title: "Hey ",
       subtitle: "You’re investment ready and eligible for premium onboarding.",
     },
@@ -187,34 +184,10 @@ const Home = (props) => {
             type="text"
           />
           {isStartKyc && isUserCompliant && (
-            <div
-              className="status-info"
-              style={{ backgroundColor: renderData.success.bgColor }}
-            >
-              <img src={require(`assets/${renderData.success.icon}`)} alt="" />
-              <div className="text">
-                <div className="title">
-                  {renderData.success.title}
-                  {userName}
-                </div>
-                <div>{renderData.success.subtitle}</div>
-              </div>
-            </div>
+            <Alert variant="success" message={renderData.success.subtitle} title={renderData.success.title} />
           )}
           {isStartKyc && !isUserCompliant && (
-            <div
-              className="status-info"
-              style={{ backgroundColor: renderData.incomplete.bgColor }}
-            >
-              <img
-                src={require(`assets/${renderData.incomplete.icon}`)}
-                alt=""
-              />
-              <div className="text">
-                <div className="title">{renderData.incomplete.title}</div>
-                <div>{renderData.incomplete.subtitle}</div>
-              </div>
-            </div>
+            <Alert variant="danger" message={renderData.incomplete.subtitle} title={renderData.incomplete.title} />
           )}
         </main>
         <ResidentDialog
