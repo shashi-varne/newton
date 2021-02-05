@@ -22,8 +22,8 @@ import Home from './home'
 import Nominee from './nominee'
 import Report from './report'
 import Aadhar from './aadhar'
-import PersonalDetails1 from './compliant/PersonalDetails1'
-import PersonalDetails2 from './compliant/PersonalDetails2'
+import CompliantPersonalDetails1 from './compliant/PersonalDetails1'
+import CompliantPersonalDetails2 from './compliant/PersonalDetails2'
 import ConfirmPan from './compliant/ConfirmPan'
 import KycComplete from './compliant/Complete'
 import CompliantReport from './compliant/Report'
@@ -35,6 +35,7 @@ import AddBank from './bank/AddBank'
 import AddBankVerify from './bank/AddBankVerify'
 import BanksList from './bank/BanksList'
 import BankDetails from './bank/BankDetails'
+import PersonalDetails1 from './personal_details/Screen1'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -53,6 +54,7 @@ const Kyc = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}/journey`} component={Journey} />
+          <Route exact path={`${url}/personal-details1`} component={PersonalDetails1} />
           <Route exact path={`${url}/address`} component={Address} />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/home-kyc`} component={Home} />
@@ -60,8 +62,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/report`} component={Report} />
           <Route exact path={`${url}/aadhar`} component={Aadhar} />
           <Route exact path={`${url}/aadhar/confirmation`} component={AadharConfirmation} />
-          <Route exact path={`${url}/compliant-personal-details`} component={PersonalDetails1} />
-          <Route exact path={`${url}/compliant-personal-details2`} component={PersonalDetails2} />
+          <Route exact path={`${url}/compliant-personal-details`} component={CompliantPersonalDetails1} />
+          <Route exact path={`${url}/compliant-personal-details2`} component={CompliantPersonalDetails2} />
           <Route exact path={`${url}/compliant-confirm-pan`} component={ConfirmPan} />
           <Route exact path={`${url}/compliant-report-complete`} component={KycComplete} />
           <Route exact path={`${url}/compliant-report-details`} component={CompliantReport} />

@@ -2,6 +2,16 @@
   font-size: 20px;
   color: #160d2e;
   font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-size: 14px;
+    color: #767e86;
+    float: right;
+    margin: 4px 7px 0px 0;
+    font-weight: 400;
+  }
 }
 
 .kyc-main-subtitle {
