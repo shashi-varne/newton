@@ -519,3 +519,79 @@
     }
   }
 }
+
+.kyc-approved-bank-verify {
+  line-height: 1.5;
+  padding-bottom: 30px;
+
+  header {
+    margin: 25px 0 20px 0;
+    display: flex;
+    column-gap: 10px;
+    align-items: flex-start;
+    padding: 15px 15px 20px 15px;
+    border: 1px solid #fff5f6;
+    border-radius: 4px;
+    background-color: #f6f2ff;
+
+    img {
+      width: 14px;
+    }
+
+    .text {
+      color: #160d2e;
+      font-size: 14px;
+
+      .title {
+        font-weight: 700;
+        margin: -2px 0 0 0;
+      }
+    }
+  }
+
+  .item {
+    padding: 20px 0;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 13px;
+    border-bottom: 1px solid #ededed;
+
+    .flex {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+
+      .left {
+        margin-right: 20px;
+      }
+
+      .right {
+        .text {
+          font-weight: normal;
+          color: #767e86;
+        }
+      }
+    }
+
+    .left {
+      font-weight: bold;
+      color: #0a1d32;
+    }
+
+    .right {
+      color: #160d2e;
+    }
+
+    .edit {
+      font-size: 13px;
+      color: #35cb5d;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+}
