@@ -18,14 +18,14 @@ const PersonalDetails1 = (props) => {
       showLoader={showLoader}
       id="kyc-personal-details1"
       hideInPageTitle
-      buttonTitle="CONTINUE"
+      buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
       disable={isApiRunning || showLoader}
       handleClick={handleClick}
     >
       <div className="kyc-complaint-personal-details">
         <div className="kyc-main-title">
-          Personal details <span>1/4</span>{" "}
+          Personal details <span>1/4</span>
         </div>
         <div className="kyc-main-subtitle">
           We need basic details to verify identity
