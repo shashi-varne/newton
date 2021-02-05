@@ -34,6 +34,7 @@ import RegistrationSuccess from './success'
 import AddBank from './bank/AddBank'
 import AddBankVerify from './bank/AddBankVerify'
 import BanksList from './bank/BanksList'
+import BankDetails from './bank/BankDetails'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -69,7 +70,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/registration/success`} component={RegistrationSuccess} />
           <Route exact path={`${url}/approved/banks/doc`} component={AddBank} />
           <Route exact path={`${url}/approved/banks/verify/:bank_id`} component={AddBankVerify} />
-          <Route exact path={`${url}/add-bank`} component={BanksList} />                
+          <Route exact path={`${url}/add-bank`} component={BanksList} />
+          <Route exact path={`${url}/add-bank/details/:bank_id`} component={BankDetails} />                
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
