@@ -198,23 +198,6 @@
       }
     }
   }
-
-  footer {
-    color: #8d879b;
-    font-size: 14px;
-    text-align: center;
-    margin-top: 20px;
-
-    .partner-info {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-around;
-      color: #8d879b;
-      font-size: 10px;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-  }
 }
 
 .aadhar {
@@ -426,5 +409,22 @@
         margin: -2px 0 0 0;
       }
     }
+  }
+}
+
+.contact-us {
+  color: #8d879b;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 50px;
+
+  .partner-info {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+    color: #8d879b;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 500;
   }
 }
