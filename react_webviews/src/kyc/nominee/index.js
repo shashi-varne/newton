@@ -7,8 +7,8 @@ import {
   calculateAge,
   isValidDate,
 } from "utils/validators";
-import Input from "../../common/ui/Input";
-import DropdownWithoutIcon from "../../common/ui/SelectWithoutIcon";
+import Input from "common/ui/Input";
+import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { storageConstants, relationshipOptions } from "../constants";
 
 let userKycDetails = storageService().getObject(storageConstants.KYC);
