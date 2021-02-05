@@ -329,3 +329,51 @@
     }
   }
 }
+
+.FooterDefaultLayout {
+  .two-button {
+    .confirm-pan-button1 {
+      color: #767e86;
+      font-size: 12px;
+      font-weight: 600;
+      width: -webkit-fill-available;
+      cursor: pointer;
+    }
+  }
+}
+
+.kyc-compliant-confirm-pan {
+  line-height: 1.5;
+  main {
+    position: relative;
+
+    img {
+      width: 100%;
+    }
+
+    .pan-block-on-img {
+      position: absolute;
+      top: 50%;
+      left: 6%;
+
+      .user-name {
+        color: #0a1d32;
+        font-size: 15px;
+        font-weight: 600;
+        margin: 0 0 10px 0;
+      }
+
+      .pan-number {
+        color: #0a1d32;
+        line-height: 1.6;
+
+        span {
+          font-weight: 600;
+          margin: 0 0 0 4px;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+        }
+      }
+    }
+  }
+}
