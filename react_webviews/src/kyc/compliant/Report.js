@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { Imgc } from "common/ui/Imgc";
-import { getConfig } from "utils/functions";
 import { reportCardDetails } from "../constants";
 import ContactUs from "../mini_components/ContactUs";
 
-const productName = getConfig().productName;
-const Report = (props) => {
+const CompliantReport = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [openIndex, setOpenIndex] = useState(-1);
-  const [isCompliant, setIsCompliant] = useState(false);
-  const [is_nri, setIsNri] = useState(true);
+  const [isCompliant, setIsCompliant] = useState(true);
+  const [is_nri, setIsNri] = useState(false);
+  const [cardDetails, setCardDetails] = useState([]);
 
   const handleClick = () => {};
 
@@ -24,50 +22,35 @@ const Report = (props) => {
     else setOpenIndex(index);
   };
 
+  useEffect(() => {
+    if (isCompliant) {
+      if (is_nri) {
+        reportCardDetails.splice(4, 1); //remove docs
+        setCardDetails(reportCardDetails);
+      } else {
+        reportCardDetails.splice(1, 1); //remove address
+        reportCardDetails.splice(3, 1); //remove docs
+        setCardDetails(reportCardDetails);
+      }
+    }
+  }, []);
+
   const personalDetails = () => {
     return (
       <>
         <div className="unzipped-title">ALEKHYA</div>
-        {isCompliant && (
-          <div className="unzipped-box">
-            <div className="title">Email</div>
-            <div className="subtitle">alekhyatest68@yopmail.com</div>
-          </div>
-        )}
-        <div className="row-align">
-          {!isCompliant && (
-            <div className="unzipped-box">
-              <div className="title">Gender</div>
-              <div className="subtitle">FEMALE</div>
-            </div>
-          )}
-          <div className="unzipped-box">
-            <div className="title">Dob</div>
-            <div className="subtitle">11/12/2000</div>
-          </div>
+        <div className="unzipped-box">
+          <div className="title">Email</div>
+          <div className="subtitle">alekhyatest68@yopmail.com</div>
         </div>
-        {!isCompliant && (
-          <>
-            <div className="unzipped-box">
-              <div className="title">Marital Status</div>
-              <div className="subtitle">SINGLE</div>
-            </div>
-            <div className="unzipped-box">
-              <div className="title">Father’s name</div>
-              <div className="subtitle">SURYA</div>
-            </div>
-            <div className="unzipped-box">
-              <div className="title">Mother’s name</div>
-              <div className="subtitle">SAI</div>
-            </div>
-          </>
-        )}
-        {isCompliant && (
-          <div className="unzipped-box">
-            <div className="title">Mobile</div>
-            <div className="subtitle">8686227321</div>
-          </div>
-        )}
+        <div className="unzipped-box">
+          <div className="title">Dob</div>
+          <div className="subtitle">11/12/2000</div>
+        </div>
+        <div className="unzipped-box">
+          <div className="title">Mobile</div>
+          <div className="subtitle">8686227321</div>
+        </div>
       </>
     );
   };
@@ -75,27 +58,7 @@ const Report = (props) => {
   const addressDetails = () => {
     return (
       <>
-        {!isCompliant && (
-          <>
-            <div className="unzipped-box">
-              <div className="title">
-                {is_nri && <span>Indian </span>} Address as per Passport
-              </div>
-              <div className="subtitle">
-                18-8-274/A, laxminagar, Warangal, Telangana, 506002
-              </div>
-            </div>
-            {is_nri && (
-              <div className="unzipped-box">
-                <div className="title">Foreign Address as per Passport</div>
-                <div className="subtitle">
-                  18-8-274/A, laxminagar, Warangal, Telangana, 506002
-                </div>
-              </div>
-            )}
-          </>
-        )}
-        {isCompliant && (
+        {is_nri && (
           <div className="unzipped-box">
             <div className="title">Foreign Address</div>
             <div className="subtitle">
@@ -162,27 +125,14 @@ const Report = (props) => {
       showLoader={showLoader}
       hideInPageTitle
       id="kyc-home"
-      buttonTitle="OK"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
-      handleClick={handleClick}
+      noFooter={true}
     >
       <div className="kyc-report">
-        <div className="kyc-main-title">KYC status</div>
+        <div className="kyc-main-title">KYC details</div>
         <main>
-          <Imgc
-            src={require(`assets/${productName}/congratulations_illustration.svg`)}
-            alt="img"
-            className="img"
-          />
-          <div className="congrats">Congratulations!</div>
-          <div className="text">Your application is submitted.</div>
-          <div className="text message">
-            <img src={require(`assets/eta_icon.svg`)} alt="" />
-            Approves in one working day
-          </div>
           <section>
-            {reportCardDetails.map((item, index) => {
+            {cardDetails.map((item, index) => {
               return (
                 <div
                   key={index}
@@ -213,4 +163,4 @@ const Report = (props) => {
   );
 };
 
-export default Report;
+export default CompliantReport;

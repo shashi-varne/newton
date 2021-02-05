@@ -9,7 +9,7 @@ import {
 } from "utils/validators";
 import Input from "../../common/ui/Input";
 import DropdownWithoutIcon from "../../common/ui/SelectWithoutIcon";
-import { storageConstants } from "../constants";
+import { storageConstants, relationshipOptions } from "../constants";
 
 let userKycDetails = storageService().getObject(storageConstants.KYC);
 const Nominee = (props) => {
@@ -18,29 +18,6 @@ const Nominee = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [userKyc, setUserKyc] = useState(userKycDetails);
-
-  const options = [
-    {
-      name: "Wife",
-      value: "WIFE",
-    },
-    {
-      name: "Husband",
-      value: "HUSBAND",
-    },
-    {
-      name: "Mother",
-      value: "MOTHER",
-    },
-    {
-      name: "Father",
-      value: "FATHER",
-    },
-    {
-      name: "Other",
-      value: "OTHER",
-    },
-  ];
 
   const handleClick = () => {
     let keys_to_check = ["dob", "name", "relationship"];
@@ -125,7 +102,7 @@ const Nominee = (props) => {
             <DropdownWithoutIcon
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              options={options}
+              options={relationshipOptions}
               id="relationship"
               label="Relationship"
               isAOB={true}
