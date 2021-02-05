@@ -28,6 +28,7 @@ import ConfirmPan from './compliant/ConfirmPan'
 import KycComplete from './compliant/Complete'
 import CompliantReport from './compliant/Report'
 import Verify from './compliant/Verify'
+import AadharConfirmation from './aadhar/confirmation'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -52,6 +53,7 @@ const Kyc = (props) => {
           <Route exact path={`${url}/:userType/nominee-details`} component={Nominee} />
           <Route exact path={`${url}/report`} component={Report} />
           <Route exact path={`${url}/aadhar`} component={Aadhar} />
+          <Route exact path={`${url}/aadhar/confirmation`} component={AadharConfirmation} />
           <Route exact path={`${url}/compliant-personal-details`} component={PersonalDetails1} />
           <Route exact path={`${url}/compliant-personal-details2`} component={PersonalDetails2} />
           <Route exact path={`${url}/compliant-confirm-pan`} component={ConfirmPan} />

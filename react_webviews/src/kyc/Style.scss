@@ -436,3 +436,29 @@
     }
   }
 }
+
+.aadhar-confirmation {
+  line-height: 1.5;
+
+  header {
+    text-align: center;
+    margin: -20px;
+    padding: 20px 30px;
+    background-color: #f4f5f6;
+    font-size: 18px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  main {
+    margin-top: 20px;
+    padding: 20px 0;
+    color: #333333;
+
+    p {
+      margin: 0 0 10px;
+    }
+  }
+}
