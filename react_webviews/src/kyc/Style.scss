@@ -478,3 +478,44 @@
     }
   }
 }
+
+.kyc-approved-bank {
+  line-height: 1.5;
+  padding-bottom: 30px;
+
+  header {
+    margin-top: 25px;
+    display: flex;
+    column-gap: 10px;
+    align-items: flex-start;
+    padding: 15px 15px 20px 15px;
+    border: 1px solid #fff5f6;
+    border-radius: 4px;
+    background-color: #f6f2ff;
+
+    img {
+      width: 14px;
+    }
+
+    .text {
+      color: #160d2e;
+      font-size: 14px;
+
+      .title {
+        font-weight: 700;
+        margin: -2px 0 0 0;
+      }
+    }
+  }
+
+  main {
+    .input {
+      margin-top: 20px;
+
+      img {
+        width: 22px;
+        margin-right: 10px;
+      }
+    }
+  }
+}

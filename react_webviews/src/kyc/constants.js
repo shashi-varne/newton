@@ -135,3 +135,36 @@ export const reportCardDetails = [
     click_image: "next_arrow_icon.svg",
   },
 ];
+
+export const bankAccountTypeOptions = (isNri) => {
+  let account_types = [];
+  if (!isNri) {
+    account_types = [
+      {
+        value: "CA",
+        name: "Current Account",
+      },
+      {
+        value: "CC",
+        name: "Cash Credit",
+      },
+      {
+        value: "SB",
+        name: "Savings Account",
+      },
+    ];
+  } else {
+    account_types = [
+      {
+        value: "SB-NRE",
+        name: "Non Resident External Account (NRE)",
+      },
+      {
+        value: "SB-NRO",
+        name: "Non Resident Ordinary Account (NRO)",
+      },
+    ];
+  }
+
+  return account_types;
+};

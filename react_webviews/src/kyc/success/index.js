@@ -13,6 +13,7 @@ const RegistrationSuccess = (props) => {
       hideInPageTitle
       id="registration-success"
       buttonTitle="GOT IT!"
+      title='KYC Submitted'
       isApiRunning={isApiRunning}
       disable={isApiRunning || showLoader}
       handleClick={handleClick}
