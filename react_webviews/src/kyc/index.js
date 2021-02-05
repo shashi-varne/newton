@@ -33,6 +33,7 @@ import RtaCompliantPersonalDetails from './rta_compliant'
 import RegistrationSuccess from './success'
 import AddBank from './bank/AddBank'
 import AddBankVerify from './bank/AddBankVerify'
+import BanksList from './bank/BanksList'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -67,7 +68,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/rta-compliant-personal-details`} component={RtaCompliantPersonalDetails} />
           <Route exact path={`${url}/registration/success`} component={RegistrationSuccess} />
           <Route exact path={`${url}/approved/banks/doc`} component={AddBank} />
-          <Route exact path={`${url}/approved/banks/verify/:bank_id`} component={AddBankVerify} />                
+          <Route exact path={`${url}/approved/banks/verify/:bank_id`} component={AddBankVerify} />
+          <Route exact path={`${url}/add-bank`} component={BanksList} />                
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
