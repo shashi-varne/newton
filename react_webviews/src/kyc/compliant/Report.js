@@ -125,10 +125,8 @@ const CompliantReport = (props) => {
       showLoader={showLoader}
       hideInPageTitle
       id="kyc-home"
-      buttonTitle="OK"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
-      handleClick={handleClick}
+      noFooter={true}
     >
       <div className="kyc-report">
         <div className="kyc-main-title">KYC details</div>

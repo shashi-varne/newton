@@ -27,6 +27,7 @@ import PersonalDetails2 from './compliant/PersonalDetails2'
 import ConfirmPan from './compliant/ConfirmPan'
 import KycComplete from './compliant/Complete'
 import CompliantReport from './compliant/Report'
+import Verify from './compliant/Verify'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -55,7 +56,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/compliant-personal-details2`} component={PersonalDetails2} />
           <Route exact path={`${url}/compliant-confirm-pan`} component={ConfirmPan} />
           <Route exact path={`${url}/compliant-report-complete`} component={KycComplete} />
-          <Route exact path={`${url}/compliant-report-details`} component={CompliantReport} />              
+          <Route exact path={`${url}/compliant-report-details`} component={CompliantReport} />
+          <Route exact path={`${url}/compliant-report-verified`} component={Verify} />                 
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
