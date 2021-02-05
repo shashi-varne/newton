@@ -1,5 +1,7 @@
-import React from 'react'
+import React from "react";
+import { getConfig } from "utils/functions";
 
+const productName = getConfig().productName;
 let alertVariants = {
   danger: {
     bgColor: "#fff5f6",
@@ -13,6 +15,14 @@ let alertVariants = {
     bgColor: "#fff5f6",
     icon: "attention_icon.svg",
   },
+  info: {
+    icon: `${productName}/info_icon.svg`,
+    bgColor: "none",
+  },
+  warning: {
+    icon: `attention_icon_new.svg`,
+    bgColor: "#fff6ce",
+  },
 };
 
 const Alert = ({ message, variant, title }) => {
@@ -21,15 +31,16 @@ const Alert = ({ message, variant, title }) => {
       className="alert-status-info"
       style={{ backgroundColor: alertVariants[variant].bgColor }}
     >
-      <img src={require(`assets/${alertVariants[variant].icon}`)} alt={variant} />
+      <img
+        src={require(`assets/${alertVariants[variant].icon}`)}
+        alt={variant}
+      />
       <div className="text">
-        <div className="title">
-          {title}
-        </div>
+        <div className="title">{title}</div>
         <div>{message}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Alert
+export default Alert;

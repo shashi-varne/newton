@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
+import Alert from "../mini_components/Alert";
 
 const productName = getConfig().productName;
 const Complete = (props) => {
@@ -28,16 +29,11 @@ const Complete = (props) => {
           <div className="title">Kudos, KYC is completed!</div>
           <div className="subtitle">See KYC application details {" >"}</div>
         </header>
-        <main>
-          <img src={require(`assets/attention_icon_new.svg`)} alt="" />
-          <div className="text">
-            <div className="title">Note</div>
-            <div>
-              Your bank verification is still pending. You will be able to
-              invest once your bank is verified.
-            </div>
-          </div>
-        </main>
+        <Alert
+          variant="warning"
+          title="Note"
+          message="Your bank verification is still pending. You will be able to invest once your bank is verified."
+        />
       </div>
     </Container>
   );

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { getConfig } from "../../utils/functions";
+import Alert from "../mini_components/Alert";
 
-const productName = getConfig().productName;
 const AddBankVerify = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
@@ -32,13 +31,11 @@ const AddBankVerify = (props) => {
     >
       <div className="kyc-approved-bank-verify">
         <div className="kyc-main-title">Verify your bank account</div>
-        <header>
-          <img src={require(`assets/${productName}/info_icon.svg`)} alt="" />
-          <div className="text">
-            <div className="title">Important</div>
-            <div>We will credit ₹1 to your bank account for verification.</div>
-          </div>
-        </header>
+        <Alert
+          variant="info"
+          title="Important"
+          message="We will credit ₹1 to your bank account for verification."
+        />
         <div className="item">
           <div className="flex">
             <div className="left">
