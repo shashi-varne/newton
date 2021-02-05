@@ -377,3 +377,54 @@
     }
   }
 }
+
+.kyc-compliant-complete {
+  line-height: 1.5;
+
+  header {
+    text-align: center;
+
+    img {
+      margin: 40px 0;
+    }
+
+    .title {
+      font-size: 15px;
+      color: #160d2e;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      font-weight: 400;
+      color: #4f2da7;
+      margin: 30px 0 0 0;
+      cursor: pointer;
+    }
+  }
+
+  main {
+    margin-top: 25px;
+    display: flex;
+    column-gap: 10px;
+    align-items: flex-start;
+    padding: 15px 15px 20px 15px;
+    border: 1px solid #fff5f6;
+    border-radius: 4px;
+    background-color: #fff6ce;
+
+    img {
+      width: 14px;
+    }
+
+    .text {
+      color: #160d2e;
+      font-size: 14px;
+
+      .title {
+        font-weight: 700;
+        margin: -2px 0 0 0;
+      }
+    }
+  }
+}
