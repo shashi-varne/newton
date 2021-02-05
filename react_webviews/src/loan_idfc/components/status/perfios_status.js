@@ -51,6 +51,8 @@ class PerfiosStatus extends Component {
       commonMapper: {},
       perfios_state: "",
       count: 0,
+      loaderWithData: false,
+      loaderData: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -71,6 +73,11 @@ class PerfiosStatus extends Component {
     let perfios_display_rejection_reason = perfios_info.perfios_display_rejection_reason;
     let bt_eligible = vendor_info.bt_eligible;
 
+    let loaderData = {
+      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
+      subtitle: "This may take around 2 minutes!",
+    };
+
     this.setState({
       commonMapper: commonMapper[perfios_state] || {},
       perfios_display_rejection_reason: perfios_display_rejection_reason,
@@ -78,6 +85,7 @@ class PerfiosStatus extends Component {
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
       name: name,
+      loaderData: loaderData
     });
   };
 
@@ -118,6 +126,9 @@ class PerfiosStatus extends Component {
             next_state: "eligible-loan",
           },
           () => {
+            this.setState({
+              loaderWithData: true
+            })
             this.submitApplication({}, "one", "", "eligible-loan");
           }
         );
@@ -157,6 +168,9 @@ class PerfiosStatus extends Component {
         };
         this.updateApplication(body, "bt-info");
       } else {
+        this.setState({
+          loaderWithData: true
+        })
         this.submitApplication({}, "one", "", "eligible-loan");
       }
     }
@@ -186,6 +200,8 @@ class PerfiosStatus extends Component {
           icon: commonMapper.icon || "",
           goBack: this.goBack,
         }}
+        loaderWithData={this.state.loaderWithData}
+        loaderData={this.state.loaderData}
       >
         <div className="idfc-loan-status">
           {commonMapper["top_icon"] && (
