@@ -30,6 +30,7 @@ import CompliantReport from './compliant/Report'
 import Verify from './compliant/Verify'
 import AadharConfirmation from './aadhar/confirmation'
 import RtaCompliantPersonalDetails from './rta_compliant'
+import RegistrationSuccess from './success'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -61,7 +62,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/compliant-report-complete`} component={KycComplete} />
           <Route exact path={`${url}/compliant-report-details`} component={CompliantReport} />
           <Route exact path={`${url}/compliant-report-verified`} component={Verify} />
-          <Route exact path={`${url}/rta-compliant-personal-details`} component={RtaCompliantPersonalDetails} />                
+          <Route exact path={`${url}/rta-compliant-personal-details`} component={RtaCompliantPersonalDetails} />
+          <Route exact path={`${url}/registration/success`} component={RegistrationSuccess} />                
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
