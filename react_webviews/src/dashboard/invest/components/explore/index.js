@@ -10,7 +10,7 @@ import { storageService } from 'utils/validators'
 import InvestExploreCard from './InvestExploreCard'
 
 import { getTrendingFunds, getSubCategories } from '../../common/api'
-import { CART, FUNDSLIST } from '../../../diy/constants'
+import { CART, CATEGORY, FUNDSLIST, SUBCATEGORY } from '../../../diy/constants'
 export const exploreMFMappings = [
   {
     title: 'Equity',
@@ -40,6 +40,8 @@ const InvestExplore = (props) => {
   useEffect(() => {
     storageService().remove(FUNDSLIST)
     storageService().remove(CART)
+    storageService().remove(CATEGORY)
+    storageService().remove(SUBCATEGORY)
     fetchTrendingFunds()
   }, [])
 

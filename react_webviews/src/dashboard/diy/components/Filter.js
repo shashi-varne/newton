@@ -39,6 +39,7 @@ const Filter = ({
     setLocalFundOption('growth')
     setLocalSortFilter('returns')
     setLocalFundHouse('')
+    close()
   }
 
   return (

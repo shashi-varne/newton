@@ -1,9 +1,10 @@
 import Api from 'utils/api'
 import { storageService } from '../../utils/validators'
+import { FUNDSLIST } from './constants'
 
 const genericErrorMessage = 'Something went wrong!!!'
 
-export async function getFundList({ key, name, type }) {
+export async function getFundList({ key, type }) {
   const res = await Api.get(`/api/funds/${type}/${key}/sip`)
   if (
     res.pfwresponse.result.message === 'success' &&
@@ -15,7 +16,7 @@ export async function getFundList({ key, name, type }) {
 }
 
 export function getFundHouses() {
-  const fundsList = storageService().getObject('diystore_fundsList')
+  const fundsList = storageService().getObject(FUNDSLIST)
 
   if (fundsList.length > 0) {
     const fundsHouseArr = fundsList.map((item) => item.fund_house)

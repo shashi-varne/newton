@@ -7,8 +7,8 @@ const FundHouse = ({ localFundHouse, setLocalFundHouse }) => {
 
   return (
     <section className="diy-fund-houses">
-      {fundHouses.map((house) => (
-        <div className="house" onClick={() => setLocalFundHouse(house)}>
+      {fundHouses.map((house, idx) => (
+        <div key={idx} className="house" onClick={() => setLocalFundHouse(house)}>
           <CheckIcon
             className={house === localFundHouse ? 'checked' : ''}
           />

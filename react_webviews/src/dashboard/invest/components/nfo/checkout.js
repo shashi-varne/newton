@@ -8,6 +8,7 @@ import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
 import TermsAndCond from "../../../mini-components/TermsAndCond";
+import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
 
 class Checkout extends Component {
   constructor(props) {
@@ -58,14 +59,14 @@ class Checkout extends Component {
         return;
       }
     } else if (type === "diy") {
-      let schemeType = storageService().get("diystore_category") || "";
+      let schemeType = storageService().get(CATEGORY) || "";
       let categoryName =
-        storageService().get("diystore_subCategoryScreen") || "";
-      fundsData = !storageService().getObject("diystore_cart")
+        storageService().get(SUBCATEGORY) || "";
+      fundsData = !storageService().getObject(CART)
         ? [storageService().getObject("diystore_fundInfo")]
-        : storageService().getObject("diystore_cart");
+        : storageService().getObject(CART);
       fundsData.forEach(() => form_data.push({}));
-      let fundsArray = storageService().getObject("diystore_fundsList");
+      let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
       if (partner_code === "bfdlmobile") {
         renderData = renderData.map(

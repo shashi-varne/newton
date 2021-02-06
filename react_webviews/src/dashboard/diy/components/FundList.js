@@ -58,18 +58,27 @@ const FundList = (props) => {
   }
 
   useEffect(() => {
-    const { key, name, type } = match.params
+    const { key, type } = match.params
     const category = storageService().get(CATEGORY)
     const subCategory = storageService().get(SUBCATEGORY)
-    if (!category || !subCategory || category !== type || subCategory !== key) {
-      fetchFunds({ key, name, type })
+    if (!category || !subCategory || category !== type || subCategory !== key || fundsList.length === 0) {
+      fetchFunds({ key, type })
+    }
+  }, [])
+
+  useEffect(() => {
+    const { key, type } = match.params
+    const category = storageService().get(CATEGORY)
+    const subCategory = storageService().get(SUBCATEGORY)
+    if (!category || !subCategory || category !== type || subCategory !== key || fundsList.length === 0) {
+      fetchFunds({ key, type })
     }
   }, [match.params.key, match.params.type])
 
-  const fetchFunds = async ({ key, name, type }) => {
+  const fetchFunds = async ({ key, type }) => {
     try {
       setShowLoader(true)
-      const funds = await getFundList({ key, name, type })
+      const funds = await getFundList({ key, type })
       setFundsList([...funds])
       storageService().setObject(FUNDSLIST, funds)
       storageService().set(CATEGORY, type)
@@ -162,7 +171,7 @@ const FundList = (props) => {
                   : -1
               }
               if (sortFilter === 'rating') {
-                return Number(b.fisdom_rating) - Number(a.fisdom_rating) > 0
+                return Number(b.morning_star_rating) - Number(a.morning_star_rating) > 0
                   ? 1
                   : -1
               }
@@ -181,7 +190,6 @@ const FundList = (props) => {
               />
             ))}
         </TabContainer>
-        )
       </div>
       <CartFooter
         cart={cart}
@@ -215,7 +223,9 @@ const DiyFundCard = ({
     console.log(parentProps.location.search + '&isins=' + props.isin)
     navigate(
       `/fund-details`,
-      { searchParams: `${parentProps.location.search}&isins=${props.isin}` },
+      {
+        searchParams: `${parentProps.location.search}&isins=${props.isin}&type=diy`,
+      },
       true
     )
   }
@@ -239,7 +249,7 @@ const DiyFundCard = ({
             <p>
               Return: <span>{props[returnField[value]]}</span>
             </p>
-            <RatingStar value={props.fisdom_rating} />
+            <RatingStar value={props.morning_star_rating} />
           </div>
           <div
             className={
