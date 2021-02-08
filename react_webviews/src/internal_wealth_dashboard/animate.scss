@@ -1,4 +1,3 @@
-
 @mixin iwd-animatedDelay($n, $delay) {
   @for $i from 1 through $n {
     .iwd-animated:nth-child(#{$i}) {
@@ -13,6 +12,50 @@
   animation-fill-mode: both;
   -webkit-animation-name: iwd-fade;
   -webkit-animation-fill-mode: both;
+}
+
+.boxEffect-enter {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  .iwd-fade {
+    opacity: 0;
+  }
+}
+.boxEffect-enter-active {
+  width: 340px;
+  height: 300px;
+  transition: width 500ms, height 441ms ease-out;
+  .iwd-fade {
+    opacity: 0;
+    padding: 30px 40px 20px;
+    @include iwd-fadeCreator(0.3, ease-in, 0.3);
+  }
+}
+.boxEffect-enter-done {
+  width: 340px;
+  height: 300px;
+  .iwd-fade {
+    padding: 30px 40px 20px;
+  }
+}
+.boxEffect-exit {
+  width: 340px;
+  height: 300px;
+  overflow: hidden;
+  .iwd-fade {
+    padding: 30px 40px 20px;
+  }
+}
+.boxEffect-exit-active {
+  .iwd-fade {
+    opacity: 0;
+    transition: opacity ease-in 0.3s;
+  }
+  width: 0;
+  height: 0;
+  transition: width 500ms, height 441ms ease-out;
+  transition-delay: 500ms;
 }
 
 .circularExpand {
@@ -95,10 +138,6 @@
   }
 }
 
-.iwd-fade {
-  @include iwd-fadeCreator(0.6, ease-out, 0);
-}
-
 @keyframes iwd-fade {
   from {
     opacity: 0;
@@ -111,16 +150,15 @@
 @keyframes iwd-glow {
   50% {
     opacity: 1;
-    box-shadow: 0 0 1px 12px rgba(#9F86DF, 0.8);
+    box-shadow: 0 0 1px 12px rgba(#9f86df, 0.8);
   }
 }
 
 .iwd-fade-entrance {
-  animation: iwd-fade-entrance 1.8s 
-  // cubic-bezier(1,-0.49, 0.49, 0.49);
-  cubic-bezier(1, 0.03, 0.61, 0.68);
+  animation: iwd-fade-entrance 1.8s // cubic-bezier(1,-0.49, 0.49, 0.49);
+    cubic-bezier(1, 0.03, 0.61, 0.68);
   // cubic-bezier(1, 0.03, 0.9, 0.75);
-  
+
   animation-name: iwd-fade-entrance;
   -webkit-animation-name: iwd-fade-entrance;
 }
@@ -137,15 +175,14 @@
 }
 
 .iwd-fadeFromTop {
-  animation: iwd-fadeFromTop 0.8s
-  cubic-bezier(0.29, 0.83, 0.51, 0.97);
+  animation: iwd-fadeFromTop 0.8s cubic-bezier(0.29, 0.83, 0.51, 0.97);
   animation-name: iwd-fadeFromTop;
   -webkit-animation-name: iwd-fadeFromTop;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 
-@keyframes iwd-fadeFromTop{
+@keyframes iwd-fadeFromTop {
   from {
     opacity: 0;
     transform: translate3d(0, -80px, 0);
@@ -157,15 +194,14 @@
 }
 
 .iwd-fadeFromLeft {
-  animation: iwd-fadeFromLeft 0.6s
-  cubic-bezier(0.29, 0.83, 0.51, 0.97);
+  animation: iwd-fadeFromLeft 0.6s cubic-bezier(0.29, 0.83, 0.51, 0.97);
   animation-name: iwd-fadeFromLeft;
   -webkit-animation-name: iwd-fadeFromLeft;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 
-@keyframes iwd-fadeFromLeft{
+@keyframes iwd-fadeFromLeft {
   from {
     opacity: 0;
     transform: translate3d(-80px, 0, 0);
@@ -177,12 +213,12 @@
 }
 
 .iwd-rotate-180 {
-  animation: iwd-rotate-180 .4s ease-out;
+  animation: iwd-rotate-180 0.4s ease-out;
   animation-fill-mode: forwards;
 }
 
 .iwd-rotate-180-reverse {
-  animation: iwd-rotate-180-reverse .4s ease-out;
+  animation: iwd-rotate-180-reverse 0.4s ease-out;
   animation-fill-mode: forwards;
 }
 
@@ -210,11 +246,14 @@
   }
 }
 
-.example-appear, .example-enter {
+.example-appear,
+.example-enter {
   @extend .iwd-animatedFade;
 }
 
-.example-appear-active, .example-enter-active { //TODO: change names
+.example-appear-active,
+.example-enter-active {
+  //TODO: change names
   animation-name: iwd-fadeInUp;
   -webkit-animation-name: iwd-fadeInUp;
 }
@@ -238,7 +277,8 @@
   }
 }
 
-.iwd-fade-animate-enter-active, .iwd-fade-animate-exit-active {
+.iwd-fade-animate-enter-active,
+.iwd-fade-animate-exit-active {
   @extend .iwd-fade;
 }
 
