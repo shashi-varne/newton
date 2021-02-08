@@ -72,7 +72,6 @@ export async function initData() {
 }
 
 async function setSummaryData(result) {
-  console.log(result)
   const currentUser = result.data.user.user.data
   const userKyc = result.data.kyc.kyc.data
   if (userKyc.firstlogin) {

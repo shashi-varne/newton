@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Skelton from '../../common/ui/Skelton'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 
-import { initData } from '../services'
+import {  initData } from '../services'
 import ShowAadharDialog from './components/ShowAadharDialog'
 import Alert from '../mini_components/Alert'
+import { storageService } from '../../utils/validators'
 
 const steps = [
   'PAN Details',
@@ -21,15 +21,18 @@ const Journey = (props) => {
   const [activeStep, setActiveStep] = useState(0)
   const [journeyStatus, setJourneyStatus] = useState('ground_premium')
   const [kycStatus, setKycStatus] = useState('compliant')
-  const [showAadhar, setShowAadhar] = useState(true)
+  const [showAadhaar, setShowAadhaar] = useState(true)
+  // const [npsDetailsReq, setNpsDetailsReq] = useState(
+  //   storageService().get('nps_additional_details_required')
+  // )
 
-  // useEffect(() => {
-  //   initData()
-  // }, [])
+  useEffect(() => {
+    initData()
+  }, [])
 
-  if (loading) {
-    return <Skelton type="g" />
-  }
+  // if (loading) {
+  //   return <Skelton type="g" />
+  // }
 
   const productName = getConfig().productName
 
@@ -40,6 +43,8 @@ const Journey = (props) => {
       disable={loading}
       title="KYC Journey"
       classOverRideContainer="pr-container"
+      showSkelton={loading}
+      skeltonType="p"
     >
       <div className="kyc-journey">
         {journeyStatus === 'ground_premium' && (
@@ -52,7 +57,7 @@ const Journey = (props) => {
               <div className="pj-bottom-info-box">
                 <img
                   src={require(`assets/${productName}/ic_instant.svg`)}
-                  alt="Instatly Investment"
+                  alt="Instant Investment"
                   role="i"
                   className="icon"
                 />
@@ -81,7 +86,7 @@ const Journey = (props) => {
         </div>
         <Alert
           variant="attention"
-          message="Please share following mandtory details within 24 hrs to execute the investment."
+          message="Please share following mandatory details within 24 hrs to execute the investment."
           title="Hey +91|0000064334"
         />
         <main className="steps-container">
@@ -104,8 +109,8 @@ const Journey = (props) => {
         </main>
       </div>
       <ShowAadharDialog
-        open={showAadhar}
-        onClose={() => setShowAadhar(false)}
+        open={showAadhaar}
+        onClose={() => setShowAadhaar(false)}
       />
     </Container>
   )
