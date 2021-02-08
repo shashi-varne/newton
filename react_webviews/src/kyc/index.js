@@ -37,6 +37,8 @@ import BanksList from './bank/BanksList'
 import BankDetails from './bank/BankDetails'
 import PersonalDetails1 from './personal_details/Screen1'
 import PersonalDetails2 from './personal_details/Screen2'
+import PersonalDetails3 from './personal_details/Screen3'
+import PersonalDetails4 from './personal_details/Screen4'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -57,6 +59,8 @@ const Kyc = (props) => {
           <Route exact path={`${url}/journey`} component={Journey} />
           <Route exact path={`${url}/personal-details1`} component={PersonalDetails1} />
           <Route exact path={`${url}/personal-details2`} component={PersonalDetails2} />
+          <Route exact path={`${url}/personal-details3`} component={PersonalDetails3} />
+          <Route exact path={`${url}/personal-details4`} component={PersonalDetails4} />
           <Route exact path={`${url}/address`} component={Address} />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/home-kyc`} component={Home} />

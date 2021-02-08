@@ -8,16 +8,19 @@ import {
   isValidDate,
 } from "utils/validators";
 import Input from "common/ui/Input";
+import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { storageConstants, relationshipOptions } from "../constants";
+import { storageConstants } from "../constants";
+import { relationshipOptions } from "../constants";
 
 let userKycDetails = storageService().getObject(storageConstants.KYC);
-const Nominee = (props) => {
+const PersonalDetails4 = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [userKyc, setUserKyc] = useState(userKycDetails);
+  const [isChecked, setIsChecked] = useState(true);
 
   const handleClick = () => {
     let keys_to_check = ["dob", "name", "relationship"];
@@ -45,6 +48,10 @@ const Nominee = (props) => {
   };
 
   const handleChange = (name) => (event) => {
+    if (name === "checkbox") {
+      setIsChecked(!isChecked);
+      return;
+    }
     let value = event.target ? event.target.value : event;
     let formData = Object.assign({}, form_data);
     let kyc = Object.assign({}, userKyc);
@@ -68,15 +75,30 @@ const Nominee = (props) => {
     <Container
       showLoader={showLoader}
       hideInPageTitle
-      id="kyc-home"
+      id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
       disable={isApiRunning || showLoader}
       handleClick={handleClick}
     >
       <div className="kyc-nominee">
-        <div className="kyc-main-title">Nominee detail</div>
+        <div className="kyc-main-title">
+          Nominee detail <span>4/4</span>
+        </div>
         <main>
+          <div className="nominee-checkbox">
+            <Checkbox
+              defaultChecked
+              checked={isChecked}
+              value={isChecked}
+              name="checked"
+              handleChange={handleChange("checkbox")}
+              class="checkbox"
+            />
+            <span>
+              I do not wish to add a <b>nominee</b>
+            </span>
+          </div>
           <Input
             label="Name"
             class="input"
@@ -86,6 +108,7 @@ const Nominee = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
+            disabled={isChecked}
           />
           <Input
             label="Date of birth(DD/MM/YYYY)"
@@ -97,6 +120,7 @@ const Nominee = (props) => {
             maxLength={10}
             type="text"
             id="dob"
+            disabled={isChecked}
           />
           <div className="input">
             <DropdownWithoutIcon
@@ -109,6 +133,7 @@ const Nominee = (props) => {
               value={userKyc.nomination.meta_data.relationship || ""}
               name="relationship"
               onChange={handleChange("relationship")}
+              disabled={isChecked}
             />
           </div>
         </main>
@@ -117,4 +142,4 @@ const Nominee = (props) => {
   );
 };
 
-export default Nominee;
+export default PersonalDetails4;

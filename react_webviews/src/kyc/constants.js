@@ -180,3 +180,11 @@ export const maritalStatusOptions = [
   { name: "Married", value: "MARRIED" },
   { name: "Unmarried", value: "UNMARRIED" },
 ];
+
+export const occupationTypeOptions = [
+  { name: "Salaried", value: "SALARIED" },
+  { name: "Self employed", value: "SELF EMPLOYED" },
+  { name: "Business", value: "BUSINESS" },
+  { name: "Agriculturist", value: "AGRICULTURIST" },
+  { name: "Professional", value: "PROFESSIONAL" },
+];

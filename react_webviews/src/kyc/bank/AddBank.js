@@ -8,6 +8,7 @@ import { bankAccountTypeOptions } from "../constants";
 import { getConfig } from "../../utils/functions";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Alert from "../mini_components/Alert";
 
 const productName = getConfig().productName;
 let userKycDetails = storageService().getObject(storageConstants.KYC);
@@ -77,16 +78,11 @@ const AddBank = (props) => {
     >
       <div className="kyc-approved-bank">
         <div className="kyc-main-title">Enter bank account details</div>
-        <header>
-          <img src={require(`assets/${productName}/info_icon.svg`)} alt="" />
-          <div className="text">
-            <div className="title">Note</div>
-            <div>
-              As per SEBI, it is mandatory for mutual fund investors to provide
-              their own bank account details.
-            </div>
-          </div>
-        </header>
+        <Alert
+          variant="info"
+          title="Note"
+          message=" As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details."
+        />
         <main>
           <Input
             label="Account Holder name"
