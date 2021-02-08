@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormControl } from 'material-ui/Form';
 import qs from 'qs';
 
-import toast from '../../../../common/ui/Toast';
+// import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import MobileInputWithoutIcon from '../../../../common/ui/MobileInputWithoutIcon';
 import Input from '../../../../common/ui/Input';
@@ -26,7 +26,7 @@ class PersonalDetails1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       name: '',
       openModal: false,
       name_error: '',
@@ -64,11 +64,45 @@ class PersonalDetails1 extends Component {
     });
   }
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClick,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+  }
+
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload = async () => {
+    this.setErrorData('onload');
+    let error = ''
     try {
       const res = await Api.get('/api/ins_service/api/insurance/account/summary')
       this.setState({
-        show_loader: false
+        skelton: false
       });
 
       if (res.pfwresponse.status_code === 200) {
@@ -81,16 +115,26 @@ class PersonalDetails1 extends Component {
       } else if (res.pfwresponse.status_code === 401) {
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        // toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+        error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
       }
-
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false,
+        showError: 'page'
       });
-      toast('Something went wrong');
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError: 'page'
+      })
     }
   }
 
@@ -134,6 +178,9 @@ class PersonalDetails1 extends Component {
 
     this.sendEvents('next');
 
+    this.setErrorData('submit');
+    let error = '';
+
     var canSubmitForm = true;
 
     if (!validateEmpty(this.state.name)) {
@@ -170,7 +217,7 @@ class PersonalDetails1 extends Component {
     if (canSubmitForm) {
       try {
         let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-        this.setState({ openModal: true, openModalMessage: openModalMessage });
+        this.setState({ openModal: true, openModalMessage: openModalMessage ,});
 
         var kotakBody = {
           name: this.state.name,
@@ -178,14 +225,13 @@ class PersonalDetails1 extends Component {
           email: this.state.email
         };
         const res = await Api.post('/api/ins_service/api/insurance/kotak/lead/create', kotakBody);
-
         if (res.pfwresponse.status_code === 200) {
 
           var kotakUrl = res.pfwresponse.result.lead;
           if (getConfig().app === 'web') {
 
             this.setState({
-              show_loader: false,
+              skelton: false,
               openModal: false,
               openModalMessage: ''
             });
@@ -216,20 +262,30 @@ class PersonalDetails1 extends Component {
 
         } else {
           this.setState({
-            show_loader: false, openModal: false,
+            skelton: false, openModal: false,
             openModalMessage: ''
           });
-
-          toast(res.pfwresponse.result.error || 'Something went wrong');
+          error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
+          // toast(res.pfwresponse.result.error || 'Something went wrong');
         }
       } catch (err) {
         this.setState({
-          show_loader: false
+          skelton: false,
+          showError: 'page'
         });
-        toast('Something went wrong');
+      }
+  
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError: 'page'
+        })
       }
     }
-
   }
 
   sendEvents(user_action) {
@@ -274,7 +330,7 @@ class PersonalDetails1 extends Component {
     this.sendEvents('tnc_clicked');
     if (!getConfig().Web) {
       this.setState({
-        show_loader: true
+        skelton: true
       })
     }
 
@@ -291,8 +347,10 @@ class PersonalDetails1 extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
-        showLoader={this.state.show_loader}
-        hide_header={this.state.show_loader}
+        showError={this.state.showError}
+        skelton={this.state.skelton}
+        errorData={this.state.errorData}
+        hide_header={this.state.skelton}
         title="Personal Details"
         banner={true}
         bannerText={this.bannerText()}

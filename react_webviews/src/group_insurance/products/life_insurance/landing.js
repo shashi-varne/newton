@@ -21,7 +21,7 @@ class FyntuneLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       productName: getConfig().productName,
       stepsContentMapper: fyntuneConstants.stepsContentMapper,
       stepsToFollow: fyntuneConstants.stepsToFollow,
@@ -38,10 +38,43 @@ class FyntuneLanding extends Component {
     });
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClick,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+              skelton: false,
+            })
+          },
+          button_text2: 'CLOSE'
+        }
+      };
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+  }
+
   onload = async() => {
+
+    this.setErrorData('onload');
+    let error = ''
+
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
-      show_loader: true,
+      skelton: true,
       openDialogRefresh: false
     })
     //resume api
@@ -49,7 +82,7 @@ class FyntuneLanding extends Component {
       var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
       
       this.setState({
-        show_loader: false
+        skelton: false
       })
       var resultData = res.pfwresponse.result;
 
@@ -63,16 +96,26 @@ class FyntuneLanding extends Component {
       this.setState({ resume_data : resultData});
         
       } else {
-        toast(resultData.error || resultData.message || "Something went wrong");
+        // toast(resultData.error || resultData.message || "Something went wrong");
+        error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
       }
-    }catch(err){
-      console.log(err)
+    } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false,
+        showError: 'page'
       });
-      toast("Something went wrong");
     }
-  
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError: 'page'
+      })
+    }
   }
 
   async componentDidMount(){
@@ -216,6 +259,8 @@ class FyntuneLanding extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
+    this.setErrorData('submit');
+    let error = ''
     var body = {}
     
     let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
@@ -226,7 +271,8 @@ class FyntuneLanding extends Component {
     
     
     this.setState({
-      show_loader: true
+      skelton: true,
+      // show_loader: true
     })
     //create lead api
     try{
@@ -239,7 +285,7 @@ class FyntuneLanding extends Component {
             
             toast(resultData.message)
             this.setState({
-              show_loader: false
+              skelton: false
             })
             
             return;
@@ -275,15 +321,26 @@ class FyntuneLanding extends Component {
           }
             
         } else {
-            toast(resultData.error || resultData.message || "Something went wrong");
+          error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
+            // toast(resultData.error || resultData.message || "Something went wrong");
         }
-      }catch(err){
-        console.log(err)
+      }catch (err) {
         this.setState({
-          show_loader: false
+          skelton: false,
+          showError: 'page'
         });
-        toast("Something went wrong");
-    }
+      }
+  
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError: 'page'
+        })
+      }
 
 };
 
@@ -293,6 +350,9 @@ class FyntuneLanding extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
+        showError={this.state.showError}
+        skelton={this.state.skelton}
+        errorData={this.state.errorData}
         showLoader={this.state.show_loader}
         title="Insurance Savings Plan"
         fullWidthButton={true}

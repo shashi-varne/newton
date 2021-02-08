@@ -81,6 +81,7 @@ class PlanDetailsClass extends Component {
     super(props);
     this.state = {
       selectedIndex: 0,
+      skelton: true,
       checked: true,
       parent: this.props.parent || {
         'plan_data': {
