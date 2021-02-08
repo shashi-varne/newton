@@ -46,6 +46,7 @@ class EnterAmount extends Component {
                     onChange={this.handleChange}
                   />
                 </div>
+                <p class="help-text">Save tax upto: <span>{"'{ taxSaved | inrFormat }'} {'{(stateParams.type == 'sip') ? 'yearly' : ''}'"}</span></p>
 
                 <div className="tags">
                   <div className="tag-container">

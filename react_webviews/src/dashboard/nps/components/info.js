@@ -1,7 +1,33 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
+import { storageService } from "utils/validators";
+import { navigate } from '../common/commonFunctions';
 
 class NpsInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      currentuser: false
+    };
+
+    this.navigate = navigate.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({
+      currentuser: storageService().get("currentUser")
+    })
+  }
+
+  handleClick = () => {
+    if (this.state.currentuser.nps_investment) {
+      // this,navigate('')
+    } else {
+      this.navigate('pan')
+    }
+  }
+
   render() {
     return (
       <Container
@@ -9,6 +35,7 @@ class NpsInfo extends Component {
         buttonTitle="CONTINUE"
         title="Why NPS?"
         classOverRideContainer="pr-container"
+        handleClick={this.handleClick}
       >
         <div className="nps-info">
           <ul>
@@ -83,15 +110,15 @@ class NpsInfo extends Component {
           <div className="detail">
             <div className="head">Exclusive tax benefits in NPS:</div>
             <p>
-              {"a)"} Any individual who is subscriber of NPS can claim tax deduction
-              up to 10 % of gross income under Sec 80 CCD (1) with in the
-              overall ceiling of Rs. 1.5 lakhs under Sec 80 CCE.
+              {"a)"} Any individual who is subscriber of NPS can claim tax
+              deduction up to 10 % of gross income under Sec 80 CCD (1) with in
+              the overall ceiling of Rs. 1.5 lakhs under Sec 80 CCE.
             </p>
             <p>
-              {"b)"} An additional deduction for the investment up to Rs. 50,000 in
-              NPS (Tier I account) has been exclusively available for NPS under
-              subsection 80CCD (1B). This is over and above the deduction of Rs.
-              1.5 lakhs available under sec 80C of Income Tax Act. 1961.
+              {"b)"} An additional deduction for the investment up to Rs. 50,000
+              in NPS (Tier I account) has been exclusively available for NPS
+              under subsection 80CCD (1B). This is over and above the deduction
+              of Rs. 1.5 lakhs available under sec 80C of Income Tax Act. 1961.
             </p>
             <p ng-if="!finity">
               {"c)"} Tax benefits are applicable for investments in Tier I

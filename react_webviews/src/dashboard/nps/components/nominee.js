@@ -7,16 +7,48 @@ import nominee from "../../../assets/nominee.png";
 import calendar from "../../../assets/calendar2.png";
 import relationship from "../../../assets/relationship.png";
 import Select from "../../../common/ui/Select";
+import{ updateMeta } from "../common/api";
+
+const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
 class NpsNominee extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
+      form_data: {}
     };
+    this.updateMeta = updateMeta.bind(this);
+  }
+
+  handleChange = (name) => (event) => {
+    let value = event.target ? event.target.value : event;
+    let { form_data } = this.state;
+
+    form_data[name] = value;
+    form_data[name + "_error"] = "";
+
+    this.setState({
+      form_data: form_data
+    })
+  };
+
+  handleClick = () => {
+    let { form_data } = this.state;
+
+    let data = {
+      nomination: {
+        dob: form_data.dob,
+        name: form_data.name,
+        relationship: form_data.relationship
+      }
+    }
+
+    this.updateMeta(data);
   }
 
   render() {
+    let { form_data } = this.state;
     return (
       <Container
         classOverRide="pr-error-container"
@@ -26,7 +58,7 @@ class NpsNominee extends Component {
         hidePageTitle
         title="Nominee Details"
         showLoader={this.state.show_loader}
-        // handleClick={replaceFund}
+        handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >
         <div className="page-heading">
@@ -42,8 +74,12 @@ class NpsNominee extends Component {
               icon={nominee}
               width="30"
               id="name"
+              name="name"
               label="Nominee Name"
-              // onChange={handleChange("pan")}
+              error={form_data.name_error ? true : false}
+              helperText={form_data.name_error}
+              value={form_data.name || ""}
+              onChange={this.handleChange("name")}
             />
           </div>
 
@@ -51,9 +87,13 @@ class NpsNominee extends Component {
             <InputWithIcon
               icon={calendar}
               width="30"
-              id="name"
+              id="dob"
+              name="dob"
               label="Nominee DOB (DD/MM/YYYY)"
-              // onChange={handleChange("pan")}
+              error={form_data.dob_error ? true : false}
+              helperText={form_data.dob_error}
+              value={form_data.dob || ""}
+              onChange={this.handleChange("dob")}
             />
           </div>
 
@@ -61,12 +101,14 @@ class NpsNominee extends Component {
             <Select
               icon={relationship}
               width="30"
-              id="name"
+              id="relationship"
               label="Relationship"
-              value={2}
-              options={['vjghk', 'gygh'
-              ]}
-              // onChange={handleChange("pan")}
+              name="relationship"
+              error={form_data.relationship_error ? true : false}
+              helperText={form_data.relationship_error}
+              value={form_data.relationship || ''}
+              options={relationshipOptions}
+              onChange={this.handleChange("relationship")}
             />
           </div>
         </div>

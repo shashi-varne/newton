@@ -9,6 +9,11 @@ import NpsIdentity from "./components/identity";
 import NpsNominee from "./components/nominee";
 import NpsDelivery from "./components/delivery";
 import NpsUpload from "./components/upload";
+import NpsSuccess from "./components/success";
+import NpsInvestments from "./components/investments";
+import NpsPending from "./components/pending";
+import NpsPerformance from "./components/performance";
+import NpsPran from "./components/pran";
 import "../../common/theme/Style.scss";
 import "./style.scss";
 
@@ -26,6 +31,11 @@ const Nps = (props) => {
       <Route exact path={`${url}/nominee`} component={NpsNominee} />
       <Route exact path={`${url}/delivery`} component={NpsDelivery} />
       <Route exact path={`${url}/upload`} component={NpsUpload} />
+      <Route exact path={`${url}/success`} component={NpsSuccess} />
+      <Route exact path={`${url}/investments`} component={NpsInvestments} />
+      <Route exact path={`${url}/pending`} component={NpsPending} />
+      <Route exact path={`${url}/performance`} component={NpsPerformance} />
+      <Route exact path={`${url}/pran`} component={NpsPran} />
     </Switch>
   );
 };

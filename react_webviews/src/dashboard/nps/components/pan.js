@@ -1,20 +1,21 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import calendar from "../../../assets/calendar2.png";
 import phone from "../../../assets/phone_black.png";
 import card from "../../../assets/card.png";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
+import{ kyc_submit } from "../common/api";
 
 const yesOrNo_options = [
   {
     name: "Yes",
-    value: "Yes",
+    value: true,
   },
   {
     name: "No",
-    value: "No",
+    value: false,
   },
 ];
 
@@ -25,18 +26,23 @@ class PanDetails extends Component {
       form_data: {},
       pan: "",
       dob: "",
-      mobile_no: "",
-      is_nps_contributed: ''
+      mobile_number: "",
+      is_nps_contributed: false
     };
+
+    this.kyc_submit = kyc_submit.bind(this);
   }
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
+    let { form_data } = this.state;
+
+    form_data[name] = value;
+    form_data[name + '_error'] = '';
 
     this.setState({
-      [name]: value,
-      [name + 'error']: ''
-    });
+      form_data: form_data
+    })
   };
 
   handleChangeRadio = (event) => {
@@ -50,9 +56,26 @@ class PanDetails extends Component {
 
   handleClick = () => {
     // endpoint = api/kyc/v2/mine
+    // console.log(this.state.form_data)
+    let { form_data } = this.state;
+    let data = {
+      kyc: {
+        address: {
+          email: form_data.email,
+          mobile_number: form_data.mobile_number
+        },
+        pan: {
+          dob: form_data.dob,
+          pan_number: form_data.pan
+        }
+      }
+    }
+
+    this.kyc_submit(data);
   }
 
   render() {
+    let { form_data, is_nps_contributed } = this.state;
     return (
       <Container
         classOverRIde="pr-error-container"
@@ -69,6 +92,10 @@ class PanDetails extends Component {
                 width="30"
                 id="pan"
                 label="PAN number"
+                name="pan"
+                error={!!form_data.pan_error}
+                helperText={form_data.pan_error}
+                value={form_data.pan}
                 onChange={this.handleChange("pan")}
               />
             </div>
@@ -87,12 +114,31 @@ class PanDetails extends Component {
               />
             </div>
 
+            {is_nps_contributed && <div className="InputField">
+              <InputWithIcon
+                icon={card}
+                width="30"
+                id="pran"
+                label="Pran number"
+                type="number"
+                name="pran"
+                error={!!form_data.pran_error}
+                helperText={form_data.pran_error}
+                value={form_data.pran}
+                onChange={this.handleChange("pran")}
+              />
+            </div>}
+
             <div className="InputField">
               <InputWithIcon
                 icon={calendar}
                 width="30"
                 id="dob"
+                name="dob"
                 label="your date of birth"
+                error={!!form_data.dob_error}
+                helperText={form_data.dob_error}
+                value={form_data.dob}
                 onChange={this.handleChange("dob")}
               />
             </div>
@@ -102,9 +148,28 @@ class PanDetails extends Component {
                 icon={phone}
                 width="30"
                 type="number"
-                id="mobile_no"
+                id="mobile_number"
+                name="mobile_number"
                 label="Enter Mobile Number"
-                onChange={this.handleChange("mobile_no")}
+                error={!!form_data.mobile_number_error}
+                helperText={form_data.mobile_number_error}
+                value={form_data.mobile_number}
+                onChange={this.handleChange("mobile_number")}
+              />
+            </div>
+
+            <div className="InputField">
+              <InputWithIcon
+                icon={phone}
+                width="30"
+                type="email"
+                id="email"
+                name="email"
+                label="Your Email"
+                error={!!form_data.email_error}
+                helperText={form_data.email_error}
+                value={form_data.email}
+                onChange={this.handleChange("email")}
               />
             </div>
           </FormControl>
