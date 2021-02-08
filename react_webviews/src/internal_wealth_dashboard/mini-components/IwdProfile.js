@@ -94,7 +94,7 @@ const IwdProfile = (props) => {
       >
         <ClickAwayListener onClickAway={toggleExpanded}>
           <div id="iwd-profile">
-            <div className="iwd-fade">
+            <div className="iwd-profile-content">
               {profileIcon}
               <div className="iwd-profile-username">{userDetail.name}</div>
               <div className="iwd-profile-detail" id="pan">

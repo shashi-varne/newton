@@ -18,7 +18,7 @@
   width: 0;
   height: 0;
   overflow: hidden;
-  .iwd-fade {
+  .iwd-profile-content {
     opacity: 0;
   }
 }
@@ -26,16 +26,16 @@
   width: 340px;
   height: 300px;
   transition: width 500ms, height 441ms ease-out;
-  .iwd-fade {
+  .iwd-profile-content {
     opacity: 0;
     padding: 30px 40px 20px;
-    @include iwd-fadeCreator(0.3, ease-in, 0.3);
+    @include iwd-fadeCreator(0.3, ease-in, 0.4);
   }
 }
 .boxEffect-enter-done {
   width: 340px;
   height: 300px;
-  .iwd-fade {
+  .iwd-profile-content {
     padding: 30px 40px 20px;
   }
 }
@@ -43,12 +43,12 @@
   width: 340px;
   height: 300px;
   overflow: hidden;
-  .iwd-fade {
+  .iwd-profile-content {
     padding: 30px 40px 20px;
   }
 }
 .boxEffect-exit-active {
-  .iwd-fade {
+  .iwd-profile-content {
     opacity: 0;
     transition: opacity ease-in 0.3s;
   }
@@ -138,6 +138,9 @@
   }
 }
 
+.iwd-fade {
+  @include iwd-fadeCreator(0.6, ease-out, 0);
+}
 @keyframes iwd-fade {
   from {
     opacity: 0;
