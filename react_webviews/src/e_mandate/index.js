@@ -32,6 +32,9 @@ import EnpsConsentFailure from './components/enps/failure';
 import EnpsRedirection from './components/enps/redirection';
 import EnpsConsentOtp from './components/enps/otp';
 
+//Money Control WebView
+import MoneyControlLayout from './components/money_control/layout'
+
 
 import { ToastContainer } from 'react-toastify';
 
@@ -91,6 +94,8 @@ const Mandate_OTM = (props) => {
           <Route path={`${url}/enps/success`} component={EnpsConsentSuccess} />
           <Route path={`${url}/enps/otp`} component={EnpsConsentOtp} />
 
+          {/* iframe money control*/}
+          <Route path={`${url}/layout`} component={MoneyControlLayout} />
 
           <Route component={NotFound} />
         </Switch>
