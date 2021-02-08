@@ -483,8 +483,9 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
+    // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
+    config_to_return.webAppUrl = window.location.origin + '/appl/web/view#!/';
   }
 
   config_to_return.isStaging = isStaging;
