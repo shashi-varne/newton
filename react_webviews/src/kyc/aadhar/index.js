@@ -1,15 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
+import { validateNumber, storageService } from "utils/validators";
+import { navigate as navigateFunc, validateFields } from "../common/functions";
+import { getPathname, storageConstants } from "../constants";
+import { initData } from "../services";
 
 const Aadhar = (props) => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showLoader] = useState(false);
   const [form_data, setFormData] = useState({});
+  const navigate = navigateFunc.bind(props);
 
-  const handleClick = () => {};
+  useEffect(() => {
+    initialize();
+  }, []);
 
-  const handleChange = () => {};
+  let initialize = async () => {
+    let userKyc = storageService().getObject(storageConstants.KYC);
+    if (!userKyc) {
+      await initData();
+      userKyc = storageService().getObject(storageConstants.KYC);
+    }
+    setFormData({
+      mobile: userKyc.identification.meta_data.mobile_number || "",
+    });
+  };
+
+  let keysToCheck = ["aadhar", "mobile"];
+
+  const handleClick = () => {
+    let result = validateFields(form_data, keysToCheck);
+    if (!result.canSubmit) {
+      let data = Object.assign({}, result.formData);
+      setFormData(data);
+      return;
+    }
+    navigate(getPathname("aadharConfirmation"), { state: { name: "Alekhya" } });
+  };
+
+  const handleChange = (name) => (event) => {
+    let value = event?.target?.value || "";
+    let formData = Object.assign({}, form_data);
+    console.log(formData);
+    if (!value) {
+      formData[`${name}_error`] = "This is required";
+    } else {
+      formData[`${name}_error`] = "";
+    }
+    if (value && !validateNumber(value)) return;
+    formData[name] = value;
+    setFormData(formData);
+  };
 
   return (
     <Container
@@ -17,8 +58,7 @@ const Aadhar = (props) => {
       hideInPageTitle
       id="aadhar"
       buttonTitle="PROCEED"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={showLoader}
       handleClick={handleClick}
     >
       <div className="aadhar">
@@ -34,20 +74,20 @@ const Aadhar = (props) => {
             label="Aadhar card number"
             placeholder="XXXXXXXXXXXX"
             class="input"
-            value=""
-            error={form_data.name_error ? true : false}
-            helperText={form_data.name_error || ""}
+            value={form_data.aadhar || ""}
+            error={form_data.aadhar_error ? true : false}
+            helperText={form_data.aadhar_error || ""}
             onChange={handleChange("aadhar")}
-            maxLength={20}
+            maxLength={12}
             type="text"
           />
           <Input
             label="Mobile number"
             placeholder="0000000000"
             class="input"
-            value=""
+            value={form_data.mobile || ""}
             error={form_data.mobile_error ? true : false}
-            helperText={form_data.name_error || ""}
+            helperText={form_data.mobile_error || ""}
             onChange={handleChange("mobile")}
             maxLength={10}
             type="text"

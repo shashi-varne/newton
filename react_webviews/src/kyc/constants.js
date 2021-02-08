@@ -3,6 +3,14 @@ export const apiConstants = {
   submit: "/api/kyc/v2/mine",
 };
 
+export const getPathname = (name) => {
+  let pathnames = {
+    aadhar: "/kyc/aadhar",
+    aadharConfirmation: "/kyc/aadhar/confirmation",
+  };
+  return pathnames[name] || "";
+};
+
 export const storageConstants = {
   USER: "user",
   KYC: "kyc",
