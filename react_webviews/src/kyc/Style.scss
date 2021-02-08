@@ -712,6 +712,20 @@
   }
 }
 
+.FooterDefaultLayout {
+  .FlexItem2 {
+    .bank-list-footer {
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+      background-color: white;
+    }
+
+    .disabled {
+      border: none;
+    }
+  }
+}
+
 ///////////// BANK LIST END //////////////
 
 .kyc-show-aadhar {

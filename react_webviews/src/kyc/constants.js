@@ -1,12 +1,16 @@
 export const apiConstants = {
   getPan: "/api/kyc/checkv2/mine",
   submit: "/api/kyc/v2/mine",
+  getMyaccount: "/api/iam/myaccount",
 };
 
 export const getPathname = (name) => {
   let pathnames = {
     aadhar: "/kyc/aadhar",
     aadharConfirmation: "/kyc/aadhar/confirmation",
+    bankList: "/kyc/add-bank",
+    addBank: "/kyc/approved/banks/doc/",
+    bankDetails: "/kyc/add-bank/details/",
   };
   return pathnames[name] || "";
 };

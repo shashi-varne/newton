@@ -1,76 +1,73 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { getConfig } from "../../utils/functions";
+import { getMyAccount } from "../common/api";
+import { storageService } from "utils/validators";
+import { navigate as navigateFunc } from "../common/functions";
+import { getPathname } from "../constants";
+import toast from "common/ui/Toast";
 
 const productName = getConfig().productName;
 const Banksist = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
-  const [showLoader, setShowLoader] = useState(false);
-  const [isApiRunning, setIsApiRunning] = useState(false);
-  const [banks, setBanks] = useState([
-    {
-      account_number: "06301010001211",
-      account_type: "SB",
-      bank_id: 5587781714706433,
-      bank_image:
-        "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png",
-      bank_name: "ANDHRA BANK",
-      bank_status: "doc_submitted",
-      branch_name: "WARANGAL",
-      ifsc_code: "ANDB0000630",
-      mandates: [],
-      mapped_bank_status: "Verification pending",
-      status: "default",
-    },
-    {
-      account_number: "06301010001210",
-      account_type: "SB",
-      bank_id: 6382861765574657,
-      bank_image:
-        "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png",
-      bank_name: "ANDHRA BANK",
-      bank_status: "verified",
-      branch_name: "WARANGAL",
-      ifsc_code: "ANDB0000630",
-      mandates: [],
-      mapped_bank_status: "Verification pending",
-      status: "rejected", //"additional_approved",
-    },
-    {
-      account_number: "06301010001210",
-      account_type: "SB",
-      bank_id: 6382861765574657,
-      bank_image:
-        "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png",
-      bank_name: "ANDHRA BANK",
-      bank_status: "rejected",
-      branch_name: "WARANGAL",
-      ifsc_code: "ANDB0000630",
-      mandates: [],
-      mapped_bank_status: "Verification pending",
-      status: "rejected", //"additional_approved",
-    },
-  ]);
+  const [showLoader, setShowLoader] = useState(true);
+  const [changeRequest, setChangerequest] = useState({});
+  const navigate = navigateFunc.bind(props);
+  const [banks, setBanks] = useState([]);
 
-  const handleClick = () => {};
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = async () => {
+    try {
+      const result = await getMyAccount();
+      if (!result) return;
+      setBanks(result.bank_mandates.banks || []);
+      setChangerequest(result.change_request || {});
+      setShowLoader(false);
+      storageService().setObject("bank_mandates", result.bank_mandates.banks);
+      storageService().setObject("change_requests", result.change_requests);
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    }
+  };
+
+  const handleClick = () => {
+    navigate(`${getPathname("addBank")}`);
+  };
+
+  const bank_details = (bank_id) => () => {
+    navigate(`${getPathname("bankDetails")}${bank_id}`);
+  };
+
+  const config = getConfig();
 
   return (
     <Container
-      showLoader={showLoader}
+      showSkelton={showLoader}
       hideInPageTitle
       id="banks-list"
       buttonTitle="ADD ANOTHER BANK"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
       handleClick={handleClick}
+      disable={showLoader}
+      noFooter={
+        changeRequest.add_bank_enabled &&
+        ((config.web && !config.isIframe) || config.native)
+      }
+      buttonClassName="bank-list-footer"
     >
       <div className="banks-list">
         <div className="kyc-main-title">Bank accounts</div>
         {banks.map((bank, index) => {
           return (
-            <div className="block" key={index}>
+            <div
+              className="block"
+              key={index}
+              onClick={bank_details(bank.bank_id)}
+            >
               <div className="bank-details">
-                <img src={bank.bank_image} className="left-icon" />
+                <img src={bank.bank_image} className="left-icon" alt="" />
                 <div className="content">
                   <div className="bank-name">
                     <div className="name">

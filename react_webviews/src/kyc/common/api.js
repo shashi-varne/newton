@@ -79,3 +79,21 @@ export const savePanData = async (pan_number, nri_data) => {
       throw result.error || result.message || "Server error";
   }
 };
+
+export const getMyAccount = async () => {
+  const res = await Api.get(apiConstants.getMyaccount);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};
