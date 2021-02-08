@@ -18,23 +18,28 @@ import Upload from './upload'
 import { themeConfig } from 'utils/constants'
 import './Style.scss'
 
-import Home from './home'
-import Nominee from './nominee'
-import Report from './report'
 import Aadhar from './aadhar'
+import AadharConfirmation from './aadhar/confirmation'
+import AadharCallback from './aadhar/callback'
+
+import AddBank from './bank/AddBank'
+import AddBankVerify from './bank/AddBankVerify'
+import BanksList from './bank/BanksList'
+import BankDetails from './bank/BankDetails'
+
 import CompliantPersonalDetails1 from './compliant/PersonalDetails1'
 import CompliantPersonalDetails2 from './compliant/PersonalDetails2'
 import ConfirmPan from './compliant/ConfirmPan'
 import KycComplete from './compliant/Complete'
 import CompliantReport from './compliant/Report'
 import Verify from './compliant/Verify'
-import AadharConfirmation from './aadhar/confirmation'
 import RtaCompliantPersonalDetails from './rta_compliant'
+
 import RegistrationSuccess from './success'
-import AddBank from './bank/AddBank'
-import AddBankVerify from './bank/AddBankVerify'
-import BanksList from './bank/BanksList'
-import BankDetails from './bank/BankDetails'
+
+import Home from './home'
+import Nominee from './nominee'
+import Report from './report'
 import PersonalDetails1 from './personal_details/Screen1'
 import PersonalDetails2 from './personal_details/Screen2'
 import PersonalDetails3 from './personal_details/Screen3'
@@ -68,6 +73,7 @@ const Kyc = (props) => {
           <Route exact path={`${url}/report`} component={Report} />
           <Route exact path={`${url}/aadhar`} component={Aadhar} />
           <Route exact path={`${url}/aadhar/confirmation`} component={AadharConfirmation} />
+          <Route exact path={`${url}/aadhar/callback/:error`} component={AadharCallback} />
           <Route exact path={`${url}/compliant-personal-details`} component={CompliantPersonalDetails1} />
           <Route exact path={`${url}/compliant-personal-details2`} component={CompliantPersonalDetails2} />
           <Route exact path={`${url}/compliant-confirm-pan`} component={ConfirmPan} />
