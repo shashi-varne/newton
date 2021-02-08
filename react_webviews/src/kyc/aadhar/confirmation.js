@@ -2,19 +2,17 @@ import React, { useState } from "react";
 import Container from "../common/Container";
 
 const AadharConfirmation = (props) => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showLoader] = useState(false);
 
   const handleClick = () => {};
 
   return (
     <Container
-      showLoader={showLoader}
+      showSkelton={showLoader}
       hideInPageTitle
       id="aadhar-confirmation"
       buttonTitle="PROCEED"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={showLoader}
       handleClick={handleClick}
     >
       <div className="aadhar-confirmation">

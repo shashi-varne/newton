@@ -54,7 +54,7 @@ const Aadhar = (props) => {
 
   return (
     <Container
-      showLoader={showLoader}
+      showSkelton={showLoader}
       hideInPageTitle
       id="aadhar"
       buttonTitle="PROCEED"
