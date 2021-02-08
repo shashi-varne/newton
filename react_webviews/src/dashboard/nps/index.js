@@ -8,6 +8,7 @@ import Recommendations from "./components/recommendations";
 import NpsIdentity from "./components/identity";
 import NpsNominee from "./components/nominee";
 import NpsDelivery from "./components/delivery";
+import NpsUpload from "./components/upload";
 import "../../common/theme/Style.scss";
 import "./style.scss";
 
@@ -24,6 +25,7 @@ const Nps = (props) => {
       <Route exact path={`${url}/identity`} component={NpsIdentity} />
       <Route exact path={`${url}/nominee`} component={NpsNominee} />
       <Route exact path={`${url}/delivery`} component={NpsDelivery} />
+      <Route exact path={`${url}/upload`} component={NpsUpload} />
     </Switch>
   );
 };

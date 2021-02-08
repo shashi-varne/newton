@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
-import person from "../../../assets/person.png";
+import person from "../../../assets/location.png";
 
 class NpsDelivery extends Component {
   constructor(props) {

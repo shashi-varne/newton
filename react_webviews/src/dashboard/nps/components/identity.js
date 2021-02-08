@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 // import toast from "common/ui/Toast";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
-import RadioWithIcon from "../../../common/ui/RadioWithoutIcon";
+import RadioWithIcon from "../../../common/ui/RadioOptions";
 import person from "../../../assets/person.png";
 
 class NpsIdentity extends Component {
@@ -10,11 +10,11 @@ class NpsIdentity extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      form_data: {},
     };
   }
 
-  componentWillMount() {
-  }
+  componentWillMount() {}
 
   render() {
     return (
@@ -26,7 +26,6 @@ class NpsIdentity extends Component {
         hidePageTitle
         title="Additional Details"
         showLoader={this.state.show_loader}
-        // handleClick={replaceFund}
         classOverRideContainer="pr-container"
       >
         <div className="page-heading">
@@ -49,14 +48,21 @@ class NpsIdentity extends Component {
 
           <div className="InputField">
             <RadioWithIcon
+              icon_type=''
               width="30"
               id="name"
               label="Marital Status"
-              options={[{
-                  name: "status", value: 'hvgh'
-              },{
-                name: "status", value: 'hvgh'
-            }]}
+              value={2}
+              options={[
+                {
+                  name: "Single",
+                  value: "single",
+                },
+                {
+                  name: "Married",
+                  value: "married",
+                },
+              ]}
               // onChange={handleChange("pan")}
             />
           </div>

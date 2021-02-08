@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
-import toast from "common/ui/Toast";
+// import toast from "common/ui/Toast";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import person from "../../../assets/person.png";
-import "../style.scss";
+import nominee from "../../../assets/nominee.png";
+import calendar from "../../../assets/calendar2.png";
+import relationship from "../../../assets/relationship.png";
+import Select from "../../../common/ui/Select";
 
 class NpsNominee extends Component {
   constructor(props) {
@@ -36,7 +39,7 @@ class NpsNominee extends Component {
         <div className="nps-nominee">
           <div className="InputField">
             <InputWithIcon
-              icon={person}
+              icon={nominee}
               width="30"
               id="name"
               label="Nominee Name"
@@ -46,7 +49,7 @@ class NpsNominee extends Component {
 
           <div className="InputField">
             <InputWithIcon
-              icon={person}
+              icon={calendar}
               width="30"
               id="name"
               label="Nominee DOB (DD/MM/YYYY)"
@@ -55,11 +58,14 @@ class NpsNominee extends Component {
           </div>
 
           <div className="InputField">
-            <InputWithIcon
-              icon={person}
+            <Select
+              icon={relationship}
               width="30"
               id="name"
               label="Relationship"
+              value={2}
+              options={['vjghk', 'gygh'
+              ]}
               // onChange={handleChange("pan")}
             />
           </div>
