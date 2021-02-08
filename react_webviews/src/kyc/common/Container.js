@@ -3,6 +3,7 @@ import { withRouter } from 'react-router'
 
 import Header from './Header'
 import Footer from './footer'
+import Skelton from '../../common/ui/Skelton'
 import loader_fisdom from 'assets/loader_gif_fisdom.gif'
 import loader_myway from 'assets/loader_gif_myway.gif'
 import { nativeCallback } from 'utils/native_callback'
@@ -122,6 +123,14 @@ const Container = (props) => {
     }
   }
 
+  const renderSkeltonLoader = (type = 'g') => {
+    if (props.showSkelton) {
+      return (
+        <Skelton type={type} />
+      )
+    }
+  }
+
   const headerGoBack = () => {
     historyGoBack({ fromHeader: true })
   }
@@ -168,6 +177,7 @@ const Container = (props) => {
       <div id="HeaderHeight" style={{ top: 56 }}>
         {/* Loader Block */}
         {renderPageLoader()}
+        {renderSkeltonLoader(props?.skeltonType)}
       </div>
 
       {/*  */}
