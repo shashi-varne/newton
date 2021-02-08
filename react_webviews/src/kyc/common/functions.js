@@ -1,19 +1,16 @@
 import { getConfig } from "utils/functions";
 
-export const navigate = (pathname, data, replace) => {
-  if (!replace) {
-    props.history.push({
+export function navigate(pathname, data, redirect = false) {
+  if (redirect) {
+    this.history.push({
       pathname: pathname,
       search: data?.searchParams || getConfig().searchParams,
-      params: data.params,
-      stata: data.state,
     });
   } else {
-    props.history.replace({
-      pathname: pathname,
+    this.history.push({
+      pathname: `/kyc/${pathname}`,
       search: data?.searchParams || getConfig().searchParams,
-      params: data.params,
-      stata: data.state,
+      state: data,
     });
   }
-};
+}
