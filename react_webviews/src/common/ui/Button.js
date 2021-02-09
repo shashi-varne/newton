@@ -8,7 +8,7 @@ import './style.scss';
 import { getConfig } from 'utils/functions';
 
 import DotDotLoaderNew from './DotDotLoaderNew';
-import { disableBodyTouch , disableBodyOverflow} from 'utils/validators';
+import { disableBodyTouch } from 'utils/validators';
 
 
 class CustomButton extends Component {
@@ -21,11 +21,11 @@ class CustomButton extends Component {
     
     if(!showLoader || !props.showError){
       disableBodyTouch(true); //touch enabled
-      disableBodyOverflow(true);
+      // disableBodyOverflow(true);
     }
 
     if(props.showError){
-      disableBodyOverflow();
+      // disableBodyOverflow();
     }
 
     const { button: buttonClass, ...classes } = props.classes || {};
