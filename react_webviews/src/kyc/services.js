@@ -1,6 +1,15 @@
 import Api from '../utils/api'
 import { isEmpty, storageService } from '../utils/validators'
 
+const docMapper = {
+  DL: 'Driving license',
+  PASSPORT: 'Passport',
+  AADHAAR: 'Aadhaar card',
+  VOTER_ID_CARD: 'Voter ID',
+  UTILITY_BILL: 'Gas receipt',
+  LAT_BANK_PB: 'Passbook',
+}
+
 export async function getAccountSummary(params = {}) {
   const url = '/api/user/account/summary'
   if (isEmpty(params)) {
@@ -16,8 +25,7 @@ export async function getAccountSummary(params = {}) {
   }
   const response = await Api.post(url, params)
   if (
-    response.pfwresponse.status_code === 200 &&
-    response.pfwresponse.result.message === 'success'
+    response.pfwresponse.status_code === 200
   ) {
     return response.pfwresponse.result
   } else {
@@ -29,8 +37,7 @@ export async function getNPSInvestmentStatus() {
   const url = '/api/nps/invest/status/v2'
   const response = await Api.get(url)
   if (
-    response.pfwresponse.status_code === 200 &&
-    response.pfwresponse.result.message === 'success'
+    response.pfwresponse.status_code === 200
   ) {
     return response.pfwresponse.result
   } else {
@@ -88,7 +95,7 @@ async function setSummaryData(result) {
   setNpsData(result)
 }
 
-async function getCampaignBySection(notifications, sections) {
+export function getCampaignBySection(notifications, sections) {
   if (!sections) {
     sections = []
   }
@@ -235,4 +242,65 @@ export function getKycAppStatus(kyc) {
     docRejected,
     rejectedItems
   }
+}
+
+export function getDocuments(userKyc) {
+  return [
+    {
+      key: "pan",
+      title: "PAN card",
+      subtitle: userKyc.pan.meta_data.pan_number,
+      doc_status: userKyc.pan.doc_status,
+      // default_image: partner.assets.pan_default,
+      // approved_image: partner.assets.pan_approved
+    },
+
+    {
+      key: "address",
+      title: "Address proof",
+      subtitle: getAddressProof(userKyc),
+      doc_status: userKyc.address.doc_status,
+      // default_image: partner.assets.regi_default,
+      // approved_image: partner.assets.regi_approved
+    },
+
+    {
+      key: "selfie",
+      title: "Selfie",
+      doc_status: userKyc.identification.doc_status,
+      // default_image: partner.assets.selfie_default,
+      // approved_image: partner.assets.selfie_approved
+    },
+
+    {
+      key: "selfie_video",
+      title: "Selfie video (IPV)",
+      doc_status: userKyc.ipvvideo.doc_status,
+      // default_image: partner.assets.video_default,
+      // approved_image: partner.assets.video_approved
+    },
+
+    {
+      key: "bank",
+      title: "Bank details",
+      doc_status: userKyc.bank.meta_data_status,
+      // default_image: partner.assets.default,
+      // approved_image: partner.assets.approved
+    },
+
+    {
+      key: "sign",
+      title: "Signature",
+      doc_status: userKyc.sign.doc_status,
+      // default_image: partner.assets.sign_default,
+      // approved_image: partner.assets.sign_approved
+    }
+  ]
+}
+
+function getAddressProof(userKyc) {
+  if (userKyc.address.meta_data.is_nri) {
+    return "Passport"
+  }
+  return docMapper[userKyc.address_doc_type]
 }

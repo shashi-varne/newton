@@ -19,7 +19,7 @@ const Intro = (props) => {
       hideInPageTitle
       buttonTitle="CONTINUE"
       disable={loading}
-      titile="KYC Journey"
+      title="Intro"
       classOverRideContainer="pr-container"
       showSkelton={loading}
       skeltonType="p"

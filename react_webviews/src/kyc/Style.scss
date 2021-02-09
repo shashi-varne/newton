@@ -987,3 +987,16 @@
     }
   }
 }
+
+.kyc-upload-card {
+  border: 1px solid beige;
+  padding: 10px 0 10px 0;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  .title {
+    margin-left: 10px;
+  }
+}
