@@ -20,7 +20,7 @@ definitions:
           - npm install
           - yarn
           - yarn build &
-          - sleep 1
+          - sleep 5
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
