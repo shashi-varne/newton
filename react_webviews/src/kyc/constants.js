@@ -2,6 +2,8 @@ export const apiConstants = {
   getPan: "/api/kyc/checkv2/mine",
   submit: "/api/kyc/v2/mine",
   getMyaccount: "/api/iam/myaccount",
+  getIFSC: "/api/ifsc/",
+  addAdditionalBank: "/api/kyc/bank/add/additionalbank/mine",
 };
 
 export const getPathname = (name) => {
@@ -11,6 +13,7 @@ export const getPathname = (name) => {
     bankList: "/kyc/add-bank",
     addBank: "/kyc/approved/banks/doc/",
     bankDetails: "/kyc/add-bank/details/",
+    addBankVerify: '/kyc/approved/banks/verify/',
   };
   return pathnames[name] || "";
 };
@@ -200,3 +203,16 @@ export const occupationTypeOptions = [
   { name: "Agriculturist", value: "AGRICULTURIST" },
   { name: "Professional", value: "PROFESSIONAL" },
 ];
+
+export const getIfscCodeError = (code) => {
+  switch (code) {
+    case "lvb":
+      return "Please enter a valid ifsc code of Lakshmi Vilas Bank";
+    case "cub":
+      return "Please enter a valid ifsc code of City Union Bank";
+    case "ippb":
+      return "Please enter a valid ifsc code of India Post Payments Bank";
+    default:
+      return "Please enter a valid ifsc code";
+  }
+};

@@ -41,7 +41,6 @@ const Aadhar = (props) => {
   const handleChange = (name) => (event) => {
     let value = event?.target?.value || "";
     let formData = Object.assign({}, form_data);
-    console.log(formData);
     if (!value) {
       formData[`${name}_error`] = "This is required";
     } else {

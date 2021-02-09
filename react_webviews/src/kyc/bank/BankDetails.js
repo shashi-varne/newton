@@ -1,94 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Container from "../common/Container";
 import { formatAmountInr } from "utils/validators";
+import { storageService } from "utils/validators";
+import { navigate as navigateFunc } from "../common/functions";
+import { initData } from "../services";
 
 const BankDetails = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
-  const [showLoader, setShowLoader] = useState(false);
-  const [isApiRunning, setIsApiRunning] = useState(false);
-  const [banks, setBanks] = useState([
-    {
-      account_number: "06301010001211",
-      account_type: "SB",
-      bank_id: 5587781714706433,
-      bank_image:
-        "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png",
-      bank_name: "ANDHRA BANK",
-      bank_status: "doc_submitted",
-      branch_name: "WARANGAL",
-      ifsc_code: "ANDB0000630",
-      mandates: [],
-      mapped_bank_status: "Verification pending",
-      status: "default",
-    },
-    {
-      account_number: "06301010001210",
-      account_type: "SB",
-      bank_id: 6382861765574657,
-      bank_image:
-        "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png",
-      bank_name: "ANDHRA BANK",
-      bank_status: "verified",
-      branch_name: "WARANGAL",
-      ifsc_code: "ANDB0000630",
-      mandates: [
-        {
-          id: 1234,
-          amount: 1237894,
-          status: "verified",
-          mapped_mandate_status: "hello",
-        },
-        {
-          id: 1234,
-          amount: 1234,
-          status: "rejected",
-          mapped_mandate_status: "hello",
-        },
-        {
-          id: 1234,
-          amount: 1234,
-          status: "init",
-          mapped_mandate_status: "hello",
-        },
-      ],
-      mapped_bank_status: "Verification pending",
-      status: "rejected",
-    },
-    {
-      account_number: "06301010001210",
-      account_type: "SB",
-      bank_id: 6382861765574657,
-      bank_image:
-        "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png",
-      bank_name: "ANDHRA BANK",
-      bank_status: "rejected",
-      branch_name: "WARANGAL",
-      ifsc_code: "ANDB0000630",
-      mandates: [
-        {
-          id: 1234,
-          amount: 1234,
-          status: "verified",
-          mapped_mandate_status: "hello",
-        },
-        {
-          id: 1278934,
-          amount: 1234,
-          status: "verified",
-          mapped_mandate_status: "hello",
-        },
-      ],
-      mapped_bank_status: "Verification pending",
-      status: "rejected",
-    },
-  ]);
+  const banks = storageService().getObject("bank_mandates") || [];
+  const bank_id = props.match.params.bank_id;
+  if (!bank_id) {
+    props.history.goBack();
+  }
+  const bank = banks.find((obj) => obj.bank_id?.toString() === bank_id) || {};
+  const navigate = navigateFunc.bind(props);
 
-  const bank = banks[1];
+  const handleClick = () => {
+    if (bank.status === "default") {
+      navigate();
+      // $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status });
+    } else {
+      navigate("");
+      // $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status, additional: true, bank_id: $scope.bankData.bank_id });
+    }
+  };
 
-  const handleClick = () => {};
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  let initialize = async () => {
+    await initData();
+  };
+
   return (
     <Container
-      showLoader={showLoader}
+      showLoader={false}
       hideInPageTitle
       id="bank-details"
       buttonTitle="RE-UPLOAD DOCUMENT"
@@ -98,7 +44,7 @@ const BankDetails = (props) => {
       <div className="bank-details">
         <div className="kyc-main-title">Bank accounts</div>
         <div className="bank-info">
-          <img src={bank.bank_image} className="left-icon" />
+          <img src={bank.bank_image} className="left-icon" alt="" />
           <div className="content">
             <div className="bank-name">
               <div className="name">

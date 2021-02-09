@@ -1,88 +1,160 @@
 import React, { useState } from "react";
 import Container from "../common/Container";
-import { storageService } from "utils/validators";
+import { storageService, validateNumber } from "utils/validators";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { storageConstants } from "../constants";
-import { bankAccountTypeOptions } from "../constants";
-import { getConfig } from "../../utils/functions";
+import { storageConstants, bankAccountTypeOptions } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
+import {
+  navigate as navigateFunc,
+  validateFields,
+  checkIFSCFormat,
+  saveBankData,
+} from "../common/functions";
+import { initData } from "../services";
 
-const productName = getConfig().productName;
-let userKycDetails = storageService().getObject(storageConstants.KYC);
 const AddBank = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
-  const [showLoader, setShowLoader] = useState(false);
-  const [isApiRunning, setIsApiRunning] = useState(false);
-  const [form_data, setFormData] = useState({});
-  const [bankData, setBankData] = useState({
+  const navigate = navigateFunc.bind(props);
+  const initialize = async () => {
+    await initData();
+  };
+  initialize();
+  let userKyc = storageService().getObject(storageConstants.KYC);
+  const bank_id = props.location.bank_id;
+
+  let data = {
     account_number: "",
     c_account_number: "",
     account_type: "",
     ifsc_code: "",
-  });
-  const [userKyc, setUserKyc] = useState(userKycDetails);
+  };
+  if (bank_id) {
+    data = userKyc.additional_approved_banks.find(function (obj) {
+      return obj.bank_id?.toString() === bank_id;
+    });
+  }
 
+  data.c_account_number = data.account_number;
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [form_data, setFormData] = useState({});
+  const [bankData, setBankData] = useState({ ...data });
+  const [bankIcon, setBankIcon] = useState("");
   const accountTypes = bankAccountTypeOptions(
     userKyc.address.meta_data.is_nri || ""
   );
 
+  let info_text =
+    "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.";
+  let variant = "info";
+  if (bank_id) {
+    if (bankData.user_rejection_attempts === 0) {
+      // $mdDialog.show({
+      //   controller: function ($scope, $rootScope, $state) {
+      //     $scope.icon = $rootScope.partner.assets.ic_bank_not_added;
+      //     $scope.cancel = function () {
+      //       $mdDialog.cancel();
+      //     };
+      //     $scope.redirect = function () {
+      //       $state.go("kyc-journey");
+      //     }
+      //     $scope.bankdeatils = function () {
+      //       $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status, additional: true, bank_id: $scope.stateParams.bank_id });
+      //     }
+      //   },
+      //   templateUrl: 'components/modal/pennyExhausted.html',
+      //   parent: angular.element(document.body),
+      //   clickOutsideToClose: false,
+      //   fullscreen: false
+      // })
+    } else if (bankData.user_rejection_attempts === 2) {
+      info_text =
+        "2 more attempts remaining! Please enter your correct account details to proceed";
+      variant = "attention";
+    } else if (bankData.user_rejection_attempts === 1) {
+      info_text =
+        "Just 1 attempt is remaining! Please enter your correct account details to proceed";
+      variant = "attention";
+    }
+  }
+
   const handleClick = () => {
-    let keys_to_check = [
+    const keysToCheck = [
       "ifsc_code",
       "account_number",
       "account_type",
       "c_account_number",
     ];
-    let formData = Object.assign({}, form_data);
-    let submit = true;
-    keys_to_check.forEach((element) => {
-      let value = bankData[element];
-      if (!value) {
-        formData[`${element}_error`] = "This is required";
-        submit = false;
-      }
-    });
-    if (!submit) {
-      setFormData(formData);
+    const formData = { ...form_data, ...bankData };
+    let result = validateFields(formData, keysToCheck);
+    if (!result.canSubmit) {
+      let data = Object.assign({}, result.formData);
+      setFormData(data);
       return;
     }
+
+    if (bankData.account_number !== bankData.c_account_number) {
+      let data = Object.assign({}, form_data);
+      data.c_account_number_error = "Account number should be same";
+      setFormData(data);
+      return;
+    }
+
+    if (form_data.ifsc_code_error) return;
+    const data = {
+      account_number: bankData.account_number,
+      account_type: bankData.account_type,
+      bank_name: bankData.bank_name,
+      branch_name: bankData.branch_name,
+      ifsc_code: bankData.ifsc_code.toUpperCase(),
+    };
+    saveBankData(data, setIsApiRunning, navigate);
   };
 
-  const handleChange = (name) => (event) => {
+  const handleChange = (name) => async (event) => {
     let value = event.target ? event.target.value : event;
+
+    if (name === "ifsc_code" && value && value.length > 11) return;
+
+    if (name.includes("account_number") && value && !validateNumber(value))
+      return;
+
     let formData = Object.assign({}, form_data);
     let bank = Object.assign({}, bankData);
     bank[name] = value;
     if (!value) {
       formData[`${name}_error`] = "This is required";
     } else formData[`${name}_error`] = "";
-
-    setFormData(formData);
     setBankData(bank);
+    if (name === "ifsc_code" && value) {
+      if (value.length === 11) {
+        let data = await checkIFSCFormat(bank, formData, setIsApiRunning);
+        setBankIcon(data.bankIcon);
+        setFormData(data.formData);
+        setBankData(data.bankData);
+        return;
+      } else if (formData.ifsc_code_helper) {
+        formData.ifsc_code_error = "Please enter a valid ifsc code";
+      } else {
+        formData.ifsc_code_error = "";
+      }
+    }
+    setFormData(formData);
   };
 
-  const bankIcon =
-    "https://sdk-dot-plutus-staging.appspot.com/static/img/bank_logos/ADB.png";
   return (
     <Container
-      showLoader={showLoader}
       hideInPageTitle
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning}
       handleClick={handleClick}
     >
       <div className="kyc-approved-bank">
         <div className="kyc-main-title">Enter bank account details</div>
-        <Alert
-          variant="info"
-          title="Note"
-          message=" As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details."
-        />
+        <Alert variant={variant} title="Note" message={info_text} />
         <main>
           <Input
             label="Account Holder name"
@@ -106,9 +178,7 @@ const AddBank = (props) => {
             }
             onChange={handleChange("ifsc_code")}
             type="text"
-            id="ifsc_code"
             InputProps={{
-              maxLength: 11,
               endAdornment: (
                 <>
                   {bankIcon && (
@@ -119,6 +189,7 @@ const AddBank = (props) => {
                 </>
               ),
             }}
+            disabled={isApiRunning}
           />
           <Input
             label="Account Number"
@@ -128,8 +199,9 @@ const AddBank = (props) => {
             helperText={form_data.account_number_error || ""}
             onChange={handleChange("account_number")}
             maxLength={16}
-            type="text"
+            type="password"
             id="account_number"
+            disabled={isApiRunning}
           />
           <Input
             label="Confirm Account Number"
@@ -141,6 +213,7 @@ const AddBank = (props) => {
             maxLength={16}
             type="text"
             id="c_account_number"
+            disabled={isApiRunning}
           />
           <div className="input">
             <DropdownWithoutIcon
@@ -153,6 +226,7 @@ const AddBank = (props) => {
               value={bankData.account_type || ""}
               name="account_type"
               onChange={handleChange("account_type")}
+              disabled={isApiRunning}
             />
           </div>
         </main>
