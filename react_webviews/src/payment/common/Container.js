@@ -98,6 +98,13 @@ class Container extends Component {
 
   handlePopup = () => {
 
+    let eventObj = {
+      "event_name": "Payment failed",
+      "properties": {
+        "reason": "dropped"
+      }
+    };
+    nativeCallback({ events: eventObj });
     this.setState({
       openPopup: false
     });
