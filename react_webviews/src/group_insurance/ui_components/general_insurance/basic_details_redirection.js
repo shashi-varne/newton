@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
+// import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
     validateEmail, validateNumber, numberShouldStartWith,

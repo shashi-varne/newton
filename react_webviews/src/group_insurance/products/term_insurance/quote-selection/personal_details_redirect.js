@@ -271,7 +271,7 @@ class PersonalDetails1 extends Component {
       } catch (err) {
         this.setState({
           skelton: false,
-          showError: 'page'
+          showError: true
         });
       }
   
@@ -282,7 +282,7 @@ class PersonalDetails1 extends Component {
             ...this.state.errorData,
             title2: error
           },
-          showError: 'page'
+          showError: true
         })
       }
     }

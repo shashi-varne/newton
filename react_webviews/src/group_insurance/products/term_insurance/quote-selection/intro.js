@@ -203,13 +203,10 @@ class Intro extends Component {
     }
   }
 
-   componentDidMount() {
+  async componentDidMount() {
     this.setState({
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom,
     })
-  }
-
-  async componentDidMount() {
     this.onload();
   }
 
