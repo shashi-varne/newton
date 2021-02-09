@@ -238,7 +238,7 @@ class PerfiosStatus extends Component {
             (perfios_state !== "failure" && perfios_state !== "blocked") && (
               <div className="subtitle">
                 Before we move to the final loan offer, we have an option of
-                'Balance Transfer - BT' for you. However, it is up to you
+                <b>'Balance Transfer - BT' for you</b>. However, it is up to you
                 whether you want to opt for it or not.
               </div>
             )}

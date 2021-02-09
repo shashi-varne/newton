@@ -384,7 +384,7 @@ class JourneyMap extends Component {
 
           {index <= "1" && (
             <div className="head-title">
-              <b>Ta-da! You've</b> successfully uploaded your basic details.
+              <b>Ta-da!</b> You've successfully uploaded your basic details.
             </div>
           )}
           {index === "2" && (

@@ -368,12 +368,15 @@
 
 .basic-details {
   margin-bottom: 40px;
+  .InputField {
+    margin-bottom: 30px !important;
+  }
   .basic-details-subtitle {
-    font-weight: 500;
+    font-weight: 600;
     color: #0a1d32;
     font-size: 15px;
     line-height: 21px;
-    padding: 0 5px 15px 0;
+    padding: 0 0 20px 0;
   }
 
   .sub-head {
@@ -399,10 +402,18 @@
 
 .professional-details {
   margin-bottom: 40px;
+
+  .InputField {
+    margin-bottom: 30px !important;
+  }
 }
 
 .personal-details {
   margin-bottom: 40px;
+
+  .InputField {
+    margin-bottom: 30px !important;
+  }
 
   .MuiFormHelperText-root {
     color: var(--primary);
@@ -425,7 +436,11 @@
   font-size: 13px;
   font-weight: 400;
   color: #0a1d32;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
+
+  .InputField {
+    margin-bottom: 30px !important;
+  }
 
   .head-title {
     margin: 10px 0;
@@ -446,12 +461,11 @@
 
 .idfc-loan-status {
   .subtitle {
-    padding: 0 10px;
     font-size: 13px;
     line-height: 24px;
     color: #0a1d32;
     opacity: 0.55;
-    width: 90%;
+    width: 95%;
     margin-top: 20px;
   }
 
@@ -714,6 +728,14 @@
 }
 
 .loan-form-summary {
+  .bct-top-title {
+    font-weight: 600 !important;
+  }
+
+  .bct-content {
+    padding: 30px 0 0 10px !important;
+  }
+
   .member-tile {
     display: flex;
     margin: 15px 0 15px 0;
@@ -831,9 +853,19 @@
     margin: 40px 0 35px 0;
 
     .top-title {
-      font-weight: 600;
+      font-weight: 800;
       font-size: 17px;
       margin-bottom: 20px;
+    }
+
+    .generic-page-title{
+      font-weight: 600;
+    }
+
+    .top-tile {
+      .generic-page-title{
+        font-size: 17px;
+      }
     }
 
     .content {
@@ -864,7 +896,7 @@
     .partners {
       display: flex;
       padding: 10px 0;
-      justify-content: space-evenly;
+      // justify-content: space-evenly;
       text-align: center;
       font-size: 16px;
       line-height: 19px;
@@ -914,6 +946,7 @@
       color: #ffffff;
       background: var(--secondary) !important;
       border-radius: 4px;
+      font-weight: 800;
     }
   }
 
@@ -963,7 +996,7 @@
       display: flex;
       justify-content: space-between;
       padding: 10px 20px;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 15px;
       line-height: 15px;
       color: #0a1d32;
@@ -1009,18 +1042,22 @@
 .recommended {
   margin-bottom: 40px;
   .recommended-subtitle {
-    font-weight: 500;
+    font-weight: 600;
     color: #0a1d32;
     font-size: 15px;
     line-height: 21px;
-    padding: 0 5px 15px 0;
+    padding: 0 0 20px 0;
   }
 
   .sub-head {
     font-size: 13px;
     font-weight: 400;
     color: #767e86;
-    margin: 10px 0;
+    margin: 0 0 10px;
+  }
+
+  .error-radiogrp {
+    margin-bottom: 20px;
   }
 
   .employment-type {
@@ -1077,7 +1114,7 @@
     }
 
     .loan-amount {
-      font-weight: 500;
+      font-weight: 600;
     }
   }
 

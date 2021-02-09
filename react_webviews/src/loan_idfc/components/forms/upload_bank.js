@@ -103,7 +103,7 @@ class UploadBank extends Component {
     }
 
     let loaderData = {
-      title: `Hang on, while IDFC finishes analysing your last 3 months' bank statements`,
+      title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
       subtitle: "It may take 10 to 15 seconds!",
     };
 

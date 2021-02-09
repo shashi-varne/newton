@@ -97,13 +97,13 @@ class Example extends React.Component {
           renderSuggestion={renderSuggestion}
           inputProps={inputProps}
         />
-        <span className="error-radiogrp">
+        {(this.props.error || this.props.helperText) && <span className="error-radiogrp">
           {this.props.error
             ? this.props.helperText
               ? this.props.helperText
               : "Please select an option"
             : this.props.helperText}
-        </span>
+        </span>}
       </FormControl>
     );
   }

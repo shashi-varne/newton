@@ -92,6 +92,17 @@ class ProfessionalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
+    // if (name === 'net_monthly_salary') {
+    //   var nf = new Intl.NumberFormat();
+    //   nf.format(value.replace(',', '')); 
+
+    //   form_data[name] = nf.format(value);
+    //   form_data[name + "_error"] = "";
+    //   console.log(value)
+    // } else {
+
+    // // }
+
     if (name) {
       form_data[name] = value;
       form_data[name + "_error"] = "";

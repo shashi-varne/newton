@@ -276,7 +276,7 @@ class LoanKnowMore extends Component {
           <div className="block1-info">
             <div className="partner">
               <div>
-                <div>{partnerData.title}</div>
+                <div style={{fontWeight:'600'}}>{partnerData.title}</div>
                 <div>{partnerData.subtitle}</div>
               </div>
               {partnerData.logo && (

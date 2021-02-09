@@ -36,7 +36,7 @@ class PartnerCard extends Component {
         }
         >
           <div>
-            <div>{this.props.baseData.title}</div>
+            <div style={{fontWeight: '600'}}>{this.props.baseData.title}</div>
             <div>{this.props.baseData.subtitle}</div>
           </div>
           <img
