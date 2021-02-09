@@ -20,7 +20,7 @@ definitions:
           - npm install
           - yarn
           - yarn build &
-          - sleep 0
+          - sleep 1
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -44,9 +44,9 @@ definitions:
           - npm install
           - yarn
           - yarn build &
-          - sleep 0
+          - sleep 1
           - ls
-          - mv public $BITBUCKET_BRANCH
+          - mv build $BITBUCKET_BRANCH
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
             variables:
               KEY_FILE: $KEY_FILE
