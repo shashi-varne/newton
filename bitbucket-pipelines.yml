@@ -19,7 +19,6 @@ definitions:
           - cd react_webviews
           - npm install
           - yarn
-          - nvm use
           - yarn build
           - ls
           - mv build $BITBUCKET_COMMIT
