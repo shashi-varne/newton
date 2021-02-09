@@ -65,8 +65,3 @@ pipelines:
       - step:
           <<: *master-deploy
           name: Master deploy
-    
-    bitbucket-pipeline:
-      - step:
-          <<: *master-deploy
-          name: Master deploy
