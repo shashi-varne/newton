@@ -19,7 +19,8 @@ definitions:
           - cd react_webviews
           - npm install
           - yarn
-          - yarn build
+          - yarn build &
+          - sleep 0
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
