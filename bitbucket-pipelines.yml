@@ -43,7 +43,7 @@ definitions:
           - npm install
           - yarn
           - yarn build &
-          - sleep 5
+          - sleep 0
           - ls
           - mv public $BITBUCKET_BRANCH
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
