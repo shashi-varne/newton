@@ -1,121 +1,88 @@
-import React, { useEffect, useState } from 'react'
-import { storageService } from '../../utils/validators'
+import { useEffect, useState } from 'react'
+import { isEmpty, storageService } from '../../utils/validators'
 
-import {
-  getAccountSummary,
-  getCampaignBySection,
-  getNPSInvestmentStatus,
-} from '../services'
+import { getAccountSummary, getNPSInvestmentStatus } from '../services'
 
 function useInitData() {
-  const [state, setState] = useState({
-    loading: false,
-    error: '',
-    currentUser: storageService().get('currentUser'),
-    user: storageService().get('user') || null,
-    kyc: storageService().get('kyc') || null,
-    referral: storageService().get('referral') || null,
-    firstlogin: storageService().get('firstlogin'),
-    campaign: storageService().get('campaign') || [],
-    npsUser: storageService().get('npsUser') || [],
-    banklist: storageService().get('banklist') || [],
-    referral: storageService().get('referral') || [],
-    nps_additional_details_required: storageService().get(
-      'nps_additional_details_required'
-    ),
-  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [currentUser, _setCurrentUser] = useState(false)
+  const [user, _setUser] = useState(false)
+  const [kyc, _setKyc] = useState(storageService().getObject('kyc') || null)
+  const [npsUser, _setNpsUser] = useState(
+    storageService().getObject('npsUser') || null
+  )
+  const [referral, _setReferral] = useState(
+    storageService().getObject('referral') || []
+  )
+  const [firstlogin, _setFirstlogin] = useState(
+    storageService().getObject('firstlogin')
+  )
+  const [banklist, _setBanklist] = useState(
+    storageService().getObject('banklist') || []
+  )
+  const [npsData, _setNpsData] = useState(
+    storageService().get('nps_additional_details_required')
+  )
+  const [campaign, _setCampaign] = useState(
+    storageService().get('campaign') || []
+  )
 
   useEffect(() => {
-    const { kyc, user, npsUser } = state
-    if (!!kyc || !!user || !!npsUser) {
-      syncData()
-    }
+    syncData()
   }, [])
 
-  const setError = (message) => {
-    setState((prevState) => ({ ...prevState, error: message }))
-  }
-
-  const setLoading = (loading) => {
-    setState((prevState) => ({
-      ...prevState,
-      loading,
-    }))
-  }
-
   const setNpsData = (flag) => {
-    setState((prevState) => ({
-      ...prevState,
-      nps_additional_details_required: flag,
-    }))
+    _setNpsData((prevFla) => flag)
     storageService().set('nps_additional_details_required', flag)
   }
 
   const setKyc = (kyc) => {
-    setState((prevState) => ({
-      ...prevState,
-      kyc,
-    }))
+    _setKyc(() => ({ ...kyc }))
     storageService().setObject('kyc', kyc)
   }
 
   const setBanklist = (list) => {
-    setState((prevState) => ({
-      ...prevState,
-      banklist: list,
-    }))
+    _setBanklist((list) => [...list])
     storageService().setObject('banklist', list)
   }
 
-  const setNpsUser = (user) => {
-    setState((prevState) => ({ ...prevState, npsUser: user }))
+  const setNpsUser = (npsUser) => {
+    _setNpsUser(() => ({ ...npsUser }))
     storageService().setObject('npsUser', user)
   }
 
   const setReferral = (referral) => {
-    setState((prevState) => ({
-      ...prevState,
-      referral,
-    }))
+    _setReferral(() => ({ ...referral }))
     storageService().setObject('referral', referral)
   }
 
   const setUser = (user) => {
-    setState((prevState) => ({
-      ...prevState,
-      user,
-    }))
+    _setUser(() => ({ ...user }))
     storageService().setObject('user', user)
   }
 
   const setFirstLogin = (firstlogin) => {
-    setState((prevState) => ({
-      ...prevState,
-      firstlogin,
-    }))
+    _setFirstlogin(() => firstlogin)
     storageService().setObject('firstlogin', firstlogin)
   }
 
   const setCurrentUser = (currentUser) => {
-    setState((prevState) => ({
-      ...prevState,
-      currentUser,
-    }))
+    _setCurrentUser(() => ({ ...currentUser }))
     storageService().set('currentUser', currentUser)
   }
 
   async function syncData() {
-    const { currentUser, user, kyc, referral } = state
     console.log(!!referral)
-    if (!!currentUser && !!user && !!kyc) {
-      if (!!referral) {
+    if (currentUser && user && kyc) {
+      if (!referral) {
         const queryParams = {
           campaign: ['user_campaign'],
           nps: ['nps_user'],
           bank_list: ['bank_list'],
           referral: ['subbroker', 'p2p'],
         }
-        setState((prevState) => ({ ...prevState, loading: true }))
+        setLoading(true)
         try {
           const result = await getAccountSummary(queryParams)
           console.log(result)
@@ -177,7 +144,20 @@ function useInitData() {
   }
 
   return {
-    ...state,
+    loading,
+    error,
+    kyc,
+    npsUser,
+    currentUser,
+    npsData,
+    firstlogin,
+    setKyc,
+    setNpsData,
+    setNpsUser,
+    setBanklist,
+    setUser,
+    setCurrentUser,
+    setFirstLogin,
   }
 }
 

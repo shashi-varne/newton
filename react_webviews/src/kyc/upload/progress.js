@@ -1,29 +1,44 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getConfig } from 'utils/functions'
 import Container from '../common/Container'
 import UploadCard from './UploadCard'
 
 import { getDocuments, initData } from '../services'
-import { storageService } from '../../utils/validators'
+import { isEmpty, storageService } from '../../utils/validators'
 import useInitData from '../hooks/useInitData'
 
 const Progress = () => {
-  const [state, setState] = useInitData()
-  const documents = getDocuments(state.kyc)
+  const { kyc, loading } = useInitData()
+  console.log(kyc)
+  let documents = []
+  if (!loading && !isEmpty(kyc)) {
+    documents = getDocuments(kyc)
+  }
   return (
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      disable={state.loading}
+      disable={loading}
       classOverRideContainer="pr-container"
-      showSkelton={state.loading}
+      showSkelton={loading}
       skeltonType="p"
       fullWidthButton={true}
       handleClick={(event) => {
         console.log(event)
       }}
     >
-      <section id="kyc-upload-progress"></section>
+      <section id="kyc-upload-progress">
+        <div className="header">
+          Upload Documents
+        </div>
+        <main className="documents">
+          {documents.map(document => (
+            <div key={document.title} className="document">
+              {document.title}
+            </div>
+          ))}
+        </main>
+      </section>
     </Container>
   )
 }
