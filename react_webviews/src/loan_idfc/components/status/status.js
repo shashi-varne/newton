@@ -359,7 +359,7 @@ class LoanStatus extends Component {
 
           {vendor_application_status === "idfc_0.5_rejected" && (
             <div className="subtitle">
-              We're so sorry to inform you that IDFC has rejected your loan
+              We're so sorry to inform you that IDFC FIRST Bank has rejected your loan
               application as it did not meet their loan policy.
             </div>
           )}
@@ -383,7 +383,7 @@ class LoanStatus extends Component {
 
           {commonMapper.top_title === "Application Rejected" && !rejection_reason && idfc_rejection_reason !== 'pincode' && (
             <div className="subtitle">
-              We're so sorry to inform you that IDFC has rejected your loan
+              We're so sorry to inform you that IDFC FIRST Bank has rejected your loan
               application as it did not meet their loan policy.
             </div>
           )}
