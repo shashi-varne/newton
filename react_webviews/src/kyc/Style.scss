@@ -988,15 +988,23 @@
   }
 }
 
-.kyc-upload-card {
-  border: 1px solid beige;
-  padding: 10px 0 10px 0;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+#kyc-upload-progress {
+  .header {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+  }
+  .kyc-upload-card {
+    border: 1px solid beige;
+    padding: 10px 0 10px 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 10px 0 10px 0;
 
-  .title {
-    margin-left: 10px;
+    .title {
+      margin-left: 10px;
+    }
   }
 }

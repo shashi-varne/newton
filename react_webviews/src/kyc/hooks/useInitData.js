@@ -29,11 +29,13 @@ function useInitData() {
   )
 
   useEffect(() => {
-    syncData()
+    if (!kyc || !npsUser || !user) {
+      syncData()
+    }
   }, [])
 
   const setNpsData = (flag) => {
-    _setNpsData((prevFla) => flag)
+    _setNpsData(() => flag)
     storageService().set('nps_additional_details_required', flag)
   }
 
@@ -43,7 +45,7 @@ function useInitData() {
   }
 
   const setBanklist = (list) => {
-    _setBanklist((list) => [...list])
+    _setBanklist(()=> list)
     storageService().setObject('banklist', list)
   }
 
@@ -129,11 +131,17 @@ function useInitData() {
           npsResult?.data?.nps?.nps_user?.data?.is_doc_required
             ? true
             : false
-
+        const npsUser = result.data.nps.nps_user.data
+        const referral = result.data.referral
+        const banklist = result.data.bank_list.bank_list.data
         setUser(user)
         setKyc(kyc)
         setFirstLogin(firstlogin)
         setNpsData(nps_additional_details_required)
+        setCurrentUser(true)
+        setNpsUser(npsUser)
+        setBanklist(banklist)
+        setReferral(referral)
         setLoading(false)
       } catch (err) {
         setError(err.message)

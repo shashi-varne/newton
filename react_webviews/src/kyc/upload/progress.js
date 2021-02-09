@@ -26,6 +26,7 @@ const Progress = () => {
       handleClick={(event) => {
         console.log(event)
       }}
+      disable={true}
     >
       <section id="kyc-upload-progress">
         <div className="header">
@@ -34,7 +35,7 @@ const Progress = () => {
         <main className="documents">
           {documents.map(document => (
             <div key={document.title} className="document">
-              {document.title}
+              <UploadCard default_image={document.default_image} title={document.title} onClick={() => {}}/>
             </div>
           ))}
         </main>

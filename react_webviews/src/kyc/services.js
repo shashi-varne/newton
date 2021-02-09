@@ -251,7 +251,7 @@ export function getDocuments(userKyc) {
       title: "PAN card",
       subtitle: userKyc.pan.meta_data.pan_number,
       doc_status: userKyc.pan.doc_status,
-      // default_image: partner.assets.pan_default,
+      default_image: 'pan_default.svg',
       // approved_image: partner.assets.pan_approved
     },
 
@@ -260,7 +260,7 @@ export function getDocuments(userKyc) {
       title: "Address proof",
       subtitle: getAddressProof(userKyc),
       doc_status: userKyc.address.doc_status,
-      // default_image: partner.assets.regi_default,
+      default_image: 'regi_default.svg',
       // approved_image: partner.assets.regi_approved
     },
 
@@ -268,7 +268,7 @@ export function getDocuments(userKyc) {
       key: "selfie",
       title: "Selfie",
       doc_status: userKyc.identification.doc_status,
-      // default_image: partner.assets.selfie_default,
+      default_image: 'selfie_default.svg',
       // approved_image: partner.assets.selfie_approved
     },
 
@@ -276,7 +276,7 @@ export function getDocuments(userKyc) {
       key: "selfie_video",
       title: "Selfie video (IPV)",
       doc_status: userKyc.ipvvideo.doc_status,
-      // default_image: partner.assets.video_default,
+      default_image: 'video_default.svg',
       // approved_image: partner.assets.video_approved
     },
 
@@ -284,7 +284,7 @@ export function getDocuments(userKyc) {
       key: "bank",
       title: "Bank details",
       doc_status: userKyc.bank.meta_data_status,
-      // default_image: partner.assets.default,
+      default_image: 'default.svg',
       // approved_image: partner.assets.approved
     },
 
@@ -292,7 +292,7 @@ export function getDocuments(userKyc) {
       key: "sign",
       title: "Signature",
       doc_status: userKyc.sign.doc_status,
-      // default_image: partner.assets.sign_default,
+      default_image: 'sign_default.svg',
       // approved_image: partner.assets.sign_approved
     }
   ]
