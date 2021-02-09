@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Container from '../common/Container';
+import Container from '../commoniFrame/Container';
 import { getConfig } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
@@ -13,7 +13,7 @@ import ic_b_fisdom from 'assets/ic_auth_bank_fisdom.svg';
 import ic_e_fisdom from 'assets/ic_auth_emandate_fisdom.svg';
 import ic_sb_fisdom from 'assets/ic_select_bank_fisdom.svg';
 import trust_icon from 'assets/trust_icons_emandate.svg';
-
+import illustration from 'assets/finity/illustration.svg'
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
@@ -47,6 +47,7 @@ class About extends Component {
       b_icon: getConfig().productName !== 'fisdom' ? ic_b_myway : ic_b_fisdom,
       e_icon: getConfig().productName !== 'fisdom' ? ic_e_myway : ic_e_fisdom,
       sb_icon: getConfig().productName !== 'fisdom' ? ic_sb_myway : ic_sb_fisdom,
+      iframeIcon: illustration,
       emandate: {},
       pc_urlsafe: getConfig().pc_urlsafe,
       params: getConfig().current_params
@@ -128,7 +129,7 @@ class About extends Component {
     }
     
     this.setState({
-      show_loader: true
+      show_loader: false
     })
     try {
       const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
@@ -196,9 +197,10 @@ class About extends Component {
         edit={this.props.edit}
         buttonTitle="Select Bank for e-mandate"
         events={this.sendEvents('just_set_events')}
+        img={this.state.iframeIcon}
       >
         <div style={{ textAlign: 'center' }}>
-          <img width={'100%'} src={this.state.top_icon} alt="Mandate" />
+          {/* <img width={'100%'} src={this.state.top_icon} alt="Mandate" /> */}
         </div>
         <div style={{
           color: '#767e86', margin: '10px 0px 10px 0px',

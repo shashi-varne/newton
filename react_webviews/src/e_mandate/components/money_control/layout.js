@@ -6,7 +6,7 @@ import Footer from '../../common/footer';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
 import color from 'material-ui/colors/amber';
-import { container } from 'webpack';
+// import { container } from 'webpack';
 
 
 
@@ -35,35 +35,9 @@ class MoneyControlLayout extends Component {
         <img src={ require(`assets/finity/Finity_Logo.svg`)} style={{paddingRight: '40px', marginTop: '32px', marginBottom: '32px'}} alt=""/>
         </div> 
 
-        <div>
-
-           {/* <EnpsConsentAbout/>               */}
-      
+        <div> 
+           {/* <EnpsConsentAbout/> */}
        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        <div style={{ position : 'absolute', bottom: 0, left: '50%',}}>
         <Footer 
         fullWidthButton={true}

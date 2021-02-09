@@ -220,7 +220,8 @@ class Container extends Component {
     setHeights({ 'header': true, 'container': false });
   }
 
-  render() {
+
+  renderitmow() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
@@ -230,9 +231,10 @@ class Container extends Component {
         steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
       }
     }
-
     return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+      <div
+      // className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+      >
         {/* Header Block */}
         {(!this.props.noHeader && !getConfig().hide_header) && <Header
           disableBack={this.props.disableBack}
@@ -262,19 +264,26 @@ class Container extends Component {
           </div>}
 
           {/* Banner Block */}
-          {/* {this.props.banner && <Banner text={this.props.bannerText} />} */}
+          {this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 
         {/* Children Block */}
-        <div className={`Container ${this.props.classOverRideContainer}`}>
+        <div style={{display: 'flex', flexDirection: 'row' , overflow: 'scroll' , overflowX: 'hidden'}} >
+          <div style={{width: '40%', display: 'block', marginLeft: '80px', 
+           height: '850px' , paddingTop: '100px'}}>
+          <h1>{this.props.title}</h1>
           {this.props.children}
-        </div>
+         </div>
+            <div style={{margin: 'auto'}}> <img width={'200%'} src={this.props.img} alt="Mandate" /></div>
+         </div>
 
         {/* Footer Block */}
+
+      <div style={{bottom: 0, position: 'fixed', marginLeft:'40%'}}>
         {!this.props.noFooter &&
           <Footer
-            fullWidthButton={this.props.fullWidthButton}
+            fullWidthButton={this.props.fullWidthButton}  
             logo={this.props.logo}
             buttonTitle={this.props.buttonTitle}
             provider={this.props.provider}
@@ -287,11 +296,19 @@ class Container extends Component {
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
             isDisabled={this.props.isDisabled} />
-        }
+        } </div>
         {/* No Internet */}
         {this.renderDialog()}
         {this.renderPopup()}
+        <br></br>
       </div>
+    )
+  }
+
+  render() {
+    return ( //className={`Container ${this.props.classOverRideContainer}`}
+    this.renderitmow()
+    //  this.renderitmow()
     );
   }
 };
