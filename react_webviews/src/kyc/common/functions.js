@@ -10,12 +10,15 @@ export function navigate(pathname, data = {}) {
     this.history.replace({
       pathname: pathname,
       search: data?.searchParams || getConfig().searchParams,
+      state: data.state,
+      params: data.params,
     });
   } else {
     this.history.push({
       pathname: pathname,
       search: data?.searchParams || getConfig().searchParams,
       state: data.state,
+      params: data.params,
     });
   }
 }

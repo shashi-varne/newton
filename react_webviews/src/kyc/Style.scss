@@ -975,3 +975,51 @@
 }
 
 ///////////// BANK DETAILS END //////////////
+
+#kyc-upload-intro {
+  .banner {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 10px 0;
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  .intro {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 14px;
+    color: #160d2e;
+  }
+
+  .trust {
+    margin-top: 90px;
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+}
+
+#kyc-upload-progress {
+  .header {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+  }
+  .kyc-upload-card {
+    border: 1px solid beige;
+    padding: 10px 0 10px 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 10px 0 10px 0;
+
+    .title {
+      margin-left: 10px;
+    }
+  }
+}

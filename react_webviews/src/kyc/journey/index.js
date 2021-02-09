@@ -6,6 +6,7 @@ import {  initData } from '../services'
 import ShowAadharDialog from './components/ShowAadharDialog'
 import Alert from '../mini_components/Alert'
 import { storageService } from '../../utils/validators'
+import useInitData from '../hooks/useInitData'
 
 const steps = [
   'PAN Details',
@@ -16,23 +17,14 @@ const steps = [
 ]
 
 const Journey = (props) => {
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [activeStep, setActiveStep] = useState(0)
   const [journeyStatus, setJourneyStatus] = useState('ground_premium')
   const [kycStatus, setKycStatus] = useState('compliant')
   const [showAadhaar, setShowAadhaar] = useState(true)
-  // const [npsDetailsReq, setNpsDetailsReq] = useState(
-  //   storageService().get('nps_additional_details_required')
-  // )
+  const { loading, kyc, npsUser, user } = useInitData()
 
-  useEffect(() => {
-    initData()
-  }, [])
-
-  // if (loading) {
-  //   return <Skelton type="g" />
-  // }
+  console.log(npsUser, user)
 
   const productName = getConfig().productName
 
