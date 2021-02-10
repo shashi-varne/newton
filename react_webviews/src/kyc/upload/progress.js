@@ -5,15 +5,39 @@ import UploadCard from './UploadCard'
 
 import { getDocuments, initData } from '../services'
 import { isEmpty, storageService } from '../../utils/validators'
-import useInitData from '../hooks/useInitData'
+import { storageConstants } from '../constants'
+import { toast } from 'react-toastify'
 
 const Progress = () => {
-  const { kyc, loading } = useInitData()
-  console.log(kyc)
+  const [kyc, setKyc] = useState(storageService().getObject(storageConstants.KYC) || null)
+  const [loading, setLoading] = useState(false)
+  
+  useEffect(() => {
+    if (isEmpty(kyc)) {
+      initialize()
+    }
+  }, [])
+
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      await initData()
+      const kyc = storageService().getObject(storageConstants.KYC)
+      setKyc(kyc)
+    } catch (err) {
+      console.error(err)
+      toast(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   let documents = []
-  if (!loading && !isEmpty(kyc)) {
+
+  if (!isEmpty(kyc) && !loading) {
     documents = getDocuments(kyc)
   }
+
   return (
     <Container
       hideInPageTitle

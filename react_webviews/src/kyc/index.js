@@ -16,6 +16,7 @@ import Address from './address'
 import Upload from './upload'
 import Intro from './upload/intro'
 import Progress from './upload/progress'
+import Pan from './upload/pan'
 
 import { themeConfig } from 'utils/constants'
 import './Style.scss'
@@ -72,6 +73,7 @@ const Kyc = (props) => {
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
+          <Route exact path={`${url}/upload/pan`} component={Pan} />
           <Route exact path={`${url}/home-kyc`} component={Home} />
           <Route exact path={`${url}/:userType/nominee-details`} component={Nominee} />
           <Route exact path={`${url}/report`} component={Report} />

@@ -125,9 +125,7 @@ const Container = (props) => {
 
   const renderSkeltonLoader = (type = 'g') => {
     if (props.showSkelton) {
-      return (
-        <Skelton type={type} />
-      )
+      return <Skelton type={type} />
     }
   }
 
@@ -176,7 +174,6 @@ const Container = (props) => {
       {/* Below Header Block */}
       <div id="HeaderHeight" style={{ top: 56 }}>
         {/* Loader Block */}
-        {renderPageLoader()}
         {renderSkeltonLoader(props?.skeltonType)}
       </div>
 

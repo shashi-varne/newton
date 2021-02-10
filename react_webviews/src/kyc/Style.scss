@@ -1023,3 +1023,28 @@
     }
   }
 }
+
+.page-body-kyc {
+  .title {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+    padding: 0;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #8d879b;
+    padding: 0 15px 0 0;
+    margin-bottom: 20px;
+  }
+
+  .doc-container {
+    border: 1px dotted 
+  }
+}
+
+#kyc-upload-pan {
+  .alert-status-info {
+    margin-top: 20px;
+  }
+}

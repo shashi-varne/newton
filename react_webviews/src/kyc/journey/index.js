@@ -5,8 +5,9 @@ import Container from '../common/Container'
 import {  initData } from '../services'
 import ShowAadharDialog from './components/ShowAadharDialog'
 import Alert from '../mini_components/Alert'
-import { storageService } from '../../utils/validators'
-import useInitData from '../hooks/useInitData'
+import { isEmpty, storageService } from '../../utils/validators'
+import { storageConstants } from '../constants'
+import { toast } from 'react-toastify'
 
 const steps = [
   'PAN Details',
@@ -17,15 +18,31 @@ const steps = [
 ]
 
 const Journey = (props) => {
-  const [error, setError] = useState('')
+  const [kyc, setKyc] = useState(storageService().getObject(storageConstants.KYC) || null)
   const [activeStep, setActiveStep] = useState(0)
   const [journeyStatus, setJourneyStatus] = useState('ground_premium')
   const [kycStatus, setKycStatus] = useState('compliant')
   const [showAadhaar, setShowAadhaar] = useState(true)
-  const { loading, kyc, npsUser, user } = useInitData()
+  const [loading, setLoading] = useState(false)
 
-  console.log(npsUser, user)
-
+  useEffect(() => {
+    if (isEmpty(kyc)) {
+      initialize()
+    }
+  }, [])
+  
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      await initData()
+      const kyc = storageService().getObject(storageConstants.KYC)
+      setKyc(kyc)
+    } catch(err) {
+      toast(err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
   const productName = getConfig().productName
 
   return (
@@ -39,6 +56,7 @@ const Journey = (props) => {
       skeltonType="p"
     >
       <div className="kyc-journey">
+        <h1>{JSON.stringify(kyc)}</h1>
         {journeyStatus === 'ground_premium' && (
           <div className="kyc-journey-caption">fast track your investment!</div>
         )}
