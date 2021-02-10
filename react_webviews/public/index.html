@@ -157,12 +157,13 @@
         var myBaseHrefUrl = '/appl/webview/' + window.location.pathname.split('/')[3] +'/' ;
         myBaseHref.href = myBaseHrefUrl;
         window.sessionStorage.setItem('base_href', myBaseHrefUrl);
-      }
-
-      if(pathname.indexOf('plutus-webview') !== -1) {
+      } else if(pathname.indexOf('plutus-webview') !== -1) {
         var myBaseHrefUrl = '/plutus-webview' + window.location.pathname.split('/')[2] + '/' ;
         myBaseHref.href = myBaseHrefUrl;
         window.sessionStorage.setItem('base_href', myBaseHrefUrl);
+      } else {
+        myBaseHref = '/';
+        myBaseHref.href = myBaseHrefUrl;
       }
 
     </script>
