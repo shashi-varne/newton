@@ -79,9 +79,9 @@ const Container = (props) => {
         onClose={handleClose}
         aria-labelledby='responsive-dialog-title'
       >
-        <DialogTitle id='form-dialog-title'>No Internet Found</DialogTitle>
+        <DialogTitle id='form-dialog-title'>{props.popUpText || 'No Internet Found'}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Check your connection and try again.</DialogContentText>
+          <DialogContentText>{props.popupContent || 'Check your connection and try again.'}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button className='DialogButtonFullWidth' onClick={handleClose} color='default' autoFocus>

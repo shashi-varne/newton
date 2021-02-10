@@ -1,15 +1,31 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import { get_recommended_funds } from "../common/api";
+import { formatAmountInr } from "utils/validators";
 import toast from "common/ui/Toast";
+import Radio from "@material-ui/core/Radio";
+import Button from "@material-ui/core/Button";
+import { navigate } from "../common/commonFunctions";
+import {
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+} from "@material-ui/core";
+
+const risk_level = ["High", "Low", "Moderate", "Moderate Low"];
 
 class Recommendations extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      recommendations: '',
+      recommendations: "",
+      all_charges: "",
+      openDialog: false,
     };
+    this.navigate = navigate.bind(this);
   }
 
   componentWillMount() {
@@ -29,6 +45,7 @@ class Recommendations extends Component {
 
       this.setState({
         recommendations: data.recommended[0],
+        all_charges: data.all_charges,
         show_loader: false,
       });
     } catch (err) {
@@ -48,8 +65,66 @@ class Recommendations extends Component {
       });
   };
 
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+    });
+  };
+
+  handleChange = (name) => {
+    this.setState({
+      selectedValue: name,
+    });
+  };
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        fullScreen={false}
+        open={this.state.openDialog}
+        onClose={this.handleClose}
+        aria-labelledby="responsive-dialog-title"
+        className="risk-level"
+      >
+        <DialogTitle id="form-dialog-title" className="edit-title">
+          Choose Risk Level
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText className="nps-flex-box">
+            {risk_level.map((item, index) => (
+              <div className="edit-risk" key={index}>
+                <div>{item}</div>
+                <Radio
+                  checked={this.state.selectedValue === item}
+                  onChange={() => this.handleChange(item)}
+                  value={this.state.selectedValue || ""}
+                  name="radio-button-demo"
+                  color="primary"
+                />
+              </div>
+            ))}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            className="DialogButtonFullWidth"
+            color="default"
+            autoFocus
+            onClick={this.handleClose}
+          >
+            APPLY NOW
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  handleClick = () => {
+
+  }
+  
   render() {
-    let { recommendations, show_loader } = this.state;
+    let { recommendations, show_loader, all_charges } = this.state;
     return (
       <Container
         classOverRide="pr-error-container"
@@ -59,11 +134,13 @@ class Recommendations extends Component {
         hidePageTitle
         title="Recommended fund"
         showLoader={show_loader}
-        // handleClick={replaceFund}
+        handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >
         <div className="fund">
-          <div className="replace">Replace</div>
+          <div className="replace" onClick={() => {
+            this.navigate("fundreplace");
+          }}>Replace</div>
           <div className="name">
             <div className="icon">
               <img
@@ -73,7 +150,7 @@ class Recommendations extends Component {
               />
             </div>
             <div className="text">
-              <h3>{recommendations && recommendations.pension_house.name}</h3>
+              <div>{recommendations && recommendations.pension_house.name}</div>
             </div>
           </div>
         </div>
@@ -83,7 +160,16 @@ class Recommendations extends Component {
             <p>
               <b>Risk:</b> {this.getFormatted(recommendations.risk || "")}
             </p>
-            <span className="edit-icon edit">Edit</span>
+            <span
+              className="edit-icon edit"
+              onClick={() =>
+                this.setState({
+                  openDialog: true,
+                })
+              }
+            >
+              Edit
+            </span>
           </div>
           <div className="allocation">
             <div className="graph">
@@ -154,37 +240,19 @@ class Recommendations extends Component {
         </div>
 
         <div className="bill">
-          {/* <!-- <div class="heading">
-            <div class="flex-box">
-              <div class="left">Total payable amount</div>
-              <div class="right">{{ paymentDetail.total_amount | inrFormat }}</div>
-            </div>
-          </div>
-          <div class="flex-box">
-            <div class="left">Investment amount</div>
-            <div class="right">{{ paymentDetail.amount }}</div>
-          </div>
-          <div class="flex-box">
-            <div class="left">Onboarding charges (One-time)</div>
-            <div class="right">{{ paymentDetail.onboarding_charges }}</div>
-          </div>
-          <div class="flex-box">
-            <div class="left">Transaction charges</div>
-            <div class="right">{{ paymentDetail.transaction_charges }}</div>
-          </div>
-          <div class="flex-box">
-            <div class="left">GST (18%)</div>
-            <div class="right">{{ paymentDetail.gst }}</div>
-          </div> --> */}
-          <div
-            className="flex-box"
-            ng-repeat="charge in paymentDetail track by $index"
-            ng-class="{'heading' : charge.key === 'total_amount'}"
-            ng-if="charge.value > 0"
-          >
-            <div className="left">{"{ 'charge.text' }"}</div>
-            <div className="right">{"{ 'charge.value' | inrFormatDecimal }"}</div>
-          </div>
+          {all_charges &&
+            all_charges.map((item, index) => (
+              <div
+                className="flex-box"
+                style={{
+                  fontWeight: `${index === all_charges.length - 1 ? 600 : 500}`,
+                }}
+                key={index}
+              >
+                <div className="left">{item.text}</div>
+                <div className="right">{formatAmountInr(item.value)}</div>
+              </div>
+            ))}
           <div className="note">
             <div className="heading">Note:</div>
             <div>
@@ -200,9 +268,8 @@ class Recommendations extends Component {
               <span>3.</span> Standard charges stipulated by PFRDA will apply on
               your investment.
             </div>
-            {/* //<div className="more" ng-click="more()">Know More...</div> */}
           </div>
-          <div className="terms">
+          {/* <div className="terms">
             <img src="../assets/img/terms_agree.png" alt="" width="25" />
             <div ng-if="!finity && isWeb">
               By tapping on proceed, I agree that I have read the <br />
@@ -236,8 +303,9 @@ class Recommendations extends Component {
                 terms & conditions.
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
+        {this.renderDialog()}
       </Container>
     );
   }

@@ -17,15 +17,19 @@
       }
 
       .text {
-        flex: 1;
-        h4 {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        margin-bottom: 5px;
+
+        .title {
           font-size: 18px;
           color: #160d2e;
-          font-weight: 600;
-          margin-block-start: 0px;
+          font-weight: 800;
+          margin-bottom: 10px;
         }
 
-        p {
+        .subtitle {
           color: rgb(135, 135, 135);
           font-size: 18px;
           margin: 0;
@@ -39,10 +43,11 @@
   text-align: center;
   margin: 20px auto;
 
-  h4 {
+  div {
     color: rgb(79, 45, 167);
     text-align: center;
     margin-bottom: 15px;
+    font-weight: 600;
     cursor: pointer;
   }
 
@@ -66,9 +71,14 @@
       font-weight: 600;
     }
 
-    p {
+    .statement {
+      margin-bottom: 10px;
+    }
+
+    div {
       color: rgb(135, 135, 135);
       font-size: 16px;
+      line-height: 1.5;
     }
   }
 }
@@ -178,12 +188,13 @@
     .text {
       flex: 3;
 
-      h3 {
+      div {
         margin-top: 0;
         color: rgb(74, 74, 74);
         word-break: break-word;
-        font-size: 18px;
+        font-size: 19px;
         line-height: 22px;
+        font-weight: 600;
       }
     }
   }
@@ -194,6 +205,7 @@
     font-size: 16px;
     letter-spacing: 0.5px;
     color: rgb(53, 203, 93);
+    cursor: pointer;
   }
 }
 
@@ -274,6 +286,31 @@
   border-radius: 5px;
   margin-bottom: 30px;
 
+  .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+
+    span {
+      color: rgb(74, 74, 74);
+      font-family: "LatoM";
+      font-size: 18px;
+    }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+
+    span {
+      color: rgb(74, 74, 74);
+      font-family: "LatoM";
+      font-size: 18px;
+    }
+  }
+
   .heading {
     margin-bottom: 20px;
     // font-family: "LatoB";
@@ -303,15 +340,19 @@
   margin-bottom: 20px;
   color: #878787;
   line-height: 21px;
+  font-size: 16px;
+  line-height: 1.5;
 
   .heading {
     color: #878787;
     margin-bottom: 10px;
-    // font-family: "LatoB";
+    font-weight: 600;
+    font-size: 16px;
   }
 
   span {
-    // font-family: "LatoB";
+    font-weight: 600;
+    font-size: 16px;
   }
 
   .more {
@@ -652,7 +693,6 @@
       flex: 1;
       text-align: center;
       color: #a6a6a6;
-      // font-family: "LatoB";
       font-size: 16px;
       display: flex;
       align-items: center;
@@ -671,5 +711,53 @@
     .item:first-child {
       border-right: 1px solid #a6a6a6;
     }
+  }
+}
+
+.replace-funds {
+  margin-top: 20px;
+  .md-block {
+    padding: 20px 0;
+    border: 1px solid #e8e8e8;
+    border-left: 0px;
+    border-right: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+
+    .recommended-active {
+      font-size: 18px;
+      margin-left: 10px;
+      .recommended {
+        font-size: 12px;
+        background-color: #5cb849;
+        border-radius: 3px;
+        padding: 3px 7px;
+        color: #fff;
+        margin-bottom: 10px;
+        width: fit-content;
+      }
+    }
+  }
+}
+
+.edit-title {
+  background-color: var(--primary) !important;
+
+  .MuiTypography-title {
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+}
+
+.nps-flex-box {
+  .edit-risk {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
