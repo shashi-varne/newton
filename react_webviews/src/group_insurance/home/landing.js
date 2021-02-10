@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import ContactUs from '../../common/components/contact_us'
 import qs from 'qs'; 
-
+import Api from "utils/api";
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import '../common/Style.scss'
+import '../common/Style.scss';
+import toast from "../../common/ui/Toast";
 
 class Landing extends Component {
 
@@ -59,6 +60,48 @@ class Landing extends Component {
       insuranceProducts: insuranceProducts,
       openModuleData : openModuleData
     })
+  }
+
+  componentDidMount(){
+    this.onload();
+  }
+
+  onload = async() => {
+    this.setState({
+      show_loader: true,
+    })
+    try{
+      var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
+
+        this.setState({
+          show_loader: false
+        })
+        var resultData = res.pfwresponse.result;
+
+        if (res.pfwresponse.status_code === 200) {
+          var advisory_resume_present = resultData.resume_present;
+          var advisory_resume_status = resultData.insurance_advisory.status;
+          
+          var advisory_button_text = "LET'S FIND OUT";
+          if(advisory_resume_present && advisory_resume_status === 'incomplete'){
+            advisory_button_text = "RESUME";
+          }else if(!advisory_resume_present && advisory_resume_status === 'complete'){
+            advisory_button_text = "VIEW REPORT";
+          }
+
+          this.setState({
+            advisory_button_text: advisory_button_text
+          })
+        } else {
+          toast(resultData.error || resultData.message || "Something went wrong");
+      }
+    }catch(err){
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast("Something went wrong");
+    }
   }
 
 
@@ -160,7 +203,7 @@ class Landing extends Component {
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div className="advisory-entry-container">
               <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
-              <button className="advisory-entry-button" onClick={()=>this.goToAdvisory()}>LET'S FIND OUT</button>
+              <button className="advisory-entry-button" onClick={()=>this.goToAdvisory()}>{this.state.advisory_button_text}</button>
             </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">

@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Container from '../common/Container';
-
+import Api from "utils/api";
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import StepsToFollow from '../../common/ui/stepsToFollow';
 import { advisoryConstants } from './constants';
+import toast from "../../common/ui/Toast";
+import {storageService} from "utils/validators";
 
 class AdvisoryLanding extends Component {
 
@@ -39,8 +41,35 @@ class AdvisoryLanding extends Component {
       });
     }
 
-    handleClick = () =>{
-      this.navigate('/group-insurance/advisory/basic-details')
+    handleClick = async () =>{
+      this.setState({
+        show_loader: true
+      })
+
+      try{
+        var res = await Api.post(`api/insurancev2/api/insurance/advisory/create`);
+  
+          this.setState({
+            show_loader: false
+          })
+          var resultData = res.pfwresponse.result;
+  
+          if (res.pfwresponse.status_code === 200) {
+
+            if(resultData.insurance_advisory.status === 'init'){
+              storageService().setObject("advisory_id", resultData.insurance_advisory.id);
+            this.navigate('/group-insurance/advisory/basic-details')                    
+            }
+          } else {
+            toast(resultData.error || resultData.message || "Something went wrong");
+        }
+      }catch(err){
+        console.log(err)
+        this.setState({
+          show_loader: false
+        });
+        toast("Something went wrong");
+      }
     }
 
     render() {
@@ -49,6 +78,7 @@ class AdvisoryLanding extends Component {
             events={this.sendEvents('just_set_events')}
             fullWidthButton={true}
             // force_hide_inpage_title={true}
+            showLoader={this.state.show_loader}
             onlyButton={true}
             title="Let's find the right coverage for you"
             buttonTitle="LET'S GET STARTED"

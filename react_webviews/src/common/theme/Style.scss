@@ -1176,6 +1176,7 @@ input#pan {
   .advisory-sub-text{
     color: #767E86;
     font-size: 13px;
+    line-height: 22px;
   }
   .rec-profile-container{
     border: 1.5px solid #c8c8c8;
@@ -1196,6 +1197,10 @@ input#pan {
         padding-left: 15px;
         color: #767E86;
         font-weight: 500;
+
+        p{
+          margin: 0 0 10px 0;
+        }
       }
     }
   }

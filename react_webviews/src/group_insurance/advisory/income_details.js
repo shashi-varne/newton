@@ -7,7 +7,8 @@ import { nativeCallback } from 'utils/native_callback';
 import {advisoryConstants} from './constants';
 import InputPrefix from '../../common/ui/InputPrefix';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
-
+import { updateLead } from './common_data';
+import {storageService, isEmpty} from "utils/validators";
 class AdvisoryIncomeDetails extends Component {
 
     constructor(props){
@@ -18,8 +19,8 @@ class AdvisoryIncomeDetails extends Component {
             retireOptions: advisoryConstants.retireOptions,
             form_data: {},
             showPrefix: {income: false, expense: false}
-
         }
+        this.updateLead = updateLead.bind(this);
     }
 
     sendEvents(user_action, insurance_type, banner_clicked) {
@@ -35,6 +36,34 @@ class AdvisoryIncomeDetails extends Component {
           return eventObj;
         } else {
           nativeCallback({ events: eventObj });
+        }
+    }
+
+    componentDidMount(){
+
+        var advisory_data = storageService().getObject('advisory_data') || {};
+        console.log(advisory_data)
+        if(!isEmpty(advisory_data)){
+            var form_data = {};
+            form_data.income = formatAmount(advisory_data.annual_income);
+            form_data.expense = formatAmount(advisory_data.annual_personal_expense);
+            form_data.income_growth = advisory_data.growth_in_income;
+            form_data.retire = advisory_data.age_of_retirement;
+
+            this.setState({form_data: form_data})
+            let showPrefix = this.state.showPrefix;
+            if(form_data.income){
+                showPrefix['income'] = true;
+                this.setState({
+                    showPrefix: showPrefix
+                })
+            }
+            if(form_data.expense){
+                showPrefix['expense'] = true;
+                this.setState({
+                    showPrefix: showPrefix
+                })
+            }
         }
     }
 
@@ -67,6 +96,7 @@ class AdvisoryIncomeDetails extends Component {
         }else{
             form_data[name] = formatAmount(value);
             form_data[name + '_error'] = ''
+            // form_data[name + '_value'] = formatAmountToNumber(value);  
         }
 
         this.setState({
@@ -89,8 +119,10 @@ class AdvisoryIncomeDetails extends Component {
         var showPrefix = this.state.showPrefix;
         if(form_data){
             if(form_data[name] && form_data[name].length !== 0){
+                console.log('show')
                 return;
             }else{
+                console.log('hide')
                 showPrefix[name] = false;
                 this.setState({
                     showPrefix: showPrefix
@@ -102,13 +134,13 @@ class AdvisoryIncomeDetails extends Component {
     handleClick = () =>{
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        
+        console.log(form_data)
         if(form_data){
-            if(!form_data.expense || formatAmountToNumber(form_data.expense) === 0){
+            if(!form_data.expense || form_data.expense_value === 0){
                 form_data.expense_error = "We need some details to move forward!";
                 canSubmitForm = false
             }
-            if(!form_data.income || formatAmountToNumber(form_data.income) < 100000){
+            if(!form_data.income || form_data.income_value < 100000){
                 form_data.income_error = "Annual income needs to be more than Rs 1 lac for this analysis!";
                 canSubmitForm = false;
             }
@@ -125,7 +157,20 @@ class AdvisoryIncomeDetails extends Component {
             form_data: form_data
         })
         if(canSubmitForm){
-            this.navigate('/group-insurance/advisory/liability-details')
+
+            var post_body = {
+                'annual_income' : formatAmountToNumber(form_data.income),
+                'annual_personal_expense' : formatAmountToNumber(form_data.expense),
+                'growth_in_income' : form_data.income_growth,
+                'age_of_retirement' : form_data.retire, 
+            }
+            console.log(post_body)
+            var advisory_data = storageService().getObject('advisory_data');
+            for(var x in post_body){
+                advisory_data[x] = post_body[x]
+            }
+            storageService().setObject('advisory_data', advisory_data);
+            this.updateLead(post_body, 'liability-details')
         }
     }
 
@@ -133,6 +178,7 @@ class AdvisoryIncomeDetails extends Component {
         return(
             <Container
             // events={this.sendEvents('just_set_events')}
+            showLoader={this.state.show_loader}
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}
@@ -162,6 +208,7 @@ class AdvisoryIncomeDetails extends Component {
                helperText={this.state.form_data.income_error}
                value={this.state.form_data.income || ""}
                onChange={this.handleChange()}
+               autoComplete='off'
              />
              </InputPrefix>
              </div>
@@ -181,6 +228,7 @@ class AdvisoryIncomeDetails extends Component {
                helperText={this.state.form_data.expense_error}
                value={this.state.form_data.expense || ""}
                onChange={this.handleChange()}
+               autoComplete='off'
              />
              </InputPrefix>
              </div>

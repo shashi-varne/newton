@@ -12,14 +12,19 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import download from 'assets/download.svg';
 import launch from 'assets/launch.svg';
-
+import {storageService} from "utils/validators";
+import { updateLead } from './common_data';
+import { capitalizeFirstLetter } from 'utils/validators'
 class AdivsoryRecommendations extends Component { 
     constructor(props){
         super(props);
         this.state = {
             type: getConfig().productName,
-            openDialogReset: false
+            openDialogReset: false,
+            recommendation_data: storageService().getObject('advisory_data').recommendation_data,
+            user_data: storageService().getObject('advisory_data').user_data
         }
+        this.updateLead = updateLead.bind(this);
     }
 
     navigate = (pathname, search) => {
@@ -28,12 +33,17 @@ class AdivsoryRecommendations extends Component {
           search: search ? search : getConfig().searchParams,
         });
     }
-
-    resetQuote = () =>{
-        console.log('reset')
+    
+    handleReset = () =>{
+        
+        this.setState({
+            openDialogReset: false,
+        })
+        this.updateLead({'status': 'cancelled'}, 'landing')
     }
+
     handleClose = () => {
-            // this.sendEvents('next');
+        // this.sendEvents('next');
         this.setState({
             openDialogReset: false,
         })
@@ -53,7 +63,7 @@ class AdivsoryRecommendations extends Component {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.resetQuote} color="default">
+                    <Button onClick={this.handleReset} color="default">
                         YES
                     </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
@@ -71,6 +81,10 @@ class AdivsoryRecommendations extends Component {
         });
     }
     render(){
+        var recommendation_data = this.state.recommendation_data;
+        var user_data = this.state.user_data;
+        var dependents = user_data.dependent_json;
+        var dependent_count = dependents.kids + dependents.spouse + dependents.parents;
         return(
             <Container
                 // events={this.sendEvents('just_set_events')}
@@ -82,6 +96,7 @@ class AdivsoryRecommendations extends Component {
                 disableBack={true}
                 noFooter={true}
                 handleClick={()=>this.handleClick()}
+                showLoader={this.state.show_loader}
             >
                 <div className="advisory-recommendations-container">
                     <p className="advisory-sub-text">So you can plan better</p>
@@ -93,15 +108,15 @@ class AdivsoryRecommendations extends Component {
                                     <img src={require(`assets/${this.state.type}/advisory_male.svg`)}/>
                                 </div>
                                 <div className="rec-profile-right">
-                                    <p>Shashidhar Varne</p>
-                                    <p>Male</p>
-                                    <p>24 years</p>
-                                    <p>2 dependents</p>
+                                    <p>{capitalizeFirstLetter(user_data.name)}</p>
+                                    <p>{capitalizeFirstLetter(user_data.gender.toLowerCase())}</p>
+                                    <p>{user_data.age} years</p>
+                                    <p>{dependent_count} dependents</p>
                                 </div>
                             </div>
                     </div>
 
-                    <p className="advisory-sub-text" style={{marginTop: '18px'}}>It's great that you've already planned for you life with X policy but you're short on adequate coverage</p>
+                    <p className="advisory-sub-text" style={{marginTop: '18px'}}>{recommendation_data.recommended_text}</p>
                     <p style={{fontSize: '17px', fontWeight: 'bold', margin:'30px 0 20px 0', color: '#160D2E' }}>Here's what we recommend</p>
                     
                     <RecommendationResult/>

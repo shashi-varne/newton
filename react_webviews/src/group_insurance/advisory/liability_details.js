@@ -7,6 +7,8 @@ import { yesNoOptions } from '../constants';
 import InputPrefix from '../../common/ui/InputPrefix';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
+import { updateLead } from './common_data';
+import {storageService, isEmpty} from "utils/validators";
 
 class AdvisoryLiabilityDetails extends Component {
 
@@ -16,8 +18,8 @@ class AdvisoryLiabilityDetails extends Component {
             type: getConfig().productName,
             form_data: {},
             showPrefix: {loan_amount: false, total_amount: false}
-
         }
+        this.updateLead = updateLead.bind(this);
     }
 
     sendEvents(user_action, insurance_type, banner_clicked) {
@@ -33,6 +35,34 @@ class AdvisoryLiabilityDetails extends Component {
           return eventObj;
         } else {
           nativeCallback({ events: eventObj });
+        }
+    }
+
+    componentDidMount(){
+
+        var advisory_data = storageService().getObject('advisory_data') || {};
+        console.log(advisory_data)
+        if(!isEmpty(advisory_data)){
+            var form_data = {};
+            form_data.homeloan = advisory_data.home_loan_liability === "True" ? yesNoOptions[0].value : yesNoOptions[1].value;
+            form_data.liability = advisory_data.other_liability === "True" ? yesNoOptions[0].value : yesNoOptions[1].value;
+            form_data.loan_amount = formatAmount(advisory_data.home_loan_liability_amount);
+            form_data.total_amount = formatAmount(advisory_data.other_liability_amount);
+
+            this.setState({form_data: form_data})
+            let showPrefix = this.state.showPrefix;
+            if(form_data.loan_amount){
+                showPrefix['loan_amount'] = true;
+                this.setState({
+                    showPrefix: showPrefix
+                })
+            }
+            if(form_data.total_amount){
+                showPrefix['total_amount'] = true;
+                this.setState({
+                    showPrefix: showPrefix
+                })
+            }
         }
     }
 
@@ -58,6 +88,7 @@ class AdvisoryLiabilityDetails extends Component {
         }
 
         form_data[name] = formatAmount(value);
+        // form_data[name + '_value'] = formatAmountToNumber(value);   
         form_data[name + '_error'] = '';
 
         this.setState({
@@ -74,7 +105,7 @@ class AdvisoryLiabilityDetails extends Component {
 
         form_data[name] = options[event].value;
         form_data[name + '_error'] = '';
-    
+        
         if(form_data[name] === 'NO'){
             
             if(name === 'homeloan'){
@@ -118,7 +149,7 @@ class AdvisoryLiabilityDetails extends Component {
     handleClick = () =>{
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        console.log('111')
+        console.log('form_data', form_data)
         if(form_data){
             if(!form_data.homeloan){
                 form_data.homeloan_error = 'Please enter appropriate value';
@@ -129,11 +160,11 @@ class AdvisoryLiabilityDetails extends Component {
                 canSubmitForm = false;
             }
 
-            if(form_data.homeloan === 'YES' && (!form_data.loan_amount || formatAmountToNumber(form_data.loan_amount) === 0)){
+            if(form_data.homeloan === 'YES' && (!form_data.loan_amount || form_data.loan_amount_value === 0)){
                 form_data.loan_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }
-            if(form_data.liability === 'YES' && (!form_data.total_amount || formatAmountToNumber(form_data.total_amount) === 0)){
+            if(form_data.liability === 'YES' && (!form_data.total_amount || form_data.total_amount_value === 0)){
                 form_data.total_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }
@@ -144,7 +175,18 @@ class AdvisoryLiabilityDetails extends Component {
         })
 
         if(canSubmitForm){
-            this.navigate('/group-insurance/advisory/asset-details')
+            var post_body = {
+                'home_loan_liability': form_data.homeloan === "YES" ? 'True' : 'False',
+                'other_liability': form_data.liability === "YES" ? 'True' : 'False',
+                'home_loan_liability_amount': formatAmountToNumber(form_data.loan_amount),
+                'other_liability_amount' : formatAmountToNumber(form_data.total_amount),
+            }
+            var advisory_data = storageService().getObject('advisory_data');
+            for(var x in post_body){
+                advisory_data[x] = post_body[x]
+            }
+            storageService().setObject('advisory_data', advisory_data);
+            this.updateLead(post_body,'asset-details')
         }
     }
 
@@ -157,6 +199,7 @@ class AdvisoryLiabilityDetails extends Component {
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}
+            showLoader={this.state.show_loader}
             title="Tell us your liabilities"
             buttonTitle="SAVE AND CONTINUE"
             handleClick={()=>this.handleClick()}

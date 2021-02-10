@@ -10,6 +10,8 @@ import { genderOptions, yesNoOptions } from '../../group_insurance/constants'
 import {advisoryConstants} from './constants';
 import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
 import Checkbox from "material-ui/Checkbox";
+import { updateLead } from './common_data';
+import {storageService, isEmpty} from "utils/validators";
 
 class AdvisoryBasicDetails extends Component {
 
@@ -25,6 +27,7 @@ class AdvisoryBasicDetails extends Component {
             none_checked: false,
             showDependentsError: false
         }
+        this.updateLead = updateLead.bind(this);
     }
 
     componentDidMount(){
@@ -32,13 +35,36 @@ class AdvisoryBasicDetails extends Component {
         this.setState({
             Kids_max: dependents_data.kids_max,
             Kids_total: 0,
-            // kids_checked: false,
             Parents_max: dependents_data.parents_max,
             Parents_total: 0,
-            // parents_checked: false,
             none_checked: false, 
-            // spouse_checked: false
         })
+
+        var advisory_data = storageService().getObject('advisory_data') || {};
+        if(!isEmpty(advisory_data)){
+            var form_data = {};
+            form_data.name = advisory_data.name;
+            form_data.age = advisory_data.age;
+            form_data.city = advisory_data.city ? advisory_data.city.toLowerCase() : '';
+            form_data.gender = advisory_data.gender === "MALE" ? genderOptions[0].value : genderOptions[1].value;
+            form_data.married = advisory_data.marital_status === "MARRIED" ? yesNoOptions[0].value : yesNoOptions[1].value;
+            form_data.illness = advisory_data.ci_present === "True" ? yesNoOptions[0].value : yesNoOptions[1].value;
+            let spouse_checked = advisory_data.dependent_json.spouse ? true : false;
+            let Kids_checked = advisory_data.dependent_json.kids ? true : false;
+            let Kids_total = advisory_data.dependent_json.kids;
+            let Parents_checked = advisory_data.dependent_json.parents ? true : false;
+            let Parents_total = advisory_data.dependent_json.parents;
+            let none_checked = advisory_data.dependent_json.parents + advisory_data.dependent_json.kids + advisory_data.dependent_json.spouse === 0 ? true : false;
+            this.setState({
+                form_data: form_data,
+                spouse_checked: spouse_checked,
+                Kids_checked: Kids_checked,
+                Parents_checked: Parents_checked,
+                Kids_total: Kids_total,
+                Parents_total: Parents_total,
+                none_checked: none_checked
+            })
+        }
     }
 
     handleChange = name => event => {
@@ -54,7 +80,7 @@ class AdvisoryBasicDetails extends Component {
         if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
             return;
         }
-
+        
         if(name === 'city' || name === 'age'){
             var value = event
             form_data[name] = event;
@@ -81,7 +107,6 @@ class AdvisoryBasicDetails extends Component {
         if(name === 'gender'){
             options = genderOptions
         }
-
         form_data[name] = options[event].value;
         form_data[name + '_error'] = '';
     
@@ -130,8 +155,6 @@ class AdvisoryBasicDetails extends Component {
                 spouse_checked: !spouse_checked,
                 none_checked: false,
                 showDependentsError: false
-            }, ()=>{
-                console.log('sp', this.state.spouse_checked)
             })
         }else if(name === 'none'){
             none_checked = !none_checked;
@@ -156,7 +179,7 @@ class AdvisoryBasicDetails extends Component {
     handleClick = () =>{
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-
+        console.log('state',this.state)
         let spouse_count = 0;
         if(this.state.spouse_checked){
             spouse_count = 1;
@@ -196,7 +219,18 @@ class AdvisoryBasicDetails extends Component {
         })
 
         if(canSubmitForm){
-            this.navigate('/group-insurance/advisory/income-details')
+            var post_body = {
+                'name': form_data.name,
+                'gender': form_data.gender,
+                'marital_status': form_data.married === 'YES' ? "MARREID" : "UNMARRIED",
+                'age': form_data.age,
+                'ci_present': form_data.illness === 'YES' ? 'True' : 'False',
+                'dependent_json': {"parents": this.state.Parents_total || 0, "kids": this.state.Kids_total || 0 , "spouse": this.state.spouse_checked ? 1 : 0},
+                'city': form_data.city.toUpperCase(),
+            }
+            console.log(post_body)
+            storageService().setObject('advisory_data', post_body);
+            this.updateLead(post_body, 'income-details')
         }
     }
 
@@ -209,6 +243,7 @@ class AdvisoryBasicDetails extends Component {
             force_hide_inpage_title={true}
             title="Tell us about yourself"
             buttonTitle="SAVE AND CONTINUE"
+            showLoader={this.state.show_loader}
             handleClick={()=>this.handleClick()}
             >
             <div className="advisory-basic-details-container">

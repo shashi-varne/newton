@@ -10,6 +10,8 @@ import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils
 import {advisoryConstants} from './constants';
 import Checkbox from "material-ui/Checkbox";
 import { formatMonthandYear } from '../../utils/validators';
+import { updateLead } from './common_data';
+import {storageService, isEmpty} from "utils/validators";
 
 class AdvisoryAssetDetails extends Component {
 
@@ -18,7 +20,7 @@ class AdvisoryAssetDetails extends Component {
         this.state = {
             type: getConfig().productName,
             form_data: {},
-            showPrefix: {asset_amount: false, term: false, health: false, critical: false, corona: false},
+            showPrefix: {asset_amount: false},
             insuranceList: advisoryConstants.insuranceList,
             ins_checkbox:{
                 corona_cover_amount: false,
@@ -29,6 +31,7 @@ class AdvisoryAssetDetails extends Component {
                 showCoverAmountError: false
             }
         }
+        this.updateLead = updateLead.bind(this);
     }
 
     sendEvents(user_action, insurance_type, banner_clicked) {
@@ -44,6 +47,42 @@ class AdvisoryAssetDetails extends Component {
           return eventObj;
         } else {
           nativeCallback({ events: eventObj });
+        }
+    }
+
+    componentDidMount(){
+
+        var advisory_data = storageService().getObject('advisory_data') || {};
+        if(!isEmpty(advisory_data)){
+            var form_data = {};
+            form_data.assets = advisory_data.assets === "True" ? yesNoOptions[0].value: yesNoOptions[1].value
+            form_data.asset_amount = formatAmount(advisory_data.assets_amount)
+            form_data.term_cover_amount = formatAmount(advisory_data.term_insurance_sum_assured)
+            form_data.health_cover_amount = formatAmount(advisory_data.health_insurance_sum_assured)
+            form_data.critical_cover_amount = formatAmount(advisory_data.critical_illness_insurance_sum_assured)
+            form_data.corona_cover_amount = formatAmount(advisory_data.corona_insurance_sum_assured)
+            
+
+            this.setState({form_data: form_data})
+            let showPrefix = this.state.showPrefix;
+            var checkbox_list = ['term_cover_amount', 'health_cover_amount', 'critical_cover_amount', 'corona_cover_amount'];
+            var ins_checkbox = this.state.ins_checkbox;
+            for(var x of checkbox_list){
+                if(form_data[x]){
+                    ins_checkbox[x] = true;
+                    showPrefix[x] = true;
+                }
+            }
+            if(advisory_data.term_insurance_sum_assured + advisory_data.health_insurance_sum_assured + advisory_data.critical_illness_insurance_sum_assured +  advisory_data.corona_insurance_sum_assured === 0){
+                ins_checkbox['none'] = true;
+            }
+            if(form_data.asset_amount){
+                showPrefix['asset_amount'] = true;
+            }
+            this.setState({
+                showPrefix: showPrefix,
+                ins_checkbox: ins_checkbox
+            })
         }
     }
 
@@ -69,6 +108,7 @@ class AdvisoryAssetDetails extends Component {
         }
 
         form_data[name] = formatAmount(value);
+        // form_data[name + '_value'] = formatAmountToNumber(value);   
         form_data[name + '_error'] = '';
 
         this.setState({
@@ -203,7 +243,7 @@ class AdvisoryAssetDetails extends Component {
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         var showCoverAmountError = false;
-
+        console.log(form_data)
         if(form_data){
             if(!form_data.assets){
                 form_data.assets_error = 'Please enter appropriate value'
@@ -233,7 +273,25 @@ class AdvisoryAssetDetails extends Component {
             showCoverAmountError: showCoverAmountError
         })
         if(canSubmitForm){
-            this.navigate('/group-insurance/advisory/recommendations')
+            var post_body = {
+                'assets': form_data.assets === 'YES' ? 'True' : 'False',
+                'assets_amount': formatAmountToNumber(form_data.asset_amount) || 0,
+                'term_insurance_present': form_data.term_cover_amount === 'YES' ? 'True' : 'False',
+                'term_insurance_sum_assured': formatAmountToNumber(form_data.term_cover_amount) || 0,
+                'health_insurance_present': form_data.assets === 'YES' ? 'True' : 'False',
+                'health_insurance_sum_assured' : formatAmountToNumber(form_data.health_cover_amount) || 0,
+                'corona_insurance_present': form_data.assets === 'YES' ? 'True' : 'False',
+                'corona_insurance_sum_assured' : formatAmountToNumber(form_data.corona_cover_amount) || 0,
+                'critical_illness_insurance_present': form_data.assets === 'YES' ? 'True' : 'False',
+                'critical_illness_insurance_sum_assured': formatAmountToNumber(form_data.critical_cover_amount) || 0,
+            }
+
+            var advisory_data = storageService().getObject('advisory_data');
+            for(var x in post_body){
+                advisory_data[x] = post_body[x]
+            }
+            storageService().setObject('advisory_data', advisory_data);
+            // this.updateLead(post_body, 'recommendations', true);
         }
     }
 
@@ -247,6 +305,7 @@ class AdvisoryAssetDetails extends Component {
             onlyButton={true}
             force_hide_inpage_title={true}
             title="Let's note down your assets"
+            showLoader={this.state.show_loader}
             buttonTitle="SAVE AND CONTINUE"
             handleClick={()=>this.handleClick()}
             >
