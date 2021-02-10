@@ -1,0 +1,68 @@
+image:
+  name: node:12.20.0
+
+definitions:
+  caches:
+    image: node
+
+  steps:
+    - step: &pod-deploy
+        name: Pipeline-on-demand deploy steps
+        script:
+          - apt-get update
+          - apt-get install -y curl
+          - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+          - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+          - apt-get install yarn && echo "Y"
+          - yarn set version 1.21.1
+          - npm config set strict-ssl false;
+          - cd react_webviews
+          - npm install
+          - yarn
+          - unset CI
+          - yarn build
+          - ls
+          - mv build $BITBUCKET_COMMIT
+          - pipe: atlassian/google-cloud-storage-deploy:0.4.5
+            variables:
+              KEY_FILE: $KEY_FILE
+              PROJECT: 'plutus-admin'
+              BUCKET: 'plutus-webview'
+              SOURCE: '$BITBUCKET_COMMIT'
+
+    - step: &master-deploy
+        name: Pipeline-on-demand deploy steps
+        script:
+          - apt-get update
+          - apt-get install -y curl
+          - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+          - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+          - apt-get install yarn && echo "Y"
+          - yarn set version 1.21.1
+          - npm config set strict-ssl false;
+          - cd react_webviews
+          - npm install
+          - yarn
+          - unset CI
+          - yarn build
+          - ls
+          - mv build $BITBUCKET_BRANCH
+          - pipe: atlassian/google-cloud-storage-deploy:0.4.5
+            variables:
+              KEY_FILE: $KEY_FILE
+              PROJECT: 'plutus-admin'
+              BUCKET: 'plutus-webview'
+              SOURCE: $BITBUCKET_BRANCH
+
+pipelines:
+  custom:
+    pod-deploy:
+      - step:
+          <<: *pod-deploy
+          name: Pipeline-on-demand deploy
+
+  branches:
+    master:
+      - step:
+          <<: *master-deploy
+          name: Master deploy
