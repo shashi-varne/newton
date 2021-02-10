@@ -65,7 +65,7 @@ class Container extends Component {
     nativeCallback({ action: 'exit_web' });
 
     // switch (pathname) {
-    //   case "/loan/loan-home":
+    //   case "/loan/home":
     //   case "/loan/report":
     //   case "/loan/app-update":
     //     nativeCallback({ action: "native_back"});
@@ -96,7 +96,7 @@ class Container extends Component {
     });
 
     // if(this.state.callbackType === 'loan_home') {
-    //   this.navigate('/loan/loan-home');
+    //   this.navigate('/loan/home');
     // } else if(this.state.callbackType === 'loan_journey') {
     //   this.navigate('/loan/journey');
     // } else {

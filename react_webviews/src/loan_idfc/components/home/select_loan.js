@@ -106,7 +106,7 @@ class SelectLoan extends Component {
     if (loans_applied === 0 && (!dmi && !idfc)) {
       this.navigate('edit-details')
     } else {
-      this.navigate('loan-home')
+      this.navigate('home')
     }
   }
 

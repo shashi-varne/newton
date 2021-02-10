@@ -211,7 +211,7 @@ const Lending = props => {
 
           {/* <Route path={`${url}/dmi`} component={Loan} /> */}
 
-          <Route path={`${url}/loan-home`} component={Home} />
+          <Route path={`${url}/home`} component={Home} />
           <Route path={`${url}/select-loan`} component={SelectLoan} />
           <Route path={`${url}/edit-details`} component={Recommended} />
           <Route path={`${url}/:id/loan-know-more`} component={LoanKnowMore} />

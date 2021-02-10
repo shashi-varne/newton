@@ -123,7 +123,7 @@ class Home extends Component {
         title="Loans"
         noFooter={true}
       >
-        <div className="loan-home">
+        <div className="home">
           <div className="block1-info">
             {account_exists &&
             ongoing_loan_details &&
