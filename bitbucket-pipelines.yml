@@ -20,7 +20,7 @@ definitions:
           - npm install
           - yarn
           - unset CI
-          - yarn build
+          - IS_PIPELINE=true yarn build
           - ls
           - mv build $BITBUCKET_COMMIT
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
@@ -44,7 +44,7 @@ definitions:
           - npm install
           - yarn
           - unset CI
-          - yarn build
+          - IS_PIPELINE=true yarn build
           - ls
           - mv build $BITBUCKET_BRANCH
           - pipe: atlassian/google-cloud-storage-deploy:0.4.5
