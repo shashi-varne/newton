@@ -4,9 +4,11 @@ import { formatAmountInr } from "utils/validators";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import { initData } from "../services";
+import { storageConstants } from "../constants";
 
 const BankDetails = (props) => {
-  const banks = storageService().getObject("bank_mandates") || [];
+  const banks =
+    storageService().getObject(storageConstants.BANK_MANDATES) || [];
   const bank_id = props.match.params.bank_id;
   if (!bank_id) {
     props.history.goBack();
@@ -19,7 +21,7 @@ const BankDetails = (props) => {
       navigate();
       // $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status });
     } else {
-      navigate("");
+      navigate();
       // $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status, additional: true, bank_id: $scope.bankData.bank_id });
     }
   };

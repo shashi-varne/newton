@@ -133,3 +133,39 @@ export const addAdditionalBank = async (data) => {
       throw result.message || result.error || genericErrorMessage;
   }
 };
+
+export const saveBankData = async (data) => {
+  const res = await Api.post(apiConstants.pennyVerification, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.message || result.error || genericErrorMessage;
+  }
+};
+
+export const getBankStatus = async (data) => {
+  const res = await Api.post(apiConstants.getBankStatus, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.message || result.error || genericErrorMessage;
+  }
+};

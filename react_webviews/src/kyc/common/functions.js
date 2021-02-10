@@ -123,9 +123,9 @@ export const saveBankData = async (data, setIsApiRunning, navigate) => {
     if (!result) return;
     if (result.bank.bank_status === "approved") {
       toast("Congratulations!, new account added succesfully");
-      navigate(getPathname("bankList"));
+      navigate(getPathname.bankList);
     } else {
-      navigate(`${getPathname("addBankVerify")}${result.bank.bank_id}`);
+      navigate(`${getPathname.addBankVerify}${result.bank.bank_id}`);
     }
   } catch (err) {
     toast(err || genericErrorMessage);

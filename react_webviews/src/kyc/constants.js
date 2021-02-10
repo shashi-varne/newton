@@ -4,23 +4,24 @@ export const apiConstants = {
   getMyaccount: "/api/iam/myaccount",
   getIFSC: "/api/ifsc/",
   addAdditionalBank: "/api/kyc/bank/add/additionalbank/mine",
+  pennyVerification: "/api/account/add-bank/penny-verification",
+  getBankStatus: "/api/account/penny-verification-status-check",
 };
 
-export const getPathname = (name) => {
-  let pathnames = {
-    aadhar: "/kyc/aadhar",
-    aadharConfirmation: "/kyc/aadhar/confirmation",
-    bankList: "/kyc/add-bank",
-    addBank: "/kyc/approved/banks/doc/",
-    bankDetails: "/kyc/add-bank/details/",
-    addBankVerify: '/kyc/approved/banks/verify/',
-  };
-  return pathnames[name] || "";
+export const getPathname = {
+  aadhar: "/kyc/aadhar",
+  aadharConfirmation: "/kyc/aadhar/confirmation",
+  bankList: "/kyc/add-bank",
+  addBank: "/kyc/approved/banks/doc/",
+  bankDetails: "/kyc/add-bank/details/",
+  addBankVerify: "/kyc/approved/banks/verify/",
 };
 
 export const storageConstants = {
   USER: "user",
   KYC: "kyc",
+  BANK_MANDATES: "bank_mandates",
+  CHANGE_REQUEST: "change_requests",
 };
 
 export const occupationOptions = [

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService, validateNumber } from "utils/validators";
 import Input from "common/ui/Input";
@@ -17,33 +17,50 @@ import { initData } from "../services";
 
 const AddBank = (props) => {
   const navigate = navigateFunc.bind(props);
-  const initialize = async () => {
-    await initData();
-  };
-  initialize();
   let userKyc = storageService().getObject(storageConstants.KYC);
-  const bank_id = props.location.bank_id;
-
+  const bank_id = props.location.state?.bank_id || "";
   let data = {
     account_number: "",
     c_account_number: "",
     account_type: "",
     ifsc_code: "",
   };
-  if (bank_id) {
-    data = userKyc.additional_approved_banks.find(function (obj) {
-      return obj.bank_id?.toString() === bank_id;
-    });
+  if (bank_id && userKyc) {
+    data = userKyc.additional_approved_banks.find(
+      (obj) => obj.bank_id === bank_id
+    );
+    data.c_account_number = data.account_number;
   }
 
-  data.c_account_number = data.account_number;
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [bankData, setBankData] = useState({ ...data });
-  const [bankIcon, setBankIcon] = useState("");
-  const accountTypes = bankAccountTypeOptions(
-    userKyc.address.meta_data.is_nri || ""
+  const [bankIcon, setBankIcon] = useState(data.ifsc_image || "");
+  const [accountTypes, setAccountTypes] = useState(
+    bankAccountTypeOptions(userKyc?.address?.meta_data?.is_nri || "")
   );
+
+  let name = userKyc?.pan?.meta_data?.name || "";
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  let initialize = async () => {
+    if (!userKyc) {
+      await initData();
+      userKyc = storageService().getObject(storageConstants.KYC);
+      name = userKyc.pan.meta_data.name;
+      if (bank_id) {
+        data = userKyc.additional_approved_banks.find(
+          (obj) => obj.bank_id === bank_id
+        );
+        data.c_account_number = data.account_number;
+      }
+      setBankData({ ...data });
+      setAccountTypes([...bankAccountTypeOptions(true)]);
+    }
+  };
 
   let info_text =
     "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.";
@@ -159,7 +176,7 @@ const AddBank = (props) => {
           <Input
             label="Account Holder name"
             class="input"
-            value={userKyc.pan.meta_data.name || ""}
+            value={name || ""}
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             maxLength={16}
