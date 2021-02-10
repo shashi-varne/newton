@@ -3,7 +3,11 @@ import Container from "../common/Container";
 import { storageService, validateNumber } from "utils/validators";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { storageConstants, bankAccountTypeOptions } from "../constants";
+import {
+  storageConstants,
+  bankAccountTypeOptions,
+  getPathname,
+} from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
@@ -14,9 +18,11 @@ import {
   saveBankData,
 } from "../common/functions";
 import { initData } from "../services";
+import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 
 const AddBank = (props) => {
   const navigate = navigateFunc.bind(props);
+  const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   let userKyc = storageService().getObject(storageConstants.KYC);
   const bank_id = props.location.state?.bank_id || "";
   let data = {
@@ -39,8 +45,12 @@ const AddBank = (props) => {
   const [accountTypes, setAccountTypes] = useState(
     bankAccountTypeOptions(userKyc?.address?.meta_data?.is_nri || "")
   );
-
-  let name = userKyc?.pan?.meta_data?.name || "";
+  const [name, setName] = useState(userKyc?.pan?.meta_data?.name || "");
+  const [note, setNote] = useState({
+    info_text:
+      "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
+    variant: "info",
+  });
 
   useEffect(() => {
     initialize();
@@ -50,7 +60,7 @@ const AddBank = (props) => {
     if (!userKyc) {
       await initData();
       userKyc = storageService().getObject(storageConstants.KYC);
-      name = userKyc.pan.meta_data.name;
+      setName(userKyc.pan.meta_data.name || "");
       if (bank_id) {
         data = userKyc.additional_approved_banks.find(
           (obj) => obj.bank_id === bank_id
@@ -60,41 +70,32 @@ const AddBank = (props) => {
       setBankData({ ...data });
       setAccountTypes([...bankAccountTypeOptions(true)]);
     }
+    if (bank_id) {
+      if (bankData.user_rejection_attempts === 3) {
+        setIsPennyExhausted(true);
+      } else if (bankData.user_rejection_attempts === 2) {
+        setNote({
+          info_text:
+            "2 more attempts remaining! Please enter your correct account details to proceed",
+          variant: "attention",
+        });
+      } else if (bankData.user_rejection_attempts === 1) {
+        setNote({
+          info_text:
+            "Just 1 attempt is remaining! Please enter your correct account details to proceed",
+          variant: "attention",
+        });
+      }
+    }
   };
 
-  let info_text =
-    "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.";
-  let variant = "info";
-  if (bank_id) {
-    if (bankData.user_rejection_attempts === 0) {
-      // $mdDialog.show({
-      //   controller: function ($scope, $rootScope, $state) {
-      //     $scope.icon = $rootScope.partner.assets.ic_bank_not_added;
-      //     $scope.cancel = function () {
-      //       $mdDialog.cancel();
-      //     };
-      //     $scope.redirect = function () {
-      //       $state.go("kyc-journey");
-      //     }
-      //     $scope.bankdeatils = function () {
-      //       $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status, additional: true, bank_id: $scope.stateParams.bank_id });
-      //     }
-      //   },
-      //   templateUrl: 'components/modal/pennyExhausted.html',
-      //   parent: angular.element(document.body),
-      //   clickOutsideToClose: false,
-      //   fullscreen: false
-      // })
-    } else if (bankData.user_rejection_attempts === 2) {
-      info_text =
-        "2 more attempts remaining! Please enter your correct account details to proceed";
-      variant = "attention";
-    } else if (bankData.user_rejection_attempts === 1) {
-      info_text =
-        "Just 1 attempt is remaining! Please enter your correct account details to proceed";
-      variant = "attention";
-    }
-  }
+  const uploadDocuments = () => {
+    navigate();
+  };
+
+  const redirect = () => {
+    navigate(getPathname.journey);
+  };
 
   const handleClick = () => {
     const keysToCheck = [
@@ -171,7 +172,7 @@ const AddBank = (props) => {
     >
       <div className="kyc-approved-bank">
         <div className="kyc-main-title">Enter bank account details</div>
-        <Alert variant={variant} title="Note" message={info_text} />
+        <Alert variant={note.variant} title="Note" message={note.info_text} />
         <main>
           <Input
             label="Account Holder name"
@@ -247,6 +248,11 @@ const AddBank = (props) => {
             />
           </div>
         </main>
+        <PennyExhaustedDialog
+          isOpen={isPennyExhausted}
+          redirect={redirect}
+          uploadDocuments={uploadDocuments}
+        />
       </div>
     </Container>
   );

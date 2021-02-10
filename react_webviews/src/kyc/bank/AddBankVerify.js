@@ -20,7 +20,7 @@ const AddBankVerify = (props) => {
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const userKyc = storageService().getObject(storageConstants.KYC);
+  let userKyc = storageService().getObject(storageConstants.KYC);
   const bank_id = props.match.params.bank_id;
   if (!bank_id) {
     props.history.goBack();
@@ -206,7 +206,7 @@ const AddBankVerify = (props) => {
         />
         <PennyExhaustedDialog
           isOpen={isPennyExhausted}
-          goTobankLists={goTobankLists}
+          redirect={goTobankLists}
           uploadDocuments={uploadDocuments}
         />
       </div>

@@ -15,6 +15,7 @@ export const getPathname = {
   addBank: "/kyc/approved/banks/doc/",
   bankDetails: "/kyc/add-bank/details/",
   addBankVerify: "/kyc/approved/banks/verify/",
+  journey: '/kyc/journey'
 };
 
 export const storageConstants = {

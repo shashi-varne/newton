@@ -3,7 +3,7 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 
-const PennyExhaustedDialog = ({ isOpen, goTobankLists, uploadDocuments }) => {
+const PennyExhaustedDialog = ({ isOpen, redirect, uploadDocuments }) => {
   const productName = getConfig().productName;
   return (
     <Dialog
@@ -33,7 +33,7 @@ const PennyExhaustedDialog = ({ isOpen, goTobankLists, uploadDocuments }) => {
         >
           UPLOAD BANK DOCUMENTS
         </Button>
-        <Button className="button highlight-bg" onClick={() => goTobankLists()}>
+        <Button className="button highlight-bg" onClick={() => redirect()}>
           TRY AGAIN LATER
         </Button>
       </DialogContent>
