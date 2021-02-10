@@ -15,7 +15,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner_otm';
 import { getConfig, setHeights } from 'utils/functions';
-
+// import Frame from 'react-frame-component';
 
 class Container extends Component {
 
@@ -268,8 +268,8 @@ class Container extends Component {
 
         </div>
 
-        {/* Children Block */}
-        <div style={{display: 'flex', flexDirection: 'row' , overflow: 'scroll' , overflowX: 'hidden'}} >
+        {/* Children Block  overflow: 'scroll' , overflowX: 'hidden'*/}
+        <div style={{display: 'flex', flexDirection: 'row' ,}} >
           <div style={{width: '40%', display: 'block', marginLeft: '80px', 
            height: '850px' , paddingTop: '100px'}}>
           <h1>{this.props.title}</h1>
@@ -307,8 +307,10 @@ class Container extends Component {
 
   render() {
     return ( //className={`Container ${this.props.classOverRideContainer}`}
-    this.renderitmow()
-    //  this.renderitmow()
+
+    // <Frame style={{width: '800px', height: '800px'}}>
+   this.renderitmow()
+    // </Frame>
     );
   }
 };

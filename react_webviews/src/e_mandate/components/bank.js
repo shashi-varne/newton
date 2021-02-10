@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
-import Container from '../common/Container';
+// import Container from '../common/Container';
+import Container from '../commoniFrame/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
