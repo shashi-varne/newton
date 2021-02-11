@@ -12,8 +12,8 @@
   color: #fff;
   border: 1px solid;
 }
-.MuiDialogContent-root:first-child {
-  padding-top: 24px !important;
+.MuiDialogContent-root {
+  padding: 20px !important;
 }
 .RadioButton label.professional {
   padding: 8px;
@@ -155,9 +155,6 @@
 }
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
-}
-.MuiDialogContent-root {
-  padding: 0 14px 24px 14px !important;
 }
 .spinner {
   width: 70px;
@@ -805,5 +802,69 @@ body[data-device="mobile"] {
       margin: 40px 0 0 0;
     }
 
+  }
+}
+
+
+
+/**
+ * ==============================================
+ * Dot Flashing
+ * ==============================================
+ */
+
+ .dot-flashing-parent {
+  min-height: 22px;
+  display: flex;
+  align-items: center;
+ }
+ .dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #fff;
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: .5s;
+}
+
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dot-flashing::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #fff;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #fff;
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: #fff;
+  }
+  50%,
+  100% {
+    background-color: #119A4B;
+    opacity: 0.7;
   }
 }

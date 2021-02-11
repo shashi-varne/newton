@@ -14,7 +14,7 @@ class PaymentCallbackClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      skelton: false,
       failed_icon: getConfig().productName !== 'fisdom' ? failed_myway : failed_fisdom,
     };
   }
@@ -39,13 +39,13 @@ class PaymentCallbackClass extends Component {
     }
     try {
         this.setState({
-          show_loader: true
+          skelton: true
         })
         let res;
         res = await Api.get('api/ins_service/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
         
         this.setState({
-            show_loader: false
+            skelton: false
         })
         if (res.pfwresponse.status_code === 200) {
             
@@ -54,7 +54,7 @@ class PaymentCallbackClass extends Component {
             }
         } else {
           this.setState({
-            show_loader: false
+            skelton: false
           })
           toast(res.pfwresponse.result.error || res.pfwresponse.result.message
             || 'Something went wrong');
@@ -69,7 +69,7 @@ class PaymentCallbackClass extends Component {
 
     try {
       this.setState({
-        show_loader: true
+        show_loader: 'button'
       })
       let res2;
       res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
@@ -166,8 +166,8 @@ class PaymentCallbackClass extends Component {
         fullWidthButton={true}
         buttonTitle='Make new payment'
         onlyButton={true}
-        hide_header={this.state.show_loader}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         handleClick={() => this.handleClick()}
         title="Payment Failed"
         classOverRideContainer="payment-failed"

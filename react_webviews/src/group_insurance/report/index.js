@@ -16,7 +16,7 @@ class Report extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       reportData: [],
     };
 
@@ -216,7 +216,7 @@ class Report extends Component {
       let res = await Api.get('api/ins_service/api/insurance/get/report');
 
       this.setState({
-        show_loader: false
+        skelton: false
       })
       if (res.pfwresponse.status_code === 200) {
 
@@ -244,7 +244,7 @@ class Report extends Component {
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -449,6 +449,7 @@ class Report extends Component {
         title="Insurance Report"
         showLoader={this.state.show_loader}
         classOverRideContainer="report"
+        skelton={this.state.skelton}
       >
         {this.state.reportData.map(this.renderReportCards)}
         {this.state.loading_more && <div className="loader">

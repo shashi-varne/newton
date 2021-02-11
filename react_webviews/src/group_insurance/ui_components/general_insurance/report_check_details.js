@@ -8,7 +8,6 @@ import icn_call_fisdom from 'assets/icn_call_fisdom.svg';
 import icn_call_myway from 'assets/icn_call_myway.svg';
 
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { numDifferentiation, inrFormatDecimal, getUrlParams, capitalizeFirstLetter } from '../../../utils/validators';
 import { insuranceStateMapper } from '../../constants';
@@ -25,7 +24,7 @@ class ReportDetails extends Component {
 
         }
       },
-      show_loader: true,
+      skelton: true,
       noFooter: true,
       icn_call: getConfig().productName !== 'fisdom' ? icn_call_myway : icn_call_fisdom,
       params: getUrlParams()
@@ -55,16 +54,50 @@ class ReportDetails extends Component {
     });
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
+
+  onload = async() => {
+
+    let error = '';
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
       this.setState({
-        show_loader: false
+        skelton: false
       })
+
+      
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.lead;
@@ -97,18 +130,33 @@ class ReportDetails extends Component {
         })
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong';
       }
 
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
+
       });
-      toast('Something went wrong');
+      error = 'Something went wrong'
     }
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:'page'
+      })
+    }
 
+  }
+
+  async componentDidMount() {
+     this.onload();
   }
 
   openInBrowser(url) {
@@ -178,7 +226,7 @@ class ReportDetails extends Component {
         buttonTitle={this.state.buttonTitle}
         onlyButton={true}
         title={this.state.policyData.provider === 'EDELWEISS' ?  'Term insurance' : this.state.policyData.product_title}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         classOverRideContainer="report-detail"
       >
         <div className="card">
