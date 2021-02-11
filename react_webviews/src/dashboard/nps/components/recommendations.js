@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { get_recommended_funds } from "../common/api";
+import { get_recommended_funds, getInvestmentData } from "../common/api";
 import { formatAmountInr } from "utils/validators";
+import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
 import Button from "@material-ui/core/Button";
@@ -119,10 +120,28 @@ class Recommendations extends Component {
     );
   };
 
-  handleClick = () => {
+  handleClick = async () => {
+    let data = {
+      amount: "50000",
+      order_type: "one_time",
+      pension_house_id: "PFM008",
+      risk: "moderately_high",
+    };
 
-  }
-  
+    let result = await getInvestmentData(data);
+    let pgLink = result.investments.pg_link;
+
+    let plutus_redirect_url = encodeURIComponent(
+      window.location.origin + `/nps/fundreplace` + getConfig().searchParams
+    );
+    
+    pgLink +=
+      (pgLink.match(/[\?]/g) ? "&" : "?") +
+      "plutus_redirect_url=" +
+      plutus_redirect_url;
+    window.location.href = pgLink;
+  };
+
   render() {
     let { recommendations, show_loader, all_charges } = this.state;
     return (
@@ -138,9 +157,14 @@ class Recommendations extends Component {
         classOverRideContainer="pr-container"
       >
         <div className="fund">
-          <div className="replace" onClick={() => {
-            this.navigate("fundreplace");
-          }}>Replace</div>
+          <div
+            className="replace"
+            onClick={() => {
+              this.navigate("fundreplace");
+            }}
+          >
+            Replace
+          </div>
           <div className="name">
             <div className="icon">
               <img

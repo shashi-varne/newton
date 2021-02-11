@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
-// import toast from "common/ui/Toast";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
-import person from "../../../assets/person.png";
 import nominee from "../../../assets/nominee.png";
 import calendar from "../../../assets/calendar2.png";
 import relationship from "../../../assets/relationship.png";
 import Select from "../../../common/ui/Select";
-import{ updateMeta } from "../common/api";
+import { initialize } from "../common/commonFunctions";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -16,10 +14,16 @@ class NpsNominee extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      form_data: {}
+      form_data: {},
     };
-    this.updateMeta = updateMeta.bind(this);
+    this.initialize = initialize.bind(this);
   }
+
+  componentWillMount() {
+    this.initialize();
+  }
+
+  onload = () => {};
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -29,23 +33,23 @@ class NpsNominee extends Component {
     form_data[name + "_error"] = "";
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
-  handleClick = () => {
+  handleClick = async () => {
     let { form_data } = this.state;
 
     let data = {
       nomination: {
         dob: form_data.dob,
         name: form_data.name,
-        relationship: form_data.relationship
-      }
-    }
+        relationship: form_data.relationship,
+      },
+    };
 
-    this.updateMeta(data);
-  }
+    this.updateMeta(data, "delivery");
+  };
 
   render() {
     let { form_data } = this.state;
@@ -106,7 +110,7 @@ class NpsNominee extends Component {
               name="relationship"
               error={form_data.relationship_error ? true : false}
               helperText={form_data.relationship_error}
-              value={form_data.relationship || ''}
+              value={form_data.relationship || ""}
               options={relationshipOptions}
               onChange={this.handleChange("relationship")}
             />

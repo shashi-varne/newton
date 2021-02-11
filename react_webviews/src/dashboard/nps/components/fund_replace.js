@@ -3,6 +3,7 @@ import Container from "fund_details/common/Container";
 import { get_recommended_funds } from "../common/api";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
+import { getConfig } from "utils/functions";
 
 class ReplaceFund extends Component {
   constructor(props) {

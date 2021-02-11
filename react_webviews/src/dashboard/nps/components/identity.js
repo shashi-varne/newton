@@ -4,7 +4,7 @@ import Container from "fund_details/common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import RadioOptions from "../../../common/ui/RadioOptions";
 import person from "../../../assets/person.png";
-import { nps_register } from "../common/api";
+import { initialize } from "../common/commonFunctions";
 
 const marital_status_options = [
   {
@@ -24,10 +24,14 @@ class NpsIdentity extends Component {
       show_loader: false,
       form_data: {},
     };
-    this.nps_register = nps_register.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.initialize();
+  }
+
+  onload = () => {}
 
   handleChange = (name) => (event) => {
     let value = event.target.value;
@@ -43,9 +47,16 @@ class NpsIdentity extends Component {
 
   handleClick = async () => {
     let { form_data } = this.state;
-    let queryParams = `is_married=${form_data.marital_status === 'married'}&mother_name=${form_data.mother_name}${form_data.marital_status === 'married' ? '&spouse_name=' + form_data.spouse_name : ''}`;
-    this.nps_register(queryParams)
-  }
+    let queryParams = `is_married=${
+      form_data.marital_status === "married"
+    }&mother_name=${form_data.mother_name}${
+      form_data.marital_status === "married"
+        ? "&spouse_name=" + form_data.spouse_name
+        : ""
+    }`;
+
+    this.nps_register(queryParams, 'nominee');
+  };
 
   render() {
     let { form_data } = this.state;
@@ -77,7 +88,7 @@ class NpsIdentity extends Component {
               label="Mother's name"
               error={form_data.mother_name_error ? true : false}
               helperText={form_data.mother_name_error}
-              value={form_data.mother_name || ''}
+              value={form_data.mother_name || ""}
               onChange={this.handleChange("mother_name")}
             />
           </div>
@@ -90,7 +101,7 @@ class NpsIdentity extends Component {
               label="Marital Status"
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}
-              value={form_data.marital_status || ''}
+              value={form_data.marital_status || ""}
               options={marital_status_options}
               class="MaritalStatus"
               onChange={this.handleChange("marital_status")}
@@ -106,7 +117,7 @@ class NpsIdentity extends Component {
                 label="Spouse's name"
                 error={form_data.spouse_name_error ? true : false}
                 helperText={form_data.spouse_name_error}
-                value={form_data.spouse_name || ''}
+                value={form_data.spouse_name || ""}
                 onChange={this.handleChange("spouse_name")}
               />
             </div>

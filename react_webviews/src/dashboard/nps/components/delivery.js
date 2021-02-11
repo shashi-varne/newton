@@ -3,7 +3,7 @@ import Container from "fund_details/common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import person from "../../../assets/location.png";
 import Api from "utils/api";
-import{ updateMeta } from "../common/api";
+import{ initialize } from "../common/commonFunctions";
 
 class NpsDelivery extends Component {
   constructor(props) {
@@ -12,8 +12,14 @@ class NpsDelivery extends Component {
       show_loader: false,
       form_data: {}
     };
-    this.updateMeta = updateMeta.bind(this);
+    this.initialize = initialize.bind(this);
   }
+
+  componentWillMount() {
+    this.initialize()
+  }
+
+  onload = () => {}
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -74,7 +80,7 @@ class NpsDelivery extends Component {
       }
     }
 
-    this.updateMeta(data);
+    this.updateMeta(data, '');
   }
 
   render() {
