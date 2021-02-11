@@ -9,13 +9,14 @@ import {
 import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { storageConstants, relationshipOptions } from "../constants";
-import { initData } from "../services";
 import {
-  saveCompliantPersonalDetails2,
-  validateFields,
-  navigate as navigateFunc,
-} from "../common/functions";
+  storageConstants,
+  relationshipOptions,
+  getPathname,
+} from "../constants";
+import { initData } from "../services";
+import { validateFields, navigate as navigateFunc } from "../common/functions";
+import { savePanData } from "../common/api";
 
 const PersonalDetails2 = (props) => {
   const [isChecked, setIsChecked] = useState(true);
@@ -86,14 +87,25 @@ const PersonalDetails2 = (props) => {
         nomination: userkycDetails.nomination.meta_data,
       };
     }
-    let data = {
-      setIsApiRunning,
-      isEdit,
-      navigate,
-      isChecked,
-      userKyc: userkycDetails,
-    };
-    saveCompliantPersonalDetails2(body, data);
+    saveCompliantPersonalDetails2(body);
+  };
+
+  const saveCompliantPersonalDetails2 = async (body) => {
+    try {
+      setIsApiRunning(true);
+      const submitResult = await savePanData(body);
+      if (!submitResult) return;
+      if (isChecked) {
+        if (isEdit) navigate(getPathname.journey);
+        else navigate();
+      } else {
+        navigate(getPathname.journey);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   };
 
   const handleChange = (name) => (event) => {

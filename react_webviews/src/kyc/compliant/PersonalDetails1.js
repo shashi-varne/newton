@@ -8,6 +8,7 @@ import {
   incomeOptions,
   residentialOptions,
   storageConstants,
+  getPathname,
 } from "../constants";
 import CompliantHelpDialog from "../mini_components/CompliantHelpDialog";
 import { initData } from "../services";
@@ -17,11 +18,8 @@ import {
   dobFormatTest,
   isEmpty,
 } from "../../utils/validators";
-import {
-  saveCompliantPersonalDetails1,
-  validateFields,
-  navigate as navigateFunc,
-} from "../common/functions";
+import { validateFields, navigate as navigateFunc } from "../common/functions";
+import { getCVL, savePanData } from "../common/api";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -104,14 +102,54 @@ const PersonalDetails1 = (props) => {
       email: form_data.email,
     };
     let data = {
-      setIsApiRunning,
       tin_number,
-      is_nri,
-      isEdit,
-      navigate,
       userKyc: userkycDetails,
     };
     saveCompliantPersonalDetails1(body, data);
+  };
+
+  const saveCompliantPersonalDetails1 = async (body, data) => {
+    let { userKyc, tin_number } = data;
+    try {
+      const result = await getCVL(body);
+      if (!result) return;
+      userKyc.identification.politically_exposed = "NOT APPLICABLE";
+      userKyc.address.meta_data.is_nri = is_nri;
+      let item = {
+        pan: userKyc.pan.meta_data,
+        address: userKyc.address.meta_data,
+        identification: userKyc.identification,
+      };
+      if (is_nri) {
+        item.nri_address = {
+          tin_number: tin_number || "",
+        };
+      }
+      const submitResult = await savePanData(item);
+      if (!submitResult) return;
+      if (is_nri) {
+        let toState = "kyc-bank-details";
+        if (isEdit) {
+          toState = "kyc-journey";
+        }
+        // $state.go('kyc-nri-address-details-2', {
+        //   toState: toState,
+        //   userType: 'compliant'
+        // })
+      } else {
+        if (isEdit) {
+          // $state.go("kyc-journey");
+          navigate(getPathname.journey);
+        } else {
+          navigate(getPathname.compliantPersonalDetails2);
+          // $state.go("kyc-compliant-personal-details2");
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsApiRunning(false);
+    }
   };
 
   const handleChange = (name) => (event) => {

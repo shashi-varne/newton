@@ -7,20 +7,21 @@ import {
   storageConstants,
   bankAccountTypeOptions,
   getPathname,
+  getIfscCodeError,
 } from "../constants";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
-import {
-  navigate as navigateFunc,
-  validateFields,
-  checkIFSCFormat,
-  saveBankData,
-} from "../common/functions";
+import { navigate as navigateFunc, validateFields } from "../common/functions";
 import { initData } from "../services";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
+import { getIFSC, addAdditionalBank } from "../common/api";
+import toast from "common/ui/Toast";
+import { getConfig } from "../../utils/functions";
 
 const AddBank = (props) => {
+  const genericErrorMessage = "Something Went wrong!";
+  const partner = getConfig().partner;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   let userKyc = storageService().getObject(storageConstants.KYC);
@@ -127,7 +128,25 @@ const AddBank = (props) => {
       branch_name: bankData.branch_name,
       ifsc_code: bankData.ifsc_code.toUpperCase(),
     };
-    saveBankData(data, setIsApiRunning, navigate);
+    saveBankData(data);
+  };
+
+  const saveBankData = async (data) => {
+    try {
+      setIsApiRunning(true);
+      const result = await addAdditionalBank(data);
+      if (!result) return;
+      if (result.bank.bank_status === "approved") {
+        toast("Congratulations!, new account added succesfully");
+        navigate(getPathname.bankList);
+      } else {
+        navigate(`${getPathname.addBankVerify}${result.bank.bank_id}`);
+      }
+    } catch (err) {
+      toast(err || genericErrorMessage);
+    } finally {
+      setIsApiRunning(false);
+    }
   };
 
   const handleChange = (name) => async (event) => {
@@ -147,7 +166,7 @@ const AddBank = (props) => {
     setBankData(bank);
     if (name === "ifsc_code" && value) {
       if (value.length === 11) {
-        let data = await checkIFSCFormat(bank, formData, setIsApiRunning);
+        let data = await checkIFSCFormat(bank, formData);
         setBankIcon(data.bankIcon);
         setFormData(data.formData);
         setBankData(data.bankData);
@@ -159,6 +178,52 @@ const AddBank = (props) => {
       }
     }
     setFormData(formData);
+  };
+
+  const checkIFSCFormat = async (bankData, form_data) => {
+    let formData = Object.assign({}, form_data);
+    let bank = Object.assign({}, bankData);
+    let bankIcon = "";
+    if (
+      (partner.code === "ktb" &&
+        bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
+      (partner.code === "lvb" &&
+        bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
+      (partner.code === "cub" &&
+        bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
+      (partner.code === "ippb" &&
+        bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
+      (partner.code !== "ktb" &&
+        partner.code !== "lvb" &&
+        partner.code !== "cub" &&
+        partner.code !== "ippb")
+    ) {
+      setIsApiRunning(true);
+      try {
+        const result = (await getIFSC(bankData.ifsc_code)) || [];
+        if (result && result.length > 0) {
+          const data = result[0] || {};
+          formData.ifsc_code_error = "";
+          bank.branch_name = data.branch;
+          bank.bank_name = data.bank;
+          bankIcon = data.image || "";
+          formData.ifsc_code_helper = `${data.bank} ${data.branch}`;
+        } else {
+          bank.branch_name = "";
+          bank.bank_name = "";
+          formData.ifsc_code_error = getIfscCodeError(partner.code);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsApiRunning(false);
+      }
+    } else {
+      bank.branch_name = "";
+      bank.bank_name = "";
+      formData.ifsc_code_error = getIfscCodeError(partner.code);
+    }
+    return { bankData: bank, formData: formData, bankIcon: bankIcon };
   };
 
   return (
