@@ -61,10 +61,10 @@ const Login = (props) => {
       setLoading(true);
       const newNumber = number.toString().replace(/\D/g,'');
       const user = await validate_user(newNumber);
-      if (user.msg) {
+      if (user.obc_user) {
         nextPage();
       } else {
-        setPhoneErr(<div>Sorry, it seems you have not invested in Mutual Fund through eOBC mPAY. Please click <a href="https://netbanking.netpnb.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&__FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=024">here</a> to proceed to PNB website.</div>);
+        setPhoneErr(<div>Sorry, it seems you have not invested in Mutual Fund through eOBC mPAY. Please click <a href="https://www.pnbindia.in/MF-Disclaimer.html">here</a> to proceed to PNB website.</div>);
       }
     } catch (err) {
       toast(err)

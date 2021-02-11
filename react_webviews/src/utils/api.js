@@ -6,7 +6,12 @@ import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions'
 const myHistory = createBrowserHistory();
+
+var base_href = window.sessionStorage.getItem('base_href') || '';
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
+if(base_href) {
+  base_url = window.location.origin;
+}
 
 let redirect_url = getConfig().redirect_url;
 let sdk_capabilities = getConfig().sdk_capabilities;
