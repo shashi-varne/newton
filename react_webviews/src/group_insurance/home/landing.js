@@ -52,8 +52,10 @@ class Landing extends Component {
     let openModuleData = params ? params.openModuleData : {}
 
     let redirect_url = decodeURIComponent(getConfig().redirect_url);
-    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-      window.location.href = redirect_url;
+    if(openModuleData){
+      if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+        window.location.href = redirect_url;
+      }
     }
     this.setState({
       insuranceProducts: insuranceProducts,
