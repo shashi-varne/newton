@@ -1325,6 +1325,18 @@ input#pan {
   border-top-right-radius: 8px;
 }
 
+#bottom-popup {
+  .content-button {
+    margin: 0 20px 20px 20px;
+    display: flex;
+    width: auto;
+    justify-content: center;
+  }
+  button {
+    margin: 0px;
+  }
+}
+
 /* autosuggest */
 .react-autosuggest__container {
   position: relative;
