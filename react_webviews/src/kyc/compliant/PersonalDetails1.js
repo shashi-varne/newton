@@ -29,7 +29,7 @@ const PersonalDetails1 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
-  const isEdit = props.location?.state?.isEdit || false;
+  const isEdit = props.location.state?.isEdit || false;
   const [userkyc, setUserKyc] = useState({});
   let title = "Basic details";
   const [is_nri, setIsNri] = useState();

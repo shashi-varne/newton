@@ -67,6 +67,12 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false;
           }
           break;
+        case "tin_number":
+          if (value.length < 8) {
+            formData[`${key}_error`] = "Minimum length is 8";
+            canSubmit = false;
+          }
+          break;
         default:
           break;
       }
@@ -180,8 +186,6 @@ export const saveCompliantPersonalDetails1 = async (body, data) => {
         tin_number: tin_number || "",
       };
     }
-    console.log(userKyc);
-    console.log(item);
     const submitResult = await savePanData(item);
     if (!submitResult) return;
     if (is_nri) {
@@ -201,6 +205,25 @@ export const saveCompliantPersonalDetails1 = async (body, data) => {
         navigate(getPathname.compliantPersonalDetails2);
         // $state.go("kyc-compliant-personal-details2");
       }
+    }
+  } catch (err) {
+    console.log(err);
+  } finally {
+    setIsApiRunning(false);
+  }
+};
+
+export const saveCompliantPersonalDetails2 = async (body, data) => {
+  let { setIsApiRunning, isEdit, navigate, isChecked } = data;
+  try {
+    setIsApiRunning(true);
+    const submitResult = await savePanData(body);
+    if (!submitResult) return;
+    if (isChecked) {
+      if (isEdit) navigate(getPathname.journey);
+      else navigate();
+    } else {
+      navigate(getPathname.journey);
     }
   } catch (err) {
     console.log(err);
