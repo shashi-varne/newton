@@ -495,8 +495,9 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
+    // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
+    config_to_return.webAppUrl = window.location.origin + '/appl/web/view#!/';
   }
 
   config_to_return.isStaging = isStaging;
@@ -581,7 +582,9 @@ export const isMobileDevice = () => {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+
+  var base_href = window.sessionStorage.getItem('base_href') || '';
+  let { base_url } = base_href ? window.location.origin : main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;

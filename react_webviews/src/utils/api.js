@@ -6,7 +6,12 @@ import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions'
 const myHistory = createBrowserHistory();
+
+var base_href = window.sessionStorage.getItem('base_href') || '';
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
+if(base_href) {
+  base_url = window.location.origin;
+}
 
 base_url = 'https://religare-dot-plutus-staging.appspot.com'  // TODO remove
 let redirect_url = getConfig().redirect_url;
