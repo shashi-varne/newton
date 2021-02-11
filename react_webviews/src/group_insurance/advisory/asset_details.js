@@ -291,7 +291,7 @@ class AdvisoryAssetDetails extends Component {
                 advisory_data[x] = post_body[x]
             }
             storageService().setObject('advisory_data', advisory_data);
-            // this.updateLead(post_body, 'recommendations', true);
+            this.updateLead(post_body, 'recommendations', true);
         }
     }
 

@@ -21,8 +21,6 @@ class AdivsoryRecommendations extends Component {
         this.state = {
             type: getConfig().productName,
             openDialogReset: false,
-            recommendation_data: storageService().getObject('advisory_data').recommendation_data,
-            user_data: storageService().getObject('advisory_data').user_data
         }
         this.updateLead = updateLead.bind(this);
     }
@@ -33,7 +31,16 @@ class AdivsoryRecommendations extends Component {
           search: search ? search : getConfig().searchParams,
         });
     }
-    
+
+    componentDidMount(){
+        var recommendation_data = storageService().getObject('advisory_data').recommendation_data;
+        var user_data = storageService().getObject('advisory_data').user_data;
+
+        console.log(user_data, recommendation_data)
+        this.setState({
+            user_data: user_data,
+        })
+    }
     handleReset = () =>{
         
         this.setState({
@@ -81,7 +88,7 @@ class AdivsoryRecommendations extends Component {
         });
     }
     render(){
-        var recommendation_data = this.state.recommendation_data;
+        // var recommendation_data = this.state.recommendation_data;
         var user_data = this.state.user_data;
         var dependents = user_data.dependent_json;
         var dependent_count = dependents.kids + dependents.spouse + dependents.parents;
@@ -116,7 +123,7 @@ class AdivsoryRecommendations extends Component {
                             </div>
                     </div>
 
-                    <p className="advisory-sub-text" style={{marginTop: '18px'}}>{recommendation_data.recommended_text}</p>
+                    {/* <p className="advisory-sub-text" style={{marginTop: '18px'}}>{recommendation_data.recommended_text}</p> */}
                     <p style={{fontSize: '17px', fontWeight: 'bold', margin:'30px 0 20px 0', color: '#160D2E' }}>Here's what we recommend</p>
                     
                     <RecommendationResult/>

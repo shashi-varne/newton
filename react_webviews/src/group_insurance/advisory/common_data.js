@@ -25,8 +25,23 @@ export async function updateLead( body, next_page, final_page) {
            if (res.pfwresponse.status_code === 200) {
                if(final_page){
                 var advisory_data = storageService().getObject('advisory_data');
-                advisory_data['recommendation_data'] = resultData.coverage_gap_dict;
-                advisory_data['user_data'] = resultData.insurance_advisory;
+                var recommendation_data = resultData.coverage_gap_dict;
+                var user_data = resultData.insurance_advisory;
+
+                var recommendation_array = []
+                  for(var rec in recommendation_data){
+                    var temp = {};
+                    if(rec !== 'recommended_text'){
+                    temp['key'] = rec;
+                     for(var x in recommendation_data[rec]){
+                         temp[x] = recommendation_data[rec][x]
+                     }
+                     recommendation_array.push(temp);
+                    }
+                  }
+                  
+                  advisory_data.recommendation_data = recommendation_array;
+                  advisory_data.user_data = user_data;
                 storageService().setObject('advisory_data', advisory_data);
                }
                this.navigate(`/group-insurance/advisory/${next_page}`);                    
