@@ -1,7 +1,8 @@
 import { getConfig } from "utils/functions";
-import { getIFSC, addAdditionalBank } from "../common/api";
+import { getIFSC, addAdditionalBank, getCVL, savePanData } from "../common/api";
 import { getIfscCodeError, getPathname } from "../constants";
 import toast from "common/ui/Toast";
+import { calculateAge, isValidDate } from "utils/validators";
 
 const genericErrorMessage = "Something Went wrong!";
 const partner = getConfig().partner;
@@ -26,21 +27,49 @@ export function navigate(pathname, data = {}) {
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true;
   for (let key of keyToCheck) {
-    if (!formData[key]) {
+    let value = formData[key];
+    if (!value) {
       formData[`${key}_error`] = "This is required";
       canSubmit = false;
-    } else if (key === "mobile" && formData[key].length !== 10) {
-      formData[`${key}_error`] = "Minimum length is 10";
-      canSubmit = false;
-    } else if (key === "aadhar" && formData[key].length !== 12) {
-      formData[`${key}_error`] = "Minimum length is 12";
-      canSubmit = false;
-    } else if (key.includes("account_number") && formData[key].length !== 16) {
-      formData[`${key}_error`] = "Minimum length is 16";
-      canSubmit = false;
-    } else if (key === "ifsc_code" && formData[key].length !== 11) {
-      formData[`${key}_error`] = "Minimum length is 11";
-      canSubmit = false;
+    } else {
+      switch (key) {
+        case "mobile":
+          if (value.length !== 10) {
+            formData[`${key}_error`] = "Minimum length is 10";
+            canSubmit = false;
+          }
+          break;
+        case "aadhar":
+          if (value.length !== 12) {
+            formData[`${key}_error`] = "Minimum length is 12";
+            canSubmit = false;
+          }
+          break;
+        case "account_number":
+        case "c_account_number":
+          if (value.length !== 16) {
+            formData[`${key}_error`] = "Minimum length is 16";
+            canSubmit = false;
+          }
+          break;
+        case "ifsc_code":
+          if (value.length !== 11) {
+            formData[`${key}_error`] = "Minimum length is 11";
+            canSubmit = false;
+          }
+          break;
+        case "dob":
+          if (!isValidDate(value)) {
+            formData[`${key}_error`] = "Please enter a valid date";
+            canSubmit = false;
+          } else if (calculateAge(value) < 18) {
+            formData[`${key}_error`] = "Minimum age required 18 years";
+            canSubmit = false;
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
   return { formData, canSubmit };
@@ -129,6 +158,52 @@ export const saveBankData = async (data, setIsApiRunning, navigate) => {
     }
   } catch (err) {
     toast(err || genericErrorMessage);
+  } finally {
+    setIsApiRunning(false);
+  }
+};
+
+export const saveCompliantPersonalDetails1 = async (body, data) => {
+  let { setIsApiRunning, userKyc, tin_number, is_nri, isEdit, navigate } = data;
+  try {
+    const result = await getCVL(body);
+    if (!result) return;
+    userKyc.identification.politically_exposed = "NOT APPLICABLE";
+    userKyc.address.meta_data.is_nri = is_nri;
+    let item = {
+      pan: userKyc.pan.meta_data,
+      address: userKyc.address.meta_data,
+      identification: userKyc.identification,
+    };
+    if (is_nri) {
+      item.nri_address = {
+        tin_number: tin_number || "",
+      };
+    }
+    console.log(userKyc);
+    console.log(item);
+    const submitResult = await savePanData(item);
+    if (!submitResult) return;
+    if (is_nri) {
+      let toState = "kyc-bank-details";
+      if (isEdit) {
+        toState = "kyc-journey";
+      }
+      // $state.go('kyc-nri-address-details-2', {
+      //   toState: toState,
+      //   userType: 'compliant'
+      // })
+    } else {
+      if (isEdit) {
+        // $state.go("kyc-journey");
+        navigate(getPathname.journey);
+      } else {
+        navigate(getPathname.compliantPersonalDetails2);
+        // $state.go("kyc-compliant-personal-details2");
+      }
+    }
+  } catch (err) {
+    console.log(err);
   } finally {
     setIsApiRunning(false);
   }

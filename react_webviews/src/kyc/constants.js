@@ -6,6 +6,7 @@ export const apiConstants = {
   addAdditionalBank: "/api/kyc/bank/add/additionalbank/mine",
   pennyVerification: "/api/account/add-bank/penny-verification",
   getBankStatus: "/api/account/penny-verification-status-check",
+  getCVL: "/api/kyc/updatecvl/mine",
 };
 
 export const getPathname = {
@@ -15,7 +16,9 @@ export const getPathname = {
   addBank: "/kyc/approved/banks/doc/",
   bankDetails: "/kyc/add-bank/details/",
   addBankVerify: "/kyc/approved/banks/verify/",
-  journey: '/kyc/journey'
+  journey: "/kyc/journey",
+  compliantPersonalDetails1: "/kyc/compliant-personal-details",
+  compliantPersonalDetails2: "/kyc/compliant-personal-details2",
 };
 
 export const storageConstants = {
@@ -94,11 +97,11 @@ export const incomeOptions = [
 export const residentialOptions = [
   {
     name: "Indian",
-    value: true,
+    value: "INDIAN",
   },
   {
     name: "Non indian",
-    value: false,
+    value: "NON INDIAN",
   },
 ];
 

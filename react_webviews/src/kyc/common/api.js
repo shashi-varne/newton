@@ -6,7 +6,6 @@ import toast from "common/ui/Toast";
 import { getConfig } from "utils/functions";
 
 const partner = getConfig().partner;
-let userKyc = storageService().getObject(storageConstants.KYC);
 const genericErrorMessage = "Something Went wrong!";
 export const getPan = async (data) => {
   const res = await Api.post(apiConstants.getPan, data);
@@ -34,21 +33,10 @@ export const getPan = async (data) => {
 
 const accountMerge = () => {};
 
-export const savePanData = async (pan_number, nri_data) => {
-  if (nri_data && nri_data.is_nri) {
-    userKyc.address.meta_data.is_nri = true;
-  } else {
-    userKyc.address.meta_data.is_nri = false;
-  }
-  let dob = userKyc.pan.meta_data.dob;
-  let oldObject = userKyc.pan.meta_data;
-  let newObject = Object.assign({}, oldObject);
-  newObject.dob = dob;
-  newObject.pan_number = pan_number;
+export const savePanData = async (body) => {
   const res = await Api.post(apiConstants.submit, {
     kyc: {
-      pan: newObject,
-      address: userKyc.address.meta_data,
+      ...body,
     },
   });
   if (
@@ -76,7 +64,7 @@ export const savePanData = async (pan_number, nri_data) => {
       toast(msg);
       break;
     default:
-      throw result.error || result.message || "Server error";
+      throw result.message || result.error || "Server error";
   }
 };
 
@@ -154,6 +142,24 @@ export const saveBankData = async (data) => {
 
 export const getBankStatus = async (data) => {
   const res = await Api.post(apiConstants.getBankStatus, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.message || result.error || genericErrorMessage;
+  }
+};
+
+export const getCVL = async (data) => {
+  const res = await Api.post(apiConstants.getCVL, data);
   if (
     res.pfwstatus_code !== 200 ||
     !res.pfwresponse ||
