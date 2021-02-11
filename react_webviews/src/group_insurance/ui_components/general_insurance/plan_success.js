@@ -249,7 +249,7 @@ class PlanSuccessClass extends Component {
   }
 
   renderAccordions(props, index) {
-    if(props.name === 'Nominee' && (!this.state.lead_data.nominee.name || !this.state.lead_data.nominee.relation)){
+    if(props.name === 'Nominee' && this.state.lead_data && !this.state.lead_data.nominee_details){
       return;
     }
     return (
