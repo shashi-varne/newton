@@ -5,6 +5,7 @@ import IwdCard from '../../mini-components/IwdCard';
 import Legends from '../../mini-components/Legends';
 import { isEmpty } from 'utils/validators';
 import { getConfig } from 'utils/functions';
+import { formatPercentVal } from '../../common/commonFunctions';
 
 const isMobileView = getConfig().isMobileDevice;
 function MarketCapAllocation({ data = [], isLoading }) {
@@ -54,7 +55,7 @@ function TopSectorAllocation({ data = [], isLoading }) {
           {data.map(({name, share}, idx) => (
             <div className='iwd-sal-item' key={idx}>
               <span className='iwd-sali-label'>{name}</span>
-              <span className='iwd-sali-value'>{share}%</span>
+              <span className='iwd-sali-value'>{formatPercentVal(share)}</span>
             </div>
           ))}
         </div>

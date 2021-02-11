@@ -387,7 +387,7 @@ class FyntuneLanding extends Component {
                       {this.state.resume_data.lead.base_plan_title}
                     </div>
                     <div className="rct-subtitle" style={{fontSize: '20px'}}>
-                      {inrFormatDecimal(this.state.resume_data.lead.premium)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
+                      {inrFormatDecimal(this.state.resume_data.lead.base_premium)}/<span style={{fontSize: '16px', fontWeight: '300'}}>year</span>
                     </div>
                   </div>
                 </div>

@@ -538,6 +538,7 @@ export const back_button_mapper = {
   '/group-insurance/life-insurance/savings-plan/landing': '/group-insurance/life-insurance/entry',
   '/group-insurance/life-insurance/entry': '/group-insurance',
   '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry',
+  '/group-insurance/call-back-details' : '/group-insurance',
 };
 
 export const insuranceMaritalStatus = [
@@ -840,5 +841,24 @@ export function TitleMaper(name){
 
   return TitleMaper[name] || ''
 
+
+}
+
+export function ProviderName(name) {
+
+  let NameData = name ? name.toLowerCase() : ''
+  let ProviderName = {
+    'religare': 'Care',
+    'hdfc_ergo': 'HDFC ergo',
+    'bharti axa general': 'Bhartiaxa',
+    'edelweiss tokio': 'Edelweiss tokio life',
+    'hdfc ergo': 'HDFC ergo',
+    'star health': 'Star',
+    'religare health': 'Care',
+    'fyntune': 'HDFC Life',
+    'hdfc life': 'HDFC Life',
+  }
+
+  return ProviderName[NameData] ? ProviderName[NameData] : NameData
 
 }
