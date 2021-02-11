@@ -7,11 +7,11 @@ import IconButton from 'material-ui/IconButton';
 import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons//Close';
 import restart from 'assets/restart_nav_icn.svg';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import Active from 'material-ui-customizable-icons/Active';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import Active from 'material-ui-customizable-icons/Active';
 
-const Header = ({ classes, title, count, total, current, goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, topIcon, handleTopIcon, noBack }) => (
-  <AppBar position="fixed" color="primary" className={`${classes.topBar}`}>
+const Header = ({ classes, title, count, total, current, width,goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, topIcon, handleTopIcon, noBack }) => (
+   <AppBar position="fixed" color="primary" style={{width: width,}} className={classes.topBar} >
     <Toolbar>
       <Typography variant="subheading" color="inherit" className={classes.flex}>
         {smallTitle && smallTitle !== undefined &&
@@ -20,31 +20,18 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
           </div>}
          {!smallTitle && 
       <div style={{display: 'flex', justifyContent: 'space-between' , direction: 'row'}}>  
-      {!noBack && 
+       <div style={{marginLeft: '5px' }}>
+      {!noBack &&   
       <IconButton 
       className={classes.menuButton} 
       color="inherit" aria-label="Menu" onClick={goBack}
       >
-        {!disableBack && <ChevronLeftIcon />}
-
-            {/* {!disableBack && <Active className={classes.menuButton} style={style} transform={transform} pallet={pallet}
-              style={{
-                width: '48px',
-                height: '48px'
-              }}
-              transform='scale(2)'
-              className='ChevronLeft'
-              pallet={{
-                circle: 'rgba(169, 169, 169, 1)',
-                tick: 'rgba(255, 255, 255, 1)',
-              }}
-            />} */}
-
-        {(disableBack === true || disableBack === 'summary') && <Close />}
-      </IconButton>
-      }
-     <img src={ require(`assets/finity/moneycontrol_logo.svg`)} style={{ marginTop: '20px', marginBottom: '20px'}} alt=""/>
-     <img src={ require(`assets/finity/Finity_Logo.svg`)} style={{paddingRight: '40px', marginTop: '32px', marginBottom: '32px'}} alt=""/>
+        {!disableBack && <NavigateBeforeIcon style={{ fontSize: 30 , color: 'blue'}} />}
+        {(disableBack === true || disableBack === 'summary') && <Close style={{ fontSize: 30 , color: 'blue'}}  />}
+      </IconButton>}
+      </div>
+    <img src={ require(`assets/finity/moneycontrol_logo.svg`)} className={classes.img} style={{ marginTop: '20px', marginBottom: '20px'}} alt=""/> 
+    {<img src={ require(`assets/finity/Finity_Logo.svg`)} style={{paddingRight: '40px', marginTop: '32px', marginBottom: '32px'}} alt=""/> } 
         </div>}
       </Typography>
       {resetpage &&
@@ -61,43 +48,57 @@ const Header = ({ classes, title, count, total, current, goBack, edit, type, res
 );
 
 
-const className = 'ChevronLeft';
-const viewBox = '0 0 48 48';
-const transform = 'scale(2)';
-const style = {
-  width: '48px',
-  height: '48px',
-};
-const pallet = {
-  circle: 'rgba(169, 169, 169, 1)',
-  tick: 'rgba(255, 255, 255, 1)',
-};
+const styles = function() { 
+  var windowWidth = window.innerWidth;
 
+  if (windowWidth > 425){
+    return {
+      root: {
+        flexGrow: 1,
+      },
+      flex: {
+        flex: 1,
+      },
+      menuButton: {
+        marginLeft: '-12px !important',
+        marginRight: '17px !important',
+        height: '80px',
+      },
+      topBar: {
+        backgroundColor: "#3792FC",
+        width: "100%",
+        height: '80px',
+        display: 'flex',
+        justifyContent: 'space-between'
+      }
+    }
+  }else return {
+    root: {
+      flexGrow: 1,
+    },
+    flex: {
+      flex: 1,
+    },
+    menuButton: {
+      marginLeft: '-12px !important',
+      marginRight: '17px !important',
+      height: '80px',
+    },
+    topBar: {
+      backgroundColor: 'white',
+      width: "100%",
+      height: '80px',
+      border: '1px solid white'
+      // display: 'none',
+      // justifyContent: 'space-between'
+    },
 
+    img: {
+      display: 'none'
+    }
 
-
-
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-  flex: {
-    flex: 1,
-  },
-  menuButton: {
-    marginLeft: '-12px !important',
-    marginRight: '7px !important',
-    height: '80px'
-  },
-
-  topBar: {
-    backgroundColor: "#3792FC", 
-    // width: "100%",
-    height: '80px',
-    display: 'flex', 
-    justifyContent: 'space-between'
   }
 
-};
+}
 
 export default withStyles(styles)(Header);

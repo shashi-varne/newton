@@ -10,6 +10,7 @@ import select_icon from 'assets/completed_step.svg';
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import bank_building from 'assets/finity/bank_building.svg'
 
 
 class SelectBank extends Component {
@@ -21,6 +22,7 @@ class SelectBank extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       info_icon: getConfig().productName !== 'fisdom' ? info_icon_myway : info_icon_fisdom,
       selected_bank: {},
+      iframeIcon: bank_building,
       pc_urlsafe: getConfig().pc_urlsafe
     }
   }
@@ -140,7 +142,7 @@ class SelectBank extends Component {
     )
   }
 
-  handleClick = async () => {
+  handleClick = async () => {   console.log("+++++++++++++++++++++++++++++++++++++")
 
     if(!this.state.selected_bank.account_number) {
       toast(this.state.fetchError || 'Please select bank', 'error');
@@ -148,7 +150,7 @@ class SelectBank extends Component {
     }
     this.sendEvents('next');
     this.setState({
-      show_loader: true
+      show_loader: false
     })
     try {
       let bank_data = { selected_bank: this.state.selected_bank };
@@ -237,6 +239,7 @@ class SelectBank extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="AUTHORISE E-MANDATE"
+        img={this.state.iframeIcon}
       >
         <div className="infocard">
           <div className="title">

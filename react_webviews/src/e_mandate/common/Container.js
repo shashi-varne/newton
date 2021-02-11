@@ -262,7 +262,7 @@ class Container extends Component {
           </div>}
 
           {/* Banner Block */}
-          {/* {this.props.banner && <Banner text={this.props.bannerText} />} */}
+          {this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 

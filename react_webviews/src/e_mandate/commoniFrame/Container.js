@@ -26,12 +26,15 @@ class Container extends Component {
       openPopup: false,
       popupText: '',
       callbackType: '',
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      height: 0,
+      width: 0
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
   }
 
   componentDidMount() {
+    this.update();
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -53,6 +56,14 @@ class Container extends Component {
       });
     }
   }
+
+
+  update = () => {
+    this.setState({
+      height: window.innerHeight,
+      width: window.innerWidth
+    });
+  };
 
   componentWillUnmount() {
     if (getConfig().generic_callback) {
@@ -221,7 +232,7 @@ class Container extends Component {
   }
 
 
-  renderitmow() {
+  renderForiFrame() {
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
       if (this.props.current > i) {
@@ -232,12 +243,15 @@ class Container extends Component {
       }
     }
     return (
-      <div
+      <div style={{ backgroundColor: 'white', width: this.props.width || '100%' , height: 'auto' ,
+       display: 'flex' , flexDirection : 'column' , justifyContent : 'space-between' , }}
       // className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
       >
         {/* Header Block */}
+  
         {(!this.props.noHeader && !getConfig().hide_header) && <Header
           disableBack={this.props.disableBack}
+          width={this.props.width || '100%' }
           title={this.props.title}
           smallTitle={this.props.smallTitle}
           provider={this.props.provider}
@@ -252,37 +266,40 @@ class Container extends Component {
           handleReset={this.props.handleReset}
           topIcon={this.props.topIcon}
           handleTopIcon={this.handleTopIcon} />
-        }
+        } 
         {/* Below Header Block */}
+
         <div id="HeaderHeight" style={{ top: 56 }}>
 
           {/* Loader Block */}
           {this.renderPageLoader()}
 
-          {steps && <div className="Step">
-            {steps}
-          </div>}
+          {steps && <div className="Step"> {steps}  </div>}
 
           {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
-
+               {this.props.banner && <Banner text={this.props.bannerText}     />}
         </div>
 
-        {/* Children Block  overflow: 'scroll' , overflowX: 'hidden'*/}
-        <div style={{display: 'flex', flexDirection: 'row' ,}} >
-          <div style={{width: '40%', display: 'block', marginLeft: '80px', 
-           height: '850px' , paddingTop: '100px'}}>
-          <h1>{this.props.title}</h1>
-          {this.props.children}
-         </div>
-            <div style={{margin: 'auto'}}> <img width={'200%'} src={this.props.img} alt="Mandate" /></div>
-         </div>
+        {/* Children Block */}
+        {this.props.img && <div className={'childblockiframe'} >
+          <div className='childblockiframe-element-one'>
+             <h1>{this.props.title}</h1>
+             <span>{this.props.children}</span>
+          </div>
+        { <div> <img className='childblockiframe-element-img'  src={this.props.img} alt="Mandate" /></div> }
+         </div>}
+
+         {!this.props.img && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`}>    
+         <h1>{this.props.title}</h1> 
+         {this.props.children} </div> }
+
 
         {/* Footer Block */}
 
-      <div style={{bottom: 0, position: 'fixed', marginLeft:'40%'}}>
-        {!this.props.noFooter &&
+      <div className='footer-iframe'>
+        {!this.props.noFooter && this.props.img &&
           <Footer
+            iframe={true}
             fullWidthButton={this.props.fullWidthButton}  
             logo={this.props.logo}
             buttonTitle={this.props.buttonTitle}
@@ -296,20 +313,19 @@ class Container extends Component {
             onlyButton={this.props.onlyButton}
             noFooter={this.props.noFooter}
             isDisabled={this.props.isDisabled} />
-        } </div>
+        } 
+        </div>
         {/* No Internet */}
         {this.renderDialog()}
         {this.renderPopup()}
-        <br></br>
       </div>
     )
   }
 
   render() {
-    return ( //className={`Container ${this.props.classOverRideContainer}`}
-
+    return (
     // <Frame style={{width: '800px', height: '800px'}}>
-   this.renderitmow()
+   this.renderForiFrame()
     // </Frame>
     );
   }

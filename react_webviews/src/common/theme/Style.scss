@@ -1340,3 +1340,50 @@ input#pan {
   width: 100%;
   object-fit: cover;
 }
+
+.childblockiframe{
+  display: flex;
+  flex-direction: row;
+  overflow: scroll ;
+  padding-top: 100px;
+  height: 100%;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+}
+
+.childblockiframe-element-one{
+  width: 40%;
+  margin-left: 5%;
+  margin-right: 5%;
+  height: auto;
+}
+
+.childblockiframe-element-img{
+  width: 200%;
+  margin: auto;
+  padding-top: 70%;
+}
+
+.footer-iframe{
+  background-color:  white;
+  bottom: 0%;
+  overflow: hidden;
+  margin-top: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+@media (max-width: 425px) {
+  .childblockiframe {
+    flex-direction: column-reverse;
+  }
+  .childblockiframe-element-one{
+    width: 90%;
+  }
+
+  .childblockiframe-element-img{
+    width: 100%;
+    padding-top: 0
+  }
+
+}
