@@ -6,6 +6,7 @@ import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import '../../common/Style.scss'
+import toast from '../../../common/ui/Toast'
 
 class DiseasesSpecificPlan extends Component {
 
@@ -99,15 +100,24 @@ class DiseasesSpecificPlan extends Component {
   }
 
   handleClick = (data) => {
+    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
+    let product_key = data.key ? data.key : data;
+    
+    if(BHARTIAXA_PRODUCTS.includes(product_key)){
+      toast('Technical maintenance in progress, please try again in sometime.');
+      return;
+    }
 
     this.setState({
       show_loader : true
     })
 
-    let product_key = data.key ? data.key : data;
+    
+
+
     typeof data === 'object' ? data.insurance_type = 'Disease specific plans'  : data = {"insurance_type" : 'Disease specific plans'}
     this.sendEvents(data);
-    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
+    
 
     var lead_id = '';
     var path = '';
