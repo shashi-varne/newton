@@ -4,6 +4,7 @@ export const apiConstants = {
   getMyaccount: "/api/iam/myaccount",
   getIFSC: "/api/ifsc/",
   addAdditionalBank: "/api/kyc/bank/add/additionalbank/mine",
+  uploadPan: '/api/kyc/v2/doc/mine/pan'
 };
 
 export const getPathname = (name) => {

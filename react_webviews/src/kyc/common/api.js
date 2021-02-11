@@ -133,3 +133,13 @@ export const addAdditionalBank = async (data) => {
       throw result.message || result.error || genericErrorMessage;
   }
 };
+
+export const upload = async (file) => {
+  const formData = new FormData()
+  formData.set('res', file)
+  const res = await Api.post(apiConstants.uploadPan, formData)
+  if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
+    return res.pfwresponse.result
+  }
+  throw new Error(res?.pfwresponse?.result?.message || res?.pfwresponse?.result?.error || genericErrorMessage)
+}
