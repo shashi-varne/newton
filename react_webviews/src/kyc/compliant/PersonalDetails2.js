@@ -25,7 +25,9 @@ const PersonalDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState({});
+  const [userkyc, setUserKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || {}
+  );
   let title = "Nominee detail";
   if (isEdit) {
     title = "Edit nominee detail";

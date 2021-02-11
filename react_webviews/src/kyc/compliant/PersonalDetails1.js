@@ -28,7 +28,9 @@ const PersonalDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState({});
+  const [userkyc, setUserKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || {}
+  );
   let title = "Basic details";
   const [is_nri, setIsNri] = useState();
   if (isEdit) {

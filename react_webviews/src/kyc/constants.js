@@ -10,6 +10,7 @@ export const apiConstants = {
 };
 
 export const getPathname = {
+  homeKyc: "/kyc/home-kyc",
   aadhar: "/kyc/aadhar",
   aadharConfirmation: "/kyc/aadhar/confirmation",
   bankList: "/kyc/add-bank",
@@ -19,6 +20,9 @@ export const getPathname = {
   journey: "/kyc/journey",
   compliantPersonalDetails1: "/kyc/compliant-personal-details",
   compliantPersonalDetails2: "/kyc/compliant-personal-details2",
+  confirmPan: "/kyc/compliant-confirm-pan",
+  compliantKycComplete: "/kyc/compliant-report-complete",
+  compliantReport: "/kyc/compliant-report-details",
 };
 
 export const storageConstants = {

@@ -98,3 +98,18 @@ export const submitAadharData = (data) => {
     "//" +
     encodedURI;
 };
+
+export const panUiSet = (pan) => {
+  if (!pan) {
+    return "";
+  }
+
+  let panNew =
+    pan.substring(0, 5) +
+    " " +
+    pan.substring(5, 9) +
+    " " +
+    pan.substring(9, 10);
+
+  return panNew;
+};
