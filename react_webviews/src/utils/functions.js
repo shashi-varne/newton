@@ -364,6 +364,18 @@ const partnersConfigBase = {
     close_button: 'close_nav_icon.svg',
     search_button: 'search.png',
   },
+  taxwin: {
+    logo: "logo_white.png",
+    primary_color: "#4f2da7",
+    code: "taxwin",
+    email: "ask@fisdom.com",
+    mobile: "+91-7829228886",
+    message: "",
+    banner: "obc_banner.png",
+    back_button: "back_icon_white.png",
+    close_button: "close_nav_icon.svg",
+    search_button: "search.png"
+  }
 };
 
 export const getHost = (pathname) => {
@@ -483,8 +495,9 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
+    // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
+    config_to_return.webAppUrl = window.location.origin + '/appl/web/view#!/';
   }
 
   config_to_return.isStaging = isStaging;
@@ -569,7 +582,9 @@ export const isMobileDevice = () => {
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
-  let { base_url } = main_query_params;
+
+  var base_href = window.sessionStorage.getItem('base_href') || '';
+  let { base_url } = base_href ? window.location.origin : main_query_params;
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
