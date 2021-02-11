@@ -1039,12 +1039,66 @@
   }
 
   .doc-container {
-    border: 1px dotted 
+    border: 1px dotted;
   }
 }
 
 #kyc-upload-pan {
+  font-size: 14px;
   .alert-status-info {
     margin-top: 20px;
+  }
+
+  .pan-alert {
+    width: 100%;
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  .pan-alert .row {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  .kyc-doc-upload-container {
+    margin-top: 20px;
+    border: 1px dashed var(--skelton-color); 
+    padding: 10px;
+  }
+
+  .kyc-doc-upload-container .caption {
+    text-align: center;
+  }
+
+  .kyc-doc-upload-container .preview {
+    display: block;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .kyc-upload-doc-actions {
+    margin-top: 20px;
+    .kyc-upload {
+      display: none;
+    }
+    .kyc-upload-button {
+      display: block;
+      margin: 0 auto;
+      margin-top: 10px;
+      background-color: transparent;
+      padding: 0;
+      border: none;
+      
+      svg {
+        fill: var(--secondary);
+      }
+    }
+
+    .upload-action {
+      text-transform: uppercase;
+      color: var(--secondary);
+      font-size: 10px;
+      font-weight: 800;
+    }
   }
 }
