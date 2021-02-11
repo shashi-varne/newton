@@ -54,7 +54,7 @@ class PlanSummaryClass extends Component {
     }
 
     try {
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
       this.setState({
         show_loader: false
       });
@@ -116,7 +116,7 @@ class PlanSummaryClass extends Component {
         show_loader: true
       })
       let res2;
-      res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
       if (res2.pfwresponse.status_code === 200) {
 
@@ -268,6 +268,9 @@ class PlanSummaryClass extends Component {
             <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
             Instant policy issuance
             </div>
+        </div>
+        <div className="baxa-disclaimer">
+          <p style={{ color: getConfig().primary, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
         </div>
       </Container>
     );

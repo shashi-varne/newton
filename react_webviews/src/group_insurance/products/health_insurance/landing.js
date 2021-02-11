@@ -242,11 +242,6 @@ class HealthInsuranceLanding extends Component {
   }
 
   handleClick = (product_key, title) => {
-    
-    if(product_key === 'HOSPICASH'){
-      toast('Technical maintenance in progress, please try again in sometime.')
-      return;
-    }
 
     let stateMapper = {
       'HEALTH_SUPER_TOPUP': 'super_topup',
@@ -365,7 +360,7 @@ class HealthInsuranceLanding extends Component {
       { props.key === 'DISEASE_SPECIFIC_PLANS' &&  this.state.DiseasesSpecificPlan && 
        <div onClick={() => this.handleClick(props.key, props.title)} style={{  width : '100%'
       }}>
-     <div style={{ display: 'flex' , width : '100%' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  onSelectEvent={this.handleEvent} parent={this}/> } </div>
+     <div onClick={() => this.handleClick2()} style={{ display: 'flex' , width : '100%' }}>{props.key === 'DISEASE_SPECIFIC_PLANS' && <DiseasesSpecificPlan  onSelectEvent={this.handleEvent} parent={this}/> } </div>
       </div>}
       </div>
       </div>

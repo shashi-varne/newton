@@ -6,6 +6,7 @@ import qs from 'qs';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss'
+import { isEmpty } from 'utils/validators';
 
 class Landing extends Component {
 
@@ -52,8 +53,10 @@ class Landing extends Component {
     let openModuleData = params ? params.openModuleData : {}
 
     let redirect_url = decodeURIComponent(getConfig().redirect_url);
-    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-      window.location.href = redirect_url;
+    if(!isEmpty(openModuleData)){
+      if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+        window.location.href = redirect_url;
+      }
     }
     this.setState({
       insuranceProducts: insuranceProducts,

@@ -172,12 +172,6 @@ class LifeInsuranceEntry extends Component {
   }
 
   handleClick = (product_key , product_key_info) => {
-
-    if(product_key === 'PERSONAL_ACCIDENT' || product_key === 'SMART_WALLET'){
-      toast('Technical maintenance in progress, please try again in sometime.');
-      return;
-    }
-
     this.sendEvents('next', product_key_info ? product_key_info.title : '')
 
     var BHARTIAXA_PRODUCTS = ['PERSONAL_ACCIDENT', 'SMART_WALLET', 'HEALTH'];
