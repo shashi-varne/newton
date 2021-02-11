@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
-// import Container from '../common/Container';
-import Container from '../commoniFrame/Container';
+import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
@@ -39,7 +38,7 @@ class SelectBank extends Component {
       try {
         const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
         this.setState({
-          show_loader: false
+          show_loader: true
         })
         if (res.pfwresponse.result && !res.pfwresponse.result.error) {
           let  banks = res.pfwresponse.result.banks;
@@ -142,7 +141,7 @@ class SelectBank extends Component {
     )
   }
 
-  handleClick = async () => {   console.log("+++++++++++++++++++++++++++++++++++++")
+  handleClick = async () => {
 
     if(!this.state.selected_bank.account_number) {
       toast(this.state.fetchError || 'Please select bank', 'error');
