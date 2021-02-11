@@ -344,6 +344,7 @@ class BasicDetailsRedirectionForm extends Component {
                 onlyButton={true}
                 banner={true}
                 bannerText={this.bannerText()}
+                showLoader={this.state.show_loader}
                 showError={this.state.showError}
                 skelton={this.state.skelton}
                 errorData={this.state.errorData}

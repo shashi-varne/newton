@@ -28,7 +28,7 @@ class HomeInsurance extends Component {
     this.state = {
       selectedIndex: 0,
       checked: false,
-      // show_loader:true,
+      show_loader:true,
       skelton: true,
       plan_data: {},
       recommendedIndex: 0,

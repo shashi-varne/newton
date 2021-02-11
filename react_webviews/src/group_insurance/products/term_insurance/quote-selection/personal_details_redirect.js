@@ -347,6 +347,7 @@ class PersonalDetails1 extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
+        showLoader={this.state.show_loader}
         showError={this.state.showError}
         skelton={this.state.skelton}
         errorData={this.state.errorData}
