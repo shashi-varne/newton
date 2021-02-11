@@ -432,8 +432,6 @@ class BasicDetailsForm extends Component {
       basic_details_data['dob_error'] = 'Valid age is between 18 and 50';
     }
       
-     console.log(basic_details_data)
-
     if (!basic_details_data.email || (basic_details_data.email.length < 10 || !validateEmail(basic_details_data.email))) {
 
       basic_details_data['email_error'] = 'Please enter valid email';
@@ -570,7 +568,7 @@ class BasicDetailsForm extends Component {
           "dob": this.state.basic_details_data['dob'] ? 'yes' : 'no',
           "gender": this.state.basic_details_data['gender'] ? 'yes' : 'no',
           "email": this.state.basic_details_data['email'] ? 'yes' : 'no',
-          "mobile": this.state.basic_details_data['mobile'] ? 'yes' : 'no',
+          "mobile": this.state.basic_details_data['mobile_no'] ? 'yes' : 'no',
           "nominee_details": this.state.checked ? 'yes' : 'no',
           "nominee_name": this.state.checked && this.state.basic_details_data.nominee &&
             this.state.basic_details_data.nominee['name'] ? 'yes' : 'no',
