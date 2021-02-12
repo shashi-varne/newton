@@ -88,7 +88,7 @@ const Pan = () => {
   const handleSubmit = async () => {
     try {
       setIsApiRunning(true)
-      const result = await upload(file)
+      const result = await upload(file, 'pan')
       console.log(result)
       setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
