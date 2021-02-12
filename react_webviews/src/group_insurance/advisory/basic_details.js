@@ -46,9 +46,9 @@ class AdvisoryBasicDetails extends Component {
             form_data.name = advisory_data.name;
             form_data.age = advisory_data.age;
             form_data.city = advisory_data.city ? advisory_data.city.toLowerCase() : '';
-            form_data.gender = advisory_data.gender === "MALE" ? genderOptions[0].value : genderOptions[1].value;
-            form_data.married = advisory_data.marital_status === "MARRIED" ? yesNoOptions[0].value : yesNoOptions[1].value;
-            form_data.illness = advisory_data.ci_present === "True" ? yesNoOptions[0].value : yesNoOptions[1].value;
+            form_data.gender = advisory_data.gender === "MALE" ? genderOptions[0].value : advisory_data.gender === "FEMALE"?  genderOptions[1].value : '';
+            form_data.married = advisory_data.marital_status === "MARRIED" ? yesNoOptions[0].value : advisory_data.marital_status === "UNMARRIED" ?  yesNoOptions[1].value : '';
+            form_data.illness = advisory_data.ci_present === "True" ? yesNoOptions[0].value : advisory_data.ci_present === "False" ?  yesNoOptions[1].value : '';
             let spouse_checked = advisory_data.dependent_json.spouse ? true : false;
             let Kids_checked = advisory_data.dependent_json.kids ? true : false;
             let Kids_total = advisory_data.dependent_json.kids;

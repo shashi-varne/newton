@@ -83,10 +83,14 @@ class Landing extends Component {
           var advisory_resume_status = resultData.insurance_advisory.status;
           
           var advisory_button_text = "LET'S FIND OUT";
+          var next_advisory_page = 'landing';
+
           if(advisory_resume_present && advisory_resume_status === 'incomplete'){
             advisory_button_text = "RESUME";
-          }else if(!advisory_resume_present && advisory_resume_status === 'complete'){
+            next_advisory_page = 'basic-details';
+          }else if(advisory_resume_present && advisory_resume_status === 'complete'){
             advisory_button_text = "VIEW REPORT";
+            next_advisory_page = 'recommendations';
           }
 
           this.setState({
@@ -179,6 +183,7 @@ class Landing extends Component {
   }
 
   goToAdvisory = () =>{
+
     this.navigate('/group-insurance/advisory/landing')
   }
   callBackScreen = () =>{

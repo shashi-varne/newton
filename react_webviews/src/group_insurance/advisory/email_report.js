@@ -4,6 +4,9 @@ import { getConfig } from 'utils/functions';
 import Input from '../../common/ui/Input';
 // import { nativeCallback } from 'utils/native_callback';
 import {validateEmail} from 'utils/validators';
+import {storageService} from "utils/validators";
+import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
 
 
 class EmailReport extends Component { 
@@ -39,7 +42,7 @@ class EmailReport extends Component {
         });
     }    
 
-    handleClick = () =>{
+    handleClick = async () =>{
         var form_data = this.state.form_data;
         var canSubmitForm = true;        
         if(form_data){
@@ -50,6 +53,33 @@ class EmailReport extends Component {
         }
         this.setState({form_data: form_data})       
         if(canSubmitForm){
+            var advisory_id = storageService().getObject("advisory_id");
+
+            try{
+                var res = await Api.get(`api/insurance/advisory/email/trigger?insurance_advisory_id=${advisory_id}&email=${this.state.form_data.email}`);
+          
+                  this.setState({
+                    show_loader: false
+                  })
+                  var resultData = res.pfwresponse.result;
+          
+                  if (res.pfwresponse.status_code === 200) {
+        
+                    if(resultData.insurance_advisory.status === 'init'){
+                      storageService().setObject("advisory_id", resultData.insurance_advisory.id);
+                    this.navigate('/group-insurance/advisory/basic-details')                    
+                    }
+                  } else {
+                    toast(resultData.error || resultData.message || "Something went wrong");
+                }
+              }catch(err){
+                console.log(err)
+                this.setState({
+                  show_loader: false
+                });
+                toast("Something went wrong");
+              }            
+
             this.navigate('/group-insurance/advisory/recommendations')
         }
 

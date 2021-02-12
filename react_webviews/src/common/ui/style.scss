@@ -371,6 +371,9 @@ input.default-otp-input {
   }
 
   .status-bar{
+    // @keyframes filler {
+    //   0%{width: 0px}
+    // }
     .status-bar-background{
       position: relative;
       height: 5px;
@@ -382,6 +385,7 @@ input.default-otp-input {
       top: 0;
       height: 100%;
       border-radius: 5px;
+      // animation: filler 2s 1;
     }
     .status-bar-numbers{
       margin-top: -8px;

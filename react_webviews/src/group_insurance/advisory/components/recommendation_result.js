@@ -5,6 +5,8 @@ import {numDifferentiation} from 'utils/validators';
 import StatusBar from '../../../common/ui/StatusBar';
 import Dialog, {DialogContent} from 'material-ui/Dialog';
 import Slide from '@material-ui/core/Slide';
+import {formatAmount } from 'utils/validators'
+import {advisoryConstants} from '../constants';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -16,7 +18,9 @@ class RecommendationResult extends Component {
         super(props);
         this.state = {
             type: getConfig().productName,
-            openMoreDetailsDialog: false
+            openMoreDetailsDialog: false,
+            recommendation_data: this.props.recommendation_data,
+            recommendation_bottom_sheet_data: advisoryConstants.recommendation_bottom_sheet_data
         }
     }
 
@@ -27,6 +31,9 @@ class RecommendationResult extends Component {
     }
     
     confirmDialog = () => {
+        var recommendation_data = this.state.recommendation_data;
+        var recommendation_bottom_sheet_data = this.state.recommendation_bottom_sheet_data;
+        var key = recommendation_data['key'];
         return (
           <Dialog
             id="bottom-popup"
@@ -38,41 +45,41 @@ class RecommendationResult extends Component {
           >
             <DialogContent>
                 <div className="more-details-container">
-                    <p className="more-details-heading">Health Insurance coverage</p>
+                    <p className="more-details-heading">{recommendation_bottom_sheet_data[key]['heading']} coverage</p>
 
-                    <div className="coverage-details">
+                    <div className={recommendation_data.key !== 'corona' ? "coverage-details" : "coverage-details align-left" }>
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Target Coverage</p>
-                            <p className="coverage-detail-value">{numDifferentiation(10000000)}</p>
+                            <p className="coverage-detail-value">{recommendation_data.target_si}</p>
                         </div>
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Period</p>
-                            <p className="coverage-detail-value">1 yr</p>
+                            <p className="coverage-detail-value">{recommendation_data.period}</p>
                         </div>
-                        <div className="individual-coverage-detail">
-                            <p className="coverage-detail-heading">Premium starts at</p>
-                            <p className="coverage-detail-value">₹ 4,000/year</p>
-
-                        </div>
+                        { recommendation_data.key !== 'corona' && (
+                         <div className="individual-coverage-detail">
+                             <p className="coverage-detail-heading">Premium starts at</p>
+                             <p className="coverage-detail-value">₹ {formatAmount(recommendation_data.start_premium)}/year</p>
+                        </div>   
+                        )}
                     </div>
                     <div className="why-recommend">
                         <p className="more-details-sub-heading">Why do we recommend this plan?</p>
-                        <p className="more-details-sub-text">Medical expenses are increasing at 7.5% per year. With a well covered health plan, you will be better prepared to handle medical emergencies. Also, buying a separate floater plan for parents is infact cheaper. </p>
+                        <p className="more-details-sub-text">
+                            {recommendation_bottom_sheet_data[key]['why']} 
+                            {recommendation_data.key === 'health' && this.props.parentsPresent ? <span> Also, buying a separate floater plan for parents is infact cheaper.</span> : null}
+                            
+                        </p>
                     </div>
                     <div className="more-details-benifits">
                         <p className="more-details-sub-heading">Benifits</p>
-                        <div className="more-details-bullets">
+                        {recommendation_bottom_sheet_data[key]['benefits'].map((item, index)=>(
+                            <div className="more-details-bullets">
                             <p className="diamond-bullet"></p>
-                            <p className="diamont-bullet-text">High coverage at affordable premiums</p>
+                            <p className="diamont-bullet-text">{item}</p>
                         </div>
-                        <div className="more-details-bullets">
-                            <p className="diamond-bullet"></p>
-                            <p className="diamont-bullet-text">High coverage at affordable premiums</p>
-                        </div>
-                        <div className="more-details-bullets">
-                            <p className="diamond-bullet"></p>
-                            <p className="diamont-bullet-text">High coverage at affordable premiums</p>
-                        </div>
+                        ))}
+                        
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px'}}>
                         <button  className="call-back-popup-button">GET THE PLAN</button> 
@@ -89,22 +96,29 @@ class RecommendationResult extends Component {
         })
     }
     render(){
+        console.log(this.state.recommendation_data)
+        var recommendation_data = this.state.recommendation_data;
         return(
             <div className="recommendation-result">
-                <StatusBar/>
+                <StatusBar recommendation_data={recommendation_data}/>
                 <div className="recommendation-info-container">
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Target Coverage</p>
-                        <p  className="recommendation-info-value">{numDifferentiation(11000000, true)}</p>
+                        <p  className="recommendation-info-value">{recommendation_data.target_si}</p>
                     </div>
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Period</p>
-                        <p  className="recommendation-info-value">30 years</p>
+                        <p  className="recommendation-info-value">{recommendation_data.period}</p>
                     </div>
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Premium starts at</p>
-                        <p  className="recommendation-info-value">₹ {numDifferentiation(11000000)} </p>
+                        <p  className="recommendation-info-value">₹ {formatAmount(recommendation_data.start_premium)}/year </p>
                     </div>
+                    {
+                        recommendation_data.key === 'health' && this.props.parentsPresent ? (
+                            <p className="advisory-sub-text">We recommend a separate plan of <b>₹5 lacs</b> for your parents</p>
+                        ) : null
+                    }
 
                     <div className="recommendation-cta-container">
                         <div className="more-details" onClick={this.openMoreDetailsDialog}>MORE DETAILS</div>

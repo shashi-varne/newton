@@ -40,7 +40,10 @@ export async function updateLead( body, next_page, final_page) {
                     }
                   }
                   
-                  advisory_data.recommendation_data = recommendation_array;
+                  advisory_data.recommendation_data = {
+                    'recommendation_data': recommendation_array, 
+                  };
+                  advisory_data['recommendation_data']['rec_text'] = recommendation_data.recommended_text
                   advisory_data.user_data = user_data;
                 storageService().setObject('advisory_data', advisory_data);
                }

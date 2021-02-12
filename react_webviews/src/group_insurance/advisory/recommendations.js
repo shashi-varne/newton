@@ -33,12 +33,20 @@ class AdivsoryRecommendations extends Component {
     }
 
     componentDidMount(){
-        var recommendation_data = storageService().getObject('advisory_data').recommendation_data;
+        var recommendation_data = storageService().getObject('advisory_data').recommendation_data.recommendation_data;
+        var recommend_text = storageService().getObject('advisory_data').recommendation_data.rec_text;
+        console.log('this', recommendation_data)
         var user_data = storageService().getObject('advisory_data').user_data;
 
-        console.log(user_data, recommendation_data)
+        var dependents =  user_data.dependent_json;
+        var dependent_count = dependents.kids + dependents.spouse + dependents.parents;
+
+        
         this.setState({
             user_data: user_data,
+            dependent_count: dependent_count,
+            recommendation_data: recommendation_data,
+            recommend_text: recommend_text
         })
     }
     handleReset = () =>{
@@ -88,10 +96,9 @@ class AdivsoryRecommendations extends Component {
         });
     }
     render(){
-        // var recommendation_data = this.state.recommendation_data;
+        var recommendation_data = this.state.recommendation_data;
         var user_data = this.state.user_data;
-        var dependents = user_data.dependent_json;
-        var dependent_count = dependents.kids + dependents.spouse + dependents.parents;
+        console.log(this.state.recommendation_data)
         return(
             <Container
                 // events={this.sendEvents('just_set_events')}
@@ -112,24 +119,28 @@ class AdivsoryRecommendations extends Component {
                             <p className="rec-profile-heading">Your profile</p>
                             <div className="rec-profile">
                                 <div className="rec-profile-left">
-                                    <img src={require(`assets/${this.state.type}/advisory_male.svg`)}/>
+                                    <img style={{width: '120px', height: '120px'}} src={require(`assets/${this.state.type}/advisory_male.svg`)}/>
                                 </div>
-                                <div className="rec-profile-right">
+                                {user_data && (
+                                    <div className="rec-profile-right">
                                     <p>{capitalizeFirstLetter(user_data.name)}</p>
                                     <p>{capitalizeFirstLetter(user_data.gender.toLowerCase())}</p>
                                     <p>{user_data.age} years</p>
-                                    <p>{dependent_count} dependents</p>
+                                    <p>{this.state.dependent_count} dependents</p>
                                 </div>
+                                )}
+                                
                             </div>
                     </div>
 
-                    {/* <p className="advisory-sub-text" style={{marginTop: '18px'}}>{recommendation_data.recommended_text}</p> */}
+                    <p className="advisory-sub-text" style={{marginTop: '18px'}}>{this.state.recommend_text}</p>
                     <p style={{fontSize: '17px', fontWeight: 'bold', margin:'30px 0 20px 0', color: '#160D2E' }}>Here's what we recommend</p>
                     
-                    <RecommendationResult/>
-                    <RecommendationResult/>
-                    <RecommendationResult/>
-                    <RecommendationResult/>
+                    {recommendation_data && recommendation_data.map((item, index)=>(
+                         <RecommendationResult parentsPresent={user_data.dependent_json.parents} key={item.key} recommendation_data={item}/>
+                    ))}
+                    
+                    
                     <div className="recommendation-extras">
                         <div className="download-report">
                             <img src={download} style={{marginRight: '5px'}} /> Download report

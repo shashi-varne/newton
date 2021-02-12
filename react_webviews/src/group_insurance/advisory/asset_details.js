@@ -55,13 +55,13 @@ class AdvisoryAssetDetails extends Component {
         var advisory_data = storageService().getObject('advisory_data') || {};
         if(!isEmpty(advisory_data)){
             var form_data = {};
-            form_data.assets = advisory_data.assets === "True" ? yesNoOptions[0].value: yesNoOptions[1].value
+            form_data.assets = advisory_data.assets === "True" ? yesNoOptions[0].value: advisory_data.assets === "False" ?  yesNoOptions[1].value : '';
             form_data.asset_amount = formatAmount(advisory_data.assets_amount)
             form_data.term_cover_amount = formatAmount(advisory_data.term_insurance_sum_assured)
             form_data.health_cover_amount = formatAmount(advisory_data.health_insurance_sum_assured)
             form_data.critical_cover_amount = formatAmount(advisory_data.critical_illness_insurance_sum_assured)
             form_data.corona_cover_amount = formatAmount(advisory_data.corona_insurance_sum_assured)
-            
+            console.log(form_data)
 
             this.setState({form_data: form_data})
             let showPrefix = this.state.showPrefix;

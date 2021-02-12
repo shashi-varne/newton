@@ -44,8 +44,8 @@ class AdvisoryLiabilityDetails extends Component {
         console.log(advisory_data)
         if(!isEmpty(advisory_data)){
             var form_data = {};
-            form_data.homeloan = advisory_data.home_loan_liability === "True" ? yesNoOptions[0].value : yesNoOptions[1].value;
-            form_data.liability = advisory_data.other_liability === "True" ? yesNoOptions[0].value : yesNoOptions[1].value;
+            form_data.homeloan = advisory_data.home_loan_liability === "True" ? yesNoOptions[0].value : advisory_data.home_loan_liability === "False" ?  yesNoOptions[1].value : '';
+            form_data.liability = advisory_data.other_liability === "True" ? yesNoOptions[0].value : advisory_data.other_liability === "False"?  yesNoOptions[1].value : '';
             form_data.loan_amount = formatAmount(advisory_data.home_loan_liability_amount);
             form_data.total_amount = formatAmount(advisory_data.other_liability_amount);
 

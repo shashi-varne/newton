@@ -165,7 +165,8 @@ class AdvisoryIncomeDetails extends Component {
                 'age_of_retirement' : form_data.retire, 
             }
             console.log(post_body)
-            var advisory_data = storageService().getObject('advisory_data');
+            var advisory_data = storageService().getObject('advisory_data') || {};
+            console.log('d', advisory_data)
             for(var x in post_body){
                 advisory_data[x] = post_body[x]
             }

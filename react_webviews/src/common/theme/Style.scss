@@ -1175,7 +1175,7 @@ input#pan {
 
   .advisory-sub-text{
     color: #767E86;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 22px;
   }
   .rec-profile-container{
@@ -1192,11 +1192,14 @@ input#pan {
     }
     .rec-profile{
       display: flex;
+      align-items: flex-start;
 
       .rec-profile-right{
         padding-left: 15px;
+        margin-top: 5px;
         color: #767E86;
         font-weight: 500;
+        font-size: 17px;
 
         p{
           margin: 0 0 10px 0;
@@ -1229,7 +1232,7 @@ input#pan {
       .recommendation-cta-container{
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         margin: 0 10px;
         .more-details{
           color: #35CB5D;
@@ -1265,6 +1268,14 @@ input#pan {
     color: #160D2E;
     font-weight: bold;
     margin: 0px;
+  }
+  .coverage-details.align-left{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    .individual-coverage-detail{
+      margin: 0 20px 0 20px;
+    }
   }
   .coverage-details{
     display: flex;
