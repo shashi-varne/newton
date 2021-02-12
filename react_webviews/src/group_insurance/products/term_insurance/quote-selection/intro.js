@@ -417,6 +417,7 @@ class Intro extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
+        showLoader={this.state.show_loader}
         showError={this.state.showError}
         skelton={this.state.skelton}
         errorData={this.state.errorData}
