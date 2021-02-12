@@ -28,6 +28,7 @@ export const getPathname = {
   uploadProgress: "/kyc/upload/progress",
   kycReport: "/kyc/report",
   rtaCompliantPersonalDetails: "/kyc/rta-compliant-personal-details",
+  accountMerge: "/account/merge/",
 };
 
 export const storageConstants = {
@@ -36,6 +37,7 @@ export const storageConstants = {
   BANK_MANDATES: "bank_mandates",
   CHANGE_REQUEST: "change_requests",
   NATIVE: "native",
+  AUTH_IDS: "auth_ids",
 };
 
 export const occupationOptions = [

@@ -7,7 +7,8 @@ import { getConfig } from "utils/functions";
 
 const partner = getConfig().partner;
 const genericErrorMessage = "Something Went wrong!";
-export const getPan = async (data) => {
+
+export const getPan = async (data, accountMerge) => {
   const res = await Api.post(apiConstants.getPan, data);
   if (
     res.pfwstatus_code !== 200 ||
@@ -21,7 +22,7 @@ export const getPan = async (data) => {
     case 200:
       return result;
     case 402:
-      accountMerge();
+      await accountMerge();
       break;
     case 403:
       toast("Network error");
@@ -31,7 +32,20 @@ export const getPan = async (data) => {
   }
 };
 
-const accountMerge = () => {};
+export const checkMerge = async (pan) => {
+  const res = await Api.post(
+    `/api/user/account/merge?pan_number=${pan}&verify_only=true`
+  );
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+
+  return res.pfwresponse;
+};
 
 export const savePanData = async (body) => {
   const res = await Api.post(apiConstants.submit, {
