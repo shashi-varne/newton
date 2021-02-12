@@ -58,5 +58,36 @@ export async function updateLead( body, next_page, final_page) {
          });
          toast("Something went wrong");
        }
-            
+}
+
+export async function getLead(){
+  var advisory_id = storageService().getObject("advisory_id")
+  this.setState({
+      show_loader: true,
+  })
+
+    try{
+      var res = await Api.get(`api/insurancev2/api/insurance/advisory/get?insurance_advisory_id=${advisory_id}`);
+        
+      this.setState({
+        show_loader: false
+      })
+        var resultData = res.pfwresponse.result;
+        
+        if (res.pfwresponse.status_code === 200) {
+          var resume_data = resultData.insurance_advisory;
+
+          this.setState({
+            resume_data : resume_data
+          })
+        } else {
+          toast(resultData.error || resultData.message || "Something went wrong");
+      }
+    }catch(err){
+      console.log(err)
+      this.setState({
+        show_loader: false
+      });
+      toast("Something went wrong");
+    }
 }

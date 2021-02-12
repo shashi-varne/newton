@@ -7,6 +7,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss';
 import toast from "../../common/ui/Toast";
+import {storageService} from "utils/validators";
 
 class Landing extends Component {
 
@@ -81,12 +82,15 @@ class Landing extends Component {
         if (res.pfwresponse.status_code === 200) {
           var advisory_resume_present = resultData.resume_present;
           var advisory_resume_status = resultData.insurance_advisory.status;
-          
+          var advisory_id = resultData.insurance_advisory.id;
+
           var advisory_button_text = "LET'S FIND OUT";
           var next_advisory_page = 'landing';
 
           if(advisory_resume_present && advisory_resume_status === 'incomplete'){
             advisory_button_text = "RESUME";
+            storageService().setObject('advisory_resume_present', true)
+            storageService().setObject("advisory_id", advisory_id)
             next_advisory_page = 'basic-details';
           }else if(advisory_resume_present && advisory_resume_status === 'complete'){
             advisory_button_text = "VIEW REPORT";
@@ -94,7 +98,9 @@ class Landing extends Component {
           }
 
           this.setState({
-            advisory_button_text: advisory_button_text
+            advisory_button_text: advisory_button_text,
+            next_advisory_page: next_advisory_page, 
+            advisory_id: advisory_id
           })
         } else {
           toast(resultData.error || resultData.message || "Something went wrong");
@@ -183,8 +189,7 @@ class Landing extends Component {
   }
 
   goToAdvisory = () =>{
-
-    this.navigate('/group-insurance/advisory/landing')
+    this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
   }
   callBackScreen = () =>{
     this.sendEvents('next', "", "", true);

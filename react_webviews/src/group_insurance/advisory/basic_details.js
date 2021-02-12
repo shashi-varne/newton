@@ -10,8 +10,10 @@ import { genderOptions, yesNoOptions } from '../../group_insurance/constants'
 import {advisoryConstants} from './constants';
 import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
 import Checkbox from "material-ui/Checkbox";
-import { updateLead } from './common_data';
+import { updateLead, getLead } from './common_data';
 import {storageService, isEmpty} from "utils/validators";
+import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
 
 class AdvisoryBasicDetails extends Component {
 
@@ -28,9 +30,10 @@ class AdvisoryBasicDetails extends Component {
             showDependentsError: false
         }
         this.updateLead = updateLead.bind(this);
+        this.getLead = getLead.bind(this);
     }
 
-    componentDidMount(){
+    async componentDidMount(){
         var dependents_data = this.state.dependents_data;
         this.setState({
             Kids_max: dependents_data.kids_max,
@@ -39,22 +42,35 @@ class AdvisoryBasicDetails extends Component {
             Parents_total: 0,
             none_checked: false, 
         })
-
         var advisory_data = storageService().getObject('advisory_data') || {};
-        if(!isEmpty(advisory_data)){
-            var form_data = {};
-            form_data.name = advisory_data.name;
-            form_data.age = advisory_data.age;
-            form_data.city = advisory_data.city ? advisory_data.city.toLowerCase() : '';
-            form_data.gender = advisory_data.gender === "MALE" ? genderOptions[0].value : advisory_data.gender === "FEMALE"?  genderOptions[1].value : '';
-            form_data.married = advisory_data.marital_status === "MARRIED" ? yesNoOptions[0].value : advisory_data.marital_status === "UNMARRIED" ?  yesNoOptions[1].value : '';
-            form_data.illness = advisory_data.ci_present === "True" ? yesNoOptions[0].value : advisory_data.ci_present === "False" ?  yesNoOptions[1].value : '';
-            let spouse_checked = advisory_data.dependent_json.spouse ? true : false;
-            let Kids_checked = advisory_data.dependent_json.kids ? true : false;
-            let Kids_total = advisory_data.dependent_json.kids;
-            let Parents_checked = advisory_data.dependent_json.parents ? true : false;
-            let Parents_total = advisory_data.dependent_json.parents;
-            let none_checked = advisory_data.dependent_json.parents + advisory_data.dependent_json.kids + advisory_data.dependent_json.spouse === 0 ? true : false;
+        var isResumePresent  = storageService().getObject('advisory_resume_present');
+        
+        var lead = {};
+        var form_data = {};
+
+        if(isResumePresent){
+            console.log('Resume case')
+            await this.getLead();
+            lead = this.state.resume_data;
+            form_data.illness = lead.critical_illness_insurance_present === true ? yesNoOptions[0].value : lead.critical_illness_insurance_present === false ?  yesNoOptions[1].value : '';
+        }else if(!isEmpty(advisory_data)){
+            console.log('Normal prefill')
+            lead = advisory_data
+            form_data.illness = lead.ci_present === "True" ? yesNoOptions[0].value : lead.ci_present === "False" ?  yesNoOptions[1].value : '';
+        }
+
+        if(isResumePresent ||!isEmpty(advisory_data)) {
+            form_data.name = lead.name;
+            form_data.age = lead.age;
+            form_data.city = lead.city ? lead.city.toLowerCase() : '';
+            form_data.gender = lead.gender === "MALE" ? genderOptions[0].value : lead.gender === "FEMALE"?  genderOptions[1].value : '';
+            form_data.married = lead.marital_status === "MARRIED" ? yesNoOptions[0].value : lead.marital_status === "UNMARRIED" ?  yesNoOptions[1].value : '';
+            let spouse_checked = lead.dependent_json.spouse ? true : false;
+            let Kids_checked = lead.dependent_json.kids ? true : false;
+            let Kids_total = lead.dependent_json.kids;
+            let Parents_checked = lead.dependent_json.parents ? true : false;
+            let Parents_total = lead.dependent_json.parents;
+            let none_checked = lead.dependent_json.parents + lead.dependent_json.kids + lead.dependent_json.spouse === 0 ? true : false;
             this.setState({
                 form_data: form_data,
                 spouse_checked: spouse_checked,
@@ -65,6 +81,7 @@ class AdvisoryBasicDetails extends Component {
                 none_checked: none_checked
             })
         }
+        
     }
 
     handleChange = name => event => {
