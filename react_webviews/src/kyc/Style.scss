@@ -583,6 +583,10 @@
     margin-top: 25px;
   }
 
+  .verify-skelton-top {
+    margin: 25px 0;
+  }
+
   .item {
     padding: 20px 0;
     display: -ms-flexbox;
@@ -619,6 +623,10 @@
 
     .right {
       color: #160d2e;
+    }
+
+    .verify-skelton {
+      width: 100px !important;
     }
 
     .edit {

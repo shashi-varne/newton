@@ -8,6 +8,35 @@ import { getConfig } from "utils/functions";
 const partner = getConfig().partner;
 const genericErrorMessage = "Something Went wrong!";
 
+export const getUserKycFromSummary = async () => {
+  try {
+    const res = await Api.post(apiConstants.accountSummary, {
+      kyc: ["kyc"],
+      user: ["user"],
+    });
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw genericErrorMessage;
+    }
+    const { result, status_code: status } = res.pfwresponse;
+    switch (status) {
+      case 200:
+        let user = result.data.user.user.data;
+        let kyc = result.data.kyc.kyc.data;
+        storageService().setObject(storageConstants.KYC, kyc);
+        storageService().setObject(storageConstants.USER, user);
+        break;
+      default:
+        throw result.error || result.message || genericErrorMessage;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getPan = async (data, accountMerge) => {
   const res = await Api.post(apiConstants.getPan, data);
   if (

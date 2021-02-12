@@ -4,34 +4,33 @@ import Alert from "../mini_components/Alert";
 import { storageService } from "utils/validators";
 import { storageConstants, getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
-import { initData } from "../services";
-import { saveBankData, getBankStatus } from "../common/api";
+import {
+  saveBankData,
+  getBankStatus,
+  getUserKycFromSummary,
+} from "../common/api";
 import toast from "common/ui/Toast";
 import PennyDialog from "../mini_components/PennyDialog";
 import PennyFailedDialog from "../mini_components/PennyFailedDialog";
 import PennySuccessDialog from "../mini_components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
+import { SkeltonRect } from "../../common/ui/Skelton";
 
 const AddBankVerify = (props) => {
   const [count, setCount] = useState(20);
+  const [showLoader, setShowLoader] = useState(true);
   const [countdownInterval, setCountdownInterval] = useState();
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [isPennyOpen, setIsPennyOpen] = useState(false);
   const [isPennyFailed, setIsPennyFailed] = useState(false);
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  let userKyc = storageService().getObject(storageConstants.KYC);
+  const [userKyc, setUserKyc] = useState({});
   const bank_id = props.match.params.bank_id;
   if (!bank_id) {
     props.history.goBack();
   }
-  let data = {};
-  if (userKyc) {
-    data = userKyc.additional_approved_banks.find(
-      (obj) => obj.bank_id?.toString() === bank_id
-    );
-  }
-  const [bankData, setBankData] = useState({ ...data });
+  const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
 
   useEffect(() => {
@@ -39,14 +38,14 @@ const AddBankVerify = (props) => {
   }, []);
 
   const initialize = async () => {
-    if (!userKyc) {
-      await initData();
-      userKyc = storageService().getObject(storageConstants.KYC);
-      data = userKyc.additional_approved_banks.find(
-        (obj) => obj.bank_id?.toString() === bank_id
-      );
-      setBankData({ ...data });
-    }
+    await getUserKycFromSummary();
+    let kyc = storageService().getObject(storageConstants.KYC) || {};
+    let data = kyc.additional_approved_banks.find(
+      (obj) => obj.bank_id?.toString() === bank_id
+    );
+    setShowLoader(false);
+    setBankData({ ...data });
+    setUserKyc(kyc);
   };
 
   const handleClick = async () => {
@@ -154,7 +153,7 @@ const AddBankVerify = (props) => {
       id="kyc-approved-bank"
       buttonTitle="VERIFY BANK ACCOUNT"
       isApiRunning={isApiRunning}
-      disable={isApiRunning}
+      disable={isApiRunning || showLoader}
       handleClick={handleClick}
     >
       <div className="kyc-approved-bank-verify">
@@ -164,35 +163,51 @@ const AddBankVerify = (props) => {
           title="Important"
           message="We will credit ₹1 to your bank account for verification."
         />
-        <div className="item">
-          <div className="flex">
-            <div className="left">
-              <img
-                className="ifsc-new-img2"
-                src={bankData.ifsc_image}
-                alt="bank-logo"
-              />
+        {showLoader ? (
+          <SkeltonRect className="verify-skelton-top" />
+        ) : (
+          <div className="item">
+            <div className="flex">
+              <div className="left">
+                <img
+                  className="ifsc-new-img2"
+                  src={bankData.ifsc_image}
+                  alt="bank-logo"
+                />
+              </div>
+              <div className="right">
+                <div>{bankData.bank_name}</div>
+                <div className="text">{bankData.branch_name} </div>
+              </div>
             </div>
-            <div className="right">
-              <div>{bankData.bank_name}</div>
-              <div className="text">{bankData.branch_name} </div>
+            <div className="edit" onClick={edit()}>
+              EDIT
             </div>
           </div>
-          <div className="edit" onClick={edit()}>
-            EDIT
-          </div>
-        </div>
+        )}
         <div className="item">
           <div className="left">Account number</div>
-          <div className="right"> {bankData.account_number} </div>
+          {showLoader ? (
+            <SkeltonRect className="verify-skelton" />
+          ) : (
+            <div className="right"> {bankData.account_number} </div>
+          )}
         </div>
         <div className="item">
           <div className="left">IFSC code</div>
-          <div className="right">{bankData.ifsc_code} </div>
+          {showLoader ? (
+            <SkeltonRect className="verify-skelton" />
+          ) : (
+            <div className="right">{bankData.ifsc_code} </div>
+          )}
         </div>
         <div className="item">
           <div className="left">Account type</div>
-          <div className="right"> {bankData.account_type} </div>
+          {showLoader ? (
+            <SkeltonRect className="verify-skelton" />
+          ) : (
+            <div className="right"> {bankData.account_type} </div>
+          )}
         </div>
         <PennyDialog isOpen={isPennyOpen} count={count} />
         <PennyFailedDialog

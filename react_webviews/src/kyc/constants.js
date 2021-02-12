@@ -1,4 +1,5 @@
 export const apiConstants = {
+  accountSummary: "/api/user/account/summary",
   getPan: "/api/kyc/checkv2/mine",
   submit: "/api/kyc/v2/mine",
   getMyaccount: "/api/iam/myaccount",
