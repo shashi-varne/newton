@@ -17,6 +17,7 @@ import {
   formatDate,
   dobFormatTest,
   isEmpty,
+  validateNumber,
 } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { getCVL, savePanData } from "../common/api";
@@ -31,6 +32,9 @@ const PersonalDetails1 = (props) => {
   const [userkyc, setUserKyc] = useState(
     storageService().getObject(storageConstants.KYC) || {}
   );
+  const [currentUser, setCurrentUser] = useState(
+    storageService().getObject(storageConstants.USER) || {}
+  );
   let title = "Basic details";
   const [is_nri, setIsNri] = useState();
   if (isEdit) {
@@ -43,10 +47,13 @@ const PersonalDetails1 = (props) => {
 
   const initialize = async () => {
     let userkycDetails = { ...userkyc };
+    let user = { ...currentUser };
     if (isEmpty(userkycDetails)) {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
+      user = storageService().getObject(storageConstants.USER);
     }
+    setCurrentUser(user);
     setUserKyc(userkycDetails);
     let isNri = userkycDetails.address.meta_data.is_nri;
     let selectedIndexResidentialStatus = 0;
@@ -76,13 +83,13 @@ const PersonalDetails1 = (props) => {
   const handleClick = () => {
     let keysToCheck = [
       "dob",
-      "email",
       "mobile",
       "occupation",
       "income",
       "residential_status",
     ];
     if (is_nri) keysToCheck.push("tin_number");
+    if (currentUser.email === null) keysToCheck.push("email");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -111,6 +118,7 @@ const PersonalDetails1 = (props) => {
   };
 
   const saveCompliantPersonalDetails1 = async (body, data) => {
+    setIsApiRunning(true);
     let { userKyc, tin_number } = data;
     try {
       const result = await getCVL(body);
@@ -156,6 +164,7 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
+    if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "residential_status") {
       formData[name] = residentialOptions[value].value;
@@ -209,6 +218,18 @@ const PersonalDetails1 = (props) => {
               id="dob"
               disabled={isApiRunning}
             />
+            {currentUser && currentUser.email === null && (
+              <Input
+                label="Email"
+                class="input"
+                value={form_data.email || ""}
+                error={form_data.email_error ? true : false}
+                helperText={form_data.email_error || ""}
+                onChange={handleChange("email")}
+                type="text"
+                disabled={isApiRunning}
+              />
+            )}
             <Input
               label="Mobile number"
               class="input"

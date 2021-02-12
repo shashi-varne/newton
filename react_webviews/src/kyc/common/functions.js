@@ -1,5 +1,6 @@
 import { getConfig } from "utils/functions";
 import { calculateAge, isValidDate } from "utils/validators";
+import { validateEmail } from "../../utils/validators";
 
 export function navigate(pathname, data = {}) {
   if (data.edit) {
@@ -65,6 +66,12 @@ export const validateFields = (formData, keyToCheck) => {
         case "tin_number":
           if (value.length < 8) {
             formData[`${key}_error`] = "Minimum length is 8";
+            canSubmit = false;
+          }
+          break;
+        case "email":
+          if (!validateEmail(value)) {
+            formData[`${key}_error`] = "Invalid email";
             canSubmit = false;
           }
           break;

@@ -10,6 +10,8 @@ export const apiConstants = {
 };
 
 export const getPathname = {
+  invest: "/invest",
+  landing: "/",
   homeKyc: "/kyc/home-kyc",
   aadhar: "/kyc/aadhar",
   aadharConfirmation: "/kyc/aadhar/confirmation",
@@ -25,8 +27,7 @@ export const getPathname = {
   compliantReport: "/kyc/compliant-report-details",
   uploadProgress: "/kyc/upload/progress",
   kycReport: "/kyc/report",
-  invest: "/invest",
-  landing: "/",
+  rtaCompliantPersonalDetails: "/kyc/rta-compliant-personal-details",
 };
 
 export const storageConstants = {
