@@ -31,7 +31,6 @@ class GroupHealthPlanPersonalDetails extends Component {
       header_title: 'Personal details',
       form_data: {},
       ctaWithProvider: true,
-      show_loader: true,
       quotation : { member_details : {}  },
       get_lead: true,
       openBmiDialog: false,
@@ -43,6 +42,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.updateLead = updateLead.bind(this);
     this.resetQuote = resetQuote.bind(this);
   }
+  
 
   onload = () => {
   
@@ -192,7 +192,7 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.initialize()
   }
 
- 
+
   handleChange = name => event => {
 
     var input = document.getElementById('dob');
@@ -614,6 +614,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        skelton={this.state.skelton}
         title={this.setEditTitle(this.state.header_title)}
         withProvider={true}
         handleClick2={this.handleClick2}

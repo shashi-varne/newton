@@ -54,7 +54,36 @@ class GroupHealthPlanFinalSummary extends Component {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
+    setErrorData = (type) => {
 
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClickCurrent,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    
+      }
  
     onload = () => {
         let { lead, provider } = this.state;  
@@ -580,12 +609,13 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     startPayment = async (data={}) => {
-
+        this.setErrorData("submit");
+        let error="";
         if (this.state.medical_dialog) {
             this.sendEventsPopup('next');
         }
         this.setState({
-            show_loader: true
+            show_loader: "button"
         })
         this.handleClose();
 
@@ -625,16 +655,25 @@ class GroupHealthPlanFinalSummary extends Component {
                 this.setState({
                     show_loader: false
                 });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message
+                    || 'Something went wrong';
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong');
+            error='Something went wrong';
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+              },
+              showError: true,
+            });
+          }
     }
 
     // checkPPC = async () => {
@@ -934,6 +973,9 @@ class GroupHealthPlanFinalSummary extends Component {
             handleReset={this.showDialog}
             events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}

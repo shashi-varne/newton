@@ -8,7 +8,6 @@ import { ghGetMember} from "../../../constants";
 import { getConfig } from "utils/functions";
 import BottomInfo from "../../../../common/ui/BottomInfo";
 import Api from "utils/api";
-import toast from "../../../../common/ui/Toast";
 import ReligarePremium from "../religare/religare_premium";
 import HDFCPremium from "../hdfc/hdfc_premium";
 import StarPremium from "../Star/star_premium";
@@ -19,7 +18,6 @@ class GroupHealthPlanPremiumSummary extends Component {
       premium_data: [],
       plan_selected_final: {},
       final_dob_data: [],
-      show_loader: true,
       plan_selected: {},
       get_lead: storageService().getObject("resumeToPremiumHealthInsurance") ? true : false,
       force_onload_call: true,
@@ -33,8 +31,39 @@ class GroupHealthPlanPremiumSummary extends Component {
     storageService().remove("health_insurance_application_id");
     this.initialize();
   }
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
   onload = async () => {
+    this.setErrorData("onload");
+    let error = "";
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
     let post_body = groupHealthPlanData.post_body;
 
@@ -69,7 +98,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     if(!this.state.get_lead){
       
       this.setState({
-        show_loader: true
+        skelton:true
       });
 
       try{
@@ -86,15 +115,26 @@ class GroupHealthPlanPremiumSummary extends Component {
       this.setLocalProviderData(groupHealthPlanData)
   
       this.setState({
-        show_loader: false
+        skelton: false
       });
-      }catch(error){
+      }catch(err){
         this.setState({
-          show_loader: false
+          skelton: false
         });
-        console.log(error)
+        error=err
+        console.log(err)
       }
-  
+      if(error)
+      {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+          },
+          showError: "page",
+        });
+      }
+      
     }
     
     let properties = {};
@@ -170,7 +210,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 	      return;
 	    } else {
 	      this.setState({
-	        show_loader: false,
+	        skelton: false,
 	      });
 	    }
     }
@@ -193,13 +233,13 @@ class GroupHealthPlanPremiumSummary extends Component {
       nativeCallback({ events: eventObj });
     }
   }
-
   handleClick = async () => {
     this.sendEvents("next");
-
+    this.setErrorData("submit")
+    let error="";
       try {
         this.setState({
-          show_loader: true,
+          show_loader: "button",
         });
 
         let post_body = {}
@@ -230,16 +270,24 @@ class GroupHealthPlanPremiumSummary extends Component {
           this.setState({
             show_loader: false,
           });
-          toast(
-            resultData.error || resultData.message || "Something went wrong"
-          );
+          error=resultData.error || resultData.message || "Something went wrong"
         }
       } catch (err) {
         this.setState({
           show_loader: false,
         });
-        toast("Something went wrong");
-      }    
+        error="Something went wrong";
+      }   
+      if(error)
+      {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+          },
+          showError: true,
+        });
+      } 
   };
 
   renderProviderPremium() {
@@ -257,6 +305,9 @@ class GroupHealthPlanPremiumSummary extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Premium summary"
         fullWidthButton={true}
         onlyButton={true}

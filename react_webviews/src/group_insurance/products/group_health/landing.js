@@ -16,19 +16,19 @@ import Grid from "material-ui/Grid";
 import SVG from "react-inlinesvg";
 import down_arrow from "assets/down_arrow.svg";
 import up_arrow from "assets/up_arrow.svg";
-import scrollIntoView from 'scroll-into-view-if-needed';
+import scrollIntoView from "scroll-into-view-if-needed";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from "./common_data";
 import ReactResponsiveCarousel from "../../../common/ui/carousel";
 import { getGhProviderConfig } from "./constants";
-import {  setLocalProviderData } from "./common_data";
+import { setLocalProviderData } from "./common_data";
 const screen_name = "landing_screen";
 
 class GroupHealthLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       productName: getConfig().productName,
       provider: this.props.match.params.provider,
       checked: true,
@@ -41,7 +41,7 @@ class GroupHealthLanding extends Component {
       selectedIndex: 0,
       providerConfig: getGhProviderConfig(this.props.match.params.provider),
       card_swipe_count: 0,
-      tncChecked: false
+      tncChecked: false,
     };
     this.openInBrowser = openInBrowser.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
@@ -80,44 +80,79 @@ class GroupHealthLanding extends Component {
       openModuleData: openModuleData,
     });
   }
+  setErrorData = (type) => {
+
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
   async componentDidMount() {
+    this.setErrorData("onload");
+    this.setState({ skelton: true });
+    let error = "";
     let openModuleData = this.state.openModuleData || {};
-    const provider =  this.state.providerConfig.provider_api
-    const body = {"provider": provider};
+    const provider = this.state.providerConfig.provider_api;
+    const body = { provider: provider };
     try {
       const res = await Api.post(
         `api/insurancev2/api/insurance/health/quotation/account_summary`,
         body
       );
-        if (!openModuleData.sub_module) {
-        this.setState({ 
-          show_loader: false,
+      if (!openModuleData.sub_module) {
+        this.setState({
+          skelton: false,
         });
       }
-      let resultData =  res.pfwresponse.result;
-      resultData['details_doc'] = res.pfwresponse.result.policy_brochure
-      resultData['tnc'] = res.pfwresponse.result.terms_and_condition
+      let resultData = res.pfwresponse.result;
+      resultData["details_doc"] = res.pfwresponse.result.policy_brochure;
+      resultData["tnc"] = res.pfwresponse.result.terms_and_condition;
       let lead = {};
       if (res.pfwstatus_code === 200) {
         lead = resultData.quotation || {};
-    
+
         lead.member_base = [];
-        if (resultData.quotation.id  !== undefined) { 
+        if (resultData.quotation.id !== undefined) {
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
       } else {
-        toast(resultData.error || resultData.message || "Something went wrong");
+        error = resultData.error || resultData.message || "Something went wrong";
       }
       this.setState(
         {
           common: resultData,
           quoteResume: lead,
-          applicationData : resultData.application || {}
+          applicationData: resultData.application || {},
         },
         () => {
           if (openModuleData.sub_module === "click-resume") {
             if (!this.state.quoteResume || !this.state.quoteResume.id) {
-              this.setState({ show_loader: false });
+              this.setState({
+                skelton: false,
+              });
             } else {
               this.handleResume();
             }
@@ -125,12 +160,24 @@ class GroupHealthLanding extends Component {
         }
       );
     } catch (err) {
+      console.log(err);
       this.setState({
-        show_loader: false,
+        skelton: false,
       });
-      toast("Something went wrong");
+      error = "Something went wrong";
+    }
+
+    if (error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+        },
+        showError: "page",
+      });
     }
   }
+
   navigate = (pathname) => {
     this.props.history.push({
       pathname: pathname,
@@ -138,26 +185,28 @@ class GroupHealthLanding extends Component {
     });
   };
   handleClick = () => {
-    if(!this.state.tncChecked){
-      toast('Please Agree to the Terms and Conditions');
+    if (!this.state.tncChecked) {
+      toast("Please Agree to the Terms and Conditions");
       this.handleScroll();
       return;
     }
 
-    let groupHealthPlanData = storageService().getObject('groupHealthPlanData_' + this.state.providerConfig.key) || {};
+    let groupHealthPlanData =
+      storageService().getObject(
+        "groupHealthPlanData_" + this.state.providerConfig.key
+      ) || {};
     let post_body = groupHealthPlanData.post_body;
-    if(post_body){
-      delete post_body['quotation_id'];
-      groupHealthPlanData.post_body  = post_body;
+    if (post_body) {
+      delete post_body["quotation_id"];
+      groupHealthPlanData.post_body = post_body;
       this.setLocalProviderData(groupHealthPlanData);
     }
-    
-  
+
     this.sendEvents("next");
     storageService().setObject("resumeToPremiumHealthInsurance", false);
     this.navigate(this.state.providerConfig.get_next[screen_name]);
   };
-  
+
   sendEvents(user_action, data = {}) {
     let eventObj = {
       event_name: "health_insurance",
@@ -205,8 +254,14 @@ class GroupHealthLanding extends Component {
         this.sendEvents("next");
         let quoteResume = this.state.quoteResume;
         storageService().set("ghs_ergo_quote_id", quoteResume.id);
-        if(this.state.applicationData.status === 'move_to_payment' || this.state.applicationData.status === 'ready_for_payment'){
-          storageService().set("health_insurance_application_id", this.state.applicationData.id);
+        if (
+          this.state.applicationData.status === "move_to_payment" ||
+          this.state.applicationData.status === "ready_for_payment"
+        ) {
+          storageService().set(
+            "health_insurance_application_id",
+            this.state.applicationData.id
+          );
           this.navigate("final-summary");
         } else {
           storageService().setObject("resumeToPremiumHealthInsurance", true);
@@ -234,33 +289,34 @@ class GroupHealthLanding extends Component {
     });
   };
 
-  handleTermsAndConditions = () =>{
+  handleTermsAndConditions = () => {
     this.setState({
-      tncChecked : !this.state.tncChecked
+      tncChecked: !this.state.tncChecked,
     });
-  }
+  };
 
   handleScroll = () => {
     setTimeout(function () {
-        let element = document.getElementById('agreeScroll');
-        if (!element || element === null) {
-            return;
-        }
+      let element = document.getElementById("agreeScroll");
+      if (!element || element === null) {
+        return;
+      }
 
-        scrollIntoView(element, {
-            block: 'start',
-            inline: 'nearest',
-            behavior: 'smooth'
-        })
-
+      scrollIntoView(element, {
+        block: "start",
+        inline: "nearest",
+        behavior: "smooth",
+      });
     }, 50);
-  }
+  };
 
   render() {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title={this.state.providerConfig.title}
         fullWidthButton={true}
         buttonTitle={
@@ -272,7 +328,10 @@ class GroupHealthLanding extends Component {
         handleClick={() => this.handleClick()}
         provider={this.state.provider}
       >
-        <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
+        <div
+          className="common-top-page-subtitle-dark"
+          style={{ marginBottom: "17px" }}
+        >
           {this.state.providerConfig.subtitle}
         </div>
 
@@ -299,7 +358,11 @@ class GroupHealthLanding extends Component {
                   </div>
                   <div className="rc-tile-premium-data">
                     <div className="rct-title">
-                      {this.state.providerConfig.key === "HDFCERGO" ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quoteResume.plan_id]: this.state.providerConfig.subtitle}
+                      {this.state.providerConfig.key === "HDFCERGO"
+                        ? this.state.providerConfig.hdfc_plan_title_mapper[
+                            this.state.quoteResume.plan_id
+                          ]
+                        : this.state.providerConfig.subtitle}
                     </div>
                     <div className="rct-subtitle">
                       {inrFormatDecimal(this.state.quoteResume.total_premium)}
@@ -313,7 +376,9 @@ class GroupHealthLanding extends Component {
               <div className="rc-bottom flex-between">
                 <div className="rcb-content">
                   Sum insured:{" "}
-                  {numDifferentiationInr(this.state.quoteResume.individual_sum_insured)}
+                  {numDifferentiationInr(
+                    this.state.quoteResume.individual_sum_insured
+                  )}
                 </div>
                 <div className="rcb-content">
                   Cover period: {this.state.quoteResume.tenure} year
@@ -490,37 +555,37 @@ class GroupHealthLanding extends Component {
           </div>
           <div
             className="CheckBlock2 accident-plan-terms"
-            style={{ padding: 0, margin : '10px 0px 34px 0px' }}
+            style={{ padding: 0, margin: "10px 0px 34px 0px" }}
           >
-          <div id="agreeScroll">
-           <Grid container spacing={16} alignItems="center">
-              <Grid item xs={1} className="TextCenter">
-                <Checkbox
-                  defaultChecked
-                  checked={this.state.tncChecked}
-                  color="default"
-                  value="checked"
-                  name="checked"
-                  onChange={this.handleTermsAndConditions}
-                  className="Checkbox"
-                />
+            <div id="agreeScroll">
+              <Grid container spacing={16} alignItems="center">
+                <Grid item xs={1} className="TextCenter">
+                  <Checkbox
+                    defaultChecked
+                    checked={this.state.tncChecked}
+                    color="default"
+                    value="checked"
+                    name="checked"
+                    onChange={this.handleTermsAndConditions}
+                    className="Checkbox"
+                  />
+                </Grid>
+                <Grid item xs={11}>
+                  <div className="accident-plan-terms-text" style={{}}>
+                    I agree to the{" "}
+                    <span
+                      onClick={() =>
+                        this.openInBrowser(this.state.common.tnc, "tnc")
+                      }
+                      className="accident-plan-terms-bold"
+                      style={{ color: getConfig().primary }}
+                    >
+                      Terms and conditions
+                    </span>
+                  </div>
+                </Grid>
               </Grid>
-              <Grid item xs={11}>
-                <div className="accident-plan-terms-text" style={{}}>
-                  I agree to the{" "}
-                  <span
-                    onClick={() =>
-                      this.openInBrowser(this.state.common.tnc, "tnc")
-                    }
-                    className="accident-plan-terms-bold"
-                    style={{ color: getConfig().primary }}
-                  >
-                    Terms and conditions
-                  </span>
-                </div>
-              </Grid>
-            </Grid>
-          </div>
+            </div>
           </div>
         </div>
       </Container>

@@ -277,7 +277,7 @@ class HealthInsuranceLanding extends Component {
 
   handleClick2 = () => {
     this.setState({
-      show_loader: true
+      skelton:true
     })
   }
 
@@ -443,7 +443,6 @@ class HealthInsuranceLanding extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         title="Health insurance">
         <div>

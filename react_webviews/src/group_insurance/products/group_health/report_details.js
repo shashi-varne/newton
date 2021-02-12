@@ -40,7 +40,7 @@ class GroupHealthReportDetails extends Component {
             policy_data: {
                 cssMapper: {}
             },
-            show_loader: true,
+            skelton:true,
             ic_hs_special_benefits: ic_hs_special_benefits,
             ic_hs_main_benefits: ic_hs_main_benefits
         }
@@ -56,15 +56,45 @@ class GroupHealthReportDetails extends Component {
             policy_id: policy_id
         })
     }
+    setErrorData = (type) => {
 
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClickCurrent,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    
+      }
     async componentDidMount() {
-
+        this.setErrorData("onload");
+        let error='';
         try {        
             
             const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
         
             this.setState({
-                show_loader: false
+                skelton:false
             });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
@@ -126,15 +156,25 @@ class GroupHealthReportDetails extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message
+                    || 'Something went wrong';
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton:false
             });
-            toast('Something went wrong');
+            error='Something went wrong';
+        }
+        if(error)
+        {
+            this.setState({
+                errorData: {
+                  ...this.state.errorData,
+                  title2: error,
+                },
+                showError: "page",
+              });
         }
     }
 
@@ -364,6 +404,9 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={'Health insurance'}
                 fullWidthButton={true}
                 buttonTitle="OK"

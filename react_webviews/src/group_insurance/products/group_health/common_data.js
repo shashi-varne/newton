@@ -11,13 +11,13 @@ import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
-
+    this.setErrorData =setErrorData.bind(this)
     this.navigate = navigate.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
     this.memberKeyMapper = memberKeyMapper.bind(this);
-
+    
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     
     let providerConfig = getGhProviderConfig(provider);
@@ -68,11 +68,13 @@ export async function initialize() {
     };
 
     if (this.state.get_lead) {
-
+        
+        this.setErrorData("onload")
+        let error="";
         try {
 
             this.setState({
-                show_loader: true
+                skelton: true
             });
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
@@ -85,7 +87,7 @@ export async function initialize() {
                 const res = await Api.get(url);
 
 
-                if (res.pfwresponse.status_code === 200) {
+                if (res.pfwresponse.status_code === 201) {
                     var resultData = res.pfwresponse.result;
                     lead = resultData;
                     lead.member_base = ghGetMember(lead, this.state.providerConfig);               
@@ -98,11 +100,11 @@ export async function initialize() {
                     })
                     
                 } else {
-                    toast(resultData.error || resultData.message ||
-                        'Something went wrong');
+                    error=resultData.error || resultData.message ||
+                        'Something went wrong';
                 }
                 this.setState({
-                    show_loader: false
+                    skelton: false
                 });
             } else if(application_id) {
                 url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
@@ -115,7 +117,7 @@ export async function initialize() {
                 var resultData = res.pfwresponse.result;
 
                 this.setState({
-                    show_loader: false
+                    skelton: false
                 });
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
@@ -138,18 +140,28 @@ export async function initialize() {
                     })
 
                 } else {
-                    toast(resultData.error || resultData.message ||
-                        'Something went wrong');
+                    error=resultData.error || resultData.message ||
+                        'Something went wrong';
                 }
             }
         } catch (err) {
             console.log(err);
             this.setState({
-                show_loader: false,
+                skelton: false,
                 lead: lead,
                 common_data: {}
             });
-            toast('Something went wrong');
+            error='Something went wrong';
+        }
+        if(error)
+        {
+            this.setState({
+                errorData: {
+                  ...this.state.errorData,
+                  title2: error,
+                },
+                showError: "page",
+              });
         }
     }
 
@@ -291,13 +303,16 @@ export function updateBottomPremiumAddOns(premium) {
 }
 
 export async function updateLead( body, quote_id) {
+    this.setErrorData =setErrorData.bind(this)
+    let error="";
+    this.setErrorData("submit")
     try {
         if (!quote_id) {
             quote_id = storageService().get('ghs_ergo_quote_id');
         }
 
         this.setState({
-            show_loader: true
+            show_loader: "button"
         });
         let application_id = storageService().get('health_insurance_application_id');
          body.application_id = application_id
@@ -306,7 +321,7 @@ export async function updateLead( body, quote_id) {
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
 
-            if (body.pedcase) { this.initialize(); this.setState({ show_loader: true });return}
+            if (body.pedcase) { this.initialize(); this.setState({ show_loader: "button" });return}
 
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
@@ -329,11 +344,11 @@ export async function updateLead( body, quote_id) {
                 if(resultData.error && resultData.error.length > 0 && resultData.error[0]){
                     resultData.error = resultData.error[0]
                 }
-                toast(
+                error=
                     resultData.error ||
                     resultData.message ||
-                    'Something went wrong'
-                );
+                    'Something went wrong';
+                
             }
         }
     } catch (err) {
@@ -341,7 +356,17 @@ export async function updateLead( body, quote_id) {
         this.setState({
             show_loader: false
         });
-        toast('Something went wrong');
+        error='Something went wrong';
+    }
+    if(error)
+    {
+        this.setState({
+            errorData: {
+              ...this.state.errorData,
+              title2: error,
+            },
+            showError: true,
+          });
     }
 }
 
@@ -363,7 +388,35 @@ export function navigate(pathname, data = {}) {
     }
 
 }
-
+function setErrorData (type){
+    this.setState({
+        showError: false
+      });
+      if(type) {
+        let mapper = {
+          'onload':  {
+            handleClick1: this.onload,
+            button_text1: 'Fetch again',
+            title1: ''
+          },
+          'submit': {
+            handleClick1: this.handleClickCurrent,
+            button_text1: 'Retry',
+            handleClick2: () => {
+              this.setState({
+                showError: false
+              })
+            },
+            button_text2: 'Edit'
+          }
+        };
+    
+        this.setState({
+          errorData: {...mapper[type], setErrorData : this.setErrorData}
+        })
+      }
+  
+}
 export async function resetQuote() {
 
     this.handleClose();

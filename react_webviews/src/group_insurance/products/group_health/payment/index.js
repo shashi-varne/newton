@@ -9,7 +9,6 @@ import { inrFormatDecimal, formatAMPM ,storageService, numDifferentiationInr, ge
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 
 const commonMapper = {
@@ -92,14 +91,44 @@ class GroupHealthPayment extends Component {
     })
    
   }
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
   onload = async() => {
- 
+    this.setErrorData("onload");
+    let error = "";
     if(!this.state.get_lead || true) {
       try {
 
         this.setState({
-          show_loader: true
+          skelton:true
         });
   
        let application_id = storageService().get('health_insurance_application_id'); 
@@ -108,7 +137,7 @@ class GroupHealthPayment extends Component {
   
         var resultData = res.pfwresponse.result;
         this.setState({
-          show_loader: false
+          skelton: false
         });
         if (res.pfwresponse.status_code === 200) {
   
@@ -125,15 +154,25 @@ class GroupHealthPayment extends Component {
             application_details: application_details
           })
         } else {
-          toast(resultData.error || resultData.message
-            || 'Something went wrong');
+          error=resultData.error || resultData.message
+            || 'Something went wrong';
         }
       } catch (err) {
         console.log(err)
         this.setState({
-          show_loader: false
+          skelton: false
         });
-        toast('Something went wrong');
+        error='Something went wrong';
+      }
+      if(error)
+      {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+          },
+          showError: "page",
+        });
       }
     }
   }
@@ -188,6 +227,9 @@ class GroupHealthPayment extends Component {
       <Container
         provider={this.state.provider}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         noHeader={this.state.show_loader}
         title={this.state.commonMapper['top_title']}
         handleClick={this.handleClick}
