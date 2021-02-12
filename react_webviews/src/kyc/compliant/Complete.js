@@ -1,23 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Alert from "../mini_components/Alert";
+import { navigate as navigateFunc } from "../common/functions";
+import { getPathname } from "../constants";
+import { storageService } from "../../utils/validators";
 
 const productName = getConfig().productName;
 const Complete = (props) => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const navigate = navigateFunc.bind(props);
 
-  const handleClick = () => {};
+  const handleClick = () => {
+    if (storageService().get("native")) {
+      // callbackWeb.user_exit();
+    } else {
+      navigate(getPathname.invest);
+    }
+  };
 
   return (
     <Container
-      showLoader={showLoader}
       hideInPageTitle
       id="kyc-compliant-complete"
       buttonTitle="Ok"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
       handleClick={handleClick}
     >
       <div className="kyc-compliant-complete">

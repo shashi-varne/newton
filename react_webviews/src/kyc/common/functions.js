@@ -1,10 +1,7 @@
 import { getConfig } from "utils/functions";
-import { getIFSC, addAdditionalBank } from "../common/api";
-import { getIfscCodeError, getPathname } from "../constants";
-import toast from "common/ui/Toast";
+import { calculateAge, isValidDate } from "utils/validators";
+import { validateEmail } from "../../utils/validators";
 
-const genericErrorMessage = "Something Went wrong!";
-const partner = getConfig().partner;
 export function navigate(pathname, data = {}) {
   if (data.edit) {
     this.history.replace({
@@ -26,21 +23,61 @@ export function navigate(pathname, data = {}) {
 export const validateFields = (formData, keyToCheck) => {
   let canSubmit = true;
   for (let key of keyToCheck) {
-    if (!formData[key]) {
+    let value = formData[key];
+    if (!value) {
       formData[`${key}_error`] = "This is required";
       canSubmit = false;
-    } else if (key === "mobile" && formData[key].length !== 10) {
-      formData[`${key}_error`] = "Minimum length is 10";
-      canSubmit = false;
-    } else if (key === "aadhar" && formData[key].length !== 12) {
-      formData[`${key}_error`] = "Minimum length is 12";
-      canSubmit = false;
-    } else if (key.includes("account_number") && formData[key].length !== 16) {
-      formData[`${key}_error`] = "Minimum length is 16";
-      canSubmit = false;
-    } else if (key === "ifsc_code" && formData[key].length !== 11) {
-      formData[`${key}_error`] = "Minimum length is 11";
-      canSubmit = false;
+    } else {
+      switch (key) {
+        case "mobile":
+          if (value.length !== 10) {
+            formData[`${key}_error`] = "Minimum length is 10";
+            canSubmit = false;
+          }
+          break;
+        case "aadhar":
+          if (value.length !== 12) {
+            formData[`${key}_error`] = "Minimum length is 12";
+            canSubmit = false;
+          }
+          break;
+        case "account_number":
+        case "c_account_number":
+          if (value.length !== 16) {
+            formData[`${key}_error`] = "Minimum length is 16";
+            canSubmit = false;
+          }
+          break;
+        case "ifsc_code":
+          if (value.length !== 11) {
+            formData[`${key}_error`] = "Minimum length is 11";
+            canSubmit = false;
+          }
+          break;
+        case "dob":
+          if (!isValidDate(value)) {
+            formData[`${key}_error`] = "Please enter a valid date";
+            canSubmit = false;
+          } else if (calculateAge(value) < 18) {
+            formData[`${key}_error`] = "Minimum age required 18 years";
+            canSubmit = false;
+          }
+          break;
+        case "tin_number":
+          if (value.length < 8) {
+            formData[`${key}_error`] = "Minimum length is 8";
+            canSubmit = false;
+          }
+          break;
+        case "email":
+          if (!validateEmail(value)) {
+            formData[`${key}_error`] = "Invalid email";
+            canSubmit = false;
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
   return { formData, canSubmit };
@@ -69,67 +106,17 @@ export const submitAadharData = (data) => {
     encodedURI;
 };
 
-export const checkIFSCFormat = async (bankData, form_data, setIsApiRunning) => {
-  let formData = Object.assign({}, form_data);
-  let bank = Object.assign({}, bankData);
-  let bankIcon = "";
-  if (
-    (partner.code === "ktb" &&
-      bankData.ifsc_code.toUpperCase().startsWith("KARB")) ||
-    (partner.code === "lvb" &&
-      bankData.ifsc_code.toUpperCase().startsWith("LAVB")) ||
-    (partner.code === "cub" &&
-      bankData.ifsc_code.toUpperCase().startsWith("CIUB")) ||
-    (partner.code === "ippb" &&
-      bankData.ifsc_code.toUpperCase().startsWith("IPOS")) ||
-    (partner.code !== "ktb" &&
-      partner.code !== "lvb" &&
-      partner.code !== "cub" &&
-      partner.code !== "ippb")
-  ) {
-    setIsApiRunning(true);
-    try {
-      const result = (await getIFSC(bankData.ifsc_code)) || [];
-      if (result && result.length > 0) {
-        const data = result[0] || {};
-        formData.ifsc_code_error = "";
-        bank.branch_name = data.branch;
-        bank.bank_name = data.bank;
-        bankIcon = data.image || "";
-        formData.ifsc_code_helper = `${data.bank} ${data.branch}`;
-      } else {
-        bank.branch_name = "";
-        bank.bank_name = "";
-        formData.ifsc_code_error = getIfscCodeError(partner.code);
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setIsApiRunning(false);
-    }
-  } else {
-    console.log("else");
-    bank.branch_name = "";
-    bank.bank_name = "";
-    formData.ifsc_code_error = getIfscCodeError(partner.code);
+export const panUiSet = (pan) => {
+  if (!pan) {
+    return "";
   }
-  return { bankData: bank, formData: formData, bankIcon: bankIcon };
-};
 
-export const saveBankData = async (data, setIsApiRunning, navigate) => {
-  try {
-    setIsApiRunning(true);
-    const result = await addAdditionalBank(data);
-    if (!result) return;
-    if (result.bank.bank_status === "approved") {
-      toast("Congratulations!, new account added succesfully");
-      navigate(getPathname("bankList"));
-    } else {
-      navigate(`${getPathname("addBankVerify")}${result.bank.bank_id}`);
-    }
-  } catch (err) {
-    toast(err || genericErrorMessage);
-  } finally {
-    setIsApiRunning(false);
-  }
+  let panNew =
+    pan.substring(0, 5) +
+    " " +
+    pan.substring(5, 9) +
+    " " +
+    pan.substring(9, 10);
+
+  return panNew;
 };

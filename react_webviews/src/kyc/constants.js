@@ -1,27 +1,42 @@
 export const apiConstants = {
-  getPan: '/api/kyc/checkv2/mine',
-  submit: '/api/kyc/v2/mine',
-  getMyaccount: '/api/iam/myaccount',
-  getIFSC: '/api/ifsc/',
-  addAdditionalBank: '/api/kyc/bank/add/additionalbank/mine',
-}
+  getPan: "/api/kyc/checkv2/mine",
+  submit: "/api/kyc/v2/mine",
+  getMyaccount: "/api/iam/myaccount",
+  getIFSC: "/api/ifsc/",
+  addAdditionalBank: "/api/kyc/bank/add/additionalbank/mine",
+  pennyVerification: "/api/account/add-bank/penny-verification",
+  getBankStatus: "/api/account/penny-verification-status-check",
+  getCVL: "/api/kyc/updatecvl/mine",
+};
 
-export const getPathname = (name) => {
-  let pathnames = {
-    aadhar: '/kyc/aadhar',
-    aadharConfirmation: '/kyc/aadhar/confirmation',
-    bankList: '/kyc/add-bank',
-    addBank: '/kyc/approved/banks/doc/',
-    bankDetails: '/kyc/add-bank/details/',
-    addBankVerify: '/kyc/approved/banks/verify/',
-  }
-  return pathnames[name] || ''
-}
+export const getPathname = {
+  invest: "/invest",
+  landing: "/",
+  homeKyc: "/kyc/home-kyc",
+  aadhar: "/kyc/aadhar",
+  aadharConfirmation: "/kyc/aadhar/confirmation",
+  bankList: "/kyc/add-bank",
+  addBank: "/kyc/approved/banks/doc/",
+  bankDetails: "/kyc/add-bank/details/",
+  addBankVerify: "/kyc/approved/banks/verify/",
+  journey: "/kyc/journey",
+  compliantPersonalDetails1: "/kyc/compliant-personal-details",
+  compliantPersonalDetails2: "/kyc/compliant-personal-details2",
+  confirmPan: "/kyc/compliant-confirm-pan",
+  compliantKycComplete: "/kyc/compliant-report-complete",
+  compliantReport: "/kyc/compliant-report-details",
+  uploadProgress: "/kyc/upload/progress",
+  kycReport: "/kyc/report",
+  rtaCompliantPersonalDetails: "/kyc/rta-compliant-personal-details",
+};
 
 export const storageConstants = {
-  USER: 'user',
-  KYC: 'kyc',
-}
+  USER: "user",
+  KYC: "kyc",
+  BANK_MANDATES: "bank_mandates",
+  CHANGE_REQUEST: "change_requests",
+  NATIVE: "native",
+};
 
 export const docMapper = {
   DL: 'Driving license',
@@ -99,12 +114,12 @@ export const incomeOptions = [
 
 export const residentialOptions = [
   {
-    name: 'Indian',
-    value: true,
+    name: "Indian",
+    value: "INDIAN",
   },
   {
-    name: 'Non indian',
-    value: false,
+    name: "Non indian",
+    value: "NON INDIAN",
   },
 ]
 
@@ -223,4 +238,13 @@ export const getIfscCodeError = (code) => {
     default:
       return 'Please enter a valid ifsc code'
   }
-}
+};
+
+export const kycDocNameMapper = {
+  DL: "Driving license",
+  PASSPORT: "Passport",
+  AADHAAR: "Aadhaar card",
+  VOTER_ID_CARD: "Voter ID",
+  UTILITY_BILL: "Gas receipt",
+  LAT_BANK_PB: "Passbook",
+};

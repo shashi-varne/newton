@@ -3,12 +3,15 @@ import Container from "../common/Container";
 import { storageService, validatePan } from "utils/validators";
 import Input from "common/ui/Input";
 import { getPan, savePanData } from "../common/api";
-import { storageConstants } from "../constants";
+import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
-import Alert from '../mini_components/Alert'
+import Alert from "../mini_components/Alert";
+import { navigate as navigateFunc } from "../common/functions";
 
 const Home = (props) => {
+  const navigate = navigateFunc.bind(props);
+  let userKyc = storageService().getObject(storageConstants.KYC);
   const genericErrorMessage = "Something Went wrong!";
   const [showLoader, setShowLoader] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -132,17 +135,33 @@ const Home = (props) => {
 
   const savePan = async (is_nri) => {
     try {
-      let result = await savePanData({ is_nri: is_nri });
+      if (is_nri) {
+        userKyc.address.meta_data.is_nri = true;
+      } else {
+        userKyc.address.meta_data.is_nri = false;
+      }
+      let dob = userKyc.pan.meta_data.dob;
+      let oldObject = userKyc.pan.meta_data;
+      let newObject = Object.assign({}, oldObject);
+      newObject.dob = dob;
+      newObject.pan_number = pan;
+      let body = {
+        pan: newObject,
+        address: userKyc.address.meta_data,
+      };
+      let result = await savePanData(body);
       if (!result) return;
       currentUser.name = result.kyc.pan.meta_data.name;
       if (
         (isUserCompliant || result.kyc.kyc_status === "compliant") &&
         (kycConfirmPanScreen || isPremiumFlow)
       ) {
+        navigate(getPathname.compliantPersonalDetails1);
         // $state.go("kyc-compliant-personal-details");
       } else {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
           // $state.go("kyc-journey");
+          navigate(getPathname.journey);
         } else {
           if (is_nri) {
             // $state.go("kyc-journey", { show_aadhaar: false });
@@ -184,10 +203,18 @@ const Home = (props) => {
             type="text"
           />
           {isStartKyc && isUserCompliant && (
-            <Alert variant="success" message={renderData.success.subtitle} title={renderData.success.title} />
+            <Alert
+              variant="success"
+              message={renderData.success.subtitle}
+              title={renderData.success.title}
+            />
           )}
           {isStartKyc && !isUserCompliant && (
-            <Alert variant="danger" message={renderData.incomplete.subtitle} title={renderData.incomplete.title} />
+            <Alert
+              variant="danger"
+              message={renderData.incomplete.subtitle}
+              title={renderData.incomplete.title}
+            />
           )}
         </main>
         <ResidentDialog

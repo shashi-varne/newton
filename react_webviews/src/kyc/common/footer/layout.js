@@ -1,41 +1,41 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
-import Button from '../../../common/ui/Button'
+import Button from "../../../common/ui/Button";
 import Dialog, {
   DialogActions,
   DialogTitle,
   DialogContent,
   DialogContentText,
-} from 'material-ui/Dialog'
-import Buttons from 'material-ui/Button'
+} from "material-ui/Dialog";
+import Buttons from "material-ui/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import '../Style.scss'
+import "../Style.scss";
 
 export class DefaultLayout extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       openDialog: false,
-    }
+    };
   }
 
   componentDidMount() {}
 
   clickHandler = () => {
     if (navigator.onLine) {
-      this.props.handleClick()
+      this.props.handleClick();
     } else {
       this.setState({
         openDialog: true,
-      })
+      });
     }
-  }
+  };
 
   handleClose = () => {
     this.setState({
       openDialog: false,
-    })
-  }
+    });
+  };
 
   renderDialog = () => {
     return (
@@ -62,17 +62,17 @@ export class DefaultLayout extends Component {
           </Button>
         </DialogActions>
       </Dialog>
-    )
-  }
+    );
+  };
 
   render() {
-    const props = this.props
+    const props = this.props;
     return (
       <div
         className="FooterDefaultLayout"
         onClick={() => {
           if (!props.disable) {
-            props.handleClick()
+            props.handleClick();
           }
         }}
       >
@@ -97,7 +97,7 @@ export class DefaultLayout extends Component {
         </div>
         {this.renderDialog()}
       </div>
-    )
+    );
   }
 }
 
@@ -187,18 +187,18 @@ export class TwoButtonLayout extends Component {
             size="large"
             color="secondary"
             type={props.type}
-            disabled={props.disable}
+            disabled={props.disable2}
             className={`footer-button ${props.buttonClassName2} ${
-              props.disable && "disabled"
+              props.disable2 && "disabled"
             }`}
             onClick={() => {
-              if (!props.disable && !props.isApiRunning) {
+              if (!props.disable2 && !props.isApiRunning2) {
                 props.handleClick2();
               }
             }}
           >
             {props.buttonTitle2}
-            {props.isApiRunning && (
+            {props.isApiRunning2 && (
               <div className="loader">
                 <CircularProgress size={20} thickness={5} />
               </div>

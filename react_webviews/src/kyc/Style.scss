@@ -136,6 +136,14 @@
     section {
       margin-top: 20px;
 
+      .compliant-report-skelton {
+        height: 100px !important;
+      }
+
+      .report-skelton {
+        height: 200px !important;
+      }
+
       .tile-info {
         border-top: 1px solid #f6f2ff;
         padding: 15px 0 15px 0;
@@ -211,7 +219,7 @@
 
 .kyc-complaint-personal-details {
   line-height: 1.5;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 
   .kyc-main-subtitle {
     display: flex;
@@ -553,6 +561,10 @@
     .input {
       margin-top: 20px;
 
+      input[type="password"] {
+        font-size: 24px;
+      }
+
       img {
         width: 22px;
         margin-right: 10px;
@@ -624,6 +636,7 @@
 
 .banks-list {
   line-height: 1.5;
+  padding-bottom: 20px;
 
   .block {
     display: -ms-flexbox;
@@ -1156,5 +1169,124 @@
     color: var(--secondary);
     font-size: 10px;
     font-weight: 800;
+  }
+}
+.kyc-penny-dialog {
+  .penny-dialog-content {
+    padding: 15px;
+
+    .img {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      margin: 20px 0;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.1;
+
+      span {
+        font-size: 13px;
+        color: #3792fc;
+      }
+    }
+
+    .subtitle {
+      color: #767e86;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.kyc-penny-failed-dialog {
+  .penny-failed-dialog-content {
+    padding: 15px 15px 30px 15px !important;
+
+    .title {
+      margin: -15px -15px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+
+      .text {
+        margin: 15px 0;
+      }
+    }
+
+    .subtitle {
+      color: #767e86;
+      font-size: 14px;
+      margin: 10px 0 20px 0;
+    }
+
+    .divider {
+      font-size: 8px;
+      width: 100%;
+      text-align: center;
+      border-bottom: 1px solid #ececec;
+      line-height: 0.1em;
+      color: #767e86;
+      margin: 20px 0;
+
+      span {
+        background: #fff;
+        padding: 0 10px;
+      }
+    }
+
+    .button {
+      width: 100%;
+      padding: 5px 15px;
+      font-size: 14px;
+      border-radius: 5px;
+      min-height: 47px;
+      font-weight: bold;
+      letter-spacing: 0.01em;
+    }
+
+    .bg-full {
+      color: white;
+      background-color: var(--secondary);
+    }
+
+    .bottom-margin {
+      margin-bottom: 30px;
+    }
+
+    .border-button {
+      color: var(--secondary);
+      background-color: white;
+      border: 1px solid var(--secondary);
+    }
+
+    .highlight-bg {
+      color: var(--secondary);
+      background-color: rgb(250, 250, 250);
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #kyc-bottom-dialog {
+    .MuiDialog-paper {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .MuiDialog-paperWidthSm {
+      width: 100%;
+      align-self: flex-end;
+    }
   }
 }

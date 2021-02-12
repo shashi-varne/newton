@@ -4,7 +4,7 @@ import { getConfig } from "../../utils/functions";
 import { getMyAccount } from "../common/api";
 import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
-import { getPathname } from "../constants";
+import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 
 const productName = getConfig().productName;
@@ -25,8 +25,14 @@ const Banksist = (props) => {
       setBanks(result.bank_mandates.banks || []);
       setChangerequest(result.change_request || {});
       setShowLoader(false);
-      storageService().setObject("bank_mandates", result.bank_mandates.banks);
-      storageService().setObject("change_requests", result.change_requests);
+      storageService().setObject(
+        storageConstants.BANK_MANDATES,
+        result.bank_mandates.banks
+      );
+      storageService().setObject(
+        storageConstants.CHANGE_REQUEST,
+        result.change_requests
+      );
     } catch (err) {
       console.log(err);
       toast(err);
@@ -34,11 +40,11 @@ const Banksist = (props) => {
   };
 
   const handleClick = () => {
-    navigate(`${getPathname("addBank")}`);
+    navigate(getPathname.addBank);
   };
 
   const bank_details = (bank_id) => () => {
-    navigate(`${getPathname("bankDetails")}${bank_id}`);
+    navigate(`${getPathname.bankDetails}${bank_id}`);
   };
 
   const config = getConfig();
