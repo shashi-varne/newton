@@ -56,7 +56,7 @@ class AdvisoryBasicDetails extends Component {
         }else if(!isEmpty(advisory_data)){
             console.log('Normal prefill')
             lead = advisory_data
-            form_data.illness = lead.ci_present === "True" ? yesNoOptions[0].value : lead.ci_present === "False" ?  yesNoOptions[1].value : '';
+            form_data.illness = lead.ci_present === true ? yesNoOptions[0].value : lead.ci_present === false ?  yesNoOptions[1].value : '';
         }
 
         if(isResumePresent ||!isEmpty(advisory_data)) {
@@ -239,9 +239,9 @@ class AdvisoryBasicDetails extends Component {
             var post_body = {
                 'name': form_data.name,
                 'gender': form_data.gender,
-                'marital_status': form_data.married === 'YES' ? "MARREID" : "UNMARRIED",
+                'marital_status': form_data.married === 'YES' ? "MARRIED" : "UNMARRIED",
                 'age': form_data.age,
-                'ci_present': form_data.illness === 'YES' ? 'True' : 'False',
+                'ci_present': form_data.illness === 'YES' ? true : false,
                 'dependent_json': {"parents": this.state.Parents_total || 0, "kids": this.state.Kids_total || 0 , "spouse": this.state.spouse_checked ? 1 : 0},
                 'city': form_data.city.toUpperCase(),
             }

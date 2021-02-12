@@ -7,7 +7,7 @@ import { nativeCallback } from 'utils/native_callback';
 import {advisoryConstants} from './constants';
 import InputPrefix from '../../common/ui/InputPrefix';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
-import { updateLead } from './common_data';
+import { updateLead, getLead } from './common_data';
 import {storageService, isEmpty} from "utils/validators";
 class AdvisoryIncomeDetails extends Component {
 
@@ -21,6 +21,7 @@ class AdvisoryIncomeDetails extends Component {
             showPrefix: {income: false, expense: false}
         }
         this.updateLead = updateLead.bind(this);
+        this.getLead = getLead.bind(this);
     }
 
     sendEvents(user_action, insurance_type, banner_clicked) {
@@ -39,16 +40,29 @@ class AdvisoryIncomeDetails extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
 
         var advisory_data = storageService().getObject('advisory_data') || {};
-        console.log(advisory_data)
-        if(!isEmpty(advisory_data)){
+        var isResumePresent  = storageService().getObject('advisory_resume_present');
+        
+        var lead = {};
+        var form_data = {};
+
+        if(isResumePresent){
+            console.log('Resume case')
+            await this.getLead();
+            lead = this.state.resume_data;
+        }else if(!isEmpty(advisory_data)){
+            console.log('Normal prefill')
+            lead = advisory_data
+        }
+
+        if(isResumePresent ||!isEmpty(advisory_data)){
             var form_data = {};
-            form_data.income = formatAmount(advisory_data.annual_income);
-            form_data.expense = formatAmount(advisory_data.annual_personal_expense);
-            form_data.income_growth = advisory_data.growth_in_income;
-            form_data.retire = advisory_data.age_of_retirement;
+            form_data.income = formatAmount(lead.annual_income);
+            form_data.expense = formatAmount(lead.annual_personal_expense);
+            form_data.income_growth = lead.growth_in_income;
+            form_data.retire = lead.age_of_retirement;
 
             this.setState({form_data: form_data})
             let showPrefix = this.state.showPrefix;

@@ -16,7 +16,10 @@ export async function updateLead( body, next_page, final_page) {
     }   
     try{
            var res = await Api.put(update_url, body);
-       
+          if(body.status === 'cancelled'){
+            storageService().remove('advisory_resume_present');
+          }
+
            this.setState({
              show_loader: false
            })

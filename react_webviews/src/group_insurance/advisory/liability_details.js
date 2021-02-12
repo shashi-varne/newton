@@ -7,7 +7,7 @@ import { yesNoOptions } from '../constants';
 import InputPrefix from '../../common/ui/InputPrefix';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
-import { updateLead } from './common_data';
+import { updateLead, getLead } from './common_data';
 import {storageService, isEmpty} from "utils/validators";
 
 class AdvisoryLiabilityDetails extends Component {
@@ -20,6 +20,7 @@ class AdvisoryLiabilityDetails extends Component {
             showPrefix: {loan_amount: false, total_amount: false}
         }
         this.updateLead = updateLead.bind(this);
+        this.getLead = getLead.bind(this);
     }
 
     sendEvents(user_action, insurance_type, banner_clicked) {
@@ -38,16 +39,28 @@ class AdvisoryLiabilityDetails extends Component {
         }
     }
 
-    componentDidMount(){
+    async componentDidMount(){
 
         var advisory_data = storageService().getObject('advisory_data') || {};
-        console.log(advisory_data)
-        if(!isEmpty(advisory_data)){
-            var form_data = {};
-            form_data.homeloan = advisory_data.home_loan_liability === "True" ? yesNoOptions[0].value : advisory_data.home_loan_liability === "False" ?  yesNoOptions[1].value : '';
-            form_data.liability = advisory_data.other_liability === "True" ? yesNoOptions[0].value : advisory_data.other_liability === "False"?  yesNoOptions[1].value : '';
-            form_data.loan_amount = formatAmount(advisory_data.home_loan_liability_amount);
-            form_data.total_amount = formatAmount(advisory_data.other_liability_amount);
+        var isResumePresent  = storageService().getObject('advisory_resume_present');
+        
+        var lead = {};
+        var form_data = {};
+
+        if(isResumePresent){
+            console.log('Resume case')
+            await this.getLead();
+            lead = this.state.resume_data;
+        }else if(!isEmpty(advisory_data)){
+            console.log('Normal prefill')
+            lead = advisory_data
+        }
+
+        if(isResumePresent ||!isEmpty(advisory_data)){
+            form_data.homeloan = lead.home_loan_liability === true ? yesNoOptions[0].value : lead.home_loan_liability === false ?  yesNoOptions[1].value : '';
+            form_data.liability = lead.other_liability === true ? yesNoOptions[0].value : lead.other_liability === false ?  yesNoOptions[1].value : '';
+            form_data.loan_amount = formatAmount(lead.home_loan_liability_amount);
+            form_data.total_amount = formatAmount(lead.other_liability_amount);
 
             this.setState({form_data: form_data})
             let showPrefix = this.state.showPrefix;
@@ -176,10 +189,10 @@ class AdvisoryLiabilityDetails extends Component {
 
         if(canSubmitForm){
             var post_body = {
-                'home_loan_liability': form_data.homeloan === "YES" ? 'True' : 'False',
-                'other_liability': form_data.liability === "YES" ? 'True' : 'False',
-                'home_loan_liability_amount': formatAmountToNumber(form_data.loan_amount),
-                'other_liability_amount' : formatAmountToNumber(form_data.total_amount),
+                'home_loan_liability': form_data.homeloan === "YES" ? true : false,
+                'other_liability': form_data.liability === "YES" ? true : false,
+                'home_loan_liability_amount': form_data.homeloan === "YES" ?  formatAmountToNumber(form_data.loan_amount) : 0,
+                'other_liability_amount' : form_data.liability === "YES" ? formatAmountToNumber(form_data.total_amount) : 0,
             }
             var advisory_data = storageService().getObject('advisory_data');
             for(var x in post_body){
