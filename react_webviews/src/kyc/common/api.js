@@ -35,9 +35,7 @@ const accountMerge = () => {};
 
 export const savePanData = async (body) => {
   const res = await Api.post(apiConstants.submit, {
-    kyc: {
-      ...body,
-    },
+    ...body,
   });
   if (
     res.pfwstatus_code !== 200 ||

@@ -17,6 +17,7 @@ import {
 import { initData } from "../services";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { savePanData } from "../common/api";
+import { validateAlphabets } from "../../utils/validators";
 
 const PersonalDetails2 = (props) => {
   const [isChecked, setIsChecked] = useState(true);
@@ -78,14 +79,14 @@ const PersonalDetails2 = (props) => {
     userkycDetails.nomination.meta_data.dob = form_data.dob;
     userkycDetails.nomination.meta_data.name = form_data.name;
     userkycDetails.nomination.meta_data.relationship = form_data.relationship;
-    let body = {};
+    let body = { kyc: {} };
     if (isChecked) {
       userkycDetails.nomination.nominee_optional = true;
-      body = {
+      body.kyc = {
         nomination: userkycDetails.nomination,
       };
     } else {
-      body = {
+      body.kyc = {
         nomination: userkycDetails.nomination.meta_data,
       };
     }
@@ -115,7 +116,9 @@ const PersonalDetails2 = (props) => {
       setIsChecked(!isChecked);
       return;
     }
+
     let value = event.target ? event.target.value : event;
+    if (name === "name" && value && !validateAlphabets(value)) return;
     let formData = { ...form_data };
     if (name === "dob") {
       if (!dobFormatTest(value)) {

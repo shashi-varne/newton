@@ -38,8 +38,10 @@ const ConfirmPan = (props) => {
       newObject.dob = dob;
       newObject.pan_number = pan;
       let body = {
-        pan: newObject,
-        address: userKyc.address.meta_data,
+        kyc: {
+          pan: newObject,
+          address: userKyc.address.meta_data,
+        },
       };
       setIsApiRunning(true);
       let result = await savePanData(body);

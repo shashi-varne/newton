@@ -1,21 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { storageService, isEmpty } from "../../utils/validators";
 import Container from "../common/Container";
+import { storageConstants, getPathname } from "../constants";
+import { navigate as navigateFunc } from "../common/functions";
+import { initData } from "../services";
+import { getConfig } from "../../utils/functions";
 
 const RegistrationSuccess = (props) => {
+  const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(false);
+  const [currentUser, setCurrentUser] = useState(
+    storageService().getObject(storageConstants.USER) || {}
+  );
+  const [userKyc, setUserKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || {}
+  );
+  const [isCompliant, setIsCompliant] = useState();
+  const [buttonTitle, setButtonTitle] = useState();
 
-  const [isApiRunning, setIsApiRunning] = useState(false);
-  const handleClick = () => {};
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = async () => {
+    let userkycDetails = { ...userKyc };
+    let user = { ...currentUser };
+    if (isEmpty(userkycDetails) || isEmpty(user)) {
+      setShowLoader(true);
+      await initData();
+      userkycDetails = storageService().getObject(storageConstants.KYC);
+      user = storageService().getObject(storageConstants.USER);
+      setUserKyc(userkycDetails);
+      setCurrentUser(user);
+      setShowLoader(false);
+    }
+    let is_compliant = userkycDetails.kyc_status === "compliant" ? true : false;
+    setIsCompliant(is_compliant);
+    let title = "GOT IT!";
+    if (is_compliant) title = "START INVESTING";
+    setButtonTitle(title);
+  };
+
+  const handleClick = () => {
+    if (isCompliant) {
+      proceed();
+    } else {
+      checkNPSAndProceed();
+    }
+  };
+
+  const proceed = () => {
+    navigate(getPathname.invest);
+  };
+
+  const checkNPSAndProceed = () => {
+    if (currentUser.nps_investment) {
+      if (getConfig().isIframe) {
+        // navigate()
+        // navigate to reports
+      }
+    } else {
+      navigate(getPathname.invest);
+    }
+  };
 
   return (
     <Container
-      showLoader={showLoader}
+      showSkelton={showLoader}
       hideInPageTitle
       id="registration-success"
-      buttonTitle="GOT IT!"
-      title='KYC Submitted'
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      buttonTitle={buttonTitle}
+      title="KYC Submitted"
+      disable={showLoader}
       handleClick={handleClick}
     >
       <div className="kyc-registration-success">

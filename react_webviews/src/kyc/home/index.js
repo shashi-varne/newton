@@ -146,8 +146,10 @@ const Home = (props) => {
       newObject.dob = dob;
       newObject.pan_number = pan;
       let body = {
-        pan: newObject,
-        address: userKyc.address.meta_data,
+        kyc: {
+          pan: newObject,
+          address: userKyc.address.meta_data,
+        },
       };
       let result = await savePanData(body);
       if (!result) return;

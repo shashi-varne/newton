@@ -126,12 +126,14 @@ const PersonalDetails1 = (props) => {
       userKyc.identification.politically_exposed = "NOT APPLICABLE";
       userKyc.address.meta_data.is_nri = is_nri;
       let item = {
-        pan: userKyc.pan.meta_data,
-        address: userKyc.address.meta_data,
-        identification: userKyc.identification,
+        kyc: {
+          pan: userKyc.pan.meta_data,
+          address: userKyc.address.meta_data,
+          identification: userKyc.identification,
+        },
       };
       if (is_nri) {
-        item.nri_address = {
+        item.kyc.nri_address = {
           tin_number: tin_number || "",
         };
       }
