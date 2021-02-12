@@ -3,18 +3,19 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
+import { getPathname } from "../constants";
+import { storageService } from "../../utils/validators";
 
 const productName = getConfig().productName;
 const Complete = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    // if (storageService.get('native')) {
-    //   callbackWeb.user_exit();
-    // } else {
-    //   $state.go("invest");
-    // }
-    navigate("/invest");
+    if (storageService().get("native")) {
+      // callbackWeb.user_exit();
+    } else {
+      navigate(getPathname.invest);
+    }
   };
 
   return (

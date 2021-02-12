@@ -23,6 +23,10 @@ export const getPathname = {
   confirmPan: "/kyc/compliant-confirm-pan",
   compliantKycComplete: "/kyc/compliant-report-complete",
   compliantReport: "/kyc/compliant-report-details",
+  uploadProgress: "/kyc/upload/progress",
+  kycReport: "/kyc/report",
+  invest: "/invest",
+  landing: "/",
 };
 
 export const storageConstants = {
@@ -30,6 +34,7 @@ export const storageConstants = {
   KYC: "kyc",
   BANK_MANDATES: "bank_mandates",
   CHANGE_REQUEST: "change_requests",
+  NATIVE: "native",
 };
 
 export const occupationOptions = [
@@ -224,4 +229,13 @@ export const getIfscCodeError = (code) => {
     default:
       return "Please enter a valid ifsc code";
   }
+};
+
+export const kycDocNameMapper = {
+  DL: "Driving license",
+  PASSPORT: "Passport",
+  AADHAAR: "Aadhaar card",
+  VOTER_ID_CARD: "Voter ID",
+  UTILITY_BILL: "Gas receipt",
+  LAT_BANK_PB: "Passbook",
 };

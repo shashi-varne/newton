@@ -2,18 +2,19 @@ import React from "react";
 import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import { navigate as navigateFunc } from "../common/functions";
+import { storageService } from "../../utils/validators";
+import { getPathname } from "../constants";
 
 const productName = getConfig().productName;
 const Verify = (props) => {
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    // if (storageService.get('native')) {
-    //   callbackWeb.user_exit();
-    // } else {
-    //   $state.go("invest");
-    // }
-    navigate("/invest");
+    if (storageService().get("native")) {
+      // callbackWeb.user_exit();
+    } else {
+      navigate(getPathname.invest);
+    }
   };
 
   return (
