@@ -6,7 +6,8 @@ import phone from "../../../assets/phone_black.png";
 import card from "../../../assets/card.png";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import{ kyc_submit } from "../common/api";
+import { kyc_submit } from "../common/api";
+import { dobFormatTest } from "utils/validators";
 
 const yesOrNo_options = [
   {
@@ -27,7 +28,8 @@ class PanDetails extends Component {
       pan: "",
       dob: "",
       mobile_number: "",
-      is_nps_contributed: false
+      is_nps_contributed: false,
+      show_loader: false,
     };
 
     this.kyc_submit = kyc_submit.bind(this);
@@ -37,12 +39,21 @@ class PanDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
+    if (name === "mobile_number" && value.length > 10) {
+      return;
+    }
+console.log(name)
+    if (name === "dob" && !dobFormatTest(value)) {
+      console.log('hi')
+      return;
+    }
+
     form_data[name] = value;
-    form_data[name + '_error'] = '';
+    form_data[name + "_error"] = "";
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
   handleChangeRadio = (event) => {
@@ -50,8 +61,8 @@ class PanDetails extends Component {
 
     this.setState({
       is_nps_contributed: is_nps_contributed,
-      is_nps_contributed_error: ''
-    })
+      is_nps_contributed_error: "",
+    });
   };
 
   handleClick = () => {
@@ -62,17 +73,17 @@ class PanDetails extends Component {
       kyc: {
         address: {
           email: form_data.email,
-          mobile_number: form_data.mobile_number
+          mobile_number: form_data.mobile_number,
         },
         pan: {
           dob: form_data.dob,
-          pan_number: form_data.pan
-        }
-      }
-    }
+          pan_number: form_data.pan,
+        },
+      },
+    };
 
     this.kyc_submit(data);
-  }
+  };
 
   render() {
     let { form_data, is_nps_contributed } = this.state;
@@ -80,8 +91,10 @@ class PanDetails extends Component {
       <Container
         classOverRIde="pr-error-container"
         buttonTitle="PROCEED"
+        hideInPageTitle
+        hidePageTitle
         title="PAN details"
-        classOverRideContainer="pr-container"
+        // buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
         handleClick={() => this.handleClick()}
       >
         <div className="pan-details">
@@ -96,6 +109,7 @@ class PanDetails extends Component {
                 error={!!form_data.pan_error}
                 helperText={form_data.pan_error}
                 value={form_data.pan}
+                maxLength={10}
                 onChange={this.handleChange("pan")}
               />
             </div>
@@ -114,20 +128,22 @@ class PanDetails extends Component {
               />
             </div>
 
-            {is_nps_contributed && <div className="InputField">
-              <InputWithIcon
-                icon={card}
-                width="30"
-                id="pran"
-                label="Pran number"
-                type="number"
-                name="pran"
-                error={!!form_data.pran_error}
-                helperText={form_data.pran_error}
-                value={form_data.pran}
-                onChange={this.handleChange("pran")}
-              />
-            </div>}
+            {is_nps_contributed && (
+              <div className="InputField">
+                <InputWithIcon
+                  icon={card}
+                  width="30"
+                  id="pran"
+                  label="Pran number"
+                  type="number"
+                  name="pran"
+                  error={!!form_data.pran_error}
+                  helperText={form_data.pran_error}
+                  value={form_data.pran}
+                  onChange={this.handleChange("pran")}
+                />
+              </div>
+            )}
 
             <div className="InputField">
               <InputWithIcon
@@ -146,11 +162,13 @@ class PanDetails extends Component {
             <div className="InputField">
               <InputWithIcon
                 icon={phone}
-                width="30"
                 type="number"
-                id="mobile_number"
+                width="30"
+                id="number"
                 name="mobile_number"
+                maxLength={10}
                 label="Enter Mobile Number"
+                class="Mobile"
                 error={!!form_data.mobile_number_error}
                 helperText={form_data.mobile_number_error}
                 value={form_data.mobile_number}

@@ -1,8 +1,9 @@
 // import { storageService, formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
-import { nativeCallback } from 'utils/native_callback';
-import { isEmpty } from 'utils/validators';
+import { nativeCallback } from "utils/native_callback";
+import { isEmpty } from "utils/validators";
+import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
 
@@ -14,6 +15,22 @@ export async function initialize() {
   this.nps_register = nps_register.bind(this);
   this.updateMeta = updateMeta.bind(this);
   this.getInvestmentData = getInvestmentData.bind(this);
+
+  let screenData = {};
+
+  if (this.state.screen_name) {
+    screenData = nps_config[this.state.screen_name];
+  }
+
+  let next_screen = this.state.next_screen || "";
+
+  if (this.state.screen_name && nps_config.get_next[this.state.screen_name]) {
+    next_screen = nps_config.get_next[this.state.screen_name];
+
+    this.setState({
+      next_state: next_screen,
+    });
+  }
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -119,8 +136,8 @@ export async function kyc_submit(params) {
 export async function nps_register(params, next_state) {
   try {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
     const res = await Api.post(`api/nps/register/update/v2?${params}`);
     if (
       res.pfwstatus_code !== 200 ||
@@ -132,17 +149,17 @@ export async function nps_register(params, next_state) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      this.navigate(next_state)
+      this.navigate(next_state);
     } else {
       this.setState({
-        show_loader: true
-      })
+        show_loader: true,
+      });
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
     throw err;
   }
 }
@@ -150,8 +167,8 @@ export async function nps_register(params, next_state) {
 export async function updateMeta(params, next_state) {
   try {
     this.setState({
-      show_loader: true
-    })
+      show_loader: true,
+    });
     const res = await Api.post(`api/nps/invest/updatemeta`, params);
     if (
       res.pfwstatus_code !== 200 ||
@@ -163,17 +180,17 @@ export async function updateMeta(params, next_state) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      this.navigate(next_state)
+      this.navigate(next_state);
     } else {
       this.setState({
-        show_loader: false
-      })
+        show_loader: false,
+      });
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
     this.setState({
-      show_loader: false
-    })
+      show_loader: false,
+    });
     throw err;
   }
 }

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import person from "../../../assets/location.png";
 import Api from "utils/api";
 import{ initialize } from "../common/commonFunctions";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class NpsDelivery extends Component {
   constructor(props) {
@@ -89,11 +90,11 @@ class NpsDelivery extends Component {
       <Container
         classOverRide="pr-error-container"
         fullWidthButton
-        buttonTitle="CONTINUE"
+        buttonTitle={this.state.show_loader ? <CircularProgress size={22} thickness={4} /> : 'CONTINUE'}
+        disable={this.state.show_loader}
         hideInPageTitle
         hidePageTitle
         title="Confirm Delivery Details"
-        showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >

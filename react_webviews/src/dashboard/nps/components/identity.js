@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
-// import toast from "common/ui/Toast";
+import Container from "../../common/Container";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import RadioOptions from "../../../common/ui/RadioOptions";
 import person from "../../../assets/person.png";
@@ -64,11 +64,11 @@ class NpsIdentity extends Component {
       <Container
         classOverRide="pr-error-container"
         fullWidthButton
-        buttonTitle="PROCEED"
+        buttonTitle={this.state.show_loader ? <CircularProgress size={22} thickness={4} /> : 'PROCEED'}
         hideInPageTitle
         hidePageTitle
         title="Additional Details"
-        showLoader={this.state.show_loader}
+        disable={this.state.show_loader}
         handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >

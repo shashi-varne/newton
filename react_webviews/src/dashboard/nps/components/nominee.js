@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import nominee from "../../../assets/nominee.png";
 import calendar from "../../../assets/calendar2.png";
 import relationship from "../../../assets/relationship.png";
 import Select from "../../../common/ui/Select";
 import { initialize } from "../common/commonFunctions";
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -57,11 +58,11 @@ class NpsNominee extends Component {
       <Container
         classOverRide="pr-error-container"
         fullWidthButton
-        buttonTitle="SAVE AND CONTINUE"
         hideInPageTitle
         hidePageTitle
         title="Nominee Details"
-        showLoader={this.state.show_loader}
+        buttonTitle={this.state.show_loader ? <CircularProgress size={22} thickness={4} /> : 'SAVE AND CONTINUE'}
+        disable={this.state.show_loader}
         handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >
