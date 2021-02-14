@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import qs from 'qs';
 import { getConfig } from 'utils/functions';
-import Container from '../common/Container';
+// import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
 import trust_icon from 'assets/trust_icons_emandate.svg';
@@ -22,6 +22,7 @@ class SelectBank extends Component {
       info_icon: getConfig().productName !== 'fisdom' ? info_icon_myway : info_icon_fisdom,
       selected_bank: {},
       iframeIcon: bank_building,
+      iframe: true,
       pc_urlsafe: getConfig().pc_urlsafe
     }
   }
@@ -229,7 +230,16 @@ class SelectBank extends Component {
     }
   }
 
+  loadComponent() {
+    if (this.state.iframe) {
+      return require(`../commoniFrame/Container`).default;
+    } else {
+      return require(`../common/Container`).default;
+    }
+  }
+
   render() {
+    const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}

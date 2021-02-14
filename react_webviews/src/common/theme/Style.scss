@@ -1346,22 +1346,24 @@ input#pan {
   flex-direction: row;
   overflow: scroll ;
   padding-top: 100px;
-  height: 100%;
   padding-bottom: 5px;
   overflow-x: hidden;
+  height: 100%;
 }
 
 .childblockiframe-element-one{
   width: 40%;
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 4%;
   height: auto;
+  text-align: left !important;
+  position: relative;
 }
 
 .childblockiframe-element-img{
   width: 200%;
-  margin: auto;
-  padding-top: 70%;
+  position:relative; 
+  left:35%;
+  top: 20%;
 }
 
 .footer-iframe{
@@ -1373,17 +1375,29 @@ input#pan {
   padding-bottom: 20px;
 }
 
+@media (max-width: 900px) {
+  .childblockiframe-element-img{
+    width: 100%;
+  }
+}
+
 @media (max-width: 425px) {
   .childblockiframe {
     flex-direction: column-reverse;
+    height: auto;
   }
   .childblockiframe-element-one{
     width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
   }
 
   .childblockiframe-element-img{
     width: 100%;
-    padding-top: 0
+    padding-top: 20%;
+    margin: 0 auto;
+    left:0;
+    top: 0;
   }
 
 }

@@ -243,10 +243,8 @@ class Container extends Component {
       }
     }
     return (
-      <div style={{ backgroundColor: 'white', width: this.props.width || '100%' , height: 'auto' ,
-       display: 'flex' , flexDirection : 'column' , justifyContent : 'space-between' , }}
-      // className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
-      >
+      <div style={{ backgroundColor: 'white', width: this.props.width || '100%' , height: '100%' ,
+       display: 'flex' , flexDirection : 'column' , justifyContent : 'space-between' , }}>
         {/* Header Block */}
   
         {(!this.props.noHeader && !getConfig().hide_header) && <Header
@@ -286,10 +284,10 @@ class Container extends Component {
              <h1>{this.props.title}</h1>
              <span>{this.props.children}</span>
           </div>
-        { <div> <img className='childblockiframe-element-img'  src={this.props.img} alt="Mandate" /></div> }
+        { <div> <img className='childblockiframe-element-img' src={this.props.img} alt="Mandate" /></div> }
          </div>}
 
-         {!this.props.img && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`}>    
+         {!this.props.img && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`} style={{marginTop:'90px'}}>    
          <h1>{this.props.title}</h1> 
          {this.props.children} </div> }
 

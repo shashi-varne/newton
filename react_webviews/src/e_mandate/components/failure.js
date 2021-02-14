@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import Container from '../common/Container';
+// import Container from '../common/Container';
 import '../common/Style.css';
 import failed_fisdom from 'assets/error_illustration_fisdom.svg';
 import failed_myway from 'assets/error_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
+import ils_error from 'assets/finity/ils_error.svg'
 
 class PaymentFailedClass extends Component {
 
@@ -13,8 +14,10 @@ class PaymentFailedClass extends Component {
     this.state = {
       show_loader: false,
       failed_icon: getConfig().productName !== 'fisdom' ? failed_myway : failed_fisdom,
+      iframe: true,
+      iframeIcon: ils_error
     };
-  }
+  } 
 
   handleClick = () => {
     this.sendEvents('retry');
@@ -44,7 +47,16 @@ class PaymentFailedClass extends Component {
     }
   }
 
+  loadComponent() {
+    if (this.state.iframe) {
+      return require(`../commoniFrame/Container`).default;
+    } else {
+      return require(`../common/Container`).default;
+    }
+  }
+
   render() {
+    const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -56,10 +68,11 @@ class PaymentFailedClass extends Component {
         title="Authorisation failed"
         disableBack={true}
         classOverRideContainer="payment-failed"
+        img={this.state.iframeIcon}
       >
         <div>
-          <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" width="100%" /></div>
-          <div className="payment-failed-title">e-mandate authorization failed</div>
+         {!this.state.iframe && <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" width="100%" /></div> }
+          <div className="payment-failed-title" >e-mandate authorization failed</div>
           <div className="payment-failed-subtitle">Something went wrong, please retry with correct details</div>
         </div>
       </Container>

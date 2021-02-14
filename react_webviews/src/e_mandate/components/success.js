@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Container from '../common/Container';
+// import Container from '../common/Container';
 import qs from 'qs';
 import sip_resumed_fisdom from 'assets/sip_resumed_illustration_fisdom.svg';
 import sip_resumed_myway from 'assets/sip_resumed_illustration_myway.svg';
@@ -12,6 +12,7 @@ class MandateSuccess extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      iframe: true,
       params: qs.parse(props.history.location.search.slice(1)),
       sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
       session_less_enach: window.sessionStorage.getItem('session_less_enach') || ''
@@ -46,7 +47,16 @@ class MandateSuccess extends Component {
     }
   }
 
+  loadComponent() {
+    if (this.state.iframe) {
+      return require(`../commoniFrame/Container`).default;
+    } else {
+      return require(`../common/Container`).default;
+    }
+  }
+
   render() {
+    const Container = this.loadComponent();
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -59,11 +69,12 @@ class MandateSuccess extends Component {
         buttonTitle="Ok"
         noFooter={this.state.session_less_enach}
         noBack={this.state.session_less_enach}
+        img={this.state.sip_resumed}
       >
         <div>
-          <div className="success-img">
+          {!this.state.iframe && <div className="success-img">
             <img alt="Mandate" src={this.state.sip_resumed} width="100%" />
-          </div>
+          </div>}
           <div className="success-text">
             Congrats! easySIP authorised
           </div>

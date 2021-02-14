@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-import Container from '../commoniFrame/Container';
+// import Container from '../common/Container'; 
 import { getConfig } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
@@ -50,7 +49,8 @@ class About extends Component {
       iframeIcon: illustration,
       emandate: {},
       pc_urlsafe: getConfig().pc_urlsafe,
-      params: getConfig().current_params
+      params: getConfig().current_params,
+      iframe: true
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -187,7 +187,16 @@ class About extends Component {
     )
   }
 
+  loadComponent() {
+    if (this.state.iframe) {
+      return require(`../commoniFrame/Container`).default;
+    } else {
+      return require(`../common/Container`).default;
+    }
+  }
+
   render() {
+      const Container = this.loadComponent();
     return (
       <Container
         noBack={this.state.params.referral_code ? true: false}
@@ -201,7 +210,7 @@ class About extends Component {
         // width='800px'
       >
         <div style={{ textAlign: 'center' }}>
-          {/* <img width={'100%'} src={this.state.top_icon} alt="Mandate" /> */}
+        {!this.state.iframe && <img width={'100%'} src={this.state.top_icon} alt="Mandate" />}
         </div>
         <div style={{
           color: '#767e86', margin: '10px 0px 10px 0px',

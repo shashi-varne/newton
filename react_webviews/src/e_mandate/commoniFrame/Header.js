@@ -4,11 +4,10 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import Arrow from '@material-ui/icons/ArrowBack';
+// import Arrow from '@material-ui/icons/ArrowBack';
 import Close from '@material-ui/icons//Close';
 import restart from 'assets/restart_nav_icn.svg';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import Active from 'material-ui-customizable-icons/Active';
 
 const Header = ({ classes, title, count, total, current, width,goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, topIcon, handleTopIcon, noBack }) => (
    <AppBar position="fixed" color="primary" style={{width: width,}} className={classes.topBar} >
@@ -26,8 +25,8 @@ const Header = ({ classes, title, count, total, current, width,goBack, edit, typ
       className={classes.menuButton} 
       color="inherit" aria-label="Menu" onClick={goBack}
       >
-        {!disableBack && <NavigateBeforeIcon style={{ fontSize: 30 , color: 'blue'}} />}
-        {(disableBack === true || disableBack === 'summary') && <Close style={{ fontSize: 30 , color: 'blue'}}  />}
+        {!disableBack && <NavigateBeforeIcon className={classes.NavigateBeforeIcon} style={{ fontSize: 35 }} />}
+        {(disableBack === true || disableBack === 'summary') && <Close style={{ fontSize: 35}}  className={classes.NavigateBeforeIcon} />}
       </IconButton>}
       </div>
     <img src={ require(`assets/finity/moneycontrol_logo.svg`)} className={classes.img} style={{ marginTop: '20px', marginBottom: '20px'}} alt=""/> 
@@ -69,7 +68,13 @@ const styles = function() {
         width: "100%",
         height: '80px',
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+       paddingLeft: '3%'
+      },
+      NavigateBeforeIcon: {
+        color: 'white',
+        paddingLeft:'1%',
+        marginLeft: '-5px'
       }
     }
   }else return {
@@ -80,7 +85,7 @@ const styles = function() {
       flex: 1,
     },
     menuButton: {
-      marginLeft: '-12px !important',
+      marginLeft: '-25px !important',
       marginRight: '17px !important',
       height: '80px',
     },
@@ -88,9 +93,13 @@ const styles = function() {
       backgroundColor: 'white',
       width: "100%",
       height: '80px',
-      border: '1px solid white'
-      // display: 'none',
-      // justifyContent: 'space-between'
+      border: '1px solid white',
+      paddingLeft: '3%'
+    },
+    NavigateBeforeIcon: {
+      color : "#3792FC",
+      paddingLeft:'1%',
+      marginLeft: '-5px'
     },
 
     img: {
