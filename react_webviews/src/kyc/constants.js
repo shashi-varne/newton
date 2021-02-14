@@ -1,4 +1,5 @@
 export const apiConstants = {
+  accountSummary: "/api/user/account/summary",
   getPan: "/api/kyc/checkv2/mine",
   submit: "/api/kyc/v2/mine",
   getMyaccount: "/api/iam/myaccount",
@@ -12,6 +13,7 @@ export const apiConstants = {
 export const getPathname = {
   invest: "/invest",
   landing: "/",
+  accountMerge: "/account/merge/",
   homeKyc: "/kyc/home-kyc",
   aadhar: "/kyc/aadhar",
   aadharConfirmation: "/kyc/aadhar/confirmation",
@@ -28,6 +30,10 @@ export const getPathname = {
   uploadProgress: "/kyc/upload/progress",
   kycReport: "/kyc/report",
   rtaCompliantPersonalDetails: "/kyc/rta-compliant-personal-details",
+  personalDetails1: "/kyc/personal-details1",
+  personalDetails2: "/kyc/personal-details2",
+  personalDetails3: "/kyc/personal-details3",
+  personalDetails4: "/kyc/personal-details4",
 };
 
 export const storageConstants = {
@@ -36,6 +42,7 @@ export const storageConstants = {
   BANK_MANDATES: "bank_mandates",
   CHANGE_REQUEST: "change_requests",
   NATIVE: "native",
+  AUTH_IDS: "auth_ids",
 };
 
 export const docMapper = {

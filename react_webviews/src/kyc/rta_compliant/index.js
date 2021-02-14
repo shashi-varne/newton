@@ -89,8 +89,10 @@ const RtaCompliantPersonalDetails = (props) => {
       const result = await getCVL(body);
       if (!result) return;
       let item = {
-        pan: userKyc.pan.meta_data,
-        address: userKyc.address.meta_data,
+        kyc: {
+          pan: userKyc.pan.meta_data,
+          address: userKyc.address.meta_data,
+        },
       };
       const submitResult = await savePanData(item);
       if (!submitResult) return;

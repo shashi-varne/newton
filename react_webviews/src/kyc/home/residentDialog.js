@@ -11,7 +11,7 @@ const ResidentDialog = ({ close, open, cancel, aadhaarKyc }) => {
       aria-labelledby="resident-dialog"
       keepMounted
       aria-describedby="resident-dialog"
-      id="resident-dialog"
+      id="kyc-bottom-dialog"
     >
       <DialogContent className="resident-dialog-content">
         <main>

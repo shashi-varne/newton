@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validateNumber } from "utils/validators";
+import { storageService, validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
@@ -24,55 +24,47 @@ const AddBank = (props) => {
   const partner = getConfig().partner;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  let userKyc = storageService().getObject(storageConstants.KYC);
+  const [userKyc, setUserKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || {}
+  );
   const bank_id = props.location.state?.bank_id || "";
-  let data = {
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [form_data, setFormData] = useState({});
+  const [bankData, setBankData] = useState({
     account_number: "",
     c_account_number: "",
     account_type: "",
     ifsc_code: "",
-  };
-  if (bank_id && userKyc) {
-    data = userKyc.additional_approved_banks.find(
-      (obj) => obj.bank_id === bank_id
-    );
-    data.c_account_number = data.account_number;
-  }
-
-  const [isApiRunning, setIsApiRunning] = useState(false);
-  const [form_data, setFormData] = useState({});
-  const [bankData, setBankData] = useState({ ...data });
-  const [bankIcon, setBankIcon] = useState(data.ifsc_image || "");
-  const [accountTypes, setAccountTypes] = useState(
-    bankAccountTypeOptions(userKyc?.address?.meta_data?.is_nri || "")
-  );
-  const [name, setName] = useState(userKyc?.pan?.meta_data?.name || "");
+  });
+  const [bankIcon, setBankIcon] = useState("");
+  const [accountTypes, setAccountTypes] = useState([]);
+  const [name, setName] = useState("");
   const [note, setNote] = useState({
     info_text:
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     initialize();
   }, []);
 
   let initialize = async () => {
-    if (!userKyc) {
+    let kycDetails = { ...userKyc };
+    if (isEmpty(kycDetails)) {
       await initData();
-      userKyc = storageService().getObject(storageConstants.KYC);
-      setName(userKyc.pan.meta_data.name || "");
-      if (bank_id) {
-        data = userKyc.additional_approved_banks.find(
-          (obj) => obj.bank_id === bank_id
-        );
-        data.c_account_number = data.account_number;
-      }
-      setBankData({ ...data });
-      setAccountTypes([...bankAccountTypeOptions(true)]);
+      kycDetails = storageService().getObject(storageConstants.KYC);
+      setUserKyc(kycDetails);
     }
+    setName(kycDetails.pan.meta_data.name || "");
+    let data = { ...bankData };
     if (bank_id) {
-      if (bankData.user_rejection_attempts === 3) {
+      data = kycDetails.additional_approved_banks.find(
+        (obj) => obj.bank_id === bank_id
+      );
+      data.c_account_number = data.account_number;
+      if (data.user_rejection_attempts === 3) {
         setIsPennyExhausted(true);
       } else if (bankData.user_rejection_attempts === 2) {
         setNote({
@@ -88,6 +80,11 @@ const AddBank = (props) => {
         });
       }
     }
+    setShowLoader(false);
+    setBankData({ ...data });
+    setAccountTypes([
+      ...bankAccountTypeOptions(kycDetails?.address?.meta_data?.is_nri || ""),
+    ]);
   };
 
   const uploadDocuments = () => {
@@ -229,6 +226,7 @@ const AddBank = (props) => {
   return (
     <Container
       hideInPageTitle
+      showSkelton={showLoader}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
@@ -237,87 +235,97 @@ const AddBank = (props) => {
     >
       <div className="kyc-approved-bank">
         <div className="kyc-main-title">Enter bank account details</div>
-        <Alert variant={note.variant} title="Note" message={note.info_text} />
-        <main>
-          <Input
-            label="Account Holder name"
-            class="input"
-            value={name || ""}
-            error={form_data.name_error ? true : false}
-            helperText={form_data.name_error || ""}
-            maxLength={16}
-            type="text"
-            disabled
-            id="name"
-          />
-          <TextField
-            label="IFSC Code"
-            id="ifsc_code"
-            className="input"
-            value={bankData.ifsc_code}
-            error={form_data.ifsc_code_error ? true : false}
-            helperText={
-              form_data.ifsc_code_error || form_data.ifsc_code_helper || ""
-            }
-            onChange={handleChange("ifsc_code")}
-            type="text"
-            InputProps={{
-              endAdornment: (
-                <>
-                  {bankIcon && (
-                    <InputAdornment position="end">
-                      <img alt="" src={bankIcon} />
-                    </InputAdornment>
-                  )}
-                </>
-              ),
-            }}
-            disabled={isApiRunning}
-          />
-          <Input
-            label="Account Number"
-            class="input"
-            value={bankData.account_number}
-            error={form_data.account_number_error ? true : false}
-            helperText={form_data.account_number_error || ""}
-            onChange={handleChange("account_number")}
-            maxLength={16}
-            type="password"
-            id="account_number"
-            disabled={isApiRunning}
-          />
-          <Input
-            label="Confirm Account Number"
-            class="input"
-            value={bankData.c_account_number}
-            error={form_data.c_account_number_error ? true : false}
-            helperText={form_data.c_account_number_error || ""}
-            onChange={handleChange("c_account_number")}
-            maxLength={16}
-            type="text"
-            id="c_account_number"
-            disabled={isApiRunning}
-          />
-          <div className="input">
-            <DropdownWithoutIcon
-              error={form_data.account_type_error ? true : false}
-              helperText={form_data.account_type_error}
-              options={accountTypes}
-              id="account_type"
-              label="Account Type"
-              isAOB={true}
-              value={bankData.account_type || ""}
-              name="account_type"
-              onChange={handleChange("account_type")}
-              disabled={isApiRunning}
+        {!showLoader && (
+          <>
+            <Alert
+              variant={note.variant}
+              title="Note"
+              message={note.info_text}
             />
-          </div>
-        </main>
-        <PennyExhaustedDialog
-          isOpen={isPennyExhausted}
-          redirect={redirect}
-          uploadDocuments={uploadDocuments}
-        />
+            <main>
+              <Input
+                label="Account Holder name"
+                class="input"
+                value={name || ""}
+                error={form_data.name_error ? true : false}
+                helperText={form_data.name_error || ""}
+                maxLength={16}
+                type="text"
+                disabled
+                id="name"
+              />
+              <TextField
+                label="IFSC Code"
+                id="ifsc_code"
+                className="input"
+                value={bankData.ifsc_code}
+                error={form_data.ifsc_code_error ? true : false}
+                helperText={
+                  form_data.ifsc_code_error || form_data.ifsc_code_helper || ""
+                }
+                onChange={handleChange("ifsc_code")}
+                type="text"
+                InputProps={{
+                  endAdornment: (
+                    <>
+                      {bankIcon && (
+                        <InputAdornment position="end">
+                          <img alt="" src={bankIcon} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
+                disabled={isApiRunning}
+              />
+              <Input
+                label="Account Number"
+                class="input"
+                value={bankData.account_number}
+                error={form_data.account_number_error ? true : false}
+                helperText={form_data.account_number_error || ""}
+                onChange={handleChange("account_number")}
+                maxLength={16}
+                type="password"
+                id="account_number"
+                disabled={isApiRunning}
+              />
+              <Input
+                label="Confirm Account Number"
+                class="input"
+                value={bankData.c_account_number}
+                error={form_data.c_account_number_error ? true : false}
+                helperText={form_data.c_account_number_error || ""}
+                onChange={handleChange("c_account_number")}
+                maxLength={16}
+                type="text"
+                id="c_account_number"
+                disabled={isApiRunning}
+              />
+              <div className="input">
+                <DropdownWithoutIcon
+                  error={form_data.account_type_error ? true : false}
+                  helperText={form_data.account_type_error}
+                  options={accountTypes}
+                  id="account_type"
+                  label="Account Type"
+                  isAOB={true}
+                  value={bankData.account_type || ""}
+                  name="account_type"
+                  onChange={handleChange("account_type")}
+                  disabled={isApiRunning}
+                />
+              </div>
+            </main>{" "}
+          </>
+        )}
+        {isPennyExhausted && (
+          <PennyExhaustedDialog
+            isOpen={isPennyExhausted}
+            redirect={redirect}
+            uploadDocuments={uploadDocuments}
+          />
+        )}
       </div>
     </Container>
   );

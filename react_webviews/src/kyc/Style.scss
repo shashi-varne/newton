@@ -583,6 +583,10 @@
     margin-top: 25px;
   }
 
+  .verify-skelton-top {
+    margin: 25px 0;
+  }
+
   .item {
     padding: 20px 0;
     display: -ms-flexbox;
@@ -619,6 +623,10 @@
 
     .right {
       color: #160d2e;
+    }
+
+    .verify-skelton {
+      width: 100px !important;
     }
 
     .edit {
@@ -1171,6 +1179,8 @@
     font-weight: 800;
   }
 }
+/////////////////// KYC DIALOG END ///////////////
+
 .kyc-penny-dialog {
   .penny-dialog-content {
     padding: 15px;
@@ -1277,6 +1287,64 @@
   }
 }
 
+.account-merge-dialog {
+  .account-merge-dialog-content {
+    padding: 15px 15px 30px 15px !important;
+
+    .title {
+      margin: -15px -15px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+
+      .text {
+        margin: 45px 0 10px 0;
+      }
+
+      img {
+        margin-bottom: 10px;
+      }
+    }
+
+    .subtitle {
+      color: #767e86;
+      font-size: 14px;
+      margin: 30px 0 20px 0;
+    }
+
+    .action {
+      display: flex;
+      width: 100%;
+      column-gap: 30px;
+      align-items: center;
+
+      .button {
+        width: 100%;
+        padding: 5px 15px;
+        font-size: 14px;
+        border-radius: 5px;
+        min-height: 47px;
+        font-weight: bold;
+        letter-spacing: 0.01em;
+      }
+
+      .bg-full {
+        color: white;
+        background-color: var(--secondary);
+      }
+
+      .no-bg {
+        background-color: white;
+        color: #878787;
+      }
+    }
+  }
+}
+
 @media only screen and (max-width: 700px) {
   #kyc-bottom-dialog {
     .MuiDialog-paper {
@@ -1290,3 +1358,5 @@
     }
   }
 }
+
+/////////////////// KYC DIALOG END ///////////////

@@ -48,7 +48,7 @@ const PersonalDetails1 = (props) => {
   const initialize = async () => {
     let userkycDetails = { ...userkyc };
     let user = { ...currentUser };
-    if (isEmpty(userkycDetails)) {
+    if (isEmpty(userkycDetails) || isEmpty(user)) {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
       user = storageService().getObject(storageConstants.USER);
@@ -126,12 +126,14 @@ const PersonalDetails1 = (props) => {
       userKyc.identification.politically_exposed = "NOT APPLICABLE";
       userKyc.address.meta_data.is_nri = is_nri;
       let item = {
-        pan: userKyc.pan.meta_data,
-        address: userKyc.address.meta_data,
-        identification: userKyc.identification,
+        kyc: {
+          pan: userKyc.pan.meta_data,
+          address: userKyc.address.meta_data,
+          identification: userKyc.identification,
+        },
       };
       if (is_nri) {
-        item.nri_address = {
+        item.kyc.nri_address = {
           tin_number: tin_number || "",
         };
       }
@@ -178,7 +180,7 @@ const PersonalDetails1 = (props) => {
       input.onkeyup = formatDate;
       formData[name] = value;
     } else formData[name] = value;
-    if (!value) formData[`${name}_error`] = "This is required";
+    if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
     setFormData({ ...formData });
   };
