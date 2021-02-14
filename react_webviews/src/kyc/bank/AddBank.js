@@ -44,6 +44,7 @@ const AddBank = (props) => {
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
+  const [showLoader, setShowLoader] = useState(true);
 
   useEffect(() => {
     initialize();
@@ -79,6 +80,7 @@ const AddBank = (props) => {
         });
       }
     }
+    setShowLoader(false);
     setBankData({ ...data });
     setAccountTypes([
       ...bankAccountTypeOptions(kycDetails?.address?.meta_data?.is_nri || ""),
@@ -224,6 +226,7 @@ const AddBank = (props) => {
   return (
     <Container
       hideInPageTitle
+      showSkelton={showLoader}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
@@ -232,82 +235,90 @@ const AddBank = (props) => {
     >
       <div className="kyc-approved-bank">
         <div className="kyc-main-title">Enter bank account details</div>
-        <Alert variant={note.variant} title="Note" message={note.info_text} />
-        <main>
-          <Input
-            label="Account Holder name"
-            class="input"
-            value={name || ""}
-            error={form_data.name_error ? true : false}
-            helperText={form_data.name_error || ""}
-            maxLength={16}
-            type="text"
-            disabled
-            id="name"
-          />
-          <TextField
-            label="IFSC Code"
-            id="ifsc_code"
-            className="input"
-            value={bankData.ifsc_code}
-            error={form_data.ifsc_code_error ? true : false}
-            helperText={
-              form_data.ifsc_code_error || form_data.ifsc_code_helper || ""
-            }
-            onChange={handleChange("ifsc_code")}
-            type="text"
-            InputProps={{
-              endAdornment: (
-                <>
-                  {bankIcon && (
-                    <InputAdornment position="end">
-                      <img alt="" src={bankIcon} />
-                    </InputAdornment>
-                  )}
-                </>
-              ),
-            }}
-            disabled={isApiRunning}
-          />
-          <Input
-            label="Account Number"
-            class="input"
-            value={bankData.account_number}
-            error={form_data.account_number_error ? true : false}
-            helperText={form_data.account_number_error || ""}
-            onChange={handleChange("account_number")}
-            maxLength={16}
-            type="password"
-            id="account_number"
-            disabled={isApiRunning}
-          />
-          <Input
-            label="Confirm Account Number"
-            class="input"
-            value={bankData.c_account_number}
-            error={form_data.c_account_number_error ? true : false}
-            helperText={form_data.c_account_number_error || ""}
-            onChange={handleChange("c_account_number")}
-            maxLength={16}
-            type="text"
-            id="c_account_number"
-            disabled={isApiRunning}
-          />
-          <div className="input">
-            <DropdownWithoutIcon
-              error={form_data.account_type_error ? true : false}
-              helperText={form_data.account_type_error}
-              options={accountTypes}
-              id="account_type"
-              label="Account Type"
-              isAOB={true}
-              value={bankData.account_type || ""}
-              name="account_type"
-              onChange={handleChange("account_type")}
-              disabled={isApiRunning}
+        {!showLoader && (
+          <>
+            <Alert
+              variant={note.variant}
+              title="Note"
+              message={note.info_text}
             />
-          </div>
-        </main>
+            <main>
+              <Input
+                label="Account Holder name"
+                class="input"
+                value={name || ""}
+                error={form_data.name_error ? true : false}
+                helperText={form_data.name_error || ""}
+                maxLength={16}
+                type="text"
+                disabled
+                id="name"
+              />
+              <TextField
+                label="IFSC Code"
+                id="ifsc_code"
+                className="input"
+                value={bankData.ifsc_code}
+                error={form_data.ifsc_code_error ? true : false}
+                helperText={
+                  form_data.ifsc_code_error || form_data.ifsc_code_helper || ""
+                }
+                onChange={handleChange("ifsc_code")}
+                type="text"
+                InputProps={{
+                  endAdornment: (
+                    <>
+                      {bankIcon && (
+                        <InputAdornment position="end">
+                          <img alt="" src={bankIcon} />
+                        </InputAdornment>
+                      )}
+                    </>
+                  ),
+                }}
+                disabled={isApiRunning}
+              />
+              <Input
+                label="Account Number"
+                class="input"
+                value={bankData.account_number}
+                error={form_data.account_number_error ? true : false}
+                helperText={form_data.account_number_error || ""}
+                onChange={handleChange("account_number")}
+                maxLength={16}
+                type="password"
+                id="account_number"
+                disabled={isApiRunning}
+              />
+              <Input
+                label="Confirm Account Number"
+                class="input"
+                value={bankData.c_account_number}
+                error={form_data.c_account_number_error ? true : false}
+                helperText={form_data.c_account_number_error || ""}
+                onChange={handleChange("c_account_number")}
+                maxLength={16}
+                type="text"
+                id="c_account_number"
+                disabled={isApiRunning}
+              />
+              <div className="input">
+                <DropdownWithoutIcon
+                  error={form_data.account_type_error ? true : false}
+                  helperText={form_data.account_type_error}
+                  options={accountTypes}
+                  id="account_type"
+                  label="Account Type"
+                  isAOB={true}
+                  value={bankData.account_type || ""}
+                  name="account_type"
+                  onChange={handleChange("account_type")}
+                  disabled={isApiRunning}
+                />
+              </div>
+            </main>{" "}
+          </>
+        )}
         {isPennyExhausted && (
           <PennyExhaustedDialog
             isOpen={isPennyExhausted}

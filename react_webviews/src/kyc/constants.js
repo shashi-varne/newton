@@ -13,6 +13,7 @@ export const apiConstants = {
 export const getPathname = {
   invest: "/invest",
   landing: "/",
+  accountMerge: "/account/merge/",
   homeKyc: "/kyc/home-kyc",
   aadhar: "/kyc/aadhar",
   aadharConfirmation: "/kyc/aadhar/confirmation",
@@ -29,7 +30,10 @@ export const getPathname = {
   uploadProgress: "/kyc/upload/progress",
   kycReport: "/kyc/report",
   rtaCompliantPersonalDetails: "/kyc/rta-compliant-personal-details",
-  accountMerge: "/account/merge/",
+  personalDetails1: "/kyc/personal-details1",
+  personalDetails2: "/kyc/personal-details2",
+  personalDetails3: "/kyc/personal-details3",
+  personalDetails4: "/kyc/personal-details4",
 };
 
 export const storageConstants = {

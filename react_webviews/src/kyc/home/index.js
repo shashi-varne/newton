@@ -56,7 +56,6 @@ const Home = (props) => {
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
-      investType: "mutual fund",
       title: "Are you investment ready?",
       subtitle: "We need your PAN to check if you’re investment ready",
       kycConfirmPanScreen: false,

@@ -105,7 +105,7 @@ export const savePanData = async (body) => {
       toast(msg);
       break;
     default:
-      throw result.message || result.error || "Server error";
+      throw result.error || result.message || "Server error";
   }
 };
 
