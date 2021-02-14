@@ -18,9 +18,10 @@ import { initData } from "../services";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { savePanData } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
+import toast from 'common/ui/Toast'
 
 const PersonalDetails2 = (props) => {
-  const [isChecked, setIsChecked] = useState(true);
+  const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -45,7 +46,7 @@ const PersonalDetails2 = (props) => {
       userkycDetails = storageService().getObject(storageConstants.KYC);
     }
     setUserKyc(userkycDetails);
-    let is_checked = true;
+    let is_checked = false;
     if (
       userkycDetails.nomination.nominee_optional ||
       (userkycDetails.nomination.meta_data_status !== "submitted" &&
@@ -106,6 +107,7 @@ const PersonalDetails2 = (props) => {
       }
     } catch (err) {
       console.log(err);
+      toast(err)
     } finally {
       setIsApiRunning(false);
     }

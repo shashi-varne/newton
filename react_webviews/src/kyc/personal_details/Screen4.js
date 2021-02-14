@@ -1,49 +1,110 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import {
   storageService,
   dobFormatTest,
   formatDate,
-  calculateAge,
-  isValidDate,
+  isEmpty,
 } from "utils/validators";
 import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
-import { storageConstants } from "../constants";
-import { relationshipOptions } from "../constants";
+import {
+  storageConstants,
+  relationshipOptions,
+  getPathname,
+} from "../constants";
+import { initData } from "../services";
+import { validateFields, navigate as navigateFunc } from "../common/functions";
+import { savePanData } from "../common/api";
+import { validateAlphabets } from "../../utils/validators";
+import toast from "common/ui/Toast";
 
-let userKycDetails = storageService().getObject(storageConstants.KYC);
 const PersonalDetails4 = (props) => {
-  const genericErrorMessage = "Something Went wrong!";
-  const [showLoader, setShowLoader] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const navigate = navigateFunc.bind(props);
+  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
-  const [userKyc, setUserKyc] = useState(userKycDetails);
-  const [isChecked, setIsChecked] = useState(true);
+  const isEdit = props.location.state?.isEdit || false;
+  let title = "Nominee detail";
+  if (isEdit) {
+    title = "Edit nominee detail";
+  }
+  const [userkyc, setUserKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || {}
+  );
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = async () => {
+    let userkycDetails = { ...userkyc };
+    if (isEmpty(userkycDetails)) {
+      await initData();
+      userkycDetails = storageService().getObject(storageConstants.KYC);
+      setUserKyc(userkycDetails);
+    }
+    let is_checked = false;
+    if (
+      userkycDetails.nomination.nominee_optional ||
+      (userkycDetails.nomination.meta_data_status !== "submitted" &&
+        userkycDetails.nomination.meta_data_status !== "approved")
+    ) {
+      is_checked = true;
+    }
+
+    setIsChecked(is_checked);
+
+    let formData = {
+      name: userkycDetails.nomination?.meta_data?.name || "",
+      dob: userkycDetails.nomination?.meta_data?.dob || "",
+      relationship: userkycDetails.nomination?.meta_data?.relationship || "",
+    };
+    setShowLoader(false);
+    setFormData({ ...formData });
+  };
 
   const handleClick = () => {
-    let keys_to_check = ["dob", "name", "relationship"];
-    let formData = Object.assign({}, form_data);
-    let submit = true;
-    keys_to_check.forEach((element) => {
-      let value = userKyc.nomination.meta_data[element];
-      if (!value) {
-        formData[`${element}_error`] = "This is required";
-        submit = false;
-      } else if (element === "dob") {
-        if (!isValidDate(value)) {
-          formData[`${element}_error`] = "Please enter a valid year";
-          submit = false;
-        } else if (calculateAge(value) < 18) {
-          formData[`${element}_error`] = "Minimum age required 18 years";
-          submit = false;
-        }
+    let keysToCheck = ["dob", "name", "relationship"];
+    if (!isChecked) {
+      let result = validateFields(form_data, keysToCheck);
+      if (!result.canSubmit) {
+        let data = { ...result.formData };
+        setFormData(data);
+        return;
       }
-    });
-    if (!submit) {
-      setFormData(formData);
-      return;
+    }
+    let userkycDetails = { ...userkyc };
+    userkycDetails.nomination.meta_data.dob = form_data.dob;
+    userkycDetails.nomination.meta_data.name = form_data.name;
+    userkycDetails.nomination.meta_data.relationship = form_data.relationship;
+    let body = { kyc: {} };
+    if (isChecked) {
+      userkycDetails.nomination.nominee_optional = true;
+      body.kyc = {
+        nomination: userkycDetails.nomination,
+      };
+    } else {
+      body.kyc = {
+        nomination: userkycDetails.nomination.meta_data,
+      };
+    }
+    savePersonalDetails4(body);
+  };
+
+  const savePersonalDetails4 = async (body) => {
+    try {
+      setIsApiRunning(true);
+      const submitResult = await savePanData(body);
+      if (!submitResult) return;
+      navigate(getPathname.journey);
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    } finally {
+      setIsApiRunning(false);
     }
   };
 
@@ -52,28 +113,26 @@ const PersonalDetails4 = (props) => {
       setIsChecked(!isChecked);
       return;
     }
+
     let value = event.target ? event.target.value : event;
-    let formData = Object.assign({}, form_data);
-    let kyc = Object.assign({}, userKyc);
-    kyc.nomination.meta_data[name] = value;
-    if (!value) {
-      formData[`${name}_error`] = "This is required";
-    } else if (name === "dob") {
+    if (name === "name" && value && !validateAlphabets(value)) return;
+    let formData = { ...form_data };
+    if (name === "dob") {
       if (!dobFormatTest(value)) {
         return;
       }
       let input = document.getElementById("dob");
       input.onkeyup = formatDate;
-    } else formData[`${name}_error`] = "";
-
-    kyc.nomination.meta_data[name] = value;
-    setFormData(formData);
-    setUserKyc(kyc);
+    }
+    formData[name] = value;
+    if (!value) formData[`${name}_error`] = "This is required";
+    else formData[`${name}_error`] = "";
+    setFormData({ ...formData });
   };
 
   return (
     <Container
-      showLoader={showLoader}
+      showSkelton={showLoader}
       hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
@@ -83,7 +142,8 @@ const PersonalDetails4 = (props) => {
     >
       <div className="kyc-nominee">
         <div className="kyc-main-title">
-          Nominee detail <span>4/4</span>
+          {title}
+          <span>4/4</span>
         </div>
         <main>
           <div className="nominee-checkbox">
@@ -102,25 +162,25 @@ const PersonalDetails4 = (props) => {
           <Input
             label="Name"
             class="input"
-            value={userKyc.nomination.meta_data.name}
+            value={form_data.name || ""}
             error={form_data.name_error ? true : false}
             helperText={form_data.name_error || ""}
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isChecked}
+            disabled={isChecked || isApiRunning}
           />
           <Input
             label="Date of birth(DD/MM/YYYY)"
             class="input"
-            value={userKyc.nomination.meta_data.dob}
+            value={form_data.dob || ""}
             error={form_data.dob_error ? true : false}
             helperText={form_data.dob_error || ""}
             onChange={handleChange("dob")}
             maxLength={10}
             type="text"
             id="dob"
-            disabled={isChecked}
+            disabled={isChecked || isApiRunning}
           />
           <div className="input">
             <DropdownWithoutIcon
@@ -130,10 +190,10 @@ const PersonalDetails4 = (props) => {
               id="relationship"
               label="Relationship"
               isAOB={true}
-              value={userKyc.nomination.meta_data.relationship || ""}
+              value={form_data.relationship || ""}
               name="relationship"
               onChange={handleChange("relationship")}
-              disabled={isChecked}
+              disabled={isChecked || isApiRunning}
             />
           </div>
         </main>
