@@ -59,6 +59,7 @@ class Container extends Component {
 
 
   update = () => {
+    document.getElementsByClassName("MuiPaper-elevation4")[0].style.boxShadow = 'none'
     this.setState({
       height: window.innerHeight,
       width: window.innerWidth
@@ -216,7 +217,7 @@ class Container extends Component {
   renderPageLoader = () => {
     if (this.props.showLoader) {
       return (
-        <div className="Loader">
+        <div className="Loaderiframe">
           <div className="LoaderOverlay">
             <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
           </div>
@@ -266,16 +267,18 @@ class Container extends Component {
           handleTopIcon={this.handleTopIcon} />
         } 
         {/* Below Header Block */}
-
-        <div id="HeaderHeight" style={{ top: 56 }}>
+        <div id="HeaderHeight" style={{ top: 56 , width : '100%'}}>
 
           {/* Loader Block */}
           {this.renderPageLoader()}
 
-          {steps && <div className="Step"> {steps}  </div>}
+          {steps && <div className="Step">
+            {steps}
+          </div>}
 
           {/* Banner Block */}
-               {this.props.banner && <Banner text={this.props.bannerText}     />}
+          {this.props.banner && <Banner text={this.props.bannerText} />}
+
         </div>
 
         {/* Children Block */}

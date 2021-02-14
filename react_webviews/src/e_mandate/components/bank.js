@@ -150,7 +150,7 @@ class SelectBank extends Component {
     }
     this.sendEvents('next');
     this.setState({
-      show_loader: false
+      show_loader: true
     })
     try {
       let bank_data = { selected_bank: this.state.selected_bank };

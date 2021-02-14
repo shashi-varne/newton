@@ -129,7 +129,7 @@ class About extends Component {
     }
     
     this.setState({
-      show_loader: false
+      show_loader: true
     })
     try {
       const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
