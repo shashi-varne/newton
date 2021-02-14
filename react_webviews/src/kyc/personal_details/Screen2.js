@@ -40,6 +40,9 @@ const PersonalDetails2 = (props) => {
     let formData = {
       father_name: userkycDetails.pan?.meta_data?.father_name || "",
       mother_name: userkycDetails.pan?.meta_data?.mother_name || "",
+      marital_status:
+        userkycDetails.identification.meta_data.marital_status || "",
+      spouse_name: userkycDetails.identification.meta_data.spouse_name || "",
     };
     setShowLoader(false);
     setFormData({ ...formData });
@@ -47,6 +50,7 @@ const PersonalDetails2 = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["mother_name", "father_name"];
+    if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -56,6 +60,8 @@ const PersonalDetails2 = (props) => {
     let userkycDetails = { ...userkyc };
     userkycDetails.pan.meta_data.father_name = form_data.father_name;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
+    if (form_data.marital_status === "MARRIED")
+      userkycDetails.pan.meta_data.spouse_name = form_data.spouse_name;
     savePersonalDetails2(userkycDetails);
   };
 
@@ -130,6 +136,18 @@ const PersonalDetails2 = (props) => {
               type="text"
               disabled={isApiRunning}
             />
+            {form_data.marital_status === "MARRIED" && (
+              <Input
+                label="Spouse"
+                class="input"
+                value={form_data.spouse_name || ""}
+                error={form_data.spouse_name_error ? true : false}
+                helperText={form_data.spouse_name_error || ""}
+                onChange={handleChange("spouse_name")}
+                type="text"
+                disabled={isApiRunning}
+              />
+            )}
           </main>
         )}
       </div>
