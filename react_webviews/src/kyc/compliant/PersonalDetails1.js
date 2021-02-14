@@ -48,7 +48,7 @@ const PersonalDetails1 = (props) => {
   const initialize = async () => {
     let userkycDetails = { ...userkyc };
     let user = { ...currentUser };
-    if (isEmpty(userkycDetails)) {
+    if (isEmpty(userkycDetails) || isEmpty(user)) {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
       user = storageService().getObject(storageConstants.USER);
@@ -180,7 +180,7 @@ const PersonalDetails1 = (props) => {
       input.onkeyup = formatDate;
       formData[name] = value;
     } else formData[name] = value;
-    if (!value) formData[`${name}_error`] = "This is required";
+    if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
     setFormData({ ...formData });
   };

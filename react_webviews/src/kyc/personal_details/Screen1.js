@@ -15,10 +15,11 @@ import {
   dobFormatTest,
   isEmpty,
   validateNumber,
+  validateAlphabets,
 } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { savePanData } from "../common/api";
-import { toast } from "react-toastify";
+import toast from "common/ui/Toast";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -112,6 +113,7 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
+    if (value && name === "name" && !validateAlphabets(value)) return;
     if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
