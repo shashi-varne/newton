@@ -163,6 +163,15 @@ export const addAdditionalBank = async (data) => {
   }
 };
 
+export const upload = async (file, type = 'pan') => {
+  const formData = new FormData()
+  formData.set('res', file)
+  const res = await Api.post(`/api/kyc/v2/doc/mine/${type}`, formData)
+  if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
+    return res.pfwresponse.result
+  }
+  throw new Error(res?.pfwresponse?.result?.message || res?.pfwresponse?.result?.error || genericErrorMessage)
+}
 export const saveBankData = async (data) => {
   const res = await Api.post(apiConstants.pennyVerification, data);
   if (

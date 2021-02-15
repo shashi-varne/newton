@@ -1047,6 +1047,140 @@
 
 /////////////////// KYC DIALOG END ///////////////
 
+.page-body-kyc {
+  .title {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+    padding: 0;
+  }
+  .subtitle {
+    font-size: 13px;
+    color: #8d879b;
+    padding: 0 15px 0 0;
+    margin-bottom: 20px;
+  }
+
+  .doc-container {
+    border: 1px dotted;
+  }
+}
+
+#kyc-upload-pan, .page-body-kyc {
+  font-size: 14px;
+  .alert-status-info {
+    margin-top: 20px;
+  }
+
+  .pan-alert {
+    width: 100%;
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  .pan-alert .row {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  // .kyc-doc-upload-container {
+  //   margin-top: 20px;
+  //   border: 1px dashed var(--skelton-color); 
+  //   padding: 10px;
+  // }
+
+  // .kyc-doc-upload-container .caption {
+  //   text-align: center;
+  // }
+
+  // .kyc-doc-upload-container .preview {
+  //   display: block;
+  //   width: 100%;
+  //   object-fit: contain;
+  // }
+
+  // .kyc-upload-doc-actions {
+  //   margin-top: 20px;
+  //   .kyc-upload {
+  //     display: none;
+  //   }
+  //   .kyc-upload-button {
+  //     display: block;
+  //     margin: 0 auto;
+  //     margin-top: 10px;
+  //     background-color: transparent;
+  //     padding: 0;
+  //     border: none;
+      
+  //     svg {
+  //       fill: var(--secondary);
+  //     }
+  //   }
+
+  //   .upload-action {
+  //     text-transform: uppercase;
+  //     color: var(--secondary);
+  //     font-size: 10px;
+  //     font-weight: 800;
+  //   }
+  // }
+}
+
+.kyc-doc-upload-container {
+  margin-top: 20px;
+  border: 1px dashed var(--skelton-color); 
+  padding: 10px;
+}
+
+.kyc-doc-upload-container .caption {
+  text-align: center;
+}
+
+.kyc-doc-upload-container .preview {
+  display: block;
+  width: 100%;
+  object-fit: contain;
+}
+
+.kyc-upload-doc-actions {
+  margin-top: 20px;
+  .kyc-upload {
+    display: none;
+  }
+  .kyc-upload-button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    
+    svg {
+      fill: var(--secondary);
+    }
+  }
+
+  .mobile-actions {
+    display: flex;
+    align-items: center;
+
+    .open-camera {
+      border-right: 1px solid #e1e1e1;
+      flex: 1 1 50%;
+    }
+
+    .open-gallery {
+      flex: 1 1 50%;
+    }
+  }
+
+  .upload-action {
+    text-transform: uppercase;
+    color: var(--secondary);
+    font-size: 10px;
+    font-weight: 800;
+  }
+}
 .kyc-penny-dialog {
   .penny-dialog-content {
     padding: 15px;

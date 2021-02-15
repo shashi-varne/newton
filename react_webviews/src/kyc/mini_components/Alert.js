@@ -25,7 +25,7 @@ let alertVariants = {
   },
 };
 
-const Alert = ({ message, variant, title }) => {
+const Alert = ({ message = '', variant, title, renderMessage = null }) => {
   return (
     <div
       className="alert-status-info"
@@ -37,7 +37,7 @@ const Alert = ({ message, variant, title }) => {
       />
       <div className="text">
         <div className="title">{title}</div>
-        <div>{message}</div>
+        <div>{renderMessage ? renderMessage() : message}</div>
       </div>
     </div>
   );
