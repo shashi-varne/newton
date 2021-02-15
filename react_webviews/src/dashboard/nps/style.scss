@@ -388,28 +388,20 @@
   .text {
     padding: 15px;
   }
-
-  .bold {
-    font-weight: 600;
-  }
-}
-
-.InputField {
-  // margin-top: 20px;
 }
 
 .nps-delivery-details {
   .title {
     font-size: 15px;
     font-weight: 600;
-    margin-top: 20px;
+    margin: 30px 0;
   }
 }
 
 .nps-upload {
   margin-top: 40px;
-  .MuiInputLabel-root {
-    color: #000 !important;
+  .MuiInputLabel-root.MuiFormLabel-focused,
+  .MuiInputLabel-shrink {
     font-size: 1.1rem !important;
     font-weight: 800 !important;
   }
@@ -441,9 +433,9 @@
     margin-bottom: 30px;
     padding-bottom: 15px;
 
-    span {
-      // font-family: "LatoB";
-    }
+    // span {
+    //   // font-family: "LatoB";
+    // }
   }
 
   h3 {
@@ -760,4 +752,58 @@
     justify-content: space-between;
     align-items: center;
   }
+}
+
+.image-prev-container {
+  margin: 20px 15px 20px;
+
+  .heading {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+
+  .upload-img {
+    width: 120px;
+    height: 130px;
+  }
+
+  .uploaded {
+    width: 30%;
+  }
+
+  .display-flex {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+
+.image-upload-container {
+  border-radius: 2px;
+  text-align: center;
+  background: #fdfdfd;
+  position: relative;
+  padding: 12px;
+  margin: 0 20px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+
+  .icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .label {
+    font-size: 14px;
+    color: #555;
+    font-weight: normal;
+    margin-left: 10px;
+    font-weight: 600;
+  }
+}
+
+.image-upload-container:hover {
+  opacity: 0.6;
 }

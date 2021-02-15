@@ -7,6 +7,7 @@ import relationship from "../../../assets/relationship.png";
 import Select from "../../../common/ui/Select";
 import { initialize } from "../common/commonFunctions";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { storageService, capitalize } from "utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -16,6 +17,8 @@ class NpsNominee extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
+      nps_details: {},
+      screen_name: "nps_nominee"
     };
     this.initialize = initialize.bind(this);
   }
@@ -24,7 +27,22 @@ class NpsNominee extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    let nps_additional_details = storageService().getObject("nps_additional_details");
+    let { nps_details } = nps_additional_details;
+
+    let { form_data } = this.state;
+    let { nomination } = nps_details;
+    
+    form_data.name = nomination.name || '';
+    form_data.dob = nomination.dob || '';
+    form_data.relationship = capitalize(nomination.relationship || '');
+
+    this.setState({
+      nps_details: nps_details,
+      form_data: form_data
+    });
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;

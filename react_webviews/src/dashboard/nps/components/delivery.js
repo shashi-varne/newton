@@ -3,24 +3,57 @@ import Container from "../../common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import person from "../../../assets/location.png";
 import Api from "utils/api";
-import{ initialize } from "../common/commonFunctions";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { initialize } from "../common/commonFunctions";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { storageService, capitalize } from "utils/validators";
+import { getConfig } from "utils/functions";
 
 class NpsDelivery extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      form_data: {}
+      form_data: {},
+      screen_name: "nps_delivery",
+      uploaded: '',
+      img: ''
     };
     this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-    this.initialize()
+    this.initialize();
+    if (getConfig().generic_callback) {
+      window.callbackWeb.add_listener({
+        type: "native_receiver_image",
+
+        // show_loader: function (show_loader) {
+        //   that.showLoaderNative();
+        // },
+      });
+    }
   }
 
-  onload = () => {}
+  onload = () => {
+    let nps_additional_details = storageService().getObject(
+      "nps_additional_details"
+    );
+    let { nps_details } = nps_additional_details;
+
+    let { form_data } = this.state;
+    let { address } = nps_details;
+
+    form_data.pincode = address.pincode || "";
+    form_data.addressline = address.addressline || "";
+    form_data.city = address.city || address.district || "";
+    form_data.state = address.state || "";
+
+    this.setState({
+      nps_details: nps_details,
+      address: address,
+      form_data: form_data,
+    });
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -30,11 +63,11 @@ class NpsDelivery extends Component {
     form_data[name + "_error"] = "";
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
   };
 
-  handlePincode = name => async (event)=> {
+  handlePincode = (name) => async (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
@@ -42,8 +75,8 @@ class NpsDelivery extends Component {
     form_data.pincode_error = "";
 
     this.setState({
-      form_data: form_data
-    })
+      form_data: form_data,
+    });
 
     if (form_data.pincode.length === 6) {
       try {
@@ -55,9 +88,9 @@ class NpsDelivery extends Component {
           let data = result[0];
 
           form_data.city = data.district_name || data.division_name;
-          form_data.city_error = '';
+          form_data.city_error = "";
           form_data.state = data.state_name;
-          form_data.state_error = ''
+          form_data.state_error = "";
         } else {
           throw result.error || result.message;
         }
@@ -65,11 +98,11 @@ class NpsDelivery extends Component {
         throw err;
       }
     }
-    
+
     this.setState({
-      form_data: form_data
-    })
-  }
+      form_data: form_data,
+    });
+  };
 
   handleClick = () => {
     let { form_data } = this.state;
@@ -77,12 +110,12 @@ class NpsDelivery extends Component {
     let data = {
       address: {
         addressline: form_data.addressline,
-        pin: form_data.pin,
-      }
-    }
+        pin: form_data.pincode,
+      },
+    };
 
-    this.updateMeta(data, '');
-  }
+    this.updateMeta(data, "");
+  };
 
   render() {
     let { form_data } = this.state;
@@ -90,7 +123,13 @@ class NpsDelivery extends Component {
       <Container
         classOverRide="pr-error-container"
         fullWidthButton
-        buttonTitle={this.state.show_loader ? <CircularProgress size={22} thickness={4} /> : 'CONTINUE'}
+        buttonTitle={
+          this.state.show_loader ? (
+            <CircularProgress size={22} thickness={4} />
+          ) : (
+            "CONTINUE"
+          )
+        }
         disable={this.state.show_loader}
         hideInPageTitle
         hidePageTitle
@@ -101,8 +140,8 @@ class NpsDelivery extends Component {
         <div className="page-heading">
           <img src={require("assets/hand_icon.png")} alt="" width="50" />
           <div className="text">
-            You will get the <span className="bold">PRAN</span> card delivered to
-            this address
+            You will get the <span className="bold">PRAN</span> card delivered
+            to this address
           </div>
         </div>
 
@@ -117,10 +156,10 @@ class NpsDelivery extends Component {
               id="pincode"
               label="Pincode"
               name="pincode"
-              error={(form_data.pincode_error) ? true : false}
+              error={form_data.pincode_error ? true : false}
               helperText={form_data.pincode_error}
-              value={form_data.pincode || ''}
-              onChange={this.handlePincode('pincode')}
+              value={form_data.pincode || ""}
+              onChange={this.handlePincode("pincode")}
             />
           </div>
 
@@ -130,35 +169,37 @@ class NpsDelivery extends Component {
               id="address"
               label="Permanent address (house, building, street)"
               name="addressline"
-              error={(form_data.addressline_error) ? true : false}
+              error={form_data.addressline_error ? true : false}
               helperText={form_data.addressline_error}
-              value={form_data.addressline || ''}
+              value={form_data.addressline || ""}
               onChange={this.handleChange("addressline")}
             />
           </div>
 
           <div className="InputField">
             <InputWithIcon
+              disabled
               width="30"
               id="name"
               label="City"
               name="city"
-              error={(form_data.city_error) ? true : false}
+              error={form_data.city_error ? true : false}
               helperText={form_data.city_error}
-              value={form_data.city || ''}
+              value={form_data.city || ""}
               onChange={this.handleChange("city")}
             />
           </div>
 
           <div className="InputField">
             <InputWithIcon
+              disabled
               width="30"
               id="name"
               label="State"
               name="state"
-              error={(form_data.state_error) ? true : false}
+              error={form_data.state_error ? true : false}
               helperText={form_data.state_error}
-              value={form_data.state || ''}
+              value={form_data.state || ""}
               onChange={this.handleChange("state")}
             />
           </div>

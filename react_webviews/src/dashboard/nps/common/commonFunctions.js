@@ -1,9 +1,9 @@
-// import { storageService, formatAmountInr } from "utils/validators";
+import { storageService } from "utils/validators";
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
-import { nps_config } from "../constants";
+// import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
 
@@ -18,19 +18,19 @@ export async function initialize() {
 
   let screenData = {};
 
-  if (this.state.screen_name) {
-    screenData = nps_config[this.state.screen_name];
-  }
+  // if (this.state.screen_name) {
+  //   screenData = nps_config[this.state.screen_name];
+  // }
 
-  let next_screen = this.state.next_screen || "";
+  // let next_screen = this.state.next_screen || "";
 
-  if (this.state.screen_name && nps_config.get_next[this.state.screen_name]) {
-    next_screen = nps_config.get_next[this.state.screen_name];
+  // if (this.state.screen_name && nps_config.get_next[this.state.screen_name]) {
+  //   next_screen = nps_config.get_next[this.state.screen_name];
 
-    this.setState({
-      next_state: next_screen,
-    });
-  }
+  //   this.setState({
+  //     next_state: next_screen,
+  //   });
+  // }
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -180,7 +180,22 @@ export async function updateMeta(params, next_state) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      this.navigate(next_state);
+      let nps_additional_details =
+        storageService().getObject("nps_additional_details") || {};
+      nps_additional_details.nps_details = result.user;
+
+      storageService().setObject(
+        "nps_additional_details",
+        nps_additional_details
+      );
+
+      if (this.state.screen_name === "nps_delivery") {
+        if (result.user.is_doc_required) {
+          this.navigate("upload");
+        }
+      } else {
+        this.navigate(next_state);
+      }
     } else {
       this.setState({
         show_loader: false,
