@@ -53,7 +53,7 @@ const CompliantReport = (props) => {
       }
     }
     if (userkycDetails.nomination.nominee_optional) {
-      if (isCompliant) {
+      if (isCompliant && !isNri) {
         reportCards.splice(1, 1);
       } else {
         reportCards.splice(2, 1);

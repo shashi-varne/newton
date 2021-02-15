@@ -6,6 +6,7 @@ import { storageService, isEmpty } from "utils/validators";
 import { initData } from "../services";
 import toast from "common/ui/Toast";
 import { savePanData } from "../common/api";
+import { getConfig } from "../../utils/functions";
 
 const ConfirmPan = (props) => {
   const genericErrorMessage = "Something Went wrong!";
@@ -54,9 +55,13 @@ const ConfirmPan = (props) => {
           navigate(getPathname.journey);
         } else {
           if (userKyc.address.meta_data.is_nri) {
-            navigate(`${getPathname.journey}?show_aadhar=false`);
+            navigate(`${getPathname.journey}`, {
+              searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
+            });
           } else {
-            navigate(`${getPathname.journey}?show_aadhar=true`);
+            navigate(`${getPathname.journey}`, {
+              searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+            });
           }
         }
       }

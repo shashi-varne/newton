@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import { checkMerge, getPan, savePanData } from "../common/api";
+import { checkMerge, getPan, logout, savePanData } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
@@ -168,13 +168,15 @@ const Home = (props) => {
     setOpenAccountMerge(false);
   };
 
-  const handleMerge = (step) => {
+  const handleMerge = async (step) => {
     if (step === "STEP1") {
       storageService().setObject(storageConstants.AUTH_IDS, authIds);
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (getConfig().web) {
-        navigate("/logout");
+        let result = await logout();
+        if (!result) result;
+        navigate("/login");
         // $state.go('logout')
       } else {
         // callbackWeb.logout();
@@ -252,9 +254,13 @@ const Home = (props) => {
           navigate(getPathname.journey);
         } else {
           if (is_nri) {
-            navigate(`${getPathname.journey}?show_aadhaar=false`);
+            navigate(`${getPathname.journey}`, {
+              searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
+            });
           } else {
-            navigate(`${getPathname.journey}?show_aadhaar=true`);
+            navigate(`${getPathname.journey}`, {
+              searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+            });
           }
         }
       }

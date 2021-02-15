@@ -17,7 +17,7 @@ import {
   dobFormatTest,
   formatDate,
 } from "../../utils/validators";
-import { toast } from "react-toastify";
+import toast from "common/ui/Toast";
 
 const Nominee = (props) => {
   const genericErrorMessage = "Something went wrong!";

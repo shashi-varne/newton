@@ -88,7 +88,11 @@ const AddBank = (props) => {
   };
 
   const uploadDocuments = () => {
-    navigate();
+    navigate(`/kyc/${userKyc.kyc_status}/upload-documents`, {
+      searchParams: `${
+        getConfig().searchParams
+      }&additional=true&bank_id=${bank_id}`,
+    });
   };
 
   const redirect = () => {

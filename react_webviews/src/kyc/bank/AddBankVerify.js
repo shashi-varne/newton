@@ -15,6 +15,7 @@ import PennyFailedDialog from "../mini_components/PennyFailedDialog";
 import PennySuccessDialog from "../mini_components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { SkeltonRect } from "../../common/ui/Skelton";
+import { getConfig } from "../../utils/functions";
 
 const AddBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -26,7 +27,7 @@ const AddBankVerify = (props) => {
   const [isPennySuccess, setIsPennySuccess] = useState(false);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
   const [userKyc, setUserKyc] = useState({});
-  const bank_id = props.match.params.bank_id;
+  const bank_id = props.match.params?.bank_id;
   if (!bank_id) {
     props.history.goBack();
   }
@@ -132,8 +133,11 @@ const AddBankVerify = (props) => {
   };
 
   const uploadDocuments = () => {
-    navigate();
-    `/kyc/${userKyc.kyc_status}/upload-documents?additional=true&bank_id=${bank_id}`;
+    navigate(`/kyc/${userKyc.kyc_status}/upload-documents`, {
+      searchParams: `${
+        getConfig().searchParams
+      }&additional=true&bank_id=${bank_id}`,
+    });
   };
 
   const goTobankLists = () => {

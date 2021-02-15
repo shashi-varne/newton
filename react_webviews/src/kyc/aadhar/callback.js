@@ -44,6 +44,7 @@ const AadharCallback = (props) => {
   }
   const handleClick = () => {
     if (kycFlow) navigate("");
+    // $state.go("pan");
     else navigate(getPathname.aadhar);
   };
 

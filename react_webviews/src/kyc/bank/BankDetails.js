@@ -4,6 +4,7 @@ import { formatAmountInr, storageService, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import { initData } from "../services";
 import { storageConstants } from "../constants";
+import { getConfig } from "../../utils/functions";
 
 const BankDetails = (props) => {
   const banks =
@@ -22,9 +23,11 @@ const BankDetails = (props) => {
     if (bank.status === "default") {
       navigate(`/kyc/${userKyc.kyc_status}/upload-documents`);
     } else {
-      navigate(
-        `/kyc/${userKyc.kyc_status}/upload-documents?additional=true&bank_id=${bank_id}`
-      );
+      navigate(`/kyc/${userKyc.kyc_status}/upload-documents`, {
+        searchParams: `${
+          getConfig().searchParams
+        }&additional=true&bank_id=${bank_id}`,
+      });
     }
   };
 

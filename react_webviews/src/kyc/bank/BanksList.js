@@ -6,6 +6,7 @@ import { storageService } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
+import { initData } from "../services";
 
 const productName = getConfig().productName;
 const BanksList = (props) => {
@@ -25,6 +26,7 @@ const BanksList = (props) => {
       setBanks(result.bank_mandates.banks || []);
       setChangerequest(result.change_request || {});
       setShowLoader(false);
+      await initData();
       storageService().setObject(
         storageConstants.BANK_MANDATES,
         result.bank_mandates.banks

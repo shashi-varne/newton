@@ -37,6 +37,31 @@ export const getUserKycFromSummary = async () => {
   }
 };
 
+export const logout = async () => {
+  try {
+    const res = await Api.get("api/logout");
+
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw genericErrorMessage;
+    }
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      storageService().clear();
+      return result;
+    } else {
+      throw result.error || result.message || genericErrorMessage;
+    }
+  } catch (err) {
+    toast(err || genericErrorMessage);
+  }
+};
+
 export const getPan = async (data, accountMerge) => {
   const res = await Api.post(apiConstants.getPan, data);
   if (
@@ -159,19 +184,27 @@ export const addAdditionalBank = async (data) => {
     case 200:
       return result;
     default:
-      throw result.message || result.error || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage;
   }
 };
 
-export const upload = async (file, type = 'pan') => {
-  const formData = new FormData()
-  formData.set('res', file)
-  const res = await Api.post(`/api/kyc/v2/doc/mine/${type}`, formData)
-  if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.message === 'success') {
-    return res.pfwresponse.result
+export const upload = async (file, type = "pan") => {
+  const formData = new FormData();
+  formData.set("res", file);
+  const res = await Api.post(`/api/kyc/v2/doc/mine/${type}`, formData);
+  if (
+    res.pfwresponse.status_code === 200 &&
+    res.pfwresponse.result.message === "success"
+  ) {
+    return res.pfwresponse.result;
   }
-  throw new Error(res?.pfwresponse?.result?.message || res?.pfwresponse?.result?.error || genericErrorMessage)
-}
+  throw new Error(
+    res?.pfwresponse?.result?.message ||
+      res?.pfwresponse?.result?.error ||
+      genericErrorMessage
+  );
+};
+
 export const saveBankData = async (data) => {
   const res = await Api.post(apiConstants.pennyVerification, data);
   if (
@@ -186,7 +219,7 @@ export const saveBankData = async (data) => {
     case 200:
       return result;
     default:
-      throw result.message || result.error || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage;
   }
 };
 
@@ -204,7 +237,7 @@ export const getBankStatus = async (data) => {
     case 200:
       return result;
     default:
-      throw result.message || result.error || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage;
   }
 };
 
@@ -222,6 +255,6 @@ export const getCVL = async (data) => {
     case 200:
       return result;
     default:
-      throw result.message || result.error || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage;
   }
 };

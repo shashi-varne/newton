@@ -105,7 +105,7 @@ const Report = (props) => {
       }
     }
     if (userkycDetails.nomination.nominee_optional) {
-      if (is_compliant) {
+      if (is_compliant && !isNri) {
         reportCards.splice(1, 1);
       } else {
         reportCards.splice(2, 1);
@@ -347,12 +347,14 @@ const Report = (props) => {
             Approves in one working day
           </div>
           <section>
-            {isEmpty(cardDetails) && <>
-              <SkeltonRect className="report-skelton" />
-              <SkeltonRect className="report-skelton" />
-              <SkeltonRect className="report-skelton" />
-              <SkeltonRect className="report-skelton" />
-            </>}
+            {isEmpty(cardDetails) && (
+              <>
+                <SkeltonRect className="report-skelton" />
+                <SkeltonRect className="report-skelton" />
+                <SkeltonRect className="report-skelton" />
+                <SkeltonRect className="report-skelton" />
+              </>
+            )}
             {cardDetails &&
               cardDetails.map((item, index) => {
                 return (
