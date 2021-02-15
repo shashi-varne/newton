@@ -100,7 +100,7 @@ class GroupHealthLanding extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   

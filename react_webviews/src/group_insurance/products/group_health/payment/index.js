@@ -111,7 +111,7 @@ class GroupHealthPayment extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   
@@ -162,10 +162,9 @@ class GroupHealthPayment extends Component {
         this.setState({
           skelton: false
         });
-        error='Something went wrong';
+        error = 'Something went wrong';
       }
-      if(error)
-      {
+      if (error) {
         this.setState({
           errorData: {
             ...this.state.errorData,

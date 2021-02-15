@@ -51,7 +51,7 @@ class GroupHealthPlanPremiumSummary extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   
@@ -272,22 +272,21 @@ class GroupHealthPlanPremiumSummary extends Component {
           });
           error=resultData.error || resultData.message || "Something went wrong"
         }
-      } catch (err) {
-        this.setState({
-          show_loader: false,
-        });
-        error="Something went wrong";
-      }   
-      if(error)
-      {
-        this.setState({
-          errorData: {
-            ...this.state.errorData,
-            title2: error,
-          },
-          showError: true,
-        });
-      } 
+    } catch (err) {
+      this.setState({
+        show_loader: false,
+      });
+      error = "Something went wrong";
+    }
+    if (error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+        },
+        showError: true,
+      });
+    } 
   };
 
   renderProviderPremium() {

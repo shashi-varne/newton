@@ -195,7 +195,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         body
       );
 
-      if (res.pfwresponse.status_code === 201) {
+      if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result;
         plan_selected_final = resultData.premium_details;
       } else {

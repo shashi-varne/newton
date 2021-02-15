@@ -76,7 +76,7 @@ class GroupHealthReportDetails extends Component {
                   showError: false
                 })
               },
-              button_text2: 'Edit'
+              button_text2: 'Dismiss'
             }
           };
       
@@ -162,19 +162,18 @@ class GroupHealthReportDetails extends Component {
         } catch (err) {
             console.log(err)
             this.setState({
-                skelton:false
+                skelton: false
             });
-            error='Something went wrong';
+            error = 'Something went wrong';
         }
-        if(error)
-        {
+        if (error) {
             this.setState({
                 errorData: {
-                  ...this.state.errorData,
-                  title2: error,
+                    ...this.state.errorData,
+                    title2: error,
                 },
                 showError: "page",
-              });
+            });
         }
     }
 

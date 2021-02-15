@@ -87,7 +87,7 @@ export async function initialize() {
                 const res = await Api.get(url);
 
 
-                if (res.pfwresponse.status_code === 201) {
+                if (res.pfwresponse.status_code === 200) {
                     var resultData = res.pfwresponse.result;
                     lead = resultData;
                     lead.member_base = ghGetMember(lead, this.state.providerConfig);               
@@ -388,34 +388,33 @@ export function navigate(pathname, data = {}) {
     }
 
 }
-function setErrorData (type){
+function setErrorData(type) {
+  this.setState({
+    showError: false,
+  });
+  if (type) {
+    let mapper = {
+      onload: {
+        handleClick1: this.onload,
+        button_text1: "Fetch again",
+        title1: "",
+      },
+      submit: {
+        handleClick1: this.handleClickCurrent,
+        button_text1: "Retry",
+        handleClick2: () => {
+          this.setState({
+            showError: false,
+          });
+        },
+        button_text2: "Edit",
+      },
+    };
+
     this.setState({
-        showError: false
-      });
-      if(type) {
-        let mapper = {
-          'onload':  {
-            handleClick1: this.onload,
-            button_text1: 'Fetch again',
-            title1: ''
-          },
-          'submit': {
-            handleClick1: this.handleClickCurrent,
-            button_text1: 'Retry',
-            handleClick2: () => {
-              this.setState({
-                showError: false
-              })
-            },
-            button_text2: 'Edit'
-          }
-        };
-    
-        this.setState({
-          errorData: {...mapper[type], setErrorData : this.setErrorData}
-        })
-      }
-  
+      errorData: { ...mapper[type], setErrorData: this.setErrorData },
+    });
+  }
 }
 export async function resetQuote() {
 
