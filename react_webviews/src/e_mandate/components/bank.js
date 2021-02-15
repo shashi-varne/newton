@@ -39,7 +39,7 @@ class SelectBank extends Component {
       try {
         const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
         this.setState({
-          show_loader: true
+          show_loader: false
         })
         if (res.pfwresponse.result && !res.pfwresponse.result.error) {
           let  banks = res.pfwresponse.result.banks;
