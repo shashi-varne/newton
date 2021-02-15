@@ -99,6 +99,11 @@ class PersonalDetails1 extends Component {
   onload = async () => {
     this.setErrorData('onload');
     let error = ''
+
+    this.setState({
+      skelton: true
+    });
+
     try {
       const res = await Api.get('/api/ins_service/api/insurance/account/summary')
       this.setState({
