@@ -58,9 +58,9 @@ const Report = (props) => {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
       user = storageService().getObject(storageConstants.USER);
+      setUserKyc(userkycDetails);
+      setCurrentUser(user);
     }
-    setUserKyc(userkycDetails);
-    setCurrentUser(user);
     let is_compliant = userkycDetails.kyc_status === "compliant" ? true : false;
     setIsCompliant(is_compliant);
     if (
@@ -144,7 +144,7 @@ const Report = (props) => {
 
   const checkNPSAndProceed = () => {
     if (currentUser.nps_investment) {
-      if (getConfig().isIframe) {
+      if (!getConfig().isIframe) {
         // navigate()
         // navigate to reports
       }

@@ -4,7 +4,7 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
 
 const partner = getConfig().partner;
-const CompliantHelpDialog = ({close, isOpen}) => {
+const CompliantHelpDialog = ({ close, isOpen, pan }) => {
   return (
     <Dialog
       onClose={() => close()}
@@ -18,7 +18,7 @@ const CompliantHelpDialog = ({close, isOpen}) => {
       <DialogContent className="help-content">
         <div className="title">Hey,</div>
         <div className="subtitle">
-          To change the PAN: AAAAA1234A, <br />
+          To change the PAN: {pan}, <br />
           please reach us at :
         </div>
         <div className="partner-info">

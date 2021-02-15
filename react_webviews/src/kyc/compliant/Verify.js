@@ -32,7 +32,12 @@ const Verify = (props) => {
             alt=""
           />
           <div className="title">You're ready to invest!</div>
-          <div className="subtitle">See KYC application details {" >"}</div>
+          <div
+            className="subtitle"
+            onClick={() => navigate(getPathname.compliantReport)}
+          >
+            See KYC application details {" >"}
+          </div>
         </header>
       </div>
     </Container>

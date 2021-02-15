@@ -8,7 +8,7 @@ import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 
 const productName = getConfig().productName;
-const Banksist = (props) => {
+const BanksList = (props) => {
   const [showLoader, setShowLoader] = useState(true);
   const [changeRequest, setChangerequest] = useState({});
   const navigate = navigateFunc.bind(props);
@@ -114,4 +114,4 @@ const Banksist = (props) => {
   );
 };
 
-export default Banksist;
+export default BanksList;

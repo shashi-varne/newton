@@ -39,20 +39,20 @@ const RtaCompliantPersonalDetails = (props) => {
   const initialize = async () => {
     let userkycDetails = { ...userkyc };
     let user = { ...currentUser };
-    if (isEmpty(userkycDetails)) {
+    if (isEmpty(userkycDetails) || isEmpty(user)) {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
       user = storageService().getObject(storageConstants.USER);
       setCurrentUser(user);
       setUserKyc(userkycDetails);
     }
+    setShowLoader(false);
     let formData = {
       pan: userkycDetails.pan.meta_data.pan_number,
       dob: userkycDetails.pan.meta_data.dob,
       email: userkycDetails.address.meta_data.email,
       mobile: userkycDetails.identification.meta_data.mobile_number,
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -123,7 +123,7 @@ const RtaCompliantPersonalDetails = (props) => {
 
   return (
     <Container
-      showLoader={showLoader}
+      showSkelton={showLoader}
       hideInPageTitle
       id="kyc-rta-compliant-personal-details"
       buttonTitle="SAVE AND CONTINUE"
@@ -142,7 +142,7 @@ const RtaCompliantPersonalDetails = (props) => {
             HELP
           </div>
         </div>
-        {!isEmpty(userkyc) && (
+        {!showLoader && (
           <main>
             <Input
               label="Date of birth(DD/MM/YYYY)"
@@ -167,19 +167,25 @@ const RtaCompliantPersonalDetails = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            <Input
-              label="Mobile number"
-              class="input"
-              value={form_data.mobile || ""}
-              error={form_data.mobile_error ? true : false}
-              helperText={form_data.mobile_error || ""}
-              onChange={handleChange("mobile")}
-              maxLength={10}
-              type="text"
-            />
+            {currentUser && currentUser.mobile === null && (
+              <Input
+                label="Mobile number"
+                class="input"
+                value={form_data.mobile || ""}
+                error={form_data.mobile_error ? true : false}
+                helperText={form_data.mobile_error || ""}
+                onChange={handleChange("mobile")}
+                maxLength={10}
+                type="text"
+              />
+            )}
           </main>
         )}
-        <CompliantHelpDialog isOpen={isOpen} close={close} />
+        <CompliantHelpDialog
+          isOpen={isOpen}
+          close={close}
+          pan={form_data.pan}
+        />
       </div>
     </Container>
   );

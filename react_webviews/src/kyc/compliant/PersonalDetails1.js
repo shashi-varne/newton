@@ -52,9 +52,9 @@ const PersonalDetails1 = (props) => {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
       user = storageService().getObject(storageConstants.USER);
+      setCurrentUser(user);
+      setUserKyc(userkycDetails);
     }
-    setCurrentUser(user);
-    setUserKyc(userkycDetails);
     let isNri = userkycDetails.address.meta_data.is_nri;
     let selectedIndexResidentialStatus = 0;
     if (isNri) {
@@ -206,7 +206,7 @@ const PersonalDetails1 = (props) => {
             HELP
           </div>
         </div>
-        {!isEmpty(userkyc) && (
+        {!showLoader && (
           <main>
             <Input
               label="Date of birth(DD/MM/YYYY)"
@@ -232,17 +232,19 @@ const PersonalDetails1 = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            <Input
-              label="Mobile number"
-              class="input"
-              value={form_data.mobile || ""}
-              error={form_data.mobile_error ? true : false}
-              helperText={form_data.mobile_error || ""}
-              onChange={handleChange("mobile")}
-              maxLength={10}
-              type="text"
-              disabled={isApiRunning}
-            />
+            {currentUser && currentUser.mobile === null && (
+              <Input
+                label="Mobile number"
+                class="input"
+                value={form_data.mobile || ""}
+                error={form_data.mobile_error ? true : false}
+                helperText={form_data.mobile_error || ""}
+                onChange={handleChange("mobile")}
+                maxLength={10}
+                type="text"
+                disabled={isApiRunning}
+              />
+            )}
             <div className="input">
               <DropdownWithoutIcon
                 error={form_data.occupation_error ? true : false}
@@ -301,7 +303,13 @@ const PersonalDetails1 = (props) => {
             </footer>
           </main>
         )}
-        {isOpen && <CompliantHelpDialog isOpen={isOpen} close={close} />}
+        {isOpen && (
+          <CompliantHelpDialog
+            isOpen={isOpen}
+            close={close}
+            pan={form_data.pan}
+          />
+        )}
       </div>
     </Container>
   );

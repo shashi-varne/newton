@@ -32,7 +32,12 @@ const Complete = (props) => {
             alt=""
           />
           <div className="title">Kudos, KYC is completed!</div>
-          <div className="subtitle">See KYC application details {" >"}</div>
+          <div
+            className="subtitle"
+            onClick={() => navigate(getPathname.kycReport)}
+          >
+            See KYC application details {" >"}
+          </div>
         </header>
         <Alert
           variant="warning"

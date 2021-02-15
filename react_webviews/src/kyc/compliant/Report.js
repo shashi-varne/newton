@@ -39,9 +39,9 @@ const CompliantReport = (props) => {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
       user = storageService().getObject(storageConstants.USER);
+      setUserKyc(userkycDetails);
+      setCurrentUser(user);
     }
-    setUserKyc(userkycDetails);
-    setCurrentUser(user);
     let isNri = userkycDetails.address.meta_data.is_nri;
     setIsNri(isNri);
     if (isCompliant) {

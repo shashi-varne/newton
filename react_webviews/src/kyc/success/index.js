@@ -55,7 +55,7 @@ const RegistrationSuccess = (props) => {
 
   const checkNPSAndProceed = () => {
     if (currentUser.nps_investment) {
-      if (getConfig().isIframe) {
+      if (!getConfig().isIframe) {
         // navigate()
         // navigate to reports
       }
