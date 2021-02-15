@@ -3,16 +3,17 @@ import Container from "../common/Container";
 import { getConfig } from "utils/functions";
 import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
-import { getPathname } from "../constants";
+import { getPathname, storageConstants } from "../constants";
 import { storageService } from "../../utils/validators";
+import { nativeCallback } from "utils/native_callback";
 
-const productName = getConfig().productName;
 const Complete = (props) => {
+  const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
 
   const handleClick = () => {
-    if (storageService().get("native")) {
-      // callbackWeb.user_exit();
+    if (storageService().get(storageConstants.NATIVE)) {
+      nativeCallback({ action: "exit" });
     } else {
       navigate(getPathname.invest);
     }

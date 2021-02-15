@@ -35,7 +35,7 @@ const Aadhar = (props) => {
       setFormData(data);
       return;
     }
-    navigate(getPathname("aadharConfirmation"), { state: { name: "Alekhya" } });
+    navigate(getPathname.aadharConfirmation);
   };
 
   const handleChange = (name) => (event) => {

@@ -174,6 +174,7 @@ const Home = (props) => {
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
       if (getConfig().web) {
+        navigate("/logout");
         // $state.go('logout')
       } else {
         // callbackWeb.logout();
@@ -246,18 +247,14 @@ const Home = (props) => {
         (homeData.kycConfirmPanScreen || isPremiumFlow)
       ) {
         navigate(getPathname.compliantPersonalDetails1);
-        // $state.go("kyc-compliant-personal-details");
       } else {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          // $state.go("kyc-journey");
           navigate(getPathname.journey);
         } else {
           if (is_nri) {
             navigate(`${getPathname.journey}?show_aadhaar=false`);
-            // $state.go("kyc-journey", { show_aadhaar: false });
           } else {
             navigate(`${getPathname.journey}?show_aadhaar=true`);
-            // $state.go("kyc-journey", { show_aadhaar: true });
           }
         }
       }

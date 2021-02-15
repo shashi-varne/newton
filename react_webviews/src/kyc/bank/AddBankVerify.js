@@ -56,7 +56,7 @@ const AddBankVerify = (props) => {
       if (result.code === "ERROR") {
         toast(result.message);
       } else if (userKyc.address.meta_data.is_nri) {
-        navigate();
+        uploadDocuments();
       } else {
         pennyLoader();
       }
@@ -133,6 +133,7 @@ const AddBankVerify = (props) => {
 
   const uploadDocuments = () => {
     navigate();
+    `/kyc/${userKyc.kyc_status}/upload-documents?additional=true&bank_id=${bank_id}`;
   };
 
   const goTobankLists = () => {
@@ -163,52 +164,48 @@ const AddBankVerify = (props) => {
           title="Important"
           message="We will credit ₹1 to your bank account for verification."
         />
-        {showLoader ? (
-          <SkeltonRect className="verify-skelton-top" />
-        ) : (
-          <div className="item">
-            <div className="flex">
-              <div className="left">
-                <img
-                  className="ifsc-new-img2"
-                  src={bankData.ifsc_image}
-                  alt="bank-logo"
-                />
-              </div>
-              <div className="right">
-                <div>{bankData.bank_name}</div>
-                <div className="text">{bankData.branch_name} </div>
-              </div>
-            </div>
-            <div className="edit" onClick={edit()}>
-              EDIT
-            </div>
-          </div>
+        {showLoader && (
+          <>
+            <SkeltonRect className="verify-skelton" />
+            <SkeltonRect className="verify-skelton" />
+            <SkeltonRect className="verify-skelton" />
+            <SkeltonRect className="verify-skelton" />
+          </>
         )}
-        <div className="item">
-          <div className="left">Account number</div>
-          {showLoader ? (
-            <SkeltonRect className="verify-skelton" />
-          ) : (
-            <div className="right"> {bankData.account_number} </div>
-          )}
-        </div>
-        <div className="item">
-          <div className="left">IFSC code</div>
-          {showLoader ? (
-            <SkeltonRect className="verify-skelton" />
-          ) : (
-            <div className="right">{bankData.ifsc_code} </div>
-          )}
-        </div>
-        <div className="item">
-          <div className="left">Account type</div>
-          {showLoader ? (
-            <SkeltonRect className="verify-skelton" />
-          ) : (
-            <div className="right"> {bankData.account_type} </div>
-          )}
-        </div>
+        {!showLoader && (
+          <>
+            <div className="item">
+              <div className="flex">
+                <div className="left">
+                  <img
+                    className="ifsc-new-img2"
+                    src={bankData.ifsc_image}
+                    alt="bank-logo"
+                  />
+                </div>
+                <div className="right">
+                  <div>{bankData.bank_name}</div>
+                  <div className="text">{bankData.branch_name} </div>
+                </div>
+              </div>
+              <div className="edit" onClick={edit()}>
+                EDIT
+              </div>
+            </div>
+            <div className="item">
+              <div className="left">Account number</div>
+              <div className="right"> {bankData.account_number} </div>
+            </div>
+            <div className="item">
+              <div className="left">IFSC code</div>
+              <div className="right">{bankData.ifsc_code} </div>
+            </div>
+            <div className="item">
+              <div className="left">Account type</div>
+              <div className="right"> {bankData.account_type} </div>
+            </div>
+          </>
+        )}
         <PennyDialog isOpen={isPennyOpen} count={count} />
         <PennyFailedDialog
           isOpen={isPennyFailed}

@@ -13,6 +13,7 @@ export const apiConstants = {
 export const getPathname = {
   invest: "/invest",
   landing: "/",
+  reports: "/reports",
   accountMerge: "/account/merge/",
   homeKyc: "/kyc/home-kyc",
   aadhar: "/kyc/aadhar",
@@ -34,6 +35,7 @@ export const getPathname = {
   personalDetails2: "/kyc/personal-details2",
   personalDetails3: "/kyc/personal-details3",
   personalDetails4: "/kyc/personal-details4",
+  nriAddressDetails2: "/kyc/nri-address-details2",
 };
 
 export const storageConstants = {
@@ -46,78 +48,79 @@ export const storageConstants = {
 };
 
 export const docMapper = {
-  DL: 'Driving license',
-  PASSPORT: 'Passport',
-  AADHAAR: 'Aadhaar card',
-  VOTER_ID_CARD: 'Voter ID',
-  UTILITY_BILL: 'Gas receipt',
-  LAT_BANK_PB: 'Passbook',
-}
+  DL: "Driving license",
+  PASSPORT: "Passport",
+  AADHAAR: "Aadhaar card",
+  VOTER_ID_CARD: "Voter ID",
+  UTILITY_BILL: "Gas receipt",
+  LAT_BANK_PB: "Passbook",
+};
+
 export const occupationOptions = [
   {
-    name: 'Private Sector',
-    value: 'PRIVATE SECTOR',
+    name: "Private Sector",
+    value: "PRIVATE SECTOR",
   },
   {
-    name: 'Professional',
-    value: 'PROFESSIONAL',
+    name: "Professional",
+    value: "PROFESSIONAL",
   },
   {
-    name: 'Business',
-    value: 'BUSINESS',
+    name: "Business",
+    value: "BUSINESS",
   },
   {
-    name: 'House Wife',
-    value: 'HOUSE WIFE',
+    name: "House Wife",
+    value: "HOUSE WIFE",
   },
   {
-    name: 'Public Sector',
-    value: 'PUBLIC SECTOR',
+    name: "Public Sector",
+    value: "PUBLIC SECTOR",
   },
   {
-    name: 'Government',
-    value: 'GOVERNMENT',
+    name: "Government",
+    value: "GOVERNMENT",
   },
   {
-    name: 'Student',
-    value: 'STUDENT',
+    name: "Student",
+    value: "STUDENT",
   },
   {
-    name: 'Retired',
-    value: 'RETIRED',
+    name: "Retired",
+    value: "RETIRED",
   },
   {
-    name: 'Others',
-    value: 'OTHERS',
+    name: "Others",
+    value: "OTHERS",
   },
-]
+];
 
 export const incomeOptions = [
   {
-    name: 'Below 1L',
-    value: 'BELOW 1L',
+    name: "Below 1L",
+    value: "BELOW 1L",
   },
   {
-    name: '1-5L',
-    value: '1-5L',
+    name: "1-5L",
+    value: "1-5L",
   },
   {
-    name: '5-10L',
-    value: '5-10L',
+    name: "5-10L",
+    value: "5-10L",
   },
   {
-    name: '10-25L',
-    value: '10-25L',
+    name: "10-25L",
+    value: "10-25L",
   },
   {
-    name: '25-100L',
-    value: '25-100L',
+    name: "25-100L",
+    value: "25-100L",
   },
   {
-    name: '>100L',
-    value: '>100L',
+    name: ">100L",
+    value: ">100L",
   },
-]
+];
 
 export const residentialOptions = [
   {
@@ -128,122 +131,122 @@ export const residentialOptions = [
     name: "Non indian",
     value: "NON INDIAN",
   },
-]
+];
 
 export const relationshipOptions = [
   {
-    name: 'Wife',
-    value: 'WIFE',
+    name: "Wife",
+    value: "WIFE",
   },
   {
-    name: 'Husband',
-    value: 'HUSBAND',
+    name: "Husband",
+    value: "HUSBAND",
   },
   {
-    name: 'Mother',
-    value: 'MOTHER',
+    name: "Mother",
+    value: "MOTHER",
   },
   {
-    name: 'Father',
-    value: 'FATHER',
+    name: "Father",
+    value: "FATHER",
   },
   {
-    name: 'Other',
-    value: 'OTHER',
+    name: "Other",
+    value: "OTHER",
   },
-]
+];
 
 export const reportCardDetails = [
   {
-    key: 'personal',
-    title: 'Personal',
-    click_image: 'plus_icon.svg',
+    key: "personal",
+    title: "Personal",
+    click_image: "plus_icon.svg",
   },
   {
-    key: 'address',
-    title: 'Address',
-    click_image: 'plus_icon.svg',
+    key: "address",
+    title: "Address",
+    click_image: "plus_icon.svg",
   },
   {
-    key: 'nominee',
-    title: 'Nominee',
-    click_image: 'plus_icon.svg',
+    key: "nominee",
+    title: "Nominee",
+    click_image: "plus_icon.svg",
   },
   {
-    key: 'bank',
-    title: 'Bank details',
-    click_image: 'plus_icon.svg',
+    key: "bank",
+    title: "Bank details",
+    click_image: "plus_icon.svg",
   },
   {
-    key: 'docs',
-    title: 'Documents',
-    click_image: 'next_arrow_icon.svg',
+    key: "docs",
+    title: "Documents",
+    click_image: "next_arrow_icon.svg",
   },
-]
+];
 
 export const bankAccountTypeOptions = (isNri) => {
-  let account_types = []
+  let account_types = [];
   if (!isNri) {
     account_types = [
       {
-        value: 'CA',
-        name: 'Current Account',
+        value: "CA",
+        name: "Current Account",
       },
       {
-        value: 'CC',
-        name: 'Cash Credit',
+        value: "CC",
+        name: "Cash Credit",
       },
       {
-        value: 'SB',
-        name: 'Savings Account',
+        value: "SB",
+        name: "Savings Account",
       },
-    ]
+    ];
   } else {
     account_types = [
       {
-        value: 'SB-NRE',
-        name: 'Non Resident External Account (NRE)',
+        value: "SB-NRE",
+        name: "Non Resident External Account (NRE)",
       },
       {
-        value: 'SB-NRO',
-        name: 'Non Resident Ordinary Account (NRO)',
+        value: "SB-NRO",
+        name: "Non Resident Ordinary Account (NRO)",
       },
-    ]
+    ];
   }
 
-  return account_types
-}
+  return account_types;
+};
 
 export const genderOptions = [
-  { name: 'Male', value: 'MALE' },
-  { name: 'Female', value: 'FEMALE' },
-  { name: 'Transgender', value: 'TRANSGENDER' },
-]
+  { name: "Male", value: "MALE" },
+  { name: "Female", value: "FEMALE" },
+  { name: "Transgender", value: "TRANSGENDER" },
+];
 
 export const maritalStatusOptions = [
-  { name: 'Single', value: 'SINGLE' },
-  { name: 'Married', value: 'MARRIED' },
-  { name: 'Unmarried', value: 'UNMARRIED' },
-]
+  { name: "Single", value: "SINGLE" },
+  { name: "Married", value: "MARRIED" },
+  { name: "Unmarried", value: "UNMARRIED" },
+];
 
 export const occupationTypeOptions = [
-  { name: 'Salaried', value: 'SALARIED' },
-  { name: 'Self employed', value: 'SELF EMPLOYED' },
-  { name: 'Business', value: 'BUSINESS' },
-  { name: 'Agriculturist', value: 'AGRICULTURIST' },
-  { name: 'Professional', value: 'PROFESSIONAL' },
-]
+  { name: "Salaried", value: "SALARIED" },
+  { name: "Self employed", value: "SELF EMPLOYED" },
+  { name: "Business", value: "BUSINESS" },
+  { name: "Agriculturist", value: "AGRICULTURIST" },
+  { name: "Professional", value: "PROFESSIONAL" },
+];
 
 export const getIfscCodeError = (code) => {
   switch (code) {
-    case 'lvb':
-      return 'Please enter a valid ifsc code of Lakshmi Vilas Bank'
-    case 'cub':
-      return 'Please enter a valid ifsc code of City Union Bank'
-    case 'ippb':
-      return 'Please enter a valid ifsc code of India Post Payments Bank'
+    case "lvb":
+      return "Please enter a valid ifsc code of Lakshmi Vilas Bank";
+    case "cub":
+      return "Please enter a valid ifsc code of City Union Bank";
+    case "ippb":
+      return "Please enter a valid ifsc code of India Post Payments Bank";
     default:
-      return 'Please enter a valid ifsc code'
+      return "Please enter a valid ifsc code";
   }
 };
 

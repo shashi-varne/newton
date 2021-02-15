@@ -136,12 +136,9 @@
     section {
       margin-top: 20px;
 
-      .compliant-report-skelton {
-        height: 100px !important;
-      }
-
       .report-skelton {
-        height: 200px !important;
+        margin: 25px 0;
+        height: 30px !important;
       }
 
       .tile-info {
@@ -583,8 +580,9 @@
     margin-top: 25px;
   }
 
-  .verify-skelton-top {
+  .verify-skelton {
     margin: 25px 0;
+    height: 30px !important;
   }
 
   .item {
@@ -623,10 +621,6 @@
 
     .right {
       color: #160d2e;
-    }
-
-    .verify-skelton {
-      width: 100px !important;
     }
 
     .edit {
@@ -1066,7 +1060,8 @@
   }
 }
 
-#kyc-upload-pan, .page-body-kyc {
+#kyc-upload-pan,
+.page-body-kyc {
   font-size: 14px;
   .alert-status-info {
     margin-top: 20px;
@@ -1085,7 +1080,7 @@
 
   // .kyc-doc-upload-container {
   //   margin-top: 20px;
-  //   border: 1px dashed var(--skelton-color); 
+  //   border: 1px dashed var(--skelton-color);
   //   padding: 10px;
   // }
 
@@ -1111,7 +1106,7 @@
   //     background-color: transparent;
   //     padding: 0;
   //     border: none;
-      
+
   //     svg {
   //       fill: var(--secondary);
   //     }
@@ -1128,7 +1123,7 @@
 
 .kyc-doc-upload-container {
   margin-top: 20px;
-  border: 1px dashed var(--skelton-color); 
+  border: 1px dashed var(--skelton-color);
   padding: 10px;
 }
 
@@ -1154,7 +1149,7 @@
     background-color: transparent;
     padding: 0;
     border: none;
-    
+
     svg {
       fill: var(--secondary);
     }

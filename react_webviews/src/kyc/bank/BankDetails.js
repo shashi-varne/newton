@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
-import { formatAmountInr } from "utils/validators";
-import { storageService } from "utils/validators";
+import { formatAmountInr, storageService, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
 import { initData } from "../services";
 import { storageConstants } from "../constants";
@@ -15,14 +14,17 @@ const BankDetails = (props) => {
   }
   const bank = banks.find((obj) => obj.bank_id?.toString() === bank_id) || {};
   const navigate = navigateFunc.bind(props);
+  const [userKyc, setUserKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || {}
+  );
 
   const handleClick = () => {
     if (bank.status === "default") {
-      navigate();
-      // $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status });
+      navigate(`/kyc/${userKyc.kyc_status}/upload-documents`);
     } else {
-      navigate();
-      // $state.go("kyc-upload-documents", { userType: $rootScope.userKyc.kyc_status, additional: true, bank_id: $scope.bankData.bank_id });
+      navigate(
+        `/kyc/${userKyc.kyc_status}/upload-documents?additional=true&bank_id=${bank_id}`
+      );
     }
   };
 
@@ -31,7 +33,12 @@ const BankDetails = (props) => {
   }, []);
 
   let initialize = async () => {
-    await initData();
+    let kyc = { ...userKyc };
+    if (isEmpty(kyc)) {
+      await initData();
+      kyc = storageService().getObject(storageConstants.KYC);
+      setUserKyc({ ...kyc });
+    }
   };
 
   return (

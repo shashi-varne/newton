@@ -27,8 +27,6 @@ const ConfirmPan = (props) => {
     });
   };
 
-  // const handleClick2 = () => {};
-
   const handleClick2 = async () => {
     try {
       let dob = userKyc.pan.meta_data.dob;
@@ -51,16 +49,14 @@ const ConfirmPan = (props) => {
         (kycConfirmPanScreen || isPremiumFlow)
       ) {
         navigate(getPathname.compliantPersonalDetails1);
-        // $state.go("kyc-compliant-personal-details");
       } else {
         if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          // $state.go("kyc-journey");
           navigate(getPathname.journey);
         } else {
           if (userKyc.address.meta_data.is_nri) {
-            // $state.go("kyc-journey", { show_aadhaar: false });
+            navigate(`${getPathname.journey}?show_aadhar=false`);
           } else {
-            // $state.go("kyc-journey", { show_aadhaar: true });
+            navigate(`${getPathname.journey}?show_aadhar=true`);
           }
         }
       }
@@ -81,8 +77,8 @@ const ConfirmPan = (props) => {
     if (isEmpty(userkycDetails)) {
       await initData();
       userkycDetails = storageService().getObject(storageConstants.KYC);
+      setUserKyc(userkycDetails);
     }
-    setUserKyc(userkycDetails);
   };
 
   return (

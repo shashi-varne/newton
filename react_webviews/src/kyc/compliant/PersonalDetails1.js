@@ -144,17 +144,17 @@ const PersonalDetails1 = (props) => {
         if (isEdit) {
           toState = "kyc-journey";
         }
-        // $state.go('kyc-nri-address-details-2', {
-        //   toState: toState,
-        //   userType: 'compliant'
-        // })
+        navigate(getPathname.nriAddressDetails2, {
+          state: {
+            toState: toState,
+            userType: "compliant",
+          },
+        });
       } else {
         if (isEdit) {
-          // $state.go("kyc-journey");
           navigate(getPathname.journey);
         } else {
           navigate(getPathname.compliantPersonalDetails2);
-          // $state.go("kyc-compliant-personal-details2");
         }
       }
     } catch (err) {

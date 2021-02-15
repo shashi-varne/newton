@@ -18,7 +18,7 @@ import { initData } from "../services";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { savePanData } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
-import toast from 'common/ui/Toast'
+import toast from "common/ui/Toast";
 
 const PersonalDetails2 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
@@ -101,13 +101,13 @@ const PersonalDetails2 = (props) => {
       if (!submitResult) return;
       if (isChecked) {
         if (isEdit) navigate(getPathname.journey);
-        else navigate();
+        else navigate("/kyc/compliant/bank-details");
       } else {
         navigate(getPathname.journey);
       }
     } catch (err) {
       console.log(err);
-      toast(err)
+      toast(err);
     } finally {
       setIsApiRunning(false);
     }

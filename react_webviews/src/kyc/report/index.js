@@ -13,6 +13,7 @@ import { navigate as navigateFunc } from "../common/functions";
 import { storageService, isEmpty } from "../../utils/validators";
 import { initData } from "../services";
 import { SkeltonRect } from "../../common/ui/Skelton";
+import { nativeCallback } from "utils/native_callback";
 
 const Report = (props) => {
   const productName = getConfig().productName;
@@ -69,7 +70,6 @@ const Report = (props) => {
       user.kyc_registration_v2 !== "submitted"
     ) {
       setTopTitle("Investment status");
-      // $scope.investmentPending = true;
     }
 
     let address_proof = "";
@@ -131,13 +131,11 @@ const Report = (props) => {
 
   const proceed = () => {
     if (getConfig().Web) {
-      // $state.go("invest");
       navigate(getPathname.invest);
     } else {
       if (storageService().get(storageConstants.NATIVE)) {
-        // callbackWeb.user_exit();
+        nativeCallback({ action: "exit" });
       } else {
-        // $state.go("landing");
         navigate(getPathname.landing);
       }
     }
@@ -146,15 +144,14 @@ const Report = (props) => {
   const checkNPSAndProceed = () => {
     if (currentUser.nps_investment) {
       if (!getConfig().isIframe) {
-        // navigate()
-        // navigate to reports
+        navigate(getPathname.reports);
       }
     } else {
       if (getConfig().Web) {
         navigate(getPathname.invest);
       } else {
         if (storageService().get(storageConstants.NATIVE)) {
-          // callbackWeb.user_exit();
+          nativeCallback({ action: "exit" });
         } else {
           navigate(getPathname.landing);
         }
@@ -350,7 +347,12 @@ const Report = (props) => {
             Approves in one working day
           </div>
           <section>
-            {isEmpty(cardDetails) && <SkeltonRect className="report-skelton" />}
+            {isEmpty(cardDetails) && <>
+              <SkeltonRect className="report-skelton" />
+              <SkeltonRect className="report-skelton" />
+              <SkeltonRect className="report-skelton" />
+              <SkeltonRect className="report-skelton" />
+            </>}
             {cardDetails &&
               cardDetails.map((item, index) => {
                 return (

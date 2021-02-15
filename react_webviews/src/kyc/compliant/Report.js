@@ -21,7 +21,6 @@ const CompliantReport = (props) => {
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
-      // navigate to kyc/upload/progress
       return;
     }
     if (openIndex === index) setOpenIndex(-1);
@@ -201,7 +200,11 @@ const CompliantReport = (props) => {
                 );
               })}
             {isEmpty(cardDetails) && (
-              <SkeltonRect className="compliant-report-skelton" />
+              <>
+                <SkeltonRect className="report-skelton" />
+                <SkeltonRect className="report-skelton" />
+                <SkeltonRect className="report-skelton" />
+              </>
             )}
           </section>
         </main>
