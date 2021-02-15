@@ -1377,7 +1377,11 @@ input#pan {
 
 @media (max-width: 900px) {
   .childblockiframe-element-img{
-    width: 100%;
+    width: 80%;
+    left: 10%
+  }
+  .childblockiframe-element-one{
+    width: 50%;
   }
 }
 
