@@ -116,14 +116,15 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance',
         "insurance_type": insurance_type ? insurance_type : '',
-        'banner_clicked' : banner_clicked ? true : false
+        'banner_clicked' : banner_clicked ? true : false,
+        'callback_clicked' : callback_clicked ?  true : false
       }
     };
 
@@ -132,6 +133,11 @@ class Landing extends Component {
     } else {
       nativeCallback({ events: eventObj });
     }
+  }
+
+  callBackScreen = () =>{
+    this.sendEvents('next', "", "", true);
+    this.navigate('/group-insurance/call-back-details');
   }
 
   render() {
@@ -145,7 +151,7 @@ class Landing extends Component {
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
-           <img style={{ margin: '-15px 5px 30px 0', minWidth: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
+           <img style={{ margin: '-15px 5px 30px 0', width: '100%' }} src={ require(`../../assets/${this.state.type}/icn_crousal_card_1.svg`)} alt="" />
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
@@ -158,7 +164,11 @@ class Landing extends Component {
             </div>
           </div>
 
-          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}>What our customers say</div>
+          <div className="callback-button-container">
+            <img className="image" style={{cursor: 'pointer'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} onClick={() => this.callBackScreen()} alt=""/>
+          </div>
+
+          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customers say </div>
           <div className="his"> <div className="horizontal-images-scroll">
               <img className="image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
               <img className="image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>

@@ -39,6 +39,10 @@ body[data-device="web"] #root {
 body[data-device="web"] {
   height: 100%;
 
+  .generic-error-dialog .overlay {
+    max-width: var(--desktop-width);
+    margin: 0 auto;
+  }
   .MuiAppBar-positionFixed {
     left: 0 !important;
   }
@@ -144,8 +148,7 @@ body[data-device="web"] {
     width: 100%;
     bottom: unset;
     left: unset;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-radius: 8px;
   }
 }
 
@@ -697,25 +700,10 @@ input#pan {
 }
 
 .generic-error-dialog {
-    width: 100%; 
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 999999999;
-    background-color: rgba(0, 0, 0, 0.5);
+   
     
     .overlay {
-      position: fixed;
-      background: white;
-      margin-top: 0 auto;
-      padding: 10px 20px 30px 20px;
-      bottom: 0;
-      width: -webkit-fill-available;
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+     
     }
 
     .top-part {
@@ -735,7 +723,7 @@ input#pan {
       margin: 0 15px 0 0;
     }
     .t-right {
-      margin: 0 -10px 0 0;
+      margin: 0 0px 0 0;
     }
     
     .top-image {
@@ -768,6 +756,16 @@ input#pan {
       cursor: pointer;
     }
 
+    .page-button {
+      color: var(--secondary);
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid;
+      width: fit-content;
+      padding: 7px 20px 7px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
     .button{
       font-size: 12px;
       line-height: 14px;
@@ -784,9 +782,26 @@ input#pan {
 }
 
 .generic-error-dialog-page {
+  width: 100%; 
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999999;
+  background-color: rgba(0, 0, 0, 0.5);
   background: white;
   margin: 56px 0 0 0;
   .ovarlay-page {
+    position: fixed;
+    background: white;
+    margin-top: 0 auto;
+    padding: 20px 20px 30px 20px;
+    bottom: 0;
+    width: -webkit-fill-available;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     position: relative;
     padding: 100px 20px 30px 20px;
     text-align: center;
@@ -794,6 +809,8 @@ input#pan {
   }
   .top-image-page {
     margin: 0px 0 30px 0;
+    width: 198px !important;
+    height: 91px !important;
   }
   .title1-page {
     margin: 0px;
@@ -801,8 +818,12 @@ input#pan {
   .title2-page {
     text-align: center;
   }
-  .actions {
-    margin: 30px 0 0px 0;
+  .actions-page {
+    text-align: center;
+    width: fit-content;
+    margin: 0 auto;
+    margin-top: 20px;
+    min-width: 150px
   }
 }
 
@@ -1300,8 +1321,8 @@ input#pan {
   width: 100%;
   bottom: 0px;
   left: -20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 /* autosuggest */
@@ -1496,4 +1517,14 @@ input#pan {
 
 .OTP-title{
   justify-content: center !important;
+}
+
+
+.callback-button-container{
+  margin: 40px 0;
+}
+
+.callback-button-container img{
+  width: 100%;
+  object-fit: cover;
 }

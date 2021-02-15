@@ -10,7 +10,7 @@ import "./components/Style.scss";
 import NotFound from "../common/components/NotFound";
 
 
-import Landing from "./components/general/landing";
+// import Landing from "./components/general/landing";
 import Report from "./components/general/report";
 import Journey from "./components/general/journey";
 import Calculator from "./components/general/calculator";
@@ -45,6 +45,7 @@ import Pan from "./components/mandate/pan";
 import Bank from "./components/mandate/bank";
 import Reference from "./components/mandate/reference";
 import MandateStatus from "./components/mandate/status";
+import SystemMaintainence from "./components/general/system_maintain";
 
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
@@ -84,7 +85,7 @@ const Lending = props => {
         <ToastContainer autoClose={3000} />
         <Switch>
 
-          <Route path={`${url}/home`} component={Landing} />
+          {/* <Route path={`${url}/home`} component={Landing} /> */}
           <Route path={`${url}/app-update`} component={AppUpdate} />
           <Route path={`${url}/journey`} component={Journey} />
           <Route path={`${url}/calculator`} component={Calculator} />
@@ -118,6 +119,7 @@ const Lending = props => {
           <Route path={`${url}/bank`} component={Bank} />
           <Route path={`${url}/upload-pan`} component={Pan} />
           <Route path={`${url}/mandate-status`} component={MandateStatus} />
+          <Route path={`${url}/home`} component={SystemMaintainence} />
 
           {/* Edit paths */}
 

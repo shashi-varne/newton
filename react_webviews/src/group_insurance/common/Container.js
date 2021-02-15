@@ -48,7 +48,8 @@ class Container extends Component {
        || pathname.indexOf('life-insurance') >= 0 
        || pathname.includes('/group-insurance/group-health')
        || pathname === '/group-insurance/group-insurance/add-policy' 
-       || pathname === '/group-insurance/health/landing') {
+       || pathname === '/group-insurance/health/landing'
+       || pathname === '/group-insurance/call-back-details') {
       this.setState({
         new_header: true,
         inPageTitle: true,
@@ -526,7 +527,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        {!this.props.hide_header && this.props.showLoader !== true && <Header
+        {!this.props.hide_header && this.props.showLoader !== true && !this.props.showLoaderModal && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
@@ -550,18 +551,19 @@ class Container extends Component {
         {/* Below Header Block */}
         <div id="HeaderHeight" style={{ top: 56 }}>
 
-          {/* Loader Block */}
+
+          {/* Loader Block covering entire screen*/}
           {this.renderPageLoader()}
 
           {/* Error Block */}
           {this.renderGenericError()}
 
-          {!this.props.showLoader && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
+          {!this.props.showLoader && !this.props.showLoaderModal && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
             {steps}
           </div>}
 
           {/* Banner Block */}
-          {!this.props.showLoader && this.props.banner && <Banner text={this.props.bannerText} />}
+          {!this.props.showLoader && !this.props.showLoaderModal && this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 

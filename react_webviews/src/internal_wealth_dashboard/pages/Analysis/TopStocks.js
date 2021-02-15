@@ -2,6 +2,7 @@ import React from 'react';
 import IwdCard from '../../mini-components/IwdCard';
 import { isEmpty } from 'utils/validators';
 import { topStocksIconMappings } from '../../constants';
+import { formatPercentVal } from '../../common/commonFunctions';
 const TopStocks = ({ topStocks }) => {
   return (
     <div className='iwd-scroll-child' data-pgno='2'>
@@ -24,7 +25,7 @@ const TopStocks = ({ topStocks }) => {
                 <main>
                   <div className='iwd-analysis-portfolio-heading'>{heading}</div>
                   <div className='iwd-analysis-portfolio-name'>{company}</div>
-                  <div className='iwd-analysis-portfolio-percentage'>{percentage}%</div>
+                  <div className='iwd-analysis-portfolio-percentage'>{formatPercentVal(percentage)}</div>
                 </main>
               </div>
             )

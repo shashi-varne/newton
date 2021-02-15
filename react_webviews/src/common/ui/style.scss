@@ -12,8 +12,8 @@
   color: #fff;
   border: 1px solid;
 }
-.MuiDialogContent-root:first-child {
-  padding-top: 24px !important;
+.MuiDialogContent-root {
+  padding: 20px !important;
 }
 .RadioButton label.professional {
   padding: 8px;
@@ -155,9 +155,6 @@
 }
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
-}
-.MuiDialogContent-root {
-  padding: 0 14px 24px 14px !important;
 }
 .spinner {
   width: 70px;

@@ -1,6 +1,7 @@
 import React from 'react';
 import IwdCard from '../../mini-components/IwdCard';
 import { isEmpty } from 'utils/validators';
+import { formatPercentVal } from '../../common/commonFunctions';
 const TopHoldings = ({ topHoldings }) => {
   return (
     <div className='iwd-scroll-child' data-pgno='2'>
@@ -16,7 +17,7 @@ const TopHoldings = ({ topHoldings }) => {
               <div className='iwd-analysis-debt-holding-logo'>{name.charAt(0).toUpperCase()}</div>
               <div className='iwd-analysis-debt-holding-details'>
                 <div className='iwd-analysis-debt-holding-name'>{name}</div>
-                <div className='iwd-analysis-debt-holding-percentage'>{percentage}%</div>
+                <div className='iwd-analysis-debt-holding-percentage'>{formatPercentVal(percentage)}</div>
               </div>
             </div>
           ))}
