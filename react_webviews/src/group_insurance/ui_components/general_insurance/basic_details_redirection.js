@@ -213,7 +213,7 @@ class BasicDetailsRedirectionForm extends Component {
         if (canSubmitForm) {
             try {
                 let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-                this.setState({ openModal: true, openModalMessage: openModalMessage });
+                this.setState({ openModal: true, openModalMessage: openModalMessage, show_loader: 'button' });
 
                 var leadCreateBody = {
                     name: this.state.name,
@@ -234,7 +234,8 @@ class BasicDetailsRedirectionForm extends Component {
                         this.setState({ 
                             skelton: false,
                             openModal: false, 
-                            openModalMessage: ''
+                            openModalMessage: '',
+                            show_loader: 'button'
                          });
 
                          open_browser_web(leadRedirectUrl, '_blank');
@@ -261,6 +262,10 @@ class BasicDetailsRedirectionForm extends Component {
                         window.location.href = leadRedirectUrl;
                     }
 
+                    this.setState({
+                        show_loader: false
+                      });
+
                 } else {
                     this.setState({ skelton: false,openModal: false, 
                         openModalMessage: '' });
@@ -271,7 +276,8 @@ class BasicDetailsRedirectionForm extends Component {
             } catch (err) {
                 this.setState({
                   skelton: false,
-                  showError: true
+                  showError: true,
+                  show_loader: false
                 });
               }
           
@@ -282,7 +288,8 @@ class BasicDetailsRedirectionForm extends Component {
                     ...this.state.errorData,
                     title2: error
                   },
-                  showError: true
+                  showError: true,
+                  show_loader: false
                 })
               }
         }

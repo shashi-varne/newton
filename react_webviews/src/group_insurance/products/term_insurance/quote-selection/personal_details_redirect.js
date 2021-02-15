@@ -217,7 +217,7 @@ class PersonalDetails1 extends Component {
     if (canSubmitForm) {
       try {
         let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-        this.setState({ openModal: true, openModalMessage: openModalMessage ,});
+        this.setState({ openModal: true, openModalMessage: openModalMessage ,  show_loader: 'button'});
 
         var kotakBody = {
           name: this.state.name,
@@ -233,7 +233,8 @@ class PersonalDetails1 extends Component {
             this.setState({
               skelton: false,
               openModal: false,
-              openModalMessage: ''
+              openModalMessage: '',
+              show_loader: 'button'
             });
 
             open_browser_web(kotakUrl, '_blank');
@@ -260,10 +261,15 @@ class PersonalDetails1 extends Component {
             window.location.href = kotakUrl;
           }
 
+          this.setState({
+            show_loader: false
+          });
+
         } else {
           this.setState({
             skelton: false, openModal: false,
-            openModalMessage: ''
+            openModalMessage: '',
+            show_loader: false
           });
           error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
           // toast(res.pfwresponse.result.error || 'Something went wrong');
@@ -271,7 +277,8 @@ class PersonalDetails1 extends Component {
       } catch (err) {
         this.setState({
           skelton: false,
-          showError: true
+          showError: true,
+          show_loader: false
         });
       }
   
@@ -282,7 +289,8 @@ class PersonalDetails1 extends Component {
             ...this.state.errorData,
             title2: error
           },
-          showError: true
+          showError: true,
+          show_loader: false
         })
       }
     }
