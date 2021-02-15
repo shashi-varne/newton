@@ -445,47 +445,47 @@ input.default-otp-input {
 
 
 
-.__react_component_tooltip::before,
-.__react_component_tooltip::after {
-  content: "";
-  top: -6px !important;
-  transform: rotate(-90deg);
-  right: 6px !important;
-  border-left-width: 12px !important;
-  border-bottom-width: 5px !important;
-}
+// .__react_component_tooltip::before,
+// .__react_component_tooltip::after {
+//   content: "";
+//   top: -6px !important;
+//   transform: rotate(-90deg);
+//   right: 6px !important;
+//   border-left-width: 12px !important;
+//   border-bottom-width: 5px !important;
+// }
 
-body[data-device="web"] {
-  .__react_component_tooltip {
-    max-width: var(--tooltip-width);
-    margin: 0 auto !important;
-    z-index: 999999;
-    height: auto !important;
-    left: 8% !important;
-    margin-top: 50px !important;
-  }
-  .__react_component_tooltip.show {
-    opacity: 1;
-   }
-  .__react_component_tooltip::before,
-  .__react_component_tooltip::after {
-    content: "";
-    right: 46px !important;
-  }
-}
+// body[data-device="web"] {
+//   .__react_component_tooltip {
+//     max-width: var(--tooltip-width);
+//     margin: 0 auto !important;
+//     z-index: 999999;
+//     height: auto !important;
+//     left: 8% !important;
+//     margin-top: 50px !important;
+//   }
+//   .__react_component_tooltip.show {
+//     opacity: 1;
+//    }
+//   .__react_component_tooltip::before,
+//   .__react_component_tooltip::after {
+//     content: "";
+//     right: 46px !important;
+//   }
+// }
 
-body[data-device="mobile"] {
-  .__react_component_tooltip {
-    // left: auto !important;
-    margin-right: -1px !important;
-    width: 62%;
-    // right: 0px;
-    margin-top: 70px !important;
-  }
-  .__react_component_tooltip.show {
-    opacity: 1;
-   }
-}
+// body[data-device="mobile"] {
+//   .__react_component_tooltip {
+//     // left: auto !important;
+//     margin-right: -1px !important;
+//     width: 62%;
+//       // margin-top: 70px !important;
+//     // right: 0px;
+//   }
+//   .__react_component_tooltip.show {
+//     opacity: 1;
+//    }
+// }
 
 .generic-render-benefits {
   margin-top: -40px;
@@ -662,9 +662,9 @@ body[data-device="mobile"] {
   overflow: auto !important;
 }
 
-.__react_component_tooltip .multi-line {
-  text-align: left !important;
-}
+// .__react_component_tooltip .multi-line {
+//   text-align: left !important;
+// }
 
 .generic-otp {
   .didnt-rec {
