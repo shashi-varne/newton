@@ -581,6 +581,8 @@ export const insuranceProductTitleMapper = {
   'term_insurance': 'Term Insurance',
   'DENGUE': 'Dengue insurance',
   'CORONA': 'Coronavirus insurance',
+  'HOME_INSURANCE': 'Home insurance',
+  'HEALTH_SUPER_TOPUP':'Health super top-up'
 }
 
 export function getBhartiaxaStatusToState(policy) {

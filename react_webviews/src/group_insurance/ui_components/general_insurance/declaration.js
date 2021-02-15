@@ -28,11 +28,11 @@ class DeclarationClass extends Component {
 
   
     var final_data = {
-      "product_plan": this.props.parent.props.location.params.premium_details.product_plan,
-      "premium": this.props.parent.props.location.params.premium_details.premium,
-      "cover_amount": this.props.parent.props.location.params.premium_details.cover_amount,
-      "tax_amount": this.props.parent.props.location.params.premium_details.tax_amount,
-      "productTitle":this.props.parent.props.location.params.premium_details.productTitle
+      "product_plan": this.props.parent.props.location.state.premium_details.product_plan,
+      "premium": this.props.parent.props.location.state.premium_details.premium,
+      "cover_amount": this.props.parent.props.location.state.premium_details.cover_amount,
+      "tax_amount": this.props.parent.props.location.state.premium_details.tax_amount,
+      "productTitle":this.props.parent.props.location.state.premium_details.productTitle
     } 
 
 
