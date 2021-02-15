@@ -251,6 +251,11 @@ class PaymentOption extends React.Component {
     this.selectedBank = this.selectedBank.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
+  
+  componentWillMount() {
+    nativeCallback({ action: 'take_control_reset' });
+  }
+
   componentDidMount = async () => {
     window.PlutusInitState.page = this.props.page;
     this.setState({

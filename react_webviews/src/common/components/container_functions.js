@@ -1,7 +1,6 @@
 
 import { getConfig, setHeights } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
-import $ from  'jquery';
 
 
 import React from "react";
@@ -14,7 +13,6 @@ import Dialog, {
     DialogContentText
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
-import { disableBodyOverflow } from 'utils/validators';
 import {Imgc} from '../../common/ui/Imgc';
 
 let start_time = '';
@@ -257,26 +255,6 @@ export function renderGenericError() {
     button_text1 = button_text1 || map_data.button_text1 || 'RETRY';
 
 
-
-    if(this.props.showError !== false || this.props.showError) {
-        var that = this;
-
-        function clickfunction(e) {
-            if (e.target.id === "error-dialog-parent" || $(e.target).parents("#error-dialog-parent").length) {
-                // alert("Inside div");
-                } else {
-                    disableBodyOverflow(true); //touch enabled
-                    // eslint-disable-next-line
-                    that.props.errorData && that.props.errorData.setErrorData ? that.props.errorData.setErrorData(''): () => {};
-                    document.removeEventListener('click', clickfunction, false);
-        
-                }
-        }
-
-        document.addEventListener('click',clickfunction, false);
-    }
-  
-
     function genericErrorActions() {
         return(
                         <div className="actions">
@@ -285,7 +263,6 @@ export function renderGenericError() {
                           className={`generic-page-button-large button`}
                             style={{margin: '0 20px 0 0'}}
                             onClick={() => {
-                                disableBodyOverflow(true); //touch enabled
                                 handleClick2();
                             }}>
                                 {button_text2}
@@ -293,7 +270,19 @@ export function renderGenericError() {
                             <div 
                             className={`generic-page-button-small-with-green button ${(!two_button ? 'single-button' : '')}`}
                             onClick={() => {
-                                disableBodyOverflow(true); //touch enabled
+                                handleClick1();
+                            }}>
+                                {button_text1}
+                            </div>
+                        </div>
+        )
+    }
+    function genericErrorActionsPage() {
+        return(
+                        <div className="actions-page">
+                            <div 
+                            className={`page-button button`}
+                            onClick={() => {
                                 handleClick1();
                             }}>
                                 {button_text1}
@@ -317,9 +306,19 @@ export function renderGenericError() {
     if (this.props.showError === true) {
 
         
-        disableBodyOverflow(); //touch disabled
         return (
-            <div  className={`generic-error-dialog fadein-animation ${errorData ? errorData.errorClass : ''}`}>
+
+            <Dialog
+                id="bottom-popup"
+                open={this.props.showError || false}
+                onClose={this.props.errorData.setErrorData}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+            <DialogContent>
+                <div className="gold-dialog" id="alert-dialog-description">
+                    
+                <div  className={`generic-error-dialog fadein-animation ${errorData ? errorData.errorClass : ''}`}>
                 <div id="error-dialog-parent" className="overlay">
 
                     <div className="top-part">
@@ -333,17 +332,19 @@ export function renderGenericError() {
                         </div>
                     </div>
                     
-                    
 
                     <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>
                     {genericErrorActions()}
                 </div>
-            </div>
+                    </div>                    
+                </div>
+            </DialogContent>
+        </Dialog >
+            
         );
     }  if (this.props.showError === 'page') {
 
         
-        disableBodyOverflow(); //touch disabled
         return (
             <div  className={`generic-error-dialog generic-error-dialog-page fadein-animation ${errorData ? errorData.errorClass : ''}`}>
                 <div id="error-dialog-parent" className="overlay ovarlay-page">
@@ -353,12 +354,11 @@ export function renderGenericError() {
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
                     <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>
-                    {genericErrorActions()}
+                    {genericErrorActionsPage()}
                 </div>
             </div>
         );
     } else {
-        disableBodyOverflow(true); //touch enabled
         return null;
     }
 }

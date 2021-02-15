@@ -681,7 +681,6 @@ class BasicDetailsForm extends Component {
         buttonTitle='Go to Summary'
         onlyButton={true}
         showError={this.state.showError}
-        // showError={true}
         errorData={this.state.errorData}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}

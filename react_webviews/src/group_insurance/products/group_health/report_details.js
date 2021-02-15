@@ -5,7 +5,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
 import toast from '../../../common/ui/Toast';
@@ -16,7 +16,7 @@ import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
 import ReactHtmlParser from 'react-html-parser';
-import { childeNameMapper } from '../../constants';
+import { childeNameMapper , ProviderName } from '../../constants';
 import {getCoverageType} from './constants';
 
 class GroupHealthReportDetails extends Component {
@@ -182,7 +182,7 @@ class GroupHealthReportDetails extends Component {
 
 
         if (this.state.download_link || url) {
-            this.sendEvents('download');
+            // this.sendEvents('download');
             nativeCallback({
                 action: 'open_in_browser',
                 message: {
@@ -192,6 +192,10 @@ class GroupHealthReportDetails extends Component {
         } else {
             this.getDownloadLink();
         }
+
+        this.setState({
+            download_policy: true
+        })
 
     }
 
@@ -321,15 +325,19 @@ class GroupHealthReportDetails extends Component {
 
 
     sendEvents(user_action) {
+        let providor_name = this.state.providerConfig.provider_api ? ProviderName(this.state.providerConfig.provider_api) : '';
+
         let eventObj = {
             "event_name": 'health_insurance',
             "properties": {
                 "user_action": user_action,
-                "product": this.state.providerConfig.provider_api,
-                "flow": this.state.insured_account_type || '',
-                "screen_name": 'report details',
+                'policy': 'Health insurance',
+                'policy_status': this.state.policy_data.status ? this.state.policy_data.status === 'policy_issued' ? 'Issued': capitalizeFirstLetter(this.state.policy_data.status.toLowerCase()) : '',
+                "provider_name":  capitalizeFirstLetter(providor_name),
+                "screen_name": 'policy_details',
                 "how_to_claim": this.state.how_to_claim_clicked ? 'yes' : 'no',
-                "plan_details": this.state.plan_details_clicked ? 'yes': 'no'
+                "plan_details": this.state.plan_details_clicked ? 'yes': 'no',
+                "download_policy":  this.state.download_policy ? 'yes' : 'no',
             }
         };
 
