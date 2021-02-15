@@ -94,20 +94,21 @@ const Report = (props) => {
       );
     }
 
+    let reportCards = [...reportCardDetails];
     setIsNri(isNri);
     if (is_compliant) {
       if (isNri) {
-        reportCardDetails.splice(4, 1); //remove docs
+        reportCards.splice(4, 1); //remove docs
       } else {
-        reportCardDetails.splice(1, 1); //remove address
-        reportCardDetails.splice(3, 1); //remove docs
+        reportCards.splice(1, 1); //remove address
+        reportCards.splice(3, 1); //remove docs
       }
     }
     if (userkycDetails.nomination.nominee_optional) {
       if (is_compliant) {
-        reportCardDetails.splice(1, 1);
+        reportCards.splice(1, 1);
       } else {
-        reportCardDetails.splice(2, 1);
+        reportCards.splice(2, 1);
       }
     }
     if (
@@ -117,7 +118,7 @@ const Report = (props) => {
     ) {
       setTopTitle("Investment status");
     }
-    setCardDetails(reportCardDetails);
+    setCardDetails(reportCards);
   };
 
   const handleClick = () => {

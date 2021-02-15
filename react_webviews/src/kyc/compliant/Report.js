@@ -44,19 +44,20 @@ const CompliantReport = (props) => {
     }
     let isNri = userkycDetails.address.meta_data.is_nri;
     setIsNri(isNri);
+    let reportCards = [...reportCardDetails];
     if (isCompliant) {
       if (isNri) {
-        reportCardDetails.splice(4, 1); //remove docs
+        reportCards.splice(4, 1); //remove docs
       } else {
-        reportCardDetails.splice(1, 1); //remove address
-        reportCardDetails.splice(3, 1); //remove docs
+        reportCards.splice(1, 1); //remove address
+        reportCards.splice(3, 1); //remove docs
       }
     }
     if (userkycDetails.nomination.nominee_optional) {
       if (isCompliant) {
-        reportCardDetails.splice(1, 1);
+        reportCards.splice(1, 1);
       } else {
-        reportCardDetails.splice(2, 1);
+        reportCards.splice(2, 1);
       }
     }
     if (
@@ -66,7 +67,7 @@ const CompliantReport = (props) => {
     ) {
       setTopTitle("Investment status");
     }
-    setCardDetails(reportCardDetails);
+    setCardDetails(reportCards);
   };
 
   const personalDetails = () => {
