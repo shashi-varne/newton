@@ -51,7 +51,7 @@ class Home extends Component {
         index: 0,
         title: "IDFC FIRST Bank",
         subtitle: "Competitve interest rate",
-        loan_amount: " ₹40 lacs",
+        loan_amount: " ₹40 lakhs",
         logo: "idfc_logo",
         provider_name: "idfc",
         cta_title: "RESUME",
@@ -206,18 +206,9 @@ class Home extends Component {
           <div className="block3-info">
             <div className="top-title">Our partners</div>
             <div className="partners">
-              <div>
-                <div className="card">
-                  <img src={require(`assets/idfc_logo.svg`)} alt="idfc logo" />
-                </div>
-                IDFC FIRST Bank
-              </div>
-              {/* <div>
-                <div className="card">
-                  <img src={require(`assets/dmi-finance.svg`)} alt="dmi logo" />
-                </div>
-                DMI finance
-              </div> */}
+              {/* <div className="partner-card"> */}
+                <img src={require(`assets/idfc.svg`)} alt="idfc logo" />
+              {/* </div> */}
             </div>
           </div>
         </div>

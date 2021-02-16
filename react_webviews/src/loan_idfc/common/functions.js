@@ -10,7 +10,8 @@ import {
   isValidDate,
   getEditTitle,
   IsFutureDate,
-  numDifferentiationInr
+  numDifferentiationInr,
+  calculateAge
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";
 
@@ -925,19 +926,10 @@ export async function formCheckUpdate(
   } else if (form_data.dob && IsFutureDate(form_data.dob)) {
     form_data.dob_error = "Future date is not allowed";
     canSubmitForm = false;
+  } else if (calculateAge(form_data.dob, true).days === 0) {
+    form_data.dob_error = "Current date is not allowed";
+    canSubmitForm = false;
   }
-
-  // if (form_data.company_name && this.state.lead.application_info.employment_type !== "self_employed") {
-  //   let data = this.state.companyOptions.filter(
-  //     (data) => data.name === form_data.company_name
-  //   );
-
-  //   if (data.length === 0) {
-  //     form_data.company_name_error =
-  //       "Please select company name from provided list";
-  //     canSubmitForm = false;
-  //   }
-  // }
 
   this.setState({
     form_data: form_data,

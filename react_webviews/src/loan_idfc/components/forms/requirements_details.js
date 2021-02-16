@@ -5,8 +5,11 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import Attention from "../../../common/ui/Attention";
-import { numDifferentiationInr, formatAmount, inrFormatTest } from "utils/validators";
+import {
+  numDifferentiationInr,
+  formatAmount,
+  inrFormatTest,
+} from "utils/validators";
 
 class LoanRequirementDetails extends Component {
   constructor(props) {
@@ -16,7 +19,7 @@ class LoanRequirementDetails extends Component {
       form_data: {},
       screen_name: "requirement_details_screen",
       loaderData: {},
-      purposeOfLoanOptions: []
+      purposeOfLoanOptions: [],
     };
 
     this.initialize = initialize.bind(this);
@@ -32,18 +35,18 @@ class LoanRequirementDetails extends Component {
 
     let form_data = {
       amount_required: application_info.amount_required,
-      tenor: !application_info.tenor ? '' : String(application_info.tenor)
-    }
+      tenor: !application_info.tenor ? "" : String(application_info.tenor),
+    };
 
     let loaderData = {
-      title: 'Please wait while IDFC evaluates your profile',
-      subtitle: 'This may take 10 - 15 seconds!'
-    }
+      title: "Please wait while IDFC evaluates your profile",
+      subtitle: "This may take 10 - 15 seconds!",
+    };
 
     this.setState({
       form_data: form_data,
-      loaderData: loaderData
-    })
+      loaderData: loaderData,
+    });
   };
 
   sendEvents(user_action) {
@@ -62,19 +65,19 @@ class LoanRequirementDetails extends Component {
     }
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    if (name === 'amount_required') {
+    if (name === "amount_required") {
       if (!inrFormatTest(event.target.value)) {
         return;
       }
 
-      console.log(formatAmount(event.target.value))
+      console.log(formatAmount(event.target.value));
 
       form_data[name] = event.target.value;
-      form_data[name + "_error"] = '';
+      form_data[name + "_error"] = "";
     }
 
     if (name) {
@@ -88,21 +91,20 @@ class LoanRequirementDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let { form_data } = this.state;
     let keys_to_check = [
       "amount_required",
-      // "purpose",
-      "tenor"
+      "tenor",
     ];
 
-    this.formCheckUpdate(keys_to_check, form_data, 'point_five', true);
+    this.formCheckUpdate(keys_to_check, form_data, "point_five", true);
   };
 
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Loan requirement details"
         buttonTitle="SUBMIT"
@@ -111,8 +113,6 @@ class LoanRequirementDetails extends Component {
         handleClick={this.handleClick}
       >
         <div className="requirements-details">
-          <Attention content="Enter and reverify information. Once submitted, you can’t make any changes." />
-
           <FormControl fullWidth>
             <div className="InputField">
               <Input

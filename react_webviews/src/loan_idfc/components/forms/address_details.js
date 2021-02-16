@@ -6,7 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import scrollIntoView from 'scroll-into-view-if-needed';
+import scrollIntoView from "scroll-into-view-if-needed";
 import Api from "utils/api";
 
 const yesOrNo_options = [
@@ -62,7 +62,7 @@ class AddressDetails extends Component {
         next_state: `/loan/idfc/ckyc-summary`,
       });
     }
-    
+
     let lead = this.state.lead || {};
     let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};
@@ -87,7 +87,7 @@ class AddressDetails extends Component {
     form_data.current_pincode = current_address_data.pincode;
     form_data.current_city = current_address_data.city;
     form_data.current_state = current_address_data.state;
-    form_data.current_country= 'India';
+    form_data.current_country = "India";
 
     form_data.permanent_address1 = permanent_address_data.address1;
     form_data.permanent_address2 = permanent_address_data.address2;
@@ -96,7 +96,7 @@ class AddressDetails extends Component {
     form_data.permanent_pincode = permanent_address_data.pincode;
     form_data.permanent_city = permanent_address_data.city;
     form_data.permanent_state = permanent_address_data.state;
-    form_data.permanent_country= 'India';
+    form_data.permanent_country = "India";
 
     this.setState({
       form_data: form_data,
@@ -111,7 +111,8 @@ class AddressDetails extends Component {
       properties: {
         user_action: user_action,
         screen_name: "kyc_address_details",
-        current_address_edited: this.state.form_data.current_address_edited || 'no',
+        current_address_edited:
+          this.state.form_data.current_address_edited || "no",
         ckyc_success: this.state.confirm_details ? "yes" : "no",
       },
     };
@@ -127,28 +128,41 @@ class AddressDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3', 'current_landmark',
-    'current_address1', 'current_address2', 'current_address3', 'permanent_landmark'];
+    let validate = [
+      "permanent_address1",
+      "permanent_address2",
+      "permanent_address3",
+      "current_landmark",
+      "current_address1",
+      "current_address2",
+      "current_address3",
+      "permanent_landmark",
+    ];
 
     var format = /[^a-zA-Z0-9 ,]/g;
 
     if (validate.includes(name)) {
       let error = format.test(value);
-      
-      form_data[name] = value;
-      form_data[name + "_error"] = error ? "special characters are not allowed except ( , ) commas." : '';
 
+      form_data[name] = value;
+      form_data[name + "_error"] = error
+        ? "special characters are not allowed except ( , ) commas."
+        : "";
     } else {
       form_data[name] = value;
       form_data[name + "_error"] = "";
     }
 
-    let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
+    let confirm_fields = [
+      "current_address1",
+      "current_address2",
+      "current_pincode",
+    ];
 
     if (this.state.confirm_details) {
-      this.handleCkycMessage(name)
-      if(confirm_fields.includes(name))
-        form_data['current_address_edited'] = "yes";
+      this.handleCkycMessage(name);
+      if (confirm_fields.includes(name))
+        form_data["current_address_edited"] = "yes";
     }
 
     this.setState({
@@ -158,22 +172,21 @@ class AddressDetails extends Component {
 
   handleScroll = (value) => {
     setTimeout(function () {
-        let element = document.getElementById('addressScroll');
-        if (!element || element === null) {
-            return;
-        }
+      let element = document.getElementById("addressScroll");
+      if (!element || element === null) {
+        return;
+      }
 
-        scrollIntoView(element, {
-            block: 'start',
-            inline: 'nearest',
-            behavior: 'smooth'
-        })
-
+      scrollIntoView(element, {
+        block: "start",
+        inline: "nearest",
+        behavior: "smooth",
+      });
     }, 50);
-}
+  };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let { form_data } = this.state;
     let keys_to_check = [
       "current_address1",
@@ -192,12 +205,23 @@ class AddressDetails extends Component {
 
     let keys_to_include;
     if (this.state.confirm_details) {
-      keys_to_include = ['current_address3', 'permanent_address3', 'current_country', 'permanent_country']
+      keys_to_include = [
+        "current_address3",
+        "permanent_address3",
+        "current_country",
+        "permanent_country",
+      ];
     } else {
-      keys_to_include = ['current_country', 'permanent_country']
+      keys_to_include = ["current_country", "permanent_country"];
     }
 
-    this.formCheckUpdate(keys_to_check, form_data, "null", true, keys_to_include);
+    this.formCheckUpdate(
+      keys_to_check,
+      form_data,
+      "null",
+      true,
+      keys_to_include
+    );
   };
 
   handlePincode = (name) => async (event) => {
@@ -212,8 +236,8 @@ class AddressDetails extends Component {
     form_data[name + "_error"] = "";
 
     if (this.state.confirm_details) {
-      if(name === 'current_pincode')
-        form_data['current_address_edited'] = "yes";
+      if (name === "current_pincode")
+        form_data["current_address_edited"] = "yes";
       this.handleCkycMessage(name);
     }
 
@@ -244,7 +268,7 @@ class AddressDetails extends Component {
       } else {
         city = "";
         state = "";
-        country = ""
+        country = "";
         pincode_error = "Invalid pincode";
       }
 
@@ -254,14 +278,14 @@ class AddressDetails extends Component {
         form_data.current_state = state;
         form_data.current_state_error = "";
         form_data.current_pincode_error = pincode_error;
-        form_data.current_country = country || 'India';
+        form_data.current_country = country || "India";
       } else if (name === "permanent_pincode") {
         form_data.permanent_city = city;
         form_data.permanent_city_error = "";
         form_data.permanent_state = state;
         form_data.permanent_state_error = "";
         form_data.permanent_pincode_error = pincode_error;
-        form_data.permanent_country = country || 'India';
+        form_data.permanent_country = country || "India";
       }
     }
 
@@ -282,33 +306,40 @@ class AddressDetails extends Component {
       form_data.permanent_pincode = form_data.current_pincode;
       form_data.permanent_city = form_data.current_city;
       form_data.permanent_state = form_data.current_state;
-      form_data.permanent_country = form_data.current_country
+      form_data.permanent_country = form_data.current_country;
     }
 
     for (var i in form_data) {
       form_data[i + "_error"] = "";
     }
 
-    this.setState({
-      isPermanent_address: isPermanent_address,
-      form_data: form_data,
-    }, () => {
-      if (isPermanent_address === "Yes") {
-        this.handleScroll();
+    this.setState(
+      {
+        isPermanent_address: isPermanent_address,
+        form_data: form_data,
+      },
+      () => {
+        if (isPermanent_address === "Yes") {
+          this.handleScroll();
+        }
       }
-    });
+    );
   };
 
   handleCkycMessage(name) {
-    if(this.state.confirm_details) {
-      let confirm_fields = ["current_address1", "current_address2", "current_pincode"]
+    if (this.state.confirm_details) {
+      let confirm_fields = [
+        "current_address1",
+        "current_address2",
+        "current_pincode",
+      ];
       let { form_data } = this.state;
-      confirm_fields.forEach(element => {
-        if(element === name)
-          form_data[name + '_helper'] = 'Document proof will be required if you make any change';
-        else 
-          form_data[element + '_helper'] = '';
-      })
+      confirm_fields.forEach((element) => {
+        if (element === name)
+          form_data[name + "_helper"] =
+            "Document proof will be required if you make any change";
+        else form_data[element + "_helper"] = "";
+      });
       this.setState({
         form_data: form_data,
       });
@@ -318,7 +349,7 @@ class AddressDetails extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
@@ -332,16 +363,15 @@ class AddressDetails extends Component {
         loaderData={this.state.loaderData}
       >
         <div className="address-details">
-          {this.state.confirm_details && (
-            <Attention content="Once submitted, details cannot be modified." />
-          )}
-
           <div className="head-title">Current address</div>
           <FormControl fullWidth>
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.current_address1_error}
-                helperText={this.state.form_data.current_address1_error || this.state.form_data.current_address1_helper}
+                helperText={
+                  this.state.form_data.current_address1_error ||
+                  this.state.form_data.current_address1_helper
+                }
                 type="text"
                 width="40"
                 label="Address line 1"
@@ -356,7 +386,10 @@ class AddressDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.current_address2_error}
-                helperText={this.state.form_data.current_address2_error || this.state.form_data.current_address2_helper}
+                helperText={
+                  this.state.form_data.current_address2_error ||
+                  this.state.form_data.current_address2_helper
+                }
                 type="text"
                 width="40"
                 label="Address line 2"
@@ -372,7 +405,10 @@ class AddressDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.current_address3_error}
-                  helperText={this.state.form_data.current_address3_error || this.state.form_data.current_address3_helper}
+                  helperText={
+                    this.state.form_data.current_address3_error ||
+                    this.state.form_data.current_address3_helper
+                  }
                   type="text"
                   width="40"
                   label="Address line 3"
@@ -403,7 +439,10 @@ class AddressDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.current_pincode_error}
-                helperText={this.state.form_data.current_pincode_error || this.state.form_data.current_pincode_helper}
+                helperText={
+                  this.state.form_data.current_pincode_error ||
+                  this.state.form_data.current_pincode_helper
+                }
                 type="number"
                 width="40"
                 label="Pincode"
@@ -418,7 +457,10 @@ class AddressDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.current_city_error}
-                helperText={this.state.form_data.current_city_error || this.state.form_data.current_city_helper}
+                helperText={
+                  this.state.form_data.current_city_error ||
+                  this.state.form_data.current_city_helper
+                }
                 type="text"
                 width="40"
                 label="City"
@@ -433,7 +475,10 @@ class AddressDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.current_state_error}
-                helperText={this.state.form_data.current_state_error || this.state.form_data.current_state_helper}
+                helperText={
+                  this.state.form_data.current_state_error ||
+                  this.state.form_data.current_state_helper
+                }
                 type="text"
                 width="40"
                 label="State"
@@ -465,7 +510,10 @@ class AddressDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.permanent_address1_error}
-                  helperText={this.state.form_data.permanent_address1_error || this.state.form_data.permanent_address1_helper}
+                  helperText={
+                    this.state.form_data.permanent_address1_error ||
+                    this.state.form_data.permanent_address1_helper
+                  }
                   type="text"
                   width="40"
                   label="Address line 1"
@@ -473,7 +521,7 @@ class AddressDetails extends Component {
                   name="permanent_address1"
                   value={this.state.form_data.permanent_address1 || ""}
                   onChange={this.handleChange("permanent_address1")}
-                  disabled={this.state.isPermanent_address === 'Yes'}
+                  disabled={this.state.isPermanent_address === "Yes"}
                   onClick={() => this.handleCkycMessage("permanent_address1")}
                 />
               </div>
@@ -481,7 +529,10 @@ class AddressDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.permanent_address2_error}
-                  helperText={this.state.form_data.permanent_address2_error || this.state.form_data.permanent_address2_helper}
+                  helperText={
+                    this.state.form_data.permanent_address2_error ||
+                    this.state.form_data.permanent_address2_helper
+                  }
                   type="text"
                   width="40"
                   label="Address line 2"
@@ -489,7 +540,7 @@ class AddressDetails extends Component {
                   name="permanent_address2"
                   value={this.state.form_data.permanent_address2 || ""}
                   onChange={this.handleChange("permanent_address2")}
-                  disabled={this.state.isPermanent_address === 'Yes'}
+                  disabled={this.state.isPermanent_address === "Yes"}
                   onClick={() => this.handleCkycMessage("permanent_address2")}
                 />
               </div>
@@ -498,7 +549,10 @@ class AddressDetails extends Component {
                 <div className="InputField">
                   <Input
                     error={!!this.state.form_data.permanent_address3_error}
-                    helperText={this.state.form_data.permanent_address3_error || this.state.form_data.permanent_address3_helper}
+                    helperText={
+                      this.state.form_data.permanent_address3_error ||
+                      this.state.form_data.permanent_address3_helper
+                    }
                     type="text"
                     width="40"
                     label="Address line 3"
@@ -506,7 +560,7 @@ class AddressDetails extends Component {
                     name="permanent_address3"
                     value={this.state.form_data.permanent_address3 || ""}
                     onChange={this.handleChange("permanent_address3")}
-                    disabled={this.state.isPermanent_address === 'Yes'}
+                    disabled={this.state.isPermanent_address === "Yes"}
                     onClick={() => this.handleCkycMessage("permanent_address3")}
                   />
                 </div>
@@ -523,7 +577,7 @@ class AddressDetails extends Component {
                   name="permanent_landmark"
                   value={this.state.form_data.permanent_landmark || ""}
                   onChange={this.handleChange("permanent_landmark")}
-                  disabled={this.state.isPermanent_address === 'Yes'}
+                  disabled={this.state.isPermanent_address === "Yes"}
                   onClick={() => this.handleCkycMessage("permanent_landmark")}
                 />
               </div>
@@ -531,7 +585,10 @@ class AddressDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.permanent_pincode_error}
-                  helperText={this.state.form_data.permanent_pincode_error || this.state.form_data.permanent_pincode_helper}
+                  helperText={
+                    this.state.form_data.permanent_pincode_error ||
+                    this.state.form_data.permanent_pincode_helper
+                  }
                   type="number"
                   width="40"
                   label="Pincode"
@@ -539,7 +596,7 @@ class AddressDetails extends Component {
                   name="permanent_pincode"
                   value={this.state.form_data.permanent_pincode || ""}
                   onChange={this.handlePincode("permanent_pincode")}
-                  disabled={this.state.isPermanent_address === 'Yes'}
+                  disabled={this.state.isPermanent_address === "Yes"}
                   onClick={() => this.handleCkycMessage("permanent_pincode")}
                 />
               </div>
@@ -547,7 +604,10 @@ class AddressDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.permanent_city_error}
-                  helperText={this.state.form_data.permanent_city_error || this.state.form_data.permanent_city_helper}
+                  helperText={
+                    this.state.form_data.permanent_city_error ||
+                    this.state.form_data.permanent_city_helper
+                  }
                   type="text"
                   width="40"
                   label="City"
@@ -559,10 +619,17 @@ class AddressDetails extends Component {
                 />
               </div>
 
-              <div id="addressScroll" ref={this.addressRef} className="InputField">
+              <div
+                id="addressScroll"
+                ref={this.addressRef}
+                className="InputField"
+              >
                 <Input
                   error={!!this.state.form_data.permanent_state_error}
-                  helperText={this.state.form_data.permanent_state_error || this.state.form_data.permanent_state_helper}
+                  helperText={
+                    this.state.form_data.permanent_state_error ||
+                    this.state.form_data.permanent_state_helper
+                  }
                   type="text"
                   width="40"
                   label="State"
@@ -575,6 +642,9 @@ class AddressDetails extends Component {
               </div>
             </div>
           </FormControl>
+          {this.state.confirm_details && (
+            <Attention content="Before proceeding, ensure entered details are correct. You can't make changes later. " />
+          )}
         </div>
       </Container>
     );

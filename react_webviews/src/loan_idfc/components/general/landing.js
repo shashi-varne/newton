@@ -150,7 +150,7 @@ class Landing extends Component {
                 className="title generic-page-title"
                 style={{ color: "white" }}
               >
-                Get a personal loan up to ₹40 lacs!
+                Get a personal loan up to ₹40 lakhs!
               </div>
               <div className="button">
                 <Button

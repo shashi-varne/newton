@@ -16,7 +16,7 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     failed: true,
     screenName: "system_error",
-    stage: "after address details"
+    stage: "after address details",
   },
   idfc_null_rejected: {
     top_icon: "ils_loan_failed",
@@ -59,7 +59,7 @@ const commonMapper = {
     stage: "after loan requirement details",
   },
   "idfc_0.5_submitted": {
-    top_icon: "ils_loan_status",
+    top_icon: "loan_success",
     // top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
@@ -67,7 +67,7 @@ const commonMapper = {
     screenName: "profile_success",
   },
   "idfc_0.5_accepted": {
-    top_icon: "ils_loan_status",
+    top_icon: "loan_success",
     top_title: "Congratulations,",
     button_title: "NEXT",
     cta_state: "/loan/idfc/income-details",
@@ -163,7 +163,7 @@ const commonMapper = {
     screenName: "system_error",
     stage: "after credit card details",
   },
-  "pincode": {
+  pincode: {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -173,7 +173,7 @@ const commonMapper = {
     screenName: "application_rejected",
     stage: "after loan requirement details",
   },
-  "internally_rejected": {
+  internally_rejected: {
     top_icon: "ils_loan_failed",
     top_title: "Application Rejected",
     button_title: "START NEW APPLICATION",
@@ -194,7 +194,7 @@ class LoanStatus extends Component {
       commonMapper: {},
       vendor_application_status: "",
       screen_name: "loan_status",
-      first_name: ""
+      first_name: "",
     };
 
     this.initialize = initialize.bind(this);
@@ -223,11 +223,11 @@ class LoanStatus extends Component {
         commonMapper: commonMapper["is_dedupe"] || {},
         application_status: application_status,
       });
-    }  else if (idfc_rejection_reason === 'pincode') {
+    } else if (idfc_rejection_reason === "pincode") {
       this.setState({
         commonMapper: commonMapper["pincode"] || {},
         application_status: application_status,
-        idfc_rejection_reason: idfc_rejection_reason
+        idfc_rejection_reason: idfc_rejection_reason,
       });
     } else {
       this.setState({
@@ -246,10 +246,10 @@ class LoanStatus extends Component {
         screen_name: this.state.commonMapper.screenName,
       },
     };
-    if(this.state.commonMapper.screenName === 'application_rejected') {
+    if (this.state.commonMapper.screenName === "application_rejected") {
       eventObj.properties.rejection_reason = this.state.rejection_reason || "";
       eventObj.properties.stage = this.state.commonMapper.stage || "";
-    } else if(this.state.commonMapper.screenName === 'system_error') {
+    } else if (this.state.commonMapper.screenName === "system_error") {
       eventObj.properties.stage = this.state.commonMapper.stage || "";
     }
     if (user_action === "just_set_events") {
@@ -269,9 +269,11 @@ class LoanStatus extends Component {
     let { commonMapper, vendor_application_status, is_dedupe } = this.state;
     if (!is_dedupe && vendor_application_status === "idfc_0.5_accepted") {
       this.setState({
-        show_loader: true
-      })
-      toast('A mail has been sent to your official mail ID. Verify the same for faster loan sanction.')
+        show_loader: true,
+      });
+      toast(
+        "A mail has been sent to your official mail ID. Verify the same for faster loan sanction."
+      );
       let body = {
         perfios_state: "init",
         idfc_loan_status: "perfios",
@@ -304,7 +306,7 @@ class LoanStatus extends Component {
       rejection_reason,
       is_dedupe,
       first_name,
-      idfc_rejection_reason
+      idfc_rejection_reason,
     } = this.state;
 
     if (vendor_application_status === "idfc_0.5_accepted") {
@@ -359,16 +361,15 @@ class LoanStatus extends Component {
 
           {vendor_application_status === "idfc_0.5_rejected" && (
             <div className="subtitle">
-              We're so sorry to inform you that IDFC FIRST Bank has rejected your loan
-              application as it did not meet their loan policy.
+              We're so sorry to inform you that IDFC FIRST Bank has rejected
+              your loan application as it did not meet their loan policy.
             </div>
           )}
 
           {!is_dedupe && vendor_application_status === "idfc_0.5_accepted" && (
             <div>
               <div className="subtitle">
-                Your profile has been successfully evaluated and basis the
-                checks you're most likely to get a loan offer.
+                Basis your profile you're most likely to get a loan offer.
               </div>
               <div
                 className="subtitle"
@@ -381,26 +382,34 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {commonMapper.top_title === "Application Rejected" && !rejection_reason && idfc_rejection_reason !== 'pincode' && (
-            <div className="subtitle">
-              We're so sorry to inform you that IDFC FIRST Bank has rejected your loan
-              application as it did not meet their loan policy.
-            </div>
-          )}
+          {commonMapper.top_title === "Application Rejected" &&
+            !rejection_reason &&
+            idfc_rejection_reason !== "pincode" && (
+              <div className="subtitle">
+                We're so sorry to inform you that IDFC FIRST Bank has rejected
+                your loan application as it did not meet their loan policy.
+              </div>
+            )}
 
-          {commonMapper.top_title === "Application Rejected" && !rejection_reason && idfc_rejection_reason === 'pincode' && (
-            <div>
-              <p className="subtitle">Sorry! We don't serve in the selected location yet.</p>
-              <p className="subtitle">
-                Thank you for expressing interest in availing a loan. Hope to be of assistance in future.
-              </p>
-          </div>
-          )}
+          {commonMapper.top_title === "Application Rejected" &&
+            !rejection_reason &&
+            idfc_rejection_reason === "pincode" && (
+              <div>
+                <p className="subtitle">
+                  Sorry! We don't serve in the selected location yet.
+                </p>
+                <p className="subtitle">
+                  Thank you for expressing interest in availing a loan. Hope to
+                  be of assistance in future.
+                </p>
+              </div>
+            )}
 
           {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
-                Oops! something's not right. We are checking this with IDFC FIRST Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC
+                FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
@@ -414,7 +423,8 @@ class LoanStatus extends Component {
                 alt=""
               />
               <div className="subtitle">
-                Oops! something's not right. We are checking this with IDFC FIRST Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC
+                FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
@@ -422,9 +432,13 @@ class LoanStatus extends Component {
 
           {vendor_application_status === "idfc_10_rejected" && (
             <div>
-              <div className='subtitle'>
-                Your loan application did not meet IDFC FIRST Bank’s loan policy. Hence we will not be able to take this forward.<br />
-                However, we thank you for showing interest in our loan offering.<br /><br />
+              <div className="subtitle">
+                Your loan application did not meet IDFC FIRST Bank’s loan
+                policy. Hence we will not be able to take this forward.
+                <br />
+                However, we thank you for showing interest in our loan offering.
+                <br />
+                <br />
                 We hope to be of assistance in future.
               </div>
             </div>

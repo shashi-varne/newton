@@ -117,7 +117,7 @@ class JourneyMap extends Component {
       screen_name: "journey_screen",
       count: 0,
       loaderWithData: false,
-      loaderData: {}
+      loaderData: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -136,6 +136,11 @@ class JourneyMap extends Component {
     let perfios_state = vendor_info.perfios_state || "";
     let application_complete = application_info.application_status === "application_complete";
 
+    if (idfc_loan_status === "idfc_callback_rejected") {
+      this.navigate('loan-status');
+      return
+    }
+
     let index =
       (idfc_loan_status && journeyMapper2[idfc_loan_status].index) || "0";
 
@@ -149,9 +154,9 @@ class JourneyMap extends Component {
         {
           step: "1",
           title: "Enter basic details",
-          titleCompleted: "Basic details uploaded ",
+          titleCompleted: "Work details uploaded",
           subtitle:
-            "Fill in basic and work details to get started with your loan application",
+            "Verify mobile, enter self-related information and work details to get started.",
           status: index && index >= "0" ? "completed" : "init",
           id: "basic_details",
           cta: "SUMMARY",
@@ -161,7 +166,7 @@ class JourneyMap extends Component {
           title: "Create loan application",
           titleCompleted: "Loan application created",
           subtitle:
-            "Provide/confirm your personal and address details to  proceed with your loan application.",
+            "Enter personal and address details to proceed with loan application.",
           status:
             index === "1" ? "init" : index > "1" ? "completed" : "pending",
           id: "create_loan_application",
@@ -177,7 +182,7 @@ class JourneyMap extends Component {
           title: "Provide income details",
           titleCompleted: "Provided income details",
           subtitle:
-            "Provide your loan requirements and income details to get the best loan offer. ",
+            "Enter loan requirements and income details to get the best loan offer.",
           status:
             index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
@@ -193,7 +198,7 @@ class JourneyMap extends Component {
           title: "Upload documents",
           titleCompleted: "Documents uploaded",
           subtitle:
-            "Provide your office address and upload documents to get your loan sanctioned.",
+            "Provide office address and upload documents to get loan sanctioned.",
           status:
             index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",
@@ -209,7 +214,7 @@ class JourneyMap extends Component {
           title: "Sanction and disbursal",
           titleCompleted: "",
           subtitle:
-            "IDFC FIRST Bank will verify your application. This may require a personal discussion/interaction with you.",
+            "IDFC FIRST Bank will verify application and will get in touch with you to complete the disbursal process.",
           status:
             index && index === "4"
               ? "init"
@@ -384,13 +389,12 @@ class JourneyMap extends Component {
 
           {index <= "1" && (
             <div className="head-title">
-              <b>Ta-da!</b> You've successfully uploaded your basic details.
+              Great, step 1 completed!
             </div>
           )}
           {index === "2" && (
             <div className="head-title">
-              <b>Awesome!</b> Your loan application is successfully created. Now
-              you're just a step away from finding out your loan offer.
+              Awesome, step 2 done! Get going to know the best offer.
             </div>
           )}
 

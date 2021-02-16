@@ -290,8 +290,8 @@ export const idfc_config = {
         {
           data: "Loan up to 40 lakhs:",
           sub_data: [
-            "For salaried, the range is from Rs. 1 lakh to 40 lacs",
-            "For self-employed the max loan amount is Rs. 9 lacs",
+            "For salaried, the range is from Rs. 1 lakh to 40 lakhs",
+            "For self-employed the max loan amount is Rs. 9 lakhs",
           ],
         },
         "Low interest rate starting at 10.75% p.a.",
@@ -571,7 +571,7 @@ export const idfc_config = {
         partnerData: {
           title: "DMI Finance",
           subtitle: "Quick disbursal",
-          loan_amount: "₹1 lac",
+          loan_amount: "₹1 lakh",
           logo: "dmi-finance",
         },
 
@@ -582,7 +582,7 @@ export const idfc_config = {
           faqs: [
             {
               'title': 'What is the max loan amount for salaried Personal loan ?',
-              'subtitle': 'Max loan amount is 1 lac.'
+              'subtitle': 'Max loan amount is 1 lakh.'
             },
             {
               'title': 'On what criteria will the loan be sanctioned to me ?',
@@ -641,7 +641,7 @@ export const idfc_config = {
         partnerData: {
           title: "IDFC FIRST Bank",
           subtitle: "Competitive interest rate",
-          loan_amount: " ₹40 lacs",
+          loan_amount: " ₹40 lakhs",
           logo: "idfc_logo",
         },
 

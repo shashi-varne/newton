@@ -50,8 +50,8 @@ class PartnerCard extends Component {
         }
         >
           <div>
-            <span className="sub-text">Loan upto:</span>
-            {" " + this.props.baseData.loan_amount}
+            <div className="sub-text">Loan upto:</div>
+            <div className="sub-text-2">{this.props.baseData.loan_amount}</div>
           </div>
           <Button
             variant="raised"

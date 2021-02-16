@@ -294,7 +294,7 @@ class LoanBtDetails extends Component {
 
                 <Grid item xs={11}>
                   <div className="head">Card limit</div>
-                  <div className="sub-head">₹40 lacs</div>
+                  <div className="sub-head">₹40 lakhs</div>
                   <FormControl fullWidth>
                     <div className="InputField">
                     <DropdownWithoutIcon

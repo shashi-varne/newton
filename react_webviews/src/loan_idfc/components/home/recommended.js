@@ -116,7 +116,7 @@ class Recommended extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Help us to provide you with best offers"
+        title="Let’s get the best offer for you"
         buttonTitle="NEXT"
         handleClick={this.handleClick}
       >

@@ -17,7 +17,7 @@ const gender_options = [
   {
     name: "Female",
     value: "Female",
-  }
+  },
 ];
 
 const genderMapper = {
@@ -82,14 +82,15 @@ class PersonalDetails extends Component {
     let gender = genderMapper[capitalizeFirstLetter(personal_info.gender)];
 
     if (gender === "Other") {
-      gender = ""
+      gender = "";
     }
 
     let form_data = {
       first_name: personal_info.first_name,
       middle_name: personal_info.middle_name,
       last_name: personal_info.last_name,
-      dob: confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
+      dob:
+        confirm_details && timeStampToDate(personal_info.idfc_ckyc_dob || ""),
       gender: genderMapper[capitalizeFirstLetter(personal_info.gender)],
       marital_status: capitalizeFirstLetter(personal_info.marital_status || ""),
       father_first_name: personal_info.father_first_name,
@@ -128,10 +129,17 @@ class PersonalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, details_changed } = this.state;
 
-    let names = ['first_name', 'last_name', 'father_first_name', 'father_last_name', 'mother_first_name', 'mother_last_name']
+    let names = [
+      "first_name",
+      "last_name",
+      "father_first_name",
+      "father_last_name",
+      "mother_first_name",
+      "mother_last_name",
+    ];
 
-    if(names.includes(name) && value.includes(' ')) {
-      return
+    if (names.includes(name) && value.includes(" ")) {
+      return;
     }
 
     if (name) {
@@ -139,11 +147,10 @@ class PersonalDetails extends Component {
       form_data[name + "_error"] = "";
     }
 
-    let confirm_fields = ["first_name", "last_name", "dob"]
+    let confirm_fields = ["first_name", "last_name", "dob"];
     if (this.state.confirm_details) {
       this.handleCkycMessage(name);
-      if(confirm_fields.includes(name))
-        details_changed = 'yes'
+      if (confirm_fields.includes(name)) details_changed = "yes";
     }
 
     this.setState({
@@ -153,7 +160,7 @@ class PersonalDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let { form_data } = this.state;
 
     let keys_to_check = [
@@ -168,13 +175,11 @@ class PersonalDetails extends Component {
     ];
 
     let keys_to_include = ["middle_name"];
-    
+
     if (this.state.confirm_details) {
-      keys_to_check.push(...["dob",
-      "mother_first_name", 
-      "mother_last_name"]);
+      keys_to_check.push(...["dob", "mother_first_name", "mother_last_name"]);
     }
-    
+
     this.formCheckUpdate(keys_to_check, form_data, "", "", keys_to_include);
   };
 
@@ -185,8 +190,8 @@ class PersonalDetails extends Component {
     form_data.gender_error = "";
 
     if (this.state.confirm_details) {
-      details_changed = 'yes';
-      this.handleCkycMessage('gender')
+      details_changed = "yes";
+      this.handleCkycMessage("gender");
     }
 
     this.setState({
@@ -196,15 +201,15 @@ class PersonalDetails extends Component {
   };
 
   handleCkycMessage(name) {
-    if(this.state.confirm_details) {
-      let confirm_fields = ["first_name", "last_name", "dob", "gender"]
+    if (this.state.confirm_details) {
+      let confirm_fields = ["first_name", "last_name", "dob", "gender"];
       let { form_data } = this.state;
-      confirm_fields.forEach(element => {
-        if(element === name)
-          form_data[name + '_helper'] = 'Document proof will be required if you make any change';
-        else 
-          form_data[element + '_helper'] = '';
-      })
+      confirm_fields.forEach((element) => {
+        if (element === name)
+          form_data[name + "_helper"] =
+            "Document proof will be required if you make any change";
+        else form_data[element + "_helper"] = "";
+      });
       this.setState({
         form_data: form_data,
       });
@@ -214,7 +219,7 @@ class PersonalDetails extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
@@ -226,15 +231,14 @@ class PersonalDetails extends Component {
         }}
       >
         <div className="personal-details">
-          {this.state.confirm_details && (
-            <Attention content="Once submitted, details cannot be modified." />
-          )}
-
           <FormControl fullWidth>
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.first_name_error}
-                helperText={this.state.form_data.first_name_error || this.state.form_data.first_name_helper}
+                helperText={
+                  this.state.form_data.first_name_error ||
+                  this.state.form_data.first_name_helper
+                }
                 type="text"
                 width="40"
                 label="First name"
@@ -250,7 +254,10 @@ class PersonalDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.middle_name_error}
-                helperText={this.state.form_data.middle_name_error || this.state.form_data.middle_name_helper}
+                helperText={
+                  this.state.form_data.middle_name_error ||
+                  this.state.form_data.middle_name_helper
+                }
                 type="text"
                 width="40"
                 label="Middle name"
@@ -266,7 +273,10 @@ class PersonalDetails extends Component {
             <div className="InputField">
               <Input
                 error={!!this.state.form_data.last_name_error}
-                helperText={this.state.form_data.last_name_error || this.state.form_data.last_name_helper}
+                helperText={
+                  this.state.form_data.last_name_error ||
+                  this.state.form_data.last_name_helper
+                }
                 type="text"
                 width="40"
                 label="Last name"
@@ -283,7 +293,10 @@ class PersonalDetails extends Component {
               <div className="InputField">
                 <Input
                   error={!!this.state.form_data.dob_error}
-                  helperText={this.state.form_data.dob_error || this.state.form_data.dob_helper}
+                  helperText={
+                    this.state.form_data.dob_error ||
+                    this.state.form_data.dob_helper
+                  }
                   type="text"
                   width="40"
                   label="Date of birth"
@@ -312,10 +325,11 @@ class PersonalDetails extends Component {
                 value={this.state.form_data.gender || ""}
                 onChange={this.handleChangeRadio}
               />
-              {this.state.form_data.gender_helper && <div className="helper-text">
-                {this.state.form_data.gender_helper}
+              {this.state.form_data.gender_helper && (
+                <div className="helper-text">
+                  {this.state.form_data.gender_helper}
                 </div>
-              }
+              )}
             </div>
 
             <div className="InputField">
@@ -430,6 +444,10 @@ class PersonalDetails extends Component {
               />
             </div>
           </FormControl>
+
+          {this.state.confirm_details && (
+            <Attention content="Before proceeding, ensure entered details are correct. You can't make changes later. " />
+          )}
         </div>
       </Container>
     );

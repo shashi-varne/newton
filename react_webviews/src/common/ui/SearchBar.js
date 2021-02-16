@@ -9,7 +9,7 @@ const getSuggestions = (value, inputs) => {
   const inputLength = inputValue.length;
 
   let list = inputs.filter(
-    (lang) => lang.name.toLowerCase().slice(0, inputLength) === inputValue
+    (item) => item.name.toLowerCase().slice(0, inputLength) === inputValue
   );
 
   return inputLength === 0
