@@ -96,7 +96,7 @@ class PaymentSuccessClass extends Component {
     let error = '';
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
       this.setState({
         skelton: false
@@ -115,7 +115,7 @@ class PaymentSuccessClass extends Component {
 
         })
 
-        address_details_data.addressline = leadData.permanent_address.address_line;
+        address_details_data.addressline = leadData.permanent_address.addr_line1;
         this.setState({
           leadData: leadData,
           address_details_data: address_details_data
@@ -286,7 +286,7 @@ class PaymentSuccessClass extends Component {
           show_loader: 'button'
         })
         let res2 = {};
-        res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
         this.setState({
           show_loader: false
         })
