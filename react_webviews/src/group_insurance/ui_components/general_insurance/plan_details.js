@@ -215,9 +215,11 @@ class PlanDetailsClass extends Component {
     }
 
     try {
-
+      
       let provider = this.props.parent.state.provider || 'bhartiaxa';
-      const resQuote = await Api.get('/api/ins_service/api/insurance/' +
+      let service = provider === 'bhartiaxa' ? 'insurancev2': 'ins_service';
+      
+      const resQuote = await Api.get('/api/'+ service +'/api/insurance/' +
         provider + '/get/quote?product_name=' +
         this.props.parent.state.product_key)
 
@@ -235,7 +237,7 @@ class PlanDetailsClass extends Component {
       }
 
       if (this.state.lead_id) {
-        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
 
         if (res.pfwresponse.status_code === 200) {
@@ -446,7 +448,7 @@ class PlanDetailsClass extends Component {
       let res2 = {};
       if (this.state.lead_id) {
         final_data.lead_id = this.state.lead_id;
-        res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
 
 
         if (res2.pfwresponse.status_code === 200) {
