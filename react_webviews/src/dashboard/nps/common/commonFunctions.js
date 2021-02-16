@@ -64,14 +64,25 @@ export function formCheckUpdate(keys_to_check, form_data) {
     form_data = this.state.form_data;
   }
 
+  let canSubmit = true;
+
   let keysMapper = {
     pan: "pan",
     pran: "pran",
     dob: "dob",
     mobile_no: "mobile no.",
+    mother_name: "mother name",
+    spouse_name: "spouse_name",
+    nominee_name: "nominee_name",
+    nominee_dob: "nominee_dob",
+    relationship: "relationship",
+    pincode: "pincode",
+    addressline: "permanent address",
+    city: "city",
+    state: "state"
   };
 
-  let selectTypeInput = [];
+  let selectTypeInput = ['relationship'];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -81,17 +92,20 @@ export function formCheckUpdate(keys_to_check, form_data) {
         : "Please enter ";
     if (!form_data[key_check]) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
+      canSubmit = false;
+      console.log(form_data)
     }
   }
 
   this.setState({
     form_data: form_data,
+    canSubmit: canSubmit
   });
 }
 
 export async function get_recommended_funds(params) {
   try {
-    const res = await Api.get(`api/nps/invest/recommend?amount=50000`);
+    const res = await Api.get(`api/nps/invest/recommend?amount=${params}`);
     if (
       res.pfwstatus_code !== 200 ||
       !res.pfwresponse ||
@@ -101,11 +115,12 @@ export async function get_recommended_funds(params) {
     }
     const { result, status_code: status } = res.pfwresponse;
 
-    if (status === 200) {
-      return result;
-    } else {
-      throw result.error || result.message || genericErrMsg;
-    }
+    // if (status === 200) {
+    //   return result;
+    // } else {
+    //   throw result.error || result.message || genericErrMsg;
+    // }
+    return status;
   } catch (err) {
     throw err;
   }
@@ -113,6 +128,9 @@ export async function get_recommended_funds(params) {
 
 export async function kyc_submit(params) {
   try {
+    this.setState({
+      show_loader: true,
+    });
     const res = await Api.post("api/kyc/v2/mine", params);
     if (
       res.pfwstatus_code !== 200 ||
@@ -124,11 +142,17 @@ export async function kyc_submit(params) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      return result;
+      this.navigate("amount")
     } else {
+      this.setState({
+        show_loader: false,
+      });
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
+    this.setState({
+      show_loader: false,
+    });
     throw err;
   }
 }
@@ -152,13 +176,13 @@ export async function nps_register(params, next_state) {
       this.navigate(next_state);
     } else {
       this.setState({
-        show_loader: true,
+        show_loader: false,
       });
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
     this.setState({
-      show_loader: true,
+      show_loader: false,
     });
     throw err;
   }

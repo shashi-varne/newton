@@ -119,11 +119,13 @@
   }
 
   .help-text {
-    // font-family: "LatoM";
     font-size: 14px;
     margin-top: 10px;
     margin-bottom: 15px;
+    margin-left: 20px;
+    font-weight: 600 !important;
     color: #4a4a4a;
+    text-align: start !important;
 
     // span {
     // }
@@ -140,16 +142,32 @@
       align-items: center;
       text-align: center;
       padding-left: 15px;
-      background-color: var(--primary);
+      // background-color: var(--primary);
       width: max-content;
 
       .tag {
         color: #fff;
+        background-color: var(--primary);
         border-radius: 50px;
+        border: 1px solid var(--primary);
         padding: 5px 15px;
         margin: 0 5px;
+        font-size: 18px;
         cursor: pointer;
       }
+    }
+  }
+
+  @media only screen and (min-width: 300px) and (max-width: 700px) {
+    .tag {
+      font-size: 14px !important;
+      margin: 0px !important;
+    }
+
+    .tag-container {
+      width: 100% !important;
+      padding-right: 15px;
+      justify-content: space-between !important;
     }
   }
 }
@@ -166,6 +184,10 @@
 
 .pran-details {
   color: #4a4a4a;
+}
+
+.MuiButtonBase-root {
+  border-radius: 6px !important;
 }
 
 .fund {
@@ -838,9 +860,9 @@
     background: #b1b1b1;
     flex: 1;
 
-    img {
-      // margin-top: -8px;
-    }
+    // img {
+    //   // margin-top: -8px;
+    // }
 
     .calender_date {
       font-size: 20px;

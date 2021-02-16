@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
 import toast from "../../../common/ui/Toast";
 import RadioOptions from "../../../common/ui/RadioOptions";
@@ -31,6 +30,7 @@ class NpsIdentity extends Component {
       nps_details: {},
       selfie_needed: "",
       uploaded: false,
+      canSubmit: true,
       img: "",
     };
     this.initialize = initialize.bind(this);
@@ -74,16 +74,27 @@ class NpsIdentity extends Component {
   };
 
   handleClick = async () => {
-    let { form_data } = this.state;
-    let queryParams = `is_married=${
-      form_data.marital_status === "married"
-    }&mother_name=${form_data.mother_name}${
-      form_data.marital_status === "married"
-        ? "&spouse_name=" + form_data.spouse_name
-        : ""
-    }`;
+    let { form_data, canSubmit } = this.state;
 
-    this.nps_register(queryParams, "nominee");
+    let keys_to_check = ["mother_name"];
+
+    if (form_data.marital_status !== "single") {
+      keys_to_check.push("spouse_name");
+    }
+
+    this.formCheckUpdate(keys_to_check, form_data);
+
+    if (canSubmit) {
+      let queryParams = `is_married=${
+        form_data.marital_status === "married"
+      }&mother_name=${form_data.mother_name}${
+        form_data.marital_status === "married"
+          ? "&spouse_name=" + form_data.spouse_name
+          : ""
+      }`;
+
+      this.nps_register(queryParams, "nominee");
+    }
   };
 
   openFileExplorer() {
@@ -138,17 +149,11 @@ class NpsIdentity extends Component {
       <Container
         classOverRide="pr-error-container"
         fullWidthButton
-        buttonTitle={
-          this.state.show_loader ? (
-            <CircularProgress size={22} thickness={4} />
-          ) : (
-            "PROCEED"
-          )
-        }
+        buttonTitle="PROCEED"
         hideInPageTitle
         hidePageTitle
         title="Additional Details"
-        disable={this.state.show_loader}
+        showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >

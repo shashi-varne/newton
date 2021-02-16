@@ -6,8 +6,8 @@ import calendar from "../../../assets/calendar2.png";
 import relationship from "../../../assets/relationship.png";
 import Select from "../../../common/ui/Select";
 import { initialize } from "../common/commonFunctions";
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { storageService, capitalize } from "utils/validators";
+import { dobFormatTest, formatDate } from "utils/validators";
 
 const relationshipOptions = ["Wife", "Husband", "Mother", "Father", "Other"];
 
@@ -18,7 +18,8 @@ class NpsNominee extends Component {
       show_loader: false,
       form_data: {},
       nps_details: {},
-      screen_name: "nps_nominee"
+      canSubmit: true,
+      screen_name: "nps_nominee",
     };
     this.initialize = initialize.bind(this);
   }
@@ -28,25 +29,32 @@ class NpsNominee extends Component {
   }
 
   onload = () => {
-    let nps_additional_details = storageService().getObject("nps_additional_details");
+    let nps_additional_details = storageService().getObject(
+      "nps_additional_details"
+    );
     let { nps_details } = nps_additional_details;
 
     let { form_data } = this.state;
     let { nomination } = nps_details;
-    
-    form_data.name = nomination.name || '';
-    form_data.dob = nomination.dob || '';
-    form_data.relationship = capitalize(nomination.relationship || '');
+
+    form_data.nominee_name = nomination.name || "";
+    form_data.nominee_dob = nomination.dob || "";
+    form_data.relationship = capitalize(nomination.relationship || "");
 
     this.setState({
       nps_details: nps_details,
-      form_data: form_data
+      form_data: form_data,
     });
   };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
+
+    if (name === "nominee_dob") {
+      var input = document.getElementById("nominee_dob");
+      input.onkeyup = formatDate;
+    }
 
     form_data[name] = value;
     form_data[name + "_error"] = "";
@@ -57,17 +65,23 @@ class NpsNominee extends Component {
   };
 
   handleClick = async () => {
-    let { form_data } = this.state;
+    let { form_data, canSubmit } = this.state;
 
-    let data = {
-      nomination: {
-        dob: form_data.dob,
-        name: form_data.name,
-        relationship: form_data.relationship,
-      },
-    };
+    let keys_to_check = ["nominee_name", "nominee_dob", "relationship"];
 
-    this.updateMeta(data, "delivery");
+    this.formCheckUpdate(keys_to_check, form_data);
+
+    if (canSubmit) {
+      let data = {
+        nomination: {
+          dob: form_data.nominee_dob,
+          name: form_data.nominee_name,
+          relationship: form_data.relationship,
+        },
+      };
+
+      this.updateMeta(data, "delivery");
+    }
   };
 
   render() {
@@ -79,8 +93,8 @@ class NpsNominee extends Component {
         hideInPageTitle
         hidePageTitle
         title="Nominee Details"
-        buttonTitle={this.state.show_loader ? <CircularProgress size={22} thickness={4} /> : 'SAVE AND CONTINUE'}
-        disable={this.state.show_loader}
+        buttonTitle="SAVE AND CONTINUE"
+        showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >
@@ -96,13 +110,13 @@ class NpsNominee extends Component {
             <InputWithIcon
               icon={nominee}
               width="30"
-              id="name"
-              name="name"
+              id="nominee_name"
+              name="nominee_name"
               label="Nominee Name"
-              error={form_data.name_error ? true : false}
-              helperText={form_data.name_error}
-              value={form_data.name || ""}
-              onChange={this.handleChange("name")}
+              error={form_data.nominee_name_error ? true : false}
+              helperText={form_data.nominee_name_error}
+              value={form_data.nominee_name || ""}
+              onChange={this.handleChange("nominee_name")}
             />
           </div>
 
@@ -110,13 +124,13 @@ class NpsNominee extends Component {
             <InputWithIcon
               icon={calendar}
               width="30"
-              id="dob"
-              name="dob"
+              id="nominee_dob"
+              name="nominee_dob"
               label="Nominee DOB (DD/MM/YYYY)"
-              error={form_data.dob_error ? true : false}
-              helperText={form_data.dob_error}
-              value={form_data.dob || ""}
-              onChange={this.handleChange("dob")}
+              error={form_data.nominee_dob_error ? true : false}
+              helperText={form_data.nominee_dob_error}
+              value={form_data.nominee_dob || ""}
+              onChange={this.handleChange("nominee_dob")}
             />
           </div>
 

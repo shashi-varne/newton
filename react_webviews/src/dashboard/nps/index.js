@@ -28,7 +28,7 @@ const Nps = (props) => {
       <Route exact path={`${url}/pan`} component={PanDetails} />
       <Route exact path={`${url}/amount`} component={EnterAmount} />
       <Route exact path={`${url}/fundreplace`} component={ReplaceFund} />
-      <Route exact path={`${url}/recommendations`} component={Recommendations} />
+      <Route exact path={`${url}/recommendation`} component={Recommendations} />
       <Route exact path={`${url}/identity`} component={NpsIdentity} />
       <Route exact path={`${url}/nominee`} component={NpsNominee} />
       <Route exact path={`${url}/delivery`} component={NpsDelivery} />

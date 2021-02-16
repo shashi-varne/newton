@@ -7,7 +7,7 @@ import card from "assets/card.png";
 import email from "assets/email2.svg";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
-import { kyc_submit } from "../common/api";
+import { initialize } from "../common/commonFunctions";
 import { dobFormatTest, formatDate } from "utils/validators";
 
 const yesOrNo_options = [
@@ -32,9 +32,14 @@ class PanDetails extends Component {
       is_nps_contributed: false,
       show_loader: false,
     };
-
-    this.kyc_submit = kyc_submit.bind(this);
+    this.initialize = initialize.bind(this);
   }
+
+  componentWillMount() {
+    this.initialize();
+  }
+
+  onload = () => {}
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
@@ -85,7 +90,7 @@ class PanDetails extends Component {
       },
     };
 
-    this.kyc_submit(data);
+    this.kyc_submit(data, "amount");
   };
 
   render() {
@@ -96,9 +101,8 @@ class PanDetails extends Component {
         buttonTitle="PROCEED"
         hideInPageTitle
         hidePageTitle
-        // title="PAN details"
-        // buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-        handleClick={() => this.handleClick()}
+        showLoader={this.state.show_loader}
+        handleClick={this.handleClick}
       >
         <div className="main-top-title">PAN details</div>
         <div className="pan-details">

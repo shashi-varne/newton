@@ -25,6 +25,7 @@ class Recommendations extends Component {
       recommendations: "",
       all_charges: "",
       openDialog: false,
+      risk: ''
     };
     this.navigate = navigate.bind(this);
   }
@@ -48,6 +49,7 @@ class Recommendations extends Component {
         recommendations: data.recommended[0],
         all_charges: data.all_charges,
         show_loader: false,
+        risk: data.recommended[0].risk
       });
     } catch (err) {
       this.setState({
@@ -74,7 +76,7 @@ class Recommendations extends Component {
 
   handleChange = (name) => {
     this.setState({
-      selectedValue: name,
+      risk: name,
     });
   };
 
@@ -91,19 +93,20 @@ class Recommendations extends Component {
           Choose Risk Level
         </DialogTitle>
         <DialogContent>
-          <DialogContentText className="nps-flex-box">
-            {risk_level.map((item, index) => (
-              <div className="edit-risk" key={index}>
-                <div>{item}</div>
-                <Radio
-                  checked={this.state.selectedValue === item}
-                  onChange={() => this.handleChange(item)}
-                  value={this.state.selectedValue || ""}
-                  name="radio-button-demo"
-                  color="primary"
-                />
-              </div>
+          <DialogContentText className="nps-flex-box" component="div">
+          {risk_level.map((item, index) => (
+                <div className="edit-risk" key={index}>
+                  <div>{item}</div>
+                  <Radio
+                    checked={this.state.risk === item}
+                    onChange={() => this.handleChange(item)}
+                    value={this.state.risk || ""}
+                    name="radio-button-demo"
+                    color="primary"
+                  />
+                </div>
             ))}
+            
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -134,7 +137,7 @@ class Recommendations extends Component {
     let plutus_redirect_url = encodeURIComponent(
       window.location.origin + `/nps/fundreplace` + getConfig().searchParams
     );
-    
+
     pgLink +=
       (pgLink.match(/[\?]/g) ? "&" : "?") +
       "plutus_redirect_url=" +
@@ -182,7 +185,7 @@ class Recommendations extends Component {
         <div className="fund-detail">
           <div className="risk">
             <p>
-              <b>Risk:</b> {this.getFormatted(recommendations.risk || "")}
+              <b>Risk:</b> {this.getFormatted(this.state.risk || "")}
             </p>
             <span
               className="edit-icon edit"

@@ -4,15 +4,14 @@ import InputWithIcon from "../../../common/ui/InputWithIcon";
 import person from "../../../assets/location.png";
 import Api from "utils/api";
 import { initialize } from "../common/commonFunctions";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { storageService, capitalize } from "utils/validators";
-import { getConfig } from "utils/functions";
 
 class NpsDelivery extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
+      canSubmit: true,
       form_data: {},
       screen_name: "nps_delivery",
       uploaded: '',
@@ -23,15 +22,6 @@ class NpsDelivery extends Component {
 
   componentWillMount() {
     this.initialize();
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: "native_receiver_image",
-
-        // show_loader: function (show_loader) {
-        //   that.showLoaderNative();
-        // },
-      });
-    }
   }
 
   onload = () => {
@@ -71,8 +61,8 @@ class NpsDelivery extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    form_data.pincode = value;
-    form_data.pincode_error = "";
+    form_data[name] = value;
+    form_data[name + '_error'] = "";
 
     this.setState({
       form_data: form_data,
@@ -105,16 +95,22 @@ class NpsDelivery extends Component {
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, canSubmit } = this.state;
 
-    let data = {
-      address: {
-        addressline: form_data.addressline,
-        pin: form_data.pincode,
-      },
-    };
+    let keys_to_check = ["addressline", "pincode", "city", "state"];
 
-    this.updateMeta(data, "");
+    this.formCheckUpdate(keys_to_check, form_data);
+
+    if (canSubmit) {
+      let data = {
+        address: {
+          addressline: form_data.addressline,
+          pin: form_data.pincode,
+        },
+      };
+  
+      this.updateMeta(data, "");
+    }
   };
 
   render() {
@@ -123,14 +119,8 @@ class NpsDelivery extends Component {
       <Container
         classOverRide="pr-error-container"
         fullWidthButton
-        buttonTitle={
-          this.state.show_loader ? (
-            <CircularProgress size={22} thickness={4} />
-          ) : (
-            "CONTINUE"
-          )
-        }
-        disable={this.state.show_loader}
+        buttonTitle="CONTINUE"
+        showLoader={this.state.show_loader}
         hideInPageTitle
         hidePageTitle
         title="Confirm Delivery Details"
