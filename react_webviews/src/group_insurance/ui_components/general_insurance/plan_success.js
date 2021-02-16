@@ -105,7 +105,7 @@ class PlanSuccessClass extends Component {
     let error = '';
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
       this.setState({
         skelton: false
@@ -200,8 +200,8 @@ class PlanSuccessClass extends Component {
   getAddress = (addr) => {
     return (
       <div>
-        {addr.address_line + ', ' +
-          addr.landmark + ', ' +
+        {addr.addr_line1 + ', ' +
+          // addr.landmark + ', ' +
           addr.pincode + ', ' +
           addr.city + ', ' +
           this.capitalize(addr.state) + ', ' +
@@ -285,12 +285,15 @@ class PlanSuccessClass extends Component {
   }
 
   renderAccordions(props, index) {
+    if(props.name === 'Nominee' && this.state.lead_data && !this.state.lead_data.nominee_details){
+      return;
+    }
     return (
       <div key={index} className="plan-summary-accordion">
         <div className="accordion-container">
           <div className="Accordion">
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
-              <div className="AccordionList">
+                <div className="AccordionList">
                 <span className="AccordionList1">
                   <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
                 </span>

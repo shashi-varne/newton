@@ -302,7 +302,7 @@ class BasicDetailsForm extends Component {
         })
         if(!leadData) {
          
-          let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+          let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
           leadData = res.pfwresponse.result.lead;
           this.setState({
@@ -334,7 +334,7 @@ class BasicDetailsForm extends Component {
         this.setState({
           skelton: true
         })
-        let res = await Api.get('api/ins_service/api/insurance/account/summary')
+        let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
 
         this.setState({
           skelton: false
@@ -586,9 +586,9 @@ class BasicDetailsForm extends Component {
         let res2 = {};
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
-          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
         } else {
-          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/create', final_data)
         }
 
         
@@ -604,9 +604,9 @@ class BasicDetailsForm extends Component {
           
           if ('error' in res2.pfwresponse.result) {
             if (Array.isArray(res2.pfwresponse.result.error)) {
-                error = res2.pfwresponse.result.error[0]['message'] || res2.pfwresponse.result.error[0]['error']
+              error = res2.pfwresponse.result.error[0]['error'];
             } else {
-                error = res2.pfwresponse.result.error
+              error = res2.pfwresponse.result.error.error || res2.pfwresponse.result.error;
             }
           } else {
             error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong'
@@ -654,7 +654,7 @@ class BasicDetailsForm extends Component {
           "dob": this.state.basic_details_data['dob'] ? 'yes' : 'no',
           "gender": this.state.basic_details_data['gender'] ? 'yes' : 'no',
           "email": this.state.basic_details_data['email'] ? 'yes' : 'no',
-          "mobile": this.state.basic_details_data['mobile'] ? 'yes' : 'no',
+          "mobile": this.state.basic_details_data['mobile_no'] ? 'yes' : 'no',
           "nominee_details": this.state.checked ? 'yes' : 'no',
           "nominee_name": this.state.checked && this.state.basic_details_data.nominee &&
             this.state.basic_details_data.nominee['name'] ? 'yes' : 'no',

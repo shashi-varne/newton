@@ -748,6 +748,10 @@ export function getCssMapperReport(policy) {
       color: 'red',
       disc: 'Policy Expired'
     },
+    'expired': {
+      color: 'red',
+      disc: 'Policy Expired'
+    },
     'rejected': {
       color: 'red',
       disc: 'Policy Rejected'
