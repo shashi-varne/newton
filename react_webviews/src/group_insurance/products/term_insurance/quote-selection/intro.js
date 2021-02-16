@@ -20,7 +20,7 @@ class Intro extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       params: qs.parse(props.history.location.search.slice(1)),
       type: getConfig().productName,
       termRedirectData: {},
@@ -45,7 +45,7 @@ class Intro extends Component {
       const res2 = await Api.get('/api/insurance/all/summary');
 
       this.setState({
-        show_loader: false
+        skelton: false
       })
       if (res2.pfwresponse.status_code === 200) {
 
@@ -120,20 +120,56 @@ class Intro extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
   }
 
-  async getQuotes() {
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
+
+
+  onload = async () => {
+
+    this.setErrorData('onload');
+
+    let error = ''
     window.sessionStorage.setItem('quote_redirect_data', ''); 
     try {
-      
+    this.setState({
+      skelton: true,
+    });
       const res = await Api.get('/api/ins_service/api/insurance/providers/all');
       this.getTermInsurance();
-     
       if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.providers) {
         let result = res.pfwresponse.result;
 
@@ -145,25 +181,34 @@ class Intro extends Component {
         this.setState({
           quotes: []
         });
-        toast(res.pfwresponse.result.error);
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong';
+        // toast(res.pfwresponse.result.error);
       }
-
-    } catch (err) {
+    }catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false,
+        showError: 'page'
       });
-      toast('Something went wrong');
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError: 'page'
+      })
     }
   }
 
-  componentDidMount() {
-
+  async componentDidMount() {
     this.setState({
       dropdown_arrow: this.state.type !== 'fisdom' ? dropdown_arrow_myway : dropdown_arrow_fisdom,
     })
-    this.getQuotes();
+    this.onload();
   }
-
 
   navigate = (pathname, search, params) => {
     this.props.history.push({
@@ -373,8 +418,12 @@ class Intro extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        skelton={this.state.skelton}
+        errorData={this.state.errorData}
         title="Term Insurance"
         onlyButton={true}
+        handleClick={() => this.handleClickCurrent()}
       >
 
         {this.state.quotes && this.state.quotes.map(this.renderQuotes)}

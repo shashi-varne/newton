@@ -125,8 +125,8 @@ class LifeInsuranceEntry extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        // showLoader={this.state.show_loader}
-        showLoader="page"  //#TODO remove
+        showLoader={this.state.show_loader}
+        // showLoader="page"  //#TODO remove
         title="Life Insurance"
         styleHeader={{marginLeft: '10px'}}> 
         <div className="group-health-insurance-entry">
