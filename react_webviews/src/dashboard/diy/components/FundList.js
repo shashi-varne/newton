@@ -13,10 +13,7 @@ import CartFooter from '../components/CartFooter'
 import { getFundList } from '../functions'
 import {
   CART,
-  FUNDOPTION,
   FUNDSLIST,
-  SORTFILTER,
-  FUNDHOUSE,
   CART_LIMIT,
   CATEGORY,
   SUBCATEGORY,
@@ -43,7 +40,7 @@ function TabContainer(props) {
 }
 const FundList = (props) => {
   const { match, classes, ...parentProps } = props
-  const [value, setValue] = useState(0)
+  const [value, setValue] = useState(4)
   const [fundsList, setFundsList] = useState(
     storageService().getObject(FUNDSLIST) || []
   )
@@ -120,7 +117,7 @@ const FundList = (props) => {
       classOverRideContainer="pr-containe>r"
       id="diy-fundlist-container"
     >
-      <div style={{ margin: '-20px' }}>
+      <div className="diy-tab-container">
         <Tabs
           value={value}
           onChange={handleChange}

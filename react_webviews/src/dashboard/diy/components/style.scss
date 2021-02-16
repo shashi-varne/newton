@@ -340,4 +340,11 @@
   }
 }
 
+.diy-tab-container {
+  margin: -20px;
+  .MuiTabs-flexContainer {
+    justify-content: flex-start;
+  }
+}
+
 ////// DIY SEARCH END //////
