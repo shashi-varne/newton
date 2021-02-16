@@ -569,7 +569,6 @@ class BasicDetailsForm extends Component {
           "relation": basic_details_data.nominee.relation
         }
         final_data['nominee'] = obj;
-        final_data['nominee'] = {};  //TODO remove
       } else {
         final_data['nominee'] = {};
       }
