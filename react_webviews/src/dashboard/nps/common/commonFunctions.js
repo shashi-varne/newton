@@ -15,7 +15,7 @@ export async function initialize() {
   this.nps_register = nps_register.bind(this);
   this.updateMeta = updateMeta.bind(this);
   this.getInvestmentData = getInvestmentData.bind(this);
-
+  this.submitPran = submitPran.bind(this);
   let screenData = {};
 
   // if (this.state.screen_name) {
@@ -221,7 +221,29 @@ export async function getInvestmentData(params) {
       throw genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
-    console.log(result);
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function submitPran(params) {
+  try {
+    const res = await Api.post(`/api/nps/user/pran/account/status`, params);
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw genericErrMsg;
+    }
+    const { result, status_code: status } = res.pfwresponse;
+    console.log(result)
 
     if (status === 200) {
       return result;

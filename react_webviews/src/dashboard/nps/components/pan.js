@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import InputWithIcon from "../../../common/ui/InputWithIcon";
-import calendar from "../../../assets/calendar2.png";
-import phone from "../../../assets/phone_black.png";
-import card from "../../../assets/card.png";
+import calendar from "assets/calendar2.png";
+import phone from "assets/phone_black.png";
+import card from "assets/card.png";
+import email from "assets/email2.svg";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import { kyc_submit } from "../common/api";
-import { dobFormatTest } from "utils/validators";
+import { dobFormatTest, formatDate } from "utils/validators";
 
 const yesOrNo_options = [
   {
@@ -42,10 +43,14 @@ class PanDetails extends Component {
     if (name === "mobile_number" && value.length > 10) {
       return;
     }
-console.log(name)
-    if (name === "dob" && !dobFormatTest(value)) {
-      console.log('hi')
+
+    if (name === "pran" && value.length > 12) {
       return;
+    }
+    
+    if (name === "dob") {
+      var input = document.getElementById('dob');
+      input.onkeyup = formatDate;
     }
 
     form_data[name] = value;
@@ -66,8 +71,6 @@ console.log(name)
   };
 
   handleClick = () => {
-    // endpoint = api/kyc/v2/mine
-    // console.log(this.state.form_data)
     let { form_data } = this.state;
     let data = {
       kyc: {
@@ -93,10 +96,11 @@ console.log(name)
         buttonTitle="PROCEED"
         hideInPageTitle
         hidePageTitle
-        title="PAN details"
+        // title="PAN details"
         // buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
         handleClick={() => this.handleClick()}
       >
+        <div className="main-top-title">PAN details</div>
         <div className="pan-details">
           <FormControl fullWidth>
             <div className="InputField">
@@ -108,7 +112,7 @@ console.log(name)
                 name="pan"
                 error={!!form_data.pan_error}
                 helperText={form_data.pan_error}
-                value={form_data.pan}
+                value={form_data.pan || ''}
                 maxLength={10}
                 onChange={this.handleChange("pan")}
               />
@@ -139,7 +143,7 @@ console.log(name)
                   name="pran"
                   error={!!form_data.pran_error}
                   helperText={form_data.pran_error}
-                  value={form_data.pran}
+                  value={form_data.pran || ''}
                   onChange={this.handleChange("pran")}
                 />
               </div>
@@ -154,7 +158,8 @@ console.log(name)
                 label="your date of birth"
                 error={!!form_data.dob_error}
                 helperText={form_data.dob_error}
-                value={form_data.dob}
+                value={form_data.dob || ''}
+                maxLength={10}
                 onChange={this.handleChange("dob")}
               />
             </div>
@@ -171,14 +176,14 @@ console.log(name)
                 class="Mobile"
                 error={!!form_data.mobile_number_error}
                 helperText={form_data.mobile_number_error}
-                value={form_data.mobile_number}
+                value={form_data.mobile_number || ''}
                 onChange={this.handleChange("mobile_number")}
               />
             </div>
 
             <div className="InputField">
               <InputWithIcon
-                icon={phone}
+                icon={email}
                 width="30"
                 type="email"
                 id="email"
@@ -186,7 +191,7 @@ console.log(name)
                 label="Your Email"
                 error={!!form_data.email_error}
                 helperText={form_data.email_error}
-                value={form_data.email}
+                value={form_data.email || ''}
                 onChange={this.handleChange("email")}
               />
             </div>

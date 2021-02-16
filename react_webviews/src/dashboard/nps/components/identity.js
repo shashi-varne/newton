@@ -8,6 +8,7 @@ import person from "../../../assets/person.png";
 import { initialize } from "../common/commonFunctions";
 import { getConfig, getBase64 } from "utils/functions";
 import { storageService } from "utils/validators";
+import Grid from "material-ui/Grid";
 import $ from "jquery";
 
 const marital_status_options = [
@@ -28,7 +29,7 @@ class NpsIdentity extends Component {
       show_loader: false,
       form_data: {},
       nps_details: {},
-      selfie_needed: '',
+      selfie_needed: "",
       uploaded: false,
       img: "",
     };
@@ -49,12 +50,14 @@ class NpsIdentity extends Component {
   }
 
   onload = () => {
-    let nps_additional_details = storageService().getObject("nps_additional_details");
+    let nps_additional_details = storageService().getObject(
+      "nps_additional_details"
+    );
     let { nps_details, selfie_needed } = nps_additional_details;
 
     this.setState({
       nps_details: nps_details,
-      selfie_needed: selfie_needed
+      selfie_needed: selfie_needed,
     });
   };
 
@@ -156,64 +159,66 @@ class NpsIdentity extends Component {
           </div>
         </div>
 
-        {selfie_needed && <div className="image-prev-container">
-          <div className="heading">Share your selfie</div>
-          <div className="display-flex">
-            <img
-              className={uploaded ? "uploaded" : "upload-img"}
-              src={uploaded ? img : require("assets/pickup.png")}
-              alt="Document"
-            />
+        {selfie_needed && (
+          <div className="image-prev-container">
+            <div className="heading">Share your selfie</div>
             <div className="display-flex">
-              {!getConfig().Web && (
-                <div>
-                  <div className="image-upload-container">
-                    <div className="icon">
-                      <img
-                        src={require("assets/fa_camera.svg")}
-                        alt="Document"
-                        width="30"
-                      />
-                      <div className="text-center label">Camera</div>
+              <img
+                className={uploaded ? "uploaded" : "upload-img"}
+                src={uploaded ? img : require("assets/pickup.png")}
+                alt="Document"
+              />
+              <div className="display-flex">
+                {!getConfig().Web && (
+                  <div>
+                    <div className="image-upload-container">
+                      <div className="icon">
+                        <img
+                          src={require("assets/fa_camera.svg")}
+                          alt="Document"
+                          width="30"
+                        />
+                        <div className="text-center label">Camera</div>
+                      </div>
+                    </div>
+                    <div className="image-upload-container">
+                      <div className="icon">
+                        <img
+                          src={require("assets/fa_image.svg")}
+                          alt="Document"
+                          width="30"
+                        />
+                        <div className="text-center label">Gallery</div>
+                      </div>
                     </div>
                   </div>
-                  <div className="image-upload-container">
+                )}
+                {getConfig().Web && (
+                  <div
+                    className="image-upload-container"
+                    onClick={() =>
+                      this.startUpload("open_file", "bank_statement")
+                    }
+                  >
                     <div className="icon">
                       <img
                         src={require("assets/fa_image.svg")}
                         alt="Document"
                         width="30"
                       />
-                      <div className="text-center label">Gallery</div>
+                      <input
+                        type="file"
+                        style={{ display: "none" }}
+                        onChange={this.getPhoto}
+                      />
+                      <span className="text-center label">Gallery</span>
                     </div>
                   </div>
-                </div>
-              )}
-              {getConfig().Web && (
-                <div
-                  className="image-upload-container"
-                  onClick={() =>
-                    this.startUpload("open_file", "bank_statement")
-                  }
-                >
-                  <div className="icon">
-                    <img
-                      src={require("assets/fa_image.svg")}
-                      alt="Document"
-                      width="30"
-                    />
-                    <input
-                      type="file"
-                      style={{ display: "none" }}
-                      onChange={this.getPhoto}
-                    />
-                    <span className="text-center label">Gallery</span>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>}
+        )}
 
         <div className="nps-identity">
           <div className="InputField">
@@ -230,18 +235,23 @@ class NpsIdentity extends Component {
           </div>
 
           <div className="InputField">
-            <RadioOptions
-              icon_type="blue_icon"
-              width="40"
-              id="name"
-              label="Marital Status"
-              error={form_data.marital_status_error ? true : false}
-              helperText={form_data.marital_status_error}
-              value={form_data.marital_status || ""}
-              options={marital_status_options}
-              class="MaritalStatus"
-              onChange={this.handleChange("marital_status")}
-            />
+            <Grid container spacing={16} className="marital_status">
+              <Grid item xs={2}>
+                {""}
+              </Grid>
+              <Grid item xs={10}>
+                <RadioOptions
+                  icon_type="blue_icon"
+                  width="40"
+                  label="Marital Status"
+                  error={form_data.marital_status_error ? true : false}
+                  helperText={form_data.marital_status_error}
+                  value={form_data.marital_status || ""}
+                  options={marital_status_options}
+                  onChange={this.handleChange("marital_status")}
+                />
+              </Grid>
+            </Grid>
           </div>
 
           {form_data.marital_status === "married" && (

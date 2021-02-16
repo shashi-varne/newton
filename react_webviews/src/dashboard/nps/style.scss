@@ -158,6 +158,14 @@
   .MuiFormGroup-root {
     flex-direction: row !important;
   }
+
+  .marital_status {
+    margin-top: 30px;
+  }
+}
+
+.pran-details {
+  color: #4a4a4a;
 }
 
 .fund {
@@ -477,7 +485,7 @@
   }
 }
 
-.mainbottom {
+.nps-investments {
   margin-bottom: 20px;
 
   .list {
@@ -492,23 +500,18 @@
     cursor: pointer;
 
     .icon {
-      position: relative;
       margin-right: 20px;
     }
 
     .text {
-      position: relative;
-
-      h4 {
-        margin: 0;
-        font-size: 16px;
+      .title {
+        font-size: 15px;
+        color: var(--primary);
       }
 
-      p {
-        margin: 0;
-        font-size: 14px;
-        line-height: normal;
-        min-height: 32px;
+      .sub-title {
+        font-size: 15px;
+        color: #4a4a4a;
       }
     }
     .status {
@@ -806,4 +809,118 @@
 
 .image-upload-container:hover {
   opacity: 0.6;
+}
+
+.sip-schedule {
+  .list {
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid #e8e8e8;
+    border-radius: 3px;
+  }
+
+  .list-item {
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 3px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .calender_parent {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .calender_card {
+    border-radius: 5px;
+    padding: 10px;
+    color: #ffffff;
+    background: #b1b1b1;
+    flex: 1;
+
+    img {
+      // margin-top: -8px;
+    }
+
+    .calender_date {
+      font-size: 20px;
+    }
+  }
+
+  .calender_card {
+    background: -moz-linear-gradient(
+      45deg,
+      rgba(89, 77, 202, 1) 0%,
+      rgba(55, 9, 126, 1) 100%
+    );
+    /* ff3.6+ */
+    background: -webkit-gradient(
+      linear,
+      left bottom,
+      right top,
+      color-stop(0%, rgba(89, 77, 202, 1)),
+      color-stop(100%, rgba(55, 9, 126, 1))
+    );
+    /* safari4+,chrome */
+    background: -webkit-linear-gradient(
+      45deg,
+      rgba(89, 77, 202, 1) 0%,
+      rgba(55, 9, 126, 1) 100%
+    );
+    /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(
+      45deg,
+      rgba(89, 77, 202, 1) 0%,
+      rgba(55, 9, 126, 1) 100%
+    );
+    /* opera 11.10+ */
+    background: -ms-linear-gradient(
+      45deg,
+      rgba(89, 77, 202, 1) 0%,
+      rgba(55, 9, 126, 1) 100%
+    );
+    /* ie10+ */
+    background: linear-gradient(
+      45deg,
+      rgba(89, 77, 202, 1) 0%,
+      rgba(55, 9, 126, 1) 100%
+    );
+    /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#37097e', endColorstr='#594dca', GradientType=1);
+    /* ie6-9 */
+  }
+
+  .calender_right {
+    margin-left: 10px;
+    flex: 2;
+
+    h4 {
+      font-family: "LatoB";
+      margin-top: 0;
+      color: #4a4a4a;
+    }
+
+    .amount {
+      color: #4a4a4a;
+      font-size: 16px;
+    }
+  }
+
+  .sipstatus {
+    background: #faf8ff;
+    padding: 10px 15px;
+    // box-shadow: 0 3px 5px 0 rgba(0,0,0,.1);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    font-size: 12px;
+
+    .purple {
+      font-size: 16px;
+      text-transform: capitalize;
+    }
+  }
+
+  .statusprocess {
+    padding: 10px 15px;
+  }
 }

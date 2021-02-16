@@ -19,7 +19,7 @@ class NpsSuccess extends Component {
         hidePageTitle
         title="Confirm Delivery Details"
         showLoader={this.state.show_loader}
-        // handleClick={replaceFund}
+        // handleClick={replaceFund} /api/nps/summary
         classOverRideContainer="pr-container"
       >
         <div>

@@ -23,7 +23,7 @@ class NpsInvestments extends Component {
         classOverRideContainer="pr-container"
       >
         <section class="page invest nps">
-          <div class="mainbottom">
+          <div class="nps-investments">
             <div
               class="list"
               ng-if="npscampaign"
@@ -33,8 +33,8 @@ class NpsInvestments extends Component {
                 <img src={require("assets/warning_icon.svg")} width="40" />
               </div>
               <div class="text">
-                <h4>NPS activation pending</h4>
-                <p>e-Sign through Aadhaar</p>
+                <div className="title">NPS activation pending</div>
+                <div className="sub-title">e-Sign through Aadhaar</div>
               </div>
             </div>
 
@@ -46,8 +46,8 @@ class NpsInvestments extends Component {
                 />
               </div>
               <div class="text">
-                <h4>Tax Statement </h4>
-                <p>PRAN: {"{npsData.pran}"}</p>
+                <div className="title">Tax Statement </div>
+                <div className="sub-title">PRAN: {"{npsData.pran}"}</div>
               </div>
               <div
                 class="status"
@@ -65,22 +65,26 @@ class NpsInvestments extends Component {
               ng-if="currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete'"
             >
               <div class="icon">
-                <img src={require("assets/kyc_icon.svg")} height="40" width="40" />
+                <img
+                  src={require("assets/kyc_icon.svg")}
+                  height="40"
+                  width="40"
+                />
               </div>
               <div class="text">
-                <div class="title">KYC</div>
-                <div>Complete nps transaction</div>
+                <div className="title">KYC</div>
+                <div className="sub-title">Complete nps transaction</div>
               </div>
             </div>
             {/* <!-- <div class="list" ui-sref="nps-sip-schedule" ng-show="sipIntents.length > 0">
-      <div class="icon">
-        <img src="../assets/img/sip.png" width="50" />
-      </div>
-      <div class="text">
-        <h4>NPS SIP Schedule</h4>
-        <p></p>
-      </div>
-    </div> --> */}
+              <div class="icon">
+                <img src="../assets/img/sip.png" width="50" />
+              </div>
+              <div class="text">
+                <div className="title">NPS SIP Schedule</div>
+                <div className="sub-title"></div>
+              </div>
+            </div> --> */}
             <div
               class="list"
               ng-click="optionClicked('nps-performance', 'track nps performance')"
@@ -93,8 +97,8 @@ class NpsInvestments extends Component {
                 />
               </div>
               <div class="text">
-                <h4>Track NPS Performance</h4>
-                <p>View fund wise summary</p>
+                <div className="title">Track NPS Performance</div>
+                <div className="sub-title">View fund wise summary</div>
               </div>
             </div>
             <div
@@ -109,19 +113,13 @@ class NpsInvestments extends Component {
                 />
               </div>
               <div class="text">
-                <h4>Pending Order</h4>
-                <p>{"{ pendingAmount | inrFormat }"}</p>
+                <div className="title">Pending Order</div>
+                <div className="sub-title">
+                  {"{ pendingAmount | inrFormat }"}
+                </div>
               </div>
             </div>
           </div>
-          {/* <div ng-class="{'page-footer': isIframe, 'footer': !isIframe}">
-            <md-button
-              ng-click="proceed()"
-              class="cta-button md-raised md-primary"
-            >
-              Invest More
-            </md-button>
-          </div> */}
         </section>
       </Container>
     );
