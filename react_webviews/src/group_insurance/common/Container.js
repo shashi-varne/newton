@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router';
 import { getConfig, manageDialog, setHeights } from 'utils/functions';
 import Header from './Header';
-import Footer from './footer';
+import Footer from 'common/components/footer';
 import Banner from '../../common/ui/Banner';
 
 import { nativeCallback, openModule } from 'utils/native_callback';
@@ -608,7 +608,7 @@ class Container extends Component {
           <Footer
             dualbuttonwithouticon={this.props.dualbuttonwithouticon}
             fullWidthButton={this.props.fullWidthButton}
-            twoButtons={this.props.twoButtons}
+            twoButton={this.props.twoButton}
             logo={this.props.logo}
             buttonTitle={this.props.buttonTitle}
             buttonDisabled={this.props.buttonDisabled}
@@ -630,6 +630,8 @@ class Container extends Component {
             withProvider={this.props.withProvider}
             buttonData={this.props.buttonData}
             showLoader={this.props.showLoader}
+
+            project={'insurance'}
             {...this.props}
              />
         }
