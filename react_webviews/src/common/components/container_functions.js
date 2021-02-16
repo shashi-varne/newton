@@ -230,7 +230,7 @@ export function renderGenericError() {
     let mapper = {
         'generic': {
             'title1': 'Error',
-            'button_text2': 'CANCEL',
+            'button_text2': 'DISMISS',
             'button_text1': 'RETRY'
         },
         'form': {
@@ -248,6 +248,10 @@ export function renderGenericError() {
         }
     }
     let map_data = mapper[type] || mapper['generic'];
+
+    if(!title1) {
+        title1 = map_data.title1;
+    }
 
     let two_button  = handleClick2 ? true: false;
 
@@ -349,7 +353,7 @@ export function renderGenericError() {
             <div  className={`generic-error-dialog generic-error-dialog-page fadein-animation ${errorData ? errorData.errorClass : ''}`}>
                 <div id="error-dialog-parent" className="overlay ovarlay-page">
                     <Imgc className="top-image top-image-page" src={generic_error2_icon} alt="" />
-                    <div className="title1 title1-page">{title1 || 'Something went wrong'}</div>
+                    <div className="title1 title1-page">{title1 || 'Error'}</div>
 
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
