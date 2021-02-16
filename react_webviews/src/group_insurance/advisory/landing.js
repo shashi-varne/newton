@@ -58,7 +58,7 @@ class AdvisoryLanding extends Component {
 
             if(resultData.insurance_advisory.status === 'init'){
               storageService().setObject("advisory_id", resultData.insurance_advisory.id);
-            this.navigate('/group-insurance/advisory/basic-details')                    
+            this.navigate('/group-insurance/advisory/basic-details')
             }
           } else {
             toast(resultData.error || resultData.message || "Something went wrong");

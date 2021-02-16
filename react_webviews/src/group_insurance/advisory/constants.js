@@ -80,6 +80,12 @@ export var advisoryConstants = {
         'why': 'Standard health plans don’t provide adequate cover for COVID-19 expenses. This means you’ll be paying over your existing health coverage. The Coronavirus insurance plan will take care of such expenses.',
         'benefits': ['Low waiting period of up to 15 days ','No medical check-up required','Affordable premiums']
       }
+    },
+    get_plan_path: {
+      'health': '/group-insurance/group-health/RELIGARE/landing',
+      'ci': '/group-insurance/health/critical_illness/plan',
+      'corona': '/group-insurance/corona/plan',
+      'term': '/group-insurance/life-insurance/term/landing'
     }
 
 }

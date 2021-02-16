@@ -2,11 +2,11 @@ import React, { Component, Fragment } from 'react'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {numDifferentiation} from 'utils/validators';
-import StatusBar from '../../../common/ui/StatusBar';
+import StatusBar from '../../common/ui/StatusBar';
 import Dialog, {DialogContent} from 'material-ui/Dialog';
 import Slide from '@material-ui/core/Slide';
 import {formatAmount } from 'utils/validators'
-import {advisoryConstants} from '../constants';
+import {advisoryConstants} from './constants';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -20,8 +20,14 @@ class RecommendationResult extends Component {
             type: getConfig().productName,
             openMoreDetailsDialog: false,
             recommendation_data: this.props.recommendation_data,
-            recommendation_bottom_sheet_data: advisoryConstants.recommendation_bottom_sheet_data
+            recommendation_bottom_sheet_data: advisoryConstants.recommendation_bottom_sheet_data,
+            parent: this.props.parent
+            
         }
+    }
+    
+    getPlan = (key) =>{
+        this.state.parent.navigate(advisoryConstants.get_plan_path[key])
     }
 
     handleClose = () =>{
@@ -29,7 +35,7 @@ class RecommendationResult extends Component {
             openMoreDetailsDialog: false
         })
     }
-    
+
     confirmDialog = () => {
         var recommendation_data = this.state.recommendation_data;
         var recommendation_bottom_sheet_data = this.state.recommendation_bottom_sheet_data;
@@ -82,7 +88,7 @@ class RecommendationResult extends Component {
                         
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px'}}>
-                        <button  className="call-back-popup-button">GET THE PLAN</button> 
+                        <button  className="call-back-popup-button" onClick={()=>this.getPlan(recommendation_data.key)}>GET THE PLAN</button> 
                     </div>
 
                 </div>
@@ -96,8 +102,9 @@ class RecommendationResult extends Component {
         })
     }
     render(){
-        console.log(this.state.recommendation_data)
+        
         var recommendation_data = this.state.recommendation_data;
+        
         return(
             <div className="recommendation-result">
                 <StatusBar recommendation_data={recommendation_data}/>
@@ -122,7 +129,7 @@ class RecommendationResult extends Component {
 
                     <div className="recommendation-cta-container">
                         <div className="more-details" onClick={this.openMoreDetailsDialog}>MORE DETAILS</div>
-                        <div className="get-the-plan">GET THE PLAN</div>
+                        <div className="get-the-plan" onClick={()=>this.getPlan(recommendation_data.key)}>GET THE PLAN</div>
                     </div>
                 </div>
                 {this.confirmDialog()}

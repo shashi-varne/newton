@@ -294,7 +294,7 @@ class AdvisoryAssetDetails extends Component {
             }
             console.log(post_body)
             storageService().setObject('advisory_data', advisory_data);
-            // this.updateLead(post_body, 'recommendations', true);
+            this.updateLead(post_body, 'recommendations', true);
         }
     }
 

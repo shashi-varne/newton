@@ -3,7 +3,7 @@ import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {formatAmount, containsNumbersAndComma} from 'utils/validators';
-import RecommendationResult from './components/recommendation_result';
+import RecommendationResult from './recommendation_result';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -20,6 +20,7 @@ class AdivsoryRecommendations extends Component {
         super(props);
         this.state = {
             type: getConfig().productName,
+            profile_image: storageService().getObject('advisory_data').user_data.gender === 'MALE' ? 'advisory_male' : 'advisory_female',
             openDialogReset: false,
         }
         this.updateLead = updateLead.bind(this);
@@ -30,7 +31,7 @@ class AdivsoryRecommendations extends Component {
           pathname: pathname,
           search: search ? search : getConfig().searchParams,
         });
-    }
+      }
 
     componentDidMount(){
         var recommendation_data = storageService().getObject('advisory_data').recommendation_data.recommendation_data;
@@ -98,7 +99,7 @@ class AdivsoryRecommendations extends Component {
     render(){
         var recommendation_data = this.state.recommendation_data;
         var user_data = this.state.user_data;
-        console.log(this.state.recommendation_data)
+        console.log(this.state.applicantGender)
         return(
             <Container
                 // events={this.sendEvents('just_set_events')}
@@ -119,7 +120,7 @@ class AdivsoryRecommendations extends Component {
                             <p className="rec-profile-heading">Your profile</p>
                             <div className="rec-profile">
                                 <div className="rec-profile-left">
-                                    <img style={{width: '120px', height: '120px'}} src={require(`assets/${this.state.type}/advisory_male.svg`)}/>
+                                    <img style={{width: '120px', height: '120px'}} src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
                                 </div>
                                 {user_data && (
                                     <div className="rec-profile-right">
@@ -136,18 +137,18 @@ class AdivsoryRecommendations extends Component {
                     <p className="advisory-sub-text" style={{marginTop: '18px'}}>{this.state.recommend_text}</p>
                     <p style={{fontSize: '17px', fontWeight: 'bold', margin:'30px 0 20px 0', color: '#160D2E' }}>Here's what we recommend</p>
                     
-                    {recommendation_data && recommendation_data.map((item, index)=>(
-                         <RecommendationResult parentsPresent={user_data.dependent_json.parents} key={item.key} recommendation_data={item}/>
-                    ))}
-                    
-                    
+
+                    {
+                        recommendation_data && recommendation_data.map( (item, index) =>{
+                          return <RecommendationResult key={index + 1} parent={this} parentsPresent={user_data.dependent_json.parents} recommendation_data={item}/>
+                        })
+                    }
+
                     <div className="recommendation-extras">
                         <div className="download-report">
                             <img src={download} style={{marginRight: '5px'}} /> Download report
                         </div>
-                        <div className="recommendation-extras-divider" style={{color: '#D6D6D6'}}>
-                            |
-                        </div>
+                        <div className="recommendation-extras-divider">|</div>
                         <div className="email-report"  onClick={() => this.navigate('/group-insurance/advisory/email-report')}>
                             <img src={launch} style={{marginRight: '5px'}}/> Email report 
                         </div>

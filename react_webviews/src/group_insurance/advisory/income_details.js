@@ -110,7 +110,7 @@ class AdvisoryIncomeDetails extends Component {
         }else{
             form_data[name] = formatAmount(value);
             form_data[name + '_error'] = ''
-            // form_data[name + '_value'] = formatAmountToNumber(value);  
+            form_data[name + '_value'] = formatAmountToNumber(value);  
         }
 
         this.setState({

@@ -1259,6 +1259,10 @@ input#pan {
     margin-top: -20px;
     color: #35CB5D;
     font-weight: bold;
+    .recommendation-extras-divider{
+      color: #D6D6D6;
+      transform: translateX(-8px);
+    }
   }
 }
 .more-details-container{

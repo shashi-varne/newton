@@ -27,28 +27,11 @@ export async function updateLead( body, next_page, final_page) {
          
            if (res.pfwresponse.status_code === 200) {
                if(final_page){
-                var advisory_data = storageService().getObject('advisory_data');
+                var advisory_data = storageService().getObject('advisory_data') || {};
                 var recommendation_data = resultData.coverage_gap_dict;
                 var user_data = resultData.insurance_advisory;
-
-                var recommendation_array = []
-                  for(var rec in recommendation_data){
-                    var temp = {};
-                    if(rec !== 'recommended_text'){
-                    temp['key'] = rec;
-                     for(var x in recommendation_data[rec]){
-                         temp[x] = recommendation_data[rec][x]
-                     }
-                     recommendation_array.push(temp);
-                    }
-                  }
-                  
-                  advisory_data.recommendation_data = {
-                    'recommendation_data': recommendation_array, 
-                  };
-                  advisory_data['recommendation_data']['rec_text'] = recommendation_data.recommended_text
-                  advisory_data.user_data = user_data;
-                storageService().setObject('advisory_data', advisory_data);
+                setRecommendationData(advisory_data, recommendation_data, user_data)
+                
                }
                this.navigate(`/group-insurance/advisory/${next_page}`);                    
            } else {
@@ -93,4 +76,25 @@ export async function getLead(){
       });
       toast("Something went wrong");
     }
+}
+
+export function setRecommendationData(advisory_data, recommendation_data, user_data){
+  var recommendation_array = []
+    for(var rec in recommendation_data){
+      var temp = {};
+      if(rec !== 'recommended_text'){
+      temp['key'] = rec;
+       for(var x in recommendation_data[rec]){
+           temp[x] = recommendation_data[rec][x]
+       }
+       recommendation_array.push(temp);
+      }
+    }
+    
+    advisory_data.recommendation_data = {
+      'recommendation_data': recommendation_array, 
+    };
+    advisory_data['recommendation_data']['rec_text'] = recommendation_data.recommended_text
+    advisory_data.user_data = user_data;
+    storageService().setObject('advisory_data', advisory_data);
 }

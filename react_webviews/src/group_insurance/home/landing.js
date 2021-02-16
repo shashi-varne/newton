@@ -8,6 +8,7 @@ import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss';
 import toast from "../../common/ui/Toast";
 import {storageService} from "utils/validators";
+import { setRecommendationData } from '../advisory/common_data'
 
 class Landing extends Component {
 
@@ -93,6 +94,12 @@ class Landing extends Component {
             storageService().setObject("advisory_id", advisory_id)
             next_advisory_page = 'basic-details';
           }else if(advisory_resume_present && advisory_resume_status === 'complete'){
+            storageService().setObject("advisory_id", advisory_id)
+            var advisory_data = storageService().getObject('advisory_data') || {};
+            var recommendation_data = resultData.coverage_gap_dict;
+            var user_data = resultData.insurance_advisory;
+            setRecommendationData(advisory_data, recommendation_data, user_data) 
+            
             advisory_button_text = "VIEW REPORT";
             next_advisory_page = 'recommendations';
           }
