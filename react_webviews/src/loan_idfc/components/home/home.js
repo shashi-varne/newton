@@ -67,12 +67,15 @@ class Home extends Component {
       },
     };
 
-    this.setState({
-      stepContentMapper: stepContentMapper,
-      partnerData: partnerData,
-    }, () => {
-      this.onload();
-    });
+    this.setState(
+      {
+        stepContentMapper: stepContentMapper,
+        partnerData: partnerData,
+      },
+      () => {
+        this.onload();
+      }
+    );
   }
 
   onload = () => {};
@@ -152,7 +155,7 @@ class Home extends Component {
                   ? "Start a new application"
                   : "What are you looking for ?"}
               </div>
-              <Card onClick={() => this.handleClick()}>
+              <Card className="card-lending" onClick={() => this.handleClick()}>
                 <div className="content">
                   <img
                     src={require(`assets/${productName}/loan_hand.svg`)}
@@ -161,9 +164,10 @@ class Home extends Component {
                   <div className="data">
                     <div className="title generic-page-title">
                       Personal loans
+                      <img src={require(`assets/apply_now.svg`)} alt="" />
                     </div>
                     <div className="subtitle generic-page-subtitle">
-                      Get loans upto ₹40 lacs
+                      Get loans upto ₹40 lakhs
                     </div>
                   </div>
                 </div>
@@ -172,7 +176,7 @@ class Home extends Component {
           )}
 
           <HowToSteps
-            style={{ marginTop: 20, marginBottom: 0 }}
+            style={{ marginTop: -10, marginBottom: 0 }}
             baseData={stepContentMapper}
           />
 
@@ -181,8 +185,15 @@ class Home extends Component {
             onClick={() => {
               this.sendEvents("calculator");
               this.props.history.push(
-                { pathname: `/loan/calculator`, search: getConfig().searchParams },
-                { cta_title: this.state.loan_amount_required ? "RESUME" : "APPLY NOW" }
+                {
+                  pathname: `/loan/calculator`,
+                  search: getConfig().searchParams,
+                },
+                {
+                  cta_title: this.state.loan_amount_required
+                    ? "RESUME"
+                    : "APPLY NOW",
+                }
               );
             }}
           >
