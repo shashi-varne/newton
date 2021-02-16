@@ -1,0 +1,297 @@
+import React, { Component } from "react";
+import Container from "../common/Container";
+import { getConfig } from "utils/functions";
+import Button from "@material-ui/core/Button";
+import { initialize } from "./functions";
+import InvestCard from "./components/mini_components/InvestCard";
+import SecureInvest from "./components/mini_components/SecureInvest";
+
+class Landing extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show_loader: false,
+      productName: getConfig().productName,
+      partner: getConfig().partner,
+      screenName: "invest_landing",
+      invest_show_data: {},
+      render_cards: [],
+    };
+    this.initialize = initialize.bind(this);
+  }
+
+  componentWillMount() {
+    this.initialize();
+  }
+
+  onload = () => {
+    this.setInvestCardsData();
+  };
+  
+  render() {
+    let {
+      isReadyToInvestBase,
+      productName,
+      invest_show_data,
+      partner,
+      render_cards,
+      loadingText,
+    } = this.state;
+    let {
+      our_recommendations,
+      diy,
+      bottom_scroll_cards,
+      bottom_cards,
+      popular_cards,
+    } = invest_show_data;
+    return (
+      <Container
+        showLoader={this.state.show_loader}
+        noFooter={true}
+        hideInPageTitle
+        loaderData={{
+          loadingText,
+        }}
+      >
+        <div className="invest-landing">
+          <div className="main-top-title">Start Investing</div>
+          <div className="main-top-subtitle">
+            {isReadyToInvestBase
+              ? " Your KYC is verified, You’re ready to invest"
+              : "Invest in your future"}
+          </div>
+          {render_cards &&
+            render_cards.map((element, index) => {
+              switch (element) {
+                case "kyc":
+                  return (
+                    <React.Fragment key={index}>
+                      {!isReadyToInvestBase && (
+                        <div
+                          className="kyc"
+                          style={{
+                            backgroundImage: `url(${require(`assets/${productName}/ic_card_kyc_default.svg`)})`,
+                          }}
+                          onClick={() =>
+                            this.clickCard("kyc", "Create investment profile")
+                          }
+                        >
+                          <div className="title">Create investment profile</div>
+                          <div className="subtitle">
+                            Paperless KYC in two minutes
+                          </div>
+                          <Button>CREATE NOW</Button>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                case "our_recommendations":
+                  return (
+                    <React.Fragment key={index}>
+                      {our_recommendations && (
+                        <>
+                          <div className="main-top-title">
+                            Our recommendations
+                          </div>
+                          {our_recommendations.map((item, index) => {
+                            return (
+                              <InvestCard
+                                data={item}
+                                key={index}
+                                handleClick={() =>
+                                  this.clickCard(item.key, item.title)
+                                }
+                              />
+                            );
+                          })}
+                        </>
+                      )}
+                    </React.Fragment>
+                  );
+                case "diy":
+                  return (
+                    <React.Fragment key={index}>
+                      {diy && (
+                        <>
+                          <div className="main-top-title">Do it yourself</div>
+                          {diy.map((item, index) => {
+                            return (
+                              <InvestCard
+                                data={item}
+                                key={index}
+                                handleClick={() =>
+                                  this.clickCard(item.key, item.title)
+                                }
+                              />
+                            );
+                          })}
+                        </>
+                      )}
+                    </React.Fragment>
+                  );
+                case "bottom_scroll_cards":
+                  return (
+                    <div className="bottom-scroll-cards" key={index}>
+                      <div className="list">
+                        {bottom_scroll_cards &&
+                          bottom_scroll_cards.map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="card scroll-card"
+                                onClick={() =>
+                                  this.clickCard(item.key, item.title)
+                                }
+                              >
+                                <div className="title">{item.title}</div>
+                                <div className="icons">
+                                  <img
+                                    src={require(`assets/${productName}/${item.icon_line}`)}
+                                    alt=""
+                                  />
+                                  <img
+                                    src={require(`assets/${productName}/${item.icon}`)}
+                                    alt=""
+                                    className="icon"
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                      </div>
+                    </div>
+                  );
+                case "bottom_cards":
+                  return (
+                    <React.Fragment key={index}>
+                      {bottom_cards &&
+                        bottom_cards.map((item, index) => {
+                          return (
+                            <InvestCard
+                              data={item}
+                              key={index}
+                              handleClick={() =>
+                                this.clickCard(item.key, item.title)
+                              }
+                            />
+                          );
+                        })}
+                    </React.Fragment>
+                  );
+                case "financial_tools":
+                  return (
+                    <React.Fragment key={index}>
+                      {partner.invest_screen_cards &&
+                        partner.invest_screen_cards.risk_profile && (
+                          <div className="main-top-title">Financial tools</div>
+                        )}
+                      {partner.invest_screen_cards &&
+                        (partner.invest_screen_cards.risk_profile ||
+                          partner.invest_screen_cards.fhc) && (
+                          <div className="bottom-scroll-cards">
+                            <div className="list">
+                              {partner.invest_screen_cards.fhc && (
+                                <div
+                                  className="card invest-card financial-card"
+                                  onClick={() => this.clickCard("fhc")}
+                                >
+                                  <div className="content">
+                                    <div className="title">
+                                      Financial health check
+                                    </div>
+                                    <img
+                                      src={require(`assets/${productName}/ic_fin_tools_fhc.svg`)}
+                                      alt=""
+                                      className="icon"
+                                    />
+                                  </div>
+                                  <div className="subtitle">
+                                    Get an expert financial advice
+                                  </div>
+                                  <Button>CHECK NOW</Button>
+                                </div>
+                              )}
+                              {partner.invest_screen_cards.risk_profile && (
+                                <div
+                                  className="card invest-card financial-card"
+                                  onClick={() => this.clickCard("risk_profile")}
+                                >
+                                  <div className="content">
+                                    <div className="title">
+                                      Invest for a goal
+                                    </div>
+                                    <img
+                                      src={require(`assets/${productName}/ic_fin_tools_risk.svg`)}
+                                      alt=""
+                                      className="icon"
+                                    />
+                                  </div>
+                                  <div className="subtitle">
+                                    Invest as per your risk appetite
+                                  </div>
+                                  <Button>START NOW</Button>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                    </React.Fragment>
+                  );
+                case "popular_cards":
+                  return (
+                    <React.Fragment key={index}>
+                      {popular_cards && (
+                        <>
+                          <div className="main-top-title">
+                            More investment options
+                          </div>
+                          <div className="bottom-scroll-cards">
+                            <div className="list">
+                              {popular_cards.map((item, index) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="card popular"
+                                    onClick={() =>
+                                      this.clickCard(item.key, item.title)
+                                    }
+                                    style={{
+                                      backgroundImage: `url(${require(`assets/${productName}/${item.icon}`)})`,
+                                    }}
+                                  >
+                                    <div className="title">{item.title}</div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </React.Fragment>
+                  );
+                default:
+                  return <></>;
+              }
+            })}
+          <SecureInvest />
+          {productName !== "fisdom" &&
+            productName !== "finity" &&
+            productName !== "ktb" && (
+              <div className="contact-us">
+                In partnership with
+                <span>
+                  {productName === "bfdlmobile" ||
+                  this.state.isIframe ||
+                  this.state.finity
+                    ? " Finity"
+                    : " Fisdom"}
+                </span>
+              </div>
+            )}
+        </div>
+      </Container>
+    );
+  }
+}
+
+export default Landing;
