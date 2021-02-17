@@ -58,7 +58,7 @@ class App extends Component {
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
-          <Route path='/kyc' component={Kyc} />
+          {/* <Route path='/kyc' component={Kyc} /> */}
           <Route path='/' component={Landing}/>
           <Route component={NotFound} />
         </Switch>

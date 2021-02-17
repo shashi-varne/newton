@@ -1,3 +1,5 @@
+import { getConfig } from "../../utils/functions";
+
 export const apiConstants = {
   accountSummary: "/api/user/account/summary",
   npsInvestStatus: "/api/nps/invest/status/v2",
@@ -262,4 +264,124 @@ export const nfoData = {
       selected_icon: "selected.png",
     },
   ],
+};
+
+export const kycStatusMapper = {
+  init: "",
+  submitted: {
+    color: "#3792fc",
+    popup_header: "KYC verification is under process",
+    popup_message:
+      "Our team is working on your KYC application, we will notify by email and sms once it's done",
+    button_text: "OK",
+    oneButton: true,
+    landing_text: "UNDER PROCESS",
+    icon: "ic_popup_kyc_underprocess.svg",
+  },
+  rejected: {
+    color: "#d0021b",
+    popup_header: "Sorry, Your KYC is still pending",
+    popup_message: "KYC document rejected",
+    button_text: "Update KYC",
+    landing_text: "PENDING",
+    icon: "ic_popup_kyc_pending.svg",
+    next_state: "/kyc/upload/progress",
+  },
+  incomplete: {
+    color: "#ffa60b",
+    popup_header: "",
+    popup_message: "",
+    button_text: "",
+    landing_text: "INCOMPLETE",
+    icon: "ic_popup_kyc_pending.svg",
+  },
+  complete: {
+    color: "#ffa60b",
+    popup_header: "Congratulations! KYC verified",
+    popup_message: "You're ready to invest in Mutual Funds",
+    button_text: "Start Investing",
+    icon: "ic_popup_kyc_verified.svg",
+    next_state: "/invest",
+  },
+};
+
+export const kycStatusMapperInvest = {
+  init: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Create investment profile",
+    subtitle: "Paperless KYC in two minutes",
+    button_text: "CREATE NOW",
+    next_state: "/kyc/journey",
+  },
+  ground: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Create investment profile",
+    subtitle: "Paperless KYC in two minutes",
+    button_text: "CREATE NOW",
+    next_state: "/home-kyc",
+  },
+  ground_premium: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Premium onboarding",
+    subtitle: "No documentation  |  Instant investment",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey",
+  },
+  ground_aadhaar: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Complete your KYC",
+    subtitle: "Don’t miss out good returns by Delaying",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey",
+  },
+  incomplete: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Complete your KYC",
+    subtitle: "Don’t miss out good returns by Delaying",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey",
+  },
+  rejected: {
+    icon: "ic_card_kyc_pending.svg",
+    title: "KYC still pending",
+    subtitle: "KYC document rejected",
+    button_text: "UPDATE KYC",
+    next_state: "/kyc/upload/progress",
+  },
+  submitted: {
+    icon: "ic_card_kyc_underprocess.svg",
+    title: "KYC application submitted",
+    subtitle: "Verification in-progress",
+    button_text: "CHECK STATUS",
+    next_state: "/kyc/upload/progress",
+  },
+};
+
+export const premiumBottomSheetMapper = {
+  ground_premium: {
+    popup_header: `Premium Onboarding`,
+    title: "Premium Onboarding",
+    bold_text: "Congratulations!",
+    popup_message: `You have been selected for Premium onboarding. Fast track your investment journey.`,
+    button_text: "CONTINUE",
+    oneButton: true,
+    next_state: "/kyc/journey",
+    icon: "ic_premium_onboarding_small.svg",
+  },
+  init: {
+    popup_header: "Premium Onboarding",
+    title: "Premium Onboarding",
+    popup_message: "Fast track your investment with Premium onboarding!",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey",
+    icon: "ic_popup_premium_onboarding_big.svg",
+  },
+  incomplete: {
+    popup_header: `Premium Onboarding`,
+    title: "Premium Onboarding",
+    popup_message: "Fast track your investment with Premium onboarding!",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey",
+    icon: "ic_popup_premium_onboarding_big.svg",
+  },
 };

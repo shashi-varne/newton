@@ -5,6 +5,9 @@ import Button from "@material-ui/core/Button";
 import { initialize } from "./functions";
 import InvestCard from "./components/mini_components/InvestCard";
 import SecureInvest from "./components/mini_components/SecureInvest";
+import VerificationFailedDialog from "./components/mini_components/VerificationFailedDialog";
+import KycStatusDialog from "./components/mini_components/KycStatusDialog";
+import KycPremiumLandingDialog from "./components/mini_components/KycPremiumLandingDialog";
 
 class Landing extends Component {
   constructor(props) {
@@ -16,6 +19,11 @@ class Landing extends Component {
       screenName: "invest_landing",
       invest_show_data: {},
       render_cards: [],
+      verificationFailed: false,
+      modalData: {},
+      openKycStatusDialog: false,
+      modalData: {},
+      openKycPremiumLanding: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -25,9 +33,57 @@ class Landing extends Component {
   }
 
   onload = () => {
+    this.initilizeKyc();
     this.setInvestCardsData();
   };
-  
+
+  addBank = () => {
+    this.navigate("/add-bank");
+  };
+
+  updateDocument = () => {
+    const userKyc = this.state.userKyc || {};
+    this.navigate(`/kyc/${userKyc.kyc_status}/bank-details`);
+  };
+
+  closeVerificationFailed = () => {
+    this.setState({ verificationFailed: false });
+  };
+
+  closeKycStatusDialog = () => {
+    this.setState({ openKycStatusDialog: false });
+  };
+
+  closeKycPremiumLandingDialog = () => {
+    this.setState({
+      openKycPremiumLanding: false,
+    });
+  };
+
+  handleKycPremiumLanding = () => {
+    if (
+      this.state.screenName === "invest_landing" &&
+      this.state.bottom_sheet_dialog_data_premium.next_state === "/invest"
+    ) {
+      this.closeKycPremiumLandingDialog();
+      return;
+    }
+    this.navigate(this.state.bottom_sheet_dialog_data_premium.next_state);
+  };
+
+  handleKycStatus = () => {
+    let { kycJourneyStatus } = this.state;
+    if (kycJourneyStatus === "submitted") {
+      this.closeKycStatusDialog();
+    } else if (kycJourneyStatus === "rejected") {
+      this.navigate("/kyc/upload/progress", {
+        state: {
+          toState: "/invest",
+        },
+      });
+    }
+  };
+
   render() {
     let {
       isReadyToInvestBase,
@@ -36,6 +92,11 @@ class Landing extends Component {
       partner,
       render_cards,
       loadingText,
+      kycStatusData,
+      verificationFailed,
+      openKycStatusDialog,
+      modalData,
+      openKycPremiumLanding,
     } = this.state;
     let {
       our_recommendations,
@@ -66,21 +127,21 @@ class Landing extends Component {
                 case "kyc":
                   return (
                     <React.Fragment key={index}>
-                      {!isReadyToInvestBase && (
+                      {!isReadyToInvestBase && kycStatusData && (
                         <div
                           className="kyc"
                           style={{
-                            backgroundImage: `url(${require(`assets/${productName}/ic_card_kyc_default.svg`)})`,
+                            backgroundImage: `url(${require(`assets/${productName}/${kycStatusData.icon}`)})`,
                           }}
                           onClick={() =>
-                            this.clickCard("kyc", "Create investment profile")
+                            this.clickCard("kyc", kycStatusData.title)
                           }
                         >
-                          <div className="title">Create investment profile</div>
+                          <div className="title">{kycStatusData.title}</div>
                           <div className="subtitle">
-                            Paperless KYC in two minutes
+                            {kycStatusData.subtitle}
                           </div>
-                          <Button>CREATE NOW</Button>
+                          <Button>{kycStatusData.button_text}</Button>
                         </div>
                       )}
                     </React.Fragment>
@@ -288,6 +349,30 @@ class Landing extends Component {
                 </span>
               </div>
             )}
+          <VerificationFailedDialog
+            isOpen={verificationFailed}
+            close={this.closeVerificationFailed}
+            addBank={this.addBank}
+            updateDocument={this.updateDocument}
+          />
+          {openKycStatusDialog && (
+            <KycStatusDialog
+              isOpen={openKycStatusDialog}
+              data={modalData}
+              close={this.closeKycStatusDialog}
+              handleClick={this.handleKycStatus}
+              cancel={this.closeKycStatusDialog}
+            />
+          )}
+          {openKycPremiumLanding && (
+            <KycPremiumLandingDialog
+              isOpen={openKycPremiumLanding}
+              close={this.closeKycPremiumLandingDialog}
+              cancel={this.closeKycPremiumLandingDialog}
+              handleClick={this.handleKycPremiumLanding}
+              data={modalData}
+            />
+          )}
         </div>
       </Container>
     );

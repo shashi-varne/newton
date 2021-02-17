@@ -64,6 +64,7 @@
     margin: 6px 8px 6px 0;
     background-color: var(--secondary);
     line-height: 36px;
+    letter-spacing: 0.01em;
   }
 
   button:hover {
@@ -1115,5 +1116,122 @@
   }
 }
 
-
 /// End of Explore Invest part ///////
+
+//// VERIFICATION FAILED DIALOG START ////
+
+.verification-failed-dialog {
+  .verification-failed-dialog-content {
+    padding: 15px 15px 30px 15px !important;
+
+    .title {
+      margin: -15px -15px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      color: #160d2e;
+      font-size: 20px;
+      font-weight: 600;
+
+      .text {
+        margin: 30px 0 10px 0;
+      }
+    }
+
+    .subtitle {
+      color: #767e86;
+      font-size: 14px;
+      margin: 20px 0;
+    }
+
+    .bottom-info {
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      background-color: white;
+
+      .bottom-info-box {
+        display: -ms-flexbox;
+        display: flex;
+        padding: 0 10px 0 10px;
+
+        img {
+          margin: 0 10px 0 0px;
+        }
+
+        .bottom-info-content {
+          color: #767e86;
+          font-size: 13px;
+          font-weight: 400;
+        }
+      }
+
+      .bottom-info-mid {
+        border-left: 1px solid #d3dbe4;
+        height: 12px;
+      }
+    }
+
+    .action {
+      display: flex;
+      width: 100%;
+      align-items: center;
+
+      .button {
+        width: 100%;
+        padding: 5px 15px;
+        font-size: 14px;
+        border-radius: 5px;
+        min-height: 47px;
+        font-weight: bold;
+        letter-spacing: 0.01em;
+      }
+
+      .bg-full {
+        color: white;
+        background-color: var(--secondary);
+      }
+
+      .no-bg {
+        background-color: white;
+        color: #878787;
+      }
+    }
+  }
+
+  .kyc-premium-content {
+    .title {
+      .text {
+        margin-bottom: 30px;
+      }
+    }
+
+    .subtitle {
+      margin: 30px 0 10px 0;
+    }
+
+    .action {
+      margin-top: 30px;
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  #invest-bottom-dialog {
+    .MuiDialog-paper {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .MuiDialog-paperWidthSm {
+      width: 100%;
+      align-self: flex-end;
+    }
+  }
+}
+
+//// VERIFICATION FAILED DIALOG END ////

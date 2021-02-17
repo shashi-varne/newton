@@ -10,7 +10,7 @@ import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini_components/AccountMerge";
 import { initData } from "../services";
-import { getConfig } from "../../utils/functions";
+import { getConfig } from "utils/functions";
 
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);

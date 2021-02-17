@@ -59,6 +59,8 @@ const AddBank = (props) => {
     }
     setName(kycDetails.pan.meta_data.name || "");
     let data = { ...bankData };
+    console.log(typeof bank_id);
+    console.log(typeof kycDetails.additional_approved_banks[0].bank_id);
     if (bank_id) {
       data =
         kycDetails.additional_approved_banks.find(

@@ -1,8 +1,16 @@
 import Api from "utils/api";
-import { storageService, formatAmountInr } from "utils/validators";
+import { storageService, formatAmountInr, isEmpty } from "utils/validators";
 import toast from "../../common/ui/Toast";
 import { getConfig } from "utils/functions";
-import { apiConstants, investCardsBase, keyPathMapper } from "./constants";
+import {
+  apiConstants,
+  investCardsBase,
+  keyPathMapper,
+  kycStatusMapper,
+  kycStatusMapperInvest,
+  premiumBottomSheetMapper,
+} from "./constants";
+import { getKycAppStatus } from "../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -37,8 +45,28 @@ export async function initialize() {
   this.proceedInvestmentChild = proceedInvestmentChild.bind(this);
   this.getDiyPurchaseLimit = getDiyPurchaseLimit.bind(this);
   this.deleteFund = deleteFund.bind(this);
-  if (this.state.screenName === "invest_landing") {
-    this.getSummary();
+  this.initilizeKyc = initilizeKyc.bind(this);
+  this.openKyc = openKyc.bind(this);
+  this.openPremiumOnboardBottomSheet = openPremiumOnboardBottomSheet.bind(this);
+  let userKyc = storageService().getObject("kyc") || {};
+  let currentUser = storageService().getObject("user") || {};
+  let dataSettedInsideBoot = storageService().get("dataSettedInsideBoot");
+  if (this.state.screenName === "invest_landing" && dataSettedInsideBoot) {
+    storageService().set("dataSettedInsideBoot", false);
+  }
+  if (
+    isEmpty(userKyc) ||
+    isEmpty(currentUser) ||
+    (this.state.screenName === "invest_landing" &&
+      getConfig().web &&
+      !dataSettedInsideBoot)
+  ) {
+    await this.getSummary();
+  } else {
+    this.setState({
+      userKyc: userKyc,
+      currentUser: currentUser,
+    });
   }
   if (this.onload) this.onload();
 }
@@ -73,8 +101,6 @@ export async function getSummary() {
 export function setSummaryData(result) {
   let currentUser = result.data.user.user.data;
   let userKyc = result.data.kyc.kyc.data;
-  //   _user = result.data.user.user.data;
-  //   _kyc = result.data.kyc.kyc.data;
   this.setState({
     currentUser: currentUser,
     userKyc: userKyc,
@@ -131,9 +157,9 @@ export function getCampaignBySection(notifications, sections) {
     notifications = storageService().getObject("campaign") || [];
   }
 
-  var notificationsData = [];
+  let notificationsData = [];
 
-  for (var i = 0; i < notifications.length; i++) {
+  for (let i = 0; i < notifications.length; i++) {
     if (notifications[i].campaign.name === "PlutusPendingTransactionCampaign") {
       continue;
     }
@@ -310,7 +336,7 @@ export function clickCard(state, title) {
       this.getRecommendationApi(300);
       break;
     case "kyc":
-      // handle kyc
+      this.openKyc();
       break;
     case "insurance":
       let insurancePath = "/group-insurance";
@@ -493,6 +519,7 @@ export function navigate(pathname, data = {}) {
       pathname: pathname,
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
+      state: data.state || {},
     });
   }
 }
@@ -1000,6 +1027,124 @@ export async function proceedInvestmentChild(ev) {
       console.log(error);
       this.setState({ show_loader: false });
       toast(errorMessage);
+    }
+  }
+}
+
+export function initilizeKyc() {
+  let userKyc = this.state.userKyc || storageService().getObject("kyc") || {};
+  let currentUser =
+    this.state.currentUser || storageService().getObject("user") || {};
+  let isCompliant = userKyc.kyc_status === "compliant" ? true : false;
+  let getKycAppStatusData = getKycAppStatus(userKyc);
+  let kycJourneyStatus = getKycAppStatusData.status;
+  let kycStatusData = kycStatusMapperInvest[kycJourneyStatus];
+  if (isCompliant) {
+    if (["init", "incomplete"].indexOf(kycJourneyStatus) !== -1) {
+      kycStatusData = kycStatusMapperInvest["ground_premium"];
+    }
+  }
+  let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+  this.setState({
+    isCompliant,
+    kycStatusData,
+    kycJourneyStatusMapperData,
+    userKyc,
+    kycJourneyStatus,
+  });
+  let bottom_sheet_dialog_data_premium = {};
+  let premium_onb_status = "";
+  if (isCompliant) {
+    premium_onb_status = kycJourneyStatus;
+    if (
+      ["ground_premium", "init", "incomplete"].indexOf(kycJourneyStatus) !== -1
+    ) {
+      bottom_sheet_dialog_data_premium =
+        premiumBottomSheetMapper[premium_onb_status];
+      bottom_sheet_dialog_data_premium.status = premium_onb_status;
+    }
+
+    if (
+      ["submitted", "complete"].indexOf(kycJourneyStatus) !== -1 &&
+      !currentUser.active_investment &&
+      userKyc.bank.meta_data_status === "approved"
+    ) {
+      bottom_sheet_dialog_data_premium = kycStatusMapper["complete"];
+      bottom_sheet_dialog_data_premium.status = premium_onb_status;
+    }
+
+    if (["rejected"].indexOf(kycJourneyStatus) !== -1) {
+      bottom_sheet_dialog_data_premium = kycStatusMapper[premium_onb_status];
+      bottom_sheet_dialog_data_premium.status = premium_onb_status;
+    }
+  }
+
+  this.setState({ bottom_sheet_dialog_data_premium });
+  if (premium_onb_status && bottom_sheet_dialog_data_premium) {
+    let banklist = storageService().getObject("banklist");
+    if (banklist && banklist.length) {
+      return;
+    } else {
+      this.openPremiumOnboardBottomSheet(
+        bottom_sheet_dialog_data_premium,
+        userKyc
+      );
+    }
+  }
+}
+
+export function openPremiumOnboardBottomSheet(
+  bottom_sheet_dialog_data_premium,
+  userKyc
+) {
+  let is_bottom_sheet_displayed_kyc_premium = storageService().get(
+    "is_bottom_sheet_displayed_kyc_premium"
+  );
+
+  if (is_bottom_sheet_displayed_kyc_premium) {
+    return "";
+  }
+
+  if (getConfig().Web && this.state.screenName != "invest_landing") {
+    return;
+  }
+
+  if (!getConfig().Web && this.state.screenName != "landing") {
+    return;
+  }
+
+  storageService().set("is_bottom_sheet_displayed_kyc_premium", true);
+  if (userKyc.bank.meta_data_status === "rejected") {
+    this.setState({ verificationFailed: true });
+  } else {
+    this.setState({
+      modalData: bottom_sheet_dialog_data_premium,
+      openKycPremiumLanding: true,
+    });
+  }
+}
+
+export function openKyc() {
+  let {
+    userKyc,
+    kycJourneyStatus,
+    kycStatusData,
+    kycJourneyStatusMapperData,
+  } = this.state;
+  if (kycJourneyStatus === "submitted" || kycJourneyStatus === "rejected") {
+    if (userKyc.bank.meta_data_status === "rejected") {
+      this.setState({ verificationFailed: true });
+    } else {
+      let modalData = kycJourneyStatusMapperData;
+      this.setState({ modalData, openKycStatusDialog: true });
+    }
+  } else {
+    if (kycJourneyStatus === "ground") {
+      this.navigate("/home-kyc");
+    } else {
+      this.navigate(kycStatusData.next_state, {
+        state: { fromState: "invest" },
+      });
     }
   }
 }
