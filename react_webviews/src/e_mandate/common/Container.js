@@ -1,22 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
-import Footer from './footer';
-import Banner from '../../common/ui/Banner';
+import { didmount, commonRender } from '../../common/components/container_functions';
 
 import { nativeCallback } from 'utils/native_callback';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
 import '../../utils/native_listner_otm';
-import { getConfig, setHeights } from 'utils/functions';
-import { renderPageLoader } from '../../common/components/container_functions';
-import UiSkelton from '../../common/ui/Skelton';
+import { getConfig } from 'utils/functions';
+
 
 class Container extends Component {
 
@@ -27,57 +17,32 @@ class Container extends Component {
       openPopup: false,
       popupText: '',
       callbackType: '',
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      project: 'e-mandate',
+      inPageTitle: false,
+      new_header:false,
+      force_hide_inpage_title: true,
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
-    this.renderPageLoader = renderPageLoader.bind(this);
+
+    this.didmount = didmount.bind(this);
+    this.commonRender = commonRender.bind(this);
   }
 
+
   componentDidMount() {
-    setHeights({ 'header': true, 'container': false });
-    let that = this;
+
+    this.didmount();
+
     if (getConfig().generic_callback) {
       if (getConfig().iOS) {
         nativeCallback({ action: 'hide_top_bar' });
       }
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PaymentCallback.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
     }
   }
 
   componentWillUnmount() {
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PaymentCallback.remove_listener({});
-    }
-  }
-
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: this.props.location.search
-    });
-  }
-
-  getEvents(user_action) {
-    if (!this || !this.props || !this.props.events) {
-      return;
-    }
-    let events = this.props.events;
-    events.properties.user_action = user_action;
-    return events;
+   this.unmount();
   }
 
   historyGoBack = () => {
@@ -131,36 +96,6 @@ class Container extends Component {
     }
   }
 
-  handleClose = () => {
-    this.setState({
-      openDialog: false,
-      openPopup: false
-    });
-  }
-
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your connection and try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
   handlePopup = () => {
     this.setState({
       openPopup: false
@@ -168,32 +103,6 @@ class Container extends Component {
 
     nativeCallback({ action: this.state.callbackType });
 
-  }
-
-  renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openPopup}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-        <DialogContent>
-          <DialogContentText>
-            {this.state.popupText}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default">
-            No
-          </Button>
-          <Button onClick={this.handlePopup} color="default" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
   }
 
   handleTopIcon() {
@@ -205,96 +114,18 @@ class Container extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    setHeights({ 'header': true, 'container': false });
+    this.didupdate();
   }
 
   render() {
-    let steps = [];
-    for (var i = 0; i < this.props.total; i++) {
-      if (this.props.current > i) {
-        steps.push(<span className='active'
-          style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
-      } else {
-        steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
-      }
-    }
+    
 
-    return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
-        {/* Header Block */}
-        {(!this.props.noHeader && !getConfig().hide_header) && <Header
-          disableBack={this.props.disableBack}
-          title={this.props.title}
-          smallTitle={this.props.smallTitle}
-          provider={this.props.provider}
-          count={this.props.count}
-          total={this.props.total}
-          current={this.props.current}
-          goBack={this.historyGoBack}
-          edit={this.props.edit}
-          noBack={this.props.noBack}
-          type={getConfig().productName}
-          resetpage={this.props.resetpage}
-          handleReset={this.props.handleReset}
-          topIcon={this.props.topIcon}
-          handleTopIcon={this.handleTopIcon} />
-        }
-        {/* Below Header Block */}
-        <div id="HeaderHeight" style={{ top: 56 }}>
-
-          {/* Loader Block */}
-          {this.renderPageLoader()}
-
-          {steps && <div className="Step">
-            {steps}
-          </div>}
-
-          {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
-
-        </div>
-
-        { this.props.skelton && 
-            <UiSkelton 
-            type={this.props.skelton}
-            />
-          }
-
-        {/* Children Block */}
-        <div 
-        style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial'}}
-        className={`Container ${this.props.classOverRideContainer}`}>
-           <div 
-            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
-            style={{display: this.props.skelton ? 'none': ''}}
-            > {this.props.children}
-             </div>
-        </div>
-        
-        {/* Footer Block */}
-        {!this.props.noFooter && !this.props.skelton &&
-          <Footer
-            fullWidthButton={this.props.fullWidthButton}
-            logo={this.props.logo}
-            buttonTitle={this.props.buttonTitle}
-            provider={this.props.provider}
-            premium={this.props.premium}
-            paymentFrequency={this.props.paymentFrequency}
-            edit={this.props.edit}
-            resetpage={this.props.resetpage}
-            handleClick={this.props.handleClick}
-            handleReset={this.props.handleReset}
-            onlyButton={this.props.onlyButton}
-            noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled}
-            showLoader={this.props.showLoader}
-            />
-        }
-        {/* No Internet */}
-        {this.renderDialog()}
-        {this.renderPopup()}
-      </div>
-    );
+    return(
+      <Fragment>
+      {this.commonRender()}
+      </Fragment>
+    )
+   
   }
 };
 
