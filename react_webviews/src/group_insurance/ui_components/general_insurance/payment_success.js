@@ -367,7 +367,7 @@ class PaymentSuccessClass extends Component {
         buttonTitle='Generate Policy'
         onlyButton={true}
         handleClick={() => this.handleClickCurrent()}
-        title={this.state.leadData.product_title}
+        title={this.state.leadData.product_title||this.props.parent.state.headerTitle }
         classOverRideContainer="payment-success"
       >
         <div>
