@@ -275,7 +275,7 @@ class GroupHealthLanding extends Component {
         <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
           {this.state.providerConfig.subtitle}
         </div>
-        {console.log(this.state.offerImageData, '=====================================')}
+
         <div className="group-health-landing">
           <div style={{ margin: "0 0 0 0", cursor: "pointer" }}>
             <ReactResponsiveCarousel

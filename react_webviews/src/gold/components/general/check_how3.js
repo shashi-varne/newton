@@ -96,7 +96,7 @@ class CheckHow2 extends Component {
                     <GoldBottomSecureInfo parent={this} style={{margin: '60px 0 -20px 0'}} />
                 </div>
 
-         <div style={{border : '2px solid red'}}>   <LeftRightFooter parent={this} />  </div>     
+                <LeftRightFooter parent={this} />
             </Container>
         );
     }

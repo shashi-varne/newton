@@ -35,6 +35,14 @@ import RadioOptions from '../../ui/RadioOptions'
 import RadioWithIcon from '../../ui/RadioWithIcon'
 import RadioWithoutIcon3 from '../../ui/RadioWithoutIcon2'
 import DropdownWithoutIconSelect from '../../ui/SelectWithoutIcon'
+import SliderWithValues from '../../ui/SilderWithValues'
+import UiSkelton from '../../ui/Skelton'
+import CustomizedSlider from '../../ui/Slider'
+import StepsToFollow from '../../ui/stepsToFollow'
+import TitleWithIcon from '../../ui/TitleWithIcon'
+import TermsAndConditions from '../../ui/tnc'
+import toast from '../../ui/Toast'
+import Tooltip from '../../ui/TooltipLite'
 // import Select from "material-ui";
 import { yesNoOptions } from '../../../group_insurance/constants';
 import { disableBodyTouch } from '../../../utils/validators'
@@ -46,6 +54,7 @@ import {
   Select,
   TextField
 } from "material-ui";
+import { blue } from 'material-ui/colors'
 
 class Components_base extends Component {
     constructor(props) {
@@ -56,6 +65,7 @@ class Components_base extends Component {
             city: '',
             check: true,
             openPopUpInput : true,
+            checked: true
         };
     }
 
@@ -470,7 +480,52 @@ class Components_base extends Component {
               classes={{ root: "wr-select-input" }}/>
 
               <h3>SliderWithValues</h3>
+              <SliderWithValues 
+               label="Net monthly income"
+               val="Net_monthly_Income"
+               value={75000}
+               min="0"
+               max="1000000"
+               minValue="0"
+               maxValue="₹ 10 Lacs"
+               onChange={this.handleChange()}/>
 
+              <h3>UiSkelton</h3>
+              <UiSkelton type={true} />
+
+              <h3>CustomizedSlider</h3>
+              <CustomizedSlider 
+                    min={1000}
+                    max={5000}
+                    default={2000}
+                    onChange={this.handleChange()}
+                />
+
+                <h3>StepsToFollow</h3>
+                <StepsToFollow title='fisdom' subtitle='insurance' keyId='1' />
+                <StepsToFollow title='fisdom' subtitle='gold' keyId='2' />
+                <StepsToFollow title='fisdom' subtitle='equity' keyId='3' />
+
+                <h3>TitleWithIcon</h3>
+                <TitleWithIcon  icon={icn} width={'50px'} title={'fisdom'} />
+
+                <h3>TermsAndConditions</h3>
+                <TermsAndConditions   parent={this}  />
+ 
+                  <h3>toast('Something went wrong')</h3>
+                  <div onClick={() => { toast('Something went wrong') }}>Click Me</div>
+
+                  <h3>Tooltip</h3>
+                  <Tooltip
+                   content={"Fisdom is Wisdom towards Fredom"}
+                   isOpen={undefined}
+                   useHover={true}
+                   direction={'down'}
+                   forceDirection={false}
+                  //  onClickAway={(event) => onClickAway(event, toggleModal)}
+                  //  className={tooltipClass}
+                   >
+                 </Tooltip>
           </div>
           </div>
           </div>
