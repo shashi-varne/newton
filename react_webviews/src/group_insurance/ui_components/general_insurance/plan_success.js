@@ -107,12 +107,11 @@ class PlanSuccessClass extends Component {
 
       let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        skelton: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
-
-
+        this.setState({
+          skelton: false
+        })
         let lead_data = res.pfwresponse.result.lead;
 
         let accordians_data = [

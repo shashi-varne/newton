@@ -316,7 +316,7 @@ class PaymentSuccessClass extends Component {
           ...this.state.errorData,
           title2: error
         },
-        showError: 'page'
+        showError: true
       })
     }
 
