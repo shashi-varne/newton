@@ -1376,7 +1376,6 @@ input#pan {
       font-size: 15px;
       color: #160D2E;
       font-weight: 700;
-      padding-bottom: 12px;
     }
     .rec-profile{
       display: flex;
@@ -1398,6 +1397,10 @@ input#pan {
 
   .recommendation-result{
     margin-bottom: 40px;
+    
+    .disable-get-the-plan{
+      opacity: 0.4;
+    }
     
     .recommendation-info-container{
       margin-top: 20px;
@@ -1428,6 +1431,7 @@ input#pan {
           padding: 15px 25px;
           border-radius: 5px;
         }
+        
         .get-the-plan{
           background-color: #35CB5D;
           color: #FFFFFF;
@@ -1466,13 +1470,13 @@ input#pan {
     align-items: center;
     justify-content: flex-start;
     .individual-coverage-detail{
-      margin: 0 20px 0 20px;
+      margin: 0 40px 0 0px;
     }
   }
   .coverage-details{
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     .individual-coverage-detail{
       .coverage-detail-heading{
         color: #767E86;

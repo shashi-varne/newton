@@ -12,8 +12,7 @@ import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
 import Checkbox from "material-ui/Checkbox";
 import { updateLead, getLead } from './common_data';
 import {storageService, isEmpty} from "utils/validators";
-import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
+
 
 class AdvisoryBasicDetails extends Component {
 
@@ -49,39 +48,76 @@ class AdvisoryBasicDetails extends Component {
         var form_data = {};
 
         if(isResumePresent){
-            console.log('Resume case')
             await this.getLead();
             lead = this.state.resume_data;
-            form_data.illness = lead.critical_illness_insurance_present === true ? yesNoOptions[0].value : lead.critical_illness_insurance_present === false ?  yesNoOptions[1].value : '';
+            if(lead){
+                form_data.illness = lead.critical_illness_insurance_present === true ? yesNoOptions[0].value : lead.critical_illness_insurance_present === false ?  yesNoOptions[1].value : '';
+            }
         }else if(!isEmpty(advisory_data)){
-            console.log('Normal prefill')
             lead = advisory_data
-            form_data.illness = lead.ci_present === true ? yesNoOptions[0].value : lead.ci_present === false ?  yesNoOptions[1].value : '';
+            if(lead){
+                form_data.illness = lead.ci_present === true ? yesNoOptions[0].value : lead.ci_present === false ?  yesNoOptions[1].value : '';
+            }
         }
 
-        if(isResumePresent ||!isEmpty(advisory_data)) {
+        if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)) {
             form_data.name = lead.name;
             form_data.age = lead.age;
             form_data.city = lead.city ? lead.city.toLowerCase() : '';
             form_data.gender = lead.gender === "MALE" ? genderOptions[0].value : lead.gender === "FEMALE"?  genderOptions[1].value : '';
             form_data.married = lead.marital_status === "MARRIED" ? yesNoOptions[0].value : lead.marital_status === "UNMARRIED" ?  yesNoOptions[1].value : '';
-            let spouse_checked = lead.dependent_json.spouse ? true : false;
-            let Kids_checked = lead.dependent_json.kids ? true : false;
-            let Kids_total = lead.dependent_json.kids;
-            let Parents_checked = lead.dependent_json.parents ? true : false;
-            let Parents_total = lead.dependent_json.parents;
-            let none_checked = lead.dependent_json.parents + lead.dependent_json.kids + lead.dependent_json.spouse === 0 ? true : false;
+
+            if(!isEmpty(lead.dependent_json)){
+                let spouse_checked = lead.dependent_json.spouse ? true : false;
+                let Kids_checked = lead.dependent_json.kids ? true : false;
+                let Kids_total = lead.dependent_json.kids;
+                let Parents_checked = lead.dependent_json.parents ? true : false;
+                let Parents_total = lead.dependent_json.parents;
+                let none_checked = lead.dependent_json.parents + lead.dependent_json.kids + lead.dependent_json.spouse === 0 ? true : false;
+                this.setState({
+                    spouse_checked: spouse_checked,
+                    Kids_checked: Kids_checked,
+                    Parents_checked: Parents_checked,
+                    Kids_total: Kids_total,
+                    Parents_total: Parents_total,
+                    none_checked: none_checked
+                })
+            }
             this.setState({
                 form_data: form_data,
-                spouse_checked: spouse_checked,
-                Kids_checked: Kids_checked,
-                Parents_checked: Parents_checked,
-                Kids_total: Kids_total,
-                Parents_total: Parents_total,
-                none_checked: none_checked
             })
         }
         
+    }
+
+    setErrorData = (type) => {
+
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.getLead,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
     }
 
     handleChange = name => event => {
@@ -210,11 +246,12 @@ class AdvisoryBasicDetails extends Component {
     }
 
     handleClick = () =>{
+        this.setErrorData('submit');
+
         this.sendEvents('next');
-        
+
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        console.log('state',this.state)
         let spouse_count = 0;
         if(this.state.spouse_checked){
             spouse_count = 1;
@@ -263,8 +300,12 @@ class AdvisoryBasicDetails extends Component {
                 'dependent_json': {"parents": this.state.Parents_total || 0, "kids": this.state.Kids_total || 0 , "spouse": this.state.spouse_checked ? 1 : 0},
                 'city': form_data.city.toUpperCase(),
             }
-            console.log(post_body)
-            storageService().setObject('advisory_data', post_body);
+            var advisory_data = storageService().getObject('advisory_data') || {};
+            
+            for(var x in post_body){
+                advisory_data[x] = post_body[x]
+            }
+            storageService().setObject('advisory_data', advisory_data);
             this.updateLead(post_body, 'income-details')
         }
     }
@@ -278,7 +319,10 @@ class AdvisoryBasicDetails extends Component {
             force_hide_inpage_title={true}
             title="Tell us about yourself"
             buttonTitle="SAVE AND CONTINUE"
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
             handleClick={()=>this.handleClick()}
             >
             <div className="advisory-basic-details-container">

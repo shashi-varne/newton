@@ -17,7 +17,8 @@ import launch from 'assets/launch.svg';
 import {storageService} from "utils/validators";
 import { updateLead } from './common_data';
 import { capitalizeFirstLetter } from 'utils/validators'
-
+import { openPdf } from './common_data';
+import { openInBrowser } from "../products/group_health/common_data";
 
 class AdivsoryRecommendations extends Component { 
     constructor(props){
@@ -28,6 +29,8 @@ class AdivsoryRecommendations extends Component {
             openDialogReset: false,
         }
         this.updateLead = updateLead.bind(this);
+        this.openInBrowser = openInBrowser.bind(this);
+        this.openPdf = openPdf.bind(this);
     }
 
     navigate = (pathname, search) => {
@@ -55,19 +58,21 @@ class AdivsoryRecommendations extends Component {
         })
     }
     handleReset = () =>{
+        this.setErrorData('submit');
         this.sendEvents('refresh');
         this.setState({
             openDialogReset: false,
         })
-        this.updateLead({'status': 'cancelled'}, 'landing')
+        this.updateLead({'status': 'cancelled'}, 'landing', '', true)
     }
 
-    sendEvents(user_action, insurance_type, banner_clicked) {
+    sendEvents(user_action, insurance_type, banner_clicked, download_report) {
         let eventObj = {
           "event_name": 'insurance_advisory',
           "properties": {
             "user_action": user_action,
             "screen_name": 'recommendations',
+            "download_report": download_report ? 'yes' : 'no', 
           }
         };
     
@@ -79,7 +84,6 @@ class AdivsoryRecommendations extends Component {
     }
 
     handleClose = () => {
-        // this.sendEvents('next');
         this.setState({
             openDialogReset: false,
         })
@@ -109,6 +113,37 @@ class AdivsoryRecommendations extends Component {
             </Dialog>
         );
     }
+
+    setErrorData = (type) => {
+
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.downloadReportPdf,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleReset,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
+
     showDialog = () => {
         this.setState({
             openDialogReset: true,
@@ -122,6 +157,10 @@ class AdivsoryRecommendations extends Component {
     }
 
     downloadReportPdf = async () =>{
+        
+        this.setErrorData('onload')
+
+        this.sendEvents('next', "", "", true)
         var advisory_id = storageService().getObject("advisory_id")
         try{
             var res = await Api.get(`api/insurancev2/api/insurance/advisory/pdf/download?insurance_advisory_id=${advisory_id}`);
@@ -133,7 +172,7 @@ class AdivsoryRecommendations extends Component {
           
             if (res.pfwresponse.status_code === 200) {
                 
-                console.log(resultData)
+                this.openPdf(resultData.download_link, "read_document")
             } else {
               toast(resultData.error || resultData.message || "Something went wrong");
             }
@@ -150,7 +189,7 @@ class AdivsoryRecommendations extends Component {
     render(){
         var recommendation_data = this.state.recommendation_data;
         var user_data = this.state.user_data;
-        console.log(this.state.applicantGender)
+
         return(
             <Container
                 events={this.sendEvents('just_set_events')}
@@ -162,7 +201,10 @@ class AdivsoryRecommendations extends Component {
                 disableBack={true}
                 noFooter={true}
                 handleClick={()=>this.handleClick()}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
             >
                 <div className="advisory-recommendations-container">
                     <p className="advisory-sub-text" style={{marginTop: '-8px'}}>So you can plan better</p>

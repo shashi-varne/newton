@@ -26,7 +26,10 @@ class RecommendationResult extends Component {
         }
     }
     
-    getPlan = (key, screen_name) =>{
+    getPlan = (key, screen_name, disable_get_plan) =>{
+        if(disable_get_plan){
+            return;
+        }
         this.sendEvents('next', this.state.recommendation_bottom_sheet_data[key].heading, screen_name);
         this.state.parent.navigate(advisoryConstants.get_plan_path[key])
     }
@@ -97,7 +100,7 @@ class RecommendationResult extends Component {
                         </p>
                     </div>
                     <div className="more-details-benifits">
-                        <p className="more-details-sub-heading">Benifits</p>
+                        <p className="more-details-sub-heading">Benefits</p>
                         {recommendation_bottom_sheet_data[key]['benefits'].map((item, index)=>(
                             <div className="more-details-bullets">
                             <p className="diamond-bullet"></p>
@@ -107,7 +110,7 @@ class RecommendationResult extends Component {
                         
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px'}}>
-                        <button  className="call-back-popup-button" onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet')}>GET THE PLAN</button> 
+                        <button  className={`call-back-popup-button ${recommendation_data.coverage_percentage === 100 ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', recommendation_data.coverage_percentage === 100 )}>GET THE PLAN</button> 
                     </div>
 
                 </div>
@@ -146,10 +149,12 @@ class RecommendationResult extends Component {
                             <p className="advisory-sub-text">We recommend a separate plan of <b>₹5 lacs</b> for your parents</p>
                         ) : null
                     }
-
+                    {
+                        recommendation_data.coverage_percentage === 100 ? <p className="advisory-sub-text" style={{textAlign: 'center'}}>You are well covered.</p> : null
+                    }
                     <div className="recommendation-cta-container">
                         <div className="more-details" onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>MORE DETAILS</div>
-                        <div className="get-the-plan" onClick={()=>this.getPlan(recommendation_data.key, 'recommendations')}>GET THE PLAN</div>
+                        <div className={`get-the-plan ${recommendation_data.coverage_percentage === 100 ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', recommendation_data.coverage_percentage === 100)}>GET THE PLAN</div>
                     </div>
                 </div>
                 {this.confirmDialog()}

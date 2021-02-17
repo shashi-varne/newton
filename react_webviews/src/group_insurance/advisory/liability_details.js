@@ -39,6 +39,36 @@ class AdvisoryLiabilityDetails extends Component {
         }
     }
 
+    setErrorData = (type) => {
+
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.updateLead,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
+
     async componentDidMount(){
 
         var advisory_data = storageService().getObject('advisory_data') || {};
@@ -48,15 +78,13 @@ class AdvisoryLiabilityDetails extends Component {
         var form_data = {};
 
         if(isResumePresent){
-            console.log('Resume case')
             await this.getLead();
             lead = this.state.resume_data;
         }else if(!isEmpty(advisory_data)){
-            console.log('Normal prefill')
             lead = advisory_data
         }
 
-        if(isResumePresent ||!isEmpty(advisory_data)){
+        if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)){
             form_data.homeloan = lead.home_loan_liability === true ? yesNoOptions[0].value : lead.home_loan_liability === false ?  yesNoOptions[1].value : '';
             form_data.liability = lead.other_liability === true ? yesNoOptions[0].value : lead.other_liability === false ?  yesNoOptions[1].value : '';
             form_data.loan_amount = formatAmount(lead.home_loan_liability_amount);
@@ -160,6 +188,8 @@ class AdvisoryLiabilityDetails extends Component {
     }
 
     handleClick = () =>{
+        this.setErrorData('submit');
+
         this.sendEvents('next');
 
         var form_data = this.state.form_data;
@@ -214,7 +244,10 @@ class AdvisoryLiabilityDetails extends Component {
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
             title="Tell us your liabilities"
             buttonTitle="SAVE AND CONTINUE"
             handleClick={()=>this.handleClick()}

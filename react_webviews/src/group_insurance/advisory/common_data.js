@@ -1,22 +1,31 @@
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import {storageService} from "utils/validators";
-import { openInBrowser } from "../products/group_health/common_data";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";
 
-export async function updateLead( body, next_page, final_page) {
+export async function updateLead( body, next_page, final_page, reset) {
 
     var advisory_id = storageService().getObject("advisory_id");
     
     this.setState({
-        show_loader: true
+        show_loader: 'button'
+    },()=>{
+      console.log(this.state.show_loader)
     })
+    
     var update_url = `api/insurancev2/api/insurance/advisory/update?insurance_advisory_id=${advisory_id}`;
 
     if(final_page){
         update_url += '&submitted=True';
     }   
+    if(reset){
+      update_url = `api/insurancev2/api/insurance/advisory/status/update?insurance_advisory_id=${advisory_id}`;
+      this.setState({
+        skelton: true
+      })
+    }
+    let error = ''
     try{
            var res = await Api.put(update_url, body);
           if(body.status === 'cancelled'){
@@ -38,28 +47,45 @@ export async function updateLead( body, next_page, final_page) {
                }
                this.navigate(`/group-insurance/advisory/${next_page}`);                    
            } else {
-             toast(resultData.error || resultData.message || "Something went wrong");
+             error = resultData.error || resultData.message || "Something went wrong";
            }
        }catch(err){
-         console.log(err)
-         this.setState({
-           show_loader: false
-         });
-         toast("Something went wrong");
-       }
+        this.setState({
+          show_loader: false,
+          skelton: false,
+          showError: true,
+          errorData: {
+            ...this.state.errorData, type: 'crash'
+          }
+        });
+      }
+      
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError: true,
+          skelton: false,
+        })
+      }
 }
 
 export async function getLead(){
   var advisory_id = storageService().getObject("advisory_id")
   this.setState({
-      show_loader: true,
+      skelton: true,
   })
 
+  this.setErrorData('onload');
+    let error = '';
     try{
       var res = await Api.get(`api/insurancev2/api/insurance/advisory/get?insurance_advisory_id=${advisory_id}`);
         
       this.setState({
-        show_loader: false
+        skelton: false
       })
         var resultData = res.pfwresponse.result;
         
@@ -70,14 +96,27 @@ export async function getLead(){
             resume_data : resume_data
           })
         } else {
-          toast(resultData.error || resultData.message || "Something went wrong");
+          error = resultData.error || resultData.message || "Something went wrong";
       }
     }catch(err){
-      console.log(err)
       this.setState({
-        show_loader: false
+        show_loader: false,
+        showError: true,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       });
-      toast("Something went wrong");
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError: 'page'
+      })
     }
 }
 
@@ -104,14 +143,15 @@ export function setRecommendationData(advisory_data, recommendation_data, user_d
 
 export function openPdf(pdfLink, pdfType){
     if(getConfig().iOS){
-        nativeCallback({
-          action: 'open_inapp_tab',
-          message: {
-              url: pdfLink  || '',
-              back_url: ''
-          }
-        });
+      nativeCallback({
+        action: 'open_inapp_tab',
+        message: {
+            url: pdfLink  || '',
+            back_url: ''
+        }
+      });
     }else{
-        this.openInBrowser(pdfLink, pdfType);
+      console.log(pdfLink)
+      this.openInBrowser(pdfLink, pdfType);
     }
 }

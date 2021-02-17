@@ -239,7 +239,39 @@ class AdvisoryAssetDetails extends Component {
         )
     }
 
+    setErrorData = (type) => {
+
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.updateLead,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
+
     handleClick = () =>{
+        this.setErrorData('submit');
+        
         this.sendEvents('next');
 
         var form_data = this.state.form_data;
@@ -310,7 +342,10 @@ class AdvisoryAssetDetails extends Component {
             onlyButton={true}
             force_hide_inpage_title={true}
             title="Let's note down your assets"
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
             buttonTitle="SAVE AND CONTINUE"
             handleClick={()=>this.handleClick()}
             >

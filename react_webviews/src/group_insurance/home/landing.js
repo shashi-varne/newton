@@ -18,6 +18,7 @@ class Landing extends Component {
     super(props);
     this.state = {
       // skelton: 'p',
+      skelton: true,
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)) 
@@ -74,13 +75,13 @@ class Landing extends Component {
 
   onload = async() => {
     this.setState({
-      show_loader: true,
+      skelton: true,
     })
     try{
       var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
 
         this.setState({
-          show_loader: false
+          skelton: false,
         })
         var resultData = res.pfwresponse.result;
 
@@ -119,7 +120,7 @@ class Landing extends Component {
     }catch(err){
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false,
       });
       toast("Something went wrong");
     }

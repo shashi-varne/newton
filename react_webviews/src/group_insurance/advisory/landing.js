@@ -13,8 +13,9 @@ class AdvisoryLanding extends Component {
     constructor(props){
         super(props);
         this.state = {
-            type: getConfig().productName,
-            stepsToFollow: advisoryConstants.stepsToFollow
+          show_loader: false,
+          type: getConfig().productName,
+          stepsToFollow: advisoryConstants.stepsToFollow
         }
     }
 
@@ -41,12 +42,46 @@ class AdvisoryLanding extends Component {
       });
     }
 
+    setErrorData = (type) => {
+
+      this.setState({
+        showError: false
+      });
+      if(type) {
+        let mapper = {
+          'onload':  {
+            handleClick1: this.onload,
+            button_text1: 'Fetch again',
+            title1: ''
+          },
+          'submit': {
+            handleClick1: this.handleClick,
+            button_text1: 'Retry',
+            handleClick2: () => {
+              this.setState({
+                showError: false
+              })
+            },
+            button_text2: 'Edit'
+          }
+        };
+    
+        this.setState({
+          errorData: {...mapper[type], setErrorData : this.setErrorData}
+        })
+      }
+    }
+
     handleClick = async () =>{
+      this.setErrorData('submit')
+
       this.sendEvents('next');
 
       this.setState({
-        show_loader: true
+        show_loader: 'button'
       })
+
+      let error = '';
 
       try{
         var res = await Api.post(`api/insurancev2/api/insurance/advisory/create`);
@@ -60,18 +95,33 @@ class AdvisoryLanding extends Component {
 
             if(resultData.insurance_advisory.status === 'init'){
               storageService().setObject("advisory_id", resultData.insurance_advisory.id);
+              storageService().setObject("advisory_resume_present", false);
               this.navigate('/group-insurance/advisory/basic-details')
             }
           } else {
-            toast(resultData.error || resultData.message || "Something went wrong");
+            error = resultData.error || resultData.message || "Something went wrong";
         }
       }catch(err){
-        console.log(err)
         this.setState({
-          show_loader: false
+          show_loader: false,
+          showError: true,
+          errorData: {
+            ...this.state.errorData, type: 'crash'
+          }
         });
-        toast("Something went wrong");
       }
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError: 'page'
+        })
+      }
+
+
     }
 
     render() {
@@ -81,6 +131,8 @@ class AdvisoryLanding extends Component {
             fullWidthButton={true}
             // force_hide_inpage_title={true}
             showLoader={this.state.show_loader}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             onlyButton={true}
             title="Let's find the right coverage for you"
             buttonTitle="LET'S GET STARTED"

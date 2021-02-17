@@ -40,6 +40,37 @@ class AdvisoryIncomeDetails extends Component {
         }
     }
 
+    setErrorData = (type) => {
+
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.updateLead,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    }
+
+
     async componentDidMount(){
 
         var advisory_data = storageService().getObject('advisory_data') || {};
@@ -57,7 +88,7 @@ class AdvisoryIncomeDetails extends Component {
             lead = advisory_data
         }
 
-        if(isResumePresent ||!isEmpty(advisory_data)){
+        if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)){
             var form_data = {};
             form_data.income = formatAmount(lead.annual_income);
             form_data.expense = formatAmount(lead.annual_personal_expense);
@@ -146,8 +177,10 @@ class AdvisoryIncomeDetails extends Component {
         
     }
     handleClick = () =>{
+        this.setErrorData('submit');
+
         this.sendEvents('next')
-        
+
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         console.log(form_data)
@@ -180,9 +213,7 @@ class AdvisoryIncomeDetails extends Component {
                 'growth_in_income' : form_data.income_growth,
                 'age_of_retirement' : form_data.retire, 
             }
-            console.log(post_body)
             var advisory_data = storageService().getObject('advisory_data') || {};
-            console.log('d', advisory_data)
             for(var x in post_body){
                 advisory_data[x] = post_body[x]
             }
@@ -195,7 +226,10 @@ class AdvisoryIncomeDetails extends Component {
         return(
             <Container
             events={this.sendEvents('just_set_events')}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}

@@ -35,6 +35,36 @@ class EmailReport extends Component {
         })
     }
 
+    setErrorData = (type) => {
+
+      this.setState({
+        showError: false
+      });
+      if(type) {
+        let mapper = {
+          // 'onload':  {
+          //   handleClick1: this.getLead,
+          //   button_text1: 'Fetch again',
+          //   title1: ''
+          // },
+          'submit': {
+            handleClick1: this.handleClick,
+            button_text1: 'Retry',
+            handleClick2: () => {
+              this.setState({
+                showError: false
+              })
+            },
+            button_text2: 'Edit'
+          }
+        };
+    
+        this.setState({
+          errorData: {...mapper[type], setErrorData : this.setErrorData}
+        })
+      }
+  }
+
     sendEvents(user_action, insurance_type, banner_clicked) {
       let eventObj = {
         "event_name": 'insurance_advisory',
@@ -61,6 +91,8 @@ class EmailReport extends Component {
     }    
 
     handleClick = async () =>{
+      this.setErrorData('submit');
+
         var form_data = this.state.form_data;
         var canSubmitForm = true;        
         if(form_data){
@@ -71,9 +103,14 @@ class EmailReport extends Component {
         }
         this.setState({form_data: form_data})       
         if(canSubmitForm){
+
+          this.setState({
+            show_loader: 'button'
+          })
+
           this.sendEvents('next')
             var advisory_id = storageService().getObject("advisory_id");
-
+          let error = '';
             try{
                 var res = await Api.get(`api/insurancev2/api/insurance/advisory/email/trigger?insurance_advisory_id=${advisory_id}&email=${this.state.form_data.email}`);
           
@@ -83,23 +120,31 @@ class EmailReport extends Component {
                   var resultData = res.pfwresponse.result;
           
                   if (res.pfwresponse.status_code === 200) {
-        
-                    if(resultData.insurance_advisory.status === 'init'){
-                      storageService().setObject("advisory_id", resultData.insurance_advisory.id);
-                    this.navigate('/group-insurance/advisory/basic-details')                    
-                    }
+                    this.navigate('/group-insurance/advisory/recommendations')
                   } else {
-                    toast(resultData.error || resultData.message || "Something went wrong");
+                    error = resultData.error || resultData.message || "Something went wrong";
                 }
               }catch(err){
-                console.log(err)
                 this.setState({
-                  show_loader: false
+                  show_loader: false,
+                  skelton: false,
+                  showError: true,
+                  errorData: {
+                    ...this.state.errorData, type: 'crash'
+                  }
                 });
-                toast("Something went wrong");
-              }            
-
-            this.navigate('/group-insurance/advisory/recommendations')
+              } 
+              
+            if(error) {
+              this.setState({
+                errorData: {
+                  ...this.state.errorData,
+                  title2: error
+                },
+                showError: true,
+                skelton: false,
+              })
+            }           
         }
 
     }
@@ -111,6 +156,10 @@ class EmailReport extends Component {
             // force_hide_inpage_title={true}
             onlyButton={true}
             buttonTitle="SEND"
+            showError={this.state.showError}
+            errorData={this.state.errorData}
+            showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
             handleClick={()=>this.handleClick()}
             >
             <div className="email-report-container">
