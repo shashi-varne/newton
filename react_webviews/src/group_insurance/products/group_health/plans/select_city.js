@@ -148,7 +148,7 @@ class GroupHealthPlanSelectCity extends Component {
             nativeCallback({ events: eventObj });
         }
     }
-    handleChange = name => value => {
+    handleChange = name => value => {Autosuggests
         this.setState({
             [name]: (value || '').toUpperCase(),
             [name + '_error']: ''

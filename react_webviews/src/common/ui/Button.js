@@ -95,7 +95,6 @@ class CustomButton extends Component {
         </div>
       );
     } else {
-      console.log(props)
       return (
         // <div>
           <Button
