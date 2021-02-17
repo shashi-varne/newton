@@ -209,8 +209,39 @@ class Report extends Component {
       termRedirectionPath: fullPath
     })
   }
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
   async componentDidMount() {
+    let error = '';
+    this.setErrorData('onload');
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/get/report');
@@ -236,8 +267,8 @@ class Report extends Component {
 
         this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error=res.pfwresponse.result.error || res.pfwresponse.result.message
+          || 'Something went wrong';
         // this.setState({ nextPage: ''})
       }
 
@@ -246,9 +277,17 @@ class Report extends Component {
       this.setState({
         skelton: false
       });
-      toast('Something went wrong');
+      error='Something went wrong';
     }
-
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:'page'
+      })
+    }
     window.addEventListener("scroll", this.onScroll, false);
   }
 
@@ -448,6 +487,8 @@ class Report extends Component {
         events={this.sendEvents('just_set_events')}
         title="Insurance Report"
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         classOverRideContainer="report"
         skelton={this.state.skelton}
       >
