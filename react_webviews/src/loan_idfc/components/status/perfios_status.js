@@ -15,9 +15,9 @@ const commonMapper = {
     status: "verification failed 1",
   },
   success: {
-    top_icon: "ils_loan_status",
+    top_icon: "bank_verification_success",
     top_title: "Bank statement verification successful",
-    button_title: "NEXT",
+    button_title: "CALCULATE ELIGIBILITY",
     icon: "close",
     close_state: "/loan/idfc/loan-know-more",
     status: "success",
@@ -52,7 +52,7 @@ class PerfiosStatus extends Component {
       perfios_state: "",
       count: 0,
       loaderWithData: false,
-      loaderData: {}
+      loaderData: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -70,7 +70,8 @@ class PerfiosStatus extends Component {
     let perfios_state = vendor_info.perfios_state;
     let idfc_07_state = vendor_info.idfc_07_state;
     let perfios_info = lead.perfios_info;
-    let perfios_display_rejection_reason = perfios_info.perfios_display_rejection_reason;
+    let perfios_display_rejection_reason =
+      perfios_info.perfios_display_rejection_reason;
     let bt_eligible = vendor_info.bt_eligible;
 
     let loaderData = {
@@ -85,7 +86,7 @@ class PerfiosStatus extends Component {
       bt_eligible: bt_eligible,
       idfc_07_state: idfc_07_state,
       name: name,
-      loaderData: loaderData
+      loaderData: loaderData,
     });
   };
 
@@ -117,6 +118,10 @@ class PerfiosStatus extends Component {
     else this.sendEvents("next");
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
+    this.setState({
+      loaderWithData: true,
+    });
+
     if (perfios_state === "success") {
       if (idfc_07_state === "failed") {
         this.navigate("error");
@@ -126,9 +131,6 @@ class PerfiosStatus extends Component {
             next_state: "eligible-loan",
           },
           () => {
-            this.setState({
-              loaderWithData: true
-            })
             this.submitApplication({}, "one", "", "eligible-loan");
           }
         );
@@ -168,9 +170,6 @@ class PerfiosStatus extends Component {
         };
         this.updateApplication(body, "bt-info");
       } else {
-        this.setState({
-          loaderWithData: true
-        })
         this.submitApplication({}, "one", "", "eligible-loan");
       }
     }
@@ -188,7 +187,13 @@ class PerfiosStatus extends Component {
   };
 
   render() {
-    let { commonMapper, perfios_state, bt_eligible, name, perfios_display_rejection_reason } = this.state;
+    let {
+      commonMapper,
+      perfios_state,
+      bt_eligible,
+      name,
+      perfios_display_rejection_reason,
+    } = this.state;
 
     return (
       <Container
@@ -212,9 +217,17 @@ class PerfiosStatus extends Component {
           )}
 
           {perfios_state === "success" && (
-            <div className="subtitle">
-              Hey {name}, IDFC has successfully verified your bank statements
-              and your income details have been safely updated.
+            // <div className="subtitle">
+            //   Hey {name}, IDFC has successfully verified your bank statements
+            //   and your income details have been safely updated.
+            // </div>
+            <div className="sub-msg">
+              <div className="title">What next?</div>
+              <div className="sub-title">
+                IDFC FIRST Bank will now calculate the loan offer as per their
+                loan policy and you will instantly get to know the eligible loan
+                amount.
+              </div>
             </div>
           )}
 
@@ -235,7 +248,8 @@ class PerfiosStatus extends Component {
           )}
 
           {bt_eligible &&
-            (perfios_state !== "failure" && perfios_state !== "blocked") && (
+            perfios_state !== "failure" &&
+            perfios_state !== "blocked" && (
               <div className="subtitle">
                 Before we move to the final loan offer, we have an option of
                 <b>'Balance Transfer - BT' for you</b>. However, it is up to you
@@ -243,7 +257,7 @@ class PerfiosStatus extends Component {
               </div>
             )}
 
-          {(perfios_state === "failure" && !perfios_display_rejection_reason) && (
+          {perfios_state === "failure" && !perfios_display_rejection_reason && (
             <div className="subtitle">
               Bank statement analysis failed due to some error. We recommend you
               to try again by uploading correct bank statements to proceed with
@@ -251,16 +265,15 @@ class PerfiosStatus extends Component {
             </div>
           )}
 
-          {(perfios_state === "failure" && perfios_display_rejection_reason) && (
-            <div className="subtitle">
-              {perfios_display_rejection_reason}
-            </div>
+          {perfios_state === "failure" && perfios_display_rejection_reason && (
+            <div className="subtitle">{perfios_display_rejection_reason}</div>
           )}
 
           {perfios_state === "processing" && (
             <div>
               <div className="subtitle">
-                Oops! something's not right. We are checking this with IDFC FIRST Bank and will get back to you as soon as possible.
+                Oops! something's not right. We are checking this with IDFC
+                FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>

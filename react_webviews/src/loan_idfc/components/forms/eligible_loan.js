@@ -6,11 +6,12 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import Grid from "material-ui/Grid";
 import Checkbox from "material-ui/Checkbox";
+import scrollIntoView from "scroll-into-view-if-needed";
 import {
   changeNumberFormat,
   formatAmountInr,
   inrFormatDecimal,
-  numDifferentiationInr
+  numDifferentiationInr,
 } from "utils/validators";
 
 class EligibleLoan extends Component {
@@ -36,7 +37,7 @@ class EligibleLoan extends Component {
     let vendor_info = lead.vendor_info || {};
 
     let progressHeaderData = {
-      title: "Income and loan offer",
+      title: "income details and loan offer",
       steps: [
         {
           title: "Income details",
@@ -64,9 +65,9 @@ class EligibleLoan extends Component {
     this.setState({
       vendor_info: vendor_info,
       loaderData: loaderData,
-      progressHeaderData: progressHeaderData
-    })
-  }
+      progressHeaderData: progressHeaderData,
+    });
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -106,7 +107,7 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {
@@ -122,9 +123,31 @@ class EligibleLoan extends Component {
   };
 
   handleCheckbox = (name) => {
+    if (name === "custom_tenor") {
+      this.handleScroll("emi");
+    } else {
+      this.handleScroll("max-amount");
+    }
     this.setState({
       checked: name,
     });
+  };
+
+  handleScroll = (id) => {
+    let that = this;
+
+    setTimeout(function () {
+      let element = document.getElementById(id);
+      if (!element || element === null) {
+        return;
+      }
+
+      scrollIntoView(element, {
+        block: that.state.checked === "default_tenor" ? "end" : "start",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }, 50);
   };
 
   render() {
@@ -143,10 +166,18 @@ class EligibleLoan extends Component {
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
       >
-        <div className="eligible-loan">
-          <div className="subtitle">
-            Woo-hoo! IDFC is offering you a personal loan of ₹
-            {changeNumberFormat(vendor_info.displayOffer || "0")}
+        <div className="eligible-loan" id="max-amount">
+          <div className="max-amount">
+            <img
+              src={require(`assets/${this.state.productName}/congrats.svg`)}
+              alt=""
+            />
+            <div className="head">
+              <b>Congrats!</b> You’re eligible for a loan up to
+            </div>
+            <div className="max-loan-amt">
+              {formatAmountInr(vendor_info.displayOffer || "0")}
+            </div>
           </div>
 
           <div
@@ -177,7 +208,10 @@ class EligibleLoan extends Component {
                   <div className="sub-content-left">
                     <div className="sub-head">Loan amount</div>
                     <div className="sub-title">
-                      ₹{changeNumberFormat(vendor_info.display_loan_amount || "0")}
+                      ₹
+                      {changeNumberFormat(
+                        vendor_info.display_loan_amount || "0"
+                      )}
                     </div>
                   </div>
                   <div className="sub-content-right">
@@ -189,27 +223,19 @@ class EligibleLoan extends Component {
                   <div className="sub-content-left">
                     <div className="sub-head">EMI amount</div>
                     <div className="sub-title">
-                      {formatAmountInr(vendor_info.initial_offer_emi)}/month
+                      {formatAmountInr(vendor_info.initial_offer_emi)}
                     </div>
                   </div>
                   <div className="sub-content-right">
                     <div className="sub-head">Rate of interest</div>
-                    <div className="sub-title">{ROI}%</div>
+                    <div className="sub-title">{ROI}% p.a.</div>
                   </div>
                 </div>
               </Grid>
             </Grid>
           </div>
 
-          <div
-            className="offer-checkbox"
-            style={{
-              background:
-                this.state.checked === "custom_tenor"
-                  ? "var(--highlight)"
-                  : "#ffffff",
-            }}
-          >
+          <div className={`offer-checkbox ${this.state.checked}`}>
             <Grid container spacing={16}>
               <Grid item xs={1}>
                 <Checkbox
@@ -224,50 +250,45 @@ class EligibleLoan extends Component {
               </Grid>
               <Grid item xs={11}>
                 <div className="title">I want to customise my loan offer</div>
+                {this.state.checked === "custom_tenor" && (
+                  <>
+                    <FormControl fullWidth>
+                      <div className="InputField" id="amount">
+                        <Input
+                          error={!!this.state.form_data.amount_required_error}
+                          helperText={
+                            this.state.form_data.amount_required_error ||
+                            (this.state.form_data.amount_required &&
+                              numDifferentiationInr(
+                                this.state.form_data.amount_required
+                              )) ||
+                            `Min ₹1 lakh to max ₹${changeNumberFormat(
+                              vendor_info.displayOffer || "0"
+                            )}`
+                          }
+                          type="number"
+                          width="40"
+                          label="Loan amount"
+                          id="amount_required"
+                          name="amount_required"
+                          value={this.state.form_data.amount_required || ""}
+                          onChange={this.handleChange("amount_required")}
+                          disabled={this.state.checked !== "custom_tenor"}
+                        />
+                      </div>
+                    </FormControl>
+                    <div className="estimated-emi" id="emi">
+                      <div className="title">Estimated EMI</div>
+                      <div className="emi">
+                        {inrFormatDecimal(
+                          this.state.form_data.emi_amount || "0"
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
               </Grid>
             </Grid>
-
-            <FormControl fullWidth>
-              <div className="InputField">
-                <Input
-                  error={!!this.state.form_data.amount_required_error}
-                  helperText={
-                    this.state.form_data.amount_required_error || 
-                    (this.state.form_data.amount_required && numDifferentiationInr(this.state.form_data.amount_required)) ||
-                    `Min ₹1 Lakh to max ₹${changeNumberFormat(
-                      vendor_info.displayOffer || "0"
-                    )}`
-                  }
-                  type="number"
-                  width="40"
-                  label="Loan amount"
-                  id="amount_required"
-                  name="amount_required"
-                  value={this.state.form_data.amount_required || ""}
-                  onChange={this.handleChange("amount_required")}
-                  disabled={this.state.checked !== "custom_tenor"}
-                />
-              </div>
-              <div className="InputField">
-                <Input
-                  // helperText={"Min 12 months to max 48 months"}
-                  type="text"
-                  width="40"
-                  label="Tenure"
-                  id="tenure"
-                  name="tenure"
-                  value={`${vendor_info.netTenor || "0"} months`}
-                  // onChange={this.handleChange("tenure")}
-                  disabled={true}
-                />
-              </div>
-            </FormControl>
-            <div className="estimated-emi">
-              <div className="title">Estimated EMI</div>
-              <div className="emi">
-                {inrFormatDecimal(this.state.form_data.emi_amount || "0")}/month
-              </div>
-            </div>
           </div>
         </div>
       </Container>

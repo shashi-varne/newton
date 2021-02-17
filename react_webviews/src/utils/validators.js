@@ -969,12 +969,12 @@ export function changeNumberFormat(number, decimals, recursiveCall) {
   if (noOfLakhs >= 1 && noOfLakhs <= 99) {
       const lakhs = roundOf(noOfLakhs);
       isPlural = lakhs > 1 && !recursiveCall;
-      displayStr = `${lakhs} Lakh${isPlural ? 's' : ''}`;
+      displayStr = `${lakhs} lakh${isPlural ? 's' : ''}`;
   } else if (noOfLakhs >= 100) {
       const crores = roundOf(noOfLakhs / 100);
       const crorePrefix = crores >= 100000 ? changeNumberFormat(crores, decimals, true) : crores;
       isPlural = crores > 1 && !recursiveCall;
-      displayStr = `${crorePrefix} Crore${isPlural ? 's' : ''}`;
+      displayStr = `${crorePrefix} crore${isPlural ? 's' : ''}`;
   } else {
       displayStr = roundOf(+number);
   }

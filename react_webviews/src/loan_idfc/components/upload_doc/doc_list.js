@@ -5,7 +5,7 @@ import { initialize } from "../../common/functions";
 import Card from "../../../common/ui/Card";
 import { getConfig } from "utils/functions";
 import { storageService } from "utils/validators";
-import { numDifferentiationInr } from "utils/validators";
+import { changeNumberFormat } from "utils/validators";
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
 import { getUrlParams } from "utils/validators";
@@ -42,7 +42,7 @@ class DocumentList extends Component {
     let vendor_info = lead.vendor_info || {};
     let bottomButtonData = {
       leftTitle: "Personal loan",
-      leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
+      leftSubtitle: `₹ ${changeNumberFormat(vendor_info.updated_offer_amount)}`,
     };
 
     this.setState({
@@ -193,6 +193,7 @@ class DocumentList extends Component {
                 <div
                   style={{
                     width: `${getConfig().isMobileDevice ? "60%" : "70%"}`,
+                    fontWeight: 600
                   }}
                 >
                   {item.category_name}

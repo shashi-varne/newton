@@ -6,7 +6,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import { validateNumber } from "utils/validators";
-import { numDifferentiationInr } from "utils/validators";
+import { changeNumberFormat } from "utils/validators";
 import Api from "utils/api";
 
 class AdditionalDetails extends Component {
@@ -61,7 +61,7 @@ class AdditionalDetails extends Component {
 
     let bottomButtonData = {
       leftTitle: "Personal loan",
-      leftSubtitle: numDifferentiationInr(vendor_info.updated_offer_amount),
+      leftSubtitle: `₹ ${changeNumberFormat(vendor_info.updated_offer_amount)}`,
     };
 
     this.setState({

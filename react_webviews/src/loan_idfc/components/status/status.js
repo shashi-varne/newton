@@ -371,13 +371,9 @@ class LoanStatus extends Component {
               <div className="subtitle">
                 Basis your profile you're most likely to get a loan offer.
               </div>
-              <div
-                className="subtitle"
-                style={{ color: "var(--primary)", fontSize: "14px" }}
-              >
-                <b>
-                  To view the final loan amount, provide your income details.
-                </b>
+              <div className="sub-msg">
+                <div className="title">What next?</div>
+                <div className="sub-title">Provide income details to view loan offer.</div>
               </div>
             </div>
           )}

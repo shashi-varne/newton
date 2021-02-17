@@ -65,20 +65,21 @@ class LoanEligible extends Component {
         title=""
         events={this.sendEvents("just_set_events")}
         handleClick={this.handleClick}
-        buttonTitle="CONTINUE"
+        buttonTitle="NEXT"
         hidePageTitle={true}
       >
         <div className="loan-status">
           <img
-            src={require(`assets/${this.state.productName}/ils_loan_status.svg`)}
-            style={{ width: "100%" }}
+            src={require(`assets/${this.state.productName}/congratulations.svg`)}
+            id="congratulations"
             alt=""
           />
 
           <div className="loan-eligible">
-            <b>Congrats, {this.state.first_name.trim(" ")}!</b> You are eligible
-            for a loan of
+            Congrats, {this.state.first_name.trim(" ")}!
           </div>
+
+          <div className="sub-head">Your final loan amount is</div>
 
           <div className="loan-amount">
             {formatAmountInr(vendor_info.updated_offer_amount)}
@@ -99,7 +100,7 @@ class LoanEligible extends Component {
             </div>
             <div>
               <div className="title">Rate of interest</div>
-              <div className="values">{vendor_info.updated_offer_roi}%</div>
+              <div className="values">{Math.round(vendor_info.updated_offer_roi)}% p.a.</div>
             </div>
           </div>
         </div>

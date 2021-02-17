@@ -12,10 +12,10 @@ import $ from "jquery";
 import DotDotLoader from "common/ui/DotDotLoader";
 import Api from "utils/api";
 import Input from "../../../common/ui/Input";
-import { formatDate, dobFormatTest, calculateAge, IsFutureDate } from "utils/validators";
 import { FormControl } from "material-ui/Form";
-import { getUrlParams, isValidDate } from "utils/validators";
+import { getUrlParams } from "utils/validators";
 import Autosuggests from "../../../common/ui/Autosuggest";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 class UploadBank extends Component {
   constructor(props) {
@@ -82,7 +82,7 @@ class UploadBank extends Component {
     let vendor_info = lead.vendor_info || {};
     let application_info = lead.application_info || {};
     let progressHeaderData = {
-      title: "Income and loan offer",
+      title: "income details and loan offer",
       steps: [
         {
           title: "Income details",
@@ -103,14 +103,14 @@ class UploadBank extends Component {
     }
 
     let loaderData = {
-      title: `Hang on, while IDFC finishes analysing your last 3 months bank statements`,
+      title: `Hang on, while IDFC finishes analysing your last 3 months' bank statements`,
       subtitle: "It may take 10 to 15 seconds!",
     };
 
     this.setState({
       loaderData: loaderData,
       progressHeaderData: progressHeaderData,
-      employment_type: application_info.employment_type || '',
+      employment_type: application_info.employment_type || "",
     });
   };
 
@@ -123,8 +123,9 @@ class UploadBank extends Component {
       "Upload multiple statements of the same bank account with each file not exceeding 6 MB",
     ];
 
-    if (this.state.employment_type === 'self_employed') {
-      notes[0] = "Provide your latest bank statements from your savings or current account to get the best loan offer"
+    if (this.state.employment_type === "self_employed") {
+      notes[0] =
+        "Provide your latest bank statements from your savings or current account to get the best loan offer";
     }
 
     return (
@@ -221,12 +222,12 @@ class UploadBank extends Component {
     file.uploaded = true;
     file.id = count++;
 
-    let duplicate = documents.filter(item => {
-      return item.name === file.name
-    })
-    
+    let duplicate = documents.filter((item) => {
+      return item.name === file.name;
+    });
+
     if (editId === "") {
-      duplicate.length === 0 && documents.push(file) 
+      duplicate.length === 0 && documents.push(file);
     } else if (duplicate.length === 0) {
       var index = documents.findIndex((item) => item.id === editId);
       file.curr_status = "edit";
@@ -237,7 +238,7 @@ class UploadBank extends Component {
     this.setState({
       fileUploaded: true,
       documents: documents,
-      confirmed: (duplicate.length !== 0) ? true : false,
+      confirmed: duplicate.length !== 0 ? true : false,
       editId: "",
       count: count,
     });
@@ -255,16 +256,18 @@ class UploadBank extends Component {
     file.doc_type = file.type;
 
     file.status = "uploaded";
-    file.name = !file.file_name ? `bank statement ${count}` : `${file.file_name}`;
+    file.name = !file.file_name
+      ? `bank statement ${count}`
+      : `${file.file_name}`;
     file.id = count++;
 
     if (!file.name.includes(".pdf")) {
       file.name = `${file.name}.pdf`;
     }
 
-    let duplicate = documents.filter(item => {
-      return item.name === file.name
-    })
+    let duplicate = documents.filter((item) => {
+      return item.name === file.name;
+    });
 
     if (editId === "") {
       duplicate.length === 0 && documents.push(file);
@@ -279,7 +282,7 @@ class UploadBank extends Component {
       fileUploaded: true,
       documents: documents,
       show_loader: false,
-      confirmed: (duplicate.length !== 0) ? true : false,
+      confirmed: duplicate.length !== 0 ? true : false,
       editId: "",
       count: count,
     });
@@ -346,7 +349,7 @@ class UploadBank extends Component {
         this.setState({
           isApiRunning: false,
           documents: documents,
-        });
+        }, () => this.handleScroll("upload"));
       }
     } catch (err) {
       console.log(err);
@@ -375,15 +378,6 @@ class UploadBank extends Component {
     let id = (event.target && event.target.id) || "";
     let { form_data, documents } = this.state;
 
-    if (!name) {
-      if (!dobFormatTest(value)) {
-        return;
-      }
-
-      let input = document.getElementById(id);
-      input.onkeyup = formatDate;
-    }
-
     if (name === "password") {
       var index = documents.findIndex((item) => item.id === doc_id);
 
@@ -402,82 +396,97 @@ class UploadBank extends Component {
     }
   };
 
+  handleScroll = (id) => {
+    setTimeout(function () {
+      let element = document.getElementById(id);
+      if (!element || element === null) {
+        return;
+      }
+
+      scrollIntoView(element, {
+        block: "start",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }, 50);
+  };
+
   handleClick = async () => {
     this.sendEvents("next");
     let { form_data, bankOptions } = this.state;
 
-    let keys_to_check = ["bank_name", "start_date", "end_date"];
+    let keys_to_check = ["bank_name"];
 
     let keysMapper = {
       bank_name: "bank name",
-      start_date: "start date",
-      end_date: "end date",
     };
     let canSubmit = true;
 
     let selectTypeInput = ["bank_name"];
 
-    for (var i = 0; i < keys_to_check.length; i++) {
-      let key_check = keys_to_check[i];
-      let first_error =
-        selectTypeInput.indexOf(key_check) !== -1
-          ? "Please select "
-          : "Please enter ";
-      if (!form_data[key_check]) {
-        form_data[key_check + "_error"] = first_error + keysMapper[key_check];
-        canSubmit = false;
-      } else  if(key_check.indexOf('date') >= 0 && !isValidDate(form_data[key_check]))  {
-          canSubmit = false;
-          form_data[key_check + "_error"] = first_error + "valid " + keysMapper[key_check];
-      } else  if(
-        key_check === 'start_date' && 
-        (
-          calculateAge(form_data['start_date'], true).days < 90 
-          // calculateAge(form_data['start_date'], true).days > 97
-        )
-        )  {
-          canSubmit = false;
-          
-          form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 months from the current date";
-      } else if(
-        key_check === 'end_date' && 
-        form_data[key_check]
-         && 
-        (
-          calculateAge(form_data['end_date'], true).days < 0
-        //   // || 
-        //   // calculateAge(form_data['end_date'], true).days > 4
-        )
-        ) {
-          canSubmit = false;
-          console.log(calculateAge(form_data['end_date'], true).days)
-          form_data[key_check + "_error"] = keysMapper[key_check] + " must not be 3 days before the current date";
-      }
-    }
+    // for (var i = 0; i < keys_to_check.length; i++) {
+    //   let key_check = keys_to_check[i];
+    //   let first_error =
+    //     selectTypeInput.indexOf(key_check) !== -1
+    //       ? "Please select "
+    //       : "Please enter ";
+    //   if (!form_data[key_check]) {
+    //     form_data[key_check + "_error"] = first_error + keysMapper[key_check];
+    //     canSubmit = false;
+    //   } else  if(key_check.indexOf('date') >= 0 && !isValidDate(form_data[key_check]))  {
+    //       canSubmit = false;
+    //       form_data[key_check + "_error"] = first_error + "valid " + keysMapper[key_check];
+    //   } else  if(
+    //     key_check === 'start_date' &&
+    //     (
+    //       calculateAge(form_data['start_date'], true).days < 90
+    //       // calculateAge(form_data['start_date'], true).days > 97
+    //     )
+    //     )  {
+    //       canSubmit = false;
 
-    let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
-    let endDate_days = calculateAge(form_data.end_date, true).days <= 3;
+    //       form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 months from the current date";
+    //   } else if(
+    //     key_check === 'end_date' &&
+    //     form_data[key_check]
+    //      &&
+    //     (
+    //       calculateAge(form_data['end_date'], true).days < 0
+    //     //   // ||
+    //     //   // calculateAge(form_data['end_date'], true).days > 4
+    //     )
+    //     ) {
+    //       canSubmit = false;
+    //       console.log(calculateAge(form_data['end_date'], true).days)
+    //       form_data[key_check + "_error"] = keysMapper[key_check] + " must not be 3 days before the current date";
+    //   }
+    // }
 
-    let month = calculateAge(form_data.start_date, true).months;
-    // eslint-disable-next-line radix
-    let startDate = form_data.start_date.substring(0, 2) === "01";
+    // let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
+    // let endDate_days = calculateAge(form_data.end_date, true).days <= 3;
 
-    if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
-      form_data.start_date_error = "This date must be 3 months prior to the current month.";
-      canSubmit = false;
-    }
+    // let month = calculateAge(form_data.start_date, true).months;
+    // // eslint-disable-next-line radix
+    // let startDate = form_data.start_date.substring(0, 2) === "01";
 
-    if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
-      form_data.end_date_error = "This date must not be 3 days prior to the current date.";
-      canSubmit = false;
-    }
+    // if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
+    //   form_data.start_date_error = "This date must be 3 months prior to the current month.";
+    //   canSubmit = false;
+    // }
+
+    // if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
+    //   form_data.end_date_error = "This date must not be 3 days prior to the current date.";
+    //   canSubmit = false;
+    // }
 
     this.setState({
       form_data: form_data,
     });
 
     if (canSubmit) {
-      let bank = bankOptions.filter((item) => item.value === form_data.bank_name);
+      let bank = bankOptions.filter(
+        (item) => item.value === form_data.bank_name
+      );
 
       try {
         this.setState({
@@ -494,7 +503,6 @@ class UploadBank extends Component {
         let { params } = this.state;
 
         if (result) {
-
           if (params.adminPanel) {
             if (status === 200) {
               window.location.href = this.state.params.redirect_url;
@@ -505,7 +513,6 @@ class UploadBank extends Component {
                 loaderWithData: false,
               });
             }
-
           } else {
             this.navigate("perfios-status");
           }
@@ -521,19 +528,24 @@ class UploadBank extends Component {
   };
 
   goBack = () => {
-    
     let { params } = this.state;
 
     if (params.adminPanel) {
       window.location.href = this.state.params.redirect_url;
     } else {
-      this.sendEvents('back');
+      this.sendEvents("back");
       this.navigate("income-details");
     }
   };
 
   render() {
-    let { documents, confirmed, isApiRunning, params, bankOptions } = this.state;
+    let {
+      documents,
+      confirmed,
+      isApiRunning,
+      params,
+      bankOptions,
+    } = this.state;
 
     return (
       <Container
@@ -557,7 +569,8 @@ class UploadBank extends Component {
           <Attention content={this.renderNotes()} />
           <FormControl fullWidth>
             <div className="InputField">
-              {bankOptions.length > 0  && <Autosuggests
+              {bankOptions.length > 0 && (
+                <Autosuggests
                   parent={this}
                   width="40"
                   placeholder="Search for bank"
@@ -569,40 +582,8 @@ class UploadBank extends Component {
                   helperText={this.state.form_data.bank_name_error}
                   value={this.state.form_data.bank_name || ""}
                   onChange={this.handleChange("bank_name")}
-                />}
-            </div>
-
-            <div className="InputField">
-              <Input
-                error={!!this.state.form_data.start_date_error}
-                helperText={this.state.form_data.start_date_error || "This date must be 3 months prior to the current month."}
-                type="text"
-                width="40"
-                label="Start date"
-                class="start_date"
-                maxLength={10}
-                id="start_date"
-                name="start_date"
-                placeholder="DD/MM/YYYY"
-                value={this.state.form_data.start_date || ""}
-                onChange={this.handleChange()}
-              />
-            </div>
-            <div className="InputField">
-              <Input
-                error={!!this.state.form_data.end_date_error}
-                helperText={this.state.form_data.end_date_error || "This date must not be 3 days prior to the current date."}
-                type="text"
-                width="40"
-                label="End date"
-                class="end_date"
-                maxLength={10}
-                id="end_date"
-                name="end_date"
-                placeholder="DD/MM/YYYY"
-                value={this.state.form_data.end_date || ""}
-                onChange={this.handleChange()}
-              />
+                />
+              )}
             </div>
           </FormControl>
 
@@ -617,76 +598,78 @@ class UploadBank extends Component {
                 {index + 1}. Bank statement
                 {item.showDotLoader && <DotDotLoader />}
               </div>
-              <div className="sub-title">
-                <img
-                  style={{ margin: "0 5px 0 12px" }}
-                  src={require("assets/tool.svg")}
-                  alt=""
-                />
-                {item.name}
-                <span className="bytes">{bytesToSize(item.size)}</span>
-              </div>
-
-              <div className="InputField">
-                <Input
-                  type="password"
-                  width="40"
-                  label="Enter password (if any)"
-                  class="password"
-                  id="password"
-                  name="password"
-                  placeholder="XXXXXXX"
-                  value={item.password || ""}
-                  onChange={this.handleChange("password", item.id)}
-                  disabled={item.showButton}
-                />
-              </div>
-
-              {item.status === "uploaded" && (
-                <div
-                  onClick={() =>
-                    !item.showDotLoader && this.handleConfirm(item.id)
-                  }
-                  className="generic-page-button-small"
-                  style={{
-                    opacity: `${item.showDotLoader ? "0.5" : "1"}`,
-                  }}
-                >
-                  CONFIRM
+              <div className="sub-title" style={{ marginLeft: "12px" }}>
+                <div style={{marginBottom: '30px'}}>
+                  <img
+                    style={{ margin: "0 5px 0 0" }}
+                    src={require("assets/tool.svg")}
+                    alt=""
+                  />
+                  {item.name}
+                  <span className="bytes">{bytesToSize(item.size)}</span>
                 </div>
-              )}
-              {item.showButton && (
-                <div
-                  className="edit-or-delete"
-                  style={{
-                    opacity: `${item.showDotLoader ? "0.5" : "1"}`,
-                  }}
-                >
+
+                <div className="InputField">
+                  <Input
+                    type="password"
+                    width="40"
+                    label="Enter password (if any)"
+                    class="password"
+                    id="password"
+                    name="password"
+                    placeholder="XXXXXXX"
+                    value={item.password || ""}
+                    onChange={this.handleChange("password", item.id)}
+                    disabled={item.showButton}
+                  />
+                </div>
+
+                {item.status === "uploaded" && (
                   <div
                     onClick={() =>
-                      !item.showDotLoader &&
-                      this.handleEdit(item.id, item.document_id)
+                      !item.showDotLoader && this.handleConfirm(item.id)
                     }
                     className="generic-page-button-small"
+                    style={{
+                      opacity: `${item.showDotLoader ? "0.5" : "1"}`,
+                    }}
                   >
-                    EDIT
+                    CONFIRM
                   </div>
-
+                )}
+                {item.showButton && (
                   <div
-                    onClick={() =>
-                      !item.showDotLoader && this.handleDelete(item.id)
-                    }
-                    className="generic-page-button-small"
+                    className="edit-or-delete"
+                    style={{
+                      opacity: `${item.showDotLoader ? "0.5" : "1"}`,
+                    }}
                   >
-                    DELETE
+                    <div
+                      onClick={() =>
+                        !item.showDotLoader &&
+                        this.handleEdit(item.id, item.document_id)
+                      }
+                      className="generic-page-button-small"
+                    >
+                      EDIT
+                    </div>
+
+                    <div
+                      onClick={() =>
+                        !item.showDotLoader && this.handleDelete(item.id)
+                      }
+                      className="generic-page-button-small"
+                    >
+                      DELETE
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           ))}
 
           {confirmed && (
-            <div className="upload-bank-statement">
+            <div className="upload-bank-statement" id="upload">
               <div
                 className="pdf-upload"
                 onClick={() => this.startUpload("open_file", "bank_statement")}
@@ -709,6 +692,7 @@ class UploadBank extends Component {
                   />
                 </span>
                 {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
+                {documents.length === 0 && <span className="sub-text">Max file size 6 mb</span>}
               </div>
             </div>
           )}

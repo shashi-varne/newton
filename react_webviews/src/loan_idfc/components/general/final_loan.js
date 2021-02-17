@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { formatAmountInr, capitalizeFirstLetter } from "../../../utils/validators";
+import {
+  formatAmountInr,
+  capitalizeFirstLetter,
+} from "../../../utils/validators";
 import ContactUs from "../../../common/components/contact_us";
 
 class FinalOffer extends Component {
@@ -12,7 +15,7 @@ class FinalOffer extends Component {
       show_loader: false,
       screen_name: "final_loan",
       first_name: "",
-      vendor_info: {}
+      vendor_info: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -26,13 +29,13 @@ class FinalOffer extends Component {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
     let personal_info = lead.personal_info || {};
-    let application_id = lead.application_id || ""
+    let application_id = lead.application_id || "";
 
     this.setState({
       vendor_info: vendor_info,
       first_name: personal_info.first_name,
-      application_id: application_id
-    })
+      application_id: application_id,
+    });
   };
 
   sendEvents(user_action) {
@@ -52,18 +55,18 @@ class FinalOffer extends Component {
   }
 
   handleClick = () => {
-    this.sendEvents('next');
-    this.navigate('reports')
-  }
+    this.sendEvents("next");
+    this.navigate("reports");
+  };
 
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Loan application submitted"
         handleClick={this.handleClick}
-        buttonTitle="CHECK REPORT"
+        buttonTitle="CHECK LOAN SUMMARY"
       >
         <div className="final-loan">
           <img
@@ -72,15 +75,28 @@ class FinalOffer extends Component {
             alt=""
           />
 
-          <div className="subtitle">
-            {this.state.first_name}, your application no. <b>{this.state.application_id}</b> for a personal loan of <b>{formatAmountInr(this.state.vendor_info.loanAmount)}</b> has been submitted and is currently under process.
+          <div className="head">Loan details:</div>
+          <div className="sub-head">
+            <div className="tag">
+              Application no: {this.state.application_id}
+            </div>
+            <div className="tag">
+              Loan amount: {formatAmountInr(this.state.vendor_info.loanAmount)}
+            </div>
           </div>
-          <div className="subtitle">
-            You will soon get a call from IDFC FIRST Bank's sales representative
-            who will guide you through the remaining process until the loan
-            amount is disbursed to your bank account.
+
+          <div className="sub-msg">
+            <div className="title">What next?</div>
+            <div className="sub-title">
+              IDFC FIRST Bank’s sales executive will call you within the next 24
+              hours and will assist you till loan disbursal.
+            </div>
           </div>
-          <div className="subtitle">Thank you for choosing {capitalizeFirstLetter(this.state.productName)}!</div>
+
+          <div className="subtitle">
+            Thank you for choosing{" "}
+            {capitalizeFirstLetter(this.state.productName)}!
+          </div>
           <ContactUs />
         </div>
       </Container>

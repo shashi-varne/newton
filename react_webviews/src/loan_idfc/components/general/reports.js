@@ -117,7 +117,7 @@ class ReportDetails extends Component {
     return (
       <Container
         showLoader={this.state.show_loader}
-        title="Personal Loan"
+        title="Personal Loan Summary"
         events={this.sendEvents("just_set_events")}
         handleClick={this.handleClick}
         noFooter={true}
@@ -180,7 +180,7 @@ class ReportDetails extends Component {
               <div className="mt-right">
                 <div className="mtr-top">RATE OF INTEREST</div>
                 <div className="mtr-bottom">
-                  {this.state.vendor_info.updated_offer_roi}%
+                  {Math.round(this.state.vendor_info.updated_offer_roi)}% p.a.
                 </div>
               </div>
             </div>

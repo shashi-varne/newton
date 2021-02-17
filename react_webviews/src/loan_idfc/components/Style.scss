@@ -271,7 +271,7 @@
 
     .title {
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       color: #0a1d32;
     }
     .sub-title {
@@ -304,7 +304,7 @@
 }
 
 .upload-bank-statement {
-  margin-bottom: 50px;
+  margin: 30px 0 50px;
   .upload-button {
     padding: 8px 20px !important;
     border: 1px solid var(--secondary) !important;
@@ -325,10 +325,10 @@
   .pdf-upload {
     color: var(--secondary);
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 1000;
     background: linear-gradient(90deg, #f7f6f6 0%, #ffffff 98.76%);
     margin: 0 -20px;
-    padding: 20px 20px;
+    padding: 30px 20px;
     cursor: pointer;
     letter-spacing: 1px;
 
@@ -338,11 +338,19 @@
       border-radius: 5px;
       margin-right: 20px;
     }
+
+    .sub-text {
+      font-size: 10px;
+      font-weight: 500;
+      color: #767e86;
+      margin-left: 15px;
+    }
   }
 
   .bank-statement {
     font-weight: 400;
     color: #0a1d32;
+    margin-top: 20px;
 
     .title {
       font-size: 13px;
@@ -350,7 +358,7 @@
     }
 
     .sub-title {
-      font-size: 12px;
+      font-size: 11px;
       margin: 16px 0 20px 0;
       color: #0a1d32;
     }
@@ -449,16 +457,16 @@
   .subtitle {
     font-size: 13px;
     line-height: 24px;
-    color: #0a1d32;
-    opacity: 0.55;
+    color: #767e86;
     margin-top: 20px;
+    font-weight: 500;
   }
 
   img {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
+    width: 75%;
   }
 }
 
@@ -470,14 +478,64 @@
     opacity: 0.55;
   }
 
+  .max-amount {
+    text-align: center;
+
+    .head {
+      color: #767e86;
+      margin-top: 10px;
+    }
+
+    .max-loan-amt {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 10px;
+    }
+  }
+
+  .default_tenor {
+    background: #ffffff !important;
+  }
+
+  .custom_tenor {
+    background: var(--highlight);
+    // margin-bottom: -20px !important;
+  }
+
   .offer-checkbox {
     margin: 40px -20px;
     padding: 0 20px 30px 20px;
     background: var(--highlight);
+
+    #amount {
+      margin-top: 20px;
+    }
+
+    .estimated-emi {
+      text-align: start;
+      background: #ffffff;
+      border-radius: 6px;
+      padding: 10px;
+
+      .title {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 26px;
+        color: #767e86;
+        margin-top: 0px;
+      }
+
+      .emi {
+        font-size: 17px;
+        line-height: 26px;
+        color: #0a1d32;
+      }
+    }
   }
 
   .title {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16px;
     line-height: 19px;
     color: #0a1d32;
@@ -508,24 +566,6 @@
       font-size: 17px;
       line-height: 16px;
       text-align: left;
-      color: #0a1d32;
-    }
-  }
-
-  .estimated-emi {
-    text-align: center;
-    background: rgba(216, 216, 216, 0.17);
-    border-radius: 6px;
-
-    .title {
-      font-size: 15px;
-      line-height: 26px;
-      color: var(--primary);
-    }
-
-    .emi {
-      font-size: 17px;
-      line-height: 26px;
       color: #0a1d32;
     }
   }
@@ -707,7 +747,21 @@
     color: #0a1d32;
     mix-blend-mode: normal;
     opacity: 0.55;
-    margin-bottom: 30px;
+    margin: 20px 15px 30px;
+  }
+
+  .head {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 20px 15px 0;
+  }
+
+  .sub-head {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    color: #767E86;
+    font-size: 13px;
   }
 }
 
@@ -788,10 +842,22 @@
 }
 
 .loan-status {
+  #congratulations {
+    margin: -20px -20px 0;
+  }
+
   .loan-eligible {
-    font-size: 14px;
+    font-size: 15px !important;
     text-align: center;
     margin: 20px 0 10px 0;
+    color: #160D2E;
+  }
+
+  .sub-head {
+    text-align: center;
+    color: #767E86;
+    margin-bottom: 10px;
+    font-size: 13px;
   }
 
   .loan-amount {
@@ -812,6 +878,13 @@
 
   .title {
     font-weight: 600;
+    color: #767E86;
+    font-size: 13px;
+  }
+
+  .values {
+    font-size: 15px;
+    color: #0A1D32;
   }
 }
 
@@ -958,7 +1031,7 @@
     div :nth-child(2) {
       font-size: 13px;
       line-height: 20px;
-      color: #767E86;
+      color: #767e86;
       padding: 5px 0;
     }
   }
@@ -1096,8 +1169,7 @@
       div :nth-child(2) {
         font-size: 13px;
         line-height: 20px;
-        color: #767E86;
-        ;
+        color: #767e86;
         padding: 5px 0;
       }
     }
@@ -1132,7 +1204,7 @@
 .react-autosuggest__suggestions-container--open {
   max-height: 350px !important;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12),
-      0px 2px 2px rgba(0, 0, 0, 0.0483186) !important;
+    0px 2px 2px rgba(0, 0, 0, 0.0483186) !important;
   border-color: #a2a2a2 !important;
 }
 
@@ -1203,4 +1275,23 @@
   text-align: center;
   color: var(--primary);
   margin-top: 200px;
+}
+
+.sub-msg {
+  background: var(--highlight);
+  padding: 20px;
+  border-radius: 6px;
+  margin-top: 30px;
+
+  .title {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .sub-title {
+    font-size: 13px;
+    color: rgba(22, 13, 46, 0.547);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
 }

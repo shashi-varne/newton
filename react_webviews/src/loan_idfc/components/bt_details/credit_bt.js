@@ -38,7 +38,7 @@ class LoanBtDetails extends Component {
     this.initialize();
 
     let progressHeaderData = {
-      title: "Income and loan offer",
+      title: "income details and loan offer",
       steps: [
         {
           title: "Income details",

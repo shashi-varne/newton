@@ -24,7 +24,7 @@ class IncomeDetails extends Component {
     let vendor_info = lead.vendor_info || {};
     let application_info = lead.application_info || {};
     let progressHeaderData = {
-      title: "Income and loan offer",
+      title: "income details and loan offer",
       steps: [
         {
           title: "Income details",
@@ -46,21 +46,21 @@ class IncomeDetails extends Component {
 
     this.setState({
       progressHeaderData: progressHeaderData,
-      employment_type: application_info.employment_type || '',
+      employment_type: application_info.employment_type || "",
     });
   };
 
   sendEvents(user_action, data = {}) {
     let details = {
-      "netbanking": "fetch details using netbanking",
-      "manual_upload": "upload bank statement"
-    }
+      netbanking: "fetch details using netbanking",
+      manual_upload: "upload bank statement",
+    };
     let eventObj = {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
         screen_name: "income_details",
-        option_selected: details[data.option_selected] || '',
+        option_selected: details[data.option_selected] || "",
       },
     };
 
@@ -104,13 +104,12 @@ class IncomeDetails extends Component {
                 alt=""
               />
               <div
-                style={{ width: !getConfig().isMobileDevice ? "85%" : "75%" }}
+                style={{ width: !getConfig().isMobileDevice ? "85%" : "77%" }}
               >
                 <div className="title">Fetch details using net banking</div>
                 <div className="sub-title">
-                  This is the most preferred, secure and hassle-free way of
-                  verifying your income. We never store your net banking
-                  credentials.
+                  Preferred, secure and hassle-free way of verifying income. Net
+                  banking credentials are never stored.
                 </div>
               </div>
             </div>
@@ -125,12 +124,12 @@ class IncomeDetails extends Component {
                 alt=""
               />
               <div
-                style={{ width: !getConfig().isMobileDevice ? "85%" : "75%" }}
+                style={{ width: !getConfig().isMobileDevice ? "85%" : "77%" }}
               >
                 <div className="title">Upload bank statement PDFs</div>
                 <div className="sub-title">
-                  Attach e-statements downloaded directly from your bank's
-                  website or the ones you've received from your bank.
+                  Attach e-statements downloaded from bank's website or the ones
+                  you've received from bank on email.
                 </div>
               </div>
             </div>
