@@ -368,15 +368,15 @@ class BasicDetailsForm extends Component {
         }
       }
 
-
     } catch (err) {
       this.setState({
-        skelton: false,
-        showError: 'page'
+        showError: 'page',
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        },
+        skelton: false
       });
     }
-
-    // error = 'aaaaaaa'
 
     // set error data
     if(error) {
@@ -569,7 +569,6 @@ class BasicDetailsForm extends Component {
           "relation": basic_details_data.nominee.relation
         }
         final_data['nominee'] = obj;
-        final_data['nominee'] = {};  //TODO remove
       } else {
         final_data['nominee'] = {};
       }
@@ -613,10 +612,14 @@ class BasicDetailsForm extends Component {
           }
         }
 
+
       } catch (err) {
         this.setState({
           show_loader: false,
-          showError: true
+          showError: true,
+          errorData: {
+            ...this.state.errorData, type: 'crash'
+          }
         });
       }
 
