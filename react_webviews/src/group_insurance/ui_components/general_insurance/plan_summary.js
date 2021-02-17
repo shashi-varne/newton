@@ -5,7 +5,6 @@ import provider from 'assets/provider.svg';
 import { numDifferentiationInr } from '../../../utils/validators';
 
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { insuranceStateMapper, insuranceProductTitleMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -174,6 +173,7 @@ class PlanSummaryClass extends Component {
   async handleClickCurrent() {
 
     this.setErrorData('submit');
+    let error='';
     try {
       this.setState({
         show_loader: 'button'
@@ -236,12 +236,24 @@ class PlanSummaryClass extends Component {
         this.setState({
           show_loader: false
         })
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong');
+        error=res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong';
       }
 
     } catch (err) {
-      toast('Something went wrong');
+      error='Something went wrong';
+      this.setState({
+        show_loader:false,
+      })
+    }
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
     }
   }
 
@@ -273,6 +285,8 @@ class PlanSummaryClass extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"
         classOverRide="fullHeight"
