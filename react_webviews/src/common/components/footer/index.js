@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FooterLayoutBase } from './layout';
-import { getConfig } from 'utils/functions';
+// import { getConfig } from 'utils/functions';
 
 const Footer = (props) => {
   if (props.fullWidthButton && !props.twoButton) {
@@ -25,8 +25,7 @@ const Footer = (props) => {
     );   
   } else {
     return (
-      <div className="Footer" style={{border: '1px solid' + getConfig().secondary,
-      borderRadius:6}}>
+      <div className="Footer">
         <FooterLayoutBase {...props} />
       </div>
     );
