@@ -88,6 +88,7 @@ class ReportDetails extends Component {
   onload = async() => {
 
     let error = '';
+    this.setErrorData('onload');
     try {
       let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
 
@@ -222,6 +223,8 @@ class ReportDetails extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={this.state.noFooter}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
         fullWidthButton={true}
         buttonTitle={this.state.buttonTitle}
