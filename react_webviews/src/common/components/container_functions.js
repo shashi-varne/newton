@@ -38,6 +38,7 @@ export function didmount() {
     this.new_header_scroll = new_header_scroll.bind(this);
     this.commonRender = commonRender.bind(this);
     this.headerGoBack = headerGoBack.bind(this);
+    this.renderGenericError = renderGenericError.bind(this);
 
     this.setState({
         productName: getConfig().productName,

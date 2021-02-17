@@ -6,7 +6,6 @@ import { nativeCallback, openModule } from 'utils/native_callback';
 import '../../utils/native_listner';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
-import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
 
 import {didmount ,commonRender} from '../../common/components/container_functions';
 
@@ -25,8 +24,6 @@ class Container extends Component {
       project: 'group-insurance',
     }
     this.historyGoBack = this.historyGoBack.bind(this);
-    this.renderPageLoader = renderPageLoader.bind(this);
-    this.renderGenericError = renderGenericError.bind(this);
 
     this.didmount = didmount.bind(this);
     this.commonRender =  commonRender.bind(this);
