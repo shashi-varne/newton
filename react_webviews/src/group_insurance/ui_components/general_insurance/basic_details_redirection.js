@@ -213,7 +213,11 @@ class BasicDetailsRedirectionForm extends Component {
         if (canSubmitForm) {
             try {
                 let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-                this.setState({ openModal: true, openModalMessage: openModalMessage, show_loader: 'button' });
+                this.setState({ 
+                    // openModal: true, 
+                    // openModalMessage: openModalMessage, 
+                    loaderData:{loadingText:openModalMessage},
+                    show_loader: "page" });
 
                 var leadCreateBody = {
                     name: this.state.name,
@@ -235,7 +239,7 @@ class BasicDetailsRedirectionForm extends Component {
                             skelton: false,
                             openModal: false, 
                             openModalMessage: '',
-                            show_loader: 'button'
+                            show_loader: 'page'
                          });
 
                          open_browser_web(leadRedirectUrl, '_blank');
@@ -352,6 +356,7 @@ class BasicDetailsRedirectionForm extends Component {
                 banner={true}
                 bannerText={this.bannerText()}
                 showLoader={this.state.show_loader}
+                loaderData={this.state.loaderData}
                 showError={this.state.showError}
                 skelton={this.state.skelton}
                 errorData={this.state.errorData}
