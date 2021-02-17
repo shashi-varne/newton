@@ -58,16 +58,17 @@ class ReportDetails extends Component {
   async componentDidMount() {
 
     try {
+      let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
 
-      let res = await Api.get('api/ins_service/api/insurance/' + (this.state.provider).toLowerCase() + 
+      let res = await Api.get('api/'+ service +'/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
       this.setState({
         show_loader: false
       })
       if (res.pfwresponse.status_code === 200) {
-
-        var policyData = res.pfwresponse.result.lead;
+        
+        var policyData = res.pfwresponse.result.policy;
         policyData.provider = this.state.provider;
         let buttonTitle = 'Resume';
 
