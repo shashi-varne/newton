@@ -97,7 +97,7 @@ class DeclarationClass extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         onlyButton={false}
         showLoader={this.state.show_loader}
-        twoButtons={true}
+        twoButton={true}
         buttonOneTitle="NO, I CAN'T CONFIRM"
         buttonTwoTitle="YES I CONFIRM"
         classOverRideContainer="payment-success"

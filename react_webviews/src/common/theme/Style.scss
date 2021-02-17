@@ -1025,10 +1025,20 @@ input#pan {
   font-weight: 400 !important;
 }
 
-.main-top-title-header {
+@mixin main-top-title-header-base {
   font-size: 16px !important;
   color: #160d2e;
   font-weight: 400 !important;
+}
+
+.main-top-title-header {
+  @include main-top-title-header-base();
+  color: #160d2e;
+}
+
+.main-top-title-header-old {
+  @include main-top-title-header-base();
+  color: white;
 }
 
 .slide-fade {
