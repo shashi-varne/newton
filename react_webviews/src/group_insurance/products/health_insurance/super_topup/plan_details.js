@@ -25,6 +25,7 @@ class HealthSuperTopup extends Component {
       selectedIndex: 0,
       checked: false,
       show_loader:true,
+      skelton: true,
       plan_data: {},
       recommendedIndex: 1,
       product_key: 'HEALTH_SUPER_TOPUP',

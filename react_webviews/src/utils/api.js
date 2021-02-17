@@ -6,7 +6,12 @@ import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
 import { getConfig } from 'utils/functions'
 const myHistory = createBrowserHistory();
+
+var base_href = window.sessionStorage.getItem('base_href') || '';
 let { base_url } = qs.parse(myHistory.location.search.slice(1));
+if(base_href) {
+  base_url = window.location.origin;
+}
 
 let redirect_url = getConfig().redirect_url;
 let sdk_capabilities = getConfig().sdk_capabilities;
@@ -61,6 +66,12 @@ class Api {
       .then(response => {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
+        }
+
+        let force_error_api = window.sessionStorage.getItem('force_error_api');
+        if(force_error_api) {
+          response.data.pfwresponse.status_code = 410;
+          response.data.pfwresponse.result.error = 'Not able to process request.';
         }
         return response.data;
       }, error => {

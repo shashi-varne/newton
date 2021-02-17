@@ -7,7 +7,7 @@ import landing_step_verified from 'assets/fisdom/landing_step_verified.svg';
 import sebi_logo from 'assets/sebi_logo.svg';
 import amfi_logo from 'assets/amfi_logo.svg';
 import bombay_stock_exchange_logo from 'assets/bombay_stock_exchange_logo.svg';
-import pnb_logo from "assets/pnb_logo.svg"
+// import pnb_logo from "assets/pnb_logo.svg"
 import fisdom_logo from "assets/fisdom/fisdom_white_logo.svg"
 import { navigate as navigateFunc} from '../common/commonFunction';
 
@@ -22,12 +22,12 @@ const Landing = (props) => {
         <div className='fd-landing-bg-container-sec'>
 
         <div className="fd-landing-header-img-container">
-          <img className="fd-partner-logo" src={pnb_logo} alt="pnb_logo" />
+          {/* <img className="fd-partner-logo" src={pnb_logo} alt="pnb_logo" /> */}
           <img className="fd-fisdom-logo" src={fisdom_logo} alt="pnb_logo" />
         </div>
-        <div className="fd-landing-header-text">
+        {/* <div className="fd-landing-header-text">
         Punjab National Bank partners with fisdom
-        </div>
+        </div> */}
         </div>
       </section>
 

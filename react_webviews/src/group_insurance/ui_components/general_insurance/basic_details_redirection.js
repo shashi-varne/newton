@@ -3,7 +3,7 @@ import Container from '../../common/Container';
 import Input from '../../../common/ui/Input';
 import MobileInputWithoutIcon from '../../../common/ui/MobileInputWithoutIcon';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
+// import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import {
     validateEmail, validateNumber, numberShouldStartWith,
@@ -23,7 +23,7 @@ class BasicDetailsRedirectionForm extends Component {
         this.state = {
             checked: false,
             parent: this.props.parent,
-            show_loader: true,
+            skelton: true,
             premium_details_all: window.sessionStorage.getItem('group_insurance_plan_final_data') ?
             JSON.parse(window.sessionStorage.getItem('group_insurance_plan_final_data')) : '',
             name: '',
@@ -65,11 +65,50 @@ class BasicDetailsRedirectionForm extends Component {
         });
     }
 
+    setErrorData = (type) => {
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Fetch again',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClickCurrent,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Edit'
+            }
+          };
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+      }
+
     async componentDidMount() {
+        this.onload();
+      }
+
+      onload = async () => {
+        this.setErrorData('onload');
+        let error = ''
+
+        this.setState({
+            skelton: true
+          });
+
         try {
             const res = await Api.get('/api/ins_service/api/insurance/account/summary')
             this.setState({
-                show_loader: false
+                skelton: false,
             });
 
             if (res.pfwresponse.status_code === 200) {
@@ -82,17 +121,28 @@ class BasicDetailsRedirectionForm extends Component {
             } else if (res.pfwresponse.status_code === 401) {
 
             } else {
-                toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-                    || 'Something went wrong');
+                // toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
+                error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
             }
 
 
         } catch (err) {
             this.setState({
-                show_loader: false
+              skelton: false,
+              showError: 'page'
             });
-            toast('Something went wrong');
-        }
+          }
+      
+          // set error data
+          if(error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error
+              },
+              showError: 'page'
+            })
+          }
     }
 
     handleChange = () => event => {
@@ -124,6 +174,8 @@ class BasicDetailsRedirectionForm extends Component {
     async handleClickCurrent() {
 
         this.sendEvents('next');
+        this.setErrorData('submit');
+        let error = ''
 
         var canSubmitForm = true;
 
@@ -161,7 +213,7 @@ class BasicDetailsRedirectionForm extends Component {
         if (canSubmitForm) {
             try {
                 let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-                this.setState({ openModal: true, openModalMessage: openModalMessage });
+                this.setState({ openModal: true, openModalMessage: openModalMessage, show_loader: 'button' });
 
                 var leadCreateBody = {
                     name: this.state.name,
@@ -180,9 +232,10 @@ class BasicDetailsRedirectionForm extends Component {
                     var leadRedirectUrl = res.pfwresponse.result.lead;
                     if (getConfig().app === 'web') {
                         this.setState({ 
-                            show_loader: false,
+                            skelton: false,
                             openModal: false, 
-                            openModalMessage: ''
+                            openModalMessage: '',
+                            show_loader: 'button'
                          });
 
                          open_browser_web(leadRedirectUrl, '_blank');
@@ -209,18 +262,36 @@ class BasicDetailsRedirectionForm extends Component {
                         window.location.href = leadRedirectUrl;
                     }
 
+                    this.setState({
+                        show_loader: false
+                      });
+
                 } else {
-                    this.setState({ show_loader: false,openModal: false, 
+                    this.setState({ skelton: false,openModal: false, 
                         openModalMessage: '' });
                     
-                    toast(res.pfwresponse.result.error ||  'Something went wrong');
+                    // toast(res.pfwresponse.result.error ||  'Something went wrong');
+                    error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
                 }
             } catch (err) {
                 this.setState({
-                    show_loader: false
+                  skelton: false,
+                  showError: true,
+                  show_loader: false
                 });
-                toast('Something went wrong');
-            }
+              }
+          
+              // set error data
+              if(error) {
+                this.setState({
+                  errorData: {
+                    ...this.state.errorData,
+                    title2: error
+                  },
+                  showError: true,
+                  show_loader: false
+                })
+              }
         }
 
     }
@@ -281,6 +352,9 @@ class BasicDetailsRedirectionForm extends Component {
                 banner={true}
                 bannerText={this.bannerText()}
                 showLoader={this.state.show_loader}
+                showError={this.state.showError}
+                skelton={this.state.skelton}
+                errorData={this.state.errorData}
                 handleClick={() => this.handleClickCurrent()}
                 title='Personal details'
                 classOverRideContainer="basic-details">
