@@ -18,6 +18,8 @@ export function initialize() {
   this.forgotPassword = forgotPassword.bind(this);
   this.verifyForgotOtp = verifyForgotOtp.bind(this);
   this.navigate = navigate.bind(this);
+  this.getKycFromSummary = getKycFromSummary.bind(this);
+  this.redirectAfterLogin = redirectAfterLogin.bind(this);
   let main_query_params = getUrlParams();
   let { referrer } = main_query_params;
   let referrerParam = referrer || "";
@@ -129,13 +131,48 @@ export async function emailLogin(body) {
     const res = await Api.post(`/api/user/login`, body);
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      // if (getConfig().redirect_url !== undefined) {
+      //   window.location.href = getConfig().redirect_url;
+      //   return;
+      // }
       storageService().setObject("user", result.user);
       if (!isMobileView && result.firstLogin) {
         storageService().setObject("first_login", result.firstLogin);
       }
       storageService().set("currentUser", true);
-      toast("Login Successful");
-      // handle user kyc
+      let userData = {};
+      let kycResult = await getKycFromSummary();
+      if (!kycResult) {
+        this.setState({ isApiRunning: false });
+        return;
+      }
+      if (getConfig().Web && kycResult.data.partner.partner.data) {
+        storageService().set(
+          "partner",
+          kycResult.data.partner.partner.data.name
+        );
+      }
+
+      let user = kycResult.data.user.user.data;
+      userData.me = user;
+      storageService().set("dataSettedInsideBoot", true);
+      storageService().setObject("referral", kycResult.data.referral);
+      storageService().setObject(
+        "campaign",
+        kycResult.data.campaign.user_campaign.data
+      );
+
+      this.setState({
+        currentUser: true,
+        "user-data": userData,
+      });
+      if (storageService().get("deeplink_url")) {
+        window.location.href = decodeURIComponent(
+          storageService().get("deeplink_url")
+        );
+      } else {
+        this.redirectAfterLogin(result, user);
+      }
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -304,7 +341,6 @@ export async function otpVerification(body) {
     );
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
-      toast("Login Successful");
       applyCode(result.user);
       storageService().setObject("user", result.user);
       storageService().set("currentUser", true);
@@ -312,7 +348,41 @@ export async function otpVerification(body) {
         window.location.href = this.state.rebalancing_redirect_url;
         return;
       }
-      // handle user kyc
+      let userData = {};
+      let kycResult = await getKycFromSummary();
+
+      if (!kycResult) {
+        this.setState({ isApiRunning: false });
+        return;
+      }
+
+      if (getConfig().Web && kycResult.data.partner.partner.data) {
+        storageService().set(
+          "partner",
+          kycResult.data.partner.partner.data.name
+        );
+      }
+
+      let user = kycResult.data.user.user.data;
+      userData.me = user;
+      storageService().set("dataSettedInsideBoot", true);
+      storageService().setObject("referral", kycResult.data.referral);
+      storageService().setObject(
+        "campaign",
+        kycResult.data.campaign.user_campaign.data
+      );
+
+      this.setState({
+        currentUser: true,
+        "user-data": userData,
+      });
+      if (storageService().get("deeplink_url")) {
+        window.location.href = decodeURIComponent(
+          storageService().get("deeplink_url")
+        );
+      } else {
+        this.redirectAfterLogin(result, user);
+      }
     } else {
       toast(result.message || result.error || "Something went wrong!");
     }
@@ -420,5 +490,54 @@ export function navigate(pathname, data = {}) {
       search: data.searchParams || getConfig().searchParams,
       params: data.params || {},
     });
+  }
+}
+
+export async function getKycFromSummary() {
+  const errorMessage = "Something went wrong!";
+  const res = await Api.post(`/api/user/account/summary`, {
+    kyc: ["kyc"],
+    user: ["user"],
+    partner: ["partner"],
+    campaign: ["user_campaign"],
+    referral: ["subbroker", "p2p"],
+  });
+  if (!res || !res.pfwresponse) throw errorMessage;
+  const { result, status_code: status } = res.pfwresponse;
+  if (status === 200) {
+    let user = result.data.user.user.data;
+    let kyc = result.data.kyc.kyc.data;
+    storageService().setObject("kyc", kyc);
+    storageService().setObject("user", user);
+    return result;
+  } else {
+    throw result.message || result.error || errorMessage;
+  }
+}
+
+export function redirectAfterLogin(data, user) {
+  var kyc_login = storageService().getObject("kyc");
+  if (data.firstLogin) {
+    this.navigate("/");
+  } else if (
+    user.kyc_registration_v2 === "incomplete" &&
+    user.active_investment
+  ) {
+    this.navigate("/kyc/journey");
+  } else if (
+    user.kyc_registration_v2 === "incomplete" &&
+    !user.active_investment
+  ) {
+    this.navigate("/");
+  } else if (
+    kyc_login &&
+    !kyc_login.pan.meta_data.pan_number &&
+    user.kyc_registration_v2 === "init"
+  ) {
+    this.navigate("/home-kyc");
+  } else if (user.active_investment) {
+    this.navigate("/landing");
+  } else {
+    this.navigate("/");
   }
 }
