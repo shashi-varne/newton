@@ -26,11 +26,30 @@ class RecommendationResult extends Component {
         }
     }
     
-    getPlan = (key) =>{
+    getPlan = (key, screen_name) =>{
+        this.sendEvents('next', this.state.recommendation_bottom_sheet_data[key].heading, screen_name);
         this.state.parent.navigate(advisoryConstants.get_plan_path[key])
     }
 
-    handleClose = () =>{
+    sendEvents(user_action, insurance_type, screen_name) {
+        let eventObj = {
+          "event_name": 'insurance_advisory',
+          "properties": {
+            "user_action": user_action,
+            "insurance_type": insurance_type,
+            "screen_name": screen_name,
+          }
+        };
+    
+        if (user_action === 'just_set_events') {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+    }
+
+    handleClose = (key) =>{
+        this.sendEvents('back', this.state.recommendation_bottom_sheet_data[key].heading, 'plan details bottom sheet')
         this.setState({
             openMoreDetailsDialog: false
         })
@@ -44,7 +63,7 @@ class RecommendationResult extends Component {
           <Dialog
             id="bottom-popup"
             open={this.state.openMoreDetailsDialog || false}
-            onClose={this.handleClose}
+            onClose={() => this.handleClose(key)}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             TransitionComponent={Transition}
@@ -88,7 +107,7 @@ class RecommendationResult extends Component {
                         
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px'}}>
-                        <button  className="call-back-popup-button" onClick={()=>this.getPlan(recommendation_data.key)}>GET THE PLAN</button> 
+                        <button  className="call-back-popup-button" onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet')}>GET THE PLAN</button> 
                     </div>
 
                 </div>
@@ -96,7 +115,8 @@ class RecommendationResult extends Component {
           </Dialog>
         );
     }
-    openMoreDetailsDialog = () =>{
+    openMoreDetailsDialog = (key) =>{
+        this.sendEvents('more details',this.state.recommendation_bottom_sheet_data[key].heading , 'recommendations' )
         this.setState({
             openMoreDetailsDialog: true
         })
@@ -128,8 +148,8 @@ class RecommendationResult extends Component {
                     }
 
                     <div className="recommendation-cta-container">
-                        <div className="more-details" onClick={this.openMoreDetailsDialog}>MORE DETAILS</div>
-                        <div className="get-the-plan" onClick={()=>this.getPlan(recommendation_data.key)}>GET THE PLAN</div>
+                        <div className="more-details" onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>MORE DETAILS</div>
+                        <div className="get-the-plan" onClick={()=>this.getPlan(recommendation_data.key, 'recommendations')}>GET THE PLAN</div>
                     </div>
                 </div>
                 {this.confirmDialog()}

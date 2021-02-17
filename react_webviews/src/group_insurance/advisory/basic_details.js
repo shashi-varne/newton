@@ -193,7 +193,25 @@ class AdvisoryBasicDetails extends Component {
         
     }
 
+    sendEvents(user_action, insurance_type, banner_clicked) {
+        let eventObj = {
+          "event_name": 'insurance_advisory',
+          "properties": {
+            "user_action": user_action,
+            "screen_name": 'basic details',
+          }
+        };
+    
+        if (user_action === 'just_set_events') {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
+    }
+
     handleClick = () =>{
+        this.sendEvents('next');
+        
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         console.log('state',this.state)
@@ -254,7 +272,7 @@ class AdvisoryBasicDetails extends Component {
     render() {
         return(
             <Container
-            // events={this.sendEvents('just_set_events')}
+            events={this.sendEvents('just_set_events')}
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}

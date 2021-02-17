@@ -3,6 +3,8 @@ import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {formatAmount, containsNumbersAndComma} from 'utils/validators';
+import Api from 'utils/api';
+import toast from '../../common/ui/Toast';
 import RecommendationResult from './recommendation_result';
 import Dialog, {
     DialogActions,
@@ -15,6 +17,8 @@ import launch from 'assets/launch.svg';
 import {storageService} from "utils/validators";
 import { updateLead } from './common_data';
 import { capitalizeFirstLetter } from 'utils/validators'
+
+
 class AdivsoryRecommendations extends Component { 
     constructor(props){
         super(props);
@@ -51,11 +55,27 @@ class AdivsoryRecommendations extends Component {
         })
     }
     handleReset = () =>{
-        
+        this.sendEvents('refresh');
         this.setState({
             openDialogReset: false,
         })
         this.updateLead({'status': 'cancelled'}, 'landing')
+    }
+
+    sendEvents(user_action, insurance_type, banner_clicked) {
+        let eventObj = {
+          "event_name": 'insurance_advisory',
+          "properties": {
+            "user_action": user_action,
+            "screen_name": 'recommendations',
+          }
+        };
+    
+        if (user_action === 'just_set_events') {
+          return eventObj;
+        } else {
+          nativeCallback({ events: eventObj });
+        }
     }
 
     handleClose = () => {
@@ -96,13 +116,44 @@ class AdivsoryRecommendations extends Component {
             // this.sendEvents('next');
         });
     }
+    goToEmail = () =>{
+        this.sendEvents('email report');
+        this.navigate('/group-insurance/advisory/email-report')
+    }
+
+    downloadReportPdf = async () =>{
+        var advisory_id = storageService().getObject("advisory_id")
+        try{
+            var res = await Api.get(`api/insurancev2/api/insurance/advisory/pdf/download?insurance_advisory_id=${advisory_id}`);
+
+            this.setState({
+              show_loader: false
+            })
+            var resultData = res.pfwresponse.result;
+          
+            if (res.pfwresponse.status_code === 200) {
+                
+                console.log(resultData)
+            } else {
+              toast(resultData.error || resultData.message || "Something went wrong");
+            }
+        }catch(err){
+          console.log(err)
+          this.setState({
+            show_loader: false
+          });
+          toast("Something went wrong");
+        }
+
+    }
+
     render(){
         var recommendation_data = this.state.recommendation_data;
         var user_data = this.state.user_data;
         console.log(this.state.applicantGender)
         return(
             <Container
-                // events={this.sendEvents('just_set_events')}
+                events={this.sendEvents('just_set_events')}
                 fullWidthButton={true}
                 onlyButton={true}
                 title="Our recommendations"
@@ -114,7 +165,7 @@ class AdivsoryRecommendations extends Component {
                 showLoader={this.state.show_loader}
             >
                 <div className="advisory-recommendations-container">
-                    <p className="advisory-sub-text">So you can plan better</p>
+                    <p className="advisory-sub-text" style={{marginTop: '-8px'}}>So you can plan better</p>
 
                     <div className="rec-profile-container">
                             <p className="rec-profile-heading">Your profile</p>
@@ -127,7 +178,7 @@ class AdivsoryRecommendations extends Component {
                                     <p>{capitalizeFirstLetter(user_data.name)}</p>
                                     <p>{capitalizeFirstLetter(user_data.gender.toLowerCase())}</p>
                                     <p>{user_data.age} years</p>
-                                    <p>{this.state.dependent_count} dependents</p>
+                                    { this.state.dependent_count ? (<p>{this.state.dependent_count} dependents</p>) : null}
                                 </div>
                                 )}
                                 
@@ -145,11 +196,11 @@ class AdivsoryRecommendations extends Component {
                     }
 
                     <div className="recommendation-extras">
-                        <div className="download-report">
+                        <div className="download-report" onClick={()=>this.downloadReportPdf()}>
                             <img src={download} style={{marginRight: '5px'}} /> Download report
                         </div>
                         <div className="recommendation-extras-divider">|</div>
-                        <div className="email-report"  onClick={() => this.navigate('/group-insurance/advisory/email-report')}>
+                        <div className="email-report"  onClick={()=>this.goToEmail()}>
                             <img src={launch} style={{marginRight: '5px'}}/> Email report 
                         </div>
                     </div>

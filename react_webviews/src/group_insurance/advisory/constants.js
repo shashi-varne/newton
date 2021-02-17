@@ -76,7 +76,7 @@ export var advisoryConstants = {
         'benefits': ['Coverage for up to 36 critical illnesses ','Payment on diagnosis','Acts as income substitute during emergencies']
       },
       'corona': {
-        'heading': 'Corona insurance',
+        'heading': 'Coronavirus insurance',
         'why': 'Standard health plans don’t provide adequate cover for COVID-19 expenses. This means you’ll be paying over your existing health coverage. The Coronavirus insurance plan will take care of such expenses.',
         'benefits': ['Low waiting period of up to 15 days ','No medical check-up required','Affordable premiums']
       }

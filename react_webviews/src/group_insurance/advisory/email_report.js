@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import Input from '../../common/ui/Input';
-// import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from 'utils/native_callback';
 import {validateEmail} from 'utils/validators';
 import {storageService} from "utils/validators";
 import Api from 'utils/api';
@@ -35,6 +35,24 @@ class EmailReport extends Component {
         })
     }
 
+    sendEvents(user_action, insurance_type, banner_clicked) {
+      let eventObj = {
+        "event_name": 'insurance_advisory',
+        "properties": {
+          "user_action": user_action,
+          "insurance_type": insurance_type,
+          "screen_name": 'email report',
+          'email_entered' : this.state.form_data.email && this.state.form_data.email.length ? 'yes' : 'no',
+        }
+      };
+  
+      if (user_action === 'just_set_events') {
+        return eventObj;
+      } else {
+        nativeCallback({ events: eventObj });
+      }
+    }
+
     navigate = (pathname, search) => {
         this.props.history.push({
           pathname: pathname,
@@ -53,10 +71,11 @@ class EmailReport extends Component {
         }
         this.setState({form_data: form_data})       
         if(canSubmitForm){
+          this.sendEvents('next')
             var advisory_id = storageService().getObject("advisory_id");
 
             try{
-                var res = await Api.get(`api/insurance/advisory/email/trigger?insurance_advisory_id=${advisory_id}&email=${this.state.form_data.email}`);
+                var res = await Api.get(`api/insurancev2/api/insurance/advisory/email/trigger?insurance_advisory_id=${advisory_id}&email=${this.state.form_data.email}`);
           
                   this.setState({
                     show_loader: false
@@ -87,7 +106,7 @@ class EmailReport extends Component {
     render(){
         return(
             <Container
-            // events={this.sendEvents('just_set_events')}
+            events={this.sendEvents('just_set_events')}
             fullWidthButton={true}
             // force_hide_inpage_title={true}
             onlyButton={true}

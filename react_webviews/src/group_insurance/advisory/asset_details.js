@@ -36,10 +36,10 @@ class AdvisoryAssetDetails extends Component {
 
     sendEvents(user_action, insurance_type, banner_clicked) {
         let eventObj = {
-          "event_name": 'Group Insurance',
+          "event_name": 'insurance_advisory',
           "properties": {
             "user_action": user_action,
-            "screen_name": 'insurance',
+            "screen_name": 'assets details',
           }
         };
     
@@ -240,6 +240,8 @@ class AdvisoryAssetDetails extends Component {
     }
 
     handleClick = () =>{
+        this.sendEvents('next');
+
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         var showCoverAmountError = false;

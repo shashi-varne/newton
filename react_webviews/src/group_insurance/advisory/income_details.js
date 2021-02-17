@@ -26,10 +26,10 @@ class AdvisoryIncomeDetails extends Component {
 
     sendEvents(user_action, insurance_type, banner_clicked) {
         let eventObj = {
-          "event_name": 'Group Insurance',
+          "event_name": 'insurance_advisory',
           "properties": {
             "user_action": user_action,
-            "screen_name": 'insurance',
+            "screen_name": 'income details',
           }
         };
     
@@ -146,6 +146,8 @@ class AdvisoryIncomeDetails extends Component {
         
     }
     handleClick = () =>{
+        this.sendEvents('next')
+        
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         console.log(form_data)
@@ -192,7 +194,7 @@ class AdvisoryIncomeDetails extends Component {
     render() {
         return(
             <Container
-            // events={this.sendEvents('just_set_events')}
+            events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
             fullWidthButton={true}
             onlyButton={true}

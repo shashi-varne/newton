@@ -176,7 +176,7 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked, advisory_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
@@ -184,7 +184,9 @@ class Landing extends Component {
         "screen_name": 'insurance',
         "insurance_type": insurance_type ? insurance_type : '',
         'banner_clicked' : banner_clicked ? true : false,
-        'callback_clicked' : callback_clicked ?  true : false
+        'callback_clicked' : callback_clicked ?  true : false,
+        'advisory_card_cta' : this.state.advisory_button_text,
+        'insurance_advisory_card_clicked': advisory_clicked
       }
     };
 
@@ -196,6 +198,7 @@ class Landing extends Component {
   }
 
   goToAdvisory = () =>{
+    this.sendEvents('next', "", "", "", true);
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
   }
   callBackScreen = () =>{

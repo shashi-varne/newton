@@ -20,10 +20,10 @@ class AdvisoryLanding extends Component {
 
     sendEvents(user_action, insurance_type, banner_clicked) {
         let eventObj = {
-          "event_name": 'Group Insurance',
+          "event_name": 'insurance_advisory',
           "properties": {
             "user_action": user_action,
-            "screen_name": 'insurance',
+            "screen_name": 'introduction',
           }
         };
     
@@ -42,6 +42,8 @@ class AdvisoryLanding extends Component {
     }
 
     handleClick = async () =>{
+      this.sendEvents('next');
+
       this.setState({
         show_loader: true
       })
@@ -58,7 +60,7 @@ class AdvisoryLanding extends Component {
 
             if(resultData.insurance_advisory.status === 'init'){
               storageService().setObject("advisory_id", resultData.insurance_advisory.id);
-            this.navigate('/group-insurance/advisory/basic-details')
+              this.navigate('/group-insurance/advisory/basic-details')
             }
           } else {
             toast(resultData.error || resultData.message || "Something went wrong");

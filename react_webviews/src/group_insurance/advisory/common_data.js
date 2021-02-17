@@ -1,6 +1,9 @@
 import Api from 'utils/api';
 import toast from '../../common/ui/Toast';
 import {storageService} from "utils/validators";
+import { openInBrowser } from "../products/group_health/common_data";
+import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
 
 export async function updateLead( body, next_page, final_page) {
 
@@ -97,4 +100,18 @@ export function setRecommendationData(advisory_data, recommendation_data, user_d
     advisory_data['recommendation_data']['rec_text'] = recommendation_data.recommended_text
     advisory_data.user_data = user_data;
     storageService().setObject('advisory_data', advisory_data);
+}
+
+export function openPdf(pdfLink, pdfType){
+    if(getConfig().iOS){
+        nativeCallback({
+          action: 'open_inapp_tab',
+          message: {
+              url: pdfLink  || '',
+              back_url: ''
+          }
+        });
+    }else{
+        this.openInBrowser(pdfLink, pdfType);
+    }
 }
