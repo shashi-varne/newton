@@ -65,6 +65,8 @@ class PaymentFailedClass extends Component {
         buttonTitle='Retry Payment'
         onlyButton={true}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClick()}
         title="Payment Failed"
         classOverRideContainer="payment-failed"

@@ -5,7 +5,6 @@ import failed_fisdom from 'assets/error_illustration_fisdom.svg';
 import failed_myway from 'assets/error_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import toast from '../../../common/ui/Toast';
 import { insuranceStateMapper } from '../../constants';
 import Api from 'utils/api';
 
@@ -30,9 +29,38 @@ class PaymentCallbackClass extends Component {
     })
 
   }
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again'
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
   async componentDidMount(){
-
+    let error="";
+    this.setErrorData('onload');
     if (!this.state.group_insurance_payment_urlsafe) {
         this.navigate('/group-insurance');
         return;
@@ -44,29 +72,39 @@ class PaymentCallbackClass extends Component {
         let res;
         res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/confirm/payment/' + this.state.group_insurance_payment_urlsafe)
         
-        this.setState({
+        
+        if (res.pfwresponse.status_code === 200) {
+          this.setState({
             skelton: false
         })
-        if (res.pfwresponse.status_code === 200) {
-            
             if(res.pfwresponse.result.payment_status === 'success') {
                 this.navigate('payment-success');
             }
+
         } else {
-          this.setState({
-            skelton: false
-          })
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          error=res.pfwresponse.result.error || res.pfwresponse.result.message
+            || 'Something went wrong';
         }
   
       } catch (err) {
-        toast('Something went wrong');
+        this.setState({
+          showError: 'page'
+        });
+      }
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error
+          },
+          showError:'page'
+        })
       }
   }
 
   async handleClick() {
-
+    this.setErrorData('submit');
+    let error='';
     try {
       this.setState({
         show_loader: 'button'
@@ -120,15 +158,24 @@ class PaymentCallbackClass extends Component {
         window.location.href = pgLink;
 
       } else {
-        this.setState({
-          show_loader: false
-        })
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong');
+        
+        error=res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || 'Something went wrong';
       }
 
     } catch (err) {
-      toast('Something went wrong');
+      this.setState({
+        showError: true
+      });
+    }
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError:true
+      })
     }
   }
 
@@ -168,6 +215,8 @@ class PaymentCallbackClass extends Component {
         onlyButton={true}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClick()}
         title="Payment Failed"
         classOverRideContainer="payment-failed"
