@@ -294,7 +294,8 @@ class BasicDetailsForm extends Component {
     }
 
     let error = '';
-    let errorType='';
+
+    let errorType = '';
     try {
   
       if (this.state.lead_id) { 
@@ -306,11 +307,11 @@ class BasicDetailsForm extends Component {
           let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
           leadData = res.pfwresponse.result.lead; 
-             
-          if (res.pfwresponse.status_code === 200) {
           this.setState({
             skelton: false
           })
+          if (res.pfwresponse.status_code === 200) {
+         
 
             
           } else {
@@ -382,6 +383,7 @@ class BasicDetailsForm extends Component {
           ...this.state.errorData,
           title2: error,
           type:errorType
+
         },
         showError: 'page',
       })

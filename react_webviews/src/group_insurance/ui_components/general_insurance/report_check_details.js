@@ -142,6 +142,7 @@ class ReportDetails extends Component {
       });
       error = true;
       errorType = "crash";
+
     }
 
     // set error data

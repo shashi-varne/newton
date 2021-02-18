@@ -252,6 +252,10 @@ export function renderGenericError() {
         title1 = map_data.title1;
     }
 
+    if(title2 === true) {
+        title2 = '';
+    }
+
     let two_button  = handleClick2 ? true: false;
 
     button_text2 = button_text2 || map_data.button_text2 || 'CLOSE';
