@@ -294,6 +294,7 @@ class BasicDetailsForm extends Component {
     }
 
     let error = '';
+    let errorType = '';
     try {
   
       if (this.state.lead_id) { 
@@ -371,12 +372,11 @@ class BasicDetailsForm extends Component {
 
     } catch (err) {
       this.setState({
-        showError: 'page',
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        },
         skelton: false
       });
+
+      errorType = 'crash';
+      error = true;
     }
 
     // set error data
@@ -384,7 +384,8 @@ class BasicDetailsForm extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError: 'page',
       })
