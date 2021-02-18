@@ -90,6 +90,9 @@ class PaymentCallbackClass extends Component {
       } catch (err) {
         error = true;
         errorType = "crash"
+        this.setState({
+          skelton:false
+        })
       }
       if(error) {
         this.setState({
@@ -169,6 +172,9 @@ class PaymentCallbackClass extends Component {
     } catch (err) {
       error = true;
       errorType = "crash";
+      this.setState({
+        show_loader:false
+      })
     }
     if(error) {
       this.setState({

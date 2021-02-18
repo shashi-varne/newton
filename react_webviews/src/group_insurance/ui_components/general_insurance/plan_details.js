@@ -305,6 +305,9 @@ class PlanDetailsClass extends Component {
       console.log(err)
       error = true;
       errorType = 'crash';
+      this.setState({
+        skelton:false
+      })
     }
 
     // set error data
@@ -531,7 +534,10 @@ class PlanDetailsClass extends Component {
     }
     } catch (err) {
       error = true;
-      errorType = "crash";                                                                                                                                                                          
+      errorType = "crash";
+      this.setState({
+        show_loader: false
+      })                                                                                                                                                                          
     }
     // set error data
     if(error) {

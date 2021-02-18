@@ -374,6 +374,9 @@ class BasicDetailsForm extends Component {
     } catch (err) {
       error = true
       errorType = 'crash'
+      this.setState({
+        skelton:false
+      })
     }
 
     // set error data

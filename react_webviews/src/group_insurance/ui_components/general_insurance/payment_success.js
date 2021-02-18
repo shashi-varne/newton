@@ -129,9 +129,9 @@ class PaymentSuccessClass extends Component {
     } catch (err) {
       this.setState({
         skelton: false,
-        error: true,
-        errorType: "crash"
       });
+      error= true;
+      errorType= "crash";
     }
 
 
@@ -305,6 +305,9 @@ class PaymentSuccessClass extends Component {
     catch (err) {
       error = true;
       errorType = "crash";
+      this.setState({
+        show_loader:false
+      })
     }
 
     // set error data
