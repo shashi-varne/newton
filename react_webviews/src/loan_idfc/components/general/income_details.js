@@ -116,9 +116,9 @@ class IncomeDetails extends Component {
           </Card>
 
           <div className="OR">
-            <hr />
+            <div className="generic-hr"></div>
             OR
-            <hr />
+            <div className="generic-hr"></div>
           </div>
 
           <Card onClick={() => this.handleClick("manual_upload")}>

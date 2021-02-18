@@ -134,7 +134,7 @@ class MobileVerification extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Mobile verification"
+        title="Verify mobile"
         buttonTitle="GET OTP"
         handleClick={this.handleClick}
         disable={!this.state.checked}

@@ -64,7 +64,7 @@ class AddressDetails extends Component {
     }
 
     let lead = this.state.lead || {};
-    let personal_info = lead.personal_info || {};
+    // let personal_info = lead.personal_info || {};
     let vendor_info = lead.vendor_info || {};
     let current_address_data = lead.current_address_data || {};
     let permanent_address_data = lead.permanent_address_data || {};
@@ -493,7 +493,7 @@ class AddressDetails extends Component {
             <div className="InputField">
               <RadioWithoutIcon
                 width="40"
-                label="Is permanent address same as current address?"
+                label="Is current address same as permanent address?"
                 options={yesOrNo_options}
                 id="isPermanent_address"
                 name="isPermanent_address"

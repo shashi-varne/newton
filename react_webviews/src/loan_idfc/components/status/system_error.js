@@ -6,7 +6,7 @@ import { nativeCallback } from "utils/native_callback";
 
 const commonMapper = {
   idfc_null_failed: {
-    stage: "after address details"
+    stage: "after address details",
   },
   idfc_callback_rejected: {
     stage: "after loan requirement details",
@@ -50,7 +50,7 @@ const commonMapper = {
   "idfc_1.0_failed": {
     stage: "after credit card details",
   },
-  'idfc_1.0_accepted': {
+  "idfc_1.0_accepted": {
     stage: "after credit card details",
   },
 };
@@ -76,30 +76,31 @@ class SystemError extends Component {
     let rejection_reason = this.state.rejection_reason;
     let is_dedupe = this.state.is_dedupe;
     let bt_eligible = this.state.bt_eligible;
-    if(!bt_eligible) {
-      commonMapper['idfc_1.0_failed'].stage = "after loan requirement details";
-      commonMapper['idfc_1.0_accepted'].stage = "after loan requirement details";
+    if (!bt_eligible) {
+      commonMapper["idfc_1.0_failed"].stage = "after loan requirement details";
+      commonMapper["idfc_1.0_accepted"].stage =
+        "after loan requirement details";
     }
-    let common_mapper = {}
+    let common_mapper = {};
     if (rejection_reason) {
-      common_mapper= commonMapper[rejection_reason] || {};
+      common_mapper = commonMapper[rejection_reason] || {};
     } else if (is_dedupe) {
-      common_mapper= commonMapper["is_dedupe"] || {};
+      common_mapper = commonMapper["is_dedupe"] || {};
     } else {
-      common_mapper= commonMapper[vendor_application_status] || {};
+      common_mapper = commonMapper[vendor_application_status] || {};
     }
     this.setState({
-      stage: common_mapper.stage || '',
+      stage: common_mapper.stage || "",
     });
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    this.sendEvents("next");
     this.navigate("loan-know-more");
   };
 
   goBack = () => {
-    this.sendEvents("back")
+    this.sendEvents("back");
     this.navigate("loan-know-more");
   };
 
@@ -109,7 +110,7 @@ class SystemError extends Component {
       properties: {
         user_action: user_action,
         screen_name: "system_error",
-        stage: this.state.stage || '',
+        stage: this.state.stage || "",
       },
     };
 
@@ -139,7 +140,8 @@ class SystemError extends Component {
             alt=""
           />
           <div className="subtitle">
-            <b>Oops!</b> Something' is not right. we are checking this with IDFC FIRST Bank and we will get back to you as soon as possible
+            <b>Oops!</b> something's not right. We are checking this with IDFC
+            FIRST Bank and will get back to you as soon as possible.
           </div>
           <ContactUs />
         </div>

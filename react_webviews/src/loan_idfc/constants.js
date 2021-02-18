@@ -264,7 +264,7 @@ export const idfc_config = {
         {
           icon: "icn_bt_3",
           subtitle:
-            "Possibility of getting a bigger loan offer depending on your profile",
+            "Chances of getting a bigger loan offer",
         },
       ],
     },
@@ -686,7 +686,7 @@ export const idfc_config = {
           options: [
             {
               icon: "icn_b_1",
-              subtitle: "Interest rates starting as low as 10.75% pa",
+              subtitle: "Interest rates starting as low as 10.75% p.a.",
             },
             {
               icon: "icn_b_2",

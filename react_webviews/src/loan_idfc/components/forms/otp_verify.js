@@ -198,7 +198,7 @@ class OtpVerification extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
-        title="OTP verification"
+        title="Enter OTP"
         buttonTitle="VERIFY & PROCEED"
         disable={this.state.otp.length !== 4}
         handleClick={this.handleClick}

@@ -12,11 +12,11 @@ import {
   isValidMonthYear,
   numDifferentiationInr,
   formatAmountInr,
-  IsFutureMonthYear
+  formatAmount,
+  IsFutureMonthYear,
 } from "utils/validators";
 import toast from "../../../common/ui/Toast";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-
 
 class LoanBtDetails extends Component {
   constructor(props) {
@@ -62,8 +62,8 @@ class LoanBtDetails extends Component {
 
   onload = () => {
     let loaderData = {
-      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
-      subtitle: "This may take around 2 minutes!",
+      title: `Hang on while IDFC FIRST Bank calculates the eligible loan offer `,
+      subtitle: "It usually takes around 2 minutes!",
     };
 
     let lead = this.state.lead || {};
@@ -82,7 +82,8 @@ class LoanBtDetails extends Component {
       this.state.form_data.push({
         is_selected: data.is_selected,
         financierName: data.financierName,
-        principalOutstanding: data.principalOutstanding,
+        // principalOutstanding: data.principalOutstanding,
+        principalOutstanding: `₹ ${formatAmount(data.principalOutstanding)}`,
         bt_data_id: data.bt_data_id,
         creditCardExpiryDate: data.creditCardExpiryDate,
         creditCardNumber: data.creditCardNumber,
@@ -107,7 +108,12 @@ class LoanBtDetails extends Component {
         user_action: user_action,
         screen_name: "credit_card_details",
         no_of_cards_entered: form_checked.length,
-        skipped_screen: form_checked.length !== 0 ? "no" : user_action === 'next' ? "yes" : "no",
+        skipped_screen:
+          form_checked.length !== 0
+            ? "no"
+            : user_action === "next"
+            ? "yes"
+            : "no",
       },
     };
 
@@ -121,6 +127,15 @@ class LoanBtDetails extends Component {
   handleChange = (name, index) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
+
+    if (name === "principalOutstanding") {
+      let amt = (value.match(/\d+/g) || "").toString();
+      if (amt) {
+        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+      } else {
+        value = amt;
+      }
+    }
 
     if (name === "creditCardNumber") {
       if (value.length <= 4) form_data[index][name] = value;
@@ -191,17 +206,27 @@ class LoanBtDetails extends Component {
           submit_details = false;
         }
 
-        if (!isValidMonthYear(data["creditCardExpiryDate"]) || !IsFutureMonthYear(data["creditCardExpiryDate"])) {
+        if (
+          !isValidMonthYear(data["creditCardExpiryDate"]) ||
+          !IsFutureMonthYear(data["creditCardExpiryDate"])
+        ) {
           form_data[index]["creditCardExpiryDate_error"] =
             "please enter valid credit card expiry date";
           submit_details = false;
         }
 
-        if (data["principalOutstanding"] > 500000) {
+        if (data.principalOutstanding &&
+          // eslint-disable-next-line
+          parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000) {
           form_data[index][
             "principalOutstanding_error"
           ] = `amount cannot exceed ${formatAmountInr(500000)}`;
           submit_details = false;
+        } else if (data.principalOutstanding) {
+          form_data[index][
+            "principalOutstanding"
+            // eslint-disable-next-line
+          ] = parseInt(data["principalOutstanding"].slice(1).replaceAll(',', ''))
         }
       }
     });
@@ -231,16 +256,15 @@ class LoanBtDetails extends Component {
   };
 
   goBack = () => {
-    this.sendEvents('back')
+    this.sendEvents("back");
 
     let bt_personal_loan = this.state.bt_info.bt_personal_loan;
     if (!bt_personal_loan) {
-      this.navigate('journey');
+      this.navigate("journey");
     } else {
-      this.navigate('loan-bt');
+      this.navigate("loan-bt");
     }
-
-  }
+  };
 
   render() {
     let form_checked = this.state.form_data.filter(
@@ -251,25 +275,29 @@ class LoanBtDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Credit card details"
         buttonTitle={
           form_checked.length === 0 ? "SKIP AND CONTINUE" : "CONTINUE"
         }
         handleClick={this.handleClick}
+        hidePageTitle={true}
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
           goBack: this.goBack,
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
-        current={!this.state.bt_info.bt_personal_loan ? "" : 2}
-        total={!this.state.bt_info.bt_personal_loan ? "" : 2}
-        count={!this.state.bt_info.bt_personal_loan ? "" : 1}
       >
         <div className="loan-bt">
-          <div className="subtitle">
-            Maximum 2 credit cards can be selected for BT
+          <div className="header-title-page" style={{ marginBottom: "0px" }}>
+            <div>Credit card details</div>
+            <div className="count">
+              {!this.state.bt_info.bt_personal_loan ? "" : 2}
+              <span className="total">
+                /{!this.state.bt_info.bt_personal_loan ? "" : 2}
+              </span>
+            </div>
           </div>
+          <div className="subtitle">Maximum 2 credit cards can be selected</div>
 
           {this.state.credit_bt.map((item, index) => (
             <div className="loan-bt-checkbox" key={index}>
@@ -293,28 +321,24 @@ class LoanBtDetails extends Component {
                 </Grid>
 
                 <Grid item xs={11}>
-                  <div className="head">Card limit</div>
-                  <div className="sub-head">₹40 lakhs</div>
+                  <div className="head">Card with limit of ₹40 lakhs</div>
                   <FormControl fullWidth>
                     <div className="InputField">
-                    <DropdownWithoutIcon
-                          width="40"
-                          options={this.state.screenData.bankOptions}
-                          label="Financer name"
-                          id="financierName"
-                          name="financierName"
-                          error={
-                            !!this.state.form_data[index].financierName_error
-                          }
-                          helperText={
-                            this.state.form_data[index].financierName_error
-                          }
-                          value={
-                            this.state.form_data[index].financierName ||
-                            ""
-                          }
-                          onChange={this.handleChange("financierName", index)}
-                        />
+                      <DropdownWithoutIcon
+                        width="40"
+                        options={this.state.screenData.bankOptions}
+                        label="Financer name"
+                        id="financierName"
+                        name="financierName"
+                        error={
+                          !!this.state.form_data[index].financierName_error
+                        }
+                        helperText={
+                          this.state.form_data[index].financierName_error
+                        }
+                        value={this.state.form_data[index].financierName || ""}
+                        onChange={this.handleChange("financierName", index)}
+                      />
                     </div>
 
                     <div className="InputField">
@@ -372,17 +396,22 @@ class LoanBtDetails extends Component {
                           this.state.form_data[index]
                             .principalOutstanding_error ||
                           numDifferentiationInr(
-                            this.state.form_data[index].principalOutstanding
+                            (
+                              this.state.form_data[index]
+                                .principalOutstanding || ""
+                            )
+                              .toString()
+                              .slice(1)
+                              .replaceAll(",", "")
                           )
                         }
-                        type="number"
+                        // type="number"
                         width="40"
                         label="Amount outstanding"
                         id="principalOutstanding"
                         name="principalOutstanding"
                         value={
-                          this.state.form_data[index].principalOutstanding ||
-                          ""
+                          this.state.form_data[index].principalOutstanding || ""
                         }
                         onChange={this.handleChange(
                           "principalOutstanding",

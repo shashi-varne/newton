@@ -99,7 +99,7 @@ class Calculator extends Component {
             min="0"
             max="1000000"
             minValue="0"
-            maxValue="₹ 10 Lacs"
+            maxValue="₹ 10 Lakhs"
             onChange={this.onChange}
           />
 
@@ -109,8 +109,8 @@ class Calculator extends Component {
             value={Tenure}
             min="12"
             max="60"
-            minValue="12 MONTHS"
-            maxValue="60 MONTHS"
+            minValue="12 Months"
+            maxValue="60 Months"
             onChange={this.onChange}
           />
 

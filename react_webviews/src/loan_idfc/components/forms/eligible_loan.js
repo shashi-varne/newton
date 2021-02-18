@@ -12,6 +12,7 @@ import {
   formatAmountInr,
   inrFormatDecimal,
   numDifferentiationInr,
+  formatAmount
 } from "utils/validators";
 
 class EligibleLoan extends Component {
@@ -58,8 +59,8 @@ class EligibleLoan extends Component {
     }
 
     let loaderData = {
-      title: `Hang on, while IDFC calculates your final loan offer as per their proprietary algorithms`,
-      subtitle: "This may take around 2 minutes!",
+      title: `Hang on while IDFC FIRST Bank calculates final loan offer`,
+      subtitle: "It usually takes around 2 minutes!",
     };
 
     this.setState({
@@ -91,10 +92,21 @@ class EligibleLoan extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data, vendor_info } = this.state;
 
+    if (name === "amount_required") {
+      let amt = (value.match(/\d+/g) || "").toString();
+      if (amt) {
+        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+      } else {
+        value = amt;
+      }
+    }
+
+    let emi_amount = value.slice(2).replaceAll(',', '')
+
     form_data.amount_required = value;
     form_data.amount_required_error = "";
 
-    let P = value;
+    let P = emi_amount;
     let r = vendor_info.ROI / 1200;
     let n = vendor_info.netTenor;
 
@@ -114,6 +126,7 @@ class EligibleLoan extends Component {
       form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
+      form_data.amount_required = (form_data.amount_required || '').slice(2).replaceAll(',', '');
       form_data.maxAmount = vendor_info.displayOffer;
     }
 
@@ -260,13 +273,16 @@ class EligibleLoan extends Component {
                             this.state.form_data.amount_required_error ||
                             (this.state.form_data.amount_required &&
                               numDifferentiationInr(
-                                this.state.form_data.amount_required
+                                (this.state.form_data.amount_required || "")
+                                  .toString()
+                                  .slice(1)
+                                  .replaceAll(",", "")
                               )) ||
                             `Min ₹1 lakh to max ₹${changeNumberFormat(
                               vendor_info.displayOffer || "0"
                             )}`
                           }
-                          type="number"
+                          // type="number"
                           width="40"
                           label="Loan amount"
                           id="amount_required"

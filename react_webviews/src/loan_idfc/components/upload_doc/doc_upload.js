@@ -361,6 +361,7 @@ class DocumentUpload extends Component {
     this.setState({
       form_data: form_data,
       totalUpload: totalUpload,
+      add_file: true
     });
   };
 

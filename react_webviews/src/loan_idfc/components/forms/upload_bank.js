@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import Attention from "../../../common/ui/Attention";
 import { initialize } from "../../common/functions";
-import { bytesToSize } from "utils/validators";
+import { bytesToSize, dateOrdinal } from "utils/validators";
 import { getConfig } from "utils/functions";
 import SVG from "react-inlinesvg";
 import plus from "assets/plus.svg";
@@ -35,6 +35,7 @@ class UploadBank extends Component {
       doc_id: "",
       isApiRunning: false,
       adminPanel: false,
+      date: ''
     };
 
     this.native_call_handler = this.native_call_handler.bind(this);
@@ -107,10 +108,21 @@ class UploadBank extends Component {
       subtitle: "It may take 10 to 15 seconds!",
     };
 
+    let currentdate = new Date();
+    let last3months = new Date(
+      currentdate.setMonth(currentdate.getMonth() - 3)
+    );
+    var dd = dateOrdinal(1)
+    var mm = last3months.toLocaleString("default", { month: "long" });
+    var yyyy = last3months.getFullYear();
+
+    let date = `${dd} ${mm}, ${yyyy}`
+
     this.setState({
       loaderData: loaderData,
       progressHeaderData: progressHeaderData,
       employment_type: application_info.employment_type || "",
+      date: date
     });
   };
 
@@ -118,24 +130,22 @@ class UploadBank extends Component {
     let notes = [
       "Provide the latest e-statements of salary account",
       "Attach e-statements of the last 3 months from this month",
-      "E-statement's start date should be from 1st November, 2020 or prior to that",
+      `E-statement's start date should be from ${this.state.date} or prior to that`,
       "The end date must not be 3 days prior to the current date",
       "Upload bank generated e-statements in PDF format only",
-      "Multiple statements of the same account can be uploaded"
+      "Multiple statements of the same account can be uploaded",
     ];
 
     if (this.state.employment_type === "self_employed") {
-      notes[0] =
-        "Provide the latest e-statements of savings or current a/c";
+      notes[0] = "Provide the latest e-statements of savings or current a/c";
     }
 
     return (
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
-          <div className="upload-statement-notes"
-           key={index}>
+          <div className="upload-statement-notes" key={index}>
             <div>{`${index + 1}. `}</div>
-            <div style={{marginLeft:'3px'}}>{`${item}`}</div>
+            <div style={{ marginLeft: "3px" }}>{`${item}`}</div>
           </div>
         ))}
       </div>
@@ -359,10 +369,13 @@ class UploadBank extends Component {
           });
         }
 
-        this.setState({
-          isApiRunning: false,
-          documents: documents,
-        }, () => this.handleScroll("upload"));
+        this.setState(
+          {
+            isApiRunning: false,
+            documents: documents,
+          },
+          () => this.handleScroll("upload")
+        );
       }
     } catch (err) {
       console.log(err);
@@ -435,17 +448,6 @@ class UploadBank extends Component {
       canSubmit = false;
     }
 
-    // let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
-
-    // let month = calculateAge(form_data.start_date, true).months;
-    // // eslint-disable-next-line radix
-    // let startDate = form_data.start_date.substring(0, 2) === "01";
-
-    // if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
-    //   form_data.start_date_error = "This date must be 3 months prior to the current month.";
-    //   canSubmit = false;
-    // }
-
     this.setState({
       form_data: form_data,
     });
@@ -454,9 +456,9 @@ class UploadBank extends Component {
       let bank = bankOptions.filter(
         (item) => item.value === form_data.bank_name
       );
-      
+
       if (bank.length === 0) {
-        toast('Please select bank name from the provided list');
+        toast("Please select bank name from the provided list");
         return;
       }
 
@@ -571,7 +573,7 @@ class UploadBank extends Component {
                 {item.showDotLoader && <DotDotLoader />}
               </div>
               <div className="sub-title" style={{ marginLeft: "12px" }}>
-                <div style={{marginBottom: '30px'}}>
+                <div style={{ marginBottom: "30px" }}>
                   <img
                     style={{ margin: "0 5px 0 0" }}
                     src={require("assets/tool.svg")}
@@ -664,7 +666,9 @@ class UploadBank extends Component {
                   />
                 </span>
                 {documents.length !== 0 ? "ADD FILE" : "UPLOAD FILE"}
-                {documents.length === 0 && <span className="sub-text">Max file size 6 mb</span>}
+                {documents.length === 0 && (
+                  <span className="sub-text">Max file size 6 mb</span>
+                )}
               </div>
             </div>
           )}

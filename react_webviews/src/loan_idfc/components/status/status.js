@@ -17,7 +17,7 @@ const commonMapper = {
     failed: true,
     screenName: "system_error",
     stage: "after address details",
-    hidePageTitle: false
+    hidePageTitle: false,
   },
   idfc_null_rejected: {
     top_icon: "not_eligible",
@@ -28,7 +28,7 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after address details",
-    hidePageTitle: true
+    hidePageTitle: true,
   },
   idfc_callback_rejected: {
     top_icon: "not_eligible",
@@ -39,7 +39,7 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
-    hidePageTitle: true
+    hidePageTitle: true,
   },
   "idfc_0.5_rejected": {
     top_icon: "not_eligible",
@@ -50,18 +50,40 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
-    hidePageTitle: true
+    hidePageTitle: true,
   },
   "idfc_1.0_rejected": {
     top_icon: "not_eligible",
-    // top_title: "Sorry",
+    top_title: "You’re not eligible for a loan!",
     button_title: "START NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
     screenName: "not_eligible",
     stage: "after loan requirement details",
-    hidePageTitle: true
+    hidePageTitle: true,
+  },
+  "idfc_1.1_rejected": {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible for a loan!",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "not_eligible",
+    stage: "after loan requirement details",
+    hidePageTitle: true,
+  },
+  "idfc_1.7_rejected": {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible for a loan!",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "not_eligible",
+    stage: "after loan requirement details",
+    hidePageTitle: true,
   },
   "idfc_0.5_submitted": {
     top_icon: "loan_success",
@@ -70,7 +92,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/loan-know-more",
     screenName: "profile_success",
-    hidePageTitle: false
+    hidePageTitle: false,
   },
   "idfc_0.5_accepted": {
     top_icon: "loan_success",
@@ -79,7 +101,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/income-details",
     close_state: "/loan/idfc/loan-know-more",
     screenName: "profile_success",
-    hidePageTitle: false
+    hidePageTitle: false,
   },
   idfc_cancelled: {
     top_icon: "not_eligible",
@@ -89,7 +111,7 @@ const commonMapper = {
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
-    hidePageTitle: true
+    hidePageTitle: true,
   },
   "idfc_0.5_failed": {
     top_icon: "error_illustration",
@@ -100,73 +122,7 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "system_error",
     stage: "after loan requirement details",
-    hidePageTitle: false
-  },
-  "idfc_1.1_failed": {
-    top_icon: "error_illustration",
-    top_title: "System error",
-    button_title: "OKAY",
-    icon: "close",
-    cta_state: "/loan/idfc/loan-know-more",
-    close_state: "/loan/idfc/loan-know-more",
-    screenName: "system_error",
-    stage: "after loan offer",
-    hidePageTitle: false
-  },
-  "idfc_1.7_failed": {
-    top_icon: "error_illustration",
-    top_title: "System error",
-    button_title: "OKAY",
-    icon: "close",
-    cta_state: "/loan/idfc/loan-know-more",
-    close_state: "/loan/idfc/loan-know-more",
-    screenName: "system_error",
-    stage: "after additional details",
-    hidePageTitle: false
-  },
-  "Salary receipt mode": {
-    top_icon: "not_eligible",
-    top_title: "You’re not eligible!",
-    button_title: "START NEW APPLICATION",
-    icon: "close",
-    cta_state: "/loan/idfc/loan-know-more",
-    close_state: "/loan/idfc/loan-know-more",
-    screenName: "application_rejected",
-    stage: "after basic details",
-    hidePageTitle: true
-  },
-  Salary: {
-    top_icon: "not_eligible",
-    top_title: "You’re not eligible!",
-    button_title: "START NEW APPLICATION",
-    icon: "close",
-    cta_state: "/loan/idfc/loan-know-more",
-    close_state: "/loan/idfc/loan-know-more",
-    screenName: "application_rejected",
-    stage: "after basic details",
-    hidePageTitle: true
-  },
-  Age: {
-    top_icon: "not_eligible",
-    top_title: "You’re not eligible!",
-    button_title: "START NEW APPLICATION",
-    icon: "close",
-    cta_state: "/loan/idfc/loan-know-more",
-    close_state: "/loan/idfc/loan-know-more",
-    screenName: "application_rejected",
-    stage: "after basic details",
-    hidePageTitle: true
-  },
-  is_dedupe: {
-    top_icon: "not_eligible",
-    top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
-    icon: "close",
-    cta_state: "/loan/idfc/loan-know-more",
-    close_state: "/loan/idfc/loan-know-more",
-    screenName: "application_rejected",
-    stage: "after loan requirement details",
-    hidePageTitle: true
+    hidePageTitle: false,
   },
   "idfc_1.0_failed": {
     top_icon: "error_illustration",
@@ -177,7 +133,73 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "system_error",
     stage: "after credit card details",
-    hidePageTitle: false
+    hidePageTitle: false,
+  },
+  "idfc_1.1_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OKAY",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "system_error",
+    stage: "after loan offer",
+    hidePageTitle: false,
+  },
+  "idfc_1.7_failed": {
+    top_icon: "error_illustration",
+    top_title: "System error",
+    button_title: "OKAY",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "system_error",
+    stage: "after additional details",
+    hidePageTitle: false,
+  },
+  "Salary receipt mode": {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible!",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "application_rejected",
+    stage: "after basic details",
+    hidePageTitle: true,
+  },
+  Salary: {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible!",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "application_rejected",
+    stage: "after basic details",
+    hidePageTitle: true,
+  },
+  Age: {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible!",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "application_rejected",
+    stage: "after basic details",
+    hidePageTitle: true,
+  },
+  is_dedupe: {
+    top_icon: "not_eligible",
+    top_title: "You’re not eligible for a loan!",
+    button_title: "START NEW APPLICATION",
+    icon: "close",
+    cta_state: "/loan/idfc/loan-know-more",
+    close_state: "/loan/idfc/loan-know-more",
+    screenName: "application_rejected",
+    stage: "after loan requirement details",
+    hidePageTitle: true,
   },
   pincode: {
     top_icon: "not_eligible",
@@ -188,7 +210,7 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
-    hidePageTitle: true
+    hidePageTitle: true,
   },
   internally_rejected: {
     top_icon: "not_eligible",
@@ -199,7 +221,7 @@ const commonMapper = {
     close_state: "/loan/idfc/loan-know-more",
     screenName: "application_rejected",
     stage: "after loan requirement details",
-    hidePageTitle: true
+    hidePageTitle: true,
   },
 };
 
@@ -229,7 +251,7 @@ class LoanStatus extends Component {
     let first_name = this.state.first_name;
     let is_dedupe = this.state.is_dedupe;
     let idfc_rejection_reason = this.state.idfc_rejection_reason;
-
+    
     if (rejection_reason) {
       this.setState({
         commonMapper: commonMapper[rejection_reason] || {},
@@ -331,11 +353,6 @@ class LoanStatus extends Component {
       commonMapper.top_title = `Congratulations, ${first_name.trim(" ")}!`;
     }
 
-    if (vendor_application_status === "idfc_10_rejected") {
-      commonMapper.top_title = `Sorry ${first_name}, you’re not eligible for a loan at this point.`;
-    }
-    console.log(vendor_application_status)
-
     return (
       <Container
         showLoader={this.state.show_loader}
@@ -415,12 +432,14 @@ class LoanStatus extends Component {
             </div>
           )}
 
-          {vendor_application_status === "idfc_0.5_rejected" && (
+          {commonMapper.top_title === "You’re not eligible for a loan!" &&
+            idfc_rejection_reason !== "pincode" && (
             <div className="subtitle">
-              IDFC FIRST Bank has rejected the loan application as it does not meet their loan policy.
+              IDFC FIRST Bank has rejected the loan application as it does not
+              meet their loan policy.
               <br />
               <br />
-              Thank you for showing interest in our loan offering. 
+              However, we thank you for showing interest in our loan offering..
             </div>
           )}
 
@@ -440,17 +459,8 @@ class LoanStatus extends Component {
               </div>
             )}
 
-          {commonMapper.top_title === "Application Rejected" &&
-            !rejection_reason &&
-            idfc_rejection_reason !== "pincode" && (
-              <div className="subtitle">
-                We're so sorry to inform you that IDFC FIRST Bank has rejected
-                your loan application as it did not meet their loan policy.
-              </div>
-            )}
-
-          {commonMapper.top_title === "Application Rejected" &&
-            !rejection_reason &&
+          {commonMapper.top_title === "You’re not eligible for a loan!" &&
+            // !rejection_reason &&
             idfc_rejection_reason === "pincode" && (
               <div>
                 <p className="subtitle">
@@ -466,8 +476,8 @@ class LoanStatus extends Component {
           {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
-                <b>Oops!</b> Something' is not right. we are checking this with
-                IDFC FIRST Bank and we will get back to you as soon as possible
+                <b>Oops!</b> something's not right. We are checking this with
+                IDFC FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
@@ -481,24 +491,10 @@ class LoanStatus extends Component {
                 alt=""
               />
               <div className="subtitle">
-                <b>Oops!</b> Something' is not right. we are checking this with
-                IDFC FIRST Bank and we will get back to you as soon as possible
+                <b>Oops!</b> something's not right. We are checking this with
+                IDFC FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
-            </div>
-          )}
-
-          {vendor_application_status === "idfc_10_rejected" && (
-            <div>
-              <div className="subtitle">
-                Your loan application did not meet IDFC FIRST Bank’s loan
-                policy. Hence we will not be able to take this forward.
-                <br />
-                However, we thank you for showing interest in our loan offering.
-                <br />
-                <br />
-                We hope to be of assistance in future.
-              </div>
             </div>
           )}
         </div>

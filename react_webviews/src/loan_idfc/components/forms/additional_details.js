@@ -37,8 +37,8 @@ class AdditionalDetails extends Component {
 
   onload = () => {
     let loaderData = {
-      title: `Please wait while we check if any additional documents need to be uploaded.`,
-      subtitle: "It won't take more than 10 to 15 seconds!",
+      title: `Hang on while we check if you need to upload additional documents`,
+      subtitle: "It usually takes 10 to 15 seconds!",
     };
 
     let lead = this.state.lead || {};

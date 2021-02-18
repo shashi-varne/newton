@@ -713,6 +713,7 @@ export async function submitApplication(
       "loan_bt",
       "eligible_loan",
       "bank_upload",
+      "perfios_status"
     ];
     this.setState({
       show_loader: true,

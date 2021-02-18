@@ -136,7 +136,7 @@ class JourneyMap extends Component {
     let perfios_state = vendor_info.perfios_state || "";
     let application_complete = application_info.application_status === "application_complete";
 
-    if (idfc_loan_status === "idfc_callback_rejected") {
+    if (idfc_loan_status === "idfc_callback_rejected" || idfc_loan_status ===  "idfc_cancelled") {
       this.navigate('loan-status');
       return
     }
@@ -309,7 +309,7 @@ class JourneyMap extends Component {
         this.getCkycState();
       } else {
         this.setState({
-          loaderWithData: true
+          loaderWithData: ckyc_state === "success"
         });
         if (index > "1") {
           this.sendEvents('summary', {stage: stage, summary_selected_for: stage});

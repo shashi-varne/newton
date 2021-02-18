@@ -8,7 +8,7 @@ import ContactUs from "../../../common/components/contact_us";
 const commonMapper = {
   failure: {
     top_icon: "bank_failed",
-    top_title: "Bank statement verification failed",
+    top_title: "Bank statement verification failed!",
     button_title: "RETRY",
     icon: "close",
     close_state: "/loan/idfc/loan-know-more",
@@ -16,7 +16,7 @@ const commonMapper = {
   },
   success: {
     top_icon: "bank_verification_success",
-    top_title: "Bank statement verification successful",
+    top_title: "Bank statement verification successful!",
     button_title: "CALCULATE ELIGIBILITY",
     icon: "close",
     close_state: "/loan/idfc/loan-know-more",
@@ -24,7 +24,7 @@ const commonMapper = {
   },
   blocked: {
     top_icon: "bank_failed",
-    top_title: "Bank statement verification failed",
+    top_title: "Bank statement verification failed!",
     button_title: "OKAY",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
@@ -33,7 +33,7 @@ const commonMapper = {
   },
   bypass: {
     top_icon: "bank_failed",
-    top_title: "Bank statement verification failed",
+    top_title: "Bank statement verification failed!",
     button_title: "CALCULATE ELIGIBILITY",
     icon: "close",
     close_state: "/loan/idfc/loan-know-more",
@@ -75,8 +75,8 @@ class PerfiosStatus extends Component {
     let bt_eligible = vendor_info.bt_eligible;
 
     let loaderData = {
-      title: `Hang on, while IDFC calculates your eligible loan amount as per their proprietary algorithms based on the information you have provided`,
-      subtitle: "This may take around 2 minutes!",
+      title: `Hang on while IDFC FIRST Bank calculates the eligible loan offer `,
+      subtitle: "It usually takes around 2 minutes!",
     };
 
     this.setState({
@@ -116,11 +116,8 @@ class PerfiosStatus extends Component {
     if (this.state.commonMapper.button_title === "RETRY")
       this.sendEvents("retry");
     else this.sendEvents("next");
-    let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
-    this.setState({
-      loaderWithData: true,
-    });
+    let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
       if (idfc_07_state === "failed") {
@@ -191,7 +188,7 @@ class PerfiosStatus extends Component {
       commonMapper,
       perfios_state,
       bt_eligible,
-      name,
+      // name,
       perfios_display_rejection_reason,
     } = this.state;
 
@@ -211,7 +208,7 @@ class PerfiosStatus extends Component {
           icon: commonMapper.icon || "",
           goBack: this.goBack,
         }}
-        loaderWithData={this.state.loaderWithData}
+        loaderWithData={commonMapper.button_title === "CALCULATE ELIGIBILITY"}
         loaderData={this.state.loaderData}
       >
         <div className="idfc-loan-status">
@@ -254,10 +251,28 @@ class PerfiosStatus extends Component {
           )}
 
           {perfios_state === "bypass" && (
-            <div className="subtitle">
-              Due to an error your bank statements couldn't be verified. No
-              worries, you can still go ahead with your loan application.
-              However, do upload your bank statements later.
+            <div>
+              <div className="subtitle">
+                Due to an error your bank statements couldn't be verified. No
+                worries, you can still go ahead with your loan application.
+                However, do upload your bank statements later.
+              </div>
+
+              {bt_eligible &&
+                perfios_state !== "failure" &&
+                perfios_state !== "blocked" && (
+                  <div className="sub-msg">
+                    <div className="title">What next?</div>
+                    <div className="sub-title">
+                      As you’re a special customer, you’ve qualified for Balance
+                      Transfer.
+                    </div>
+                    <div className="sub-title" style={{ marginTop: "10px" }}>
+                      To learn more about this exclusive feature tap the button
+                      below.
+                    </div>
+                  </div>
+                )}
             </div>
           )}
 
@@ -294,7 +309,7 @@ class PerfiosStatus extends Component {
           {perfios_state === "processing" && (
             <div>
               <div className="subtitle">
-                Oops! something's not right. We are checking this with IDFC
+                <b>Oops!</b> something's not right. We are checking this with IDFC
                 FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
