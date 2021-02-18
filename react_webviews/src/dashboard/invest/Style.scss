@@ -32,6 +32,10 @@
 .invest-landing {
   padding: 30px 0 50px 0;
 
+  .landing-subtitle {
+    margin-bottom: 20px;
+  }
+
   .kyc {
     background-size: cover;
     background-repeat: no-repeat;
@@ -981,138 +985,136 @@
   }
 }
 
-
 /// Explore Invest part ///////
 
 #invest-explore {
   .invest-explore-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .invest-explore-card:hover {
-      cursor: pointer;
+    cursor: pointer;
   }
-  
+
   .invest-explore-icon {
-      display: block;
-      object-fit: contain;
-      height: 50px;
-      width: 50px;
+    display: block;
+    object-fit: contain;
+    height: 50px;
+    width: 50px;
   }
-  
+
   .invest-explore-meta {
-      .title {
-          font-weight: bold !important; 
-          font-size: 16px !important;
-      }
-  
-      .subtitle {
-          font-size: 14px !important;
-          color: #9b9b93;
-      }
+    .title {
+      font-weight: bold !important;
+      font-size: 16px !important;
+    }
+
+    .subtitle {
+      font-size: 14px !important;
+      color: #9b9b93;
+    }
   }
 
   .invest-explore-quote {
-      color: #c5c5c5;
-      font-size: 13px;
-      text-align: center;
+    color: #c5c5c5;
+    font-size: 13px;
+    text-align: center;
   }
 }
 
 #invest-explore-fund-type {
   .heading {
-      margin: 20px 0;
-      color: #333333;
-      font-size: 16px;
-      line-height: 1.5;
+    margin: 20px 0;
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   .scroll {
-      display: flex;
-      flex-direction: row;
-      box-sizing: border-box;
-      overflow-x: auto;
-      position: relative;
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    overflow-x: auto;
+    position: relative;
   }
 
   .scroll .item {
-      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
-      border-radius: 3px;
-      flex: 1 1 auto;
-      margin: 10px;
-      min-width: 250px;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    flex: 1 1 auto;
+    margin: 10px;
+    min-width: 250px;
   }
 
   .item .item-details {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: flex-start;
   }
 
   .item-details .title {
-      font-weight: bold;
-      font-size: 14px;
-      margin-right: 10px;
-      margin-bottom: 0;
-      -ms-flex: 1;
-      flex: 1; 
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 2; /* number of lines to show */
-      -webkit-box-orient: vertical;
-      &:hover {
-        cursor: pointer;
-      }
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    -ms-flex: 1;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .item .cart-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid #e8e8e8;
-      padding: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #e8e8e8;
+    padding: 4px;
   }
 
   .cart-actions .stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .stats .desc {
-      margin-left: 5px;
-      font-size: 14px;
-      color: #9b9b93;
+    margin-left: 5px;
+    font-size: 14px;
+    color: #9b9b93;
   }
 
   .categories-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .categories-container .card {
-      flex-basis:45%;
+    flex-basis: 45%;
   }
-  .categories-container .card:nth-child(even){
-      margin-left: 10px;
-      
+  .categories-container .card:nth-child(even) {
+    margin-left: 10px;
   }
 
   .categories-container .card:hover {
-      cursor: pointer;
+    cursor: pointer;
   }
 
   .categories-container .card .name {
-      margin-top: 20px;
-      font-weight: bold;
-      word-break: break-word;
-      margin-bottom: 10px;
-      font-size: 16px;
+    margin-top: 20px;
+    font-weight: bold;
+    word-break: break-word;
+    margin-bottom: 10px;
+    font-size: 16px;
   }
 }
 

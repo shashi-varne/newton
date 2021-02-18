@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 import "./Style.scss";
-import Input from "../common/ui/Input";
+import Input from "common/ui/Input";
 import Button from "@material-ui/core/Button";
 import { initialize } from "./function";
 import { getConfig } from "utils/functions";
-import toast from "../common/ui/Toast";
+import toast from "common/ui/Toast";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -31,7 +29,7 @@ class Otp extends Component {
     }
     let mobile_number = state.mobile_number;
     let rebalancing_redirect_url = state.rebalancing_redirect_url || false;
-    let forgot =  state.forgot;
+    let forgot = state.forgot;
     this.setState({
       mobile_number: mobile_number,
       rebalancing_redirect_url: rebalancing_redirect_url,
@@ -50,7 +48,7 @@ class Otp extends Component {
   };
 
   handleClick = () => {
-    if(this.state.forgot) {
+    if (this.state.forgot) {
       this.verifyForgotOtp({
         otp: this.state.otp,
       });
@@ -67,7 +65,6 @@ class Otp extends Component {
     let disabled = isApiRunning || otp.length !== 4;
     return (
       <div className="login otp">
-        <ToastContainer autoClose={3000} />
         {!isMobileView && (
           <div className="header">
             <img

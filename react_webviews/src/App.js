@@ -26,16 +26,7 @@ import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
-import Kyc from './kyc'
-import Landing from "./dashboard"
-
-import Login from './login_and_registration/login';
-import Register from './login_and_registration/register';
-import Otp from './login_and_registration/otp';
-import ForgotPassword from './login_and_registration/forgot_password';
-
-import MyAccount from './dashboard/components/my_account';
-import Notification from './dashboard/components/notification';
+import Landing from "./dashboard";
 
 class App extends Component {
   render() {
@@ -65,16 +56,7 @@ class App extends Component {
           {/* <Route path="/common/render-faqs" component={CommonRenderFaqs} /> */}
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
-          
-          <Route path='/login' component={Login} />
-          <Route path='/register' component={Register} />
-          <Route path='/mobile/verify' component={Otp} />
-          <Route path='/forgot-password' component={ForgotPassword} />
-          <Route path='/my-account' component={MyAccount} />
-          <Route path='/notification' component={Notification} />
-
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
-          {/* <Route path='/kyc' component={Kyc} /> */}
           <Route path='/' component={Landing}/>
           <Route component={NotFound} />
         </Switch>

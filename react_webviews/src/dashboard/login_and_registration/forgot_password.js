@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import "./Style.scss";
 import { getConfig } from "utils/functions";
 import { countries } from "./constants";
-import Input from "../common/ui/Input";
-import Button from "@material-ui/core/Button";
+import Input from "common/ui/Input";
+import Button from "material-ui/Button";
 import { initialize } from "./function";
-import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
+import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { validateNumber } from "utils/validators";
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -37,6 +36,7 @@ class ForgotPassword extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
+    if (name === "mobile" && value && !validateNumber(value)) return;
     let { form_data } = this.state;
     form_data[name] = value;
     form_data[`${name}_error`] = "";
@@ -54,7 +54,6 @@ class ForgotPassword extends Component {
     let { loginType, form_data, isApiRunning, productName } = this.state;
     return (
       <div className="login">
-        <ToastContainer autoClose={3000} />
         <div className="header">
           <img
             src={require(`assets/${productName}_white_logo.png`)}
@@ -112,10 +111,10 @@ class ForgotPassword extends Component {
                   </div>
                   <Input
                     error={form_data.mobile_error ? true : false}
-                    type="number"
-                    value={form_data.mobile}
+                    type="text"
+                    value={form_data.mobile || ""}
                     helperText={form_data.mobile_error || ""}
-                    class="input"
+                    class="input mobile-number"
                     id="mobile"
                     label="Enter mobile number"
                     name="mobile"

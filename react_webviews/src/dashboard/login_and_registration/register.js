@@ -2,18 +2,17 @@ import React, { Component } from "react";
 import "./Style.scss";
 import { getConfig } from "utils/functions";
 import { countries } from "./constants";
-import Input from "../common/ui/Input";
-import Button from "@material-ui/core/Button";
-import Checkbox from "../common/ui/Checkbox";
+import Input from "common/ui/Input";
+import Button from "material-ui/Button";
+import Checkbox from "common/ui/Checkbox";
 import FormControl from "@material-ui/core/FormControl";
-import InputUI from "@material-ui/core/Input";
+import InputUI from "material-ui/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import DropdownWithoutIcon from "../common/ui/SelectWithoutIcon";
+import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { initialize } from "./function";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import { validateNumber } from "utils/validators";
 
 class Register extends Component {
   constructor(props) {
@@ -44,6 +43,7 @@ class Register extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
+    if (name === "mobile" && value && !validateNumber(value)) return;
     let { form_data } = this.state;
     form_data[name] = value;
     form_data[`${name}_error`] = "";
@@ -76,7 +76,6 @@ class Register extends Component {
     } = this.state;
     return (
       <div className="login">
-        <ToastContainer autoClose={3000} />
         <div className="header">
           <img
             src={require(`assets/${this.state.productName}_white_logo.png`)}
@@ -132,10 +131,10 @@ class Register extends Component {
                   </div>
                   <Input
                     error={form_data.mobile_error ? true : false}
-                    type="number"
-                    value={form_data.mobile}
+                    type="text"
+                    value={form_data.mobile || ""}
                     helperText={form_data.mobile_error || ""}
-                    class="input"
+                    class="input mobile-number"
                     id="mobile"
                     label="Enter mobile number"
                     name="mobile"

@@ -22,7 +22,6 @@ class Landing extends Component {
       verificationFailed: false,
       modalData: {},
       openKycStatusDialog: false,
-      modalData: {},
       openKycPremiumLanding: false,
     };
     this.initialize = initialize.bind(this);
@@ -116,7 +115,7 @@ class Landing extends Component {
       >
         <div className="invest-landing">
           <div className="main-top-title">Start Investing</div>
-          <div className="main-top-subtitle">
+          <div className="main-top-subtitle landing-subtitle">
             {isReadyToInvestBase
               ? " Your KYC is verified, You’re ready to invest"
               : "Invest in your future"}

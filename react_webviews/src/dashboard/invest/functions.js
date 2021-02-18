@@ -10,7 +10,7 @@ import {
   kycStatusMapperInvest,
   premiumBottomSheetMapper,
 } from "./constants";
-import { getKycAppStatus } from "../kyc/services";
+import { getKycAppStatus, isReadyToInvest } from "../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -58,7 +58,7 @@ export async function initialize() {
     isEmpty(userKyc) ||
     isEmpty(currentUser) ||
     (this.state.screenName === "invest_landing" &&
-      getConfig().web &&
+      getConfig().Web &&
       !dataSettedInsideBoot)
   ) {
     await this.getSummary();
@@ -1045,12 +1045,15 @@ export function initilizeKyc() {
     }
   }
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
+
+  let isReadyToInvestBase = isReadyToInvest();
   this.setState({
     isCompliant,
     kycStatusData,
     kycJourneyStatusMapperData,
     userKyc,
     kycJourneyStatus,
+    isReadyToInvestBase,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -1105,11 +1108,11 @@ export function openPremiumOnboardBottomSheet(
     return "";
   }
 
-  if (getConfig().Web && this.state.screenName != "invest_landing") {
+  if (getConfig().Web && this.state.screenName !== "invest_landing") {
     return;
   }
 
-  if (!getConfig().Web && this.state.screenName != "landing") {
+  if (!getConfig().Web && this.state.screenName !== "landing") {
     return;
   }
 

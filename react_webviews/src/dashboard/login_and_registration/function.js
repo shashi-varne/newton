@@ -1,5 +1,5 @@
 import { validateEmail } from "utils/validators";
-import toast from "../common/ui/Toast";
+import toast from "common/ui/Toast";
 import Api from "utils/api";
 import { storageService, getUrlParams } from "utils/validators";
 import { getConfig } from "utils/functions";

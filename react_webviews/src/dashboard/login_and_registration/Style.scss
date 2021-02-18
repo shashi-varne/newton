@@ -89,6 +89,12 @@
           .input {
             width: 100%;
           }
+
+          .mobile-number {
+            .MuiInput-underline:before {
+              margin-bottom: 1px;
+            }
+          }
         }
 
         .referral-code-input {
@@ -154,8 +160,8 @@
         }
 
         .disabled {
-          color: rgba(0, 0, 0, 0.26);
-          background-color: rgba(0, 0, 0, 0.12);
+          background-color: #bfc1c1 !important;
+          color: rgba(0, 0, 0, 0.38) !important;
           width: 100%;
           font-size: 18px;
           padding: 13px 8px;
@@ -311,6 +317,7 @@
       .input {
         margin: 10px 0 20px 0;
         text-align: center;
+        width: 150px;
       }
 
       input {
@@ -348,8 +355,8 @@
       }
 
       .disabled {
-        color: rgba(0, 0, 0, 0.26);
-        background-color: rgba(0, 0, 0, 0.12);
+        background-color: #bfc1c1 !important;
+        color: rgba(0, 0, 0, 0.38) !important;
         font-size: 18px;
         padding: 13px 15px;
         min-width: 180px;

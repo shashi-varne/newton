@@ -23,6 +23,17 @@ import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 
+/////////LOGIN AND REGISTRATION //////////////
+
+import Login from './login_and_registration/login';
+import Register from './login_and_registration/register';
+import Otp from './login_and_registration/otp';
+import ForgotPassword from './login_and_registration/forgot_password';
+
+import MyAccount from './components/my_account';
+import Notification from './components/notification';
+
+
 ////////////////////////////// KYC ///////////////////////////////
 
 import Kyc from "./kyc";
@@ -72,6 +83,7 @@ const Invest = (props) => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
+          <Route exact path={`${url}`} component={Landing} />
           <Route path={`${url}invest`} component={Landing} />
           <Route path={`${url}diy`} component={DIY} />
           <Route path={`${url}invest-journey`} component={InvestJourney} />
@@ -96,7 +108,16 @@ const Invest = (props) => {
             render={(props) => <NfoCheckout {...props} type="nfo" />}
           />
           <Route path={`${url}sipdates`} component={SipDates} />
-          
+
+        {/* LOGIN AND REGISTRATION */}
+
+          <Route path={`${url}login`} component={Login} /> 
+          <Route path={`${url}register`} component={Register} />
+          <Route path={`${url}mobile/verify`} component={Otp} />
+          <Route path={`${url}forgot-password`} component={ForgotPassword} />
+          <Route path={`${url}my-account`} component={MyAccount} />
+          <Route path={`${url}notification`} component={Notification} />
+
          {/* KYC ROUTING */}
           
           <Route path={`${url}kyc`} component={Kyc} />

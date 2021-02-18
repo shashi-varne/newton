@@ -1,7 +1,8 @@
 import Api from "utils/api";
-import { storageService } from "utils/validators";
-import toast from "../common/ui/Toast";
+import { storageService, isEmpty } from "utils/validators";
+import toast from "common/ui/Toast";
 import { getConfig } from "utils/functions";
+import { isReadyToInvest, initData } from "../kyc/services";
 
 export async function initialize() {
   let isLoggedIn = storageService().get("currentUser");
@@ -18,8 +19,14 @@ export async function initialize() {
   this.authenticate = authenticate.bind(this);
   this.exportTransactions = exportTransactions.bind(this);
 
-  let currentUser = storageService().getObject("user");
-  this.setState({ currentUser: currentUser });
+  let currentUser = storageService().getObject("user") || {};
+  let userKyc = storageService().getObject("kyc") || {};
+  if (isEmpty(userKyc) || isEmpty(currentUser)) {
+    await initData();
+    currentUser = storageService().getObject("user") || {};
+    userKyc = storageService().getObject("kyc") || {};
+  }
+  this.setState({ currentUser, userKyc });
   if (this.onload) this.onload();
 }
 
@@ -137,6 +144,8 @@ export async function getMyAccount() {
         }
         storageService.setObject("pending_mandate", pendingMandate);
       }
+
+      let isReadyToInvestBase = isReadyToInvest();
       this.setState({
         pendingMandate: pendingMandate,
         mandate: mandate,
@@ -144,6 +153,7 @@ export async function getMyAccount() {
         npsUpload: npsUpload,
         investment80C: investment80C,
         Capitalgain: Capitalgain,
+        isReadyToInvestBase,
       });
     } else {
       toast(result.message || result.error || "Something went wrong!");
