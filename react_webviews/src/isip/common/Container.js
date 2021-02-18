@@ -2,13 +2,6 @@ import React, { Component , Fragment} from 'react';
 import { withRouter } from 'react-router';
 
 import { nativeCallback } from 'utils/native_callback';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
 import '../../utils/native_listner_otm';
 import { getConfig, setHeights } from 'utils/functions';
 
@@ -33,7 +26,8 @@ class Container extends Component {
 
   componentDidMount() {
     this.didmount();
-    setHeights({ 'header': true, 'container': false });
+    
+    // setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
       if (getConfig().iOS) {
@@ -75,15 +69,6 @@ class Container extends Component {
     });
   }
 
-  getEvents(user_action) {
-    if (!this || !this.props || !this.props.events) {
-      return;
-    }
-    let events = this.props.events;
-    events.properties.user_action = user_action;
-    return events;
-  }
-
   historyGoBack = () => {
 
     let pathname = this.props.history.location.pathname;
@@ -115,29 +100,6 @@ class Container extends Component {
     });
   }
 
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your connection and try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
   handlePopup = () => {
     this.setState({
       openPopup: false
@@ -147,31 +109,6 @@ class Container extends Component {
 
   }
 
-  renderPopup = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openPopup}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        {/* <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle> */}
-        <DialogContent>
-          <DialogContentText>
-            {this.state.popupText}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="default">
-            No
-          </Button>
-          <Button onClick={this.handlePopup} color="default" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
 
   handleTopIcon() {
     this.setState({
@@ -181,19 +118,6 @@ class Container extends Component {
     })
   }
 
-  renderPageLoader = () => {
-    if (this.props.showLoader) {
-      return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
 
   componentDidUpdate(prevProps) {
     setHeights({ 'header': true, 'container': false });
