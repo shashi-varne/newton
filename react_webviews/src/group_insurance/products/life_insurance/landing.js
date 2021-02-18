@@ -271,7 +271,7 @@ class FyntuneLanding extends Component {
     
     
     this.setState({
-      skelton: true,
+      show_loader:"button"
       // show_loader: true
     })
     //create lead api
@@ -285,7 +285,7 @@ class FyntuneLanding extends Component {
             
             toast(resultData.message)
             this.setState({
-              skelton: false
+              show_loader: false
             })
             
             return;
@@ -300,6 +300,7 @@ class FyntuneLanding extends Component {
           if(getConfig().Web) {
             open_browser_web(journeyURL, '_blank')
             this.setState({
+              show_loader:false,
               openDialogRefresh: true
             });
           } else {
@@ -326,8 +327,8 @@ class FyntuneLanding extends Component {
         }
       }catch (err) {
         this.setState({
-          skelton: false,
-          showError: 'page'
+          show_loader: false,
+          showError: true
         });
       }
   
@@ -338,7 +339,8 @@ class FyntuneLanding extends Component {
             ...this.state.errorData,
             title2: error
           },
-          showError: 'page'
+          show_loader: false,
+          showError: true
         })
       }
 

@@ -222,7 +222,12 @@ class PersonalDetails1 extends Component {
     if (canSubmitForm) {
       try {
         let openModalMessage = 'Redirecting to ' + this.state.insurance_title + ' portal';
-        this.setState({ openModal: true, openModalMessage: openModalMessage ,  show_loader: 'button'});
+        this.setState({
+          //  openModal: true,
+          //   openModalMessage: openModalMessage , 
+          loaderData: { loadingText: openModalMessage },
+          show_loader: 'page'
+        });
 
         var kotakBody = {
           name: this.state.name,
@@ -239,7 +244,7 @@ class PersonalDetails1 extends Component {
               skelton: false,
               openModal: false,
               openModalMessage: '',
-              show_loader: 'button'
+              show_loader: "page"
             });
 
             open_browser_web(kotakUrl, '_blank');
@@ -363,6 +368,7 @@ class PersonalDetails1 extends Component {
         showLoader={this.state.show_loader}
         showError={this.state.showError}
         skelton={this.state.skelton}
+        loaderData={this.state.loaderData}
         errorData={this.state.errorData}
         hide_header={this.state.skelton}
         title="Personal Details"

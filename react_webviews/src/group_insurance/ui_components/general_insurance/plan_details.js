@@ -307,7 +307,10 @@ class PlanDetailsClass extends Component {
       console.log(err)
       this.setState({
         skelton: false,
-        showError: 'page'
+        showError: 'page',
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       });
     }
 

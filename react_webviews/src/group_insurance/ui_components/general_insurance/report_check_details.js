@@ -88,15 +88,13 @@ class ReportDetails extends Component {
   onload = async() => {
 
     let error = '';
+    this.setErrorData('onload');
     try {
       let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
 
       let res = await Api.get('api/'+ service +'/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
-      this.setState({
-        skelton: false
-      })
 
       
       if (res.pfwresponse.status_code === 200) {
@@ -129,18 +127,22 @@ class ReportDetails extends Component {
           redirectPath: redirectPath,
           buttonTitle: buttonTitle
         })
-
+        this.setState({
+          skelton: false
+        })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
       }
 
     } catch (err) {
       this.setState({
-        skelton: false
-
+        skelton: false,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        },
       });
-      error = 'Something went wrong'
+      error = true
     }
 
     // set error data
@@ -222,6 +224,8 @@ class ReportDetails extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={this.state.noFooter}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
         fullWidthButton={true}
         buttonTitle={this.state.buttonTitle}
