@@ -17,7 +17,6 @@ definitions:
           - yarn set version 1.21.1
           - npm config set strict-ssl false;
           - cd react_webviews
-          - npm install
           - yarn
           - unset CI
           - IS_PIPELINE=true yarn build
@@ -41,7 +40,6 @@ definitions:
           - yarn set version 1.21.1
           - npm config set strict-ssl false;
           - cd react_webviews
-          - npm install
           - yarn
           - unset CI
           - IS_PIPELINE=true yarn build
@@ -63,6 +61,11 @@ pipelines:
 
   branches:
     master:
+      - step:
+          <<: *master-deploy
+          name: Master deploy
+    
+    bitbucket-pipeline:
       - step:
           <<: *master-deploy
           name: Master deploy
