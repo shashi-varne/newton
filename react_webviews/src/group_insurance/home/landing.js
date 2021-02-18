@@ -70,14 +70,46 @@ class Landing extends Component {
     })
   }
 
+  setErrorData = (type) => {
+
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Fetch again',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClick,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+  }
+
   componentDidMount(){
     this.onload();
   }
 
   onload = async() => {
+    this.setErrorData('onload')
     this.setState({
       skelton: true,
     })
+    let error = ''
     try{
       var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
 
@@ -115,14 +147,27 @@ class Landing extends Component {
             advisory_id: advisory_id
           })
         } else {
-          toast(resultData.error || resultData.message || "Something went wrong");
+          error = resultData.error || resultData.message || "Something went wrong";
       }
     }catch(err){
-      console.log(err)
       this.setState({
-        skelton: false,
+        show_loader: false,
+        showError: true,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       });
-      toast("Something went wrong");
+    }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error
+        },
+        showError: 'page'
+      })
     }
   }
 
@@ -219,6 +264,9 @@ class Landing extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         skelton={this.state.skelton}
+        showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
