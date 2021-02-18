@@ -26,35 +26,9 @@ class Container extends Component {
 
   componentDidMount() {
     this.didmount();
-    
-    // setHeights({ 'header': true, 'container': false });
-    let that = this;
-    if (getConfig().generic_callback) {
-      if (getConfig().iOS) {
-        nativeCallback({ action: 'hide_top_bar' });
-      }
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PaymentCallback.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    }
   }
 
   componentWillUnmount() {
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PaymentCallback.remove_listener({});
-    }
     this.unmount();
   }
 
