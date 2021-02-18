@@ -93,6 +93,7 @@ class PlanSummaryClass extends Component {
         skelton: true
       })
       let error = '';
+      let errorType = '';
       try {
         let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
         if (res.pfwresponse.status_code === 200) {
@@ -105,16 +106,14 @@ class PlanSummaryClass extends Component {
 
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
       } catch (err) {
         this.setState({
           skelton: false,
-          errorData: {
-            ...this.state.errorData, type: 'crash'
-          },
-          showError:'page'
         });
+        error= true;
+        errorType= "crash";
       }
   
        // set error data
@@ -122,7 +121,8 @@ class PlanSummaryClass extends Component {
         this.setState({
           errorData: {
             ...this.state.errorData,
-            title2: error
+            title2: error,
+            type: errorType
           },
           showError:'page'
         })
@@ -174,6 +174,7 @@ class PlanSummaryClass extends Component {
 
     this.setErrorData('submit');
     let error='';
+    let errorType = '';
     try {
       this.setState({
         show_loader: 'button'
@@ -237,23 +238,22 @@ class PlanSummaryClass extends Component {
           show_loader: false
         })
         error=res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
       }
 
     } catch (err) {
-      error='Something went wrong';
       this.setState({
         show_loader:false,
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        }
       })
+      error=true;
+      errorType= "crash";
     }
     if(error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:true
       })

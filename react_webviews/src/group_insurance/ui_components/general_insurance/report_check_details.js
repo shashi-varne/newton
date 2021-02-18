@@ -88,6 +88,7 @@ class ReportDetails extends Component {
   onload = async() => {
 
     let error = '';
+    let errorType = '';
     this.setErrorData('onload');
     try {
       let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
@@ -132,17 +133,15 @@ class ReportDetails extends Component {
         })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
       }
 
     } catch (err) {
       this.setState({
         skelton: false,
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        },
       });
-      error = 'Something went wrong'
+      error = true;
+      errorType = "crash";
     }
 
     // set error data
@@ -150,7 +149,8 @@ class ReportDetails extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })
