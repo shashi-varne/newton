@@ -98,14 +98,14 @@ class Container extends Component {
   };
 
   render() {
-    let steps = [];
-    for (var i = 0; i < this.props.total; i++) {
-      if (this.props.current > i) {
-        steps.push(<span className="active" key={i}></span>);
-      } else {
-        steps.push(<span key={i}></span>);
-      }
-    }
+    // let steps = [];
+    // for (var i = 0; i < this.props.total; i++) {
+    //   if (this.props.current > i) {
+    //     steps.push(<span className="active" key={i}></span>);
+    //   } else {
+    //     steps.push(<span key={i}></span>);
+    //   }
+    // }
 
     if (this.state.mounted) {
       return (

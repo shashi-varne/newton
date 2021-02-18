@@ -4,14 +4,13 @@ import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
 
-class Eligibility extends Component {
+class Documents extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      screen_name: "eligibility_screen",
+      screen_name: "document_screen",
     };
-
     this.initialize = initialize.bind(this);
   }
 
@@ -26,7 +25,7 @@ class Eligibility extends Component {
       event_name: "idfc_lending",
       properties: {
         user_action: user_action,
-        screen_name: "eligibility",
+        screen_name: "document_screen",
       },
     };
 
@@ -43,18 +42,18 @@ class Eligibility extends Component {
   };
 
   render() {
-    let { eligibility } = this.state.screenData;
+    let { documents } = this.state.screenData;
 
     return (
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Eligibility"
+        title="Documents"
         buttonTitle="OKAY"
         handleClick={this.handleClick}
       >
         <div className="idfc-eligibility">
-          {eligibility.map((data, index) => {
+          {documents.map((data, index) => {
             return (
               <HowToSteps key={index} style={{ margin: 0 }} baseData={data} />
             );
@@ -65,4 +64,4 @@ class Eligibility extends Component {
   }
 }
 
-export default Eligibility;
+export default Documents;

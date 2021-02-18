@@ -11,7 +11,8 @@ import {
   getEditTitle,
   IsFutureDate,
   numDifferentiationInr,
-  calculateAge
+  calculateAge,
+  formatAmount
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";
 
@@ -145,7 +146,7 @@ export async function initialize() {
 
   let screens = [
     "calculator",
-    "know_more_screen",
+    "document_screen",
     "landing_screen",
     "loan_status",
     "main_landing_screen",
@@ -516,8 +517,20 @@ export async function updateApplication(params, next_state = "") {
     }
   } catch (err) {
     console.log(err);
+
+    let amountParams = ["loan_amount_required", "monthly_salary"];
+    let keys = Object.keys(params);
+    let { form_data } = this.state;
+    
+    keys.forEach((el, index) => {
+      if (amountParams.includes(el)) {
+        form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
+      }
+    })
+
     this.setState({
       show_loader: false,
+      form_data: form_data
     });
     toast("Something went wrong");
   }
@@ -763,8 +776,20 @@ export async function submitApplication(
     }
   } catch (err) {
     console.log(err);
+
+    let amountParams = ["amount_required", "net_monthly_salary"];
+    let keys = Object.keys(params);
+    let { form_data } = this.state;
+    
+    keys.forEach((el, index) => {
+      if (amountParams.includes(el)) {
+        form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
+      }
+    })
+    
     this.setState({
       show_loader: false,
+      form_data: form_data
     });
     toast("Something went wrong");
   }

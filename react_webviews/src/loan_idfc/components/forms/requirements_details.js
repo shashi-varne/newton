@@ -8,7 +8,6 @@ import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import {
   numDifferentiationInr,
   formatAmount,
-  inrFormatTest,
 } from "utils/validators";
 
 class LoanRequirementDetails extends Component {
@@ -34,13 +33,13 @@ class LoanRequirementDetails extends Component {
     let application_info = lead.application_info || {};
 
     let form_data = {
-      amount_required: application_info.amount_required,
+      amount_required: `₹ ${formatAmount(application_info.amount_required)}`,
       tenor: !application_info.tenor ? "" : String(application_info.tenor),
     };
 
     let loaderData = {
-      title: "Please wait while IDFC evaluates your profile",
-      subtitle: "This may take 10 - 15 seconds!",
+      title: "Hang on while IDFC FIRST Bank evaluates your profile",
+      subtitle: "It usually takes 10 - 15 seconds!",
     };
 
     this.setState({
@@ -70,14 +69,12 @@ class LoanRequirementDetails extends Component {
     let { form_data } = this.state;
 
     if (name === "amount_required") {
-      if (!inrFormatTest(event.target.value)) {
-        return;
+      let amt = (value.match(/\d+/g) || "").toString();
+      if (amt) {
+        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+      } else {
+        value = amt;
       }
-
-      console.log(formatAmount(event.target.value));
-
-      form_data[name] = event.target.value;
-      form_data[name + "_error"] = "";
     }
 
     if (name) {
@@ -97,6 +94,8 @@ class LoanRequirementDetails extends Component {
       "amount_required",
       "tenor",
     ];
+
+    form_data.amount_required = form_data.amount_required.slice(2).replaceAll(',', '');
 
     this.formCheckUpdate(keys_to_check, form_data, "point_five", true);
   };
@@ -119,11 +118,10 @@ class LoanRequirementDetails extends Component {
                 error={!!this.state.form_data.amount_required_error}
                 helperText={
                   this.state.form_data.amount_required_error ||
-                  numDifferentiationInr(this.state.form_data.amount_required)
+                  numDifferentiationInr((this.state.form_data.amount_required || "").toString().slice(1).replaceAll(',', ''))
                 }
-                type="text"
                 width="40"
-                label="Loan amount (in rupees)"
+                label="Loan amount"
                 class="amount_required"
                 id="amount_required"
                 name="amount_required"

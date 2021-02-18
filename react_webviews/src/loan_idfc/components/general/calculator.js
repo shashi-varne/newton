@@ -12,7 +12,7 @@ class Calculator extends Component {
     this.state = {
       show_loader: false,
       Net_monthly_Income: 90000,
-      Tenure: 12,
+      Tenure: 16,
       Other_EMIs: 10000,
       Monthly_expenses: 30000,
       screen_name: "calculator",
@@ -108,9 +108,9 @@ class Calculator extends Component {
             val="Tenure"
             value={Tenure}
             min="12"
-            max="24"
+            max="60"
             minValue="12 MONTHS"
-            maxValue="24 MONTHS"
+            maxValue="60 MONTHS"
             onChange={this.onChange}
           />
 
@@ -121,7 +121,7 @@ class Calculator extends Component {
             min="0"
             max="500000"
             minValue="0"
-            maxValue="₹ 5 Lacs"
+            maxValue="₹ 5 Lakhs"
             onChange={this.onChange}
           />
 
@@ -132,7 +132,7 @@ class Calculator extends Component {
             min="0"
             max="1000000"
             minValue="0"
-            maxValue="₹ 10 Lacs"
+            maxValue="₹ 10 Lakhs"
             onChange={this.onChange}
           />
 

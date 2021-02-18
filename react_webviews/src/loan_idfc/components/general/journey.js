@@ -145,8 +145,8 @@ class JourneyMap extends Component {
       (idfc_loan_status && journeyMapper2[idfc_loan_status].index) || "0";
 
       let loaderData = {
-        title: "We're are fetching your kyc details from CKYC repository",
-        subtitle: 'Please confirm the details on the next screen to proceed with your loan application.'
+        title: "Hang on while we fetch your KYC details from the centralised KYC repository",
+        subtitle: 'Please confirm the details on the next screen to proceed with your loan application'
       }
 
     let journeyData = {

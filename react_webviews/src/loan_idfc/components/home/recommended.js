@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 import { initialize, getRecommendedVendor } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
-import { numDifferentiationInr } from "utils/validators";
+import { numDifferentiationInr, formatAmount } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
 
 class Recommended extends Component {
@@ -29,6 +29,16 @@ class Recommended extends Component {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
     let { form_data } = this.state;
+
+    let amount_input = ['loan_amount_required', 'monthly_salary']
+    if (amount_input.includes(name)) {
+      let amt = (value.match(/\d+/g) || "").toString();
+      if (amt) {
+        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+      } else {
+        value = amt;
+      }
+    }
 
     if (id === "Salaried" || id === "Self_employed") {
       form_data.employment_type = id;
@@ -80,6 +90,9 @@ class Recommended extends Component {
       keys_to_check.push("monthly_salary");
     }
 
+    form_data.loan_amount_required = form_data.loan_amount_required.slice(2).replaceAll(',', '');
+    form_data.monthly_salary = form_data.monthly_salary.slice(2).replaceAll(',', '');
+
     if (this.validateFields(keys_to_check, form_data)) {
       this.setState({
         show_loader: true,
@@ -99,8 +112,8 @@ class Recommended extends Component {
       properties: {
         user_action: user_action,
         screen_name: "home_loan_requirement",
-        employment_type: this.state.form_data.employment_type || '',
-        amount_required: this.state.form_data.loan_amount_required || '',
+        employment_type: this.state.form_data.employment_type || "",
+        amount_required: this.state.form_data.loan_amount_required || "",
       },
     };
 
@@ -128,13 +141,11 @@ class Recommended extends Component {
                 error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
                   this.state.form_data.loan_amount_required_error ||
-                  numDifferentiationInr(this.state.form_data.loan_amount_required)
+                  numDifferentiationInr((this.state.form_data.loan_amount_required || '').slice(1).replaceAll(',', ''))
                 }
-                type="number"
                 width="40"
                 label="Loan requirement"
                 class="loan_amount_required"
-                maxLength={10}
                 id="loan_amount_required"
                 name="loan_amount_required"
                 value={this.state.form_data.loan_amount_required || ""}
@@ -157,7 +168,7 @@ class Recommended extends Component {
                 id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
-                style={{width: '100%'}}
+                style={{ width: "100%" }}
               />
             </div>
             <div
@@ -173,7 +184,7 @@ class Recommended extends Component {
                 id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
-                style={{width: '100%'}}
+                style={{ width: "100%" }}
               />
             </div>
           </div>
@@ -188,11 +199,8 @@ class Recommended extends Component {
                     error={!!this.state.form_data.monthly_salary_error}
                     helperText={
                       this.state.form_data.monthly_salary_error ||
-                      numDifferentiationInr(
-                        this.state.form_data.monthly_salary
-                      )
+                      numDifferentiationInr((this.state.form_data.monthly_salary || '').slice(1).replaceAll(',', ''))
                     }
-                    type="number"
                     width="40"
                     label="Net monthly salary (in rupees)"
                     class="monthly_salary"

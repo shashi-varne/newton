@@ -116,23 +116,26 @@ class UploadBank extends Component {
 
   renderNotes = () => {
     let notes = [
-      "Attach latest bank statements of the same account where your salary gets credited every month",
-      "Ensure the bank statements are of the last 3 months from this month",
-      "Files must be original and should be uploaded in a PDF format",
-      "Share respective passwords if your statements are password protected",
-      "Upload multiple statements of the same bank account with each file not exceeding 6 MB",
+      "Provide the latest e-statements of salary account",
+      "Attach e-statements of the last 3 months from this month",
+      "E-statement's start date should be from 1st November, 2020 or prior to that",
+      "The end date must not be 3 days prior to the current date",
+      "Upload bank generated e-statements in PDF format only",
+      "Multiple statements of the same account can be uploaded"
     ];
 
     if (this.state.employment_type === "self_employed") {
       notes[0] =
-        "Provide your latest bank statements from your savings or current account to get the best loan offer";
+        "Provide the latest e-statements of savings or current a/c";
     }
 
     return (
       <div style={{ lineHeight: "15px" }}>
         {notes.map((item, index) => (
-          <div style={{ marginTop: index !== 0 && "20px" }} key={index}>
-            {`${index + 1}. ${item}`}
+          <div className="upload-statement-notes"
+           key={index}>
+            <div>{`${index + 1}. `}</div>
+            <div style={{marginLeft:'3px'}}>{`${item}`}</div>
           </div>
         ))}
       </div>
@@ -209,6 +212,11 @@ class UploadBank extends Component {
 
     let file = e.target.files[0];
 
+    if (file.size >= 600000) {
+      toast("Please select pdf file less than 6 MB only");
+      return;
+    }
+
     let acceptedType = ["application/pdf"];
 
     if (acceptedType.indexOf(file.type) === -1) {
@@ -246,6 +254,11 @@ class UploadBank extends Component {
 
   save(file) {
     let acceptedType = ["application/pdf"];
+
+    if (file.size >= 600000) {
+      toast("Please select pdf file less than 6 MB only");
+      return;
+    }
 
     if (acceptedType.indexOf(file.type) === -1) {
       toast("Please select pdf file only");
@@ -415,55 +428,14 @@ class UploadBank extends Component {
     this.sendEvents("next");
     let { form_data, bankOptions } = this.state;
 
-    let keys_to_check = ["bank_name"];
-
-    let keysMapper = {
-      bank_name: "bank name",
-    };
     let canSubmit = true;
 
-    let selectTypeInput = ["bank_name"];
-
-    // for (var i = 0; i < keys_to_check.length; i++) {
-    //   let key_check = keys_to_check[i];
-    //   let first_error =
-    //     selectTypeInput.indexOf(key_check) !== -1
-    //       ? "Please select "
-    //       : "Please enter ";
-    //   if (!form_data[key_check]) {
-    //     form_data[key_check + "_error"] = first_error + keysMapper[key_check];
-    //     canSubmit = false;
-    //   } else  if(key_check.indexOf('date') >= 0 && !isValidDate(form_data[key_check]))  {
-    //       canSubmit = false;
-    //       form_data[key_check + "_error"] = first_error + "valid " + keysMapper[key_check];
-    //   } else  if(
-    //     key_check === 'start_date' &&
-    //     (
-    //       calculateAge(form_data['start_date'], true).days < 90
-    //       // calculateAge(form_data['start_date'], true).days > 97
-    //     )
-    //     )  {
-    //       canSubmit = false;
-
-    //       form_data[key_check + "_error"] = keysMapper[key_check] + " must be 3 months from the current date";
-    //   } else if(
-    //     key_check === 'end_date' &&
-    //     form_data[key_check]
-    //      &&
-    //     (
-    //       calculateAge(form_data['end_date'], true).days < 0
-    //     //   // ||
-    //     //   // calculateAge(form_data['end_date'], true).days > 4
-    //     )
-    //     ) {
-    //       canSubmit = false;
-    //       console.log(calculateAge(form_data['end_date'], true).days)
-    //       form_data[key_check + "_error"] = keysMapper[key_check] + " must not be 3 days before the current date";
-    //   }
-    // }
+    if (!form_data.bank_name) {
+      form_data.bank_name_error = "Please select bank name";
+      canSubmit = false;
+    }
 
     // let startDate_month = calculateAge(form_data.start_date, true).months >= 3;
-    // let endDate_days = calculateAge(form_data.end_date, true).days <= 3;
 
     // let month = calculateAge(form_data.start_date, true).months;
     // // eslint-disable-next-line radix
@@ -471,11 +443,6 @@ class UploadBank extends Component {
 
     // if (!startDate_month || (month === 3 && !startDate) || form_data.start_date.length !== 10) {
     //   form_data.start_date_error = "This date must be 3 months prior to the current month.";
-    //   canSubmit = false;
-    // }
-
-    // if (!endDate_days || form_data.end_date.length !== 10 || IsFutureDate(form_data.end_date)) {
-    //   form_data.end_date_error = "This date must not be 3 days prior to the current date.";
     //   canSubmit = false;
     // }
 
@@ -487,6 +454,11 @@ class UploadBank extends Component {
       let bank = bankOptions.filter(
         (item) => item.value === form_data.bank_name
       );
+      
+      if (bank.length === 0) {
+        toast('Please select bank name from the provided list');
+        return;
+      }
 
       try {
         this.setState({

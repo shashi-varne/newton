@@ -5,7 +5,7 @@ import { initialize } from "../../common/functions";
 import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
-import { numDifferentiationInr } from "utils/validators";
+import { numDifferentiationInr, formatAmount } from "utils/validators";
 import Autosuggest from "../../../common/ui/SearchBar";
 import Api from "utils/api";
 
@@ -50,7 +50,7 @@ class ProfessionalDetails extends Component {
     let form_data = {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
-      net_monthly_salary: application_info.net_monthly_salary,
+      net_monthly_salary: `₹ ${formatAmount(application_info.net_monthly_salary)}`,
       salary_mode: professional_info.salary_mode,
       organisation: professional_info.organisation,
       industry: professional_info.industry,
@@ -92,16 +92,14 @@ class ProfessionalDetails extends Component {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    // if (name === 'net_monthly_salary') {
-    //   var nf = new Intl.NumberFormat();
-    //   nf.format(value.replace(',', '')); 
-
-    //   form_data[name] = nf.format(value);
-    //   form_data[name + "_error"] = "";
-    //   console.log(value)
-    // } else {
-
-    // // }
+    if (name === 'net_monthly_salary') {
+      let amt = (value.match(/\d+/g) || "").toString();
+      if (amt) {
+        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+      } else {
+        value = amt;
+      }
+    }
 
     if (name) {
       form_data[name] = value;
@@ -131,6 +129,7 @@ class ProfessionalDetails extends Component {
     if (employment_type === "self_employed") {
       keys_to_check.push("company_name");
     } else {
+      form_data.net_monthly_salary = form_data.net_monthly_salary.slice(2).replaceAll(',', '');
       keys_to_check.push(...salaried);
     }
 
@@ -179,7 +178,7 @@ class ProfessionalDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Enter your work details"
+        title="Enter work details"
         buttonTitle="NEXT"
         handleClick={this.handleClick}
       >
@@ -244,11 +243,9 @@ class ProfessionalDetails extends Component {
                   error={!!this.state.form_data.net_monthly_salary_error}
                   helperText={
                     this.state.form_data.net_monthly_salary_error ||
-                    numDifferentiationInr(
-                      this.state.form_data.net_monthly_salary
-                    )
+                    numDifferentiationInr((this.state.form_data.net_monthly_salary || '').toString().slice(1).replaceAll(',', ''))
                   }
-                  type="number"
+                  // type="number"
                   width="40"
                   label="Net monthly salary (in rupees)"
                   class="net_monthly_salary"

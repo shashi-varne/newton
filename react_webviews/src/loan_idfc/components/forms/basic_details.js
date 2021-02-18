@@ -131,7 +131,7 @@ class BasicDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title={this.setEditTitle("Let's start by getting to know you a bit...")}
+        title={this.setEditTitle("Enter self-related information")}
         buttonTitle="NEXT"
         handleClick={this.handleClick}
       >

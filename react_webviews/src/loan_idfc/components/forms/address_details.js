@@ -76,8 +76,8 @@ class AddressDetails extends Component {
     }
 
     let loaderData = {
-      title: `${personal_info.first_name}, hang on while we create your loan application`,
-      subtitle: "It won't take more than 15 seconds!",
+      title: `Hang on while we create loan application`,
+      subtitle: "It usually takes around 15 seconds!",
     };
 
     form_data.current_address1 = current_address_data.address1;
@@ -337,7 +337,7 @@ class AddressDetails extends Component {
       confirm_fields.forEach((element) => {
         if (element === name)
           form_data[name + "_helper"] =
-            "Document proof will be required if you make any change";
+            "You need to provide proof for the changed info";
         else form_data[element + "_helper"] = "";
       });
       this.setState({

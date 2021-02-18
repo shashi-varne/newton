@@ -207,7 +207,7 @@ class PersonalDetails extends Component {
       confirm_fields.forEach((element) => {
         if (element === name)
           form_data[name + "_helper"] =
-            "Document proof will be required if you make any change";
+            "You need to provide proof for the changed info";
         else form_data[element + "_helper"] = "";
       });
       this.setState({

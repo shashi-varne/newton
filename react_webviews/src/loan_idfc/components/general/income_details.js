@@ -98,7 +98,7 @@ class IncomeDetails extends Component {
               "Best if you can provide your current account statements."}
           </div>
           <Card withtag="true" onClick={() => this.handleClick("netbanking")}>
-            <div className="card-content" style={{ padding: "10px 0" }}>
+            <div className="card-content" style={{ padding: "10px 0 0" }}>
               <img
                 src={require(`assets/${this.state.productName}/mobile_credit_card.svg`)}
                 alt=""

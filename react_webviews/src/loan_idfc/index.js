@@ -15,7 +15,7 @@ import MobileVerify from "./components/forms/mobile_verify";
 import OtpVerification from "./components/forms/otp_verify";
 import JourneyMap from "./components/general/journey";
 import CalculatorIdfc from "./components/general/calculator";
-import KnowMore from "./components/general/know_more";
+import Documents from "./components/general/documents";
 import IncomeDetails from "./components/general/income_details";
 import UploadBankStatements from "./components/forms/upload_bank";
 import BasicDetails from "./components/forms/basic_details";
@@ -170,7 +170,7 @@ const Lending = props => {
           <Route path={`${url}/idfc/edit-number`} component={MobileVerify} />
           <Route path={`${url}/idfc/otp-verify`} component={OtpVerification} />
           <Route path={`${url}/idfc/journey`} component={JourneyMap} />
-          <Route path={`${url}/idfc/know-more`} component={KnowMore} />
+          <Route path={`${url}/idfc/documents`} component={Documents} />
           <Route path={`${url}/idfc/income-details`} component={IncomeDetails} />
           <Route path={`${url}/idfc/upload-bank`} component={UploadBankStatements} />
           <Route path={`${url}/idfc/basic-details`} component={BasicDetails} />

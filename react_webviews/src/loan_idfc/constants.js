@@ -101,33 +101,33 @@ export const idfc_config = {
       options: [
         {
           step: "1",
-          title: "Enter basic details",
+          title: "Enter work details",
           subtitle:
-            "Fill in basic and work details to get started with your loan application.",
+            "Verify mobile, enter self-related information and work details to get started.",
         },
         {
           step: "2",
           title: "Create loan application",
           subtitle:
-            "Provide/confirm your personal and address details to proceed with your loan application.",
+            "Enter personal and address details to proceed with loan application.",
         },
         {
           step: "3",
           title: "Provide income details",
           subtitle:
-            "Enter your loan requirements and income details to get the best loan offer.",
+            "Enter loan requirements and income details to get the best loan offer.",
         },
         {
           step: "4",
           title: "Upload documents",
           subtitle:
-            "Provide your office address and upload documents to get your loan sanctioned.",
+            "Provide office address and upload documents to get loan sanctioned.",
         },
         {
           step: "5",
           title: "Sanction and disbursal",
           subtitle:
-            "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
+            "IDFC FIRST Bank will verify application and will get in touch with you to complete the disbursal process.",
         },
       ],
     },
@@ -650,33 +650,33 @@ export const idfc_config = {
           options: [
             {
               step: "1",
-              title: "Enter basic details",
+              title: "Enter work details",
               subtitle:
-                "Fill in basic and work details to get started with your loan application.",
+                "Verify mobile, enter self-related information and work details to get started.",
             },
             {
               step: "2",
               title: "Create loan application",
               subtitle:
-                "Provide/confirm your personal and address details to proceed with your loan application.",
+                "Enter personal and address details to proceed with loan application.",
             },
             {
               step: "3",
               title: "Provide income details",
               subtitle:
-                "Enter your loan requirements and income details to get the best loan offer.",
+                "Enter loan requirements and income details to get the best loan offer.",
             },
             {
               step: "4",
               title: "Upload documents",
               subtitle:
-                "Provide your office address and upload documents to get your loan sanctioned.",
+                "Provide office address and upload documents to get loan sanctioned.",
             },
             {
               step: "5",
               title: "Sanction and disbursal",
               subtitle:
-                "IDFC FIRST Bank will verify your application and will get in touch with you to complete the disbursal process.",
+                "IDFC FIRST Bank will verify application and will get in touch with you to complete the disbursal process.",
             },
           ],
         },
@@ -856,6 +856,52 @@ export const idfc_config = {
           },
           {
             icon: "Group 9964",
+            subtitle:
+              "You must be managing your business from the same office premises for at least a year",
+          },
+        ],
+      },
+    ],
+  },
+  document_screen: {
+    documents: [
+      {
+        title: "Salaried",
+        options: [
+          {
+            icon: "identity_",
+            subtitle:
+              "Must be earning a minimum net monthly salary of Rs. 20,000",
+          },
+          {
+            icon: "address_",
+            subtitle: "Should at least be 23 years of age",
+          },
+          {
+            icon: "income_",
+            subtitle:
+              "Maximum age at the time of loan maturity should not be >60 years ",
+          },
+        ],
+      },
+      {
+        title: "Self-employed",
+        options: [
+          {
+            icon: "identity_",
+            subtitle: "Should at least be 25 years of age",
+          },
+          {
+            icon: "address_",
+            subtitle:
+              "Maximum age at the time of loan maturity should not be >65 years",
+          },
+          {
+            icon: "income_",
+            subtitle: "Business must be in operations for at least 3 years",
+          },
+          {
+            icon: "document_",
             subtitle:
               "You must be managing your business from the same office premises for at least a year",
           },
