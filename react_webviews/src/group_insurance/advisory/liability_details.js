@@ -194,7 +194,6 @@ class AdvisoryLiabilityDetails extends Component {
 
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        console.log('form_data', form_data)
         if(form_data){
             if(!form_data.homeloan){
                 form_data.homeloan_error = 'Please enter appropriate value';

@@ -49,42 +49,6 @@ class AdvisoryAssetDetails extends Component {
         }
     }
 
-    componentDidMount(){
-
-        // var advisory_data = storageService().getObject('advisory_data') || {};
-        // if(!isEmpty(advisory_data)){
-        //     var form_data = {};
-        //     form_data.assets = advisory_data.assets === "True" ? yesNoOptions[0].value: advisory_data.assets === "False" ?  yesNoOptions[1].value : '';
-        //     form_data.asset_amount = formatAmount(advisory_data.assets_amount)
-        //     form_data.term_cover_amount = formatAmount(advisory_data.term_insurance_sum_assured)
-        //     form_data.health_cover_amount = formatAmount(advisory_data.health_insurance_sum_assured)
-        //     form_data.critical_cover_amount = formatAmount(advisory_data.critical_illness_insurance_sum_assured)
-        //     form_data.corona_cover_amount = formatAmount(advisory_data.corona_insurance_sum_assured)
-        //     console.log(form_data)
-
-        //     this.setState({form_data: form_data})
-        //     let showPrefix = this.state.showPrefix;
-        //     var checkbox_list = ['term_cover_amount', 'health_cover_amount', 'critical_cover_amount', 'corona_cover_amount'];
-        //     var ins_checkbox = this.state.ins_checkbox;
-        //     for(var x of checkbox_list){
-        //         if(form_data[x]){
-        //             ins_checkbox[x] = true;
-        //             showPrefix[x] = true;
-        //         }
-        //     }
-        //     if(advisory_data.term_insurance_sum_assured + advisory_data.health_insurance_sum_assured + advisory_data.critical_illness_insurance_sum_assured +  advisory_data.corona_insurance_sum_assured === 0){
-        //         ins_checkbox['none'] = true;
-        //     }
-        //     if(form_data.asset_amount){
-        //         showPrefix['asset_amount'] = true;
-        //     }
-        //     this.setState({
-        //         showPrefix: showPrefix,
-        //         ins_checkbox: ins_checkbox
-        //     })
-        // }
-    }
-
     navigate = (pathname, search) => {
       this.props.history.push({
         pathname: pathname,
@@ -277,7 +241,6 @@ class AdvisoryAssetDetails extends Component {
         var canSubmitForm = true;
         var showCoverAmountError = false;
         var ins_checkbox = this.state.ins_checkbox;
-        console.log(form_data)
         if(form_data){
             if(!form_data.assets){
                 form_data.assets_error = 'Please enter appropriate value'
@@ -325,7 +288,6 @@ class AdvisoryAssetDetails extends Component {
             for(var x in post_body){
                 advisory_data[x] = post_body[x]
             }
-            console.log(post_body)
             storageService().setObject('advisory_data', advisory_data);
             this.updateLead(post_body, 'recommendations', true);
         }

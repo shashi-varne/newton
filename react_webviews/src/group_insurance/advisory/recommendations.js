@@ -41,7 +41,6 @@ class AdivsoryRecommendations extends Component {
     componentDidMount(){
         var recommendation_data = storageService().getObject('advisory_data').recommendation_data.recommendation_data;
         var recommend_text = storageService().getObject('advisory_data').recommendation_data.rec_text;
-        console.log('this', recommendation_data)
         var user_data = storageService().getObject('advisory_data').user_data;
 
         var dependents =  user_data.dependent_json;

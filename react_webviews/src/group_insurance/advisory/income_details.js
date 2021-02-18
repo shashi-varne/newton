@@ -80,11 +80,9 @@ class AdvisoryIncomeDetails extends Component {
         var form_data = {};
 
         if(isResumePresent){
-            console.log('Resume case')
             await this.getLead();
             lead = this.state.resume_data;
         }else if(!isEmpty(advisory_data)){
-            console.log('Normal prefill')
             lead = advisory_data
         }
 
@@ -163,10 +161,8 @@ class AdvisoryIncomeDetails extends Component {
         var showPrefix = this.state.showPrefix;
         if(form_data){
             if(form_data[name] && form_data[name].length !== 0){
-                console.log('show')
                 return;
             }else{
-                console.log('hide')
                 showPrefix[name] = false;
                 this.setState({
                     showPrefix: showPrefix
@@ -182,7 +178,6 @@ class AdvisoryIncomeDetails extends Component {
 
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        console.log(form_data)
         if(form_data){
             if(!form_data.expense || form_data.expense_value === 0){
                 form_data.expense_error = "We need some details to move forward!";
