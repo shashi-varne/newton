@@ -305,11 +305,11 @@ class BasicDetailsForm extends Component {
           let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
           leadData = res.pfwresponse.result.lead; 
-             
-          if (res.pfwresponse.status_code === 200) {
           this.setState({
             skelton: false
           })
+          if (res.pfwresponse.status_code === 200) {
+         
 
             
           } else {

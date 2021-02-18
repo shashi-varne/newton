@@ -132,7 +132,7 @@ class ReportDetails extends Component {
         })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
       }
 
     } catch (err) {
@@ -142,7 +142,7 @@ class ReportDetails extends Component {
           ...this.state.errorData, type: 'crash'
         },
       });
-      error = 'Something went wrong'
+      error = true
     }
 
     // set error data
