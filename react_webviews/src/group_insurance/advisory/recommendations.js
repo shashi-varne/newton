@@ -1,10 +1,8 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import Container from '../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import {formatAmount, containsNumbersAndComma} from 'utils/validators';
 import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
 import RecommendationResult from './recommendation_result';
 import Dialog, {
     DialogActions,
@@ -231,7 +229,7 @@ class AdivsoryRecommendations extends Component {
                             <p className="rec-profile-heading">Your profile</p>
                             <div className="rec-profile">
                                 <div className="rec-profile-left">
-                                    <img style={{width: '120px', height: '120px'}} src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
+                                    <img style={{width: '120px', height: '120px'}} alt="" src={require(`assets/${this.state.type}/${this.state.profile_image}.svg`)}/>
                                 </div>
                                 {user_data && (
                                     <div className="rec-profile-right">
@@ -257,11 +255,11 @@ class AdivsoryRecommendations extends Component {
 
                     <div className="recommendation-extras">
                         <div className="download-report" onClick={()=>this.downloadReportPdf()}>
-                            <img src={download} style={{marginRight: '5px'}} /> Download report
+                            <img src={download} alt="" style={{marginRight: '5px'}} /> Download report
                         </div>
                         <div className="recommendation-extras-divider">|</div>
                         <div className="email-report"  onClick={()=>this.goToEmail()}>
-                            <img src={launch} style={{marginRight: '5px'}}/> Email report 
+                            <img src={launch} alt="" style={{marginRight: '5px'}}/> Email report 
                         </div>
                     </div>
                 </div>

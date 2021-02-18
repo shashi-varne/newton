@@ -1,5 +1,4 @@
 import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
 import {storageService} from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import { getConfig } from "utils/functions";

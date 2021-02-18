@@ -21,7 +21,8 @@ class Landing extends Component {
       skelton: true,
       type: getConfig().productName,
       insuranceProducts: [],
-      params: qs.parse(props.history.location.search.slice(1)) 
+      params: qs.parse(props.history.location.search.slice(1)),
+      advisory_button_text: "LET'S FIND OUT" 
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -90,9 +91,8 @@ class Landing extends Component {
           var advisory_resume_status = resultData.insurance_advisory.status;
           var advisory_id = resultData.insurance_advisory.id;
 
-          var advisory_button_text = "LET'S FIND OUT";
           var next_advisory_page = 'landing';
-
+          var advisory_button_text = this.state.advisory_button_text
           if(advisory_resume_present && advisory_resume_status === 'incomplete'){
             advisory_button_text = "RESUME";
             storageService().setObject('advisory_resume_present', true)

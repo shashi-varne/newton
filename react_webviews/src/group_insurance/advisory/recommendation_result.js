@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import {numDifferentiation} from 'utils/validators';
 import StatusBar from '../../common/ui/StatusBar';
 import Dialog, {DialogContent} from 'material-ui/Dialog';
 import Slide from '@material-ui/core/Slide';

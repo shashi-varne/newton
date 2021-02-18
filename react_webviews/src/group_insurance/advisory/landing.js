@@ -5,7 +5,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import StepsToFollow from '../../common/ui/stepsToFollow';
 import { advisoryConstants } from './constants';
-import toast from "../../common/ui/Toast";
 import {storageService} from "utils/validators";
 
 class AdvisoryLanding extends Component {
@@ -140,7 +139,7 @@ class AdvisoryLanding extends Component {
             >
             <div className="advisory-landing-container">
 
-              <img className="advisory-entry-hero" src={require(`assets/${this.state.type}/advisory_entry_hero.svg`)}/>
+              <img className="advisory-entry-hero" alt="" src={require(`assets/${this.state.type}/advisory_entry_hero.svg`)}/>
               <p className="advisory-hero-desc">We'll recommend insurance coverage options that work for you, based on your profile.</p>
             <p className="" style={{marginBottom: '20px', color: 'black', fontWeight: '600', fontSize: '16px' }}>Find the right coverage in 5 easy steps</p>
               <div className="steps-to-follow-container">

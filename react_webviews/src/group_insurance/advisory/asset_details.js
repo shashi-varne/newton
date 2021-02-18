@@ -9,9 +9,8 @@ import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
 import {advisoryConstants} from './constants';
 import Checkbox from "material-ui/Checkbox";
-import { formatMonthandYear } from '../../utils/validators';
 import { updateLead } from './common_data';
-import {storageService, isEmpty} from "utils/validators";
+import {storageService} from "utils/validators";
 
 class AdvisoryAssetDetails extends Component {
 

@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { getConfig } from 'utils/functions';
-// import { nativeCallback } from 'utils/native_callback';
 import { numDifferentiation } from 'utils/validators';
 import {advisoryConstants} from '../../group_insurance/advisory/constants';
 

@@ -135,7 +135,7 @@ class AdvisoryBasicDetails extends Component {
         }
         
         if(name === 'city' || name === 'age'){
-            var value = event
+            value = event
             form_data[name] = event;
             form_data[name + '_index'] = value;
             form_data[name + '_error'] = ''
@@ -252,10 +252,7 @@ class AdvisoryBasicDetails extends Component {
 
         var form_data = this.state.form_data;
         var canSubmitForm = true;
-        let spouse_count = 0;
-        if(this.state.spouse_checked){
-            spouse_count = 1;
-        }
+        
         if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
             form_data.name_error = 'Please enter full name';
             canSubmitForm = false;

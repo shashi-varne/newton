@@ -6,7 +6,6 @@ import { nativeCallback } from 'utils/native_callback';
 import {validateEmail} from 'utils/validators';
 import {storageService} from "utils/validators";
 import Api from 'utils/api';
-import toast from '../../common/ui/Toast';
 
 
 class EmailReport extends Component { 

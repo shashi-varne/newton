@@ -89,7 +89,6 @@ class AdvisoryIncomeDetails extends Component {
         }
 
         if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)){
-            var form_data = {};
             form_data.income = formatAmount(lead.annual_income);
             form_data.expense = formatAmount(lead.annual_personal_expense);
             form_data.income_growth = lead.growth_in_income;
@@ -134,7 +133,7 @@ class AdvisoryIncomeDetails extends Component {
         }
 
         if(name === 'retire' || name === 'income_growth'){
-            var value = event
+            value = event
             form_data[name] = event;
             form_data[name + '_error'] = ''
             form_data[name + '_index'] = event;
