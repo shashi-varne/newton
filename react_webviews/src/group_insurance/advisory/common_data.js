@@ -10,8 +10,6 @@ export async function updateLead( body, next_page, final_page, reset) {
     
     this.setState({
         show_loader: 'button'
-    },()=>{
-      console.log(this.state.show_loader)
     })
     
     var update_url = `api/insurancev2/api/insurance/advisory/update?insurance_advisory_id=${advisory_id}`;
@@ -151,7 +149,6 @@ export function openPdf(pdfLink, pdfType){
         }
       });
     }else{
-      console.log(pdfLink)
       this.openInBrowser(pdfLink, pdfType);
     }
 }

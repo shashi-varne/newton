@@ -48,7 +48,7 @@ class AdvisoryIncomeDetails extends Component {
         if(type) {
           let mapper = {
             'onload':  {
-              handleClick1: this.updateLead,
+              handleClick1: this.getLead,
               button_text1: 'Fetch again',
               title1: ''
             },

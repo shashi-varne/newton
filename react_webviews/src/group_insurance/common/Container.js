@@ -410,10 +410,10 @@ class Container extends Component {
         this.navigate(back_button_mapper[pathname]);
         break;
       default:
+        nativeCallback({ events: this.getEvents('back') });
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
           this.navigate(back_button_mapper[pathname]);
         } else {
-          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         }
     }

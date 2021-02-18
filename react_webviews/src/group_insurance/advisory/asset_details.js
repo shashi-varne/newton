@@ -247,7 +247,7 @@ class AdvisoryAssetDetails extends Component {
         if(type) {
           let mapper = {
             'onload':  {
-              handleClick1: this.updateLead,
+              handleClick1: this.getLead,
               button_text1: 'Fetch again',
               title1: ''
             },
@@ -271,7 +271,7 @@ class AdvisoryAssetDetails extends Component {
 
     handleClick = () =>{
         this.setErrorData('submit');
-        
+
         this.sendEvents('next');
 
         var form_data = this.state.form_data;

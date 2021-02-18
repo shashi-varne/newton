@@ -147,10 +147,9 @@ class AdivsoryRecommendations extends Component {
     showDialog = () => {
         this.setState({
             openDialogReset: true,
-        }, () => {
-            // this.sendEvents('next');
         });
     }
+  
     goToEmail = () =>{
         this.sendEvents('email report');
         this.navigate('/group-insurance/advisory/email-report')
@@ -159,14 +158,18 @@ class AdivsoryRecommendations extends Component {
     downloadReportPdf = async () =>{
         
         this.setErrorData('onload')
-
+        
+        this.setState({
+            skelton: true
+        })
         this.sendEvents('next', "", "", true)
         var advisory_id = storageService().getObject("advisory_id")
+        let error = '';
         try{
             var res = await Api.get(`api/insurancev2/api/insurance/advisory/pdf/download?insurance_advisory_id=${advisory_id}`);
 
             this.setState({
-              show_loader: false
+              skelton: false
             })
             var resultData = res.pfwresponse.result;
           
@@ -174,14 +177,29 @@ class AdivsoryRecommendations extends Component {
                 
                 this.openPdf(resultData.download_link, "read_document")
             } else {
-              toast(resultData.error || resultData.message || "Something went wrong");
+              error = resultData.error || resultData.message || "Something went wrong";
             }
         }catch(err){
-          console.log(err)
+            this.setState({
+                show_loader: false,
+                skelton: false,
+                showError: true,
+                errorData: {
+                  ...this.state.errorData, type: 'crash'
+                }
+              });
+        }
+
+        // set error data
+        if(error) {
           this.setState({
-            show_loader: false
-          });
-          toast("Something went wrong");
+            errorData: {
+              ...this.state.errorData,
+              title2: error
+            },
+            showError: true,
+            skelton: false,
+          })
         }
 
     }
