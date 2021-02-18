@@ -3,6 +3,19 @@ import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
 import HowToSteps from "../../../common/ui/HowToSteps";
+import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
+
+const yesOrNo_options = [
+  {
+    name: "Yes",
+    value: "Yes",
+  },
+  {
+    name: "No",
+    value: "No",
+  },
+];
+
 
 class BtInformation extends Component {
   constructor(props) {
@@ -110,6 +123,8 @@ class BtInformation extends Component {
             style={{ marginTop: "-20px", marginBottom: "30px" }}
             baseData={this.state.screenData.required_info}
           />
+
+         
         </div>
       </Container>
     );

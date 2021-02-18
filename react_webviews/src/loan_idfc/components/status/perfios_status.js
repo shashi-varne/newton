@@ -7,7 +7,7 @@ import ContactUs from "../../../common/components/contact_us";
 
 const commonMapper = {
   failure: {
-    top_icon: "ils_loan_failed",
+    top_icon: "bank_failed",
     top_title: "Bank statement verification failed",
     button_title: "RETRY",
     icon: "close",
@@ -23,18 +23,18 @@ const commonMapper = {
     status: "success",
   },
   blocked: {
-    top_icon: "ils_loan_failed",
+    top_icon: "bank_failed",
     top_title: "Bank statement verification failed",
-    button_title: "OK",
+    button_title: "OKAY",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
   },
   bypass: {
-    top_icon: "ils_loan_failed",
+    top_icon: "bank_failed",
     top_title: "Bank statement verification failed",
-    button_title: "NEXT",
+    button_title: "CALCULATE ELIGIBILITY",
     icon: "close",
     close_state: "/loan/idfc/loan-know-more",
     status: "verification failed 2",
@@ -199,7 +199,13 @@ class PerfiosStatus extends Component {
       <Container
         showLoader={this.state.show_loader}
         title={commonMapper.top_title}
-        buttonTitle={commonMapper.button_title}
+        buttonTitle={
+          bt_eligible &&
+          perfios_state !== "failure" &&
+          perfios_state !== "blocked"
+            ? "KNOW MORE"
+            : commonMapper.button_title
+        }
         handleClick={this.handleClick}
         headerData={{
           icon: commonMapper.icon || "",
@@ -217,17 +223,33 @@ class PerfiosStatus extends Component {
           )}
 
           {perfios_state === "success" && (
-            // <div className="subtitle">
-            //   Hey {name}, IDFC has successfully verified your bank statements
-            //   and your income details have been safely updated.
-            // </div>
-            <div className="sub-msg">
-              <div className="title">What next?</div>
-              <div className="sub-title">
-                IDFC FIRST Bank will now calculate the loan offer as per their
-                loan policy and you will instantly get to know the eligible loan
-                amount.
-              </div>
+            <div>
+              {!bt_eligible && (
+                <div className="sub-msg">
+                  <div className="title">What next?</div>
+                  <div className="sub-title">
+                    IDFC FIRST Bank will now calculate the loan offer as per
+                    their loan policy and you will instantly get to know the
+                    eligible loan amount.
+                  </div>
+                </div>
+              )}
+
+              {bt_eligible &&
+                perfios_state !== "failure" &&
+                perfios_state !== "blocked" && (
+                  <div className="sub-msg">
+                    <div className="title">What next?</div>
+                    <div className="sub-title">
+                      As you’re a special customer, you’ve qualified for Balance
+                      Transfer.
+                    </div>
+                    <div className="sub-title" style={{ marginTop: "10px" }}>
+                      To learn more about this exclusive feature tap the button
+                      below.
+                    </div>
+                  </div>
+                )}
             </div>
           )}
 
@@ -247,7 +269,7 @@ class PerfiosStatus extends Component {
             </div>
           )}
 
-          {bt_eligible &&
+          {/* {bt_eligible &&
             perfios_state !== "failure" &&
             perfios_state !== "blocked" && (
               <div className="subtitle">
@@ -255,7 +277,7 @@ class PerfiosStatus extends Component {
                 <b>'Balance Transfer - BT' for you</b>. However, it is up to you
                 whether you want to opt for it or not.
               </div>
-            )}
+            )} */}
 
           {perfios_state === "failure" && !perfios_display_rejection_reason && (
             <div className="subtitle">
@@ -282,7 +304,7 @@ class PerfiosStatus extends Component {
           {/* {!perfios_state && (
             <div>
               <img
-                src={require(`assets/${this.state.productName}/ils_loan_failed.svg`)}
+                src={require(`assets/${this.state.productName}/bank_failed.svg`)}
                 className="center"
                 alt=""
               />

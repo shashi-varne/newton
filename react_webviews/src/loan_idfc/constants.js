@@ -866,44 +866,44 @@ export const idfc_config = {
   document_screen: {
     documents: [
       {
-        title: "Salaried",
+        title: "For Salaried Applicants",
         options: [
           {
             icon: "identity_",
             subtitle:
-              "Must be earning a minimum net monthly salary of Rs. 20,000",
+              "Photo Identity Proof",
           },
           {
             icon: "address_",
-            subtitle: "Should at least be 23 years of age",
+            subtitle: "Address Proof",
           },
           {
             icon: "income_",
             subtitle:
-              "Maximum age at the time of loan maturity should not be >60 years ",
+              "Income Proof",
           },
         ],
       },
       {
-        title: "Self-employed",
+        title: "For Self-employed  Applicants",
         options: [
           {
             icon: "identity_",
-            subtitle: "Should at least be 25 years of age",
+            subtitle: "Photo Identity Proof",
           },
           {
             icon: "address_",
             subtitle:
-              "Maximum age at the time of loan maturity should not be >65 years",
+              "Address Proof",
           },
           {
             icon: "income_",
-            subtitle: "Business must be in operations for at least 3 years",
+            subtitle: "Income Proof",
           },
           {
             icon: "document_",
             subtitle:
-              "You must be managing your business from the same office premises for at least a year",
+              "Business ownership proof",
           },
         ],
       },
