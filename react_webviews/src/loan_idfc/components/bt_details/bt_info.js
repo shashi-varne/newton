@@ -11,7 +11,7 @@ class BtInformation extends Component {
       show_loader: false,
       screen_name: "bt_info_screen",
       loaderWithData: false,
-      loaderData: {}
+      loaderData: {},
     };
 
     this.initialize = initialize.bind(this);
@@ -19,28 +19,6 @@ class BtInformation extends Component {
 
   componentWillMount() {
     this.initialize();
-
-    let progressHeaderData = {
-      title: 'income details and loan offer',
-      steps: [
-        {
-          title: "Income details",
-          status: "completed",
-        },
-        {
-          title: "BT details",
-          status: "init",
-        },
-        {
-          title: "Loan offer",
-          status: "pending",
-        },
-      ],
-    };
-
-    this.setState({
-      progressHeaderData: progressHeaderData,
-    });
   }
 
   onload = () => {
@@ -53,36 +31,36 @@ class BtInformation extends Component {
     };
 
     this.setState({
-      "idfc_07_state": vendor_info.idfc_07_state,
-      loaderData: loaderData
-    })
+      idfc_07_state: vendor_info.idfc_07_state,
+      loaderData: loaderData,
+    });
   };
 
   handleClickTwo = () => {
-    this.sendEvents('opt_for_bt');
+    this.sendEvents("opt_for_bt");
     let body = {
       idfc_loan_status: "bt_processing",
-      bt_selected: 'True',
+      bt_selected: "True",
     };
     this.updateApplication(body, "loan-bt");
   };
 
   handleClickOne = () => {
-    this.sendEvents('not_opt_for_bt');
+    this.sendEvents("not_opt_for_bt");
     this.setState({
-      loaderWithData: true
-    })
+      loaderWithData: true,
+    });
     let body = {
       idfc_loan_status: "bt_bypass",
-      bt_selected: 'False',
+      bt_selected: "False",
     };
 
-    this.updateApplication(body)
+    this.updateApplication(body);
 
     // if (this.state.idfc_07_state !== 'success') {
     //   this.submitApplication({}, "one", "", "eligible-loan");
     // }
-  }
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -103,27 +81,24 @@ class BtInformation extends Component {
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        hidePageTitle={true}
+        title="What is balance transfer?"
         twoButton={true}
         dualbuttonwithouticon={true}
         buttonOneTitle="NOT OPTING FOR BT"
         buttonTwoTitle="OPTING FOR BT"
         handleClickOne={this.handleClickOne}
         handleClickTwo={this.handleClickTwo}
-        headerData={{
-          progressHeaderData: this.state.progressHeaderData,
-        }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
       >
         <div className="bt-info">
-          <div className="head">How does BT work?</div>
           <div className="sub-head">
-            A 'balance transfer' is a unique feature that allows you to transfer
-            the outstanding principal amount of your existing personal loans or
-            credit cards (taken from other lenders) to IDFC FIRST Bank (if any).
+            A 'balance transfer' is a unique feature through which you can
+            transfer the outstanding principal amount of your existing personal
+            loans or credit cards (taken from other lenders) to IDFC FIRST Bank
+            (if any).
           </div>
 
           <HowToSteps
