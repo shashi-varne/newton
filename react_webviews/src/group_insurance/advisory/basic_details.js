@@ -295,6 +295,7 @@ class AdvisoryBasicDetails extends Component {
                 'age': form_data.age,
                 'ci_present': form_data.illness === 'YES' ? true : false,
                 'dependent_json': {"parents": this.state.Parents_total || 0, "kids": this.state.Kids_total || 0 , "spouse": this.state.spouse_checked ? 1 : 0},
+                'dependent_present': this.state.Parents_total || this.state.Kids_total ||  this.state.spouse_checked ? true : false,
                 'city': form_data.city.toUpperCase(),
             }
             var advisory_data = storageService().getObject('advisory_data') || {};

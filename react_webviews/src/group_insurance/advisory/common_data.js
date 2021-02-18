@@ -5,7 +5,7 @@ import { getConfig } from "utils/functions";
 
 export async function updateLead( body, next_page, final_page, reset) {
 
-    var advisory_id = storageService().getObject("advisory_id");
+    var advisory_id = storageService().getObject("advisory_id") || '';
     
     this.setState({
         show_loader: 'button'
