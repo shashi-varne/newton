@@ -1373,9 +1373,10 @@ input#pan {
     margin-top: 20px;
 
     .rec-profile-heading{
-      font-size: 15px;
+      font-size: 16px;
       color: #160D2E;
       font-weight: 700;
+      margin-top: 0;
     }
     .rec-profile{
       display: flex;
@@ -1401,7 +1402,7 @@ input#pan {
     .disable-get-the-plan{
       opacity: 0.4;
     }
-    
+
     .recommendation-info-container{
       margin-top: 20px;
       margin: 0 -20px 0 -20px;

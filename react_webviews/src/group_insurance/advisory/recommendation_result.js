@@ -86,7 +86,7 @@ class RecommendationResult extends Component {
                         { recommendation_data.key !== 'corona' && (
                          <div className="individual-coverage-detail">
                              <p className="coverage-detail-heading">Premium starts at</p>
-                             <p className="coverage-detail-value">₹ {formatAmount(recommendation_data.start_premium)}/year</p>
+                             <p className="coverage-detail-value">₹{formatAmount(recommendation_data.start_premium)}/year</p>
                         </div>   
                         )}
                     </div>
@@ -141,7 +141,7 @@ class RecommendationResult extends Component {
                     </div>
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Premium starts at</p>
-                        <p  className="recommendation-info-value">₹ {formatAmount(recommendation_data.start_premium)}/year </p>
+                        <p  className="recommendation-info-value">₹{formatAmount(recommendation_data.start_premium)}/year </p>
                     </div>
                     {
                         recommendation_data.key === 'health' && this.props.parentsPresent ? (

@@ -364,6 +364,7 @@ input.default-otp-input {
       border-radius: 3px;
       padding: 2px 6px;
       margin-top: 5px;
+      font-weight: bold;
     }
   }
 
@@ -371,6 +372,7 @@ input.default-otp-input {
     // @keyframes filler {
     //   0%{width: 0px}
     // }
+    color: #767E86;
     .status-bar-background{
       position: relative;
       height: 5px;
@@ -392,6 +394,7 @@ input.default-otp-input {
     }
   }
   .status-bar-info-container{
+    color: #767E86;
     .status-bar-info{
       display: flex;
       align-items: center;
@@ -404,9 +407,9 @@ input.default-otp-input {
       .status-bar-info-text{
         margin: 0 0 0 10px;
         span{
-          font-weight: bold;
+          color: #160D2E;
         }
-      }
+        }
     }
   }
 }
