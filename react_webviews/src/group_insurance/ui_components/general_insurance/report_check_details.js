@@ -95,9 +95,6 @@ class ReportDetails extends Component {
       let res = await Api.get('api/'+ service +'/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
-      this.setState({
-        skelton: false
-      })
 
       
       if (res.pfwresponse.status_code === 200) {
@@ -130,7 +127,9 @@ class ReportDetails extends Component {
           redirectPath: redirectPath,
           buttonTitle: buttonTitle
         })
-
+        this.setState({
+          skelton: false
+        })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong';
@@ -138,8 +137,10 @@ class ReportDetails extends Component {
 
     } catch (err) {
       this.setState({
-        skelton: false
-
+        skelton: false,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        },
       });
       error = 'Something went wrong'
     }

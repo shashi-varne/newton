@@ -94,18 +94,15 @@ class PlanSummaryClass extends Component {
       })
       let error = '';
       try {
-        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-        this.setState({
-          skelton: false
-        });
+        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
         if (res.pfwresponse.status_code === 200) {
   
           lead = res.pfwresponse.result.lead;
           this.setState({
             skelton: false
           })
-
   
+
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
           || 'Something went wrong';
@@ -113,6 +110,9 @@ class PlanSummaryClass extends Component {
       } catch (err) {
         this.setState({
           skelton: false,
+          errorData: {
+            ...this.state.errorData, type: 'crash'
+          },
           showError:'page'
         });
       }
@@ -244,6 +244,9 @@ class PlanSummaryClass extends Component {
       error='Something went wrong';
       this.setState({
         show_loader:false,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       })
     }
     if(error) {

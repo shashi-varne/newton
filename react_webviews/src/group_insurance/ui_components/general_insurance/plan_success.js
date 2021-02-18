@@ -151,6 +151,9 @@ class PlanSuccessClass extends Component {
     } catch (err) {
       this.setState({
         skelton: false,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        },
         showError: 'page'
       });
     }

@@ -98,9 +98,6 @@ class PaymentSuccessClass extends Component {
 
       let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        skelton: false
-      })
       if (res.pfwresponse.status_code === 200) {
 
         var leadData = res.pfwresponse.result.lead;
@@ -120,7 +117,9 @@ class PaymentSuccessClass extends Component {
           leadData: leadData,
           address_details_data: address_details_data
         })
-
+        this.setState({
+          skelton: false
+        })
       } else {
         error  = res.pfwresponse.result.error || res.pfwresponse.result.message
         || 'Something went wrong';
@@ -129,7 +128,10 @@ class PaymentSuccessClass extends Component {
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: 'page'
+        showError: 'page',
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       });
     }
 
@@ -287,15 +289,12 @@ class PaymentSuccessClass extends Component {
         })
         let res2 = {};
         res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
-        this.setState({
-          show_loader: false
-        })
-
         if (res2.pfwresponse.status_code === 200) {
-
+          this.setState({
+            show_loader: false
+          })
           this.navigate('summary-success')
         } else {
-
           error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
           || 'Something went wrong';
         }
@@ -304,7 +303,10 @@ class PaymentSuccessClass extends Component {
     }
     catch (err) {
       this.setState({
-        show_loader: false
+        show_loader: false,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       })
       error = 'Something went wrong';
     }

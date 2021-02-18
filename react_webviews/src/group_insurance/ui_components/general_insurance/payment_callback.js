@@ -88,11 +88,15 @@ class PaymentCallbackClass extends Component {
   
       } catch (err) {
         this.setState({
-          showError: 'page'
+          showError: 'page',
+          errorData: {
+            ...this.state.errorData, type: 'crash'
+          }
         });
       }
       if(error) {
         this.setState({
+          skelton:false,
           errorData: {
             ...this.state.errorData,
             title2: error
@@ -165,7 +169,10 @@ class PaymentCallbackClass extends Component {
 
     } catch (err) {
       this.setState({
-        showError: true
+        showError: true,
+        errorData: {
+          ...this.state.errorData, type: 'crash'
+        }
       });
     }
     if(error) {

@@ -304,12 +304,13 @@ class BasicDetailsForm extends Component {
          
           let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
-          leadData = res.pfwresponse.result.lead;
+          leadData = res.pfwresponse.result.lead; 
+             
+          if (res.pfwresponse.status_code === 200) {
           this.setState({
             skelton: false
           })
-          if (res.pfwresponse.status_code === 200) {
-  
+
             
           } else {
             toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -336,18 +337,18 @@ class BasicDetailsForm extends Component {
         })
         let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
 
-        this.setState({
-          skelton: false
-        })
+        
         if (res.pfwresponse.status_code === 200) {
-
+        
           let result = {};
           if (res.pfwresponse.result.response_data) {
             result = res.pfwresponse.result.response_data.insurance_account || {};
           } else {
             result = res.pfwresponse.result.insurance_account || {};
           }
-
+          this.setState({
+            skelton: false
+          })
           basic_details_data.name = result.name || '';
           basic_details_data.gender = result.gender || '';
           basic_details_data.marital_status = result.marital_status || '';
@@ -371,8 +372,9 @@ class BasicDetailsForm extends Component {
 
     } catch (err) {
       this.setState({
+        showError: 'page',
+        errorData: { ...this.state.errorData, type: 'crash' },
         skelton: false,
-        showError: 'page'
       });
     }
 
@@ -385,7 +387,7 @@ class BasicDetailsForm extends Component {
           ...this.state.errorData,
           title2: error
         },
-        showError: 'page'
+        showError: 'page',
       })
     }
     this.setState({
@@ -616,7 +618,10 @@ class BasicDetailsForm extends Component {
       } catch (err) {
         this.setState({
           show_loader: false,
-          showError: true
+          showError: true,
+          errorData: {
+            ...this.state.errorData, type: 'crash'
+          },
         });
       }
 
