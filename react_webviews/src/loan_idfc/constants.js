@@ -168,13 +168,13 @@ export const idfc_config = {
               subtitle:
                 "For salaried professionals, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs 40 lakhs. For self-employed, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs. 9 lakhs.",
             },
+            // {
+            //   title: "On what criteria will the loan be sanctioned to me ?",
+            //   subtitle:
+            //     "The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.",
+            // },
             {
-              title: "On what criteria will the loan be sanctioned to me ?",
-              subtitle:
-                "The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.",
-            },
-            {
-              title: `Loan sanction depends on what factors?`,
+              title: `On what criteria will the loan be sanctioned to me ?`,
               subtitle: `The final amount sanctioned will depend on your income and other factors like credit score, repayment ability, age, employer, etc.`,
             },
             {
@@ -734,13 +734,13 @@ export const idfc_config = {
                   subtitle:
                     "For salaried professionals, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs 40 lakhs. For self-employed, the minimum loan amount is Rs. 1 lakh and the maximum loan amount is Rs. 9 lakhs.",
                 },
+                // {
+                //   title: "On what criteria will the loan be sanctioned to me ?",
+                //   subtitle:
+                //     "The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.",
+                // },
                 {
-                  title: "On what criteria will the loan be sanctioned to me ?",
-                  subtitle:
-                    "The final amount sanctioned will depend on your net monthly income, your credit bureau and other eligibility criterias.",
-                },
-                {
-                  title: `Loan sanction depends on what factors?`,
+                  title: `On what criteria will the loan be sanctioned to me ?`,
                   subtitle: `The final amount sanctioned will depend on your income and other factors like credit score, repayment ability, age, employer, etc.`,
                 },
                 {

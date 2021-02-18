@@ -104,8 +104,8 @@ class UploadBank extends Component {
     }
 
     let loaderData = {
-      title: `Hang on, while IDFC finishes analysing your last 3 months' bank statements`,
-      subtitle: "It may take 10 to 15 seconds!",
+      title: `Hang on, while IDFC FIRST Bank finishes analysing last 3 months’ bank statements`,
+      subtitle: "It usually takes 10 to 15 seconds!",
     };
 
     let currentdate = new Date();
