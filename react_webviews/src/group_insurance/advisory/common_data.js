@@ -21,6 +21,9 @@ export async function updateLead( body, next_page, final_page, reset) {
       this.setState({
         skelton: true
       })
+      storageService().remove("advisory_id");
+      storageService().remove("advisory_data");
+      storageService().remove("advisory_resume_present");
     }
     let error = ''
     try{
@@ -41,7 +44,12 @@ export async function updateLead( body, next_page, final_page, reset) {
                 var user_data = resultData.insurance_advisory;
                 setRecommendationData(advisory_data, recommendation_data, user_data)
                 
-               }
+            }
+            if(reset){
+              storageService().setObject('advisory_id',resultData.insurance_advisory.id)
+            }
+
+
                this.navigate(`/group-insurance/advisory/${next_page}`);                    
            } else {
              error = resultData.error || resultData.message || "Something went wrong";

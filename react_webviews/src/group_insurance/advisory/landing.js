@@ -116,7 +116,7 @@ class AdvisoryLanding extends Component {
             ...this.state.errorData,
             title2: error
           },
-          showError: true
+          showError: 'page'
         })
       }
 

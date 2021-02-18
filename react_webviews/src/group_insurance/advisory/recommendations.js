@@ -60,7 +60,7 @@ class AdivsoryRecommendations extends Component {
         this.setState({
             openDialogReset: false,
         })
-        this.updateLead({'status': 'cancelled'}, 'landing', '', true)
+        this.updateLead({'status': 'cancelled'}, 'basic-details', '', true)
     }
 
     sendEvents(user_action, insurance_type, banner_clicked, download_report) {
