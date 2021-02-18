@@ -1,9 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component , Fragment} from 'react';
 import { withRouter } from 'react-router';
-
-import Header from './Header';
-import Footer from './footer';
-import Banner from '../../common/ui/Banner';
 
 import { nativeCallback } from 'utils/native_callback';
 import Button from 'material-ui/Button';
@@ -16,7 +12,7 @@ import Dialog, {
 import '../../utils/native_listner_otm';
 import { getConfig, setHeights } from 'utils/functions';
 
-
+import {didmount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
 
   constructor(props) {
@@ -29,9 +25,14 @@ class Container extends Component {
       productName: getConfig().productName
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
+    this.historyGoBack = this.historyGoBack.bind(this);
+
+    this.didmount = didmount.bind(this);
+    this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
+    this.didmount();
     setHeights({ 'header': true, 'container': false });
     let that = this;
     if (getConfig().generic_callback) {
@@ -60,6 +61,11 @@ class Container extends Component {
     } else {
       window.PaymentCallback.remove_listener({});
     }
+    this.unmount();
+  }
+
+  componentDidUpdate(prevProps) {
+    this.didupdate();
   }
 
   navigate = (pathname) => {
@@ -194,77 +200,12 @@ class Container extends Component {
   }
 
   render() {
-    let steps = [];
-    for (var i = 0; i < this.props.total; i++) {
-      if (this.props.current > i) {
-        steps.push(<span className='active'
-          style={{ background: getConfig().primary, marginRight: 0 }} key={i}></span>);
-      } else {
-        steps.push(<span key={i} style={{ marginRight: 0 }}></span>);
-      }
-    }
 
-    return (
-      <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
-        {/* Header Block */}
-        {(!this.props.noHeader && !getConfig().hide_header) && <Header
-          disableBack={this.props.disableBack}
-          title={this.props.title}
-          smallTitle={this.props.smallTitle}
-          provider={this.props.provider}
-          count={this.props.count}
-          total={this.props.total}
-          current={this.props.current}
-          goBack={this.historyGoBack}
-          edit={this.props.edit}
-          type={getConfig().productName}
-          resetpage={this.props.resetpage}
-          handleReset={this.props.handleReset}
-          topIcon={this.props.topIcon}
-          handleTopIcon={this.handleTopIcon} />
-        }
-        {/* Below Header Block */}
-        {!this.props.noHeader && !getConfig().hide_header && <div id="HeaderHeight" style={{ top: 56 }}>
-
-          {steps && <div className="Step">
-            {steps}
-          </div>}
-
-          {/* Banner Block */}
-          {this.props.banner && <Banner text={this.props.bannerText} />}
-
-        </div>}
-
-        {/* Loader Block */}
-        {this.renderPageLoader()}
-
-        {/* Children Block */}
-        <div className={`Container ${this.props.classOverRideContainer}`}>
-          {this.props.children}
-        </div>
-
-        {/* Footer Block */}
-        {!this.props.noFooter &&
-          <Footer
-            fullWidthButton={this.props.fullWidthButton}
-            logo={this.props.logo}
-            buttonTitle={this.props.buttonTitle}
-            provider={this.props.provider}
-            premium={this.props.premium}
-            paymentFrequency={this.props.paymentFrequency}
-            edit={this.props.edit}
-            resetpage={this.props.resetpage}
-            handleClick={this.props.handleClick}
-            handleReset={this.props.handleReset}
-            onlyButton={this.props.onlyButton}
-            noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled} />
-        }
-        {/* No Internet */}
-        {this.renderDialog()}
-        {this.renderPopup()}
-      </div>
-    );
+    return(
+      <Fragment>
+      {this.commonRender()}
+      </Fragment>
+    )
   }
 };
 
