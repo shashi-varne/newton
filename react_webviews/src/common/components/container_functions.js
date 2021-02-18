@@ -1,7 +1,6 @@
 
 import { getConfig, setHeights } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
-import ErrorPopUp from '../../assets/error_popup_icon.svg'
 
 import React from "react";
 
@@ -328,7 +327,7 @@ export function renderGenericError() {
                             <div className="title2">{title2}</div>}
                         </div>
                         <div className="t-right">
-                            <Imgc className="top-image" src={ErrorPopUp} alt="" />
+                            <Imgc className="top-image" src={generic_error2_icon} alt="" />
                         </div>
                     </div>
                     
