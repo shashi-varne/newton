@@ -401,7 +401,7 @@ class JourneyMap extends Component {
           {index === "3" && (
             <div>
               <div className="head-title top-title">
-                <b>Congrats</b> for the loan offer of
+                Congrats, for the loan offer of
               </div>
               <div className="amount-inr">{formatAmountInr(vendor_info.updated_offer_amount)}</div>
               <div className="head-title bottom-title">Please provide document proofs</div>
@@ -410,9 +410,7 @@ class JourneyMap extends Component {
 
           {index === "4" && (
             <div className="head-title">
-              <b>Congrats, {first_name}!</b> Your loan application of ₹
-              {changeNumberFormat(vendor_info.updated_offer_amount)} is
-              submitted.
+              Congrats, for the loan offer
             </div>
           )}
 
