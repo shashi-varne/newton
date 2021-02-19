@@ -159,7 +159,7 @@ class ReportDetails extends Component {
                 />
               </div>
               <div className="mt-right">
-                <div className="mtr-top">LOAN AMOUNT</div>
+                <div className="mtr-top">LOAN AMOUNT*</div>
                 <div className="mtr-bottom">
                   ₹
                   {changeNumberFormat(
@@ -173,12 +173,12 @@ class ReportDetails extends Component {
               <div className="mt-left">
                 <img
                   src={require(`assets/${this.state.productName}/icn_ROI.svg`)}
-                  style={{margin: '0 3px 0 5px'}}
+                  style={{ margin: "0 3px 0 5px" }}
                   alt=""
                 />
               </div>
               <div className="mt-right">
-                <div className="mtr-top">RATE OF INTEREST</div>
+                <div className="mtr-top">RATE OF INTEREST*</div>
                 <div className="mtr-bottom">
                   {Math.round(this.state.vendor_info.updated_offer_roi)}% p.a.
                 </div>
@@ -193,7 +193,7 @@ class ReportDetails extends Component {
                 />
               </div>
               <div className="mt-right">
-                <div className="mtr-top">EMI AMOUNT</div>
+                <div className="mtr-top">EMI AMOUNT*</div>
                 <div className="mtr-bottom">
                   {inrFormatDecimal(this.state.vendor_info.updated_offer_emi)}
                   /month
@@ -211,7 +211,9 @@ class ReportDetails extends Component {
               <div className="mt-right">
                 <div className="mtr-top">APPLICATION SUBMISSION DATE</div>
                 <div className="mtr-bottom">
-                  {timeStampToDate(this.state.vendor_info.dt_updated || "")}
+                  {timeStampToDate(
+                    this.state.application_info.dt_updated || ""
+                  )}
                 </div>
               </div>
             </div>
@@ -228,6 +230,11 @@ class ReportDetails extends Component {
                 <div className="mtr-bottom">{this.state.application_id}</div>
               </div>
             </div>
+          </div>
+
+          <div className="disclaimer">
+            * Indicated figures are as per the initial loan offer. These are
+            subject to change.
           </div>
         </div>
 
