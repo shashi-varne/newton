@@ -288,6 +288,7 @@ class AdvisoryLiabilityDetails extends Component {
                helperText={this.state.form_data.loan_amount_error}
                value={this.state.form_data.loan_amount || ""}
                onChange={this.handleChange()}
+               autoComplete="off"
              />
              </InputPrefix>
              </div>
@@ -323,6 +324,7 @@ class AdvisoryLiabilityDetails extends Component {
                   helperText={this.state.form_data.total_amount_error}
                   value={this.state.form_data.total_amount || ""}
                   onChange={this.handleChange()}
+                  autoComplete="off"
                 />
                 </InputPrefix>
                 </div>
