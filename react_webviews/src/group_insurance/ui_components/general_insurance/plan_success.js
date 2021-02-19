@@ -103,16 +103,16 @@ class PlanSuccessClass extends Component {
     })
 
     let error = '';
+    let errorType = '';
     try {
 
       let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        skelton: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
-
-
+        this.setState({
+          skelton: false
+        })
         let lead_data = res.pfwresponse.result.lead;
 
         let accordians_data = [
@@ -145,15 +145,16 @@ class PlanSuccessClass extends Component {
         })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
 
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: 'page'
       });
+      error= true;
+      errorType= 'crash';
     }
 
 
@@ -162,7 +163,8 @@ class PlanSuccessClass extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })

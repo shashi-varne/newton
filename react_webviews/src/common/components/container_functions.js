@@ -2,7 +2,6 @@
 import { getConfig, setHeights } from 'utils/functions';
 // import { nativeCallback } from "utils/native_callback";
 
-
 import React from "react";
 
 import Button from "material-ui/Button";
@@ -251,6 +250,10 @@ export function renderGenericError() {
 
     if(!title1) {
         title1 = map_data.title1;
+    }
+
+    if(title2 === true) {
+        title2 = '';
     }
 
     let two_button  = handleClick2 ? true: false;

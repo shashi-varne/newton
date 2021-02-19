@@ -294,6 +294,8 @@ class BasicDetailsForm extends Component {
     }
 
     let error = '';
+
+    let errorType = '';
     try {
   
       if (this.state.lead_id) { 
@@ -304,12 +306,13 @@ class BasicDetailsForm extends Component {
          
           let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
-          leadData = res.pfwresponse.result.lead;
+          leadData = res.pfwresponse.result.lead; 
           this.setState({
             skelton: false
           })
           if (res.pfwresponse.status_code === 200) {
-  
+         
+
             
           } else {
             toast(res.pfwresponse.result.error || res.pfwresponse.result.message
@@ -336,18 +339,18 @@ class BasicDetailsForm extends Component {
         })
         let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
 
-        this.setState({
-          skelton: false
-        })
+        
         if (res.pfwresponse.status_code === 200) {
-
+        
           let result = {};
           if (res.pfwresponse.result.response_data) {
             result = res.pfwresponse.result.response_data.insurance_account || {};
           } else {
             result = res.pfwresponse.result.insurance_account || {};
           }
-
+          this.setState({
+            skelton: false
+          })
           basic_details_data.name = result.name || '';
           basic_details_data.gender = result.gender || '';
           basic_details_data.marital_status = result.marital_status || '';
@@ -364,18 +367,16 @@ class BasicDetailsForm extends Component {
 
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
       }
 
     } catch (err) {
+      error = true
+      errorType = 'crash'
       this.setState({
-        showError: 'page',
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        },
-        skelton: false
-      });
+        skelton:false
+      })
     }
 
     // set error data
@@ -383,9 +384,11 @@ class BasicDetailsForm extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type:errorType
+
         },
-        showError: 'page'
+        showError: 'page',
       })
     }
     this.setState({
@@ -578,6 +581,7 @@ class BasicDetailsForm extends Component {
 
 
       let error = '';
+      let errorType= '';
       try {
         this.setState({
           show_loader: 'button'
@@ -608,7 +612,7 @@ class BasicDetailsForm extends Component {
               error = res2.pfwresponse.result.error.error || res2.pfwresponse.result.error;
             }
           } else {
-            error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong'
+            error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || true
           }
         }
 
@@ -616,11 +620,9 @@ class BasicDetailsForm extends Component {
       } catch (err) {
         this.setState({
           show_loader: false,
-          showError: true,
-          errorData: {
-            ...this.state.errorData, type: 'crash'
-          }
         });
+        error = true
+        errorType = 'crash'
       }
 
       // set error data
@@ -628,7 +630,8 @@ class BasicDetailsForm extends Component {
         this.setState({
           errorData: {
             ...this.state.errorData,
-            title2: error
+            title2: error,
+            type:errorType
           },
           showError:true
         })

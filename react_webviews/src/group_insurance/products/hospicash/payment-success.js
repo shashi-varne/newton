@@ -5,7 +5,8 @@ class HospicashPaymentSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        product_key: 'HOSPICASH'
+        product_key: 'HOSPICASH',
+        headerTitle: 'Hospicash insurance'
     }
   }
   
