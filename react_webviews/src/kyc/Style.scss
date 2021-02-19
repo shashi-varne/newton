@@ -258,6 +258,16 @@
       font-size: 14px;
       border-color: #767e86;
     }
+
+    .disabled {
+      .RadioButton {
+        border-color: #9b98a2;
+
+        label {
+          color: #9b98a2;
+        }
+      }
+    }
   }
 
   footer {
@@ -561,7 +571,7 @@
     .input {
       margin-top: 20px;
 
-      input[type='password'] {
+      input[type="password"] {
         font-size: 24px;
       }
 
@@ -1629,5 +1639,54 @@
     -ms-flex-pack: center;
     justify-content: center;
     margin-top: 10px;
+  }
+}
+
+.kyc-address-details {
+  .input {
+    .address-label {
+      color: #8d879b;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .address-proof {
+      display: flex;
+      flex-wrap: wrap;
+
+      .address-proof-option {
+        margin: 10px 10px 10px 0;
+        padding: 8px 10px 8px 10px;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 4px;
+        text-align: left;
+        font-size: 13px;
+        color: #160d2e;
+        border: 1px solid;
+        border-color: #767e86;
+        min-width: 130px;
+
+        .check-icon {
+          width: 10px;
+        }
+      }
+
+      .disabled {
+        color: #9b98a2;
+        border-color: #9b98a2;
+      }
+
+      .selected {
+        font-weight: 600;
+        color: var(--primary);
+        border-color: var(--primary);
+      }
+
+      .helper-text {
+        margin-top: -5px;
+        color: #f44336;
+      }
+    }
   }
 }

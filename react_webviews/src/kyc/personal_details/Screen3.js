@@ -114,7 +114,7 @@ const PersonalDetails3 = (props) => {
           {title} <span>3/4</span>
         </div>
         <main>
-          <div className="input">
+          <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.occupation_error ? true : false}
               helperText={form_data.occupation_error}

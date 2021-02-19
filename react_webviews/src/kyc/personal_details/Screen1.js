@@ -24,7 +24,7 @@ import toast from "common/ui/Toast";
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(true);
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [isApiRunning, setIsApiRunning] = useState(true);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [userkyc, setUserKyc] = useState(
@@ -198,7 +198,7 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           )}
-          <div className="input">
+          <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
@@ -212,7 +212,7 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
+          <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}

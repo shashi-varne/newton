@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify'
 import NotFound from '../common/components/NotFound'
 
 import Journey from './journey'
-import Address from './address'
 import Upload from './upload'
 import Intro from './upload/intro'
 import Progress from './upload/progress'
@@ -53,6 +52,7 @@ import PersonalDetails4 from './personal_details/Screen4'
 import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
 import SampleDocuments from './bank-kyc/SampleDocuments'
 import Esign from './esign'
+import AddressDetails1 from './address/screen1'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -91,7 +91,7 @@ const Kyc = (props) => {
             path={`${url}/personal-details4`}
             component={PersonalDetails4}
           />
-          <Route exact path={`${url}/address`} component={Address} />
+          <Route exact path={`${url}/address-details1`} component={AddressDetails1} />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
