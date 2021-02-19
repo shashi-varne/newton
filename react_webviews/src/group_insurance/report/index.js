@@ -218,7 +218,7 @@ class Report extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -241,14 +241,13 @@ class Report extends Component {
   }
   async componentDidMount() {
     let error = '';
+    let errorType = '';
     this.setErrorData('onload');
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/get/report');
 
-      this.setState({
-        skelton: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.response;
@@ -264,11 +263,13 @@ class Report extends Component {
         let group_insurance_policies = policyData.group_insurance || {};
         let health_insurance_policies = policyData.health_insurance || {};
         let term_insurance_policies = policyData.term_insurance || {};
-
+        this.setState({
+          skelton: false
+        })
         this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
       } else {
         error=res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         // this.setState({ nextPage: ''})
       }
 
@@ -277,13 +278,14 @@ class Report extends Component {
       this.setState({
         skelton: false
       });
-      error='Something went wrong';
+      error=true;
     }
     if(error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })

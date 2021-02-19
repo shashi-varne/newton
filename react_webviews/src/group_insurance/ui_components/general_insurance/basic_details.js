@@ -11,7 +11,6 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -307,16 +306,13 @@ class BasicDetailsForm extends Component {
           let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
           leadData = res.pfwresponse.result.lead; 
-          this.setState({
-            skelton: false
-          })
           if (res.pfwresponse.status_code === 200) {
          
 
             
           } else {
-            toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-              || 'Something went wrong');
+            error=res.pfwresponse.result.error || res.pfwresponse.result.message
+              || true;
           }
         }
   
@@ -419,7 +415,7 @@ class BasicDetailsForm extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {

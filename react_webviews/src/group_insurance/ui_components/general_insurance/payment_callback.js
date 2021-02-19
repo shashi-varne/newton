@@ -38,7 +38,7 @@ class PaymentCallbackClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again'
+          button_text1: 'Retry'
         },
         'submit': {
           handleClick1: this.handleClickCurrent,
@@ -77,7 +77,7 @@ class PaymentCallbackClass extends Component {
         if (res.pfwresponse.status_code === 200) {
           this.setState({
             skelton: false
-        })
+          })
             if(res.pfwresponse.result.payment_status === 'success') {
                 this.navigate('payment-success');
             }
@@ -96,7 +96,6 @@ class PaymentCallbackClass extends Component {
       }
       if(error) {
         this.setState({
-          skelton:false,
           errorData: {
             ...this.state.errorData,
             title2: error,
