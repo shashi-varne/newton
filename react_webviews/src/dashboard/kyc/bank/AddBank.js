@@ -59,12 +59,12 @@ const AddBank = (props) => {
     }
     setName(kycDetails.pan.meta_data.name || "");
     let data = { ...bankData };
-    console.log(typeof bank_id);
-    console.log(typeof kycDetails.additional_approved_banks[0].bank_id);
+    // console.log(typeof bank_id);
+    // console.log(typeof kycDetails.additional_approved_banks[0].bank_id);
     if (bank_id) {
       data =
         kycDetails.additional_approved_banks.find(
-          (obj) => obj.bank_id.toString() === bank_id
+          (obj) => obj.bank_id === bank_id
         ) || {};
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 3) {
