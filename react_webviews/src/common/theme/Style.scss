@@ -1356,15 +1356,17 @@ input#pan {
     margin-bottom: 10px;
 
     .hr {
-      width: 48.5%;
+      width: 48%;
     }
 
     .tiny-hr {
-      width: 23.5%;
+      width: 23%;
+      height: 2px;
     }
 
     .large-hr {
       width: 75%;
+      height: 2px;
     }
 
     .invisible-line {
@@ -1372,11 +1374,11 @@ input#pan {
     }
 
     .line {
-      border-top: 1px solid var(--highlight);
+      border: 1px solid var(--highlight);
     }
 
     .line-completed {
-      border-top: 1px solid var(--primary);
+      border: 1px solid var(--primary);
     }
 
     .dot {
