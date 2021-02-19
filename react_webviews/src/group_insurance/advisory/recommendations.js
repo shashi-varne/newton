@@ -151,7 +151,7 @@ class AdivsoryRecommendations extends Component {
         this.setErrorData('onload')
         
         this.setState({
-            skelton: true
+            show_loader: 'page'
         })
         this.sendEvents('next', "", "", true)
         var advisory_id = storageService().getObject("advisory_id")
@@ -163,7 +163,7 @@ class AdivsoryRecommendations extends Component {
           
             if (res.pfwresponse.status_code === 200) {
                 this.setState({
-                    skelton: false
+                    show_loader: false
                 })
                 
                 this.openPdf(resultData.download_link, "read_document")
@@ -173,7 +173,6 @@ class AdivsoryRecommendations extends Component {
         }catch(err){
             this.setState({
                 show_loader: false,
-                skelton: false,
                 showError: true,
                 errorData: {
                   ...this.state.errorData, type: 'crash'
@@ -189,7 +188,7 @@ class AdivsoryRecommendations extends Component {
               title2: error
             },
             showError: true,
-            skelton: false,
+            show_loader: false,
           })
         }
 

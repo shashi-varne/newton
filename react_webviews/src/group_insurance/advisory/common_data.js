@@ -21,9 +21,6 @@ export async function updateLead( body, next_page, final_page, reset) {
       this.setState({
         show_loader: 'page'
       })
-      storageService().remove("advisory_id");
-      storageService().remove("advisory_data");
-      storageService().remove("advisory_resume_present");
     }
     let error = ''
     try{
@@ -46,6 +43,8 @@ export async function updateLead( body, next_page, final_page, reset) {
             }
             if(reset){
               storageService().setObject('advisory_id',resultData.insurance_advisory.id)
+              storageService().remove("advisory_data");
+              storageService().remove("advisory_resume_present");
             }
               this.navigate(`/group-insurance/advisory/${next_page}`);                    
            } else {
@@ -64,12 +63,12 @@ export async function updateLead( body, next_page, final_page, reset) {
       // set error data
       if(error) {
         this.setState({
+          show_loader: false,
           errorData: {
             ...this.state.errorData,
             title2: error
           },
           showError: true,
-          skelton: false,
         })
       }
 }
