@@ -265,8 +265,11 @@ class UploadBank extends Component {
   save(file) {
     let acceptedType = ["application/pdf"];
 
-    if (file.size >= 600000) {
+    if (file.size >= 6000000) {
       toast("Please select pdf file less than 6 MB only");
+      this.setState({
+        show_loader: false,
+      })
       return;
     }
 
@@ -280,7 +283,7 @@ class UploadBank extends Component {
 
     file.status = "uploaded";
     file.name = !file.file_name
-      ? `bank statement ${count}`
+      ? `bank statement ${count + 1}`
       : `${file.file_name}`;
     file.id = count++;
 
