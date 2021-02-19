@@ -561,7 +561,7 @@
     .input {
       margin-top: 20px;
 
-      input[type="password"] {
+      input[type='password'] {
         font-size: 24px;
       }
 
@@ -1064,7 +1064,8 @@
   }
 }
 
-#kyc-upload-pan, .page-body-kyc {
+#kyc-upload-pan,
+.page-body-kyc {
   font-size: 14px;
   .alert-status-info {
     margin-top: 20px;
@@ -1080,53 +1081,11 @@
     display: flex;
     flex-wrap: nowrap;
   }
-
-  // .kyc-doc-upload-container {
-  //   margin-top: 20px;
-  //   border: 1px dashed var(--skelton-color); 
-  //   padding: 10px;
-  // }
-
-  // .kyc-doc-upload-container .caption {
-  //   text-align: center;
-  // }
-
-  // .kyc-doc-upload-container .preview {
-  //   display: block;
-  //   width: 100%;
-  //   object-fit: contain;
-  // }
-
-  // .kyc-upload-doc-actions {
-  //   margin-top: 20px;
-  //   .kyc-upload {
-  //     display: none;
-  //   }
-  //   .kyc-upload-button {
-  //     display: block;
-  //     margin: 0 auto;
-  //     margin-top: 10px;
-  //     background-color: transparent;
-  //     padding: 0;
-  //     border: none;
-      
-  //     svg {
-  //       fill: var(--secondary);
-  //     }
-  //   }
-
-  //   .upload-action {
-  //     text-transform: uppercase;
-  //     color: var(--secondary);
-  //     font-size: 10px;
-  //     font-weight: 800;
-  //   }
-  // }
 }
 
 .kyc-doc-upload-container {
   margin-top: 20px;
-  border: 1px dashed var(--skelton-color); 
+  border: 1px dashed var(--skelton-color);
   padding: 10px;
 }
 
@@ -1152,7 +1111,7 @@
     background-color: transparent;
     padding: 0;
     border: none;
-    
+
     svg {
       fill: var(--secondary);
     }
@@ -1360,3 +1319,315 @@
 }
 
 /////////////////// KYC DIALOG END ///////////////
+
+#kyc-bank-kyc {
+  .alert-status-info {
+    margin-top: 25px;
+    line-height: 1.5;
+  }
+
+  .textField {
+    margin-top: 20px;
+  }
+}
+
+#kyc-bank-kyc-verify {
+  .detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    border-bottom: 1px solid #ededed;
+    padding: 20px 0;
+  }
+
+  .alert-status-info {
+    margin-top: 20px;
+    line-height: 1.5;
+  }
+
+  .detail .title {
+    font-weight: bold;
+  }
+
+  .detail .edit {
+    text-transform: uppercase;
+    color: var(--secondary);
+  }
+}
+// Kyc bank verify end
+#kyc-bank-kyc-upload-docs {
+  .banner {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f6f2ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .banner .title {
+    margin-left: 10px;
+    font-size: 11px;
+    color: #767e86;
+  }
+
+  .banner .edit {
+    text-transform: uppercase;
+    color: var(--secondary);
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .MuiGrid-container {
+    align-items: center;
+  }
+
+  .MuiGrid-item {
+    flex: 1 0 50%;
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .MuiGrid-item:nth-of-type(3) {
+    max-width: 70%;
+  }
+
+  .RadioButton label {
+    font-size: 11px;
+    border: 1px solid black;
+    color: black;
+    box-sizing: border-box;
+  }
+
+  .RadioLabelChecked {
+    font-weight: 600;
+  }
+
+  .doc-title {
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 24px;
+    color: var(--default);
+  }
+
+  .docs-image-container {
+    padding: 10px;
+    max-width: 100%;
+    background: #f5faff;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    margin-top: 20px;
+  }
+
+  .docs-image-container .preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: #f6f2ff;
+  }
+
+  .sign-img {
+    display: block;
+    width: 56.15px;
+    height: 48.72px;
+  }
+
+  .preview-image {
+    display: block;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  .upload-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    top: -10px;
+    cursor: pointer;
+  }
+
+  .upload-container svg {
+    fill: var(--secondary);
+  }
+
+  .upload-container .upload-action {
+    color: var(--secondary);
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 800;
+    margin-top: 3px;
+  }
+
+  .sample-document {
+    margin: 0 auto;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-top: 30px;
+    text-align: center;
+    color: var(--secondary);
+  }
+
+  .ssl-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 40px 0;
+  }
+}
+
+#kyc-bank-verification-dialog {
+  .MuiDialog-paper {
+    position: absolute;
+    bottom: 0;
+    margin: 0 !important;
+  }
+
+  .footer .MuiButton-label {
+    text-transform: uppercase;
+  }
+}
+
+.pending-bank-verification {
+  .icon {
+    align-self: flex-start;
+  }
+
+  .title {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600px;
+    width: 60%;
+    margin: 30px 0;
+  }
+
+  .description {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #767e86;
+  }
+
+  .continue-btn {
+    text-transform: uppercase !important;
+  }
+}
+
+#kyc-bank-sample-docs {
+  .title {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+  }
+
+  .description {
+    font-size: 13px;
+    line-height: 21px;
+    color: #767e86;
+    margin: 10px 0 20px 0;
+  }
+
+  .doc fieldset {
+    width: 90%;
+    border: 1px solid #9fa7b0;
+    box-sizing: border-box;
+    border-radius: 7px;
+    margin: 10px 0 30px 0;
+  }
+
+  .doc .doc-name {
+    font-weight: 800;
+    font-size: 13px;
+    line-height: 21px;
+    color: #0a1d32;
+  }
+
+  .doc fieldset legend {
+    width: 108px;
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 9px;
+    color: #9fa7b0;
+    border-bottom: 0px !important;
+    margin-left: 7px;
+  }
+}
+
+#kyc-esign {
+  .title {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    color: #160d2e;
+  }
+
+  .digi-image {
+    display: block;
+    min-width: 314px;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .subtitle {
+    margin-bottom: 21px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 18px;
+    color: #160d2e;
+  }
+
+  .esign-steps {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .esign-steps .step-icon {
+    display: block;
+    flex: 3;
+    margin-right: 20px;
+    width: 80px;
+    height: 60px;
+    border-radius: 3px;
+  }
+  .esign-steps .step .step-text {
+    display: flex;
+    align-items: center;
+    flex: 9;
+    font-size: 13px;
+    line-height: 22px;
+    color: #8d879b;
+  }
+
+  .bottom {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .bottom .bottom-text {
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    min-width: 65px;
+    font-weight: 500;
+    font-size: 8px;
+    line-height: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #767e86;
+  }
+
+  .bottom .bottom-image {
+    display: flex;
+    width: 100%;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+}

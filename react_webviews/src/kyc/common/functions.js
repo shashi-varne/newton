@@ -1,14 +1,14 @@
 import { getConfig } from "utils/functions";
 import { calculateAge, isValidDate } from "utils/validators";
-import { validateEmail } from "../../utils/validators";
+import { isEmpty, validateEmail } from "../../utils/validators";
 
 export function navigate(pathname, data = {}) {
-  if (data.edit) {
+  if (data?.edit) {
     this.history.replace({
       pathname: pathname,
       search: data?.searchParams || getConfig().searchParams,
-      state: data.state,
-      params: data.params,
+      state: data?.state || null,
+      params: data?.params || null,
     });
   } else {
     this.history.push({
