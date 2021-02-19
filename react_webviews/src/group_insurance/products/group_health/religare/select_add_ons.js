@@ -41,11 +41,11 @@ class GroupHealthPlanAddOns extends Component {
           let mapper = {
             'onload':  {
               handleClick1: this.onload,
-              button_text1: 'Fetch again',
+              button_text1: 'Retry',
               title1: ''
             },
             'submit': {
-              handleClick1: this.handleClickCurrent,
+              handleClick1: this.handleClick,
               button_text1: 'Retry',
               handleClick2: () => {
                 this.setState({
@@ -63,9 +63,14 @@ class GroupHealthPlanAddOns extends Component {
     
       }
     async componentDidMount() {
+        this.onload();        
+    }
+
+    onload =async()=>{
         this.setErrorData("onload");
         
         let error = "";
+        let errorType = "";
         let post_body = this.state.groupHealthPlanData.post_body;
 
         let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type','floater_type', "plan_id","si"];
@@ -86,12 +91,11 @@ class GroupHealthPlanAddOns extends Component {
             try {
                 const res = await Api.post('api/insurancev2/api/insurance/health/quotation/get_add_ons/religare', body);
 
-                this.setState({
-                    skelton: false
-                });
                 var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
-                    
+                    this.setState({
+                        skelton: false
+                    });
                     add_ons_data = resultData.compulsary.concat(resultData.optional)  || [];
 
                     
@@ -127,20 +131,22 @@ class GroupHealthPlanAddOns extends Component {
                     
                 } else {
                     error=resultData.error || resultData.message
-                        || 'Something went wrong';
+                        || true;
                 }
             } catch (err) {
                 console.log(err)
                 this.setState({
                     skelton: false
                 });
-                error='Something went wrong';
+                error=true;
+                errorType="crash";
             }
             if (error) {
                 this.setState({
                   errorData: {
                     ...this.state.errorData,
                     title2: error,
+                    type: errorType
                   },
                   showError: "page",
                 });
@@ -158,7 +164,6 @@ class GroupHealthPlanAddOns extends Component {
         }, () => {
             this.updateCtaPremium()
         })
-        
     }
 
     updateCtaPremium = () => {

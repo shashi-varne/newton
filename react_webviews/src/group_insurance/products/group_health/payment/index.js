@@ -100,11 +100,11 @@ class GroupHealthPayment extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1: this.handleClick,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
@@ -174,7 +174,6 @@ class GroupHealthPayment extends Component {
             type:errorType
           },
           showError: "page",
-          skelton: false
         });
       }
     }

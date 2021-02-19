@@ -38,11 +38,11 @@ class GroupHealthPlanStarSumInsured extends Component {
           let mapper = {
             'onload':  {
               handleClick1: this.onload,
-              button_text1: 'Fetch again',
+              button_text1: 'Retry',
               title1: ''
             },
             'submit': {
-              handleClick1: this.handleClickCurrent,
+              handleClick1: this.handleClick,
               button_text1: 'Retry',
               handleClick2: () => {
                 this.setState({
@@ -60,7 +60,12 @@ class GroupHealthPlanStarSumInsured extends Component {
     
       }
     async componentDidMount() {
+        this.onload();
+    }
+
+    onload = async() =>{
         let error="";
+        let errorType="";
         this.setErrorData("onload");
 
         let groupHealthPlanData = this.state.groupHealthPlanData;
@@ -90,24 +95,28 @@ class GroupHealthPlanStarSumInsured extends Component {
                     plan_selected_final: resultData.premium_details,
                     loadingPremium: false
                 });
+                this.setState({
+                    skelton: false
+                });
             } else {
                 this.setState({
                     premiumAmt: '--',
                     apiError :true
                 })
-                error=resultData.error || 'Something went wrong! Please try again.';
+                error=resultData.error || true;
+                
             }
-           this.setState({
-                skelton: false
-            });
+           
 
         } catch (err) {
             console.log(err);
-            error='Something went wrong';
+            error=true;
+            errorType="crash";
             this.setState({
                 premiumAmt: '--',
                 loadingPremium: false,
-                apiError :true
+                apiError :true,
+                skelton:false
             });
         }
         if (error) {
@@ -115,6 +124,7 @@ class GroupHealthPlanStarSumInsured extends Component {
               errorData: {
                 ...this.state.errorData,
                 title2: error,
+                type:errorType
               },
               showError: "page",
             });

@@ -121,6 +121,8 @@ class GroupHealthPlanAddressDetails extends Component {
                 form_data: form_data,
                 isLoadingCity: true
             })
+            let error='';
+            let errorType='';
             try {
                 const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
 
@@ -141,9 +143,20 @@ class GroupHealthPlanAddressDetails extends Component {
                 this.setState({
                     show_loader: false
                 });
-                toast('Something went wrong');
+                error=true;
+                errorType="crash";
             }
-
+            if (error) {
+                this.setState({
+                  errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                  },
+                  showError: "page",
+                });
+              }
+            
         } else {
             form_data.state = '';
         }

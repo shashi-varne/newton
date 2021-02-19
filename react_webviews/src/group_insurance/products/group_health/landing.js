@@ -89,7 +89,7 @@ class GroupHealthLanding extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -111,9 +111,14 @@ class GroupHealthLanding extends Component {
 
   }
   async componentDidMount() {
+    this.onload()
+  }
+
+  onload = async()=>{
     this.setErrorData("onload");
     this.setState({ skelton: true });
     let error = "";
+    let errorType = "";
     let openModuleData = this.state.openModuleData || {};
     const provider = this.state.providerConfig.provider_api;
     const body = { provider: provider };
@@ -139,7 +144,7 @@ class GroupHealthLanding extends Component {
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
       } else {
-        error = resultData.error || resultData.message || "Something went wrong";
+        error = resultData.error || resultData.message || true;
       }
       this.setState(
         {
@@ -164,7 +169,8 @@ class GroupHealthLanding extends Component {
       this.setState({
         skelton: false,
       });
-      error = "Something went wrong";
+      error = true;
+      errorType = "crash"
     }
 
     if (error) {
@@ -172,6 +178,7 @@ class GroupHealthLanding extends Component {
         errorData: {
           ...this.state.errorData,
           title2: error,
+          type: errorType
         },
         showError: "page",
       });

@@ -40,11 +40,11 @@ class GroupHealthPlanPremiumSummary extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1: this.handleClick,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
@@ -64,6 +64,8 @@ class GroupHealthPlanPremiumSummary extends Component {
   onload = async () => {
     this.setErrorData("onload");
     let error = "";
+    let errorType = "";
+
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
     let post_body = groupHealthPlanData.post_body;
 
@@ -118,11 +120,13 @@ class GroupHealthPlanPremiumSummary extends Component {
         skelton: false
       });
       }catch(err){
+        console.log(err)
         this.setState({
           skelton: false
         });
-        error=err
-        console.log(err)
+        error=true;
+        errorType= 'crash';
+        
       }
       if(error)
       {
@@ -130,6 +134,7 @@ class GroupHealthPlanPremiumSummary extends Component {
           errorData: {
             ...this.state.errorData,
             title2: error,
+            type: errorType
           },
           showError: "page",
         });
@@ -237,6 +242,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     this.sendEvents("next");
     this.setErrorData("submit")
     let error="";
+    let errorType="";
       try {
         this.setState({
           show_loader: "button",
@@ -270,19 +276,21 @@ class GroupHealthPlanPremiumSummary extends Component {
           this.setState({
             show_loader: false,
           });
-          error=resultData.error || resultData.message || "Something went wrong"
+          error=resultData.error || resultData.message || true
         }
     } catch (err) {
       this.setState({
         show_loader: false,
       });
-      error = "Something went wrong";
+      error = true;
+      errorType = "crash";
     }
     if (error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
           title2: error,
+          type: errorType
         },
         showError: true,
       });

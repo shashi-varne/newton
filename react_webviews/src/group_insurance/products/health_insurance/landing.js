@@ -139,7 +139,7 @@ class HealthInsuranceLanding extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         }
       };
@@ -158,13 +158,14 @@ class HealthInsuranceLanding extends Component {
     this.setState({ skelton: true });
     
     let error = '';
+    let errorType = '';
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
       if (!this.state.openModuleData.sub_module) {
-        this.setState({
-          skelton: false
-        })
+        // this.setState({
+        //   skelton: false
+        // })
       }
 
       if (res.pfwresponse.status_code === 200) {
@@ -227,23 +228,24 @@ class HealthInsuranceLanding extends Component {
             this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
+        this.setState({
+          skelton: false
+        });
 
       } else {
-
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
-      this.setState({
-        skelton: false
-      });
+      
 
     } catch (err) {
       console.log(err)
       this.setState({
         skelton: false,
-        showError: 'page'
       });
+      error= true;
+      errorType= "crash";
     }
 
     // set error data
@@ -251,7 +253,8 @@ class HealthInsuranceLanding extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type:errorType
         },
         showError:'page'
       })
@@ -444,6 +447,8 @@ class HealthInsuranceLanding extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Health insurance">
         <div>
           <div className='products' style={{marginTop : '10px'}}>

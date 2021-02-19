@@ -48,11 +48,11 @@ class GroupHealthPlanDetails extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1: this.handleClick,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
@@ -70,10 +70,14 @@ class GroupHealthPlanDetails extends Component {
 
   }
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload =async()=>{
     this.setErrorData("onload");
     this.setState({ skelton:true});
     let error = "";
-
+    let errorType = "";
     let { provider } = this.state;
     let groupHealthPlanData = this.state.groupHealthPlanData;
     let post_body = groupHealthPlanData.post_body;
@@ -150,31 +154,34 @@ class GroupHealthPlanDetails extends Component {
         `api/insurancev2/api/insurance/health/quotation/plan_information/${this.state.providerConfig.provider_api}`,
         body
       );
-      this.setState({
-        skelton:false
-      });
+      
       var resultData = res.pfwresponse.result;
       if (res.pfwresponse.status_code === 200) {
         this.setState({
           plan_data: resultData,
           benefits: resultData.benefits,
         });
+        this.setState({
+          skelton:false
+        });
       } else {
         error =
-          resultData.error || resultData.message || "Something went wrong";
+          resultData.error || resultData.message || true;
       }
     } catch (err) {
       console.log(err);
       this.setState({
         skelton: false,
       });
-      error = "Something went wrong";
+      error = true;
+      errorType = "crash";
     }
     if (error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
           title2: error,
+          type: errorType
         },
         showError: "page",
       });

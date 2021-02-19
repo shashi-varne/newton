@@ -33,7 +33,7 @@ class GroupHealthPlanList extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -55,9 +55,14 @@ class GroupHealthPlanList extends Component {
 
   }
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload = async()=>{
     this.setErrorData("onload");
     this.setState({ skelton: true });
     let error = "";
+    let errorType = "";
     let {
       groupHealthPlanData: { post_body },
     } = this.state;
@@ -93,20 +98,22 @@ class GroupHealthPlanList extends Component {
           }
         );
       } else {
-        error = resultData.error || resultData.message || "Something went wrong";
+        error = resultData.error || resultData.message || true;
       }
     } catch (err) {
       console.log(err);
       this.setState({
         skelton: false,
       });
-      error = "Something went wrong";
+      error = true;
+      errorType = "crash";
     }
     if (error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
           title2: error,
+          type: errorType
         },
         showError: "page",
       });

@@ -65,11 +65,11 @@ class GroupHealthReportDetails extends Component {
           let mapper = {
             'onload':  {
               handleClick1: this.onload,
-              button_text1: 'Fetch again',
+              button_text1: 'Retry',
               title1: ''
             },
             'submit': {
-              handleClick1: this.handleClickCurrent,
+              handleClick1: this.handleClick,
               button_text1: 'Retry',
               handleClick2: () => {
                 this.setState({
@@ -87,15 +87,16 @@ class GroupHealthReportDetails extends Component {
     
       }
     async componentDidMount() {
+        this.onload();
+    }
+
+    onload = async()=>{
         this.setErrorData("onload");
         let error='';
+        let errorType='';
         try {        
             
             const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
-        
-            this.setState({
-                skelton:false
-            });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 let lead = {};
@@ -153,29 +154,34 @@ class GroupHealthReportDetails extends Component {
                     application_details: application_details,
                     payment_details: payment_details
                 })
-
+                this.setState({
+                    skelton:false
+                });
 
             } else {
                 error=resultData.error || resultData.message
-                    || 'Something went wrong';
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 skelton: false
             });
-            error = 'Something went wrong';
+            error = true;
+            errorType = "crash";
         }
         if (error) {
             this.setState({
                 errorData: {
                     ...this.state.errorData,
                     title2: error,
+                    type: errorType
                 },
                 showError: "page",
             });
         }
     }
+
 
     downloadPolicy(url) {
 

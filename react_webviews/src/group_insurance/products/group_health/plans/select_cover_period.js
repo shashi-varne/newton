@@ -31,11 +31,11 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1: this.handleClick,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
@@ -54,9 +54,14 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
   }
 
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload =async()=>{
     this.setErrorData("onload");
     this.setState({ skelton: true });
     let error = "";
+    let errorType = "";
     this.setState({
       selectedIndex: this.state.groupHealthPlanData.selectedIndexCover || 0,
       add_on_title: this.state.providerConfig.add_on_title,
@@ -93,9 +98,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         `api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,
         body
       );
-      this.setState({
-        skelton: false,
-      });
+      
       var resultData = res.pfwresponse.result;
 
       if (res.pfwresponse.status_code === 200) {
@@ -111,26 +114,32 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
             );
           }
         );
+        this.setState({
+          skelton: false,
+        });
       } else {
-        error = resultData.error || resultData.message || "Something went wrong";
+        error = resultData.error || resultData.message || true;
       }
     } catch (err) {
       console.log(err);
       this.setState({
         skelton: false,
       });
-      error = "Something went wrong";
+      error = true;
+      errorType = "crash";
     }
     if (error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
           title2: error,
+          type: errorType
         },
         showError: "page",
       });
     }
   }
+
   sendEvents(user_action) {
     let cover_period =
       ((this.state.premium_data || [])[this.state.selectedIndex || 0] || {})
@@ -183,7 +192,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
       body["floater_type"] = "non_floater";
     }
 
-    let error = "hello";
+    let error = "";
+    let errorType ="";
 
     this.setState({
       show_loader: "button",
@@ -202,7 +212,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         error =
           res.pfwresponse.result.error ||
           res.pfwresponse.results.message ||
-          "Something went wrong";
+          true;
 
       }
     } catch (err) {
@@ -210,7 +220,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
       this.setState({
         show_loader: false,
       });
-      error = "Something went wrong";
+      error = true;
+      errorType = "crash"
     }
 
     if (error) {
@@ -218,6 +229,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         errorData: {
           ...this.state.errorData,
           title2: error,
+          type: errorType
         },
         showError:true
       });

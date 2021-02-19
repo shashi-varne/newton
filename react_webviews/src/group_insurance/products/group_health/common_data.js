@@ -71,6 +71,7 @@ export async function initialize() {
         
         this.setErrorData("onload")
         let error="";
+        let errorType="";
         try {
 
             this.setState({
@@ -101,7 +102,7 @@ export async function initialize() {
                     
                 } else {
                     error=resultData.error || resultData.message ||
-                        'Something went wrong';
+                        true;
                 }
                 this.setState({
                     skelton: false
@@ -141,7 +142,7 @@ export async function initialize() {
 
                 } else {
                     error=resultData.error || resultData.message ||
-                        'Something went wrong';
+                        true;
                 }
             }
         } catch (err) {
@@ -151,7 +152,7 @@ export async function initialize() {
                 lead: lead,
                 common_data: {}
             });
-            error='Something went wrong';
+            error=true;
         }
         if(error)
         {
@@ -347,7 +348,7 @@ export async function updateLead( body, quote_id) {
                 error=
                     resultData.error ||
                     resultData.message ||
-                    'Something went wrong';
+                    true;
                 
             }
         }
@@ -356,7 +357,7 @@ export async function updateLead( body, quote_id) {
         this.setState({
             show_loader: false
         });
-        error='Something went wrong';
+        error=true;
     }
     if(error)
     {
@@ -396,11 +397,11 @@ function setErrorData(type) {
     let mapper = {
       onload: {
         handleClick1: this.onload,
-        button_text1: "Fetch again",
+        button_text1: "Retry",
         title1: "",
       },
       submit: {
-        handleClick1: this.handleClickCurrent,
+        handleClick1: this.handleClick,
         button_text1: "Retry",
         handleClick2: () => {
           this.setState({

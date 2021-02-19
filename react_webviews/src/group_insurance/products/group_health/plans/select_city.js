@@ -56,11 +56,11 @@ class GroupHealthPlanSelectCity extends Component {
           let mapper = {
             'onload':  {
               handleClick1: this.onload,
-              button_text1: 'Fetch again',
+              button_text1: 'Retry',
               title1: ''
             },
             'submit': {
-              handleClick1: this.handleClickCurrent,
+              handleClick1: this.handleClick,
               button_text1: 'Retry',
               handleClick2: () => {
                 this.setState({
@@ -78,9 +78,14 @@ class GroupHealthPlanSelectCity extends Component {
     
       }
     async componentDidMount() {
+        this.onload();
+    }
+
+    onload =async()=>{
         this.setErrorData("onload");
         this.setState({ skelton : true });
         let error = "";
+        let errorType = "";
         let body = {
             "provider": this.state.providerConfig.provider_api
           };
@@ -110,12 +115,13 @@ class GroupHealthPlanSelectCity extends Component {
                         error=
                             resultData.error ||
                             resultData.message ||
-                            'Something went wrong'
+                            true
                         
                     }
                 } catch (err) {
                     console.log(err);
-                    error='Something went wrong';
+                    error=true;
+                    errorType= "crash";
                 }
             const res2 = await Api.get('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo');
             
@@ -139,25 +145,28 @@ class GroupHealthPlanSelectCity extends Component {
             });    
             } else {
                 error=resultData2.error || resultData2.message
-                    || 'Something went wrong';
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 skelton : false
             });
-           error='Something went wrong';
+           error=true;
+           errorType="crash";
         }
         if (error) {
             this.setState({
               errorData: {
                 ...this.state.errorData,
                 title2: error,
+                type: errorType
               },
               showError: "page",
             });
           }
     }
+
     navigate = (pathname) => {
         this.props.history.push({
             pathname: pathname,
