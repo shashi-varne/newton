@@ -88,7 +88,7 @@ class AdvisoryIncomeDetails extends Component {
 
         if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)){
             form_data.income = formatAmount(lead.annual_income);
-            form_data.expense = formatAmount(lead.annual_personal_expense);
+            form_data.expense = lead.annual_personal_expense === 0 ? '0' : formatAmount(lead.annual_personal_expense);
             form_data.income_growth = lead.growth_in_income;
             form_data.retire = lead.age_of_retirement;
 
