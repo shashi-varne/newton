@@ -9,7 +9,6 @@ import Checkbox from "material-ui/Checkbox";
 import toast from "../../../common/ui/Toast";
 import {
   numDifferentiationInr,
-  formatAmountInr,
   formatAmount,
 } from "utils/validators";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
@@ -158,23 +157,24 @@ class LoanBtDetails extends Component {
   }
 
   handleClick = () => {
-    let { form_data, bt_info } = this.state;
+    let { form_data, bt_info, vendor_info } = this.state;
     let form_checked = form_data.filter((item) => item.is_selected === true);
 
     let submit_details = true;
     form_data.forEach((data, index) => {
       if (data.is_selected) {
         submit_details = this.validateFields(form_data, index);
-        if (
-          data.principalOutstanding &&
-          // eslint-disable-next-line
-          parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000
-        ) {
-          form_data[index][
-            "principalOutstanding_error"
-          ] = `amount cannot exceed ${formatAmountInr(500000)}`;
-          submit_details = false;
-        } else if (data.principalOutstanding) {
+      //   if (
+      //     data.principalOutstanding &&
+      //     // eslint-disable-next-line
+      //     parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000
+      //   ) {
+      //     form_data[index][
+      //       "principalOutstanding_error"
+      //     ] = `amount cannot exceed ${formatAmountInr(500000)}`;
+      //     submit_details = false;
+      //   } else 
+        if (data.principalOutstanding) {
           form_data[index][
             "principalOutstanding"
             // eslint-disable-next-line

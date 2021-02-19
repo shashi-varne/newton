@@ -11,7 +11,6 @@ import {
   dobFormatTest,
   isValidMonthYear,
   numDifferentiationInr,
-  formatAmountInr,
   formatAmount,
   IsFutureMonthYear,
 } from "utils/validators";
@@ -217,14 +216,15 @@ class LoanBtDetails extends Component {
           submit_details = false;
         }
 
-        if (data.principalOutstanding &&
-          // eslint-disable-next-line
-          parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000) {
-          form_data[index][
-            "principalOutstanding_error"
-          ] = `amount cannot exceed ${formatAmountInr(500000)}`;
-          submit_details = false;
-        } else if (data.principalOutstanding) {
+        // if (data.principalOutstanding &&
+        //   // eslint-disable-next-line
+        //   parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000) {
+        //   form_data[index][
+        //     "principalOutstanding_error"
+        //   ] = `amount cannot exceed ${formatAmountInr(500000)}`;
+        //   submit_details = false;
+        // } else 
+        if (data.principalOutstanding) {
           form_data[index][
             "principalOutstanding"
             // eslint-disable-next-line
