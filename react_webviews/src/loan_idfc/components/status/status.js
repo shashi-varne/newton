@@ -312,7 +312,7 @@ class LoanStatus extends Component {
         show_loader: true,
       });
       toast(
-        "A mail has been sent to your official mail ID. Verify the same for faster loan sanction."
+        "An email has been sent to your official email ID. Verify the same for faster loan sanction."
       );
       let body = {
         perfios_state: "init",
@@ -476,7 +476,7 @@ class LoanStatus extends Component {
           {commonMapper.top_title === "System error" && (
             <div>
               <div className="subtitle">
-                <b>Oops!</b> something's not right. We are checking this with
+                <b>Oops!</b> something is not right. We are checking this with
                 IDFC FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
@@ -491,7 +491,7 @@ class LoanStatus extends Component {
                 alt=""
               />
               <div className="subtitle">
-                <b>Oops!</b> something's not right. We are checking this with
+                <b>Oops!</b> something is not right. We are checking this with
                 IDFC FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
