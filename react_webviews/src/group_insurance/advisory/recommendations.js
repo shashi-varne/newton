@@ -159,7 +159,6 @@ class AdivsoryRecommendations extends Component {
         try{
             var res = await Api.get(`api/insurancev2/api/insurance/advisory/pdf/download?insurance_advisory_id=${advisory_id}`);
 
-            
             var resultData = res.pfwresponse.result;
           
             if (res.pfwresponse.status_code === 200) {

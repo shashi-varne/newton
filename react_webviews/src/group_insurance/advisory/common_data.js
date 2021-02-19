@@ -27,37 +27,33 @@ export async function updateLead( body, next_page, final_page, reset) {
     }
     let error = ''
     try{
-           var res = await Api.put(update_url, body);
+          var res = await Api.put(update_url, body);
           if(body.status === 'cancelled'){
             storageService().remove('advisory_resume_present');
           }
-
-           this.setState({
-             show_loader: false
-           })
            var resultData = res.pfwresponse.result;
          
            if (res.pfwresponse.status_code === 200) {
-               if(final_page){
-                var advisory_data = storageService().getObject('advisory_data') || {};
-                var recommendation_data = resultData.coverage_gap_dict;
-                var user_data = resultData.insurance_advisory;
-                setRecommendationData(advisory_data, recommendation_data, user_data)
+            this.setState({
+              show_loader: false
+            })
+            if(final_page){
+             var advisory_data = storageService().getObject('advisory_data') || {};
+             var recommendation_data = resultData.coverage_gap_dict;
+             var user_data = resultData.insurance_advisory;
+             setRecommendationData(advisory_data, recommendation_data, user_data)
                 
             }
             if(reset){
               storageService().setObject('advisory_id',resultData.insurance_advisory.id)
             }
-
-
-               this.navigate(`/group-insurance/advisory/${next_page}`);                    
+              this.navigate(`/group-insurance/advisory/${next_page}`);                    
            } else {
              error = resultData.error || resultData.message || true;
            }
        }catch(err){
         this.setState({
           show_loader: false,
-          skelton: false,
           showError: true,
           errorData: {
             ...this.state.errorData, type: 'crash'

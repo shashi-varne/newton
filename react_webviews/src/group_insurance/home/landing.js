@@ -6,7 +6,6 @@ import Api from "utils/api";
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss';
-import toast from "../../common/ui/Toast";
 import {storageService} from "utils/validators";
 import { setRecommendationData } from '../advisory/common_data'
 import '../common/Style.scss'
@@ -112,13 +111,14 @@ class Landing extends Component {
     let error = ''
     try{
       var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
-
-        this.setState({
-          skelton: false,
-        })
         var resultData = res.pfwresponse.result;
 
         if (res.pfwresponse.status_code === 200) {
+
+          this.setState({
+            skelton: false,
+          })
+          
           var advisory_resume_present = resultData.resume_present;
           var advisory_resume_status = resultData.insurance_advisory.status;
           var advisory_id = resultData.insurance_advisory.id;
@@ -147,7 +147,7 @@ class Landing extends Component {
             advisory_id: advisory_id
           })
         } else {
-          error = resultData.error || resultData.message || "Something went wrong";
+          error = resultData.error || resultData.message || true;
       }
     }catch(err){
       this.setState({
