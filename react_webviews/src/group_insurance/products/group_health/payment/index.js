@@ -124,6 +124,7 @@ class GroupHealthPayment extends Component {
   onload = async() => {
     this.setErrorData("onload");
     let error = "";
+    let errorType = "";
     if(!this.state.get_lead || true) {
       try {
 
@@ -136,11 +137,11 @@ class GroupHealthPayment extends Component {
         const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.provider_api}/check_status?application_id=${application_id}`);
   
         var resultData = res.pfwresponse.result;
-        this.setState({
-          skelton: false
-        });
+        
         if (res.pfwresponse.status_code === 200) {
-  
+          this.setState({
+            skelton: false
+          });
           let lead = resultData.quotation_details || {};
           let policy_data = resultData.policy || {};
           let payment_details = resultData.payment_details || {};
@@ -155,22 +156,25 @@ class GroupHealthPayment extends Component {
           })
         } else {
           error=resultData.error || resultData.message
-            || 'Something went wrong';
+            || true;
         }
       } catch (err) {
         console.log(err)
         this.setState({
           skelton: false
         });
-        error = 'Something went wrong';
+        error = true;
+        errorType = "crash";
       }
       if (error) {
         this.setState({
           errorData: {
             ...this.state.errorData,
             title2: error,
+            type:errorType
           },
           showError: "page",
+          skelton: false
         });
       }
     }

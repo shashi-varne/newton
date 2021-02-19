@@ -408,6 +408,8 @@ class GroupHealthPlanSelectPed extends Component {
                 events={this.sendEvents('just_set_events')}
                 skelton={this.state.skelton}
                 showLoader={this.state.show_loader}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={this.state.member_key === 'self' ? this.setEditTitle('Your pre-existing diseases') : this.setEditTitle(capitalizeFirstLetter(childeNameMapper(this.state.member_key)) + "'s pre-existing diseases")}
                 buttonTitle="CONTINUE"
                 withProvider={true}

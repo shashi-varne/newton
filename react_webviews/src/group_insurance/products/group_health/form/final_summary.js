@@ -611,6 +611,7 @@ class GroupHealthPlanFinalSummary extends Component {
     startPayment = async (data={}) => {
         this.setErrorData("submit");
         let error="";
+        let errorType="";
         if (this.state.medical_dialog) {
             this.sendEventsPopup('next');
         }
@@ -627,7 +628,6 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
            
-
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -656,20 +656,22 @@ class GroupHealthPlanFinalSummary extends Component {
                     show_loader: false
                 });
                 error=resultData.error || resultData.message
-                    || 'Something went wrong';
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 show_loader: false
             });
-            error='Something went wrong';
+            error=true;
+            errorType= "crash";
         }
         if (error) {
             this.setState({
               errorData: {
                 ...this.state.errorData,
                 title2: error,
+                type: errorType
               },
               showError: true,
             });
