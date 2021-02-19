@@ -248,6 +248,7 @@ class PlanDetailsClass extends Component {
     }
 
     let error = '';
+    let errorType = '';
     try {
       
       let provider = this.props.parent.state.provider || 'bhartiaxa';
@@ -267,7 +268,7 @@ class PlanDetailsClass extends Component {
 
       } else {
         error = resQuote.pfwresponse.result.error || resQuote.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
       if (this.state.lead_id) {
@@ -284,11 +285,8 @@ class PlanDetailsClass extends Component {
           })
 
         } else {
-          this.setState({
-            skelton: false
-          })
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
       } else {
 
@@ -305,13 +303,11 @@ class PlanDetailsClass extends Component {
 
     } catch (err) {
       console.log(err)
+      error = true;
+      errorType = 'crash';
       this.setState({
-        skelton: false,
-        showError: 'page',
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        }
-      });
+        skelton:false
+      })
     }
 
     // set error data
@@ -320,7 +316,8 @@ class PlanDetailsClass extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })
@@ -497,6 +494,7 @@ class PlanDetailsClass extends Component {
     });
 
     let error = '';
+    let errorType = '';
     try {
 
       let res2 = {};
@@ -525,7 +523,7 @@ class PlanDetailsClass extends Component {
             show_loader: false
           })
           error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
       } else {
           if(this.props.parent.state.product_key === 'CORONA' && !this.state.lead_id){
@@ -535,14 +533,20 @@ class PlanDetailsClass extends Component {
       }
     }
     } catch (err) {
-      error = 'Something went wrong';                                                                                                                                                                          
+      error = true;
+      errorType = "crash";
+      this.setState({
+        show_loader: false
+      })                                                                                                                                                                          
     }
     // set error data
     if(error) {
       this.setState({
+        show_loader:false,
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:true
       })

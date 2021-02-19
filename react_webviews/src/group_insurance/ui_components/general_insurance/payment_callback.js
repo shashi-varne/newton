@@ -59,7 +59,8 @@ class PaymentCallbackClass extends Component {
 
   }
   async componentDidMount(){
-    let error="";
+    let error = "";
+    let errorType = "";
     this.setErrorData('onload');
     if (!this.state.group_insurance_payment_urlsafe) {
         this.navigate('/group-insurance');
@@ -83,23 +84,23 @@ class PaymentCallbackClass extends Component {
 
         } else {
           error=res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong';
+            || true;
         }
   
       } catch (err) {
+        error = true;
+        errorType = "crash"
         this.setState({
-          showError: 'page',
-          errorData: {
-            ...this.state.errorData, type: 'crash'
-          }
-        });
+          skelton:false
+        })
       }
       if(error) {
         this.setState({
           skelton:false,
           errorData: {
             ...this.state.errorData,
-            title2: error
+            title2: error,
+            type:errorType
           },
           showError:'page'
         })
@@ -109,6 +110,7 @@ class PaymentCallbackClass extends Component {
   async handleClick() {
     this.setErrorData('submit');
     let error='';
+    let errorType='';
     try {
       this.setState({
         show_loader: 'button'
@@ -164,22 +166,23 @@ class PaymentCallbackClass extends Component {
       } else {
         
         error=res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
       }
 
     } catch (err) {
+      error = true;
+      errorType = "crash";
       this.setState({
-        showError: true,
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        }
-      });
+        show_loader:false
+      })
     }
     if(error) {
       this.setState({
+        show_loader:false,
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:true
       })

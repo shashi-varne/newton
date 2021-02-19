@@ -94,6 +94,7 @@ class PaymentSuccessClass extends Component {
     // })
 
     let error = '';
+    let errorType = '';
     try {
 
       let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
@@ -122,17 +123,15 @@ class PaymentSuccessClass extends Component {
         })
       } else {
         error  = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: 'page',
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        }
       });
+      error= true;
+      errorType= "crash";
     }
 
 
@@ -141,7 +140,8 @@ class PaymentSuccessClass extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })
@@ -213,6 +213,7 @@ class PaymentSuccessClass extends Component {
     this.sendEvents('next');
     
     let error = '';
+    let errorType = '';
     try {
       let keysMapper = {
         'addressline': 'address line',
@@ -289,34 +290,34 @@ class PaymentSuccessClass extends Component {
         })
         let res2 = {};
         res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
+        this.setState({
+          show_loader: false
+        })
         if (res2.pfwresponse.status_code === 200) {
-          this.setState({
-            show_loader: false
-          })
           this.navigate('summary-success')
         } else {
           error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
 
       }
     }
     catch (err) {
+      error = true;
+      errorType = "crash";
       this.setState({
-        show_loader: false,
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        }
+        show_loader:false
       })
-      error = 'Something went wrong';
     }
 
     // set error data
     if(error) {
       this.setState({
+        show_loader:false,
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError: true
       })
