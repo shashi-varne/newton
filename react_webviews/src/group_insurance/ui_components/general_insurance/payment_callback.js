@@ -59,6 +59,10 @@ class PaymentCallbackClass extends Component {
 
   }
   async componentDidMount(){
+    this.onload();
+  }
+
+  onload = async () => {
     let error = "";
     let errorType = "";
     this.setErrorData('onload');
@@ -106,8 +110,9 @@ class PaymentCallbackClass extends Component {
       }
   }
 
-  async handleClick() {
-    this.setErrorData('submit');
+
+  handleClick = async () => {
+    this.setErrorData('submit')
     let error='';
     let errorType='';
     try {
