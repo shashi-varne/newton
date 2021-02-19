@@ -56,12 +56,6 @@ class AdvisoryLanding extends Component {
           'submit': {
             handleClick1: this.handleClick,
             button_text1: 'Retry',
-            handleClick2: () => {
-              this.setState({
-                showError: false
-              })
-            },
-            button_text2: 'Edit'
           }
         };
     
@@ -98,7 +92,7 @@ class AdvisoryLanding extends Component {
               this.navigate('/group-insurance/advisory/basic-details')
             }
           } else {
-            error = resultData.error || resultData.message || "Something went wrong";
+            error = resultData.error || resultData.message || true;
         }
       }catch(err){
         this.setState({

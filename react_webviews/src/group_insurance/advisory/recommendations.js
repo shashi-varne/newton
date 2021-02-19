@@ -126,12 +126,6 @@ class AdivsoryRecommendations extends Component {
             'submit': {
               handleClick1: this.handleReset,
               button_text1: 'Retry',
-              handleClick2: () => {
-                this.setState({
-                  showError: false
-                })
-              },
-              button_text2: 'Edit'
             }
           };
       
@@ -165,16 +159,17 @@ class AdivsoryRecommendations extends Component {
         try{
             var res = await Api.get(`api/insurancev2/api/insurance/advisory/pdf/download?insurance_advisory_id=${advisory_id}`);
 
-            this.setState({
-              skelton: false
-            })
+            
             var resultData = res.pfwresponse.result;
           
             if (res.pfwresponse.status_code === 200) {
+                this.setState({
+                    skelton: false
+                })
                 
                 this.openPdf(resultData.download_link, "read_document")
             } else {
-              error = resultData.error || resultData.message || "Something went wrong";
+              error = resultData.error || resultData.message || true;
             }
         }catch(err){
             this.setState({
@@ -219,6 +214,12 @@ class AdivsoryRecommendations extends Component {
                 showError={this.state.showError}
                 errorData={this.state.errorData}
                 showLoader={this.state.show_loader}
+                loaderData= {
+                    {
+                        'loaderClass': 'Loader-Dialog',
+                        'loadingText': 'Always plan ahead. It wasn’t raining when Noah built the ark.'
+                    }
+                }
                 skelton={this.state.skelton}
             >
                 <div className="advisory-recommendations-container">

@@ -19,7 +19,7 @@ export async function updateLead( body, next_page, final_page, reset) {
     if(reset){
       update_url = `api/insurancev2/api/insurance/advisory/status/update?insurance_advisory_id=${advisory_id}`;
       this.setState({
-        skelton: true
+        show_loader: 'page'
       })
       storageService().remove("advisory_id");
       storageService().remove("advisory_data");
@@ -52,7 +52,7 @@ export async function updateLead( body, next_page, final_page, reset) {
 
                this.navigate(`/group-insurance/advisory/${next_page}`);                    
            } else {
-             error = resultData.error || resultData.message || "Something went wrong";
+             error = resultData.error || resultData.message || true;
            }
        }catch(err){
         this.setState({
@@ -89,23 +89,25 @@ export async function getLead(){
     try{
       var res = await Api.get(`api/insurancev2/api/insurance/advisory/get?insurance_advisory_id=${advisory_id}`);
         
-      this.setState({
-        skelton: false
-      })
+      
         var resultData = res.pfwresponse.result;
         
         if (res.pfwresponse.status_code === 200) {
+          this.setState({
+            skelton: false
+          })
+
           var resume_data = resultData.insurance_advisory;
 
           this.setState({
             resume_data : resume_data
           })
         } else {
-          error = resultData.error || resultData.message || "Something went wrong";
+          error = resultData.error || resultData.message || true;
       }
     }catch(err){
       this.setState({
-        show_loader: false,
+        skelton: false,
         showError: true,
         errorData: {
           ...this.state.errorData, type: 'crash'
