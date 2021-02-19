@@ -41,7 +41,7 @@ class PaymentCallbackClass extends Component {
           button_text1: 'Retry'
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1: this.handleClick,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
