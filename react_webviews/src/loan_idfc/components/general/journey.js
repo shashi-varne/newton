@@ -157,7 +157,7 @@ class JourneyMap extends Component {
           titleCompleted: "Work details uploaded",
           subtitle:
             "Verify mobile, enter self-related information and work details to get started.",
-          status: index && index >= "0" ? " " : "init",
+          status: index && index >= "0" ? "completed" : "init",
           id: "basic_details",
           cta: "SUMMARY",
         },
@@ -168,7 +168,7 @@ class JourneyMap extends Component {
           subtitle:
             "Enter personal and address details to proceed with loan application.",
           status:
-            index === "1" ? "init" : index > "1" ? " " : "pending",
+            index === "1" ? "init" : index > "1" ? "completed" : "pending",
           id: "create_loan_application",
           cta:
             idfc_loan_status === "basic_details_uploaded"
@@ -184,14 +184,14 @@ class JourneyMap extends Component {
           subtitle:
             "Enter loan requirements and income details to get the best loan offer.",
           status:
-            index === "2" ? "init" : index > "2" ? " " : "pending",
+            index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
           cta:
             idfc_loan_status === "idfc_null_accepted"
               ? "START"
               : index === "2"
               ? "RESUME"
-              : index > "2" && " ",
+              : index > "2" && "",
         },
         {
           step: "4",
@@ -200,14 +200,14 @@ class JourneyMap extends Component {
           subtitle:
             "Provide office address and upload documents to get loan sanctioned.",
           status:
-            index === "3" ? "init" : index > "3" ? " " : "pending",
+            index === "3" ? "init" : index > "3" ? "completed" : "pending",
           id: "document_upload",
           cta:
             (idfc_loan_status === "offer_accepted")
               ? "START"
               : index === "3"
               ? "RESUME"
-              : index > "3" && " ",
+              : index > "3" && "",
         },
         {
           step: "5",
@@ -220,7 +220,7 @@ class JourneyMap extends Component {
               ? "init"
               : index < "4"
               ? "pending"
-              : " ",
+              : "",
           cta:
             index === "4" &&
             "CHECK",
