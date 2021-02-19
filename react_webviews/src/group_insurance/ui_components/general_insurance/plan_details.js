@@ -296,9 +296,12 @@ class PlanDetailsClass extends Component {
         }
         this.setPremiumData(premium_details, data || {});
 
-        this.setState({
-          skelton: false
-        })
+        if(!error) {
+          this.setState({
+            skelton: false
+          })
+        }
+        
       }
 
     } catch (err) {
