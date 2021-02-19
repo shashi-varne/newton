@@ -258,21 +258,26 @@ class PerfiosStatus extends Component {
                 However, do upload your bank statements later.
               </div>
 
-              {bt_eligible &&
-                perfios_state !== "failure" &&
-                perfios_state !== "blocked" && (
-                  <div className="sub-msg">
-                    <div className="title">What next?</div>
-                    <div className="sub-title">
-                      As you’re a special customer, you’ve qualified for Balance
-                      Transfer.
-                    </div>
-                    <div className="sub-title" style={{ marginTop: "10px" }}>
-                      To learn more about this exclusive feature tap the button
-                      below.
-                    </div>
+              {!bt_eligible && (
+                <div className="subtitle">
+                  Now all you need to do is hit 'calculate eligibility' to view
+                  your loan offer.
+                </div>
+              )}
+
+              {bt_eligible && (
+                <div className="sub-msg">
+                  <div className="title">What next?</div>
+                  <div className="sub-title">
+                    As you’re a special customer, you’ve qualified for Balance
+                    Transfer.
                   </div>
-                )}
+                  <div className="sub-title" style={{ marginTop: "10px" }}>
+                    To learn more about this exclusive feature tap the button
+                    below.
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -309,8 +314,8 @@ class PerfiosStatus extends Component {
           {perfios_state === "processing" && (
             <div>
               <div className="subtitle">
-                <b>Oops!</b> something's not right. We are checking this with IDFC
-                FIRST Bank and will get back to you as soon as possible.
+                <b>Oops!</b> something's not right. We are checking this with
+                IDFC FIRST Bank and will get back to you as soon as possible.
               </div>
               <ContactUs />
             </div>
