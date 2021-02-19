@@ -71,7 +71,7 @@ class Api {
         let force_error_api = window.sessionStorage.getItem('force_error_api');
         if(force_error_api) {
           response.data.pfwresponse.status_code = 410;
-          response.data.pfwresponse.result.error = 'Not able to process request.';
+          response.data.pfwresponse.result.error = 'Sorry, we could not process your request';
         }
         return response.data;
       }, error => {
