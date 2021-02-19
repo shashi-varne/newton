@@ -194,7 +194,7 @@ class BtInformation extends Component {
 
     if (!isBtOpted) {
       this.setState({
-        isBtOpted_error: "please select any option"
+        isBtOpted_error: "please select any one option"
       })
       return
     }

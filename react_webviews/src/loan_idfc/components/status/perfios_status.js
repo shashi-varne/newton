@@ -208,7 +208,7 @@ class PerfiosStatus extends Component {
           icon: commonMapper.icon || "",
           goBack: this.goBack,
         }}
-        loaderWithData={commonMapper.button_title === "CALCULATE ELIGIBILITY"}
+        loaderWithData={!bt_eligible}
         loaderData={this.state.loaderData}
       >
         <div className="idfc-loan-status">
