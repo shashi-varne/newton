@@ -62,7 +62,7 @@ class PaymentCallbackClass extends Component {
     this.onload();
   }
 
-  onload =async() =>{
+  onload = async () => {
     let error = "";
     let errorType = "";
     this.setErrorData('onload');
