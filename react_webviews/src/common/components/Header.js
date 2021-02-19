@@ -70,7 +70,7 @@ const Header = ({ classes, title, count, total, current, goBack,
                   </div>
                   <div
                   style = {{
-                    marginLeft : index === 0 ? '-40%' : index === headerData.progressHeaderData.steps.length - 1 ? '50%' : '0',
+                    marginLeft : index === 0 ? '-50%' : index === headerData.progressHeaderData.steps.length - 1 ? '50%' : '0',
                     color: `${step.status === 'init' ? '#0A1D32' : '#C4C4C4'}`
                   }}
                   >{step.title}</div>
