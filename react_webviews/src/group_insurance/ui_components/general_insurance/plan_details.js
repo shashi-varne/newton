@@ -205,7 +205,7 @@ class PlanDetailsClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again'
+          button_text1: 'Retry'
         },
         'submit': {
           handleClick1: this.handleClickCurrent,

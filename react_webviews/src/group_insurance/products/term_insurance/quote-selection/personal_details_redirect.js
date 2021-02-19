@@ -72,7 +72,7 @@ class PersonalDetails1 extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -99,16 +99,14 @@ class PersonalDetails1 extends Component {
   onload = async () => {
     this.setErrorData('onload');
     let error = ''
-
+    let errorType = '';
     this.setState({
       skelton: true
     });
 
     try {
       const res = await Api.get('/api/ins_service/api/insurance/account/summary')
-      this.setState({
-        skelton: false
-      });
+      
 
       if (res.pfwresponse.status_code === 200) {
         const { name, email, mobile_number } = res.pfwresponse.result.insurance_account;
@@ -117,18 +115,22 @@ class PersonalDetails1 extends Component {
           email: email || '',
           mobile_number: mobile_number || '',
         });
+        this.setState({
+          skelton: false
+        });
       } else if (res.pfwresponse.status_code === 401) {
 
       } else {
         // toast(res.pfwresponse.result.error || res.pfwresponse.result.message || 'Something went wrong');
-        error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
+        error = res.pfwresponse.result.message || res.pfwresponse.result.message || true
       }
 
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: 'page'
       });
+      error= true;
+      errorType= "crash";
     }
 
     // set error data
@@ -136,7 +138,8 @@ class PersonalDetails1 extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError: 'page'
       })
@@ -185,7 +188,7 @@ class PersonalDetails1 extends Component {
 
     this.setErrorData('submit');
     let error = '';
-
+    let errorType = '';
     var canSubmitForm = true;
 
     if (!validateEmpty(this.state.name)) {
@@ -281,7 +284,7 @@ class PersonalDetails1 extends Component {
             openModalMessage: '',
             show_loader: false
           });
-          error = res.pfwresponse.result.message || res.pfwresponse.result.message || 'Something went wrong'
+          error = res.pfwresponse.result.message || res.pfwresponse.result.message || true
           // toast(res.pfwresponse.result.error || 'Something went wrong');
         }
       } catch (err) {
@@ -290,6 +293,8 @@ class PersonalDetails1 extends Component {
           showError: true,
           show_loader: false
         });
+        error = true;
+        errorType = 'crash';
       }
   
       // set error data
@@ -297,7 +302,8 @@ class PersonalDetails1 extends Component {
         this.setState({
           errorData: {
             ...this.state.errorData,
-            title2: error
+            title2: error,
+            type: errorType
           },
           showError: true,
           show_loader: false
