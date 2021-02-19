@@ -934,8 +934,8 @@ export async function formCheckUpdate(
 
   // eslint-disable-next-line
   if (form_data.maxAmount && form_data.amount_required > parseInt(form_data.maxAmount)) {
-    form_data.amount_required_error =
-      "Amount cannot be greater than max loan amount";
+    form_data.amount_required_error = "Amount cannot be greater than max loan amount";
+    form_data.amount_required = `₹ ${formatAmount(form_data.amount_required)}`;
     canSubmitForm = false;
   }
   
@@ -945,6 +945,7 @@ export async function formCheckUpdate(
     parseInt(form_data.amount_required) < parseInt("100000")
   ) {
     form_data.amount_required_error = `Minimum loan amount should be ${numDifferentiationInr(100000)}`;
+    form_data.amount_required = `₹ ${formatAmount(form_data.amount_required)}`;
     canSubmitForm = false;
   }
 
