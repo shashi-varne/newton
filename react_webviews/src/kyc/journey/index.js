@@ -56,7 +56,6 @@ const Journey = (props) => {
       skeltonType="p"
     >
       <div className="kyc-journey">
-        <h1>{JSON.stringify(kyc)}</h1>
         {journeyStatus === 'ground_premium' && (
           <div className="kyc-journey-caption">fast track your investment!</div>
         )}

@@ -1,70 +1,71 @@
-import { create } from 'jss'
-import JssProvider from 'react-jss/lib/JssProvider'
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { create } from "jss";
+import JssProvider from "react-jss/lib/JssProvider";
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 import {
   createGenerateClassName,
   jssPreset,
   MuiThemeProvider,
   createMuiTheme,
-} from '@material-ui/core/styles'
-import { ToastContainer } from 'react-toastify'
-import NotFound from '../common/components/NotFound'
+} from "@material-ui/core/styles";
+import { ToastContainer } from "react-toastify";
+import NotFound from "../common/components/NotFound";
 
-import Journey from './journey'
-import Upload from './upload'
-import Intro from './upload/intro'
-import Progress from './upload/progress'
-import Pan from './upload/pan'
-import AddressUpload from './upload/address'
-import KycBankDetails from './bank-kyc/KycBankDetails'
-import KycBankVerify from './bank-kyc/KycBankVerify'
+import Journey from "./journey";
+import Upload from "./upload";
+import Intro from "./upload/intro";
+import Progress from "./upload/progress";
+import Pan from "./upload/pan";
+import AddressUpload from "./upload/address";
+import KycBankDetails from "./bank-kyc/KycBankDetails";
+import KycBankVerify from "./bank-kyc/KycBankVerify";
 
-import { themeConfig } from 'utils/constants'
-import './Style.scss'
+import { themeConfig } from "utils/constants";
+import "./Style.scss";
 
-import Aadhar from './aadhar'
-import AadharConfirmation from './aadhar/confirmation'
-import AadharCallback from './aadhar/callback'
+import Aadhar from "./aadhar";
+import AadharConfirmation from "./aadhar/confirmation";
+import AadharCallback from "./aadhar/callback";
 
-import AddBank from './bank/AddBank'
-import AddBankVerify from './bank/AddBankVerify'
-import BanksList from './bank/BanksList'
-import BankDetails from './bank/BankDetails'
+import AddBank from "./bank/AddBank";
+import AddBankVerify from "./bank/AddBankVerify";
+import BanksList from "./bank/BanksList";
+import BankDetails from "./bank/BankDetails";
 
-import CompliantPersonalDetails1 from './compliant/PersonalDetails1'
-import CompliantPersonalDetails2 from './compliant/PersonalDetails2'
-import ConfirmPan from './compliant/ConfirmPan'
-import KycComplete from './compliant/Complete'
-import CompliantReport from './compliant/Report'
-import Verify from './compliant/Verify'
-import RtaCompliantPersonalDetails from './rta_compliant'
+import CompliantPersonalDetails1 from "./compliant/PersonalDetails1";
+import CompliantPersonalDetails2 from "./compliant/PersonalDetails2";
+import ConfirmPan from "./compliant/ConfirmPan";
+import KycComplete from "./compliant/Complete";
+import CompliantReport from "./compliant/Report";
+import Verify from "./compliant/Verify";
+import RtaCompliantPersonalDetails from "./rta_compliant";
 
-import RegistrationSuccess from './success'
+import RegistrationSuccess from "./success";
 
-import Home from './home'
-import Nominee from './nominee'
-import Report from './report'
-import PersonalDetails1 from './personal_details/Screen1'
-import PersonalDetails2 from './personal_details/Screen2'
-import PersonalDetails3 from './personal_details/Screen3'
-import PersonalDetails4 from './personal_details/Screen4'
-import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
-import SampleDocuments from './bank-kyc/SampleDocuments'
-import Esign from './esign'
-import AddressDetails1 from './address/screen1'
+import Home from "./home";
+import Nominee from "./nominee";
+import Report from "./report";
+import PersonalDetails1 from "./personal_details/Screen1";
+import PersonalDetails2 from "./personal_details/Screen2";
+import PersonalDetails3 from "./personal_details/Screen3";
+import PersonalDetails4 from "./personal_details/Screen4";
+import KycUploadDocuments from "./bank-kyc/KycUploadDocuments";
+import SampleDocuments from "./bank-kyc/SampleDocuments";
+import Esign from "./esign";
+import AddressDetails1 from "./address/screen1";
+import DigilockerPersonalDetails1 from "./digilocker/screen1";
 
-const theme = createMuiTheme(themeConfig)
+const theme = createMuiTheme(themeConfig);
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'f',
-})
+  productionPrefix: "f",
+});
 
-const jss = create(jssPreset())
+const jss = create(jssPreset());
 
 const Kyc = (props) => {
-  const { url } = props.match
+  const { url } = props.match;
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
@@ -84,14 +85,18 @@ const Kyc = (props) => {
           <Route
             exact
             path={`${url}/personal-details3`}
-            component={PersonalDetails3}
+            render={(props) => <PersonalDetails3 {...props} type="default" />}
           />
           <Route
             exact
             path={`${url}/personal-details4`}
             component={PersonalDetails4}
           />
-          <Route exact path={`${url}/address-details1`} component={AddressDetails1} />
+          <Route
+            exact
+            path={`${url}/address-details1`}
+            component={AddressDetails1}
+          />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
@@ -191,16 +196,31 @@ const Kyc = (props) => {
             path={`${url}/sample-documents`}
             component={SampleDocuments}
           />
+          <Route exact path={`${url}/esign`} component={Esign} />
           <Route
             exact
-            path={`${url}/esign`}
-            component={Esign}
+            path={`${url}/dl/personal-details1`}
+            component={DigilockerPersonalDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/dl/personal-details2`}
+            render={(props) => (
+              <PersonalDetails3 {...props} type="digilocker" />
+            )}
+          />
+          <Route
+            exact
+            path={`${url}/dl/personal-details3`}
+            render={(props) => (
+              <PersonalDetails4 {...props} type="digilocker" />
+            )}
           />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
-  )
-}
+  );
+};
 
-export default Kyc
+export default Kyc;
