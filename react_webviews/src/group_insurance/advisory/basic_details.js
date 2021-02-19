@@ -50,14 +50,8 @@ class AdvisoryBasicDetails extends Component {
         if(isResumePresent){
             await this.getLead();
             lead = this.state.resume_data;
-            if(lead){
-                form_data.illness = lead.critical_illness_insurance_present === true ? yesNoOptions[0].value : lead.critical_illness_insurance_present === false ?  yesNoOptions[1].value : '';
-            }
         }else if(!isEmpty(advisory_data)){
             lead = advisory_data
-            if(lead){
-                form_data.illness = lead.ci_present === true ? yesNoOptions[0].value : lead.ci_present === false ?  yesNoOptions[1].value : '';
-            }
         }
 
         if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)) {
@@ -66,6 +60,7 @@ class AdvisoryBasicDetails extends Component {
             form_data.city = lead.city ? lead.city.toLowerCase() : '';
             form_data.gender = lead.gender === "MALE" ? genderOptions[0].value : lead.gender === "FEMALE"?  genderOptions[1].value : '';
             form_data.married = lead.marital_status === "MARRIED" ? yesNoOptions[0].value : lead.marital_status === "UNMARRIED" ?  yesNoOptions[1].value : '';
+            form_data.illness = lead.ci_present === true ? yesNoOptions[0].value : lead.ci_present === false ?  yesNoOptions[1].value : '';
 
             if(!isEmpty(lead.dependent_json)){
                 let spouse_checked = lead.dependent_json.spouse ? true : false;
