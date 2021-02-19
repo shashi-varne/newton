@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Container from "../../common/Container";
 import { nativeCallback } from "utils/native_callback";
 import { initialize } from "../../common/functions";
-import { changeNumberFormat, formatAmountInr } from "utils/validators";
+import { formatAmountInr } from "utils/validators";
 import JourneySteps from "../../../common/ui/JourneySteps";
 const journeyMapper2 = {
   basic_details_uploaded: {
@@ -361,7 +361,7 @@ class JourneyMap extends Component {
   };
 
   render() {
-    let { idfc_loan_status, index, first_name, vendor_info } = this.state;
+    let { idfc_loan_status, index, vendor_info } = this.state;
     return (
       <Container
         events={this.sendEvents('just_set_events')}

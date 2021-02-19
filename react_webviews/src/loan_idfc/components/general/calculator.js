@@ -89,6 +89,7 @@ class Calculator extends Component {
           backgroundColor: "var(--highlight)",
         }}
         noPadding={true}
+        changeBackground={true}
         handleClick={this.handleClick}
       >
         <div className="idfc-loan-calculator">
@@ -141,6 +142,9 @@ class Calculator extends Component {
             <div className="total">
               {inrFormatDecimal(Math.max(parseInt(Loan_Eligibility < 4000000 ? Loan_Eligibility : 4000000 ), 0))}
             </div>
+          </div>
+          <div className="subtitle">
+            This is an indicative loan amount. Your actual loan amount will depend on your Bureau and personal profile
           </div>
         </div>
       </Container>

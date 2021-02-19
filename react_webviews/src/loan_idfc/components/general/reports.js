@@ -233,8 +233,9 @@ class ReportDetails extends Component {
           </div>
 
           <div className="disclaimer">
-            * Indicated figures are as per the initial loan offer. These are
-            subject to change.
+            <div>*</div>
+            <div className="subtitle">Indicated figures are as per the initial loan offer. These are
+            subject to change.</div>
           </div>
         </div>
 

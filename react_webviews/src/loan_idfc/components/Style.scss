@@ -228,7 +228,7 @@
     text-align: center;
     padding-top: 20px;
     background-color: var(--highlight);
-    color: #0a1d32;
+    color: #160D2E;
     margin: 0 -20px 0 -20px;
     font-size: 13px;
   }
@@ -239,6 +239,14 @@
     font-weight: 600;
     margin: 9px 0 0px 0;
     padding-bottom: 50px;
+  }
+
+  .subtitle {
+    background: var(--highlight);
+    margin: -20px -20px 0;
+    padding: 0 20px;
+    color: #767E86;
+    font-size: 13px;
   }
 }
 
@@ -1436,4 +1444,19 @@
 .loan-report-details {
   color: #160D2E;
   font-size: 13px;
+
+  .disclaimer {
+    display: flex;
+    font-weight: 600;
+
+    .subtitle {
+      margin-left: 5px;
+      font-weight: 500;
+    }
+  }
+}
+
+.idfc-container {
+  background: var(--highlight) !important;
+  height: 100% !important;
 }

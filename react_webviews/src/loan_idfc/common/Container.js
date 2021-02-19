@@ -102,7 +102,7 @@ class Container extends Component {
       return (
         <div
           className={`ContainerWrapper loanMainContainer ${this.props.classOverRide
-            }  ${getConfig().productName !== "fisdom" ? "blue" : ""}`}
+            }  ${getConfig().productName !== "fisdom" ? "blue" : ""} ${this.props.changeBackground ? 'idfc-container' : ''}`}
         >
           {/* Header Block */}
           {!this.props.noHeader &&
