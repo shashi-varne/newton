@@ -107,7 +107,7 @@ export function commonRender(props) {
                     type={getConfig().productName}
                     resetpage={this.props.resetpage}
                     handleReset={this.props.handleReset}
-                    topIcon={this.props.topIcon}
+                    topIcon={this.props.topIcon || this.props.rightIcon}
                     handleTopIcon={this.handleTopIcon}
                     inPageTitle={this.state.inPageTitle}
                     force_hide_inpage_title={this.state.force_hide_inpage_title}
@@ -115,10 +115,11 @@ export function commonRender(props) {
                     className={this.props.classHeader}
                     headerData={this.props.headerData}
                     new_header={this.state.new_header}
-                    goBack={this.headerGoBack}
+                    goBack={this.headerGoBack || this.historyGoBack}
                     // goBack={this.historyGoBack}
                     filterPgae={this.props.filterPgae}
                     handleFilter={this.props.handleFilter} 
+                    hideBack={this.props.hideBack}
           
                 />
                 }
