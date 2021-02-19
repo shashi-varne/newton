@@ -197,14 +197,18 @@ class LoanBtDetails extends Component {
 
     if (submit_details) {
       if (!bt_info.bt_credit_card) {
-        this.submitApplication(
-          {
-            bt_selection: form_checked,
-          },
-          "one",
-          true,
-          "eligible-loan"
-        );
+        if (vendor_info.idfc_07_state !== "success") {
+          this.get07State();
+        } else {
+          this.submitApplication(
+            {
+              bt_selection: form_checked,
+            },
+            "one",
+            true,
+            "eligible-loan"
+          );
+        }
       } else {
         this.updateApplication({
           bt_selection: form_checked,

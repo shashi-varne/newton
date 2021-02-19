@@ -1371,14 +1371,17 @@ input#pan {
 
     .invisible-line {
       border: 1px solid #FFFFFF;
+      background-color: #FFFFFF;
     }
 
     .line {
       border: 1px solid var(--highlight);
+      background-color: var(--highlight);
     }
 
     .line-completed {
       border: 1px solid var(--primary);
+      background-color: var(--primary);
     }
 
     .dot {

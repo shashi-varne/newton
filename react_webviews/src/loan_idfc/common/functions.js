@@ -680,6 +680,8 @@ export async function get07State() {
       that.submitApplication({}, "one", "", "eligible-loan");
     }  else if (result.idfc_07_state === "success" && result.vendor_application_status === "bt_bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
+    }  else if (result.idfc_07_state === "success" && result.vendor_application_status === "bt_processing") {
+      that.submitApplication({}, "one", "", "eligible-loan");
     } else {
       if (count < 20) {
         that.setState({

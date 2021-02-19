@@ -69,6 +69,7 @@ class LoanBtDetails extends Component {
     let lead = this.state.lead || {};
 
     let bt_info = lead.bt_info;
+    let vendor_info = lead.vendor_info || {};
 
     let credit_bt = [];
 
@@ -95,6 +96,7 @@ class LoanBtDetails extends Component {
       credit_bt: credit_bt,
       loaderData: loaderData,
       bt_info: bt_info,
+      vendor_info: vendor_info
     });
   };
 
@@ -193,7 +195,7 @@ class LoanBtDetails extends Component {
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, vendor_info } = this.state;
     let form_checked = form_data.filter((item) => item.is_selected === true);
 
     let submit_details = true;
@@ -244,14 +246,18 @@ class LoanBtDetails extends Component {
     this.sendEvents("next");
 
     if (submit_details) {
-      this.submitApplication(
-        {
-          bt_selection: form_checked,
-        },
-        "one",
-        true,
-        "eligible-loan"
-      );
+      if (vendor_info.idfc_07_state !== "success") {
+        this.get07State();
+      } else {
+        this.submitApplication(
+          {
+            bt_selection: form_checked,
+          },
+          "one",
+          true,
+          "eligible-loan"
+        );
+      }
     }
   };
 
