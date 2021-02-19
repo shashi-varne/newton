@@ -1324,17 +1324,10 @@ input#pan {
       color: #767E86;
     }
   }
-  .checkbox-container{
-    display: flex;
-    align-items: center;
-    // margin: -30px 0;
-    .checkbox-option{
-      transform: translateX(-17px);
-      color: #160D2E;
-    }
-  }
+  
   .advisory-basic-dependents{
     margin-top: -18px;
+    position: relative;
     .CheckBlock2{
       margin-top: -32px;
     }
@@ -1344,7 +1337,25 @@ input#pan {
     #spouse-checkbox{
       margin-bottom: 10px;
     }
-
+    .dependents-plus-minus{
+      position: relative; 
+    }
+    .plus-minus-input{
+      
+    }
+    .right-data{
+      margin-left: 2px;
+    }
+    .checkbox-container{
+      display: flex;
+      align-items: center;
+      position: relative;
+      .checkbox-option{
+        color: #160D2E;
+        position: absolute;
+        left: 9%;
+      }
+    }
   }
 }
 .advisory-liability-details-container{

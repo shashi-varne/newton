@@ -418,9 +418,14 @@ class AdvisoryBasicDetails extends Component {
             />
             <p className="checkbox-option">Spouse</p>
             </div>
+            
+            <div className="dependents-plus-minus">
             <PlusMinusInput name="Kids" parent={this} />
+            </div>
+            <div className="dependents-plus-minus">
             <PlusMinusInput name="Parents" parent={this} />
-
+            </div>
+            
             <div className="checkbox-container" id="none-checkbox">
             <Checkbox
                   checked={this.state.none_checked}
