@@ -87,11 +87,12 @@ class Recommended extends Component {
     let body = {};
 
     if (form_data.employment_type === "Salaried") {
+      form_data.monthly_salary = form_data.monthly_salary.slice(2).replaceAll(',', '');
       keys_to_check.push("monthly_salary");
     }
 
     form_data.loan_amount_required = form_data.loan_amount_required.slice(2).replaceAll(',', '');
-    form_data.monthly_salary = form_data.monthly_salary.slice(2).replaceAll(',', '');
+    
 
     if (this.validateFields(keys_to_check, form_data)) {
       this.setState({
