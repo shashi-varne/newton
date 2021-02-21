@@ -266,6 +266,7 @@ class Journey extends Component {
         withProvider={this.state.withProvider}
         buttonData={this.state.bottomButtonData}
         hidePageTitle={true}
+        classOverRide={'loanMainContainer'}
       >
         <div className="loan-journey">
           <div style={{ display: 'flex' }}>

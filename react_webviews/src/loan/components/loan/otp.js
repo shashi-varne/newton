@@ -53,6 +53,7 @@ class LoanOtp extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
+        classOverRide={'loanMainContainer'}
       >
         <div className="loan-otp">
           

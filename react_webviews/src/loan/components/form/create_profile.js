@@ -226,6 +226,7 @@ class FormCreateProfile extends Component {
                 title=""
                 buttonTitle="CONTINUE"
                 noFooter={true}
+                classOverRide={'loanMainContainer'}
                 headerData={{
                     hide_icon: true
                 }}

@@ -242,6 +242,7 @@ class AddressDetails extends Component {
                 title={this.setEditTitle("Residence details")}
                 buttonTitle="CONTINUE"
                 handleClick={() => this.handleClick()}
+                classOverRide={'loanMainContainer'}
             >
                 <FormControl fullWidth>
                     <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, margin: '0 0 6px 0' }}>

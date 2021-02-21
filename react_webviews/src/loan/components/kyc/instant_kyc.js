@@ -310,6 +310,7 @@ class InstantKycHome extends Component {
         title="Instant KYC"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
+        classOverRide={'loanMainContainer'}
         buttonTitle="CHECK ELIGIBILITY"
         headerData={{
           icon: 'close'

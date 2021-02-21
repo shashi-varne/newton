@@ -109,6 +109,7 @@ class Permissions extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="I AGREE"
+        classOverRide={'loanMainContainer'}
         loaderData={
           {
             // 'loaderClass': 'Loader-Dialog',

@@ -130,6 +130,7 @@ class RedirectionStatus extends Component {
         handleClick={this.handleClick}
         buttonTitle={this.state.commonMapper.button_title}
         noHeader={true}
+        classOverRide={'loanMainContainer'}
         headerData={{
           icon: 'close',
           goBack: this.goBack

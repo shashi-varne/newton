@@ -35,6 +35,7 @@ class Transactions extends Component {
         show_loader={this.state.show_loader}
         title="Transaction"
         noHeader={this.state.show_loader}
+        classOverRide={'loanMainContainer'}
         noFooter={true}
         styleContainer={{
             background: '#f6f6f6'

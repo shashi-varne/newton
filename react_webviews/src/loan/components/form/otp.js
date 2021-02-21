@@ -210,6 +210,7 @@ class FormOtp extends Component {
         title=""
         buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
+        classOverRide={'loanMainContainer'}
       >
         <div className="default-otp">
 

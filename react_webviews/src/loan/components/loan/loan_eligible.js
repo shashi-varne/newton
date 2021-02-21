@@ -96,6 +96,7 @@ class LoanEligible extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
+        classOverRide={'loanMainContainer'}
         hidePageTitle={true}
         headerData={{
           icon: 'close'

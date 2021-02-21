@@ -110,6 +110,7 @@ class Calculator extends Component {
         handleClick={this.handleClick}
         buttonTitle={this.state.cta_title || "APPLY NOW"}
         // noFooter={true}
+        classOverRide={'loanMainContainer'}
       >
         <div className="loan-calculator">
           <SliderWithValues 

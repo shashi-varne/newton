@@ -117,6 +117,7 @@ class ReportDetails extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         noFooter={true}
+        classOverRide={'loanMainContainer'}
       >
         <div className="loan-report-details loan-form-summary">
 

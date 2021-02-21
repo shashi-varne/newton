@@ -320,6 +320,7 @@ class MandateBank extends Component {
         buttonTitle="SETUP MANDATE"
         withProvider={this.state.withProvider}
         buttonData={this.state.bottomButtonData}
+        classOverRide={'loanMainContainer'}
         headerData={{
           goBack: this.state.fromPanScreen ? this.goBack : ''
         }}

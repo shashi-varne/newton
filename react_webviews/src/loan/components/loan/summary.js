@@ -199,6 +199,7 @@ class LoanSummary extends Component {
         handleClick={this.handleClick}
         buttonTitle="GET LOAN"
         // disable={!this.state.confirm_details_check}
+        classOverRide={'loanMainContainer'}
         headerData={{
           icon: 'close'
         }}

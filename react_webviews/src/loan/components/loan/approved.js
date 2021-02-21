@@ -63,6 +63,7 @@ class LoanApprvoed extends Component {
         title="Loan Approved"
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
+        classOverRide={'loanMainContainer'}
         buttonTitle="OK"
         headerData={{
           icon: 'close'
