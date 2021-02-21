@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
 import Header from './Header';
@@ -13,6 +13,9 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import { getConfig } from '../../utils/functions';
 
+import {didmount ,commonRender} from '../../common/components/container_functions';
+
+
 class Container extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +23,8 @@ class Container extends Component {
       openDialog: false,
       productName: getConfig().productName
     }
+    this.didmount = didmount.bind(this);
+    this.commonRender =  commonRender.bind(this);
   }
 
   historyGoBack = () => {
@@ -39,47 +44,18 @@ class Container extends Component {
     }
   }
 
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your connection and try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="default" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+  componentDidMount() {
+
+    this.didmount();
   }
 
-  handleClose = () => {
-    this.setState({
-      openDialog: false
-    });
+  componentWillUnmount() {
+  
+    this.unmount();
   }
 
-  renderPageLoader = () => {
-    if (this.props.showLoader) {
-      return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
+  componentDidUpdate(prevProps) {
+    this.didupdate();
   }
 
   render() {
@@ -95,18 +71,29 @@ class Container extends Component {
         <div style={{ height: 56 }}></div>
 
         {/* Loader Block */}
-        {this.renderPageLoader()}
+        {/* {this.renderPageLoader()} */}
 
         {/* Children Block */}
-        <div className={`ReferralContainer ${this.props.background}`}>
+        <div className={`ReferralContainer ${this.props.classOverRideContainer}`}>
           {this.props.children}
         </div>
 
         {/* No Internet */}
-        {this.renderDialog()}
+        {/* {this.renderDialog()} */}
       </div>
     );
   }
+
+
+  // render() {
+
+  //   return(
+  //     <Fragment>
+  //     {this.commonRender()}
+  //     </Fragment>
+  //   )
+  // }
+
 };
 
 export default withRouter(Container);
