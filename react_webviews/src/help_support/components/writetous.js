@@ -307,6 +307,7 @@ class Writetous extends Component {
         buttonTitle="Send"
         handleClick={this.handleClick}
         events={this.backButtonEvent()}
+        classOverRideContainer={'HelpContainer'}
       >
         <div className="Help Form pad20">
           <div className="InputField">

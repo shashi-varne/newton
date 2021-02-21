@@ -310,6 +310,7 @@ class Answer extends Component {
         background="white"
         noFooter={true}
         events={this.backButtonEvent()}
+        classOverRideContainer={'HelpContainer'}
       >
         <div className="Help pad20">
           <div className="question">{answer.name}</div>

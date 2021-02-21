@@ -209,6 +209,7 @@ class Thankyou extends Component {
         buttonTitle="OK"
         handleClick={this.handleClick}
         hideheader={true}
+        classOverRideContainer={'HelpContainer'}
       >
         <div className="Help pad20">
           <div className="thankyou">

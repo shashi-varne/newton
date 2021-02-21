@@ -130,6 +130,7 @@ class Category extends Component {
         title={'Help & Support'}
         noFooter={true}
         events={this.backButtonEvent()}
+        classOverRideContainer={'HelpContainer'}
       >
         <div className="Help pad20">
           <div className="section-head">
