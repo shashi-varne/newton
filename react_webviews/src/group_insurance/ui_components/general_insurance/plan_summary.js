@@ -65,7 +65,7 @@ class PlanSummaryClass extends Component {
               showError: false
             })
           },
-          button_text2: 'Okay'
+          button_text2: 'Dismiss'
         }
       };
   
