@@ -665,6 +665,16 @@ input.default-otp-input {
 //   text-align: left !important;
 // }
 
+.generic-otp {
+  .didnt-rec {
+    margin: 0px 0px !important;
+  }
+
+  .resend-otp {
+    color: #35CB5D !important;
+  }
+}
+
 .generic-tooltip {
   span {
     border-radius: 4px;
