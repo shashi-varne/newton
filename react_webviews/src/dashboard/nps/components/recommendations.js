@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { get_recommended_funds, getInvestmentData } from "../common/api";
+import { getInvestmentData } from "../common/api";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
 import Button from "@material-ui/core/Button";
-import { navigate } from "../common/commonFunctions";
+import { initialize } from "../common/commonFunctions";
 import {
   Dialog,
   DialogActions,
@@ -27,12 +27,17 @@ class Recommendations extends Component {
       openDialog: false,
       risk: ''
     };
-    this.navigate = navigate.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-    this.fetchRecommendedFunds();
+    this.initialize();
   }
+
+  onload = () => {
+    console.log(this.props.location)
+    this.fetchRecommendedFunds();
+  };
 
   fetchRecommendedFunds = async () => {
     try {
@@ -40,17 +45,22 @@ class Recommendations extends Component {
         show_loader: true,
       });
 
-      const params = {
-        type: "buildwealth",
-      };
-      const data = await get_recommended_funds(params);
+      let amount = this.props.location.state.amount
 
-      this.setState({
-        recommendations: data.recommended[0],
-        all_charges: data.all_charges,
-        show_loader: false,
-        risk: data.recommended[0].risk
-      });
+      const res = await this.get_recommended_funds(amount);
+      let data = res.result;
+
+      if (res.status_code === 200) {
+        this.setState({
+          recommendations: data.recommended[0],
+          all_charges: data.all_charges,
+          show_loader: false,
+          risk: data.recommended[0].risk
+        });
+      } else {
+        toast("something went wrong")
+      }
+      
     } catch (err) {
       this.setState({
         show_loader: false,

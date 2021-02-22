@@ -8,7 +8,7 @@ import email from "assets/email2.svg";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import { initialize } from "../common/commonFunctions";
-import { dobFormatTest, formatDate } from "utils/validators";
+import { dobFormatTest, formatDate, validateEmail } from "utils/validators";
 
 const yesOrNo_options = [
   {

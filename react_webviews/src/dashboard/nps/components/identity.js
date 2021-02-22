@@ -32,6 +32,7 @@ class NpsIdentity extends Component {
       uploaded: false,
       canSubmit: true,
       img: "",
+      file: "",
     };
     this.initialize = initialize.bind(this);
   }
@@ -93,7 +94,14 @@ class NpsIdentity extends Component {
           : ""
       }`;
 
-      this.nps_register(queryParams, "nominee");
+      if (this.state.selfie_needed) {
+        const data = new FormData();
+        data.append("file", this.state.file);
+
+        this.nps_register(queryParams, "nominee", data);
+      } else {
+        this.nps_register(queryParams, "nominee");
+      }
     }
   };
 
@@ -138,6 +146,7 @@ class NpsIdentity extends Component {
 
       that.setState({
         img: file.imageBaseFile,
+        file: file,
         uploaded: true,
       });
     });

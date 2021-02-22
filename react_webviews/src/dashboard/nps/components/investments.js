@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
+import { initialize } from "../common/commonFunctions";
 
 class NpsInvestments extends Component {
   constructor(props) {
@@ -7,7 +8,14 @@ class NpsInvestments extends Component {
     this.state = {
       show_loader: false,
     };
+    this.initialize = initialize.bind(this);
   }
+
+  componentWillMount() {
+    this.initialize();
+  }
+
+  onload = () => {}
 
   render() {
     return (

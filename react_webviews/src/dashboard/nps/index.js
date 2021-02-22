@@ -16,6 +16,7 @@ import NpsPerformance from "./components/performance";
 import NpsPran from "./components/pran";
 import NpsSchedule from "./components/schedule";
 import NpsSipDate from "./components/sipDate";
+import NpsPaymentCallback from "./components/payment";
 import "../../common/theme/Style.scss";
 import "./style.scss";
 
@@ -26,9 +27,9 @@ const Nps = (props) => {
     <Switch>
       <Route exact path={`${url}/info`} component={NpsInfo} />
       <Route exact path={`${url}/pan`} component={PanDetails} />
-      <Route exact path={`${url}/amount`} component={EnterAmount} />
+      <Route exact path={`${url}/amount/:type`} component={EnterAmount} />
       <Route exact path={`${url}/fundreplace`} component={ReplaceFund} />
-      <Route exact path={`${url}/recommendation`} component={Recommendations} />
+      <Route exact path={`${url}/recommendation/:type`} component={Recommendations} />
       <Route exact path={`${url}/identity`} component={NpsIdentity} />
       <Route exact path={`${url}/nominee`} component={NpsNominee} />
       <Route exact path={`${url}/delivery`} component={NpsDelivery} />
@@ -40,6 +41,7 @@ const Nps = (props) => {
       <Route exact path={`${url}/pran`} component={NpsPran} />
       <Route exact path={`${url}/schedule`} component={NpsSchedule} />
       <Route exact path={`${url}/sip-dates`} component={NpsSipDate} />
+      <Route exact path={`${url}/payment/callback/:type/:id/:status`} component={NpsPaymentCallback} />
     </Switch>
   );
 };

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
+import { initialize } from "../common/commonFunctions";
 
 class NpsSuccess extends Component {
   constructor(props) {
@@ -7,6 +8,36 @@ class NpsSuccess extends Component {
     this.state = {
       show_loader: false,
     };
+    this.initialize = initialize.bind(this);
+  }
+
+  componentWillMount() {
+    this.initialize();
+  }
+
+  onload = () => {
+
+  }
+
+  authenticate = () => {
+    // $scope.authenticate = function () {
+    //   $scope.isApiRunning = true;
+    //   investService.npsRequestMandate({ amount: 50000 }).then(function (data) {
+    //     $scope.isApiRunning = false;
+    //     $scope.paymentRedirectUrl = encodeURIComponent(
+    //       $location.protocol() + '://' + $location.host() + ':' +$location.port() + '/#!/nps/mandate/callback'
+    //     );
+    //     var pgLink = data.payment_link;
+    //     pgLink += ( pgLink.match( /[\?]/g ) ? '&' : '?' ) + 'plutus_redirect_url='+ $scope.paymentRedirectUrl;
+    //     window.location = pgLink;
+    //   }, function (err) {
+    //     $scope.isApiRunning = false;
+    //   });
+    // };
+  }
+
+  handleClick = () => {
+    this.navigate("investments")
   }
 
   render() {
@@ -19,7 +50,7 @@ class NpsSuccess extends Component {
         hidePageTitle
         title="Confirm Delivery Details"
         showLoader={this.state.show_loader}
-        // handleClick={replaceFund} /api/nps/summary
+        handleClick={this.handleClick}
         classOverRideContainer="pr-container"
       >
         <div>
@@ -51,10 +82,7 @@ class NpsSuccess extends Component {
                     <p>{"{paymentMessage}"}</p>
                   </div> */}
                 </div>
-                <div
-                  class="contact container-padding"
-                  ng-hide="partner.code == 'bfdlmobile'"
-                >
+                <div class="contact container-padding">
                   <p>For any query, reach us at</p>
                   <div class="flex-box">
                     <div class="item">+80-30-408363</div>
@@ -62,7 +90,7 @@ class NpsSuccess extends Component {
                   </div>
                 </div>
               </div>
-              <div class="nps-mandate" ng-if="showMandate">
+              {/* <div class="nps-mandate">
                 <img src={require("assets/next_step_icon.png")} />
                 <div class="container-padding">
                   <div class="display-flex">
@@ -89,7 +117,7 @@ class NpsSuccess extends Component {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             <div class="page-footer">
               {/* <md-button ng-show="showMandate" ng-class="{'button-loading' : isApiRunning}" ng-disabled="isApiRunning" ng-click="authenticate()" class="cta-button md-raised md-primary">Proceed</md-button>

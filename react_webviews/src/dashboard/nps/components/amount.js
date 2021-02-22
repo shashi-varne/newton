@@ -35,12 +35,10 @@ class EnterAmount extends Component {
     let { amount } = this.state;
 
     if (amount) {
-      let status = await this.get_recommended_funds(amount);
+      let res = await this.get_recommended_funds(amount);
 
-      console.log(status);
-
-      if (status === 200) {
-        this.navigate("recommendation");
+      if (res.status_code === 200) {
+        this.navigate('recommendation/one-time', {amount: this.state.amount})
       }
     }
   };

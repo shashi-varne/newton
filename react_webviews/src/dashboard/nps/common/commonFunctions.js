@@ -3,6 +3,7 @@ import { getConfig } from "utils/functions";
 import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
+import toast from "../../../common/ui/Toast";
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
@@ -16,6 +17,7 @@ export async function initialize() {
   this.updateMeta = updateMeta.bind(this);
   this.getInvestmentData = getInvestmentData.bind(this);
   this.submitPran = submitPran.bind(this);
+  this.getNPSInvestmentStatus = getNPSInvestmentStatus.bind(this);
   let screenData = {};
 
   // if (this.state.screen_name) {
@@ -44,7 +46,7 @@ export async function initialize() {
   );
 }
 
-export function navigate(pathname, data, redirect) {
+export function navigate(pathname, data = {}, redirect) {
   if (redirect) {
     this.props.history.push({
       pathname: pathname,
@@ -54,7 +56,7 @@ export function navigate(pathname, data, redirect) {
     this.props.history.push({
       pathname: `/nps/${pathname}`,
       search: data?.searchParams || getConfig().searchParams,
-      state: { graphData: data },
+      state: data,
     });
   }
 }
@@ -113,14 +115,14 @@ export async function get_recommended_funds(params) {
     ) {
       throw genericErrMsg;
     }
-    const { result, status_code: status } = res.pfwresponse;
+    let result = res.pfwresponse;
 
     // if (status === 200) {
     //   return result;
     // } else {
     //   throw result.error || result.message || genericErrMsg;
     // }
-    return status;
+    return result;
   } catch (err) {
     throw err;
   }
@@ -142,34 +144,37 @@ export async function kyc_submit(params) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      this.navigate("amount")
+      this.navigate("amount/one-time")
     } else {
-      this.setState({
-        show_loader: false,
-      });
-      throw result.error || result.message || genericErrMsg;
+      switch (status) {
+        case 402:
+          console.log(402);
+          break;
+        case 403:
+          toast(result.error);
+          break;
+        default:
+          toast(result.error || result.message || genericErrMsg);
+          break;
+      }
     }
   } catch (err) {
     this.setState({
       show_loader: false,
     });
-    throw err;
+    console.log(err);
+    toast("something went wrong")
   }
 }
 
-export async function nps_register(params, next_state) {
+export async function nps_register(params, next_state, body = "" ) {
+  console.log(body)
   try {
     this.setState({
       show_loader: true,
     });
-    const res = await Api.post(`api/nps/register/update/v2?${params}`);
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
-      throw genericErrMsg;
-    }
+    const res = await Api.post(`api/nps/register/update/v2?${params}`, body);
+
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
@@ -184,7 +189,8 @@ export async function nps_register(params, next_state) {
     this.setState({
       show_loader: false,
     });
-    throw err;
+    console.log(err);
+    toast("something went wrong")
   }
 }
 
@@ -214,8 +220,10 @@ export async function updateMeta(params, next_state) {
       );
 
       if (this.state.screen_name === "nps_delivery") {
-        if (result.user.is_doc_required) {
+        if (!result.user.is_doc_required) {
           this.navigate("upload");
+        } else {
+          this.navigate('success')
         }
       } else {
         this.navigate(next_state);
@@ -276,5 +284,27 @@ export async function submitPran(params) {
     }
   } catch (err) {
     throw err;
+  }
+}
+
+export async function getNPSInvestmentStatus() {
+  try {
+    const res = await Api.get(`/api/nps/invest/status/v2`);
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      storageService().setObject("nps_additional_details", result.registration_details);
+      this.navigate('identity')
+      // return result;
+    } else {
+      toast(result.error || result.message || genericErrMsg);
+    }
+  } catch (err) {
+    this.setState({
+      show_loader: false,
+    });
+    console.log(err);
+    toast("something went wrong")
   }
 }

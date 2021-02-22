@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
-import { navigate } from "../common/commonFunctions";
+import { initialize } from "../common/commonFunctions";
+import { getConfig } from "utils/functions";
 
 class NpsInfo extends Component {
   constructor(props) {
@@ -13,14 +14,22 @@ class NpsInfo extends Component {
       withdraw: false,
     };
 
-    this.navigate = navigate.bind(this);
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-    this.setState({
-      currentuser: storageService().get("currentUser"),
-    });
+    this.initialize();
   }
+
+  onload = () => {
+    let currentuser = storageService().get("currentUser")
+    let npsUser = storageService().get("npsUser") || {};
+
+    this.setState({
+      currentuser: currentuser,
+      npsUser: npsUser
+    });
+  };
 
   handleClick = (name) => {
     if (name) {
@@ -29,7 +38,12 @@ class NpsInfo extends Component {
       });
     } else {
       if (this.state.currentuser.nps_investment) {
-        // this,navigate('')
+        this.props.history.push(
+          { pathname: `amount/one-time`, search: getConfig().searchParams },
+          { state: {
+            pran_number: this.state.npsUser.pran
+          } }
+        );
       } else {
         this.navigate("pan");
       }
