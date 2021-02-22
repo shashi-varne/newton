@@ -19,7 +19,8 @@ class BasicDetails extends Component {
       show_loader: false,
       form_data: {},
       screen_name: "basic_details",
-      qualification: []
+      qualification: [],
+      skelton: 'g',
     };
 
     this.initialize = initialize.bind(this);
@@ -134,6 +135,7 @@ class BasicDetails extends Component {
         title={this.setEditTitle("Enter self-related information")}
         buttonTitle="NEXT"
         handleClick={this.handleClick}
+        skelton={this.state.skelton}
       >
         <div className="basic-details">
           <FormControl fullWidth>

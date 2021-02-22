@@ -17,6 +17,7 @@ import trust_icon from 'assets/trust_icons_emandate.svg';
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import {Imgc} from '../../common/ui/Imgc';
 
 const aboutQuestions = [
   {
@@ -91,7 +92,9 @@ class About extends Component {
   renderSteps = (props, index) => {
     return (
       <div key={index} className="plan-details-item">
-        <img className="plan-details-icon" src={props.icon} alt="" />
+        <Imgc className="plan-details-icon" 
+        style={{width:100,height:60, marginRight:15}}
+        src={props.icon} alt="" />
         <div className="plan-details-text">{props.disc}</div>
       </div>
     )
@@ -128,17 +131,20 @@ class About extends Component {
     }
     
     this.setState({
-      show_loader: true
+      show_loader: 'button'
     })
     try {
       const res = await Api.get('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe);
-      if (res.pfwresponse.result) {
+      if (res.pfwresponse.result && res.pfwresponse.status_code === 200) {
         let params = {
           banks: res.pfwresponse.result.banks
         }
         this.navigate('e-mandate/select-bank', params);
       }
       else {
+        this.setState({
+          show_loader: false
+        })
         toast(res.pfwresponse.result.error || 
           res.pfwresponse.result.message || 'Something went wrong', 'error');
       }
@@ -198,7 +204,7 @@ class About extends Component {
         events={this.sendEvents('just_set_events')}
       >
         <div style={{ textAlign: 'center' }}>
-          <img width={'100%'} src={this.state.top_icon} alt="Mandate" />
+          <Imgc style={{minHeight:140, width:"100%"}} src={this.state.top_icon} alt="Mandate" />
         </div>
         <div style={{
           color: '#767e86', margin: '10px 0px 10px 0px',
@@ -214,7 +220,7 @@ class About extends Component {
         {aboutQuestions.map(this.renderQuestions)}
         <div style={{ textAlign: 'center', margin: '25px 0' }}>
           <div style={{ color: '#636363', marginBottom: '10px' }}>e-mandate powered by</div>
-          <img width={'75%'} src={trust_icon} alt="NACH" />
+          <Imgc style={{minHeight:20, width:"100%"}} src={trust_icon} alt="NACH" />
         </div>
 
       </Container>

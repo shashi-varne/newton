@@ -107,8 +107,7 @@ class Container extends Component {
         >
           {/* Header Block */}
           {!this.props.noHeader &&
-            !getConfig().hide_header &&
-            !this.props.showLoader && (
+            !getConfig().hide_header && (
               <Header
                 disableBack={this.props.disableBack}
                 title={this.props.title}
@@ -135,7 +134,9 @@ class Container extends Component {
             {/* Loader Block */}
             {this.props.loaderWithData
               ? this.renderPageLoader2(this.props.loaderData)
-              : this.renderPageLoader()}
+              // : this.renderPageLoader()
+              : ''
+              }
             {/* {this.renderPageLoader()} */}
             {/* {this.renderPageLoader2()} */}
           </div>
@@ -193,12 +194,8 @@ class Container extends Component {
               withProvider={this.props.withProvider}
               buttonData={this.props.buttonData}
               style={this.props.styleFooter}
-              twoButton={this.props.twoButton}
-              dualbuttonwithouticon={this.props.dualbuttonwithouticon}
-              buttonOneTitle={this.props.buttonOneTitle}
-              buttonTwoTitle={this.props.buttonTwoTitle}
-              handleClickOne={this.props.handleClickOne}
-              handleClickTwo={this.props.handleClickTwo}
+              // showDotDot={this.props.showDotDot}
+              showLoader={this.props.showLoader}
             />
           )}
           {/* No Internet */}

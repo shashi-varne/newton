@@ -22,6 +22,7 @@ class OtpVerification extends Component {
       proceedForOrder: false,
       base_url: getConfig().base_url,
       screen_name: "otp_verify",
+      skelton: 'g',
     };
 
     this.initialize = initialize.bind(this);
@@ -83,7 +84,7 @@ class OtpVerification extends Component {
   resendOtp = async () => {
     let { resend_otp_url: url } = this.state;
     this.setState({
-      show_loader: true,
+      // skelton: 'g',
       otp_error: "",
       otp: "",
       timeAvailable: this.state.totalTime,
@@ -93,7 +94,7 @@ class OtpVerification extends Component {
 
     try {
       this.setState({
-        show_loader: true
+        skelton: 'g'
       });
 
       const res = await Api.get(url);
@@ -104,25 +105,25 @@ class OtpVerification extends Component {
         if (result.resend_otp_url !== '' && result.verify_otp_url !== '') {
           var message = 'OTP sent to the mobile number ' + this.state.mobile_no + ', please verify.'
           this.setState({
-            show_loader: false,
+            skelton: false,
             resend_otp_url: result.resend_otp_url,
             verify_otp_url: result.verify_otp_url
           })
           toast(message || result.message);
         }
         this.setState({
-          show_loader: false
+          skelton: false
         });
 
       } else {
         this.setState({
-          show_loader: false
+          skelton: false
         });
         toast(result.error || result.message || "Something went wrong!");
       }
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       });
       toast('Something went wrong');
     }
@@ -151,9 +152,9 @@ class OtpVerification extends Component {
     }
 
     if (canSubmitForm) {
-      this.setState({
-        show_loader: true,
-      });
+      // this.setState({
+      //   show_loader: "button",
+      // });
 
       let params = {
         otp: otp,
@@ -161,7 +162,7 @@ class OtpVerification extends Component {
 
       try {
         this.setState({
-          show_loader: true,
+          show_loader: "button",
         });
 
         const res = await Api.post(url, params);
@@ -202,6 +203,7 @@ class OtpVerification extends Component {
         buttonTitle="VERIFY & PROCEED"
         disable={this.state.otp.length !== 4}
         handleClick={this.handleClick}
+        skelton={this.state.skelton}
       >
         <div className="otp-verification">
           <div className="subtitle">

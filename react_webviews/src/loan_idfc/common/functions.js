@@ -315,7 +315,7 @@ export async function getDocumentList() {
 export async function getOrCreate(params) {
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
     });
 
     let body = {
@@ -478,7 +478,7 @@ export function setEditTitle(string) {
 export async function updateApplication(params, next_state = "") {
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
     });
 
     const res = await Api.post(
@@ -1092,13 +1092,14 @@ export function navigate(pathname, data = {}) {
 export async function getRecommendedVendor(params) {
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
     });
 
     const res = await Api.post(`relay/api/loan/account/recommendation`, params);
 
     const { result, status_code: status } = res.pfwresponse;
     if (status === 200) {
+      this.setState({ show_loader: false });
       this.navigate(this.state.next_state);
     } else {
       this.setState({ show_loader: false });

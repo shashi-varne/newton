@@ -16,7 +16,6 @@ import ic_ci_d1_fisdom from 'assets/ic_ci_d1_fisdom.svg';
 import ic_ci_d1_myway from 'assets/ic_ci_d1_myway.svg';
 
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import { insuranceProductTitleMapper } from '../../constants';
@@ -82,8 +81,8 @@ class PlanDetailsClass extends Component {
     super(props);
     this.state = {
       selectedIndex: 0,
+      skelton: true,
       checked: true,
-      show_loader: true,
       parent: this.props.parent || {
         'plan_data': {
 
@@ -197,8 +196,42 @@ class PlanDetailsClass extends Component {
     })
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
+
     this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry'
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
+
+  }
+
+  onload = async () => {
+
+    this.setErrorData('onload');
+
+    this.setState({
+      skelton: true,
       ic_claim_assist: this.state.type !== 'fisdom' ? ic_claim_assist_myway : ic_claim_assist_fisdom,
       ic_read: this.state.type !== 'fisdom' ? ic_read_myway : ic_read_fisdom
     })
@@ -214,6 +247,8 @@ class PlanDetailsClass extends Component {
       color: this.state.color
     }
 
+    let error = '';
+    let errorType = '';
     try {
       
       let provider = this.props.parent.state.provider || 'bhartiaxa';
@@ -232,8 +267,8 @@ class PlanDetailsClass extends Component {
         })
 
       } else {
-        toast(resQuote.pfwresponse.result.error || resQuote.pfwresponse.result.message
-          || 'Something went wrong');
+        error = resQuote.pfwresponse.result.error || resQuote.pfwresponse.result.message
+        || true;
       }
 
       if (this.state.lead_id) {
@@ -246,15 +281,12 @@ class PlanDetailsClass extends Component {
           this.setPremiumData(premium_details, leadData);
           this.setState({
             leadData: leadData,
-            show_loader: false
+            skelton: false
           })
 
         } else {
-          this.setState({
-            show_loader: false
-          })
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || true;
         }
       } else {
 
@@ -264,26 +296,44 @@ class PlanDetailsClass extends Component {
         }
         this.setPremiumData(premium_details, data || {});
 
-        this.setState({
-          show_loader: false
-        })
+        if(!error) {
+          this.setState({
+            skelton: false
+          })
+        }
+        
       }
 
     } catch (err) {
       console.log(err)
+      error = true;
+      errorType = 'crash';
       this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
+        skelton:false
+      })
+    }
+
+    // set error data
+   
+     if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
     }
 
     this.setState({
       premium_details: premium_details
     })
-
   }
 
-
+  async componentDidMount() {
+    this.onload();
+  }
 
 
   componentDidUpdate(prevState) {
@@ -412,14 +462,15 @@ class PlanDetailsClass extends Component {
       pathname: pathname,
       search: search ? search : getConfig().searchParams,
       params: {
-        premium_details: premium_details || {},
         diseasesData: diseasesData || {}
       }
-    });
+    }, {premium_details: premium_details});
   }
 
-  async handleClickCurrent() {  
+  async handleClickCurrent() { 
     this.sendEvents('next');
+
+    this.setErrorData('submit');
 
     var final_data = {
       "product_plan": this.props.parent.state.plan_data.premium_details[this.state.selectedIndex].product_plan,
@@ -434,15 +485,19 @@ class PlanDetailsClass extends Component {
     window.sessionStorage.setItem('group_insurance_plan_final_data',
       JSON.stringify(group_insurance_plan_final_data));
 
-    this.setState({
-      show_loader: true
-    })
+   
 
     if (this.state.isRedirectionModal) {
       this.navigate('form-redirection', '', final_data);
       return;
     }
 
+    this.setState({
+      show_loader: 'button'
+    });
+
+    let error = '';
+    let errorType = '';
     try {
 
       let res2 = {};
@@ -458,6 +513,8 @@ class PlanDetailsClass extends Component {
           let ageRef = calculateAge('18/11/2020');
           let diffAge = ageRef - createdAge;
 
+          final_data.lead  = res2.pfwresponse.result.updated_lead || {};
+
 
           if(this.props.parent.state.product_key === 'CORONA' && diffAge <= 0){
             this.navigate('declaration', '', final_data);
@@ -468,8 +525,8 @@ class PlanDetailsClass extends Component {
           this.setState({
             show_loader: false
           })
-          toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || true;
         }
       } else {
           if(this.props.parent.state.product_key === 'CORONA' && !this.state.lead_id){
@@ -479,7 +536,23 @@ class PlanDetailsClass extends Component {
       }
     }
     } catch (err) {
-      toast('Something went wrong');                                                                                                                                                                          
+      error = true;
+      errorType = "crash";
+      this.setState({
+        show_loader: false
+      })                                                                                                                                                                          
+    }
+    // set error data
+    if(error) {
+      this.setState({
+        show_loader:false,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:true
+      })
     }
 
   }
@@ -578,9 +651,12 @@ class PlanDetailsClass extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle={this.props.parent.state.provider === 'hdfcergo' ? 'Get Free Quote' : 'Get this Plan'}
         onlyButton={true}
-        hide_header={this.state.show_loader}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        // showError={true}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClickCurrent()}
         title={this.state.productTitle || ''}
         classOverRideContainer="accident-plan">

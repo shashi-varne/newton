@@ -15,6 +15,7 @@ class MobileVerification extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "mobile_verification",
       mobile_no: "",
       terms_and_conditions_clicked: "no",
@@ -134,6 +135,7 @@ class MobileVerification extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Verify mobile"
         buttonTitle="GET OTP"
         handleClick={this.handleClick}

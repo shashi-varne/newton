@@ -265,7 +265,7 @@ class LoanKnowMore extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        // showLoader={this.state.show_loader}
+        showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         buttonTitle={this.state.top_cta_title}
         hidePageTitle={true}
