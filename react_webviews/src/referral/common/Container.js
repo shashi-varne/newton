@@ -56,7 +56,7 @@ class Container extends Component {
 
     return(
       <Fragment>
-      {this.commonRender({noFooter: true})}
+      {this.commonRender()}
       </Fragment>
     )
   }

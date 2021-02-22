@@ -166,7 +166,7 @@ export function commonRender(props) {
                 </div>
 
                 {/* Footer Block */}
-                {(!this.props.noFooter && !props.noFooter )&& !this.props.skelton &&
+                {!this.props.noFooter && !this.props.skelton &&
                     <Footer
                         buttonTitle={this.props.buttonTitle}
                         handleClick={this.props.handleClick}
