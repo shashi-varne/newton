@@ -43,6 +43,11 @@ body[data-device="web"] {
     max-width: var(--desktop-width);
     margin: 0 auto;
   }
+  .generic-error-dialog-page{
+    max-width: var(--desktop-width);
+    margin: 0 auto;
+    margin-top: 56px;
+  }
   .MuiAppBar-positionFixed {
     left: 0 !important;
   }
@@ -54,6 +59,7 @@ body[data-device="web"] {
   .Header {
     max-width: var(--desktop-width);
     margin: 0 auto;
+    box-shadow: none;
   }
 
   .Footer {
