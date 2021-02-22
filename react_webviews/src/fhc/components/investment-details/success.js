@@ -53,6 +53,9 @@ class InvestSuccess extends Component {
                 buttonTitle="Check Results"
                 handleClick={this.handleClick}
                 title="Fin Health Check (FHC)"
+                fullWidthButton={true}
+                onlyButton={true}
+                classOverRide={'fhc-container'}
             >
                 <div className="landing-container">
                     <img

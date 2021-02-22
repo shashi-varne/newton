@@ -169,6 +169,9 @@ class InsuranceDetails2 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
+        fullWidthButton={true}
+        onlyButton={true}
+        classOverRide={'fhc-container'}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/secure.svg`)}

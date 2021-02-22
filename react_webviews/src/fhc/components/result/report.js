@@ -99,6 +99,9 @@ class Report extends Component {
         handleReset={this.restartFHC}
         noFooter={true}
         classOverRideContainer="bg-grey"
+        fullWidthButton={true}
+        onlyButton={true}
+        classOverRide={'fhc-container'}
       >
         {
           [

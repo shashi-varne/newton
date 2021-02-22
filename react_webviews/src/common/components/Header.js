@@ -56,7 +56,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           style={{marginLeft: 'auto'}}
         />
       }
-      {topIcon === 'close' && <Close onClick={handleTopIcon} />}
+      {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
     </Toolbar>
   </AppBar >
 );

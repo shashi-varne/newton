@@ -64,6 +64,9 @@ class Landing extends Component {
                 buttonTitle="Start"
                 handleClick={() => this.startFHC()}
                 title="Fin Health Check (FHC)"
+                fullWidthButton={true}
+                onlyButton={true}
+                classOverRide={'fhc-container'}
             >
                 <div className="landing-container">
                     <img
