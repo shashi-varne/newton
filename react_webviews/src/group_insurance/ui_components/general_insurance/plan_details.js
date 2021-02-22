@@ -220,7 +220,7 @@ class PlanDetailsClass extends Component {
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
