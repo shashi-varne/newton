@@ -239,7 +239,7 @@ export async function getInstitutionList() {
 export async function getPickList() {
   try {
     this.setState({
-      show_loader: true,
+      skelton: 'g'
     });
 
     const res = await Api.get(`relay/api/loan/idfc/picklist`);
@@ -255,7 +255,8 @@ export async function getPickList() {
           businessOptions: result.nature_of_business,
           organisationTypeOptions: result.organisation,
           salaryRecieptOptions: result.salary_mode,
-          show_loader: false,
+          skelton: false,
+          show_loader: false
         },
         () => {
           this.onload();
@@ -264,13 +265,15 @@ export async function getPickList() {
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.setState({
-        show_loader: false,
+        skelton: false,
+        show_loader: false
       });
     }
   } catch (err) {
     console.log(err);
     this.setState({
-      show_loader: false,
+      skelton: false,
+      show_loader: false
     });
     toast("Something went wrong");
   }
@@ -301,8 +304,6 @@ export async function getDocumentList() {
         }
       );
     }
-
-    
   } catch (err) {
     console.log(err);
     this.setState({
@@ -384,22 +385,22 @@ export async function getOrCreate(params) {
         this.getPickList();
       } else {
         this.setState({
-          show_loader: false,
-          skelton: false
+          skelton: false,
+          show_loader: false
         });
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.setState({
-        show_loader: false,
-        skelton: false
+        skelton: false,
+        show_loader: false
       });
     }
   } catch (err) {
     console.log(err);
     this.setState({
-      show_loader: false,
-      skelton: false
+      skelton: false,
+      show_loader: false
     });
     toast("Something went wrong");
   }
@@ -475,11 +476,23 @@ export function setEditTitle(string) {
   return string;
 }
 
-export async function updateApplication(params, next_state = "") {
+export async function updateApplication(
+  params, 
+  next_state = "",
+  loaderType = "",
+  loaderValue = ""
+) {
   try {
-    this.setState({
-      show_loader: "button",
-    });
+    if (loaderType) {
+      this.setState({
+        [loaderType]: loaderValue,
+        noHeader: true
+      })
+    } else {
+      this.setState({
+        show_loader: "button"
+      })
+    }
 
     const res = await Api.post(
       `relay/api/loan/update/application/idfc/${this.state.application_id}`,
@@ -543,8 +556,15 @@ export async function updateApplication(params, next_state = "") {
 }
 
 export async function get05Callback() {
+  let loaderData = {
+    title: "Hang on while IDFC FIRST Bank evaluates your profile",
+    subtitle: "It usually takes 10 - 15 seconds!",
+  };
+
   this.setState({
+    loaderData: loaderData,
     show_loader: true,
+    loaderWithData: true
   });
 
   // setTimeout(, 3000)
@@ -710,7 +730,7 @@ export async function submitApplication(
 ) {
   try {
     this.setState({
-      show_loader: true,
+      show_loader: "button",
     });
 
     let screens = [
@@ -724,7 +744,7 @@ export async function submitApplication(
       "perfios_status"
     ];
     this.setState({
-      show_loader: true,
+      // show_loader: true,
       loaderWithData: screens.includes(this.state.screen_name),
     });
     const res = await Api.post(
@@ -737,6 +757,9 @@ export async function submitApplication(
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
+      this.setState({
+        show_loader: false,
+      });
       if (result.message === "Success") {
         if (state === "point_five") {
           this.get05Callback();

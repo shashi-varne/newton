@@ -16,6 +16,7 @@ class LoanRequirementDetails extends Component {
     this.state = {
       show_loader: false,
       form_data: {},
+      skelton: 'g',
       screen_name: "requirement_details_screen",
       loaderData: {},
       purposeOfLoanOptions: [],
@@ -105,6 +106,7 @@ class LoanRequirementDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Loan requirement details"
         buttonTitle="SUBMIT"
         loaderWithData={this.state.loaderWithData}

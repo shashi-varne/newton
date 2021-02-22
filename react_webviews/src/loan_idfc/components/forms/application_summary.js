@@ -9,6 +9,7 @@ class ApplicationSummary extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       accordianData: [],
       detail_clicked: [],
       isSelfEmployee: false,
@@ -84,21 +85,11 @@ class ApplicationSummary extends Component {
           subtitle: capitalize(professional_info.salary_mode || ""),
           common_field: false,
         },
-        // {
-        //   title: "Company constitution",
-        //   subtitle: capitalize(professional_info.constitution || ""),
-        //   common_field: true,
-        // },
         {
           title: "Organisation",
           subtitle: capitalize(professional_info.organisation || ""),
           common_field: true,
         },
-        // {
-        //   title: "Department",
-        //   subtitle: capitalize(professional_info.department || ""),
-        //   common_field: false,
-        // },
         {
           title: "Industry",
           subtitle: capitalize(professional_info.industry || ""),
@@ -238,6 +229,7 @@ class ApplicationSummary extends Component {
         showLoader={this.state.show_loader}
         title="Basic detail Summary"
         buttonTitle="OKAY"
+        skelton={this.state.skelton}
         handleClick={() => {
           this.sendEvents('next');
           this.navigate('journey')

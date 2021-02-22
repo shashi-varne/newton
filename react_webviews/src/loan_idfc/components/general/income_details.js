@@ -10,6 +10,7 @@ class IncomeDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g'
     };
 
     this.initialize = initialize.bind(this);
@@ -81,6 +82,7 @@ class IncomeDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Income details"
         noFooter={true}
         headerData={{

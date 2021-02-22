@@ -28,10 +28,10 @@ class AddressDetails extends Component {
       screen_name: "address_details",
       form_data: {},
       confirm_details: false,
+      skelton: 'g',
     };
 
     this.initialize = initialize.bind(this);
-    this.handlePincode = this.handlePincode.bind(this);
     this.addressRef = React.createRef();
   }
 
@@ -85,12 +85,9 @@ class AddressDetails extends Component {
     form_data.current_address2 = current_address_data.address2;
     form_data.current_address3 = current_address_data.address3;
     form_data.current_landmark = current_address_data.landmark;
-    // form_data.current_pincode = current_address_data.pincode;
-    // form_data.current_city = current_address_data.city;
-    // form_data.current_state = current_address_data.state;
-    form_data.current_pincode = "226001";
-    form_data.current_city = 'bnn';
-    form_data.current_state = 'kij';
+    form_data.current_pincode = current_address_data.pincode;
+    form_data.current_city = current_address_data.city;
+    form_data.current_state = current_address_data.state;
     form_data.current_country = "India";
 
     form_data.permanent_address1 = permanent_address_data.address1;
@@ -107,7 +104,7 @@ class AddressDetails extends Component {
       confirm_details: confirm_details,
       loaderData: loaderData,
     }, () => {
-      this.prefillPincode('current_pincode', "226001")
+      this.prefillPincode('current_pincode', current_address_data.pincode)
       this.prefillPincode('permanent_pincode', permanent_address_data.pincode)
     });
   };
@@ -117,8 +114,7 @@ class AddressDetails extends Component {
     const res = await Api.get("/relay/api/loan/pincode/get/" + pin);
       let resultData = res.pfwresponse.result[0] || "";
 
-      let { city, state, country } = form_data;
-      let pincode_error = "";
+      let city, state, country = '';
       if (
         res.pfwresponse.status_code === 200 &&
         res.pfwresponse.result.length > 0
@@ -137,10 +133,9 @@ class AddressDetails extends Component {
         city = "";
         state = "";
         country = "";
-        pincode_error = "Invalid pincode";
       }
 
-      if (name === "permanent_pincode") {
+      if (name === "current_pincode") {
         form_data.current_city = city;
         form_data.current_state = state;
         form_data.current_country = country || "India";
@@ -401,6 +396,7 @@ class AddressDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         } address details`}

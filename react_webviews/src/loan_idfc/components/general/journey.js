@@ -114,10 +114,12 @@ class JourneyMap extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "journey_screen",
       count: 0,
       loaderWithData: false,
       loaderData: {},
+      noHeader: false
     };
     this.initialize = initialize.bind(this);
   }
@@ -275,7 +277,7 @@ class JourneyMap extends Component {
         let body = {
           idfc_loan_status: "ckyc",
         };
-        that.updateApplication(body, "personal-details");
+        that.updateApplication(body, "personal-details", "loaderWithData", true);
       } else {
         if (count < 20) {
           that.setState({
@@ -316,9 +318,15 @@ class JourneyMap extends Component {
           this.navigate("ckyc-summary");
         } else {
           this.sendEvents('next', {stage: stage});
-          this.updateApplication({
-            idfc_loan_status: "ckyc",
-          });
+
+          if (idfc_loan_status !== 'ckyc') {
+            this.updateApplication({
+              idfc_loan_status: "ckyc",
+            }, "", "skelton", "g");
+          } else {
+            this.navigate('personal-details')
+          }
+          
         }
       }
     }
@@ -362,6 +370,7 @@ class JourneyMap extends Component {
 
   render() {
     let { idfc_loan_status, index, vendor_info } = this.state;
+    console.log(this.state.show_loader)
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -372,6 +381,8 @@ class JourneyMap extends Component {
         }}
         hidePageTitle={true}
         loaderData={this.state.loaderData}
+        skelton={this.state.skelton}
+        noHeader={this.state.noHeader}
         loaderWithData={this.state.loaderWithData}
       >
         <div className="journey-track">

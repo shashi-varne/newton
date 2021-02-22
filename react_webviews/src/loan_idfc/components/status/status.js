@@ -235,6 +235,7 @@ class LoanStatus extends Component {
       vendor_application_status: "",
       screen_name: "loan_status",
       first_name: "",
+      skelton: 'g'
     };
 
     this.initialize = initialize.bind(this);
@@ -309,7 +310,7 @@ class LoanStatus extends Component {
     let { commonMapper, vendor_application_status, is_dedupe } = this.state;
     if (!is_dedupe && vendor_application_status === "idfc_0.5_accepted") {
       this.setState({
-        show_loader: true,
+        show_loader: "button",
       });
       toast(
         "An email has been sent to your official email ID. Verify the same for faster loan sanction."
@@ -360,6 +361,7 @@ class LoanStatus extends Component {
         buttonTitle={commonMapper.button_title}
         handleClick={this.handleClick}
         hidePageTitle={commonMapper.hidePageTitle}
+        skelton={this.state.skelton}
         headerData={{
           icon: commonMapper.icon || "",
           goBack: this.goBack,

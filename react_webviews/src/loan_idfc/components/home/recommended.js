@@ -91,7 +91,7 @@ class Recommended extends Component {
       keys_to_check.push("monthly_salary");
     }
 
-    form_data.loan_amount_required = form_data.loan_amount_required.slice(2).replaceAll(',', '');
+    form_data.loan_amount_required = (form_data.loan_amount_required || '').slice(2).replaceAll(',', '');
     
 
     if (this.validateFields(keys_to_check, form_data)) {
@@ -104,6 +104,7 @@ class Recommended extends Component {
       }
       this.sendEvents("next");
       this.getRecommendedVendor(body);
+      form_data.loan_amount_required = `₹ ${formatAmount(form_data.loan_amount_required)}`;
     }
   };
 

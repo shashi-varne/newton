@@ -24,7 +24,8 @@ class ProfessionalDetails extends Component {
       organisationTypeOptions: [],
       salaryRecieptOptions: [],
       company_name: "",
-      isApiRunning: false
+      isApiRunning: false,
+      skelton: 'g',
     };
 
     this.initialize = initialize.bind(this);
@@ -50,7 +51,7 @@ class ProfessionalDetails extends Component {
     let form_data = {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
-      net_monthly_salary: `₹ ${formatAmount(application_info.net_monthly_salary)}`,
+      net_monthly_salary: application_info.net_monthly_salary ? `₹ ${formatAmount(application_info.net_monthly_salary)}` : '',
       salary_mode: professional_info.salary_mode,
       organisation: professional_info.organisation,
       industry: professional_info.industry,
@@ -129,11 +130,13 @@ class ProfessionalDetails extends Component {
     if (employment_type === "self_employed") {
       keys_to_check.push("company_name");
     } else {
-      form_data.net_monthly_salary = form_data.net_monthly_salary.slice(2).replaceAll(',', '');
+      let net_monthly_salary = form_data.net_monthly_salary.slice(2).replaceAll(',', '')
+      form_data.net_monthly_salary = net_monthly_salary;
       keys_to_check.push(...salaried);
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
+    form_data.net_monthly_salary = `₹ ${formatAmount(form_data.net_monthly_salary)}`;
   };
 
   handleSearch = async (value) => {
@@ -178,6 +181,7 @@ class ProfessionalDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Enter work details"
         buttonTitle="NEXT"
         handleClick={this.handleClick}

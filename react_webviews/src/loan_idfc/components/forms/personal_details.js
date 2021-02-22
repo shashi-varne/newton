@@ -36,6 +36,7 @@ class PersonalDetails extends Component {
       form_data: {},
       confirm_details: false,
       details_changed: "no",
+      skelton: 'g',
     };
 
     this.initialize = initialize.bind(this);
@@ -221,6 +222,7 @@ class PersonalDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         }  personal details`}
