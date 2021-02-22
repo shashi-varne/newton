@@ -30,9 +30,6 @@ class Report extends Component {
       search: getConfig().searchParams,
       params: {
         backToState: 'report'
-      },
-      state:{
-        base_plan_title:base_plan_title
       }
     });
   }
@@ -337,7 +334,7 @@ class Report extends Component {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
-    this.navigate(path, policy.provider,policy.base_plan_title);
+    this.navigate(path, policy.provider);
   }
 
   renderReportCards(props, index) {

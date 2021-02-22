@@ -97,7 +97,7 @@ class PlanSummaryClass extends Component {
       try {
         let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
         if (res.pfwresponse.status_code === 200) {
-  
+
           lead = res.pfwresponse.result.lead;
           this.setState({
             skelton: false
@@ -109,9 +109,6 @@ class PlanSummaryClass extends Component {
           || true;
         }
       } catch (err) {
-        this.setState({
-          skelton: false,
-        });
         error= true;
         errorType= "crash";
       }
