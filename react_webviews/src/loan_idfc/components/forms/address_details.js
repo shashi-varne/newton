@@ -31,6 +31,7 @@ class AddressDetails extends Component {
     };
 
     this.initialize = initialize.bind(this);
+    this.handlePincode = this.handlePincode.bind(this);
     this.addressRef = React.createRef();
   }
 
@@ -56,7 +57,7 @@ class AddressDetails extends Component {
     });
   }
 
-  onload = () => {
+  onload = async () => {
     if (this.props.edit) {
       this.setState({
         next_state: `/loan/idfc/ckyc-summary`,
@@ -84,9 +85,12 @@ class AddressDetails extends Component {
     form_data.current_address2 = current_address_data.address2;
     form_data.current_address3 = current_address_data.address3;
     form_data.current_landmark = current_address_data.landmark;
-    form_data.current_pincode = current_address_data.pincode;
-    form_data.current_city = current_address_data.city;
-    form_data.current_state = current_address_data.state;
+    // form_data.current_pincode = current_address_data.pincode;
+    // form_data.current_city = current_address_data.city;
+    // form_data.current_state = current_address_data.state;
+    form_data.current_pincode = "226001";
+    form_data.current_city = 'bnn';
+    form_data.current_state = 'kij';
     form_data.current_country = "India";
 
     form_data.permanent_address1 = permanent_address_data.address1;
@@ -102,8 +106,54 @@ class AddressDetails extends Component {
       form_data: form_data,
       confirm_details: confirm_details,
       loaderData: loaderData,
+    }, () => {
+      this.prefillPincode('current_pincode', "226001")
+      this.prefillPincode('permanent_pincode', permanent_address_data.pincode)
     });
   };
+
+  prefillPincode = async (name, pin) => {
+    let { form_data } = this.state; 
+    const res = await Api.get("/relay/api/loan/pincode/get/" + pin);
+      let resultData = res.pfwresponse.result[0] || "";
+
+      let { city, state, country } = form_data;
+      let pincode_error = "";
+      if (
+        res.pfwresponse.status_code === 200 &&
+        res.pfwresponse.result.length > 0
+      ) {
+        if (!resultData.idfc_city_name) {
+          city =
+            resultData.district_name ||
+            resultData.division_name ||
+            resultData.taluk;
+        } else {
+          city = resultData.idfc_city_name;
+        }
+        state = resultData.idfc_state_name || resultData.state_name;
+        country = resultData.country;
+      } else {
+        city = "";
+        state = "";
+        country = "";
+        pincode_error = "Invalid pincode";
+      }
+
+      if (name === "permanent_pincode") {
+        form_data.current_city = city;
+        form_data.current_state = state;
+        form_data.current_country = country || "India";
+      } else if (name === "permanent_pincode") {
+        form_data.permanent_city = city;
+        form_data.permanent_state = state;
+        form_data.permanent_country = country || "India";
+      }
+
+      this.setState({
+        form_data: form_data
+      })
+  }
 
   sendEvents(user_action) {
     let eventObj = {

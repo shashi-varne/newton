@@ -5,6 +5,7 @@ import Input from "../../../common/ui/Input";
 import { FormControl } from "material-ui/Form";
 import { numDifferentiationInr, formatAmount } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
+import {Imgc} from '../../../common/ui/Imgc';
 
 class Recommended extends Component {
   constructor(props) {
@@ -165,7 +166,7 @@ class Recommended extends Component {
               }}
               onClick={this.handleChange()}
             >
-              <img
+              <Imgc
                 id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
@@ -181,7 +182,7 @@ class Recommended extends Component {
               }}
               onClick={this.handleChange()}
             >
-              <img
+              <Imgc
                 id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""

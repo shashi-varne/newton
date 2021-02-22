@@ -10,6 +10,7 @@ import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
 import { getConfig } from "utils/functions";
 import { goBackMap } from "../constants";
+import UiSkelton from '../../common/ui/Skelton';
 
 class Container extends Component {
   constructor(props) {
@@ -139,24 +140,41 @@ class Container extends Component {
             {/* {this.renderPageLoader2()} */}
           </div>
 
-          {/*  */}
-
           {!this.state.force_hide_inpage_title &&
             !this.props.noHeader &&
             !this.props.hidePageTitle &&
             this.new_header_scroll()}
 
+          { this.props.skelton && 
+            <UiSkelton 
+            type={this.props.skelton}
+            />
+          }
+
           {/* Children Block */}
-          <div
+          {/* <div
             style={this.props.styleContainer}
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""
               }`}
           >
             {this.props.children}
+          </div> */}
+
+          {/* Children Block */}
+          <div
+            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial',
+            // backgroundImage: this.props.skelton ? 'unset': 'initial'
+          }}
+            className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
+            >
+            <div 
+            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
+            style={{display: this.props.skelton ? 'none': ''}}
+            > {this.props.children} </div>
           </div>
 
           {/* Footer Block */}
-          {!this.props.noFooter && (
+          {!this.props.noFooter && !this.props.skelton && (
             <Footer
               noFooter={this.props.noFooter}
               fullWidthButton={this.props.fullWidthButton}

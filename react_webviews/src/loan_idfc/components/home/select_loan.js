@@ -11,6 +11,7 @@ class SelectLoan extends Component {
     this.state = {
       show_loader: false,
       screen_name: "select_loan_screen",
+      skelton: 'g',
     };
     this.initialize = initialize.bind(this);
   }
@@ -155,7 +156,8 @@ class SelectLoan extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        showLoader={this.state.show_loader}
+        // showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Select loan provider"
         noFooter={true}
         headerData={{

@@ -6,6 +6,7 @@ import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
 import Card from "../../../common/ui/Card";
 import { getConfig } from "utils/functions";
+import {Imgc} from '../../../common/ui/Imgc';
 
 class Home extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class Home extends Component {
     this.state = {
       show_loader: false,
       screen_name: "home_screen",
+      skelton: 'g',
     };
     this.initialize = initialize.bind(this);
   }
@@ -122,9 +124,10 @@ class Home extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        showLoader={this.state.show_loader}
+        // showLoader={this.state.show_loader}
         title="Loans"
         noFooter={true}
+        skelton={this.state.skelton}
       >
         <div className="home">
           <div className="block1-info">
@@ -141,7 +144,7 @@ class Home extends Component {
                 );
               })
             ) : (
-              <img
+              <Imgc
                 src={require(`assets/${productName}/icn_hero.svg`)}
                 alt="info"
               />
@@ -157,14 +160,14 @@ class Home extends Component {
               </div>
               <Card className="card-lending" onClick={() => this.handleClick()}>
                 <div className="content">
-                  <img
+                  <Imgc
                     src={require(`assets/${productName}/loan_hand.svg`)}
                     alt="amount icon"
                   />
                   <div className="data">
                     <div className="title generic-page-title">
                       Personal loans
-                      <img src={require(`assets/apply_now.svg`)} alt="" />
+                      <Imgc src={require(`assets/apply_now.svg`)} alt="" />
                     </div>
                     <div className="subtitle generic-page-subtitle">
                       Get loans upto ₹40 lakhs
@@ -197,7 +200,7 @@ class Home extends Component {
               );
             }}
           >
-            <img
+            <Imgc
               src={require(`assets/${productName}/calculatemi.svg`)}
               alt="calculator"
             />
@@ -207,7 +210,7 @@ class Home extends Component {
             <div className="top-title">Our partners</div>
             <div className="partners">
               {/* <div className="partner-card"> */}
-                <img src={require(`assets/idfc.svg`)} alt="idfc logo" />
+                <Imgc src={require(`assets/idfc.svg`)} alt="idfc logo" />
               {/* </div> */}
             </div>
           </div>

@@ -385,18 +385,21 @@ export async function getOrCreate(params) {
       } else {
         this.setState({
           show_loader: false,
+          skelton: false
         });
       }
     } else {
       toast(result.error || result.message || "Something went wrong!");
       this.setState({
         show_loader: false,
+        skelton: false
       });
     }
   } catch (err) {
     console.log(err);
     this.setState({
       show_loader: false,
+      skelton: false
     });
     toast("Something went wrong");
   }
@@ -434,6 +437,7 @@ export async function getUserStatus(state = "") {
       this.setState(
         {
           show_loader: false,
+          skelton: false
         },
         () => {
           this.onload();
@@ -444,6 +448,7 @@ export async function getUserStatus(state = "") {
       this.setState(
         {
           show_loader: false,
+          skelton: false
         },
         () => {
           this.onload();
@@ -455,6 +460,7 @@ export async function getUserStatus(state = "") {
     this.setState(
       {
         show_loader: false,
+        skelton: false
       }
     );
     toast("Something went wrong");
@@ -1131,6 +1137,7 @@ export async function getSummary() {
         ongoing_loan_details: result.ongoing_loan_details,
         selectedVendors: selectedVendors,
         show_loader: false,
+        skelton: false,
         employment_type: result.employment_type,
         loan_amount_required: result.loan_amount_required,
         loans_applied: result.loans_applied,
@@ -1143,7 +1150,10 @@ export async function getSummary() {
         }
       });
     } else {
-      this.setState({ show_loader: false }, () => {
+      this.setState({ 
+        show_loader: false,
+        skelton: false
+      }, () => {
         this.onload();
       });
       toast(result.error || result.message || "Something went wrong!");

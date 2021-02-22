@@ -10,6 +10,7 @@ class Eligibility extends Component {
     this.state = {
       show_loader: false,
       screen_name: "eligibility_screen",
+      skelton: 'g',
     };
 
     this.initialize = initialize.bind(this);
@@ -48,7 +49,8 @@ class Eligibility extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        showLoader={this.state.show_loader}
+        // showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         title="Eligibility"
         buttonTitle="OKAY"
         handleClick={this.handleClick}
