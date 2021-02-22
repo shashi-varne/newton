@@ -164,3 +164,118 @@
 //       );
 //   };
 
+import React from 'react'
+import Container from '../common/Container'
+import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon'
+
+const AddressDetails1 = (props) => {
+  const [showSkelton, setShowSkelton] = useState(false)
+  const [isApiRunning, setIsApiRunning] = useState(false)
+  return (
+    <Container showSkelton={showLoader} buttonTitle="SAVE AND CONTINUE" disable={isApiRunning} hideInPageTitle handleClick={handleSubmit} isApiRunning={isApiRunning}>
+
+    </Container>
+  )
+}
+
+export default AddressDetails1
+
+/**
+ * <section
+  class="page home"
+  ng-class="{paddingBottom : '!isStartKyc', paddingBottomRemove : 'isStartKyc'}"
+>
+  <div class="page-body-kyc">
+    <div class="title">
+      {{ title }}
+      <div class="page-progress">1/{{ total_pages }}</div>
+    </div>
+    <form
+      class="form row"
+      name="indianaddressform1"
+      ng-submit="submitPan()"
+      autocomplete="off"
+    >
+      <div class="input-select-radio-button-container">
+        <label class="label-input">Residential status:</label>
+        <div id="select-radio-buttons">
+          <div
+            ng-repeat="item in residentialStatusOptions track by $index"
+            class="radio-btn-group"
+            ng-click="handleChangeResidentialStatus($index)"
+          >
+            <div
+              class="ContainerWrapper RadioButton unchecked"
+              data-value="{this.props.value}"
+              ng-class="{'checked': selectedIndexResidentialStatus === $index}"
+            >
+              <div
+                class="RadioButtonTiles"
+                ng-class="{'RadioLabelChecked': selectedIndexResidentialStatus === $index}"
+              >
+                {{ item }}
+                <div
+                  ng-if="selectedIndexResidentialStatus === $index"
+                  class="checkmark"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="residentialError" class="validation-errors-select">
+          {{ residentialError }}
+        </div>
+      </div>
+
+      <div class="input-select-radio-button-container">
+        <label class="label-input">Address proof:</label>
+        <div id="select-radio-buttons">
+          <div
+            ng-repeat="item in addressProofOptions track by $index"
+            class="radio-btn-group"
+            ng-click="handleChangeAddressProof($index)"
+          >
+            <div
+              class="ContainerWrapper RadioButton unchecked"
+              data-value="{this.props.value}"
+              ng-class="{'checked': selectedIndexAddressProof === $index}"
+            >
+              <div
+                class="RadioButtonTiles"
+                ng-class="{'RadioLabelChecked': selectedIndexAddressProof === $index,
+                'RadioButtonDisabled': userKyc.address.meta_data.is_nri && 
+               $index !==1}"
+              >
+                {{ item.name }}
+                <div
+                  ng-if="selectedIndexAddressProof === $index"
+                  class="checkmark"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="addressError" class="validation-errors-select">
+          {{ addressError }}
+        </div>
+      </div>
+    </form>
+
+    <div class="page-footer">
+      <div class="server-errors">
+        <div ng-show="serverValidationError == true">
+          {{ serverValidationMessage }}
+        </div>
+      </div>
+      <md-button
+        ng-disabled="selectedIndexResidentialStatus === '' || isApiRunning"
+        class="cta-button md-raised md-primary"
+        ng-click="goNext()"
+        ng-class="{'button-loading' : isApiRunning}"
+        >SAVE AND CONTINUE</md-button
+      >
+    </div>
+  </div>
+</section>
+
+ */

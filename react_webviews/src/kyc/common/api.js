@@ -250,3 +250,40 @@ export const uploadBankDocuments = async (file, type, bank_id) => {
       genericErrorMessage
   )
 }
+
+export const getPinCodeData = async (pincode) => {
+  const url = `api/pincode/${pincode}`
+  const res = await Api.get(url)
+  if (
+    res.pfwresponse.status_code === 200
+  ) {
+    return res.pfwresponse.result
+  }
+  throw new Error(
+    res?.pfwresponse?.result?.message ||
+      res?.pfwresponse?.result?.error ||
+      genericErrorMessage
+  )
+}
+
+export const submit = async (data) => {
+  const url =  `/api/kyc/v2/mine`
+  const res = await Api.post(url, data)
+  if (
+    res.pfwresponse.status_code === 200 &&
+    res.pfwresponse.result.message === 'success'
+  ) {
+    const result = res.pfwresponse.result
+    if (result.kyc.identification.meta_data.nationality) {
+      result.kyc.identification.meta_data.nationality = result.kyc.identification.meta_data.nationality.toUpperCase();
+    }
+    storageService().setObject("kyc", result.kyc);
+    storageService().setObject("user", result.user);
+    return result
+  }
+  throw new Error(
+    res?.pfwresponse?.result?.message ||
+      res?.pfwresponse?.result?.error ||
+      genericErrorMessage
+  ) 
+}

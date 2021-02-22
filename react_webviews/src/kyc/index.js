@@ -53,6 +53,7 @@ import PersonalDetails4 from './personal_details/Screen4'
 import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
 import SampleDocuments from './bank-kyc/SampleDocuments'
 import Esign from './esign'
+import AddressDetails2 from './address/AddressDetails2'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -191,10 +192,11 @@ const Kyc = (props) => {
             path={`${url}/sample-documents`}
             component={SampleDocuments}
           />
+          <Route exact path={`${url}/esign`} component={Esign} />
           <Route
             exact
-            path={`${url}/esign`}
-            component={Esign}
+            path={`${url}/address-details2`}
+            component={AddressDetails2}
           />
           <Route component={NotFound} />
         </Switch>

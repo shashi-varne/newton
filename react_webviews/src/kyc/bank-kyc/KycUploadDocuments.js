@@ -67,6 +67,7 @@ const KycUploadDocuments = (props) => {
         verificationDocOptions[selected].value,
         bank_id
       )
+      console.log(result)
       setShowPendingModal(true)
     } catch (err) {
       setShowPendingModal(true)
