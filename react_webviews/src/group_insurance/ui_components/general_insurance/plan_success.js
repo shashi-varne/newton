@@ -84,7 +84,7 @@ class PlanSuccessClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         }
       };
@@ -103,16 +103,16 @@ class PlanSuccessClass extends Component {
     })
 
     let error = '';
+    let errorType = '';
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        skelton: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
-
-
+        this.setState({
+          skelton: false
+        })
         let lead_data = res.pfwresponse.result.lead;
 
         let accordians_data = [
@@ -145,15 +145,16 @@ class PlanSuccessClass extends Component {
         })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
 
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: 'page'
       });
+      error= true;
+      errorType= 'crash';
     }
 
 
@@ -162,7 +163,8 @@ class PlanSuccessClass extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })
@@ -200,8 +202,8 @@ class PlanSuccessClass extends Component {
   getAddress = (addr) => {
     return (
       <div>
-        {addr.address_line + ', ' +
-          addr.landmark + ', ' +
+        {addr.addr_line1 + ', ' +
+          // addr.landmark + ', ' +
           addr.pincode + ', ' +
           addr.city + ', ' +
           this.capitalize(addr.state) + ', ' +
@@ -285,12 +287,15 @@ class PlanSuccessClass extends Component {
   }
 
   renderAccordions(props, index) {
+    if(props.name === 'Nominee' && this.state.lead_data && !this.state.lead_data.nominee_details){
+      return;
+    }
     return (
       <div key={index} className="plan-summary-accordion">
         <div className="accordion-container">
           <div className="Accordion">
             <div className="AccordionTitle" onClick={() => this.toggleAccordian(props.key)}>
-              <div className="AccordionList">
+                <div className="AccordionList">
                 <span className="AccordionList1">
                   <img className="AccordionListIcon" src={(this.state.accordianTab === props.key) ? shrink : expand} alt="" width="20" />
                 </span>

@@ -5,7 +5,8 @@ class DenguePaymentSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product_key: 'DENGUE'
+      product_key: 'DENGUE',
+      headerTitle: 'Dengue insurance'
     }
   }
 

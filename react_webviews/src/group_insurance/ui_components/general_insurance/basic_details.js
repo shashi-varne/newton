@@ -11,7 +11,6 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -294,6 +293,8 @@ class BasicDetailsForm extends Component {
     }
 
     let error = '';
+
+    let errorType = '';
     try {
   
       if (this.state.lead_id) { 
@@ -302,18 +303,16 @@ class BasicDetailsForm extends Component {
         })
         if(!leadData) {
          
-          let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+          let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
     
-          leadData = res.pfwresponse.result.lead;
-          this.setState({
-            skelton: false
-          })
+          leadData = res.pfwresponse.result.lead; 
           if (res.pfwresponse.status_code === 200) {
-  
+         
+
             
           } else {
-            toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-              || 'Something went wrong');
+            error=res.pfwresponse.result.error || res.pfwresponse.result.message
+              || true;
           }
         }
   
@@ -334,20 +333,20 @@ class BasicDetailsForm extends Component {
         this.setState({
           skelton: true
         })
-        let res = await Api.get('api/ins_service/api/insurance/account/summary')
+        let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
 
-        this.setState({
-          skelton: false
-        })
+        
         if (res.pfwresponse.status_code === 200) {
-
+        
           let result = {};
           if (res.pfwresponse.result.response_data) {
             result = res.pfwresponse.result.response_data.insurance_account || {};
           } else {
             result = res.pfwresponse.result.insurance_account || {};
           }
-
+          this.setState({
+            skelton: false
+          })
           basic_details_data.name = result.name || '';
           basic_details_data.gender = result.gender || '';
           basic_details_data.marital_status = result.marital_status || '';
@@ -364,28 +363,28 @@ class BasicDetailsForm extends Component {
 
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
       }
 
-
     } catch (err) {
+      error = true
+      errorType = 'crash'
       this.setState({
-        skelton: false,
-        showError: 'page'
-      });
+        skelton:false
+      })
     }
-
-    // error = 'aaaaaaa'
 
     // set error data
     if(error) {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type:errorType
+
         },
-        showError: 'page'
+        showError: 'page',
       })
     }
     this.setState({
@@ -416,7 +415,7 @@ class BasicDetailsForm extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -569,7 +568,6 @@ class BasicDetailsForm extends Component {
           "relation": basic_details_data.nominee.relation
         }
         final_data['nominee'] = obj;
-        final_data['nominee'] = {};  //TODO remove
       } else {
         final_data['nominee'] = {};
       }
@@ -579,6 +577,7 @@ class BasicDetailsForm extends Component {
 
 
       let error = '';
+      let errorType= '';
       try {
         this.setState({
           show_loader: 'button'
@@ -586,9 +585,9 @@ class BasicDetailsForm extends Component {
         let res2 = {};
         if (this.state.lead_id) {
           final_data.lead_id = this.state.lead_id;
-          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
         } else {
-          res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/create', final_data)
+          res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/create', final_data)
         }
 
         
@@ -604,20 +603,22 @@ class BasicDetailsForm extends Component {
           
           if ('error' in res2.pfwresponse.result) {
             if (Array.isArray(res2.pfwresponse.result.error)) {
-                error = res2.pfwresponse.result.error[0]['message'] || res2.pfwresponse.result.error[0]['error']
+              error = res2.pfwresponse.result.error[0]['error'];
             } else {
-                error = res2.pfwresponse.result.error
+              error = res2.pfwresponse.result.error.error || res2.pfwresponse.result.error;
             }
           } else {
-            error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong'
+            error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || true
           }
         }
+
 
       } catch (err) {
         this.setState({
           show_loader: false,
-          showError: true
         });
+        error = true
+        errorType = 'crash'
       }
 
       // set error data
@@ -625,7 +626,8 @@ class BasicDetailsForm extends Component {
         this.setState({
           errorData: {
             ...this.state.errorData,
-            title2: error
+            title2: error,
+            type:errorType
           },
           showError:true
         })
@@ -654,7 +656,7 @@ class BasicDetailsForm extends Component {
           "dob": this.state.basic_details_data['dob'] ? 'yes' : 'no',
           "gender": this.state.basic_details_data['gender'] ? 'yes' : 'no',
           "email": this.state.basic_details_data['email'] ? 'yes' : 'no',
-          "mobile": this.state.basic_details_data['mobile'] ? 'yes' : 'no',
+          "mobile": this.state.basic_details_data['mobile_no'] ? 'yes' : 'no',
           "nominee_details": this.state.checked ? 'yes' : 'no',
           "nominee_name": this.state.checked && this.state.basic_details_data.nominee &&
             this.state.basic_details_data.nominee['name'] ? 'yes' : 'no',
