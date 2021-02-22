@@ -18,7 +18,7 @@ class PaymentFailedClass extends Component {
 
   handleClick = () => {
     this.setState({
-      show_loader: true
+      show_loader: 'button'
     })
     let pgLink = window.sessionStorage.getItem('group_insurance_payment_url');
     if (pgLink) {
