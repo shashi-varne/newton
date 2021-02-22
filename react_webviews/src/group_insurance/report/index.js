@@ -24,7 +24,7 @@ class Report extends Component {
   }
 
 
-  navigate = (pathname, provider) => {
+  navigate = (pathname, provider, base_plan_title) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
@@ -229,17 +229,21 @@ class Report extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
   }
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload = async() =>{
     let error = '';
     let errorType = '';
     this.setErrorData('onload');
@@ -302,7 +306,6 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
-
     let policy_type = policy.policy_type ? policy.policy_type : ''
     this.sendEvents('next', policy.key, policy_type , policy);
     let path = '';
