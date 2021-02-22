@@ -136,7 +136,6 @@ class BasicDetails extends Component {
         handleClick={this.handleClick}
       >
         <div className="basic-details">
-          <div className="basic-details-subtitle">Enter the details below:</div>
           <FormControl fullWidth>
             <div className="InputField">
               <Input
