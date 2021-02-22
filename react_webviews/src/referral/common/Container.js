@@ -1,16 +1,7 @@
 import React, { Component , Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from './Header';
-
 import { nativeCallback } from 'utils/native_callback';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
 import { getConfig } from '../../utils/functions';
 
 import {didmount ,commonRender} from '../../common/components/container_functions';
@@ -47,6 +38,9 @@ class Container extends Component {
   componentDidMount() {
 
     this.didmount();
+    this.setState({
+      mounted: true
+    })
   }
 
   componentWillUnmount() {
@@ -59,40 +53,13 @@ class Container extends Component {
   }
 
   render() {
-    return (
-      <div className="ReferralContainerWrapper">
-        {/* Header Block */}
-        <Header
-          title={this.props.title}
-          goBack={this.historyGoBack}
-          type={getConfig().productName} />
 
-        {/* Below Header Block */}
-        <div style={{ height: 56 }}></div>
-
-        {/* Loader Block */}
-        {/* {this.renderPageLoader()} */}
-
-        {/* Children Block */}
-        <div className={`ReferralContainer ${this.props.classOverRideContainer}`}>
-          {this.props.children}
-        </div>
-
-        {/* No Internet */}
-        {/* {this.renderDialog()} */}
-      </div>
-    );
+    return(
+      <Fragment>
+      {this.commonRender({noFooter: true})}
+      </Fragment>
+    )
   }
-
-
-  // render() {
-
-  //   return(
-  //     <Fragment>
-  //     {this.commonRender()}
-  //     </Fragment>
-  //   )
-  // }
 
 };
 

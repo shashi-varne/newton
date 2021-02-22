@@ -40,6 +40,28 @@ class Container extends Component {
     });
   }
 
+  handlePopup = () => {
+    this.setState({
+      openPopup: false
+    });
+
+    if (this.state.callbackType === 'show_quotes') {
+      let eventObj = {
+        "event_name": 'exit_from_payment',
+        "properties": {
+          "user_action": 'yes',
+          "source": 'summary'
+        }
+      };
+      nativeCallback({ events: eventObj });
+      window.sessionStorage.setItem('show_quotes', true);
+      this.navigate('/insurance/quote');
+    }
+
+
+    nativeCallback({ action: this.state.callbackType });
+  }
+
 
   historyGoBack = () => {
     // let insurance_v2 = getConfig().insurance_v2;
