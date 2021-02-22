@@ -34,6 +34,12 @@ export const getPathname = {
   personalDetails2: '/kyc/personal-details2',
   personalDetails3: '/kyc/personal-details3',
   personalDetails4: '/kyc/personal-details4',
+  addressDetails1: '/kyc/address-details1',
+  addressDetails2: '/kyc/address-details2',
+  digilockerPersonalDetails1: '/kyc/dl/personal-details1',
+  digilockerPersonalDetails2: '/kyc/dl/personal-details2',
+  digilockerPersonalDetails3: '/kyc/dl/personal-details3',
+  uploadSign: '/kyc/upload/sign',
 }
 
 export const storageConstants = {
@@ -261,3 +267,12 @@ export const verificationDocOptions = [
   { name: 'Cancelled cheque', value: 'cheque' },
   { name: 'First page of passbook', value: 'passbook' },
 ]
+
+export const addressProofOptions = [
+  { name: "Driving license", value: "DL" },
+  { name: "Passport", value: "PASSPORT" },
+  { name: "Aadhaar card", value: "AADHAAR" },
+  { name: "Voter ID", value: "VOTER_ID_CARD" },
+  { name: "Gas receipt", value: "UTILITY_BILL" },
+  { name: "Passbook", value: "LAT_BANK_PB" }
+];

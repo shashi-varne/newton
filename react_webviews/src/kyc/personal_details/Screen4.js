@@ -34,6 +34,7 @@ const PersonalDetails4 = (props) => {
   const [userkyc, setUserKyc] = useState(
     storageService().getObject(storageConstants.KYC) || {}
   );
+  const type = props.type || "";
 
   useEffect(() => {
     initialize();
@@ -99,7 +100,11 @@ const PersonalDetails4 = (props) => {
       setIsApiRunning(true);
       const submitResult = await savePanData(body);
       if (!submitResult) return;
-      navigate(getPathname.journey);
+      if (type === "digilocker") {
+        navigate(getPathname.uploadSign);
+      } else {
+        navigate(getPathname.journey);
+      }
     } catch (err) {
       console.log(err);
       toast(err);
@@ -143,7 +148,7 @@ const PersonalDetails4 = (props) => {
       <div className="kyc-nominee">
         <div className="kyc-main-title">
           {title}
-          <span>4/4</span>
+          <span>{type === "digilocker" ? 3 : 4}/4</span>
         </div>
         <main>
           <div className="nominee-checkbox">
