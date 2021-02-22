@@ -24,12 +24,15 @@ class Report extends Component {
   }
 
 
-  navigate = (pathname, provider) => {
+  navigate = (pathname, provider, base_plan_title) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
       params: {
         backToState: 'report'
+      },
+      state:{
+        base_plan_title:base_plan_title
       }
     });
   }
@@ -240,6 +243,10 @@ class Report extends Component {
 
   }
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload = async() =>{
     let error = '';
     let errorType = '';
     this.setErrorData('onload');
@@ -302,7 +309,6 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
-
     let policy_type = policy.policy_type ? policy.policy_type : ''
     this.sendEvents('next', policy.key, policy_type , policy);
     let path = '';
@@ -331,7 +337,7 @@ class Report extends Component {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
 
-    this.navigate(path, policy.provider);
+    this.navigate(path, policy.provider,policy.base_plan_title);
   }
 
   renderReportCards(props, index) {

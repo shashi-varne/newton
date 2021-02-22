@@ -231,7 +231,7 @@ class ReportDetails extends Component {
         fullWidthButton={true}
         buttonTitle={this.state.buttonTitle}
         onlyButton={true}
-        title={this.state.policyData.provider === 'EDELWEISS' ?  'Term insurance' : this.state.policyData.product_title}
+        title={ (this.state.policyData.provider === 'EDELWEISS' ?  'Term insurance' : this.state.policyData.product_title) || this.props?.location?.state?.base_plan_title }
         skelton={this.state.skelton}
         classOverRideContainer="report-detail"
       >
