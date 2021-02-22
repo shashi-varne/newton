@@ -40,6 +40,10 @@ export const getPathname = {
   digilockerPersonalDetails2: '/kyc/dl/personal-details2',
   digilockerPersonalDetails3: '/kyc/dl/personal-details3',
   uploadSign: '/kyc/upload/sign',
+  changeAddressDetails1: '/kyc/change-address-details1',
+  changeAddressDetails2: '/kyc/change-address-details2',
+  nriAddressDetails1: '/kyc/nri-address-details1',
+  nriAddressDetails2: '/kyc/nri-address-details2',
 }
 
 export const storageConstants = {

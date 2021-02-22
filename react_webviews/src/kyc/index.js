@@ -42,19 +42,21 @@ import RtaCompliantPersonalDetails from "./rta_compliant";
 
 import RegistrationSuccess from "./success";
 
-import Home from './home'
-import Nominee from './nominee'
-import Report from './report'
-import PersonalDetails1 from './personal_details/Screen1'
-import PersonalDetails2 from './personal_details/Screen2'
-import PersonalDetails3 from './personal_details/Screen3'
-import PersonalDetails4 from './personal_details/Screen4'
-import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
-import SampleDocuments from './bank-kyc/SampleDocuments'
-import Esign from './esign'
-import AddressDetails2 from './address/AddressDetails2'
+import Home from "./home";
+import Nominee from "./nominee";
+import Report from "./report";
+import PersonalDetails1 from "./personal_details/Screen1";
+import PersonalDetails2 from "./personal_details/Screen2";
+import PersonalDetails3 from "./personal_details/Screen3";
+import PersonalDetails4 from "./personal_details/Screen4";
+import KycUploadDocuments from "./bank-kyc/KycUploadDocuments";
+import SampleDocuments from "./bank-kyc/SampleDocuments";
+import Esign from "./esign";
+import AddressDetails2 from "./address/AddressDetails2";
 import AddressDetails1 from "./address/screen1";
 import DigilockerPersonalDetails1 from "./digilocker/screen1";
+import ChangeAddressDetails1 from "./address/change_address/ChangeAddressDetails1";
+import NriAddressDetails1 from "./address/nri/Screen1";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -97,6 +99,16 @@ const Kyc = (props) => {
             exact
             path={`${url}/address-details1`}
             component={AddressDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/change-address-details1`}
+            component={ChangeAddressDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/nri-address-details1`}
+            component={NriAddressDetails1}
           />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />

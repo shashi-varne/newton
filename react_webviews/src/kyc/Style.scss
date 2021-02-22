@@ -242,6 +242,16 @@
   main {
     .input {
       margin-top: 20px;
+
+      .MuiGrid-item {
+        min-width: fit-content;
+
+        label {
+          .inside-text {
+            margin-right: 5px;
+          }
+        }
+      }
     }
 
     .RadioWithIcon {
