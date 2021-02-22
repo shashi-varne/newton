@@ -43,6 +43,10 @@ body[data-device="web"] {
     max-width: var(--desktop-width);
     margin: 0 auto;
   }
+  .generic-page-loader {
+    max-width: var(--desktop-width);
+    margin: 0 auto;
+  }
   .generic-error-dialog-page{
     max-width: var(--desktop-width);
     margin: 0 auto;
