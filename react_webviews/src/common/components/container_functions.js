@@ -143,7 +143,7 @@ export function commonRender(props) {
 
                 </div>
 
-                {!this.state.force_hide_inpage_title && this.state.new_header &&
+                {!this.state.force_hide_inpage_title && !this.props.noHeader && this.state.new_header &&
                     this.new_header_scroll()
                 }
 

@@ -10,7 +10,6 @@ import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
-import Delete from '@material-ui/icons/Delete';
 
 const headerIconMapper = {
   back: back_arrow,
