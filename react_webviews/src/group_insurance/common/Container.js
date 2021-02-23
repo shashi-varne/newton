@@ -18,6 +18,7 @@ import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
 import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
 import UiSkelton from '../../common/ui/Skelton';
+import { storageService } from '../../utils/validators';
 
 
 class Container extends Component {
@@ -219,6 +220,14 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+
+    let from_advisory = storageService().getObject('from_advisory')
+    let advisory_paths = ['/group-insurance/health/critical_illness/plan', '/group-insurance/group-health/RELIGARE/landing', '/group-insurance/corona/plan','/group-insurance/life-insurance/term/landing'];
+    if(from_advisory && advisory_paths.indexOf(pathname) >= 0){
+      console.log(pathname)
+      this.navigate('/group-insurance/advisory/recommendations')
+      return;
+    }
 
       if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
         this.navigate('/group-insurance');

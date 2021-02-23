@@ -6,6 +6,7 @@ import Dialog, {DialogContent} from 'material-ui/Dialog';
 import Slide from '@material-ui/core/Slide';
 import {formatAmount } from 'utils/validators'
 import {advisoryConstants} from './constants';
+import { storageService } from 'utils/validators';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -29,6 +30,7 @@ class RecommendationResult extends Component {
         if(disable_get_plan){
             return;
         }
+        storageService().setObject('from_advisory', true);
         this.sendEvents('next', this.state.recommendation_bottom_sheet_data[key].heading, screen_name);
         this.state.parent.navigate(advisoryConstants.get_plan_path[key])
     }

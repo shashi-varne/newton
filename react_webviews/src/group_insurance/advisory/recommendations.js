@@ -211,7 +211,9 @@ class AdivsoryRecommendations extends Component {
                 title="Our recommendations"
                 resetpage={true}
                 handleReset={this.showDialog}
-                disableBack={true}
+                headerData={{
+                    icon: 'close'
+                }}
                 noFooter={true}
                 handleClick={()=>this.handleClick()}
                 showError={this.state.showError}

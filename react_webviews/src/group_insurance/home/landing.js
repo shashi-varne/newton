@@ -104,6 +104,7 @@ class Landing extends Component {
   }
 
   onload = async() => {
+    storageService().remove('from_advisory')
     this.setErrorData('onload')
     this.setState({
       skelton: true,
