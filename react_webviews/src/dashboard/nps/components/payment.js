@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { initialize } from "../common/commonFunctions";
 import Container from "fund_details/common/Container";
+import { storageService } from "utils/validators";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
     super(props);
     this.state = {
       status: "",
+      screen_name: 'npsPaymentStatus'
     };
     this.initialize = initialize.bind(this);
   }
@@ -19,8 +21,21 @@ class NpsPaymentCallback extends Component {
 
   handleClick = async () => {
     const result = await this.getNPSInvestmentStatus();
+    storageService().set('nps_additional_details_required', true);
 
-    console.log(result);
+    let currentUser = storageService().get("currentUser");
+
+    if (result.registration_details.additional_details_status) {
+      if (currentUser.kyc_registration_v2 == 'init') {
+        this.navigate('home-kyc');
+      } else if (currentUser.kyc_registration_v2 == 'incomplete') {
+        this.navigate('kyc-journey');
+      } else {
+        this.navigate('identity');
+      }
+    } else {
+      this.navigate('investments');
+    }
   };
 
   render() {
@@ -42,7 +57,7 @@ class NpsPaymentCallback extends Component {
           >
             <div ng-show="paymentError == false">
               <div className="icon">
-                <img src="../assets/img/thumb.svg" width="80" height="80" />
+                <img src={require("assets/thumb.svg")} width="80" height="80" />
               </div>
               <h3>Payment Successful</h3>
               <p>

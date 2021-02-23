@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
-import { getInvestmentData } from "../common/api";
+import { storageService } from "utils/validators";
 import { formatAmountInr } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
@@ -35,7 +35,6 @@ class Recommendations extends Component {
   }
 
   onload = () => {
-    console.log(this.props.location)
     this.fetchRecommendedFunds();
   };
 
@@ -45,7 +44,7 @@ class Recommendations extends Component {
         show_loader: true,
       });
 
-      let amount = this.props.location.state.amount
+      let amount = storageService().get('npsAmount')
 
       const res = await this.get_recommended_funds(amount);
       let data = res.result;
@@ -141,11 +140,11 @@ class Recommendations extends Component {
       risk: "moderately_high",
     };
 
-    let result = await getInvestmentData(data);
+    let result = await this.getInvestmentData(data);
     let pgLink = result.investments.pg_link;
 
     let plutus_redirect_url = encodeURIComponent(
-      window.location.origin + `/nps/fundreplace` + getConfig().searchParams
+      window.location.origin + `/nps/redirect` + getConfig().searchParams
     );
 
     pgLink +=

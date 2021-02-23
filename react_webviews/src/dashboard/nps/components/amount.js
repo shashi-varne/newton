@@ -3,6 +3,7 @@ import Container from "fund_details/common/Container";
 import Input from "../../../common/ui/Input";
 import { initialize } from "../common/commonFunctions";
 import { formatAmountInr } from "utils/validators";
+import { storageService } from "utils/validators";
 
 class EnterAmount extends Component {
   constructor(props) {
@@ -10,6 +11,7 @@ class EnterAmount extends Component {
     this.state = {
       amount: "50000",
       taxsaved: "15450",
+      show_loader: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -35,6 +37,7 @@ class EnterAmount extends Component {
     let { amount } = this.state;
 
     if (amount) {
+      storageService().set('npsAmount', amount);
       let res = await this.get_recommended_funds(amount);
 
       if (res.status_code === 200) {
@@ -54,6 +57,7 @@ class EnterAmount extends Component {
       <Container
         classOverRIde="pr-error-container"
         buttonTitle="SHOW FUNDS"
+        showLoader={this.state.show_loader}
         title="Enter Amount"
         classOverRideContainer="pr-container"
         handleClick={this.handleClick}

@@ -19,6 +19,7 @@ import NpsSipDate from "./components/sipDate";
 import NpsPaymentCallback from "./components/payment";
 import "../../common/theme/Style.scss";
 import "./style.scss";
+import NpsPaymentRedirect from "./components/redirect";
 
 const Nps = (props) => {
   const { url } = props.match;
@@ -41,7 +42,8 @@ const Nps = (props) => {
       <Route exact path={`${url}/pran`} component={NpsPran} />
       <Route exact path={`${url}/schedule`} component={NpsSchedule} />
       <Route exact path={`${url}/sip-dates`} component={NpsSipDate} />
-      <Route exact path={`${url}/payment/callback/:type/:id/:status`} component={NpsPaymentCallback} />
+      <Route exact path={`${url}/redirect`} component={NpsPaymentRedirect} />
+      <Route exact path={`${url}/payment/callback/:type/:status`} component={NpsPaymentCallback} />
     </Switch>
   );
 };

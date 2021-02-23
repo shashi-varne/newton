@@ -3,7 +3,8 @@ import Container from "fund_details/common/Container";
 import { get_recommended_funds } from "../common/api";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
-import { getConfig } from "utils/functions";
+import { getUrlParams } from "utils/validators";
+import { initialize } from "../common/commonFunctions";
 
 class ReplaceFund extends Component {
   constructor(props) {
@@ -14,13 +15,19 @@ class ReplaceFund extends Component {
       show_loader: false,
       selectedValue: "",
     };
+    this.initialize = initialize.bind(this);
   }
 
   componentWillMount() {
-    this.fetchRecommendedFunds();
+    this.initialize();
   }
 
+  onload = () => {
+    this.fetchRecommendedFunds();
+  };
+
   fetchRecommendedFunds = async () => {
+    console.log(getUrlParams())
     try {
       this.setState({
         show_loader: true,

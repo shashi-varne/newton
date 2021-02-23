@@ -50,12 +50,12 @@ export function navigate(pathname, data = {}, redirect) {
   if (redirect) {
     this.props.history.push({
       pathname: pathname,
-      search: data?.searchParams || getConfig().searchParams,
+      search: data.searchParams || getConfig().searchParams,
     });
   } else {
     this.props.history.push({
       pathname: `/nps/${pathname}`,
-      search: data?.searchParams || getConfig().searchParams,
+      search: data.searchParams || getConfig().searchParams,
       state: data,
     });
   }
@@ -81,10 +81,10 @@ export function formCheckUpdate(keys_to_check, form_data) {
     pincode: "pincode",
     addressline: "permanent address",
     city: "city",
-    state: "state"
+    state: "state",
   };
 
-  let selectTypeInput = ['relationship'];
+  let selectTypeInput = ["relationship"];
 
   for (var i = 0; i < keys_to_check.length; i++) {
     let key_check = keys_to_check[i];
@@ -95,18 +95,21 @@ export function formCheckUpdate(keys_to_check, form_data) {
     if (!form_data[key_check]) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmit = false;
-      console.log(form_data)
+      console.log(form_data);
     }
   }
 
   this.setState({
     form_data: form_data,
-    canSubmit: canSubmit
+    canSubmit: canSubmit,
   });
 }
 
 export async function get_recommended_funds(params) {
   try {
+    this.setState({
+      show_loader: true,
+    });
     const res = await Api.get(`api/nps/invest/recommend?amount=${params}`);
     if (
       res.pfwstatus_code !== 200 ||
@@ -144,7 +147,7 @@ export async function kyc_submit(params) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      this.navigate("amount/one-time")
+      this.navigate("amount/one-time");
     } else {
       switch (status) {
         case 402:
@@ -163,12 +166,12 @@ export async function kyc_submit(params) {
       show_loader: false,
     });
     console.log(err);
-    toast("something went wrong")
+    toast("something went wrong");
   }
 }
 
-export async function nps_register(params, next_state, body = "" ) {
-  console.log(body)
+export async function nps_register(params, next_state, body = "") {
+  console.log(body);
   try {
     this.setState({
       show_loader: true,
@@ -190,7 +193,7 @@ export async function nps_register(params, next_state, body = "" ) {
       show_loader: false,
     });
     console.log(err);
-    toast("something went wrong")
+    toast("something went wrong");
   }
 }
 
@@ -223,7 +226,7 @@ export async function updateMeta(params, next_state) {
         if (!result.user.is_doc_required) {
           this.navigate("upload");
         } else {
-          this.navigate('success')
+          this.navigate("success");
         }
       } else {
         this.navigate(next_state);
@@ -244,6 +247,10 @@ export async function updateMeta(params, next_state) {
 
 export async function getInvestmentData(params) {
   try {
+    this.setState({
+      show_loader: true,
+    });
+
     const res = await Api.post(`api/nps/invest/v2?app_version=1`, params);
     if (
       res.pfwstatus_code !== 200 ||
@@ -255,6 +262,7 @@ export async function getInvestmentData(params) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
+      storageService().set("npsInvestId", result.id);
       return result;
     } else {
       throw result.error || result.message || genericErrMsg;
@@ -275,7 +283,7 @@ export async function submitPran(params) {
       throw genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
-    console.log(result)
+    console.log(result);
 
     if (status === 200) {
       return result;
@@ -295,8 +303,11 @@ export async function getNPSInvestmentStatus() {
 
     if (status === 200) {
       storageService().setObject("nps_additional_details", result.registration_details);
-      this.navigate('identity')
-      // return result;
+      if (this.state.screen_name === 'npsPaymentStatus') {
+        return result
+      } else {
+        this.navigate("identity");
+      }
     } else {
       toast(result.error || result.message || genericErrMsg);
     }
@@ -305,6 +316,6 @@ export async function getNPSInvestmentStatus() {
       show_loader: false,
     });
     console.log(err);
-    toast("something went wrong")
+    toast("something went wrong");
   }
 }
