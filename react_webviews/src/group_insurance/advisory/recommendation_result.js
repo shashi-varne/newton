@@ -135,10 +135,12 @@ class RecommendationResult extends Component {
                         <p  className="recommendation-info-heading">Target Coverage</p>
                         <p  className="recommendation-info-value">{recommendation_data.target_si}</p>
                     </div>
+                    { recommendation_data.key !== 'corona' && (
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Period</p>
                         <p  className="recommendation-info-value">{recommendation_data.period}</p>
                     </div>
+                    )}
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Premium starts at</p>
                         <p  className="recommendation-info-value">₹{formatAmount(recommendation_data.start_premium)}/year </p>
