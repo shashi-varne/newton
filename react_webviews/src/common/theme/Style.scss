@@ -1232,6 +1232,15 @@ input#pan {
     width: 100%;
     object-fit: cover;
   }
+  .adivsory-card-heading{
+    position: absolute;
+    left: 6.5%;
+    top: 2px;
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 26px;
+
+  }
   .advisory-entry-button{
     position: absolute;
     padding: 14px 18px;
@@ -1319,7 +1328,7 @@ input#pan {
 .advisory-basic-details-container{
   margin-bottom: 50px;
   .InputField{
-
+    margin-bottom: 30px;
     .RadioWithIcon{
       color: #767E86;
     }

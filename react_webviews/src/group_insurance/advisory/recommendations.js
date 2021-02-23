@@ -167,6 +167,12 @@ class AdivsoryRecommendations extends Component {
                 })
                 
                 this.openPdf(resultData.download_link, "read_document")
+                nativeCallback({
+                    action: 'open_in_browser',
+                    message: {
+                        url: resultData.download_link
+                    }
+                });
             } else {
               error = resultData.error || resultData.message || true;
             }
