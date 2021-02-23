@@ -12,6 +12,7 @@ import { ToastContainer } from "react-toastify";
 import Summary from "./components/Summary";
 import { themeConfig } from "utils/constants";
 import "./Style.scss";
+import NotFound from "common/components/NotFound";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -22,7 +23,7 @@ const generateClassName = createGenerateClassName({
 
 const jss = create(jssPreset());
 
-const FundInfo = (props) => {
+const Reports = (props) => {
   const { url } = props.match;
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
@@ -30,10 +31,11 @@ const FundInfo = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route path={url} exact component={Summary} />
+          <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
   );
 };
 
-export default FundInfo;
+export default Reports;
