@@ -247,14 +247,14 @@ class AdvisoryLiabilityDetails extends Component {
             errorData={this.state.errorData}
             showLoader={this.state.show_loader}
             skelton={this.state.skelton}
-            title="Tell us your liabilities"
+            title="Tell us about your liabilities"
             buttonTitle="SAVE AND CONTINUE"
             handleClick={()=>this.handleClick()}
             >
             <div className="advisory-liability-details-container">
             
             <div className="advisory-title-container"  style={{marginBottom: '15px'}}>
-                <p>Tell us your liabilities</p>
+                <p>Tell us about your liabilities</p>
                 <span>3/4</span>
             </div>
 
