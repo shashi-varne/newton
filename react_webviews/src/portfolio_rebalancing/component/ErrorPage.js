@@ -36,14 +36,15 @@ const ErrorPage = (props) => {
   return (
     <Container
       goBack={goBack}
-      classOverRide='pr-error-container'
-      fullWidthButton
+      classOverRide='pr-main-container pr-error-container'
       buttonTitle='Retry'
       helpContact
       disableBack
       handleClick={retry}
       title='Portfolio rebalancing'
       classOverRideContainer='pr-container'
+      fullWidthButton={true}
+      onlyButton={true}
     >
       <>
         <section className='image-cover'>

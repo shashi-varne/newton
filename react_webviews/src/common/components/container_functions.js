@@ -156,7 +156,7 @@ export function commonRender(props) {
                 {/* Children Block */}
                 <div
                     // style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }} //this is overrideing the classname style...// todo
-                    className={`Container ${this.props.background} ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}>
+                    className={`Container  ${this.props.background} ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}>
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}

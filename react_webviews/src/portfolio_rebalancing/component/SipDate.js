@@ -152,11 +152,13 @@ const Date = (props) => {
     <Container
       buttonTitle='Rebalance Funds'
       handleClick={nextPage}
-      fullWidthButton
       goBack={goBack}
       events={sendEvents('just_set_events')}
       title='Select SIP auto debit  date'
       classOverRideContainer='pr-container'
+      fullWidthButton={true}
+      onlyButton={true}
+      classOverRide='pr-main-container'
     >
       <Typography className='pr-sip-transaction' align='left'>
         SIP switch transactions

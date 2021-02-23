@@ -44,11 +44,13 @@ const Landing = (props) => {
     <Container
       goBack={goBack}
       buttonTitle='Continue'
-      fullWidthButton
       handleClick={nextPage}
       events={sendEvents('just_set_events')}
       title='Portfolio rebalancing'
       classOverRideContainer='pr-container'
+      fullWidthButton={true}
+      onlyButton={true}
+      classOverRide='pr-main-container'
     >
       <section>
         <div className='common-top-page-subtitle'>

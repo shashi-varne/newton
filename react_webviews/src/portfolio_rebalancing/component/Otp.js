@@ -134,6 +134,9 @@ const Otp = (props) => {
       events={sendEvents('just_set_events')}
       title='Enter OTP to verify'
       classOverRideContainer='pr-container'
+      fullWidthButton={true}
+      onlyButton={true}
+      classOverRide='pr-main-container'
     >
       <div className='pr-otp-container'>
         <section className='otp-successful-section'>
