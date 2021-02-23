@@ -12,7 +12,7 @@ class Container extends Component {
       openDialog: false,
       project: 'help',
       inPageTitle: false,
-      new_header: false
+      new_header: false,
     }
     this.historyGoBack = this.historyGoBack.bind(this);
     this.didmount = didmount.bind(this);
@@ -21,6 +21,9 @@ class Container extends Component {
 
   componentDidMount() {
     this.didmount();
+    this.setState({
+      help: true
+    })
   }
 
   componentWillUnmount() {
@@ -54,7 +57,7 @@ class Container extends Component {
 
     return(
       <Fragment>
-      {this.commonRender()}
+      {this.commonRender()} 
       </Fragment>
     )
   }

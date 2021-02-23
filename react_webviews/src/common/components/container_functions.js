@@ -114,7 +114,7 @@ export function commonRender(props) {
                     style={this.props.styleHeader}
                     className={this.props.classHeader}
                     headerData={this.props.headerData}
-                    new_header={this.state.new_header}
+                    new_header={this.state.new_header || this.state.help}
                     goBack={this.headerGoBack || this.historyGoBack}
                     // goBack={this.historyGoBack}
                     filterPgae={this.props.filterPgae}
@@ -155,8 +155,8 @@ export function commonRender(props) {
 
                 {/* Children Block */}
                 <div
-                    style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }} //this is overrideing the classname style...todo
-                    className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}>
+                    // style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }} //this is overrideing the classname style...// todo
+                    className={`Container ${this.props.background} ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}>
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}
