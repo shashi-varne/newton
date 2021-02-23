@@ -26,6 +26,7 @@ class DocumentUpload extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "document_upload",
       form_data: {},
       image_data: {},
@@ -366,7 +367,10 @@ class DocumentUpload extends Component {
   };
 
   uploadDocument = async (file) => {
-    let {totalUpload, documents, category} = this.state;
+    let { totalUpload, documents, category } = this.state;
+    this.setErrorData("submit");
+    let error = "";
+    let errorType = "";
 
     this.setState({
       isApiRunning: true
@@ -402,16 +406,37 @@ class DocumentUpload extends Component {
         }
         
       } else {
-        toast(result.error || result.message || "Something went wrong")
+        // toast(result.error || result.message || "Something went wrong")
+        let title1 = result.error[0] || "Something went wrong!";
+        this.setState({
+          show_loader: false,
+          isApiRunning: false,
+          skelton: false,
+          title1: title1,
+        });
+
+        this.setErrorData("submit");
+        error = true;
+        errorType = "form";
       }
     } catch (err) {
       console.log(err);
-      toast("Something went wrong");
+      // toast("Something went wrong");
+      this.setState({
+        show_loader: false,
+        isApiRunning: false,
+        skelton: false
+      });
+      error = true;
+      errorType = "form";
     }
   }
 
   deleteDocument = async (index, file) => {
     let { documents } = this.state;
+    this.setErrorData("submit");
+    let error = "";
+    let errorType = "";
 
     documents[index].show_loader = true;
     this.setState({
@@ -441,14 +466,43 @@ class DocumentUpload extends Component {
 
         this.setState({
           documents: documents,
-          isApiRunning: false
+          isApiRunning: false,
         });
       } else {
-        toast(result.error);
+        // toast(result.error);
+        let title1 = result.error[0] || "Something went wrong!";
+        this.setState({
+          show_loader: false,
+          loaderWithData: false,
+          skelton: false,
+          title1: title1,
+        });
+
+        this.setErrorData("submit");
+        error = true;
+        errorType = "form";
+        documents[index].show_loader = false;
       }
     } catch (err) {
       console.log(err);
-      toast("Something went wrong");
+      // toast("Something went wrong");
+      error = true;
+      errorType = "form";
+      documents[index].show_loader = false;
+    }
+
+    if (error) {
+      this.setState({
+        show_loader: false,
+        isApiRunning: false,
+        documents: documents,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType,
+        },
+        showError: true,
+      });
     }
   };
 
@@ -462,7 +516,8 @@ class DocumentUpload extends Component {
     }
 
     this.setState({
-      show_loader: true
+      // show_loader: true,
+      skelton: 'g'
     })
     if (totalUpload < 3) {
       let count = 0;
@@ -512,6 +567,32 @@ class DocumentUpload extends Component {
     })
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text1: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let { image_data, documents, totalUpload, disableButton, isApiRunning } = this.state;
     // eslint-disable-next-line radix
@@ -534,6 +615,9 @@ class DocumentUpload extends Component {
         headerData={{
           goBack: this.goBack,
         }}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="idfc-document-upload">
           <div className="InputField">

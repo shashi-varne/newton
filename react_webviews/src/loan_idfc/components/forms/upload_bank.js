@@ -445,6 +445,8 @@ class UploadBank extends Component {
     let { form_data, bankOptions } = this.state;
 
     let canSubmit = true;
+    let error = "";
+    let errorType = "";
 
     if (!form_data.bank_name) {
       form_data.bank_name_error = "Please select bank name";
@@ -453,6 +455,7 @@ class UploadBank extends Component {
 
     this.setState({
       form_data: form_data,
+      showError: false,
     });
 
     if (canSubmit) {
@@ -498,8 +501,23 @@ class UploadBank extends Component {
         console.log(err);
         this.setState({
           show_loader: false,
+          loaderWithData: false
         });
-        toast("Something went wrong");
+        // toast("Something went wrong");
+        this.setErrorData("submit");
+        error = true;
+        errorType = "form";
+      }
+
+      if (error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType,
+          },
+          showError: true,
+        });
       }
     }
   };
@@ -512,6 +530,35 @@ class UploadBank extends Component {
     } else {
       this.sendEvents("back");
       this.navigate("income-details");
+    }
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
     }
   };
 
@@ -528,11 +575,12 @@ class UploadBank extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Upload bank statements"
         buttonTitle="SUBMIT AND CONTINUE"
         disable={documents.length === 0 || !confirmed || isApiRunning}
         headerData={{
-          progressHeaderData: !params.adminPanel
+          progressHeaderData: (!params.adminPanel && (!this.state.showError || !this.state.loaderWithData))
             ? this.state.progressHeaderData
             : "",
           icon: params.adminPanel ? "close" : "",
@@ -541,6 +589,8 @@ class UploadBank extends Component {
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="upload-bank-statement">
           <Attention content={this.renderNotes()} />

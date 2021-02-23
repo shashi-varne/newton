@@ -396,6 +396,35 @@ class AddressDetails extends Component {
     }
   }
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
@@ -409,9 +438,11 @@ class AddressDetails extends Component {
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData,
+          progressHeaderData: (!this.state.showError && !this.state.loaderWithData) ? this.state.progressHeaderData : '',
         }}
         loaderData={this.state.loaderData}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="address-details">
           <div className="head-title">Current address</div>

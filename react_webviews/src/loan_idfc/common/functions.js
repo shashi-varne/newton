@@ -13,6 +13,7 @@ import {
   numDifferentiationInr,
   calculateAge,
   formatAmount,
+  validateEmail
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";
 
@@ -138,9 +139,13 @@ export async function initialize() {
 }
 
 export async function getInstitutionList() {
+  this.setErrorData("onload");
+
+  let error = "";
+  let errorType = "";
   try {
     this.setState({
-      show_loader: true,
+      skelton: 'g'
     });
 
     const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
@@ -158,19 +163,35 @@ export async function getInstitutionList() {
       this.setState({
         bankOptions: bankOptions,
         show_loader: false,
+        skelton: false
       });
     } else {
-      toast(result.error || result.message || "Something went wrong!");
       this.setState({
         show_loader: false,
+        skelton: false
       });
+      error = true;
+      errorType = "crash";
     }
   } catch (err) {
     console.log(err);
     this.setState({
       show_loader: false,
     });
-    toast("Something went wrong");
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: 'page',
+    });
   }
 }
 
@@ -217,6 +238,9 @@ export async function getPickList() {
 }
 
 export async function getDocumentList() {
+  this.setErrorData("onload");
+  let error = "";
+  let errorType = "";
   try {
     this.setState({
       show_loader: true,
@@ -238,6 +262,7 @@ export async function getDocumentList() {
         {
           docList: result.doc_list,
           show_loader: false,
+          skelton: false
         },
         () => {
           this.onload();
@@ -249,7 +274,21 @@ export async function getDocumentList() {
     this.setState({
       show_loader: false,
     });
-    toast("Something went wrong");
+    // toast("Something went wrong");
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: "page",
+    });
   }
 }
 
@@ -259,13 +298,17 @@ export async function getOrCreate(params) {
   let error = "";
   let errorType = "";
 
+  let screenNames = ['main_landing_screen', 'loan_status']
+
   try {
-    if (this.state.screen_name === "main_landing_screen") {
+    if (screenNames.includes(this.state.screen_name)) {
       this.setState({
         show_loader: "button",
       });
     } else {
       this.setState({
+        loaderWithData: false,
+        show_loader: false,
         skelton: "g",
       });
     }
@@ -347,8 +390,7 @@ export async function getOrCreate(params) {
         });
       }
     } else {
-      let errorTitle =
-        result.error || result.message || "Something went wrong!";
+      let errorTitle = result.error || result.message || "Something went wrong!";
       this.setState({
         show_loader: false,
         skelton: false,
@@ -361,13 +403,13 @@ export async function getOrCreate(params) {
     }
   } catch (err) {
     console.log(err);
-    if (this.state.screen_name === "main_landing_screen") {
+    if (screenNames.includes(this.state.screen_name)) {
       this.setErrorData("submit");
       error = true;
       errorType = "generic";
     } else {
       error = true;
-      errorType = "page";
+      errorType = "crash";
     }
   }
 
@@ -380,7 +422,7 @@ export async function getOrCreate(params) {
         type: errorType,
       },
       showError:
-        this.state.screen_name === "main_landing_screen" ? true : "page",
+      screenNames.includes(this.state.screen_name) ? true : "page",
     });
   }
 }
@@ -517,20 +559,10 @@ export async function updateApplication(
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      // if (typeof result.error === "string") {
-      //   this.setState({
-      //     show_loader: false,
-      //   });
-      //   toast(result.error || result.message || "Something went wrong!");
-      // } else {
-      //   this.setState({
-      //     show_loader: false,
-      //   });
-      //   toast(result.error[0] || result.message || "Something went wrong!");
-      // }
-      let title1 = result.error || "Something went wrong!";
+      let title1 = result.error[0] || "Something went wrong!";
       this.setState({
         show_loader: false,
+        loaderWithData: false,
         skelton: false,
         title1: title1,
       });
@@ -554,6 +586,7 @@ export async function updateApplication(
 
     this.setState({
       show_loader: false,
+      loaderWithData: false,
       form_data: form_data,
     });
     // toast("Something went wrong");
@@ -615,8 +648,15 @@ export async function get05Callback() {
 }
 
 export async function get10Callback(next_state) {
+  let loaderData = {
+    title: `Hang on while IDFC FIRST Bank calculates the eligible loan offer `,
+    subtitle: "It usually takes around 2 minutes!",
+  };
+
   this.setState({
     show_loader: true,
+    loaderData: loaderData,
+    loaderWithData: true
   });
 
   // setTimeout(, 3000)
@@ -766,7 +806,7 @@ export async function submitApplication(
 
   try {
     this.setState({
-      show_loader: "button",
+      show_loader: !this.state.loaderWithData ? "button" : true,
     });
 
     let screens = [
@@ -777,10 +817,9 @@ export async function submitApplication(
       "loan_bt",
       "eligible_loan",
       "bank_upload",
-      "perfios_status",
+      "perfios_state",
     ];
     this.setState({
-      // show_loader: true,
       loaderWithData: screens.includes(this.state.screen_name),
     });
     const res = await Api.post(
@@ -829,6 +868,7 @@ export async function submitApplication(
         let title1 = result.error[0] || "Something went wrong!";
         this.setState({
           show_loader: false,
+          loaderWithData: false,
           skelton: false,
           title1: title1,
         });
@@ -853,6 +893,7 @@ export async function submitApplication(
 
     this.setState({
       show_loader: false,
+      loaderWithData: false,
       form_data: form_data,
     });
     // toast("Something went wrong");
@@ -985,6 +1026,8 @@ export async function formCheckUpdate(
     "office_landmark",
   ];
 
+  let email_input = ['office_email', 'email_id'];
+
   var format = /[^a-zA-Z0-9 ,]/g;
 
   for (var i = 0; i < keys_to_check.length; i++) {
@@ -1003,6 +1046,11 @@ export async function formCheckUpdate(
         "special characters are not allowed except ( , ) commas.";
       canSubmitForm = false;
     }
+
+    if (email_input.includes(key_check) && !validateEmail(form_data[key_check])) {
+      form_data[key_check + "_error"] = 'invalid email'
+      canSubmitForm = false;
+    }
   }
 
   for (var j = 0; j < keys_to_include.length; j++) {
@@ -1010,6 +1058,11 @@ export async function formCheckUpdate(
     if (validate.includes(key) && format.test(form_data[key])) {
       form_data[key + "_error"] =
         "special characters are not allowed except ( , ) commas.";
+      canSubmitForm = false;
+    }
+
+    if (email_input.includes(key) && !validateEmail(form_data[key])) {
+      form_data[key + "_error"] = 'invalid email'
       canSubmitForm = false;
     }
   }
@@ -1099,9 +1152,13 @@ export async function netBanking(url) {
 }
 
 export async function startTransaction(transaction_type) {
+  this.setErrorData("submit");
+
+  let error = "";
+  let errorType = "";
   try {
     this.setState({
-      show_loader: true,
+      skelton: 'g'
     });
 
     const res = await Api.get(
@@ -1124,9 +1181,22 @@ export async function startTransaction(transaction_type) {
   } catch (err) {
     console.log(err);
     this.setState({
-      show_loader: false,
+      skelton: false,
     });
-    toast("Something went wrong");
+    error = true;
+    errorType = "generic";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
+    });
   }
 }
 

@@ -109,7 +109,8 @@ class Container extends Component {
         >
           {/* Header Block */}
           {!this.props.noHeader &&
-            !getConfig().hide_header && (
+            !getConfig().hide_header &&
+            !this.props.loaderWithData && (
               <Header
                 disableBack={this.props.disableBack}
                 title={this.props.title}

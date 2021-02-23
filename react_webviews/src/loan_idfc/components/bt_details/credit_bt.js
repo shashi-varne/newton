@@ -23,6 +23,7 @@ class LoanBtDetails extends Component {
     this.state = {
       show_loader: false,
       screen_name: "credit_bt",
+      skelton: 'g',
       form_data: [],
       credit_bt: [],
       bankOptions: [],
@@ -216,14 +217,6 @@ class LoanBtDetails extends Component {
           submit_details = false;
         }
 
-        // if (data.principalOutstanding &&
-        //   // eslint-disable-next-line
-        //   parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000) {
-        //   form_data[index][
-        //     "principalOutstanding_error"
-        //   ] = `amount cannot exceed ${formatAmountInr(500000)}`;
-        //   submit_details = false;
-        // } else 
         if (data.principalOutstanding) {
           form_data[index][
             "principalOutstanding"
@@ -246,7 +239,7 @@ class LoanBtDetails extends Component {
     this.sendEvents("next");
 
     if (submit_details) {
-      if (vendor_info.idfc_07_state !== "success") {
+      if (vendor_info.idfc_07_state === "success") {
         this.get07State();
       } else {
         this.submitApplication(
@@ -272,6 +265,35 @@ class LoanBtDetails extends Component {
     }
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "EDIT",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let form_checked = this.state.form_data.filter(
       (item) => item.is_selected === true
@@ -292,6 +314,9 @@ class LoanBtDetails extends Component {
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="loan-bt">
           <div className="header-title-page" style={{ marginBottom: "0px" }}>

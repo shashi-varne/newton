@@ -14,6 +14,7 @@ class AdditionalDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       form_data: {},
       employment_type: "",
       screen_name: "additional_details",
@@ -237,13 +238,42 @@ class AdditionalDetails extends Component {
       keys_to_check.push("nature_of_business")
     }
 
-    if(form_data.office_pincode.length !== 6) {
+    if(form_data.office_pincode && form_data.office_pincode.length !== 6) {
       form_data['office_pincode_error'] = 'Please enter valid pincode';
       this.setState({form_data : form_data});
       return
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "one_point_seven", true);
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "EDIT",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
   };
 
   render() {
@@ -259,6 +289,9 @@ class AdditionalDetails extends Component {
         buttonData={this.state.bottomButtonData}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="additional-details">
           {employment_type === "self_employed" && (

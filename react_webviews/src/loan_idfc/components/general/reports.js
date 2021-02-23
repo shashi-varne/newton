@@ -14,6 +14,7 @@ class ReportDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       cssMapper: {},
       personal_info: {},
       application_info: {},
@@ -113,6 +114,24 @@ class ReportDetails extends Component {
     this.sendEvents("next");
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
@@ -121,6 +140,9 @@ class ReportDetails extends Component {
         events={this.sendEvents("just_set_events")}
         handleClick={this.handleClick}
         noFooter={true}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="loan-report-details loan-form-summary">
           <div

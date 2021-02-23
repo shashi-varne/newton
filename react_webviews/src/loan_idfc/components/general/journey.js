@@ -240,8 +240,36 @@ class JourneyMap extends Component {
       vendor_info: vendor_info,
       bt_info: bt_info,
       application_complete: application_complete,
-      loaderData: loaderData
+      loaderData: loaderData,
     });
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
   };
 
   sendEvents(user_action, data = {}) {
@@ -370,7 +398,6 @@ class JourneyMap extends Component {
 
   render() {
     let { idfc_loan_status, index, vendor_info } = this.state;
-    console.log(this.state.show_loader)
     return (
       <Container
         events={this.sendEvents('just_set_events')}
@@ -382,8 +409,9 @@ class JourneyMap extends Component {
         hidePageTitle={true}
         loaderData={this.state.loaderData}
         skelton={this.state.skelton}
-        noHeader={this.state.noHeader}
         loaderWithData={this.state.loaderWithData}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="journey-track">
           {index < "3" && <img

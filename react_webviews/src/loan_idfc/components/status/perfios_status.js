@@ -46,6 +46,7 @@ class PerfiosStatus extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       params: getUrlParams(),
       screen_name: "perfios_state",
       commonMapper: {},
@@ -117,6 +118,10 @@ class PerfiosStatus extends Component {
       this.sendEvents("retry");
     else this.sendEvents("next");
 
+    this.setState({
+      loaderWithData: !bt_eligible
+    })
+
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     if (perfios_state === "success") {
@@ -183,6 +188,35 @@ class PerfiosStatus extends Component {
     }
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let {
       commonMapper,
@@ -191,11 +225,13 @@ class PerfiosStatus extends Component {
       // name,
       perfios_display_rejection_reason,
     } = this.state;
-
+console.log(this.state.loaderWithData ,this.state.showLoader)
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title={commonMapper.top_title}
+        // hidePageTitle={skelton && true}
         buttonTitle={
           bt_eligible &&
           perfios_state !== "failure" &&
@@ -208,8 +244,10 @@ class PerfiosStatus extends Component {
           icon: commonMapper.icon || "",
           goBack: this.goBack,
         }}
-        loaderWithData={!bt_eligible}
+        loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="idfc-loan-status">
           {commonMapper["top_icon"] && (

@@ -8,6 +8,7 @@ import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
 import Attention from "../../../common/ui/Attention";
 import RadioWithoutIcon from "../../../common/ui/RadioWithoutIcon";
 import { capitalizeFirstLetter, timeStampToDate } from "utils/validators";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 const gender_options = [
   {
@@ -40,6 +41,7 @@ class PersonalDetails extends Component {
     };
 
     this.initialize = initialize.bind(this);
+    this.emailRef = React.createRef();
   }
 
   componentWillMount() {
@@ -106,6 +108,50 @@ class PersonalDetails extends Component {
       form_data: form_data,
       confirm_details: confirm_details,
     });
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
+  handleScroll = (value) => {
+    setTimeout(function () {
+      let element = document.getElementById("emailScroll");
+      if (!element || element === null) {
+        return;
+      }
+
+      scrollIntoView(element, {
+        block: "start",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }, 50);
   };
 
   sendEvents(user_action) {
@@ -182,6 +228,10 @@ class PersonalDetails extends Component {
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "", "", keys_to_include);
+
+    if (form_data.email_id_error) {
+      this.handleScroll();
+    }
   };
 
   handleChangeRadio = (event) => {
@@ -229,8 +279,10 @@ class PersonalDetails extends Component {
         buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: this.state.progressHeaderData,
+          progressHeaderData: !this.state.showError ? this.state.progressHeaderData : '',
         }}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="personal-details">
           <FormControl fullWidth>
@@ -430,7 +482,11 @@ class PersonalDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
+            <div
+              id="emailScroll"
+              ref={this.emailRef}
+              className="InputField"
+            >
               <Input
                 error={!!this.state.form_data.email_id_error}
                 helperText={this.state.form_data.email_id_error}

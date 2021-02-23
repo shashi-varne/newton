@@ -9,6 +9,7 @@ class LoanEligible extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "loan_eligible",
       first_name: "",
     };
@@ -56,6 +57,35 @@ class LoanEligible extends Component {
     this.updateApplication(body);
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let vendor_info = this.state.vendor_info || {};
 
@@ -67,6 +97,9 @@ class LoanEligible extends Component {
         handleClick={this.handleClick}
         buttonTitle="NEXT"
         hidePageTitle={true}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="loan-status">
           <img

@@ -20,6 +20,7 @@ class EligibleLoan extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "eligible_loan",
       form_data: {},
       checked: "default_tenor",
@@ -163,6 +164,35 @@ class EligibleLoan extends Component {
     }, 50);
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "EDIT",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let { vendor_info } = this.state;
     let ROI = (vendor_info.initial_offer_roi / 100) * 100;
@@ -178,6 +208,9 @@ class EligibleLoan extends Component {
         }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="eligible-loan" id="max-amount">
           <div className="max-amount">

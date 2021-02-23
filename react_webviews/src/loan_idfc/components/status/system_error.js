@@ -60,6 +60,7 @@ class SystemError extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       vendor_application_status: "",
       screen_name: "system_error",
     };
@@ -121,17 +122,38 @@ class SystemError extends Component {
     }
   }
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="System error"
-        buttonTitle="OK"
+        buttonTitle="OKAY"
         handleClick={this.handleClick}
         headerData={{
           icon: "close",
           goBack: this.goBack,
         }}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="idfc-loan-status">
           <img

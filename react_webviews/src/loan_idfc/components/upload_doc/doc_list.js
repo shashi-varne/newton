@@ -15,6 +15,7 @@ class DocumentList extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "document_list",
       cards: [],
       docList: [],
@@ -54,8 +55,13 @@ class DocumentList extends Component {
     this.sendEvents('next');
     let params = this.state.params;
     this.setState({
-      show_loader: true
+      show_loader: "button"
     })
+
+    this.setErrorData("submit");
+
+    let error = "";
+    let errorType = "";
     try {
       const res = await Api.get(
         `relay/api/loan/idfc/document/submit/${this.state.application_id}`
@@ -74,18 +80,39 @@ class DocumentList extends Component {
           show_loader: false
         })
       } else {
-        toast(result.error || result.message || "Something went wrong!");
+        let title1 = result.error[0] || "Something went wrong!";
         this.setState({
-          show_loader: false
-        })
+          show_loader: false,
+          skelton: false,
+          title1: title1,
+        });
+
+        this.setErrorData("submit");
+        error = true;
+        errorType = "form";
       }
 
     } catch (err) {
       console.log(err);
       this.setState({
-        show_loader: false
-      })
-      toast("Something went wrong");
+        show_loader: false,
+        skelton: false,
+      });
+
+      error = true;
+      errorType = "form";
+    }
+
+    if (error) {
+      this.setState({
+        show_loader: false,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType,
+        },
+        showError: true,
+      });
     }
   };
 
@@ -132,6 +159,35 @@ class DocumentList extends Component {
     }
   }
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick1: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text1: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let { docList, disableButton } = this.state;
 
@@ -157,6 +213,9 @@ class DocumentList extends Component {
           icon: this.state.params.adminPanel ? "close" : "",
           goBack: this.goBack,
         }}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="upload-documents">
           {this.state.docList.map((item, index) => (

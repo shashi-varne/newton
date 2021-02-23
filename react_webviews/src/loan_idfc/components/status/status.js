@@ -340,6 +340,35 @@ class LoanStatus extends Component {
     }
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getUserStatus,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let {
       commonMapper,
@@ -362,6 +391,8 @@ class LoanStatus extends Component {
         handleClick={this.handleClick}
         hidePageTitle={commonMapper.hidePageTitle}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         headerData={{
           icon: commonMapper.icon || "",
           goBack: this.goBack,

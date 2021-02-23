@@ -18,6 +18,7 @@ class LoanBtDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "loan_bt",
       form_data: [],
       loan_bt: [],
@@ -164,16 +165,7 @@ class LoanBtDetails extends Component {
     form_data.forEach((data, index) => {
       if (data.is_selected) {
         submit_details = this.validateFields(form_data, index);
-      //   if (
-      //     data.principalOutstanding &&
-      //     // eslint-disable-next-line
-      //     parseInt(data["principalOutstanding"].slice(1).replaceAll(',', '')) > 500000
-      //   ) {
-      //     form_data[index][
-      //       "principalOutstanding_error"
-      //     ] = `amount cannot exceed ${formatAmountInr(500000)}`;
-      //     submit_details = false;
-      //   } else 
+        
         if (data.principalOutstanding) {
           form_data[index][
             "principalOutstanding"
@@ -227,6 +219,35 @@ class LoanBtDetails extends Component {
     });
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "EDIT",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let form_checked = this.state.form_data.filter(
       (item) => item.is_selected === true
@@ -246,6 +267,9 @@ class LoanBtDetails extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="loan-bt">
           <div className="header-title-page">

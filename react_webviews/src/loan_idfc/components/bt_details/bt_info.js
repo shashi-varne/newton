@@ -23,6 +23,7 @@ class BtInformation extends Component {
       show_loader: false,
       screen_name: "bt_info_screen",
       loaderWithData: false,
+      skelton: 'g',
       loaderData: {},
       isBtOpted: "",
       accordianData: [],
@@ -106,10 +107,6 @@ class BtInformation extends Component {
     };
 
     this.updateApplication(body);
-
-    // if (this.state.idfc_07_state !== 'success') {
-    //   this.submitApplication({}, "one", "", "eligible-loan");
-    // }
   };
 
   sendEvents(user_action) {
@@ -192,6 +189,10 @@ class BtInformation extends Component {
   handleClick = () => {
     let { isBtOpted } = this.state;
 
+    this.setState({
+      loaderWithData: this.state.isBtOpted === "No"
+    })
+
     if (!isBtOpted) {
       this.setState({
         isBtOpted_error: "please select any one option"
@@ -206,16 +207,48 @@ class BtInformation extends Component {
     }
   }
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="What is balance transfer?"
         buttonTitle="NEXT"
-        loaderWithData={this.state.isBtOpted === 'No'}
+        loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
         handleClick={this.handleClick}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="bt-info">
           <div className="sub-head">

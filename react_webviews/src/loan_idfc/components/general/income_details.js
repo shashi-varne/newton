@@ -10,7 +10,7 @@ class IncomeDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: 'g'
+      skelton: "g",
     };
 
     this.initialize = initialize.bind(this);
@@ -51,6 +51,35 @@ class IncomeDetails extends Component {
     });
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          // handleClick1: this.handleClick,
+          button_text1: "Dismiss",
+          title1: this.state.title1,
+          handleClick1: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          // button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   sendEvents(user_action, data = {}) {
     let details = {
       netbanking: "fetch details using netbanking",
@@ -88,6 +117,8 @@ class IncomeDetails extends Component {
         headerData={{
           progressHeaderData: this.state.progressHeaderData,
         }}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="income-details">
           <div className="subtitle">

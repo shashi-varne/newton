@@ -64,13 +64,13 @@ class BasicDetails extends Component {
     if (type) {
       let mapper = {
         onload: {
-          handleClick1: this.onload,
+          handleClick1: this.getOrCreate,
           button_text1: "Retry",
         },
         submit: {
           handleClick1: this.handleClick,
           button_text1: "Retry",
-          title1: this.state.title,
+          title1: this.state.title1,
           handleClick2: () => {
             this.setState({
               showError: false,

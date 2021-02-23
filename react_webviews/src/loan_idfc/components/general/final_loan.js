@@ -13,6 +13,7 @@ class FinalOffer extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      skelton: 'g',
       screen_name: "final_loan",
       first_name: "",
       vendor_info: {},
@@ -59,6 +60,24 @@ class FinalOffer extends Component {
     this.navigate("reports");
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
@@ -67,6 +86,9 @@ class FinalOffer extends Component {
         title="Loan application submitted"
         handleClick={this.handleClick}
         buttonTitle="CHECK LOAN SUMMARY"
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="final-loan">
           <img
