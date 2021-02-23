@@ -66,12 +66,12 @@ export async function initialize() {
     let lead = {
         member_base: [],
     };
-
+    let error="";
+    let errorType="";
     if (this.state.get_lead) {
         
         this.setErrorData("onload")
-        let error="";
-        let errorType="";
+        
         try {
 
             this.setState({
@@ -99,14 +99,14 @@ export async function initialize() {
                             this.onload();
                         }
                     })
-                    
+                    this.setState({
+                        skelton: false
+                    });
                 } else {
                     error=resultData.error || resultData.message ||
                         true;
                 }
-                this.setState({
-                    skelton: false
-                });
+                
             } else if(application_id) {
                 url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
    
@@ -117,9 +117,7 @@ export async function initialize() {
                 // eslint-disable-next-line
                 var resultData = res.pfwresponse.result;
 
-                this.setState({
-                    skelton: false
-                });
+               
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
                     var member_base = ghGetMember(lead, this.state.providerConfig);
@@ -139,6 +137,9 @@ export async function initialize() {
                         }
 
                     })
+                    this.setState({
+                        skelton: false
+                    });
 
                 } else {
                     error=resultData.error || resultData.message ||
@@ -153,6 +154,7 @@ export async function initialize() {
                 common_data: {}
             });
             error=true;
+            errorType="crash";
         }
         if(error)
         {
@@ -160,6 +162,7 @@ export async function initialize() {
                 errorData: {
                   ...this.state.errorData,
                   title2: error,
+                  type: errorType
                 },
                 showError: "page",
               });
@@ -268,15 +271,16 @@ export async function initialize() {
         })
         
 
-
-        this.setState({
-            bottomButtonData: bottomButtonData,
-            confirmDialogData: confirmDialogData
-        }, () => {
-            if (this.onload) {
-                this.onload();
-            }
-        })
+        if(!error){
+            this.setState({
+                bottomButtonData: bottomButtonData,
+                confirmDialogData: confirmDialogData
+            }, () => {
+                if (this.onload) {
+                    this.onload();
+                }
+            })
+        }
     }
 }
 
@@ -306,6 +310,7 @@ export function updateBottomPremiumAddOns(premium) {
 export async function updateLead( body, quote_id) {
     this.setErrorData =setErrorData.bind(this)
     let error="";
+    let errorType="";
     this.setErrorData("submit")
     try {
         if (!quote_id) {
@@ -358,6 +363,7 @@ export async function updateLead( body, quote_id) {
             show_loader: false
         });
         error=true;
+        errorType="crash";
     }
     if(error)
     {
@@ -365,6 +371,7 @@ export async function updateLead( body, quote_id) {
             errorData: {
               ...this.state.errorData,
               title2: error,
+              type: errorType
             },
             showError: true,
           });
