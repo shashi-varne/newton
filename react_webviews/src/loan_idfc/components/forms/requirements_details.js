@@ -96,7 +96,7 @@ class LoanRequirementDetails extends Component {
       "tenor",
     ];
 
-    form_data.amount_required = form_data.amount_required.slice(2).replaceAll(',', '');
+    form_data.amount_required = (form_data.amount_required || '').slice(2).replaceAll(',', '');
 
     this.formCheckUpdate(keys_to_check, form_data, "point_five", true);
   };

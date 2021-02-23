@@ -11,6 +11,6 @@ EXPOSE 3000
 RUN apt-get update;
 RUN rm -rf ./node_modules
 
-RUN bash -c "npm install"
+RUN bash -c "yarn"
 
-CMD bash -c "npm run ${BUILD_ENV}"
+CMD bash -c "yarn ${BUILD_ENV}"

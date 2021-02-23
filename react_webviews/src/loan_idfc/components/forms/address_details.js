@@ -109,8 +109,13 @@ class AddressDetails extends Component {
     });
   };
 
-  prefillPincode = async (name, pin) => {
+  prefillPincode = async (name, pin = '') => {
     let { form_data } = this.state; 
+
+    if (pin.length !== 6) {
+      return;
+    }
+
     const res = await Api.get("/relay/api/loan/pincode/get/" + pin);
       let resultData = res.pfwresponse.result[0] || "";
 

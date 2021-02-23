@@ -74,12 +74,12 @@ class ReportDetails extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 

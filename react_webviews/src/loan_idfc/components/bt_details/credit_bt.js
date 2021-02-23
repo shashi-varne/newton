@@ -228,7 +228,7 @@ class LoanBtDetails extends Component {
           form_data[index][
             "principalOutstanding"
             // eslint-disable-next-line
-          ] = parseInt(data["principalOutstanding"].slice(1).replaceAll(',', ''))
+          ] = parseInt((data["principalOutstanding"] || '').slice(1).replaceAll(',', ''))
         }
       }
     });

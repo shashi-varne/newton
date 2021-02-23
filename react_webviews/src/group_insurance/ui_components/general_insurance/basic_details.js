@@ -594,7 +594,8 @@ class BasicDetailsForm extends Component {
         if (res2.pfwresponse.status_code === 200) {
           var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
           window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
-          this.navigate('summary', {lead: res2.pfwresponse.result.updated_lead || {}})
+          let lead = res2.pfwresponse.result.updated_lead || res2.pfwresponse.result.lead;
+          this.navigate('summary', {lead: lead || {}})
         } else {
           this.setState({
             show_loader: false,

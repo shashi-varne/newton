@@ -65,12 +65,12 @@ class PlanSummaryClass extends Component {
               showError: false
             })
           },
-          button_text2: 'Okay'
+          button_text2: 'Dismiss'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
@@ -97,7 +97,7 @@ class PlanSummaryClass extends Component {
       try {
         let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
         if (res.pfwresponse.status_code === 200) {
-  
+
           lead = res.pfwresponse.result.lead;
           this.setState({
             skelton: false
@@ -109,9 +109,6 @@ class PlanSummaryClass extends Component {
           || true;
         }
       } catch (err) {
-        this.setState({
-          skelton: false,
-        });
         error= true;
         errorType= "crash";
       }

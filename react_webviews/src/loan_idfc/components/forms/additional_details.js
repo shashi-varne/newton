@@ -69,8 +69,56 @@ class AdditionalDetails extends Component {
       bottomButtonData: bottomButtonData,
       form_data: form_data,
       loaderData: loaderData,
+    }, () => {
+      this.prefillPincode('office_pincode', office_address_data.pincode)
     });
   };
+
+  prefillPincode = async (name, pin = '') => {
+    let { form_data } = this.state; 
+
+    if (pin.length !== 6) {
+      return;
+    }
+
+    const res = await Api.get("/relay/api/loan/pincode/get/" + pin);
+      let resultData = res.pfwresponse.result[0] || "";
+
+      let city, state, country = '';
+      if (
+        res.pfwresponse.status_code === 200 &&
+        res.pfwresponse.result.length > 0
+      ) {
+        if (!resultData.idfc_city_name) {
+          city =
+            resultData.district_name ||
+            resultData.division_name ||
+            resultData.taluk;
+        } else {
+          city = resultData.idfc_city_name;
+        }
+        state = resultData.idfc_state_name || resultData.state_name;
+        country = resultData.country;
+      } else {
+        city = "";
+        state = "";
+        country = "";
+      }
+
+      if (name === "current_pincode") {
+        form_data.current_city = city;
+        form_data.current_state = state;
+        form_data.current_country = country || "India";
+      } else if (name === "permanent_pincode") {
+        form_data.permanent_city = city;
+        form_data.permanent_state = state;
+        form_data.permanent_country = country || "India";
+      }
+
+      this.setState({
+        form_data: form_data
+      })
+  }
 
   handlePincode = (name) => async (event) => {
     const pincode = event.target.value;
