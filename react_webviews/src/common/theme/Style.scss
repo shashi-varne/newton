@@ -1237,8 +1237,8 @@ input#pan {
     padding: 14px 18px;
     left: 6%;
     top: 58%;
-    font-size: 10px;
-    font-weight: 900;
+    font-size: 11px;
+    font-weight: bold;
     letter-spacing: 0.5px;
     cursor: pointer;
     color: white;
@@ -1537,7 +1537,7 @@ input#pan {
       height: 5px; 
       background-color: #767E86;
       margin-right: 10px;
-      transform: matrix(0.71, 0.81, -0.62, 0.71, 0, 0);
+      transform: matrix(0.78, 0.7, -0.6, 0.9, 0, 0) rotate(6deg);;
     }
   }
   

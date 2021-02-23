@@ -96,7 +96,7 @@ class AdivsoryRecommendations extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                    Restarting will delete all existing data. Do you want to restart? 
+                    <p style={{color: '#0A1D32'}}>Restarting will delete all existing data. Do you want to restart? </p>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -252,11 +252,11 @@ class AdivsoryRecommendations extends Component {
                     }
 
                     <div className="recommendation-extras">
-                        <div className="download-report" onClick={()=>this.downloadReportPdf()}>
+                        <div className="download-report click-pointer" onClick={()=>this.downloadReportPdf()}>
                             <img src={download} alt="" style={{marginRight: '5px'}} /> Download report
                         </div>
                         <div className="recommendation-extras-divider">|</div>
-                        <div className="email-report"  onClick={()=>this.goToEmail()}>
+                        <div className="email-report click-pointer"  onClick={()=>this.goToEmail()}>
                             <img src={launch} alt="" style={{marginRight: '5px'}}/> Email report 
                         </div>
                     </div>
