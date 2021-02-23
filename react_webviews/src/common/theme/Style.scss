@@ -1327,6 +1327,10 @@ input#pan {
 
 .advisory-basic-details-container{
   margin-bottom: 50px;
+  
+  .InputField.adv-drop-down{
+    margin-bottom: 5px;
+  }
   .InputField{
     margin-bottom: 30px;
     .RadioWithIcon{
@@ -1368,6 +1372,9 @@ input#pan {
   }
 }
 .advisory-liability-details-container{
+  .InputField{
+    margin-bottom: 30px;
+  }
   #loan_amount, #total_amount{
     padding-left: 12.5px;
   }
@@ -1577,8 +1584,21 @@ input#pan {
   #income, #expense{
     padding-left: 12.5px;
   }
+  .InputField{
+    margin-bottom: 30px;
+  }
 }
+
 .advisory-asset-details-container{
+  #asset-question{
+    margin-bottom: 30px;
+    color: #767E86;
+  }
+  .InputField{
+    .RadioWithIcon{
+      color: #767E86;
+    }
+  }
   #asset_amount, #health_cover_amount, #term_cover_amount, #critical_cover_amount, #corona_cover_amount{
     padding-left: 12.5px;
   }

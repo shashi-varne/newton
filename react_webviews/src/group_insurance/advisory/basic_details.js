@@ -354,7 +354,7 @@ class AdvisoryBasicDetails extends Component {
                 />
             </div>
 
-            <div className="InputField">
+            <div className="InputField adv-drop-down">
             <DropdownWithoutIcon
               parent={this}
               header_title="What you're interested in"
@@ -386,7 +386,7 @@ class AdvisoryBasicDetails extends Component {
                 />
             </div>
 
-            <div className="InputField">
+            <div className="InputField adv-drop-down">
             <DropdownWithoutIcon
               parent={this}
               selectedIndex = {this.state.form_data.city_index || 0}
@@ -405,7 +405,7 @@ class AdvisoryBasicDetails extends Component {
             
             <p style={{color: '#767E86', marginBottom: '15px', fontSize: '12.8px'}}>Do you have any dependents?</p>
             
-            <div className="advisory-basic-dependents" style={{ marginBottom: '10px'}}>
+            <div className="advisory-basic-dependents" style={{ marginBottom: '13px'}}>
             <div className="checkbox-container" id="spouse-checkbox">
             <Checkbox
                   checked={this.state.spouse_checked}

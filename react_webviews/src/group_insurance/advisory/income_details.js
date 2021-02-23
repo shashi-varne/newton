@@ -278,7 +278,7 @@ class AdvisoryIncomeDetails extends Component {
              </InputPrefix>
              </div>
 
-            <div className="InputField">
+            <div className="InputField" style={{marginBottom: '20px'}}>
              <DropdownWithoutIcon
               parent={this}
               selectedIndex = {this.state.form_data.income_growth_index || 0}

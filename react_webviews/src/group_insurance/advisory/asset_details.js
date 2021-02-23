@@ -317,7 +317,7 @@ class AdvisoryAssetDetails extends Component {
                 <span>4/4</span>
             </div>
 
-            <div className="InputField">
+            <div className="InputField" id="asset-question">
                 <RadioWithoutIcon
                   width="40"
                   label="Do you have any assets (Equity/MF/Property/FD,etc.)?"

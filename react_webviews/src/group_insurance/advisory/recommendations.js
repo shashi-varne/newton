@@ -166,7 +166,6 @@ class AdivsoryRecommendations extends Component {
                     show_loader: false
                 })
                 
-                this.openPdf(resultData.download_link, "read_document")
                 nativeCallback({
                     action: 'open_in_browser',
                     message: {
