@@ -9,7 +9,6 @@ import {
   inrFormatDecimal
 } from '../../../utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 
@@ -45,7 +44,6 @@ class PlanSuccessClass extends Component {
       lead_data: {
         nominee: {}
       },
-      show_loader: true,
       accordians_data: [],
       type: getConfig().productName
     };
@@ -77,18 +75,44 @@ class PlanSuccessClass extends Component {
     });
   }
 
-  async componentDidMount() {
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
+
+  onload = async() => {
+    this.setErrorData('onload');
+    this.setState({
+      skelton: true
+    })
+
+    let error = '';
+    let errorType = '';
     try {
 
       let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        show_loader: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
-
-
+        this.setState({
+          skelton: false
+        })
         let lead_data = res.pfwresponse.result.lead;
 
         let accordians_data = [
@@ -120,21 +144,35 @@ class PlanSuccessClass extends Component {
           accordians_data: accordians_data
         })
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || true;
       }
 
+
     } catch (err) {
-      console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      error= true;
+      errorType= 'crash';
     }
 
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
+    }
+  }
 
-
+  async componentDidMount() {
+    this.onload();
   }
 
   async handleClickCurrent() {
@@ -315,12 +353,14 @@ class PlanSuccessClass extends Component {
         events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"
         buttonTwoTitle="Check details"
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClickOne={() => this.handleClickOne()}
         handleClickTwo={() => this.handleClickTwo()}
         title="Success"
         disableBack={true}
         classOverRideContainer="plan-success"
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
       >
         <div className="plan-success-heading">
           <div className="plan-success-heading-icon"><img src={this.state.congratulations_icon} alt="" /></div>

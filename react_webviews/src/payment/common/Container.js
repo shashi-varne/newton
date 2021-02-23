@@ -18,6 +18,7 @@ import '../../utils/native_listner';
 import { getConfig } from 'utils/functions';
 import { checkStringInString } from 'utils/validators';
 import { goBackMap } from '../constants';
+import UiSkelton from '../../common/ui/Skelton';
 
 class Container extends Component {
   constructor(props) {
@@ -149,7 +150,7 @@ class Container extends Component {
       return (
         <div className={`ContainerWrapper paymentMainContainer ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
           {/* Header Block */}
-          {(!this.props.noHeader && !getConfig().hide_header) && !this.props.showLoader &&
+          {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true &&
             <Header
               disableBack={this.props.disableBack}
               title={this.props.title}
@@ -183,16 +184,27 @@ class Container extends Component {
             this.new_header_scroll()
           }
 
+          { this.props.skelton && 
+            <UiSkelton 
+            type={this.props.skelton}
+            />
+          }
+  
+
           {/* Children Block */}
           <div
-            style={this.props.styleContainer}
+            style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial'}}
             className={`Container ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}
           >
-            {this.props.children}
+            <div 
+            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
+            style={{display: this.props.skelton ? 'none': ''}}
+            > {this.props.children}
+             </div>
           </div>
 
           {/* Footer Block */}
-          {!this.props.noFooter && (
+          {!this.props.noFooter && !this.props.skelton && (
             <Footer
               noFooter={this.props.noFooter}
               fullWidthButton={this.props.fullWidthButton}
