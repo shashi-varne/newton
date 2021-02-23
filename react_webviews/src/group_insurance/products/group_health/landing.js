@@ -128,9 +128,9 @@ class GroupHealthLanding extends Component {
         body
       );
       if (!openModuleData.sub_module) {
-        this.setState({
-          skelton: false,
-        });
+        // this.setState({
+        //   skelton: false,
+        // });
       }
       let resultData = res.pfwresponse.result;
       resultData["details_doc"] = res.pfwresponse.result.policy_brochure;
@@ -143,6 +143,9 @@ class GroupHealthLanding extends Component {
         if (resultData.quotation.id !== undefined) {
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
         }
+        this.setState({
+          skelton: false,
+        });
       } else {
         error = resultData.error || resultData.message || true;
       }

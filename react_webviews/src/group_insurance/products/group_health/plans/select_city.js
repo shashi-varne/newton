@@ -47,36 +47,7 @@ class GroupHealthPlanSelectCity extends Component {
             this.navigate('plan-list');
         }
     }
-    setErrorData = (type) => {
-
-        this.setState({
-          showError: false
-        });
-        if(type) {
-          let mapper = {
-            'onload':  {
-              handleClick1: this.onload,
-              button_text1: 'Retry',
-              title1: ''
-            },
-            'submit': {
-              handleClick1: this.handleClick,
-              button_text1: 'Retry',
-              handleClick2: () => {
-                this.setState({
-                  showError: false
-                })
-              },
-              button_text2: 'Edit'
-            }
-          };
-      
-          this.setState({
-            errorData: {...mapper[type], setErrorData : this.setErrorData}
-          })
-        }
     
-      }
     async componentDidMount() {
         this.onload();
     }

@@ -24,36 +24,7 @@ class GroupHealthPlanList extends Component {
   componentWillMount() {
     this.initialize();
   }
-  setErrorData = (type) => {
 
-    this.setState({
-      showError: false
-    });
-    if(type) {
-      let mapper = {
-        'onload':  {
-          handleClick1: this.onload,
-          button_text1: 'Retry',
-          title1: ''
-        },
-        'submit': {
-          handleClick1: this.handleClickCurrent,
-          button_text1: 'Retry',
-          handleClick2: () => {
-            this.setState({
-              showError: false
-            })
-          },
-          button_text2: 'Edit'
-        }
-      };
-  
-      this.setState({
-        errorData: {...mapper[type], setErrorData : this.setErrorData}
-      })
-    }
-
-  }
   async componentDidMount() {
     this.onload();
   }
