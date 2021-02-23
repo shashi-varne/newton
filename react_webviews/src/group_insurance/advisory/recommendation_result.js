@@ -72,6 +72,7 @@ class RecommendationResult extends Component {
           >
             <DialogContent>
                 <div className="more-details-container">
+                    <div className="top-content">
                     <p className="more-details-heading">{recommendation_bottom_sheet_data[key]['heading']} coverage</p>
 
                     <div className={recommendation_data.key !== 'corona' ? "coverage-details" : "coverage-details align-left" }>
@@ -108,11 +109,12 @@ class RecommendationResult extends Component {
                         ))}
                         
                     </div>
-                    <div style={{margin: '0 5px', marginTop: '20px'}}>
+                    </div>
+                    <div style={{margin: '0 5px', marginTop: '20px', width: '100%'}}>
                         <button  className={`call-back-popup-button ${recommendation_data.coverage_percentage === 100 ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', recommendation_data.coverage_percentage === 100 )}>GET THE PLAN</button> 
                     </div>
-
                 </div>
+         
             </DialogContent>
           </Dialog>
         );

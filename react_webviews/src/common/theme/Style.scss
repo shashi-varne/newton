@@ -1436,21 +1436,24 @@ input#pan {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 10px;
+        font-size: 12.8px;
+        letter-spacing: 1px;
+        font-weight: bolder;
         .more-details{
           color: #35CB5D;
-          font-weight: bold;
-          padding: 15px 25px;
-          border-radius: 5px;
+          width: 100%;
+          cursor: pointer;
+          margin-right: 6px;
+          text-align: center;
         }
-        
         .get-the-plan{
           background-color: #35CB5D;
           color: #FFFFFF;
-          font-weight: bold;
-          padding: 15px 25px;
+          text-align: center;
+          width: 100%;
           border-radius: 5px;
-          font-size: 12px;
+          cursor: pointer;
+          padding: 18px 22px;
         }
       }
       
@@ -1470,13 +1473,18 @@ input#pan {
   }
 }
 .more-details-container{
-  padding: 10px;
   .more-details-heading{
     font-size: 16px;
     color: #160D2E;
     font-weight: bold;
     margin: 0px;
   }
+  .call-back-popup-button{
+    width: 100%;
+    transform: translateX(-5px);
+    margin: 0;
+  }
+
   .coverage-details.align-left{
     display: flex;
     align-items: center;
@@ -1529,7 +1537,7 @@ input#pan {
       height: 5px; 
       background-color: #767E86;
       margin-right: 10px;
-      transform: rotate(135deg);
+      transform: matrix(0.71, 0.81, -0.62, 0.71, 0, 0);
     }
   }
   
