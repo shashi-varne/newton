@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 
-import Header from '../../common/components/Header';
 import {didmount, commonRender} from '../../common/components/container_functions';
-
-import Footer from "./footer";
 
 
 import { nativeCallback } from "utils/native_callback";

@@ -11,19 +11,19 @@ import ReactResponsiveCarousel from '../../ui/carousel'
 import CheckBox from '../../ui/Checkbox'
 import DialogBox from '../../ui/Dialog'
 import DotDotLoader from '../../ui/DotDotLoader';
-import DotDotLoaderNew from '../../ui/DotDotLoaderNew'
+// import DotDotLoaderNew from '../../ui/DotDotLoaderNew'
 import DropdownInModal from '../../ui/DropdownInModal'
-import DropdownInPage from '../../ui/DropdownInPage'
+// import DropdownInPage from '../../ui/DropdownInPage'
 import Faqs from '../../ui/Faqs'
 import GenericTooltip from '../../ui/GenericTooltip'
 import HowToSteps from '../../ui/HowToSteps'
 import Icon from '../../ui/Icon'
-import Imgc from '../../ui/Imgc'
-import InputPopup from '../../ui/InputPopup'
+// import Imgc from '../../ui/Imgc'
+// import InputPopup from '../../ui/InputPopup'
 import InputWithIcon from '../../ui/InputWithIcon'
-import LandingSteps from '../../ui/LandingSteps'
+// import LandingSteps from '../../ui/LandingSteps'
 import LeftRightFooter from '../../ui/leftRightFooter'
-import MmYyInModal from '../../ui/MmYyInModal'
+// import MmYyInModal from '../../ui/MmYyInModal'
 import MobileInputWithIcon from '../../ui/MobileInputWithIcon'
 import MobileInputWithoutIcon from '../../ui/MobileInputWithoutIcon'
 import OtpDefault from '../../ui/otp'
@@ -32,8 +32,8 @@ import RadioBtn from '../../ui/RadioBtn'
 import RadioWithoutIcon from '../../ui/RadioWithoutIcon'
 import RadioWithoutIcon2 from '../../ui/RadioButton2'
 import RadioOptions from '../../ui/RadioOptions'
-import RadioWithIcon from '../../ui/RadioWithIcon'
-import RadioWithoutIcon3 from '../../ui/RadioWithoutIcon2'
+// import RadioWithIcon from '../../ui/RadioWithIcon'
+// import RadioWithoutIcon3 from '../../ui/RadioWithoutIcon2'
 import DropdownWithoutIconSelect from '../../ui/SelectWithoutIcon'
 import SliderWithValues from '../../ui/SilderWithValues'
 import UiSkelton from '../../ui/Skelton'
@@ -52,11 +52,11 @@ import icn from '../../../assets/info_icon.svg'
 
 import {
   Select,
-  TextField
+  // TextField
 } from "material-ui";
-import { blue } from 'material-ui/colors'
+// import { blue } from 'material-ui/colors'
 
-class Components_base extends Component {
+class ComponentBase extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -301,7 +301,6 @@ class Components_base extends Component {
                 error={''}
                 type='data'
                 helperText={''}
-                type="text"
                 width="40"
                 className='compoenets-base'
                 label="Label"
@@ -353,7 +352,9 @@ class Components_base extends Component {
               <MobileInputWithIcon  icon={icn} width='2' error={''}
                 type='data'
                 helperText={''}
+                // eslint-disable-next-line 
                 type="text"
+                // eslint-disable-next-line
                 width="40"
                 className='compoenets-base'
                 label="Enter Mobile Number"
@@ -369,6 +370,7 @@ class Components_base extends Component {
               <MobileInputWithoutIcon error={''}
                 type='data'
                 helperText={''}
+                // eslint-disable-next-line
                 type="text"
                 width="40"
                 className='compoenets-base'
@@ -418,6 +420,7 @@ class Components_base extends Component {
                             options={yesNoOptions}
                             type="professional2"
                             id="criminal"
+                            // eslint-disable-next-line
                             label="Criminal proceedings"
                             error={(this.state.form_data.is_ped_error) ? true : false}
                             helperText={this.state.form_data.is_ped_error}
@@ -534,7 +537,7 @@ class Components_base extends Component {
 }
 
 const abcd = (props) => (
-    <Components_base
+    <ComponentBase
         {...props} />
 );
 

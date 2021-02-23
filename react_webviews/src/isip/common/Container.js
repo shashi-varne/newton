@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner_otm';
-import { getConfig, setHeights } from 'utils/functions';
+import { getConfig } from 'utils/functions';
 
 import {didmount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
@@ -31,7 +31,7 @@ class Container extends Component {
   componentWillUnmount() {
     this.unmount();
   }
-
+// eslint-disable-next-line
   componentDidUpdate(prevProps) {
     this.didupdate();
   }
@@ -93,9 +93,6 @@ class Container extends Component {
   }
 
 
-  componentDidUpdate(prevProps) {
-    setHeights({ 'header': true, 'container': false });
-  }
 
   render() {
 
