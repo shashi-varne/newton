@@ -109,6 +109,7 @@ class Landing extends Component {
       skelton: true,
     })
     let error = ''
+    let errorType = ''
     try{
       var res = await Api.get(`api/insurancev2/api/insurance/advisory/resume/check`);
         var resultData = res.pfwresponse.result;
@@ -153,10 +154,9 @@ class Landing extends Component {
       this.setState({
         show_loader: false,
         showError: true,
-        errorData: {
-          ...this.state.errorData, type: 'crash'
-        }
       });
+      errorType = 'crash';
+      error = true;
     }
 
     // set error data
@@ -164,9 +164,10 @@ class Landing extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
-        showError: 'page'
+        showError: 'page',
       })
     }
   }
@@ -276,7 +277,7 @@ class Landing extends Component {
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
             <div className="advisory-entry-container">
               <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
-              <button className="advisory-entry-button" onClick={()=>this.goToAdvisory()}>{this.state.advisory_button_text}</button>
+              <button className="advisory-entry-button" style={{ backgroundColor: getConfig().primary }} onClick={()=>this.goToAdvisory()}>{this.state.advisory_button_text}</button>
             </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">
