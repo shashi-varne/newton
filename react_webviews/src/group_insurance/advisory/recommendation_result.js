@@ -133,7 +133,7 @@ class RecommendationResult extends Component {
                 <div className="recommendation-info-container">
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Target Coverage</p>
-                        <p  className="recommendation-info-value">{recommendation_data.target_si}</p>
+                        <p  className="recommendation-info-value">₹{recommendation_data.target_si}</p>
                     </div>
                     { recommendation_data.key !== 'corona' && (
                     <div className="recommendation-info">
