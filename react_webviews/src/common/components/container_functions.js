@@ -346,7 +346,7 @@ export function renderPopup() {
     return (
         <Dialog
             fullScreen={false}
-            open={this.state.openPopup}
+            open={this.state.openPopup || false}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
         >
