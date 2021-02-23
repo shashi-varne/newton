@@ -890,3 +890,11 @@ export function capitalize(string) {
     return f.toUpperCase();
   });
 }
+
+export function isIframe() {
+  if (window.top !== window.self) {
+    return true;
+  } else {
+    return false;
+  }
+}
