@@ -134,9 +134,18 @@ export function setRecommendationData(advisory_data, recommendation_data, user_d
        recommendation_array.push(temp);
       }
     }
+    var rec_order = ['term', 'health', 'ci', 'corona']
+    var sorted_recommendations = [];
+    for(var x of rec_order){
+      for(var y of recommendation_array){
+        if(x === y.key){
+          sorted_recommendations.push(y);
+        }
+      }
+    }
     
     advisory_data.recommendation_data = {
-      'recommendation_data': recommendation_array, 
+      'recommendation_data': sorted_recommendations, 
     };
     advisory_data['recommendation_data']['rec_text'] = recommendation_data.recommended_text
     advisory_data.user_data = user_data;
