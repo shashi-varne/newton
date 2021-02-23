@@ -68,6 +68,35 @@ class ProfessionalDetails extends Component {
     });
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   sendEvents(user_action) {
     let eventObj = {
       event_name: "idfc_lending",
@@ -184,6 +213,8 @@ class ProfessionalDetails extends Component {
         title="Enter work details"
         buttonTitle="NEXT"
         handleClick={this.handleClick}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="professional-details">
           <FormControl fullWidth>

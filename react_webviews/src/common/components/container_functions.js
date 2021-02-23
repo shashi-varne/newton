@@ -220,7 +220,6 @@ export function renderPopup() {
 
 export function renderGenericError() {
 
-
     let errorData = this.props.errorData || {};
     let { title1, title2 , button_text1, button_text2, 
         handleClick2, handleClick1} = errorData;

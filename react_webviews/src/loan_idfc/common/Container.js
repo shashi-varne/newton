@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 
 import Header from "../../common/components/Header";
 import { didmount } from "../../common/components/container_functions";
-
+import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
 import Footer from "./footer";
 
 import { nativeCallback } from "utils/native_callback";
@@ -27,6 +27,8 @@ class Container extends Component {
     };
 
     this.didmount = didmount.bind(this);
+    this.renderPageLoader = renderPageLoader.bind(this);
+    this.renderGenericError = renderGenericError.bind(this);
   }
 
   componentDidMount() {
@@ -140,6 +142,8 @@ class Container extends Component {
             {/* {this.renderPageLoader()} */}
             {/* {this.renderPageLoader2()} */}
           </div>
+
+          {this.renderGenericError()}
 
           {!this.state.force_hide_inpage_title &&
             !this.props.noHeader &&

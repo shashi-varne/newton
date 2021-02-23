@@ -6,7 +6,7 @@ import PartnerCard from "./partner_card";
 import { nativeCallback } from "utils/native_callback";
 import Card from "../../../common/ui/Card";
 import { getConfig } from "utils/functions";
-import {Imgc} from '../../../common/ui/Imgc';
+import { Imgc } from "../../../common/ui/Imgc";
 
 class Home extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class Home extends Component {
     this.state = {
       show_loader: false,
       screen_name: "home_screen",
-      skelton: 'g',
+      skelton: "g",
     };
     this.initialize = initialize.bind(this);
   }
@@ -80,7 +80,30 @@ class Home extends Component {
     );
   }
 
-  onload = () => {};
+  onload = () => {
+    this.setErrorData("onload");
+    if (this.state.showError) {
+      this.getSummary();
+    }
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
 
   handleClick = () => {
     let { ongoing_loan_details, account_exists } = this.state;
@@ -128,6 +151,8 @@ class Home extends Component {
         title="Loans"
         noFooter={true}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="home">
           <div className="block1-info">
@@ -211,7 +236,7 @@ class Home extends Component {
             <div className="top-title">Our partners</div>
             <div className="partners">
               {/* <div className="partner-card"> */}
-                <Imgc src={require(`assets/idfc.svg`)} alt="idfc logo" />
+              <Imgc src={require(`assets/idfc.svg`)} alt="idfc logo" />
               {/* </div> */}
             </div>
           </div>

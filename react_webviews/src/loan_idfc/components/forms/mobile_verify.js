@@ -15,7 +15,7 @@ class MobileVerification extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: 'g',
+      skelton: "g",
       screen_name: "mobile_verification",
       mobile_no: "",
       terms_and_conditions_clicked: "no",
@@ -40,6 +40,35 @@ class MobileVerification extends Component {
   }
 
   onload = () => {};
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getOrCreate,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
 
   handleScroll = () => {
     setTimeout(function () {
@@ -136,6 +165,8 @@ class MobileVerification extends Component {
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Verify mobile"
         buttonTitle="GET OTP"
         handleClick={this.handleClick}

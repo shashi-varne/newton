@@ -11,7 +11,8 @@ class SelectLoan extends Component {
     this.state = {
       show_loader: false,
       screen_name: "select_loan_screen",
-      skelton: 'g',
+      skelton: "g",
+      showError: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -20,10 +21,15 @@ class SelectLoan extends Component {
     this.initialize();
   }
 
-  onload = () => {
+  onload = async () => {
+
     let { selectedVendors, ongoing_loan_details } = this.state;
     let stepContentMapper = [];
     let status = [];
+
+    if (selectedVendors.length === 0) {
+      // this.navigate('home')
+    }
 
     ongoing_loan_details.length !== 0 &&
       ongoing_loan_details.forEach((item) => status.push(item.vendor));
@@ -35,7 +41,7 @@ class SelectLoan extends Component {
         subtitle: "Competitive interest rate",
         loan_amount: " ₹40 lakhs",
         logo: "idfc_logo",
-        cta_title: status.includes('idfc') ? 'RESUME' : 'APPLY NOW',
+        cta_title: status.includes("idfc") ? "RESUME" : "APPLY NOW",
         displayTag: true,
         provider_name: "idfc",
         benefits: {
@@ -62,7 +68,7 @@ class SelectLoan extends Component {
         subtitle: "Quick disbursal",
         loan_amount: " ₹1 lakh",
         logo: "dmi-finance",
-        cta_title: status.includes('dmi') ? 'RESUME' : 'APPLY NOW',
+        cta_title: status.includes("dmi") ? "RESUME" : "APPLY NOW",
         provider_name: "dmi",
         benefits: {
           options: [
@@ -100,16 +106,34 @@ class SelectLoan extends Component {
     });
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getSummary,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   goBack = () => {
-    this.sendEvents('back')
+    this.sendEvents("back");
     let { loans_applied, dmi, idfc } = this.state;
 
-    if (loans_applied === 0 && (!dmi && !idfc)) {
-      this.navigate('edit-details')
+    if (loans_applied === 0 && !dmi && !idfc) {
+      this.navigate("edit-details");
     } else {
-      this.navigate('home')
+      this.navigate("home");
     }
-  }
+  };
 
   handleBenefits = (index) => {
     let { selectedIndexs } = this.state;
@@ -119,17 +143,24 @@ class SelectLoan extends Component {
 
   handleClick = (provider_name) => {
     let { vendors_data, ongoing_loan_details } = this.state;
-    let resume = vendors_data[provider_name].cta_title === 'RESUME' ? 'yes' : 'no';
-    let vendor = ongoing_loan_details.find((element) => element.vendor === provider_name) || {}
-    this.sendEvents("next", { 
+    let resume =
+      vendors_data[provider_name].cta_title === "RESUME" ? "yes" : "no";
+    let vendor =
+      ongoing_loan_details.find(
+        (element) => element.vendor === provider_name
+      ) || {};
+    this.sendEvents("next", {
       provider_name: provider_name,
-      status: vendor.status || 'default',
-      resume: resume, 
+      status: vendor.status || "default",
+      resume: resume,
     });
-    
+
     this.props.history.push(
-      { pathname: `/loan/${provider_name}/loan-know-more`, search: getConfig().searchParams },
-      { neftBanks: 'select-loan' }
+      {
+        pathname: `/loan/${provider_name}/loan-know-more`,
+        search: getConfig().searchParams,
+      },
+      { neftBanks: "select-loan" }
     );
   };
 
@@ -139,9 +170,9 @@ class SelectLoan extends Component {
       properties: {
         user_action: user_action,
         screen_name: "select_loan_provider",
-        provider_name: data.provider_name || '',
-        status: data.status || '',
-        resume: data.resume || '', 
+        provider_name: data.provider_name || "",
+        status: data.status || "",
+        resume: data.resume || "",
       },
     };
 
@@ -163,6 +194,8 @@ class SelectLoan extends Component {
         headerData={{
           goBack: this.goBack,
         }}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="select_loan">
           {this.state.stepContentMapper &&
@@ -171,7 +204,7 @@ class SelectLoan extends Component {
                 <PartnerCard
                   key={index}
                   baseData={item}
-                  handleBenefits={() =>this.handleBenefits(index)}
+                  handleBenefits={() => this.handleBenefits(index)}
                   handleClick={this.handleClick}
                   isSelected={this.state.selectedIndexs[index]}
                 />

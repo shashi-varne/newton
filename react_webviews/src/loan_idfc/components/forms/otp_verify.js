@@ -22,7 +22,7 @@ class OtpVerification extends Component {
       proceedForOrder: false,
       base_url: getConfig().base_url,
       screen_name: "otp_verify",
-      skelton: 'g',
+      skelton: "g",
     };
 
     this.initialize = initialize.bind(this);
@@ -44,18 +44,50 @@ class OtpVerification extends Component {
       mobile_no: params.mobile_no || "",
     };
 
-    this.setState({
-      otpBaseData: otpBaseData,
-      mobile_no: params.mobile_no || "",
-      resend_otp_url: params.resend_otp_url || "",
-      verify_otp_url: params.verify_otp_url || "",
-      next_state: params.next_state || "",
-    }, () => {
-      this.initialize();
-    });
+    this.setState(
+      {
+        otpBaseData: otpBaseData,
+        mobile_no: params.mobile_no || "",
+        resend_otp_url: params.resend_otp_url || "",
+        verify_otp_url: params.verify_otp_url || "",
+        next_state: params.next_state || "",
+      },
+      () => {
+        this.initialize();
+      }
+    );
   }
 
   onload = () => {};
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
 
   sendEvents(user_action) {
     let eventObj = {
@@ -94,38 +126,40 @@ class OtpVerification extends Component {
 
     try {
       this.setState({
-        skelton: 'g'
+        skelton: "g",
       });
 
       const res = await Api.get(url);
-  
+
       const { result, status_code: status } = res.pfwresponse;
-  
+
       if (status === 200) {
-        if (result.resend_otp_url !== '' && result.verify_otp_url !== '') {
-          var message = 'OTP sent to the mobile number ' + this.state.mobile_no + ', please verify.'
+        if (result.resend_otp_url !== "" && result.verify_otp_url !== "") {
+          var message =
+            "OTP sent to the mobile number " +
+            this.state.mobile_no +
+            ", please verify.";
           this.setState({
             skelton: false,
             resend_otp_url: result.resend_otp_url,
-            verify_otp_url: result.verify_otp_url
-          })
+            verify_otp_url: result.verify_otp_url,
+          });
           toast(message || result.message);
         }
         this.setState({
-          skelton: false
+          skelton: false,
         });
-
       } else {
         this.setState({
-          skelton: false
+          skelton: false,
         });
         toast(result.error || result.message || "Something went wrong!");
       }
     } catch (err) {
       this.setState({
-        skelton: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      toast("Something went wrong");
     }
   };
 
@@ -134,6 +168,9 @@ class OtpVerification extends Component {
     let canSubmitForm = true;
 
     let { verify_otp_url: url, otp } = this.state;
+
+    let error = '';
+    let errorType = '';
 
     if (!this.state.otp) {
       canSubmitForm = false;
@@ -152,9 +189,10 @@ class OtpVerification extends Component {
     }
 
     if (canSubmitForm) {
-      // this.setState({
-      //   show_loader: "button",
-      // });
+      this.setState({
+        show_loader: "button",
+        showError: false
+      });
 
       let params = {
         otp: otp,
@@ -170,40 +208,59 @@ class OtpVerification extends Component {
         const { result, status_code: status } = res.pfwresponse;
 
         if (status === 200) {
-          // if (!result.error) {
-            this.navigate(this.state.next_state);
-        //   } else {
-        //     this.setState({
-        //       show_loader: false,
-        //       otpVerified: false,
-        //     });
-        //   }
+          this.navigate(this.state.next_state);
         } else {
           this.setState({
             show_loader: false,
           });
-          toast(result.error || result.message || "Something went wrong!");
+          // toast(result.error || result.message || "Something went wrong!");
+          let title1 = result.error || "Something went wrong!";
+          this.setState({
+            show_loader: false,
+            skelton: false,
+            title1: title1,
+          });
+
+          this.setErrorData("submit");
+          error = true;
+          errorType = "form";
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
         this.setState({
           show_loader: false,
         });
-        toast("Something went wrong");
+        // toast("Something went wrong");
+        error = true;
+        errorType = "form";
       }
+    }
+
+    if(error) {
+      this.setState({
+        show_loader: false,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: true
+      })
     }
   };
 
   render() {
     return (
       <Container
-        events={this.sendEvents('just_set_events')}
+        events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
         title="Enter OTP"
         buttonTitle="VERIFY & PROCEED"
         disable={this.state.otp.length !== 4}
         handleClick={this.handleClick}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="otp-verification">
           <div className="subtitle">

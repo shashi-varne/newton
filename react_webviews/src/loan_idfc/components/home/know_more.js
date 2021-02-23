@@ -34,60 +34,6 @@ class LoanKnowMore extends Component {
       documents: screenData.loan_partners[provider].documents,
     });
 
-    if (provider === "dmi") {
-      let lead = this.state.lead || {};
-      let application_info = lead.application_info || {};
-      let vendor_info = lead.vendor_info || {};
-
-      let rejection_reason = application_info.rejection_reason || "";
-
-      this.setState({
-        reason: rejection_reason,
-      });
-
-      if (vendor_info.dmi_loan_status === "complete") {
-        this.navigate("report");
-        return;
-      }
-
-      let process_done = false;
-      let isResume = true;
-      let top_cta_title = "RESUME";
-
-      if (
-        !application_info.latitude ||
-        !application_info.network_service_provider
-      ) {
-        this.setState({
-          location_needed: true,
-        });
-
-        isResume = false;
-        top_cta_title = "APPLY NOW";
-
-        this.setState({
-          isResume: isResume,
-        });
-      }
-
-      if (
-        [
-          "callback_awaited_disbursement_approval",
-          "disbursement_approved",
-        ].indexOf(vendor_info.dmi_loan_status) !== -1
-      ) {
-        process_done = true;
-      }
-
-      this.setState({
-        application_info: application_info,
-        vendor_info: vendor_info,
-        isResume: isResume,
-        process_done: process_done,
-        top_cta_title: top_cta_title,
-      });
-    }
-
     if (provider === 'idfc') {
       this.setState({
         top_cta_title:
@@ -98,6 +44,35 @@ class LoanKnowMore extends Component {
           this.state.application_exists && this.state.otp_verified
             ? "journey"
             : "edit-number",
+      });
+    }
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getUserStatus,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.errorTitle,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
       });
     }
   };
@@ -270,6 +245,8 @@ class LoanKnowMore extends Component {
         buttonTitle={this.state.top_cta_title}
         hidePageTitle={true}
         handleClick={this.handleClick}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         headerData={{
           goBack: this.goBack,
         }}

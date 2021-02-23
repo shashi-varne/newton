@@ -12,7 +12,7 @@ import {
   IsFutureDate,
   numDifferentiationInr,
   calculateAge,
-  formatAmount
+  formatAmount,
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";
 
@@ -77,72 +77,10 @@ export async function initialize() {
     show_loader: true,
   });
 
-  let lead = {
-    member_base: [],
-  };
-
-  if (provider === 'dmi') {
-    try {
-      this.setState({
-        show_loader: true,
-      });
-
-      let body = {
-        vendor_name: "DMI",
-        application_info: "True",
-        vendor_info: "True"
-      };
-
-      for (var key in this.state.getLeadBodyKeys) {
-        body[this.state.getLeadBodyKeys[key]] = "True";
-      }
-      const res = await Api.post("/relay/api/loan/get/application/dmi", body);
-
-      this.setState({
-        show_loader: false,
-      });
-
-      let resultData = res.pfwresponse.result;
-
-      if (res.pfwresponse.status_code === 200) {
-        lead = resultData || {};
-        let application_id = (lead.application_info || {}).application_id;
-        storageService().set("loan_application_id", application_id);
-        this.setState(
-          {
-            lead: lead || {},
-            application_id: application_id,
-          },
-          () => {
-            if (this.onload && !this.state.ctaWithProvider) {
-              this.onload();
-            }
-          }
-        );
-      } else {
-        toast(resultData.error || resultData.message || "Something went wrong");
-        this.onload();
-      }
-    } catch (err) {
-      console.log(err);
-      this.setState(
-        {
-          show_loader: false,
-          lead: lead,
-          common_data: {},
-        },
-        () => {
-          this.onload();
-        }
-      );
-      toast("Something went wrong");
-    }
-  } else {
-    let application_id = storageService().get("loan_application_id");
-    this.setState({
-      application_id: application_id,
-    });
-  }
+  let application_id = storageService().get("loan_application_id");
+  this.setState({
+    application_id: application_id,
+  });
 
   let screens = [
     "calculator",
@@ -151,7 +89,7 @@ export async function initialize() {
     "loan_status",
     "main_landing_screen",
     "eligibility_screen",
-    "recommended"
+    "recommended",
   ];
 
   let idfc_dmi_screens = [
@@ -190,12 +128,12 @@ export async function initialize() {
     this.getUserStatus();
   }
 
-  if (this.state.screen_name === "main_landing_screen" && provider === 'idfc') {
+  if (this.state.screen_name === "main_landing_screen" && provider === "idfc") {
     this.getUserStatus();
   }
 
   if (idfc_dmi_screens.includes(this.state.screen_name)) {
-    this.getSummary();
+    await this.getSummary();
   }
 }
 
@@ -239,7 +177,7 @@ export async function getInstitutionList() {
 export async function getPickList() {
   try {
     this.setState({
-      skelton: 'g'
+      skelton: "g",
     });
 
     const res = await Api.get(`relay/api/loan/idfc/picklist`);
@@ -247,7 +185,6 @@ export async function getPickList() {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-
       this.setState(
         {
           industryOptions: result.industry,
@@ -256,7 +193,7 @@ export async function getPickList() {
           organisationTypeOptions: result.organisation,
           salaryRecieptOptions: result.salary_mode,
           skelton: false,
-          show_loader: false
+          show_loader: false,
         },
         () => {
           this.onload();
@@ -266,14 +203,14 @@ export async function getPickList() {
       toast(result.error || result.message || "Something went wrong!");
       this.setState({
         skelton: false,
-        show_loader: false
+        show_loader: false,
       });
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
-      show_loader: false
+      show_loader: false,
     });
     toast("Something went wrong");
   }
@@ -290,8 +227,11 @@ export async function getDocumentList() {
     );
     const { result } = res.pfwresponse;
 
-    let status = ['idfc_1.7_accepted', 'idfc_1.7_submitted']
-    if (result.doc_list.length === 0 && status.includes(this.state.lead.vendor_info.idfc_loan_status)) {
+    let status = ["idfc_1.7_accepted", "idfc_1.7_submitted"];
+    if (
+      result.doc_list.length === 0 &&
+      status.includes(this.state.lead.vendor_info.idfc_loan_status)
+    ) {
       this.submitApplication({}, "four", "", "final-offer");
     } else {
       this.setState(
@@ -314,10 +254,21 @@ export async function getDocumentList() {
 }
 
 export async function getOrCreate(params) {
+  this.setErrorData("onload");
+
+  let error = "";
+  let errorType = "";
+
   try {
-    this.setState({
-      show_loader: "button",
-    });
+    if (this.state.screen_name === "main_landing_screen") {
+      this.setState({
+        show_loader: "button",
+      });
+    } else {
+      this.setState({
+        skelton: "g",
+      });
+    }
 
     let body = {
       create_new: (params && params.create_new) || false,
@@ -336,7 +287,12 @@ export async function getOrCreate(params) {
     let lead = {};
     let urlParams = getUrlParams();
 
-    const res = await Api.post(`relay/api/loan/get/application/idfc${urlParams.user ? "?user_id=" + urlParams.user : ''}`, body);
+    const res = await Api.post(
+      `relay/api/loan/get/application/idfc${
+        urlParams.user ? "?user_id=" + urlParams.user : ""
+      }`,
+      body
+    );
     const { result, status_code: status } = res.pfwresponse;
 
     lead = result || {};
@@ -363,7 +319,8 @@ export async function getOrCreate(params) {
 
       let picklistScreens = [
         "professional_details_screen",
-        "additional_details"]
+        "additional_details",
+      ];
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
         this.navigate(this.state.next_state);
@@ -386,30 +343,56 @@ export async function getOrCreate(params) {
       } else {
         this.setState({
           skelton: false,
-          show_loader: false
+          show_loader: false,
         });
       }
     } else {
-      toast(result.error || result.message || "Something went wrong!");
+      let errorTitle =
+        result.error || result.message || "Something went wrong!";
       this.setState({
+        show_loader: false,
         skelton: false,
-        show_loader: false
+        errorTitle: errorTitle,
       });
+
+      this.setErrorData("submit");
+      error = true;
+      errorType = "generic";
     }
   } catch (err) {
     console.log(err);
+    if (this.state.screen_name === "main_landing_screen") {
+      this.setErrorData("submit");
+      error = true;
+      errorType = "generic";
+    } else {
+      error = true;
+      errorType = "page";
+    }
+  }
+
+  if (error) {
     this.setState({
-      skelton: false,
-      show_loader: false
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError:
+        this.state.screen_name === "main_landing_screen" ? true : "page",
     });
-    toast("Something went wrong");
   }
 }
 
 export async function getUserStatus(state = "") {
+  this.setErrorData("onload");
+  let error = "";
+  let errorType = "";
+
   try {
     this.setState({
-      show_loader: true,
+      skelton: "g",
     });
 
     const res = await Api.get("relay/api/loan/user/status/idfc");
@@ -428,7 +411,7 @@ export async function getUserStatus(state = "") {
         "bt_info_screen",
         "credit_bt",
         "loan_bt",
-        "eligible_loan"
+        "eligible_loan",
       ];
 
       if (screens.indexOf(this.state.screen_name) !== -1) {
@@ -438,33 +421,40 @@ export async function getUserStatus(state = "") {
       this.setState(
         {
           show_loader: false,
-          skelton: false
+          skelton: false,
         },
         () => {
           this.onload();
         }
       );
     } else {
-      toast(result.error || result.message || "Something went wrong!");
-      this.setState(
-        {
-          show_loader: false,
-          skelton: false
-        },
-        () => {
-          this.onload();
-        }
-      );
+      error = true;
+      errorType = "crash";
+      // this.setState(
+      //   {
+      //     show_loader: false,
+      //     skelton: false
+      //   },
+      // () => {
+      //   this.onload();
+      // }
+      // );
     }
   } catch (err) {
     console.log(err);
-    this.setState(
-      {
-        show_loader: false,
-        skelton: false
-      }
-    );
-    toast("Something went wrong");
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: "page",
+    });
   }
 }
 
@@ -477,21 +467,26 @@ export function setEditTitle(string) {
 }
 
 export async function updateApplication(
-  params, 
+  params,
   next_state = "",
   loaderType = "",
   loaderValue = ""
 ) {
+  this.setErrorData("submit");
+
+  let error = "";
+  let errorType = "";
+
   try {
     if (loaderType) {
       this.setState({
         [loaderType]: loaderValue,
-        noHeader: true
-      })
+        noHeader: true,
+      });
     } else {
       this.setState({
-        show_loader: "button"
-      })
+        show_loader: "button",
+      });
     }
 
     const res = await Api.post(
@@ -522,17 +517,27 @@ export async function updateApplication(
         this.navigate(next_state || this.state.next_state);
       }
     } else {
-      if (typeof result.error === "string") {
-        this.setState({
-          show_loader: false,
-        });
-        toast(result.error || result.message || "Something went wrong!");
-      } else {
-        this.setState({
-          show_loader: false,
-        });
-        toast(result.error[0] || result.message || "Something went wrong!");
-      }
+      // if (typeof result.error === "string") {
+      //   this.setState({
+      //     show_loader: false,
+      //   });
+      //   toast(result.error || result.message || "Something went wrong!");
+      // } else {
+      //   this.setState({
+      //     show_loader: false,
+      //   });
+      //   toast(result.error[0] || result.message || "Something went wrong!");
+      // }
+      let title1 = result.error || "Something went wrong!";
+      this.setState({
+        show_loader: false,
+        skelton: false,
+        title1: title1,
+      });
+
+      this.setErrorData("submit");
+      error = true;
+      errorType = "form";
     }
   } catch (err) {
     console.log(err);
@@ -540,18 +545,32 @@ export async function updateApplication(
     let amountParams = ["loan_amount_required", "monthly_salary"];
     let keys = Object.keys(params);
     let { form_data } = this.state;
-    
+
     keys.forEach((el, index) => {
       if (amountParams.includes(el)) {
         form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
       }
-    })
+    });
 
     this.setState({
       show_loader: false,
-      form_data: form_data
+      form_data: form_data,
     });
-    toast("Something went wrong");
+    // toast("Something went wrong");
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
+    });
   }
 }
 
@@ -564,7 +583,7 @@ export async function get05Callback() {
   this.setState({
     loaderData: loaderData,
     show_loader: true,
-    loaderWithData: true
+    loaderWithData: true,
   });
 
   // setTimeout(, 3000)
@@ -609,7 +628,8 @@ export async function get10Callback(next_state) {
     if (result.idfc_10_callback) {
       that.navigate("/loan/idfc/eligible-loan");
     } else if (
-      result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
+      result.vendor_application_status === "idfc_cancelled" ||
+      result.vendor_application_status === "idfc_callback_rejected" ||
       result.is_cancelled === true
     ) {
       that.navigate("loan-status");
@@ -639,11 +659,12 @@ export async function get11Callback() {
     if (result.idfc_11_callback) {
       that.navigate("/loan/idfc/loan-eligible");
     } else if (
-      result.vendor_application_status === "idfc_cancelled" || result.vendor_application_status === "idfc_callback_rejected" ||
+      result.vendor_application_status === "idfc_cancelled" ||
+      result.vendor_application_status === "idfc_callback_rejected" ||
       result.is_cancelled === true
     ) {
       that.navigate("loan-status");
-    }  else {
+    } else {
       if (count < 20) {
         that.setState({
           count: count + 1,
@@ -666,9 +687,13 @@ export async function get07StateForBt() {
   let result = await this.getUserStatus();
   let { count } = this.state;
   let that = this;
-  
-  setTimeout(function () { 
-    if ((result.idfc_07_state === "success" || result.idfc_07_state === "triggered") && result.bt_eligible) {
+
+  setTimeout(function () {
+    if (
+      (result.idfc_07_state === "success" ||
+        result.idfc_07_state === "triggered") &&
+      result.bt_eligible
+    ) {
       let body = {
         idfc_loan_status: "bt_init",
       };
@@ -696,7 +721,7 @@ export async function get07State() {
   let result = await this.getUserStatus();
   let { count } = this.state;
   let that = this;
-  
+
   setTimeout(function () {
     if (result.perfios_status === "bypass") {
       that.submitApplication({}, "one", "", "eligible-loan");
@@ -704,9 +729,15 @@ export async function get07State() {
       that.navigate("error");
     } else if (result.idfc_07_state === "success" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
-    }  else if (result.idfc_07_state === "success" && result.vendor_application_status === "bt_bypass") {
+    } else if (
+      result.idfc_07_state === "success" &&
+      result.vendor_application_status === "bt_bypass"
+    ) {
       that.submitApplication({}, "one", "", "eligible-loan");
-    }  else if (result.idfc_07_state === "success" && result.vendor_application_status === "bt_processing") {
+    } else if (
+      result.idfc_07_state === "success" &&
+      result.vendor_application_status === "bt_processing"
+    ) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else {
       if (count < 20) {
@@ -728,6 +759,11 @@ export async function submitApplication(
   update = "",
   next_state = ""
 ) {
+  this.setErrorData("submit");
+
+  let error = "";
+  let errorType = "";
+
   try {
     this.setState({
       show_loader: "button",
@@ -741,7 +777,7 @@ export async function submitApplication(
       "loan_bt",
       "eligible_loan",
       "bank_upload",
-      "perfios_status"
+      "perfios_status",
     ];
     this.setState({
       // show_loader: true,
@@ -786,24 +822,20 @@ export async function submitApplication(
         "Salary",
         "Salary receipt mode",
       ];
-      if (
-        typeof result.error === "string" &&
-        rejection_cases.indexOf(result.error) === -1
-      ) {
-        this.setState({
-          show_loader: false,
-        });
-        toast(result.error || result.message || "Something went wrong!");
-      } else if (
-        typeof result.error === "string" &&
-        rejection_cases.indexOf(result.error) !== -1
-      ) {
+
+      if (rejection_cases.indexOf(result.error) !== -1) {
         this.navigate("loan-status");
       } else {
+        let title1 = result.error[0] || "Something went wrong!";
         this.setState({
           show_loader: false,
+          skelton: false,
+          title1: title1,
         });
-        toast(result.error[0] || result.message || "Something went wrong!");
+
+        this.setErrorData("submit");
+        error = true;
+        errorType = "form";
       }
     }
   } catch (err) {
@@ -812,23 +844,33 @@ export async function submitApplication(
     let amountParams = ["amount_required", "net_monthly_salary"];
     let keys = Object.keys(params);
     let { form_data } = this.state;
-    
+
     keys.forEach((el, index) => {
       if (amountParams.includes(el)) {
         form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
       }
-    })
-    
+    });
+
     this.setState({
       show_loader: false,
-      form_data: form_data
+      form_data: form_data,
     });
-    toast("Something went wrong");
+    // toast("Something went wrong");
+    error = true;
+    errorType = "form";
   }
 
-  // this.setState({
-  //   show_loader: false,
-  // });
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
+    });
+  }
 }
 
 export function openInBrowser(url) {
@@ -878,7 +920,10 @@ export async function formCheckUpdate(
     mother_last_name: "mother's last name",
     religion: "religion",
     email_id: "email id",
-    company_name: this.state.lead.application_info.employment_type !== "self_employed" ?  "company name from provided list" : "business name",
+    company_name:
+      this.state.lead.application_info.employment_type !== "self_employed"
+        ? "company name from provided list"
+        : "business name",
     business_name: "business name",
     office_email: "office email",
     net_monthly_salary: "net monthly salary",
@@ -925,9 +970,20 @@ export async function formCheckUpdate(
     "company_name",
   ];
 
-  let validate = ['permanent_address1', 'permanent_address2', 'permanent_address3', 'permanent_landmark',
-    'current_address1', 'current_address2', 'current_address3', 'current_landmark',
-    'office_address1', 'office_address2', 'office_address3', 'office_landmark',];
+  let validate = [
+    "permanent_address1",
+    "permanent_address2",
+    "permanent_address3",
+    "permanent_landmark",
+    "current_address1",
+    "current_address2",
+    "current_address3",
+    "current_landmark",
+    "office_address1",
+    "office_address2",
+    "office_address3",
+    "office_landmark",
+  ];
 
   var format = /[^a-zA-Z0-9 ,]/g;
 
@@ -943,7 +999,8 @@ export async function formCheckUpdate(
     }
 
     if (validate.includes(key_check) && format.test(form_data[key_check])) {
-      form_data[key_check + "_error"] = "special characters are not allowed except ( , ) commas.";
+      form_data[key_check + "_error"] =
+        "special characters are not allowed except ( , ) commas.";
       canSubmitForm = false;
     }
   }
@@ -951,7 +1008,8 @@ export async function formCheckUpdate(
   for (var j = 0; j < keys_to_include.length; j++) {
     let key = keys_to_include[i];
     if (validate.includes(key) && format.test(form_data[key])) {
-      form_data[key + "_error"] = "special characters are not allowed except ( , ) commas.";
+      form_data[key + "_error"] =
+        "special characters are not allowed except ( , ) commas.";
       canSubmitForm = false;
     }
   }
@@ -961,19 +1019,25 @@ export async function formCheckUpdate(
     canSubmitForm = false;
   }
 
-  // eslint-disable-next-line
-  if (form_data.maxAmount && form_data.amount_required > parseInt(form_data.maxAmount)) {
-    form_data.amount_required_error = "Amount cannot be greater than max loan amount";
+  if (
+    form_data.maxAmount &&
+    // eslint-disable-next-line
+    form_data.amount_required > parseInt(form_data.maxAmount)
+  ) {
+    form_data.amount_required_error =
+      "Amount cannot be greater than max loan amount";
     form_data.amount_required = `₹ ${formatAmount(form_data.amount_required)}`;
     canSubmitForm = false;
   }
-  
+
   if (
     form_data.amount_required &&
     // eslint-disable-next-line
     parseInt(form_data.amount_required) < parseInt("100000")
   ) {
-    form_data.amount_required_error = `Minimum loan amount should be ${numDifferentiationInr(100000)}`;
+    form_data.amount_required_error = `Minimum loan amount should be ${numDifferentiationInr(
+      100000
+    )}`;
     form_data.amount_required = `₹ ${formatAmount(form_data.amount_required)}`;
     canSubmitForm = false;
   }
@@ -1113,6 +1177,10 @@ export function navigate(pathname, data = {}) {
 }
 
 export async function getRecommendedVendor(params) {
+  this.setErrorData("submit");
+
+  let error = "";
+  let errorType = "";
   try {
     this.setState({
       show_loader: "button",
@@ -1125,20 +1193,44 @@ export async function getRecommendedVendor(params) {
       this.setState({ show_loader: false });
       this.navigate(this.state.next_state);
     } else {
-      this.setState({ show_loader: false });
-      toast(result.error || result.message || "Something went wrong!");
+      let errorTitle =
+        result.error || result.message || "Something went wrong!";
+      this.setState({ show_loader: false, errorTitle: errorTitle });
+
+      this.setErrorData("submit");
+      error = true;
+      errorType = "form";
     }
   } catch (err) {
     this.setState({ show_loader: false });
     console.log(err);
-    toast("Something went wrong");
+    // toast("Something went wrong");
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
+    });
   }
 }
 
 export async function getSummary() {
+  this.setErrorData("onload");
+
+  let error = "";
+  let errorType = "";
   try {
     this.setState({
-      show_loader: true,
+      // show_loader: true,
+      skelton: "g",
     });
 
     const res = await Api.get(`relay/api/loan/account/get/summary`);
@@ -1155,36 +1247,48 @@ export async function getSummary() {
     if (status === 200) {
       storageService().set("employment_type", result.employment_type);
       storageService().set("loans_applied", result.loans_applied);
-      
-      this.setState({
-        account_exists: result.account_exists,
-        ongoing_loan_details: result.ongoing_loan_details,
-        selectedVendors: selectedVendors,
-        show_loader: false,
-        skelton: false,
-        employment_type: result.employment_type,
-        loan_amount_required: result.loan_amount_required,
-        loans_applied: result.loans_applied,
-        dmi: result.dmi,
-        idfc: result.idfc
-      },
-      () => {
-        if (this.onload && !this.state.ctaWithProvider) {
+
+      this.setState(
+        {
+          account_exists: result.account_exists,
+          ongoing_loan_details: result.ongoing_loan_details,
+          selectedVendors: selectedVendors,
+          show_loader: false,
+          skelton: false,
+          employment_type: result.employment_type,
+          loan_amount_required: result.loan_amount_required,
+          loans_applied: result.loans_applied,
+          dmi: result.dmi,
+          idfc: result.idfc,
+        },
+        () => {
           this.onload();
         }
-      });
+      );
     } else {
-      this.setState({ 
+      this.setState({
         show_loader: false,
-        skelton: false
-      }, () => {
-        this.onload();
+        skelton: false,
       });
-      toast(result.error || result.message || "Something went wrong!");
+      // toast(result.error || result.message || "Something went wrong!");
+      error = true;
+      errorType = "crash";
     }
   } catch (err) {
     this.setState({ show_loader: false });
     console.log(err);
-    toast("Something went wrong");
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: "page",
+    });
   }
 }

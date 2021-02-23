@@ -20,7 +20,7 @@ class BasicDetails extends Component {
       form_data: {},
       screen_name: "basic_details",
       qualification: [],
-      skelton: 'g',
+      skelton: "g",
     };
 
     this.initialize = initialize.bind(this);
@@ -55,6 +55,35 @@ class BasicDetails extends Component {
       form_data: form_data,
       pan_state: application_info.is_pan_disabled,
     });
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
   };
 
   sendEvents(user_action) {
@@ -118,8 +147,7 @@ class BasicDetails extends Component {
   handleClick = () => {
     this.sendEvents("next");
     let { form_data, pan_state } = this.state;
-    let keys_to_check = ["dob", 
-     "employment_type"];
+    let keys_to_check = ["dob", "employment_type"];
     if (pan_state !== "success") {
       keys_to_check.push("pan_no");
     }
@@ -136,6 +164,8 @@ class BasicDetails extends Component {
         buttonTitle="NEXT"
         handleClick={this.handleClick}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
       >
         <div className="basic-details">
           <FormControl fullWidth>
@@ -189,7 +219,7 @@ class BasicDetails extends Component {
                 id="Salaried"
                 src={require(`assets/${this.state.productName}/icn_salaried.svg`)}
                 alt=""
-                style={{width: '100%'}}
+                style={{ width: "100%" }}
               />
             </div>
             <div
@@ -205,7 +235,7 @@ class BasicDetails extends Component {
                 id="Self_employed"
                 src={require(`assets/${this.state.productName}/icn_self_employed.svg`)}
                 alt=""
-                style={{width: '100%'}}
+                style={{ width: "100%" }}
               />
             </div>
           </div>
