@@ -95,6 +95,9 @@ class FyntuneLanding extends Component {
       this.setState({ resume_data : resultData});
         
       } else {
+        this.setState({
+          skelton: false
+        })
         // error = res.pfwresponse.result.error || res.pfwresponse.result.message || true
       }
     } catch (err) {
