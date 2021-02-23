@@ -57,7 +57,7 @@ class RecommendationResult extends Component {
         })
     }
 
-    confirmDialog = () => {
+    moreDetailsDialog = () => {
         var recommendation_data = this.state.recommendation_data;
         var recommendation_bottom_sheet_data = this.state.recommendation_bottom_sheet_data;
         var key = recommendation_data['key'];
@@ -160,7 +160,7 @@ class RecommendationResult extends Component {
                         <div className={`get-the-plan ${recommendation_data.coverage_percentage === 100 ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', recommendation_data.coverage_percentage === 100)}>GET THE PLAN</div>
                     </div>
                 </div>
-                {this.confirmDialog()}
+                {this.moreDetailsDialog()}
             </div>
         )
     }

@@ -1237,8 +1237,8 @@ input#pan {
     padding: 14px 18px;
     left: 6%;
     top: 58%;
-    font-size: 11px;
-    font-weight: bold;
+    font-size: 12px;
+    font-weight: bolder;
     letter-spacing: 0.5px;
     cursor: pointer;
     color: white;
@@ -1462,13 +1462,19 @@ input#pan {
   .recommendation-extras{
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
     margin-top: -20px;
     color: #35CB5D;
     font-weight: bold;
-    .recommendation-extras-divider{
-      color: #D6D6D6;
-      transform: translateX(-8px);
+    .download-report{
+      align-self: flex-start;
+      flex: 0.48;
+      text-align: center;
+      border-right: #D6D6D6 2px solid;
+    }
+    .email-report{
+      flex: 0.52;
+      text-align: center;
     }
   }
 }
