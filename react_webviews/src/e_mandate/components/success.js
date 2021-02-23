@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import qs from 'qs';
 import sip_resumed_fisdom from 'assets/sip_resumed_illustration_fisdom.svg';
 import sip_resumed_myway from 'assets/sip_resumed_illustration_myway.svg';
-import { getConfig } from 'utils/functions';
+import { getConfig , isIframe} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import ContactUs from '../../common/components/contact_us';
 import {Imgc} from '../../common/ui/Imgc';
@@ -14,7 +14,7 @@ class MandateSuccess extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      iframe: true,
+      iframe: isIframe(),
       params: qs.parse(props.history.location.search.slice(1)),
       sip_resumed: getConfig().productName !== 'fisdom' ? sip_resumed_myway : sip_resumed_fisdom,
       session_less_enach: window.sessionStorage.getItem('session_less_enach') || ''

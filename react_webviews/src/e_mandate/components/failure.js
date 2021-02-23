@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import '../common/Style.css';
 import failed_fisdom from 'assets/error_illustration_fisdom.svg';
 import failed_myway from 'assets/error_illustration_myway.svg';
-import { getConfig } from 'utils/functions';
+import { getConfig , isIframe} from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import ils_error from 'assets/finity/ils_error.svg'
 import {Imgc} from '../../common/ui/Imgc';
@@ -16,7 +16,7 @@ class PaymentFailedClass extends Component {
     this.state = {
       show_loader: false,
       failed_icon: getConfig().productName !== 'fisdom' ? failed_myway : failed_fisdom,
-      iframe: true,
+      iframe: isIframe(),
       iframeIcon: ils_error
     };
   } 

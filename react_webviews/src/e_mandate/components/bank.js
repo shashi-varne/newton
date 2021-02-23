@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import qs from 'qs';
-import { getConfig } from 'utils/functions';
+import { getConfig , isIframe} from 'utils/functions';
 // import Container from '../common/Container';
 import info_icon_fisdom from 'assets/info_icon_fisdom.svg'
 import info_icon_myway from 'assets/info_icon_myway.svg'
@@ -22,7 +22,7 @@ class SelectBank extends Component {
       info_icon: getConfig().productName !== 'fisdom' ? info_icon_myway : info_icon_fisdom,
       selected_bank: {},
       iframeIcon: bank_building,
-      iframe: true,
+      iframe: isIframe(),
       pc_urlsafe: getConfig().pc_urlsafe
     }
   }

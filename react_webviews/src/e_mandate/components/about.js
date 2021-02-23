@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import Container from '../common/Container'; 
-import { getConfig } from 'utils/functions';
+import { getConfig, isIframe } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import top_icon_fisdom from 'assets/sip_action_illustration_fisdom.svg';
@@ -51,7 +51,7 @@ class About extends Component {
       emandate: {},
       pc_urlsafe: getConfig().pc_urlsafe,
       params: getConfig().current_params,
-      iframe: true
+      iframe: isIframe()
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
