@@ -13,7 +13,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      // skelton: 'p',
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)) 
@@ -150,7 +150,7 @@ class Landing extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>

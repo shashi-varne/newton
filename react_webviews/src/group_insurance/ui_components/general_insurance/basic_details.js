@@ -11,7 +11,6 @@ import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
@@ -32,11 +31,10 @@ class BasicDetailsForm extends Component {
       basic_details_data: {
         nominee: {}
       },
-      show_loader: true,
       premium_details: {},
       inputDisabled: {},
       relationshipOptions: [],
-      age: 0
+      age: 0,
     };
 
     this.handleClickCurrent = this.handleClickCurrent.bind(this);
@@ -56,9 +54,8 @@ class BasicDetailsForm extends Component {
     }
 
     let lead_id = window.sessionStorage.getItem('group_insurance_lead_id_selected');
-    let { params } = this.props.parent.props.location || {};
     this.setState({
-      premium_details: params ? params.premium_details : {},
+      premium_details: this.props.parent.props.location.state ? this.props.parent.props.location.state.premium_details : '',
       lead_id: lead_id || '',
       inputDisabled: inputDisabled
     })
@@ -230,7 +227,6 @@ class BasicDetailsForm extends Component {
       basic_details_data[name] = event.target.value;
       basic_details_data[name + '_error'] = errorDate;
       let age = this.calculateAge(event.target.value.replace(/\\-/g, '/').split('/').reverse().join('/'));
-      console.log(age)
       this.setState({
         age: age
       })
@@ -267,7 +263,15 @@ class BasicDetailsForm extends Component {
 
   };
 
-  async componentDidMount() {
+  onload = async () => {
+    
+  
+
+    this.setErrorData('onload');
+
+
+    let premium_details = this.state.premium_details;
+    let leadData = premium_details.lead || '';
 
     this.setRelationshipOptions('male');
     let basic_details_data = {
@@ -283,52 +287,66 @@ class BasicDetailsForm extends Component {
         "relation": ""
       },
       "nominee_checked": false,
-      cover_amount: this.state.premium_details.cover_amount,
-      premium: this.state.premium_details.premium,
-      tax_amount: this.state.premium_details.tax_amount
+      cover_amount: premium_details.cover_amount,
+      premium: premium_details.premium,
+      tax_amount: premium_details.tax_amount
     }
+
+    let error = '';
+
+    let errorType = '';
     try {
   
       if (this.state.lead_id) { 
-        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-    
         this.setState({
-          show_loader: false
+          skelton: true
         })
-        if (res.pfwresponse.status_code === 200) {
+        if(!leadData) {
+         
+          let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+    
+          leadData = res.pfwresponse.result.lead; 
+          if (res.pfwresponse.status_code === 200) {
+         
 
-          var leadData = res.pfwresponse.result.lead;
-
-          Object.keys(basic_details_data).forEach((key) => {
-            basic_details_data[key] = leadData[key]
-          })
-
-          this.setRelationshipOptions(basic_details_data.gender);
-          basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
-          let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
-          this.setState({
-            age: age,
-            checked: leadData.nominee_details || false
-          })
-        } else {
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+            
+          } else {
+            error=res.pfwresponse.result.error || res.pfwresponse.result.message
+              || true;
+          }
         }
+  
+        Object.keys(basic_details_data).forEach((key) => {
+          basic_details_data[key] = leadData[key]
+        })
+
+        this.setRelationshipOptions(basic_details_data.gender);
+        basic_details_data['dob'] = basic_details_data['dob'] ? basic_details_data['dob'].replace(/\\-/g, '/').split('-').join('/') : '';
+        let age = this.calculateAge(basic_details_data.dob.replace(/\\-/g, '/').split('/').reverse().join('/'));
+        this.setState({
+          age: age,
+          checked: leadData.nominee_details || false,
+          skelton: false
+        })
+       
       } else {
+        this.setState({
+          skelton: true
+        })
         let res = await Api.get('api/ins_service/api/insurance/account/summary?provider=BHARTIAXA')
 
-        this.setState({
-          show_loader: false
-        })
+        
         if (res.pfwresponse.status_code === 200) {
-
+        
           let result = {};
           if (res.pfwresponse.result.response_data) {
             result = res.pfwresponse.result.response_data.insurance_account || {};
           } else {
             result = res.pfwresponse.result.insurance_account || {};
           }
-
+          this.setState({
+            skelton: false
+          })
           basic_details_data.name = result.name || '';
           basic_details_data.gender = result.gender || '';
           basic_details_data.marital_status = result.marital_status || '';
@@ -344,22 +362,37 @@ class BasicDetailsForm extends Component {
         } else if (res.pfwresponse.status_code === 401) {
 
         } else {
-          toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-            || 'Something went wrong');
+          error = res.pfwresponse.result.error || res.pfwresponse.result.message
+          || true;
         }
       }
 
     } catch (err) {
+      error = true
+      errorType = 'crash'
       this.setState({
-        show_loader: false
-      });
-      toast('Something went wrong');
+        skelton:false
+      })
     }
 
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type:errorType
+
+        },
+        showError: 'page',
+      })
+    }
     this.setState({
       basic_details_data: basic_details_data
     })
-
+  }
+  async componentDidMount() {
+    this.onload();
   }
 
   calculateAge = (birthday) => {
@@ -373,11 +406,46 @@ class BasicDetailsForm extends Component {
     return age;
   }
 
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
 
   async handleClickCurrent() {
 
 
+    this.setErrorData('submit');
+
+  
+    this.setState({
+      showError: false
+    })
     this.sendEvents('next');
     let keysMapper = {
       'name': 'name',
@@ -471,6 +539,7 @@ class BasicDetailsForm extends Component {
         canSubmitForm = false;
         basic_details_data.nominee['relation_error'] = 'Please enter relationship';
       }
+
     }
 
     this.setState({
@@ -506,9 +575,12 @@ class BasicDetailsForm extends Component {
       final_data.product_name = this.props.parent.state.product_key;
       final_data.nominee_details = this.state.checked;
 
+
+      let error = '';
+      let errorType= '';
       try {
         this.setState({
-          show_loader: true
+          show_loader: 'button'
         })
         let res2 = {};
         if (this.state.lead_id) {
@@ -518,42 +590,59 @@ class BasicDetailsForm extends Component {
           res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/create', final_data)
         }
 
-        this.setState({
-          show_loader: false
-        })
+        
         if (res2.pfwresponse.status_code === 200) {
           var lead_id_updated = this.state.lead_id || res2.pfwresponse.result.lead.id;
           window.sessionStorage.setItem('group_insurance_lead_id_selected', lead_id_updated || '');
-          this.navigate('summary')
+          let lead = res2.pfwresponse.result.updated_lead || res2.pfwresponse.result.lead;
+          this.navigate('summary', {lead: lead || {}})
         } else {
+          this.setState({
+            show_loader: false,
+            
+          })
+          
           if ('error' in res2.pfwresponse.result) {
             if (Array.isArray(res2.pfwresponse.result.error)) {
-              toast(res2.pfwresponse.result.error[0]['error']);
+              error = res2.pfwresponse.result.error[0]['error'];
             } else {
-              toast(res2.pfwresponse.result.error.error || res2.pfwresponse.result.error);
+              error = res2.pfwresponse.result.error.error || res2.pfwresponse.result.error;
             }
           } else {
-            toast(res2.pfwresponse.result.message || res2.pfwresponse.result.message || 'Something went wrong');
+            error = res2.pfwresponse.result.message || res2.pfwresponse.result.message || true
           }
         }
 
+
       } catch (err) {
-        console.log(err)
         this.setState({
-          show_loader: false
+          show_loader: false,
         });
-        toast('Something went wrong');
+        error = true
+        errorType = 'crash'
+      }
+
+      // set error data
+      if(error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type:errorType
+          },
+          showError:true
+        })
       }
 
     }
 
   }
 
-  navigate = (pathname) => {
+  navigate = (pathname, data) => {
     this.props.parent.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams
-    });
+    }, data);
   }
 
   sendEvents(user_action) {
@@ -594,7 +683,10 @@ class BasicDetailsForm extends Component {
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         buttonTitle='Go to Summary'
         onlyButton={true}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         handleClick={() => this.handleClickCurrent()}
         title={insuranceProductTitleMapper[this.props.parent ? this.props.parent.state.product_key : '']}
         classOverRideContainer="basic-details">

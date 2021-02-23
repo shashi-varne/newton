@@ -16,6 +16,8 @@ import Dialog, {
 import '../../utils/native_listner';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
+import { renderPageLoader, renderGenericError } from '../../common/components/container_functions';
+import UiSkelton from '../../common/ui/Skelton';
 
 
 class Container extends Component {
@@ -32,6 +34,8 @@ class Container extends Component {
       force_hide_inpage_title: false
     }
     this.historyGoBack = this.historyGoBack.bind(this);
+    this.renderPageLoader = renderPageLoader.bind(this);
+    this.renderGenericError = renderGenericError.bind(this);
   }
 
   componentDidMount() {
@@ -505,20 +509,6 @@ class Container extends Component {
     return null;
   }
 
-  renderPageLoader = () => {
-    if (this.props.showLoader) {
-      return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
   componentDidUpdate(prevProps) {
     setHeights({ 'header': true, 'container': false });
   }
@@ -537,7 +527,7 @@ class Container extends Component {
     return (
       <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`}  >
         {/* Header Block */}
-        {!this.props.hide_header && !this.props.showLoader && !this.props.showLoaderModal && <Header
+        {!this.props.hide_header && this.props.showLoader !== true && !this.props.showLoaderModal && <Header
           disableBack={this.props.disableBack}
           title={this.props.title}
           smallTitle={this.props.smallTitle}
@@ -565,12 +555,15 @@ class Container extends Component {
           {/* Loader Block covering entire screen*/}
           {this.renderPageLoader()}
 
+          {/* Error Block */}
+          {this.renderGenericError()}
+
           {!this.props.showLoader && !this.props.showLoaderModal && steps && <div className={`Step ${(this.props.type !== 'fisdom') ? 'blue' : ''}`}>
             {steps}
           </div>}
 
           {/* Banner Block */}
-          {!this.props.showLoader && !this.props.showLoaderModal && this.props.banner && <Banner text={this.props.bannerText} />}
+          {!this.props.showLoaderModal && this.props.banner && <Banner text={this.props.bannerText} />}
 
         </div>
 
@@ -592,13 +585,26 @@ class Container extends Component {
           </div>
          }
 
+          { this.props.skelton && 
+            <UiSkelton 
+            type={this.props.skelton}
+            />
+          }
+
+
         {/* Children Block */}
-        <div className={`Container ${this.props.classOverRideContainer}`}>
-          {this.props.children}
+        <div 
+        style={{...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff': 'initial'}}
+        className={`Container ${this.props.classOverRideContainer}`}>
+           <div 
+            className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
+            style={{display: this.props.skelton ? 'none': ''}}
+            > {this.props.children}
+             </div>
         </div>
 
         {/* Footer Block */}
-        {!this.props.noFooter &&
+        {!this.props.noFooter && !this.props.skelton &&
           <Footer
             dualbuttonwithouticon={this.props.dualbuttonwithouticon}
             fullWidthButton={this.props.fullWidthButton}
@@ -623,6 +629,8 @@ class Container extends Component {
             noFooter={this.props.noFooter}
             withProvider={this.props.withProvider}
             buttonData={this.props.buttonData}
+            showLoader={this.props.showLoader}
+            {...this.props}
              />
         }
         {/* No Internet */}
