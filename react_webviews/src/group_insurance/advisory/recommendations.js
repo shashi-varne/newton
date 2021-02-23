@@ -255,7 +255,6 @@ class AdivsoryRecommendations extends Component {
                         <div className="download-report click-pointer" onClick={()=>this.downloadReportPdf()}>
                             <img src={download} alt="" style={{marginRight: '5px'}} /> Download report
                         </div>
-                        <div className="recommendation-extras-divider">|</div>
                         <div className="email-report click-pointer"  onClick={()=>this.goToEmail()}>
                             <img src={launch} alt="" style={{marginRight: '5px'}}/> Email report 
                         </div>
