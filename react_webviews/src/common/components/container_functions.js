@@ -241,7 +241,7 @@ export function navigate(pathname) {
 export function check_hide_header_title() {
     let force_hide_inpage_title;
     let restrict_in_page_titles = ['provider-filter'];
-    if (restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+    if (restrict_in_page_titles.indexOf(this.props.headerType) !== -1 || this.state.force_hide_inpage_title) {
         force_hide_inpage_title = true;
     }
 
