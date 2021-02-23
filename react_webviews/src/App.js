@@ -26,7 +26,7 @@ import PortfolioRebalancing from './portfolio_rebalancing';
 import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
-
+import Report from "./reports";
 
 var basename = window.sessionStorage.getItem('base_href') || '';
 if(basename && basename.indexOf('appl/webview') !== -1) {
@@ -63,6 +63,7 @@ class App extends Component {
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
+          <Route path='/reports' component={Report} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
