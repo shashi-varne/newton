@@ -6,6 +6,8 @@ import sip_resumed_myway from 'assets/sip_resumed_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import ContactUs from '../../common/components/contact_us';
+import {Imgc} from '../../common/ui/Imgc';
+
 
 class MandateSuccess extends Component {
   constructor(props) {
@@ -72,9 +74,10 @@ class MandateSuccess extends Component {
         img={this.state.sip_resumed}
       >
         <div>
-          {!this.state.iframe && <div className="success-img">
-            <img alt="Mandate" src={this.state.sip_resumed} width="100%" />
-          </div>}
+          {!this.state.iframe &&  <div className="success-img">
+            <Imgc alt="Mandate" src={this.state.sip_resumed}
+            style={{minHeight:130, width:"100%"}} />
+          </div> }
           <div className="success-text">
             Congrats! easySIP authorised
           </div>

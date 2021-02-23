@@ -6,6 +6,8 @@ import failed_myway from 'assets/error_illustration_myway.svg';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import ils_error from 'assets/finity/ils_error.svg'
+import {Imgc} from '../../common/ui/Imgc';
+
 
 class PaymentFailedClass extends Component {
 
@@ -71,8 +73,12 @@ class PaymentFailedClass extends Component {
         img={this.state.iframeIcon}
       >
         <div>
-         {!this.state.iframe && <div className="payment-failed-icon"><img src={this.state.failed_icon} alt="" width="100%" /></div> }
-          <div className="payment-failed-title" >e-mandate authorization failed</div>
+          {!this.state.iframe && <div className="payment-failed-icon">
+            <Imgc src={this.state.failed_icon} alt="" 
+              style={{minHeight:160, width:"100%"}} 
+            />
+          </div>}
+          <div className="payment-failed-title">e-mandate authorization failed</div>
           <div className="payment-failed-subtitle">Something went wrong, please retry with correct details</div>
         </div>
       </Container>

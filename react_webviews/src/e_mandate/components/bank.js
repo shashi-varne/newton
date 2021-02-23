@@ -150,15 +150,13 @@ class SelectBank extends Component {
     }
     this.sendEvents('next');
     this.setState({
-      show_loader: true
+      show_loader: 'page'
     })
     try {
       let bank_data = { selected_bank: this.state.selected_bank };
       const res = await Api.post('/api/mandate/enach/user/banks/' + this.state.pc_urlsafe, bank_data);
       
-      this.setState({
-        show_loader: false
-      });
+      
       if (res.pfwresponse.result && !res.pfwresponse.result.error) {
         let paymentRedirectUrl = encodeURIComponent(
           window.location.origin + '/e-mandate/redirection'
@@ -216,6 +214,9 @@ class SelectBank extends Component {
         }
         window.location.href = pgLink;
       } else {
+        this.setState({
+          show_loader: false
+        });
         toast(res.pfwresponse.result.error || 
           res.pfwresponse.result.message || 'Something went wrong', 'error');
       }

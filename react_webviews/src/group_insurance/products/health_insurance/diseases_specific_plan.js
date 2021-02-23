@@ -6,7 +6,6 @@ import { getConfig } from 'utils/functions';
 import { getBhartiaxaStatusToState } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
 import '../../common/Style.scss'
-import toast from '../../../common/ui/Toast'
 
 class DiseasesSpecificPlan extends Component {
 
@@ -100,24 +99,15 @@ class DiseasesSpecificPlan extends Component {
   }
 
   handleClick = (data) => {
-    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
-    let product_key = data.key ? data.key : data;
-    
-    if(BHARTIAXA_PRODUCTS.includes(product_key)){
-      toast('Technical maintenance in progress, please try again in sometime.');
-      return;
-    }
 
     this.setState({
       show_loader : true
     })
 
-    
-
-
+    let product_key = data.key ? data.key : data;
     typeof data === 'object' ? data.insurance_type = 'Disease specific plans'  : data = {"insurance_type" : 'Disease specific plans'}
     this.sendEvents(data);
-    
+    var BHARTIAXA_PRODUCTS = ['HOSPICASH', 'DENGUE', 'CORONA'];
 
     var lead_id = '';
     var path = '';
@@ -153,7 +143,7 @@ class DiseasesSpecificPlan extends Component {
         display: 'flex', alignItems: 'center', width : '100%'
       }}>
         <div style={{ display: 'flex' , width : '100%'}}>
-          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : '0px 26px 0px 8px'}}/>
+          <img src={ require(`assets/${props.icon}_${this.state.type}.svg`)  } alt="" style={{margin : props.key === 'CORONA' ? '-18px 26px 0px 8px' : '0px 26px 0px 8px'}}/>
           <div style={{ borderBottomWidth: '1px',
                   borderBottomColor: '#EFEDF2', borderBottomStyle:'solid',   paddingTop: '20px', paddingBottom: this.state.insuranceProducts.length - 1 !== index ? '20px' : '40px',
                   justifyContent: 'space-between', cursor: 'pointer' , width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%' }}>

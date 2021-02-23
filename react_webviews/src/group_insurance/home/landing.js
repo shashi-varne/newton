@@ -6,13 +6,14 @@ import qs from 'qs';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss'
+import { isEmpty } from 'utils/validators';
 
 class Landing extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      // skelton: 'p',
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)) 
@@ -52,8 +53,10 @@ class Landing extends Component {
     let openModuleData = params ? params.openModuleData : {}
 
     let redirect_url = decodeURIComponent(getConfig().redirect_url);
-    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-      window.location.href = redirect_url;
+    if(!isEmpty(openModuleData)){
+      if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+        window.location.href = redirect_url;
+      }
     }
     this.setState({
       insuranceProducts: insuranceProducts,
@@ -147,7 +150,7 @@ class Landing extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>

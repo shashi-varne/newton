@@ -7,9 +7,27 @@ import SVG from 'react-inlinesvg';
 import './style.scss';
 import { getConfig } from 'utils/functions';
 
+import DotDotLoaderNew from './DotDotLoaderNew';
+import { disableBodyTouch } from 'utils/validators';
+
+
 class CustomButton extends Component {
   render() {
-    const props = this.props;
+    let props = this.props;
+    let showLoader = props.showLoader;
+    showLoader = showLoader === 'button' ? true : false;
+    // showLoader= true;
+
+    
+    if(!showLoader || !props.showError){
+      disableBodyTouch(true); //touch enabled
+      // disableBodyOverflow(true);
+    }
+
+    if(props.showError){
+      // disableBodyOverflow();
+    }
+
     const { button: buttonClass, ...classes } = props.classes || {};
 
       if(props.iframe){
@@ -111,7 +129,10 @@ class CustomButton extends Component {
             classes={classes}
             disabled={props.disable}
           >
-            {props.buttonTitle}
+            {!showLoader && props.buttonTitle}
+            {showLoader && <DotDotLoaderNew
+            styleBounce={{backgroundColor:'white'}}
+            />}
             {
               props.arrow &&
               <img alt="" src={arrow} width={20} className="FooterButtonArrow" />

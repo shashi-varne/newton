@@ -67,6 +67,12 @@ class Api {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
         }
+
+        let force_error_api = window.sessionStorage.getItem('force_error_api');
+        if(force_error_api) {
+          response.data.pfwresponse.status_code = 410;
+          response.data.pfwresponse.result.error = 'Sorry, we could not process your request';
+        }
         return response.data;
       }, error => {
         return error;
