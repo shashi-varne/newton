@@ -151,9 +151,10 @@ class Home extends Component {
           {ongoing_loan_details && ongoing_loan_details.length !== 2 && (
             <div className="block2-info">
               <div className="top-title">
-                {ongoing_loan_details && ongoing_loan_details.length !== 0
+                {/* {ongoing_loan_details && ongoing_loan_details.length !== 0
                   ? "Start a new application"
-                  : "What are you looking for ?"}
+                  : "What are you looking for ?"} */}
+                  Get started
               </div>
               <Card className="card-lending" onClick={() => this.handleClick()}>
                 <div className="content">
@@ -164,7 +165,7 @@ class Home extends Component {
                   <div className="data">
                     <div className="title generic-page-title">
                       Personal loans
-                      <img src={require(`assets/apply_now.svg`)} alt="" />
+                      {ongoing_loan_details.length === 0 && <img src={require(`assets/apply_now.svg`)} alt="" />}
                     </div>
                     <div className="subtitle generic-page-subtitle">
                       Get loans upto ₹40 lakhs

@@ -129,7 +129,7 @@ class ProfessionalDetails extends Component {
     if (employment_type === "self_employed") {
       keys_to_check.push("company_name");
     } else {
-      form_data.net_monthly_salary = form_data.net_monthly_salary.slice(2).replaceAll(',', '');
+      form_data.net_monthly_salary = (form_data.net_monthly_salary || '').slice(2).replaceAll(',', '');
       keys_to_check.push(...salaried);
     }
 
