@@ -24,10 +24,10 @@ class Eligibility extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_eligibility",
       properties: {
         user_action: user_action,
-        screen_name: "eligibility",
       },
     };
 

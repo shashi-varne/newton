@@ -87,10 +87,10 @@ class MobileVerification extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_mobile_number_verification",
       properties: {
         user_action: user_action,
-        screen_name: "mobile number verification",
         "t&c_clicked": this.state.terms_and_conditions_clicked,
       },
     };
@@ -156,6 +156,7 @@ class MobileVerification extends Component {
 
     this.setState({
       checked: !checked,
+      terms_and_conditions_clicked: 'yes'
     });
   };
 

@@ -91,10 +91,10 @@ class OtpVerification extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_otp_screen",
       properties: {
         user_action: user_action,
-        screen_name: "otp_screen",
         resend_clicked: this.state.resend_otp_clicked ? "yes" : "no",
       },
     };

@@ -110,10 +110,10 @@ class Recommended extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_category: "Lending IDFC",
+      event_name: "loan_requirement",
       properties: {
         user_action: user_action,
-        screen_name: "home_loan_requirement",
         employment_type: this.state.form_data.employment_type || "",
         amount_required: this.state.form_data.loan_amount_required || "",
       },

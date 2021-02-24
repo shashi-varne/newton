@@ -79,10 +79,10 @@ class LoanKnowMore extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_introduction",
       properties: {
         user_action: user_action,
-        screen_name: "know_more",
       },
     };
 

@@ -62,23 +62,6 @@ class SelectLoan extends Component {
           ],
         },
       },
-      dmi: {
-        index: 1,
-        title: "DMI Finance",
-        subtitle: "Quick disbursal",
-        loan_amount: " ₹1 lakh",
-        logo: "dmi-finance",
-        cta_title: status.includes("dmi") ? "RESUME" : "APPLY NOW",
-        provider_name: "dmi",
-        benefits: {
-          options: [
-            "Get loan upto 1 lakh with no human interaction",
-            "No income documents required",
-            "Complete easy loan application process and get money within 48 hrs",
-            "You don't have to provide any security money for your loan",
-          ],
-        },
-      },
     };
 
     this.setState({
@@ -136,6 +119,9 @@ class SelectLoan extends Component {
   };
 
   handleBenefits = (index) => {
+    this.setState({
+      benefit_clicked: 'yes'
+    })
     let { selectedIndexs } = this.state;
     selectedIndexs[index] = !this.state.selectedIndexs[index];
     this.setState({ selectedIndexs: selectedIndexs });
@@ -166,13 +152,14 @@ class SelectLoan extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "lending",
+      event_category: "Lending IDFC",
+      event_name: "select_loan_provider",
       properties: {
         user_action: user_action,
-        screen_name: "select_loan_provider",
         provider_name: data.provider_name || "",
-        status: data.status || "",
-        resume: data.resume || "",
+        status: data.status || "default",
+        resume: data.resume || "no",
+        benefit_clicked: this.state.benefit_clicked || 'no'
       },
     };
 

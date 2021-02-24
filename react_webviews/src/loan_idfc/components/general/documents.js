@@ -22,10 +22,10 @@ class Documents extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_documents",
       properties: {
         user_action: user_action,
-        screen_name: "document_screen",
       },
     };
 

@@ -47,10 +47,10 @@ class Calculator extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_eligibility_calculator",
       properties: {
         user_action: user_action,
-        screen_name: "eligibility_calculator",
       },
     };
 
