@@ -531,7 +531,7 @@ export async function updateApplication(
     }
 
     const res = await Api.post(
-      `relay/api/loan/update/application/idf/${this.state.application_id}`,
+      `relay/api/loan/update/application/idfc/${this.state.application_id}`,
       params
     );
 

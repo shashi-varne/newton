@@ -144,7 +144,7 @@ class Calculator extends Component {
             </div>
           </div>
           <div className="subtitle">
-            This is an indicative loan amount. Your actual loan amount will depend on your Bureau and personal profile
+            This is an indicative loan amount. Your actual loan amount will depend on your bureau and personal profile
           </div>
         </div>
       </Container>
