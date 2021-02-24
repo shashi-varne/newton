@@ -67,7 +67,7 @@ class Components_base extends Component {
             openPopUpInput : true,
             checked: true,
             mobile_no:'',
-            fisdom_checked: true,
+            fisdom_checked: false,
         };
     }
 
@@ -87,64 +87,85 @@ class Components_base extends Component {
         },
         ]
 
+        let height = [{
+          'name': '153',
+          'value': '153'
+        },{
+          'name': '155',
+          'value': '155'
+        }]
+
         this.setState({
             vendor_details: vendor_details,
             suggestions_list: city,
+            height: height,
         })
 
     }
 
   updateParent(a, b) {
-    console.log(a, b)
+    this.setState({
+      fisdom_checked: b,
+      fisdom_total: b || 5
+    })
+  }
+  
+  leftClick(){
+    toast('you click left footer')
+  }
+
+  rightClick(){
+    toast('you click right footer')
   }
 
   handler(index){
     console.log(index)
   }
 
-    handleChange = (name) => (event) => {
-        if (!name) {
-            return
-        }
+  handleChange = (name) => (event) => {
+    if (!name) {
+      return
+    }
+    if (name === 'height') {
+      let form_data = this.state.form_data
+      form_data.height = event ? this.state.height[event]['value'] : '153'
+      this.setState({
+        form_data: form_data
+      })
+      return
+    }
 
-        if (name === 'check') {
-            this.setState({
-                check: !this.state.check
-            })
-            return
-        }
+    if (name === 'check') {
+      this.setState({
+        check: !this.state.check
+      })
+      return
+    }
 
-        // if(name === 'PlusMinusInput'){
-        //   this.setState({
-        //     fisdom_checked: !this.state.fisdom_checked
-        //   })
-        //   return
-        // }
+    let form_data = this.state.form_data;
+    let value
+    let mobile = this.state.mobile_no
 
-        let form_data = this.state.form_data;
-        let value
-        let mobile = this.state.mobile_no
+    if (name !== 'Vendor') {
+      value = event.target.value || ''
+    }
 
-        if (name !== 'Vendor') {
-            value = event.target.value || ''
-        }
-
-        if (name === 'Vendor') {
-            // eslint-disable-next-line
-            value = event
-            form_data[name] = value ;
-            form_data[name + '_error'] = '';
-        };
-
-        if(name === 'mobile_no'){
-          mobile = event.target.value
-        }
-        this.setState({
-            mobile_no: mobile,
-            mobile_no_error: "",
-            form_data: form_data,
-        });
+    if (name === 'Vendor') {
+      // eslint-disable-next-line
+      value = event
+      form_data[name] = value;
+      form_data[name + '_error'] = '';
     };
+
+    if (name === 'mobile_no') {
+      mobile = event.target.value
+    }
+    this.setState({
+      mobile_no: mobile,
+      mobile_no_error: "",
+      form_data: form_data,
+    });
+  };
 
     render() {
         let { mobile_no } = this.state;
@@ -159,7 +180,7 @@ class Components_base extends Component {
           <div className="compoenets-base">
 
           <h3>Banner</h3>
-       <div style={{position: 'fixed'}} > <Banner text={'UI Componets List'}/> </div>   
+       {/* <div style={{position: 'fixed'}} > <Banner text={'UI Componets List'}/> </div>      */}
 
            <h3>DropdownWithoutIcon</h3>
             <DropdownWithoutIcon
@@ -245,7 +266,7 @@ class Components_base extends Component {
                 <h3>DropdownInModal</h3>
                 <DropdownInModal
                   parent={this}
-                  options={this.state.vendor_details}
+                  options={this.state.height}
                   header_title="Select Height (cm)"
                   cta_title="SAVE"
                   selectedIndex={this.state.selectedIndex}
@@ -257,7 +278,7 @@ class Components_base extends Component {
                   class="Education"
                   id="height"
                   name="height"
-                  onChange={this.handleChange()} />
+                  onChange={this.handleChange('height')} />
 
 
                   <h3>DropdownInPage</h3>
@@ -396,9 +417,8 @@ class Components_base extends Component {
               <h3>OtpDefault</h3>
               <OtpDefault  parent={this}/>
 
-              <h3>PlusMinusInput</h3>
-              <div onClick={this.handleChange('PlusMinusInput')}><PlusMinusInput name={'fisdom'} label={'insurance'}  parent={this} />  </div>
-            
+              <h3>PlusMinusInput</h3>                
+                <PlusMinusInput name={'fisdom'} label={'insurance'}  parent={this} /> 
 
                 <h3>RadioBtn</h3>
                 <RadioBtn   />
