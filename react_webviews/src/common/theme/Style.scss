@@ -1565,9 +1565,23 @@ input#pan {
 }
 
 .advisory-asset-details-container{
-  #asset-question{
+  .InputField#asset-question{
     margin-bottom: 30px;
-    color: #767E86;
+    position: relative;
+    width: 100% i !important;
+    .MuiGrid-spacing-xs-16{
+      width: 100%;
+      .MuiGrid-item{
+        width: 100%;
+        .RadioWithIcon{
+          display: inline-block;
+          width: 140%;
+          line-height: 20px;
+          
+        }
+      }
+    }
+
   }
   .InputField{
     .RadioWithIcon{

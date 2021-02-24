@@ -342,7 +342,7 @@ class AdvisoryBasicDetails extends Component {
             }
             
             storageService().setObject('advisory_data', advisory_data);
-            // this.updateLead(post_body, 'income-details')
+            this.updateLead(post_body, 'income-details')
         }
     }
 
