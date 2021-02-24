@@ -118,12 +118,12 @@ class PerfiosStatus extends Component {
       this.sendEvents("retry");
     else this.sendEvents("next");
 
+    let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
+
     this.setState({
       loaderWithData: !bt_eligible
     })
-
-    let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
-
+    
     if (perfios_state === "success") {
       if (idfc_07_state === "failed") {
         this.navigate("error");

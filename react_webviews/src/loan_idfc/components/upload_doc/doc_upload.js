@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import toast from "../../../common/ui/Toast";
+// import toast from "../../../common/ui/Toast";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import DropdownWithoutIcon from "../../../common/ui/SelectWithoutIcon";
@@ -429,6 +429,20 @@ class DocumentUpload extends Component {
       });
       error = true;
       errorType = "form";
+    }
+
+    if (error) {
+      this.setState({
+        show_loader: false,
+        isApiRunning: false,
+        documents: documents,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType,
+        },
+        showError: true,
+      });
     }
   }
 

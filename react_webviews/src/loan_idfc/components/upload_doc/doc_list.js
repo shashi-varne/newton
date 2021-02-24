@@ -7,7 +7,7 @@ import { getConfig } from "utils/functions";
 import { storageService } from "utils/validators";
 import { changeNumberFormat } from "utils/validators";
 import Api from "utils/api";
-import toast from "../../../common/ui/Toast";
+// import toast from "../../../common/ui/Toast";
 import { getUrlParams } from "utils/validators";
 
 class DocumentList extends Component {
@@ -173,12 +173,12 @@ class DocumentList extends Component {
           handleClick1: this.handleClick,
           button_text1: "Retry",
           title1: this.state.title1,
-          handleClick1: () => {
+          handleClick2: () => {
             this.setState({
               showError: false,
             });
           },
-          button_text1: "Dismiss",
+          button_text2: "Dismiss",
         },
       };
 
