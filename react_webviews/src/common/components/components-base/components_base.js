@@ -49,7 +49,6 @@ import TitleWithIcon from '../../ui/TitleWithIcon'
 import TermsAndConditions from '../../ui/tnc'
 import toast from '../../ui/Toast'
 import Tooltip from '../../ui/TooltipLite'
-// import Select from "material-ui";
 import { yesNoOptions } from '../../../group_insurance/constants';
 // eslint-disable-next-line 
 import { disableBodyTouch } from '../../../utils/validators'
@@ -169,8 +168,21 @@ class ComponentsBase extends Component {
     console.log(index)
   }
 
+  setToolTip(bool){
+    this.setState({
+      toolTip: !bool
+    })
+  }
+
   handleChange = (name) => (event) => {
     if (!name) {
+      return
+    }
+
+    if(name === 'DialogBox'){
+      this.setState({
+        DialogBox: !this.state.DialogBox
+      })
       return
     }
 
@@ -326,12 +338,22 @@ class ComponentsBase extends Component {
                 <CheckBox handleChange={this.handleChange("check")} checked={this.state.check}  />
 
                 <h3>CheckboxList</h3>
-                <p>pending do it tommorow</p>
+                {/* <p>pending do it tommorow</p> */}
 
                 <h3>DialogBox</h3>
-                <DialogBox /> 
-                <p>pending do it tommorow</p>
+                <div  style={{backgroundColor: 'rgb(53, 203, 93)', 
+                border: '6px solid white', color: 'green', textAlign: 'center' }} 
+                onClick={this.handleChange("DialogBox")}>   
+                {this.state.DialogBox ? <DialogBox
+                 open={true}
+                 onClose={false}
+                 disableBackdropClick={true}
+               >
+                <div style={{height:'50px', width:'100%'}}> {'Life is either a daring adventure, or nothing.'}</div>
+               </DialogBox> : 'CLICK ME'}
+              </div>
 
+    
                 <h3>DotDotLoader</h3>
                 <DotDotLoader />
 
@@ -455,6 +477,25 @@ class ComponentsBase extends Component {
               
               <h3>LeftRightFooter</h3>
               <LeftRightFooter parent={this} />
+
+              <h3>Lite-Tooltip</h3>
+                  <Tooltip
+                    content={'Suvarna Vidhana Soudha was build by Chief minister Kengal Hanumanthaiya in 1952'}
+                    background='#f0f7ff'
+                    direction='down'
+                    backgroundArrow='#f0f7ff'
+                    className='fd-tooltip-container'
+                    isOpen={true}
+                    onClickAway={() => this.setToolTip(false)}
+                  >
+                    <img
+                      src={icn}
+                      width='25px'
+                      className='info-tip'
+                      alt='info'
+                      onClick={() => this.setToolTip(!this.state.toolTip)}
+                    />
+                  </Tooltip>
 
               <h3>MmYyInModal</h3>
 
@@ -639,18 +680,6 @@ class ComponentsBase extends Component {
  
                   <h3>toast('Something went wrong')</h3>
                   <div onClick={() => { toast('Something went wrong') }}>Click Me</div>
-
-                  <h3>Tooltip</h3>
-                  <Tooltip
-                   content={"Fisdom is Wisdom towards Fredom"}
-                   isOpen={undefined}
-                   useHover={true}
-                   direction={'down'}
-                   forceDirection={false}
-                  //  onClickAway={(event) => onClickAway(event, toggleModal)}
-                  //  className={tooltipClass}
-                   >
-                 </Tooltip>
           </div>
           </div>
           </div>
