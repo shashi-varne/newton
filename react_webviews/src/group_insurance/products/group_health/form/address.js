@@ -39,7 +39,6 @@ class GroupHealthPlanAddressDetails extends Component {
         }
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
-
         this.addressRef = React.createRef();
     }
 

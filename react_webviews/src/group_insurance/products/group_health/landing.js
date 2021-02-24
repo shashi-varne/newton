@@ -157,7 +157,7 @@ class GroupHealthLanding extends Component {
         },
         () => {
           if (openModuleData.sub_module === "click-resume") {
-            if (!this.state.quoteResume || !this.state.quoteResume.id) {
+            if ((!this.state.quoteResume || !this.state.quoteResume.id)&&(!error) ) {
               this.setState({
                 skelton: false,
               });
@@ -170,7 +170,7 @@ class GroupHealthLanding extends Component {
     } catch (err) {
       console.log(err);
       this.setState({
-        skelton: false,
+        // skelton: false,
       });
       error = true;
       errorType = "crash"

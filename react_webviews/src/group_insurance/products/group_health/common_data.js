@@ -326,7 +326,9 @@ export async function updateLead( body, quote_id) {
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-
+            this.setState({
+                show_loader: false
+            })
             if (body.pedcase) { this.initialize(); this.setState({ show_loader: "button" });return}
 
             if(this.props.edit && !this.state.force_forward) {

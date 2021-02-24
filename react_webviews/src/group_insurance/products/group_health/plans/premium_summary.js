@@ -31,36 +31,7 @@ class GroupHealthPlanPremiumSummary extends Component {
     storageService().remove("health_insurance_application_id");
     this.initialize();
   }
-  setErrorData = (type) => {
 
-    this.setState({
-      showError: false
-    });
-    if(type) {
-      let mapper = {
-        'onload':  {
-          handleClick1: this.onload,
-          button_text1: 'Retry',
-          title1: ''
-        },
-        'submit': {
-          handleClick1: this.handleClick,
-          button_text1: 'Retry',
-          handleClick2: () => {
-            this.setState({
-              showError: false
-            })
-          },
-          button_text2: 'Dismiss'
-        }
-      };
-  
-      this.setState({
-        errorData: {...mapper[type], setErrorData : this.setErrorData}
-      })
-    }
-
-  }
   onload = async () => {
     this.setErrorData("onload");
     let error = "";

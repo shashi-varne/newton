@@ -18,7 +18,7 @@ class PaymentFailedClass extends Component {
 
   handleClick = () => {
     this.setState({
-      show_loader: true
+      show_loader: 'button'
     })
     let pgLink = window.sessionStorage.getItem('group_insurance_payment_url');
     if (pgLink) {
@@ -65,6 +65,8 @@ class PaymentFailedClass extends Component {
         buttonTitle='Retry Payment'
         onlyButton={true}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClick()}
         title="Payment Failed"
         classOverRideContainer="payment-failed"
