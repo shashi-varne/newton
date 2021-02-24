@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Input from '../../ui/Input'
 import DropdownWithoutIcon from '../../ui/SelectWithoutIcon'
 import Autosuggests from '../../ui/Autosuggest'
+// eslint-disable-next-line 
 import Banner from '../../ui/Banner'
 import BottomInfo from '../../ui/BottomInfo'
 import BottomSheet from '../../ui/BottomSheet'
@@ -11,6 +12,7 @@ import ReactResponsiveCarousel from '../../ui/carousel'
 import CheckBox from '../../ui/Checkbox'
 import DialogBox from '../../ui/Dialog'
 import DotDotLoader from '../../ui/DotDotLoader';
+// eslint-disable-next-line 
 import DotDotLoaderNew from '../../ui/DotDotLoaderNew'
 import DropdownInModal from '../../ui/DropdownInModal'
 import DropdownInPage from '../../ui/DropdownInPage'
@@ -18,6 +20,7 @@ import Faqs from '../../ui/Faqs'
 import GenericTooltip from '../../ui/GenericTooltip'
 import HowToSteps from '../../ui/HowToSteps'
 import Icon from '../../ui/Icon'
+// eslint-disable-next-line 
 import Imgc from '../../ui/Imgc'
 import InputPopup from '../../ui/InputPopup'
 import InputWithIcon from '../../ui/InputWithIcon'
@@ -28,11 +31,14 @@ import MobileInputWithIcon from '../../ui/MobileInputWithIcon'
 import MobileInputWithoutIcon from '../../ui/MobileInputWithoutIcon'
 import OtpDefault from '../../ui/otp'
 import PlusMinusInput from '../../ui/PlusMinusInput'
+// eslint-disable-next-line 
 import RadioBtn from '../../ui/RadioBtn'
 import RadioWithoutIcon from '../../ui/RadioWithoutIcon'
 import RadioWithoutIcon2 from '../../ui/RadioButton2'
 import RadioOptions from '../../ui/RadioOptions'
+// eslint-disable-next-line 
 import RadioWithIcon from '../../ui/RadioWithIcon'
+// eslint-disable-next-line 
 import RadioWithoutIcon3 from '../../ui/RadioWithoutIcon2'
 import DropdownWithoutIconSelect from '../../ui/SelectWithoutIcon'
 import SliderWithValues from '../../ui/SilderWithValues'
@@ -45,18 +51,15 @@ import toast from '../../ui/Toast'
 import Tooltip from '../../ui/TooltipLite'
 // import Select from "material-ui";
 import { yesNoOptions } from '../../../group_insurance/constants';
+// eslint-disable-next-line 
 import { disableBodyTouch } from '../../../utils/validators'
 import { FormControl } from "material-ui/Form"
 import MenuItem from "@material-ui/core/MenuItem"
 import icn from '../../../assets/info_icon.svg'
 
-import {
-  Select,
-  TextField
-} from "material-ui";
-import { blue } from 'material-ui/colors'
+import { Select } from "material-ui";
 
-class Components_base extends Component {
+class ComponentsBase extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -64,18 +67,52 @@ class Components_base extends Component {
             suggestions_list: [],
             city: '',
             check: true,
-            openPopUpInput : true,
+            openPopUpInput : false,
             checked: true,
             mobile_no:'',
             fisdom_checked: false,
+            InputPopup: false,
         };
     }
 
+    disableBodyTouch() {
+        document.body.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
+        document.body.style.pointerEvents = 'none';
+      }
 
     componentWillMount() {
         let city = [{ 'key': 'bangalore', 'value': 'bangalore' },
         { 'key': 'hydrabad', 'value': 'hydrabad' },
         { 'key': 'goa', 'value': 'goa' }, { "key": "ALISINGA", "value": "ALISINGA" }]
+
+        let stepsContentMapperBlock2 = {
+          title: `I want to`,
+          img_alt:"Gold",
+          options: [
+            {
+              icon: "ic_buy_gold",
+              title: "Buy gold",
+              next_state: '/gold/buy'
+            },
+            {
+              icon: "ic_sell_gold",
+              title: "Sell gold",
+              next_state: '/gold/sell'
+            },
+            {
+              icon: "ic_delivery",
+              title: "Get delivery",
+              next_state: '/gold/delivery'
+            },
+          ],
+        };
+        var insurance_details = [
+          {'name': 'Life Insurance', 'value': 'Life Insurance'},
+          {'name': 'Health Insurance', 'value': 'Health Insurance'},
+          {'name': 'Covid Insurance', 'value': 'Covid Insurance'},
+          {'name': 'Anything else', 'value': 'Anything else'}
+      ]
 
         let vendor_details = [{
             'name': 'Donne Darko',
@@ -84,8 +121,9 @@ class Components_base extends Component {
         {
             'name': 'Bharti Axa',
             'value': 'bharti axa general'
-        },
-        ]
+        }]
+
+      let residentialOptions = [ 'Owned','Rented','PG','Hostel','Batchlor Accomodation' ];
 
         let height = [{
           'name': '153',
@@ -99,26 +137,35 @@ class Components_base extends Component {
             vendor_details: vendor_details,
             suggestions_list: city,
             height: height,
+            residentialOptions: residentialOptions,
+            insurance_details: insurance_details,
+            stepsContentMapperBlock2 : stepsContentMapperBlock2,
         })
 
+    }
+
+    handleChildClick = (e) => {
+      e.stopPropagation();
     }
 
   updateParent(a, b) {
     this.setState({
       fisdom_checked: b,
-      fisdom_total: b || 5
+      fisdom_total: b || 5,
+      openPopUpInput: b,
+      openPopUpInputDate: b,
     })
   }
-  
-  leftClick(){
+
+  leftClick() {
     toast('you click left footer')
   }
 
-  rightClick(){
+  rightClick() {
     toast('you click right footer')
   }
 
-  handler(index){
+  handler(index) {
     console.log(index)
   }
 
@@ -126,6 +173,35 @@ class Components_base extends Component {
     if (!name) {
       return
     }
+
+    if(name === 'InputPopup'){
+      this.setState({
+        openPopUpInput: !this.state.openPopUpInput
+      })
+      return
+    }
+
+    if (name === 'setValue') {
+      this.setState({
+        selectedIndex: event
+      })
+      return
+    }
+
+    if (name === 'suggestions_list') {
+      this.setState({
+        answer: event.target.value,
+      })
+      return
+    }
+
+    if (name === 'radioOption') {
+      this.setState({
+        radioOption: event.target.value,
+      })
+      return
+    }
+
     if (name === 'height') {
       let form_data = this.state.form_data
       form_data.height = event ? this.state.height[event]['value'] : '153'
@@ -259,9 +335,9 @@ class Components_base extends Component {
                 <h3>DotDotLoader</h3>
                 <DotDotLoader />
 
-                <h3>DotDotLoaderNew</h3>
+                <h3>DotDotLoaderNew (disableBodyTouch)</h3>
                 {/* <div><DotDotLoaderNew /></div> */}
-                {disableBodyTouch(true)}
+                {this.disableBodyTouch()}
            
                 <h3>DropdownInModal</h3>
                 <DropdownInModal
@@ -282,14 +358,13 @@ class Components_base extends Component {
 
 
                   <h3>DropdownInPage</h3>
-                  <p>pending....</p>
-                   {/* <DropdownInPage
-                     options={this.state.smokeList}
-                     value={this.state.selectedIndex}
-                     onChange={this.setValue} /> */}
-
-                   <h3>Faqs</h3>
-                   <Faqs options={[{'title': 'fisdom', 'subtitle': 'Insurance', 'points': ['gold','insurance','equity','index funds','mutual funds']}]} />
+                  <DropdownInPage
+                  options={['Yes' , 'No']}
+                  value={this.state.selectedIndex || 0}
+                  onChange={this.handleChange('setValue')} />
+  
+                  <h3>Faqs</h3>
+                  <Faqs options={[{'title': 'fisdom', 'subtitle': 'Insurance', 'points': ['gold','insurance','equity','index funds','mutual funds']}]} />
 
                   <h3>GenericTooltip</h3>
                   <GenericTooltip productName={'fisdom'}  content='fisdom for financial freedom' />
@@ -334,7 +409,6 @@ class Components_base extends Component {
                 error={''}
                 type='data'
                 helperText={''}
-                type="text"
                 width="40"
                 className='compoenets-base'
                 label="Label"
@@ -350,8 +424,9 @@ class Components_base extends Component {
            </FormControl>
 
            <h3>InputPopup</h3>
-           {/* <InputPopup  parent={this} /> */}
-           <p>this is a Input Popup Box</p>
+           <div  style={{backgroundColor: 'rgb(53, 203, 93)', border: '6px solid white', color: 'green', textAlign: 'center' }} onClick={this.handleChange("InputPopup")}>{this.state.openPopUpInput ? 
+           <div onClick={this.handleChildClick}><InputPopup parent={this} label='this is a inpage dropdown' cta_title='All Ok' header_title='Fisdom Dropdown' /> 
+           </div>: 'Click Me'}</div>
 
 
            <h3>InputWithIcon</h3>
@@ -373,20 +448,35 @@ class Components_base extends Component {
               </FormControl>
 
               <h3>LandingSteps</h3>
-              {/* <LandingSteps baseData={{ 'title': 'fisdom', 'subtitle': 'Insurance', 'options': [{"title": 'insurance', 'subtitle': 'gold'}]}} /> */}
-  
+              <LandingSteps
+               style={{ margin: "20px 0px 0px 0px", cursor:'pointer' }}
+               baseData={this.state.stepsContentMapperBlock2}
+               classNameIcon="steps-icon"/>
+              
               <h3>LeftRightFooter</h3>
               <LeftRightFooter parent={this} />
 
               <h3>MmYyInModal</h3>
-              {/* <MmYyInModal /> */}
-              <p>pending.....</p>
+
+                 <div style={{border: '2px solid red', height:'100px'}}> 
+                 <MmYyInModal  
+                  parent={this}
+                  header_title={'MmYyInModal'}
+                  header_sub_title={'fisdom'}
+                  cta_title={'All Ok'}
+                  name={'fisdom'}
+                  label={'Have a nice Day'}
+                  id={'id07'}
+                  dob={'05/1950'}
+                  start_date={'05/1990'}
+                  value={'' }/>  </div>
+
 
               <h3>MobileInputWithIcon</h3>
               <MobileInputWithIcon  icon={icn} width='2' error={''}
                 type='data'
                 helperText={''}
-                type="text"
+                // eslint-disable-next-line
                 width="40"
                 className='compoenets-base'
                 label="Enter Mobile Number"
@@ -402,7 +492,6 @@ class Components_base extends Component {
               <MobileInputWithoutIcon error={''}
                 type='data'
                 helperText={''}
-                type="text"
                 width="40"
                 className='compoenets-base'
                 label="Enter Mobile Number"
@@ -421,7 +510,7 @@ class Components_base extends Component {
                 <PlusMinusInput name={'fisdom'} label={'insurance'}  parent={this} /> 
 
                 <h3>RadioBtn</h3>
-                <RadioBtn   />
+                {/* <RadioBtn   /> */}
 
                 <h3>RadioWithoutIcon</h3>
                 <FormControl fullWidth>
@@ -440,44 +529,45 @@ class Components_base extends Component {
                             </div> </FormControl>
 
                  <h3>RadioWithoutIcon2</h3>
-                 <FormControl fullWidth>
-                 <div className="InputField" style={{  margin: '0 auto', display: 'inline-table' , marginRight: '100px', marginLeft: '100px' }}>
+                 <div className="RadioBlock RadioWithoutIcon" style={{ display: 'inline-table' , marginBottom: 30, color: '#a2a2a2', fontSize: '14px', fontWeight: 'normal'}}>
                         <RadioWithoutIcon2
                             label={'Radio Button'}
                             options={yesNoOptions}
                             type="professional2"
                             id="criminal"
-                            label="Criminal proceedings"
+                            // eslint-disable-next-line
+                            label="RadioWithoutIcon2"
                             error={(this.state.form_data.is_ped_error) ? true : false}
                             helperText={this.state.form_data.is_ped_error}
                             value={this.state.form_data.is_ped || ''}
                             onChange={this.handleChange()} />
-                            </div> </FormControl>
+                            </div> 
            
                   <h3>RadioOptions</h3>
                   <FormControl fullWidth>
                   <div className="InputField">
                     <RadioOptions
-                      error={true}
-                      helperText={"helperText"}
-                      width="40"
-                      label={'label qyestions'}
-                      class="MaritalStatus"
-                      options={yesNoOptions}
-                      id="marital-status"
-                      value={'Bengaluru'}
-                      onChange={this.handleChange()} />
+                       error={(this.state.question1_error) ? true : false}
+                       helperText={'RadioWithoutIcon2'}
+                       width="40"
+                       label="RadioWithoutIcon2"
+                       class="MaritalStatus"
+                       options={yesNoOptions}
+                       id="marital-status"
+                       value={this.state.radioOption || ''}
+                       onChange={this.handleChange('radioOption')} />
                   </div>
                  </FormControl>
 
 
               <h3>Select DropDown</h3>
-              <FormControl className="wr-code-input">
+              <FormControl className="wr-code-input" style={{ borderBottom : '2px solid #3792FC' , backgroundColor: 'rgba(238, 238, 238, 0.3)' }}>
               <Select
-                value={mobile_no}
-                renderValue={(mobile_no) => `+${mobile_no.split("/")[0]}`}
-                onChange={this.handleChange()}
+                value={this.state.answer || ''}
+                // renderValue={(mobile_no) => `+${mobile_no.split("/")[0]}`}
+                onChange={this.handleChange('suggestions_list')}
                 disableUnderline={true}
+                label={'lable'}
                 inputProps={{
                   name: "phone",
                 }}
@@ -485,8 +575,8 @@ class Components_base extends Component {
                 classes={{ root: "wr-select-input" }}
               >
                 {this.state.suggestions_list.map((code, index) => (
-                  <MenuItem key={index} value={code.dialCode + "/" + code.format}>
-                    {`${code.name} +${code.dialCode}`}
+                  <MenuItem key={index} value={code.key + "/" + code.value}>
+                    {`${code.value}`}
                   </MenuItem>
                 ))}
               </Select>
@@ -495,18 +585,24 @@ class Components_base extends Component {
 
 
             <h3>Select DropdownWithoutIcon</h3>
+            <FormControl  fullWidth>
             <DropdownWithoutIconSelect 
-              value={mobile_no}
-              renderValue={(mobile_no) => `+${mobile_no.split("/")[0]}`}
-              onChange={this.handleChange()}
-              disableUnderline={true}
-              options={this.state.suggestions_list}
-              inputProps={{
-                name: "phone",
-              }}
-              isAOB={true}
-              disabled={false}
-              classes={{ root: "wr-select-input" }}/>
+                 parent={this}
+                 header_title="What you're interested in"
+                 selectedIndex = {this.state.form_data.index || 0}
+                 width="40"
+                 dataType="AOB"
+                 options={this.state.insurance_details}
+                 id="insurance"
+                 label="What you're interested in"
+                 error={this.state.form_data.insuranceType_error ? true : false}
+                 helperText={this.state.form_data.insuranceType_error}
+                 name="insuranceType"
+                 value={this.state.form_data.Vendor || ''}
+                 onChange={this.handleChange("Vendor")}/> 
+                 </FormControl>
+
+
 
               <h3>SliderWithValues</h3>
               <SliderWithValues 
@@ -563,7 +659,7 @@ class Components_base extends Component {
 }
 
 const abcd = (props) => (
-    <Components_base
+    <ComponentsBase
         {...props} />
 );
 
