@@ -179,14 +179,18 @@ class AdvisoryIncomeDetails extends Component {
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         if(form_data){
-            if(!form_data.expense){
-                form_data.expense_error = "We need some details to move forward!";
-                canSubmitForm = false
-            }
-            if(!form_data.income || form_data.income_value < 100000){
+            if(!form_data.income){
+              form_data.income_error = "We need some details to move forward!";
+              canSubmitForm = false;
+            }else if(form_data.income_value < 100000){
                 form_data.income_error = "Annual income needs to be more than Rs 1 lac for this analysis!";
                 canSubmitForm = false;
             }
+            if(!form_data.expense){
+              form_data.expense_error = "We need some details to move forward!";
+              canSubmitForm = false
+            }
+          
             if(!form_data.income_growth){
                 form_data.income_growth_error = "We need some details to move forward!";
                 canSubmitForm = false;

@@ -249,9 +249,12 @@ class Landing extends Component {
     }
   }
 
-  goToAdvisory = () =>{
+  goToAdvisory = (e) =>{
+    // console.log('go go')
+    e.preventDefault();
     this.sendEvents('next', "", "", "", true);
     this.navigate(`/group-insurance/advisory/${this.state.next_advisory_page}`)
+    return;
   }
   callBackScreen = () =>{
     this.sendEvents('next', "", "", true);
@@ -276,10 +279,10 @@ class Landing extends Component {
            </div>
             <h1 style={{ fontWeight: '700', color: '#160d2e', fontSize: '17px' , marginTop:'10px', marginBottom:'4px' , lineHeight : '20.15px'}}>What are you looking for?</h1>
             <div> {this.state.insuranceProducts.map(this.renderPorducts)}</div>
-            <div className="advisory-entry-container">
+            <div className="advisory-entry-container" onClick={(e)=>this.goToAdvisory(e)}>  
               <img className="advisory-entry" src={require(`assets/${this.state.type}/entry_insurance_advisory.svg`)} alt=""/>
               <p className="adivsory-card-heading">Do you have adequate insurance coverage?</p>
-              <button className="advisory-entry-button" style={{ backgroundColor: getConfig().primary }} onClick={()=>this.goToAdvisory()}>{this.state.advisory_button_text}</button>
+              <button className="advisory-entry-button" style={{ backgroundColor: getConfig().primary }}>{this.state.advisory_button_text}</button>
             </div>
             <div style={{ margin: "18px 0 26px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px', color: '#160d2e' }}> Get Insured with ease </div>
           <div className="his">

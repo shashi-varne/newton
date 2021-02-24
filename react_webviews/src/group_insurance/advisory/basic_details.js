@@ -9,7 +9,6 @@ import PlusMinusInput from '../../common/ui/PlusMinusInput';
 import { genderOptions, yesNoOptions } from '../../group_insurance/constants' 
 import {advisoryConstants} from './constants';
 import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
-import Checkbox from "material-ui/Checkbox";
 import { updateLead, getLead } from './common_data';
 import {storageService, isEmpty} from "utils/validators";
 
@@ -24,8 +23,10 @@ class AdvisoryBasicDetails extends Component {
             metroCityOptions: advisoryConstants.metroCityOptions,
             dependents_data: advisoryConstants.dependents_data,
             form_data: {}, 
-            spouse_checked: false,
-            none_checked: false,
+            Spouse_checked: false,
+            Spouse_onlycheckbox: true,
+            None_checked: false,
+            None_onlycheckbox: true,
             showDependentsError: false
         }
         this.updateLead = updateLead.bind(this);
@@ -39,7 +40,7 @@ class AdvisoryBasicDetails extends Component {
             Kids_total: 0,
             Parents_max: dependents_data.parents_max,
             Parents_total: 0,
-            none_checked: false, 
+            // None_checked: false, 
         })
         var advisory_data = storageService().getObject('advisory_data') || {};
         var isResumePresent  = storageService().getObject('advisory_resume_present');
@@ -63,19 +64,19 @@ class AdvisoryBasicDetails extends Component {
             form_data.illness = lead.ci_present === true ? yesNoOptions[0].value : lead.ci_present === false ?  yesNoOptions[1].value : '';
 
             if(!isEmpty(lead.dependent_json)){
-                let spouse_checked = lead.dependent_json.spouse ? true : false;
+                let Spouse_checked = lead.dependent_json.spouse ? true : false;
                 let Kids_checked = lead.dependent_json.kids ? true : false;
                 let Kids_total = lead.dependent_json.kids;
                 let Parents_checked = lead.dependent_json.parents ? true : false;
                 let Parents_total = lead.dependent_json.parents;
-                let none_checked = lead.dependent_json.parents + lead.dependent_json.kids + lead.dependent_json.spouse === 0 ? true : false;
+                let None_checked = lead.dependent_json.parents + lead.dependent_json.kids + lead.dependent_json.spouse === 0 ? true : false;
                 this.setState({
-                    spouse_checked: spouse_checked,
+                    Spouse_checked: Spouse_checked,
                     Kids_checked: Kids_checked,
                     Parents_checked: Parents_checked,
                     Kids_total: Kids_total,
                     Parents_total: Parents_total,
-                    none_checked: none_checked
+                    None_checked: None_checked
                 })
             }
             this.setState({
@@ -185,43 +186,66 @@ class AdvisoryBasicDetails extends Component {
     };
 
     updateParent = (key, value) => {
+        console.log(key[0] ,value)
+        let None_checked = this.state.None_checked
+        let Kids_checked = this.state.Kids_checked
+        let Spouse_checked = this.state.Spouse_checked
+        let Parents_checked = this.state.Parents_checked
+        
+        if(key[0].includes('_checked')){
+            if((key[0] === 'Spouse_checked' || key[0] === 'Kids_checked' || key[0] === 'Parents_checked')  && value){
+                None_checked = false
+            }else if(key[0] === 'None_checked' && value){
+                None_checked = true
+                Spouse_checked = false
+                Kids_checked = false
+                Parents_checked = false
+            }
+            this.setState({
+                None_checked: None_checked,
+                Spouse_checked: Spouse_checked,
+                Kids_checked: Kids_checked,
+                Parents_checked: Parents_checked
+            })
+        }
+        
         this.setState({
             [key]: value,
-            none_checked: false,
-            showDependentsError: false
+            showDependentsError: false,
         }, () => {
             this.setMinMax();
+            console.log(this.state)
         });
     };
 
     handleRegularCheckbox = (name) =>{
-        var none_checked = this.state.none_checked;
-        var spouse_checked = this.state.spouse_checked;
+        var None_checked = this.state.None_checked;
+        var Spouse_checked = this.state.Spouse_checked;
+        console.log('name', name)
 
         if(name === 'spouse'){
             this.setState({
-                spouse_checked: !spouse_checked,
-                none_checked: false,
+                Spouse_checked: !Spouse_checked,
+                None_checked: !None_checked,
                 showDependentsError: false
             })
         }else if(name === 'none'){
-            none_checked = !none_checked;
+            None_checked = !None_checked;
             
-            if(none_checked){
+            if(None_checked){
                 this.setState({
                     Kids_checked: false, 
                     Kids_total: 0,
                     Parents_checked: false,
                     Parents_total: 0,
-                    spouse_checked: false,
+                    Spouse_checked: false,
                     showDependentsError: false
                 })
             }
             this.setState({
-                none_checked: none_checked
+                None_checked: None_checked
             })
         }
-        
     }
 
     sendEvents(user_action, insurance_type, banner_clicked) {
@@ -248,49 +272,67 @@ class AdvisoryBasicDetails extends Component {
         var form_data = this.state.form_data;
         var canSubmitForm = true;
         
-        if (form_data && (form_data.name || '').split(" ").filter(e => e).length < 2) {
-            form_data.name_error = 'Please enter full name';
-            canSubmitForm = false;
+        if(form_data){
+            if(!form_data.name){
+                form_data.name_error = 'We need some details to move forward!';
+                canSubmitForm = false;
+            }else if ((form_data.name || '').split(" ").filter(e => e).length < 2) {
+                form_data.name_error = 'Please enter full name';
+                canSubmitForm = false;
+            }
+
+            if(!form_data.gender){
+                form_data.gender_error = 'We need some details to move forward!'
+                canSubmitForm = false;
+            }
+            if(!form_data.age){
+                form_data.age_error = 'We need some details to move forward!'
+                canSubmitForm = false;
+            }
+
+            if(!form_data.illness){
+                form_data.illness_error = 'We need some details to move forward!'
+                canSubmitForm = false;
+            }
+            if(!form_data.married){
+                form_data.married_error = 'We need some details to move forward!'
+                canSubmitForm = false;
+            }
+            
+            if(!form_data.city){
+                form_data.city_error = 'We need some details to move forward!'
+                canSubmitForm = false;
+            }
+            if(!this.state.None_checked && !this.state.Spouse_checked && !this.state.Kids_checked && !this.state.Parents_total){
+                this.setState({
+                    showDependentsError: true,
+                })    
+                canSubmitForm = false;
+            }
         }
-        if(form_data && !form_data.gender){
-            form_data.gender_error = 'We need some details to move forward!'
-            canSubmitForm = false;
-        }
-        if(form_data && !form_data.illness){
-            form_data.illness_error = 'We need some details to move forward!'
-            canSubmitForm = false;
-        }
-        if(form_data && !form_data.married){
-            form_data.married_error = 'We need some details to move forward!'
-            canSubmitForm = false;
-        }
-        if(form_data && !form_data.age){
-            form_data.age_error = 'We need some details to move forward!'
-            canSubmitForm = false;
-        }
-        if(form_data && !form_data.city){
-            form_data.city_error = 'We need some details to move forward!'
-            canSubmitForm = false;
-        }
-        if(!this.state.none_checked && !this.state.spouse_checked && !this.state.Kids_checked && !this.state.Parents_total){
-            this.setState({
-                showDependentsError: true,
-            })    
-            canSubmitForm = false;
-        }
+        
         this.setState({
             form_data: form_data
         })
 
         if(canSubmitForm){
+            var None_checked = this.state.None_checked;
+            var Parents_total = this.state.Parents_total;
+            var Kids_total = this.state.Kids_total;
+
+            if(None_checked){
+                Parents_total = 0;
+                Kids_total = 0;
+            }
+
             var post_body = {
                 'name': form_data.name,
                 'gender': form_data.gender,
                 'marital_status': form_data.married === 'YES' ? "MARRIED" : "UNMARRIED",
                 'age': form_data.age,
                 'ci_present': form_data.illness === 'YES' ? true : false,
-                'dependent_json': {"parents": this.state.Parents_total || 0, "kids": this.state.Kids_total || 0 , "spouse": this.state.spouse_checked ? 1 : 0},
-                'dependent_present': this.state.Parents_total || this.state.Kids_total ||  this.state.spouse_checked ? true : false,
+                'dependent_json': {"parents": Parents_total || 0, "kids": Kids_total || 0 , "spouse": this.state.Spouse_checked ? 1 : 0},
+                'dependent_present': Parents_total || Kids_total ||  this.state.Spouse_checked ? true : false,
                 'city': form_data.city.toUpperCase(),
             }
             var advisory_data = storageService().getObject('advisory_data') || {};
@@ -298,8 +340,9 @@ class AdvisoryBasicDetails extends Component {
             for(var x in post_body){
                 advisory_data[x] = post_body[x]
             }
+            
             storageService().setObject('advisory_data', advisory_data);
-            this.updateLead(post_body, 'income-details')
+            // this.updateLead(post_body, 'income-details')
         }
     }
 
@@ -403,41 +446,14 @@ class AdvisoryBasicDetails extends Component {
             />
             </div>
             
-            <p style={{color: '#767E86', marginBottom: '15px', fontSize: '12.8px'}}>Do you have any dependents?</p>
+            <p style={{color: '#767E86', marginBottom: '18px', fontSize: '12.8px'}}>Do you have any dependents?</p>
             
             <div className="advisory-basic-dependents" style={{ marginBottom: '13px'}}>
-            <div className="checkbox-container" id="spouse-checkbox">
-            <Checkbox
-                  checked={this.state.spouse_checked}
-                  color="default"
-                  value="checked"
-                  name="spouse"
-                  id="spouse-checkbox"
-                  onChange={()=>this.handleRegularCheckbox('spouse')}
-                  className="basic-checkbox"
-            />
-            <p className="checkbox-option">Spouse</p>
-            </div>
-            
-            <div className="dependents-plus-minus">
-            <PlusMinusInput name="Kids" parent={this} />
-            </div>
-            <div className="dependents-plus-minus">
-            <PlusMinusInput name="Parents" parent={this} />
-            </div>
-            
-            <div className="checkbox-container" id="none-checkbox">
-            <Checkbox
-                  checked={this.state.none_checked}
-                  color="default"
-                  value="checked"
-                  name="none"
-                  onChange={()=>this.handleRegularCheckbox('none')}
-                  className="basic-checkbox"
-            />
-            <p className="checkbox-option">None</p>
-            </div>
-            {this.state.showDependentsError && <p style={{color: '#f44336', fontSize: '0.75rem', textAlign: 'left', margin: '-2px 0 25px 0'}}>We need some details to move forward!</p>}
+                <PlusMinusInput name="Spouse" parent={this} />
+                <PlusMinusInput name="Kids" parent={this} />
+                <PlusMinusInput name="Parents" parent={this} />
+                <PlusMinusInput name="None" parent={this} />
+                {this.state.showDependentsError && <p style={{color: '#f44336', fontSize: '0.75rem', textAlign: 'left', margin: '-2px 0 25px 0'}}>We need some details to move forward!</p>}
             </div>
 
             <div className="InputField">

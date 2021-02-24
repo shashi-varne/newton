@@ -136,9 +136,9 @@ export function setRecommendationData(advisory_data, recommendation_data, user_d
     }
     var rec_order = ['term', 'health', 'ci', 'corona']
     var sorted_recommendations = [];
-    for(var x of rec_order){
+    for(var j of rec_order){
       for(var y of recommendation_array){
-        if(x === y.key){
+        if(j === y.key){
           sorted_recommendations.push(y);
         }
       }

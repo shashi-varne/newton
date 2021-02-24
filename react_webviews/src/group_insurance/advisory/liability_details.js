@@ -129,8 +129,8 @@ class AdvisoryLiabilityDetails extends Component {
         }
 
         form_data[name] = formatAmount(value);
-        // form_data[name + '_value'] = formatAmountToNumber(value);   
         form_data[name + '_error'] = '';
+        form_data[name + '_value'] = formatAmountToNumber(value);  
 
         this.setState({
             form_data: form_data
@@ -204,11 +204,18 @@ class AdvisoryLiabilityDetails extends Component {
                 canSubmitForm = false;
             }
 
-            if(form_data.homeloan === 'YES' && (!form_data.loan_amount || form_data.loan_amount_value === 0)){
+            if(form_data.homeloan === 'YES' && (!form_data.loan_amount)){
                 form_data.loan_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
+            }else if(form_data.homeloan === 'YES' && (form_data.loan_amount_value === 0)){
+                form_data.loan_amount_error = 'Please enter appropriate value';
+                canSubmitForm = false;
             }
-            if(form_data.liability === 'YES' && (!form_data.total_amount || form_data.total_amount_value === 0)){
+
+            if(form_data.liability === 'YES' && (!form_data.total_amount)){
+                form_data.total_amount_error = 'Please enter appropriate value';
+                canSubmitForm = false;
+            }else if(form_data.liability === 'YES' && (form_data.total_amount_value === 0)){
                 form_data.total_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }
