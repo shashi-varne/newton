@@ -21,8 +21,8 @@ class RecommendationResult extends Component {
             openMoreDetailsDialog: false,
             recommendation_data: this.props.recommendation_data,
             recommendation_bottom_sheet_data: advisoryConstants.recommendation_bottom_sheet_data,
-            parent: this.props.parent
-            
+            parent: this.props.parent,
+            adequate_coverage_present: this.props.recommendation_data.coverage_percentage === 100
         }
     }
     
@@ -63,6 +63,7 @@ class RecommendationResult extends Component {
         var recommendation_data = this.state.recommendation_data;
         var recommendation_bottom_sheet_data = this.state.recommendation_bottom_sheet_data;
         var key = recommendation_data['key'];
+        var adequate_coverage_present = this.state.adequate_coverage_present
         return (
           <Dialog
             id="bottom-popup"
@@ -82,16 +83,20 @@ class RecommendationResult extends Component {
                             <p className="coverage-detail-heading">Target Coverage</p>
                             <p className="coverage-detail-value">₹{recommendation_data.target_si}</p>
                         </div>
-                        { recommendation_data.key !== 'corona' && (
+                        { recommendation_data.key !== 'corona' &&  !adequate_coverage_present ? (
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Period</p>
                             <p className="coverage-detail-value">{recommendation_data.period}</p>
                         </div>
-                        )}
-                         <div className="individual-coverage-detail">
+                        ) : null}
+                        {
+                            !adequate_coverage_present ? (
+                        <div className="individual-coverage-detail">
                              <p className="coverage-detail-heading">Premium starts at</p>
                              <p className="coverage-detail-value">₹{formatAmount(recommendation_data.start_premium)}/year</p>
                         </div>   
+                            ) : null
+                        }
                     </div>
                     <div className="why-recommend">
                         <p className="more-details-sub-heading">Why do we recommend this plan?</p>
@@ -113,7 +118,7 @@ class RecommendationResult extends Component {
                     </div>
                     </div>
                     <div style={{margin: '0 5px', marginTop: '20px', width: '100%'}}>
-                        <button  className={`call-back-popup-button ${recommendation_data.coverage_percentage === 100 ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', recommendation_data.coverage_percentage === 100 )}>GET THE PLAN</button> 
+                        <button  className={`call-back-popup-button ${adequate_coverage_present ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'plan details bottom sheet', adequate_coverage_present )}>GET THE PLAN</button> 
                     </div>
                 </div>
          
@@ -130,6 +135,7 @@ class RecommendationResult extends Component {
     render(){
         
         var recommendation_data = this.state.recommendation_data;
+        var adequate_coverage_present = this.state.adequate_coverage_present
         
         return(
             <div className="recommendation-result">
@@ -139,27 +145,29 @@ class RecommendationResult extends Component {
                         <p  className="recommendation-info-heading">Target Coverage</p>
                         <p  className="recommendation-info-value">₹{recommendation_data.target_si}</p>
                     </div>
-                    { recommendation_data.key !== 'corona' && (
+                    { recommendation_data.key !== 'corona' && !adequate_coverage_present ? (
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Period</p>
                         <p  className="recommendation-info-value">{recommendation_data.period}</p>
                     </div>
-                    )}
-                    <div className="recommendation-info">
+                    ) : null}
+                    {!adequate_coverage_present ? (
+                        <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Premium starts at</p>
                         <p  className="recommendation-info-value">₹{formatAmount(recommendation_data.start_premium)}/year </p>
                     </div>
+                    ) : null}
                     {
                         recommendation_data.key === 'health' && this.props.parentsPresent ? (
                             <p className="advisory-sub-text">We recommend a separate plan of <b>₹5 lacs</b> for your parents</p>
                         ) : null
                     }
                     {
-                        recommendation_data.coverage_percentage === 100 ? <p className="advisory-sub-text" style={{textAlign: 'center'}}>You are well covered.</p> : null
+                        adequate_coverage_present ? <p className="advisory-sub-text" style={{textAlign: 'center', color: '#160D2E'}}>You are well covered.</p> : null
                     }
                     <div className="recommendation-cta-container">
                         <div className="more-details" onClick={()=>this.openMoreDetailsDialog(recommendation_data.key)}>MORE DETAILS</div>
-                        <div className={`get-the-plan ${recommendation_data.coverage_percentage === 100 ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', recommendation_data.coverage_percentage === 100)}>GET THE PLAN</div>
+                        <div className={`get-the-plan ${adequate_coverage_present ?`disable-get-the-plan`: `` }`} onClick={()=>this.getPlan(recommendation_data.key, 'recommendations', adequate_coverage_present)}>GET THE PLAN</div>
                     </div>
                 </div>
                 {this.moreDetailsDialog()}

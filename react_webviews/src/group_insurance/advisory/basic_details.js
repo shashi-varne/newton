@@ -34,6 +34,7 @@ class AdvisoryBasicDetails extends Component {
     }
 
     async componentDidMount(){
+        storageService().remove('from_advisory')
         var dependents_data = this.state.dependents_data;
         this.setState({
             Kids_max: dependents_data.kids_max,
