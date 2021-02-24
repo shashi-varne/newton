@@ -16,7 +16,7 @@ function computeAgeOptions(type){
 function computeIncomeGrowthOptions(){
     var incomeGrowthOptions = [];
         for(var i = 0; i < 26; i++){
-            var temp = {'name': `${i} %`,'value': i};
+            var temp = {'name': `${i}%`,'value': i};
             incomeGrowthOptions.push(temp);
         }
         return incomeGrowthOptions;        

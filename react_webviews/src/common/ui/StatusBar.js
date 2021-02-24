@@ -33,7 +33,7 @@ class StatusBar extends Component {
                     
                     <div className="status-bar-numbers">
                         <p className="status-bar-number-left">{numDifferentiation(0, true)}</p>
-                        <p className="status-bar-number-right">₹ {recommendation_data.target_si}</p>
+                        <p className="status-bar-number-right">₹{recommendation_data.target_si}</p>
                     </div>
                 </div>
 
@@ -44,7 +44,7 @@ class StatusBar extends Component {
                     </div>
                     <div className="status-bar-info">
                         <p className="status-bar-info-circle" style={{backgroundColor: '#D5CBED'}}></p>
-                        <p className="status-bar-info-text">Coverage gap -  <span>₹ {recommendation_data.coverage_gap}</span> </p>
+                        <p className="status-bar-info-text">Coverage gap -  <span>₹{recommendation_data.coverage_gap}</span> </p>
                     </div>
                 </div>
             </div>
