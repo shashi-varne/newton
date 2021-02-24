@@ -96,18 +96,21 @@ class GroupHealthPlanSelectSumAssured extends Component {
         showError: "page",
       });
     }
-
-    this.setState(
-      {
-        selectedIndex:
-          this.state.groupHealthPlanData.selectedIndexSumAssured || 0,
-      },
-      () => {
-        this.updateBottomPremium(
-          this.state.premium_data[this.state.selectedIndex].premium
-        );
-      }
-    );
+    if(!error)
+    {
+      this.setState(
+        {
+          selectedIndex:
+            this.state.groupHealthPlanData.selectedIndexSumAssured || 0,
+        },
+        () => {
+          this.updateBottomPremium(
+            this.state.premium_data[this.state.selectedIndex].premium
+          );
+        }
+      );
+    }
+    
   }
 
   navigate = (pathname) => {

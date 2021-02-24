@@ -398,7 +398,7 @@ export function navigate(pathname, data = {}) {
     }
 
 }
-function setErrorData(type) {
+function setErrorData(type,dismiss) {
   this.setState({
     showError: false,
   });
@@ -417,7 +417,7 @@ function setErrorData(type) {
             showError: false,
           });
         },
-        button_text2: "Edit",
+        button_text2: dismiss? "Dismiss" : "Edit",
       },
     };
 

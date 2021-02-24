@@ -609,7 +609,7 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     startPayment = async (data={}) => {
-        this.setErrorData("submit");
+        this.setErrorData("submit",true);
         let error="";
         let errorType="";
         if (this.state.medical_dialog) {

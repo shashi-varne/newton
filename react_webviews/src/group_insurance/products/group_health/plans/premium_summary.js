@@ -211,7 +211,7 @@ class GroupHealthPlanPremiumSummary extends Component {
   }
   handleClick = async () => {
     this.sendEvents("next");
-    this.setErrorData("submit")
+    this.setErrorData("submit",true)
     let error="";
     let errorType="";
       try {
@@ -237,7 +237,10 @@ class GroupHealthPlanPremiumSummary extends Component {
 
         var resultData = res.pfwresponse.result;
         
-        if (res.pfwresponse.status_code === 200) {     
+        if (res.pfwresponse.status_code === 200) { 
+          this.setState({
+            show_loader: false,
+          });    
           let lead = resultData.quotation_details;
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
           let application_id = resultData.application_details.id;
