@@ -34,7 +34,7 @@ class SliderWithValues extends Component {
                 <CustomizedSlider 
                     min={this.props.min}
                     max={this.props.max}
-                    value={this.props.value}
+                    default={this.props.value}
                     onChange={this.onChange}
                 />
                 <div className="content-2">

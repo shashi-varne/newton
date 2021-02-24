@@ -9,10 +9,12 @@ import {
   createMuiTheme,
 } from "@material-ui/core/styles";
 import { ToastContainer } from "react-toastify";
-import Summary from "./components/Summary";
 import { themeConfig } from "utils/constants";
 import "./Style.scss";
 import NotFound from "common/components/NotFound";
+
+import Summary from "./components/Summary";
+import Goals from "./components/Goals";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -31,6 +33,7 @@ const Reports = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route path={url} exact component={Summary} />
+          <Route path={`${url}/goals`} exact component={Goals} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

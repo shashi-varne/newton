@@ -215,3 +215,101 @@
     }
   }
 }
+
+.report-goals {
+  margin-top: -20px;
+  line-height: 1.5;
+  color: #333333;
+
+  .goal {
+    background: #f4f5f6;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    .goal-info {
+      padding: 0 20px 4px 20px;
+
+      h5 {
+        text-align: center;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.1;
+        padding: 15px 0;
+      }
+
+      .summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+
+        .content {
+          border-right: 2px solid #d4d4d4;
+          text-align: center;
+          width: 100%;
+
+          .amount {
+            font-weight: 600;
+            min-height: 40px;
+
+            .earning-percent {
+              font-size: 12px;
+            }
+          }
+
+          .text {
+            img {
+              width: 10px;
+              float: right;
+              margin-top: -35px;
+              margin-left: -9px;
+              margin-right: -10px;
+            }
+          }
+
+          .green {
+            color: #71bf1c;
+          }
+
+          .red {
+            color: #d0021b;
+          }
+        }
+
+        .content:last-child {
+          border-right: 0;
+        }
+      }
+
+      .slider-container {
+        .slider-head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px 0 0 0;
+
+          .left {
+            color: #cd9090;
+          }
+
+          .right {
+            color: rgba(68, 166, 45, 0.7);
+          }
+        }
+      }
+    }
+
+    button {
+      min-height: 45px;
+      width: 100%;
+      background-color: var(--secondary);
+      color: white;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+}
