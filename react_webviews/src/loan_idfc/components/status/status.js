@@ -5,6 +5,7 @@ import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import ContactUs from "../../../common/components/contact_us";
 import toast from "../../../common/ui/Toast";
+import { Imgc } from "../../../common/ui/Imgc";
 
 const commonMapper = {
   idfc_null_failed: {
@@ -252,30 +253,39 @@ class LoanStatus extends Component {
     let first_name = this.state.first_name;
     let is_dedupe = this.state.is_dedupe;
     let idfc_rejection_reason = this.state.idfc_rejection_reason;
-    
+    let mapper = {};
+
     if (rejection_reason) {
+      mapper = commonMapper[rejection_reason] || {};
       this.setState({
-        commonMapper: commonMapper[rejection_reason] || {},
+        commonMapper: mapper,
         application_status: application_status,
         rejection_reason: rejection_reason,
       });
     } else if (is_dedupe) {
+      mapper = commonMapper["is_dedupe"] || {};
       this.setState({
-        commonMapper: commonMapper["is_dedupe"] || {},
+        commonMapper: mapper,
         application_status: application_status,
       });
     } else if (idfc_rejection_reason === "pincode") {
+      mapper = commonMapper["pincode"] || {};
       this.setState({
-        commonMapper: commonMapper["pincode"] || {},
+        commonMapper: mapper,
         application_status: application_status,
         idfc_rejection_reason: idfc_rejection_reason,
       });
     } else {
+      mapper = commonMapper[vendor_application_status] || {};
       this.setState({
-        commonMapper: commonMapper[vendor_application_status] || {},
+        commonMapper: mapper,
         vendor_application_status: vendor_application_status,
         first_name: first_name,
       });
+    }
+
+    if (Object.keys(mapper).length === 0) {
+      this.navigate('loan-know-more');
     }
   };
 
@@ -393,6 +403,7 @@ class LoanStatus extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
+        hidePageTitle={this.state.skelton}
         headerData={{
           icon: commonMapper.icon || "",
           goBack: this.goBack,
@@ -400,7 +411,7 @@ class LoanStatus extends Component {
       >
         <div className="idfc-loan-status">
           {commonMapper["top_icon"] && (
-            <img
+            <Imgc
               src={require(`assets/${this.state.productName}/${commonMapper["top_icon"]}.svg`)}
               className="center"
               alt=""

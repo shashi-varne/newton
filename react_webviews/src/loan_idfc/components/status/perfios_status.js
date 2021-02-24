@@ -4,6 +4,7 @@ import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import ContactUs from "../../../common/components/contact_us";
+import { Imgc } from "../../../common/ui/Imgc";
 
 const commonMapper = {
   failure: {
@@ -74,14 +75,16 @@ class PerfiosStatus extends Component {
     let perfios_display_rejection_reason =
       perfios_info.perfios_display_rejection_reason;
     let bt_eligible = vendor_info.bt_eligible;
+    let mapper = {};
 
     let loaderData = {
       title: `Hang on while IDFC FIRST Bank calculates the eligible loan offer `,
       subtitle: "It usually takes around 2 minutes!",
     };
 
+    mapper = commonMapper[perfios_state] || {}
     this.setState({
-      commonMapper: commonMapper[perfios_state] || {},
+      commonMapper: mapper,
       perfios_display_rejection_reason: perfios_display_rejection_reason,
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
@@ -89,6 +92,10 @@ class PerfiosStatus extends Component {
       name: name,
       loaderData: loaderData,
     });
+
+    if (Object.keys(mapper).length === 0) {
+      this.navigate('loan-know-more');
+    }
   };
 
   goBack = () => {
@@ -225,13 +232,12 @@ class PerfiosStatus extends Component {
       // name,
       perfios_display_rejection_reason,
     } = this.state;
-console.log(this.state.loaderWithData ,this.state.showLoader)
+
     return (
       <Container
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         title={commonMapper.top_title}
-        // hidePageTitle={skelton && true}
         buttonTitle={
           bt_eligible &&
           perfios_state !== "failure" &&
@@ -244,6 +250,7 @@ console.log(this.state.loaderWithData ,this.state.showLoader)
           icon: commonMapper.icon || "",
           goBack: this.goBack,
         }}
+        hidePageTitle={this.state.skelton}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
         showError={this.state.showError}
@@ -251,7 +258,7 @@ console.log(this.state.loaderWithData ,this.state.showLoader)
       >
         <div className="idfc-loan-status">
           {commonMapper["top_icon"] && (
-            <img
+            <Imgc
               src={require(`assets/${this.state.productName}/${commonMapper["top_icon"]}.svg`)}
               alt=""
             />
