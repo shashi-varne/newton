@@ -438,7 +438,7 @@ class AddressDetails extends Component {
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}
         headerData={{
-          progressHeaderData: (!this.state.showError && !this.state.loaderWithData) ? this.state.progressHeaderData : '',
+          progressHeaderData: !this.state.loaderWithData ? this.state.progressHeaderData : '',
         }}
         loaderData={this.state.loaderData}
         showError={this.state.showError}

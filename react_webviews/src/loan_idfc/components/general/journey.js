@@ -255,14 +255,13 @@ class JourneyMap extends Component {
           button_text1: "Retry",
         },
         submit: {
-          handleClick1: this.handleClick,
-          button_text1: "Retry",
-          handleClick2: () => {
+          handleClick1: () => {
             this.setState({
+              skelton: false,
               showError: false,
             });
           },
-          button_text2: "Edit",
+          button_text1: "Dismiss",
         },
       };
 

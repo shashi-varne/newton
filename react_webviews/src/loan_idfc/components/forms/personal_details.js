@@ -279,7 +279,7 @@ class PersonalDetails extends Component {
         buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         headerData={{
-          progressHeaderData: !this.state.showError ? this.state.progressHeaderData : '',
+          progressHeaderData: this.state.progressHeaderData,
         }}
         showError={this.state.showError}
         errorData={this.state.errorData}

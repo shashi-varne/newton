@@ -162,7 +162,7 @@ class SystemError extends Component {
             alt=""
           />
           <div className="subtitle">
-            <b>Oops!</b> something is not right. We are checking this with IDFC
+            <b>Oops!</b> Something is not right. We are checking this with IDFC
             FIRST Bank and will get back to you as soon as possible.
           </div>
           <ContactUs />

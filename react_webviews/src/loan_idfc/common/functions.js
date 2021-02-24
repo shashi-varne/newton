@@ -591,7 +591,7 @@ export async function updateApplication(
     });
     // toast("Something went wrong");
     error = true;
-    errorType = "form";
+    errorType = this.state.screen_name === 'journey_screen' ? "crash" : 'form';
   }
 
   if (error) {
@@ -602,7 +602,7 @@ export async function updateApplication(
         title2: error,
         type: errorType,
       },
-      showError: true,
+      showError: this.state.screen_name === 'journey_screen' ? "page" : true,
     });
   }
 }
@@ -686,8 +686,14 @@ export async function get10Callback(next_state) {
 }
 
 export async function get11Callback() {
+  let loaderData = {
+    title: `Hang on while IDFC FIRST Bank calculates final loan offer`,
+    subtitle: "It usually takes around 2 minutes!",
+  };
   this.setState({
     show_loader: true,
+    loaderData: loaderData,
+    loaderWithData: true
   });
 
   // setTimeout(, 3000)

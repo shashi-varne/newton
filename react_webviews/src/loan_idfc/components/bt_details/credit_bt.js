@@ -198,6 +198,9 @@ class LoanBtDetails extends Component {
     let { form_data, vendor_info } = this.state;
     let form_checked = form_data.filter((item) => item.is_selected === true);
 
+    this.setState({
+      loaderWithData: true
+    })
     let submit_details = true;
     form_data.forEach((data, index) => {
       if (data.is_selected) {
