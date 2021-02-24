@@ -21,9 +21,6 @@ class Container extends Component {
 
   componentDidMount() {
     this.didmount();
-    this.setState({
-      help: true
-    })
   }
 
   componentWillUnmount() {
