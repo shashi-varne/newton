@@ -154,6 +154,7 @@ class LoanRequirementDetails extends Component {
                   numDifferentiationInr((this.state.form_data.amount_required || "").toString().slice(1).replaceAll(',', ''))
                 }
                 width="40"
+                inputMode="numeric"
                 label="Loan amount"
                 class="amount_required"
                 id="amount_required"

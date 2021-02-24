@@ -173,9 +173,10 @@ class Recommended extends Component {
               <Input
                 error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
-                  this.state.form_data.loan_amount_required_error ||
+                  this.state.form_data.loan_amount_required_error || 
                   numDifferentiationInr((this.state.form_data.loan_amount_required || '').slice(1).replaceAll(',', ''))
                 }
+                inputMode="numeric"
                 width="40"
                 label="Loan requirement"
                 class="loan_amount_required"
@@ -234,6 +235,7 @@ class Recommended extends Component {
                       this.state.form_data.monthly_salary_error ||
                       numDifferentiationInr((this.state.form_data.monthly_salary || '').slice(1).replaceAll(',', ''))
                     }
+                    inputMode="numeric"
                     width="40"
                     label="Net monthly salary (in rupees)"
                     class="monthly_salary"
