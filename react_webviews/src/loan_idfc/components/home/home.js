@@ -33,7 +33,7 @@ class Home extends Component {
         {
           icon: "b2",
           title: "Minimal documentation",
-          subtitle: "Hassle free paperwork with easy application process",
+          subtitle: "Easy paperwork with simple application process",
         },
         {
           icon: "b3",
@@ -196,7 +196,7 @@ class Home extends Component {
                       {ongoing_loan_details.length === 0 && <Imgc src={require(`assets/apply_now.svg`)} alt="" />}
                     </div>
                     <div className="subtitle generic-page-subtitle">
-                      Get loans upto ₹40 lakhs
+                      Get loan upto ₹40 lakhs
                     </div>
                   </div>
                 </div>

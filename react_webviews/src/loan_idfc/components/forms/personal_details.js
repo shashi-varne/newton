@@ -156,10 +156,10 @@ class PersonalDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_kyc_personal_details",
       properties: {
         user_action: user_action,
-        screen_name: "kyc_personal_details",
         details_changed: this.state.details_changed,
         ckyc_success: this.state.confirm_details ? "yes" : "no",
       },

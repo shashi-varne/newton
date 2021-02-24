@@ -114,10 +114,10 @@ class ApplicationSummary extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_summary",
       properties: {
         user_action: user_action,
-        screen_name: "summary",
         stage: "basic details uploaded",
       },
     };

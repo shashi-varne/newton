@@ -157,10 +157,11 @@ class AddressDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_kyc_address_details",
       properties: {
         user_action: user_action,
-        screen_name: "kyc_address_details",
+        event_name: "kyc_address_details",
         current_address_edited:
           this.state.form_data.current_address_edited || "no",
         ckyc_success: this.state.confirm_details ? "yes" : "no",
