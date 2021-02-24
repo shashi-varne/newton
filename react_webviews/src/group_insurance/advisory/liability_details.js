@@ -196,11 +196,11 @@ class AdvisoryLiabilityDetails extends Component {
         var canSubmitForm = true;
         if(form_data){
             if(!form_data.homeloan){
-                form_data.homeloan_error = 'Please enter appropriate value';
+                form_data.homeloan_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }
             if(!form_data.liability){
-                form_data.liability_error = 'Please enter appropriate value';
+                form_data.liability_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }
 
@@ -213,10 +213,10 @@ class AdvisoryLiabilityDetails extends Component {
             }
 
             if(form_data.liability === 'YES' && (!form_data.total_amount)){
-                form_data.total_amount_error = 'Please enter appropriate value';
+                form_data.total_amount_error = 'We need some details to move forward!';
                 canSubmitForm = false;
             }else if(form_data.liability === 'YES' && (form_data.total_amount_value === 0)){
-                form_data.total_amount_error = 'We need some details to move forward!';
+                form_data.total_amount_error = 'Please enter appropriate value';
                 canSubmitForm = false;
             }
         }

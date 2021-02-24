@@ -243,18 +243,25 @@ class AdvisoryAssetDetails extends Component {
         var ins_checkbox = this.state.ins_checkbox;
         if(form_data){
             if(!form_data.assets){
-                form_data.assets_error = 'Please enter appropriate value'
+                form_data.assets_error = 'We need some details to move forward!'
                 canSubmitForm = false;
-            } 
-            if(form_data.assets === 'YES' && (!form_data.asset_amount || formatAmountToNumber(form_data.asset_amount) === 0)){
+            }
+
+            if(form_data.assets === 'YES' && (!form_data.asset_amount)){
                 form_data.asset_amount_error = 'We need some details to move forward!'
+                canSubmitForm = false;
+            }else if(form_data.assets === 'YES' && (formatAmountToNumber(form_data.asset_amount) === 0)){
+                form_data.asset_amount_error = 'Please enter appropriate value'
                 canSubmitForm = false;
             } 
             
             var check_box_list = ['term_cover_amount','health_cover_amount','critical_cover_amount','corona_cover_amount']
             for(var amount of check_box_list){
-                if(ins_checkbox[amount] && (!form_data[amount] || formatAmountToNumber(form_data[amount])=== 0 )){
+                if(ins_checkbox[amount] && (!form_data[amount])){
                     form_data[amount +'_error'] = 'We need some details to move forward!';
+                    canSubmitForm = false;
+                }else if(ins_checkbox[amount] && (formatAmountToNumber(form_data[amount])=== 0 )){
+                    form_data[amount +'_error'] = 'Please enter appropriate value';
                     canSubmitForm = false;
                 }
             }
