@@ -65,7 +65,9 @@ class Components_base extends Component {
             city: '',
             check: true,
             openPopUpInput : true,
-            checked: true
+            checked: true,
+            mobile_no:'',
+            fisdom_checked: true,
         };
     }
 
@@ -112,12 +114,19 @@ class Components_base extends Component {
             return
         }
 
+        // if(name === 'PlusMinusInput'){
+        //   this.setState({
+        //     fisdom_checked: !this.state.fisdom_checked
+        //   })
+        //   return
+        // }
+
         let form_data = this.state.form_data;
-        let mobile, value;
+        let value
+        let mobile = this.state.mobile_no
 
         if (name !== 'Vendor') {
             value = event.target.value || ''
-            mobile = value.slice(4);
         }
 
         if (name === 'Vendor') {
@@ -127,6 +136,9 @@ class Components_base extends Component {
             form_data[name + '_error'] = '';
         };
 
+        if(name === 'mobile_no'){
+          mobile = event.target.value
+        }
         this.setState({
             mobile_no: mobile,
             mobile_no_error: "",
@@ -137,7 +149,6 @@ class Components_base extends Component {
     render() {
         let { mobile_no } = this.state;
 
-        mobile_no = '9937476458'
         return (
             <div style={{backgroundColor: 'white', height: 'auto'}}>  
             <header className='header-components-base'>
@@ -202,7 +213,8 @@ class Components_base extends Component {
                <CustomButton  twoButton={true} dualbuttonwithouticon={true} buttonOneTitle={'Download'} buttonTwoTitle={'Continue'}/>
 
                <h3>CustomButton 3:</h3>
-               <CustomButton  twoButton={false} dualbuttonwithouticon={true} buttonTitle={'Continue'}/>
+               <div style={{backgroundColor: 'rgb(53, 203, 93)', color: 'white' , width : '130px' , borderRadius: '6px'}}>
+               <CustomButton  twoButton={false} dualbuttonwithouticon={true} buttonTitle={'Continue'}/></div>
 
                <h3>ReactResponsiveCarousel</h3>
                <ReactResponsiveCarousel
@@ -214,7 +226,7 @@ class Components_base extends Component {
                 callbackFromParent={()=>console.log("fisdom")}/>
 
                 <h3>CheckBox</h3>
-                <CheckBox onChange={this.handleChange("check")}/>
+                <CheckBox handleChange={this.handleChange("check")} checked={this.state.check}  />
 
                 <h3>CheckboxList</h3>
                 <p>pending do it tommorow</p>
@@ -309,7 +321,7 @@ class Components_base extends Component {
                 maxLength={14}
                 id="number"
                 name="mobile_no"
-                value={`+91 ${mobile_no}` || ''}
+                value={`${mobile_no}` || ''}
                 onChange={this.handleChange("mobile_no")}
                 inputMode="numeric"
               />
@@ -361,7 +373,7 @@ class Components_base extends Component {
                 maxLength={14}
                 id="number"
                 name="mobile_no"
-                value={''}
+                value={`${mobile_no}` || ''}
                 onChange={this.handleChange("mobile_no")}
                 inputMode="numeric"/>
 
@@ -377,7 +389,7 @@ class Components_base extends Component {
                 maxLength={14}
                 id="number"
                 name="mobile_no"
-                value={''}
+                value={`${mobile_no}` || ''}
                 onChange={this.handleChange("mobile_no")}
                 inputMode="numeric"/>
 
@@ -385,11 +397,8 @@ class Components_base extends Component {
               <OtpDefault  parent={this}/>
 
               <h3>PlusMinusInput</h3>
-              <PlusMinusInput
-                    name={'fisdom'}
-                    label={'insurance'}
-                    parent={this}
-                />
+              <div onClick={this.handleChange('PlusMinusInput')}><PlusMinusInput name={'fisdom'} label={'insurance'}  parent={this} />  </div>
+            
 
                 <h3>RadioBtn</h3>
                 <RadioBtn   />
