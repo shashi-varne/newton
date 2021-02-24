@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 import qs from 'qs';
-import createBrowserHistory from 'history/createBrowserHistory';
+
 import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
-import { getConfig } from 'utils/functions'
+import { getConfig } from 'utils/functions';
+const createBrowserHistory = require("history").createBrowserHistory
 const myHistory = createBrowserHistory();
 
 var base_href = window.sessionStorage.getItem('base_href') || '';
