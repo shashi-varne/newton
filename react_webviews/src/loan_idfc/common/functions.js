@@ -421,8 +421,7 @@ export async function getOrCreate(params) {
         title2: error,
         type: errorType,
       },
-      showError:
-      screenNames.includes(this.state.screen_name) ? true : "page",
+      showError: screenNames.includes(this.state.screen_name) ? true : "page",
     });
   }
 }
@@ -541,6 +540,7 @@ export async function updateApplication(
     if (status === 200) {
       this.setState({
         ...(result || ""),
+        show_loader: false,
       });
 
       if (this.state.screen_name === "mobile_verification") {

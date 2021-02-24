@@ -12,6 +12,7 @@ class ApplicationSummary extends Component {
       accordianData: [],
       detail_clicked: [],
       confirm_details: false,
+      skelton: 'g'
     };
     this.initialize = initialize.bind(this);
   }
@@ -300,6 +301,24 @@ class ApplicationSummary extends Component {
     this.navigate(state);
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getUserStatus,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
@@ -307,6 +326,9 @@ class ApplicationSummary extends Component {
         showLoader={this.state.show_loader}
         title="Loan application Summary"
         buttonTitle="OKAY"
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => {
           this.sendEvents('next');
           this.navigate('journey')

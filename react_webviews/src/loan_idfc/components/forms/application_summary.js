@@ -222,6 +222,24 @@ class ApplicationSummary extends Component {
     this.navigate(state);
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.getUserStatus,
+          button_text1: "Retry",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     return (
       <Container
@@ -230,6 +248,8 @@ class ApplicationSummary extends Component {
         title="Basic detail Summary"
         buttonTitle="OKAY"
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => {
           this.sendEvents('next');
           this.navigate('journey')
