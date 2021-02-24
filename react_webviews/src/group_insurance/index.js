@@ -1,18 +1,14 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import {
   Route,
   Switch
 } from 'react-router-dom';
-import { withRouter } from "react-router";
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import '../common/theme/Style.scss';
+
 // import { getConfig } from 'utils/functions';
-import { themeConfig } from 'utils/constants';
-import { ToastContainer } from 'react-toastify';
 
 import './common/Style.scss';
 import './products/term_insurance/Style.css';
-import NotFound from '../common/components/NotFound';
+import NotFound from 'common/components/NotFound';
 import Landing from './home/landing';
 
 /***********************TERM INSURANCE START   **************/
@@ -46,9 +42,6 @@ import FinalReport from './products/term_insurance/report/index'
 import InsuranceHome from './products/term_insurance/home/index'
 
 
-import { create } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
 
 import PersonalDetailsRedirect from './products/term_insurance/quote-selection/personal_details_redirect'
 
@@ -203,45 +196,16 @@ import HealthInsuranceEntry from './products/group_health/plans/entry';
 import GroupHealthPlanHowToClaimStar from './products/group_health/plans/how_to_claim_star';
 import GroupHealthPlanHowToClaimReligare from './products/group_health/plans/how_to_claim_religare';
 
-import Tooltip from '../common/ui/Tooltip';
 import StarAddress from './products/group_health/Star/star_address';
 
-
-
-
-const generateClassName = createGenerateClassName({
-  dangerouslyUseGlobalCSS: true,
-  productionPrefix: 'f',
-});
-const jss = create(jssPreset());
-// We define a custom insertion point that JSS will look for injecting the styles in the DOM.
-// jss.options.insertionPoint = 'jss-insertion-point';
-
-const theme = createMuiTheme(themeConfig);
-
-const ScrollToTop = withRouter(
-  class ScrollToTopWithoutRouter extends Component {
-    componentDidUpdate(prevProps) {
-      if (this.props.location !== prevProps.location) {
-        window.scrollTo(0, 0)
-      }
-    }
-
-    render() {
-      return null;
-    }
-  }
-);
 
 const Insurance = (props) => {
   const { url } = props.match;
 
   return (
-    <JssProvider jss={jss} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <ScrollToTop />
-        <ToastContainer autoClose={3000} />
-        <Tooltip />
+
+    <Fragment>
+        
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
 
@@ -568,8 +532,7 @@ const Insurance = (props) => {
 
           <Route component={NotFound} />
         </Switch>
-      </MuiThemeProvider>
-    </JssProvider>
+      </Fragment>
   );
 };
 

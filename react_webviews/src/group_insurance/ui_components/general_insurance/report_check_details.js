@@ -63,7 +63,7 @@ class ReportDetails extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -74,12 +74,12 @@ class ReportDetails extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
@@ -88,19 +88,19 @@ class ReportDetails extends Component {
   onload = async() => {
 
     let error = '';
+    let errorType = '';
+    this.setErrorData('onload');
     try {
+      let service = this.state.provider.toLowerCase() === 'bhartiaxa' ? 'insurancev2': 'ins_service';
 
-      let res = await Api.get('api/ins_service/api/insurance/' + (this.state.provider).toLowerCase() + 
+      let res = await Api.get('api/'+ service +'/api/insurance/' + (this.state.provider).toLowerCase() + 
       '/policy/get/' + this.state.policy_id);
       
-      this.setState({
-        skelton: false
-      })
 
       
       if (res.pfwresponse.status_code === 200) {
-
-        var policyData = res.pfwresponse.result.lead;
+        
+        var policyData = res.pfwresponse.result.policy;
         policyData.provider = this.state.provider;
         let buttonTitle = 'Resume';
 
@@ -128,18 +128,21 @@ class ReportDetails extends Component {
           redirectPath: redirectPath,
           buttonTitle: buttonTitle
         })
-
+        this.setState({
+          skelton: false
+        })
       } else {
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
       }
 
     } catch (err) {
       this.setState({
-        skelton: false
-
+        skelton: false,
       });
-      error = 'Something went wrong'
+      error = true;
+      errorType = "crash";
+
     }
 
     // set error data
@@ -147,7 +150,8 @@ class ReportDetails extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })
@@ -221,6 +225,8 @@ class ReportDetails extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={this.state.noFooter}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={this.handleClick}
         fullWidthButton={true}
         buttonTitle={this.state.buttonTitle}

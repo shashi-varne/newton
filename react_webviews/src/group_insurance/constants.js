@@ -581,6 +581,9 @@ export const insuranceProductTitleMapper = {
   'term_insurance': 'Term Insurance',
   'DENGUE': 'Dengue insurance',
   'CORONA': 'Coronavirus insurance',
+  'HOME_INSURANCE': 'Home insurance',
+  'HEALTH_SUPER_TOPUP':'Health super top-up',
+  'CRITICAL_HEALTH_INSURANCE': 'Critical illness insurance'
 }
 
 export function getBhartiaxaStatusToState(policy) {
@@ -745,6 +748,10 @@ export function getCssMapperReport(policy) {
       disc: 'Policy Issued'
     },
     'policy_expired': {
+      color: 'red',
+      disc: 'Policy Expired'
+    },
+    'expired': {
       color: 'red',
       disc: 'Policy Expired'
     },
