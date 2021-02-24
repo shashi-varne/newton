@@ -403,7 +403,7 @@ function setErrorData(type) {
   if (type) {
     let mapper = {
       onload: {
-        handleClick1: this.initialize,
+        handleClick1: this.state.get_lead ? this.initialize : this.onload,
         button_text1: "Retry",
         title1: "",
       },
