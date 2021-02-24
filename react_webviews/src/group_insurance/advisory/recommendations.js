@@ -104,7 +104,7 @@ class AdivsoryRecommendations extends Component {
                         YES
                     </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
-                        CANCEL
+                        NO
                     </Button>
                 </DialogActions>
             </Dialog>
