@@ -61,13 +61,24 @@ class PaymentSuccessClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Edit'
         }
+
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
@@ -94,13 +105,11 @@ class PaymentSuccessClass extends Component {
     // })
 
     let error = '';
+    let errorType = '';
     try {
 
-      let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
+      let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
 
-      this.setState({
-        skelton: false
-      })
       if (res.pfwresponse.status_code === 200) {
 
         var leadData = res.pfwresponse.result.lead;
@@ -115,22 +124,25 @@ class PaymentSuccessClass extends Component {
 
         })
 
-        address_details_data.addressline = leadData.permanent_address.address_line;
+        address_details_data.addressline = leadData.permanent_address.addr_line1;
         this.setState({
           leadData: leadData,
           address_details_data: address_details_data
         })
-
+        this.setState({
+          skelton: false
+        })
       } else {
         error  = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
     } catch (err) {
       this.setState({
         skelton: false,
-        showError: 'page'
       });
+      error= true;
+      errorType= "crash";
     }
 
 
@@ -139,7 +151,8 @@ class PaymentSuccessClass extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
         showError:'page'
       })
@@ -211,6 +224,7 @@ class PaymentSuccessClass extends Component {
     this.sendEvents('next');
     
     let error = '';
+    let errorType = '';
     try {
       let keysMapper = {
         'addressline': 'address line',
@@ -286,37 +300,37 @@ class PaymentSuccessClass extends Component {
           show_loader: 'button'
         })
         let res2 = {};
-        res2 = await Api.post('api/ins_service/api/insurance/bhartiaxa/lead/update', final_data)
+        res2 = await Api.post('api/insurancev2/api/insurance/bhartiaxa/lead/update', final_data)
         this.setState({
           show_loader: false
         })
-
         if (res2.pfwresponse.status_code === 200) {
-
           this.navigate('summary-success')
         } else {
-
           error = res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
 
       }
     }
     catch (err) {
+      error = true;
+      errorType = "crash";
       this.setState({
-        show_loader: false
+        show_loader:false
       })
-      error = 'Something went wrong';
     }
 
     // set error data
     if(error) {
       this.setState({
+        show_loader:false,
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type: errorType
         },
-        showError: 'page'
+        showError: true
       })
     }
 
@@ -367,7 +381,7 @@ class PaymentSuccessClass extends Component {
         buttonTitle='Generate Policy'
         onlyButton={true}
         handleClick={() => this.handleClickCurrent()}
-        title={this.state.leadData.product_title}
+        title={this.state.leadData.product_title||this.props.parent.state.headerTitle }
         classOverRideContainer="payment-success"
       >
         <div>

@@ -5,7 +5,6 @@ import provider from 'assets/provider.svg';
 import { numDifferentiationInr } from '../../../utils/validators';
 
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import { getConfig } from 'utils/functions';
 import { insuranceStateMapper, insuranceProductTitleMapper } from '../../constants';
 import { nativeCallback } from 'utils/native_callback';
@@ -55,7 +54,7 @@ class PlanSummaryClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {
@@ -66,12 +65,12 @@ class PlanSummaryClass extends Component {
               showError: false
             })
           },
-          button_text2: 'Okay'
+          button_text2: 'Dismiss'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
@@ -94,28 +93,24 @@ class PlanSummaryClass extends Component {
         skelton: true
       })
       let error = '';
+      let errorType = '';
       try {
-        let res = await Api.get('api/ins_service/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)
-        this.setState({
-          skelton: false
-        });
+        let res = await Api.get('api/insurancev2/api/insurance/bhartiaxa/lead/get/' + this.state.lead_id)    
         if (res.pfwresponse.status_code === 200) {
-  
+
           lead = res.pfwresponse.result.lead;
           this.setState({
             skelton: false
           })
-
   
+
         } else {
           error = res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong';
+          || true;
         }
       } catch (err) {
-        this.setState({
-          skelton: false,
-          showError:'page'
-        });
+        error= true;
+        errorType= "crash";
       }
   
        // set error data
@@ -123,7 +118,8 @@ class PlanSummaryClass extends Component {
         this.setState({
           errorData: {
             ...this.state.errorData,
-            title2: error
+            title2: error,
+            type: errorType
           },
           showError:'page'
         })
@@ -174,12 +170,14 @@ class PlanSummaryClass extends Component {
   async handleClickCurrent() {
 
     this.setErrorData('submit');
+    let error='';
+    let errorType = '';
     try {
       this.setState({
         show_loader: 'button'
       })
       let res2;
-      res2 = await Api.get('api/ins_service/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
+      res2 = await Api.get('api/insurancev2/api/insurance/bhartiaxa/start/payment?lead_id=' + this.state.lead_id)
 
       if (res2.pfwresponse.status_code === 200) {
 
@@ -236,12 +234,26 @@ class PlanSummaryClass extends Component {
         this.setState({
           show_loader: false
         })
-        toast(res2.pfwresponse.result.error || res2.pfwresponse.result.message
-          || 'Something went wrong');
+        error=res2.pfwresponse.result.error || res2.pfwresponse.result.message
+          || true;
       }
 
     } catch (err) {
-      toast('Something went wrong');
+      this.setState({
+        show_loader:false,
+      })
+      error=true;
+      errorType= "crash";
+    }
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:true
+      })
     }
   }
 
@@ -273,6 +285,8 @@ class PlanSummaryClass extends Component {
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         handleClick={() => this.handleClickCurrent()}
         title="Summary"
         classOverRide="fullHeight"
@@ -331,6 +345,9 @@ class PlanSummaryClass extends Component {
             <img style={{ margin: '0px 5px 0 0' }} src={this.state.instant_icon} alt="" />
             Instant policy issuance
             </div>
+        </div>
+        <div className="baxa-disclaimer">
+          <p style={{ color: getConfig().primary, marginBottom: '25px', textAlign: 'center'}}>*Maximum of 2 policy purchases per user allowed, anymore can lead to dispute during claim</p>
         </div>
       </Container>
     );

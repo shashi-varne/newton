@@ -5,7 +5,8 @@ class SmartwalletPaymentSuccess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        product_key: 'SMART_WALLET'
+        product_key: 'SMART_WALLET',
+        headerTitle: 'Smart wallet insurance'
     }
   }
   

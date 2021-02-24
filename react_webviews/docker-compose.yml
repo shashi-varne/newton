@@ -7,8 +7,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./:/webview
-      - /webview/node_modules
+      - ./:/app
+      - /webview/react_webviews/node_modules
     restart: always
     networks:
       - sbmf-net
