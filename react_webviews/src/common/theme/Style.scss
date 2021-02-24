@@ -1462,10 +1462,16 @@ input#pan {
       flex: 0.48;
       text-align: center;
       border-right: #D6D6D6 2px solid;
+      span{
+        cursor: pointer;
+      }
     }
     .email-report{
       flex: 0.52;
       text-align: center;
+      span{
+        cursor: pointer;
+      }
     }
   }
 }
