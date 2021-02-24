@@ -80,7 +80,7 @@ class RecommendationResult extends Component {
                     <div className={recommendation_data.key !== 'corona' ? "coverage-details" : "coverage-details align-left" }>
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Target Coverage</p>
-                            <p className="coverage-detail-value">{recommendation_data.target_si}</p>
+                            <p className="coverage-detail-value">₹{recommendation_data.target_si}</p>
                         </div>
                         { recommendation_data.key !== 'corona' && (
                         <div className="individual-coverage-detail">
