@@ -46,7 +46,7 @@ const Summary = (props) => {
   const initialize = async () => {
     const result = await getSummaryV2();
     if (!result) {
-      showSkelton(false);
+      setShowSkelton(false);
       return;
     }
     setReportData(result.report);

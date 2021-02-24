@@ -2,6 +2,8 @@ export const apiConstants = {
   reportSummaryV2:
     "/api/invest/reportv4/portfolio/summary/v2?upcoming_needed=y",
   reportGoals: "/api/invest/reportv4/portfolio/summary?upcoming_needed=y",
+  getFunds: "/api/invest/reportv4/portfolio/funds",
+  getFundMf: "/api/mf/v2",
 };
 
 export const getPathname = {

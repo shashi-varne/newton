@@ -15,6 +15,7 @@ import NotFound from "common/components/NotFound";
 
 import Summary from "./components/Summary";
 import Goals from "./components/Goals";
+import Funds from "./components/Funds";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -34,6 +35,8 @@ const Reports = (props) => {
         <Switch>
           <Route path={url} exact component={Summary} />
           <Route path={`${url}/goals`} exact component={Goals} />
+          <Route path={`${url}/goals/funds/:itype/`} exact component={Funds} />
+          <Route path={`${url}/goals/funds/:itype/:subtype`} exact component={Funds} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

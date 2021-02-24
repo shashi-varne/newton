@@ -48,3 +48,43 @@ export const getReportGoals = async () => {
     toast(err || genericErrorMessage);
   }
 };
+
+export const getFunds = async (data) => {
+  try {
+    const res = await Api.get(apiConstants.getFunds, data);
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw genericErrorMessage;
+    }
+    const { result, status_code: status } = res.pfwresponse;
+    switch (status) {
+      case 200:
+        return result;
+      default:
+        throw result.error || result.message || genericErrorMessage;
+    }
+  } catch (err) {
+    toast(err || genericErrorMessage);
+  }
+};
+
+export const getFundMf = async (data) => {
+  const res = await Api.get(apiConstants.getFundMf, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};

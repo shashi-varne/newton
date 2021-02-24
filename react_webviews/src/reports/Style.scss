@@ -313,3 +313,158 @@
     }
   }
 }
+
+.reports-funds {
+  margin-top: -20px;
+  line-height: 1.5;
+  color: #333333;
+
+  .fund {
+    background: #f4f5f6;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    h5 {
+      text-align: left;
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.1;
+      padding: 15px 8px 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .right-info {
+        font-size: 12px;
+        min-width: fit-content;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+        img {
+          width: 14px;
+        }
+      }
+    }
+
+    .head {
+      padding: 5px 20px;
+      margin-bottom: 0px;
+    }
+
+    .hr-break {
+      margin: 0 20px;
+      border: 1px solid #d4d4d4;
+    }
+
+    .summary {
+      display: flex;
+      align-items: center;
+      padding: 15px 0;
+
+      .content {
+        border-right: 2px solid #d4d4d4;
+        text-align: center;
+        width: 33.33%;
+
+        .amount {
+          font-weight: 600;
+          min-height: 40px;
+
+          .earning-percent {
+            font-size: 12px;
+          }
+        }
+
+        .green {
+          color: #71bf1c;
+        }
+
+        .red {
+          color: #d0021b;
+        }
+      }
+
+      .content:last-child {
+        border-right: 0;
+      }
+    }
+
+    .red {
+      color: #d32f2f;
+    }
+
+    .green {
+      color: #34ca5c;
+    }
+  }
+
+  button {
+    min-height: 45px;
+    width: 100%;
+    background-color: var(--secondary);
+    color: white;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  button:hover {
+    background-color: var(--secondary);
+    color: white;
+  }
+}
+
+.reports-no-fund-message-dialog-content {
+  line-height: 1.5;
+
+  .text {
+    color: rgba(0, 0, 0, 0.87);
+    margin-bottom: 10px;
+    padding-right: 8px;
+  }
+
+  .align-right {
+    text-align: right;
+    padding: 10px 8px 0 116px;
+
+    button {
+      min-height: 40px;
+      min-width: 80px;
+      background-color: var(--secondary);
+      color: white;
+    }
+  }
+}
+
+.reports-ask-invest-type-dialog-content {
+  line-height: 1.5;
+
+  .text {
+    color: rgba(0, 0, 0, 0.87);
+    margin-bottom: 10px;
+    padding-right: 8px;
+  }
+
+  .align-right {
+    padding: 10px 8px 0 116px;
+    display: flex;
+    column-gap: 5px;
+    justify-content: flex-end;
+
+    button {
+      min-height: 40px;
+      min-width: 100px;
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .bg-light {
+      background-color: white;
+      color: var(--primary);
+    }
+  }
+}

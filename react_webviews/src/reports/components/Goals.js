@@ -39,7 +39,7 @@ const Goals = (props) => {
     }
     const result = await getReportGoals();
     if (!result) {
-      showSkelton(false);
+      setShowSkelton(false);
       return;
     }
     setGoals(result.report.current.goals);
