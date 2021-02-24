@@ -107,10 +107,10 @@ class SystemError extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_system_error",
       properties: {
         user_action: user_action,
-        screen_name: "system_error",
         stage: this.state.stage || "",
       },
     };
