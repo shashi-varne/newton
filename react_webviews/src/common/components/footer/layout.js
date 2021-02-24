@@ -174,7 +174,7 @@ export class FooterLayoutBase extends Component {
   renderDefaultLayout = (props) => {
     return(
       <div className="FooterDefaultLayout" onClick={props.handleClick}>
-      <div className="FlexItem2" style={{backgroundColor: 'rgb(53, 203, 93)', color: 'white'}}>
+      <div className="FlexItem2" style={{backgroundColor: 'rgb(53, 203, 93)', color: 'white', borderRadius: '6px'}}>
         <Button
           type={props.type}
           {...props} />
