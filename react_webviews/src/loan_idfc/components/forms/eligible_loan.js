@@ -73,10 +73,10 @@ class EligibleLoan extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_loan_offer",
       properties: {
         user_action: user_action,
-        screen_name: "loan_offer",
         offer_selected:
           this.state.checked === "default_tenor" ? "default" : "customised",
       },

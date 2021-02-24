@@ -105,10 +105,10 @@ class LoanBtDetails extends Component {
       (item) => item.is_selected === true
     );
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_credit_card_details",
       properties: {
         user_action: user_action,
-        screen_name: "credit_card_details",
         no_of_cards_entered: form_checked.length,
         skipped_screen:
           form_checked.length !== 0

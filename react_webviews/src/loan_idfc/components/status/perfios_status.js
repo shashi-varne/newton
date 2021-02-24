@@ -55,6 +55,7 @@ class PerfiosStatus extends Component {
       count: 0,
       loaderWithData: false,
       loaderData: {},
+      application_info: {}
     };
 
     this.initialize = initialize.bind(this);
@@ -67,6 +68,7 @@ class PerfiosStatus extends Component {
   onload = () => {
     let lead = this.state.lead || {};
     let vendor_info = lead.vendor_info || {};
+    let application_info = lead.application_info || {};
     let personal_info = lead.personal_info || {};
     let name = personal_info.first_name;
     let perfios_state = vendor_info.perfios_state;
@@ -85,6 +87,7 @@ class PerfiosStatus extends Component {
     mapper = commonMapper[perfios_state] || {}
     this.setState({
       commonMapper: mapper,
+      application_info: application_info,
       perfios_display_rejection_reason: perfios_display_rejection_reason,
       perfios_state: perfios_state,
       bt_eligible: bt_eligible,
@@ -104,12 +107,20 @@ class PerfiosStatus extends Component {
   };
 
   sendEvents(user_action) {
+    let { application_info, bt_eligible, perfios_state, commonMapper } = this.state;
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_bank_statement_verification",
       properties: {
         user_action: user_action,
-        screen_name: "bank_statement_verification",
         status: this.state.commonMapper.status,
+        employment_type: application_info.application_status,
+        cta_value:
+          bt_eligible &&
+          perfios_state !== "failure" &&
+          perfios_state !== "blocked"
+            ? "KNOW MORE"
+            : commonMapper.button_title,
       },
     };
 
