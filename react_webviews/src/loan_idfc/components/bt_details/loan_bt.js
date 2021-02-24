@@ -323,6 +323,7 @@ class LoanBtDetails extends Component {
                           )
                         }
                         // type="number"
+                        inputMode="numeric"
                         width="40"
                         label="Amount outstanding"
                         id="principalOutstanding"

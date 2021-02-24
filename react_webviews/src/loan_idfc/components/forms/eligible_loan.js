@@ -283,6 +283,7 @@ class EligibleLoan extends Component {
                             )}`
                           }
                           // type="number"
+                          inputMode="numeric"
                           width="40"
                           label="Loan amount"
                           id="amount_required"

@@ -247,6 +247,7 @@ class ProfessionalDetails extends Component {
                   }
                   // type="number"
                   width="40"
+                  inputMode="numeric"
                   label="Net monthly salary (in rupees)"
                   class="net_monthly_salary"
                   id="net_monthly_salary"
