@@ -42,6 +42,9 @@ class ReportDetails extends Component {
 
     let status = [
       "application_submitted",
+      "idfc_3_submitted",
+      "idfc_3_accepted",
+      "idfc_3_failed",
       "idfc_4_submitted",
       "idfc_4_accepted",
       "idfc_4_failed",

@@ -118,10 +118,10 @@ class DocumentList extends Component {
 
   sendEvents(user_action, data={}) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "upload_docs",
       properties: {
         user_action: user_action,
-        screen_name: "upload_docs",
         docs_list : this.state.docList.map((category) => category.category_name),
         doc_card_selected: data.doc_card_selected || "",
       },

@@ -207,10 +207,10 @@ class DocumentUpload extends Component {
   sendEvents(user_action) {
     let type = (this.state.type === "open_camera" ? "camera" : "gallery") || "";
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: this.state.docList.category_name || "doc_upload",
       properties: {
         user_action: user_action,
-        screen_name: `${this.state.docList.category_name} doc` || "doc_upload",
         doc_type: this.state.form_data.doc_name,
         type: type,
       },
