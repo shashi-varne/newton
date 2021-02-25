@@ -29,6 +29,7 @@ class HomeInsurance extends Component {
       selectedIndex: 0,
       checked: false,
       show_loader:true,
+      skelton: true,
       plan_data: {},
       recommendedIndex: 0,
       product_key: 'HOME_INSURANCE',

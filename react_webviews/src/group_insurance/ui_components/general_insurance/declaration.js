@@ -26,17 +26,17 @@ class DeclarationClass extends Component {
 
   handleClick = () => {
 
-  
+    
     var final_data = {
-      "product_plan": this.props.parent.props.location.params.premium_details.product_plan,
-      "premium": this.props.parent.props.location.params.premium_details.premium,
-      "cover_amount": this.props.parent.props.location.params.premium_details.cover_amount,
-      "tax_amount": this.props.parent.props.location.params.premium_details.tax_amount,
-      "productTitle":this.props.parent.props.location.params.premium_details.productTitle
+      "product_plan": this.props.parent.props.location.state.premium_details.product_plan,
+      "premium": this.props.parent.props.location.state.premium_details.premium,
+      "cover_amount": this.props.parent.props.location.state.premium_details.cover_amount,
+      "tax_amount": this.props.parent.props.location.state.premium_details.tax_amount,
+      "productTitle":this.props.parent.props.location.state.premium_details.productTitle
     } 
 
 
-    this.navigate('form', '' ,final_data )
+    this.navigate('form' ,final_data )
   }
  
 
@@ -69,15 +69,12 @@ class DeclarationClass extends Component {
   }
 
 
-  navigate = (pathname, search, premium_details) => {
+  navigate = (pathname, data) => {
 
     this.props.parent.props.history.push({
       pathname: pathname,
-      search: search ? search : getConfig().searchParams,
-      params: {
-        premium_details: premium_details || {}
-      }
-    });
+      search: getConfig().searchParams
+    }, {premium_details: data});
   }
 
   componentDidMount(){
