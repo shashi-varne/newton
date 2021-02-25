@@ -264,7 +264,7 @@ class OtpVerification extends Component {
       >
         <div className="otp-verification">
           <div className="subtitle">
-            Enter OTP sent to <b>+91{this.state.otpBaseData.mobile_no}</b>
+            OTP sent to <b>+91{this.state.otpBaseData.mobile_no}</b>
           </div>
 
           <OtpDefault parent={this} />

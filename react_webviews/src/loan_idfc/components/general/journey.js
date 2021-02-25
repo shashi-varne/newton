@@ -119,7 +119,8 @@ class JourneyMap extends Component {
       count: 0,
       loaderWithData: false,
       loaderData: {},
-      noHeader: false
+      noHeader: false,
+      resume: false
     };
     this.initialize = initialize.bind(this);
   }
@@ -184,7 +185,7 @@ class JourneyMap extends Component {
           title: "Provide income details",
           titleCompleted: "Provided income details",
           subtitle:
-            "Enter loan requirements and income details to get the best loan offer.",
+            "Provide your loan requirements and income details to get the best loan offer.",
           status:
             index === "2" ? "init" : index > "2" ? "completed" : "pending",
           id: "income_details",
@@ -279,6 +280,7 @@ class JourneyMap extends Component {
         screen_name: "journey_map",
         stage: data.stage,
         summary_selected_for: data.summary_selected_for || "",
+        resume: this.state.resume ? 'yes' : 'no'
       },
     };
     if (user_action === "just_set_events") {
@@ -351,6 +353,9 @@ class JourneyMap extends Component {
               idfc_loan_status: "ckyc",
             }, "", "skelton", "g");
           } else {
+            this.setState({
+              resume: true
+            })
             this.navigate('personal-details')
           }
           
@@ -359,6 +364,11 @@ class JourneyMap extends Component {
     }
     // ---step-3
     if (id === "income_details" && index <= "2") {
+      if (next_state !== 'loan-requirement-details') {
+        this.setState({
+          resume: true
+        })
+      }
       this.sendEvents('next', {stage: stage});
       if (idfc_loan_status === "idfc_0.5_accepted" || idfc_loan_status === "idfc_0.5_submitted") {
         this.get05Callback();
@@ -384,6 +394,11 @@ class JourneyMap extends Component {
     }
     // ---step-4
     if (id === "document_upload" && index <= "3") {
+      if (next_state !== 'additional-details') {
+        this.setState({
+          resume: true
+        })
+      }
       this.sendEvents('next', {stage: stage});
       this.navigate(next_state);
     }

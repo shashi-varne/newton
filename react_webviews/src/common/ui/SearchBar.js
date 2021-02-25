@@ -84,12 +84,13 @@ class Example extends React.Component {
     return (
       <FormControl className="Dropdown" disabled={this.props.disabled}>
         <InputLabel shrink={true} htmlFor={this.props.id}>
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", lineHeight: 0.2 }}>
             <span>{this.props.label}</span>
             <span>{this.props.isApiRunning ? <DotDotLoader /> : ""}</span>
           </div>
         </InputLabel>
         <Autosuggest
+          className="Select"
           suggestions={suggestions}
           onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}

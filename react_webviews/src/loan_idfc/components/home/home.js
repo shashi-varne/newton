@@ -182,7 +182,7 @@ class Home extends Component {
                 {/* {ongoing_loan_details && ongoing_loan_details.length !== 0
                   ? "Start a new application"
                   : "What are you looking for ?"} */}
-                  Get started
+                Get started
               </div>
               <Card className="card-lending" onClick={() => this.handleClick()}>
                 <div className="content">
@@ -193,10 +193,12 @@ class Home extends Component {
                   <div className="data">
                     <div className="title generic-page-title">
                       Personal loans
-                      {ongoing_loan_details.length === 0 && <Imgc src={require(`assets/apply_now.svg`)} alt="" />}
+                      {ongoing_loan_details.length === 0 && (
+                        <Imgc src={require(`assets/apply_now.svg`)} alt="" />
+                      )}
                     </div>
                     <div className="subtitle generic-page-subtitle">
-                      Get loan upto ₹40 lakhs
+                      Get loan up to ₹40 lakhs
                     </div>
                   </div>
                 </div>
@@ -234,11 +236,7 @@ class Home extends Component {
 
           <div className="block3-info">
             <div className="top-title">Our partners</div>
-            <div className="partners">
-              {/* <div className="partner-card"> */}
-              <Imgc src={require(`assets/idfc.svg`)} alt="idfc logo" />
-              {/* </div> */}
-            </div>
+            <Imgc src={require(`assets/idfc.svg`)} alt="idfc logo" />
           </div>
         </div>
       </Container>

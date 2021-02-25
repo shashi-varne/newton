@@ -47,10 +47,10 @@ class SelectLoan extends Component {
         benefits: {
           options: [
             {
-              data: "Loan up to Rs. 40 lakhs:",
+              data: "Loan up to ₹40 lakhs:",
               sub_data: [
-                "For salaried, the range is from Rs. 1 lakh to Rs. 40 lakhs",
-                "For self-employed, the range is from Rs. 1 lakh to Rs. 9 lakhs",
+                "For salaried, the range is from ₹1 lakh to ₹40 lakhs",
+                "For self-employed, the range is from ₹1 lakh to ₹9 lakhs",
               ],
             },
             "Low interest rate starting at 10.75% p.a.",

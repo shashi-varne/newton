@@ -339,7 +339,7 @@ export function renderGenericError() {
                     </div>
                     
 
-                    <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>
+                    {getConfig().project !== 'loan' && <div className="help" onClick={() => this.redirectToHelp()}>GET HELP</div>}
                     {genericErrorActions()}
                 </div>
                     </div>                    
@@ -359,7 +359,7 @@ export function renderGenericError() {
 
                     <div className="title2 title2-page">{title2 || 'Sorry, we could not process your request'}</div>
 
-                    <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>
+                    {getConfig().project !== 'loan' && <div className="help help-page" onClick={() => this.redirectToHelp()}>GET HELP</div>}
                     {genericErrorActionsPage()}
                 </div>
             </div>
