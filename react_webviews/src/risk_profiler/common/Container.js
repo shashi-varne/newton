@@ -6,7 +6,7 @@ import '../../utils/native_listner';
 import { getConfig } from 'utils/functions';
 
 
-import {didmount ,commonRender} from '../../common/components/container_functions';
+import {didMount ,commonRender} from '../../common/components/container_functions';
 
 
 
@@ -26,12 +26,12 @@ class Container extends Component {
 
     this.historyGoBack = this.historyGoBack.bind(this);
 
-    this.didmount = didmount.bind(this);
+    this.didMount = didMount.bind(this);
     this.commonRender = commonRender.bind(this);
   }
 
   componentDidMount() {
-    this.didmount();
+    this.didMount();
   }
 
   componentWillUnmount() {

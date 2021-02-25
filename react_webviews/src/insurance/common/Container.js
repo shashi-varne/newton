@@ -8,7 +8,7 @@ import loader_fisdom from 'assets/loader_gif_fisdom.gif';
 import loader_myway from 'assets/loader_gif_myway.gif';
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner';
-import {didmount ,commonRender} from '../../common/components/container_functions';
+import {didMount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
 
   constructor(props) {
@@ -21,12 +21,12 @@ class Container extends Component {
       loaderMain: getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom
     }
     this.historyGoBack = this.historyGoBack.bind(this);
-    this.didmount = didmount.bind(this);
+    this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
-    this.didmount();
+    this.didMount();
   }
 
   componentWillUnmount() {

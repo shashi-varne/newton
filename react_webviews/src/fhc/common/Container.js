@@ -9,7 +9,7 @@ import { uploadFHCData } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
 import { navigate } from './commonFunctions';
 
-import {didmount ,commonRender} from '../../common/components/container_functions';
+import {didMount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
 
   constructor(props) {
@@ -26,12 +26,12 @@ class Container extends Component {
     this.historyGoBack = this.historyGoBack.bind(this);
     // this.handleYes = this.handleYes.bind(this);
     this.navigate = navigate.bind(this);
-    this.didmount = didmount.bind(this);
+    this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
-    this.didmount();
+    this.didMount();
   }
 
   componentWillUnmount() {

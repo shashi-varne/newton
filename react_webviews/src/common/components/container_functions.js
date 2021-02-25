@@ -21,7 +21,7 @@ import BottomSheet from '../../common/ui/BottomSheet';
 
 let start_time = '';
 
-export function didmount() {
+export function didMount() {
     start_time = new Date();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);

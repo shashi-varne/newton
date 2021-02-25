@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
-import { didmount, commonRender } from '../../common/components/container_functions';
+import { didMount, commonRender } from '../../common/components/container_functions';
 
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner';
@@ -20,12 +20,12 @@ class Container extends Component {
       project: 'portfolio-rebalancing', //to use in common functions
     };
     this.historyGoBack = this.historyGoBack.bind(this);
-    this.didmount = didmount.bind(this);
+    this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
-    this.didmount();
+    this.didMount();
   }
 
   componentWillUnmount() {

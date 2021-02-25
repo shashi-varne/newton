@@ -7,7 +7,7 @@ import '../../utils/native_listner';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
 
-import {didmount ,commonRender} from '../../common/components/container_functions';
+import {didMount ,commonRender} from '../../common/components/container_functions';
 
 class Container extends Component {
 
@@ -25,13 +25,13 @@ class Container extends Component {
     }
     this.historyGoBack = this.historyGoBack.bind(this);
 
-    this.didmount = didmount.bind(this);
+    this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
 
-    this.didmount();
+    this.didMount();
 
 
     window.addEventListener("scroll", this.onScroll, false);

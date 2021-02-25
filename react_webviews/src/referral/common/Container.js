@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from '../../utils/functions';
 
-import {didmount ,commonRender} from '../../common/components/container_functions';
+import {didMount ,commonRender} from '../../common/components/container_functions';
 
 
 class Container extends Component {
@@ -14,7 +14,7 @@ class Container extends Component {
       openDialog: false,
       productName: getConfig().productName
     }
-    this.didmount = didmount.bind(this);
+    this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
   }
 
@@ -37,7 +37,7 @@ class Container extends Component {
 
   componentDidMount() {
 
-    this.didmount();
+    this.didMount();
     this.setState({
       mounted: true
     })
