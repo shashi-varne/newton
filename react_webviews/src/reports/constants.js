@@ -4,6 +4,7 @@ export const apiConstants = {
   reportGoals: "/api/invest/reportv4/portfolio/summary?upcoming_needed=y",
   getFunds: "/api/invest/reportv4/portfolio/funds",
   getFundMf: "/api/mf/v2",
+  getFundDetailsForSwitch: "/api/invest/reportv4/portfolio/fund-detail",
 };
 
 export const getPathname = {
@@ -35,6 +36,9 @@ export const getPathname = {
   reportsTransactions: "/reports/transactions",
   reportsFundswiseSummary: "/reports/fundswise/summary",
   reportsFunds: "/reports/goals/funds/",
+  reportsFundswiseSwitch: "/reports/fundswise/switch/",
+  reportsFundswiseTransactions: "/reports/transactions/",
+  reportsFundswiseDetails: "/reports/fundswise/deatils/",
 };
 
 export const storageConstants = {

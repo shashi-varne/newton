@@ -88,3 +88,21 @@ export const getFundMf = async (data) => {
       throw result.error || result.message || genericErrorMessage;
   }
 };
+
+export const getFundDetailsForSwitch = async (data) => {
+  const res = await Api.get(apiConstants.getFundDetailsForSwitch, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};
