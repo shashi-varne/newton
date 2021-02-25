@@ -24,7 +24,7 @@ class Report extends Component {
   }
 
 
-  navigate = (pathname, provider) => {
+  navigate = (pathname, provider, base_plan_title) => {
     this.props.history.push({
       pathname: pathname,
       search: getConfig().searchParams,
@@ -209,15 +209,49 @@ class Report extends Component {
       termRedirectionPath: fullPath
     })
   }
+  setErrorData = (type) => {
 
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        },
+        'submit': {
+          handleClick1: this.handleClickCurrent,
+          button_text1: 'Retry',
+          handleClick2: () => {
+            this.setState({
+              showError: false
+            })
+          },
+          button_text2: 'Dismiss'
+        }
+      };
+  
+      this.setState({
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
+      })
+    }
+
+  }
   async componentDidMount() {
+    this.onload();
+  }
+
+  onload = async() =>{
+    let error = '';
+    let errorType = '';
+    this.setErrorData('onload');
     try {
 
       let res = await Api.get('api/ins_service/api/insurance/get/report');
 
-      this.setState({
-        skelton: false
-      })
+      
       if (res.pfwresponse.status_code === 200) {
 
         var policyData = res.pfwresponse.result.response;
@@ -233,11 +267,13 @@ class Report extends Component {
         let group_insurance_policies = policyData.group_insurance || {};
         let health_insurance_policies = policyData.health_insurance || {};
         let term_insurance_policies = policyData.term_insurance || {};
-
+        this.setState({
+          skelton: false
+        })
         this.setReportData(term_insurance_policies, group_insurance_policies, health_insurance_policies , o2o_applications);
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+        error=res.pfwresponse.result.error || res.pfwresponse.result.message
+          || true;
         // this.setState({ nextPage: ''})
       }
 
@@ -246,9 +282,18 @@ class Report extends Component {
       this.setState({
         skelton: false
       });
-      toast('Something went wrong');
+      error=true;
     }
-
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError:'page'
+      })
+    }
     window.addEventListener("scroll", this.onScroll, false);
   }
 
@@ -261,7 +306,6 @@ class Report extends Component {
   }
 
   redirectCards(policy) {
-
     let policy_type = policy.policy_type ? policy.policy_type : ''
     this.sendEvents('next', policy.key, policy_type , policy);
     let path = '';
@@ -448,6 +492,8 @@ class Report extends Component {
         events={this.sendEvents('just_set_events')}
         title="Insurance Report"
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         classOverRideContainer="report"
         skelton={this.state.skelton}
       >

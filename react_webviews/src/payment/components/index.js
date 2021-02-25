@@ -270,6 +270,11 @@ class PaymentOption extends React.Component {
         intent_supported = true;
         upi_others = false;
       }
+      
+      if (store.partner === 'ippb') {
+        intent_supported = false;
+        upi_others = true;
+      }
       const supportedBanks = store.banks.filter((item, i) => {
         return item.bank_supported;
       });
