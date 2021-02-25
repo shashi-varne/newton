@@ -490,12 +490,16 @@
       margin: 0;
       font-size: 16px;
       font-weight: 500;
-      padding: 15px 0 5px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
 
+      .text {
+        padding: 15px 0 5px 0;
+      }
+
       .right-info {
+        padding: 15px 0 5px 10px;
         .icon {
           font-size: 18px;
           color: gray;
@@ -602,6 +606,80 @@
 
       li:last-child {
         border-bottom: 0;
+      }
+    }
+  }
+}
+
+.reports-fundswise-transactions {
+  line-height: 1.5;
+  color: #333333;
+  margin: -20px 0;
+
+  p {
+    font-size: 14px;
+    margin: 25px 0 10px 0;
+    text-align: center;
+  }
+
+  .transaction {
+    border: solid 1px #e8e8e8;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+
+    .folio-no {
+      color: grey;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .text {
+        background: #f2f2f2;
+        padding: 1px 10px;
+        border-radius: 10px;
+        font-size: 13px;
+        text-transform: capitalize;
+      }
+
+      .green {
+        color: #71bf1c;
+      }
+
+      .red {
+        color: #d0021b;
+      }
+    }
+
+    .transaction-header {
+      border-bottom: 0.5px dashed #b2b2b2;
+      margin: 10px 0 15px 0;
+      padding-bottom: 15px;
+      font-size: 16px;
+    }
+
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+
+      .content {
+        width: 50%;
+
+        .text {
+          color: gray;
+        }
+
+        h5 {
+          margin: 5px 0;
+          font-size: 16px;
+          font-weight: 500;
+        }
       }
     }
   }

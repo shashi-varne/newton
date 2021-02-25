@@ -5,6 +5,8 @@ export const apiConstants = {
   getFunds: "/api/invest/reportv4/portfolio/funds",
   getFundMf: "/api/mf/v2",
   getFundDetailsForSwitch: "/api/invest/reportv4/portfolio/fund-detail",
+  getTransactions: "/api/invest/transactionv4",
+  getFundsWiseTransactions: "/api/invest/transactionv4",
 };
 
 export const getPathname = {
