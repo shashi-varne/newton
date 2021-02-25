@@ -23,13 +23,13 @@ const Journey = (props) => {
     storageService().getObject(storageConstants.USER || null)
   )
   const [isApiRunning, setIsApiRunning] = useState(false)
-  const [show_aadhaar, setShowAadhaar] = useState(
-    Boolean(urlParams?.show_aadhaar)
-  )
+  const [show_aadhaar, setShowAadhaar] = useState(false)
   const [loading, setLoading] = useState(false)
   const [npsDetailsReq, setNpsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
+
+  const [open, setOpen] = useState(true)
 
   const [journeyData, setJourneyData] = useState([])
 
@@ -120,7 +120,7 @@ const Journey = (props) => {
           inputsForStatus: ['sign'],
         },
       ]
-    } else if (!isCompliant && show_aadhaar) {
+    } else if (userKyc.kyc_status === 'compliant' && show_aadhaar) {
       journeyData = [
         {
           key: 'pan',
@@ -353,13 +353,6 @@ const Journey = (props) => {
     setJourneyData([...journeyData])
   }
 
-  if (
-    urlParams?.show_aadhaar === 'true' ||
-    urlParams?.kycJourneyStatus === 'ground_aadhaar'
-  ) {
-    setShowAadhaar(true)
-  }
-
   let ctaText = ''
   if (customer_verified) {
     ctaText = 'UNLOCK NOW'
@@ -527,6 +520,12 @@ const Journey = (props) => {
           setCtaText('UNLOCK_NOW')
         }
       }
+      if (
+        urlParams?.show_aadhaar === 'true' ||
+        urlParams?.kycJourneyStatus === 'ground_aadhaar'
+      ) {
+        setShowAadhaar(true)
+      }
       if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
         navigate('/nps/identity')
         return
@@ -582,7 +581,7 @@ const Journey = (props) => {
   }
 
   const cancel = () => {
-    setShowAadhaar(false)
+    setOpen(false)
     navigate('/kyc/journey', { show_aadhar: false })
   }
 
@@ -607,7 +606,7 @@ const Journey = (props) => {
         {kycJourneyStatus === 'ground_premium' && (
           <div className="kyc-journey-caption">fast track your investment!</div>
         )}
-        {kyc_status === 'compliant' && (
+        {kyc.kyc_status === 'compliant' && (
           <div className="kyc-pj-content">
             <div className="left">
               <div className="pj-header">Premium Onboarding</div>
@@ -633,6 +632,36 @@ const Journey = (props) => {
 
             <img
               src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
+              alt="Premium Onboarding"
+            />
+          </div>
+        )}
+        {show_aadhaar && (
+          <div className="kyc-pj-content">
+            <div className="left">
+              <div className="pj-header">Premium Onboarding</div>
+              <div className="pj-bottom-info-box">
+                <img
+                  src={require(`assets/${productName}/ic_instant.svg`)}
+                  alt="Instant Investment"
+                  role="i"
+                  className="icon"
+                />
+                <div className="pj-bottom-info-content">Instant Investment</div>
+              </div>
+              <div className="pj-bottom-info-box">
+                <img
+                  src={require(`assets/${productName}/ic_no_doc.svg`)}
+                  alt="No document asked"
+                  role="i"
+                  className="icon"
+                />
+                <div className="pj-bottom-info-content">No document asked</div>
+              </div>
+            </div>
+
+            <img
+              src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
               alt="Premium Onboarding"
             />
           </div>
@@ -703,8 +732,8 @@ const Journey = (props) => {
         </main>
       </div>
       <ShowAadharDialog
-        open={show_aadhaar}
-        onClose={() => setShowAadhaar(false)}
+        open={show_aadhaar && open}
+        onClose={() => setOpen(false)}
       />
     </Container>
   )
