@@ -280,3 +280,9 @@ export const addressProofOptions = [
   { name: "Gas receipt", value: "UTILITY_BILL" },
   { name: "Passbook", value: "LAT_BANK_PB" }
 ];
+
+export const nriAddressProofOptions = [
+  { name: "Driving license", value: "DL" },
+  { name: "Passport", value: "PASSPORT" },
+  { name: "Passport", value: "PASSPORT" } 
+]

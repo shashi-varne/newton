@@ -332,10 +332,15 @@
   align-items: center;
   height: 60px;
   padding-bottom: 14px;
+  position: relative;
 }
 
 .kyc-journey .steps-container .step:not(:last-child) {
   border-left: 2px solid #eeeeee;
+}
+
+.kyc-journey .steps-container .step__completed:not(:last-child) {
+  border-left: 2px solid var(--primary);
 }
 
 .kyc-journey .steps-container .step .icon {
@@ -365,6 +370,24 @@
   margin-left: 40px;
   position: relative;
   top: -13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-basis: 100%;
+
+  .edit {
+    color: var(--secondary);
+    text-transform: uppercase;
+    justify-self: flex-end;
+    cursor: pointer;
+  }
+}
+
+.kyc-journey .steps-container .step .disc {
+  position: absolute;
+  top: 20px;
+  left: 57px;
+  font-size: 13px;
 }
 
 .kyc-journey .steps-container .step .title__selected {

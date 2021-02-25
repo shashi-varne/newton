@@ -234,6 +234,11 @@ const Kyc = (props) => {
               <PersonalDetails4 {...props} type="digilocker" />
             )}
           />
+          <Route 
+            exact
+            path={`${url}/nri-address-details1`}
+            component={NriAddressDetails1}
+          />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
