@@ -385,6 +385,7 @@ class LoanBtDetails extends Component {
                           this.state.form_data[index].creditCardNumber_error
                         }
                         type="number"
+                        inputMode="numeric"
                         width="40"
                         maxLength={4}
                         label="Card number (last four digit)"
