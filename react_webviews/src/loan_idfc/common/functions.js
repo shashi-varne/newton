@@ -829,7 +829,7 @@ export async function submitApplication(
       loaderWithData: screens.includes(this.state.screen_name),
     });
     const res = await Api.post(
-      `relay/api/loan/submit/application/idf/${
+      `relay/api/loan/submit/application/idfc/${
         this.state.application_id
       }?state=${state}${update && "&update=" + update}`,
       params
