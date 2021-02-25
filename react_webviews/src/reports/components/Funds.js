@@ -11,7 +11,7 @@ import AskInvestType from "./mini_components/AskInvestType";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
-  if (isEmpty(params)) props.history.goBack();
+  if (isEmpty(params) || !params.itype) props.history.goBack();
   const itype = params.itype || "";
   const subtype = params.subtype || "";
 

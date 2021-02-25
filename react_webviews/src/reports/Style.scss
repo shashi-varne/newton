@@ -554,3 +554,55 @@
     }
   }
 }
+
+.reports-fundswise-details {
+  line-height: 1.5;
+  color: #333333;
+
+  h5 {
+    margin-bottom: 5px;
+    font-size: 18px;
+    margin-top: 10px;
+    line-height: 1.1;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .folio-number {
+    color: grey;
+    font-size: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .content {
+    color: gray;
+    text-align: center;
+  }
+
+  .block1 {
+    background: #f4f5f6;
+    padding: 15px 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    position: relative;
+
+    ul {
+      margin: 0 15px 0 0;
+      padding: 0;
+
+      li {
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid #d4d4d4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      li:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}

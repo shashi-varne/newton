@@ -38,7 +38,7 @@ export const getPathname = {
   reportsFunds: "/reports/goals/funds/",
   reportsFundswiseSwitch: "/reports/fundswise/switch/",
   reportsFundswiseTransactions: "/reports/transactions/",
-  reportsFundswiseDetails: "/reports/fundswise/deatils/",
+  reportsFundswiseDetails: "/reports/fundswise/details/",
 };
 
 export const storageConstants = {
