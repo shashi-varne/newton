@@ -34,7 +34,7 @@ class LoanRequirementDetails extends Component {
     let application_info = lead.application_info || {};
 
     let form_data = {
-      amount_required: `₹ ${formatAmount(application_info.amount_required)}`,
+      amount_required: application_info.amount_required,
       tenor: !application_info.tenor ? "" : String(application_info.tenor),
     };
 
@@ -72,7 +72,7 @@ class LoanRequirementDetails extends Component {
     if (name === "amount_required") {
       let amt = (value.match(/\d+/g) || "").toString();
       if (amt) {
-        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+        value = amt.replaceAll(",", "");
       } else {
         value = amt;
       }
@@ -95,8 +95,6 @@ class LoanRequirementDetails extends Component {
       "amount_required",
       "tenor",
     ];
-
-    form_data.amount_required = (form_data.amount_required || '').slice(2).replaceAll(',', '');
 
     this.formCheckUpdate(keys_to_check, form_data, "point_five", true);
   };
@@ -151,7 +149,7 @@ class LoanRequirementDetails extends Component {
                 error={!!this.state.form_data.amount_required_error}
                 helperText={
                   this.state.form_data.amount_required_error ||
-                  numDifferentiationInr((this.state.form_data.amount_required || "").toString().slice(1).replaceAll(',', ''))
+                  numDifferentiationInr((this.state.form_data.amount_required || "").toString().replaceAll(',', ''))
                 }
                 width="40"
                 inputMode="numeric"
@@ -159,7 +157,7 @@ class LoanRequirementDetails extends Component {
                 class="amount_required"
                 id="amount_required"
                 name="amount_required"
-                value={this.state.form_data.amount_required || ""}
+                value={this.state.form_data.amount_required ? `₹ ${formatAmount(this.state.form_data.amount_required)}` : ""}
                 onChange={this.handleChange("amount_required")}
               />
             </div>

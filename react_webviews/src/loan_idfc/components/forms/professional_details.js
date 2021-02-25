@@ -51,7 +51,7 @@ class ProfessionalDetails extends Component {
     let form_data = {
       company_name: professional_info.company_name,
       office_email: professional_info.office_email,
-      net_monthly_salary: application_info.net_monthly_salary ? `₹ ${formatAmount(application_info.net_monthly_salary)}` : '',
+      net_monthly_salary: application_info.net_monthly_salary,
       salary_mode: professional_info.salary_mode,
       organisation: professional_info.organisation,
       industry: professional_info.industry,
@@ -131,7 +131,7 @@ class ProfessionalDetails extends Component {
     if (name === 'net_monthly_salary') {
       let amt = (value.match(/\d+/g) || "").toString();
       if (amt) {
-        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+        value = amt.replaceAll(",", "");
       } else {
         value = amt;
       }
@@ -165,12 +165,10 @@ class ProfessionalDetails extends Component {
     if (employment_type === "self_employed") {
       keys_to_check.push("company_name");
     } else {
-      form_data.net_monthly_salary = (form_data.net_monthly_salary || '').slice(2).replaceAll(',', '');
       keys_to_check.push(...salaried);
     }
 
     this.formCheckUpdate(keys_to_check, form_data, "internal", true);
-    form_data.net_monthly_salary = `₹ ${formatAmount(form_data.net_monthly_salary)}`;
   };
 
   handleSearch = async (value) => {
@@ -283,7 +281,7 @@ class ProfessionalDetails extends Component {
                   error={!!this.state.form_data.net_monthly_salary_error}
                   helperText={
                     this.state.form_data.net_monthly_salary_error ||
-                    numDifferentiationInr((this.state.form_data.net_monthly_salary || '').toString().slice(1).replaceAll(',', ''))
+                    numDifferentiationInr((this.state.form_data.net_monthly_salary || '').toString().replaceAll(',', ''))
                   }
                   // type="number"
                   width="40"
@@ -292,7 +290,7 @@ class ProfessionalDetails extends Component {
                   class="net_monthly_salary"
                   id="net_monthly_salary"
                   name="net_monthly_salary"
-                  value={this.state.form_data.net_monthly_salary || ""}
+                  value={this.state.form_data.net_monthly_salary ? `₹ ${formatAmount(this.state.form_data.net_monthly_salary)}` : ""}
                   onChange={this.handleChange("net_monthly_salary")}
                 />
               </div>

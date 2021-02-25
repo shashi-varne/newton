@@ -96,13 +96,13 @@ class EligibleLoan extends Component {
     if (name === "amount_required") {
       let amt = (value.match(/\d+/g) || "").toString();
       if (amt) {
-        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+        value = amt.replaceAll(",", "");
       } else {
         value = amt;
       }
     }
 
-    let emi_amount = value.slice(2).replaceAll(',', '')
+    let emi_amount = value;
 
     form_data.amount_required = value;
     form_data.amount_required_error = "";
@@ -127,7 +127,6 @@ class EligibleLoan extends Component {
       form_data.amount_required = vendor_info.display_loan_amount;
       form_data.amount_required_error = "";
     } else {
-      form_data.amount_required = (form_data.amount_required || '').slice(2).replaceAll(',', '');
       form_data.maxAmount = vendor_info.displayOffer;
     }
 
@@ -308,7 +307,6 @@ class EligibleLoan extends Component {
                               numDifferentiationInr(
                                 (this.state.form_data.amount_required || "")
                                   .toString()
-                                  .slice(1)
                                   .replaceAll(",", "")
                               )) ||
                             `Min ₹1 lakh to max ₹${changeNumberFormat(
@@ -321,7 +319,7 @@ class EligibleLoan extends Component {
                           label="Loan amount"
                           id="amount_required"
                           name="amount_required"
-                          value={this.state.form_data.amount_required || ""}
+                          value={this.state.form_data.amount_required ? `₹ ${formatAmount(this.state.form_data.amount_required)}` : ""}
                           onChange={this.handleChange("amount_required")}
                           disabled={this.state.checked !== "custom_tenor"}
                         />

@@ -34,7 +34,7 @@ class Recommended extends Component {
     if (amount_input.includes(name)) {
       let amt = (value.match(/\d+/g) || "").toString();
       if (amt) {
-        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+        value = amt.replaceAll(",", "");
       } else {
         value = amt;
       }
@@ -87,12 +87,8 @@ class Recommended extends Component {
     let body = {};
 
     if (form_data.employment_type === "Salaried") {
-      form_data.monthly_salary = (form_data.monthly_salary || '').slice(2).replaceAll(',', '');
       keys_to_check.push("monthly_salary");
     }
-
-    form_data.loan_amount_required = (form_data.loan_amount_required || '').slice(2).replaceAll(',', '');
-    
 
     if (this.validateFields(keys_to_check, form_data)) {
       this.setState({
@@ -104,8 +100,6 @@ class Recommended extends Component {
       }
       this.sendEvents("next");
       this.getRecommendedVendor(body);
-      form_data.loan_amount_required = `₹ ${formatAmount(form_data.loan_amount_required || '')}`;
-      form_data.monthly_salary = `₹ ${formatAmount(form_data.monthly_salary || '')}`;
     }
   };
 
@@ -175,7 +169,7 @@ class Recommended extends Component {
                 error={!!this.state.form_data.loan_amount_required_error}
                 helperText={
                   this.state.form_data.loan_amount_required_error || 
-                  numDifferentiationInr((this.state.form_data.loan_amount_required || '').slice(1).replaceAll(',', ''))
+                  numDifferentiationInr((this.state.form_data.loan_amount_required || '').toString().replaceAll(',', ''))
                 }
                 inputMode="numeric"
                 width="40"
@@ -183,7 +177,7 @@ class Recommended extends Component {
                 class="loan_amount_required"
                 id="loan_amount_required"
                 name="loan_amount_required"
-                value={this.state.form_data.loan_amount_required || ""}
+                value={this.state.form_data.loan_amount_required ? `₹ ${formatAmount(this.state.form_data.loan_amount_required)}` : ""}
                 onChange={this.handleChange("loan_amount_required")}
               />
             </div>
@@ -234,7 +228,7 @@ class Recommended extends Component {
                     error={!!this.state.form_data.monthly_salary_error}
                     helperText={
                       this.state.form_data.monthly_salary_error ||
-                      numDifferentiationInr((this.state.form_data.monthly_salary || '').slice(1).replaceAll(',', ''))
+                      numDifferentiationInr((this.state.form_data.monthly_salary || '').toString().replaceAll(',', ''))
                     }
                     inputMode="numeric"
                     width="40"
@@ -242,7 +236,7 @@ class Recommended extends Component {
                     class="monthly_salary"
                     id="monthly_salary"
                     name="monthly_salary"
-                    value={this.state.form_data.monthly_salary || ""}
+                    value={this.state.form_data.monthly_salary ? `₹ ${formatAmount(this.state.form_data.monthly_salary)}` : ""}
                     onChange={this.handleChange("monthly_salary")}
                   />
                 </div>
