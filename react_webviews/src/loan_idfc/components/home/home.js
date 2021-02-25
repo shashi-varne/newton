@@ -236,7 +236,10 @@ class Home extends Component {
 
           <div className="block3-info">
             <div className="top-title">Our partners</div>
-            <Imgc src={require(`assets/idfc.svg`)} alt="idfc logo" />
+            <div className="partners">
+              <img src={require(`assets/idfc_logo.svg`)} alt="idfc logo" />
+              <div className="partner-name">IDFC FIRST Bank</div>
+            </div>
           </div>
         </div>
       </Container>
