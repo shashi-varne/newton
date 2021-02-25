@@ -308,7 +308,6 @@ export function updateBottomPremiumAddOns(premium) {
 }
 
 export async function updateLead( body, quote_id) {
-    this.setErrorData =setErrorData.bind(this)
     let error="";
     let errorType="";
     this.setErrorData("submit")
