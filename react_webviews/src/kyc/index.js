@@ -54,9 +54,10 @@ import SampleDocuments from "./bank-kyc/SampleDocuments";
 import Esign from "./esign";
 import AddressDetails2 from "./address/AddressDetails2";
 import AddressDetails1 from "./address/screen1";
-import DigilockerPersonalDetails1 from "./digilocker/screen1";
+import DigilockerPersonalDetails1 from "./digilocker/components/screen1";
 import ChangeAddressDetails1 from "./address/change_address/ChangeAddressDetails1";
-import NriAddressDetails1 from "./address/nri/Screen1";
+import NriAddressDetails1 from "./address/nri/NRIAddressDetails1";
+import NRIAddressDetails2 from './address/nri/NRIAddressDetails2'
 
 const theme = createMuiTheme(themeConfig);
 
@@ -239,6 +240,7 @@ const Kyc = (props) => {
             path={`${url}/nri-address-details1`}
             component={NriAddressDetails1}
           />
+          <Route exact path={`${url}/nri-address-details2`} component={NRIAddressDetails2} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

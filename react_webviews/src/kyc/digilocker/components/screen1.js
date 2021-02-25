@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Container from "../common/Container";
+import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
@@ -7,16 +7,16 @@ import {
   maritalStatusOptions,
   storageConstants,
   getPathname,
-} from "../constants";
-import { initData } from "../services";
+} from "../../constants";
+import { initData } from "../../services";
 import {
   storageService,
   isEmpty,
   validateNumber,
   validateAlphabets,
 } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+import { validateFields, navigate as navigateFunc } from "../../common/functions";
+import { savePanData } from "../../common/api";
 import toast from "common/ui/Toast";
 
 const PersonalDetails1 = (props) => {

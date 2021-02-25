@@ -24,7 +24,7 @@ const Journey = (props) => {
   )
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [show_aadhaar, setShowAadhaar] = useState(
-    urlParams?.show_aadhaar || false
+    Boolean(urlParams?.show_aadhaar)
   )
   const [loading, setLoading] = useState(false)
   const [npsDetailsReq, setNpsDetailsReq] = useState(
@@ -240,8 +240,8 @@ const Journey = (props) => {
 
   const initJourneyData = (isCompliant, userKyc, show_aadhaar) => {
     let journeyData = getJourneyData(isCompliant, userKyc, show_aadhaar)
-    for (var i = 0; i < journeyData.length; i++) {
-      var status = 'completed'
+    for (let i = 0; i < journeyData.length; i++) {
+      let status = 'completed'
       if (journeyData[i].key === 'digilocker') {
         if (
           userKyc[journeyData[i].inputsForStatus] === null ||
@@ -263,8 +263,8 @@ const Journey = (props) => {
         journeyData[i].key === 'docs' ||
         journeyData[i].key === 'sign'
       ) {
-        for (var j = 0; j < journeyData[i].inputsForStatus.length; j++) {
-          var data = journeyData[i].inputsForStatus[j]
+        for (let j = 0; j < journeyData[i].inputsForStatus.length; j++) {
+          let data = journeyData[i].inputsForStatus[j]
           if (data !== 'bank' && userKyc[data].doc_status === 'init') {
             status = 'init'
             break
@@ -295,13 +295,13 @@ const Journey = (props) => {
             journeyData[i].isEditAllowed = false
           }
         }
-        for (var j = 0; j < journeyData[i].inputsForStatus.length; j++) {
+        for (let j = 0; j < journeyData[i].inputsForStatus.length; j++) {
           for (
-            var k = 0;
+            let k = 0;
             k < journeyData[i].inputsForStatus[j].keys.length;
             k++
           ) {
-            var data = journeyData[i].inputsForStatus[j]
+            let data = journeyData[i].inputsForStatus[j]
 
             if (
               !userKyc[data.name]['meta_data'][data.keys[k]] ||
@@ -527,6 +527,22 @@ const Journey = (props) => {
           setCtaText('UNLOCK_NOW')
         }
       }
+      if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
+        navigate('/nps/identity')
+        return
+      } else if (
+        currentUser.kyc_registration_v2 == 'submitted' &&
+        kyc.sign_status === 'signed'
+      ) {
+        navigate('/kyc/report')
+        return
+      } else if (
+        currentUser.kyc_registration_v2 == 'complete' &&
+        kyc.sign_status === 'signed'
+      ) {
+        navigate('/invest')
+        return
+      }
     }
   }, [kyc, currentUser])
 
@@ -575,23 +591,6 @@ const Journey = (props) => {
      * @TODO native callback handlers
      */
     setShowAadhaar(true)
-  }
-
-  if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
-    navigate('/nps/identity')
-    return
-  } else if (
-    currentUser.kyc_registration_v2 == 'submitted' &&
-    kyc.sign_status === 'signed'
-  ) {
-    navigate('/kyc/report')
-    return
-  } else if (
-    currentUser.kyc_registration_v2 == 'complete' &&
-    kyc.sign_status === 'signed'
-  ) {
-    navigate('/invest')
-    return
   }
 
   return (

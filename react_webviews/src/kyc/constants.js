@@ -266,6 +266,12 @@ export const kycDocNameMapper = {
   LAT_BANK_PB: 'Passbook',
 }
 
+export const kycNRIDocNameMapper = {
+  DL: "Driving license",
+  UTILITY_BILL: "Gas receipt",
+  LAT_BANK_PB: "Passbook"
+};
+
 export const verificationDocOptions = [
   { name: 'Bank statement', value: 'bankstatement' },
   { name: 'Cancelled cheque', value: 'cheque' },
