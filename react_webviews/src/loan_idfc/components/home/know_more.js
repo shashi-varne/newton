@@ -83,6 +83,7 @@ class LoanKnowMore extends Component {
       event_name: "idfc_introduction",
       properties: {
         user_action: user_action,
+        resume: this.state.top_cta_title === 'RESUME' ? 'yes' : 'no'
       },
     };
 

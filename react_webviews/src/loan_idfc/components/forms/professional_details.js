@@ -106,8 +106,14 @@ class ProfessionalDetails extends Component {
       },
     };
 
+    let salary_mode = {
+      'Bank Account Transfer': 'bank transfer',
+      'Cash': 'cash',
+      'Cheque': 'cheque'
+    }    
+
     if (this.state.employment_type === 'salaried')  {
-      eventObj.properties.salary_mode = this.state.form_data.salary_mode || "";
+      eventObj.properties.salary_mode = salary_mode[this.state.form_data.salary_mode || ''] || '';
       eventObj.properties.net_monthly_salary = this.state.form_data.net_monthly_salary || "";
     }
 

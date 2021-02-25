@@ -92,7 +92,7 @@ class BasicDetails extends Component {
       event_name: "idfc_personal_details",
       properties: {
         user_action: user_action,
-        employment_type: this.state.form_data.employment_type || "",
+        employment_type: (this.state.form_data.employment_type || "").toLowerCase(),
         dob: this.state.form_data.dob || "",
       },
     };

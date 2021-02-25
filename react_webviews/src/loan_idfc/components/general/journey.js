@@ -274,13 +274,13 @@ class JourneyMap extends Component {
 
   sendEvents(user_action, data = {}) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_journey_map",
       properties: {
         user_action: user_action,
-        screen_name: "journey_map",
         stage: data.stage,
         summary_selected_for: data.summary_selected_for || "",
-        resume: this.state.resume ? 'yes' : 'no'
+        resume: data.resume ? 'yes' : 'no'
       },
     };
     if (user_action === "just_set_events") {
@@ -346,16 +346,17 @@ class JourneyMap extends Component {
           this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
           this.navigate("ckyc-summary");
         } else {
-          this.sendEvents('next', {stage: stage});
+          let resume = false;
+          if (idfc_loan_status === 'ckyc') {
+            resume = true
+          }
+          this.sendEvents('next', {stage: stage, resume: resume});
 
           if (idfc_loan_status !== 'ckyc') {
             this.updateApplication({
               idfc_loan_status: "ckyc",
             }, "", "skelton", "g");
           } else {
-            this.setState({
-              resume: true
-            })
             this.navigate('personal-details')
           }
           
@@ -364,12 +365,11 @@ class JourneyMap extends Component {
     }
     // ---step-3
     if (id === "income_details" && index <= "2") {
+      let resume = false;
       if (next_state !== 'loan-requirement-details') {
-        this.setState({
-          resume: true
-        })
+          resume = true
       }
-      this.sendEvents('next', {stage: stage});
+      this.sendEvents('next', {stage: stage, resume: resume});
       if (idfc_loan_status === "idfc_0.5_accepted" || idfc_loan_status === "idfc_0.5_submitted") {
         this.get05Callback();
       } else if (idfc_loan_status === "idfc_1.0_accepted" || idfc_loan_status === "idfc_1.0_submitted") {
