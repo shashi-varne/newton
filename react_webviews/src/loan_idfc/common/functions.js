@@ -758,7 +758,7 @@ export async function get07StateForBt() {
   }, 3000);
 }
 
-export async function get07State() {
+export async function get07State(body = {}) {
   this.setState({
     show_loader: true,
   });
@@ -784,7 +784,7 @@ export async function get07State() {
       result.idfc_07_state === "success" &&
       result.vendor_application_status === "bt_processing"
     ) {
-      that.submitApplication({}, "one", "", "eligible-loan");
+      that.submitApplication(body, "one", true, "eligible-loan");
     } else {
       if (count < 20) {
         that.setState({
@@ -829,7 +829,7 @@ export async function submitApplication(
       loaderWithData: screens.includes(this.state.screen_name),
     });
     const res = await Api.post(
-      `relay/api/loan/submit/application/idfc/${
+      `relay/api/loan/submit/application/idf/${
         this.state.application_id
       }?state=${state}${update && "&update=" + update}`,
       params

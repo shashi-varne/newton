@@ -80,7 +80,7 @@ class LoanBtDetails extends Component {
       this.state.form_data.push({
         is_selected: data.is_selected,
         financierName: data.financierName,
-        principalOutstanding: `₹ ${formatAmount(data.principalOutstanding)}`,
+        principalOutstanding: data.principalOutstanding,
         bt_data_id: data.bt_data_id,
       });
     });
@@ -125,7 +125,8 @@ class LoanBtDetails extends Component {
     if (name === "principalOutstanding") {
       let amt = (value.match(/\d+/g) || "").toString();
       if (amt) {
-        value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+        // value = `₹ ${formatAmount(amt.replaceAll(",", ""))}`;
+        value = amt.replaceAll(",", "")
       } else {
         value = amt;
       }
@@ -166,17 +167,17 @@ class LoanBtDetails extends Component {
       if (data.is_selected) {
         submit_details = this.validateFields(form_data, index);
         
-        if (data.principalOutstanding) {
-          form_data[index][
-            "principalOutstanding"
-            // eslint-disable-next-line
-          ] = parseInt((data["principalOutstanding"] || '').slice(1).replaceAll(',', ''))
-        }
+        // if (data.principalOutstanding) {
+        //   form_data[index][
+        //     "principalOutstanding"
+        //     // eslint-disable-next-line
+        //   ] = parseInt((data["principalOutstanding"] || '').replaceAll(',', ''))
+        // }
       }
     });
 
     if (!submit_details) {
-      this.setState({ form_data: form_data });
+      this.setState({ form_data: form_data, loaderWithData: false });
       return;
     }
 
@@ -190,7 +191,9 @@ class LoanBtDetails extends Component {
     if (submit_details) {
       if (!bt_info.bt_credit_card) {
         if (vendor_info.idfc_07_state !== "success") {
-          this.get07State();
+          this.get07State({
+            bt_selection: form_checked,
+          });
         } else {
           this.submitApplication(
             {
@@ -342,7 +345,6 @@ class LoanBtDetails extends Component {
                                 .principalOutstanding || ""
                             )
                               .toString()
-                              .slice(1)
                               .replaceAll(",", "")
                           )
                         }
@@ -352,8 +354,9 @@ class LoanBtDetails extends Component {
                         label="Amount outstanding"
                         id="principalOutstanding"
                         name="principalOutstanding"
+                        // `₹ ${formatAmount(data["principalOutstanding"])}`
                         value={
-                          this.state.form_data[index].principalOutstanding ||
+                          this.state.form_data[index].principalOutstanding ? `₹ ${formatAmount(this.state.form_data[index].principalOutstanding)}` :
                           // item.principalOutstanding ||
                           ""
                         }

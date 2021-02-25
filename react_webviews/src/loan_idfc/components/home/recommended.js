@@ -104,7 +104,8 @@ class Recommended extends Component {
       }
       this.sendEvents("next");
       this.getRecommendedVendor(body);
-      form_data.loan_amount_required = `₹ ${formatAmount(form_data.loan_amount_required)}`;
+      form_data.loan_amount_required = `₹ ${formatAmount(form_data.loan_amount_required || '')}`;
+      form_data.monthly_salary = `₹ ${formatAmount(form_data.monthly_salary || '')}`;
     }
   };
 
