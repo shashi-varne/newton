@@ -71,6 +71,7 @@ class ComponentsBase extends Component {
             mobile_no:'',
             fisdom_checked: false,
             InputPopup: false,
+            openPopUpInputDate: false
         };
     }
 
@@ -152,7 +153,7 @@ class ComponentsBase extends Component {
       fisdom_checked: b,
       fisdom_total: b || 5,
       openPopUpInput: b,
-      openPopUpInputDate: b,
+      openPopUpInputDate: false,
     })
   }
 
@@ -188,7 +189,7 @@ class ComponentsBase extends Component {
 
     if(name === 'InputPopup'){
       this.setState({
-        openPopUpInput: !this.state.openPopUpInput
+        openPopUpInput2: !this.state.openPopUpInput2
       })
       return
     }
@@ -261,14 +262,12 @@ class ComponentsBase extends Component {
         return (
             <div style={{backgroundColor: 'white', height: 'auto'}}>  
             <header className='header-components-base'>
+            <Banner text={'UI Componets List'} />
             <h2>UI Componets List</h2>
             </header>
             <div className='compoenets-list'>
             <h2>Select the List to View Demo</h2>
           <div className="compoenets-base">
-
-          <h3>Banner</h3>
-       {/* <div style={{position: 'fixed'}} > <Banner text={'UI Componets List'}/> </div>      */}
 
            <h3>DropdownWithoutIcon</h3>
             <DropdownWithoutIcon
@@ -446,7 +445,7 @@ class ComponentsBase extends Component {
            </FormControl>
 
            <h3>InputPopup</h3>
-           <div  style={{backgroundColor: 'rgb(53, 203, 93)', border: '6px solid white', color: 'green', textAlign: 'center' }} onClick={this.handleChange("InputPopup")}>{this.state.openPopUpInput ? 
+           <div  style={{backgroundColor: 'rgb(53, 203, 93)', border: '6px solid white', color: 'green', textAlign: 'center' }} onClick={this.handleChange("InputPopup")}>{this.state.openPopUpInput2 ? 
            <div onClick={this.handleChildClick}><InputPopup parent={this} label='this is a inpage dropdown' cta_title='All Ok' header_title='Fisdom Dropdown' /> 
            </div>: 'Click Me'}</div>
 
@@ -500,6 +499,7 @@ class ComponentsBase extends Component {
               <h3>MmYyInModal</h3>
 
                  <div style={{border: '2px solid red', height:'100px'}}> 
+                 <PlusMinusInput name={'fisdom'} label={'insurance'}  parent={this} /> 
                  <MmYyInModal  
                   parent={this}
                   header_title={'MmYyInModal'}
@@ -510,7 +510,7 @@ class ComponentsBase extends Component {
                   id={'id07'}
                   dob={'05/1950'}
                   start_date={'05/1990'}
-                  value={'' }/>  </div>
+                  value={this.state.openPopUpInputDate}/>  </div>
 
 
               <h3>MobileInputWithIcon</h3>
