@@ -48,7 +48,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
   
     onload = async () => {
-
+        this.setErrorData("onload");
         if (this.props.edit) {
             this.setState({
                 next_state: `/group-insurance/group-health/${this.state.provider}/final-summary`
@@ -410,9 +410,10 @@ class GroupHealthPlanAddressDetails extends Component {
                 form_data: form_data,
                 isLoadingCity: true
             })
+            let error = "";
+            let errorType = "";
             try {
                 const res = await Api.get((`api/insurancev2/api/insurance/proposal/hdfc_ergo/validate_pincode?pincode=${pincode}&city=${cityName}`));
-
                 this.setState({isLoadingCity: false});
                 if (res.pfwresponse.status_code === 200 && res.pfwresponse.result.pincode_match) {
                     form_data.state = res.pfwresponse.result.state;
@@ -428,7 +429,18 @@ class GroupHealthPlanAddressDetails extends Component {
                 this.setState({
                     show_loader: false
                 });
-                toast('Something went wrong');
+                error = true;
+                errorType = "crash";
+            }
+            if(error){
+                this.setState({
+                    errorData: {
+                      ...this.state.errorData,
+                      title2: error,
+                      type: errorType
+                    },
+                    showError: true,
+                  });
             }
 
         } else {

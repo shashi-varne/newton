@@ -119,10 +119,7 @@ class GroupHealthPlanSelectCity extends Component {
                     || true;
             }
         } catch (err) {
-            console.log(err)
-            this.setState({
-                // skelton : false
-            });
+        console.log(err)
            error=true;
            errorType="crash";
         }

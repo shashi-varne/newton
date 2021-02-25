@@ -103,7 +103,7 @@ class GroupHealthPlanStarSumInsured extends Component {
                     premiumAmt: '--',
                     apiError :true
                 })
-                error=resultData.error || true;
+                error=resultData.error || resultData.message || true;
                 
             }
            
