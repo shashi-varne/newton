@@ -22,6 +22,7 @@ import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+import ComponentsBase from './common/components/components-base/index'
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 import Fhc from './fhc';
@@ -35,7 +36,6 @@ import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 
-import components_base from "./common/components/components-base"
 import Tooltip from 'common/ui/Tooltip';
 import 'common/theme/Style.scss';
 
@@ -103,7 +103,7 @@ class App extends Component {
               <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
               <Route path='/fund-details' component={FundDetails} />
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
-              <Route path='/components-base' component={components_base} />
+              <Route path='/components-base' component={ComponentsBase} />
               <Route component={NotFound} />
             </Switch>
           </MuiThemeProvider>
