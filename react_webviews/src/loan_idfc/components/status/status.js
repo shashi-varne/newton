@@ -482,7 +482,7 @@ class LoanStatus extends Component {
               meet their loan policy.
               <br />
               <br />
-              However, we thank you for showing interest in our loan offering..
+              However, we thank you for showing interest in our loan offering.
             </div>
           )}
 
