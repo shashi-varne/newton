@@ -87,7 +87,7 @@ export const idfc_config = {
       options: [
         {
           icon: "icn_b_1",
-          subtitle: "Interest rates starting as low as 10.75% pa",
+          subtitle: "Interest rates starting as low as 10.75% per annum",
         },
         {
           icon: "icn_b_2",
@@ -686,7 +686,7 @@ export const idfc_config = {
           options: [
             {
               icon: "icn_b_1",
-              subtitle: "Interest rates starting as low as 10.75% p.a.",
+              subtitle: "Interest rates starting as low as 10.75% per annum",
             },
             {
               icon: "icn_b_2",

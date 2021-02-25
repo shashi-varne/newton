@@ -176,7 +176,7 @@ class AddressDetails extends Component {
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    let { form_data } = this.state;
+    let { form_data, isPermanent_address } = this.state;
 
     let validate = [
       "permanent_address1",
@@ -213,6 +213,17 @@ class AddressDetails extends Component {
       this.handleCkycMessage(name);
       if (confirm_fields.includes(name))
         form_data["current_address_edited"] = "yes";
+    }
+
+    if (isPermanent_address === "Yes") {
+      form_data.permanent_address1 = form_data.current_address1;
+      form_data.permanent_address2 = form_data.current_address2;
+      form_data.permanent_address3 = form_data.current_address3;
+      form_data.permanent_landmark = form_data.current_landmark;
+      form_data.permanent_pincode = form_data.current_pincode;
+      form_data.permanent_city = form_data.current_city;
+      form_data.permanent_state = form_data.current_state;
+      form_data.permanent_country = form_data.current_country;
     }
 
     this.setState({
@@ -291,6 +302,10 @@ class AddressDetails extends Component {
       this.handleCkycMessage(name);
     }
 
+    if (this.state.isPermanent_address === "Yes") {
+      form_data.permanent_pincode = form_data.current_pincode;
+    }
+
     this.setState({
       form_data: form_data,
     });
@@ -337,6 +352,12 @@ class AddressDetails extends Component {
         form_data.permanent_pincode_error = pincode_error;
         form_data.permanent_country = country || "India";
       }
+    }
+
+    if (this.state.isPermanent_address === "Yes") {
+      form_data.permanent_city = form_data.current_city;
+      form_data.permanent_state = form_data.current_state;
+      form_data.permanent_country = form_data.current_country;
     }
 
     this.setState({
