@@ -4,7 +4,6 @@ import { getConfig,
  } from 'utils/functions';
 import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 import {isEmpty} from '../../../utils/validators';
@@ -426,22 +425,24 @@ function setErrorData(type,dismiss) {
   }
 }
 export async function resetQuote() {
-
+    this.setErrorData("submit",true)
     this.handleClose();
     this.setState({
-        show_loader: true,
+        skelton: true,
         restart_conformation: true
     }, () => {
         this.sendEvents('next');
     });
-
+    let error = "";
+    let errorType = "";
     try {
 
         const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
 
         var resultData = res.pfwresponse.result;
+        
         if (res.pfwresponse.status_code === 200) {
-
+            
             let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
             this.navigate(next_state);
             this.setState({
@@ -449,20 +450,30 @@ export async function resetQuote() {
             })
 
         } else {
-            this.setState({
-                show_loader: false
-            });
-
-            toast(resultData.error || resultData.message
-                || 'Something went wrong');
+            error = resultData.error || resultData.message
+                || true;
         }
     } catch (err) {
         console.log(err)
         this.setState({
-            show_loader: false
+            skelton: false
         });
-        toast('Something went wrong');
+        error = true;
+        errorType = "crash";
     }
+    if (error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          showError: true,
+        });
+        this.setState({
+            skelton: false
+        });
+      }
 }
 
 export function openInBrowser(url, type) {

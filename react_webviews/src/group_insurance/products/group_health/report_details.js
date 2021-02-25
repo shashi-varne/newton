@@ -1,6 +1,5 @@
  import React, { Component } from 'react';
 import Container from '../../common/Container';
-
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
@@ -8,7 +7,6 @@ import {
     numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
 import { initialize } from './common_data';
@@ -174,20 +172,23 @@ class GroupHealthReportDetails extends Component {
     }
 
     getDownloadLink = async () => {
+        this.setErrorData("submit",true)
+        let error = "";
+        let errorType = "";
         try {
 
             this.setState({
-                show_loader: true
+                skelton: true 
             });
 
            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
-            this.setState({
-                show_loader: false
-            });
+        
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
 
-
+                this.setState({
+                    skelton:false
+                })
                 let download_link = resultData.download_link;
                 this.setState({
                     download_link: download_link
@@ -197,15 +198,26 @@ class GroupHealthReportDetails extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
+        }
+        if(error){
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: true,
+            });
         }
     }
 
