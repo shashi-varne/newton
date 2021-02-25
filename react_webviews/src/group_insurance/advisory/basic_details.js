@@ -187,7 +187,6 @@ class AdvisoryBasicDetails extends Component {
     };
 
     updateParent = (key, value) => {
-        console.log(key[0] ,value)
         let None_checked = this.state.None_checked
         let Kids_checked = this.state.Kids_checked
         let Spouse_checked = this.state.Spouse_checked
@@ -215,15 +214,12 @@ class AdvisoryBasicDetails extends Component {
             showDependentsError: false,
         }, () => {
             this.setMinMax();
-            console.log(this.state)
         });
     };
 
     handleRegularCheckbox = (name) =>{
         var None_checked = this.state.None_checked;
         var Spouse_checked = this.state.Spouse_checked;
-        console.log('name', name)
-
         if(name === 'spouse'){
             this.setState({
                 Spouse_checked: !Spouse_checked,

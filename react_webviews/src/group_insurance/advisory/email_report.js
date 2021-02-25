@@ -95,10 +95,13 @@ class EmailReport extends Component {
         var form_data = this.state.form_data;
         var canSubmitForm = true;        
         if(form_data){
-            if (!form_data.email || (form_data.email && (form_data.email.length < 10 || !validateEmail(this.state.form_data.email)))) {
-                form_data.email_error = 'We need some details to move forward!';
-                canSubmitForm = false
-            }
+          if (!form_data.email) {
+              form_data.email_error = 'Enter email id to proceed';
+              canSubmitForm = false
+          }else if((form_data.email && (form_data.email.length < 10 || !validateEmail(this.state.form_data.email)))){
+              form_data.email_error = 'Please enter correct email id';
+              canSubmitForm = false
+          }
         }
         this.setState({form_data: form_data})       
         if(canSubmitForm){

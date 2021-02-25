@@ -314,7 +314,7 @@ class AdvisoryAssetDetails extends Component {
             errorData={this.state.errorData}
             showLoader={this.state.show_loader}
             skelton={this.state.skelton}
-            buttonTitle="SAVE AND CONTINUE"
+            buttonTitle="VIEW COVERAGE"
             handleClick={()=>this.handleClick()}
             >
             <div className="advisory-asset-details-container">
@@ -327,7 +327,7 @@ class AdvisoryAssetDetails extends Component {
             <div className="InputField" id="asset-question">
                 <RadioWithoutIcon
                   width="40"
-                  label="Do you have any assets (Equity/MF/Property/FD,etc.)?"
+                  label="Do you have any assets (Equity/MF/Property/FD, etc.)?"
                   class="assets"
                   options={yesNoOptions}
                   id="assets"

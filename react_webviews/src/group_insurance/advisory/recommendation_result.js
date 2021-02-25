@@ -7,6 +7,7 @@ import Slide from '@material-ui/core/Slide';
 import {formatAmount } from 'utils/validators'
 import {advisoryConstants} from './constants';
 import { storageService } from 'utils/validators';
+import ReactHtmlParser from 'react-html-parser';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -159,7 +160,7 @@ class RecommendationResult extends Component {
                     ) : null}
                     {
                         recommendation_data.key === 'health' && this.props.parentsPresent ? (
-                            <p className="advisory-sub-text">We recommend a separate plan of <b>₹5 lacs</b> for your parents</p>
+                            <p className="advisory-sub-text">{ReactHtmlParser(recommendation_data.variable_text)}</p>
                         ) : null
                     }
                     {
