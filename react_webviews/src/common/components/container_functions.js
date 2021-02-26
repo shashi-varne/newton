@@ -449,7 +449,8 @@ export function renderGenericError() {
                     'handleClick1': handleClick1,
                     'button_text2': button_text2,
                     'handleClick2': handleClick2,
-                    'handleClose': this.props.errorData.setErrorData
+                    'handleClose': this.props.errorData.setErrorData,
+                    'helpClick': this.redirectToHelp
                 }}
             />
 
