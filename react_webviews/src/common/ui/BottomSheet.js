@@ -48,6 +48,20 @@ class BottomSheetClass extends Component {
                                 </div>}
 
                         </div>
+                       {data.helpClick && <div className="help">
+                            
+                            <Button
+                            
+                            fullWidth={true}
+                            variant="raised"
+                            size="large"
+                            color="secondary"
+                            onClick={data.helpClick}
+                            autoFocus
+                            type={'textonly'}
+                            buttonTitle={'GET HELP'}
+                            />
+                        </div>}
 
                     </div>
                 </DialogContent>

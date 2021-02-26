@@ -132,7 +132,7 @@ const styles = {
     fontSize: '16px !important',
     boxShadow: 'none',
     // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
-    width: !getConfig().isMobileDevice ? 'auto' : '100% !important'
+    width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },
   label: {},
 }
