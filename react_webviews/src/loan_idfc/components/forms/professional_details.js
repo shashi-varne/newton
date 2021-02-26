@@ -266,7 +266,7 @@ class ProfessionalDetails extends Component {
                   helperText={this.state.form_data.office_email_error}
                   type="text"
                   width="40"
-                  label="Official email id"
+                  label="Official email ID"
                   class="Email"
                   id="office_email"
                   name="office_email"
@@ -287,7 +287,7 @@ class ProfessionalDetails extends Component {
                   // type="number"
                   width="40"
                   inputMode="numeric"
-                  label="Net monthly salary (in rupees)"
+                  label="Net monthly salary"
                   class="net_monthly_salary"
                   id="net_monthly_salary"
                   name="net_monthly_salary"

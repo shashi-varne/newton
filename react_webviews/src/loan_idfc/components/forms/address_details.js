@@ -549,7 +549,7 @@ class AddressDetails extends Component {
                 }
                 type="number"
                 width="40"
-                label="Pincode"
+                label="Pin code"
                 id="current_pincode"
                 name="current_pincode"
                 value={this.state.form_data.current_pincode || ""}
@@ -695,7 +695,7 @@ class AddressDetails extends Component {
                   }
                   type="number"
                   width="40"
-                  label="Pincode"
+                  label="Pin code"
                   id="permanent_pincode"
                   name="permanent_pincode"
                   value={this.state.form_data.permanent_pincode || ""}

@@ -233,7 +233,7 @@ class Recommended extends Component {
                     }
                     inputMode="numeric"
                     width="40"
-                    label="Net monthly salary (in rupees)"
+                    label="Net monthly salary"
                     class="monthly_salary"
                     id="monthly_salary"
                     name="monthly_salary"

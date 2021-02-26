@@ -23,7 +23,7 @@ const commonMapper = {
   idfc_null_rejected: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -34,7 +34,7 @@ const commonMapper = {
   idfc_callback_rejected: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -45,7 +45,7 @@ const commonMapper = {
   "idfc_0.5_rejected": {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -56,7 +56,7 @@ const commonMapper = {
   "idfc_1.0_rejected": {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -67,7 +67,7 @@ const commonMapper = {
   "idfc_1.1_rejected": {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -78,7 +78,7 @@ const commonMapper = {
   "idfc_1.7_rejected": {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -107,7 +107,7 @@ const commonMapper = {
   idfc_cancelled: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -161,7 +161,7 @@ const commonMapper = {
   "Salary receipt mode": {
     top_icon: "not_eligible",
     top_title: "You’re not eligible!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -172,7 +172,7 @@ const commonMapper = {
   Salary: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -183,7 +183,7 @@ const commonMapper = {
   Age: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -194,7 +194,7 @@ const commonMapper = {
   is_dedupe: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -205,7 +205,7 @@ const commonMapper = {
   pincode: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -216,7 +216,7 @@ const commonMapper = {
   internally_rejected: {
     top_icon: "not_eligible",
     top_title: "You’re not eligible for a loan!",
-    button_title: "START NEW APPLICATION",
+    button_title: "START A NEW APPLICATION",
     icon: "close",
     cta_state: "/loan/idfc/loan-know-more",
     close_state: "/loan/idfc/loan-know-more",
@@ -339,7 +339,7 @@ class LoanStatus extends Component {
       }
     }
 
-    if (commonMapper.button_title === "START NEW APPLICATION") {
+    if (commonMapper.button_title === "START A NEW APPLICATION") {
       let params = {
         create_new: true,
         reset: true,

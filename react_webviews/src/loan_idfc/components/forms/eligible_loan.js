@@ -267,7 +267,7 @@ class EligibleLoan extends Component {
                 </div>
                 <div className="content">
                   <div className="sub-content-left">
-                    <div className="sub-head">EMI amount</div>
+                    <div className="sub-head">EMI</div>
                     <div className="sub-title">
                       {formatAmountInr(vendor_info.initial_offer_emi)}
                     </div>
