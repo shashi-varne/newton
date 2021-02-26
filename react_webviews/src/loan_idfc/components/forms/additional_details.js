@@ -364,7 +364,7 @@ class AdditionalDetails extends Component {
                 type="text"
                 width="40"
                 maxLength={6}
-                label="Pincode"
+                label="Pin code"
                 id="office_pincode"
                 name="office_pincode"
                 value={this.state.form_data.office_pincode || ""}
