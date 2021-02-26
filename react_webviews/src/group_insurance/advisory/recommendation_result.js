@@ -138,7 +138,6 @@ class RecommendationResult extends Component {
         
         var recommendation_data = this.state.recommendation_data;
         var adequate_coverage_present = this.state.adequate_coverage_present
-        
         return(
             <div className="recommendation-result">
                 <StatusBar recommendation_data={recommendation_data}/>
@@ -160,8 +159,8 @@ class RecommendationResult extends Component {
                     </div>
                     ) : null}
                     {
-                        recommendation_data.key === 'health' && this.props.parentsPresent ? (
-                            <p className="advisory-sub-text">{ReactHtmlParser(recommendation_data.variable_text)}</p>
+                        recommendation_data.key === 'health' && this.props.parentsPresent && !adequate_coverage_present  ? (
+                            <p className="advisory-sub-text advisory-variable-text">{ReactHtmlParser(recommendation_data.variable_text)}</p>
                         ) : null
                     }
                     {

@@ -1235,11 +1235,11 @@ input#pan {
   .adivsory-card-heading{
     position: absolute;
     left: 6.5%;
-    top: 2px;
+    padding-right: 30px;
+    top: 2%;
     font-weight: bold;
-    font-size: 17px;
-    line-height: 26px;
-
+    font-size: calc(14px + 1vw);
+    line-height: 160%;
   }
   .advisory-entry-button{
     position: absolute;
@@ -1367,6 +1367,9 @@ input#pan {
     color: #767E86;
     font-size: 14px;
     line-height: 22px;
+  }
+  .advisory-variable-text{
+    text-align: center;
   }
   .rec-profile-container{
     border: 1.5px solid #c8c8c8;

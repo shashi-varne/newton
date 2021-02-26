@@ -241,7 +241,7 @@ class AdivsoryRecommendations extends Component {
                                     <p>{capitalizeFirstLetter(user_data.name)}</p>
                                     <p>{capitalizeFirstLetter(user_data.gender.toLowerCase())}</p>
                                     <p>{user_data.age} years</p>
-                                    { this.state.dependent_count ? (<p>{this.state.dependent_count} dependent{this.state.dependent_count > 1 ? <span>s</span>: ''} </p>) : null}
+                                    {(<p>{this.state.dependent_count} dependent{this.state.dependent_count > 1 ? <span>s</span>: ''} </p>)}
                                 </div>
                                 )}
                                 
