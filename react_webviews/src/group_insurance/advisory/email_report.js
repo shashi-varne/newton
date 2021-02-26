@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import {validateEmail} from 'utils/validators';
 import {storageService} from "utils/validators";
 import Api from 'utils/api';
-
+import toast from "../../common/ui/Toast";
 
 class EmailReport extends Component { 
     constructor(props){
@@ -122,6 +122,7 @@ class EmailReport extends Component {
                   var resultData = res.pfwresponse.result;
           
                   if (res.pfwresponse.status_code === 200) {
+                    toast('Mail sent!');
                     this.navigate('/group-insurance/advisory/recommendations')
                   } else {
                     error = resultData.error || resultData.message || "Something went wrong";
