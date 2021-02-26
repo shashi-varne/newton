@@ -149,7 +149,6 @@ class PersonalDetails2 extends Component {
         buttonTitle="Save & Continue"
         fullWidthButton={true}
         onlyButton={true}
-        classOverRide={'fhc-container'}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/group.svg`)}

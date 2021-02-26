@@ -18,6 +18,9 @@ class Container extends Component {
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header: true,
       project: 'portfolio-rebalancing', //to use in common functions
+      props: {
+        classOverRide : 'pr-main-container'
+      }
     };
     this.historyGoBack = this.historyGoBack.bind(this);
     this.didMount = didMount.bind(this);
@@ -68,7 +71,7 @@ class Container extends Component {
 
     return(
       <Fragment>
-      {this.commonRender()}
+      {this.commonRender(this.state.props)}
       </Fragment>
     )
   }

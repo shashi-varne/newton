@@ -398,7 +398,6 @@ class KycStatus extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle={this.state.commonMapper.button_title}
-        classOverRide={'loanMainContainer'}
         headerData={{
           icon: 'close',
           goBack: this.goBack

@@ -53,7 +53,6 @@ class AppUpdate extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         buttonTitle="UPDATE NOW"
-        classOverRide={'loanMainContainer'}
       >
 
         <div style={{ textAlign: 'center',margin: '20px 0 0 0' }}>

@@ -13,6 +13,9 @@ class Container extends Component {
       project: 'help',
       inPageTitle: false,
       new_header: false,
+      props: {
+        classOverRideContainer: 'HelpContainer'
+      }
     }
     this.historyGoBack = this.historyGoBack.bind(this);
     this.didMount = didMount.bind(this);
@@ -54,7 +57,7 @@ class Container extends Component {
 
     return(
       <Fragment>
-      {this.commonRender()} 
+      {this.commonRender(this.state.props)} 
       </Fragment>
     )
   }

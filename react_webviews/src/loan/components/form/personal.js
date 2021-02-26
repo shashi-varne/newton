@@ -183,7 +183,6 @@ class PersonalDetails extends Component {
                 title={this.setEditTitle("Personal details")}
                 buttonTitle="CONTINUE"
                 handleClick={() => this.handleClick()}
-                classOverRide={'loanMainContainer'}
             >
                 <FormControl fullWidth>
 

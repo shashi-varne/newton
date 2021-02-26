@@ -158,7 +158,6 @@ class MandateStatus extends Component {
           goBack: this.goBack
         }}
         noFooter={this.state.commonMapper.noFooter}
-        classOverRide={'loanMainContainer'}
       >
         <div className="gold-payment-container" id="goldSection">
           <div>

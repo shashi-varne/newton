@@ -91,7 +91,8 @@ export function commonRender(props) {
 
     if (this.state.mounted) {
         return (
-            <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+
+   <div className={`ContainerWrapper  ${this.props.background} ${props ? props.classOverRide ? props.classOverRide : '' : ''} ${this.props.classOverRide} ${this.props.noPadding ? "no-padding" : ""}`} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && <Header
@@ -116,7 +117,6 @@ export function commonRender(props) {
                     headerData={this.props.headerData}
                     new_header={this.state.new_header || this.state.project === 'help'}
                     goBack={this.headerGoBack || this.historyGoBack}
-                    // goBack={this.historyGoBack}
                     filterPgae={this.props.filterPgae}
                     handleFilter={this.props.handleFilter} 
                     hideBack={this.props.hideBack}
@@ -156,7 +156,7 @@ export function commonRender(props) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`Container  ${this.props.background} ${this.props.classOverRideContainer} ${this.props.noPadding ? "no-padding" : ""}`}>
+                    className={`Container  ${this.props.background} ${this.props.background} ${props ? props.classOverRideContainer ? props.classOverRideContainer : '' : ''} ${this.props.classOverRideContainer } ${this.props.noPadding ? "no-padding" : ""}`}>
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}

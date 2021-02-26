@@ -50,7 +50,6 @@ const Landing = (props) => {
       classOverRideContainer='pr-container'
       fullWidthButton={true}
       onlyButton={true}
-      classOverRide='pr-main-container'
     >
       <section>
         <div className='common-top-page-subtitle'>

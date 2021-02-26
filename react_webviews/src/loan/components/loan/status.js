@@ -58,7 +58,6 @@ class LoanStatus extends Component {
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
         hidePageTitle={true}
-        classOverRide={'loanMainContainer'}
       >
         <div className="loan-status">
           <img

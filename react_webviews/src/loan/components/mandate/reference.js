@@ -169,7 +169,6 @@ class KycStatus extends Component {
         events={this.sendEvents('just_set_events')}
         buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
-        classOverRide={'loanMainContainer'}
       >
         <FormControl fullWidth>
           <div className="loan-mandate-reference">

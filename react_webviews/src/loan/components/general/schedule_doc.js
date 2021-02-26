@@ -84,7 +84,6 @@ class ScheduleDoc extends Component {
         handleClick={this.handleClick}
         buttonTitle="CONTINUE"
         noFooter={true}
-        classOverRide={'loanMainContainer'}
       >
         <div className="loan-schedule-doc">
           <img

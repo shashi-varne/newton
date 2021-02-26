@@ -158,7 +158,6 @@ const Date = (props) => {
       classOverRideContainer='pr-container'
       fullWidthButton={true}
       onlyButton={true}
-      classOverRide='pr-main-container'
     >
       <Typography className='pr-sip-transaction' align='left'>
         SIP switch transactions

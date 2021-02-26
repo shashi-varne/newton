@@ -483,7 +483,6 @@ class FormSummary extends Component {
                 headerData={{
                     icon: 'close'
                 }}
-                classOverRide={'loanMainContainer'}
             >
 
                 <div className="common-top-page-subtitle">

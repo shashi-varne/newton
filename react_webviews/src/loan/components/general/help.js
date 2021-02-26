@@ -57,7 +57,6 @@ class Help extends Component {
         events={this.sendEvents('just_set_events')}
         handleClick={this.handleClick}
         noFooter={true}
-        classOverRide={'loanMainContainer'}
       >
         <div className="loan-help">
           <div className="label" style={{lineHeight: '20px'}}>

@@ -64,7 +64,6 @@ class Report extends Component {
         buttonTitle="CONTINUE"
         noFooter={true}
         classHeader="loan-report-header"
-        classOverRide={'loanMainContainer'}
       >
         <div className="loan-landing2">
           <div className="container">

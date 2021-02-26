@@ -136,7 +136,6 @@ const Otp = (props) => {
       classOverRideContainer='pr-container'
       fullWidthButton={true}
       onlyButton={true}
-      classOverRide='pr-main-container'
     >
       <div className='pr-otp-container'>
         <section className='otp-successful-section'>

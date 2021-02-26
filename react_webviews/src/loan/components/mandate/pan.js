@@ -396,7 +396,6 @@ class MandatePan extends Component {
         buttonTitle="CONTINUE"
         withProvider={this.state.withProvider}
         buttonData={this.state.bottomButtonData}
-        classOverRide={'loanMainContainer'}
       >
         <div className="common-top-page-subtitle">
           PAN Card: {this.state.personal_info.pan_no}

@@ -55,7 +55,6 @@ class InvestSuccess extends Component {
                 title="Fin Health Check (FHC)"
                 fullWidthButton={true}
                 onlyButton={true}
-                classOverRide={'fhc-container'}
             >
                 <div className="landing-container">
                     <img

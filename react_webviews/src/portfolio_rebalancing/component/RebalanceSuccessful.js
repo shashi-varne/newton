@@ -52,7 +52,6 @@ const RebalanceSuccessful = () => {
       classOverRideContainer='pr-container'
       fullWidthButton={true}
       onlyButton={true}
-      classOverRide='pr-main-container'
     >
       <section className='image-success-cover'>
         <img

@@ -24,7 +24,6 @@ class SystemMaintainence extends Component {
         showLoader={this.state.show_loader}
         hidePageTitle={true}
         noFooter={true}
-        classOverRide={'loanMainContainer'}
       >
         <div className="system-maintainence">
           <img src={require("assets/Group 252.svg")} alt="" />

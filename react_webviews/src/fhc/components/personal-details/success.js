@@ -42,7 +42,6 @@ class Success extends Component {
                 hideBack={true}
                 fullWidthButton={true}
                 onlyButton={true}
-                classOverRide={'fhc-container'}
             >
                 <div className="landing-container">
                     <img

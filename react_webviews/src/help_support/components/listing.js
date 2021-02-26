@@ -169,7 +169,6 @@ class Listing extends Component {
         noFooter={true}
         noBack={ !(getConfig().isWebCode) && getConfig().app === 'android' }
         events={this.backButtonEvent()}
-        classOverRideContainer={'HelpContainer'}
       >
         <div className="Help pad20">  
           <div className="section-head">

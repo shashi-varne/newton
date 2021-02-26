@@ -20,7 +20,10 @@ class Container extends Component {
       show_loader: false,
       popupText: '',
       callbackType: '',
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      props: {
+        classOverRide: 'fhc-container'
+      }
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
     this.historyGoBack = this.historyGoBack.bind(this);
@@ -109,7 +112,7 @@ class Container extends Component {
 
     return(
       <Fragment>
-      {this.commonRender()}
+      {this.commonRender(this.state.props)}
       </Fragment>
     )
   }

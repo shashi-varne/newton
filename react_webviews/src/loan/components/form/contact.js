@@ -107,7 +107,6 @@ class ContactDetails extends Component {
                 title={this.setEditTitle("Contact details")}
                 buttonTitle="CONTINUE"
                 handleClick={() => this.handleClick()}
-                classOverRide={'loanMainContainer'}
             >
                 <FormControl fullWidth>
 
