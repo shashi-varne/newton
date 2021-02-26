@@ -13,16 +13,10 @@ const AddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [pinTouched, setPinTouched] = useState(false)
   const [showError, setShowError] = useState(false)
-  const [pincode, setPincode] = useState('')
-  const [address, setAddress] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
 
   const [kyc, setKyc] = useState(
     storageService().getObject(storageConstants.KYC) || null
   )
-
-  const isDisabled = isEmpty(pincode) || isEmpty(address) || isApiRunning
 
   const getHelperText = (pincode) => {
     if (typeof pincode === 'string') {
@@ -51,7 +45,8 @@ const AddressDetails2 = (props) => {
       const nomination_address = kyc?.nomination?.meta_data?.nominee_address
       item.kyc.nomination.address = nomination_address
       setIsApiRunning(true)
-      await submit(item)
+      const result = await submit(item)
+      setKyc(result.kyc)
       if (backToJourney !== null) {
         navigate('/kyc/upload/address')
       } else {
@@ -74,17 +69,36 @@ const AddressDetails2 = (props) => {
 
   const handleChange = (event) => {
     const name = event.target.name
+    const value = event.target.value
     switch (name) {
       case 'pincode':
-        if (event.target.value.length <= 6) {
+        if (value.length <= 6) {
           if (!pinTouched) {
             setPinTouched(true)
           }
-          setPincode(event.target.value)
+          setKyc((kyc) => ({
+            ...kyc,
+            address: {
+              ...kyc?.address,
+              meta_data: {
+                ...kyc?.address?.meta_data,
+                [name]: value,
+              },
+            },
+          }))
         }
         break
-      case 'address':
-        setAddress(event.target.value)
+      case 'addressline':
+        setKyc((kyc) => ({
+          ...kyc,
+          address: {
+            ...kyc?.address,
+            meta_data: {
+              ...kyc?.address?.meta_data,
+              [name]: value,
+            },
+          },
+        }))
         break
       default:
         break
@@ -120,8 +134,6 @@ const AddressDetails2 = (props) => {
             },
           },
         }))
-        setCity(data[0].district_name)
-        setState(data[0].state_name)
       }
     } catch (err) {
       Toast(err.message, 'error')
@@ -129,6 +141,10 @@ const AddressDetails2 = (props) => {
   }
 
   const setNomineeData = () => {
+    const city = kyc?.address?.meta_data?.city
+    const state = kyc?.address?.meta_data?.state
+    const pincode = kyc?.address?.meta_data?.pincode
+    const addressline = kyc?.address?.meta_data?.addressline
     setKyc((kyc) => ({
       ...kyc,
       nomination: {
@@ -138,7 +154,7 @@ const AddressDetails2 = (props) => {
           city,
           state,
           pincode,
-          addressline: address,
+          addressline,
         },
       },
     }))
@@ -164,23 +180,22 @@ const AddressDetails2 = (props) => {
     }
   }
 
-  let total_pages = 2
+  const getTotalPages = (userKyc) =>
+    userKyc?.address?.meta_data?.is_nri ? 4 : 2
 
-  let address_proof = ''
-
-  if (kyc?.address?.meta_data?.is_nri) {
-    address_proof = 'Passport'
-    total_pages = 4
-  } else {
-    address_proof = kycDocNameMapper[kyc?.address_doc_type]
+  const getAddressProof = (userKyc) => {
+    const isNri = userKyc?.address?.meta_data?.is_nri
+    if (isNri) {
+      return 'Passport'
+    }
+    return kycDocNameMapper[kyc?.address_doc_type]
   }
 
   const initialize = async () => {
     try {
       setShowSkelton(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
+      const result = await initData()
+      setKyc(result.kyc)
     } catch (err) {
       setShowError(true)
     } finally {
@@ -195,10 +210,16 @@ const AddressDetails2 = (props) => {
   }, [])
 
   useEffect(() => {
-    if (pincode.length === 6) {
+    if (kyc?.address?.meta_data?.pincode?.length === 6) {
       fetchPincodeData()
     }
-  }, [pincode])
+  }, [kyc?.address?.meta_data?.pincode])
+
+  const pincode = kyc?.address?.meta_data?.pincode || ''
+  const addressline = kyc?.address?.meta_data?.addressline || ''
+  const state = kyc?.address?.meta_data?.state || ''
+  const city = kyc?.address?.meta_data?.city || ''
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning
 
   return (
     <Container
@@ -210,11 +231,13 @@ const AddressDetails2 = (props) => {
       isApiRunning={isApiRunning}
     >
       <section id="kyc-bank-kyc-address-details-2" className="page-body-kyc">
-        <div className="title">{title}</div>
-        <div className="sub-title">Address as per Driving Liscence</div>
+        <div className="flex-between flex-center">
+          <div className="title">{title}</div>
+          <div className="pageno">2/{getTotalPages(kyc)}</div>
+        </div>
+        <div className="sub-title">Address as per {getAddressProof(kyc)}</div>
         <form className="form-container">
           <TextField
-            type="number"
             label="Pincode"
             name="pincode"
             className=""
@@ -229,9 +252,9 @@ const AddressDetails2 = (props) => {
           />
           <TextField
             label="Address"
-            name="address"
+            name="addressline"
             className=""
-            value={address}
+            value={addressline}
             onChange={handleChange}
             margin="normal"
             multiline

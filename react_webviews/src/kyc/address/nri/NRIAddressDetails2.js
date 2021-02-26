@@ -13,17 +13,12 @@ const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [pinTouched, setPinTouched] = useState(false)
   const [showError, setShowError] = useState(false)
-  const [pincode, setPincode] = useState('')
-  const [address, setAddress] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [country, setCountry] = useState('')
 
   const [kyc, setKyc] = useState(
     storageService().getObject(storageConstants.KYC) || null
   )
 
-  const isDisabled = isEmpty(pincode) || isEmpty(address) || isApiRunning
+  const isDisabled = isApiRunning
   const stateParams = props?.location?.state
 
   const getHelperText = (pincode) => {
@@ -49,7 +44,8 @@ const NRIAddressDetails2 = (props) => {
         },
       }
       setIsApiRunning(true)
-      await submit(item)
+      const result = await submit(item)
+      setKyc(result.kyc)
       if (stateParams?.toState) {
         navigate(stateParams?.toState, { userType: stateParams?.userType })
       } else if (stateParams?.backToJourney) {
@@ -70,26 +66,72 @@ const NRIAddressDetails2 = (props) => {
 
   const handleChange = (event) => {
     const name = event.target.name
+    const value = event.target.value
     switch (name) {
       case 'pincode':
         if (event.target.value.length <= 6) {
           if (!pinTouched) {
             setPinTouched(true)
           }
-          setPincode(event.target.value)
+          setKyc((kyc) => ({
+            ...kyc,
+            nri_address: {
+              ...kyc?.nri_address,
+              meta_data: {
+                ...kyc?.nri_address?.meta_data,
+                [name]: value,
+              },
+            },
+          }))
         }
         break
       case 'address':
-        setAddress(event.target.value)
+        setKyc((kyc) => ({
+          ...kyc,
+          nri_address: {
+            ...kyc?.nri_address,
+            meta_data: {
+              ...kyc?.nri_address?.meta_data,
+              addressline: value,
+            },
+          },
+        }))
         break
       case 'city':
-        setCity(event.target.value)
+        setKyc((kyc) => ({
+          ...kyc,
+          nri_address: {
+            ...kyc?.nri_address,
+            meta_data: {
+              ...kyc?.nri_address?.meta_data,
+              city: value,
+            },
+          },
+        }))
         break
       case 'state':
-        setState(event.target.value)
+        setKyc((kyc) => ({
+          ...kyc,
+          nri_address: {
+            ...kyc?.nri_address,
+            meta_data: {
+              ...kyc?.nri_address?.meta_data,
+              state: value,
+            },
+          },
+        }))
         break
       case 'country':
-        setCountry(event.target.value)
+        setKyc((kyc) => ({
+          ...kyc,
+          nri_address: {
+            ...kyc?.nri_address,
+            meta_data: {
+              ...kyc?.nri_address?.meta_data,
+              country: value,
+            },
+          },
+        }))
         break
       default:
         break
@@ -98,7 +140,7 @@ const NRIAddressDetails2 = (props) => {
 
   const fetchPincodeData = async () => {
     try {
-      const data = await getPinCodeData(pincode)
+      const data = await getPinCodeData(kyc?.nri_address?.meta_data?.pincode)
       if (data.length === 0) {
         setKyc((userKyc) => ({
           ...userKyc,
@@ -125,8 +167,6 @@ const NRIAddressDetails2 = (props) => {
             },
           },
         }))
-        setCity(data[0].district_name)
-        setState(data[0].state_name)
       }
     } catch (err) {
       console.error(err)
@@ -178,10 +218,16 @@ const NRIAddressDetails2 = (props) => {
   }, [])
 
   useEffect(() => {
-    if (pincode.length === 6) {
+    if (kyc?.nri_address?.meta_data?.pincode.length === 6) {
       fetchPincodeData()
     }
-  }, [pincode])
+  }, [kyc?.nri_address?.meta_data?.pincode])
+
+  const pincode = kyc?.nri_address?.meta_data?.pincode || ''
+  const addressline = kyc?.nri_address?.meta_data?.addressline || ''
+  const state = kyc?.nri_address?.meta_data?.state || ''
+  const city = kyc?.nri_address?.meta_data?.city || ''
+  const country = kyc?.nri_address?.meta_data?.country || ''
 
   return (
     <Container
@@ -216,7 +262,7 @@ const NRIAddressDetails2 = (props) => {
             label="Address"
             name="address"
             className=""
-            value={address}
+            value={addressline}
             onChange={handleChange}
             margin="normal"
             multiline

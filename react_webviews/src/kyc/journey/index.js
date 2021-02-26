@@ -599,138 +599,150 @@ const Journey = (props) => {
       disable={loading}
       title="KYC Journey"
       classOverRideContainer="pr-container"
-      showSkelton={loading}
+      showSkelton={loading || isEmpty(kyc) || isEmpty(currentUser)}
       handleClick={goNext}
     >
-      <div className="kyc-journey">
-        {kycJourneyStatus === 'ground_premium' && (
-          <div className="kyc-journey-caption">fast track your investment!</div>
-        )}
-        {kyc.kyc_status === 'compliant' && (
-          <div className="kyc-pj-content">
-            <div className="left">
-              <div className="pj-header">Premium Onboarding</div>
-              <div className="pj-bottom-info-box">
-                <img
-                  src={require(`assets/${productName}/ic_instant.svg`)}
-                  alt="Instant Investment"
-                  role="i"
-                  className="icon"
-                />
-                <div className="pj-bottom-info-content">Instant Investment</div>
-              </div>
-              <div className="pj-bottom-info-box">
-                <img
-                  src={require(`assets/${productName}/ic_no_doc.svg`)}
-                  alt="No document asked"
-                  role="i"
-                  className="icon"
-                />
-                <div className="pj-bottom-info-content">No document asked</div>
-              </div>
+      {kyc && currentUser && (
+        <div className="kyc-journey">
+          {kycJourneyStatus === 'ground_premium' && (
+            <div className="kyc-journey-caption">
+              fast track your investment!
             </div>
+          )}
+          {kyc.kyc_status === 'compliant' && (
+            <div className="kyc-pj-content">
+              <div className="left">
+                <div className="pj-header">Premium Onboarding</div>
+                <div className="pj-bottom-info-box">
+                  <img
+                    src={require(`assets/${productName}/ic_instant.svg`)}
+                    alt="Instant Investment"
+                    role="i"
+                    className="icon"
+                  />
+                  <div className="pj-bottom-info-content">
+                    Instant Investment
+                  </div>
+                </div>
+                <div className="pj-bottom-info-box">
+                  <img
+                    src={require(`assets/${productName}/ic_no_doc.svg`)}
+                    alt="No document asked"
+                    role="i"
+                    className="icon"
+                  />
+                  <div className="pj-bottom-info-content">
+                    No document asked
+                  </div>
+                </div>
+              </div>
 
-            <img
-              src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
-              alt="Premium Onboarding"
-            />
-          </div>
-        )}
-        {show_aadhaar && (
-          <div className="kyc-pj-content">
-            <div className="left">
-              <div className="pj-header">Premium Onboarding</div>
-              <div className="pj-bottom-info-box">
-                <img
-                  src={require(`assets/${productName}/ic_instant.svg`)}
-                  alt="Instant Investment"
-                  role="i"
-                  className="icon"
-                />
-                <div className="pj-bottom-info-content">Instant Investment</div>
-              </div>
-              <div className="pj-bottom-info-box">
-                <img
-                  src={require(`assets/${productName}/ic_no_doc.svg`)}
-                  alt="No document asked"
-                  role="i"
-                  className="icon"
-                />
-                <div className="pj-bottom-info-content">No document asked</div>
-              </div>
+              <img
+                src={require(`assets/${productName}/ic_premium_onboarding_mid.svg`)}
+                alt="Premium Onboarding"
+              />
             </div>
+          )}
+          {show_aadhaar && (
+            <div className="kyc-pj-content">
+              <div className="left">
+                <div className="pj-header">Premium Onboarding</div>
+                <div className="pj-bottom-info-box">
+                  <img
+                    src={require(`assets/${productName}/ic_instant.svg`)}
+                    alt="Instant Investment"
+                    role="i"
+                    className="icon"
+                  />
+                  <div className="pj-bottom-info-content">
+                    Instant Investment
+                  </div>
+                </div>
+                <div className="pj-bottom-info-box">
+                  <img
+                    src={require(`assets/${productName}/ic_no_doc.svg`)}
+                    alt="No document asked"
+                    role="i"
+                    className="icon"
+                  />
+                  <div className="pj-bottom-info-content">
+                    No document asked
+                  </div>
+                </div>
+              </div>
 
-            <img
-              src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
-              alt="Premium Onboarding"
+              <img
+                src={require(`assets/${productName}/icn_aadhaar_kyc.svg`)}
+                alt="Premium Onboarding"
+              />
+            </div>
+          )}
+          <div className="kyc-journey-title">{top_title}</div>
+          {!show_aadhaar && (
+            <div className="kyc-journey-subtitle">
+              Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
+              address proof handy to complete KYC
+            </div>
+          )}
+          {kyc?.kyc_status === 'compliant' && !investmentPending && (
+            <div class="kyc-journey-subtitle">
+              To unlock premium onboarding, complete these simple steps
+            </div>
+          )}
+
+          {investmentPending && (
+            <Alert
+              variant="attention"
+              message="Please share following mandatory details within 24 hrs to execute the investment."
+              title={`Hey ${currentUser.name}`}
             />
-          </div>
-        )}
-        <div className="kyc-journey-title">{top_title}</div>
-        {!show_aadhaar && (
-          <div className="kyc-journey-subtitle">
-            Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and address
-            proof handy to complete KYC
-          </div>
-        )}
-        {kyc?.kyc_status === 'compliant' && !investmentPending && (
-          <div class="kyc-journey-subtitle">
-            To unlock premium onboarding, complete these simple steps
-          </div>
-        )}
-
-        {investmentPending && (
-          <Alert
-            variant="attention"
-            message="Please share following mandatory details within 24 hrs to execute the investment."
-            title={`Hey ${currentUser.name}`}
-          />
-        )}
-        <main className="steps-container">
-          {journeyData.map((item, idx) => (
-            <div
-              className={
-                item.status === 'completed' ? 'step step__completed' : 'step'
-              }
-              key={idx}
-            >
-              {item.status === 'completed' && (
-                <img
-                  src={require(`assets/${productName}/completed.svg`)}
-                  alt="completed"
-                  className="icon"
-                />
-              )}
-              {item.status !== 'completed' && (
-                <span
-                  className={idx === stage - 1 ? 'icon icon__active' : 'icon'}
-                >
-                  {idx + 1}
-                </span>
-              )}
+          )}
+          <main className="steps-container">
+            {journeyData.map((item, idx) => (
               <div
                 className={
-                  idx === stage - 1 ? 'title title__selected' : 'title'
+                  item.status === 'completed' ? 'step step__completed' : 'step'
                 }
+                key={idx}
               >
-                {item.title}
-                {item.status === 'completed' && item.isEditAllowed && (
+                {item.status === 'completed' && (
+                  <img
+                    src={require(`assets/${productName}/completed.svg`)}
+                    alt="completed"
+                    className="icon"
+                  />
+                )}
+                {item.status !== 'completed' && (
                   <span
-                    className="edit"
-                    onClick={() =>
-                      handleEdit(item.key, idx, item.isEditAllowed)
-                    }
+                    className={idx === stage - 1 ? 'icon icon__active' : 'icon'}
                   >
-                    EDIT
+                    {idx + 1}
                   </span>
                 )}
-              </div>
+                <div
+                  className={
+                    idx === stage - 1 ? 'title title__selected' : 'title'
+                  }
+                >
+                  {item.title}
+                  {item.status === 'completed' && item.isEditAllowed && (
+                    <span
+                      className="edit"
+                      onClick={() =>
+                        handleEdit(item.key, idx, item.isEditAllowed)
+                      }
+                    >
+                      EDIT
+                    </span>
+                  )}
+                </div>
 
-              {item?.disc && <div className="disc">{item?.disc}</div>}
-            </div>
-          ))}
-        </main>
-      </div>
+                {item?.disc && <div className="disc">{item?.disc}</div>}
+              </div>
+            ))}
+          </main>
+        </div>
+      )}
       <ShowAadharDialog
         open={show_aadhaar && open}
         onClose={() => setOpen(false)}
