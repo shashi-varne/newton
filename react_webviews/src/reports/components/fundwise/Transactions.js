@@ -1,10 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty, storageService } from "utils/validators";
 import { storageConstants } from "../../constants";
 import { initData } from "../../services";
 import { getTransactions } from "../../common/api";
-import { green } from "material-ui/colors";
 
 const FundswiseTransactions = (props) => {
   const params = props?.match?.params || {};
@@ -31,9 +30,6 @@ const FundswiseTransactions = (props) => {
       return;
     }
     setTransactions(data.transactions);
-    if (result) {
-      setReportData(result);
-    }
     const result = await getTransactions();
     if (result) {
       setReportData(result);
@@ -73,7 +69,7 @@ const FundswiseTransactions = (props) => {
                       <span
                         className={`text ${
                           transaction.ttype === "purchase" && "green"
-                        } ${transaction.ttype == "redemption" && "red"}`}
+                        } ${transaction.ttype === "redemption" && "red"}`}
                       >
                         {transaction.ttype}
                       </span>

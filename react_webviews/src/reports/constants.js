@@ -50,3 +50,103 @@ export const storageConstants = {
   PENDING_REDEMPTION: "pending_redemption",
   SIPS: "sips",
 };
+
+export const getPurchaseProcessData = (
+  dt_created = "",
+  expected_credit_date = ""
+) => {
+  return {
+    purchase: [
+      {
+        title: "Payment successful",
+        desc: "",
+        time: "Immediate",
+      },
+      {
+        title: "Order placed",
+        desc:
+          "The payment and investment details are sent to the mutual fund company for order execution.",
+        time: "1 day",
+      },
+      {
+        title: "Units allotted",
+        desc:
+          "On successful order execution units are allotted. Your investment will be active from this day onward.",
+        time: "1 day",
+      },
+      {
+        title: "Investment confirmed",
+        desc:
+          "fisdom has received confirmation of the investment from the mutual fund company and your portfolio is updated.",
+        time: "2-3 days",
+      },
+    ],
+    withdraw: [
+      {
+        title: "Withdraw requested",
+        desc: "",
+        time: dt_created,
+      },
+      {
+        title: "Order placed",
+        desc: "Order sent to fund house.",
+        time: "1 day",
+      },
+      {
+        title: "Units deducted",
+        desc: "Order executed and units deducted.",
+        time: "2-3 days",
+      },
+      {
+        title: "Amount credited",
+        desc:
+          "fisdom has received confirmation of the withdrawal from the mutual fund company.",
+        time: expected_credit_date,
+      },
+    ],
+    switch: [
+      {
+        title: "Switch requested",
+        desc: "",
+        time: "Immediate",
+      },
+      {
+        title: "Order placed",
+        desc:
+          "Your order has been sent to the mutual fund company for execution",
+        time: "1 day*",
+      },
+      {
+        title: "Units switched",
+        desc: "On succesful order execution, units are switched",
+        time: "2-3 days*",
+      },
+      {
+        title: "Switch confirmed",
+        desc:
+          "fisdom has received confirmation of the switch from the mutual fund company.",
+        time: "3-6 days*",
+      },
+    ],
+    autodebit: [
+      {
+        title: "Auto debit request raised",
+        desc:
+          "Auto debit of the SIP amount from your bank account is initiated and the order has been placed. Allotment of units is subject to successful auto-debit.",
+        time: "Immediate",
+      },
+      {
+        title: "Units allotted",
+        desc:
+          "On successful order execution, units are allotted. Your investment will be active from this day onward.",
+        time: "1 day",
+      },
+      {
+        title: "Investment confirmed",
+        desc:
+          "fisdom has received confirmation of the investment from the mutual fund company and your portfolio is updated.",
+        time: "2-3 days",
+      },
+    ],
+  };
+};
