@@ -95,10 +95,11 @@ class ReportDetails extends Component {
 
   sendEvents(user_action) {
     let eventObj = {
-      event_name: "idfc_lending",
+      event_category: "Lending IDFC",
+      event_name: "idfc_loan_report",
       properties: {
         user_action: user_action,
-        screen_name: "loan_report",
+        event_name: "idfc_loan_report",
         status:
           (this.state.cssMapper[this.state.loan_status || ""] &&
             this.state.cssMapper[this.state.loan_status || ""].disc) ||

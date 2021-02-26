@@ -213,6 +213,7 @@ class DocumentUpload extends Component {
         user_action: user_action,
         doc_type: this.state.form_data.doc_name,
         type: type,
+        event_name: this.state.docList.category_name || "doc_upload",
       },
     };
 

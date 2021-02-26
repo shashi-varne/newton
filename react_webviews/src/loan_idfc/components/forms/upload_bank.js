@@ -158,6 +158,7 @@ class UploadBank extends Component {
       event_name: "idfc_upload_bank_statement",
       properties: {
         user_action: user_action,
+        event_name: "idfc_upload_bank_statement",
         files_uploaded: this.state.documents.length,
       },
     };
@@ -382,10 +383,12 @@ class UploadBank extends Component {
       }
     } catch (err) {
       console.log(err);
+      documents[index].showDotLoader = false;
       this.setState({
         show_loader: false,
+        documents: documents
       });
-      toast("Something went wrong");
+      toast(err || "Something went wrong");
     }
   };
 

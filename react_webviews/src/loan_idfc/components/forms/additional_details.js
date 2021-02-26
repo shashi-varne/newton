@@ -184,6 +184,7 @@ class AdditionalDetails extends Component {
       event_name: "idfc_additional_details",
       properties: {
         user_action: user_action,
+        event_name: "idfc_additional_details",
       },
     };
 

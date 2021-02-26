@@ -124,6 +124,7 @@ class DocumentList extends Component {
         user_action: user_action,
         docs_list : this.state.docList.map((category) => category.category_name),
         doc_card_selected: data.doc_card_selected || "",
+        event_name: "upload_docs",
       },
     };
 

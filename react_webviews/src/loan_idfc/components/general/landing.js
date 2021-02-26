@@ -89,6 +89,7 @@ class Landing extends Component {
       properties: {
         user_action: user_action,
         screen_name: "home_screen",
+        event_name: "idfc_lending",
       },
     };
 

@@ -55,6 +55,7 @@ class LoanRequirementDetails extends Component {
       event_name: "idfc_loan_requirement_details",
       properties: {
         user_action: user_action,
+        event_name: "idfc_loan_requirement_details",
       },
     };
 

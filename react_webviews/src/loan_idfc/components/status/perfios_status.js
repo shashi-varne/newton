@@ -113,6 +113,7 @@ class PerfiosStatus extends Component {
       event_name: "idfc_bank_statement_verification",
       properties: {
         user_action: user_action,
+        event_name: "idfc_bank_statement_verification",
         status: this.state.commonMapper.status,
         employment_type: application_info.application_status,
         cta_value:

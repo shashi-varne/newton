@@ -94,6 +94,7 @@ class BasicDetails extends Component {
         user_action: user_action,
         employment_type: (this.state.form_data.employment_type || "").toLowerCase(),
         dob: this.state.form_data.dob || "",
+        event_name: "idfc_personal_details",
       },
     };
 

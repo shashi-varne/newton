@@ -280,7 +280,8 @@ class JourneyMap extends Component {
         user_action: user_action,
         stage: data.stage,
         summary_selected_for: data.summary_selected_for || "",
-        resume: data.resume ? 'yes' : 'no'
+        resume: data.resume ? 'yes' : 'no',
+        event_name: "idfc_journey_map",
       },
     };
     if (user_action === "just_set_events") {

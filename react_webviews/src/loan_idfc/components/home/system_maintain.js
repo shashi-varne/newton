@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
-import HowToSteps from "../../../common/ui/HowToSteps";
-import PartnerCard from "./partner_card";
-import { nativeCallback } from "utils/native_callback";
-import Card from "../../../common/ui/Card";
-import { getConfig } from "utils/functions";
 
 class Home extends Component {
   constructor(props) {

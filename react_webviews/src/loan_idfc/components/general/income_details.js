@@ -91,6 +91,7 @@ class IncomeDetails extends Component {
       properties: {
         user_action: user_action,
         option_selected: details[data.option_selected] || "",
+        event_name: "idfc_income_details_perfios",
       },
     };
 

@@ -164,6 +164,7 @@ class AddressDetails extends Component {
         current_address_edited:
           this.state.form_data.current_address_edited || "no",
         ckyc_success: this.state.confirm_details ? "yes" : "no",
+        event_name: "idfc_kyc_address_details",
       },
     };
 

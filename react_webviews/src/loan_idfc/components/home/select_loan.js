@@ -159,7 +159,8 @@ class SelectLoan extends Component {
         provider_name: data.provider_name || "",
         status: data.status || "default",
         resume: data.resume || "no",
-        benefit_clicked: this.state.benefit_clicked || 'no'
+        benefit_clicked: this.state.benefit_clicked || 'no',
+        event_name: "select_loan_provider",
       },
     };
 

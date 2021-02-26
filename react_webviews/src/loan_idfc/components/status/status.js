@@ -295,6 +295,7 @@ class LoanStatus extends Component {
       event_name: this.state.commonMapper.screenName,
       properties: {
         user_action: user_action,
+        event_name: this.state.commonMapper.screenName,
       },
     };
     if (this.state.commonMapper.screenName === "application_rejected") {

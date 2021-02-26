@@ -28,6 +28,7 @@ class Eligibility extends Component {
       event_name: "idfc_eligibility",
       properties: {
         user_action: user_action,
+        event_name: "idfc_eligibility",
       },
     };
 

@@ -112,6 +112,7 @@ class SystemError extends Component {
       properties: {
         user_action: user_action,
         stage: this.state.stage || "",
+        event_name: "idfc_system_error",
       },
     };
 

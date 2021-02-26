@@ -91,6 +91,7 @@ class MobileVerification extends Component {
       event_name: "idfc_mobile_number_verification",
       properties: {
         user_action: user_action,
+        event_name: "idfc_mobile_number_verification",
         "t&c_clicked": this.state.terms_and_conditions_clicked,
       },
     };
