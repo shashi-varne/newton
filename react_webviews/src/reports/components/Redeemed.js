@@ -6,7 +6,7 @@ import { initData } from "../services";
 import { getSummaryV2 } from "../common/api";
 import Process from "./mini_components/Process";
 
-const Purchase = (props) => {
+const Redeemed = (props) => {
   const [userkyc, setUserKyc] = useState(
     storageService().getObject(storageConstants.KYC) || {}
   );
@@ -16,7 +16,7 @@ const Purchase = (props) => {
   const [transactions, setTransactions] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
   const [openProcess, setOpenProcess] = useState(false);
-  const [selectedPurchase, setSelectedPurchase] = useState({});
+  const [selectedRedeemed, setSelectedRedeemed] = useState({});
 
   useEffect(() => {
     initialize();
@@ -37,12 +37,12 @@ const Purchase = (props) => {
       setShowSkelton(false);
       return;
     }
-    setTransactions(result.report.pending.invested_transactions);
+    setTransactions(result.report.pending.redeemed_transactions);
     setShowSkelton(false);
   };
 
-  const handleProcess = (purchased) => {
-    setSelectedPurchase(purchased);
+  const handleProcess = (redeemed) => {
+    setSelectedRedeemed(redeemed);
     setOpenProcess(true);
   };
 
@@ -56,12 +56,12 @@ const Purchase = (props) => {
       <div className="report-purchase">
         {!showSkelton &&
           !isEmpty(transactions) &&
-          transactions.map((purchased, index) => {
+          transactions.map((redeemed, index) => {
             return (
               <div className="purchased" key={index}>
                 <div className="head">
-                  <div>{purchased.mfname}</div>
-                  {purchased.status === "upcoming" && (
+                  <div>{redeemed.mfname}</div>
+                  {redeemed.status === "upcoming" && (
                     <img src={require(`assets/auto_debit.png`)} alt="" />
                   )}
                 </div>
@@ -69,19 +69,30 @@ const Purchase = (props) => {
                   <div className="content">
                     <img alt="" src={require(`assets/invested_amount.png`)} />
                     <div className="text">
-                      <h4>Invested amount</h4>
-                      <div>{formatAmountInr(purchased.amount)}</div>
+                      <h4>Withdraw amount</h4>
+                      <div>{formatAmountInr(redeemed.amount)}</div>
                     </div>
                   </div>
-                  <div className="content">
-                    <img alt="" src={require(`assets/date.png`)} />
-                    <div className="text">
-                      <h4>Purchased on</h4>
-                      <div>{purchased.tran_date}</div>
+                  {!redeemed.bank_account_no && (
+                    <div className="content">
+                      <img alt="" src={require(`assets/date.png`)} />
+                      <div className="text">
+                        <h4>Redeemed on</h4>
+                        <div>{redeemed.tran_date}</div>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {redeemed.bank_account_no && (
+                    <div className="content">
+                      <img alt="" src={require(`assets/add_bank_icon.png`)} />
+                      <div className="text">
+                        <h4>Account credited</h4>
+                        <div>{redeemed.bank_account_no}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {purchased.status !== "upcoming" && (
+                {redeemed.trans_type === "insta-redeem" && (
                   <div className="progress-bar">
                     <div className="progress">
                       <div className="content">
@@ -92,13 +103,16 @@ const Purchase = (props) => {
                         />
                         <hr className="right"></hr>
                       </div>
-                      <div className="text">PAYMENT SUCCESSFUL</div>
+                      <div className="text">
+                        <div>WITHDRAW REQUESTED</div>
+                        <div className="small">{redeemed.dt_created}</div>
+                      </div>
                     </div>
                     <div className="progress">
                       <div className="content">
                         <hr className="left"></hr>
-                        {purchased.plutus_state === "order_placed" ||
-                        purchased.plutus_state === "unit_alloted" ? (
+                        {redeemed.plutus_state === "order_placed" ||
+                        redeemed.plutus_state === "unit_deducted" ? (
                           <img
                             src={require(`assets/completed_step.svg`)}
                             alt=""
@@ -113,7 +127,7 @@ const Purchase = (props) => {
                     <div className="progress">
                       <div className="content">
                         <hr className="left"></hr>
-                        {purchased.plutus_state === "unit_alloted" ? (
+                        {redeemed.plutus_state === "unit_deducted" ? (
                           <img
                             src={require(`assets/completed_step.svg`)}
                             alt=""
@@ -123,7 +137,7 @@ const Purchase = (props) => {
                         )}
                         <hr className="right"></hr>
                       </div>
-                      <div className="text">UNITS ALLOTED</div>
+                      <div className="text">UNITS DEDUCTED</div>
                     </div>
                     <div className="progress">
                       <div className="content">
@@ -131,11 +145,11 @@ const Purchase = (props) => {
                         <span className="dot"></span>
                         <hr className="right"></hr>
                       </div>
-                      <div className="text">INVESTMENT CONFIRMED</div>
+                      <div className="text">AMOUNT CREDITED</div>
                     </div>
                   </div>
                 )}
-                {purchased.status === "upcoming" && (
+                {redeemed.trans_type !== "insta-redeem" && (
                   <div className="progress-bar upcoming">
                     <div className="progress">
                       <div className="content">
@@ -146,32 +160,51 @@ const Purchase = (props) => {
                         />
                         <hr className="right"></hr>
                       </div>
-                      <div className="text">AUTO DEBIT REQUEST RAISED</div>
+                      <div className="text">
+                        <div>WITHDRAW REQUESTED</div>
+                        <div className="small">{redeemed.dt_created}</div>
+                      </div>
                     </div>
                     <div className="progress">
                       <div className="content">
                         <hr className="left"></hr>
-                        <span className="dot"></span>
+                        {redeemed.amount_credited || redeemed.units_deducted ? (
+                          <img
+                            src={require(`assets/completed_step.svg`)}
+                            alt=""
+                          />
+                        ) : (
+                          <span className="dot"></span>
+                        )}
                         <hr className="right"></hr>
                       </div>
-                      <div className="text">UNITS ALLOTED</div>
+                      <div className="text">
+                        <div>AMOUNT CREDITED</div>
+                        <div className="small">
+                          {redeemed.expected_credit_date}
+                        </div>
+                      </div>
                     </div>
                     <div className="progress">
                       <div className="content">
                         <hr className="left"></hr>
-                        <span className="dot"></span>
+                        {redeemed.units_deducted ? (
+                          <img
+                            src={require(`assets/completed_step.svg`)}
+                            alt=""
+                          />
+                        ) : (
+                          <span className="dot"></span>
+                        )}
                         <hr className="right"></hr>
                       </div>
-                      <div className="text">INVESTMENT CONFIRMED</div>
+                      <div className="text">UNITS DEDUCTED</div>
                     </div>
                   </div>
                 )}
                 <div className="check-process">
-                  <div
-                    className="text"
-                    onClick={() => handleProcess(purchased)}
-                  >
-                    CHECK PROCESS ?
+                  <div className="text" onClick={() => handleProcess(redeemed)}>
+                    View Details
                   </div>
                 </div>
               </div>
@@ -182,13 +215,12 @@ const Purchase = (props) => {
             isOpen={openProcess}
             close={() => setOpenProcess(false)}
             data={getPurchaseProcessData(
-              "",
-              "",
-              selectedPurchase.nfo_recommendation
+              selectedRedeemed.dt_created,
+              selectedRedeemed.expected_credit_date
             )}
-            type="purchase"
-            state={selectedPurchase.plutus_state}
-            status={selectedPurchase.status}
+            type="withdraw"
+            state={selectedRedeemed.plutus_state}
+            status={selectedRedeemed.status}
           />
         )}
       </div>
@@ -196,4 +228,4 @@ const Purchase = (props) => {
   );
 };
 
-export default Purchase;
+export default Redeemed;

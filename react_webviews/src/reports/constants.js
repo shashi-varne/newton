@@ -53,7 +53,8 @@ export const storageConstants = {
 
 export const getPurchaseProcessData = (
   dt_created = "",
-  expected_credit_date = ""
+  expected_credit_date = "",
+  nfo_recommendation = false
 ) => {
   return {
     purchase: [
@@ -72,7 +73,7 @@ export const getPurchaseProcessData = (
         title: "Units allotted",
         desc:
           "On successful order execution units are allotted. Your investment will be active from this day onward.",
-        time: "1 day",
+        time: nfo_recommendation ? "10-15 days" : "1 day",
       },
       {
         title: "Investment confirmed",

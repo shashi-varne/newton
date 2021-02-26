@@ -5,15 +5,7 @@ import HourglassFullIcon from "@material-ui/icons/HourglassFull";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckIcon from "@material-ui/icons/Check";
 
-const Process = ({
-  isOpen,
-  data,
-  close,
-  state,
-  type,
-  nfo_recommendation,
-  status,
-}) => {
+const Process = ({ isOpen, data, close, state, type, status }) => {
   return (
     <Dialog
       open={isOpen}
@@ -98,11 +90,7 @@ const Process = ({
                 >
                   <div className="top">
                     <span className="title">{data.purchase[2].title}</span>
-                    <span className="time">
-                      {nfo_recommendation
-                        ? "10-15 days"
-                        : data.purchase[2].time}
-                    </span>
+                    <span className="time">{data.purchase[2].time}</span>
                   </div>
                   <div className="desc">{data.purchase[2].desc}</div>
                 </div>
@@ -190,6 +178,97 @@ const Process = ({
                     <span className="time">{data.autodebit[2].time}</span>
                   </div>
                   <div className="desc">{data.autodebit[2].desc}</div>
+                </div>
+              </div>
+            </>
+          )}
+          {status !== "upcoming" && type === "withdraw" && (
+            <>
+              <div className="process-step">
+                <div className="dot completed">
+                  <CheckIcon className="icon" />
+                </div>
+                <div className="text selected">
+                  <div className="top">
+                    <span className="title">{data.withdraw[0].title}</span>
+                    <span className="time">{data.withdraw[0].time}</span>
+                  </div>
+                  <div className="desc">{data.withdraw[0].desc}</div>
+                </div>
+              </div>
+              <div className="process-step">
+                <div
+                  className={`dot ${
+                    (state === "unit_deducted" ||
+                      state === "order_placed" ||
+                      (state === "withdraw_success" &&
+                        state !== "order_placed")) &&
+                    "completed"
+                  }`}
+                >
+                  {state === "unit_deducted" || state === "order_placed" ? (
+                    <CheckIcon className="icon" />
+                  ) : state === "withdraw_success" &&
+                    state !== "order_placed" ? (
+                    <MoreHorizIcon className="icon" />
+                  ) : (
+                    <HourglassFullIcon className="icon" />
+                  )}
+                </div>
+                <div
+                  className={`text ${
+                    (state === "unit_deducted" || state === "order_placed") &&
+                    "selected"
+                  }`}
+                >
+                  <div className="top">
+                    <span className="title">{data.withdraw[1].title}</span>
+                    <span className="time">{data.withdraw[1].time}</span>
+                  </div>
+                  <div className="desc">{data.withdraw[1].desc}</div>
+                </div>
+              </div>
+              <div className="process-step">
+                <div
+                  className={`dot ${
+                    (state === "unit_deducted" || state === "order_placed") &&
+                    "completed"
+                  }`}
+                >
+                  {state === "unit_deducted" ? (
+                    <CheckIcon className="icon" />
+                  ) : state !== "unit_alloted" && state === "order_placed" ? (
+                    <MoreHorizIcon className="icon" />
+                  ) : (
+                    <HourglassFullIcon className="icon" />
+                  )}
+                </div>
+                <div
+                  className={`text ${state === "unit_deducted" && "selected"}`}
+                >
+                  <div className="top">
+                    <span className="title">{data.withdraw[2].title}</span>
+                    <span className="time">{data.withdraw[2].time}</span>
+                  </div>
+                  <div className="desc">{data.withdraw[2].desc}</div>
+                </div>
+              </div>
+              <div className="process-step">
+                <div
+                  className={`dot ${state === "unit_deducted" && "completed"}`}
+                >
+                  {state === "unit_deducted" ? (
+                    <MoreHorizIcon className="icon" />
+                  ) : (
+                    <HourglassFullIcon className="icon" />
+                  )}
+                </div>
+                <div className="text">
+                  <div className="top">
+                    <span className="title">{data.withdraw[3].title}</span>
+                    <span className="time">{data.withdraw[3].time}</span>
+                  </div>
+                  <div className="desc">{data.withdraw[3].desc}</div>
                 </div>
               </div>
             </>
