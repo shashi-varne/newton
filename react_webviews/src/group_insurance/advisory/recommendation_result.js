@@ -43,6 +43,7 @@ class RecommendationResult extends Component {
             "user_action": user_action,
             "insurance_type": insurance_type,
             "screen_name": screen_name,
+            "download_report": "no" 
           }
         };
     

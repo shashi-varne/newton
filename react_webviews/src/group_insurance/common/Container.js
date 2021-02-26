@@ -224,7 +224,7 @@ class Container extends Component {
     let from_advisory = storageService().getObject('from_advisory')
     let advisory_paths = ['/group-insurance/health/critical_illness/plan', '/group-insurance/group-health/RELIGARE/landing', '/group-insurance/corona/plan','/group-insurance/life-insurance/term/landing'];
     if(from_advisory && advisory_paths.indexOf(pathname) >= 0){
-      console.log(pathname)
+      
       this.navigate('/group-insurance/advisory/recommendations')
       return;
     }
