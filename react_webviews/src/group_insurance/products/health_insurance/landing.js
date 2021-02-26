@@ -39,7 +39,8 @@ class HealthInsuranceLanding extends Component {
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
       Comprehensive : false,
-      DiseasesSpecificPlan : false
+      DiseasesSpecificPlan : false,
+      lastClickedItem:""
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -141,12 +142,73 @@ class HealthInsuranceLanding extends Component {
           handleClick1: this.onload,
           button_text1: 'Retry',
           title1: ''
-        }
+        },
+        submit: {
+          handleClick1: this.handleClickEntry,
+          button_text1: "Retry",
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+
+  }
+
+  handleClickEntry = async (data) => {
+    if (data) {
+      this.setState({
+        lastClickedItem: data
       })
+    }
+    else {
+      data = this.state.lastClickedItem
+    }
+    this.setErrorData("submit");
+    this.setState({
+      skelton: true
+    });
+    let error = "";
+    let errorType = "";
+    try {
+      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+
+      let resultData = res.pfwresponse
+      if(res.pfwresponse.status_code === 200){
+        data.insurance_type = 'Comprehensive health insurance'
+        this.sendEvents(data)
+        let fullPath = data.key + '/landing';
+        this.navigate('/group-insurance/group-health/' + fullPath);  
+      }else {
+        error = resultData.error || resultData.message || true;
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        skelton: false,
+      });
+      error = true;
+      errorType = "crash";
+    }
+    
+    if(error)
+    {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: true,
+        skelton: false
+      });
     }
 
   }
@@ -161,12 +223,6 @@ class HealthInsuranceLanding extends Component {
     let errorType = '';
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
-
-      if (!this.state.openModuleData.sub_module) {
-        // this.setState({
-        //   skelton: false
-        // })
-      }
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
