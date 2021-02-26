@@ -183,7 +183,7 @@ class AdvisoryIncomeDetails extends Component {
               form_data.income_error = "We need some details to move forward!";
               canSubmitForm = false;
             }else if(form_data.income_value < 100000){
-                form_data.income_error = "Annual income needs to be more than Rs 1 lac for this analysis!";
+                form_data.income_error = "Annual income needs to be more than  ₹1 lac for this analysis!";
                 canSubmitForm = false;
             }
             if(!form_data.expense){
