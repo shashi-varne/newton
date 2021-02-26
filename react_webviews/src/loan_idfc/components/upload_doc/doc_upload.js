@@ -570,6 +570,7 @@ class DocumentUpload extends Component {
   }
 
   goBack = () => {
+    this.sendEvents('back')
     let { params } = this.state;
     let current_params = '';
 
