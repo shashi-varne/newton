@@ -393,11 +393,11 @@ export async function getOrCreate(params) {
       let errorTitle = result.error || result.message || "Something went wrong!";
       this.setState({
         show_loader: false,
-        skelton: false,
+        // skelton: false,
         errorTitle: errorTitle,
       });
 
-      this.setErrorData("submit");
+      this.setErrorData("onload");
       error = true;
       errorType = "generic";
     }
