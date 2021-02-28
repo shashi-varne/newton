@@ -35,11 +35,10 @@ const AddressDetails2 = (props) => {
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
-      setNomineeData()
       let item = {
         kyc: {
           address: kyc.address.meta_data,
-          nomination: kyc.nomination.meta_data,
+          nomination: kyc?.nomination?.meta_data,
         },
       }
       const nomination_address = kyc?.nomination?.meta_data?.nominee_address
@@ -86,6 +85,7 @@ const AddressDetails2 = (props) => {
               },
             },
           }))
+          setNomineeData(name, value)
         }
         break
       case 'addressline':
@@ -99,6 +99,7 @@ const AddressDetails2 = (props) => {
             },
           },
         }))
+        setNomineeData(name, value)
         break
       default:
         break
@@ -140,21 +141,17 @@ const AddressDetails2 = (props) => {
     }
   }
 
-  const setNomineeData = () => {
-    const city = kyc?.address?.meta_data?.city
-    const state = kyc?.address?.meta_data?.state
-    const pincode = kyc?.address?.meta_data?.pincode
-    const addressline = kyc?.address?.meta_data?.addressline
+  const setNomineeData = (name, value) => {
     setKyc((kyc) => ({
       ...kyc,
       nomination: {
         ...kyc?.nomination,
         meta_data: {
-          ...kyc?.nomination?.meta_data,
-          city,
-          state,
-          pincode,
-          addressline,
+          ...kyc?.nomination.address?.meta_data,
+          nominee_address: {
+            ...kyc?.nomination?.address?.meta_data?.nominee_address,
+            [name]: value,
+          }
         },
       },
     }))
