@@ -49,7 +49,6 @@ const Balance = (props) => {
           </div>
           <Button
             className="withdraw-mid-tile-text2"
-            color="secondary"
             variant="outlined"
             onClick={() => {}}
             fullWidth
