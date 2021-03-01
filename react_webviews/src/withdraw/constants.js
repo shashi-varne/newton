@@ -15,7 +15,7 @@ export const withdrawOptions = [
   {
     title: 'Manual',
     desc: 'You can choose specific funds from which you want to withdraw',
-    url: 'self',
+    redirectUrl: 'self',
     openModal: false
   },
 ]

@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import WithdrawType from './components/WithdrawType';
+import React, { useEffect } from 'react'
+import WithdrawType from './components/WithdrawType'
 import WithdrawReason from './components/WithdrawReason'
 import WithdrawRemark from './components/WithdrawRemark'
-import Landing from "./components/balance"
+import Landing from './components/balance'
 
-import { Switch, Route, withRouter } from 'react-router-dom';
-import { create } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
+import { Switch, Route, withRouter } from 'react-router-dom'
+import { create } from 'jss'
+import JssProvider from 'react-jss/lib/JssProvider'
 
 import './Style.scss'
 
@@ -15,42 +15,53 @@ import {
   jssPreset,
   MuiThemeProvider,
   createMuiTheme,
-} from '@material-ui/core/styles';
-import { themeConfig } from 'utils/constants';
-import { ToastContainer } from 'react-toastify';
+} from '@material-ui/core/styles'
+import { ToastContainer } from 'react-toastify'
+import NotFound from '../common/components/NotFound'
+import { themeConfig } from 'utils/constants'
+import './Style.scss'
+
+import SystemSummary from './components/system_summary'
+
+const theme = createMuiTheme(themeConfig)
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
-});
-const jss = create(jssPreset());
-const theme = createMuiTheme(themeConfig);
+})
+const jss = create(jssPreset())
 const ScrollToTopWithoutRouter = (props) => {
-  const { location } = props;
+  const { location } = props
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location]);
+    window.scrollTo(0, 0)
+  }, [location])
 
-  return null;
-};
-const ScrollToTop = withRouter(ScrollToTopWithoutRouter);
+  return null
+}
+const ScrollToTop = withRouter(ScrollToTopWithoutRouter)
 
 const Withdraw = ({ match }) => {
-  const { url } = match;
+  const { url } = match
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ToastContainer autoClose={3000} />
         <ScrollToTop />
-          <Switch>
-            <Route exact path={`${url}`} component={Landing} />
-            <Route path={`${url}/type`} component={WithdrawType} />
-            <Route path={`${url}/reason`} component={WithdrawReason} />
-            <Route path={`${url}/remark`} component={WithdrawRemark} />
-          </Switch>
+        <Switch>
+          <Route exact path={`${url}`} component={Landing} />
+          <Route
+            exact
+            path={`${url}/system/summary`}
+            component={SystemSummary}
+          />
+          <Route path={`${url}/type`} component={WithdrawType} />
+          <Route path={`${url}/reason`} component={WithdrawReason} />
+          <Route path={`${url}/remark`} component={WithdrawRemark} />
+          <Route component={NotFound} />
+        </Switch>
       </MuiThemeProvider>
     </JssProvider>
-  );
-};
+  )
+}
 
-export default Withdraw;
+export default Withdraw

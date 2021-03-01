@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core'
 import React, { useState } from 'react'
 import Container from '../../common/Container'
 import { withdrawTiles, withdrawOptions } from '../../constants'
-import { navigate as navigateFunc } from '../../common/commonFunctions'
+import { navigate as navigateFunc } from '../../common/commonFunction'
 import AmountDialog from '../../mini_components/AmountDialog'
 
 const Balance = (props) => {
@@ -10,7 +10,7 @@ const Balance = (props) => {
   const redirect = (url, openModal) => {
     const navigate = navigateFunc.bind(props)
     if (!openModal) {
-      navigate(url, null, false)
+      navigate(url, null, null, false)
     } else {
       setOpen(true)
     }
