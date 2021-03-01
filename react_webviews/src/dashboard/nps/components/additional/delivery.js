@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import Container from "../../common/Container";
-import InputWithIcon from "../../../common/ui/InputWithIcon";
-import person from "../../../assets/location.png";
+import Container from "../../../common/Container";
+import InputWithIcon from "common/ui/InputWithIcon";
+import person from "assets/location.png";
 import Api from "utils/api";
-import { initialize } from "../common/commonFunctions";
+import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 
 class NpsDelivery extends Component {

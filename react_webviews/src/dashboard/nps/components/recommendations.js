@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "../../common/Container";
 import { storageService } from "utils/validators";
-import { formatAmountInr } from "utils/validators";
+import { inrFormatDecimal2 } from "utils/validators";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
@@ -14,8 +14,10 @@ import {
   DialogContent,
   DialogContentText,
 } from "@material-ui/core";
+import PieChart from "./piegraph";
 
 const risk_level = ["High", "Low", "Moderate", "Moderate Low"];
+const isMobileDevice = getConfig().isMobileDevice;
 
 class Recommendations extends Component {
   constructor(props) {
@@ -25,7 +27,8 @@ class Recommendations extends Component {
       recommendations: "",
       all_charges: "",
       openDialog: false,
-      risk: ''
+      risk: '',
+      graphData: []
     };
     this.initialize = initialize.bind(this);
   }
@@ -50,11 +53,40 @@ class Recommendations extends Component {
       let data = res.result;
 
       if (res.status_code === 200) {
+        let recommendations = data.recommended[0];
+        let graphData =[
+          {
+            "id": "E",
+            "label": "E",
+            "value": recommendations.e_allocation,
+            "color": "hsl(227, 70%, 50%)"
+          },
+          {
+            "id": "G",
+            "label": "G",
+            "value": recommendations.g_allocation,
+            "color": "hsl(316, 70%, 50%)"
+          },
+          {
+            "id": "C",
+            "label": "C",
+            "value": recommendations.c_allocation,
+            "color": "hsl(291, 70%, 50%)"
+          },
+          {
+            "id": "A",
+            "label": "A",
+            "value": recommendations.a_allocation,
+            "color": "hsl(262, 70%, 50%)"
+          },
+        ]
+
         this.setState({
-          recommendations: data.recommended[0],
+          recommendations: recommendations,
           all_charges: data.all_charges,
           show_loader: false,
-          risk: data.recommended[0].risk
+          risk: recommendations.risk,
+          graphData: graphData
         });
       } else {
         toast("something went wrong")
@@ -155,7 +187,8 @@ class Recommendations extends Component {
   };
 
   render() {
-    let { recommendations, show_loader, all_charges } = this.state;
+    let { recommendations, show_loader, all_charges, graphData } = this.state;
+    
     return (
       <Container
         classOverRide="pr-error-container"
@@ -209,14 +242,12 @@ class Recommendations extends Component {
           </div>
           <div className="allocation">
             <div className="graph">
-              <canvas
-                id="doughnut"
-                className="chart chart-doughnut"
-                chart-data="data"
-                chart-labels="labels"
-                chart-colors="colors"
-                chart-options="options"
-              ></canvas>
+              <PieChart
+                height={isMobileDevice ? 100 : 180}
+                width={isMobileDevice ? 100 : 180}
+                data={graphData}
+                colors={["rgb(74, 144, 226)", "rgb(51, 191, 159)", "rgb(131, 90, 237)", "rgb(185, 176, 64)"]}
+              ></PieChart>
               <div
                 className="text-center"
                 style={{ color: "rgb(135, 135, 135)", marginTop: "10px" }}
@@ -286,7 +317,7 @@ class Recommendations extends Component {
                 key={index}
               >
                 <div className="left">{item.text}</div>
-                <div className="right">{formatAmountInr(item.value)}</div>
+                <div className="right">{inrFormatDecimal2(item.value)}</div>
               </div>
             ))}
           <div className="note">

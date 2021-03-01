@@ -82,6 +82,7 @@ export function formCheckUpdate(keys_to_check, form_data) {
     addressline: "permanent address",
     city: "city",
     state: "state",
+    marital_status: 'marital status'
   };
 
   let selectTypeInput = ["relationship"];
@@ -95,7 +96,6 @@ export function formCheckUpdate(keys_to_check, form_data) {
     if (!form_data[key_check]) {
       form_data[key_check + "_error"] = first_error + keysMapper[key_check];
       canSubmit = false;
-      console.log(form_data);
     }
   }
 
@@ -103,6 +103,8 @@ export function formCheckUpdate(keys_to_check, form_data) {
     form_data: form_data,
     canSubmit: canSubmit,
   });
+
+  return canSubmit;
 }
 
 export async function get_recommended_funds(params) {

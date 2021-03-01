@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import Input from "../../../common/ui/Input";
 import { initialize } from "../common/commonFunctions";
-import { formatAmountInr } from "utils/validators";
-import { storageService } from "utils/validators";
+import { formatAmountInr, storageService, formatAmount } from "utils/validators";
+// import { storageService } from "utils/validators";
 
 class EnterAmount extends Component {
   constructor(props) {
@@ -25,6 +25,15 @@ class EnterAmount extends Component {
   handleChange = name => (event) => {
     let value = (name === "custom-amt") ? event.target.id : event.target.value;
     let taxSaved = Math.min(value * 0.309, 61800);
+
+    if (name === 'amount') {
+      let amt = (value.match(/\d+/g) || "").toString();
+      if (amt) {
+        value = amt.replaceAll(",", "");
+      } else {
+        value = amt;
+      }
+    }
 
     this.setState({
       amount: value,
@@ -73,11 +82,11 @@ class EnterAmount extends Component {
                   <Input
                     error={!!this.state.amount_error}
                     helperText={this.state.amount_error}
-                    type="number"
                     width="40"
                     id="amount"
                     name="amount"
-                    value={this.state.amount || ""}
+                    inputMode="numeric"
+                    value={this.state.amount ? `₹ ${formatAmount(this.state.amount)}` : ""}
                     onChange={this.handleChange("amount")}
                   />
                 </div>

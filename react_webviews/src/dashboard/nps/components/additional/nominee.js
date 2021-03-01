@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Container from "../../common/Container";
-import InputWithIcon from "../../../common/ui/InputWithIcon";
-import nominee from "../../../assets/nominee.png";
-import calendar from "../../../assets/calendar2.png";
-import relationship from "../../../assets/relationship.png";
-import Select from "../../../common/ui/Select";
-import { initialize } from "../common/commonFunctions";
+import Container from "../../../common/Container";
+import InputWithIcon from "common/ui/InputWithIcon";
+import nominee from "assets/nominee.png";
+import calendar from "assets/calendar2.png";
+import relationship from "assets/relationship.png";
+import Select from "common/ui/Select";
+import { initialize } from "../../common/commonFunctions";
 import { storageService, capitalize } from "utils/validators";
 import { dobFormatTest, formatDate } from "utils/validators";
 

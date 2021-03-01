@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
-import InputWithIcon from "../../../common/ui/InputWithIcon";
-import { initialize } from "../common/commonFunctions";
+import InputWithIcon from "common/ui/InputWithIcon";
+import { initialize } from "../../common/commonFunctions";
 import card from "assets/card.png";
 
 class NpsPran extends Component {

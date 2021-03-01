@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Container from "../../common/Container";
-import InputWithIcon from "../../../common/ui/InputWithIcon";
-import toast from "../../../common/ui/Toast";
-import RadioOptions from "../../../common/ui/RadioOptions";
-import person from "../../../assets/person.png";
-import { initialize } from "../common/commonFunctions";
+import Container from "../../../common/Container";
+import InputWithIcon from "common/ui/InputWithIcon";
+import toast from "common/ui/Toast";
+import RadioOptions from "common/ui/RadioOptions";
+import person from "assets/person.png";
+import { initialize } from "../../common/commonFunctions";
 import { getConfig, getBase64 } from "utils/functions";
 import { storageService } from "utils/validators";
 import Grid from "material-ui/Grid";
@@ -30,7 +30,7 @@ class NpsIdentity extends Component {
       nps_details: {},
       selfie_needed: "",
       uploaded: false,
-      canSubmit: true,
+      canSubmit: false,
       img: "",
       file: "",
     };
@@ -75,15 +75,15 @@ class NpsIdentity extends Component {
   };
 
   handleClick = async () => {
-    let { form_data, canSubmit } = this.state;
+    let { form_data } = this.state;
 
-    let keys_to_check = ["mother_name"];
+    let keys_to_check = ["mother_name", "marital_status"];
 
     if (form_data.marital_status !== "single") {
       keys_to_check.push("spouse_name");
     }
 
-    this.formCheckUpdate(keys_to_check, form_data);
+    let canSubmit = this.formCheckUpdate(keys_to_check, form_data);
 
     if (canSubmit) {
       let queryParams = `is_married=${

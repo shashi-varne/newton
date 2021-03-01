@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Container from "../../common/Container";
+import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
-import { initialize } from "../common/commonFunctions";
+import { initialize } from "../../common/commonFunctions";
 import { getConfig } from "utils/functions";
 
 class NpsInfo extends Component {
