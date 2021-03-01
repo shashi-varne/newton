@@ -7,10 +7,12 @@ export const apiConstants = {
   getFundDetailsForSwitch: "/api/invest/reportv4/portfolio/fund-detail",
   getTransactions: "/api/invest/transactionv4",
   getFundsWiseTransactions: "/api/invest/transactionv4",
+  getAvailableFundsForSwitch: "/api/invest/fund/switch/available-funds",
 };
 
 export const getPathname = {
   invest: "/invest",
+  diyFundInfo: "/diy/fundinfo",
   buildwealth: "/invest/buildwealth",
   savetax: "/invest/savetax",
   investGold: "/invest/advanced-investing/gold",
@@ -41,6 +43,7 @@ export const getPathname = {
   reportsFundswiseSwitch: "/reports/fundswise/switch/",
   reportsFundswiseTransactions: "/reports/transactions/",
   reportsFundswiseDetails: "/reports/fundswise/details/",
+  reportsSwitchNow: "/reports/fundswise/switch-now/",
 };
 
 export const storageConstants = {
@@ -49,6 +52,8 @@ export const storageConstants = {
   PENDING_PURCHASE: "pending_purchase",
   PENDING_REDEMPTION: "pending_redemption",
   SIPS: "sips",
+  DIYSTORE_FUNDINFO: "diystore_fundInfo",
+  REPORTS_SWITCH_FUND: "reports_switch_fund",
 };
 
 export const getPurchaseProcessData = (

@@ -8,7 +8,7 @@ import { getTransactions } from "../../common/api";
 const FundswiseTransactions = (props) => {
   const params = props?.match?.params || {};
   const amfi = params.amfi || "";
-  if (amfi === "") props.history.goBack();
+  if (amfi === "" && props.type === "fundswise") props.history.goBack();
   const [userkyc, setUserKyc] = useState(
     storageService().getObject(storageConstants.KYC) || {}
   );

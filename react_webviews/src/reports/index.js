@@ -21,6 +21,7 @@ import FundswiseDetails from "./components/fundwise/Details";
 import FundswiseTransactions from "./components/fundwise/Transactions";
 import Purchase from "./components/Purchase";
 import Redeemed from "./components/Redeemed";
+import SwitchFund from "./components/SwitchFund";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -44,9 +45,11 @@ const Reports = (props) => {
           <Route path={`${url}/goals/funds/:itype/:subtype`} exact component={Funds} />
           <Route path={`${url}/fundswise/summary`} exact component={FundswiseSummary} />
           <Route path={`${url}/fundswise/details/:dataindex`} exact component={FundswiseDetails} />
-          <Route path={`${url}/transactions/:amfi`} exact component={FundswiseTransactions} />
+          <Route path={`${url}/transactions/:amfi`} exact  render={(props) => <FundswiseTransactions {...props} type='fundswise' />} />
+          <Route path={`${url}/transactions`} exact component={FundswiseTransactions} />
           <Route path={`${url}/purchased-transaction`} exact component={Purchase} />
           <Route path={`${url}/redeemed-transaction`} exact component={Redeemed} />
+          <Route path={`${url}/fundswise/switch/:amfi`} exact component={SwitchFund} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

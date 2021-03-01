@@ -13,7 +13,7 @@ export const getSummaryV2 = async () => {
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrorMessage;
+      throw res.pfwmessage || genericErrorMessage;
     }
     const { result, status_code: status } = res.pfwresponse;
     switch (status) {
@@ -35,7 +35,7 @@ export const getReportGoals = async () => {
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrorMessage;
+      throw res.pfwmessage || genericErrorMessage;
     }
     const { result, status_code: status } = res.pfwresponse;
     switch (status) {
@@ -57,7 +57,7 @@ export const getFunds = async (data) => {
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrorMessage;
+      throw res.pfwmessage || genericErrorMessage;
     }
     const { result, status_code: status } = res.pfwresponse;
     switch (status) {
@@ -78,7 +78,7 @@ export const getFundMf = async (data) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrorMessage;
+    throw res.pfwmessage || genericErrorMessage;
   }
   const { result, status_code: status } = res.pfwresponse;
   switch (status) {
@@ -96,7 +96,7 @@ export const getFundDetailsForSwitch = async (data) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrorMessage;
+    throw res.pfwmessage || genericErrorMessage;
   }
   const { result, status_code: status } = res.pfwresponse;
   switch (status) {
@@ -115,7 +115,7 @@ export const getTransactions = async (data) => {
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrorMessage;
+      throw res.pfwmessage || genericErrorMessage;
     }
     const { result, status_code: status } = res.pfwresponse;
     switch (status) {
@@ -126,5 +126,23 @@ export const getTransactions = async (data) => {
     }
   } catch (err) {
     toast(err || genericErrorMessage);
+  }
+};
+
+export const getAvailableFundsForSwitch = async (data) => {
+  const res = await Api.get(apiConstants.getAvailableFundsForSwitch, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
   }
 };
