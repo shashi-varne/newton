@@ -14,6 +14,7 @@ import HNI from './external_portfolio';
 import IsipBIller from './isip';
 import HelpSupport from './help_support';
 import CommonLanding from './common/components/landing';
+import Withdraw from './withdraw'
 // import CommonRenderFaqs from './common/components/RenderFaqs';
 
 import Fhc from './fhc';
@@ -63,6 +64,7 @@ class App extends Component {
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
+          <Route path='/withdraw' component={Withdraw} />
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
