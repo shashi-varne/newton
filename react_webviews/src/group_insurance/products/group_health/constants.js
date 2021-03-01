@@ -12,6 +12,11 @@ export const hdfc = {
     show_ind_mem_premium: true,
     pan_amount: 100000,
     claim_settlement_ratio: 98.88,
+    covers_text:{
+        title: 'Coverage for all',
+        subtitle: 'Option to cover your entire family (spouse, kids and parents)'
+    },
+    member_assets: ['icn_couple.svg', 'icn_kids.svg', 'icn_parents.svg'],
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         plan_dob_screen: 'plan-select-city',
@@ -36,6 +41,7 @@ export const hdfc = {
         'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
     },
     landing_screen: {
+        image_list: ['ic_why_hs','ic_why_hs2', 'ic_why_hs3', 'ic_why_hs4'],
         offerImageData: [
             { src: 'hdfc_icn_landing_card_1.png' },
             { src: 'hdfc_icn_landing_card_2.png' },
@@ -212,6 +218,7 @@ export const religare = {
     logo_summary: 'ic_religare_logo.svg',
     pan_amount: 50000,
     claim_settlement_ratio: 92.58,
+    member_assets: ['icn_couple.svg', 'icn_kids.svg', 'icn_parents.svg'],
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob-religare',
@@ -248,6 +255,7 @@ export const religare = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
+        image_list: ['ic_why_hs','ic_why_hs2', 'ic_why_hs3', 'ic_why_hs4'],
         offerImageData: [
             { src: 'religare_icn_landing_card_1.png' },
             { src: 'religare_icn_landing_card_2.png' },
@@ -521,6 +529,334 @@ export const religare = {
     }
 };
 
+export const gmc = {
+    key: 'GMC',
+    provider_api: 'gmc',
+    title: 'Care Health',
+    title2: 'Care Health',
+    subtitle: 'fisdom Care Health+',
+    address_field_max_length: 60,
+    logo: 'ic_religare_logo.svg',
+    logo_card: 'ic_religare_logo_card.svg',
+    logo_cta: 'ic_religare_logo.svg',
+    logo_summary: 'ic_religare_logo.svg',
+    pan_amount: 50000,
+    claim_settlement_ratio: 92.58,
+    covers_text:{
+        title: 'Covers your family',
+        subtitle: 'Ideal for self, spouse and kids'
+    },
+    member_assets: ['icn_couple.svg', 'icn_kids.svg'],
+    get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
+        landing_screen: 'insure-type',
+        insure_type_screen: 'plan-dob-religare',
+        add_members_screen: 'plan-dob',
+        plan_dob_screen: 'plan-list',
+        religare_dob: 'plan-list',
+        plan_list_screen: 'plan-details',
+        plan_details_screens: 'plan-select-sum-assured',
+        sum_assured_screen: {
+            floater: 'plan-select-floater',
+            not_floater: 'plan-select-add-ons'
+        },
+        cover_type_screen: 'plan-select-add-ons',
+        add_ons_screen: 'plan-select-cover-period',
+        nominee_screen: 'plan-lifestyle-details'
+    },
+    validation_props: {
+        'dob_adult': { min: 18, max: 99 }, 
+        'dob_child': { minDays: 91, minAge: 5, max: 25 },
+        'dob_married_male': { min: 18, max: 99 },
+        'dob_married_female': {min: 18}
+    },
+    applicant_detail_screen: {
+        fields: [
+            'fullname',
+            'addr1',
+            'erg-1'
+        ]
+    },
+    add_on_title : {
+        uar: 'Unlimited Automatic Recharge',
+        opd: 'OPD care',
+        ped_wait_period: 'Reduction in PED wait period',
+        ncb: 'No Claim Bonus Super'
+    },
+    landing_screen: {
+        image_list: ['ic_why_hs_gmc_1','ic_why_hs2', 'ic_why_hs_gmc_2'],
+        offerImageData: [
+            { src: 'gmc_icn_landing_card_3.svg' },
+            { src: 'gmc_icn_landing_card_2.svg' },
+            { src: 'gmc_icn_landing_card_1.svg' }
+        ],
+        whats_covered: [
+            '540+ day care procedures',
+            '30 days pre & 60 days post hospitalisation expenses',
+            'Pre-existing disease(s) after 24 months',
+            'Accidental death, permanent total & permanent partial disability',
+            'Doctor-on-call services'
+        ],
+        whats_not_covered: [
+            'Maternity & childbirth related expenses',
+            'Ayurveda, Unani, Siddha, and Homeopathy treatments, etc.',
+            'Organ donor expenses',
+            'Domiciliary hospitalisation',
+            'Cost of spectacles/contact lenses, dental treatment, etc.',
+        ],
+        faq_data: {
+            'header_title': 'Frequently asked questions',
+            'header_subtitle': '',
+            'steps': {
+                'options': [
+                    {
+                        'title': 'Is coronavirus treatment covered in this plan?',
+                        'subtitle': 'Yes, this health insurance policy for family covers hospitalisation expenses to Coronavirus (COVID-19) subject to all terms and conditions of the policy.'
+                    },
+                    {
+                        'title': 'Is there any free health check-up in your policy?',
+                        'subtitle': 'Yes, there is a free annual health check-up for all the insured members every year regardless of claim history.'
+                    },
+                    {
+                        'title': 'Can I cancel my policy once purchased?',
+                        'subtitle': 'Yes, within 15 days from the receipt of the policy document you may return/cancel the policy, and premium after proportionate deduction would be refunded.'
+                    },
+                    {
+                        'title': 'How does Auto recharge work?',
+                        'subtitle': 'Sum Insured will be automatically restored (once every policy year) in case the sum insured and any no claim bonus accumulated is exhausted during the policy year. It cannot be used against an illness/disease for which a claim has already been made in the current policy year.'
+                    },
+                    {
+                        'title': 'What is the waiting period for existing diseases? Can it be reduced?',
+                        'subtitle': 'There is a waiting period of 48 months for existing and 24 months for specified diseases. This waiting period of 48 months can be reduced by taking the additional cover of ‘Reduction in PED Wait Period’'
+                    },
+                    {
+                        'title': 'What do you mean by Network hospital?',
+                        'subtitle': 'Network hospital is one, which has an agreement with Care Health Insurance for providing cashless treatment to its customers.'
+                    },
+                    {
+                        'title': 'What is a No Claim Bonus?',
+                        'subtitle': 'A policyholder, who hasn’t made any claim in a year, will have his Sum insured increased by a certain amount (bonus). CARE offers a 10% increase in the policy sum insured for every claim-free year, with no change in premium.'
+                    },
+                    {
+                        'title': 'How to file and track your claim?',
+                        'subtitle': 'You can file a claim by contacting Care Health customer help desk at customerfirst@careinsurance.com or 1800-102-4488. Claim status can be tracked online here or contacting customer care at the above number.'
+                    },
+                    {
+                        'title': 'How much time does it take for a claim to be processed?',
+                        'subtitle': 'For cashless claims it takes 4 hrs and for reimbursement claims, it takes 5 working days to get processed, provided all the documents are in order.'
+                    },
+                ],
+            },
+            'cta_title': 'OK'
+        }
+    },
+    insure_type_screen: {
+        account_type_options: [
+            {
+                'name': 'Self',
+                'value': 'self'
+            },
+            {
+                'name': 'Family members',
+                'value': 'family'
+            },
+            {
+                'name': 'Self & family members',
+                'value': 'self_family'
+            },
+            {
+                'name': 'Parents',
+                'value': 'parents'
+            }
+        ]
+    },
+    add_members_screen: {
+        son_max: 4,
+        daughter_max: 4,
+        total_plus_minus_max: 4
+    },
+    plan_list_screen: {
+        tile_mid_data: [
+            { 'label': 'Sum insured::', 'key': 'sum_assured_options_text' },
+            { 'label': 'Hospital room:', 'key': 'hospital_room' },
+            { 'label': 'Daily allowance:', 'key': 'alternative_treatment' }
+        ]
+    },
+    nominee_screen: {
+        nominee_opts: [
+            {
+                'name': 'BROTHER',
+                'value': 'BROTHER'
+            },
+            {
+                'name': 'FATHER',
+                'value': 'FATHER'
+            },
+            {
+                'name': 'GRAND FATHER',
+                'value': 'GRANDFATHER'
+            },
+            {
+                'name': 'GRAND MOTHER',
+                'value': 'GRANDMOTHER'
+            },
+            {
+                'name': 'BROTHER IN LAW',
+                'value': 'BROTHER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER IN LAW',
+                'value': 'MOTHER_IN_LAW'
+            },
+            {
+                'name': 'SISTER IN LAW',
+                'value': 'SISTER_IN_LAW'
+            },
+            {
+                'name': 'MOTHER',
+                'value': 'MOTHER'
+            },
+            {
+                'name': 'SISTER',
+                'value': 'SISTER'
+            },
+            {
+                'name': 'SON',
+                'value': 'SON'
+            },
+            // {
+            //     'name': 'SPOUSE',
+            //     'value': 'SPOUSE'
+            // },
+            {
+                'name': 'DAUGHTER',
+                'value': 'DAUGHTER'
+            },
+            {
+                'name': 'WIFE',
+                'value': 'WIFE'
+            },
+            {
+                'name': 'HUSBAND',
+                'value': 'HUSBAND'
+            }
+        ],
+
+    },
+    select_ped_screen: {
+        ped_list: [
+            {
+                'name': 'Diabetes',
+                id: 'ped_no_1',
+                tag: 'PEDdiabetesDetails',
+                "key" : 'religare_ped_diabetes',
+                description: 'Diabetes Mellitus type 1 or Diabetes on insulin or Diabetes associated with blindness or chronic foot ulcer',
+            },
+            {
+                'name': 'Hypertension',
+                id: 'ped_no_2',
+                tag: 'PEDhyperTensionDetails',
+                "key" :  "religare_ped_hypertension",
+                description: 'Hypertension / High blood pressure'
+            },
+            {
+                'name': 'Liver disease',
+                id: 'ped_no_3',
+                tag: 'PEDliverDetails',
+                "key" : "religare_ped_liver_disease",
+                description: 'Pancreatitis or Liver disease(including but not limited to Cirrhosis / Hepatitis B or C / Willson’s disease) or any other digestive tract disorder(disorders of esophagus or stomach or intestine or any other)'
+            },
+            {
+                'name': 'Cancer',
+                id: 'ped_no_4',
+                tag: 'PEDcancerDetails',
+                "key" : "religare_ped_cancer",
+                description: 'Cancer'
+            },
+            {
+                'name': 'Cardiac disorder',
+                id: 'ped_no_5',
+                tag: 'PEDcardiacDetails',
+                "key" :   "religare_ped_cardiac_disorder",
+                description: 'Any cardiovascular / Heart disease(including but not limited to Coronary artery disease / Rheumatic heart disease / Heart attack or Myocardial infarction / Heart failure / Bypass Grafting or CABG / Angioplasty or PTCA / Heart valve diseases / Pacemaker implantation)'
+            },
+            {
+                'name': 'Blood disorder',
+                id: 'ped_no_6',
+                tag: 'PEDjointpainDetails',
+                "key" : "religare_ped_blood_disorder",
+                description: 'Any disorders of Blood and / or Immunity(including but not limited to bleeding or clotting disorders, Systemic Lupus Erythematosus, Rheumatoid Arthritis, Crohn’s disease, Ulcerative Colitis) '
+            },
+            {
+                'name': 'Kidney disease',
+                id: 'ped_no_7',
+                tag: 'PEDkidneyDetails',
+                "key" : "religare_ped_kidney_disease",
+                description: 'Any Kidney / urinary tract / reproductive organ disease'
+            },
+            {
+                'name': 'Paralysis',
+                id: 'ped_no_8',
+                tag: 'PEDparalysisDetails',
+                "key" : "religare_ped_paralysis",
+                description: 'Any Neuromuscular(muscles or nervous system) disorder or Psychiatric disorders(including but not limited to Motor Neuron Disease, Muscular dystrophies, Epilepsy, Paralysis, Parkinsonism, Multiple Sclerosis, stroke, mental illness)'
+            },
+            {
+                'name': 'Congenital disorder',
+                id: 'ped_no_9',
+                tag: 'PEDcongenitalDetails',
+                "key" :  "religare_ped_congenital_disorder",
+                description: 'Congenital disorder'
+            },
+            {
+                'name': 'HIV / AIDS',
+                id: 'ped_no_10',
+                tag: 'PEDHivaidsDetails',
+                "key" : "religare_ped_hiv_aids",
+                description: 'HIV / AIDS / STD'
+            },
+            {
+                'name': 'Respiratory disorders',
+                id: 'ped_no_11',
+                tag: 'PEDRespiratoryDetails',
+                "key" : "religare_ped_respiratory_disorders",
+                description: 'Any Respiratory disease / Disease of Lungs, Pleura, and airway(including but not limited to Asthma / Tuberculosis / Pleural effusion / Bronchitis / Emphysema) '
+            },
+            {
+                'name': 'Endocrine disorders',
+                id: 'ped_no_12',
+                tag: 'PEDEndoDetails',
+                "key" : "religare_ped_endocrine_disorders",
+                description: 'Any disorders of the endocrine system(including but not limited to Pituitary / Parathyroid / adrenal gland disorders)'
+            },
+            {
+                'name': 'Any other medication / treatment',
+                id: 'ped_no_13',
+                tag: 'PEDillnessDetails',
+                "key" : "religare_ped_other_med_treatment",
+                description: 'Has any of the proposed to be insured consulted / taken treatment or recommended to take investigations / medication / surgery other than for childbirth / minor injuries ? *'
+            },
+            {
+                'name': 'Any other surgery',
+                id: 'ped_no_14',
+                tag: 'PEDSurgeryDetails',
+                "key" :  "religare_ped_other_surgery",
+                description: 'Has any of the proposed to be insured been hospitalised or has been under any prolonged treatment for any illness / injury or has undergone surgery other than for childbirth / minor injuries ? *'
+            },
+            {
+                'display_name': 'Any other diseases',
+                'name': 'Other',
+                id: 'ped_no_15',
+                tag: 'PEDotherDetails',
+                "key" : "religare_ped_other_disease",
+                description: ''
+            }
+        ]
+    },
+    payment_screen: {
+        total_cities: 7800
+    }
+};
+
 export const star = {
     key: 'STAR',
     provider_api: 'star',
@@ -534,6 +870,11 @@ export const star = {
     logo_summary: 'ic_star_logo.svg',
     pan_amount: 100000,
     claim_settlement_ratio: 78.15,
+    covers_text:{
+        title: 'Covers all age groups',
+        subtitle: 'Option to cover your entire family (spouse, kids and parents)'
+    },
+    member_assets: ['icn_couple.svg', 'icn_kids.svg', 'icn_parents.svg'],
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
         insure_type_screen: 'plan-dob',
@@ -561,6 +902,7 @@ export const star = {
         ]
     },
     landing_screen: {
+        image_list: ['ic_why_hs','ic_why_hs2', 'ic_why_hs3', 'ic_why_hs4'],
         offerImageData: [
             { src: 'star_icn_landing_card_1.svg' },
             { src: 'star_icn_landing_card_2.svg' },
@@ -828,6 +1170,7 @@ export function getGhProviderConfig(provider) {
     let mapper = {
         'HDFCERGO': hdfc,
         'RELIGARE': religare,
+        'GMC': gmc,
         'STAR': star,
     };
 

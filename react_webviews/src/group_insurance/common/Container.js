@@ -567,7 +567,7 @@ class Container extends Component {
 
         </div>
 
-        {!this.state.force_hide_inpage_title && this.state.new_header &&
+        {!this.state.force_hide_inpage_title && !this.props.force_hide_inpage_title && this.state.new_header &&
           <div 
             id="header-title-page"
             style={this.props.styleHeader} 

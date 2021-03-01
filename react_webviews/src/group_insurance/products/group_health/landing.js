@@ -22,7 +22,11 @@ import { openInBrowser } from "./common_data";
 import ReactResponsiveCarousel from "../../../common/ui/carousel";
 import { getGhProviderConfig } from "./constants";
 import {  setLocalProviderData } from "./common_data";
+import MoreInfoAccordian from "../../../common/ui/MoreInfoAccordian";
+import GenericImageSlider from "../../../common/ui/GenericImageSlider";
+
 const screen_name = "landing_screen";
+
 
 class GroupHealthLanding extends Component {
   constructor(props) {
@@ -179,20 +183,7 @@ class GroupHealthLanding extends Component {
       nativeCallback({ events: eventObj });
     }
   }
-  renderCoveredPoints = (props, index) => {
-    return (
-      <div key={index} className="wic-tile">
-        <div className="circle"></div>
-        <div className="wic-tile-right">{props}</div>
-      </div>
-    );
-  };
-  handleClickPoints = (key) => {
-    this.setState({
-      [key + "_open"]: !this.state[key + "_open"],
-      [key + "_clicked"]: true,
-    });
-  };
+  
   handleResume = () => {
     if (!this.state.quoteResume || !this.state.quoteResume.id) {
       return;
@@ -271,9 +262,18 @@ class GroupHealthLanding extends Component {
         onlyButton={true}
         handleClick={() => this.handleClick()}
         provider={this.state.provider}
+        force_hide_inpage_title={true}
       >
-        <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
-          {this.state.providerConfig.subtitle}
+        <div className="health-insurance-title-container">
+          <div>
+            <div className="common-top-page-title-dark">{this.state.providerConfig.title}</div>
+            <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
+              {this.state.providerConfig.subtitle}
+            </div>
+        </div>
+            <div className="title-image">
+                <img src={require(`assets/${this.state.providerConfig.logo_card}`)} alt=""/>
+            </div>
         </div>
 
         <div className="group-health-landing">
@@ -323,127 +323,49 @@ class GroupHealthLanding extends Component {
             </div>
           )}
 
-          <div className="generic-page-title" style={{ margin: "40px 0 0 0" }}>
-            Covers all age groups
+          <div className="generic-page-title health-landing-covers-title" style={{ margin: "40px 0 0 0", fontSize: '15px', fontWeight: '700' }}>
+            {this.state.providerConfig.covers_text.title}
           </div>
           <div
-            className="generic-page-subtitle"
+            className="generic-page-subtitle health-landing-covers-subtitle"
             style={{ margin: "10px 0 0 0" }}
           >
-            Buy health insurance for yourself, spouse, kids or parents also.
+            {this.state.providerConfig.covers_text.subtitle}
           </div>
 
-          <div className="family-images" style={{ margin: "15px 0 15px 0" }}>
-            <img
+          <div className="family-images" style={{ margin: "15px 0 15px 0", display: 'start', justifyContent: `${this.state.providerConfig.key === 'GMC' ? 'start' : 'space-between'}`}}>
+            
+            {this.state.providerConfig.member_assets.map((item, index) =>{
+              return <img
               className="accident-plan-read-icon"
-              src={require(`assets/${this.state.productName}/icn_couple.svg`)}
+              src={require(`assets/${this.state.productName}/${item}`)}
               alt=""
+              style={{marginRight: `${this.state.providerConfig.key === 'GMC' ? '15px' : '0'}`}}
             />
-            <img
-              className="accident-plan-read-icon"
-              src={require(`assets/${this.state.productName}/icn_kids.svg`)}
-              alt=""
-            />
-            <img
-              className="accident-plan-read-icon"
-              src={require(`assets/${this.state.productName}/icn_parents.svg`)}
-              alt=""
-            />
+            })}
           </div>
 
           <div
             className="generic-page-title"
             style={{ margin: "40px 0 20px 0" }}
           >
-            Overview
+            Plan overview
           </div>
 
-          <div
-            className="what-is-covered"
-            style={{
-              background:
-                this.state.productName === "fisdom" ? "#5721AE" : "#19487F",
-            }}
-            onClick={() => this.handleClickPoints("whats_covered")}
-          >
-            <div className="top">
-              <div className="wic-title">What is covered?</div>
-              <div className="">
-                <SVG
-                  className="text-block-2-img"
-                  preProcessor={(code) =>
-                    code.replace(/fill=".*?"/g, "fill=#fff")
-                  }
-                  src={this.state.whats_covered_open ? up_arrow : down_arrow}
-                />
-              </div>
-            </div>
-
-            {this.state.whats_covered_open && (
-              <div className="content">
-                {this.state.whats_covered.map(this.renderCoveredPoints)}
-              </div>
-            )}
-          </div>
-
-          <div
-            className="what-is-covered"
-            style={{
-              background:
-                this.state.productName === "fisdom" ? "#5721AE" : "#19487F",
-            }}
-            onClick={() => this.handleClickPoints("whats_not_covered")}
-          >
-            <div className="top">
-              <div className="wic-title">What is not covered?</div>
-              <div className="">
-                <SVG
-                  className="text-block-2-img"
-                  preProcessor={(code) =>
-                    code.replace(/fill=".*?"/g, "fill=#fff")
-                  }
-                  src={
-                    this.state.whats_not_covered_open ? up_arrow : down_arrow
-                  }
-                />
-              </div>
-            </div>
-
-            {this.state.whats_not_covered_open &&
-              this.state.whats_not_covered.map(this.renderCoveredPoints)}
-          </div>
-
-          <div
-            className="generic-page-title"
-            style={{ margin: "40px 0 20px 0" }}
-          >
-            Benefits of health insurance
-          </div>
-
-          <div className="his">
-            <div className="horizontal-images-scroll">
-              <img
-                className="image"
-                src={require(`assets/${this.state.productName}/ic_why_hs.png`)}
-                alt=""
-              />
-              <img
-                className="image"
-                src={require(`assets/${this.state.productName}/ic_why_hs2.png`)}
-                alt=""
-              />
-              <img
-                className="image"
-                src={require(`assets/${this.state.productName}/ic_why_hs3.png`)}
-                alt=""
-              />
-              <img
-                className="image"
-                src={require(`assets/${this.state.productName}/ic_why_hs4.png`)}
-                alt=""
-              />
-            </div>
-          </div>
+          <MoreInfoAccordian 
+            parent={this} 
+            key="whats_covered" 
+            title="What is covered?" 
+            data={this.state.whats_covered}
+          />
+          <MoreInfoAccordian 
+            parent={this} 
+            key="whats_not_covered" 
+            title="What is not covered?" 
+            data={this.state.whats_not_covered}
+          />
+          
+          <GenericImageSlider title="Key benefits" image_list={this.state.screenData.image_list}/>
 
           <HowToSteps
             style={{ margin: "20px 0px 0px 0px" }}
