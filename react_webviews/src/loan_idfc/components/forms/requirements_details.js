@@ -55,6 +55,7 @@ class LoanRequirementDetails extends Component {
       event_name: "idfc_loan_requirement_details",
       properties: {
         user_action: user_action,
+        amount: this.state.form_data.amount_required,
         event_name: "idfc_loan_requirement_details",
       },
     };
@@ -90,7 +91,7 @@ class LoanRequirementDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
+    // this.sendEvents("next");
     let { form_data } = this.state;
     let keys_to_check = [
       "amount_required",

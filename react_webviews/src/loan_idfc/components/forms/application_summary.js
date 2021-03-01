@@ -119,7 +119,7 @@ class ApplicationSummary extends Component {
       properties: {
         user_action: user_action,
         event_name: "idfc_summary",
-        stage: "basic details uploaded",
+        stage: "work details uploaded",
       },
     };
 

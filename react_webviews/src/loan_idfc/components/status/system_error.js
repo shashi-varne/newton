@@ -3,6 +3,7 @@ import Container from "../../common/Container";
 import ContactUs from "../../../common/components/contact_us";
 import { initialize } from "../../common/functions";
 import { nativeCallback } from "utils/native_callback";
+import { getConfig } from "utils/functions";
 
 const commonMapper = {
   idfc_null_failed: {
@@ -160,7 +161,7 @@ class SystemError extends Component {
         <div className="idfc-loan-status">
           <img
             src={require(`assets/${this.state.productName}/error_illustration.svg`)}
-            className="center"
+            style={{ width: "100%", height: `${!getConfig().isMobileDevice ? '400px' : ''}` }}
             alt=""
           />
           <div className="subtitle">

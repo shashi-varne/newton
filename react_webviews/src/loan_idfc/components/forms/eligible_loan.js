@@ -12,15 +12,16 @@ import {
   formatAmountInr,
   inrFormatDecimal,
   numDifferentiationInr,
-  formatAmount
+  formatAmount,
 } from "utils/validators";
+import { getConfig } from "utils/functions";
 
 class EligibleLoan extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: 'g',
+      skelton: "g",
       screen_name: "eligible_loan",
       form_data: {},
       checked: "default_tenor",
@@ -121,7 +122,7 @@ class EligibleLoan extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
+    // this.sendEvents("next");
     let { form_data, vendor_info } = this.state;
 
     if (this.state.checked === "default_tenor") {
@@ -213,11 +214,14 @@ class EligibleLoan extends Component {
         errorData={this.state.errorData}
       >
         <div className="eligible-loan" id="max-amount">
+          <img
+            src={require(`assets/${this.state.productName}/congrats.svg`)}
+            style={{
+              width: "100%",
+            }}
+            alt=""
+          />
           <div className="max-amount">
-            <img
-              src={require(`assets/${this.state.productName}/congrats.svg`)}
-              alt=""
-            />
             <div className="head">
               <b>Congrats!</b> You’re eligible for a loan up to
             </div>
@@ -320,7 +324,13 @@ class EligibleLoan extends Component {
                           label="Loan amount"
                           id="amount_required"
                           name="amount_required"
-                          value={this.state.form_data.amount_required ? `₹ ${formatAmount(this.state.form_data.amount_required)}` : ""}
+                          value={
+                            this.state.form_data.amount_required
+                              ? `₹ ${formatAmount(
+                                  this.state.form_data.amount_required
+                                )}`
+                              : ""
+                          }
                           onChange={this.handleChange("amount_required")}
                           disabled={this.state.checked !== "custom_tenor"}
                         />

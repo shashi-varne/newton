@@ -88,7 +88,7 @@ class BtInformation extends Component {
   };
 
   handleClickTwo = () => {
-    this.sendEvents("opt_for_bt");
+    this.sendEvents("next");
     let body = {
       idfc_loan_status: "bt_processing",
       bt_selected: "True",
@@ -97,7 +97,7 @@ class BtInformation extends Component {
   };
 
   handleClickOne = () => {
-    this.sendEvents("not_opt_for_bt");
+    this.sendEvents("next");
     this.setState({
       loaderWithData: true,
     });

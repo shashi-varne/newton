@@ -5,6 +5,7 @@ import { getUrlParams } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
 import ContactUs from "../../../common/components/contact_us";
 import { Imgc } from "../../../common/ui/Imgc";
+import { getConfig } from "utils/functions";
 
 const commonMapper = {
   failure: {
@@ -273,6 +274,7 @@ class PerfiosStatus extends Component {
           {commonMapper["top_icon"] && (
             <Imgc
               src={require(`assets/${this.state.productName}/${commonMapper["top_icon"]}.svg`)}
+              style={{ width: "100%", height: `${!getConfig().isMobileDevice ? '400px' : ''}` }}
               alt=""
             />
           )}

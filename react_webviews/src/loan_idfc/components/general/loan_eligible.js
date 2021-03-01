@@ -9,7 +9,7 @@ class LoanEligible extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: 'g',
+      skelton: "g",
       screen_name: "loan_eligible",
       first_name: "",
     };
@@ -104,11 +104,13 @@ class LoanEligible extends Component {
         errorData={this.state.errorData}
       >
         <div className="loan-status">
-          <img
-            src={require(`assets/${this.state.productName}/congratulations.svg`)}
-            id="congratulations"
-            alt=""
-          />
+          <div id="congratulations">
+            <img
+              src={require(`assets/${this.state.productName}/congratulations.svg`)}
+              style={{ width: "100%" }}
+              alt=""
+            />
+          </div>
 
           <div className="loan-eligible">
             Congrats, {this.state.first_name.trim(" ")}!
@@ -135,7 +137,9 @@ class LoanEligible extends Component {
             </div>
             <div>
               <div className="title">Rate of interest</div>
-              <div className="values">{Math.round(vendor_info.updated_offer_roi)}% p.a.</div>
+              <div className="values">
+                {Math.round(vendor_info.updated_offer_roi)}% p.a.
+              </div>
             </div>
           </div>
         </div>

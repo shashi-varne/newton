@@ -147,7 +147,7 @@ class BasicDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
+    // this.sendEvents("next");
     let { form_data } = this.state;
     let keys_to_check = ["dob", "employment_type", "pan_no"];
 

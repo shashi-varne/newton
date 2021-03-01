@@ -518,6 +518,7 @@ export async function updateApplication(
   loaderValue = ""
 ) {
   this.setErrorData("submit");
+  this.sendEvents("next");
 
   let error = "";
   let errorType = "";
@@ -816,6 +817,7 @@ export async function submitApplication(
   next_state = ""
 ) {
   this.setErrorData("submit");
+  this.sendEvents("next");
 
   let error = "";
   let errorType = "";
@@ -1095,7 +1097,6 @@ export async function formCheckUpdate(
   ) {
     form_data.amount_required_error =
       "Amount cannot be greater than max loan amount";
-    form_data.amount_required = `₹ ${formatAmount(form_data.amount_required)}`;
     canSubmitForm = false;
   }
 
@@ -1107,7 +1108,6 @@ export async function formCheckUpdate(
     form_data.amount_required_error = `Minimum loan amount should be ${numDifferentiationInr(
       100000
     )}`;
-    form_data.amount_required = `₹ ${formatAmount(form_data.amount_required)}`;
     canSubmitForm = false;
   }
 

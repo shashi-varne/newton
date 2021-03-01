@@ -6,6 +6,7 @@ import { getUrlParams } from "utils/validators";
 import ContactUs from "../../../common/components/contact_us";
 import toast from "../../../common/ui/Toast";
 import { Imgc } from "../../../common/ui/Imgc";
+import { getConfig } from "utils/functions";
 
 const commonMapper = {
   idfc_null_failed: {
@@ -391,7 +392,7 @@ class LoanStatus extends Component {
       idfc_rejection_reason,
     } = this.state;
 
-    if (vendor_application_status === "idfc_0.5_accepted") {
+    if (vendor_application_status === "idfc_0.5_accepted" || vendor_application_status === "idfc_0.5_submitted") {
       commonMapper.top_title = `Congratulations, ${first_name.trim(" ")}!`;
     }
 
@@ -414,7 +415,8 @@ class LoanStatus extends Component {
           {commonMapper["top_icon"] && (
             <Imgc
               src={require(`assets/${this.state.productName}/${commonMapper["top_icon"]}.svg`)}
-              className="center"
+              // className="center"
+              style={{ width: "100%", height: `${!getConfig().isMobileDevice ? '400px' : ''}` }}
               alt=""
             />
           )}

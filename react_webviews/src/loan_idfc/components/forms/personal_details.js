@@ -209,7 +209,7 @@ class PersonalDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents("next");
+    // this.sendEvents("next");
     let { form_data } = this.state;
 
     let keys_to_check = [
@@ -505,9 +505,7 @@ class PersonalDetails extends Component {
             </div>
           </FormControl>
 
-          {this.state.confirm_details && (
-            <Attention content="Before proceeding, ensure entered details are correct. You can't make changes later. " />
-          )}
+          <Attention content="Before proceeding, ensure entered details are correct. You can't make changes later. " />
         </div>
       </Container>
     );

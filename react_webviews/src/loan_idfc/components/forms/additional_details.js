@@ -221,7 +221,7 @@ class AdditionalDetails extends Component {
   };
 
   handleClick = () => {
-    this.sendEvents('next');
+    // this.sendEvents('next');
     let { form_data, employment_type } = this.state;
 
     let keys_to_check = [
