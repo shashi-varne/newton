@@ -359,6 +359,7 @@ class LoanStatus extends Component {
       let mapper = {
         onload: {
           handleClick1: this.getUserStatus,
+          title1: this.state.title1,
           button_text1: "Retry",
         },
         submit: {

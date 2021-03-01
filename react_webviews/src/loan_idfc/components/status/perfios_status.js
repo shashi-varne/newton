@@ -215,6 +215,7 @@ class PerfiosStatus extends Component {
       let mapper = {
         onload: {
           handleClick1: this.getOrCreate,
+          title1: this.state.title1,
           button_text1: "Retry",
         },
         submit: {

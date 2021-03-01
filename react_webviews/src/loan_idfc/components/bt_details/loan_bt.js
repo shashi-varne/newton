@@ -63,6 +63,7 @@ class LoanBtDetails extends Component {
     };
 
     let bt_info = lead.bt_info;
+    let vendor_info = lead.vendor_info || {};
 
     let loan_bt = [];
 
@@ -89,6 +90,7 @@ class LoanBtDetails extends Component {
       loan_bt: loan_bt,
       bt_info: bt_info,
       loaderData: loaderData,
+      vendor_info: vendor_info
     });
   };
 
@@ -191,6 +193,9 @@ class LoanBtDetails extends Component {
 
     if (submit_details) {
       if (!bt_info.bt_credit_card) {
+        this.setState({
+          loaderWithData: true
+        })
         if (vendor_info.idfc_07_state !== "success") {
           this.get07State({
             bt_selection: form_checked,

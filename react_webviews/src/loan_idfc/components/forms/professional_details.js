@@ -77,7 +77,7 @@ class ProfessionalDetails extends Component {
         onload: {
           handleClick1: this.getOrCreate,
           button_text1: "Retry",
-          title1: this.state.errorTitle || ''
+          title1: this.state.title1,
         },
         submit: {
           handleClick1: this.handleClick,

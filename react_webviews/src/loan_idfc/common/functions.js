@@ -390,11 +390,10 @@ export async function getOrCreate(params) {
         });
       }
     } else {
-      let errorTitle = result.error || result.message || "Something went wrong!";
+      let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
         show_loader: false,
-        // skelton: false,
-        errorTitle: errorTitle,
+        title1: title1,
       });
 
       this.setErrorData("onload");
@@ -469,6 +468,11 @@ export async function getUserStatus(state = "") {
         }
       );
     } else {
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        show_loader: false,
+        title1: title1,
+      });
       error = true;
       errorType = "crash";
       // this.setState(
@@ -769,7 +773,7 @@ export async function get07State(body = {}) {
   let that = this;
 
   setTimeout(function () {
-    if (result.perfios_status === "bypass") {
+    if (result.perfios_status === "bypass" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (result.idfc_07_state === "failed") {
       that.navigate("error");
