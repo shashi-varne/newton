@@ -64,7 +64,7 @@ class BtInformation extends Component {
         title: `What information do I need to provide?`,
         subtitle: `${this.state.screenData.required_info.options.map(
           (el) =>
-            `<div class="bt-faq">
+            `<div class="bt-faq bt">
               <img
                 src=${require(`assets/${this.state.productName}/${el.icon}.svg`)}
                 alt=""

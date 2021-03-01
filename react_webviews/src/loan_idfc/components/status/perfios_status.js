@@ -97,7 +97,7 @@ class PerfiosStatus extends Component {
     });
 
     if (Object.keys(mapper).length === 0) {
-      this.navigate('loan-know-more');
+      this.navigate('error');
     }
   };
 

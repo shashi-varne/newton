@@ -148,11 +148,8 @@ class BasicDetails extends Component {
 
   handleClick = () => {
     this.sendEvents("next");
-    let { form_data, pan_state } = this.state;
-    let keys_to_check = ["dob", "employment_type"];
-    if (pan_state !== "success") {
-      keys_to_check.push("pan_no");
-    }
+    let { form_data } = this.state;
+    let keys_to_check = ["dob", "employment_type", "pan_no"];
 
     this.formCheckUpdate(keys_to_check, form_data);
   };
@@ -212,8 +209,8 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "Salaried" &&
-                  "1px solid var(--primary)",
+                  this.state.form_data.employment_type === "Salaried" ?
+                  "1px solid var(--primary)" : '2px solid var(--highlight)',
               }}
               onClick={this.handleChange()}
             >
@@ -228,8 +225,8 @@ class BasicDetails extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "Self_employed" &&
-                  "1px solid var(--primary)",
+                  this.state.form_data.employment_type === "Self_employed" ?
+                  "1px solid var(--primary)" : '2px solid var(--highlight)',
               }}
               onClick={this.handleChange()}
             >

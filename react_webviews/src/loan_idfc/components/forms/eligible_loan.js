@@ -172,7 +172,6 @@ class EligibleLoan extends Component {
       let mapper = {
         onload: {
           handleClick1: this.getOrCreate,
-          title1: this.state.title1,
           button_text1: "Retry",
         },
         submit: {
@@ -204,9 +203,9 @@ class EligibleLoan extends Component {
         hidePageTitle={true}
         buttonTitle="VIEW FINAL OFFER"
         handleClick={this.handleClick}
-        headerData={{
-          progressHeaderData: this.state.progressHeaderData,
-        }}
+        // headerData={{
+        //   progressHeaderData: this.state.progressHeaderData,
+        // }}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
         skelton={this.state.skelton}

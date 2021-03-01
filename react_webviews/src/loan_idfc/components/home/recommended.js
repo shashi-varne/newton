@@ -189,8 +189,8 @@ class Recommended extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "Salaried" &&
-                  "1px solid var(--primary)",
+                  this.state.form_data.employment_type === "Salaried" ?
+                  "1px solid var(--primary)" : '2px solid var(--highlight)',
               }}
               onClick={this.handleChange()}
             >
@@ -205,8 +205,8 @@ class Recommended extends Component {
               className="employment-card"
               style={{
                 border:
-                  this.state.form_data.employment_type === "Self_employed" &&
-                  "1px solid var(--primary)",
+                  this.state.form_data.employment_type === "Self_employed" ?
+                  "1px solid var(--primary)" : '2px solid var(--highlight)',
               }}
               onClick={this.handleChange()}
             >
