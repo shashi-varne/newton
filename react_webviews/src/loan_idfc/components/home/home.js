@@ -62,7 +62,7 @@ class Home extends Component {
         index: 1,
         title: "DMI Finance",
         subtitle: "Quick disbursal",
-        loan_amount: "₹1 lac",
+        loan_amount: "₹1 lakh",
         logo: "dmi-finance",
         provider_name: "dmi",
         cta_title: "RESUME",

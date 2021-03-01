@@ -578,20 +578,20 @@ export async function updateApplication(
   } catch (err) {
     console.log(err);
 
-    let amountParams = ["loan_amount_required", "monthly_salary"];
-    let keys = Object.keys(params);
-    let { form_data } = this.state;
+    // let amountParams = ["loan_amount_required", "monthly_salary"];
+    // let keys = Object.keys(params);
+    // let { form_data } = this.state;
 
-    keys.forEach((el, index) => {
-      if (amountParams.includes(el)) {
-        form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
-      }
-    });
+    // keys.forEach((el, index) => {
+    //   if (amountParams.includes(el)) {
+    //     form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
+    //   }
+    // });
 
     this.setState({
       show_loader: false,
       loaderWithData: false,
-      form_data: form_data,
+      // form_data: form_data,
     });
     // toast("Something went wrong");
     error = true;
@@ -739,7 +739,10 @@ export async function get07StateForBt() {
   let that = this;
 
   setTimeout(function () {
-    if (
+    if (result.vendor_application_status === 'idfc_callback_rejected' || 
+    result.vendor_application_status === 'idfc_cancelled') {
+      that.navigate("loan-status");
+    } else if (
       (result.idfc_07_state === "success" ||
         result.idfc_07_state === "triggered") &&
       result.bt_eligible
@@ -773,7 +776,10 @@ export async function get07State(body = {}) {
   let that = this;
 
   setTimeout(function () {
-    if (result.perfios_status === "bypass" && !result.bt_eligible) {
+    if (result.vendor_application_status === 'idfc_callback_rejected' || 
+    result.vendor_application_status === 'idfc_cancelled') {
+      that.navigate("loan-status");
+    } else if (result.perfios_status === "bypass" && !result.bt_eligible) {
       that.submitApplication({}, "one", "", "eligible-loan");
     } else if (result.idfc_07_state === "failed") {
       that.navigate("error");
@@ -891,20 +897,20 @@ export async function submitApplication(
   } catch (err) {
     console.log(err);
 
-    let amountParams = ["amount_required", "net_monthly_salary"];
-    let keys = Object.keys(params);
-    let { form_data } = this.state;
+    // let amountParams = ["amount_required", "net_monthly_salary"];
+    // let keys = Object.keys(params);
+    // let { form_data } = this.state;
 
-    keys.forEach((el, index) => {
-      if (amountParams.includes(el)) {
-        form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
-      }
-    });
+    // keys.forEach((el, index) => {
+    //   if (amountParams.includes(el)) {
+    //     form_data[el] = `₹ ${formatAmount(form_data[el].replaceAll(",", ""))}`;
+    //   }
+    // });
 
     this.setState({
       show_loader: false,
       loaderWithData: false,
-      form_data: form_data,
+      // form_data: form_data,
     });
     // toast("Something went wrong");
     error = true;
