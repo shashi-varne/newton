@@ -56,6 +56,12 @@ class AdvisoryLanding extends Component {
           'submit': {
             handleClick1: this.handleClick,
             button_text1: 'Retry',
+            handleClick2: () => {
+              this.setState({
+                showError: false
+              })
+            },
+            button_text2: 'Dismiss'
           }
         };
     

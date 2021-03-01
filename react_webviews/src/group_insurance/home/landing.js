@@ -78,7 +78,7 @@ class Landing extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         },
         'submit': {

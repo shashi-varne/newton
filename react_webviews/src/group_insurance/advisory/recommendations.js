@@ -121,7 +121,13 @@ class AdivsoryRecommendations extends Component {
             'onload':  {
               handleClick1: this.downloadReportPdf,
               button_text1: 'Retry',
-              title1: ''
+              title1: '',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Dismiss'
             },
             'submit': {
               handleClick1: this.handleReset,
