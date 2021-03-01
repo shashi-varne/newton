@@ -1404,6 +1404,33 @@ input#pan {
   .recommendation-result{
     margin-bottom: 40px;
     
+    .adequate-coverage-container{
+      background-color: #FAF9FE;
+      margin: 0 -20px 0 -20px;
+      padding: 10px 20px 20px 20px;
+      .top-row{
+        display: flex;
+        align-self: center;
+        img{
+          margin-right: 10px;
+        }
+        p{
+          font-size: 15px;
+          line-height: 18px;
+        }
+      }
+      button{
+        cursor: pointer;
+        margin-top: -10px;
+        font-size: 12.8px;
+        font-family: 'Rubik', sans-serif;
+        font-weight: bold;
+        letter-spacing: 1px;
+        padding: 18px 0;
+        transform: translate(-4px, -4px);
+      }
+    }
+
     .disable-get-the-plan{
       opacity: 0.4;
     }
@@ -1489,6 +1516,7 @@ input#pan {
     width: 100%;
     transform: translateX(-5px);
     margin: 0;
+    padding: 18px 0;
   }
 
   .coverage-details.align-left{
@@ -1496,7 +1524,7 @@ input#pan {
     align-items: center;
     justify-content: flex-start;
     .individual-coverage-detail{
-      margin: 0 30px 0 0px;
+      margin: 0 45px 0 0px;
     }
   }
   .coverage-details{
