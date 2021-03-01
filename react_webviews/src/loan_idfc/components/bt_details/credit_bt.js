@@ -242,7 +242,7 @@ class LoanBtDetails extends Component {
     this.sendEvents("next");
 
     if (submit_details) {
-      if (vendor_info.idfc_07_state !== "success") {
+      if (vendor_info.idfc_07_state !== "success" && vendor_info.perfios_state !== 'bypass') {
         this.get07State({
           bt_selection: form_checked,
         });
