@@ -1,42 +1,56 @@
-import { create } from 'jss'
-import JssProvider from 'react-jss/lib/JssProvider'
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import WithdrawType from './components/WithdrawType';
+import WithdrawReason from './components/WithdrawReason'
+import WithdrawRemark from './components/WithdrawRemark'
+import Landing from "./components/balance"
+
+import { Switch, Route, withRouter } from 'react-router-dom';
+import { create } from 'jss';
+import JssProvider from 'react-jss/lib/JssProvider';
+
+import './Style.scss'
+
 import {
   createGenerateClassName,
   jssPreset,
   MuiThemeProvider,
   createMuiTheme,
-} from '@material-ui/core/styles'
-import { ToastContainer } from 'react-toastify'
-import NotFound from '../common/components/NotFound'
-import { themeConfig } from 'utils/constants'
-import './Style.scss'
-
-import Balance from './components/balance'
-
-const theme = createMuiTheme(themeConfig)
+} from '@material-ui/core/styles';
+import { themeConfig } from 'utils/constants';
+import { ToastContainer } from 'react-toastify';
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: 'f',
-})
+});
+const jss = create(jssPreset());
+const theme = createMuiTheme(themeConfig);
+const ScrollToTopWithoutRouter = (props) => {
+  const { location } = props;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
-const jss = create(jssPreset())
+  return null;
+};
+const ScrollToTop = withRouter(ScrollToTopWithoutRouter);
 
-const Kyc = (props) => {
-  const { url } = props.match
+const Withdraw = ({ match }) => {
+  const { url } = match;
   return (
     <JssProvider jss={jss} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme}>
         <ToastContainer autoClose={3000} />
-        <Switch>
-          <Route exact path={`${url}`} component={Balance} />
-          <Route component={NotFound} />
-        </Switch>
+        <ScrollToTop />
+          <Switch>
+            <Route exact path={`${url}`} component={Landing} />
+            <Route path={`${url}/type`} component={WithdrawType} />
+            <Route path={`${url}/reason`} component={WithdrawReason} />
+            <Route path={`${url}/remark`} component={WithdrawRemark} />
+          </Switch>
       </MuiThemeProvider>
     </JssProvider>
-  )
-}
+  );
+};
 
-export default Kyc
+export default Withdraw;

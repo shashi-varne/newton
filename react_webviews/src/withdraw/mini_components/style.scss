@@ -1,0 +1,54 @@
+.withdraw-fund-card{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+
+  .withdraw-fund-header{
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    align-items: center;
+    & div {
+      display: flex;
+      align-items: center;
+      img {
+        margin-right: 30px;
+      }
+      div{
+        font-size: 16px;
+        color: #0A1C32;
+        font-weight: 600;
+        line-height: 1.6;
+      }
+    }
+  }
+
+  .withdraw-investment-container{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0px;
+    .withdraw-amount-container{
+
+      .investment-header-text,.amount-header-text {
+        color: #0A1D32;
+        font-size: 8px;
+        font-weight: 600;
+        line-height: 1.6;
+        text-transform: uppercase;
+      }
+
+      & div{
+        color: #767E86;
+        font-weight: 400;
+        font-size: 13px;
+      }
+    }
+  }
+
+  .withdraw-tax{
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 400;
+    margin: 10px 0 0 10px;
+  }
+}

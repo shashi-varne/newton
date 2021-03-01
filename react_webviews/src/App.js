@@ -28,7 +28,6 @@ import FundDetails from './fund_details';
 import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 
-
 var basename = window.sessionStorage.getItem('base_href') || '';
 if(basename && basename.indexOf('appl/webview') !== -1) {
   basename = basename ? basename + 'view/' : '';
