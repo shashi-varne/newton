@@ -292,3 +292,9 @@ export const nriAddressProofOptions = [
   { name: "Passport", value: "PASSPORT" },
   { name: "Passport", value: "PASSPORT" } 
 ]
+
+export const dlDocs = [
+  {name: 'Aadhaar Card', icon: 'ic_aadhaar_card'},
+  {name: 'Pan Card', icon: 'ic_pan_card'},
+  {name: 'Address Details', icon: 'ic_address_details'}
+]

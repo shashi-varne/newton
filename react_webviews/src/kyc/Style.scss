@@ -604,7 +604,7 @@
     .input {
       margin-top: 20px;
 
-      input[type="password"] {
+      input[type='password'] {
         font-size: 24px;
       }
 
@@ -1726,4 +1726,127 @@
       }
     }
   }
+}
+
+#digilocker-success {
+  .page-title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .page-desc {
+    margin: 10px 0 30px 0;
+    font-size: 13px;
+    line-height: 21px;
+    color: #8d8798;
+  }
+
+  .esign-steps {
+    margin-top: 30px;
+  }
+
+  .esign-steps .doc {
+    margin-bottom: 30px;
+  }
+
+  .esign-steps .doc .doc-name {
+    font-size: 15px;
+    line-height: 18px;
+    color: #8d879b;
+    margin-left: 20px;
+  }
+
+  .footer {
+    margin: 30px 0 20px 0;
+  }
+
+  .footer .bottom-text {
+    color: #767e86;
+    font-size: 8px;
+    line-height: 9px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  .footer .bottom-image {
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+}
+
+#digilocker-failed {
+  .page-title {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  .digi-image {
+    display: block;
+    object-fit: contain;
+    min-width: 314px;
+    max-width: 100%;
+    margin: 0 auto;
+    margin: 30px 0 20px 0;
+  }
+
+  .body-text1 {
+    font-size: 13px;
+    line-height: 22px;
+    color: #8d879b;
+  }
+
+  .body-text2 {
+    font-size: 13px;
+    line-height: 22px;
+    color: #8d879b;
+    margin-top: 10px;
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 10px;
+  }
+
+  .footer .raised {
+    display: block;
+    width: 100%;
+    padding: 7px;
+    border-radius: 5px;
+    letter-spacing: 1px;
+  }
+
+  .footer .MuiButton-label {
+    font-size: 16px;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  .footer .outlined {
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    padding: 7px;
+    border-radius: 5px;
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+  }
+}
+
+.kyc-dl-aadhaar-dialog .heading {
+  width: 55%;
+  color: #160d2e;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.kyc-dl-aadhaar-dialog .img-right-top {
+  top: 10;
+  right: 10;
 }
