@@ -17,12 +17,6 @@ const SwitchFund = (props) => {
   const amfi = params.amfi || "";
 
   const navigate = navigateFunc.bind(props);
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [funds, setFunds] = useState({});
   const [filteredFunds, setFilteredFunds] = useState({});
   const [fundDetails, setFundDetails] = useState({});
@@ -53,15 +47,7 @@ const SwitchFund = (props) => {
   }, []);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
+    await initData();
     const result = await getAvailableFundsForSwitch({
       amfi,
     });
@@ -104,7 +90,7 @@ const SwitchFund = (props) => {
   };
 
   const switchFund = (fund) => {
-    storageService().setObject(storageConstants.REPORTS_SWITCH_FUND, fund);
+    storageService().setObject(storageConstants.REPORTS_SWITCH_FUND_TO, fund);
     navigate(`${getPathname.reportsSwitchNow}${amfi}`);
   };
 

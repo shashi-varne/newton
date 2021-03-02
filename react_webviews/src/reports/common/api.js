@@ -146,3 +146,21 @@ export const getAvailableFundsForSwitch = async (data) => {
       throw result.error || result.message || genericErrorMessage;
   }
 };
+
+export const postSwitchRecommendation = async (data) => {
+  const res = await Api.post(apiConstants.postSwitchRecommendation, data);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.message || result.error || genericErrorMessage;
+  }
+};
