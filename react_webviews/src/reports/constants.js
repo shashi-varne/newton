@@ -46,6 +46,7 @@ export const getPathname = {
   reportsFundswiseDetails: "/reports/fundswise/details/",
   reportsSwitchNow: "/reports/fundswise/switch-now/",
   otpSwitch: "/switch/verify",
+  sipDetails: "/reports/sip/details",
 };
 
 export const storageConstants = {
@@ -56,6 +57,9 @@ export const storageConstants = {
   SIPS: "sips",
   DIYSTORE_FUNDINFO: "diystore_fundInfo",
   REPORTS_SWITCH_FUND_TO: "reports_switch_fund_to",
+  PAUSE_SIP: "pause-sip",
+  SELECTED_SIP: "selected-sip",
+  PAUSE_REQUEST_DATA: "pause-request-data",
 };
 
 export const getPurchaseProcessData = (

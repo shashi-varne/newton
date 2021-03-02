@@ -62,3 +62,10 @@ export const redirectToReports = (name) => {
     redirectUrl;
   window.location.href = url;
 };
+
+export const dateOrdinalSuffix = (dom) => {
+  if (dom === 31 || dom === 21 || dom === 1) return "st";
+  if (dom === 22 || dom === 2) return "nd";
+  if (dom === 23 || dom === 3) return "rd";
+  return "th";
+};
