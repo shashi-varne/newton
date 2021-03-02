@@ -85,10 +85,9 @@ export async function initialize() {
             if (resume && !application_id) {
                 url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
-
-
+                var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
-                    var resultData = res.pfwresponse.result;
+                    
                     lead = resultData;
                     lead.member_base = ghGetMember(lead, this.state.providerConfig);               
                     this.setState({
@@ -102,7 +101,7 @@ export async function initialize() {
                         skelton: false
                     });
                 } else {
-                    error=resultData.error || resultData.message ||
+                    error = resultData.error || resultData.message ||
                         true;
                 }
                 
@@ -347,7 +346,7 @@ export async function updateLead( body, quote_id) {
                     this.sendEvents('next', {bmi_check: true});
                 });
             } else {
-                if(resultData.error && resultData.error.length > 0 && resultData.error[0]){
+                if(resultData.error && resultData.error.length > 0 && resultData.error[0] && Array.isArray(resultData.error)){
                     resultData.error = resultData.error[0]
                 }
                 error=
@@ -396,7 +395,7 @@ export function navigate(pathname, data = {}) {
     }
 
 }
-function setErrorData(type, dismiss, func) {
+function setErrorData(type, dismiss, HandleClickFunc) {
   this.setState({
     showError: false,
   });
@@ -408,7 +407,7 @@ function setErrorData(type, dismiss, func) {
         title1: "",
       },
       submit: {
-        handleClick1: func ? func : this.handleClick,
+        handleClick1: HandleClickFunc ? HandleClickFunc : this.handleClick,
         button_text1: "Retry",
         handleClick2: () => {
           this.setState({

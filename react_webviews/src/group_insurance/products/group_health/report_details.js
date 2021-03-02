@@ -185,14 +185,14 @@ class GroupHealthReportDetails extends Component {
         try {
 
             this.setState({
-                skelton: true 
+                show_loader: "page" 
             });
 
            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
         
             var resultData = res.pfwresponse.result;
             this.setState({
-                skelton:false
+                show_loader:false
             })
             if (res.pfwresponse.status_code === 200) {  
                 let download_link = resultData.download_link;
@@ -210,7 +210,7 @@ class GroupHealthReportDetails extends Component {
         } catch (err) {
             console.log(err)
             this.setState({
-                skelton: false
+                show_loader: false
             });
             error = true;
             errorType = "crash";
