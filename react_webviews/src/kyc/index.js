@@ -60,6 +60,7 @@ import NriAddressDetails1 from './address/nri/NRIAddressDetails1'
 import NRIAddressDetails2 from './address/nri/NRIAddressDetails2'
 import Success from './digilocker/components/success'
 import Failed from './digilocker/components/failed'
+import DigilockerCallback from './digilocker/components/digilockercallback'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -239,6 +240,7 @@ const Kyc = (props) => {
           />
           <Route exact path={`${url}/digilocker/success`} component={Success} />
           <Route exact path={`${url}/digilocker/failed`} component={Failed} />
+          <Route exact path={`${url}/digilocker/callback/:status`} component={DigilockerCallback} />
           <Route
             exact
             path={`${url}/nri-address-details1`}

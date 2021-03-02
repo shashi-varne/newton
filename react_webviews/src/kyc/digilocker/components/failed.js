@@ -3,16 +3,25 @@ import Container from '../../common/Container'
 import { initData } from '../../services'
 import toast from 'common/ui/Toast'
 import { getConfig } from 'utils/functions'
-import { Button } from 'material-ui'
+import { navigate as navigateFunc } from '../../common/functions'
+import Button from '@material-ui/core/Button'
+import AadhaarDialog from '../../mini_components/AadhaarDialog'
 
 const Failed = (props) => {
   const [showLoader, setShowLoader] = useState(false)
-  const retry = () => {
-    
+  const [open, setOpen] = useState(false)
+
+  const close = () => {
+    setOpen(false)
   }
 
-  const proceed = () => {
+  const retry = () => {
+    setOpen(true)
+  }
 
+  const manual = () => {
+    const navigate = navigateFunc.bind(props)
+    navigate('/kyc/journey')
   }
 
   const productName = getConfig().productName
@@ -33,14 +42,27 @@ const Failed = (props) => {
           investing in mutual funds.
         </div>
         <footer className="footer">
-          <Button variant="raised" fullWidth color="secondary" className="raised" onClick={retry}>
+          <Button
+            variant="raised"
+            fullWidth
+            color="secondary"
+            className="raised"
+            onClick={retry}
+          >
             RETRY
           </Button>
-          <Button variant="outlined" fullWidth color="secondary" className="outlined" onClick={proceed}>
+          <Button
+            variant="outlined"
+            fullWidth
+            color="secondary"
+            className="outlined"
+            onClick={manual}
+          >
             CONTINUE WITH MANUAL KYC
           </Button>
         </footer>
       </section>
+      <AadhaarDialog open={open} id="kyc-aadhaar-dialog" close={close} />
     </Container>
   )
 }

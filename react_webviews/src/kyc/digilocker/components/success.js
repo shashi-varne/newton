@@ -4,12 +4,17 @@ import { initData } from '../../services'
 import toast from 'common/ui/Toast'
 import { getConfig } from '../../../utils/functions'
 import { dlDocs } from '../../constants'
+import { navigate as navigateFunc } from '../../common/functions'
 
 const Success = (props) => {
   const productName = getConfig().productName
   const [showLoader, setShowLoader] = useState(false)
+  const proceed = () => {
+    const navigate = navigateFunc.bind(props)
+    navigate('/kyc/journey')
+  }
   return (
-    <Container showLoader={showLoader} hideInPageTitle buttonTitle="PROCEED">
+    <Container showLoader={showLoader} hideInPageTitle buttonTitle="PROCEED" handleClick={proceed}>
       <section id="digilocker-success">
         <div className="page-title">Share Details</div>
         <div className="page-desc">

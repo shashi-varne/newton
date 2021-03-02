@@ -1847,6 +1847,12 @@
 }
 
 .kyc-dl-aadhaar-dialog .img-right-top {
-  top: 10;
-  right: 10;
+  align-self: flex-start;
+  position: relative;
+  bottom: 10px;
+  left: 10px;
+}
+
+.kyc-dl-aadhaar-dialog .dialog-actions {
+  margin-top: 25px;
 }
