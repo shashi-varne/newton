@@ -114,7 +114,6 @@ class BtInformation extends Component {
       event_category: "Lending IDFC",
       event_name: "idfc_bt_transfer_details",
       properties: {
-        event_name: "idfc_bt_transfer_details",
         user_action: user_action,
         opted_for_bt: this.state.isBtOpted
       },

@@ -99,7 +99,6 @@ class ReportDetails extends Component {
       event_name: "idfc_loan_report",
       properties: {
         user_action: user_action,
-        event_name: "idfc_loan_report",
         status:
           (this.state.cssMapper[this.state.loan_status || ""] &&
             this.state.cssMapper[this.state.loan_status || ""].disc) ||

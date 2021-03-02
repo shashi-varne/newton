@@ -103,7 +103,6 @@ class LoanBtDetails extends Component {
       event_name: "idfc_select_bt",
       properties: {
         user_action: user_action,
-        event_name: "idfc_select_bt",
         no_of_loans_selected: form_checked.length,
         skipped_screen:
           form_checked.length !== 0

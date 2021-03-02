@@ -38,7 +38,6 @@ class LoanEligible extends Component {
       event_name: "idfc_final_loan_offer",
       properties: {
         user_action: user_action,
-        event_name: "idfc_final_loan_offer",
       },
     };
 

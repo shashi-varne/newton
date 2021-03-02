@@ -124,7 +124,6 @@ class DocumentList extends Component {
         user_action: user_action,
         docs_list : this.state.docList.map((category) => category.category_name),
         doc_card_selected: data.doc_card_selected || "",
-        event_name: "upload_docs",
       },
     };
 
@@ -207,6 +206,7 @@ class DocumentList extends Component {
         showLoader={this.state.show_loader}
         title="Upload documents"
         buttonTitle="CONTINUE"
+        hidePageTitle={this.state.skelton}
         handleClick={this.handleClick}
         withProvider={!this.state.params.adminPanel? true : false}
         buttonData={this.state.bottomButtonData}

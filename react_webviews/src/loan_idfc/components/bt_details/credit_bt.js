@@ -108,7 +108,6 @@ class LoanBtDetails extends Component {
       event_name: "idfc_credit_card_details",
       properties: {
         user_action: user_action,
-        event_name: "idfc_credit_card_details",
         no_of_cards_entered: form_checked.length,
         skipped_screen:
           form_checked.length !== 0

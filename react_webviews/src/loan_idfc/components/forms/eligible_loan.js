@@ -76,7 +76,6 @@ class EligibleLoan extends Component {
       event_category: "Lending IDFC",
       event_name: "idfc_loan_offer",
       properties: {
-        event_name: "idfc_loan_offer",
         user_action: user_action,
         offer_selected:
           this.state.checked === "default_tenor" ? "default" : "customised",

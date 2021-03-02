@@ -162,7 +162,6 @@ class PersonalDetails extends Component {
       event_name: "idfc_kyc_personal_details",
       properties: {
         user_action: user_action,
-        event_name: "idfc_kyc_personal_details",
         details_changed: this.state.details_changed,
         ckyc_success: this.state.confirm_details ? "yes" : "no",
       },

@@ -26,7 +26,6 @@ class Documents extends Component {
       event_name: "idfc_documents",
       properties: {
         user_action: user_action,
-        event_name: "idfc_documents",
       },
     };
 

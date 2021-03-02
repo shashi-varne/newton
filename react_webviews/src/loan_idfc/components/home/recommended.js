@@ -111,7 +111,6 @@ class Recommended extends Component {
         user_action: user_action,
         employment_type: (this.state.form_data.employment_type || '').toLowerCase() || "",
         amount_required: this.state.form_data.loan_amount_required || "",
-        event_name: "loan_requirement",
       },
     };
 

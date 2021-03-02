@@ -158,7 +158,6 @@ class UploadBank extends Component {
       event_name: "idfc_upload_bank_statement",
       properties: {
         user_action: user_action,
-        event_name: "idfc_upload_bank_statement",
         files_uploaded: this.state.documents.length,
       },
     };

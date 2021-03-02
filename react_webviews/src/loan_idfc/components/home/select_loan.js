@@ -160,7 +160,6 @@ class SelectLoan extends Component {
         status: data.status || "default",
         resume: data.resume || "no",
         benefit_clicked: this.state.benefit_clicked || 'no',
-        event_name: "select_loan_provider",
       },
     };
 

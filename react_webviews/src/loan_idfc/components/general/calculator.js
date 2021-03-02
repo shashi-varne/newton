@@ -51,7 +51,6 @@ class Calculator extends Component {
       event_name: "idfc_eligibility_calculator",
       properties: {
         user_action: user_action,
-        event_name: "idfc_eligibility_calculator",
       },
     };
 

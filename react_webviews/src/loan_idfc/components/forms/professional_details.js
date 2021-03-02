@@ -104,7 +104,6 @@ class ProfessionalDetails extends Component {
       event_name: "idfc_professional_details",
       properties: {
         user_action: user_action,
-        event_name: "idfc_professional_details",
       },
     };
 

@@ -42,11 +42,9 @@ class FinalOffer extends Component {
   sendEvents(user_action) {
     let eventObj = {
       event_category: "Lending IDFC",
-      event_name: "idfc_lending",
+      event_name: "idfc_application_submitted",
       properties: {
         user_action: user_action,
-        screen_name: "application_submitted",
-        event_name: "idfc_lending",
       },
     };
 

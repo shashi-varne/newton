@@ -96,7 +96,6 @@ class OtpVerification extends Component {
       event_name: "idfc_otp_screen",
       properties: {
         user_action: user_action,
-        event_name: "idfc_otp_screen",
         resend_clicked: this.state.resend_otp_clicked ? "yes" : "no",
       },
     };

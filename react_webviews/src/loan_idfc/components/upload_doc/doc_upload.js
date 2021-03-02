@@ -213,7 +213,6 @@ class DocumentUpload extends Component {
         user_action: user_action,
         doc_type: this.state.form_data.doc_name,
         type: type,
-        event_name: this.state.docList.category_name || "doc_upload",
       },
     };
 
@@ -629,6 +628,7 @@ class DocumentUpload extends Component {
         buttonTitle="CONTINUE"
         disable={disableButton}
         handleClick={this.handleClick}
+        hidePageTitle={this.state.skelton}
         headerData={{
           goBack: this.goBack,
         }}

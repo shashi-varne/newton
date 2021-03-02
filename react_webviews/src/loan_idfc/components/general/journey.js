@@ -282,7 +282,6 @@ class JourneyMap extends Component {
         stage: data.stage,
         summary_selected_for: data.summary_selected_for || "",
         resume: data.resume ? 'yes' : 'no',
-        event_name: "idfc_journey_map",
       },
     };
     if (user_action === "just_set_events") {
@@ -341,10 +340,7 @@ class JourneyMap extends Component {
         this.sendEvents('next', {stage: stage});
         this.getCkycState();
       } else {
-        this.setState({
-          loaderWithData: ckyc_state === "success",
-          show_loader: ckyc_state === "success"
-        });
+        
         if (index > "1") {
           this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
           this.navigate("ckyc-summary");
@@ -356,6 +352,11 @@ class JourneyMap extends Component {
           this.sendEvents('next', {stage: stage, resume: resume});
 
           if (idfc_loan_status !== 'ckyc') {
+            this.setState({
+              loaderWithData: ckyc_state === "success",
+              show_loader: ckyc_state === "success"
+            });
+
             this.updateApplication({
               idfc_loan_status: "ckyc",
             }, "", "skelton", "g");

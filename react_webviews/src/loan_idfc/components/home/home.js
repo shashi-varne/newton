@@ -126,7 +126,6 @@ class Home extends Component {
       event_name: "lending_home_screen",
       properties: {
         user_action: user_action,
-        event_name: "lending_home_screen",
       },
     };
 
