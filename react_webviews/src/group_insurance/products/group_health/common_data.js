@@ -425,10 +425,10 @@ function setErrorData(type,dismiss) {
   }
 }
 export async function resetQuote() {
-    this.setErrorData("submit",true)
+    this.setErrorData("submit", true)
     this.handleClose();
     this.setState({
-        skelton: true,
+        show_loader: "page",
         restart_conformation: true
     }, () => {
         this.sendEvents('next');
@@ -456,7 +456,7 @@ export async function resetQuote() {
     } catch (err) {
         console.log(err)
         this.setState({
-            skelton: false
+            show_loader: false
         });
         error = true;
         errorType = "crash";
@@ -469,10 +469,9 @@ export async function resetQuote() {
             type: errorType
           },
           showError: true,
+          show_loader: false
         });
-        this.setState({
-            skelton: false
-        });
+        
       }
 }
 

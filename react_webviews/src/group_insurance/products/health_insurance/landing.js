@@ -40,7 +40,8 @@ class HealthInsuranceLanding extends Component {
       params: qs.parse(props.history.location.search.slice(1)),
       Comprehensive : false,
       DiseasesSpecificPlan : false,
-      lastClickedItem:""
+      lastClickedItem:"",
+      title:"Health insurance"
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -171,6 +172,17 @@ class HealthInsuranceLanding extends Component {
     else {
       data = this.state.lastClickedItem
     }
+    if(data.title==="Care Health"){
+      this.setState({
+        title:"Care Health (formerly Religare)"
+      })
+    }
+    else{
+      this.setState({
+        title:data.title
+      })
+    }
+    
     this.setErrorData("submit");
     this.setState({
       skelton: true
@@ -505,7 +517,7 @@ class HealthInsuranceLanding extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        title="Health insurance">
+        title={this.state.title}>
         <div>
           <div className='products' style={{marginTop : '10px'}}>
             <h1 style={{ fontWeight: '500', color: '#160d2e', fontSize: '17px', lineHeight : '20.15px', marginBottom : '15px'}}>Explore best plans for your health</h1>
