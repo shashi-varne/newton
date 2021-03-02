@@ -351,7 +351,7 @@ class JourneyMap extends Component {
           }
           this.sendEvents('next', {stage: stage, resume: resume});
 
-          if (idfc_loan_status !== 'ckyc') {
+          if (!resume) {
             this.setState({
               loaderWithData: ckyc_state === "success",
               show_loader: ckyc_state === "success"
