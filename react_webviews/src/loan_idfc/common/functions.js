@@ -12,7 +12,7 @@ import {
   IsFutureDate,
   numDifferentiationInr,
   calculateAge,
-  formatAmount,
+  // formatAmount,
   validateEmail
 } from "utils/validators";
 import { getUrlParams } from "utils/validators";

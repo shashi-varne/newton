@@ -141,7 +141,7 @@ class PerfiosStatus extends Component {
     let { perfios_state, bt_eligible, idfc_07_state = "" } = this.state;
 
     this.setState({
-      loaderWithData: !bt_eligible
+      loaderWithData: !bt_eligible && this.state.commonMapper.button_title !== "RETRY"
     })
     
     if (perfios_state === "success") {

@@ -14,7 +14,6 @@ import {
   numDifferentiationInr,
   formatAmount,
 } from "utils/validators";
-import { getConfig } from "utils/functions";
 
 class EligibleLoan extends Component {
   constructor(props) {
