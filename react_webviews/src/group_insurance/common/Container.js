@@ -220,6 +220,16 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+    
+    if(this.checkStringInString('/group-insurance/advisory/basic-details')){
+      let resume_case = storageService().getObject('advisory_resume_present');
+      if(resume_case){
+        this.navigate('/group-insurance');
+      }else{
+        this.navigate('/group-insurance/advisory/landing')
+      }  
+      return;
+    }
 
     let from_advisory = storageService().getObject('from_advisory')
     let advisory_paths = ['/group-insurance/health/critical_illness/plan', '/group-insurance/group-health/RELIGARE/landing', '/group-insurance/corona/plan','/group-insurance/life-insurance/term/landing'];
