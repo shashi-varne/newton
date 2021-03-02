@@ -136,14 +136,14 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
 
         try{
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`, body);
-
             if (res.pfwresponse.status_code === 200){
                 var resultData = res.pfwresponse.result;
                 plan_selected_final = resultData.premium_details;
             }else{
-                error = res.pfwresponse.result.error || res.pfwresponse.results.message
+                error = res.pfwresponse.result.error || res.pfwresponse.result.message
                     || true;
             }
+            
         }catch(err){
             console.log(err);
             this.setState({
@@ -159,7 +159,8 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
                 title2: error,
                 type: errorType
               },
-              showError:true
+              showError:true,
+              show_loader:false,
             });
           }
         groupHealthPlanData.plan_selected_final = plan_selected_final;
@@ -204,6 +205,7 @@ class GroupHealthPlanSelectCoverPeriod extends Component {
         }
 
         this.setLocalProviderData(groupHealthPlanData);
+        if(!error)
         this.navigate('plan-premium-summary');
     }
 

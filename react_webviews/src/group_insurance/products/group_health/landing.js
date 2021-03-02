@@ -134,7 +134,7 @@ class GroupHealthLanding extends Component {
       resultData['details_doc'] = res.pfwresponse.result.policy_brochure
       resultData['tnc'] = res.pfwresponse.result.terms_and_condition
       let lead = {};
-      if (res.pfwstatus_code === 200) {
+      if (res.pfwresponse.status_code === 200) {
         lead = resultData.quotation || {};
     
         lead.member_base = [];
