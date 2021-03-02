@@ -25,6 +25,7 @@ class AddressDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      loaderWithData: false,
       screen_name: "address_details",
       form_data: {},
       confirm_details: false,
@@ -457,6 +458,7 @@ class AddressDetails extends Component {
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         } address details`}
+        hidePageTitle={this.state.skelton}
         buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         loaderWithData={this.state.loaderWithData}

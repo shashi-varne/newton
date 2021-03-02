@@ -145,7 +145,7 @@ export async function getInstitutionList() {
   let errorType = "";
   try {
     this.setState({
-      skelton: 'g'
+      skelton: true
     });
 
     const res = await Api.get("relay/api/loan/idfc/perfios/institutionlist");
@@ -168,7 +168,7 @@ export async function getInstitutionList() {
     } else {
       this.setState({
         show_loader: false,
-        skelton: false
+        // skelton: false
       });
       error = true;
       errorType = "crash";
@@ -1174,7 +1174,7 @@ export async function startTransaction(transaction_type) {
   let errorType = "";
   try {
     this.setState({
-      skelton: 'g'
+      skelton: true
     });
 
     const res = await Api.get(

@@ -33,6 +33,7 @@ class PersonalDetails extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      loaderWithData: false,
       screen_name: "personal_details_screen",
       form_data: {},
       confirm_details: false,
@@ -278,6 +279,7 @@ class PersonalDetails extends Component {
         title={`${
           this.state.confirm_details ? "Confirm your" : "Provide"
         }  personal details`}
+        hidePageTitle={this.state.skelton}
         buttonTitle={this.state.confirm_details ? "CONFIRM & SUBMIT" : "SUBMIT"}
         handleClick={this.handleClick}
         headerData={{
