@@ -28,7 +28,6 @@ class GroupHealthPlanPersonalDetails extends Component {
     super(props);
     this.state = {
       type: getConfig().productName,
-      header_title: 'Personal details',
       form_data: {},
       ctaWithProvider: true,
       quotation : { member_details : {}  },
@@ -43,6 +42,20 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.resetQuote = resetQuote.bind(this);
   }
   
+  pageTitle = () =>{
+    let member_key = this.props.member_key;
+    let header_title = `${capitalizeFirstLetter(childeNameMapper(member_key))}'s details`;
+    let header_subtitle = '';
+
+    if (member_key === 'self') {
+      header_title = 'Personal details';
+      header_subtitle = 'Policy will be issued basis these details';
+    }
+    this.setState({
+      header_title: header_title,
+      header_subtitle: header_subtitle
+    })
+  }
 
   onload = () => {
   
@@ -189,6 +202,7 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   componentWillMount() {
+    this.pageTitle()
     this.initialize()
   }
 
