@@ -40,7 +40,8 @@ class GroupHealthReportDetails extends Component {
             },
             skelton:true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            dURL:""
         }
 
         this.initialize = initialize.bind(this);
@@ -150,9 +151,15 @@ class GroupHealthReportDetails extends Component {
     }
 
 
-    downloadPolicy(url) {
-
-
+    downloadPolicy = (url) => {
+        if(url){
+            this.setState({
+                dURL:url
+            })
+        }else{
+            url=this.state.dURL
+        }
+       
         if (this.state.download_link || url) {
             // this.sendEvents('download');
             nativeCallback({
@@ -172,7 +179,7 @@ class GroupHealthReportDetails extends Component {
     }
 
     getDownloadLink = async () => {
-        this.setErrorData("submit",true)
+        this.setErrorData("submit", true, this.downloadPolicy)
         let error = "";
         let errorType = "";
         try {
@@ -184,11 +191,10 @@ class GroupHealthReportDetails extends Component {
            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
         
             var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-                this.setState({
-                    skelton:false
-                })
+            this.setState({
+                skelton:false
+            })
+            if (res.pfwresponse.status_code === 200) {  
                 let download_link = resultData.download_link;
                 this.setState({
                     download_link: download_link

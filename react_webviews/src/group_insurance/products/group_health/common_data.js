@@ -396,7 +396,7 @@ export function navigate(pathname, data = {}) {
     }
 
 }
-function setErrorData(type,dismiss) {
+function setErrorData(type, dismiss, func) {
   this.setState({
     showError: false,
   });
@@ -408,14 +408,14 @@ function setErrorData(type,dismiss) {
         title1: "",
       },
       submit: {
-        handleClick1: this.handleClick,
+        handleClick1: func ? func : this.handleClick,
         button_text1: "Retry",
         handleClick2: () => {
           this.setState({
             showError: false,
           });
         },
-        button_text2: dismiss? "Dismiss" : "Edit",
+        button_text2: dismiss ? "Dismiss" : "Edit",
       },
     };
 
@@ -425,7 +425,7 @@ function setErrorData(type,dismiss) {
   }
 }
 export async function resetQuote() {
-    this.setErrorData("submit", true)
+    this.setErrorData("submit", true, this.resetQuote)
     this.handleClose();
     this.setState({
         show_loader: "page",
