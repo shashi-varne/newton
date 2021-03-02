@@ -38,15 +38,21 @@ const SwitchNow = (props) => {
 
   const initialize = async () => {
     await initData();
-    const data = await getFundDetailsForSwitch({
-      amfi,
-    });
-    if (!data) {
-      showSkelton(false);
-      return;
+    try {
+      const data = await getFundDetailsForSwitch({
+        amfi,
+      });
+      if (!data) {
+        showSkelton(false);
+        return;
+      }
+      setFundDetails(data.report);
+    } catch (err) {
+      console.log(err);
+      toast(err);
+    } finally {
+      setShowSkelton(false);
     }
-    setFundDetails(data.report);
-    setShowSkelton(false);
   };
 
   const fullSwitch = (index) => {
@@ -122,10 +128,10 @@ const SwitchNow = (props) => {
       buttonTitle="SWITCH NOW"
       handleClick={handleClick}
       isApiRunning={isApiRunning}
-      disabled={isApiRunning || showSkelton}
+      disable={isApiRunning || showSkelton}
     >
       <div className="reports-switch-now">
-        {!showSkelton && (
+        {!showSkelton && !isEmpty(fundDetails) && (
           <>
             <header>
               <div className="content">

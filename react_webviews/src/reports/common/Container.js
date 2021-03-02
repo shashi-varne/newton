@@ -230,11 +230,18 @@ const Container = (props) => {
           noFooter={props.noFooter}
           fullWidthButton={props.fullWidthButton}
           buttonTitle={props.buttonTitle}
+          buttonTitle2={props.buttonTitle2}
           handleClick={props.handleClick}
           handleClick2={props.handleClick2}
           onlyButton={props.onlyButton}
           disable={props.disable}
+          disable2={props.disable2}
           buttonData={props.buttonData}
+          isApiRunning={props.isApiRunning}
+          isApiRunning2={props.isApiRunning2}
+          twoButton={props.twoButton}
+          buttonClassName={props.buttonClassName}
+          buttonClassName2={props.buttonClassName2}
         />
       )}
       {/* No Internet */}

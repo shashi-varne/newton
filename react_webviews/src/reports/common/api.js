@@ -164,3 +164,23 @@ export const postSwitchRecommendation = async (data) => {
       throw result.message || result.error || genericErrorMessage;
   }
 };
+
+export const getSipAction = async (data) => {
+  const res = await Api.get(
+    `${apiConstants.getSipAction}${data.key}/${data.action}`
+  );
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};

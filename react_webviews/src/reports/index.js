@@ -24,6 +24,7 @@ import Redeemed from "./components/Redeemed";
 import SwitchFund from "./components/SwitchFund";
 import SwitchNow from "./components/SwitchNow";
 import Sip from "./components/sip/Sip";
+import SipDetails from "./components/sip/SipDetails";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -54,6 +55,7 @@ const Reports = (props) => {
           <Route path={`${url}/fundswise/switch/:amfi`} exact component={SwitchFund} />
           <Route path={`${url}/fundswise/switch-now/:amfi`} exact component={SwitchNow} />
           <Route path={`${url}/sip`} exact component={Sip} />
+          <Route path={`${url}/sip/details`} exact component={SipDetails} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

@@ -9,6 +9,7 @@ export const apiConstants = {
   getFundsWiseTransactions: "/api/invest/transactionv4",
   getAvailableFundsForSwitch: "/api/invest/fund/switch/available-funds",
   postSwitchRecommendation: "/api/invest/switch/orders",
+  getSipAction: "/api/invest/sip/",
 };
 
 export const getPathname = {
@@ -47,6 +48,8 @@ export const getPathname = {
   reportsSwitchNow: "/reports/fundswise/switch-now/",
   otpSwitch: "/switch/verify",
   sipDetails: "/reports/sip/details",
+  pauseAction: "/reports/sip/pause-action/",
+  pauseResumeRestart: "/reports/sip/pause-resume-restart/",
 };
 
 export const storageConstants = {

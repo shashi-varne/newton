@@ -97,7 +97,7 @@ const FundswiseSummary = (props) => {
             return (
               <div className="fund" key={index}>
                 <h5>
-                  <div className='text' onClick={() => getFundDetails(index)}>
+                  <div className="text" onClick={() => getFundDetails(index)}>
                     {fund.mf.friendly_name}
                   </div>
                   <div className="right-info">

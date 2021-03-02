@@ -1290,3 +1290,155 @@
     }
   }
 }
+
+.reports-sip-details {
+  color: #333333;
+  line-height: 1.5;
+
+  .status {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    font-weight: 700;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+
+    .dot {
+      border-radius: 50%;
+      width: 8px;
+      height: 8px;
+      margin-right: 5px;
+      margin-top: -2px;
+    }
+  }
+
+  .yellow {
+    color: #c2a20c;
+    .dot {
+      background-color: #c2a20c;
+    }
+  }
+
+  .green {
+    color: #71bf1c;
+    .dot {
+      background-color: #71bf1c;
+    }
+  }
+
+  .red {
+    color: #d0021b;
+    .dot {
+      background-color: #d0021b;
+    }
+  }
+
+  .blue {
+    color: #3792fc;
+    .dot {
+      background-color: #3792fc;
+    }
+  }
+
+  .mf-name {
+    color: #0a1d32;
+    font-size: 16px;
+    line-height: 26px;
+    margin-bottom: 10px;
+  }
+
+  .content {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+
+    img {
+      width: 30px;
+      margin-right: 20px;
+    }
+
+    .title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0a1d32;
+    }
+
+    .progress-bar {
+      margin-top: 10px;
+      position: relative;
+      
+      .step {
+        img {
+          width: 20px;
+          position: absolute;
+          padding-bottom: 20px;
+        }
+
+        .circle {
+          width: 20px;
+          height: 20px;
+          background-color: #b2b2b2;
+          position: absolute;
+          padding-bottom: 20px;
+          border-radius: 50%;
+        }
+
+        .text {
+          padding-bottom: 20px;
+          border-left: 1px solid #b2b2b2;
+          margin-left: 10px;
+          padding-left: 40px;
+          line-height: 20px;
+          color: #333c4e;
+          font-weight: 400;
+          letter-spacing: 0.8px;
+        }
+      }
+
+      .completed {
+        .text {
+          border-color: var(--secondary);
+        }
+      }
+
+      .step:first-child {
+        img {
+          padding-top: 20px;
+        }
+
+        .text {
+          padding-top: 20px;
+        }
+      }
+
+      .step:last-child {
+        .text {
+          border-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.FooterDefaultLayout {
+  .FlexItem2 {
+    .footer-button {
+      letter-spacing: 1px !important;
+    }
+  }
+
+  .two-button {
+    .reports-sip-details-footer-button {
+      color: var(--secondary) !important;
+      background-color: white !important;
+      border: 2px solid var(--secondary);
+      font-size: 12px !important;
+    }
+
+    .first-button {
+      color: var(--secondary) !important;
+    }
+  }
+}

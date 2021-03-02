@@ -10,6 +10,7 @@ import {
 } from "../common/api";
 import { navigate as navigateFunc } from "../common/functions";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
+import toast from "common/ui/Toast";
 
 const SwitchFund = (props) => {
   const params = props?.match?.params || {};
@@ -48,24 +49,30 @@ const SwitchFund = (props) => {
 
   const initialize = async () => {
     await initData();
-    const result = await getAvailableFundsForSwitch({
-      amfi,
-    });
-    if (!result) {
-      showSkelton(false);
-      return;
+    try {
+      const result = await getAvailableFundsForSwitch({
+        amfi,
+      });
+      if (!result) {
+        showSkelton(false);
+        return;
+      }
+      setFunds(result.switch_mfs);
+      setFilteredFunds(result.switch_mfs);
+      const data = await getFundDetailsForSwitch({
+        amfi,
+      });
+      if (!data) {
+        showSkelton(false);
+        return;
+      }
+      setFundDetails(data.report);
+    } catch (err) {
+      console.log(err);
+      toast(err)
+    } finally {
+      setShowSkelton(false);
     }
-    setFunds(result.switch_mfs);
-    setFilteredFunds(result.switch_mfs);
-    const data = await getFundDetailsForSwitch({
-      amfi,
-    });
-    if (!data) {
-      showSkelton(false);
-      return;
-    }
-    setFundDetails(data.report);
-    setShowSkelton(false);
   };
 
   const handleFilter = () => (type) => {
@@ -102,7 +109,7 @@ const SwitchFund = (props) => {
       skelton={showSkelton}
     >
       <div className="reports-switch">
-        {!showSkelton && (
+        {!showSkelton && !isEmpty(fundDetails) && (
           <>
             <header>
               <h4>{fundDetails.mf.friendly_name}</h4>

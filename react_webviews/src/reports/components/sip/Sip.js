@@ -21,7 +21,7 @@ const Sip = (props) => {
   }, []);
 
   const initialize = async () => {
-    await initData();
+    initData();
     storageService().remove(storageConstants.PAUSE_SIP);
     storageService().remove(storageConstants.SELECTED_SIP);
     storageService().remove(storageConstants.PAUSE_REQUEST_DATA);
@@ -41,7 +41,7 @@ const Sip = (props) => {
   };
 
   const formatName = (name) => {
-    if (name == "init") {
+    if (name === "init") {
       name = "mandate pending";
     }
     return name.replace(/_/g, " ").toUpperCase();
@@ -78,6 +78,7 @@ const Sip = (props) => {
                 <div className="bottom">
                   <div className="content">
                     <img
+                      alt=""
                       src={require(`assets/${productName}/sip_date_icon.svg`)}
                     />
                     <div>
@@ -90,6 +91,7 @@ const Sip = (props) => {
                   </div>
                   <div className="content">
                     <img
+                      alt=""
                       src={require(`assets/${productName}/amount_icon.svg`)}
                     />
                     <div>{formatAmountInr(sip.amount)}</div>
