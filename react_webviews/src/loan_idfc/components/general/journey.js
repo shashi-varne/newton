@@ -342,7 +342,8 @@ class JourneyMap extends Component {
         this.getCkycState();
       } else {
         this.setState({
-          loaderWithData: ckyc_state === "success"
+          loaderWithData: ckyc_state === "success",
+          show_loader: ckyc_state === "success"
         });
         if (index > "1") {
           this.sendEvents('summary', {stage: stage, summary_selected_for: stage});
