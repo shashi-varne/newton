@@ -139,7 +139,7 @@ class HealthInsuranceLanding extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again',
+          button_text1: 'Retry',
           title1: ''
         }
       };
@@ -158,6 +158,7 @@ class HealthInsuranceLanding extends Component {
     this.setState({ skelton: true });
     
     let error = '';
+    let errorType = '';
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
@@ -231,7 +232,7 @@ class HealthInsuranceLanding extends Component {
       } else {
 
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
-        || 'Something went wrong';
+        || true;
       }
 
       this.setState({
@@ -242,8 +243,9 @@ class HealthInsuranceLanding extends Component {
       console.log(err)
       this.setState({
         skelton: false,
-        showError: 'page'
       });
+      error= true;
+      errorType= "crash";
     }
 
     // set error data
@@ -251,7 +253,8 @@ class HealthInsuranceLanding extends Component {
       this.setState({
         errorData: {
           ...this.state.errorData,
-          title2: error
+          title2: error,
+          type:errorType
         },
         showError:'page'
       })
@@ -445,6 +448,8 @@ class HealthInsuranceLanding extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Health insurance">
         <div>
           <div className='products' style={{marginTop : '10px'}}>

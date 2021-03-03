@@ -253,7 +253,7 @@ export function renderGenericError() {
     }
 
     if(title2 === true) {
-        title2 = '';
+        title2 = 'Sorry, we could not process your request'; // default text
     }
 
     let two_button  = handleClick2 ? true: false;

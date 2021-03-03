@@ -205,7 +205,7 @@ class PlanDetailsClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again'
+          button_text1: 'Retry'
         },
         'submit': {
           handleClick1: this.handleClickCurrent,
@@ -215,12 +215,12 @@ class PlanDetailsClass extends Component {
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'DISMISS'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
@@ -296,9 +296,12 @@ class PlanDetailsClass extends Component {
         }
         this.setPremiumData(premium_details, data || {});
 
-        this.setState({
-          skelton: false
-        })
+        if(!error) {
+          this.setState({
+            skelton: false
+          })
+        }
+        
       }
 
     } catch (err) {

@@ -38,27 +38,31 @@ class PaymentCallbackClass extends Component {
       let mapper = {
         'onload':  {
           handleClick1: this.onload,
-          button_text1: 'Fetch again'
+          button_text1: 'Retry'
         },
         'submit': {
-          handleClick1: this.handleClickCurrent,
+          handleClick1: this.handleClick,
           button_text1: 'Retry',
           handleClick2: () => {
             this.setState({
               showError: false
             })
           },
-          button_text2: 'Edit'
+          button_text2: 'Dismiss'
         }
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: {...mapper[type], setErrorData : this.setErrorData}
       })
     }
 
   }
   async componentDidMount(){
+    this.onload();
+  }
+
+  onload = async () => {
     let error = "";
     let errorType = "";
     this.setErrorData('onload');
@@ -77,7 +81,7 @@ class PaymentCallbackClass extends Component {
         if (res.pfwresponse.status_code === 200) {
           this.setState({
             skelton: false
-        })
+          })
             if(res.pfwresponse.result.payment_status === 'success') {
                 this.navigate('payment-success');
             }
@@ -96,7 +100,6 @@ class PaymentCallbackClass extends Component {
       }
       if(error) {
         this.setState({
-          skelton:false,
           errorData: {
             ...this.state.errorData,
             title2: error,
@@ -107,8 +110,9 @@ class PaymentCallbackClass extends Component {
       }
   }
 
-  async handleClick() {
-    this.setErrorData('submit');
+
+  handleClick = async () => {
+    this.setErrorData('submit')
     let error='';
     let errorType='';
     try {
