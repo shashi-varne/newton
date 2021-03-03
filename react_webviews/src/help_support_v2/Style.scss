@@ -1,0 +1,45 @@
+.help-Category {
+  .title {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 25px;
+    margin-bottom: 20px;
+    color: #0a1d32;
+  }
+
+  .category {
+    display: flex;
+    align-items: center;
+
+    .img {
+      width: 12%;
+    }
+  }
+
+  .name {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    margin-left: 20px;
+    color: #0a1d32;
+    border-bottom: 1px solid var(--highlight);
+    padding: 6% 0;
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 300px) and (max-width: 500px) {
+  .help-Category {
+  
+    .category {
+      .img {
+        width: 18%;
+      }
+
+      .name {
+        font-size: 15px;
+        padding: 8% 0;
+      }
+    }
+  }
+}
