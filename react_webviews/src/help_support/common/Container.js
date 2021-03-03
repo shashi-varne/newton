@@ -12,10 +12,7 @@ class Container extends Component {
       openDialog: false,
       project: 'help',
       inPageTitle: false,
-      new_header: false,
-      props: {
-        classOverRideContainer: 'HelpContainer'
-      }
+      new_header: false
     }
     this.historyGoBack = this.historyGoBack.bind(this);
     this.didMount = didMount.bind(this);
@@ -55,9 +52,12 @@ class Container extends Component {
 
   render() {
 
+    let  props_base = {
+      classOverRideContainer: 'HelpContainer'
+    }
     return(
       <Fragment>
-      {this.commonRender(this.state.props)} 
+      {this.commonRender(props_base)} 
       </Fragment>
     )
   }

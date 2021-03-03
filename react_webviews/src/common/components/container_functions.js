@@ -77,7 +77,7 @@ export function headerGoBack() {
     this.historyGoBack({ fromHeader: true });
 }
 
-export function commonRender(props) {
+export function commonRender(props_base) {
 
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -92,7 +92,7 @@ export function commonRender(props) {
     if (this.state.mounted) {
         return (
 
-   <div className={`ContainerWrapper  ${this.props.background} ${props ? props.classOverRide ? props.classOverRide : '' : ''} ${this.props.classOverRide} ${this.props.noPadding ? "no-padding" : ""}`} >
+   <div className={`ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && <Header
@@ -156,7 +156,10 @@ export function commonRender(props) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`Container  ${this.props.background} ${this.props.background} ${props ? props.classOverRideContainer ? props.classOverRideContainer : '' : ''} ${this.props.classOverRideContainer } ${this.props.noPadding ? "no-padding" : ""}`}>
+                    className={`Container  ${this.props.background || ''} 
+                    ${props_base && props_base.classOverRideContainer ? props_base.classOverRideContainer : ''} 
+                    ${this.props.classOverRideContainer || '' } 
+                    ${this.props.noPadding ? "no-padding" : ""}`}>
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}

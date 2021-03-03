@@ -21,9 +21,7 @@ class Container extends Component {
       force_hide_inpage_title: this.props.hidePageTitle,
       new_header:true,
       project: 'lending' ,//to use in common functions
-      props: {
-        classOverRide : 'loanMainContainer'
-      }
+      
     };
     this.historyGoBack = this.historyGoBack.bind(this);
 
@@ -124,10 +122,12 @@ class Container extends Component {
   }
 
    render() {
-
+    let props_base = {
+      classOverRide : 'loanMainContainer'
+    }
     return(
       <Fragment>
-      {this.commonRender(this.state.props)}
+      {this.commonRender(props_base)}
       </Fragment>
     )
   }
