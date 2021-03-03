@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
 
-import Header from '../../common/components/Header';
-import { didmount } from '../../common/components/container_functions';
-import Footer from './footer';
+import { didMount, commonRender } from '../../common/components/container_functions';
+
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from '../../utils/functions';
 
 class Container extends Component {
   constructor(props) {
@@ -14,14 +12,18 @@ class Container extends Component {
       openDialog: false,
       project: 'help',
       inPageTitle: false,
-      new_header: false
+      new_header: false,
+      props: {
+        classOverRideContainer: 'HelpContainer'
+      }
     }
-
-    this.didmount = didmount.bind(this);
+    this.historyGoBack = this.historyGoBack.bind(this);
+    this.didMount = didMount.bind(this);
+    this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
-    this.didmount();
+    this.didMount();
   }
 
   componentWillUnmount() {
@@ -52,51 +54,12 @@ class Container extends Component {
   }
 
   render() {
-    if (this.state.mounted) {
-      return (
-        <div className="ContainerWrapper">
-          {/* Header Block */}
-          {!this.props.hideheader &&
-            <Header
-              title={this.props.title}
-              goBack={this.historyGoBack}
-              type={getConfig().productName}
-              inPageTitle={this.state.inPageTitle}
-              force_hide_inpage_title={this.state.force_hide_inpage_title}
-              new_header={this.state.new_header} 
-             />
-          }
 
-          {/* Below Header Block */}
-          {<div id="HeaderHeight" style={{ top: 56 }}>
-          </div>}
-
-          {!this.state.force_hide_inpage_title && this.state.new_header &&
-            this.new_header_scroll() 
-          }
-
-          {/* Children Block */}
-          <div className={`Container HelpContainer ${this.props.background}`}>
-            {this.props.children}
-          </div>
-
-          {/* Footer Block */}
-          {!this.props.noFooter &&
-            <Footer
-              fullWidthButton={this.props.fullWidthButton}
-              buttonTitle={this.props.buttonTitle}
-              handleClick={this.props.handleClick}
-              noFooter={this.props.noFooter}
-              isDisabled={this.props.isDisabled} />
-          }
-
-          {/* No Internet */}
-          {this.renderDialog()}
-        </div>
-      );
-    }
-
-    return null;
+    return(
+      <Fragment>
+      {this.commonRender(this.state.props)} 
+      </Fragment>
+    )
   }
 };
 

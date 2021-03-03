@@ -21,7 +21,7 @@ import BottomSheet from '../../common/ui/BottomSheet';
 
 let start_time = '';
 
-export function didmount() {
+export function didMount() {
     start_time = new Date();
 
     this.getHeightFromTop = getHeightFromTop.bind(this);
@@ -91,7 +91,8 @@ export function commonRender(props) {
 
     if (this.state.mounted) {
         return (
-            <div className={`ContainerWrapper ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
+
+   <div className={`ContainerWrapper  ${this.props.background} ${props ? props.classOverRide ? props.classOverRide : '' : ''} ${this.props.classOverRide} ${this.props.noPadding ? "no-padding" : ""}`} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && <Header
@@ -107,17 +108,18 @@ export function commonRender(props) {
                     type={getConfig().productName}
                     resetpage={this.props.resetpage}
                     handleReset={this.props.handleReset}
-                    topIcon={this.props.topIcon}
+                    topIcon={this.props.topIcon || this.props.rightIcon}
                     handleTopIcon={this.handleTopIcon}
                     inPageTitle={this.state.inPageTitle}
                     force_hide_inpage_title={this.state.force_hide_inpage_title}
                     style={this.props.styleHeader}
                     className={this.props.classHeader}
                     headerData={this.props.headerData}
-                    new_header={this.state.new_header}
-                    goBack={this.headerGoBack}
+                    new_header={this.state.new_header || this.state.project === 'help'}
+                    goBack={this.headerGoBack || this.historyGoBack}
                     filterPgae={this.props.filterPgae}
                     handleFilter={this.props.handleFilter} 
+                    hideBack={this.props.hideBack}
           
                 />
                 }
@@ -141,7 +143,7 @@ export function commonRender(props) {
 
                 </div>
 
-                {!this.state.force_hide_inpage_title && this.state.new_header &&
+                {!this.state.force_hide_inpage_title && !this.props.noHeader && this.state.new_header &&
                     this.new_header_scroll()
                 }
 
@@ -154,7 +156,7 @@ export function commonRender(props) {
                 {/* Children Block */}
                 <div
                     style={{ ...this.props.styleContainer, backgroundColor: this.props.skelton ? '#fff' : 'initial' }}
-                    className={`Container ${this.props.classOverRideContainer}`}>
+                    className={`Container  ${this.props.background} ${this.props.background} ${props ? props.classOverRideContainer ? props.classOverRideContainer : '' : ''} ${this.props.classOverRideContainer } ${this.props.noPadding ? "no-padding" : ""}`}>
                     <div
                         className={`${!this.props.skelton ? 'fadein-animation' : ''}`}
                         style={{ display: this.props.skelton ? 'none' : '' }}
@@ -239,7 +241,7 @@ export function navigate(pathname) {
 export function check_hide_header_title() {
     let force_hide_inpage_title;
     let restrict_in_page_titles = ['provider-filter'];
-    if (restrict_in_page_titles.indexOf(this.props.headerType) !== -1) {
+    if (restrict_in_page_titles.indexOf(this.props.headerType) !== -1 || this.state.force_hide_inpage_title) {
         force_hide_inpage_title = true;
     }
 
@@ -344,7 +346,7 @@ export function renderPopup() {
     return (
         <Dialog
             fullScreen={false}
-            open={this.state.openPopup}
+            open={this.state.openPopup || false}
             onClose={this.handleClose}
             aria-labelledby="responsive-dialog-title"
         >

@@ -23,7 +23,7 @@ class BottomSheetClass extends Component {
         let parent = this.props.parent || {};
         let data = this.props.data || {};
 
-        console.log(data)
+
         return (
             <Dialog
                 id="bottom-popup"

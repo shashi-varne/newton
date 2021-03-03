@@ -1,25 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router';
-import Header from './Header';
-import Footer from './footer';
-import Banner from '../../common/ui/Banner';
 
 import { nativeCallback } from 'utils/native_callback';
 import '../../utils/native_listner';
-import { getConfig, setHeights } from 'utils/functions';
-import PopUp from './PopUp';
+import { getConfig } from 'utils/functions';
 import { storageService } from '../../utils/validators';
 import { uploadFHCData } from '../common/ApiCalls';
 import toast from '../../common/ui/Toast';
-import Button from 'material-ui/Button';
-import Dialog, {
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
 import { navigate } from './commonFunctions';
 
+import {didMount ,commonRender} from '../../common/components/container_functions';
 class Container extends Component {
 
   constructor(props) {
@@ -30,48 +20,25 @@ class Container extends Component {
       show_loader: false,
       popupText: '',
       callbackType: '',
-      productName: getConfig().productName
+      productName: getConfig().productName,
+      props: {
+        classOverRide: 'fhc-container'
+      }
     }
     this.handleTopIcon = this.handleTopIcon.bind(this);
-    this.handleYes = this.handleYes.bind(this);
+    this.historyGoBack = this.historyGoBack.bind(this);
+    // this.handleYes = this.handleYes.bind(this);
     this.navigate = navigate.bind(this);
+    this.didMount = didMount.bind(this);
+    this.commonRender =  commonRender.bind(this);
   }
 
   componentDidMount() {
-    setHeights({ 'header': true, 'container': false });
-    let that = this;
-    if (getConfig().generic_callback) {
-      window.callbackWeb.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    } else {
-      window.PlutusSdk.add_listener({
-        type: 'back_pressed',
-        go_back: function () {
-          that.historyGoBack();
-        }
-      });
-    }
+    this.didMount();
   }
 
   componentWillUnmount() {
-    if (getConfig().generic_callback) {
-      window.callbackWeb.remove_listener({});
-    } else {
-      window.PlutusSdk.remove_listener({});
-    }
-  }
-
-  getEvents(user_action) {
-    if (!this || !this.props || !this.props.events) {
-      return;
-    }
-    let events = this.props.events;
-    events.properties.user_action = user_action;
-    return events;
+    this.unmount();
   }
 
   historyGoBack = () => {
@@ -109,30 +76,7 @@ class Container extends Component {
 
   }
 
-  renderDialog = () => {
-    return (
-      <Dialog
-        fullScreen={false}
-        open={this.state.openDialog}
-        onClose={this.handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">No Internet Found</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Check your connection and try again.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button className="DialogButtonFullWidth" onClick={this.handleClose} color="secondary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-
-  handleYes = async () => {
+  handlePopup = async () => {
     this.setState({
       openPopup: false
     });
@@ -159,109 +103,18 @@ class Container extends Component {
     })
   }
 
-  renderPageLoader = () => {
-    if (this.props.showLoader || this.state.show_loader) {
-      return (
-        <div className="Loader">
-          <div className="LoaderOverlay">
-            <img src={require(`assets/${this.state.productName}/loader_gif.gif`)} alt="" />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
 
   componentDidUpdate(prevProps) {
-    setHeights({ 'header': true, 'container': false });
+    this.didupdate();
   }
 
   render() {
-    let show_loader = this.props.showLoader || this.state.show_loader;
-    let steps = [];
-    for (var i = 0; i < this.props.total; i++) {
-      if (this.props.current > i) {
-        steps.push(<span className='active'
-          style={{ background: getConfig().primary, marginRight: 1 }} key={i}></span>);
-      } else {
-        steps.push(<span key={i} style={{ marginRight: 1 }}></span>);
-      }
-    }
 
-    return (
-      <div className={`ContainerWrapper fhc-container ${this.props.classOverRide}  ${(getConfig().productName !== 'fisdom') ? 'blue' : ''}`} >
-        {/* Header Block */}
-        {!this.props.noHeader &&
-          <Header
-            title={this.props.title}
-            smallTitle={this.props.smallTitle}
-            provider={this.props.provider}
-            count={this.props.count}
-            total={this.props.total}
-            current={this.props.current}
-            goBack={this.historyGoBack}
-            edit={this.props.edit}
-            type={getConfig().productName}
-            resetpage={this.props.resetpage}
-            handleReset={this.props.handleReset}
-            topIcon={this.props.topIcon}
-            handleTopIcon={this.handleTopIcon}
-            hideBack={this.props.hideBack} />
-        }
-
-        {/* Below Header Block */}
-        <div id="HeaderHeight" style={{ top: 60 }}>
-
-          {/* Loader Block */}
-          {this.renderPageLoader()}
-
-          {
-            (!show_loader && steps) && <div className="Step">
-              {steps}
-            </div>
-          }
-
-          {/* Banner Block */}
-          {(!show_loader && this.props.banner) && <Banner text={this.props.bannerText} />}
-
-        </div>
-
-
-        {/* Children Block */}
-        <div className={`Container ${this.props.classOverRideContainer}`}>
-          {this.props.children}
-        </div>
-
-        {/* Footer Block */}
-        {!this.props.noFooter &&
-          <Footer
-            fullWidthButton={this.props.fullWidthButton}
-            logo={this.props.logo}
-            buttonTitle={this.props.buttonTitle}
-            provider={this.props.provider}
-            premium={this.props.premium}
-            paymentFrequency={this.props.paymentFrequency}
-            edit={this.props.edit}
-            resetpage={this.props.resetpage}
-            handleClick={this.props.handleClick}
-            handleReset={this.props.handleReset}
-            onlyButton={this.props.onlyButton}
-            noFooter={this.props.noFooter}
-            isDisabled={this.props.isDisabled} />
-        }
-        {/* No Internet */}
-        {this.renderDialog()}
-        <PopUp
-          openPopup={this.state.openPopup}
-          popupText={this.state.popupText}
-          handleClose={this.handleClose}
-          handleNo={this.handleClose}
-          handleYes={this.handleYes}
-        >
-        </PopUp>
-      </div>
-    );
+    return(
+      <Fragment>
+      {this.commonRender(this.state.props)}
+      </Fragment>
+    )
   }
 };
 

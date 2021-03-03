@@ -44,7 +44,6 @@ const Landing = (props) => {
     <Container
       goBack={goBack}
       buttonTitle='Continue'
-      fullWidthButton
       handleClick={nextPage}
       events={sendEvents('just_set_events')}
       title='Portfolio rebalancing'

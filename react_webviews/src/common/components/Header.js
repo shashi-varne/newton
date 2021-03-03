@@ -47,15 +47,15 @@ const Header = ({ classes, title, count, total, current, goBack,
           {title}
         </div>
       </div>
-
       {resetpage &&
         <img onClick={handleReset}
           alt=""
           width={20}
           src={restart}
+          style={{marginLeft: 'auto'}}
         />
       }
-      {topIcon === 'close' && <Close onClick={handleTopIcon} />}
+      {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
     </Toolbar>
   </AppBar >
 );

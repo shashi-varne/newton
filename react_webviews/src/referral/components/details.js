@@ -158,6 +158,7 @@ class Details extends Component {
         showLoader={this.state.show_loader}
         title={'Refer & Earn'}
         background='GreyBackground'
+        noFooter={true}
       >
         <div className="Refer pad15">
           <Card nopadding={true}>

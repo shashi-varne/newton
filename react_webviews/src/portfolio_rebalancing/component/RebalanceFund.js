@@ -78,7 +78,6 @@ const RebalanceFund = (props) => {
   return (
     <Container
       events={sendEvents('just_set_events')}
-      fullWidthButton
       buttonTitle='Continue'
       handleClick={nextPage}
       showLoader={funds && isEmpty(funds)}
