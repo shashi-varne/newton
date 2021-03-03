@@ -1368,7 +1368,7 @@
     .progress-bar {
       margin-top: 10px;
       position: relative;
-      
+
       .step {
         img {
           width: 20px;
@@ -1430,15 +1430,54 @@
   }
 
   .two-button {
-    .reports-sip-details-footer-button {
+    .reports-sip-details-footer-button,
+    .reports-sip-action-footer-button {
       color: var(--secondary) !important;
       background-color: white !important;
       border: 2px solid var(--secondary);
       font-size: 12px !important;
     }
 
+    .reports-sip-action-footer-button2 {
+      font-size: 12px !important;
+    }
+
     .first-button {
       color: var(--secondary) !important;
+    }
+  }
+}
+
+.reports-sip-action {
+  padding-bottom: 20px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333333;
+
+  .top-img {
+    padding: 30px 0 20px;
+  }
+
+  .light-text {
+    color: #4a4a4a;
+    margin: 20px 0;
+  }
+
+  .link-container {
+    display: flex;
+    margin: -10px 0 20px 0;
+    cursor: pointer;
+
+    img {
+      width: 15px;
+      margin-right: 10px;
+    }
+
+    .link {
+      color: #35cb5d;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 700;
     }
   }
 }

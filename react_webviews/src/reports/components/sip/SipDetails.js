@@ -69,7 +69,6 @@ const SipDetails = (props) => {
       result.report.sips.active_sips.find((o) => {
         return o.id === selected_sip;
       }) || {};
-    reportData.friendly_status = "cancellation_requested";
     setreport(reportData);
     let title = "";
     if (sip_mandate_created.includes(reportData.friendly_status))
@@ -139,7 +138,11 @@ const SipDetails = (props) => {
       buttonTitle={buttonTitle}
       buttonTitle2="PAUSE SIP"
       skelton={showSkelton}
-      buttonClassName="reports-sip-details-footer-button"
+      buttonClassName={
+        sip_mandate_created.includes(report.friendly_status)
+          ? "reports-sip-details-footer-button"
+          : ""
+      }
       buttonClassName2="reports-sip-details-footer-button"
       handleClick={handleClick("FIRST")}
       handleClick2={handleClick("SECOND")}

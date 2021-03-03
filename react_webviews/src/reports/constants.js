@@ -50,6 +50,8 @@ export const getPathname = {
   sipDetails: "/reports/sip/details",
   pauseAction: "/reports/sip/pause-action/",
   pauseResumeRestart: "/reports/sip/pause-resume-restart/",
+  pauseCancelDetail: "/reports/sip/pause-cancel-detail/",
+  pausePeriod: "/reports/sip/pause-period",
 };
 
 export const storageConstants = {
