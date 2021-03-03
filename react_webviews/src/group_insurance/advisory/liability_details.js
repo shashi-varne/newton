@@ -85,8 +85,10 @@ class AdvisoryLiabilityDetails extends Component {
         }
 
         if((isResumePresent ||!isEmpty(advisory_data)) && !isEmpty(lead)){
-            form_data.homeloan = lead.home_loan_liability === true ? yesNoOptions[0].value : lead.home_loan_liability === false ?  yesNoOptions[1].value : '';
-            form_data.liability = lead.other_liability === true ? yesNoOptions[0].value : lead.other_liability === false ?  yesNoOptions[1].value : '';
+            form_data.homeloan = lead.home_loan_liability && (lead.home_loan_liability_amount !== null || lead.home_loan_liability_amount !== 0) ? yesNoOptions[0].value : !lead.home_loan_liability && (lead.home_loan_liability_amount === 0)  ?  yesNoOptions[1].value : '';
+            
+            form_data.liability = lead.other_liability && (lead.other_liability_amount !== null || lead.other_liability_amount !== 0) ? yesNoOptions[0].value : !lead.other_liability && (lead.other_liability_amount === 0)  ?  yesNoOptions[1].value : '';
+
             form_data.loan_amount = formatAmount(lead.home_loan_liability_amount);
             form_data.total_amount = formatAmount(lead.other_liability_amount);
 
