@@ -1600,3 +1600,22 @@
     }
   }
 }
+
+.reports-sip-otp {
+  color: #333333;
+  line-height: 1.5;
+  text-align: center;
+
+  .title {
+    color: #0a1d32;
+    font-size: 16px;
+    line-height: 26px;
+    padding-bottom: 20px;
+    text-align: left;
+  }
+
+  .otp-error {
+    color: red;
+    margin: 14px 0 0 0;
+  }
+}

@@ -1,5 +1,5 @@
 import Api from "utils/api";
-import { apiConstants } from "../constants";
+import { apiConstants, getPathname } from "../constants";
 import { isEmpty } from "utils/validators";
 import toast from "common/ui/Toast";
 
@@ -224,6 +224,46 @@ export const postSipAction = async (data) => {
   switch (status) {
     case 200:
       return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};
+
+export const resendOtp = async (data) => {
+  const res = await Api.get(data.url);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};
+
+export const submitOtp = async (data) => {
+  const res = await Api.post(data.url, {
+    otp: data.otp,
+  });
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    case 402:
+      return { navigateTo: getPathname.reportsSip };
     default:
       throw result.error || result.message || genericErrorMessage;
   }

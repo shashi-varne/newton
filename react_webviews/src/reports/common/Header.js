@@ -4,7 +4,7 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import Arrow from '@material-ui/icons/ArrowBack';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import Close from '@material-ui/icons/Close';
 import restart from 'assets/restart_nav_icn.svg';
 
@@ -28,7 +28,7 @@ const Header = ({
   <AppBar position='fixed' color='primary' className={`Header ${classes.root}`}>
     <Toolbar>
       <IconButton className={classes.menuButton} color='inherit' aria-label='Menu' onClick={goBack}>
-        {!disableBack && <Arrow />}
+        {!disableBack && <NavigateBeforeIcon className={classes.menuIcon} />}
         {(disableBack === true || disableBack === 'summary') && <Close />}
         {/* <Arrow /> */}
       </IconButton>
@@ -76,8 +76,12 @@ const styles = {
   },
   menuButton: {
     marginLeft: '-12px !important',
-    marginRight: '7px !important',
+    marginRight: '7px !important', 
   },
+  menuIcon: {
+    width: '30px !important',
+    height: '30px !important',
+  }
 };
 
 export default withStyles(styles)(Header);
