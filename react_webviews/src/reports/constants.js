@@ -13,6 +13,7 @@ export const apiConstants = {
 };
 
 export const getPathname = {
+  reports: "/reports",
   invest: "/invest",
   diyFundInfo: "/diy/fundinfo",
   buildwealth: "/invest/buildwealth",

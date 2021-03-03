@@ -1,0 +1,95 @@
+import React, { useEffect } from "react";
+import Container from "../../common/Container";
+import { isEmpty, storageService } from "utils/validators";
+import { getPathname, storageConstants } from "../../constants";
+import { initData } from "../../services";
+import { navigate as navigateFunc } from "../../common/functions";
+import { getConfig } from "utils/functions";
+import { Imgc } from "common/ui/Imgc";
+
+const Request = (props) => {
+  const productName = getConfig().productName;
+  const navigate = navigateFunc.bind(props);
+  const requestData = storageService().getObject(
+    storageConstants.PAUSE_REQUEST_DATA
+  ) || {
+    title: "Request Placed!",
+    data: {
+      note: "Hi Hello",
+      pause_period: 2,
+      resume_date: "12 mar",
+      restart_date: "12 sep",
+      cancel_date: "21 mar",
+    },
+    action: "pause",
+  };
+  if (isEmpty(requestData)) {
+    navigate(getPathname.reports);
+  }
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = () => {
+    initData();
+  };
+
+  const handleClick = () => {
+    navigate(getPathname.reportsSip);
+  };
+
+  return (
+    <Container
+      hideInPageTitle={true}
+      buttonTitle="OK"
+      handleClick={() => handleClick()}
+    >
+      {!isEmpty(requestData) && (
+        <div className="reports-sip-request">
+          <Imgc
+            alt=""
+            className="img"
+            src={require(`assets/${productName}/${
+              requestData.action === "resume"
+                ? "sip_resumed_illustration"
+                : "order_placed_illustration"
+            }.svg`)}
+          />
+          <div className="title">{requestData.title}</div>
+          {requestData.data && (
+            <>
+              <div className="note">{requestData.data.note}</div>
+              {requestData.data.pause_period && (
+                <div className="text">
+                  <b>Pause Period: </b>
+                  {requestData.data.pause_period}
+                </div>
+              )}
+              {requestData.data.resume_date && (
+                <div className="text">
+                  <b>Resume Date: </b>
+                  {requestData.data.resume_date}
+                </div>
+              )}
+              {requestData.data.restart_date && (
+                <div className="text">
+                  <b>Restart Date: </b>
+                  {requestData.data.restart_date}
+                </div>
+              )}
+              {requestData.data.cancel_date && (
+                <div className="text">
+                  <b>Cancel Date: </b>
+                  {requestData.data.cancel_date}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </Container>
+  );
+};
+
+export default Request;

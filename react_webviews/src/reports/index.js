@@ -29,6 +29,7 @@ import Action from "./components/sip/Action";
 import PausePeriod from "./components/sip/PausePeriod";
 import PauseCancelDetail from "./components/sip/PauseCancelDetail";
 import Otp from "./components/sip/Otp";
+import Request from "./components/sip/Request";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -64,6 +65,7 @@ const Reports = (props) => {
           <Route path={`${url}/sip/pause-period`} exact component={PausePeriod} />
           <Route path={`${url}/sip/pause-cancel-detail/:action/:period`} exact component={PauseCancelDetail} />
           <Route path={`${url}/sip/otp/:action`} exact component={Otp} />
+          <Route path={`${url}/sip/pause-request`} exact component={Request} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
