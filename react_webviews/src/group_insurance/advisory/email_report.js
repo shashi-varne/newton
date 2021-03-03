@@ -64,12 +64,11 @@ class EmailReport extends Component {
       }
   }
 
-    sendEvents(user_action, insurance_type, banner_clicked) {
+    sendEvents(user_action) {
       let eventObj = {
         "event_name": 'insurance_advisory',
         "properties": {
           "user_action": user_action,
-          "insurance_type": insurance_type,
           "screen_name": 'email report',
           'email_entered' : this.state.form_data.email && this.state.form_data.email.length ? 'yes' : 'no',
         }
