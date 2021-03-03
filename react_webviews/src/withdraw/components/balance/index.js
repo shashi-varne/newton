@@ -7,9 +7,12 @@ import Dialog from '../../mini_components/Dialog';
 
 const Balance = (props) => {
   const [open, setOpen] = useState(false);
-  const [amount,setAmount] = useState(0);
+  const [amount,setAmount] = useState('');
+  const [error,setError] = useState(false);
+  const [type, setType] = useState('');
   const navigate = navigateFunc.bind(props);
   const redirect = (url, openModal) => {
+    setType(url);
     if (!openModal) {
       navigate(url, null, false);
     } else {
@@ -21,14 +24,31 @@ const Balance = (props) => {
   };
 
   const handleSwitch = () => {
+    setError(false);
     setOpen(true);
   };
 
   const handleChange = (event) => {
-    setAmount(event.target.value);
+    if(event.target.value.length !== 0){
+      setAmount(event.target.value);
+      if(error){
+        setError(false);
+      }
+    }else{
+      setAmount(event.target.value);
+      setError(true);
+    }
   };
   const handleProceed = () => {
-    navigate('switch',{amount});
+    if(amount){
+      if(type === 'systematic'){
+        navigate(type,{amount})
+      } else{
+        navigate('switch',{amount});
+      }
+    } else{
+      setError(true);
+    }
     return;
   };
   return (
@@ -92,6 +112,8 @@ const Balance = (props) => {
         handleChange={handleChange}
         handleProceed={handleProceed}
         value={amount}
+        error={error}
+        helperText={error ? 'Please enter the amount' : ''}
       />
     </Container>
   );

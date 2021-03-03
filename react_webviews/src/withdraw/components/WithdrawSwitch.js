@@ -11,7 +11,7 @@ import { getRecommendedSwitch } from '../common/Api';
 import { navigate as navigateFunc} from '../common/commonFunction';
 
 const WithdrawSwitch = (props) => {
-  const { amount } = props.location?.state;
+  const  amount  = props.location?.state?.amount;
   const [switchFunds, setSwitchFunds] = useState(null);
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedSwitch = async () => {
@@ -32,10 +32,11 @@ const WithdrawSwitch = (props) => {
   }, []);
 
   const showFundGraph = (isins) => () => {
-    navigate('/fund-details',null,{isins},true)
+    
+    navigate('/fund-details',null,{ searchParams: `${props.location.search}&isins=${isins}` },true)
   }
   return (
-    <Container buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`} fullWidthButton hidePageTitle>
+    <Container buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`} fullWidthButton hideInPageTitle>
       {
           !isEmpty(switchFunds?.recommendations) && 
           <section>
@@ -50,9 +51,9 @@ const WithdrawSwitch = (props) => {
           <div className='withdraw-mf-details'>
             <div className='withdraw-mf-name'>{el.from_mf.friendly_name}</div>
             <div className='withdraw-mf-amount'>{inrFormatDecimal(el.folios[0]?.amount)}</div>
-            <div className='withdraw-mf-more' onClick={showFundGraph(el.isin)}>
+            <div className='withdraw-mf-more' onClick={showFundGraph(el.from_mf.isin)}>
               <img src={info_icon} alt='info_icon' />
-              know more</div>
+              Know more</div>
           </div>
         </div>
         <div className='withdraw-switch-mid'>
@@ -69,9 +70,9 @@ const WithdrawSwitch = (props) => {
           </div>
           <div className='withdraw-mf-details'>
             <div className='withdraw-mf-name'>{el.to_mf.friendly_name}</div>
-            <div className='withdraw-mf-more'>
+            <div className='withdraw-mf-more' onClick={showFundGraph(el.to_mf.isin)}>
             <img src={info_icon} alt='info_icon' />
-            know more</div>
+            Know more</div>
           </div>
         </div>
       </div>

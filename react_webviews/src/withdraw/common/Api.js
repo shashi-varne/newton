@@ -61,15 +61,21 @@ export const getRecommendedSwitch = async (amount) => {
   }
 };
 
-export const getRecommendedFund = async (type) => {
+export const getRecommendedFund = async (type, amount = null) => {
   
   try {
-    // const res = await Api.get(`api/invest/redeem/recommendv3/mine/${type}`);
+     let api = `api/invest/redeem/recommendv3/mine/${type}`;
+     if(amount){
+      api += `?amount=${amount}`
+     }
+   await Api.get(api);
     let res;
     if(type === 'insta-redeem'){
       res = insta;
     } else if(type === 'self') {
       res = self;
+    } else if(type === 'systematic'){
+       res = systematic;
     }
     if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
       throw genericErrMsg;
@@ -1065,3 +1071,83 @@ const switchFunds = {
   "pfwstatus_code": 200,
   "pfwtime": "2021-03-03 11:56:32.989914"
 }
+
+const systematic = {
+   "pfwuser_id": 5121843795066880,
+   "pfwresponse": {
+     "status_code": 200,
+     "requestapi": "",
+     "result": {
+       "message": "success",
+       "recommendations": [
+         {
+           "tax_generated": true,
+           "subtype": null,
+           "debt_stcg_applied": true,
+           "itype": "overall",
+           "name": "Overall",
+           "allocations": [
+             {
+               "folios": [
+                 {
+                   "available_amount": 20655.461008599996,
+                   "all_units": false,
+                   "amount": 14200,
+                   "folio_number": "477156831544"
+                 }
+               ],
+               "ltcg_tax": 42.25869095757578,
+               "exit_load": 0,
+               "stcg_percent": 30,
+               "stcg_tax": 710.9604507186922,
+               "debt_stcg_applied": true,
+               "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png",
+               "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png",
+               "know_how_msg": "You can avoid short term taxes by holding your investments for 3 years",
+               "message": "* STCG Tax and LTCG Tax applicable",
+               "invested_since": "01 Aug 2016",
+               "ltcg_percent": 20,
+               "mf": {
+                 "amfi": "INF204K01BU4",
+                 "amc": "Nippon India Mutual Fund",
+                 "fisdom_rating": 3,
+                 "curr_nav": 29.7286,
+                 "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png",
+                 "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png",
+                 "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/nippon_india.png",
+                 "name": "Nippon India Gilt Securities Fund -Growth Plan - Growth Option",
+                 "friendly_name": "Nippon India Gilt Securities Fund",
+                 "mfid": "INF204K01BU4",
+                 "nav_date": "03/03/2021",
+                 "isin": "INF204K01BU4",
+                 "bond_stock": "bond"
+               },
+               "tax_type": "debt",
+               "friendly_name": "Nippon India Gilt Securities Fund",
+               "amount": 14200,
+               "units": 719.2189999999999,
+               "isin": "INF204K01BU4",
+               "balance": 21381.37,
+               "withdrawal_amount": 14200
+             }
+           ],
+           "overall_tax": {
+             "ltcg_tax": 42.25869095757578,
+             "stcg_tax": 710.9604507186922,
+             "exit_load": 0
+           },
+           "extra_messages": [
+             "All tax computations are based on your holding with us. Capital losses are also offset against overall gains wherever applicable.",
+             "* Actual withdrawal may differ slightly as it depends on NAV",
+             "** STCG Tax is computed based on the highest tax bracket. Actual amount will depend on individual taxable income",
+             "*** LTCG tax is applicable only if total capital gain is more than 1 Lakh in a financial year. Total LTCG tax shown here is computed @10% on the gains over 1 Lakh. Current computation considers all LT gains till today."
+           ]
+         }
+       ]
+     }
+   },
+   "pfwmessage": "Success",
+   "pfwutime": "",
+   "pfwstatus_code": 200,
+   "pfwtime": "2021-03-03 19:23:29.008908"
+ }

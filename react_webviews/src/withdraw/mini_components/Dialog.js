@@ -3,7 +3,7 @@ import Dialog from 'common/ui/Dialog'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 
-const AmountDialog = ({ open, close, title, id, placeholder,handleChange,handleProceed,value }) => {
+const AmountDialog = ({ open, close, title, id, placeholder,handleChange,handleProceed,value,error, helperText }) => {
   // const handleChange = (event) => {
   //   setValue(event.target.value)
   // }
@@ -24,6 +24,9 @@ const AmountDialog = ({ open, close, title, id, placeholder,handleChange,handleP
             fullWidth
             value={value}
             onChange={handleChange}
+            error={error}
+            helperText={helperText}
+            autoComplete={false}
           />
           <div className="flex-between">
             <Button color="primary" onClick={close} className="cancel-btn">

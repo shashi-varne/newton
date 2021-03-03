@@ -61,6 +61,7 @@
 
 .withdraw-switch{
   border-bottom: 2px solid #e4e4e4;
+  padding: 20px 0px;
   .withdraw-mf{
     display: flex;
     align-items: center;
@@ -128,6 +129,20 @@
   }
 }
 
+.withdraw-switch:first-child{
+  padding-top: 0px;
+}
+
 /////////End of Withdraw Switch //////////////////
 
 
+.withdraw-instant-msg{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  div{
+    color: #767E86;
+    font-size: 12px;
+    font-weight: 400;
+  }
+}

@@ -9,7 +9,7 @@ export const withdrawOptions = [
   {
     title: 'System Selected',
     desc: 'System selected funds optimized for your portfolio.',
-    redirectUrl: 'system',
+    redirectUrl: 'systematic',
     openModal: true
   },
   {

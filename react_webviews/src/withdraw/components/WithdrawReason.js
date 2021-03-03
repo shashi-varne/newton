@@ -26,8 +26,12 @@ const Landing = (props) => {
 
   const fetchWithdrawReasons = async () => {
     const result = await getWithdrawReasons();
-    storageService().setObject('withdrawReasons',result?.survey?.question);
-    setReasons(result?.survey?.question);
+    if(result?.dnd_flag){
+      navigate('');
+    } else{
+      storageService().setObject('withdrawReasons',result?.survey?.question);
+      setReasons(result?.survey?.question);
+    }
   };
 
   const getSubQuestions = (qstn) => () => {
