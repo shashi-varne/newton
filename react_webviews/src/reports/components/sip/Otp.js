@@ -72,7 +72,7 @@ class Otp extends Component {
           requestdata
         );
         this.props.history.push({
-          pathname: getPathname.pauseRequst,
+          pathname: getPathname.pauseRequest,
           search: getConfig().searchParams,
         });
       } catch (err) {

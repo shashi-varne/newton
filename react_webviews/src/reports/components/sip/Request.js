@@ -10,19 +10,8 @@ import { Imgc } from "common/ui/Imgc";
 const Request = (props) => {
   const productName = getConfig().productName;
   const navigate = navigateFunc.bind(props);
-  const requestData = storageService().getObject(
-    storageConstants.PAUSE_REQUEST_DATA
-  ) || {
-    title: "Request Placed!",
-    data: {
-      note: "Hi Hello",
-      pause_period: 2,
-      resume_date: "12 mar",
-      restart_date: "12 sep",
-      cancel_date: "21 mar",
-    },
-    action: "pause",
-  };
+  const requestData =
+    storageService().getObject(storageConstants.PAUSE_REQUEST_DATA) || {};
   if (isEmpty(requestData)) {
     navigate(getPathname.reports);
   }

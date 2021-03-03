@@ -54,7 +54,7 @@ export const getPathname = {
   pauseCancelDetail: "/reports/sip/pause-cancel-detail/",
   pausePeriod: "/reports/sip/pause-period",
   sipOtp: "/reports/sip/otp/",
-  pauseRequst: "/reports/sip/pause-request",
+  pauseRequest: "/reports/sip/pause-request",
 };
 
 export const storageConstants = {
