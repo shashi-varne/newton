@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { formatAmountInr, isEmpty, storageService } from "utils/validators";
+import { formatAmountInr, isEmpty } from "utils/validators";
 import Button from "@material-ui/core/Button";
 import Slider from "common/ui/Slider";
-import { getPathname, storageConstants } from "../constants";
+import { getPathname } from "../constants";
 import { initData } from "../services";
 import { getReportGoals } from "../common/api";
 import { navigate as navigateFunc } from "../common/functions";
@@ -14,12 +14,6 @@ const Goals = (props) => {
     max: 100,
   };
   const navigate = navigateFunc.bind(props);
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [goals, setGoals] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
 
@@ -28,15 +22,7 @@ const Goals = (props) => {
   }, []);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
+    initData();
     const result = await getReportGoals();
     if (!result) {
       setShowSkelton(false);

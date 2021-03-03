@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
-import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import { getPathname, storageConstants } from "../../constants";
+import { formatAmountInr, isEmpty } from "utils/validators";
+import { getPathname } from "../../constants";
 import { initData } from "../../services";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
 import { navigate as navigateFunc } from "../../common/functions";
@@ -11,12 +11,6 @@ import toast from "common/ui/Toast";
 
 const FundswiseSummary = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [menuPosition, setMenuPosition] = useState(null);
   const [funds, setFunds] = useState({});
   const [selectedFund, setSelectedFund] = useState({});
@@ -27,15 +21,7 @@ const FundswiseSummary = (props) => {
   }, []);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
+    initData();
     const result = await getFunds();
     if (!result) {
       showSkelton(false);

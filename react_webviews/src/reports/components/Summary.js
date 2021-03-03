@@ -22,9 +22,6 @@ const Summary = (props) => {
   const productName = getConfig().productName;
   const partner = getConfig().partner;
   const navigate = navigateFunc.bind(props);
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   const [currentUser, setCurrentUser] = useState(
     storageService().getObject(storageConstants.USER) || {}
   );
@@ -79,14 +76,11 @@ const Summary = (props) => {
       reportData.sips.active_sips.length > 0 ? true : false;
     Data.showTransactions = reportData.current.current > 0 ? true : false;
     setData({ ...Data });
-    let userkycDetails = { ...userkyc };
     let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
+    if (isEmpty(user)) {
       await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
+      user = storageService().getObject(storageConstants.USER) || {};
       setCurrentUser(user);
-      setUserKyc(userkycDetails);
     }
     setShowSkelton(false);
   };

@@ -31,6 +31,7 @@ import PauseCancelDetail from "./components/sip/PauseCancelDetail";
 import Otp from "./components/sip/Otp";
 import Request from "./components/sip/Request";
 import PauseResumeRestart from "./components/sip/PauseResumeRestart";
+import SwitchedTransaction from "./components/SwitchedTransaction";
 
 const theme = createMuiTheme(themeConfig);
 
@@ -68,6 +69,7 @@ const Reports = (props) => {
           <Route path={`${url}/sip/otp/:action`} exact component={Otp} />
           <Route path={`${url}/sip/pause-request`} exact component={Request} />
           <Route path={`${url}/sip/pause-resume-restart/:action/:next_sip_date`} exact component={PauseResumeRestart} />
+          <Route path={`${url}/switched-transaction`} exact component={SwitchedTransaction} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

@@ -37,7 +37,7 @@ const SwitchNow = (props) => {
   }, []);
 
   const initialize = async () => {
-    await initData();
+    initData();
     try {
       const data = await getFundDetailsForSwitch({
         amfi,

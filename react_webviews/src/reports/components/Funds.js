@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { formatAmountInr, isEmpty, storageService } from "utils/validators";
+import { formatAmountInr, isEmpty } from "utils/validators";
 import Button from "@material-ui/core/Button";
-import { getPathname, storageConstants } from "../constants";
+import { getPathname } from "../constants";
 import { initData } from "../services";
 import { getFunds, getFundMf } from "../common/api";
 import { navigate as navigateFunc } from "../common/functions";
@@ -16,12 +16,6 @@ const Funds = (props) => {
   const subtype = params.subtype || "";
 
   const navigate = navigateFunc.bind(props);
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [openFundNotAvailable, setFundNotAvailable] = useState(false);
   const [openAskInvestType, setAskInvestType] = useState(false);
   const [funds, setFunds] = useState({});
@@ -65,15 +59,7 @@ const Funds = (props) => {
   }, []);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
+    initData();
     const result = await getFunds({
       itype,
       subtype,

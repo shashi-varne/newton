@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
-import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import { storageConstants } from "../../constants";
+import { formatAmountInr, isEmpty } from "utils/validators";
 import { initData } from "../../services";
 import { getFunds } from "../../common/api";
 
@@ -9,12 +8,6 @@ const FundswiseDetails = (props) => {
   const params = props?.match?.params || {};
   const dataindex = params.dataindex || "";
   if (dataindex === "") props.history.goBack();
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [folio_number, setFolioNumber] = useState("");
   const [fund, setFund] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
@@ -24,6 +17,7 @@ const FundswiseDetails = (props) => {
   }, []);
 
   const initialize = async () => {
+    initData();
     const result = await getFunds();
     if (!result) {
       showSkelton(false);
@@ -40,15 +34,6 @@ const FundswiseDetails = (props) => {
         .join(", ") || ""
     );
     setShowSkelton(false);
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
   };
 
   return (

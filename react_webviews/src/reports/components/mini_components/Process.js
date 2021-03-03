@@ -273,7 +273,104 @@ const Process = ({ isOpen, data, close, state, type, status }) => {
               </div>
             </>
           )}
+          {type === "switch" && (
+            <>
+              <div className="process-step">
+                <div className="dot completed">
+                  <CheckIcon className="icon" />
+                </div>
+                <div className="text selected">
+                  <div className="top">
+                    <span className="title">{data.switch[0].title}</span>
+                    <span className="time">{data.switch[0].time}</span>
+                  </div>
+                  <div className="desc">{data.switch[0].desc}</div>
+                </div>
+              </div>
+              <div className="process-step">
+                <div
+                  className={`dot ${
+                    (state === "unit_deducted" ||
+                      state === "order_placed" ||
+                      (state === "switch_success" &&
+                        state !== "order_placed")) &&
+                    "completed"
+                  }`}
+                >
+                  {state === "unit_deducted" || state === "order_placed" ? (
+                    <CheckIcon className="icon" />
+                  ) : state === "switch_success" &&
+                    state !== "order_placed" ? (
+                    <MoreHorizIcon className="icon" />
+                  ) : (
+                    <HourglassFullIcon className="icon" />
+                  )}
+                </div>
+                <div
+                  className={`text ${
+                    (state === "unit_deducted" || state === "order_placed") &&
+                    "selected"
+                  }`}
+                >
+                  <div className="top">
+                    <span className="title">{data.switch[1].title}</span>
+                    <span className="time">{data.switch[1].time}</span>
+                  </div>
+                  <div className="desc">{data.switch[1].desc}</div>
+                </div>
+              </div>
+              <div className="process-step">
+                <div
+                  className={`dot ${
+                    (state === "unit_deducted" || state === "order_placed") &&
+                    "completed"
+                  }`}
+                >
+                  {state === "unit_deducted" ? (
+                    <CheckIcon className="icon" />
+                  ) : state !== "unit_deducted" && state === "order_placed" ? (
+                    <MoreHorizIcon className="icon" />
+                  ) : (
+                    <HourglassFullIcon className="icon" />
+                  )}
+                </div>
+                <div
+                  className={`text ${state === "unit_deducted" && "selected"}`}
+                >
+                  <div className="top">
+                    <span className="title">{data.switch[2].title}</span>
+                    <span className="time">{data.switch[2].time}</span>
+                  </div>
+                  <div className="desc">{data.switch[2].desc}</div>
+                </div>
+              </div>
+              <div className="process-step">
+                <div
+                  className={`dot ${state === "unit_deducted" && "completed"}`}
+                >
+                  {state === "unit_deducted" ? (
+                    <MoreHorizIcon className="icon" />
+                  ) : (
+                    <HourglassFullIcon className="icon" />
+                  )}
+                </div>
+                <div className="text">
+                  <div className="top">
+                    <span className="title">{data.switch[3].title}</span>
+                    <span className="time">{data.switch[3].time}</span>
+                  </div>
+                  <div className="desc">{data.switch[3].desc}</div>
+                </div>
+              </div>
+            </>
+          )}
         </main>
+
+        {type === "switch" && (
+          <div className="bottom-message">
+            *Subject to Registeration Completed.
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

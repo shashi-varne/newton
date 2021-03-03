@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { formatAmountInr, isEmpty, storageService } from "utils/validators";
-import { getPurchaseProcessData, storageConstants } from "../constants";
+import { formatAmountInr, isEmpty } from "utils/validators";
+import { getPurchaseProcessData } from "../constants";
 import { initData } from "../services";
 import { getSummaryV2 } from "../common/api";
 import Process from "./mini_components/Process";
 
 const Redeemed = (props) => {
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [transactions, setTransactions] = useState({});
   const [showSkelton, setShowSkelton] = useState(true);
   const [openProcess, setOpenProcess] = useState(false);
@@ -23,15 +17,7 @@ const Redeemed = (props) => {
   }, []);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
+    initData();
     const result = await getSummaryV2();
     if (!result) {
       setShowSkelton(false);
