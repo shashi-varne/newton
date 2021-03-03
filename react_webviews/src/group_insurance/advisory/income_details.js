@@ -18,7 +18,8 @@ class AdvisoryIncomeDetails extends Component {
             incomeGrowthOptions: advisoryConstants.incomeGrowthOptions,
             retireOptions: advisoryConstants.retireOptions,
             form_data: {},
-            showPrefix: {income: false, expense: false}
+            showPrefix: {income: false, expense: false},
+            form_data: {income_growth: ''}
         }
         this.updateLead = updateLead.bind(this);
         this.getLead = getLead.bind(this);
@@ -77,7 +78,7 @@ class AdvisoryIncomeDetails extends Component {
         var isResumePresent  = storageService().getObject('advisory_resume_present');
         
         var lead = {};
-        var form_data = {};
+        var form_data = this.state.form_data;
 
         if(isResumePresent){
             await this.getLead();
@@ -191,7 +192,7 @@ class AdvisoryIncomeDetails extends Component {
               canSubmitForm = false
             }
           
-            if(!form_data.income_growth){
+            if(!form_data.income_growth && form_data.income_growth !== 0){
                 form_data.income_growth_error = "We need some details to move forward!";
                 canSubmitForm = false;
             }
@@ -294,7 +295,7 @@ class AdvisoryIncomeDetails extends Component {
               error={this.state.form_data.income_growth_error ? true : false}
               helperText={this.state.form_data.income_growth_error}
               name="age"
-              value={this.state.form_data.income_growth || ''}
+              value={this.state.form_data.income_growth}
               onChange={this.handleChange("income_growth")}
             />
             </div>
