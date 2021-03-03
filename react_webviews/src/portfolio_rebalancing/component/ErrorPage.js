@@ -43,8 +43,6 @@ const ErrorPage = (props) => {
       handleClick={retry}
       title='Portfolio rebalancing'
       classOverRideContainer='pr-container'
-      fullWidthButton={true}
-      onlyButton={true}
     >
       <>
         <section className='image-cover'>

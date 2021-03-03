@@ -85,8 +85,6 @@ const RebalanceFund = (props) => {
       title='Rebalance funds'
       classOverRide='pr-rebalance-fund-container'
       classOverRideContainer='pr-container'
-      fullWidthButton={true}
-      onlyButton={true}
     >
       {funds?.length > 0 &&
         !isEmpty(checkMap) &&

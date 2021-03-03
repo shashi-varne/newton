@@ -156,8 +156,6 @@ const Date = (props) => {
       events={sendEvents('just_set_events')}
       title='Select SIP auto debit  date'
       classOverRideContainer='pr-container'
-      fullWidthButton={true}
-      onlyButton={true}
     >
       <Typography className='pr-sip-transaction' align='left'>
         SIP switch transactions

@@ -50,8 +50,6 @@ const RebalanceSuccessful = () => {
       events={sendEvents('just_set_events')}
       title='Portfolio rebalance successful!'
       classOverRideContainer='pr-container'
-      fullWidthButton={true}
-      onlyButton={true}
     >
       <section className='image-success-cover'>
         <img

@@ -48,8 +48,6 @@ const Landing = (props) => {
       events={sendEvents('just_set_events')}
       title='Portfolio rebalancing'
       classOverRideContainer='pr-container'
-      fullWidthButton={true}
-      onlyButton={true}
     >
       <section>
         <div className='common-top-page-subtitle'>
