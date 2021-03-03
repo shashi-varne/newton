@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Container from "../../common/Container";
-import { isEmpty, storageService } from "utils/validators";
-import { getPathname, storageConstants } from "../../constants";
+import { isEmpty } from "utils/validators";
+import { getPathname } from "../../constants";
 import { initData } from "../../services";
 import { navigate as navigateFunc } from "../../common/functions";
 import { getConfig } from "utils/functions";
