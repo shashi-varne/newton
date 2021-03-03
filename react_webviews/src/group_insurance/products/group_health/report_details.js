@@ -182,10 +182,14 @@ class GroupHealthReportDetails extends Component {
         this.setErrorData("submit", true, this.downloadPolicy)
         let error = "";
         let errorType = "";
+        let loaderMessage = "Did you know insurance is good investment?";
         try {
 
             this.setState({
-                show_loader: "page" 
+                show_loader: "page",
+                loaderData:{
+                    loadingText:loaderMessage
+                }
             });
 
            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
@@ -407,6 +411,7 @@ class GroupHealthReportDetails extends Component {
                 skelton={this.state.skelton}
                 showError={this.state.showError}
                 errorData={this.state.errorData}
+                loaderData={this.state.loaderData}
                 title={'Health insurance'}
                 fullWidthButton={true}
                 buttonTitle="OK"
