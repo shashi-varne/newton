@@ -184,3 +184,47 @@ export const getSipAction = async (data) => {
       throw result.error || result.message || genericErrorMessage;
   }
 };
+
+export const getSipNote = async (data) => {
+  const res = await Api.get(
+    `${apiConstants.getSipAction}${data.key}/${data.action}${
+      data.action === "pause" ? `?tenor=${data.tenure}` : ""
+    }`
+  );
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};
+
+export const postSipAction = async (data) => {
+  let tenor = data.action === "pause" ? { tenor: data.period } : {};
+  const res = await Api.post(
+    `${apiConstants.getSipAction}${data.key}/${data.action}`,
+    tenor
+  );
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};

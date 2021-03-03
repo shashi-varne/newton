@@ -52,6 +52,7 @@ export const getPathname = {
   pauseResumeRestart: "/reports/sip/pause-resume-restart/",
   pauseCancelDetail: "/reports/sip/pause-cancel-detail/",
   pausePeriod: "/reports/sip/pause-period",
+  sipOtp: "/reports/sip/otp/",
 };
 
 export const storageConstants = {

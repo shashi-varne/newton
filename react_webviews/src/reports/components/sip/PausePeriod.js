@@ -31,7 +31,7 @@ const PausePeriod = (props) => {
   };
 
   const handleClick = () => () => {
-    navigate(`${getPathname.pauseCancelDetail}cancel/${period}`);
+    navigate(`${getPathname.pauseCancelDetail}pause/${period}`);
   };
 
   const handleChange = () => (value) => setPeriod(value);
