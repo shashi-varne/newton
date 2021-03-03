@@ -3,7 +3,7 @@
     font-size: 17px;
     font-weight: 700;
     line-height: 25px;
-    margin-bottom: 20px;
+    margin: 20px 0;
     color: #0a1d32;
   }
 
@@ -13,6 +13,17 @@
 
     .img {
       width: 12%;
+    }
+
+    .contact-img {
+      width: 5%;
+      padding: 16px 0;
+    }
+
+    .contact {
+      font-size: 14px;
+      font-weight: 400;
+      margin-left: 24px;
     }
   }
 
@@ -30,7 +41,6 @@
 
 @media only screen and (min-width: 300px) and (max-width: 500px) {
   .help-Category {
-  
     .category {
       .img {
         width: 18%;
@@ -39,6 +49,14 @@
       .name {
         font-size: 15px;
         padding: 8% 0;
+      }
+
+      .contact-img {
+        width: 8%;
+      }
+
+      .contact {
+        font-size: 13px;
       }
     }
   }

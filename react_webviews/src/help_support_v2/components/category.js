@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Imgc } from "../../common/ui/Imgc";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
-import { getConfig } from 'utils/functions';
 
 const catgories = [
   {
@@ -66,17 +65,34 @@ class Category extends Component {
         noFooter={true}
       >
         <div className="help-Category">
+          <div className="search"></div>
           <div className="title">Category</div>
           {catgories.map((el, index) => (
             <div className="category" key={index}>
               <Imgc
                 src={require(`assets/${this.state.productName}/${el.icon}.svg`)}
-                className='img'
+                className="img"
                 alt=""
               />
-              <div className="name">{el.name}</div>
+              <div
+                className="name"
+                style={{ border: `${index === catgories.length - 1 && "0px"}` }}
+              >
+                {el.name}
+              </div>
             </div>
           ))}
+          <div className="title">Need more help?</div>
+          <div className="generic-hr"></div>
+          <div className="category">
+            <Imgc
+              src={require(`assets/${this.state.productName}/icn_contact.svg`)}
+              className="contact-img"
+              alt=""
+            />
+            <div className="contact">Contact us</div>
+          </div>
+          <div className="generic-hr"></div>
         </div>
       </Container>
     );

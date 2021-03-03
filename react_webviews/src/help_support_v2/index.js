@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import './Style.scss';
 import NotFound from "../common/components/NotFound";
 import Category from './components/category';
+import Queries from './components/queries';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -48,6 +49,7 @@ const HelpSupport = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route path={`${url}/category`} component={Category} />
+          <Route path={`${url}/queries`} component={Queries} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
