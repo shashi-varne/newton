@@ -40,8 +40,6 @@ class Success extends Component {
                 handleClick={() => this.startFHC()}
                 title="Fin Health Check (FHC)"
                 hideBack={true}
-                fullWidthButton={true}
-                onlyButton={true}
             >
                 <div className="landing-container">
                     <img

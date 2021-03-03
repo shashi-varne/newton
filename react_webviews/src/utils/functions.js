@@ -592,7 +592,7 @@ export const getConfig = () => {
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-  let project = 'insurance';
+  let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';

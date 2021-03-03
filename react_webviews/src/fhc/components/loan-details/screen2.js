@@ -144,8 +144,6 @@ class LoanDetails2 extends Component {
         edit={this.props.edit}
         topIcon="close"
         buttonTitle="Save & Continue"
-        fullWidthButton={true}
-        onlyButton={true}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/loan.svg`)}

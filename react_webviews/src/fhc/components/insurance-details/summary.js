@@ -153,8 +153,6 @@ class InsuranceSummary extends Component {
         topIcon="close"
         buttonTitle="Save & Continue"
         logo={this.state.image}
-        fullWidthButton={true}
-        onlyButton={true}
       >
         <FormControl fullWidth>
           <TitleWithIcon width="23" icon={require(`assets/${this.state.type}/secure.svg`)}
