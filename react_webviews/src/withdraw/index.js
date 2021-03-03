@@ -3,6 +3,7 @@ import WithdrawType from './components/WithdrawType';
 import WithdrawReason from './components/WithdrawReason'
 import WithdrawRemark from './components/WithdrawRemark'
 import Landing from "./components/balance"
+import WithdrawSwitch from './components/WithdrawSwitch'
 
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { create } from 'jss';
@@ -44,9 +45,10 @@ const Withdraw = ({ match }) => {
         <ScrollToTop />
           <Switch>
             <Route exact path={`${url}`} component={Landing} />
-            <Route path={`${url}/type`} component={WithdrawType} />
             <Route path={`${url}/reason`} component={WithdrawReason} />
             <Route path={`${url}/remark`} component={WithdrawRemark} />
+            <Route path={`${url}/switch`} component={WithdrawSwitch} />
+            <Route path={`${url}/:type`} component={WithdrawType} />
           </Switch>
       </MuiThemeProvider>
     </JssProvider>

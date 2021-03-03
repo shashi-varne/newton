@@ -1,8 +1,24 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from '../common/Container';
-import FundCard from '../mini_components/FundCard'
-const Landing = (props) => {
+import FundCard from '../mini_components/FundCard';
+import isEmpty from 'lodash/isEmpty'
+import {getRecommendedFund} from '../common/Api';
 
+const Landing = (props) => {
+  const {type} = props.match?.params;
+  const [recommendedFunds, setRecommendedFunds] = useState(null);
+  const fetchRecommendedFunds = async () => {
+    try {
+      const data = await getRecommendedFund(type);
+      setRecommendedFunds(data?.recommendations[0]);
+      console.log(data);
+    } catch(err){
+      console.log(err);
+    }
+  }
+  useEffect(() => {
+    fetchRecommendedFunds();
+  },[])
   return (
     <Container
       buttonTitle='Continue'
@@ -11,13 +27,16 @@ const Landing = (props) => {
       classOverRideContainer='pr-container'
       hidePageTitle
     >
-      <section>
+      {
+        !isEmpty(recommendedFunds?.allocations) && 
+        <section>
         {
-          [1,1,1,1].map((el,idx) => (
-            <FundCard key={el} expand={idx === 0} type='insta'/>
+          recommendedFunds?.allocations?.map((el,idx) => (
+            <FundCard key={el} expand={idx === 0} type={type} data={el}/>
             ))
         }
       </section>
+          }
     </Container>
   );
 };

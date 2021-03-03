@@ -6,8 +6,9 @@ import RemoveIcon from '@material-ui/icons/Remove';
 
 import './style.scss';
 
-const FundCard = ({ type, expand }) => {
+const FundCard = ({ type, expand, data }) => {
   const [open, setOpen] = useState(expand ? true : false);
+  const {amount, invested_since, mf:{friendly_name, amc_logo_small}} = data;
   const handleToggle = () => {
     setOpen(!open);
   };
@@ -15,15 +16,17 @@ const FundCard = ({ type, expand }) => {
     <div className='withdraw-fund-card'>
       <div className='withdraw-fund-header' onClick={handleToggle}>
         <div>
-          <img style={{ width: '40px', height: '40px', background: 'red' }} src='' alt='' />
-          <div>Nippon India Liquid Fund</div>
+          <div className='withdraw-fund-icon'>
+          <img src={amc_logo_small} alt='' />
+          </div>
+          <div>{friendly_name}</div>
         </div>
 
         {open ? (
           <RemoveIcon
             style={{
               border: '2px #878787 solid',
-              fontSize: '20px',
+              fontSize: '15px',
               borderRadius: '3px',
               color: '#878787',
             }}
@@ -32,7 +35,7 @@ const FundCard = ({ type, expand }) => {
           <AddIcon
             style={{
               border: '2px #878787 solid',
-              fontSize: '20px',
+              fontSize: '15px',
               borderRadius: '3px',
               color: '#878787',
             }}
@@ -43,11 +46,11 @@ const FundCard = ({ type, expand }) => {
       <div className='withdraw-investment-container'>
         <div className='withdraw-amount-container'>
           <div className='amount-header-text'>WITHDRAWABLE AMOUNT</div>
-          <div>900</div>
+          <div>{amount}</div>
         </div>
         <div className='withdraw-amount-container'>
           <div className='investment-header-text'>INVESTMENT SINCE</div>
-          <div>20 JAB 2018</div>
+          <div>{invested_since}</div>
         </div>
       </div>
       <Collapse in={open}>

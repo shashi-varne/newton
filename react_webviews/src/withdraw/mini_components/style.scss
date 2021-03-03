@@ -11,8 +11,14 @@
     & div {
       display: flex;
       align-items: center;
-      img {
-        margin-right: 30px;
+      width: 80%;
+      .withdraw-fund-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 20px;
+        img{
+          width: 100%;
+        }
       }
       div{
         font-size: 16px;

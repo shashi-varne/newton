@@ -3,28 +3,27 @@ import Dialog from 'common/ui/Dialog'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 
-const AmountDialog = ({ open, close }) => {
-  const [amount, setAmount] = useState('')
-  const handleAmountChange = (event) => {
-    setAmount(event.target.value)
-  }
-  const handleProceed = () => {
-    /**
-     * @TODO
-     */
-  }
+const AmountDialog = ({ open, close, title, id, placeholder,handleChange,handleProceed,value }) => {
+  // const handleChange = (event) => {
+  //   setValue(event.target.value)
+  // }
+  // const handleProceed = () => {
+  //   /**
+  //    * @TODO
+  //    */
+  // }
   return (
     <Dialog open={open} onClose={close} className="withdraw-amount-dialog">
       <section className="withdraw-amount-dialog-content">
-        <div className="title">Enter Amount</div>
+        <div className="title">{title}</div>
         <form className="withdraw-amount-form">
           <TextField
-            id="amount"
-            name="amont"
-            placeholder="Amount"
+            id={id}
+            name={id}
+            placeholder={placeholder}
             fullWidth
-            value={amount}
-            onChange={handleAmountChange}
+            value={value}
+            onChange={handleChange}
           />
           <div className="flex-between">
             <Button color="primary" onClick={close} className="cancel-btn">
