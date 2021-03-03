@@ -978,7 +978,6 @@ class GroupHealthPlanFinalSummary extends Component {
             skelton={this.state.skelton}
             showError={this.state.showError}
             errorData={this.state.errorData}
-            loaderData={this.state.loaderData}
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}

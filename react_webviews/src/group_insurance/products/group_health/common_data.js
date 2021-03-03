@@ -424,14 +424,10 @@ function setErrorData(type, dismiss, HandleClickFunc) {
   }
 }
 export async function resetQuote() {
-    let loaderMessage = "How do you ensure your loved ones are safe after you? Insure!"
     this.setErrorData("submit", true, this.resetQuote)
     this.handleClose();
     this.setState({
         show_loader: "page",
-        loaderData:{
-            loadingText:loaderMessage
-        },
         restart_conformation: true
     }, () => {
         this.sendEvents('next');
