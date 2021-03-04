@@ -21,7 +21,9 @@ import NotFound from '../common/components/NotFound'
 import { themeConfig } from 'utils/constants'
 import './Style.scss'
 
-import SystemSummary from './components/system_summary'
+import SystemSummary from './components/summary/system'
+import SelfSummary from './components/summary/self'
+import Insta from './components/summary/insta'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -54,6 +56,9 @@ const Withdraw = ({ match }) => {
             path={`${url}/system/summary`}
             component={SystemSummary}
           />
+          <Route path={`${url}/self/summary`} component={SelfSummary} />
+          <Route path={`${url}/system/summary`} component={SystemSummary} />
+          <Route path={`${url}/insta/summary`} component={Insta} />
           <Route path={`${url}/type`} component={WithdrawType} />
           <Route path={`${url}/reason`} component={WithdrawReason} />
           <Route path={`${url}/remark`} component={WithdrawRemark} />

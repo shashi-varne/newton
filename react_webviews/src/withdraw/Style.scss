@@ -63,7 +63,7 @@
   }
 
   .Card .MuiButton-label {
-    color: var(--secondary); 
+    color: var(--secondary);
   }
 
   .footer .title {
@@ -131,5 +131,71 @@
   }
   .proceed-btn {
     background-color: var(--secondary);
+  }
+}
+
+#withdraw-manual-summary, #withdraw-system-summary {
+  .tax-summary {
+    margin: 40px 0 10px 0;
+    font-size: 20px;
+    color: #0a1c32;
+    font-weight: 600;
+  }
+
+  .fund-list {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.withdraw-summary-liability {
+  color: #767386;
+}
+
+.withdraw-summary-liability .title,
+.withdraw-summary-liability .total,
+.withdraw-summary-exitload .total {
+  color: #0a1c32;
+}
+
+.withdraw-summary-liability .title,
+.withdraw-summary-exitload .title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.withdraw-summary-liability .breakdown,
+.withdraw-summary-exitload .total {
+  margin-top: 15px;
+}
+
+.withdraw-summary-liability.Card,
+.withdraw-summary-exitload.Card {
+  background-color: var(--highlight);
+  padding: 20px;
+  margin: 10px 0 20px 0;
+  box-shadow: none;
+  border-radius: 6px;
+}
+
+.withdraw-summary-liability .ruler {
+  margin: 15px -20px 15px -20px;
+  border: 1px solid #ededed;
+}
+
+.withdraw-summary-liability .breakdown .item {
+  margin-top: 3px;
+}
+
+#withdraw-insta-summary {
+  .title {
+    margin: 40px 0 10px 0;
+    font-size: 20px;
+    color: #0a1c32;
+    font-weight: 600;
+  }
+
+  .withdraw-tax-summary {
+    margin-top: 40px;
   }
 }

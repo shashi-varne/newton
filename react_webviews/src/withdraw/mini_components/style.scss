@@ -1,9 +1,9 @@
-.withdraw-fund-card{
+.withdraw-fund-card {
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
 
-  .withdraw-fund-header{
+  .withdraw-fund-header {
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -14,41 +14,87 @@
       img {
         margin-right: 30px;
       }
-      div{
+      div {
         font-size: 16px;
-        color: #0A1C32;
+        color: #0a1c32;
         font-weight: 600;
         line-height: 1.6;
       }
     }
   }
 
-  .withdraw-investment-container{
+  .withdraw-investment-container {
     display: flex;
     justify-content: space-between;
     margin: 20px 0px;
-    .withdraw-amount-container{
-
-      .investment-header-text,.amount-header-text {
-        color: #0A1D32;
+    .withdraw-amount-container {
+      .investment-header-text,
+      .amount-header-text {
+        color: #0a1d32;
         font-size: 8px;
         font-weight: 600;
         line-height: 1.6;
         text-transform: uppercase;
       }
 
-      & div{
-        color: #767E86;
+      & div {
+        color: #767e86;
         font-weight: 400;
         font-size: 13px;
       }
     }
   }
 
-  .withdraw-tax{
+  .withdraw-tax {
     color: var(--primary);
     font-size: 10px;
     font-weight: 400;
     margin: 10px 0 0 10px;
   }
+}
+
+.withdraw-tax-summary {
+  .top .fund-image {
+    display: block;
+    width: 40px;
+  }
+
+  .top .fund-name {
+    font-size: 16px;
+    color: #0a1c32;
+    font-weight: 600;
+    line-height: 1.6;
+  }
+
+  .item__hide {
+    display: none;
+  }
+
+  .item {
+    display: block;
+    border-bottom: 1px solid #EDEDED;
+    padding: 20px 0 20px 0;
+  }
+
+  .item .tile {
+    margin: 5px 0 0 0;
+    line-height: 1.6;
+    color: #0a1c32;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .item .tile2 {
+    margin: 0 0 0 20px;
+    font-size: 13px;
+    color: #767E86;
+  }
+
+  .fund-name {
+    margin-left: 10px;
+  }
+}
+
+.withdraw-tax-summary:nth-last-child(1) .item {
+  border-bottom: none;
 }
