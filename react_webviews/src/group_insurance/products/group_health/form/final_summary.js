@@ -938,7 +938,7 @@ class GroupHealthPlanFinalSummary extends Component {
             fullWidthButton={true}
             onlyButton={true}
             buttonTitle={`MAKE PAYMENT OF ${inrFormatDecimal(this.state.quotation.total_premium)}`}
-            handleClick={() => toast('hi')}
+            handleClick={() => this.handleClick()}
         >
 
             <div className="group-health-final-summary">
