@@ -602,13 +602,16 @@ export const getConfig = () => {
     base_url_default = window.location.origin;
   }
 
-  if(isProdFisdom) {
-    base_url_default = 'https://my.fisdom.com';
+  if(!base_url) {
+    if(isProdFisdom) {
+      base_url_default = 'https://my.fisdom.com';
+    }
+  
+    if(isProdFinity) {
+      base_url_default = 'https://api.mywaywealth.com';
+    }
   }
-
-  if(isProdFinity) {
-    base_url_default = 'https://api.mywaywealth.com';
-  }
+  
 
   if(base_url_default) {
     base_url = base_url_default;
