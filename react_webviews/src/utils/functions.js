@@ -931,7 +931,7 @@ export function capitalize(string) {
 export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/webview') !== -1) {
-    basename = basename ? basename + 'view/' : '';
+    basename = basename ? basename + 'view' : '';
   }
   return basename;
 }
