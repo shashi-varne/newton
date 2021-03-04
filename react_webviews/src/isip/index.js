@@ -19,7 +19,7 @@ const IsipBIller = (props) => {
   return (
      <Fragment>
         <Switch>
-          <Route exact path={`${url}`} component={BillerAbout} />
+          <Route exact path={`${url}/`} component={BillerAbout} />
           <Route path={`${url}/biller/about`} component={BillerAbout} />
           <Route path={`${url}/biller/details`} component={BillerDetails} />
           <Route path={`${url}/biller/steps`} component={BillerSteps} />
