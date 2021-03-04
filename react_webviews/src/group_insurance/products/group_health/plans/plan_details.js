@@ -7,7 +7,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import {initialize} from '../common_data';
+import {initialize, openPdf} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
@@ -35,6 +35,7 @@ class GroupHealthPlanDetails extends Component {
         }
 
         this.initialize = initialize.bind(this);
+        this.openPdf = openPdf.bind(this);
     }
 
     componentWillMount() {
@@ -390,7 +391,7 @@ class GroupHealthPlanDetails extends Component {
                   <span
                     style={{ color: getConfig().primary }}
                     onClick={() =>
-                      this.openInBrowser(
+                      this.openPdf(
                         this.state.plan_data.policy_prospectus,
                         "read_document"
                       )
