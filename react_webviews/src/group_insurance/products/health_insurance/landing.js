@@ -27,7 +27,6 @@ import back_nav_bar_icon_up from '../../../assets/back_nav_bar_icon_up.png'
 
 
 import Api from '../../../utils/api'
-import toast from '../../../common/ui/Toast'
 import { setTermInsData } from '../../common/commonFunction'
 
 class HealthInsuranceLanding extends Component {
@@ -35,7 +34,7 @@ class HealthInsuranceLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: true,
+      skelton: true,
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
@@ -46,6 +45,7 @@ class HealthInsuranceLanding extends Component {
     this.renderPorducts = this.renderPorducts.bind(this);
     this.setTermInsData = setTermInsData.bind(this);
   }
+  
 
   componentWillMount() {
 
@@ -106,7 +106,7 @@ class HealthInsuranceLanding extends Component {
     //   }
     // } else {
     //   this.setState({
-    //     show_loader: false
+    //     skelton: false
     //   })
     // }
 
@@ -127,17 +127,41 @@ class HealthInsuranceLanding extends Component {
     });
   }
 
+  setErrorData = (type) => {
 
-  async componentDidMount() {
+    this.setState({
+      showError: false
+    });
+    if(type) {
+      let mapper = {
+        'onload':  {
+          handleClick1: this.onload,
+          button_text1: 'Retry',
+          title1: ''
+        }
+      };
+  
+      this.setState({
+        errorData: mapper[type]
+      })
+    }
 
-    this.setState({ show_loader: true });
+  }
+
+  onload = async () => {
+    this.setErrorData('onload');
+
+
+    this.setState({ skelton: true });
     
+    let error = '';
+    let errorType = '';
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
 
       if (!this.state.openModuleData.sub_module) {
         this.setState({
-          show_loader: false
+          skelton: false
         })
       }
 
@@ -203,21 +227,40 @@ class HealthInsuranceLanding extends Component {
         }
 
       } else {
-        toast(res.pfwresponse.result.error || res.pfwresponse.result.message
-          || 'Something went wrong');
+
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message
+        || true;
       }
 
       this.setState({
-        show_loader: false
+        skelton: false
       });
 
     } catch (err) {
       console.log(err)
       this.setState({
-        show_loader: false
+        skelton: false,
       });
-      toast('Something went wrong');
+      error= true;
+      errorType= "crash";
     }
+
+    // set error data
+    if(error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type:errorType
+        },
+        showError:'page'
+      })
+    }
+  }
+
+
+  async componentDidMount() {
+    this.onload();
   }
 
   getLeadId(product_key) {
@@ -401,6 +444,9 @@ class HealthInsuranceLanding extends Component {
         events={this.sendEvents('just_set_events')}
         noFooter={true}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Health insurance">
         <div>
           <div className='products' style={{marginTop : '10px'}}>

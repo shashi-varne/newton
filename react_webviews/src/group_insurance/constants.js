@@ -538,6 +538,7 @@ export const back_button_mapper = {
   '/group-insurance/life-insurance/savings-plan/landing': '/group-insurance/life-insurance/entry',
   '/group-insurance/life-insurance/entry': '/group-insurance',
   '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry',
+  '/group-insurance/call-back-details' : '/group-insurance',
 };
 
 export const insuranceMaritalStatus = [
@@ -580,6 +581,9 @@ export const insuranceProductTitleMapper = {
   'term_insurance': 'Term Insurance',
   'DENGUE': 'Dengue insurance',
   'CORONA': 'Coronavirus insurance',
+  'HOME_INSURANCE': 'Home insurance',
+  'HEALTH_SUPER_TOPUP':'Health super top-up',
+  'CRITICAL_HEALTH_INSURANCE': 'Critical illness insurance'
 }
 
 export function getBhartiaxaStatusToState(policy) {
@@ -744,6 +748,10 @@ export function getCssMapperReport(policy) {
       disc: 'Policy Issued'
     },
     'policy_expired': {
+      color: 'red',
+      disc: 'Policy Expired'
+    },
+    'expired': {
       color: 'red',
       disc: 'Policy Expired'
     },

@@ -1,12 +1,10 @@
 import axios from 'axios';
 
-import qs from 'qs';
-import createBrowserHistory from 'history/createBrowserHistory';
 import { checkValidString } from './validators';
 import { encrypt, decrypt } from './encryption';
-import { getConfig } from 'utils/functions'
-const myHistory = createBrowserHistory();
-let { base_url } = qs.parse(myHistory.location.search.slice(1));
+import { getConfig } from 'utils/functions';
+
+let base_url = getConfig().base_url;
 
 let redirect_url = getConfig().redirect_url;
 let sdk_capabilities = getConfig().sdk_capabilities;
@@ -61,6 +59,12 @@ class Api {
       .then(response => {
         if (response.data._encr_payload) {
           response.data = JSON.parse(decrypt(response.data._encr_payload));
+        }
+
+        let force_error_api = window.sessionStorage.getItem('force_error_api');
+        if(force_error_api) {
+          response.data.pfwresponse.status_code = 410;
+          response.data.pfwresponse.result.error = 'Sorry, we could not process your request';
         }
         return response.data;
       }, error => {

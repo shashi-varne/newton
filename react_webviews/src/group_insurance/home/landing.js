@@ -6,13 +6,14 @@ import qs from 'qs';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import '../common/Style.scss'
+import { isEmpty } from 'utils/validators';
 
 class Landing extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      show_loader: false,
+      // skelton: 'p',
       type: getConfig().productName,
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)) 
@@ -52,8 +53,10 @@ class Landing extends Component {
     let openModuleData = params ? params.openModuleData : {}
 
     let redirect_url = decodeURIComponent(getConfig().redirect_url);
-    if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
-      window.location.href = redirect_url;
+    if(!isEmpty(openModuleData)){
+      if(!openModuleData.sub_module && redirect_url && redirect_url.includes("exit_web")) {
+        window.location.href = redirect_url;
+      }
     }
     this.setState({
       insuranceProducts: insuranceProducts,
@@ -116,14 +119,15 @@ class Landing extends Component {
     )
   }
 
-  sendEvents(user_action, insurance_type, banner_clicked) {
+  sendEvents(user_action, insurance_type, banner_clicked, callback_clicked) {
     let eventObj = {
       "event_name": 'Group Insurance',
       "properties": {
         "user_action": user_action,
         "screen_name": 'insurance',
         "insurance_type": insurance_type ? insurance_type : '',
-        'banner_clicked' : banner_clicked ? true : false
+        'banner_clicked' : banner_clicked ? true : false,
+        'callback_clicked' : callback_clicked ?  true : false
       }
     };
 
@@ -134,6 +138,11 @@ class Landing extends Component {
     }
   }
 
+  callBackScreen = () =>{
+    this.sendEvents('next', "", "", true);
+    this.navigate('/group-insurance/call-back-details');
+  }
+
   render() {
 
 
@@ -141,7 +150,7 @@ class Landing extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         title="Insurance">
            <div  style={{ marginTop: '30px' }}>
            <div onClick={this.policymove}>
@@ -158,7 +167,11 @@ class Landing extends Component {
             </div>
           </div>
 
-          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}>What our customers say</div>
+          <div className="callback-button-container">
+            <img className="image" style={{cursor: 'pointer'}} src={require(`assets/${this.state.type}/landing_call_back_button.svg`)} onClick={() => this.callBackScreen()} alt=""/>
+          </div>
+
+          <div style={{ margin: "40px 0 20px 0", fontWeight : '700', fontSize : '17px', lineHeight:'20.15px' , color: '#160d2e' }}> What our customers say </div>
           <div className="his"> <div className="horizontal-images-scroll">
               <img className="image" src={require(`assets/${this.state.type}/icn_review_1.svg`)} alt=""/>
               <img className="image" src={require(`assets/${this.state.type}/icn_review_2.svg`)} alt=""/>
