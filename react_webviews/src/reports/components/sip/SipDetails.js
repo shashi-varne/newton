@@ -62,7 +62,7 @@ const SipDetails = (props) => {
     initData();
     const result = await getSummaryV2();
     if (!result) {
-      showSkelton(false);
+      setShowSkelton(false);
       return;
     }
     const reportData =

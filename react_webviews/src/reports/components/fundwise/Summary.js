@@ -27,7 +27,7 @@ const FundswiseSummary = (props) => {
     initData();
     const result = await getFunds();
     if (!result) {
-      showSkelton(false);
+      setShowSkelton(false);
       return;
     }
     setFunds(result.report);

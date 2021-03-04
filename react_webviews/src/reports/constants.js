@@ -15,6 +15,7 @@ export const apiConstants = {
 export const getPathname = {
   reports: "/reports",
   invest: "/invest",
+  investMore: "/reports/invest/",
   diyFundInfo: "/diy/fundinfo",
   buildwealth: "/invest/buildwealth",
   savetax: "/invest/savetax",
@@ -68,6 +69,7 @@ export const storageConstants = {
   PAUSE_SIP: "pause-sip",
   SELECTED_SIP: "selected-sip",
   PAUSE_REQUEST_DATA: "pause-request-data",
+  MF_INVEST_DATA: "mf_invest_data",
 };
 
 export const getPurchaseProcessData = (

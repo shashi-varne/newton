@@ -54,7 +54,7 @@ const SwitchFund = (props) => {
         amfi,
       });
       if (!result) {
-        showSkelton(false);
+        setShowSkelton(false);
         return;
       }
       setFunds(result.switch_mfs);
@@ -63,13 +63,13 @@ const SwitchFund = (props) => {
         amfi,
       });
       if (!data) {
-        showSkelton(false);
+        setShowSkelton(false);
         return;
       }
       setFundDetails(data.report);
     } catch (err) {
       console.log(err);
-      toast(err)
+      toast(err);
     } finally {
       setShowSkelton(false);
     }

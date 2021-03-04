@@ -890,28 +890,6 @@
   }
 }
 
-@media only screen and (max-width: 479px) {
-  .report-purchase {
-    .purchased {
-      .head {
-        font-size: 17px;
-      }
-
-      .head-info {
-        .content {
-          img {
-            width: 30px;
-          }
-
-          .text {
-            font-size: 12px;
-          }
-        }
-      }
-    }
-  }
-}
-
 #reports-process-dialog {
   .reports-process-dialog-content {
     padding: 15px !important;
@@ -1711,6 +1689,109 @@
     b {
       color: #3f5469;
       font-weight: 700;
+    }
+  }
+}
+
+.reports-invest-more {
+  color: #333333;
+  line-height: 1.5;
+
+  .text {
+    margin-bottom: 10px;
+    font-size: 14px;
+    padding-top: 10px;
+    text-align: left;
+  }
+
+  .margin {
+    margin-top: 30px;
+  }
+
+  .padding {
+    padding-top: 50px;
+  }
+
+  .terms {
+    display: flex;
+    align-items: center;
+
+    .checkbox {
+      margin-right: -10px;
+    }
+
+    a {
+      cursor: pointer;
+      color: #337ab7;
+      text-decoration: none;
+    }
+  }
+
+  .payment-redirect {
+    margin: -20px -20px 0 -20px;
+    position: relative;
+
+    .img {
+      width: 100%;
+      display: none;
+    }
+
+    .payment-text {
+      width: 100%;
+      padding: 35px;
+      text-align: center;
+
+      h4 {
+        margin-top: 30px;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.1;
+        text-align: center;
+      }
+
+      p {
+        font-size: 16px;
+        margin: 0 0 5px 0;
+        color: #333;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 479px) {
+  .report-purchase {
+    .purchased {
+      .head {
+        font-size: 17px;
+      }
+
+      .head-info {
+        .content {
+          img {
+            width: 30px;
+          }
+
+          .text {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .reports-invest-more {
+    .payment-redirect {
+      .img {
+        display: block;
+      }
+
+      .payment-text {
+        position: absolute;
+        top: 0;
+        text-align: left;
+      }
     }
   }
 }

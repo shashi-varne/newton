@@ -43,7 +43,7 @@ const SwitchNow = (props) => {
         amfi,
       });
       if (!data) {
-        showSkelton(false);
+        setShowSkelton(false);
         return;
       }
       setFundDetails(data.report);

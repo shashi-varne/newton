@@ -27,7 +27,7 @@ const Sip = (props) => {
     storageService().remove(storageConstants.PAUSE_REQUEST_DATA);
     const result = await getSummaryV2();
     if (!result) {
-      showSkelton(false);
+      setShowSkelton(false);
       return;
     }
     setreports(result.report);

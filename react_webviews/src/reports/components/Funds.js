@@ -66,7 +66,7 @@ const Funds = (props) => {
       subtype,
     });
     if (!result) {
-      showSkelton(false);
+      setShowSkelton(false);
       return;
     }
     setFunds(result.report);
@@ -118,8 +118,8 @@ const Funds = (props) => {
             message: "How would you like to invest in this fund?",
             button2Title: "SIP",
             button1Title: "ONE-TIME",
-            handleClick1: handleInvestType("ONE-TIME", item, item.type, result),
-            handleClick2: handleInvestType("SIP", item, item.type, result),
+            handleClick1: handleInvestType("ONE-TIME", item),
+            handleClick2: handleInvestType("SIP", item),
           });
           setAskInvestType(true);
         } else if (result.sip_flag) {
@@ -128,7 +128,7 @@ const Funds = (props) => {
             button2Title: "CONTINUE",
             button1Title: "CANCEL",
             handleClick1: handleInvestType("CANCEL"),
-            handleClick2: handleInvestType("SIP", item, itype, result),
+            handleClick2: handleInvestType("SIP", item),
           });
           setAskInvestType(true);
         } else if (result.ot_flag) {
@@ -137,21 +137,18 @@ const Funds = (props) => {
             button2Title: "CONTINUE",
             button1Title: "CANCEL",
             handleClick1: handleInvestType("CANCEL"),
-            handleClick2: handleInvestType("ONE-TIME", item, itype, result),
+            handleClick2: handleInvestType("ONE-TIME", item),
           });
           setAskInvestType(true);
         }
       } else if (canShowOnlyOt(itype) && result.ot_flag) {
-        item.min = result.addl_purchase.min;
-        item.max = result.addl_purchase.max;
-        item.mul = result.addl_purchase.mul;
-        navigate(`${getPathname.invest}/ONE-TIME/${itype}/${result.mfid}`, {
+        navigate(`${getPathname.investMore}ONE-TIME`, {
           state: {
             recommendation: JSON.stringify(item),
           },
         });
       } else if (canShowOnlySip(itype) && result.sip_flag) {
-        navigate(`${getPathname.invest}/SIP/${itype}/${result.mfid}`, {
+        navigate(`${getPathname.investMore}SIP`, {
           state: {
             recommendation: JSON.stringify(item),
           },
@@ -164,18 +161,15 @@ const Funds = (props) => {
     }
   };
 
-  const handleInvestType = (invest_type, recommendation, itype, data) => () => {
+  const handleInvestType = (invest_type, recommendation) => () => {
     if (invest_type === "SIP") {
-      navigate(`${getPathname.invest}/${invest_type}/${itype}/${data.mfid}`, {
+      navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
           recommendation: JSON.stringify(recommendation),
         },
       });
     } else if (invest_type === "ONE-TIME") {
-      recommendation.min = data.addl_purchase.min;
-      recommendation.max = data.addl_purchase.max;
-      recommendation.mul = data.addl_purchase.mul;
-      navigate(`${getPathname.invest}/${invest_type}/${itype}/${data.mfid}`, {
+      navigate(`${getPathname.investMore}${invest_type}`, {
         state: {
           recommendation: JSON.stringify(recommendation),
         },
