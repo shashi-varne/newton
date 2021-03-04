@@ -1,6 +1,6 @@
 import { getConfig } from "utils/functions";
 
-export function navigate(pathname,state, data, redirect) {
+export function navigate(pathname,state, data, redirect,params) {
     if (redirect) {
       this.history.push({
         pathname: pathname,

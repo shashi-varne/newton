@@ -3,15 +3,11 @@ import Container from '../common/Container';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import isEmpty from 'lodash/isEmpty';
 import { navigate as navigateFunc } from '../common/commonFunction';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import Button from '@material-ui/core/Button'
+import Dialog from '../mini_components/Dialog';
+
 import './style.scss';
 
 import { getWithdrawReasons } from '../common/Api';
-import TextField from '@material-ui/core/TextField'
 import { storageService } from '../../utils/validators';
 
 const Landing = (props) => {
@@ -30,13 +26,17 @@ const Landing = (props) => {
 
   const fetchWithdrawReasons = async () => {
     const result = await getWithdrawReasons();
-    storageService().setObject('withdrawReasons',result?.survey?.question);
-    setReasons(result?.survey?.question);
+    if(result?.dnd_flag){
+      navigate('');
+    } else{
+      storageService().setObject('withdrawReasons',result?.survey?.question);
+      setReasons(result?.survey?.question);
+    }
   };
 
   const getSubQuestions = (qstn) => () => {
     if (qstn?.action?.dismiss) {
-      alert('got to withdraw');
+      navigate('');
       return;
     }
 
@@ -55,8 +55,9 @@ const Landing = (props) => {
     <Container
       buttonTitle='Continue'
       fullWidthButton
-      hidePageTitle
+      hideInPageTitle
       noPadding
+
     >
       {!isEmpty(reasons) && (
         <section className='withdraw-reasons'>
@@ -72,24 +73,7 @@ const Landing = (props) => {
           </div>
         </section>
       )}
-      <Dialog open={open} aria-labelledby='form-dialog-title'>
-        <DialogTitle id="form-dialog-title">Please specify your reason</DialogTitle>
-          <DialogContent>
-            <TextField
-              id="reason"
-              value=''
-              onChange={() => {}}
-            />
-          </DialogContent>
-          <DialogActions className="content-button">
-            <Button onClick={handleClose} color="primary" >
-              CANCEL
-            </Button>
-            <Button onClick={handleClose} className="DialogButtonFullWidth">
-              CONTINUE
-            </Button>
-          </DialogActions>
-      </Dialog>
+      <Dialog open={open} close={handleClose} title='Please specify your reason' id='reason' placeholder='Reason' />
     </Container>
   );
 };
