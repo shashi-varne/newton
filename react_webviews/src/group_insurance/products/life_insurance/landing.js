@@ -118,7 +118,7 @@ class FyntuneLanding extends Component {
           error = '';
           this.setErrorData('onload_provider_error');
           this.setState({
-            providerError: "Something's not right. Retry in a while"
+            providerError: 'Seems there is some issue, please try again after sometime'
           })
         }
       }
