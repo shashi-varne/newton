@@ -928,10 +928,10 @@ export function capitalize(string) {
   });
 }
 
-export function getBaseName() {
+export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/webview') !== -1) {
     basename = basename ? basename + 'view' : '';
   }
-  return basename;
+  return window.location.origin + basename;
 }
