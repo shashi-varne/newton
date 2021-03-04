@@ -927,3 +927,11 @@ export function capitalize(string) {
     return f.toUpperCase();
   });
 }
+
+export function getBasePath() {
+  var basename = window.sessionStorage.getItem('base_href') || '';
+  if(basename && basename.indexOf('appl/webview') !== -1) {
+    basename = basename ? basename + 'view/' : '';
+  }
+  return basename;
+}
