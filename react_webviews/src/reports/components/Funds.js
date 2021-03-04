@@ -5,9 +5,10 @@ import Button from "@material-ui/core/Button";
 import { getPathname } from "../constants";
 import { initData } from "../services";
 import { getFunds, getFundMf } from "../common/api";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 import FundNotAvailable from "./mini_components/FundNotAvailable";
 import AskInvestType from "./mini_components/AskInvestType";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Funds = (props) => {
   const params = props?.match?.params || {};
@@ -248,12 +249,7 @@ const Funds = (props) => {
                               fund.current_earnings.amount < 0 ? "red" : "green"
                             }`}
                           >
-                            <>{fund.current_earnings.amount < 0 && "-"}</>
-                            {formatAmountInr(
-                              fund.current_earnings.amount < 0
-                                ? -1 * fund.current_earnings.amount
-                                : fund.current_earnings.amount
-                            )}
+                            {getAmountInInr(fund.current_earnings.amount)}
                             {fund.current_earnings.percent &&
                               fund.current_earnings.percent !== 0 && (
                                 <div
@@ -299,8 +295,14 @@ const Funds = (props) => {
                     <Button
                       onClick={() => getMfDetails(fund)}
                       disabled={isApiRunning}
+                      className={`${isApiRunning && "disabled"}`}
                     >
                       INVEST MORE
+                      {isApiRunning && (
+                        <div className="loader">
+                          <CircularProgress size={20} thickness={5} />
+                        </div>
+                      )}
                     </Button>
                   </>
                 )}

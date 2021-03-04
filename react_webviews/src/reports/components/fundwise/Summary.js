@@ -4,7 +4,10 @@ import { formatAmountInr, isEmpty } from "utils/validators";
 import { getPathname } from "../../constants";
 import { initData } from "../../services";
 import { getFunds, getFundDetailsForSwitch } from "../../common/api";
-import { navigate as navigateFunc } from "../../common/functions";
+import {
+  navigate as navigateFunc,
+  getAmountInInr,
+} from "../../common/functions";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FundSummaryMenu from "../mini_components/FundSummaryMenu";
 import toast from "common/ui/Toast";
@@ -116,7 +119,7 @@ const FundswiseSummary = (props) => {
                       >
                         {fund.redeemed_earnings.amount === 0
                           ? "-"
-                          : formatAmountInr(fund.redeemed_earnings.amount)}
+                          : getAmountInInr(fund.redeemed_earnings.amount)}
                       </h5>
                       <div>Realised earnings</div>
                     </div>
@@ -135,7 +138,7 @@ const FundswiseSummary = (props) => {
                       >
                         {fund.current_earnings.amount === 0
                           ? "-"
-                          : formatAmountInr(fund.current_earnings.amount)}
+                          : getAmountInInr(fund.current_earnings.amount)}
                       </h5>
                       <div>Unrealised earnings</div>
                     </div>

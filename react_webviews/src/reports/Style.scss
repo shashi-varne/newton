@@ -410,11 +410,24 @@
     border-top-right-radius: 0;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+
+    .loader {
+      position: absolute;
+      div {
+        color: white;
+        vertical-align: middle;
+      }
+    }
   }
 
   button:hover {
     background-color: var(--secondary);
     color: white;
+  }
+
+  .disabled {
+    background-color: #bfc1c1 !important;
+    color: rgba(0, 0, 0, 0.38) !important;
   }
 }
 
@@ -679,6 +692,7 @@
           margin: 5px 0;
           font-size: 16px;
           font-weight: 500;
+          line-height: 1.1;
         }
       }
     }

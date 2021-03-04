@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import { formatAmountInr, isEmpty } from "utils/validators";
 import { initData } from "../../services";
-import { getTransactions } from "../../common/api";
+import { getTransactions, getNextTransactions } from "../../common/api";
 
 const FundswiseTransactions = (props) => {
   const params = props?.match?.params || {};
   const amfi = params.amfi || "";
   if (amfi === "" && props.type === "fundswise") props.history.goBack();
   const [reportData, setReportData] = useState({});
-  const [transactions, setTransactions] = useState({});
+  const [transactions, setTransactions] = useState([]);
   const [showSkelton, setShowSkelton] = useState(true);
+  const [isApiRunning, setIsApiRunning] = useState(false);
 
   useEffect(() => {
     initialize();
@@ -24,14 +25,39 @@ const FundswiseTransactions = (props) => {
       return;
     }
     setTransactions(data.transactions);
-    const result = await getTransactions();
-    if (result) {
-      setReportData(result);
+    if (props.type === "fundswise") {
+      const result = await getTransactions();
+      if (result) {
+        setReportData(result);
+      }
+    } else {
+      setReportData(data);
     }
     setShowSkelton(false);
   };
 
-  const handleClick = () => {};
+  const handleClick = async () => {
+    setIsApiRunning(true);
+    try {
+      const result = await getNextTransactions(reportData.next_page);
+      if (!result) {
+        setIsApiRunning(false);
+        return;
+      }
+
+      let data = [...transactions];
+      data.push(...result.transactions);
+      setTransactions(data);
+      let report_data = { ...reportData };
+      report_data.more = result.more;
+      report_data.next_page = result.next_page;
+      setReportData(report_data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsApiRunning(false);
+    }
+  };
 
   return (
     <Container
@@ -39,8 +65,10 @@ const FundswiseTransactions = (props) => {
       headerTitle="Transactions"
       noFooter={!reportData.more}
       buttonTitle="SHOW MORE"
-      handleClick={handleClick}
+      handleClick={() => handleClick()}
       skelton={showSkelton}
+      isApiRunning={isApiRunning}
+      disable={isApiRunning || showSkelton}
     >
       <div className="reports-fundswise-transactions">
         {!showSkelton && (

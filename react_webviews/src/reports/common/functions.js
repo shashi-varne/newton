@@ -1,5 +1,6 @@
 import { getConfig } from "utils/functions";
 import { storageService } from "utils/validators";
+import { formatAmountInr } from "../../utils/validators";
 
 export function navigate(pathname, data = {}) {
   if (data.edit) {
@@ -68,4 +69,9 @@ export const dateOrdinalSuffix = (dom) => {
   if (dom === 22 || dom === 2) return "nd";
   if (dom === 23 || dom === 3) return "rd";
   return "th";
+};
+
+export const getAmountInInr = (amount) => {
+  if (amount >= 0) return formatAmountInr(amount);
+  return `- ${formatAmountInr(-1 * amount)}`;
 };

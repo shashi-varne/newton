@@ -13,6 +13,7 @@ import {
   navigate as navigateFunc,
   getProjectedValue,
   redirectToReports,
+  getAmountInInr,
 } from "../common/functions";
 import { getPathname, storageConstants } from "../constants";
 import { initData } from "../services";
@@ -211,7 +212,7 @@ const Summary = (props) => {
                     <div className="content">
                       <div>Earnings</div>
                       <div className={report.past.earnings > 0 && "green"}>
-                        {formatAmountInr(report.past.earnings)}
+                        {getAmountInInr(report.past.earnings)}
                       </div>
                     </div>
                   </div>

@@ -268,3 +268,21 @@ export const submitOtp = async (data) => {
       throw result.error || result.message || genericErrorMessage;
   }
 };
+
+export const getNextTransactions = async (data) => {
+  const res = await Api.get(data.url);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw res.pfwmessage || genericErrorMessage;
+  }
+  const { result, status_code: status } = res.pfwresponse;
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrorMessage;
+  }
+};

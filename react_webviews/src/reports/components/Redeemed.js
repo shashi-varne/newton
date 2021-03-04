@@ -78,7 +78,7 @@ const Redeemed = (props) => {
                     </div>
                   )}
                 </div>
-                {redeemed.trans_type === "insta-redeem" && (
+                {redeemed.trans_type !== "insta-redeem" && (
                   <div className="progress-bar">
                     <div className="progress">
                       <div className="content">
@@ -135,7 +135,7 @@ const Redeemed = (props) => {
                     </div>
                   </div>
                 )}
-                {redeemed.trans_type !== "insta-redeem" && (
+                {redeemed.trans_type === "insta-redeem" && (
                   <div className="progress-bar upcoming">
                     <div className="progress">
                       <div className="content">
@@ -154,7 +154,22 @@ const Redeemed = (props) => {
                     <div className="progress">
                       <div className="content">
                         <hr className="left"></hr>
-                        {redeemed.amount_credited || redeemed.units_deducted ? (
+                        {redeemed.units_deducted || redeemed.amount_credited ? (
+                          <img
+                            src={require(`assets/completed_step.svg`)}
+                            alt=""
+                          />
+                        ) : (
+                          <span className="dot"></span>
+                        )}
+                        <hr className="right"></hr>
+                      </div>
+                      <div className="text">UNITS DEDUCTED</div>
+                    </div>
+                    <div className="progress">
+                      <div className="content">
+                        <hr className="left"></hr>
+                        {redeemed.amount_credited ? (
                           <img
                             src={require(`assets/completed_step.svg`)}
                             alt=""
@@ -170,21 +185,6 @@ const Redeemed = (props) => {
                           {redeemed.expected_credit_date}
                         </div>
                       </div>
-                    </div>
-                    <div className="progress">
-                      <div className="content">
-                        <hr className="left"></hr>
-                        {redeemed.units_deducted ? (
-                          <img
-                            src={require(`assets/completed_step.svg`)}
-                            alt=""
-                          />
-                        ) : (
-                          <span className="dot"></span>
-                        )}
-                        <hr className="right"></hr>
-                      </div>
-                      <div className="text">UNITS DEDUCTED</div>
                     </div>
                   </div>
                 )}

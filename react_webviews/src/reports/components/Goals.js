@@ -6,7 +6,7 @@ import Slider from "common/ui/Slider";
 import { getPathname } from "../constants";
 import { initData } from "../services";
 import { getReportGoals } from "../common/api";
-import { navigate as navigateFunc } from "../common/functions";
+import { navigate as navigateFunc, getAmountInInr } from "../common/functions";
 
 const Goals = (props) => {
   const sliderConstants = {
@@ -125,8 +125,12 @@ const Goals = (props) => {
                       </div>
                     </div>
                     <div className="content">
-                      <div className="amount green">
-                        {formatAmountInr(goal.earnings)}
+                      <div
+                        className={`amount ${
+                          goal.earnings >= 0 ? "green" : "red"
+                        }`}
+                      >
+                        {getAmountInInr(goal.earnings)}
                         {goal.earnings_percent && goal.earnings_percent !== 0 && (
                           <div
                             className={`earning-percent ${
