@@ -163,15 +163,14 @@ class LoanKnowMore extends Component {
 
         let application_complete = application_status === "application_complete";
 
+        // Salary_receipt_mode
+        // Salary_reciept_mode
+
         if (rejection_cases.indexOf(vendor_application_status || rejection_reason) !== -1 || is_dedupe) {
           this.navigate("loan-status");
-        }
-  
-        if (rejection_cases.indexOf(rejection_reason) !== -1) {
+        } else if ((rejection_cases.indexOf(rejection_reason) !== -1) || (rejection_reason || '').split(' ').join('_') === "Salary reciept mode") {
           this.navigate("loan-status");
-        }
-  
-        if (pan_status === '' || vendor_application_status === "pan") {
+        } else if (pan_status === '' || vendor_application_status === "pan") {
           this.navigate("basic-details");
         } else if (perfios_status === "failure") {
           this.navigate("perfios-status");

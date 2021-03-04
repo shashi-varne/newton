@@ -58,7 +58,7 @@ class PartnerCard extends Component {
             size="large"
             autoFocus
           >
-            {this.props.baseData.cta_title}
+            {this.props.otp_verified ? "RESUME" : "APPLY NOW"}
           </Button>
         </div>
         {this.props.baseData.benefits && (

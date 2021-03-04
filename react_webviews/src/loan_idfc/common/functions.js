@@ -520,6 +520,10 @@ export async function updateApplication(
   this.setErrorData("submit");
   this.sendEvents("next");
 
+  this.setState({
+    title1: ''
+  })
+
   let error = "";
   let errorType = "";
 
@@ -818,6 +822,10 @@ export async function submitApplication(
 ) {
   this.setErrorData("submit");
   this.sendEvents("next");
+
+  this.setState({
+    title1: ''
+  })
 
   let error = "";
   let errorType = "";

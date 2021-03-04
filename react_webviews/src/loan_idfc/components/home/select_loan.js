@@ -25,14 +25,18 @@ class SelectLoan extends Component {
 
     let { selectedVendors, ongoing_loan_details } = this.state;
     let stepContentMapper = [];
-    let status = [];
+    let status = {};
 
-    if (selectedVendors.length === 0) {
+    // if (selectedVendors.length === 0) {
       // this.navigate('home')
-    }
+    // }
 
     ongoing_loan_details.length !== 0 &&
-      ongoing_loan_details.forEach((item) => status.push(item.vendor));
+      ongoing_loan_details.forEach((item) => {
+        status[item.vendor] = {
+          otp_verified: item.otp_verified
+        }
+      });
 
     let vendors_data = {
       idfc: {
@@ -41,7 +45,7 @@ class SelectLoan extends Component {
         subtitle: "Competitive interest rate",
         loan_amount: " ₹40 lakhs",
         logo: "idfc_logo",
-        cta_title: status.includes("idfc") ? "RESUME" : "APPLY NOW",
+        otp_verified: status['idfc'].otp_verified,
         displayTag: true,
         provider_name: "idfc",
         benefits: {
@@ -191,6 +195,7 @@ class SelectLoan extends Component {
                 <PartnerCard
                   key={index}
                   baseData={item}
+                  otp_verified={item.otp_verified}
                   handleBenefits={() => this.handleBenefits(index)}
                   handleClick={this.handleClick}
                   isSelected={this.state.selectedIndexs[index]}

@@ -71,8 +71,8 @@ class Home extends Component {
 
     this.setState(
       {
-        stepContentMapper: stepContentMapper,
         partnerData: partnerData,
+        stepContentMapper: stepContentMapper,
       },
       () => {
         this.onload();
@@ -164,6 +164,7 @@ class Home extends Component {
                   <PartnerCard
                     key={index}
                     baseData={partnerData[item.vendor]}
+                    otp_verified={item.otp_verified}
                     handleClick={() => this.handleResume(item.vendor)}
                   />
                 );
