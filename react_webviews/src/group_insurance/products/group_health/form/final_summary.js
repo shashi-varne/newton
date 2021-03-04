@@ -4,7 +4,7 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../../common/ui/Toast';
-import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common_data';
+import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
@@ -46,6 +46,7 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
         this.resetQuote = resetQuote.bind(this);
+        this.openPdf = openPdf.bind(this);
         this.openMedicalDialog = openMedicalDialog.bind(this);
     }
 
@@ -1072,7 +1073,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </Grid>
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openInBrowser(this.state.lead.terms_and_condition,
+                        I agree to the <span onClick={() => this.openPdf(this.state.lead.terms_and_condition,
                         'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                             Terms and conditions</span></div>
                     </Grid>
