@@ -164,7 +164,7 @@ class Home extends Component {
                   <PartnerCard
                     key={index}
                     baseData={partnerData[item.vendor]}
-                    otp_verified={item.otp_verified}
+                    otp_verified={item.otp_verified || ""}
                     handleClick={() => this.handleResume(item.vendor)}
                   />
                 );

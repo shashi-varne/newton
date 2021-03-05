@@ -45,7 +45,7 @@ class SelectLoan extends Component {
         subtitle: "Competitive interest rate",
         loan_amount: " ₹40 lakhs",
         logo: "idfc_logo",
-        otp_verified: status['idfc'].otp_verified,
+        otp_verified: status['idfc'] ? status['idfc'].otp_verified : '',
         displayTag: true,
         provider_name: "idfc",
         benefits: {
