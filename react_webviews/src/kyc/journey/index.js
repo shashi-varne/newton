@@ -407,7 +407,7 @@ const Journey = (props) => {
         nominee: '/kyc/compliant-nominee-details',
         bank: '/kyc/compliant/bank-details',
         sign: '/kyc/upload/sign',
-        pan: '/kyc/home-kyc',
+        pan: '/kyc/home',
       }
       navigate(stateMapper[key], {
         isEdit: isEdit,
@@ -417,13 +417,13 @@ const Journey = (props) => {
     } else {
       if (show_aadhaar) {
         var stateMapper = {
-          pan: '/kyc/home-kyc',
+          pan: '/kyc/home',
           personal: '/kyc/dl-personal-details1',
           bank_esign: '/kyc/non-compliant/bank-details',
         }
       } else {
         var stateMapper = {
-          pan: '/kyc/home-kyc',
+          pan: '/kyc/home',
           personal: '/kyc/personal-details1',
           address: '/kyc/address-details1',
           docs: '/kyc/upload/intro',

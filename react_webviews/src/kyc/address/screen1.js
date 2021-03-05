@@ -94,34 +94,22 @@ const AddressDetails1 = (props) => {
       setFormData(data)
       return
     }
-    // let userkycDetails = { ...userkyc };
-    // userkycDetails.address.meta_data.address_doc_type =
-    //   form_data.address_doc_type;
-    // userkycDetails.identification.meta_data.is_nri =
-    //   form_data.residential_status === "INDIAN";
+    let userkycDetails = { ...userkyc };
+    userkycDetails.nri_address.meta_data.mobile_number =
+      form_data.mobile_number;
+    userkycDetails.nri_address.meta_data.address_doc_type =
+      form_data.address_doc_type;
+    saveNriAddressDetails1(userkycDetails);
+  };
 
-    setUserKyc((kyc) => ({
-      ...kyc,
-      address: {
-        ...kyc.address,
-        meta_data: {
-          ...kyc.address.meta_data,
-          address_doc_type: form_data.address_doc_type,
-          is_nri: form_data.residential_status === 'INDIAN',
-        },
-      },
-    }))
-    
-  }
-
-  const savePersonalDetails1 = async () => {
-    setIsApiRunning(true)
+  const saveNriAddressDetails1 = async (userKyc) => {
+    setIsApiRunning(true);
     try {
       let item = {
         kyc: {
-          address: userkyc.address.meta_data,
+          nri_address: userKyc.nri_address.meta_data,
         },
-      }
+      };
       const submitResult = await savePanData(item)
       if (!submitResult) return
       navigate(getPathname.addressDetails2, {

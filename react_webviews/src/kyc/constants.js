@@ -14,7 +14,7 @@ export const getPathname = {
   invest: '/invest',
   landing: '/',
   accountMerge: '/account/merge/',
-  homeKyc: '/kyc/home-kyc',
+  homeKyc: '/kyc/home',
   aadhar: '/kyc/aadhar',
   aadharConfirmation: '/kyc/aadhar/confirmation',
   bankList: '/kyc/add-bank',

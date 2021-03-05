@@ -62,7 +62,7 @@ const AddBank = (props) => {
     if (bank_id) {
       data =
         kycDetails.additional_approved_banks.find(
-          (obj) => obj.bank_id.toString() === bank_id
+          (obj) => obj.bank_id === bank_id
         ) || {};
       data.c_account_number = data.account_number;
       if (data.user_rejection_attempts === 3) {

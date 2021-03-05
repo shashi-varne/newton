@@ -10,7 +10,7 @@ import {
   kycStatusMapperInvest,
   premiumBottomSheetMapper,
 } from "./constants";
-import { getKycAppStatus } from "../kyc/services";
+import { getKycAppStatus } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -58,7 +58,7 @@ export async function initialize() {
     isEmpty(userKyc) ||
     isEmpty(currentUser) ||
     (this.state.screenName === "invest_landing" &&
-      getConfig().web &&
+      getConfig().Web &&
       !dataSettedInsideBoot)
   ) {
     await this.getSummary();
@@ -1105,11 +1105,11 @@ export function openPremiumOnboardBottomSheet(
     return "";
   }
 
-  if (getConfig().Web && this.state.screenName != "invest_landing") {
+  if (getConfig().Web && this.state.screenName !== "invest_landing") {
     return;
   }
 
-  if (!getConfig().Web && this.state.screenName != "landing") {
+  if (!getConfig().Web && this.state.screenName !== "landing") {
     return;
   }
 
@@ -1140,7 +1140,7 @@ export function openKyc() {
     }
   } else {
     if (kycJourneyStatus === "ground") {
-      this.navigate("/home-kyc");
+      this.navigate("/kyc/home");
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },

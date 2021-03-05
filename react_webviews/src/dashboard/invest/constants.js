@@ -318,7 +318,7 @@ export const kycStatusMapperInvest = {
     title: "Create investment profile",
     subtitle: "Paperless KYC in two minutes",
     button_text: "CREATE NOW",
-    next_state: "/home-kyc",
+    next_state: "/kyc/home",
   },
   ground_premium: {
     icon: "ic_card_kyc_default.svg",

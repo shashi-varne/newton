@@ -23,9 +23,9 @@ import KycBankVerify from './bank-kyc/KycBankVerify'
 import { themeConfig } from 'utils/constants'
 import './Style.scss'
 
-import Aadhar from './aadhar'
-import AadharConfirmation from './aadhar/confirmation'
-import AadharCallback from './aadhar/callback'
+// import Aadhar from './aadhar'
+// import AadharConfirmation from './aadhar/confirmation'
+// import AadharCallback from './aadhar/callback'
 
 import AddBank from './bank/AddBank'
 import AddBankVerify from './bank/AddBankVerify'
@@ -123,14 +123,14 @@ const Kyc = (props) => {
             path={`${url}/upload/address`}
             component={AddressUpload}
           />
-          <Route exact path={`${url}/home-kyc`} component={Home} />
+          <Route exact path={`${url}/home`} component={Home} />
           <Route
             exact
             path={`${url}/:userType/nominee-details`}
             component={Nominee}
           />
           <Route exact path={`${url}/report`} component={Report} />
-          <Route exact path={`${url}/aadhar`} component={Aadhar} />
+          {/* <Route exact path={`${url}/aadhar`} component={Aadhar} />
           <Route
             exact
             path={`${url}/aadhar/confirmation`}
@@ -140,7 +140,7 @@ const Kyc = (props) => {
             exact
             path={`${url}/aadhar/callback/:error`}
             component={AadharCallback}
-          />
+          /> */}
           <Route
             exact
             path={`${url}/compliant-personal-details`}

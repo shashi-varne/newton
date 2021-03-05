@@ -23,23 +23,6 @@ import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 
-////////////////////////////// KYC ///////////////////////////////
-
-import Kyc from "./kyc";
-
-import Home from "./kyc/home";
-
-import Aadhar from "./kyc/aadhar";
-import AadharConfirmation from "./kyc/aadhar/confirmation";
-import AadharCallback from "./kyc/aadhar/callback";
-
-import AddBank from "./kyc/bank/AddBank";
-import AddBankVerify from "./kyc/bank/AddBankVerify";
-import BanksList from "./kyc/bank/BanksList";
-import BankDetails from "./kyc/bank/BankDetails";
-
-import RegistrationSuccess from './kyc/success'
-
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: "f",
@@ -96,19 +79,6 @@ const Invest = (props) => {
             render={(props) => <NfoCheckout {...props} type="nfo" />}
           />
           <Route path={`${url}sipdates`} component={SipDates} />
-          
-         {/* KYC ROUTING */}
-          
-          <Route path={`${url}kyc`} component={Kyc} />
-          <Route exact path={`${url}home-kyc`} component={Home} />
-          <Route exact path={`${url}aadhar`} component={Aadhar} />
-          <Route exact path={`${url}aadhar/confirmation`} component={AadharConfirmation} />
-          <Route exact path={`${url}aadhar/callback/:error`} component={AadharCallback} />
-          <Route exact path={`${url}approved/banks/doc`} component={AddBank} />
-          <Route exact path={`${url}approved/banks/verify/:bank_id`} component={AddBankVerify} />
-          <Route exact path={`${url}add-bank`} component={BanksList} />
-          <Route exact path={`${url}add-bank/details/:bank_id`} component={BankDetails} />                
-          <Route exact path={`${url}registration/success`} component={RegistrationSuccess} />
           
           <Route component={NotFound} />
         </Switch>

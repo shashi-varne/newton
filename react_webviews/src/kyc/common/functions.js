@@ -14,8 +14,8 @@ export function navigate(pathname, data = {}) {
     this.history.push({
       pathname: pathname,
       search: data?.searchParams || getConfig().searchParams,
-      state: data.state,
-      params: data.params,
+      state: data?.state,
+      params: data?.params,
     });
   }
 }

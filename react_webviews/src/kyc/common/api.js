@@ -184,7 +184,7 @@ export const addAdditionalBank = async (data) => {
     case 200:
       return result
     default:
-      throw result.error || result.message || genericErrorMessage;
+      throw result.message || result.error || genericErrorMessage;
   }
 }
 
