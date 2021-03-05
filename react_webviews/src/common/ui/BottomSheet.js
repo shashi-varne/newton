@@ -27,7 +27,7 @@ class BottomSheetClass extends Component {
         return (
             <Dialog
                 id="bottom-popup"
-                open={parent && parent.state && data.dialog_name ?  parent.state[data.dialog_name] : this.props.open || false}
+                open={parent && parent.state && data.dialog_name ? parent.state[data.dialog_name] : this.props.open || false}
                 onClose={parent.handleClose || data.handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
@@ -44,22 +44,21 @@ class BottomSheetClass extends Component {
                             {(data.icon || data.src) &&
                                 <div className="t-right">
                                     <Imgc className='top-right-image'
-                                        src={data.src ? data.src:  require(`assets/${data.icon}`)} alt="" />
+                                        src={data.src ? data.src : require(`assets/${data.icon}`)} alt="" />
                                 </div>}
 
                         </div>
-                       {data.helpClick && <div className="help">
-                            
+                        {data.helpClick && 
+                        <div className="help">
                             <Button
-                            
-                            fullWidth={true}
-                            variant="raised"
-                            size="large"
-                            color="secondary"
-                            onClick={data.helpClick}
-                            autoFocus
-                            type={'textonly'}
-                            buttonTitle={'GET HELP'}
+                                fullWidth={true}
+                                variant="raised"
+                                size="large"
+                                color="secondary"
+                                onClick={data.helpClick}
+                                autoFocus
+                                type={'textonly'}
+                                buttonTitle={'GET HELP'}
                             />
                         </div>}
 

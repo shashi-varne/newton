@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
-import { createGenerateClassName, jssPreset } from '@material-ui/core/styles';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { createGenerateClassName, jssPreset,
+  MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { themeConfig } from 'utils/constants';
 import { withRouter } from "react-router";
 import { ToastContainer } from 'react-toastify';
