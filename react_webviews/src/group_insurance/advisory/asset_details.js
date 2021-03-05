@@ -306,7 +306,7 @@ class AdvisoryAssetDetails extends Component {
     render() {
         return(
             <Container
-            // events={this.sendEvents('just_set_events')}
+            events={this.sendEvents('just_set_events')}
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}
