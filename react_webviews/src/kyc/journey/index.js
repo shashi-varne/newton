@@ -55,6 +55,20 @@ const Journey = (props) => {
       return false
     }
   }
+
+  const getButtonText = () => {
+    let ctaText = ''
+    if (customer_verified) {
+      ctaText = 'UNLOCK NOW'
+    }
+    if (canSubmit()) {
+      ctaText = 'SUBMIT'
+    } else {
+      ctaText = 'CONTINUE'
+    }
+
+    return ctaText
+  }
   const getJourneyData = (isCompliant, userKyc, show_aadhaar) => {
     let journeyData = []
     if (isCompliant) {
@@ -358,23 +372,54 @@ const Journey = (props) => {
     ctaText = 'UNLOCK NOW'
   }
 
+  // $scope.goNext = function () {
+  //   $scope.sendCleverTapEvents('next');
+  //   if (!$scope.canSubmit) {
+  //     for (var i = 0; i < $scope.journeyData.length; i++) {
+  //       if ($scope.journeyData[i].status !== "completed") {
+  //         if ($scope.kyc_status !== 'compliant' && $scope.show_aadhaar && $scope.journeyData[i].key === 'digilocker') {
+  //           $scope.proceed();
+  //           break;
+  //         } else {
+  //           $scope.handleEdit($scope.journeyData[i].key, i);
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   if ($scope.kycJourneyStatus === "rejected" && !$scope.show_aadhaar) {
+  //     $scope.handleEdit($scope.journeyData[3].key, 3);
+  //   }
+
+  //   if ($scope.canSubmit) {
+  //     $scope.finalSubmissionData = {
+  //       kyc: {
+  //         identification: {
+  //           fatca_declaration: true
+  //         }
+  //       }
+  //     };
+  //     $scope.submitData();
+  //   }
+  // };
+
   const goNext = async () => {
     try {
-      if (
-        journeyData.length &&
-        journeyData[journeyData.length - 1].status === 'completed' &&
-        kycJourneyStatus !== 'rejected'
-      ) {
+      if (!canSubmit()) {
         for (var i = 0; i < journeyData.length; i++) {
           if (journeyData[i].status !== 'completed') {
+            console.log('completed not **** ')
             if (
               kyc_status !== 'compliant' &&
               show_aadhaar &&
               journeyData[i].key === 'digilocker'
             ) {
+              console.log('Not Completed')
               await proceed()
               break
             } else {
+              console.log('Here')
               handleEdit(journeyData[i].key, i)
               break
             }
@@ -383,10 +428,12 @@ const Journey = (props) => {
       }
 
       if (kycJourneyStatus === 'rejected' && !show_aadhaar) {
+        console.log('Rejected')
         handleEdit(journeyData[3].key, 3)
       }
 
       if (canSubmit()) {
+        console.log('Submit Data')
         await submitData()
       }
     } catch (err) {
@@ -397,6 +444,7 @@ const Journey = (props) => {
   }
 
   const handleEdit = (key, index, isEdit) => {
+    console.log('Inside handleEdit')
     if (isCompliant) {
       if (key === 'pan' && !customer_verified) {
         navigate('/kyc/compliant-confirm-pan')
@@ -414,6 +462,7 @@ const Journey = (props) => {
         backToJourney: key === 'sign' ? true : null,
         userType: 'compliant',
       })
+      return
     } else {
       if (show_aadhaar) {
         var stateMapper = {
@@ -427,13 +476,14 @@ const Journey = (props) => {
           personal: '/kyc/personal-details1',
           address: '/kyc/address-details1',
           docs: '/kyc/upload/intro',
-          esign: '/kyc-esign',
+          esign: '/kyc-esign/info',
         }
       }
       navigate(stateMapper[key], {
         isEdit: isEdit,
         userType: 'non-compliant',
       })
+      return
     }
   }
 
@@ -585,17 +635,18 @@ const Journey = (props) => {
     navigate('/kyc/journey', { show_aadhar: false })
   }
 
-  const proceed = async () => {
+  const proceed = () => {
     /**
      * @TODO native callback handlers
      */
     setShowAadhaar(true)
+    setOpen(true)
   }
 
   return (
     <Container
       hideInPageTitle
-      buttonTitle={canSubmit() ? 'SUBMIT' : ctaText || 'CONTINUE'}
+      buttonTitle={getButtonText()}
       disable={loading}
       title="KYC Journey"
       classOverRideContainer="pr-container"
