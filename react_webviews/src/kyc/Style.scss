@@ -1412,7 +1412,19 @@
     font-size: 11px;
     color: #767e86;
   }
+  .banner .left {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-right: 20px;
+  }
 
+  .banner .left .icon {
+    width: 20px;
+    height: 20px;
+  }
+  
   .banner .edit {
     text-transform: uppercase;
     color: var(--secondary);

@@ -25,7 +25,6 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null)
   const inputEl = useRef(null)
 
-  let bank_id = kyc?.bank?.meta_data?.bank_id
   let bankData = kyc?.bank?.meta_data
 
   const userType = props?.match.params?.userType
@@ -35,12 +34,11 @@ const KycUploadDocuments = (props) => {
   const additional = urlparams?.additional
   const isEdit = urlparams?.isEdit
 
-  if (additional) {
-    bank_id = urlparams?.bank_id
-    bankData = kyc?.additional_approved_banks?.find(function (obj) {
-      return obj.bank_id === bank_id
-    })
-  }
+  let bank_id = urlparams.bank_id || kyc?.bank?.meta_data?.bank_id
+
+  bankData = kyc?.additional_approved_banks?.find(function (obj) {
+    return obj.bank_id === bank_id
+  })
 
   const handleChange = (event) => {
     setFile(event.target.files[0])
@@ -137,7 +135,9 @@ const KycUploadDocuments = (props) => {
       <section id="kyc-bank-kyc-upload-docs" className="page-body-kyc">
         <div className="title">Upload documents</div>
         <div className="banner">
-          <img src={bankData.ifsc_image} alt="IFSC Image" />
+          <div className="left">
+            <img src={bankData?.ifsc_image || ''} alt="bank" className="icon" />
+          </div>
           <div className="title">Account Number</div>
           <div className="edit" onClick={handleEdit}>
             edit
