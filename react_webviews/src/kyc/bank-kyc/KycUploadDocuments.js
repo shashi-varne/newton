@@ -37,7 +37,7 @@ const KycUploadDocuments = (props) => {
   let bank_id = urlparams.bank_id || kyc?.bank?.meta_data?.bank_id
 
   bankData = kyc?.additional_approved_banks?.find(function (obj) {
-    return obj.bank_id === bank_id
+    return obj.bank_id === Number(bank_id)
   })
 
   const handleChange = (event) => {
@@ -136,9 +136,13 @@ const KycUploadDocuments = (props) => {
         <div className="title">Upload documents</div>
         <div className="banner">
           <div className="left">
-            <img src={bankData?.ifsc_image || ''} alt="bank" className="icon" />
+            <img src={bankData?.ifsc_image} alt="bank" className="icon" />
           </div>
-          <div className="title">Account Number</div>
+          <div className="acc_no">
+            <div className="title">Account number</div>
+            <div className="value">{bankData?.account_number}</div>
+          </div>
+
           <div className="edit" onClick={handleEdit}>
             edit
           </div>

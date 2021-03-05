@@ -131,7 +131,7 @@ const AddBankVerify = (props) => {
   const checkBankDetails = () => {
     navigate(getPathname.addBank, {
       state: {
-        bank_id: bank_id,
+        bank_id: bankData.bank_id,
       },
     });
   };

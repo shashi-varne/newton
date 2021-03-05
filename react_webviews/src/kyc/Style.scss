@@ -1408,7 +1408,6 @@
     align-items: center;
   }
   .banner .title {
-    margin-left: 10px;
     font-size: 11px;
     color: #767e86;
   }
@@ -1420,10 +1419,15 @@
     margin-right: 20px;
   }
 
+  .banner .acc_no {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+
   .banner .left .icon {
     width: 20px;
     height: 20px;
-  }
+  } 
   
   .banner .edit {
     text-transform: uppercase;

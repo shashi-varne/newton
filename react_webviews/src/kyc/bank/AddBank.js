@@ -65,7 +65,7 @@ const AddBank = (props) => {
           (obj) => obj.bank_id === bank_id
         ) || {};
       data.c_account_number = data.account_number;
-      if (data.user_rejection_attempts === 3) {
+      if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
       } else if (bankData.user_rejection_attempts === 2) {
         setNote({
