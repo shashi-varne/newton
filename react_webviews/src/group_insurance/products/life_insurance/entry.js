@@ -127,7 +127,7 @@ class LifeInsuranceEntry extends Component {
         noFooter={true}
         showLoader={this.state.show_loader}
         title="Life Insurance"
-        styleHeader={{marginLeft: '10px'}}> 
+        > 
         <div className="group-health-insurance-entry">
           <div className='products'>
             <div className='health_insurance'>Must have plans for your family</div>
