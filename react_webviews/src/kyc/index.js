@@ -9,15 +9,16 @@ import {
   createMuiTheme,
 } from '@material-ui/core/styles'
 import { ToastContainer } from 'react-toastify'
-import NotFound from "../common/components/NotFound";
+import NotFound from '../common/components/NotFound'
 
 import Journey from './journey'
-import Address from './address'
 import Upload from './upload'
 import Intro from './upload/intro'
 import Progress from './upload/progress'
 import Pan from './upload/pan'
 import AddressUpload from './upload/address'
+import KycBankDetails from './bank-kyc/KycBankDetails'
+import KycBankVerify from './bank-kyc/KycBankVerify'
 
 import { themeConfig } from 'utils/constants'
 import './Style.scss'
@@ -48,6 +49,18 @@ import PersonalDetails1 from './personal_details/Screen1'
 import PersonalDetails2 from './personal_details/Screen2'
 import PersonalDetails3 from './personal_details/Screen3'
 import PersonalDetails4 from './personal_details/Screen4'
+import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
+import SampleDocuments from './bank-kyc/SampleDocuments'
+import Esign from './esign'
+import AddressDetails2 from './address/AddressDetails2'
+import AddressDetails1 from './address/screen1'
+import DigilockerPersonalDetails1 from './digilocker/components/screen1'
+import ChangeAddressDetails1 from './address/change_address/ChangeAddressDetails1'
+import NriAddressDetails1 from './address/nri/NRIAddressDetails1'
+import NRIAddressDetails2 from './address/nri/NRIAddressDetails2'
+import Success from './digilocker/components/success'
+import Failed from './digilocker/components/failed'
+import DigilockerCallback from './digilocker/components/digilockercallback'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -66,34 +79,178 @@ const Kyc = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route exact path={`${url}/journey`} component={Journey} />
-          <Route exact path={`${url}/personal-details1`} component={PersonalDetails1} />
-          <Route exact path={`${url}/personal-details2`} component={PersonalDetails2} />
-          <Route exact path={`${url}/personal-details3`} component={PersonalDetails3} />
-          <Route exact path={`${url}/personal-details4`} component={PersonalDetails4} />
-          <Route exact path={`${url}/address`} component={Address} />
+          <Route
+            exact
+            path={`${url}/personal-details1`}
+            component={PersonalDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/personal-details2`}
+            component={PersonalDetails2}
+          />
+          <Route
+            exact
+            path={`${url}/personal-details3`}
+            render={(props) => <PersonalDetails3 {...props} type="default" />}
+          />
+          <Route
+            exact
+            path={`${url}/personal-details4`}
+            component={PersonalDetails4}
+          />
+          <Route
+            exact
+            path={`${url}/address-details1`}
+            component={AddressDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/change-address-details1`}
+            component={ChangeAddressDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/nri-address-details1`}
+            component={NriAddressDetails1}
+          />
           <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
           <Route exact path={`${url}/upload/pan`} component={Pan} />
-          <Route exact path={`${url}/upload/address`} component={AddressUpload} />
+          <Route
+            exact
+            path={`${url}/upload/address`}
+            component={AddressUpload}
+          />
           <Route exact path={`${url}/home-kyc`} component={Home} />
-          <Route exact path={`${url}/:userType/nominee-details`} component={Nominee} />
+          <Route
+            exact
+            path={`${url}/:userType/nominee-details`}
+            component={Nominee}
+          />
           <Route exact path={`${url}/report`} component={Report} />
           <Route exact path={`${url}/aadhar`} component={Aadhar} />
-          <Route exact path={`${url}/aadhar/confirmation`} component={AadharConfirmation} />
-          <Route exact path={`${url}/aadhar/callback/:error`} component={AadharCallback} />
-          <Route exact path={`${url}/compliant-personal-details`} component={CompliantPersonalDetails1} />
-          <Route exact path={`${url}/compliant-personal-details2`} component={CompliantPersonalDetails2} />
-          <Route exact path={`${url}/compliant-confirm-pan`} component={ConfirmPan} />
-          <Route exact path={`${url}/compliant-report-complete`} component={KycComplete} />
-          <Route exact path={`${url}/compliant-report-details`} component={CompliantReport} />
-          <Route exact path={`${url}/compliant-report-verified`} component={Verify} />
-          <Route exact path={`${url}/rta-compliant-personal-details`} component={RtaCompliantPersonalDetails} />
-          <Route exact path={`${url}/registration/success`} component={RegistrationSuccess} />
+          <Route
+            exact
+            path={`${url}/aadhar/confirmation`}
+            component={AadharConfirmation}
+          />
+          <Route
+            exact
+            path={`${url}/aadhar/callback/:error`}
+            component={AadharCallback}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-personal-details`}
+            component={CompliantPersonalDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-personal-details2`}
+            component={CompliantPersonalDetails2}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-confirm-pan`}
+            component={ConfirmPan}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-report-complete`}
+            component={KycComplete}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-report-details`}
+            component={CompliantReport}
+          />
+          <Route
+            exact
+            path={`${url}/compliant-report-verified`}
+            component={Verify}
+          />
+          <Route
+            exact
+            path={`${url}/rta-compliant-personal-details`}
+            component={RtaCompliantPersonalDetails}
+          />
+          <Route
+            exact
+            path={`${url}/registration/success`}
+            component={RegistrationSuccess}
+          />
           <Route exact path={`${url}/approved/banks/doc`} component={AddBank} />
-          <Route exact path={`${url}/approved/banks/verify/:bank_id`} component={AddBankVerify} />
+          <Route
+            exact
+            path={`${url}/approved/banks/verify/:bank_id`}
+            component={AddBankVerify}
+          />
           <Route exact path={`${url}/add-bank`} component={BanksList} />
-          <Route exact path={`${url}/add-bank/details/:bank_id`} component={BankDetails} />                
+          <Route
+            exact
+            path={`${url}/add-bank/details/:bank_id`}
+            component={BankDetails}
+          />
+          <Route
+            exact
+            path={`${url}/:userType/bank-details`}
+            component={KycBankDetails}
+          />
+          <Route
+            exact
+            path={`${url}/:userType/bank-verify`}
+            component={KycBankVerify}
+          />
+          <Route
+            exact
+            path={`${url}/:userType/upload-documents`}
+            component={KycUploadDocuments}
+          />
+          <Route
+            exact
+            path={`${url}/sample-documents`}
+            component={SampleDocuments}
+          />
+          <Route exact path={`${url}/esign`} component={Esign} />
+          <Route
+            exact
+            path={`${url}/address-details2`}
+            component={AddressDetails2}
+          />
+          <Route
+            exact
+            path={`${url}/dl/personal-details1`}
+            component={DigilockerPersonalDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/dl/personal-details2`}
+            render={(props) => (
+              <PersonalDetails3 {...props} type="digilocker" />
+            )}
+          />
+          <Route
+            exact
+            path={`${url}/dl/personal-details3`}
+            render={(props) => (
+              <PersonalDetails4 {...props} type="digilocker" />
+            )}
+          />
+          <Route exact path={`${url}/digilocker/success`} component={Success} />
+          <Route exact path={`${url}/digilocker/failed`} component={Failed} />
+          <Route exact path={`${url}/digilocker/callback/:status`} component={DigilockerCallback} />
+          <Route
+            exact
+            path={`${url}/nri-address-details1`}
+            component={NriAddressDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/nri-address-details2`}
+            component={NRIAddressDetails2}
+          />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

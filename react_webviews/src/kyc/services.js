@@ -25,9 +25,9 @@ export async function getAccountSummary(params = {}) {
   }
   const response = await Api.post(url, params)
   if (
-    response.pfwresponse.status_code === 200
+    response?.pfwresponse?.status_code === 200
   ) {
-    return response.pfwresponse.result
+    return response?.pfwresponse?.result
   } else {
     throw new Error(response.pfwresponse.result.message)
   }
@@ -150,7 +150,7 @@ export function getKycAppStatus(kyc) {
   let docRejected = 0
   let rejectedItems = []
   let fieldsToCheck = []
-  if (kyc.kyc_status === 'compliant') {
+  if (kyc?.kyc_status === 'compliant') {
     fieldsToCheck = [
       { name: 'pan', keys: ['meta_data_status'] },
       { name: 'bank', keys: ['meta_data_status'] },
@@ -169,7 +169,7 @@ export function getKycAppStatus(kyc) {
       { name: 'ipvvideo', keys: ['doc_status'] },
     ]
   }
-  if (kyc.address.meta_data.is_nri) {
+  if (kyc?.address?.meta_data?.is_nri) {
     fieldsToCheck.push({
       name: 'nri_address',
       keys: ['doc_status', 'meta_data_status'],
@@ -213,26 +213,26 @@ export function getKycAppStatus(kyc) {
   }
 
   if (
-    kyc.kyc_status === 'compilant' &&
-    kyc.application_status_v2 !== 'submitted' &&
-    kyc.customer_vrified !== 'VERIFIED'
+    kyc?.kyc_status === 'compilant' &&
+    kyc?.application_status_v2 !== 'submitted' &&
+    kyc?.customer_vrified !== 'VERIFIED'
   ) {
     status = 'ground'
   }
 
-  if (kyc.kyc_status === 'compilant' && (kyc.application_status_v2 !== 'submitted' && kyc.application_status_v2 !== 'complete') && kyc.customer_verified === 'UNVERIFIED') {
+  if (kyc?.kyc_status === 'compilant' && (kyc?.application_status_v2 !== 'submitted' && kyc?.application_status_v2 !== 'complete') && kyc?.customer_verified === 'UNVERIFIED') {
     status = 'ground_premium'
   }
 
-  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'comliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
+  if (!kyc?.address.meta_data?.is_nri && kyc?.kyc_status !== 'comliant' && kyc?.dl_docs_status !== '' && kyc?.dl_docs_status !== 'init' && kyc?.dl_docs_status !== null) {
     status = 'ground_aadhar'
   }
 
-  if (kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
+  if (kyc?.application_status_v2 === 'init' && kyc?.pan.meta_data.pan_number && kyc?.customer_verified === 'VERIFIED' && (kyc?.dl_docs_status === '' || kyc?.dl_docs_status === 'init' || kyc?.dl_docs_status === null)) {
     status = 'incomplete'
   }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null) && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+  if (kyc?.kyc_status !== 'compliant' && (kyc?.dl_docs_status === '' || kyc?.dl_docs_status === 'init' || kyc?.dl_docs_status === null) && (kyc?.application_status_v2 === 'submitted' || kyc?.application_status_v2 === 'complete') && kyc?.sign_status !== 'signed') {
     status = 'incomplete';
   }
 

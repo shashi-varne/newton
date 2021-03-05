@@ -6,6 +6,8 @@ import { Button } from '@material-ui/core'
 
 const ShowAadharDialog = ({ open, onClose }) => {
   const productName = getConfig().productName
+  
+  
   return (
     <Dialog open={open} onClose={onClose}>
       <section className="kyc-show-aadhar">

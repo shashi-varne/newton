@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Container from "../common/Container";
+import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
@@ -7,18 +7,16 @@ import {
   maritalStatusOptions,
   storageConstants,
   getPathname,
-} from "../constants";
-import { initData } from "../services";
+} from "../../constants";
+import { initData } from "../../services";
 import {
   storageService,
-  formatDate,
-  dobFormatTest,
   isEmpty,
   validateNumber,
   validateAlphabets,
-} from "../../utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+} from "utils/validators";
+import { validateFields, navigate as navigateFunc } from "../../common/functions";
+import { savePanData } from "../../common/api";
 import toast from "common/ui/Toast";
 
 const PersonalDetails1 = (props) => {
@@ -60,13 +58,24 @@ const PersonalDetails1 = (props) => {
       gender: userkycDetails.identification?.meta_data?.gender || "",
       marital_status:
         userkycDetails.identification?.meta_data?.marital_status || "",
+      father_name: userkycDetails.pan?.meta_data?.father_name || "",
+      mother_name: userkycDetails.pan?.meta_data?.mother_name || "",
+      spouse_name: userkycDetails.identification.meta_data.spouse_name || "",
     };
     setShowLoader(false);
     setFormData({ ...formData });
   };
 
   const handleClick = () => {
-    let keysToCheck = ["name", "dob", "gender", "marital_status"];
+    let keysToCheck = [
+      "name",
+      "dob",
+      "gender",
+      "marital_status",
+      "father_name",
+      "mother_name",
+    ];
+    if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
     if (currentUser.email === null) keysToCheck.push("email");
     if (currentUser.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
@@ -83,6 +92,10 @@ const PersonalDetails1 = (props) => {
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
+    userkycDetails.pan.meta_data.father_name = form_data.father_name;
+    userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
+    if (form_data.marital_status === "MARRIED")
+      userkycDetails.pan.meta_data.spouse_name = form_data.spouse_name;
     savePersonalDetails1(userkycDetails);
   };
 
@@ -92,13 +105,12 @@ const PersonalDetails1 = (props) => {
       let item = {
         kyc: {
           pan: userKyc.pan.meta_data,
-          address: userKyc.address.meta_data,
           identification: userKyc.identification.meta_data,
         },
       };
       const submitResult = await savePanData(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails2, {
+      navigate(getPathname.digilockerPersonalDetails2, {
         state: {
           isEdit: isEdit,
         },
@@ -113,20 +125,13 @@ const PersonalDetails1 = (props) => {
 
   const handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
-    if (value && name === "name" && !validateAlphabets(value)) return;
+    if (value && name.includes("name") && !validateAlphabets(value)) return;
     if (name === "mobile" && value && !validateNumber(value)) return;
     let formData = { ...form_data };
     if (name === "marital_status")
       formData[name] = maritalStatusOptions[value].value;
     else if (name === "gender") formData[name] = genderOptions[value].value;
-    else if (name === "dob") {
-      if (!dobFormatTest(value)) {
-        return;
-      }
-      let input = document.getElementById("dob");
-      input.onkeyup = formatDate;
-      formData[name] = value;
-    } else formData[name] = value;
+    else formData[name] = value;
     if (!value && value !== 0) formData[`${name}_error`] = "This is required";
     else formData[`${name}_error`] = "";
     setFormData({ ...formData });
@@ -147,7 +152,7 @@ const PersonalDetails1 = (props) => {
           {title} <span>1/4</span>
         </div>
         <div className="kyc-main-subtitle">
-          We need basic details to verify identity
+          Please fill your basic details for further verification
         </div>
         <main>
           <Input
@@ -159,18 +164,6 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
-          />
-          <Input
-            label="Date of birth(DD/MM/YYYY)"
-            class="input"
-            value={form_data.dob || ""}
-            error={form_data.dob_error ? true : false}
-            helperText={form_data.dob_error || ""}
-            onChange={handleChange("dob")}
-            maxLength={10}
-            type="text"
-            id="dob"
             disabled={isApiRunning}
           />
           {currentUser.email === null && (
@@ -198,6 +191,27 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           )}
+          <Input
+            label="Father's name"
+            class="input"
+            value={form_data.father_name || ""}
+            error={form_data.father_name_error ? true : false}
+            helperText={form_data.father_name_error || ""}
+            onChange={handleChange("father_name")}
+            maxLength={20}
+            type="text"
+            disabled={isApiRunning}
+          />
+          <Input
+            label="Mother's name"
+            class="input"
+            value={form_data.mother_name || ""}
+            error={form_data.mother_name_error ? true : false}
+            helperText={form_data.mother_name_error || ""}
+            onChange={handleChange("mother_name")}
+            type="text"
+            disabled={isApiRunning}
+          />
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
@@ -226,6 +240,18 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           </div>
+          {form_data.marital_status === "MARRIED" && (
+            <Input
+              label="Spouse"
+              class="input"
+              value={form_data.spouse_name || ""}
+              error={form_data.spouse_name_error ? true : false}
+              helperText={form_data.spouse_name_error || ""}
+              onChange={handleChange("spouse_name")}
+              type="text"
+              disabled={isApiRunning}
+            />
+          )}
         </main>
       </div>
     </Container>
