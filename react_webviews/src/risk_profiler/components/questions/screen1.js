@@ -8,6 +8,7 @@ import { getConfig } from 'utils/functions';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
+import { storageService } from '../../../utils/validators';
 
 class QuestionScreen1 extends Component {
   constructor(props) {
@@ -112,7 +113,8 @@ class QuestionScreen1 extends Component {
         "user_action": user_action,
         "screen_name": 'Saving',
         "q1": this.state.question1 ? 'answered' : 'empty',
-        "q2": this.state.question2 ? 'answered' : 'empty'
+        "q2": this.state.question2 ? 'answered' : 'empty',
+        flow: storageService().get('risk-entry-flow') || '',
       }
     };
     if (user_action === 'just_set_events') {

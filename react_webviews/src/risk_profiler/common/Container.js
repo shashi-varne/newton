@@ -86,8 +86,8 @@ class Container extends Component {
 
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
-
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        this.props.history.goBack();
+        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
         return;
       }
     }
@@ -106,7 +106,8 @@ class Container extends Component {
     switch (pathname) {
       case "/risk":
       case "/risk/intro":
-        nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        this.props.history.goBack();
+        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
         break;
       case "/risk/recommendation":
         this.navigate('result');

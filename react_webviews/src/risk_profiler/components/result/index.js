@@ -17,6 +17,8 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
+import { getUrlParams, storageService } from '../../../utils/validators';
+import { pick } from 'lodash';
 
 
 class Result extends Component {
@@ -25,11 +27,26 @@ class Result extends Component {
     this.state = {
       show_loader: true,
       openDialogReset: false,
-      params: qs.parse(props.history.location.search.slice(1)),
+      params: this.setEntryParams(),
       productName: getConfig().productName
-    }
+    };    
   }
 
+  setEntryParams = () => {
+    const urlParams = getUrlParams();
+    // const entryParams = storageService().getObject('risk-entry-params') || {};
+    console.log('URLP', urlParams);
+    if (urlParams.fromExternalSrc) {
+      storageService().setObject(
+        'risk-entry-params',
+        pick(urlParams, ['amount', 'flow', 'term', 'type', 'year', 'subType', 'partner_code'])
+      );
+      storageService().set('flow', urlParams.flow);
+    }
+    // return entryParams;
+
+    return urlParams;
+  }
 
   async componentDidMount() {
     try {
@@ -44,7 +61,7 @@ class Result extends Component {
           show_loader: false
         });
       } else {
-        this.navigate('intro');
+        this.navigate('intro', true);
       }
     } catch (err) {
       this.setState({
@@ -54,14 +71,24 @@ class Result extends Component {
     }
   }
 
-  navigate = (pathname) => {
-    this.props.history.push({
-      pathname: pathname,
-      search: getConfig().searchParams,
-      params: {
-        indicator: (this.state.score) ? this.state.score.indicator : false
-      }
-    });
+  navigate = (pathname, replace) => {
+    let params = {
+      indicator: (this.state.score) ? this.state.score.indicator : false
+    };
+
+    if (!replace) {
+      this.props.history.push({
+        pathname: pathname,
+        search: getConfig().searchParams,
+        params,
+      });
+    } else {
+      this.props.history.replace({
+        pathname: pathname,
+        search: getConfig().searchParams,
+        params,
+      });
+    }
   }
 
   sendEvents(user_action) {
@@ -70,7 +97,8 @@ class Result extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'Result',
-        "risk_tolerance": this.state.score.indicator
+        "risk_tolerance": this.state.score.indicator,
+        flow: this.state.params.flow,
       }
     };
     if (user_action === 'just_set_events') {
@@ -82,7 +110,54 @@ class Result extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
-    this.navigate('recommendation');
+    // TODO: Redirect based on URL param or app version conditionally to old flow or new flow
+    // ------------ OLD FLOW ---------------
+    // this.navigate('recommendation');
+    // -------------------------------------
+    
+    // ------------ NEW FLOW ---------------
+    const openWebModule = getConfig().isWebCode;
+    const riskEntryParams = storageService().getObject('risk-entry-params') || {};
+    console.log('openWebModule', openWebModule, ' ,riskEntryParams', JSON.stringify(riskEntryParams));
+    if (openWebModule) {
+      window.location.href = this.redirectUrlBuilder(riskEntryParams);
+    } else {
+      // TODO: Inform native of this callback
+      nativeCallback({
+        action: 'recommendation',
+        message: {
+          ...riskEntryParams
+        }
+      });
+    }
+  }
+
+  redirectUrlBuilder = (entryParams) => {
+    const webview_redirect_url = encodeURIComponent(
+      window.location.origin +
+      '/risk/recommendation' +
+      getConfig().searchParams
+    );
+    let webPath = '';
+
+    if (entryParams.type === 'saveforgoal') {
+      webPath = `invest/savegoal/${entryParams.subType}/${entryParams.year}/${entryParams.amount}/${entryParams.amount}`;
+      return getConfig().webAppUrl + webPath; 
+    } 
+    
+    if (!entryParams.type) {
+      webPath='invest';
+    } else {
+      webPath = 'risk-v2/recommendations';
+    }
+
+    return getConfig().webAppUrl + 
+      webPath + '?' +
+      'amount=' + entryParams.amount +
+      '&type=' + entryParams.type +
+      '&term=' + entryParams.term +
+      '&fromRisk=true';
+      // '&webview_redirect_url=' + webview_redirect_url;
   }
 
   renderDialog = () => {

@@ -6,6 +6,7 @@ import { getConfig } from 'utils/functions';
 import Container from '../../common/Container';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import { nativeCallback } from 'utils/native_callback';
+import { storageService } from '../../../utils/validators';
 
 class QuestionScreen2 extends Component {
   constructor(props) {
@@ -74,7 +75,8 @@ class QuestionScreen2 extends Component {
         "user_action": user_action,
         "screen_name": 'Dependency',
         "q1": this.state.question1 ? 'answered' : 'empty',
-        "q2": this.state.question2 ? 'answered' : 'empty'
+        "q2": this.state.question2 ? 'answered' : 'empty',
+        flow: storageService().get('risk-entry-flow') || '',
       }
     };
 
