@@ -125,6 +125,9 @@ body[data-device="web"] {
   #root > div:nth-child(2) {
     height: 100%;
   }
+  .Toastify {
+    height: auto !important;
+  }
 
   .Loader {
     max-width: var(--desktop-width);
