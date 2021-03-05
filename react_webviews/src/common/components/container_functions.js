@@ -117,7 +117,7 @@ export function commonRender(props_base) {
                     headerData={this.props.headerData}
                     new_header={this.state.new_header || this.state.project === 'help'}
                     goBack={this.headerGoBack || this.historyGoBack}
-                    filterPgae={this.props.filterPgae}
+                    filterPage={this.props.filterPage}
                     handleFilter={this.props.handleFilter} 
                     hideBack={this.props.hideBack}
           

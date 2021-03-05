@@ -7,7 +7,7 @@ const Footer = (props) => {
   if (props.fullWidthButton && !props.twoButton) {
     return (
       <div className="Footer">
-        <FooterLayoutBase type="summary" reset={(props.resetpage) ? true : false} {...props} />
+        <FooterLayoutBase type="summary" {...props} />
       </div>
     );
   } else if (props.twoButton) {
