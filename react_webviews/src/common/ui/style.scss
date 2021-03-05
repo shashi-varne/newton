@@ -398,11 +398,11 @@ input.default-otp-input {
     .status-bar-info{
       display: flex;
       align-items: center;
-      margin-top: -12px;
-      .status-bar-info-circle{
-        border-radius: 999px;
-        width: 10px;
-        height: 10px;
+      margin-top: -8px;
+      .status-bar-info-bar{
+        width: 12px;
+        height: 4px;
+        border-radius: 100px;
       }
       .status-bar-info-text{
         margin: 0 0 0 10px;

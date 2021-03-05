@@ -33,11 +33,11 @@ export var advisoryConstants = {
           subtitle: "",
         },
         {
-          title: "Tell us about your liabilities",
+          title: "Do you have any loans?",
           subtitle: "",
         },
         {
-          title: "Let's note down your assets",
+          title: "Have you made any investments?",
           subtitle: "",
         },
         {
@@ -53,7 +53,7 @@ export var advisoryConstants = {
         {'name':'Kolkata' ,'value': 'kolkata'},
         {'name':'Chennai' ,'value': 'chennai'},
         {'name':'Hyderabad' ,'value': 'hyderabad'},
-        {'name':'Any other city' ,'value': 'other'},
+        {'name':'Other' ,'value': 'other'},
     ],
     dependents_data: {kids_max: 4, parents_max: 2, total_plus_minus_max: 6},
     incomeGrowthOptions: computeIncomeGrowthOptions(),

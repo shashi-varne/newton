@@ -82,25 +82,23 @@ class RecommendationResult extends Component {
                     <div className="top-content">
                     <p className="more-details-heading">{recommendation_bottom_sheet_data[key]['heading']} coverage</p>
 
-                    <div className={recommendation_data.key !== 'corona' && !adequate_coverage_present ?  "coverage-details" : "coverage-details align-left" }>
+                    <div className={recommendation_data.key === 'term' && !adequate_coverage_present ?  "coverage-details" : "coverage-details align-left" }>
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Target Coverage</p>
                             <p className="coverage-detail-value">₹{recommendation_data.target_si}</p>
                         </div>
-                        { recommendation_data.key !== 'corona' ? (
+                        { recommendation_data.key === 'term' && !adequate_coverage_present ? (
                         <div className="individual-coverage-detail">
                             <p className="coverage-detail-heading">Period</p>
                             <p className="coverage-detail-value">{recommendation_data.period}</p>
                         </div>
                         ) : null}
-                        {
-                            !adequate_coverage_present ? (
+                        {!adequate_coverage_present ? (
                         <div className="individual-coverage-detail">
                              <p className="coverage-detail-heading">Premium starts at</p>
                              <p className="coverage-detail-value">₹{formatAmount(recommendation_data.start_premium)}/year</p>
                         </div>   
-                            ) : null
-                        }
+                        ) : null}
                     </div>
                     <div className="why-recommend">
                         <p className="more-details-sub-heading">Why do we recommend this plan?</p>
@@ -149,13 +147,13 @@ class RecommendationResult extends Component {
                         <p  className="recommendation-info-heading">Target Coverage</p>
                         <p  className="recommendation-info-value">₹{recommendation_data.target_si}</p>
                     </div>
-                    { recommendation_data.key !== 'corona' ? (
+                    { recommendation_data.key === 'term' ? (
                     <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Period</p>
                         <p  className="recommendation-info-value">{recommendation_data.period}</p>
                     </div>
                     ) : null}
-                        <div className="recommendation-info">
+                    <div className="recommendation-info">
                         <p  className="recommendation-info-heading">Premium starts at</p>
                         <p  className="recommendation-info-value">₹{formatAmount(recommendation_data.start_premium)}/year </p>
                     </div>

@@ -8,7 +8,7 @@ import {advisoryConstants} from './constants';
 import InputPrefix from '../../common/ui/InputPrefix';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
 import { updateLead, getLead } from './common_data';
-import {storageService, isEmpty} from "utils/validators";
+import {storageService, isEmpty, numberToSentence} from "utils/validators";
 class AdvisoryIncomeDetails extends Component {
 
     constructor(props){
@@ -127,7 +127,7 @@ class AdvisoryIncomeDetails extends Component {
 
         var value = event.target ? event.target.value : event;
         
-        if( (name ==='income' || name === 'expense') && (!containsNumbersAndComma(value))){
+        if( (name ==='income' || name === 'expense') && (!containsNumbersAndComma(value) || value.length > 12)){
             return;
         }
 
@@ -222,7 +222,8 @@ class AdvisoryIncomeDetails extends Component {
     }
 
     render() {
-        return(
+       
+      return(
             <Container
             events={this.sendEvents('just_set_events')}
             showError={this.state.showError}
@@ -254,8 +255,8 @@ class AdvisoryIncomeDetails extends Component {
                name="income"
                onFocus={()=>this.showPrefix('income')}
                onBlur={()=>this.hidePrefix('income')}
-               error={this.state.form_data.income_error ? true : false}
-               helperText={this.state.form_data.income_error}
+               error={!!this.state.form_data.income_error}
+               helperText={this.state.form_data.income_error || numberToSentence(this.state.form_data.income)}
                value={this.state.form_data.income || ""}
                onChange={this.handleChange()}
                autoComplete='off'
@@ -274,8 +275,8 @@ class AdvisoryIncomeDetails extends Component {
                name="expense"
                onFocus={()=>this.showPrefix('expense')}
                onBlur={()=>this.hidePrefix('expense')}
-               error={this.state.form_data.expense_error ? true : false}
-               helperText={this.state.form_data.expense_error}
+               error={!!this.state.form_data.expense_error}
+               helperText={this.state.form_data.expense_error || numberToSentence(this.state.form_data.expense)}
                value={this.state.form_data.expense || ""}
                onChange={this.handleChange()}
                autoComplete='off'
@@ -283,7 +284,7 @@ class AdvisoryIncomeDetails extends Component {
              </InputPrefix>
              </div>
 
-            <div className="InputField" style={{marginBottom: '20px'}}>
+            <div className="InputField" style={{marginBottom: '5px'}}>
              <DropdownWithoutIcon
               parent={this}
               selectedIndex = {this.state.form_data.income_growth_index || 0}
@@ -300,7 +301,7 @@ class AdvisoryIncomeDetails extends Component {
             />
             </div>
 
-            <div className="InputField" style={{marginTop: '-30px'}}>
+            <div className="InputField">
             <DropdownWithoutIcon
               parent={this}
               selectedIndex = {this.state.form_data.retire_index || 0}

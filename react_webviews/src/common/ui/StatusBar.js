@@ -39,11 +39,11 @@ class StatusBar extends Component {
 
                 <div className="status-bar-info-container">
                     <div className="status-bar-info">
-                        <p className="status-bar-info-circle" style={{backgroundColor: '#4F2DA7'}}></p>
-                        <p className="status-bar-info-text">Current Coverage</p>
+                        <p className="status-bar-info-bar" style={{backgroundColor: '#4F2DA7'}}></p>
+                        <p className="status-bar-info-text">Current Coverage -  <span style={{color: '#767E86'}}>₹{recommendation_data.current_si}</span></p>
                     </div>
                     <div className="status-bar-info">
-                        <p className="status-bar-info-circle" style={{backgroundColor: '#D5CBED'}}></p>
+                        <p className="status-bar-info-bar" style={{backgroundColor: '#D5CBED'}}></p>
                         <p className="status-bar-info-text">Coverage gap -  <span>₹{recommendation_data.coverage_gap}</span> </p>
                     </div>
                 </div>

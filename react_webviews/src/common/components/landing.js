@@ -54,6 +54,8 @@ class CommonLanding extends Component {
             'insurance-reports-list': '/group-insurance/common/report',
             'life-insurance-landing': '/group-insurance/life-insurance/entry',
             'disease-specific-plans': '/group-insurance/health/landing',
+            'advisory-landing': '/group-insurance/advisory/landing',
+            'advisory-resume': '/group-insurance/advisory/basic-details',
         };
 
         let pathname = navigateMapper[main_module] || '';

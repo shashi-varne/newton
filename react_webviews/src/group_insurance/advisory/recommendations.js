@@ -96,7 +96,7 @@ class AdivsoryRecommendations extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                    <p style={{color: '#0A1D32'}}>Restarting will delete all existing data. Do you want to restart? </p>
+                    <p style={{color: '#0A1D32'}}>Restarting will delete the information you've provided. Do you still want to restart?</p>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

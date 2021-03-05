@@ -674,7 +674,7 @@ input#pan {
 .generic-page-loader {
   width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -1262,7 +1262,7 @@ input#pan {
     cursor: pointer;
     color: white;
     border: none;
-    background-color: #4F2DA7;
+    background-color: #35CB5D;
     border-radius: 5px;
   }
 }
@@ -1534,7 +1534,7 @@ input#pan {
     align-items: center;
     justify-content: flex-start;
     .individual-coverage-detail{
-      margin: 0 45px 0 0px;
+      margin: 0 40px 0 0px;
     }
   }
   .coverage-details{
@@ -1542,6 +1542,7 @@ input#pan {
     align-items: center;
     justify-content: space-between;
     .individual-coverage-detail{
+      text-align: left;
       .coverage-detail-heading{
         color: #767E86;
         font-size: 14px;
@@ -1549,7 +1550,6 @@ input#pan {
       .coverage-detail-value{
         color: #160D2E;
         font-size: 14px;
-        text-align: center;
       }
     }
   }

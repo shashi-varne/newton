@@ -8,7 +8,7 @@ import InputPrefix from '../../common/ui/InputPrefix';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
 import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
 import { updateLead, getLead } from './common_data';
-import {storageService, isEmpty} from "utils/validators";
+import {storageService, isEmpty,  numberToSentence} from "utils/validators";
 
 class AdvisoryLiabilityDetails extends Component {
 
@@ -126,7 +126,7 @@ class AdvisoryLiabilityDetails extends Component {
 
         var value = event.target ? event.target.value : event;
         
-        if( (name ==='loan_amount' || name === 'total_amount') && (!containsNumbersAndComma(value))){
+        if( (name ==='loan_amount' || name === 'total_amount') && (!containsNumbersAndComma(value) || value.length > 12)){
             return;
         }
 
@@ -256,21 +256,21 @@ class AdvisoryLiabilityDetails extends Component {
             errorData={this.state.errorData}
             showLoader={this.state.show_loader}
             skelton={this.state.skelton}
-            title="Tell us about your liabilities"
+            title="Do you have any loans?"
             buttonTitle="SAVE AND CONTINUE"
             handleClick={()=>this.handleClick()}
             >
             <div className="advisory-liability-details-container">
             
             <div className="advisory-title-container"  style={{marginBottom: '15px'}}>
-                <p>Tell us about your liabilities</p>
+                <p>Do you have any loans?</p>
                 <span>3/4</span>
             </div>
 
             <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
-                  label="Do you have any home loans?"
+                  label="Do you have a home loan?"
                   class="homeloan"
                   options={yesNoOptions}
                   id="homeloan"
@@ -293,8 +293,8 @@ class AdvisoryLiabilityDetails extends Component {
                name="loan_amount"
                onFocus={()=>this.showPrefix('loan_amount')}
                onBlur={()=>this.hidePrefix('loan_amount')}
-               error={this.state.form_data.loan_amount_error ? true : false}
-               helperText={this.state.form_data.loan_amount_error}
+               error={!!this.state.form_data.loan_amount_error}
+               helperText={this.state.form_data.loan_amount_error || numberToSentence(this.state.form_data.loan_amount)}
                value={this.state.form_data.loan_amount || ""}
                onChange={this.handleChange()}
                autoComplete="off"
@@ -306,7 +306,7 @@ class AdvisoryLiabilityDetails extends Component {
             <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
-                  label="Any other loans/liabilities?"
+                  label="Any other loans?"
                   class="liability"
                   options={yesNoOptions}
                   id="liability"
@@ -329,8 +329,8 @@ class AdvisoryLiabilityDetails extends Component {
                   name="total_amount"
                   onFocus={()=>this.showPrefix('total_amount')}
                   onBlur={()=>this.hidePrefix('total_amount')}
-                  error={this.state.form_data.total_amount_error ? true : false}
-                  helperText={this.state.form_data.total_amount_error}
+                  error={!!this.state.form_data.total_amount_error}
+                  helperText={this.state.form_data.total_amount_error || numberToSentence(this.state.form_data.total_amount)}
                   value={this.state.form_data.total_amount || ""}
                   onChange={this.handleChange()}
                   autoComplete="off"

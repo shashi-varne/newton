@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { yesNoOptions } from '../constants'; 
 import InputPrefix from '../../common/ui/InputPrefix';
 import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon';
-import {formatAmount, containsNumbersAndComma, formatAmountToNumber} from 'utils/validators';
+import {formatAmount, containsNumbersAndComma, formatAmountToNumber, numberToSentence} from 'utils/validators';
 import {advisoryConstants} from './constants';
 import Checkbox from "material-ui/Checkbox";
 import { updateLead } from './common_data';
@@ -66,7 +66,7 @@ class AdvisoryAssetDetails extends Component {
 
         var value = event.target ? event.target.value : event;
         
-        if( (name === 'asset_amount' || name === 'term_cover_amount' || name === 'health_cover_amount' || name === 'critical_cover_amount' || name === 'corona_cover_amount') && (!containsNumbersAndComma(value))){
+        if( (name === 'asset_amount' || name === 'term_cover_amount' || name === 'health_cover_amount' || name === 'critical_cover_amount' || name === 'corona_cover_amount') && (!containsNumbersAndComma(value) || value.length > 12)){
             return;
         }
 
@@ -190,10 +190,11 @@ class AdvisoryAssetDetails extends Component {
                           name={props.name}
                           onFocus={()=>this.showPrefix(props.name)}
                           onBlur={()=>this.hidePrefix(props.name)}
-                          error={this.state.form_data[props.name + '_error'] ? true : false}
-                          helperText={this.state.form_data[props.name + '_error']}
+                          error={!!this.state.form_data[props.name + '_error']}
+                          helperText={this.state.form_data[props.name + '_error'] || numberToSentence(this.state.form_data[props.name])}
                           value={this.state.form_data[props.name] || ""}
                           onChange={this.handleChange()}
+                          autoComplete="off"
                         />
                         </InputPrefix>
                     </div>
@@ -309,7 +310,7 @@ class AdvisoryAssetDetails extends Component {
             fullWidthButton={true}
             onlyButton={true}
             force_hide_inpage_title={true}
-            title="Let's note down your assets"
+            title="Have you made any investments?"
             showError={this.state.showError}
             errorData={this.state.errorData}
             showLoader={this.state.show_loader}
@@ -320,7 +321,7 @@ class AdvisoryAssetDetails extends Component {
             <div className="advisory-asset-details-container">
             
             <div className="advisory-title-container"  style={{marginBottom: '15px'}}>
-                <p>Let's note down your assets</p>
+                <p>Have you made any investments?</p>
                 <span>4/4</span>
             </div>
 
@@ -350,8 +351,8 @@ class AdvisoryAssetDetails extends Component {
                name="asset_amount"
                onFocus={()=>this.showPrefix('asset_amount')}
                onBlur={()=>this.hidePrefix('asset_amount')}
-               error={this.state.form_data.asset_amount_error ? true : false}
-               helperText={this.state.form_data.asset_amount_error}
+               error={!!this.state.form_data.asset_amount_error}
+               helperText={this.state.form_data.asset_amount_error || numberToSentence(this.state.form_data.asset_amount)}
                value={this.state.form_data.asset_amount || ""}
                onChange={this.handleChange()}
                autoComplete="off"
