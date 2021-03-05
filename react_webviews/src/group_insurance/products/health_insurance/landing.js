@@ -169,17 +169,9 @@ class HealthInsuranceLanding extends Component {
     else {
       data = this.state.lastClickedItem
     }
-    if(data.title==="Care Health"){
       this.setState({
-        title:"Care Health (formerly Religare)"
+        title:''
       })
-    }
-    else{
-      this.setState({
-        title:data.title
-      })
-    }
-    
     this.setErrorData("submit");
     this.setState({
       skelton: true
@@ -215,8 +207,7 @@ class HealthInsuranceLanding extends Component {
           title2: error,
           type: errorType
         },
-        showError: true,
-        skelton: false
+        showError: "page",
       });
     }
 

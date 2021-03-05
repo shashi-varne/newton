@@ -69,27 +69,36 @@ class GroupHealthPlanPremiumSummary extends Component {
 
     //quote creation api
     if(!this.state.get_lead){
-      
       this.setState({
         skelton:true
       });
 
       try{
         let res = await Api.post(`api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
-        
       let resultData = res.pfwresponse.result;
-      let quote_id = resultData.quotation ? resultData.quotation.id : '';
+      let quote_id = "";
       
-      if(res.pfwresponse.status_code === 400 && resultData.error){
-        quote_id =  resultData.error.quotation_id
+      if(res.pfwresponse.status_code === 200){
+        quote_id = resultData.quotation ? resultData.quotation.id : '';
       }
-
+      else{
+        if(typeof(resultData.error) === 'object')
+        {
+          quote_id =  resultData.error.quotation_id;
+          error = resultData.error.msg || true;
+        }
+        else{
+          error = resultData.error || resultData.message || true
+        }
+      }
+      
       groupHealthPlanData.post_body.quotation_id = quote_id;
       this.setLocalProviderData(groupHealthPlanData)
-  
-      this.setState({
-        skelton: false
-      });
+      if(!error){
+        this.setState({
+          skelton: false
+        });
+      }
       }catch(err){
         console.log(err)
         this.setState({
