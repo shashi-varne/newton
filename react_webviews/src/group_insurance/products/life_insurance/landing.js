@@ -3,7 +3,7 @@ import Container from "../../common/Container";
 
 import Api from "utils/api";
 import toast from "../../../common/ui/Toast";
-import { getConfig } from "utils/functions";
+import { getConfig, getBasePath } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import HowToSteps from "../../../common/ui/HowToSteps";
 import {fyntuneConstants} from './constants';
@@ -220,15 +220,15 @@ class FyntuneLanding extends Component {
     if (!this.state.resume_data.resume_present) {
       return;
     }
-
+    let basepath = getBasePath();
     this.sendEvents("next", {resume_clicked: "yes"});
     var resume_redirection_url = this.state.resume_data.redirection_url;
     var redirectToHDFC = this.state.resume_data.chrome_tab_enable;
 
     let intermediateScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+      basepath + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
-    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    let landingScreenURL = basepath + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
     
     var journeyURL = resume_redirection_url + '?back_url_webview='+  intermediateScreenURL + '&resume_url_webview='+ landingScreenURL;
 
@@ -309,11 +309,11 @@ class FyntuneLanding extends Component {
     let error = '';
     let errorType = '';
     var body = {}
-    
-    let landingScreenURL = window.location.origin + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
+    let basepath = getBasePath();
+    let landingScreenURL = basepath + `/group-insurance/life-insurance/savings-plan/landing` + getConfig().searchParams;
     
     let intermediateScreenURL = encodeURIComponent(
-      window.location.origin + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
+      basepath + `/group-insurance/life-insurance/resume-intermediate` + getConfig().searchParams
     );
     
     

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
@@ -543,9 +543,9 @@ class GroupHealthPlanFinalSummary extends Component {
         let resultData = this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
-
+        let basepath = getBasePath();
         let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
+            basepath + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
         );
 
 
