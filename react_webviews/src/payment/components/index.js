@@ -111,25 +111,25 @@ const UpiRows = (props) => {
       if (upis_keys.length > 3) {
         if (upis_keys.includes("GPay")) {
           i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps["GPay"].package_name)}><img src={getImage(upi_apps["GPay"].package_name)} key={i} /><div className="bottomtext">GPay</div></div>)
+          rows.push(<div onClick={() => props.goToPayment(upi_apps["GPay"].package_name)}><img alt="payment" src={getImage(upi_apps["GPay"].package_name)} key={i} /><div className="bottomtext">GPay</div></div>)
         }
         if (upis_keys.includes("PhonePe")) {
           i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps["PhonePe"].package_name)}><img src={getImage(upi_apps["PhonePe"].package_name)} key={i} /><div className="bottomtext">PhonePe</div></div>)
+          rows.push(<div onClick={() => props.goToPayment(upi_apps["PhonePe"].package_name)}><img alt="payment" src={getImage(upi_apps["PhonePe"].package_name)} key={i} /><div className="bottomtext">PhonePe</div></div>)
         }
         if (upis_keys.includes("Paytm")) {
           i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps["Paytm"].package_name)}><img src={getImage(upi_apps["Paytm"].package_name)} key={i} /><div className="bottomtext">Paytm</div></div>)
+          rows.push(<div onClick={() => props.goToPayment(upi_apps["Paytm"].package_name)}><img alt="payment" src={getImage(upi_apps["Paytm"].package_name)} key={i} /><div className="bottomtext">Paytm</div></div>)
         }
 
         if (!upis_keys.includes("GPay") && !upis_keys.includes("PhonePe") && !upis_keys.includes("Paytm")) {
           i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+          rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img alt="payment" src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
         }
 
       } else {
         i++;
-        rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+        rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img alt="payment" src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
       }
     }
   }

@@ -170,7 +170,7 @@ class RecommendationResult extends Component {
                 ):(
                     <div className="adequate-coverage-container">
                         <div className="top-row">
-                            <img src={require(`assets/${this.state.type}/shield.svg`)}/>
+                            <img src={require(`assets/${this.state.type}/shield.svg`)} alt="sheild"/>
                             <p>Congratulations! You are well covered</p>
                         </div>
                         <div style={{margin: '0 5px', marginTop: '20px', width: '100%'}}>
