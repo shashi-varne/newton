@@ -326,7 +326,7 @@
 
 .kyc-journey .steps-container .step {
   display: flex;
-  align-items: center;
+  // align-items: center;
   height: 60px;
   padding-bottom: 14px;
   position: relative;
@@ -343,7 +343,6 @@
 .kyc-journey .steps-container .step .icon {
   display: flex;
   justify-content: center;
-  align-items: center;
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -351,10 +350,13 @@
   color: var(--label);
   border: 1px solid #eeeeee;
   background-color: white;
-  position: relative;
+  position: absolute;
   left: -10px;
-  top: -13px;
   font-weight: bold;
+}
+
+.kyc-journey .steps-container .step .img {
+  border: 0;
 }
 
 .kyc-journey .steps-container .step .icon__active {
@@ -1189,6 +1191,7 @@
     background-color: transparent;
     padding: 0;
     border: none;
+    cursor: pointer;
 
     svg {
       fill: var(--secondary);

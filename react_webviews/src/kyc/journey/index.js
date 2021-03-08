@@ -760,7 +760,7 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/completed.svg`)}
                     alt="completed"
-                    className="icon"
+                    className="icon img"
                   />
                 )}
                 {item.status !== 'completed' && (

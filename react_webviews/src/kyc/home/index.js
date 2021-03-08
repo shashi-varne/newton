@@ -110,6 +110,7 @@ const Home = (props) => {
 
     if (!isStartKyc) checkCompliant();
     else if (!isUserCompliant) setOpenResident(true);
+    else savePan(userKyc.address?.meta_data?.is_nri || false);
   };
 
   const checkCompliant = async () => {
