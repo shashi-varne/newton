@@ -17,7 +17,6 @@ class AdvisoryIncomeDetails extends Component {
             type: getConfig().productName,
             incomeGrowthOptions: advisoryConstants.incomeGrowthOptions,
             retireOptions: advisoryConstants.retireOptions,
-            form_data: {},
             showPrefix: {income: false, expense: false},
             form_data: {income_growth: ''}
         }
