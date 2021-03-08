@@ -32,6 +32,7 @@ class PanDetails extends Component {
       mobile_number: "",
       is_nps_contributed: false,
       show_loader: false,
+      openPopup: false
     };
     this.initialize = initialize.bind(this);
   }

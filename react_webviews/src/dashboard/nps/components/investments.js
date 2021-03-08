@@ -118,7 +118,7 @@ class NpsInvestments extends Component {
                 {this.state.nps_data.pran_status !== 'active' && <div>FREEZED</div>}
               </div>
             </div>
-            {getConfig().partner_code !== 'bfdlmobile' &&
+            {this.state.productName !== 'bfdlmobile' &&
               <div
                 className="list"
                 onClick={() => this.optionClicked('kyc-journey', 'complete nps transaction')}

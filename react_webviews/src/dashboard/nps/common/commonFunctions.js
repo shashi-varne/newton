@@ -4,6 +4,12 @@ import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
 import toast from "../../../common/ui/Toast";
+import Dialog, {
+  DialogActions,
+  // DialogTitle,
+  DialogContent,
+  DialogContentText
+} from 'material-ui/Dialog';
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
