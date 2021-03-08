@@ -415,7 +415,6 @@ const Journey = (props) => {
               show_aadhaar &&
               journeyData[i].key === 'digilocker'
             ) {
-              console.log('Not Completed')
               await proceed()
               break
             } else {
@@ -572,8 +571,7 @@ const Journey = (props) => {
       }
       if (
         urlParams?.show_aadhaar === 'true' ||
-        urlParams?.kycJourneyStatus === 'ground_aadhaar'
-      ) {
+        urlParams?.kycJourneyStatus === 'ground_aadhaar' || kycJourneyStatus === 'ground_aadhaar' || true) {
         setShowAadhaar(true)
       }
       if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
@@ -760,7 +758,7 @@ const Journey = (props) => {
                   <img
                     src={require(`assets/${productName}/completed.svg`)}
                     alt="completed"
-                    className="icon"
+                    className="icon img"
                   />
                 )}
                 {item.status !== 'completed' && (

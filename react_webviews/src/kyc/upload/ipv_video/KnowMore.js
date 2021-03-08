@@ -1,6 +1,5 @@
 import React from 'react'
-import Dialog, { DialogContent } from "material-ui/Dialog";
-import { Imgc } from "common/ui/Imgc";
+import Dialog from '@material-ui/core/Dialog'
 
 const KnowMore = ({ isOpen }) => {
   return (
@@ -10,11 +9,12 @@ const KnowMore = ({ isOpen }) => {
       keepMounted
       aria-describedby="ipv-know-dialog"
       className="ipv-know-dialog"
-      id="ipv-know-dialog"
+      id="kyc-bottom-dialog"
+      fullScreen={true}
     >
-      <DialogContent className="know_more_dialog">
-        <h1>adskjhasjkds</h1>
-      </DialogContent>
+      <div className="know_more_dialog">
+        adhaskjdhkjsahdsakjhd
+      </div>
     </Dialog>
   );
 }
