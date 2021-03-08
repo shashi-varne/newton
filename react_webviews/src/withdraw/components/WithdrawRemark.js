@@ -7,12 +7,18 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Dialog from '../mini_components/Dialog';
 
-import {postWithdrawReasons} from '../common/Api'
+import { postWithdrawReasons } from '../common/Api';
 import './style.scss';
+import toast from 'common/ui/Toast';
 
 const WithdrawRemark = ({ location, ...props }) => {
-  const [value,setValue] = useState(null);
+  const [value, setValue] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
+  const [reason, setReason] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const subQstn = isEmpty(location?.state) ? null : location?.state;
   const navigate = navigateFunc.bind(props);
   useEffect(() => {
@@ -22,30 +28,81 @@ const WithdrawRemark = ({ location, ...props }) => {
   }, []);
 
   const sendWithdrawReason = async (param) => {
-
-    try{
+    try {
+      setIsLoading(true);
       await postWithdrawReasons(param);
-      navigate("");
-    } catch(err) {
-      console.log(err)
+      navigate('');
+    } catch (err) {
+      toast(err);
+      console.log(err);
+    } finally{
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleClick = () => {
-    const data = {
-      choice : subQstn?.tag,
-      reason : subQstn?.title
+    if (subQstn?.tag === 'app_concerns') {
+      if (!value) {
+        toast('Please select one reason');
+        return;
+      }
     }
+    const data = {
+      choice: subQstn?.tag,
+      reason: subQstn?.title,
+    };
     sendWithdrawReason(data);
-    
-  }
+  };
 
   const handleChange = (el) => {
-    setValue(el.target.value);
-  }
+    if (el.target.value.includes('Other')) {
+      setValue(el.target.value);
+      setOpen(true);
+    } else {
+      setValue(el.target.value);
+    }
+  };
+
+  const handleChangeDialog = (event) => {
+    if (event.target.value.length !== 0) {
+      setReason(event.target.value);
+      if (error) {
+        setError(false);
+      }
+    } else {
+      setReason(event.target.value);
+      setError(true);
+    }
+  };
+
+  const handleProceed = () => {
+    if (reason) {
+      const data = {
+        choice: subQstn?.tag,
+        reason,
+      };
+      setOpen(false);
+      sendWithdrawReason(data);
+    } else {
+      setError(true);
+    }
+    return;
+  };
+
+  const handleClose = () => {
+    setValue(null);
+    setOpen(false);
+  };
 
   return (
-    <Container buttonTitle='Continue' fullWidthButton hideInPageTitle noPadding handleClick={handleClick}>
+    <Container
+      buttonTitle='Continue'
+      fullWidthButton
+      hideInPageTitle
+      noPadding
+      handleClick={handleClick}
+      showSkelton={isLoading}
+    >
       {!isEmpty(subQstn?.action) && (
         <section className='withdraw-remark'>
           <div className='withdraw-remark-title'>{subQstn?.action?.sub_question?.title}</div>
@@ -61,7 +118,12 @@ const WithdrawRemark = ({ location, ...props }) => {
           ) : (
             <div className='withdraw-fisdom-radio'>
               <FormControl component='fieldset'>
-                <RadioGroup aria-label='fisdom-reasons' name='reasons' value={value} onChange={handleChange}>
+                <RadioGroup
+                  aria-label='fisdom-reasons'
+                  name='reasons'
+                  value={value}
+                  onChange={handleChange}
+                >
                   {subQstn?.action?.sub_question?.options?.map((el) => (
                     <FormControlLabel
                       value={el.title}
@@ -74,6 +136,19 @@ const WithdrawRemark = ({ location, ...props }) => {
               </FormControl>
             </div>
           )}
+          <Dialog
+            open={open}
+            disableBackdropClick
+            title='Please specify your reason'
+            id='reason'
+            close={handleClose}
+            placeholder='Reason'
+            handleChange={handleChangeDialog}
+            handleProceed={handleProceed}
+            value={reason}
+            error={error}
+            helperText={error ? 'Please enter the reason' : ''}
+          />
         </section>
       )}
     </Container>

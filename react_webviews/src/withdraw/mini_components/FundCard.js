@@ -3,24 +3,23 @@ import TextField from '@material-ui/core/TextField';
 import Collapse from '@material-ui/core/Collapse';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import Input from 'common/ui/Input';
+
+import { inrFormatDecimal } from 'utils/validators';
 
 import './style.scss';
 
-const FundCard = ({ type, expand, data }) => {
+const FundCard = ({ type, expand, data, handleChange, value, error, helperText,disabled }) => {
   const [open, setOpen] = useState(expand ? true : false);
   const {
     amount,
     invested_since,
     mf: { friendly_name, amc_logo_small },
   } = data;
-  const [value, setValue] = useState('');
   const handleToggle = () => {
     setOpen(!open);
   };
 
-  const handleChange = (e) => {
-    setValue(e.target.value);
-  }
   return (
     <div className='withdraw-fund-card'>
       <div className='withdraw-fund-header' onClick={handleToggle}>
@@ -51,7 +50,7 @@ const FundCard = ({ type, expand, data }) => {
       <div className='withdraw-investment-container'>
         <div className='withdraw-amount-container'>
           <div className='amount-header-text'>WITHDRAWABLE AMOUNT</div>
-          <div>{amount}</div>
+          <div>{inrFormatDecimal(Math.ceil(amount))}</div>
         </div>
         <div className='withdraw-amount-container'>
           <div className='investment-header-text'>INVESTMENT SINCE</div>
@@ -60,12 +59,17 @@ const FundCard = ({ type, expand, data }) => {
       </div>
       <Collapse in={open}>
         <div className='withdraw-input'>
-          <TextField
+          <Input
             id='amount'
             label='Withdraw Amount'
             value={type === 'systematic' ? amount : value}
             onChange={handleChange}
-            disabled={type === 'systematic'}
+            disabled={disabled}
+            error={error}
+            helperText={error && helperText}
+            type='text'
+            inputMode='numeric'
+            pattern='[0-9]*'
           />
         </div>
       </Collapse>

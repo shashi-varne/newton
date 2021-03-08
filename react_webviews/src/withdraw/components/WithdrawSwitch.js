@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../common/Container';
-import FundCard from '../mini_components/FundCard';
 import isEmpty from 'lodash/isEmpty';
 import down_arrow from 'assets/down_arrow_green.png'
 import stock_icon from 'assets/stock_icon.png'
 import bond_icon from 'assets/bond_icon.png'
 import info_icon from 'assets/info_icon_fisdom.svg'
-import { numDifferentiationInr, numDifferentiation, inrFormatDecimal } from 'utils/validators';
+import { inrFormatDecimal } from 'utils/validators';
 import { getRecommendedSwitch } from '../common/Api';
 import { navigate as navigateFunc} from '../common/commonFunction';
 
 const WithdrawSwitch = (props) => {
   const  amount  = props.location?.state?.amount;
   const [switchFunds, setSwitchFunds] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedSwitch = async () => {
     try {
+      setIsLoading(true);
       const data = await getRecommendedSwitch(amount);
       setSwitchFunds(data);
-      console.log(data);
     } catch (err) {
       console.log(err);
+    } finally{
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -36,7 +38,7 @@ const WithdrawSwitch = (props) => {
     navigate('/fund-details',null,{ searchParams: `${props.location.search}&isins=${isins}` },true)
   }
   return (
-    <Container buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`} fullWidthButton hideInPageTitle>
+    <Container buttonTitle={`SWITCH: ${inrFormatDecimal(switchFunds?.total_switched_amount)}`} showSkelton={isLoading} fullWidthButton hideInPageTitle>
       {
           !isEmpty(switchFunds?.recommendations) && 
           <section>
