@@ -63,7 +63,7 @@ const Recommendations = (props) => {
         <div className='recommendations-total-investment'>
           <div>Total Investment</div>
 
-          <div>{formatAmountInr(amount)}</div>
+          <div>{recommendation?.length > 0 ? formatAmountInr(amount) : '₹0'}</div>
         </div>
         <div>
           <div className="recommendations-disclaimer-morning">

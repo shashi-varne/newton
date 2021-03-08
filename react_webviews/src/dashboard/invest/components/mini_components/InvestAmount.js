@@ -48,23 +48,30 @@ const InvestAmount = (props) => {
   useEffect(() => {
     if (!amount) {
       setErrorMsg('This is a required field');
+      setError(true);
       return;
     }
     if (isNaN(amount)) {
       return;
     }
-    let result;
-    if (investTypeDisplay === 'sip') {
-      result = validateSipAmount(amount);
-    } else {
-      result = validateOtAmount(amount);
-    }
-    if (result?.error) {
-      setError(true);
-      setErrorMsg(result?.message);
-    } else {
-      setErrorMsg('');
+    if(error){
       setError(false);
+    }
+    if(goalRecommendation.itype !== 'saveforgoal'){
+
+      let result;
+      if (investTypeDisplay === 'sip') {
+        result = validateSipAmount(amount);
+      } else {
+        result = validateOtAmount(amount);
+      }
+      if (result?.error) {
+        setError(true);
+        setErrorMsg(result?.message);
+      } else {
+        setErrorMsg('');
+        setError(false);
+      }
     }
     if (goalRecommendation.id === 'savetax') {
       calculateTax(graphData?.corpus);
@@ -162,7 +169,7 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          {goalRecommendation.id === 'investsurplus' ? (
+          {goalRecommendation.id === 'investsurplus' || investTypeDisplay !== 'sip' || goalRecommendation.itype !== 'saveforgoal' ? (
             <p className='invest-amount-input-duration'>from my savings</p>
           ) : (
             <p className='invest-amount-input-duration'>per month</p>
