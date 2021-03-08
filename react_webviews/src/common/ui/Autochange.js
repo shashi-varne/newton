@@ -17,7 +17,7 @@ export default class Autochange extends React.Component {
       contentRenderer: false,
       dropdownRenderer: false,
       inputRenderer: false,
-      itemRenderer: false,
+      itemRenderer: true,
       optionRenderer: false,
       noDataRenderer: false,
       selectValues: [],
@@ -28,15 +28,15 @@ export default class Autochange extends React.Component {
       separator: false,
       forceOpen: false,
       handle: true,
-      addPlaceholder: "+ click to add",
+      addPlaceholder: "Enter",
       labelField: "username",
       valueField: "email",
-      color: "#0074D9",
+      color: "#EEEEEE",
       keepSelectedInList: true,
       closeOnSelect: false,
       dropdownPosition: "bottom",
       direction: "ltr",
-      dropdownHeight: "300px",
+      dropdownHeight: "280px",
       options: this.props.options,
     };
   }
@@ -154,7 +154,7 @@ export default class Autochange extends React.Component {
     return (    
       <div className={this.props.className}>
         <div>
-          <div style={{ maxWidth: "350px" }}>
+          <div style={{ width: "280px" , height: '52px',}}>
             <StyledSelect
               // handleKeyDownFn={({ event, state, props, methods, setState }) => {
               //   const { cursor } = state;
@@ -263,278 +263,6 @@ export default class Autochange extends React.Component {
 
 
             { /* --------------------  Drop Down ------------------    */}
-
-
-        <p>&nbsp;</p>
-        <p>
-             {/* <input
-            type="checkbox"
-            checked={this.state.multi}
-            onChange={() =>
-              this.setState({
-                multi: !this.state.multi
-              })
-            }
-          />{" "} 
-            Multi
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.disabled}
-            onChange={() =>
-              this.setState({
-                disabled: !this.state.disabled
-              })
-            }
-          />{" "}
-          Disabled
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.loading}
-            onChange={() =>
-              this.setState({
-                loading: !this.state.loading
-              })
-            }
-          />{" "}
-          Loading
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.clearable}
-            onChange={() =>
-              this.setState({
-                clearable: !this.state.clearable
-              })
-            }
-          />{" "}
-          Clearable
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.searchable}
-            onChange={() =>
-              this.setState({
-                searchable: !this.state.searchable
-              })
-            }
-          />{" "}
-            Searchable
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.create}
-            onChange={() =>
-              this.setState({
-                create: !this.state.create
-              })
-            }
-          />{" "}
-          Create new entries
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.separator}
-            onChange={() =>
-              this.setState({
-                separator: !this.state.separator
-              })
-            }
-          />{" "}
-          Separator
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.handle}
-            onChange={() =>
-              this.setState({
-                handle: !this.state.handle
-              })
-            }
-          />{" "}
-          Dropdown handle
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.forceOpen}
-            onChange={() =>
-              this.setState({
-                forceOpen: !this.state.forceOpen
-              })
-            }
-          />{" "}
-          Stay open
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.contentRenderer}
-            onChange={() =>
-              this.setState({
-                contentRenderer: !this.state.contentRenderer
-              })
-            }
-          />{" "}
-          Custom content renderer
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.dropdownRenderer}
-            onChange={() =>
-              this.setState({
-                dropdownRenderer: !this.state.dropdownRenderer
-              })
-            }
-          />{" "} 
-           Custom dropdown renderer
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.itemRenderer}
-            onChange={() =>
-              this.setState({
-                itemRenderer: !this.state.itemRenderer
-              })
-            }
-          />{" "}
-          Custom dropdown item renderer
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.keepSelectedInList}
-            onChange={() =>
-              this.setState({
-                keepSelectedInList: !this.state.keepSelectedInList
-              })
-            }
-          />{" "}
-          Keep selected item in a list
-          <br />
-          <input
-            type="checkbox"
-            checked={this.state.closeOnSelect}
-            onChange={() =>
-              this.setState({
-                closeOnSelect: !this.state.closeOnSelect
-              })
-            }
-          />{" "} */}
-          {/* Close dropdown on select/deselect
-          <br />
-          Custom color{" "}
-          <input
-            type="color"
-            defaultValue={this.state.color}
-            onChange={event =>
-              this.setState({
-                color: event.target.value
-              })
-            }
-          />
-          <br /> */}
-          {/* Dropdown position
-          <StyledHtmlSelect
-            defaultValue={this.state.dropdownPosition}
-            onChange={event =>
-              this.setState({ dropdownPosition: event.target.value })
-            }
-          >
-            <option value="auto">auto</option>
-            <option value="top">top</option>
-            <option value="bottom">bottom</option>
-          </StyledHtmlSelect>
-          <br />
-          Dropdown Height:{" "}
-          <StyledInput
-            type="text"
-            checked={this.state.dropdownHeight}
-            value={this.state.dropdownHeight}
-            onChange={event =>
-              this.setState({
-                dropdownHeight: event.target.value
-              })
-            }
-          />
-          <br />
-          Dropdown direction
-          <StyledHtmlSelect
-            defaultValue={this.state.direction}
-            onChange={event => this.setState({ direction: event.target.value })}
-          >
-            <option value="auto">auto</option>
-            <option value="rtl">right-to-left</option>
-            <option value="ltr">left-to-right</option>
-          </StyledHtmlSelect>
-          <br /> */}
-
-
-          {/* Add placeholder:{" "} 
-          <StyledInput
-            type="text"
-            checked={this.state.addPlaceholder}
-            value={this.state.addPlaceholder}
-            onChange={event =>
-              this.setState({
-                addPlaceholder: event.target.value
-              })
-            }
-          />
-          <br />
-          Search by field:{" "}
-          <StyledHtmlSelect
-            defaultValue={this.state.searchBy}
-            onChange={event => this.setState({ searchBy: event.target.value })}
-          >
-            {Object.keys(options[0]).map(f => (
-              <option key={f} value={f}>
-                {f}
-              </option>
-            ))}
-          </StyledHtmlSelect>
-          <br />
-          Label field:{" "}
-          <StyledHtmlSelect
-            defaultValue={this.state.labelField}
-            onChange={event =>
-              this.setState({
-                labelField: event.target.value,
-                searchBy: event.target.value
-              })
-            }
-          >
-            {Object.keys(options[0]).map(f => (
-              <option key={f} value={f}>
-                {f}
-              </option>
-            ))}
-          </StyledHtmlSelect>
-          <br />
-          Value field:{" "}
-          <StyledHtmlSelect
-            defaultValue={this.state.valueField}
-            onChange={event =>
-              this.setState({ valueField: event.target.value })
-            }
-          >
-            {Object.keys(options[0]).map(f => (
-              <option key={f} value={f}>
-                {f}
-              </option>
-            ))}
-          </StyledHtmlSelect> */}
-        </p>
-
-        {/* <details>
-          <summary>Options:</summary>
-          <pre>{JSON.stringify(options, false, 2)}</pre>
-        </details>
-
-        <details>
-          <summary>Selected values:</summary>
-          <pre>{JSON.stringify(this.state.selectValues, false, 2)}</pre>
-        </details> */}
-
-         {/*  ---------------------Drop Down ---------------------    */}
 
       </div>
     );
