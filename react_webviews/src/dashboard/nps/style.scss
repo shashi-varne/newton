@@ -591,8 +591,10 @@
     .icon {
       max-width: 50px;
       flex: 1;
-      border: 1px solid #f0f0f0;
-      border-radius: 2px;
+    }
+
+    img {
+      width: 100%;
     }
 
     .text {

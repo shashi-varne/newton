@@ -152,11 +152,20 @@ export async function kyc_submit(params) {
       this.navigate("amount/one-time");
     } else {
       switch (status) {
-        case 402:
-          console.log(402);
+        case 301:
+          this.navigate('/nps/pan')
           break;
-        case 403:
-          toast(result.error);
+        case 302:
+          this.navigate('/kyc-journey')
+          break;
+        case 303:
+          //modal
+          break;
+        case 304:
+          //modal
+          break;
+        case 305:
+          this.navigate('/nps/pran')
           break;
         default:
           toast(result.error || result.message || genericErrMsg);
@@ -275,6 +284,10 @@ export async function getInvestmentData(params) {
 }
 
 export async function submitPran(params) {
+  this.setState({
+    show_loader: true
+  })
+
   try {
     const res = await Api.post(`/api/nps/user/pran/account/status`, params);
     if (
@@ -285,15 +298,21 @@ export async function submitPran(params) {
       throw genericErrMsg;
     }
     const { result, status_code: status } = res.pfwresponse;
-    console.log(result);
 
     if (status === 200) {
+      
       return result;
     } else {
+      this.setState({
+        show_loader: false
+      })
       throw result.error || result.message || genericErrMsg;
     }
   } catch (err) {
-    throw err;
+    this.setState({
+      show_loader: false
+    })
+    console.log(err);
   }
 }
 

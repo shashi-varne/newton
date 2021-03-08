@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import { initialize } from "../common/commonFunctions";
+import { getConfig } from "utils/functions";
 
 class NpsSuccess extends Component {
   constructor(props) {
@@ -86,7 +87,7 @@ class NpsSuccess extends Component {
                   <p>For any query, reach us at</p>
                   <div class="flex-box">
                     <div class="item">+80-30-408363</div>
-                    <div class="item">{"{ partner.email }"}</div>
+                    <div class="item">{getConfig().askEmail}</div>
                   </div>
                 </div>
               </div>

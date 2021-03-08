@@ -85,11 +85,6 @@ class PanDetails extends Component {
       canSubmit = false;
     }
 
-    if (form_data.email && !validatePan(form_data.email)) {
-      form_data.email_error = "invalid email";
-      canSubmit = false;
-    }
-
     this.setState({
       form_data: form_data,
     });
