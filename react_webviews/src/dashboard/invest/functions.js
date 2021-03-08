@@ -10,7 +10,7 @@ import {
   kycStatusMapperInvest,
   premiumBottomSheetMapper,
 } from "./constants";
-import { getKycAppStatus } from "../../kyc/services";
+import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -1044,6 +1044,7 @@ export function initilizeKyc() {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
   }
+  let isReadyToInvestBase = isReadyToInvest()
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
   this.setState({
     isCompliant,
@@ -1051,6 +1052,7 @@ export function initilizeKyc() {
     kycJourneyStatusMapperData,
     userKyc,
     kycJourneyStatus,
+    isReadyToInvestBase,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
