@@ -97,7 +97,7 @@
       padding: 10px 20px;
 
       .MuiInput-input {
-        font-size: 25px;
+        font-size: 24px;
       }
 
       .MuiFormHelperText-root {
@@ -278,6 +278,7 @@
 
     .graph {
       width: 200px;
+      // text-align: -webkit-center;
     }
 
     .stats {
@@ -443,14 +444,12 @@
 
 .payment-sucess {
   text-align: center;
-  margin-top: 50px;
   position: relative;
   padding-top: 1px;
   background: #fff;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
-  margin: 10px;
-  margin-top: 20px;
+  margin: 20px -5px 10px;
 
   .icon {
     margin: 40px 0;
@@ -462,10 +461,6 @@
     color: #878787;
     margin-bottom: 30px;
     padding-bottom: 15px;
-
-    // span {
-    //   // font-family: "LatoB";
-    // }
   }
 
   h3 {
@@ -508,7 +503,7 @@
 }
 
 .nps-investments {
-  margin-bottom: 20px;
+  margin: 0 -5px 20px;
 
   .list {
     position: relative;
@@ -820,6 +815,7 @@
   align-items: center;
   border-radius: 5px;
   box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
   cursor: pointer;
 
   .icon {
@@ -957,13 +953,12 @@
 .nps-payment-callback {
   .invest-sucess {
     text-align: center;
-    margin-top: 50px;
     position: relative;
     padding-top: 1px;
     background: #fff;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    margin: 10px;
+    margin: 10px -10px 10px;
     top: 20px;
     padding: 20px 0;
 
@@ -971,21 +966,17 @@
       margin: 30px 0;
     }
 
-    h3 {
+    .sub-head {
       font-size: 20px;
-      font-family: "LatoB";
-      margin: 0;
       margin-top: 30px;
       margin-bottom: 10px;
+      color: #35cb5d;
+      font-weight: 600;
     }
 
-    p {
+    .sub-title {
       color: #878787;
       font-size: 18px;
-
-      span {
-        font-family: "LatoB";
-      }
     }
   }
 }
@@ -995,5 +986,10 @@
 }
 
 .pan-details {
-  margin-top: 30px;
+
+  .top-title {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
 }

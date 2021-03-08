@@ -26,6 +26,7 @@ class NpsIdentity extends Component {
     super(props);
     this.state = {
       show_loader: false,
+      screen_name: 'nps-identity',
       form_data: {},
       nps_details: {},
       selfie_needed: "",
@@ -39,16 +40,52 @@ class NpsIdentity extends Component {
 
   componentWillMount() {
     this.initialize();
+  }
+
+  componentDidMount() {
+    let that = this;
     if (getConfig().generic_callback) {
       window.callbackWeb.add_listener({
-        type: "native_receiver_image",
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
 
-        // show_loader: function (show_loader) {
-        //   that.showLoaderNative();
-        // },
+          that.showLoaderNative();
+        }
       });
     }
   }
+
+  showLoaderNative() {
+    this.setState({
+      show_loader: true
+    })
+  }
+
+  mergeDocs(file) {
+
+    this.setState({
+      show_loader: true
+    })
+
+    let that = this
+    getBase64(file, function (img) {
+      that.setState({
+        img: img,
+        file: file,
+      })
+    });
+
+    setTimeout(
+      function () {
+        this.setState({
+          show_loader: false
+        })
+      }
+        .bind(this),
+      1000
+    );
+
+  };
 
   onload = () => {
     let nps_additional_details = storageService().getObject(
@@ -94,11 +131,11 @@ class NpsIdentity extends Component {
           : ""
       }`;
 
-      if (this.state.selfie_needed) {
-        const data = new FormData();
-        data.append("file", this.state.file);
+      if (!this.state.selfie_needed) {
+        await this.uploadDocs(this.state.file);
 
-        this.nps_register(queryParams, "nominee", data);
+        this.nps_register(queryParams, "nominee");
+        
       } else {
         this.nps_register(queryParams, "nominee");
       }
@@ -109,7 +146,7 @@ class NpsIdentity extends Component {
     $("input").trigger("click");
   }
 
-  startUpload(method_name, doc_type) {
+  startUpload(method_name, doc_type, doc_name, doc_side) {
     this.setState({
       type: method_name,
     });
@@ -117,7 +154,7 @@ class NpsIdentity extends Component {
     if (getConfig().Web) {
       this.openFileExplorer();
     } else {
-      this.native_call_handler(method_name, doc_type);
+      this.native_call_handler(method_name, doc_type, doc_name, doc_side);
     }
   }
 
@@ -152,6 +189,55 @@ class NpsIdentity extends Component {
     });
   };
 
+  native_call_handler(method_name, doc_type, doc_name, doc_side) {
+    let that = this;
+    if (getConfig().generic_callback) {
+      window.callbackWeb[method_name]({
+        type: 'doc',
+        doc_type: doc_type,
+        doc_name: doc_name,
+        doc_side: doc_side,
+        // callbacks from native
+        upload: function upload(file) {
+          try {
+            that.setState({
+              docType: this.doc_type,
+              docName: this.docName,
+              doc_side: this.doc_side,
+              show_loader: true
+            })
+            switch (file.type) {
+              case 'image/jpeg':
+              case 'image/jpg':
+              case 'image/png':
+              case 'image/bmp':
+                that.mergeDocs(file);
+                break;
+              default:
+                alert('Please select image file');
+                that.setState({
+                  docType: this.doc_type,
+                  show_loader: false
+                })
+            }
+          } catch (e) {
+            // 
+          }
+        }
+      });
+
+      window.callbackWeb.add_listener({
+        type: 'native_receiver_image',
+        show_loader: function (show_loader) {
+          that.setState({
+            show_loader: true
+          })
+          that.showLoaderNative();
+        }
+      });
+    }
+  }
+
   render() {
     let { form_data, nps_details, selfie_needed, uploaded, img } = this.state;
     return (
@@ -173,7 +259,7 @@ class NpsIdentity extends Component {
           </div>
         </div>
 
-        {selfie_needed && (
+        {!selfie_needed && (
           <div className="image-prev-container">
             <div className="heading">Share your selfie</div>
             <div className="display-flex">
@@ -185,7 +271,9 @@ class NpsIdentity extends Component {
               <div className="display-flex">
                 {!getConfig().Web && (
                   <div>
-                    <div className="image-upload-container">
+                    <div className="image-upload-container"
+                      onClick={() => this.startUpload('open_camera', 'address', 'address.jpg')}
+                    >
                       <div className="icon">
                         <img
                           src={require("assets/fa_camera.svg")}
@@ -195,7 +283,9 @@ class NpsIdentity extends Component {
                         <div className="text-center label">Camera</div>
                       </div>
                     </div>
-                    <div className="image-upload-container">
+                    <div className="image-upload-container"
+                      onClick={() => this.startUpload('open_gallery', 'address', 'address.jpg')}
+                    >
                       <div className="icon">
                         <img
                           src={require("assets/fa_image.svg")}

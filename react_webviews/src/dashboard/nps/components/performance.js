@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import { initialize } from "../common/commonFunctions";
-import Api from "utils/api";
-import toast from "common/ui/Toast";
-import { formatAmountInr } from "../../../utils/validators";
+import { storageService } from "utils/validators";
+import { formatAmountInr } from "utils/validators";
 
 class NpsPerformance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nps_data: ''
+      nps_performance: '',
+      pran: ''
     };
     this.initialize = initialize.bind(this);
   }
@@ -20,35 +20,13 @@ class NpsPerformance extends Component {
 
   onload = async () => {
 
-    try {
-      this.setState({
-        show_loader: true,
-      });
-      const res = await Api.get(`/api/nps/summary`);
+    let nps_performance = storageService().getObject('nps_performance');
+    let pran = storageService().get('pran');
 
-      let { result, status_code: status } = res.pfwresponse;
-
-      this.setState({
-        show_loader: false,
-      });
-
-      if (status === 200) {
-
-        let nps_data = result
-
-        this.setState({
-          nps_data: nps_data
-        })
-      } else {
-        toast(result.error || result.message);
-      }
-
-    } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
-      throw err;
-    }
+    this.setState({
+      nps_performance: nps_performance,
+      pran, pran
+    })
   }
 
   getFullName = (type) => {
@@ -78,7 +56,7 @@ class NpsPerformance extends Component {
         <section className="page nps">
           <div className="pending container-padding">
             <div className="list">
-              {this.state.nps_data && this.state.nps_data.portfolio_data.map((item, index) =>
+              {this.state.nps_performance && this.state.nps_performance.map((item, index) =>
               (<div className="fund">
                 <div className="list-item">
                   <div className="text">
@@ -121,7 +99,7 @@ class NpsPerformance extends Component {
             </div>
             <div className="tnc">
               *Total invested value that you have invested for your PRAN:{" "}
-              {this.state.nps_data.pran} through any source.
+              {this.state.pran} through any source.
             </div>
           </div>
         </section>

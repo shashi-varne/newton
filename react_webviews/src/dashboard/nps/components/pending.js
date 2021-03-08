@@ -1,15 +1,14 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import { initialize } from "../common/commonFunctions";
-import Api from "utils/api";
-import toast from "common/ui/Toast";
-import { formatAmountInr } from "../../../utils/validators";
+import { storageService } from "utils/validators";
+import { formatAmountInr } from "utils/validators";
 
 class NpsPending extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nps_data: ''
+      nps_pending_orders: ''
     };
     this.initialize = initialize.bind(this);
   }
@@ -20,35 +19,11 @@ class NpsPending extends Component {
 
   onload = async () => {
 
-    try {
-      this.setState({
-        show_loader: true,
-      });
-      const res = await Api.get(`/api/nps/summary`);
+    let nps_pending_orders = storageService().getObject('nps_pending_orders');
 
-      let { result, status_code: status } = res.pfwresponse;
-
-      this.setState({
-        show_loader: false,
-      });
-
-      if (status === 200) {
-
-        let nps_data = result
-
-        this.setState({
-          nps_data: nps_data
-        })
-      } else {
-        toast(result.error || result.message);
-      }
-
-    } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
-      throw err;
-    }
+    this.setState({
+      nps_pending_orders: nps_pending_orders
+    })
   }
 
   render() {
@@ -61,24 +36,23 @@ class NpsPending extends Component {
         noFooter
         title="Pending Orders"
         showLoader={this.state.show_loader}
-        // handleClick={replaceFund}
         classOverRideContainer="pr-container"
       >
-        <section class="page nps">
-          <div class="pending container-padding">
-            {this.state.nps_data && this.state.nps_data.pending_orders.map((item, index) =>
-              <div class="list" key={index}>
-                <div class="fund">
-                  <div class="list-item">
-                    <div class="text">
-                      <div class="tier">TIER {item.tier}</div>
+        <section className="page nps">
+          <div className="pending container-padding">
+            {this.state.nps_pending_orders && this.state.nps_pending_orders.map((item, index) =>
+              <div className="list" key={index}>
+                <div className="fund">
+                  <div className="list-item">
+                    <div className="text">
+                      <div className="tier">TIER {item.tier}</div>
                       <h1>{item.pf_house.name}</h1>
                     </div>
-                    <div class="icon">
+                    <div className="icon">
                       <img src={item.pf_house.image} alt='' />
                     </div>
                   </div>
-                  <div class="display-flex">
+                  <div className="display-flex">
                     <div>
                       <h3>Total invested value</h3>
                       <span>{formatAmountInr(item.amount)}</span>
@@ -86,7 +60,7 @@ class NpsPending extends Component {
                   </div>
                 </div>
               </div>)}
-            <div class="tnc">
+            <div className="tnc">
               *It might take upto 5 working days for your contribution to
               reflect in your portfolio.
             </div>

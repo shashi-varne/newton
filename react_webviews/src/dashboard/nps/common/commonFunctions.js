@@ -4,12 +4,12 @@ import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
 import toast from "../../../common/ui/Toast";
-import Dialog, {
-  DialogActions,
-  // DialogTitle,
-  DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
+// import Dialog, {
+//   DialogActions,
+//   // DialogTitle,
+//   DialogContent,
+//   DialogContentText
+// } from 'material-ui/Dialog';
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
@@ -24,6 +24,11 @@ export async function initialize() {
   this.getInvestmentData = getInvestmentData.bind(this);
   this.submitPran = submitPran.bind(this);
   this.getNPSInvestmentStatus = getNPSInvestmentStatus.bind(this);
+  this.accountMerge = accountMerge.bind(this);
+  this.openInBrowser = openInBrowser.bind(this);
+  this.openInTabApp = openInTabApp.bind(this);
+  this.uploadDocs = uploadDocs.bind(this);
+  
   let screenData = {};
 
   // if (this.state.screen_name) {
@@ -158,20 +163,8 @@ export async function kyc_submit(params) {
       this.navigate("amount/one-time");
     } else {
       switch (status) {
-        case 301:
-          this.navigate('/nps/pan')
-          break;
-        case 302:
-          this.navigate('/kyc-journey')
-          break;
-        case 303:
-          //modal
-          break;
-        case 304:
-          //modal
-          break;
-        case 305:
-          this.navigate('/nps/pran')
+        case 402:
+          this.accountMerge()
           break;
         default:
           toast(result.error || result.message || genericErrMsg);
@@ -323,10 +316,16 @@ export async function submitPran(params) {
 }
 
 export async function getNPSInvestmentStatus() {
+  this.setState({
+    show_loader: true
+  })
   try {
     const res = await Api.get(`/api/nps/invest/status/v2`);
 
     const { result, status_code: status } = res.pfwresponse;
+    this.setState({
+      show_loader: false
+    })
 
     if (status === 200) {
       storageService().setObject("nps_additional_details", result.registration_details);
@@ -344,5 +343,112 @@ export async function getNPSInvestmentStatus() {
     });
     console.log(err);
     toast("something went wrong");
+  }
+}
+
+export async function accountMerge() {
+
+  if (this.state.isIframe) {
+
+  } else {
+    this.setState({
+      show_loader: true
+    })
+
+    let userKyc = storageService().getObject("user");
+    let pan_number = userKyc.pan.meta_data.pan_number;
+
+    this.checkMerge(pan_number)
+  }
+}
+
+export async function checkMerge(pan_number) {
+  this.setState({
+    show_loader: true
+  })
+
+  try {
+    const res = await Api.post(`/api/user/account/merge?pan_number=${pan_number.toUpperCase()}&verify_only=true`);
+
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      
+    } else {
+      switch (status) {
+        case 402:
+          this.accountMerge()
+          break;
+        default:
+          toast(result.error || result.message || genericErrMsg);
+          break;
+      }
+    }
+  } catch (err) {
+    this.setState({
+      show_loader: false,
+    });
+    console.log(err);
+    toast("something went wrong");
+  }
+}
+
+export function openInBrowser(url) {
+  nativeCallback({
+      action: 'open_in_browser',
+      message: {
+          url: url
+      }
+  });
+}
+
+export function openInTabApp(data = {}) {
+  nativeCallback({
+      action: 'open_inapp_tab',
+      message: {
+          url: data.url || '',
+          back_url: data.back_url || ''
+      }
+  });
+}
+
+///api/invest/folio/import/image
+export async function uploadDocs(file) {
+  this.setState({
+    show_loader: true
+  })
+
+  var uploadurl = '/api/invest/folio/import/image';
+  const data = new FormData()
+  data.append('res', file);
+  data.append('doc_type', 'pan');
+
+  try {
+    const res = await Api.post(uploadurl, data);
+
+
+    var resultData = res.pfwresponse.result || {};
+    if (res.pfwresponse.status_code === 200 && resultData.message) {
+
+      if (this.state.screen_name === 'nps-identity') {
+        return res.pfwresponse
+      } else {
+        this.navigate('success');
+      }
+
+    } else {
+
+      this.setState({
+        show_loader: false
+      });
+
+      toast(resultData.error || 'Something went wrong');
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      show_loader: false
+    });
+    toast('Something went wrong');
   }
 }

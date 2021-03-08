@@ -8,8 +8,9 @@ import email from "assets/email2.svg";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
-import { dobFormatTest, formatDate, validateEmail, validatePan } from "utils/validators";
+import { dobFormatTest, formatDate, validateEmail, validateNumber, validatePan } from "utils/validators";
 import Grid from "material-ui/Grid";
+import { storageService } from "utils/validators";
 
 const yesOrNo_options = [
   {
@@ -30,6 +31,7 @@ class PanDetails extends Component {
       pan: "",
       dob: "",
       mobile_number: "",
+      currentUser: '',
       is_nps_contributed: false,
       show_loader: false,
       openPopup: false
@@ -41,18 +43,31 @@ class PanDetails extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    let currentUser = storageService().getObject("user");
+    let userKyc = storageService().getObject("kyc");
+    let { form_data } = this.state;
+
+    form_data.dob = userKyc.pan.meta_data.dob || '';
+    form_data.pan = userKyc.pan.meta_data.pan_number || '';
+      
+    form_data.email = userKyc.address.meta_data.email || '';
+    form_data.mobile_number = userKyc.address.meta_data.mobile_number || '';
+
+    this.setState({
+      currentUser: currentUser,
+      userKyc: userKyc,
+      form_data: form_data
+    })
+
+  };
 
   handleChange = (name) => (event) => {
     let value = event.target ? event.target.value : event;
     let { form_data } = this.state;
 
-    if (name === "mobile_number" && value.length > 10) {
-      return;
-    }
-
-    if (name === "pran" && value.length > 12) {
-      return;
+    if (name === "mobile_number" || name === "pran") {
+      value = !isNaN(parseInt(value, 10)) && parseInt(value, 10)
     }
 
     if (name === "dob") {
@@ -78,11 +93,26 @@ class PanDetails extends Component {
   };
 
   handleClick = () => {
-    let { form_data } = this.state;
+    let { form_data, userKyc, is_nps_contributed } = this.state;
     let canSubmit = true;
 
     if (!validatePan(form_data.pan)) {
       form_data.pan_error = "invalid pan";
+      canSubmit = false;
+    }
+
+    if (is_nps_contributed && form_data.pran.length !== 12) {
+      form_data.pran_error = "invalid pran";
+      canSubmit = false;
+    }
+
+    if (!form_data.mobile_number.length !== 10) {
+      form_data.mobile_number_error = "invalid mobile_number";
+      canSubmit = false;
+    }
+
+    if (!validateEmail(form_data.email)) {
+      form_data.email_error = "invalid email";
       canSubmit = false;
     }
 
@@ -91,16 +121,24 @@ class PanDetails extends Component {
     });
 
     if (canSubmit) {
+      let { pan, address } = userKyc;
+
+      if (is_nps_contributed) {
+        storageService().set('nps-pran_number', form_data.pran)
+      }
+
+      pan.meta_data.dob = form_data.dob;
+      pan.meta_data.pan_number = form_data.pan;
+      
+      address.meta_data.email = form_data.email;
+      address.meta_data.mobile_number = form_data.mobile_number;
+
+      storageService().setObject("kyc", userKyc);
+
       let data = {
         kyc: {
-          address: {
-            email: form_data.email,
-            mobile_number: form_data.mobile_number,
-          },
-          pan: {
-            dob: form_data.dob,
-            pan_number: form_data.pan,
-          },
+          address: address.meta_data,
+          pan: pan.meta_data,
         },
       };
 
@@ -109,18 +147,19 @@ class PanDetails extends Component {
   };
 
   render() {
-    let { form_data, is_nps_contributed } = this.state;
+    let { form_data, is_nps_contributed, currentUser } = this.state;
     return (
       <Container
         classOverRIde="pr-error-container"
         buttonTitle="PROCEED"
         hideInPageTitle
-        hidePageTitle
+        title="PAN Details"
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
       >
-        <div className="main-top-title">PAN details</div>
+        
         <div className="pan-details">
+          <div className="top-title">Your Details</div>
           <FormControl fullWidth>
             <div className="InputField">
               <InputWithIcon
@@ -165,7 +204,8 @@ class PanDetails extends Component {
                   width="30"
                   id="pran"
                   label="Pran number"
-                  type="number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   name="pran"
                   error={!!form_data.pran_error}
                   helperText={form_data.pran_error}
@@ -190,24 +230,25 @@ class PanDetails extends Component {
               />
             </div>
 
-            <div className="InputField">
+            {currentUser.mobile === null && <div className="InputField">
               <InputWithIcon
                 icon={phone}
-                type="number"
                 width="30"
                 id="number"
                 name="mobile_number"
+                inputMode="numeric"
                 maxLength={10}
                 label="Enter Mobile Number"
+                pattern="[0-9]*"
                 class="Mobile"
                 error={!!form_data.mobile_number_error}
                 helperText={form_data.mobile_number_error}
                 value={form_data.mobile_number || ""}
                 onChange={this.handleChange("mobile_number")}
               />
-            </div>
+            </div>}
 
-            <div className="InputField">
+            {currentUser.email === null && <div className="InputField">
               <InputWithIcon
                 icon={email}
                 width="30"
@@ -220,7 +261,7 @@ class PanDetails extends Component {
                 value={form_data.email || ""}
                 onChange={this.handleChange("email")}
               />
-            </div>
+            </div>}
           </FormControl>
         </div>
       </Container>

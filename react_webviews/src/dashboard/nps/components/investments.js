@@ -3,15 +3,18 @@ import Container from "fund_details/common/Container";
 import { initialize } from "../common/commonFunctions";
 import Api from "utils/api";
 import toast from "common/ui/Toast";
-import { getConfig } from "utils/functions";
 import { storageService } from "utils/validators";
 import { formatAmountInr } from "../../../utils/validators";
+import { getConfig } from "utils/functions";
 
 class NpsInvestments extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nps_data: ''
+      nps_data: '',
+      currentUser: '',
+      npscampaign: false,
+      npsCampActionUrl: ''
     };
     this.initialize = initialize.bind(this);
   }
@@ -21,8 +24,38 @@ class NpsInvestments extends Component {
   }
 
   onload = async () => {
+    let currentUser = storageService().getObject('user');
+    let campaigns = storageService().getObject("campaign");
+    let { npscampaign, npsCampActionUrl } = this.state;
 
-    let currentUser = storageService().get('currentUser');
+    let npsCampaignData = {
+      notification_visual_data: {
+        target: []
+      }
+    };
+
+    campaigns.forEach(item => {
+      if (item.campaign === 'nps_esign') {
+        npscampaign = true;
+        npsCampaignData = item;
+      }
+    })
+
+    let target = npsCampaignData.notification_visual_data.target;
+
+    if (target.length > 0) {
+      target.forEach(item => {
+        if (item.url) {
+          npsCampActionUrl = item.url;
+        }
+      })
+    }
+
+    this.setState({
+      currentUser: currentUser,
+      npscampaign: npscampaign,
+      npsCampActionUrl: npsCampActionUrl
+    })
     
     try {
       this.setState({
@@ -31,6 +64,10 @@ class NpsInvestments extends Component {
       const res = await Api.get(`/api/nps/summary`);
 
       let { result, status_code: status } = res.pfwresponse;
+
+      storageService().setObject('nps_pending_orders', result.pending_orders);
+      storageService().setObject('nps_performance', result.portfolio_data);
+      storageService().set('nps_pran', result.pran);
 
       this.setState({
         show_loader: false,
@@ -55,18 +92,47 @@ class NpsInvestments extends Component {
     }
   }
 
-  nps_tax_statement = () => {
-    // windows.
+  redirection = (url) => {
+    let paymentRedirectUrl = encodeURIComponent(
+      window.location.origin + `/nps/investments` + getConfig().searchParams
+    );
+
+    let back_url = paymentRedirectUrl;
+
+    // for web no issue
+    if(getConfig().Web) {
+      this.openInBrowser(url)
+    } else {
+      var payment_link = url;
+      var pgLink = payment_link;
+      let app = getConfig().app;
+      // eslint-disable-next-line
+      pgLink += (pgLink.match(/[\?]/g) ? '&' : '?') + 'plutus_redirect_url=' + paymentRedirectUrl +
+        '&app=' + app + '&back_url=' + back_url;
+      if (getConfig().generic_callback) {
+        pgLink += '&generic_callback=' + getConfig().generic_callback;
+      }
+
+
+      this.openInTabApp({
+        url: pgLink,
+        back_url: back_url
+      });
+    }
   }
 
   optionClicked = (route, item) => {
-    this.navigate('pending')
+
     let cardClicked = item;
     this.setState({
       cardClicked: cardClicked
     })
 
     this.navigate(route);
+  }
+
+  investMore = () => {
+    this.navigate('amount/one-time')
   }
 
   render() {
@@ -79,15 +145,14 @@ class NpsInvestments extends Component {
         hidePageTitle
         title="NPS Investments"
         showLoader={this.state.show_loader}
-        // handleClick={replaceFund}
+        handleClick={this.investMore}
         classOverRideContainer="pr-container"
       >
         <section className="page invest nps">
           <div className="nps-investments">
-            <div
+            {this.state.npscampaign && <div
               className="list"
-              ng-if="npscampaign"
-              ng-click="redirectNpsCampLink('nps activation pending')"
+              onClick={() => this.redirection(this.state.npsCampActionUrl)}
             >
               <div className="icon">
                 <img src={require("assets/warning_icon.svg")} width="40" />
@@ -96,9 +161,9 @@ class NpsInvestments extends Component {
                 <div className="title">NPS activation pending</div>
                 <div className="sub-title">e-Sign through Aadhaar</div>
               </div>
-            </div>
+            </div>}
 
-            <div className="list" onClick={() => this.nps_tax_statement()}>
+            <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url)}>
               <div className="icon">
                 <img
                   src={require("assets/fisdom/icn_tax_statement.svg")}
@@ -110,19 +175,18 @@ class NpsInvestments extends Component {
                 <div className="sub-title">PRAN: {this.state.nps_data.pran}</div>
               </div>
               <div
-                className="status"
-                style={{ color: `${this.state.nps_data.pran_status === 'active' ? 'green' : '#c2a20c'}`}}
+                className={`status ${this.state.nps_data.pran_status === 'active' ? 'green' : 'yellow'}`}
               >
                 <div className="circle"></div>
                 {this.state.nps_data.pran_status === 'active' && <div>ACTIVE</div>}
                 {this.state.nps_data.pran_status !== 'active' && <div>FREEZED</div>}
               </div>
             </div>
-            {this.state.productName !== 'bfdlmobile' &&
+            {this.state.productName !== 'bfdlmobile' && (this.state.currentUser.kyc_registration_v2 === 'init' || 
+            this.state.currentUser.kyc_registration_v2 === 'incomplete') &&
               <div
                 className="list"
-                onClick={() => this.optionClicked('kyc-journey', 'complete nps transaction')}
-                // ng-if="currentUser.kyc_registration_v2 === 'init' || currentUser.kyc_registration_v2 === 'incomplete'"
+                onClick={() => this.optionClicked('kyc/kyc-journey', 'complete nps transaction')}
               >
                 <div className="icon">
                   <img
@@ -160,7 +224,7 @@ class NpsInvestments extends Component {
                 <div className="sub-title">View fund wise summary</div>
               </div>
             </div>}
-            <div
+            {this.state.nps_data && this.state.nps_data.pending_orders.length > 0 && <div
               className="list"
               onClick={() => this.optionClicked('pending', 'pending order')}
             >
@@ -176,7 +240,7 @@ class NpsInvestments extends Component {
                   {formatAmountInr(this.state.nps_data.total_pending_amount)}
                 </div>
               </div>
-            </div>
+            </div>}
           </div>
         </section>
       </Container>

@@ -31,29 +31,8 @@ export default function PieChart (props) {
         tooltip={'green'
       }
         colors={colors}
-        // theme={{
-        //   tooltip: {
-        //     container: {
-        //       background: 'none',
-        //       boxShadow: 'none',
-        //       padding: '0',
-        //     },
-        //   }
-        // }}
         {...otherProps}
       />
-    </div>
-  );
-}
-
-function customTooltip({ label, color }) {
-  return (
-    <div className="wr-pie-tooltip">
-      <div
-        className="wr-pt-color-bubble"
-        style={{ backgroundColor: 'green' }}>
-      </div>
-      <span className="wr-pt-label">{label}</span>
     </div>
   );
 }

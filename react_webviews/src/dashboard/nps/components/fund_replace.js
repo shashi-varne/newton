@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
-import { get_recommended_funds } from "../common/api";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
-import { getUrlParams } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
 
 class ReplaceFund extends Component {
@@ -27,7 +25,6 @@ class ReplaceFund extends Component {
   };
 
   fetchRecommendedFunds = async () => {
-    console.log(getUrlParams())
     try {
       this.setState({
         show_loader: true,
@@ -36,7 +33,7 @@ class ReplaceFund extends Component {
       const params = {
         type: "buildwealth",
       };
-      const data = await get_recommended_funds(params);
+      const data = await this.get_recommended_funds(params);
 
       this.setState({
         recommended: data.recommended[0].pension_house,

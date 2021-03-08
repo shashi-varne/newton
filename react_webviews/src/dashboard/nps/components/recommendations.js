@@ -27,8 +27,10 @@ class Recommendations extends Component {
       recommendations: "",
       all_charges: "",
       openDialog: false,
+      openInvestmentSummary: false,
       risk: '',
-      graphData: []
+      graphData: [],
+      display_summary_only: false
     };
     this.initialize = initialize.bind(this);
   }
@@ -38,6 +40,22 @@ class Recommendations extends Component {
   }
 
   onload = () => {
+  //   $scope.display_summary_only = $rootScope.currentUser.nps_investment || false;
+  // if($scope.pran_number) {
+  //   $scope.display_summary_only = true;
+  // }
+    let currentUser = storageService().getObject('user');
+    let { display_summary_only } = this.state;
+
+    display_summary_only = currentUser.nps_investment || false;
+    if (storageService().get('nps-pran_number')) {
+      display_summary_only = true;
+    }
+
+    this.setState({
+      display_summary_only: display_summary_only
+    })
+
     this.fetchRecommendedFunds();
   };
 
@@ -164,6 +182,32 @@ class Recommendations extends Component {
     );
   };
 
+  renderInvestmentSummary = () => {
+    return (
+      <Dialog
+        id="bottom-popup"
+        open={this.state.openInvestmentSummary || false}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          
+        </DialogContent>
+        <DialogActions>
+          <Button
+            className="DialogButtonFullWidth"
+            color="default"
+            autoFocus
+            onClick={this.handleClose}
+          >
+            CONTINUE TO PAYMENT
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
   handleClick = async () => {
     let data = {
       amount: "50000",
@@ -233,7 +277,7 @@ class Recommendations extends Component {
               className="edit-icon edit"
               onClick={() =>
                 this.setState({
-                  openDialog: true,
+                  openInvestmentSummary: true,
                 })
               }
             >
@@ -373,6 +417,7 @@ class Recommendations extends Component {
           </div> */}
         </div>
         {this.renderDialog()}
+        {this.state.display_summary_only && this.renderInvestmentSummary()}
       </Container>
     );
   }

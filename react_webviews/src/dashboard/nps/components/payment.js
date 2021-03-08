@@ -2,13 +2,16 @@ import React, { Component } from "react";
 import { initialize } from "../common/commonFunctions";
 import Container from "fund_details/common/Container";
 import { storageService } from "utils/validators";
+import { formatAmountInr } from "utils/validators";
+import { getUrlParams } from "utils/validators";
 
 class NpsPaymentCallback extends Component {
   constructor(props) {
     super(props);
     this.state = {
       status: "",
-      screen_name: 'npsPaymentStatus'
+      screen_name: 'npsPaymentStatus',
+      amount: ''
     };
     this.initialize = initialize.bind(this);
   }
@@ -17,7 +20,17 @@ class NpsPaymentCallback extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    let amount = storageService().get('npsAmount');
+
+    let pathname = this.props.history.location.pathname.split('/');
+    let status = pathname[pathname.length - 1];
+
+    this.setState({
+      amount: amount,
+      status: status
+    })
+  };
 
   handleClick = async () => {
     const result = await this.getNPSInvestmentStatus();
@@ -27,9 +40,9 @@ class NpsPaymentCallback extends Component {
 
     if (result.registration_details.additional_details_status) {
       if (currentUser.kyc_registration_v2 == 'init') {
-        this.navigate('home-kyc');
+        this.navigate('/home-kyc');
       } else if (currentUser.kyc_registration_v2 == 'incomplete') {
-        this.navigate('kyc-journey');
+        this.navigate('/kyc-journey');
       } else {
         this.navigate('identity');
       }
@@ -42,6 +55,7 @@ class NpsPaymentCallback extends Component {
     return (
       <Container
         classOverRIde="pr-error-container"
+        showLoader={this.state.show_loader}
         buttonTitle="OK"
         hideInPageTitle
         hidePageTitle
@@ -55,19 +69,19 @@ class NpsPaymentCallback extends Component {
             className="invest-sucess container-padding"
             style={{ padding: "20px" }}
           >
-            <div ng-show="paymentError == false">
+            {this.state.status === 'success' && <div>
               <div className="icon">
                 <img src={require("assets/thumb.svg")} width="80" height="80" />
               </div>
-              <h3>Payment Successful</h3>
-              <p>
-                Payment of <span>50000</span>
-              </p>
-            </div>
-            <div className="invest-error" ng-show="paymentError == true">
+              <div className="sub-head">Payment Successful</div>
+              <div className="sub-title">
+                Payment of <b>{formatAmountInr(this.state.amount)}</b> towards NPS is successful
+              </div>
+            </div>}
+            {this.state.status !== 'success' && <div className="invest-error" ng-show="paymentError == true">
               <h2>Error</h2>
               <p>{"{paymentMessage}"}</p>
-            </div>
+            </div>}
           </div>
         </div>
       </Container>

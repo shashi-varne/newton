@@ -152,6 +152,8 @@ class uploadAddressProof extends Component {
             />
           </div>
         </div>
+
+        {this.renderCamera()}
       </Container>
     );
   }

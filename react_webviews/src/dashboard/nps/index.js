@@ -14,8 +14,6 @@ import NpsInvestments from "./components/investments";
 import NpsPending from "./components/pending";
 import NpsPerformance from "./components/performance";
 import NpsPran from "./components/additional/pran";
-import NpsSchedule from "./components/schedule";
-import NpsSipDate from "./components/sipDate";
 import NpsPaymentCallback from "./components/payment";
 import "../../common/theme/Style.scss";
 import "./style.scss";
@@ -40,8 +38,6 @@ const Nps = (props) => {
       <Route exact path={`${url}/pending`} component={NpsPending} />
       <Route exact path={`${url}/performance`} component={NpsPerformance} />
       <Route exact path={`${url}/pran`} component={NpsPran} />
-      <Route exact path={`${url}/schedule`} component={NpsSchedule} />
-      <Route exact path={`${url}/sip-dates`} component={NpsSipDate} />
       <Route exact path={`${url}/redirect`} component={NpsPaymentRedirect} />
       <Route exact path={`${url}/payment/callback/:type/:status`} component={NpsPaymentCallback} />
     </Switch>

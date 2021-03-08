@@ -9,7 +9,7 @@ class NpsInfo extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      currentuser: false,
+      currentUser: false,
       benefits: false,
       withdraw: false,
     };
@@ -22,11 +22,11 @@ class NpsInfo extends Component {
   }
 
   onload = () => {
-    let currentuser = storageService().get("currentUser")
+    let currentUser = storageService().getObject("user")
     let npsUser = storageService().get("npsUser") || {};
 
     this.setState({
-      currentuser: currentuser,
+      currentUser: currentUser,
       npsUser: npsUser
     });
   };
@@ -37,7 +37,7 @@ class NpsInfo extends Component {
         [name]: true,
       });
     } else {
-      if (this.state.currentuser.nps_investment) {
+      if (this.state.currentUser.nps_investment) {
         this.props.history.push(
           { pathname: `amount/one-time`, search: getConfig().searchParams },
           { state: {
