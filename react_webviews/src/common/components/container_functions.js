@@ -18,6 +18,7 @@ import Dialog, {
 import '../../utils/native_listner';
 import { Imgc } from '../../common/ui/Imgc';
 import BottomSheet from '../../common/ui/BottomSheet';
+import { disableBodyTouch } from 'utils/validators';
 
 let start_time = '';
 
@@ -143,7 +144,8 @@ export function commonRender(props_base) {
 
                 </div>
 
-                {!this.state.force_hide_inpage_title && !this.props.noHeader && this.state.new_header &&
+                {!this.state.force_hide_inpage_title && !this.props.noHeader &&
+                !this.props.force_hide_inpage_title && this.state.new_header &&
                     this.new_header_scroll()
                 }
 
@@ -243,7 +245,7 @@ export function navigate(pathname) {
 
 export function check_hide_header_title() {
     let force_hide_inpage_title;
-    let restrict_in_page_titles = ['provider-filter'];
+    let restrict_in_page_titles = ['provider-filter', 'insurance-advisory-start'];
     if (restrict_in_page_titles.indexOf(this.props.headerType) !== -1 || this.state.force_hide_inpage_title) {
         force_hide_inpage_title = true;
     }
@@ -512,6 +514,7 @@ export function renderPageLoader() {
             </div>
         );
     } else if (this.props.showLoader === 'page') {
+        disableBodyTouch();
         return (
             <div className={`generic-page-loader ${loaderData ? loaderData.loaderClass : ''}`}>
                 <div className="LoaderOverlay">
@@ -523,6 +526,7 @@ export function renderPageLoader() {
             </div>
         );
     } else {
+        disableBodyTouch(true);
         return null;
     }
 }

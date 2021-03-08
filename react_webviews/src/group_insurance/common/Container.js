@@ -6,7 +6,7 @@ import { nativeCallback, openModule } from 'utils/native_callback';
 import '../../utils/native_listner';
 import {checkStringInString} from 'utils/validators';
 import { back_button_mapper } from '../constants';
-
+import { storageService } from '../../utils/validators';
 import {didMount ,commonRender} from '../../common/components/container_functions';
 
 class Container extends Component {
@@ -43,7 +43,15 @@ class Container extends Component {
        || pathname.includes('/group-insurance/group-health')
        || pathname === '/group-insurance/group-insurance/add-policy' 
        || pathname === '/group-insurance/health/landing'
-       || pathname === '/group-insurance/call-back-details') {
+       || pathname === '/group-insurance/advisory/landing'
+       || pathname === '/group-insurance/advisory/basic-details'
+       || pathname === '/group-insurance/advisory/income-details'
+       || pathname === '/group-insurance/advisory/liability-details'
+       || pathname === '/group-insurance/advisory/asset-details'
+       || pathname === '/group-insurance/advisory/recommendations'
+       || pathname === '/group-insurance/advisory/email-report'
+       || pathname === '/group-insurance/call-back-details'
+       ) {
       this.setState({
         new_header: true,
         inPageTitle: true,
@@ -115,6 +123,24 @@ class Container extends Component {
       params = {};
     }
     let pathname = this.props.history.location.pathname;
+    
+    if(this.checkStringInString('/group-insurance/advisory/basic-details')){
+      let resume_case = storageService().getObject('advisory_resume_present');
+      if(resume_case){
+        this.navigate('/group-insurance');
+      }else{
+        this.navigate('/group-insurance/advisory/landing')
+      }  
+      return;
+    }
+
+    let from_advisory = storageService().getObject('from_advisory')
+    let advisory_paths = ['/group-insurance/health/critical_illness/plan', '/group-insurance/group-health/RELIGARE/landing', '/group-insurance/corona/plan','/group-insurance/life-insurance/term/landing'];
+    if(from_advisory && advisory_paths.indexOf(pathname) >= 0){
+      
+      this.navigate('/group-insurance/advisory/recommendations')
+      return;
+    }
 
       if (this.checkStringInString('/group-insurance/other-insurance/entry')) {
         this.navigate('/group-insurance');
@@ -306,10 +332,10 @@ class Container extends Component {
         this.navigate(back_button_mapper[pathname]);
         break;
       default:
+        nativeCallback({ events: this.getEvents('back') });
         if (back_button_mapper[pathname] && back_button_mapper[pathname].length > 0) {
           this.navigate(back_button_mapper[pathname]);
         } else {
-          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         }
     }
