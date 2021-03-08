@@ -134,7 +134,8 @@
   }
 }
 
-#withdraw-manual-summary, #withdraw-system-summary {
+#withdraw-manual-summary,
+#withdraw-system-summary {
   .tax-summary {
     margin: 40px 0 10px 0;
     font-size: 20px;
@@ -198,4 +199,78 @@
   .withdraw-tax-summary {
     margin-top: 40px;
   }
+}
+
+#withdraw-otp-success {
+  .thumb-img {
+    display: block;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+  }
+
+  .message {
+    font-size: 16px;
+    color: #0a1d32;
+    text-align: center;
+    font-weight: 600;
+  }
+}
+
+#withdraw-otp-failed {
+  .header {
+    font-size: 20px;
+    color: #160d2e;
+    font-weight: 600;
+    padding: 0;
+  }
+
+  .failed-icon {
+    display: block;
+    width: 100%;
+  }
+
+  .failed-title {
+    color: #160d2e;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .failed-subtitle {
+    color: #767e86;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 20px;
+  }
+
+  .contact-us {
+    margin: 0 auto;
+    text-align: center;
+    margin: 50px 0 20px 0;
+  }
+
+  .contact-us .contact-us-bottom1 {
+    margin: 0 auto;
+    font-size: 13px;
+    color: #767E86;
+    margin-bottom: 11px;
+  }
+
+  .contact-us .contact-us-bottom2 {
+    margin: 0 auto;
+    font-size: 10px;
+    color: #767e86;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+
+    .icon {
+      margin: 0 20px 0 20px;
+    }
+  }
+
 }
