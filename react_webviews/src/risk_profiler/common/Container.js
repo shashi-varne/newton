@@ -79,15 +79,18 @@ class Container extends Component {
   historyGoBack = () => {
     this.setState({
       back_pressed: true
-    })
+    });
     let pathname = this.props.history.location.pathname;
     let { params } = this.props.location;
     let { search } = this.props.location;
 
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
-        this.props.history.goBack();
-        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        if (getConfig().isWebCode) {
+          this.props.history.goBack();
+        } else {
+          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        }
         return;
       }
     }
@@ -97,17 +100,20 @@ class Container extends Component {
       return;
     }
 
-    if (pathname.indexOf('question1') >= 0) {
-      nativeCallback({ events: this.getEvents('back') });
-      this.navigate('intro');
-      return;
-    }
+    // if (pathname.indexOf('question1') >= 0) {
+    //   nativeCallback({ events: this.getEvents('back') });
+    //   this.navigate('intro');
+    //   return;
+    // }
 
     switch (pathname) {
       case "/risk":
       case "/risk/intro":
-        this.props.history.goBack();
-        // nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        if (getConfig().isWebCode) {
+          this.props.history.goBack();
+        } else {
+          nativeCallback({ action: 'exit', events: this.getEvents('back') });
+        }
         break;
       case "/risk/recommendation":
         this.navigate('result');

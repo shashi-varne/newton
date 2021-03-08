@@ -7,7 +7,7 @@ import Container from '../../common/Container';
 import RadioOptions from '../../../common/ui/RadioOptions';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
-import { storageService } from '../../../utils/validators';
+import { isEmpty, storageService } from '../../../utils/validators';
 
 class QuestionScreen5 extends Component {
   constructor(props) {
@@ -123,7 +123,13 @@ class QuestionScreen5 extends Component {
         if (res.pfwresponse.result.message === 'success') {
           let score = res.pfwresponse.result.score;
           window.sessionStorage.setItem('score', JSON.stringify(score));
-          this.navigate('result')
+          const showOldFlow = storageService().getObject('showOldFlow');
+          if (!showOldFlow || isEmpty(showOldFlow)) {
+            this.navigate('result');
+          } else {
+            storageService().remove('showOldFlow');
+            this.navigate('result/v1');
+          }
         }
 
       } catch (err) {

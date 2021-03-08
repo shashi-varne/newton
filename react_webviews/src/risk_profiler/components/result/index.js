@@ -17,14 +17,15 @@ import Dialog, {
   DialogContent,
   DialogContentText
 } from 'material-ui/Dialog';
-import { getUrlParams, storageService } from '../../../utils/validators';
-import { pick } from 'lodash';
-
+import { getUrlParams, isEmpty, storageService } from '../../../utils/validators';
+import { pick, get } from 'lodash';
 
 class Result extends Component {
   constructor(props) {
     super(props);
+    const [lastParam] = props.match.path.split('/').reverse();
     this.state = {
+      showOldFlow: lastParam === 'v1',
       show_loader: true,
       openDialogReset: false,
       params: this.setEntryParams(),
@@ -33,15 +34,16 @@ class Result extends Component {
   }
 
   setEntryParams = () => {
-    const urlParams = getUrlParams();
+    let urlParams = getUrlParams();
     // const entryParams = storageService().getObject('risk-entry-params') || {};
-    console.log('URLP', urlParams);
     if (urlParams.fromExternalSrc) {
       storageService().setObject(
         'risk-entry-params',
-        pick(urlParams, ['amount', 'flow', 'term', 'type', 'year', 'subType', 'partner_code'])
+        pick(urlParams, ['amount', 'flow', 'term', 'type', 'year', 'subType', 'partner_code', 'hideRPReset'])
       );
       storageService().set('flow', urlParams.flow);
+    } else {
+      urlParams = storageService().getObject('risk-entry-params') || {};
     }
     // return entryParams;
 
@@ -52,15 +54,31 @@ class Result extends Component {
     try {
 
       // let score = JSON.parse(window.sessionStorage.getItem('score'));
-      let score;
       const res = await Api.get('/api/risk/profile/user/recommendation');
-      if (res.pfwresponse.result.score) {
-        score = res.pfwresponse.result.score;
+      const score = get(res, 'pfwresponse.result.score');
+      if (!isEmpty(score) && score.score) {
+
+        if (this.state.params.type === 'saveforgoal') {
+          const { pfwresponse: { result: recommRes }} = await Api.get('/api/invest/recommendv2', {
+            type: 'investsurplus',
+            term: parseInt(this.state.params.year - new Date().getFullYear(), 10),
+            rp_enabled: true,
+          });
+
+          this.setState({
+            stockSplit: recommRes.recommendation.equity,
+            bondSplit: recommRes.recommendation.debt,
+            stockReturns: recommRes.recommendation.expected_return_eq,
+            bondReturns: recommRes.recommendation.expected_return_debt,
+          });
+        }
+
         this.setState({
           score: score,
-          show_loader: false
+          show_loader: false,
         });
       } else {
+        storageService().setObject('showOldFlow', this.state.showOldFlow);
         this.navigate('intro', true);
       }
     } catch (err) {
@@ -75,6 +93,7 @@ class Result extends Component {
     let params = {
       indicator: (this.state.score) ? this.state.score.indicator : false
     };
+    pathname = '/risk/' + pathname;
 
     if (!replace) {
       this.props.history.push({
@@ -110,38 +129,71 @@ class Result extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
-    // TODO: Redirect based on URL param or app version conditionally to old flow or new flow
-    // ------------ OLD FLOW ---------------
-    // this.navigate('recommendation');
-    // -------------------------------------
-    
-    // ------------ NEW FLOW ---------------
+    if (this.state.showOldFlow) {
+      this.navigate('recommendation');
+      return;
+    }
+   
     const openWebModule = getConfig().isWebCode;
-    const riskEntryParams = storageService().getObject('risk-entry-params') || {};
-    console.log('openWebModule', openWebModule, ' ,riskEntryParams', JSON.stringify(riskEntryParams));
     if (openWebModule) {
-      window.location.href = this.redirectUrlBuilder(riskEntryParams);
+      window.location.href = this.redirectUrlBuilder();
     } else {
       // TODO: Inform native of this callback
       nativeCallback({
         action: 'recommendation',
         message: {
-          ...riskEntryParams
+          ...this.state.params,
         }
       });
     }
   }
 
-  redirectUrlBuilder = (entryParams) => {
-    const webview_redirect_url = encodeURIComponent(
-      window.location.origin +
-      '/risk/recommendation' +
-      getConfig().searchParams
-    );
+  calculateMonthlyAmount = (term, corpusValue) => {
+    var n = term * 12;
+    var r = this.getRateOfInterest();
+    var a = corpusValue;
+    var i = (r / 12) / 100;
+    console.log('---', n, r, a, i, corpusValue);
+    var tmp = Math.pow((1 + i), n) - 1;
+    var monthlyInvestment = (a * i) / tmp;
+    var monthlyAmount = monthlyInvestment;
+    if (monthlyAmount < 500) {
+      monthlyAmount = 500;
+    }
+    return Math.floor(monthlyAmount);
+  }
+
+  getRateOfInterest = () => {
+    var range = Math.abs(this.state.stockReturns - this.state.bondReturns);
+    if (this.state.stockSplit < 1) {
+      return this.state.bondReturns;
+    } else if (this.state.stockSplit > 99) {
+      return this.state.stockReturns;
+    } else {
+      var rateOffset = (range * this.state.stockSplit) / 100;
+      return this.state.bondReturns + rateOffset;
+    }
+  }
+
+  redirectUrlBuilder = () => {
+    const entryParams = this.state.params;
+    // const webview_redirect_url = encodeURIComponent(
+    //   window.location.origin +
+    //   '/risk/recommendation' +
+    //   getConfig().searchParams
+    // );
     let webPath = '';
 
     if (entryParams.type === 'saveforgoal') {
-      webPath = `invest/savegoal/${entryParams.subType}/${entryParams.year}/${entryParams.amount}/${entryParams.amount}`;
+      const monthlyAmount = this.calculateMonthlyAmount(
+        parseInt(entryParams.year - new Date().getFullYear(), 10),
+        entryParams.amount
+      );
+      webPath = "invest/savegoal/" +
+        `${entryParams.subType}/` +
+        `${entryParams.year}/` +
+        `${monthlyAmount}/` +
+        `${entryParams.amount}`;
       return getConfig().webAppUrl + webPath; 
     } 
     
@@ -298,9 +350,9 @@ class Result extends Component {
           handleClick={this.handleClick}
           edit={this.props.edit}
           buttonTitle="Fund Recommendation"
-          topIcon="restart"
+          topIcon={this.state.params.hideRPReset !== "true" ? '' : "restart"}
           handleReset={this.showDialog}
-          resetpage={true}
+          resetpage={this.state.params.hideRPReset !== "true"}
           events={this.sendEvents('just_set_events')}
         >
           <div className="meter-img">
