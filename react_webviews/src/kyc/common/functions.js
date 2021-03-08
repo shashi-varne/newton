@@ -1,6 +1,5 @@
 import { getConfig } from "utils/functions";
-import { calculateAge, isValidDate } from "utils/validators";
-import { isEmpty, validateEmail } from "../../utils/validators";
+import { calculateAge, isValidDate, validateEmail } from "utils/validators";
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {

@@ -3,7 +3,7 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 
-const PennySuccessDialog = ({ isOpen, goTobankLists }) => {
+const PennySuccessDialog = ({ isOpen, redirect }) => {
   const productName = getConfig().productName;
   return (
     <Dialog
@@ -27,7 +27,7 @@ const PennySuccessDialog = ({ isOpen, goTobankLists }) => {
           Hurrah! Your bank account is added. Invest securely and safely with
           us.
         </div>
-        <Button className="button bg-full" onClick={() => goTobankLists()}>
+        <Button className="button bg-full" onClick={() => redirect()}>
           CONTINUE
         </Button>
       </DialogContent>

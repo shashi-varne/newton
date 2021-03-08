@@ -220,10 +220,7 @@ const AddBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog
-          isOpen={isPennySuccess}
-          goTobankLists={goTobankLists}
-        />
+        <PennySuccessDialog isOpen={isPennySuccess} redirect={goTobankLists} />
         <PennyExhaustedDialog
           isOpen={isPennyExhausted}
           redirect={goTobankLists}

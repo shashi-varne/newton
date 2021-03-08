@@ -44,6 +44,8 @@ export const getPathname = {
   changeAddressDetails2: '/kyc/change-address-details2',
   nriAddressDetails1: '/kyc/nri-address-details1',
   nriAddressDetails2: '/kyc/nri-address-details2',
+  uploadPan: '/kyc/upload/pan',
+  kycEsign: '/kyc/esign'
 }
 
 export const storageConstants = {
