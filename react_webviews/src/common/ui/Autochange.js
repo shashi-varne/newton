@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
-// import packageJson from "../../../../react_webviews/package.json";
-// import "normalize.css";
 import './style.scss';
-
+// eslint-disable-next-line
+import { InputLabel } from 'material-ui/Input';
+import { FormControl } from 'material-ui/Form';
 import Select from "react-dropdown-select";
 
 export default class Autochange extends React.Component {
@@ -11,13 +11,13 @@ export default class Autochange extends React.Component {
     super(props);
 
     this.state = {
-      multi: true,
+      multi: true,           // For multi Activate
+      itemRenderer: true,   // For multi Select with checkbox
       disabled: false,
       loading: false,
       contentRenderer: false,
       dropdownRenderer: false,
       inputRenderer: false,
-      itemRenderer: true,
       optionRenderer: false,
       noDataRenderer: false,
       selectValues: [],
@@ -28,7 +28,7 @@ export default class Autochange extends React.Component {
       separator: false,
       forceOpen: false,
       handle: true,
-      addPlaceholder: "Enter",
+      addPlaceholder: "",
       labelField: "username",
       valueField: "email",
       color: "#EEEEEE",
@@ -70,7 +70,7 @@ export default class Autochange extends React.Component {
 
   dropdownRenderer = ({ props, state, methods }) => {
     const regexp = new RegExp(state.search, "i");
-    const options = this.state.options;
+    // const options = this.state.options;
 
     return (
       <div>
@@ -152,44 +152,14 @@ export default class Autochange extends React.Component {
     const options = this.state.options
 
     return (    
-      <div className={this.props.className}>
+        <FormControl className="Dropdown label" disabled={this.props.disabled}>
+        {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
+      {/* <div className={this.props.className}> */}
+      <span className="label2">label</span>
         <div>
           <div style={{ width: "280px" , height: '52px',}}>
             <StyledSelect
-              // handleKeyDownFn={({ event, state, props, methods, setState }) => {
-              //   const { cursor } = state;
-              //   const escape = event.key === 'Escape';
-              //   const enter = event.key === 'Enter';
-              //   const arrowUp = event.key === 'ArrowUp';
-              //   const arrowDown = event.key === 'ArrowDown';
-              //   const tab = event.key === 'Tab' && !event.shiftKey;
-              //   const shiftTab = event.shiftKey && event.key === 'Tab';
-
-              //   if ((arrowDown || tab) && cursor === null) {
-              //     return setState({
-              //       cursor: 0
-              //     });
-              //   }
-
-              //   if (arrowUp || arrowDown || shiftTab || tab) {
-              //     event.preventDefault();
-              //   }
-
-              //   if (escape) {
-              //     this.dropDown('close');
-              //   }
-
-              //   if (enter) {
-              //     const currentItem = methods.searchResults()[cursor];
-              //     if (currentItem && !currentItem.disabled) {
-              //       if (props.create && valueExistInSelected(state.search, state.values, props)) {
-              //         return null;
-              //       }
-
-              //       methods.addItem(currentItem);
-              //     }
-              //   }}
-              placeholder="Enter Data"
+              placeholder=""
               addPlaceholder={this.state.addPlaceholder}
               color={this.state.color}
               disabled={this.state.disabled}
@@ -264,7 +234,8 @@ export default class Autochange extends React.Component {
 
             { /* --------------------  Drop Down ------------------    */}
 
-      </div>
+      {/* </div> */}
+      </FormControl>
     );
   }
 }
@@ -359,7 +330,7 @@ const Button = styled.button`
     color: deepskyblue;
   }
 `;
-
+// eslint-disable-next-line
 const StyledHtmlSelect = styled.select`
   padding: 0;
   margin: 0 0 0 10px;
@@ -368,7 +339,7 @@ const StyledHtmlSelect = styled.select`
   background: #fff;
   border: 1px solid #0071dc;
 `;
-
+// eslint-disable-next-line
 const StyledInput = styled.input`
   margin: 0 0 0 10px;
   height: 23px !important;
