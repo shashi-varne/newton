@@ -1108,7 +1108,9 @@
 }
 
 #kyc-upload-pan,
-.page-body-kyc {
+#kyc-upload-ipv-video,
+#kyc-upload-sign,
+#kyc-upload-identification .page-body-kyc {
   font-size: 14px;
   .alert-status-info {
     margin-top: 20px;
@@ -1124,12 +1126,45 @@
     display: flex;
     flex-wrap: nowrap;
   }
+
+  .ipv_footer_instructions {
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .ipv_code {
+    font-weight: bold;
+    font-size: 26px;
+    line-height: 31px;
+    letter-spacing: 7.5px;
+    color: #331c6b;
+    margin-top: 10px;
+  }
+
+  .flex-between-center {
+    margin-top: 14px;
+
+    .know_more {
+      font-size: 14px;
+      color: #160d2e;
+    }
+
+    .link {
+      color: var(--secondary);
+      font-size: 10px;
+      margin: 5px 0 0;
+    }
+  }
 }
 
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
   padding: 10px;
+}
+
+.kyc-doc-upload-container.noBorder {
+  border: none;
 }
 
 .kyc-doc-upload-container .caption {
@@ -1427,8 +1462,8 @@
   .banner .left .icon {
     width: 20px;
     height: 20px;
-  } 
-  
+  }
+
   .banner .edit {
     text-transform: uppercase;
     color: var(--secondary);

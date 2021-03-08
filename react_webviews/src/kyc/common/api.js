@@ -39,28 +39,28 @@ export const getUserKycFromSummary = async () => {
 
 export const logout = async () => {
   try {
-    const res = await Api.get("api/logout");
+    const res = await Api.get('api/logout')
 
     if (
       res.pfwstatus_code !== 200 ||
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
-      throw genericErrorMessage;
+      throw genericErrorMessage
     }
 
-    const { result, status_code: status } = res.pfwresponse;
+    const { result, status_code: status } = res.pfwresponse
 
     if (status === 200) {
-      storageService().clear();
-      return result;
+      storageService().clear()
+      return result
     } else {
-      throw result.error || result.message || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage
     }
   } catch (err) {
-    toast(err || genericErrorMessage);
+    toast(err || genericErrorMessage)
   }
-};
+}
 
 export const getPan = async (data, accountMerge) => {
   const res = await Api.post(apiConstants.getPan, data)
@@ -184,13 +184,20 @@ export const addAdditionalBank = async (data) => {
     case 200:
       return result
     default:
-      throw result.message || result.error || genericErrorMessage;
+      throw result.message || result.error || genericErrorMessage
   }
 }
 
-export const upload = async (file, type = 'pan') => {
+export const upload = async (file, type = 'pan', data = {}) => {
   const formData = new FormData()
   formData.set('res', file)
+  if (!isEmpty(data)) {
+    switch (type) {
+      case 'ipvvideo':
+        formData.append('ipv_code', data.ipv_code)
+        break
+    }
+  }
   const res = await Api.post(`/api/kyc/v2/doc/mine/${type}`, formData)
   if (
     res.pfwresponse.status_code === 200 &&
@@ -218,7 +225,7 @@ export const saveBankData = async (data) => {
     case 200:
       return result
     default:
-      throw result.error || result.message || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage
   }
 }
 
@@ -236,7 +243,7 @@ export const getBankStatus = async (data) => {
     case 200:
       return result
     default:
-      throw result.error || result.message || genericErrorMessage;
+      throw result.error || result.message || genericErrorMessage
   }
 }
 
@@ -279,9 +286,7 @@ export const uploadBankDocuments = async (file, type, bank_id) => {
 export const getPinCodeData = async (pincode) => {
   const url = `api/pincode/${pincode}`
   const res = await Api.get(url)
-  if (
-    res.pfwresponse.status_code === 200
-  ) {
+  if (res.pfwresponse.status_code === 200) {
     return res.pfwresponse.result
   }
   throw new Error(
@@ -292,7 +297,7 @@ export const getPinCodeData = async (pincode) => {
 }
 
 export const submit = async (data) => {
-  const url =  `/api/kyc/v2/mine`
+  const url = `/api/kyc/v2/mine`
   const res = await Api.post(url, data)
   if (
     res.pfwresponse.status_code === 200 &&
@@ -300,15 +305,28 @@ export const submit = async (data) => {
   ) {
     const result = res.pfwresponse.result
     if (result.kyc.identification.meta_data.nationality) {
-      result.kyc.identification.meta_data.nationality = result.kyc.identification.meta_data.nationality.toUpperCase();
+      result.kyc.identification.meta_data.nationality = result.kyc.identification.meta_data.nationality.toUpperCase()
     }
-    storageService().setObject("kyc", result.kyc);
-    storageService().setObject("user", result.user);
+    storageService().setObject('kyc', result.kyc)
+    storageService().setObject('user', result.user)
     return result
   }
   throw new Error(
     res?.pfwresponse?.result?.message ||
       res?.pfwresponse?.result?.error ||
       genericErrorMessage
-  ) 
+  )
+}
+
+export const getIpvCode = async () => {
+  const url = `api/kyc/ipv_code`
+  const res = await Api.get(url)
+  if (res.pfwresponse.status_code === 200) {
+    return res.pfwresponse.result
+  }
+  throw new Error(
+    res?.pfwresponse?.result?.message ||
+      res?.pfwresponse?.result?.error ||
+      genericErrorMessage
+  )
 }

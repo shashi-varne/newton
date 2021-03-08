@@ -60,6 +60,9 @@ import NriAddressDetails1 from './address/nri/NRIAddressDetails1'
 import NRIAddressDetails2 from './address/nri/NRIAddressDetails2'
 import Success from './digilocker/components/success'
 import Failed from './digilocker/components/failed'
+import Sign from './upload/sign'
+import Selfie from './upload/selfie'
+import IpvVideo from './upload/ipv_video'
 import DigilockerCallback from './digilocker/components/digilockercallback'
 
 const theme = createMuiTheme(themeConfig)
@@ -118,6 +121,9 @@ const Kyc = (props) => {
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
           <Route exact path={`${url}/upload/pan`} component={Pan} />
+          <Route exact path={`${url}/upload/sign`} component={Sign} />
+          <Route exact path={`${url}/upload/selfie`} component={Selfie} />
+          <Route exact path={`${url}/upload/selfie_video`} component={IpvVideo} />
           <Route
             exact
             path={`${url}/upload/address`}
