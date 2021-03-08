@@ -25,6 +25,9 @@ import './Style.scss'
 import SystemSummary from './components/summary/system'
 import SelfSummary from './components/summary/self'
 import Insta from './components/summary/insta'
+import Otp from './components/otp'
+import Success from './components/otp/success'
+import Failed from './components/otp/failed'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -63,6 +66,9 @@ const Withdraw = ({ match }) => {
           <Route path={`${url}/reason`} component={WithdrawReason} />
           <Route path={`${url}/remark`} component={WithdrawRemark} />
           <Route path={`${url}/switch`} component={WithdrawSwitch} />
+          <Route path={`${url}/verify`} component={Otp} />
+          <Route path={`${url}/otp/success`} component={Success} />
+          <Route path={`${url}/otp/failed`} component={Failed} />
           <Route path={`${url}/:type`} component={WithdrawType} />
           <Route component={NotFound} />
         </Switch>
