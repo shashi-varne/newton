@@ -12,11 +12,9 @@ class AccidentForm extends Component {
 
   render() {
     return (
-      <div>
-        <BasicDetails
-          parent={this}
-        />
-      </div>
+      <BasicDetails
+        parent={this}
+      />
     );
   }
 }

@@ -75,8 +75,8 @@ class App extends Component {
         <JssProvider jss={jss} generateClassName={generateClassName}>
           <MuiThemeProvider theme={theme}>
           <ScrollToTop />
-          <Tooltip />
-          <ToastContainer autoClose={1000} />
+            <Tooltip />
+            <ToastContainer autoClose={3000} />
             <Switch>
               <Route path='/insurance' component={Insurance} />
               <Route path='/group-insurance' component={GroupInsurance} />
@@ -104,6 +104,7 @@ class App extends Component {
               <Route path='/partner-landing' component={FisdomPartnerRedirect} />
               <Route component={NotFound} />
             </Switch>
+          
           </MuiThemeProvider>
         </JssProvider>
       </BrowserRouter>
