@@ -1,7 +1,8 @@
-
 //////////// Withdraw Reasons ////////////////
-.withdraw-reasons,.withdraw-remark{
-  .withdraw-reason-title,.withdraw-remark-title{
+.withdraw-reasons,
+.withdraw-remark {
+  .withdraw-reason-title,
+  .withdraw-remark-title {
     padding: 20px;
     font-size: 17px;
     color: black;
@@ -9,11 +10,10 @@
     font-weight: 500;
     line-height: 1.4;
   }
-
 }
 
-.withdraw-reason-list{
-  .withdraw-reason-items{
+.withdraw-reason-list {
+  .withdraw-reason-items {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -25,25 +25,24 @@
 
 //////////// End of Withdraw Reasons ////////////////
 
-
 //////////// Withdraw Remark ////////////////
-.withdraw-remark-list{
-  .withdraw-remark-items{
+.withdraw-remark-list {
+  .withdraw-remark-items {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 15px;
 
-    svg{
+    svg {
       margin-right: 18px;
     }
   }
 }
 
-.withdraw-fisdom-radio{
-  fieldset{
-    div{
-      label{
+.withdraw-fisdom-radio {
+  fieldset {
+    div {
+      label {
         display: flex;
         justify-content: space-between;
         padding: 0px 20px;
@@ -56,46 +55,44 @@
 
 //////////// End of Withdraw Remark ////////////////
 
-
 //////////Withdraw Switch ///////////////////////////
 
-.withdraw-switch{
+.withdraw-switch {
   border-bottom: 2px solid #e4e4e4;
   padding: 20px 0px;
-  .withdraw-mf{
+  .withdraw-mf {
     display: flex;
     align-items: center;
-    .withdraw-mf-icon{
+    .withdraw-mf-icon {
       margin-right: 15px;
       width: 20px;
       height: 20px;
-      img{
+      img {
         width: 100%;
       }
     }
 
-    .withdraw-mf-details{
+    .withdraw-mf-details {
       display: flex;
       flex-direction: column;
 
-      .withdraw-mf-name{
+      .withdraw-mf-name {
         font-size: 18px;
         color: black;
-
       }
 
-      .withdraw-mf-amount{
+      .withdraw-mf-amount {
         font-size: 14px;
         color: #71716c;
         margin-bottom: 5px;
         margin: 5px 0px;
       }
 
-      .withdraw-mf-more{
+      .withdraw-mf-more {
         padding: 5px 10px;
         background-color: #f4f3f3;
         width: max-content;
-        border-radius:10px;
+        border-radius: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -103,46 +100,93 @@
         cursor: pointer;
         color: #333333;
 
-        img{
+        img {
           margin-right: 5px;
         }
       }
     }
   }
 
-  .withdraw-switch-mid{
+  .withdraw-switch-mid {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 20px 0px;
 
-    .withdraw-switch-icon{
+    .withdraw-switch-icon {
       height: 50px;
-      img{
+      img {
         height: 100%;
       }
     }
   }
 
-  .withdraw-switch-amount{
+  .withdraw-switch-amount {
     font-size: 16px;
   }
 }
 
-.withdraw-switch:first-child{
+.withdraw-switch:first-child {
   padding-top: 0px;
 }
 
 /////////End of Withdraw Switch //////////////////
 
-
-.withdraw-instant-msg{
+.withdraw-instant-msg {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  div{
-    color: #767E86;
+  div {
+    color: #767e86;
     font-size: 12px;
     font-weight: 400;
+  }
+}
+
+.withdraw-insta {
+  .withdraw-zero-invest-icon {
+    margin: 30px 0 10px 0;
+  }
+  .withdraw-insta-icon,
+  .withdraw-insta-head {
+    text-align: center;
+  }
+  .withdraw-insta-head {
+    color: #4a4a4a;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .withdraw-insta-info {
+    color: #878787;
+    font-size: 14px;
+    font-weight: 400;
+    margin: 10px 0 0 0;
+  }
+}
+
+.withdraw-insta-exceed {
+  display: flex;
+  margin: 20px 0px;
+  padding: 15px 15px 20px 15px;
+  border: 1px solid #fff5f6;
+  border-radius: 4px;
+  background: #FFF5F6;
+
+  .withdraw-insta-exceed-icon {
+    margin-right: 10px;
+  }
+  .withdraw-insta-exceed-msg {
+    .withdraw-insta-exceed-head {
+      font-size: 14px;
+      color: #160d2e;
+      font-weight: 700;
+    }
+
+    .withdraw-insta-exceed-info {
+      color: #160d2e;
+      font-size: 14px;
+      text-align: start;
+    }
   }
 }
