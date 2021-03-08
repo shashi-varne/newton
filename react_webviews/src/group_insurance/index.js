@@ -187,6 +187,15 @@ import ResumeIntermediatePage from './products/life_insurance/resumeIntermediate
 import FyntuneReportDetails from './products/life_insurance/fyntune_report_details';
 import LifeInsuranceAppUpdate from './products/life_insurance/app_update';
 
+//Advisory
+import AdvisoryLanding from './advisory/landing';
+import AdvisoryBasicDetails from './advisory/basic_details';
+import AdvisoryIncomeDetails from './advisory/income_details';
+import AdvisoryLiabilityDetails from './advisory/liability_details.js';
+import AdvisoryAssetDetails from './advisory/asset_details.js';
+import AdivsoryRecommendations from './advisory/recommendations.js';
+import EmailReport from './advisory/email_report.js';
+
 //call back
 import CallBackDetails from './call_back/call_back';
 
@@ -245,6 +254,14 @@ const Insurance = (props) => {
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
 
+          {/* INSURANCE ADVISORY */}
+          <Route path={`${url}/advisory/landing`} component={AdvisoryLanding} />
+          <Route path={`${url}/advisory/basic-details`} component={AdvisoryBasicDetails} />
+          <Route path={`${url}/advisory/income-details`} component={AdvisoryIncomeDetails} />
+          <Route path={`${url}/advisory/liability-details`} component={AdvisoryLiabilityDetails} />
+          <Route path={`${url}/advisory/asset-details`} component={AdvisoryAssetDetails} />
+          <Route path={`${url}/advisory/recommendations`} component={AdivsoryRecommendations} />
+          <Route path={`${url}/advisory/email-report`} component={EmailReport} />
           {/********** CALL BACK **********/}
           <Route path={`${url}/call-back-details`} component={CallBackDetails}/>
 

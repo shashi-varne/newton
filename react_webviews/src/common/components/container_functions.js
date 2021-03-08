@@ -13,6 +13,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import '../../utils/native_listner';
 import {Imgc} from '../../common/ui/Imgc';
+import { disableBodyTouch } from 'utils/validators';
 
 let start_time = '';
 
@@ -408,6 +409,7 @@ export function renderPageLoader() {
             </div>
         );
     } else if (this.props.showLoader === 'page') {
+        disableBodyTouch();
         return (
             <div className={`generic-page-loader ${loaderData ? loaderData.loaderClass : ''}`}>
                 <div className="LoaderOverlay">
@@ -419,6 +421,7 @@ export function renderPageLoader() {
             </div>
         );
     } else {
+        disableBodyTouch(true);
         return null;
     }
 }
