@@ -993,3 +993,37 @@
     margin-bottom: 20px;
   }
 }
+
+.nps-payment {
+  .mid-content-points {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0 5px 0;
+    .mid-content-points-left {
+      font-size: 14px;
+      font-weight: 400;
+      color: #878787;
+      /* margin: 5px 0 5px 0; */
+    }
+    .mid-content-points-right {
+      color: #4A494A;
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  .heading {
+    margin: 10px 0 20px 0;
+    border-top: 1px solid #CECECE;
+    border-bottom: 1px solid #CECECE;
+    padding: 10px 0px;
+
+    .mid-content-points-left {
+      color: #4A494A;
+    }
+    .mid-content-points-right {
+      color: #4A494A;
+      font-weight: 700;
+    }
+  }
+}

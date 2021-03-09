@@ -3,6 +3,7 @@ import Container from "fund_details/common/Container";
 import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
 import { initialize } from "../common/commonFunctions";
+import { storageService } from "utils/validators";
 
 class ReplaceFund extends Component {
   constructor(props) {
@@ -30,10 +31,8 @@ class ReplaceFund extends Component {
         show_loader: true,
       });
 
-      const params = {
-        type: "buildwealth",
-      };
-      const data = await this.get_recommended_funds(params);
+      let amount = storageService().get('npsAmount')
+      const data = await this.get_recommended_funds(amount);
 
       this.setState({
         recommended: data.recommended[0].pension_house,
