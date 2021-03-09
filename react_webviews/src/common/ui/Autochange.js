@@ -86,7 +86,7 @@ export default class Autochange extends React.Component {
           </Buttons>
           <input
             type="text"
-            // value={state.search}
+            value={state.search}
             onChange={methods.setSearch}
             placeholder="Type anything"
           />
