@@ -22,6 +22,8 @@ import DIY from "./diy";
 import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
+import PaymentCallback from "./invest/components/PaymentCallback";
+import SipPaymentCallback from "./invest/components/SipPaymentCallback";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -56,6 +58,8 @@ const Invest = (props) => {
         <ToastContainer autoClose={3000} />
         <Switch>
           <Route path={`${url}invest`} component={Landing} />
+          <Route path={`${url}landing`} exact component={Landing} />
+          <Route path={`${url}`} exact component={Landing} />
           <Route path={`${url}diy`} component={DIY} />
           <Route path={`${url}invest-journey`} component={InvestJourney} />
           <Route
@@ -79,7 +83,8 @@ const Invest = (props) => {
             render={(props) => <NfoCheckout {...props} type="nfo" />}
           />
           <Route path={`${url}sipdates`} component={SipDates} />
-          
+          <Route path={`${url}payment/callback/:status/:message`} component={PaymentCallback} />
+          <Route path={`${url}sip/payment/callback/:status/:message`} component={SipPaymentCallback} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

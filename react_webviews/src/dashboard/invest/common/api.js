@@ -1,5 +1,6 @@
 import Api from 'utils/api';
 import { isEmpty } from 'utils/validators';
+import { apiConstants } from '../constants';
 const genericErrMsg = 'Something went wrong';
 
 export const get_recommended_funds = async (params) => {
@@ -101,3 +102,23 @@ export const querySearch = async (name) => {
     return null;
   }
 };
+
+export const getCampaign = async () => {
+  const res = await Api.post(apiConstants.accountSummary, {
+    campaign: ["user_campaign"],
+  })
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw genericErrMsg
+  }
+  const { result, status_code: status } = res.pfwresponse
+  switch (status) {
+    case 200:
+      return result;
+    default:
+      throw result.error || result.message || genericErrMsg
+  }
+}
