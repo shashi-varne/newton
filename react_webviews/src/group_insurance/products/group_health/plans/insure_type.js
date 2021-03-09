@@ -123,6 +123,9 @@ class GroupHealthSelectInsureType extends Component {
         provider={this.state.provider}
         events={this.sendEvents('just_set_events')}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        skelton={this.state.skelton}
         title="Who would you like to insure?"
         fullWidthButton={true}
         buttonTitle="CONTINUE"

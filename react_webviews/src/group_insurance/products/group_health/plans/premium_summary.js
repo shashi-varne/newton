@@ -8,7 +8,6 @@ import { ghGetMember} from "../../../constants";
 import { getConfig } from "utils/functions";
 import BottomInfo from "../../../../common/ui/BottomInfo";
 import Api from "utils/api";
-import toast from "../../../../common/ui/Toast";
 import ReligarePremium from "../religare/religare_premium";
 import HDFCPremium from "../hdfc/hdfc_premium";
 import StarPremium from "../Star/star_premium";
@@ -19,7 +18,6 @@ class GroupHealthPlanPremiumSummary extends Component {
       premium_data: [],
       plan_selected_final: {},
       final_dob_data: [],
-      show_loader: true,
       plan_selected: {},
       get_lead: storageService().getObject("resumeToPremiumHealthInsurance") ? true : false,
       force_onload_call: true,
@@ -35,6 +33,10 @@ class GroupHealthPlanPremiumSummary extends Component {
   }
 
   onload = async () => {
+    this.setErrorData("onload");
+    let error = "";
+    let errorType = "";
+
     let groupHealthPlanData = this.state.groupHealthPlanData || {};
     let post_body = groupHealthPlanData.post_body;
 
@@ -67,34 +69,57 @@ class GroupHealthPlanPremiumSummary extends Component {
 
     //quote creation api
     if(!this.state.get_lead){
-      
       this.setState({
-        show_loader: true
+        skelton:true
       });
 
       try{
         let res = await Api.post(`api/insurancev2/api/insurance/health/quotation/upsert_quote/${this.state.providerConfig.provider_api}`, body );
-        
       let resultData = res.pfwresponse.result;
-      let quote_id = resultData.quotation ? resultData.quotation.id : '';
+      let quote_id = "";
       
-      if(res.pfwresponse.status_code === 400 && resultData.error){
-        quote_id =  resultData.error.quotation_id
+      if(res.pfwresponse.status_code === 200){
+        quote_id = resultData.quotation ? resultData.quotation.id : '';
       }
-
+      else{
+        if(typeof(resultData.error) === 'object')
+        {
+          quote_id =  resultData.error.quotation_id;
+          error = resultData.error.msg || true;
+        }
+        else{
+          error = resultData.error || resultData.message || true
+        }
+      }
+      
       groupHealthPlanData.post_body.quotation_id = quote_id;
       this.setLocalProviderData(groupHealthPlanData)
-  
-      this.setState({
-        show_loader: false
-      });
-      }catch(error){
+      if(!error){
         this.setState({
-          show_loader: false
+          skelton: false
         });
-        console.log(error)
       }
-  
+      }catch(err){
+        console.log(err)
+        this.setState({
+          skelton: false
+        });
+        error=true;
+        errorType= 'crash';
+        
+      }
+      if(error)
+      {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          showError: "page",
+        });
+      }
+      
     }
     
     let properties = {};
@@ -170,7 +195,7 @@ class GroupHealthPlanPremiumSummary extends Component {
 	      return;
 	    } else {
 	      this.setState({
-	        show_loader: false,
+	        skelton: false,
 	      });
 	    }
     }
@@ -193,13 +218,14 @@ class GroupHealthPlanPremiumSummary extends Component {
       nativeCallback({ events: eventObj });
     }
   }
-
   handleClick = async () => {
     this.sendEvents("next");
-
+    this.setErrorData("submit",true)
+    let error="";
+    let errorType="";
       try {
         this.setState({
-          show_loader: true,
+          show_loader: "button",
         });
 
         let post_body = {}
@@ -220,7 +246,10 @@ class GroupHealthPlanPremiumSummary extends Component {
 
         var resultData = res.pfwresponse.result;
         
-        if (res.pfwresponse.status_code === 200) {     
+        if (res.pfwresponse.status_code === 200) { 
+          this.setState({
+            show_loader: false,
+          });    
           let lead = resultData.quotation_details;
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
           let application_id = resultData.application_details.id;
@@ -230,16 +259,25 @@ class GroupHealthPlanPremiumSummary extends Component {
           this.setState({
             show_loader: false,
           });
-          toast(
-            resultData.error || resultData.message || "Something went wrong"
-          );
+          error=resultData.error || resultData.message || true
         }
-      } catch (err) {
-        this.setState({
-          show_loader: false,
-        });
-        toast("Something went wrong");
-      }    
+    } catch (err) {
+      this.setState({
+        show_loader: false,
+      });
+      error = true;
+      errorType = "crash";
+    }
+    if (error) {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: true,
+      });
+    } 
   };
 
   renderProviderPremium() {
@@ -257,6 +295,9 @@ class GroupHealthPlanPremiumSummary extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="Premium summary"
         fullWidthButton={true}
         onlyButton={true}
