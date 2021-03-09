@@ -91,6 +91,7 @@ export async function initialize() {
     "main_landing_screen",
     "eligibility_screen",
     "recommended",
+    "system_error"
   ];
 
   let idfc_dmi_screens = [
