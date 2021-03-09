@@ -21,6 +21,7 @@ import { isFunction } from '../../utils/validators';
 
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(props?.showDialog || false);
+  const [openPopup, setOpenPopup] = useState(props?.showPopup || false);
   const x = React.useRef(true);
   const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;
@@ -79,9 +80,9 @@ const Container = (props) => {
         onClose={handleClose}
         aria-labelledby='responsive-dialog-title'
       >
-        <DialogTitle id='form-dialog-title'>No Internet Found</DialogTitle>
+        <DialogTitle id='form-dialog-title'>{props.popUpText || 'No Internet Found'}</DialogTitle>
         <DialogContent>
-          <DialogContentText>Check your connection and try again.</DialogContentText>
+          <DialogContentText>{props.popupContent || 'Check your connection and try again.'}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button className='DialogButtonFullWidth' onClick={handleClose} color='default' autoFocus>
@@ -91,6 +92,29 @@ const Container = (props) => {
       </Dialog>
     );
   };
+
+  // const renderPopup = () => {
+  //   return (
+  //     <Dialog
+  //         fullScreen={false}
+  //         open={openPopup}
+  //         onClose={this.handleClose}
+  //         aria-labelledby="responsive-dialog-title"
+  //     >
+  //         <DialogContent>
+  //             <DialogContentText>{this.state.popupText}</DialogContentText>
+  //         </DialogContent>
+  //         <DialogActions>
+  //             <Button onClick={this.handlePopup} color="default" autoFocus>
+  //                 Yes
+  //             </Button>
+  //             <Button onClick={this.handleClose} color="default">
+  //                 No
+  //             </Button>
+  //         </DialogActions>
+  //     </Dialog>
+  //   );
+  // };
 
   const renderPageLoader = () => {
     if (props.showLoader) {
