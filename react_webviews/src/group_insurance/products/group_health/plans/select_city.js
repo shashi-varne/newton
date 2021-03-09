@@ -4,7 +4,6 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import Autosuggests from '../../../../common/ui/Autosuggest';
 import { FormControl } from 'material-ui/Form';
 import { initialize } from '../common_data';
@@ -18,7 +17,7 @@ class GroupHealthPlanSelectCity extends Component {
             suggestions_list: [],
             errors: [],
             fields: [],
-            show_loader: true
+            skelton:true
         }
         this.initialize = initialize.bind(this);
     }
@@ -48,8 +47,16 @@ class GroupHealthPlanSelectCity extends Component {
             this.navigate('plan-list');
         }
     }
+    
     async componentDidMount() {
-        
+        this.onload();
+    }
+
+    onload =async()=>{
+        this.setErrorData("onload");
+        this.setState({ skelton : true });
+        let error = "";
+        let errorType = "";
         let body = {
             "provider": this.state.providerConfig.provider_api
           };
@@ -76,18 +83,16 @@ class GroupHealthPlanSelectCity extends Component {
                             city: city
                         });
                     } else {
-                        toast(
+                        error=
                             resultData.error ||
                             resultData.message ||
-                            'Something went wrong'
-                        );
+                            true
+                        
                     }
                 } catch (err) {
                     console.log(err);
-                    this.setState({
-                        show_loader: false
-                    });
-                    toast('Something went wrong');
+                    error=true;
+                    errorType= "crash";
                 }
             const res2 = await Api.get('api/insurancev2/api/insurance/health/quotation/get_cities/hdfc_ergo');
             
@@ -107,20 +112,29 @@ class GroupHealthPlanSelectCity extends Component {
                 })
 
             this.setState({
-                show_loader: false
+                skelton:false
             });    
             } else {
-                toast(resultData2.error || resultData2.message
-                    || 'Something went wrong');
+                error=resultData2.error || resultData2.message
+                    || true;
             }
         } catch (err) {
-            console.log(err)
-            this.setState({
-                show_loader: false
-            });
-            toast('Something went wrong');
+        console.log(err)
+           error=true;
+           errorType="crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+          }
     }
+
     navigate = (pathname) => {
         this.props.history.push({
             pathname: pathname,
@@ -159,7 +173,9 @@ class GroupHealthPlanSelectCity extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title="Where do you live?"
                 fullWidthButton={true}
                 buttonTitle="CONTINUE"
