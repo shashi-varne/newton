@@ -873,11 +873,11 @@ body[data-device="mobile"] {
 .react-dropdown-select-option-label{
   padding: 2px;
   color: black;
-  // border: 1px solid #D6D6D6;
 }
 .react-dropdown-select-option{
   border: 1px solid #D6D6D6;
-  margin: 6px 2px 2px 0px !important;
+  width: fit-content;
+  // margin: 6px 2px 2px 0px !important;  
 }
 .react-dropdown-select-option-remove{
   color: white;
@@ -926,12 +926,17 @@ body[data-device="mobile"] {
 }
 
 .react-dropdown-select-content{  
-     font-size: 13px;
-     margin-bottom: -10px;
-     line-height: 21px;
-     font-weight: normal;
-     color: #161A2E;
-     margin-left: 4px;
+  font-size: 13px;
+  margin-bottom: -20px;
+  line-height: 21px;
+  font-weight: normal;
+  color: #161A2E;
+  max-width: 200px;
+  height: 33px !important;
+  overflow-x: scroll;
+  display: inline-flex !important;
+  flex-direction: column;
+  white-space: nowrap;
 }
 
 .react-dropdown-select-dropdown-handle{
@@ -944,5 +949,48 @@ body[data-device="mobile"] {
   line-height: 21px !important;
   color: #161A2E;
   margin-top: 5px;
-  margin-left: 0 !important;
+  margin-left: 5px !important;
+}
+
+.react-dropdown-select-dropdown-handle{
+  position: absolute;
+  left: 250px
+}
+
+.react-dropdown-select-clear{
+  position: absolute;
+  left: 225px;
+  color: black !important;
+}
+
+.css-s60fer-OptionComponent{
+  margin: 3px 0px 0px 5px !important;
+}
+
+.css-163mfpo-ItemComponent{
+  background-color: white !important;
+  color: #767E86 !important;
+}
+
+.colorbackground{
+  background-color: #EEEEEE;
+  color: #161A2E;
+}
+
+.css-ge5lft-ReactDropdownSelect:hover{
+  border-bottom: 1px solid #D6D6D6 !important;;
+}
+
+.css-ge5lft-ReactDropdownSelect:focus-within {
+  border-bottom: 1px solid #4F2DA7 !important;
+}
+
+.css-v1jrxw-ContentComponent{
+  display: inline-block !important;
+  margin-left: 5px;
+  margin-top: 4px;
+}
+
+.css-majisu-InputComponent{
+  margin-top: -5px;
 }

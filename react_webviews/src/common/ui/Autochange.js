@@ -11,8 +11,8 @@ export default class Autochange extends React.Component {
     super(props);
 
     this.state = {
-      multi: true,           // For multi Activate
-      itemRenderer: true,   // For multi Select with checkbox
+      multi: false,           // For multi Activate
+      itemRenderer: false,   // For multi Select with checkbox
       disabled: false,
       loading: false,
       contentRenderer: false,
@@ -60,17 +60,16 @@ export default class Autochange extends React.Component {
   };
 
   itemRenderer = ({ item, itemIndex, props, state, methods }) => (
-    <div key={item[props.valueField]} onClick={() => methods.addItem(item)}>
-      <div style={{ margin: "10px" }}>
+    <div key={item[props.valueField]} onClick={() => methods.addItem(item)} className={methods.isSelected(item) ? 'colorbackground' : ''}>
+      <div style={{ margin: "10px", minHeight: '21px' , lineHeight: '21px', position: "relative"  }}>
         <input type="checkbox" checked={methods.isSelected(item)} />
-        &nbsp;&nbsp;&nbsp;{item[props.labelField]}
+        &nbsp;&nbsp;&nbsp;<span style={{ position: 'absolute', top: '0' }}>{item[props.labelField]}</span>
       </div>
     </div>
   );
 
   dropdownRenderer = ({ props, state, methods }) => {
     const regexp = new RegExp(state.search, "i");
-    // const options = this.state.options;
 
     return (
       <div>
@@ -87,7 +86,7 @@ export default class Autochange extends React.Component {
           </Buttons>
           <input
             type="text"
-            value={state.search}
+            // value={state.search}
             onChange={methods.setSearch}
             placeholder="Type anything"
           />
@@ -146,10 +145,28 @@ export default class Autochange extends React.Component {
       placeholder="Type in"
     />
   );
+  
+  removeIns(){
+        let paragraphs = document.getElementsByTagName("ins");
+        var loop = function () {
+            for (var i = 0, len = paragraphs.length; i < len; i++) {
+                paragraphs[i].parentNode.removeChild(paragraphs[i]);
+            }
+        };
+        loop();
+  }
 
-  render() {
-
-    const options = this.state.options
+    render() {
+        const options = this.state.options
+        window.addEventListener('load', function () {
+            let paragraphs = document.getElementsByTagName("ins");
+            var loop = function () {
+                for (var i = 0, len = paragraphs.length; i < len; i++) {
+                    paragraphs[i].parentNode.removeChild(paragraphs[i]);
+                }
+            };
+            loop();
+        })
 
     return (    
         <FormControl className="Dropdown label" disabled={this.props.disabled}>
@@ -180,7 +197,7 @@ export default class Autochange extends React.Component {
               options={options}
               dropdownGap={5}
               keepSelectedInList={this.state.keepSelectedInList}
-              onDropdownOpen={() => undefined}
+              onDropdownOpen={() => this.removeIns()}
               onDropdownClose={() => undefined}
               onClearAll={() => undefined}
               onSelectAll={() => undefined}
