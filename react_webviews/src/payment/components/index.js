@@ -2,14 +2,12 @@ import React from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { getImage } from '../constants'
 import "./Style.css";
 import "./Style.scss";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
 import icn_debit_card from 'assets/icn_debit_card.svg';
-import icn_gpay from 'assets/icn_gpay.svg';
-import icn_phonepe from 'assets/icn_phonepe.svg';
-import icn_paytm from 'assets/icn_paytm.svg';
 import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';
 import completed_step from 'assets/completed_step.svg';
@@ -21,6 +19,7 @@ import toast from '../../common/ui/Toast';
 let store = {};
 let intent_supported = false;
 let upi_others = true;
+let upi_apps = {};
 let nativeData;
 function getAllUrlParams(url) {
 
@@ -92,6 +91,7 @@ if (urlParams.payment_data) {
   nativeData = JSON.parse(decodeData);
   intent_supported = nativeData.intent_supported;
   upi_others = nativeData.upi_others;
+  upi_apps = nativeData.upi_apps;
 }
 
 window.PlutusInitState = {};
@@ -99,6 +99,42 @@ window.PlutusInitState = {};
 const pushEvent = (eventObj) => {
   nativeCallback({ events: eventObj });
 };
+
+const UpiRows = (props) => {
+  let rows = [];
+  let i = 0;
+  let upis_keys = Object.keys(upi_apps);
+  for (let key in upi_apps) {
+    if (i === 3) {
+      break;
+    } else {
+      if (upis_keys.length > 3) {
+        if (upis_keys.includes("GPay")) {
+          i++;
+          rows.push(<div onClick={() => props.goToPayment(upi_apps["GPay"].package_name)}><img alt="payment" src={getImage(upi_apps["GPay"].package_name)} key={i} /><div className="bottomtext">GPay</div></div>)
+        }
+        if (upis_keys.includes("PhonePe")) {
+          i++;
+          rows.push(<div onClick={() => props.goToPayment(upi_apps["PhonePe"].package_name)}><img alt="payment" src={getImage(upi_apps["PhonePe"].package_name)} key={i} /><div className="bottomtext">PhonePe</div></div>)
+        }
+        if (upis_keys.includes("Paytm")) {
+          i++;
+          rows.push(<div onClick={() => props.goToPayment(upi_apps["Paytm"].package_name)}><img alt="payment" src={getImage(upi_apps["Paytm"].package_name)} key={i} /><div className="bottomtext">Paytm</div></div>)
+        }
+
+        if (!upis_keys.includes("GPay") && !upis_keys.includes("PhonePe") && !upis_keys.includes("Paytm")) {
+          i++;
+          rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img alt="payment" src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+        }
+
+      } else {
+        i++;
+        rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img alt="payment" src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+      }
+    }
+  }
+  return (rows)
+}
 
 const UpiModal = (props) => {
   window.PlutusInitState.page = 'modal';
@@ -135,7 +171,7 @@ const UpiModal = (props) => {
           <label className="checkbox"><input type="checkbox" onChange={() => props.handleCheck()} /><span className={`checkmark ${store.partner}`}></span></label>
           <div className={`${props.highlighttnc ? 'active' : ''} ${store.partner}`}>Make sure to use same <b>VPA(UPI ID)</b> linked to above selected account</div>
         </div>
-        <div className="upi-button margin-top">
+        <div className={`${getConfig().app === 'ios' ? 'ios' : ''} upi-button margin-top`}>
           <button className={`${props.checked ? 'active' : ''} ${store.partner}`} onClick={() => props.loadUPi()}>Continue to Pay ₹ {store.amount}</button>
         </div>
       </div>
@@ -185,7 +221,7 @@ const SelectBankModal = (props) => {
         <div className="list">
           {bankList}
         </div>
-        <div className="footer upi-button margin-top">
+        <div className={`${getConfig().app === 'ios' ? 'ios' : ''} footer upi-button margin-top`}>
           <button className={`active ${store.partner}`} onClick={() => props.closeBankModal(true)}>Continue</button>
         </div>
       </div>
@@ -251,7 +287,7 @@ class PaymentOption extends React.Component {
     this.selectedBank = this.selectedBank.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-  
+
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
   }
@@ -270,7 +306,7 @@ class PaymentOption extends React.Component {
         intent_supported = true;
         upi_others = false;
       }
-      
+
       if (store.partner === 'ippb') {
         intent_supported = false;
         upi_others = true;
@@ -510,21 +546,11 @@ class PaymentOption extends React.Component {
       });
       window.location.href = store.url + '&account_number=' + this.state.selectedBank.account_number + '&gateway_type=UPI';
     } else {
-      let upi_name = '';
-      if (type === 'com.google.android.apps.nbu.paisa.user') {
-        upi_name = 'gpay'
-      }
-      if (type === 'com.phonepe.app') {
-        upi_name = 'phonepe'
-      }
-      if (type === 'net.one97.paytm') {
-        upi_name = 'paytm'
-      }
       let eventObj = {
         "event_name": "pg_payment_option",
         "properties": {
           "user_action": "next",
-          "upi_name": upi_name
+          "upi_name": type
         }
       };
       pushEvent(eventObj);
@@ -659,9 +685,7 @@ class PaymentOption extends React.Component {
                     </div>
                   </label>
                   {intent_supported && !upi_others && <div className="add-button tab-content">
-                    <div onClick={() => this.goToPayment('com.google.android.apps.nbu.paisa.user')}><img src={icn_gpay} alt="gpay" /><div className="bottomtext">Google Pay</div></div>
-                    <div onClick={() => this.goToPayment('com.phonepe.app')}><img src={icn_phonepe} alt="phonepe" /><div className="bottomtext">PhonePe</div></div>
-                    <div onClick={() => this.goToPayment('net.one97.paytm')}><img src={icn_paytm} alt="paytm" /><div className="bottomtext">Paytm</div></div>
+                    <UpiRows goToPayment={this.goToPayment} />
                     <div onClick={() => this.goToPayment('others')}><img src={icn_more} alt="more" /><div className="bottomtext">Others</div></div>
                   </div>}
                   {intent_supported && upi_others && <div className="add-button tab-content">
