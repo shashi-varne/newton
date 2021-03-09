@@ -317,7 +317,10 @@ class StarAddress extends Component {
     return (
       <Container
         events={this.sendEvents('just_set_events')}
+        skelton={this.state.skelton}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title={this.setEditTitle("Address details")}
         buttonTitle="CONTINUE"
         withProvider={true}
