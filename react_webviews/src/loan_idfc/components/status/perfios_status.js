@@ -3,7 +3,6 @@ import Container from "../../common/Container";
 import { initialize } from "../../common/functions";
 import { getUrlParams } from "utils/validators";
 import { nativeCallback } from "utils/native_callback";
-import ContactUs from "../../../common/components/contact_us";
 import { Imgc } from "../../../common/ui/Imgc";
 import { getConfig } from "utils/functions";
 
