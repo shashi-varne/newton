@@ -1,4 +1,7 @@
 import React, { Fragment } from 'react';
+import { getConfig } from '../../utils/functions';
+
+const productType = getConfig().productName;
 
 export default function CamsRequestSteps() {
   return (
@@ -30,7 +33,10 @@ export default function CamsRequestSteps() {
       </div>
       <div className="cas-req-step">
         <div className="cas-req-step-title">
-          <b>Step 5:</b> Enter password as <span className="highlighted-text">fisdom1234</span>
+          <b>Step 5:</b> Enter password as
+          <span className="highlighted-text">
+            &nbsp;{productType === 'finity' ? 'finity1234' : 'fisdom1234'}
+          </span>
         </div>
         <img src={require('assets/cams_pwd.png')} alt="screenshot" />
       </div>
