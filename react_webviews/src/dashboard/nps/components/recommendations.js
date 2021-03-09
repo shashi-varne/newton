@@ -38,7 +38,8 @@ class Recommendations extends Component {
       graphData: [],
       display_summary_only: false,
       amount: '',
-      url: ''
+      url: '',
+      pension_house: {}
     };
     this.initialize = initialize.bind(this);
   }
@@ -51,16 +52,18 @@ class Recommendations extends Component {
     let currentUser = storageService().getObject('user');
     let { display_summary_only } = this.state;
 
-    // display_summary_only = currentUser.nps_investment || false;
-    // if (storageService().get('nps-pran_number')) {
-    //   display_summary_only = true;
-    // }
+    display_summary_only = currentUser.nps_investment || false;
+    if (storageService().get('nps-pran_number')) {
+      display_summary_only = true;
+    }
 
     let amount = storageService().get('npsAmount');
+    let pension_house = storageService().getObject('nps-recommend') || {};
 
     this.setState({
       display_summary_only: display_summary_only,
-      amount: amount
+      amount: amount,
+      pension_house: pension_house
     })
 
     this.fetchRecommendedFunds();
@@ -194,6 +197,13 @@ class Recommendations extends Component {
     );
   };
 
+  closeInvestment = () => {
+    this.setState({
+      openInvestmentSummary: false
+    })
+    this.navigate('amount/one-time')
+  }
+
   renderInvestmentSummary = () => {
     let { recommendations, all_charges } = this.state;
 
@@ -201,7 +211,7 @@ class Recommendations extends Component {
       <Dialog
         id="bottom-popup"
         open={this.state.openInvestmentSummary || false}
-        onClose={this.handleClose}
+        onClose={this.closeInvestment}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         TransitionComponent={Transition}
@@ -245,7 +255,7 @@ class Recommendations extends Component {
               </div>
             </div>
             <div>
-              <button onClick={() => this.payment()} className="call-back-popup-button">CONTINUE TO PAYMENT</button>
+              <button style={{cursor: 'pointer'}} onClick={() => this.payment()} className="call-back-popup-button">CONTINUE TO PAYMENT</button>
             </div>
           </div>
         </DialogContent>
@@ -263,7 +273,7 @@ class Recommendations extends Component {
     let data = {
       amount: this.state.amount,
       order_type: "one_time",
-      pension_house_id: this.state.recommendations.pension_house.pension_house_id,
+      pension_house_id: (!this.state.display_summary_only && this.state.pension_house.pension_house_id) || this.state.recommendations.pension_house.pension_house_id,
       risk: this.state.risk,
     };
 
@@ -291,7 +301,7 @@ class Recommendations extends Component {
   };
 
   render() {
-    let { recommendations, show_loader, all_charges, graphData, display_summary_only } = this.state;
+    let { recommendations, pension_house, show_loader, all_charges, graphData, display_summary_only } = this.state;
 
     return (
       <Container
@@ -300,6 +310,7 @@ class Recommendations extends Component {
         buttonTitle="PROCEED"
         hideInPageTitle
         hidePageTitle
+        noFooter={display_summary_only}
         title="Recommended fund"
         showLoader={show_loader}
         handleClick={this.handleClick}
@@ -319,13 +330,13 @@ class Recommendations extends Component {
               <div className="name">
                 <div className="icon">
                   <img
-                    src={recommendations && recommendations.pension_house.image}
-                    alt={recommendations}
+                    src={pension_house.image || (recommendations && recommendations.pension_house.image)}
+                    alt=''
                     width="90"
                   />
                 </div>
                 <div className="text">
-                  <div>{recommendations && recommendations.pension_house.name}</div>
+                  <div>{pension_house.name || (recommendations && recommendations.pension_house.name)}</div>
                 </div>
               </div>
             </div>

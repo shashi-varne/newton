@@ -72,6 +72,7 @@ class NpsIdentity extends Component {
       that.setState({
         img: img,
         file: file,
+        uploaded: true
       })
     });
 
@@ -95,7 +96,7 @@ class NpsIdentity extends Component {
 
     this.setState({
       nps_details: nps_details,
-      selfie_needed: selfie_needed,
+      selfie_needed: !selfie_needed,
     });
   };
 
@@ -123,19 +124,17 @@ class NpsIdentity extends Component {
     let canSubmit = this.formCheckUpdate(keys_to_check, form_data);
 
     if (canSubmit) {
-      let queryParams = `is_married=${
-        form_data.marital_status === "married"
-      }&mother_name=${form_data.mother_name}${
-        form_data.marital_status === "married"
+      let queryParams = `is_married=${form_data.marital_status === "married"
+        }&mother_name=${form_data.mother_name}${form_data.marital_status === "married"
           ? "&spouse_name=" + form_data.spouse_name
           : ""
-      }`;
+        }`;
 
       if (!this.state.selfie_needed) {
         await this.uploadDocs(this.state.file);
 
         this.nps_register(queryParams, "nominee");
-        
+
       } else {
         this.nps_register(queryParams, "nominee");
       }
@@ -164,7 +163,6 @@ class NpsIdentity extends Component {
     let file = e.target.files[0] || {};
 
     let acceptedType = [
-      "application/pdf",
       "image/jpeg",
       "image/jpg",
       "image/png",
@@ -239,7 +237,8 @@ class NpsIdentity extends Component {
   }
 
   render() {
-    let { form_data, nps_details, selfie_needed, uploaded, img } = this.state;
+    let { form_data, selfie_needed, uploaded, img } = this.state;
+
     return (
       <Container
         classOverRide="pr-error-container"
@@ -251,6 +250,7 @@ class NpsIdentity extends Component {
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
         classOverRideContainer="pr-container"
+        disable={(selfie_needed && !uploaded) ? true : false}
       >
         <div className="page-heading">
           <img src={require("assets/hand_icon.png")} alt="" width="50" />
@@ -259,7 +259,7 @@ class NpsIdentity extends Component {
           </div>
         </div>
 
-        {!selfie_needed && (
+        {selfie_needed && (
           <div className="image-prev-container">
             <div className="heading">Share your selfie</div>
             <div className="display-flex">

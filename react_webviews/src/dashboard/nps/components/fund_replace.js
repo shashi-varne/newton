@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Container from "fund_details/common/Container";
-import toast from "common/ui/Toast";
 import Radio from "@material-ui/core/Radio";
 import { initialize } from "../common/commonFunctions";
 import { storageService } from "utils/validators";
@@ -12,7 +11,7 @@ class ReplaceFund extends Component {
       pension_houses: "",
       recommended: "",
       show_loader: false,
-      selectedValue: "",
+      selectedValue: '',
     };
     this.initialize = initialize.bind(this);
   }
@@ -26,7 +25,6 @@ class ReplaceFund extends Component {
   };
 
   fetchRecommendedFunds = async () => {
-    try {
       this.setState({
         show_loader: true,
       });
@@ -34,27 +32,32 @@ class ReplaceFund extends Component {
       let amount = storageService().get('npsAmount')
       const data = await this.get_recommended_funds(amount);
 
+      data.result.pension_houses.map((el, index) => {
+        if (el.name  === data.result.recommended[0].pension_house.name) {
+          data.result.pension_houses.splice(index, 1);
+          data.result.pension_houses.splice(0, 0, el)
+        }
+      })
+
       this.setState({
-        recommended: data.recommended[0].pension_house,
-        pension_houses: data.pension_houses,
+        recommended: data.result.recommended[0].pension_house,
+        pension_houses: data.result.pension_houses,
         show_loader: false,
       });
-    } catch (err) {
-      this.setState({
-        show_loader: false,
-      });
-      toast(err);
-    }
+      
   };
 
   handleChange = (index) => {
     this.setState({
       selectedValue: index,
+      nps_recommended: this.state.pension_houses[index]
     });
   };
 
   handleClick = () => {
-    // endpoint = api/kyc/v2/mine
+    
+    storageService().setObject('nps-recommend', this.state.nps_recommended);
+    this.navigate('recommendation/one-time')
   };
 
   render() {
@@ -95,7 +98,7 @@ class ReplaceFund extends Component {
                     </div>
                     <Radio
                       checked={this.state.selectedValue === index}
-                      value={this.state.selectedValue || ""}
+                      value={this.state.selectedValue.toString() || ""}
                       name="radio-button-demo"
                       color="primary"
                     />

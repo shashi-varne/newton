@@ -155,7 +155,8 @@ class NpsInvestments extends Component {
               onClick={() => this.redirection(this.state.npsCampActionUrl)}
             >
               <div className="icon">
-                <img src={require("assets/warning_icon.svg")} width="40" />
+                <img
+                  alt='' src={require("assets/warning_icon.svg")} width="40" />
               </div>
               <div className="text">
                 <div className="title">NPS activation pending</div>
@@ -166,6 +167,7 @@ class NpsInvestments extends Component {
             <div className="list" onClick={() => this.redirection( this.state.nps_data.nps_tax_statement_url)}>
               <div className="icon">
                 <img
+                  alt=''
                   src={require("assets/fisdom/icn_tax_statement.svg")}
                   width="40"
                 />
@@ -190,6 +192,7 @@ class NpsInvestments extends Component {
               >
                 <div className="icon">
                   <img
+                    alt=''
                     src={require("assets/kyc_icon.svg")}
                     height="40"
                     width="40"
@@ -202,7 +205,8 @@ class NpsInvestments extends Component {
               </div>}
             {/* <!-- <div className="list" ui-sref="nps-sip-schedule" ng-show="sipIntents.length > 0">
               <div className="icon">
-                <img src="../assets/img/sip.png" width="50" />
+                <img
+                  alt='' src="../assets/img/sip.png" width="50" />
               </div>
               <div className="text">
                 <div className="title">NPS SIP Schedule</div>
@@ -215,6 +219,7 @@ class NpsInvestments extends Component {
             >
               <div className="icon">
                 <img
+                  alt=''
                   src={require("assets/fisdom/icn_fundwise_summary.svg")}
                   width="40"
                 />
@@ -230,6 +235,7 @@ class NpsInvestments extends Component {
             >
               <div className="icon">
                 <img
+                  alt=''
                   src={require("assets/fisdom/icn_fundwise_summary.svg")}
                   width="40"
                 />

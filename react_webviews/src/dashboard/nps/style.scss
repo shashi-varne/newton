@@ -278,7 +278,7 @@
 
     .graph {
       width: 200px;
-      // text-align: -webkit-center;
+      text-align: -webkit-center;
     }
 
     .stats {
@@ -783,6 +783,12 @@
 
 .image-prev-container {
   margin: 20px 15px 20px;
+
+  .title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
 
   .heading {
     margin-bottom: 10px;

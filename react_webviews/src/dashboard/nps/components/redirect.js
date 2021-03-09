@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Container from "fund_details/common/Container";
 import { getUrlParams } from "utils/validators";
 import { initialize } from "../common/commonFunctions";
-import { storageService } from "utils/validators";
 import { getConfig } from "../../../utils/functions";
 
 export default class NpsPaymentRedirect extends Component {

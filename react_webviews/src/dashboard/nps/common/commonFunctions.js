@@ -421,7 +421,7 @@ export async function uploadDocs(file) {
   var uploadurl = '/api/invest/folio/import/image';
   const data = new FormData()
   data.append('res', file);
-  data.append('doc_type', 'pan');
+  data.append('doc_type', file.doc_type);
 
   try {
     const res = await Api.post(uploadurl, data);
