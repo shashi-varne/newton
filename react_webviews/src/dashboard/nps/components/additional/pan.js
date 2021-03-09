@@ -8,9 +8,17 @@ import email from "assets/email2.svg";
 import { FormControl } from "material-ui/Form";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import { initialize } from "../../common/commonFunctions";
-import { dobFormatTest, formatDate, validateEmail, validateNumber, validatePan } from "utils/validators";
+import {
+  dobFormatTest,
+  formatDate,
+  isValidDate,
+  IsFutureDate,
+  validateEmail,
+  validatePan,
+} from "utils/validators";
 import Grid from "material-ui/Grid";
 import { storageService } from "utils/validators";
+import Dialog, { DialogContent } from "material-ui/Dialog";
 
 const yesOrNo_options = [
   {
@@ -31,10 +39,12 @@ class PanDetails extends Component {
       pan: "",
       dob: "",
       mobile_number: "",
-      currentUser: '',
+      currentUser: "",
       is_nps_contributed: false,
       show_loader: false,
-      openPopup: false
+      openDialog: false,
+      title: "",
+      subtitle: "",
     };
     this.initialize = initialize.bind(this);
   }
@@ -48,18 +58,17 @@ class PanDetails extends Component {
     let userKyc = storageService().getObject("kyc");
     let { form_data } = this.state;
 
-    form_data.dob = userKyc.pan.meta_data.dob || '';
-    form_data.pan = userKyc.pan.meta_data.pan_number || '';
-      
-    form_data.email = userKyc.address.meta_data.email || '';
-    form_data.mobile_number = userKyc.address.meta_data.mobile_number || '';
+    form_data.dob = userKyc.pan.meta_data.dob || "";
+    form_data.pan = userKyc.pan.meta_data.pan_number || "";
+
+    form_data.email = userKyc.address.meta_data.email || "";
+    form_data.mobile_number = userKyc.address.meta_data.mobile_number || "";
 
     this.setState({
       currentUser: currentUser,
       userKyc: userKyc,
-      form_data: form_data
-    })
-
+      form_data: form_data,
+    });
   };
 
   handleChange = (name) => (event) => {
@@ -67,10 +76,14 @@ class PanDetails extends Component {
     let { form_data } = this.state;
 
     if (name === "mobile_number" || name === "pran") {
-      value = !isNaN(parseInt(value, 10)) && parseInt(value, 10)
+      value = !isNaN(parseInt(value, 10)) && parseInt(value, 10);
     }
 
     if (name === "dob") {
+      if (!dobFormatTest(value)) {
+        return;
+      }
+
       var input = document.getElementById("dob");
       input.onkeyup = formatDate;
     }
@@ -93,7 +106,7 @@ class PanDetails extends Component {
   };
 
   handleClick = () => {
-    let { form_data, userKyc, is_nps_contributed } = this.state;
+    let { form_data, userKyc, is_nps_contributed, currentUser } = this.state;
     let canSubmit = true;
 
     if (!validatePan(form_data.pan)) {
@@ -101,18 +114,30 @@ class PanDetails extends Component {
       canSubmit = false;
     }
 
-    if (is_nps_contributed && form_data.pran.length !== 12) {
+    if (
+      is_nps_contributed &&
+      (!form_data.pran || form_data.pran.toString().length !== 12)
+    ) {
       form_data.pran_error = "invalid pran";
       canSubmit = false;
     }
 
-    if (!form_data.mobile_number.length !== 10) {
+    if (currentUser.mobile === null && !form_data.mobile_number.length !== 10) {
       form_data.mobile_number_error = "invalid mobile_number";
       canSubmit = false;
     }
 
-    if (!validateEmail(form_data.email)) {
+    if (currentUser.email === null && !validateEmail(form_data.email)) {
       form_data.email_error = "invalid email";
+      canSubmit = false;
+    }
+
+    if (IsFutureDate(form_data.dob)) {
+      form_data.dob_error = "future date not allowed";
+      canSubmit = false;
+    }
+    if (!isValidDate(form_data.dob) || !form_data.dob) {
+      form_data.dob_error = "invalid date";
       canSubmit = false;
     }
 
@@ -124,12 +149,14 @@ class PanDetails extends Component {
       let { pan, address } = userKyc;
 
       if (is_nps_contributed) {
-        storageService().set('nps-pran_number', form_data.pran)
+        storageService().set("nps-pran_number", form_data.pran);
+      } else {
+        storageService().set("nps-pran_number", '');
       }
 
       pan.meta_data.dob = form_data.dob;
       pan.meta_data.pan_number = form_data.pan;
-      
+
       address.meta_data.email = form_data.email;
       address.meta_data.mobile_number = form_data.mobile_number;
 
@@ -146,6 +173,67 @@ class PanDetails extends Component {
     }
   };
 
+  handleClose = () => {
+    this.setState({
+      openDialog: false,
+    });
+  };
+
+  renderDialog = () => {
+    return (
+      <Dialog
+        id="bottom-popup"
+        open={this.state.openDialog || false}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <div className="nps-dialog" id="alert-dialog-description">
+            <div className="nps-dialog-content">
+              <div className="content">
+                <div className="title">{this.state.title}</div>
+                <div className="sub-title">{this.state.subtitle}</div>
+              </div>
+              <img
+                src={require(`assets/${this.state.productName}/popup_kyc_pending.svg`)}
+              />
+            </div>
+            <div className="btn">
+              <button
+                style={{ cursor: "pointer" }}
+                onClick={() => this.handleClose()}
+                className="call-back-popup-button not-now"
+              >
+                NOT NOW
+              </button>
+              <button
+                style={{ cursor: "pointer" }}
+                onClick={() => this.cta_action()}
+                className="call-back-popup-button"
+              >
+                {this.state.btn_text}
+              </button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
+  cta_action = () => {
+    let { btn_text } = this.state;
+    if (btn_text === 'SIGN OUT') {
+      this.navigate('logout')
+    } else {
+      this.navigate('accountmerge')
+    }
+  }
+
+  goBack = () => {
+    this.navigate('invest')
+  }
+
   render() {
     let { form_data, is_nps_contributed, currentUser } = this.state;
     return (
@@ -156,8 +244,8 @@ class PanDetails extends Component {
         title="PAN Details"
         showLoader={this.state.show_loader}
         handleClick={this.handleClick}
+        goBack={this.goBack}
       >
-        
         <div className="pan-details">
           <div className="top-title">Your Details</div>
           <FormControl fullWidth>
@@ -175,7 +263,7 @@ class PanDetails extends Component {
                 onChange={this.handleChange("pan")}
               />
             </div>
-            
+
             <div className="InputField">
               <Grid container spacing={16} className="marital_status">
                 <Grid item xs={2}>
@@ -207,6 +295,7 @@ class PanDetails extends Component {
                   inputMode="numeric"
                   pattern="[0-9]*"
                   name="pran"
+                  maxLength={12}
                   error={!!form_data.pran_error}
                   helperText={form_data.pran_error}
                   value={form_data.pran || ""}
@@ -230,39 +319,44 @@ class PanDetails extends Component {
               />
             </div>
 
-            {currentUser.mobile === null && <div className="InputField">
-              <InputWithIcon
-                icon={phone}
-                width="30"
-                id="number"
-                name="mobile_number"
-                inputMode="numeric"
-                maxLength={10}
-                label="Enter Mobile Number"
-                pattern="[0-9]*"
-                class="Mobile"
-                error={!!form_data.mobile_number_error}
-                helperText={form_data.mobile_number_error}
-                value={form_data.mobile_number || ""}
-                onChange={this.handleChange("mobile_number")}
-              />
-            </div>}
+            {currentUser.mobile === null && (
+              <div className="InputField">
+                <InputWithIcon
+                  icon={phone}
+                  width="30"
+                  id="number"
+                  name="mobile_number"
+                  inputMode="numeric"
+                  maxLength={10}
+                  label="Enter Mobile Number"
+                  pattern="[0-9]*"
+                  class="Mobile"
+                  error={!!form_data.mobile_number_error}
+                  helperText={form_data.mobile_number_error}
+                  value={form_data.mobile_number || ""}
+                  onChange={this.handleChange("mobile_number")}
+                />
+              </div>
+            )}
 
-            {currentUser.email === null && <div className="InputField">
-              <InputWithIcon
-                icon={email}
-                width="30"
-                type="email"
-                id="email"
-                name="email"
-                label="Your Email"
-                error={!!form_data.email_error}
-                helperText={form_data.email_error}
-                value={form_data.email || ""}
-                onChange={this.handleChange("email")}
-              />
-            </div>}
+            {currentUser.email === null && (
+              <div className="InputField">
+                <InputWithIcon
+                  icon={email}
+                  width="30"
+                  type="email"
+                  id="email"
+                  name="email"
+                  label="Your Email"
+                  error={!!form_data.email_error}
+                  helperText={form_data.email_error}
+                  value={form_data.email || ""}
+                  onChange={this.handleChange("email")}
+                />
+              </div>
+            )}
           </FormControl>
+          {this.renderDialog()}
         </div>
       </Container>
     );

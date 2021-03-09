@@ -1033,3 +1033,97 @@
     }
   }
 }
+
+.nps-scheme {
+  div {
+    div.item {
+      padding: 10px 20px !important;
+      cursor: pointer;
+
+      .icon {
+        flex: 1;
+        text-align: center;
+      }
+
+      .text {
+        flex: 2 !important;
+
+        div {
+          font-size: 20px;
+          font-weight: 600;
+          color: #333333;
+        }
+
+        p {
+          color: rgb(135, 135, 135);
+          font-size: 18px;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.nfo-scheme {
+  div {
+    div.item {
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 15px;
+      border: 1px solid #e8e8e8;
+      padding: 10px 15px;
+      border-radius: 5px;
+      background: #fafafa;
+      box-shadow: 0 3px 5px 0 rgba(0, 0, 0, .1);
+      align-items: center;
+
+      .icon {
+        flex: 1;
+      }
+
+      .text {
+        flex: 3;
+
+        div {
+          margin-top: 10px;
+        }
+
+        p {
+          color: rgb(135, 135, 135);
+          font-size: 18px;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.nps-dialog {
+  .nps-dialog-content {
+    display: flex;
+  
+    img {
+      margin-top: -10px;
+      width: 100px;
+    }
+
+    .title {
+      font-size: 17px;
+      font-weight: 600;
+    }
+  }
+
+  .btn {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+
+    .not-now {
+      background-color: #878787;
+    }
+  }
+
+  .call-back-popup-button {
+    width: 40%;
+  }
+}

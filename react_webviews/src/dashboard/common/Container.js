@@ -21,7 +21,6 @@ import { isFunction } from '../../utils/validators';
 
 const Container = (props) => {
   const [openDialog, setOpenDialog] = useState(props?.showDialog || false);
-  const [openPopup, setOpenPopup] = useState(props?.showPopup || false);
   const x = React.useRef(true);
   const loaderMain = getConfig().productName !== 'fisdom' ? loader_myway : loader_fisdom;
   const inPageTitle = true;

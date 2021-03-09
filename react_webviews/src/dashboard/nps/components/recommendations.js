@@ -15,7 +15,7 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import PieChart from "./piegraph";
-import Slide from '@material-ui/core/Slide';
+import Slide from "@material-ui/core/Slide";
 import { formatAmountInr } from "../../../utils/validators";
 
 const risk_level = ["High", "Low", "Moderate", "Moderate Low"];
@@ -33,13 +33,13 @@ class Recommendations extends Component {
       recommendations: "",
       all_charges: "",
       openDialog: false,
-      openInvestmentSummary: false,
-      risk: '',
+      openInvestmentSummary: true,
+      risk: "",
       graphData: [],
       display_summary_only: false,
-      amount: '',
-      url: '',
-      pension_house: {}
+      amount: "",
+      url: "",
+      pension_house: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -49,22 +49,23 @@ class Recommendations extends Component {
   }
 
   onload = () => {
-    let currentUser = storageService().getObject('user');
+    let currentUser = storageService().getObject("user");
     let { display_summary_only } = this.state;
 
     display_summary_only = currentUser.nps_investment || false;
-    if (storageService().get('nps-pran_number')) {
+    if (storageService().get("nps-pran_number")) {
       display_summary_only = true;
     }
 
-    let amount = storageService().get('npsAmount');
-    let pension_house = storageService().getObject('nps-recommend') || {};
+    let amount = storageService().get("npsAmount");
+    let prevpath = storageService().get('nps-prevpath') || '';
+    let pension_house = prevpath === 'fund-replace' ? storageService().getObject("nps-recommend") : {};
 
     this.setState({
       display_summary_only: display_summary_only,
       amount: amount,
-      pension_house: pension_house
-    })
+      pension_house: pension_house,
+    });
 
     this.fetchRecommendedFunds();
   };
@@ -75,40 +76,39 @@ class Recommendations extends Component {
         show_loader: true,
       });
 
-      let amount = storageService().get('npsAmount')
+      let amount = storageService().get("npsAmount");
 
       const res = await this.get_recommended_funds(amount);
       let data = res.result;
 
-
-      if (res.status_code === 200) {
+      if (res.status_code === 200 && !this.state.display_summary_only) {
         let recommendations = data.recommended[0];
         let graphData = [
           {
-            "id": "E",
-            "label": "E",
-            "value": recommendations.e_allocation,
-            "color": "hsl(227, 70%, 50%)"
+            id: "E",
+            label: "E",
+            value: recommendations.e_allocation,
+            color: "hsl(227, 70%, 50%)",
           },
           {
-            "id": "G",
-            "label": "G",
-            "value": recommendations.g_allocation,
-            "color": "hsl(316, 70%, 50%)"
+            id: "G",
+            label: "G",
+            value: recommendations.g_allocation,
+            color: "hsl(316, 70%, 50%)",
           },
           {
-            "id": "C",
-            "label": "C",
-            "value": recommendations.c_allocation,
-            "color": "hsl(291, 70%, 50%)"
+            id: "C",
+            label: "C",
+            value: recommendations.c_allocation,
+            color: "hsl(291, 70%, 50%)",
           },
           {
-            "id": "A",
-            "label": "A",
-            "value": recommendations.a_allocation,
-            "color": "hsl(262, 70%, 50%)"
+            id: "A",
+            label: "A",
+            value: recommendations.a_allocation,
+            color: "hsl(262, 70%, 50%)",
           },
-        ]
+        ];
 
         this.setState({
           recommendations: recommendations,
@@ -116,20 +116,19 @@ class Recommendations extends Component {
           payment_details: data.payment_breakup,
           show_loader: false,
           risk: recommendations.risk,
-          graphData: graphData
+          graphData: graphData,
         });
       } else {
-        toast("something went wrong")
+        toast("something went wrong");
       }
 
-      if (this.state.display_summary_only)
-        this.handleClick()
-
+      if (this.state.display_summary_only) this.handleClick();
     } catch (err) {
       this.setState({
         show_loader: false,
       });
-      toast(err);
+      console.log(err);
+      toast("something went wrong");
     }
   };
 
@@ -180,7 +179,6 @@ class Recommendations extends Component {
                 />
               </div>
             ))}
-
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -199,10 +197,10 @@ class Recommendations extends Component {
 
   closeInvestment = () => {
     this.setState({
-      openInvestmentSummary: false
-    })
-    this.navigate('amount/one-time')
-  }
+      openInvestmentSummary: false,
+    });
+    this.navigate("amount/one-time");
+  };
 
   renderInvestmentSummary = () => {
     let { recommendations, all_charges } = this.state;
@@ -217,8 +215,10 @@ class Recommendations extends Component {
         TransitionComponent={Transition}
       >
         <DialogContent>
-          <div className="group-health-bmi-dialog" id="alert-dialog-description">
-
+          <div
+            className="group-health-bmi-dialog"
+            id="alert-dialog-description"
+          >
             <div className="md-dialog-content">
               {/* <div ng-if="pran_number || (!recommendation_avail && pran_backend)">
                 <div className="title">Contribution to your existing NPS</div>
@@ -228,52 +228,93 @@ class Recommendations extends Component {
                 </div>
               </div> */}
 
-              <div style={{ display: 'flex', margin: '0 0 20px 0' }}>
-                <img src={recommendations.pension_house && recommendations.pension_house.image}
+              <div style={{ display: "flex", margin: "0 0 20px 0" }}>
+                <img
+                  src={
+                    recommendations.pension_house &&
+                    recommendations.pension_house.image
+                  }
                   alt="NPS"
-                  style={{ width: '70px' }}
+                  style={{ width: "70px" }}
                 />
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', margin: '0 0 0 10px' }}>
-                  <div style={{ color: '#4A494A', fontSize: '10px', fontWeight: 700 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    margin: "0 0 0 10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "#4A494A",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                    }}
+                  >
                     TIER 1
                   </div>
-                  <div style={{ fontSize: '16px', fontWeight: 700 }}>
-                    {recommendations.pension_house && recommendations.pension_house.name}
+                  <div style={{ fontSize: "16px", fontWeight: 700 }}>
+                    {recommendations.pension_house &&
+                      recommendations.pension_house.name}
                   </div>
                 </div>
               </div>
 
               <div className="mid-content">
-                {all_charges && all_charges.map((item, index) => (
-                  <div className="nps-payment" key={index}>
-                    {item.value > 0 && <div className={`mid-content-points ${item.key === 'total_amount' && 'heading'}`}>
-                      <div className="mid-content-points-left">{item.text}</div>
-                      <div className="mid-content-points-right">{formatAmountInr(item.value)}</div>
-                    </div>}
-                  </div>
-                ))}
+                {all_charges &&
+                  all_charges.map((item, index) => (
+                    <div className="nps-payment" key={index}>
+                      {item.value > 0 && (
+                        <div
+                          className={`mid-content-points ${
+                            item.key === "total_amount" && "heading"
+                          }`}
+                        >
+                          <div className="mid-content-points-left">
+                            {item.text}
+                          </div>
+                          <div className="mid-content-points-right">
+                            {formatAmountInr(item.value)}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
               </div>
             </div>
             <div>
-              <button style={{cursor: 'pointer'}} onClick={() => this.payment()} className="call-back-popup-button">CONTINUE TO PAYMENT</button>
+              <button
+                style={{ cursor: "pointer" }}
+                onClick={() => this.payment()}
+                className="call-back-popup-button"
+              >
+                CONTINUE TO PAYMENT
+              </button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
-    )
-  }
+    );
+  };
 
   payment = () => {
     let url = this.state.url;
 
     window.location.href = url;
-  }
+  };
 
   handleClick = async () => {
     let data = {
       amount: this.state.amount,
       order_type: "one_time",
-      pension_house_id: (!this.state.display_summary_only && this.state.pension_house.pension_house_id) || this.state.recommendations.pension_house.pension_house_id,
+      pension_house_id:
+        (!this.state.display_summary_only &&
+          this.state.pension_house &&
+          this.state.pension_house.pension_house_id) ||
+        this.state.recommendations.pension_house
+          ? this.state.recommendations.pension_house.pension_house_id
+          : "",
       risk: this.state.risk,
     };
 
@@ -288,20 +329,31 @@ class Recommendations extends Component {
       (pgLink.match(/[\?]/g) ? "&" : "?") +
       "plutus_redirect_url=" +
       plutus_redirect_url;
-    
+
     if (this.state.display_summary_only) {
       this.setState({
         url: pgLink,
         show_loader: false,
-        openInvestmentSummary: true
-      })
+        openInvestmentSummary: true,
+      });
     } else {
       window.location.href = pgLink;
     }
   };
 
+  goBack = () => {
+    this.navigate('amount/one-time')
+  }
+
   render() {
-    let { recommendations, pension_house, show_loader, all_charges, graphData, display_summary_only } = this.state;
+    let {
+      recommendations,
+      pension_house,
+      show_loader,
+      all_charges,
+      graphData,
+      display_summary_only,
+    } = this.state;
 
     return (
       <Container
@@ -314,9 +366,10 @@ class Recommendations extends Component {
         title="Recommended fund"
         showLoader={show_loader}
         handleClick={this.handleClick}
+        goBack={this.goBack}
         classOverRideContainer="pr-container"
       >
-        {!display_summary_only &&
+        {!display_summary_only && (
           <div>
             <div className="fund">
               <div
@@ -326,17 +379,23 @@ class Recommendations extends Component {
                 }}
               >
                 Replace
-          </div>
+              </div>
               <div className="name">
                 <div className="icon">
                   <img
-                    src={pension_house.image || (recommendations && recommendations.pension_house.image)}
-                    alt=''
+                    src={
+                      pension_house.image ||
+                      (recommendations && recommendations.pension_house.image)
+                    }
+                    alt=""
                     width="90"
                   />
                 </div>
                 <div className="text">
-                  <div>{pension_house.name || (recommendations && recommendations.pension_house.name)}</div>
+                  <div>
+                    {pension_house.name ||
+                      (recommendations && recommendations.pension_house.name)}
+                  </div>
                 </div>
               </div>
             </div>
@@ -355,22 +414,27 @@ class Recommendations extends Component {
                   }
                 >
                   Edit
-            </span>
+                </span>
               </div>
               <div className="allocation">
                 <div className="graph">
                   <PieChart
                     height={isMobileDevice ? 100 : 180}
                     width={isMobileDevice ? 100 : 180}
-                    data={graphData}
-                    colors={["rgb(74, 144, 226)", "rgb(51, 191, 159)", "rgb(131, 90, 237)", "rgb(185, 176, 64)"]}
+                    data={graphData || {}}
+                    colors={[
+                      "rgb(74, 144, 226)",
+                      "rgb(51, 191, 159)",
+                      "rgb(131, 90, 237)",
+                      "rgb(185, 176, 64)",
+                    ]}
                   ></PieChart>
                   <div
                     className="text-center"
                     style={{ color: "rgb(135, 135, 135)", marginTop: "10px" }}
                   >
                     Asset allocation
-              </div>
+                  </div>
                 </div>
                 <div className="stats">
                   <ul>
@@ -381,9 +445,9 @@ class Recommendations extends Component {
                       <div className="">
                         <span className="color3">
                           {recommendations && recommendations.e_allocation}%
-                    </span>{" "}
-                    in equity
-                  </div>
+                        </span>{" "}
+                        in equity
+                      </div>
                     </li>
                     <li>
                       <div className="">
@@ -392,9 +456,9 @@ class Recommendations extends Component {
                       <div className="">
                         <span className="color4">
                           {recommendations && recommendations.c_allocation}%
-                    </span>{" "}
-                    in corporate debt
-                  </div>
+                        </span>{" "}
+                        in corporate debt
+                      </div>
                     </li>
                     <li>
                       <div className="">
@@ -403,9 +467,9 @@ class Recommendations extends Component {
                       <div className="">
                         <span className="color2">
                           {recommendations && recommendations.g_allocation}%
-                    </span>{" "}
-                    in govt. bonds
-                  </div>
+                        </span>{" "}
+                        in govt. bonds
+                      </div>
                     </li>
                     <li>
                       <div className="">
@@ -414,9 +478,9 @@ class Recommendations extends Component {
                       <div className="">
                         <span className="color1">
                           {recommendations && recommendations.a_allocation}%
-                    </span>{" "}
-                    in AIFs
-                  </div>
+                        </span>{" "}
+                        in AIFs
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -429,7 +493,9 @@ class Recommendations extends Component {
                   <div
                     className="flex-box"
                     style={{
-                      fontWeight: `${index === all_charges.length - 1 ? 600 : 500}`,
+                      fontWeight: `${
+                        index === all_charges.length - 1 ? 600 : 500
+                      }`,
                     }}
                     key={index}
                   >
@@ -440,18 +506,18 @@ class Recommendations extends Component {
               <div className="note">
                 <div className="heading">Note:</div>
                 <div>
-                  <span>1.</span> Your subsequent investments will go into the above
-              selected pension fund house. Switch facility can be availed only
-              once per year.
-            </div>
+                  <span>1.</span> Your subsequent investments will go into the
+                  above selected pension fund house. Switch facility can be
+                  availed only once per year.
+                </div>
                 <div>
-                  <span>2.</span> At this point, we are only catering customers who
-              will be onboarded by us.
-            </div>
+                  <span>2.</span> At this point, we are only catering customers
+                  who will be onboarded by us.
+                </div>
                 <div>
-                  <span>3.</span> Standard charges stipulated by PFRDA will apply on
-              your investment.
-            </div>
+                  <span>3.</span> Standard charges stipulated by PFRDA will
+                  apply on your investment.
+                </div>
               </div>
               {/* <div className="terms">
             <img src="../assets/img/terms_agree.png" alt="" width="25" />
@@ -490,7 +556,8 @@ class Recommendations extends Component {
           </div> */}
             </div>
             {this.renderDialog()}
-          </div>}
+          </div>
+        )}
         {this.state.display_summary_only && this.renderInvestmentSummary()}
       </Container>
     );

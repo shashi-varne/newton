@@ -4,12 +4,6 @@ import Api from "utils/api";
 import { nativeCallback } from "utils/native_callback";
 import { isEmpty } from "utils/validators";
 import toast from "../../../common/ui/Toast";
-// import Dialog, {
-//   DialogActions,
-//   // DialogTitle,
-//   DialogContent,
-//   DialogContentText
-// } from 'material-ui/Dialog';
 // import { nps_config } from "../constants";
 
 const genericErrMsg = "Something went wrong";
@@ -25,25 +19,10 @@ export async function initialize() {
   this.submitPran = submitPran.bind(this);
   this.getNPSInvestmentStatus = getNPSInvestmentStatus.bind(this);
   this.accountMerge = accountMerge.bind(this);
+  this.checkMerge = checkMerge.bind(this);
   this.openInBrowser = openInBrowser.bind(this);
   this.openInTabApp = openInTabApp.bind(this);
   this.uploadDocs = uploadDocs.bind(this);
-  
-  let screenData = {};
-
-  // if (this.state.screen_name) {
-  //   screenData = nps_config[this.state.screen_name];
-  // }
-
-  // let next_screen = this.state.next_screen || "";
-
-  // if (this.state.screen_name && nps_config.get_next[this.state.screen_name]) {
-  //   next_screen = nps_config.get_next[this.state.screen_name];
-
-  //   this.setState({
-  //     next_state: next_screen,
-  //   });
-  // }
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -119,11 +98,12 @@ export function formCheckUpdate(keys_to_check, form_data) {
 }
 
 export async function get_recommended_funds(params) {
+  let pran = storageService().get('nps-pran_number')
   try {
     this.setState({
       show_loader: true,
     });
-    const res = await Api.get(`api/nps/invest/recommend?amount=${params}`);
+    const res = await Api.get(`api/nps/invest/recommend?amount=${params}${pran ? `&pran=${pran}` : ''}`);
     if (
       res.pfwstatus_code !== 200 ||
       !res.pfwresponse ||
@@ -299,7 +279,7 @@ export async function submitPran(params) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      
+
       return result;
     } else {
       this.setState({
@@ -355,7 +335,7 @@ export async function accountMerge() {
       show_loader: true
     })
 
-    let userKyc = storageService().getObject("user");
+    let userKyc = storageService().getObject("kyc");
     let pan_number = userKyc.pan.meta_data.pan_number;
 
     this.checkMerge(pan_number)
@@ -373,15 +353,24 @@ export async function checkMerge(pan_number) {
     const { result, status_code: status } = res.pfwresponse;
 
     if (status === 200) {
-      
+      this.setState({
+        show_loader: false,
+        openDialog: true,
+        title: 'PAN Already Exists',
+        subtitle: 'Sorry! this PAN is already registered with another account.',
+        btn_text: 'LINK ACCOUNT'
+      })
     } else {
-      switch (status) {
-        case 402:
-          this.accountMerge()
-          break;
-        default:
-          toast(result.error || result.message || genericErrMsg);
-          break;
+      if (result.different_login) {
+        this.setState({
+          show_loader: false,
+          openDialog: true,
+          title: 'PAN Is already registered',
+          subtitle: result.error || result.message,
+          btn_text: 'SIGN OUT'
+        })
+      } else {
+        toast(result.error || result.message || 'something went wrong')
       }
     }
   } catch (err) {
@@ -395,20 +384,20 @@ export async function checkMerge(pan_number) {
 
 export function openInBrowser(url) {
   nativeCallback({
-      action: 'open_in_browser',
-      message: {
-          url: url
-      }
+    action: 'open_in_browser',
+    message: {
+      url: url
+    }
   });
 }
 
 export function openInTabApp(data = {}) {
   nativeCallback({
-      action: 'open_inapp_tab',
-      message: {
-          url: data.url || '',
-          back_url: data.back_url || ''
-      }
+    action: 'open_inapp_tab',
+    message: {
+      url: data.url || '',
+      back_url: data.back_url || ''
+    }
   });
 }
 
