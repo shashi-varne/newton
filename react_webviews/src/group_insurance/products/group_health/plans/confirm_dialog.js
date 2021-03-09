@@ -14,7 +14,7 @@ class ConfirmDialogClass extends Component {
         }
     }
 
-    rednerContent1(props, index) {
+    renderContent1(props, index) {
         return (
             <div key={index}>
                 {props.heading && <div className="content2-points-inside-heading">
@@ -33,7 +33,7 @@ class ConfirmDialogClass extends Component {
         )
     }
 
-    rednerContent2(props, index) {
+    renderContent2(props, index) {
         return (
             <div key={index} className="content2-points">
                 <div className="content2-points-inside-text">
@@ -73,23 +73,23 @@ class ConfirmDialogClass extends Component {
                        <div style={{ marginRight: '15px'}}>  
                         <div className="content-top flex-between" style={{ margin: '0 0 20px 0' }}>
                             <div className='ct-left'>
-                                <span style={{ fontWeight: 600 }}>Sum assured:</span> {numDifferentiationInr(confirmDialogData.sum_assured)}
+                                <span style={{ fontWeight: 600 }}>Sum assured:</span> {numDifferentiationInr(confirmDialogData.title_left)}
                             </div>
                             <div className='ct-right'>
-                                <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.tenure} {confirmDialogData.tenure>1?'years':'year'}
+                                <span style={{ fontWeight: 600 }}>Cover period:</span> {confirmDialogData.title_right}
                     </div>
                         </div>
 
                         <div className="hr"></div>
 
                         <div className="content">
-                            {confirmDialogData.content1.map(this.rednerContent1)}
+                            {confirmDialogData.content1.map(this.renderContent1)}
                         </div>
 
                         <div className="hr"></div>
 
                         <div className="content2">
-                            {confirmDialogData.content2.map(this.rednerContent2)}
+                            {confirmDialogData.content2.map(this.renderContent2)}
                         </div>
 
                         <div className="hr"></div>

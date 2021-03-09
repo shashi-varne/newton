@@ -638,48 +638,7 @@
   }
 
 
-  .what-is-covered {
-    background: #19487F;
-    
-    padding: 10px;
-    border-radius: 4px;
-    margin: 10px 0 10px 0;
-    cursor: pointer;
-    .top {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .wic-title {
-      color: white;
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .content {
-      margin: 20px 0 0 0;
-    }
   
-    .circle {
-      width: 8px;
-      height: 8px;
-      border-radius: 100px;
-      margin-right: 5px;
-      background-color: white;
-    }
-
-    .wic-tile {
-      display: flex;
-      align-items: baseline;
-      margin: 15px 0 10px 0;
-      color: white;
-      font-size: 12px;
-        font-weight: 400;
-    }
-    
-    .wic-tile-right {
-        margin: 0 0 0 4px;
-    }
-  }
   
 }
 
@@ -772,6 +731,12 @@
 
 .group-health-plan-details {
   margin: 0 0 30px 0;
+
+  .tc-subtitle.single-heading{
+    margin-top: -32px;
+    font-size: 17px  !important;
+    font-weight: bold !important;
+  }
   .sum-assured-info {
     display: flex;
     justify-content: space-between;
@@ -831,8 +796,46 @@
 
 .group-health-plan-select-sum-assured {
   margin: 60px 0 0 0;
+
+  .disclaimer-checkbox{
+    margin:0 20px 0 0;
+    position: absolute;
+    bottom: 100px;
+    color:  #6D7278;
+    font-size: 13px;
+    line-height: 20px;
+    word-wrap: break-word;
+    .note-container{
+      display: flex;
+      p{
+        margin: 0
+      }
+      p:nth-child(1){
+        color: #000000;
+        margin-right: 5px;
+      }
+    }
+    .check-box-container{
+      display: flex;
+      .Checkbox{
+        margin-left: -14px;
+      }
+    }
+  }
 }
 
+.declaration-container{
+  margin-left: -12px;
+  display: flex;
+  align-items: flex-start;
+  p{
+    font-size: 13px;
+    line-height: 21px;
+  }
+  .Checkbox{
+    margin-top: 0;
+  }
+}
 .group-health-plan-select-floater {
 
   .detail-info {
@@ -860,6 +863,23 @@
   }
 }
 
+.flex-between.pi-tile.premium-summary-bottom{
+  margin-bottom: 21px;
+}
+
+.insurance-address-container{
+.InputField .RadioWithIcon{
+  width: 300px;
+  font-size: 13px;
+  }
+
+  .InputField .same_address{
+    margin-bottom: 30px;
+  }
+
+}
+
+
 .group-health-plan-premium-summary {
   margin-bottom: 30px;
   .group-health-top-content-plan-logo {
@@ -867,6 +887,7 @@
     .tc-right {
       margin: 0 20px 0 0px;
       max-width: 140px;
+      color: grey;
     }
   }
 .premium-summary-disclaimer{

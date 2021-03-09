@@ -14,12 +14,14 @@ export default class RadioBtn extends Component {
     return (
       <div
         className="radio-btn-group"
-        onClick={() => this.handleClick()} >
+        onClick={() => this.handleClick()} 
+        >
         <div
           style={{ color: getConfig().primary }}
           className={`ContainerWrapper ${this.props.isChecked ? "RadioButton checked" : "RadioButton unchecked"}`}
           data-value={this.props.value} >
-          <label
+          <label 
+            style={{height: '36px'}}
             className={`${this.props.type} ${this.props.isChecked ? getConfig().configPrimaryColorClass + ' RadioLabelChecked' :
               ''} ${this.props.disabledWithValue ? " radioDisabledWithValue" : ""}`}
           >

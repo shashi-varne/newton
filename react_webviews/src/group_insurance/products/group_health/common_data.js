@@ -215,8 +215,8 @@ export async function initialize() {
             content2: [
                 { 'name': 'Total', 'value': inrFormatDecimal(total_amount) }
             ],
-            sum_assured: individual_sum_insured,
-            tenure: tenure
+            title_left: individual_sum_insured, //sum_assured
+            title_right: tenure > 1 ? `${tenure} years` : `${tenure} year` //tenure
         }
         if(provider === 'RELIGARE') {
             if(lead.add_ons && !isEmpty(lead.add_ons)){
@@ -253,7 +253,7 @@ export async function initialize() {
             'name': 'GST',
             'value': inrFormatDecimal(gst)
         })
-        
+        console.log(confirmDialogData)
 
 
         this.setState({

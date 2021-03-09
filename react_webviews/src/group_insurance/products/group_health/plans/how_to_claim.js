@@ -49,6 +49,7 @@ class GroupHealthPlanHowToClaim extends Component {
     }
 
     render() {
+        console.log(this.state.renderData)
         return (
             <Container
                 fullWidthButton={true}

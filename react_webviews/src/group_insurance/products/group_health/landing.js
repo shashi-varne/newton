@@ -267,7 +267,7 @@ class GroupHealthLanding extends Component {
         <div className="health-insurance-title-container">
           <div>
             <div className="common-top-page-title-dark">{this.state.providerConfig.title}</div>
-            <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px'}} >
+            <div className="common-top-page-subtitle-dark" style={{marginBottom : '17px', marginTop: '-10px'}} >
               {this.state.providerConfig.subtitle}
             </div>
         </div>
@@ -323,7 +323,7 @@ class GroupHealthLanding extends Component {
             </div>
           )}
 
-          <div className="generic-page-title health-landing-covers-title" style={{ margin: "40px 0 0 0", fontSize: '15px', fontWeight: '700' }}>
+          <div className="generic-page-title health-landing-covers-title" style={{ margin: "26px 0 0 0", fontSize: '15px', fontWeight: '700' }}>
             {this.state.providerConfig.covers_text.title}
           </div>
           <div

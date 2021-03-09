@@ -103,7 +103,7 @@ class CustomButton extends Component {
             style={{backgroundColor: getConfig().secondary, color: 'white'}}
             className={buttonClass}
             classes={classes}
-            disabled={props.disable}
+            disabled={props.buttonDisabled}
           >
             {!showLoader && props.buttonTitle}
             {showLoader && <DotDotLoaderNew

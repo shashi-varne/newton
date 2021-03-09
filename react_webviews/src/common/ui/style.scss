@@ -71,6 +71,7 @@
 }
 .Flex .radio-btn-group {
   flex: 1;
+  height: 36px;
 }
 .MobileGrid {
   display: flex;
@@ -656,6 +657,10 @@ body[data-device="mobile"] {
     margin-top: 0px !important;
     height: auto;
   }
+}
+
+.MuiGrid-grid-xs-7{
+  min-width: 210px;
 }
 
 .MuiMenuItem-root {

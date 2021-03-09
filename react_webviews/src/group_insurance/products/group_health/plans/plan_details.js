@@ -11,6 +11,7 @@ import {initialize} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
+import PlanSuccess from '../../../ui_components/general_insurance/plan_success';
 
 class GroupHealthPlanDetails extends Component {
 
@@ -76,8 +77,20 @@ class GroupHealthPlanDetails extends Component {
             post_body.sum_assured = '300000';
             post_body.plan_id = "FHONEW";
             allowed_post_body_keys.push('postal_code')
+        }else if(provider === 'GMC'){
+          post_body.plan_id = "fisdom_care_health_plus";
+          var plan_selected = {};
+          plan_selected['plan_title'] = 'fisdom Care Health+'
+          plan_selected['copay'] = '0% copay is applicable only where insured age is less than 60 yrs, there will be 20% copay for insured whose age at the time of entry is 61 yrs and above';
+          
+          this.setState({
+            plan_selected: plan_selected
+          })
+          
+          groupHealthPlanData.plan_selected = plan_selected;
         }
         let body = {};
+
         for(let key of allowed_post_body_keys){
             body[key] = post_body[key];
         }
@@ -86,7 +99,6 @@ class GroupHealthPlanDetails extends Component {
         this.setState({
             groupHealthPlanData: groupHealthPlanData
         })
-
         this.setLocalProviderData(groupHealthPlanData);
 
 
@@ -123,13 +135,13 @@ class GroupHealthPlanDetails extends Component {
         let data_mapper = {
             'whats_included': {
                 'header_title': "What is covered?",
-                'header_subtitle': 'These are some of the benefits that are covered under this policy',
+                'header_subtitle': 'Below are the key features of this policy',
                 'steps': this.state.plan_data.whats_included,
                 'pathname': '/gold/common/render-benefits'
             },
             'whats_not_included': {
                 'header_title': "What is not covered?",
-                'header_subtitle' : 'These are some of the incidences that are not covered under this policy',
+                'header_subtitle' : 'Below incidences are not covered in this policy',
                 'steps': this.state.plan_data.whats_not_included,
                 'pathname': '/gold/common/render-benefits'
             },
@@ -139,9 +151,7 @@ class GroupHealthPlanDetails extends Component {
             }
         }
 
-
         let mapper_data = data_mapper[type];
-
         let renderData = {
             'header_title': mapper_data.header_title,
             'header_subtitle': mapper_data.header_subtitle || `${this.state.providerConfig.title2 ||
@@ -170,7 +180,7 @@ class GroupHealthPlanDetails extends Component {
                 ]
             }
 
-            if(provider === 'RELIGARE') {
+            if(provider === 'RELIGARE' || provider === 'GMC' ) {
                 this.navigate('how-to-claim-religare');
                 return;
             }
@@ -270,11 +280,11 @@ class GroupHealthPlanDetails extends Component {
             <div className="group-health-plan-details">
               <div className="group-health-top-content-plan-logo">
                 <div className="left">
-                  <div className="tc-title">
-                    {this.state.provider !== 'RELIGARE'? this.state.providerConfig.title2 ||
+                  <div className="tc-title" style={{fontSize: '17px'}}>
+                    {this.state.provider === 'HDFCERGO' || this.state.provider === 'STAR'? this.state.providerConfig.title2 ||
                       this.state.providerConfig.title: ''}
                   </div>
-                  <div className="tc-subtitle">{this.state.plan_data && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title: this.state.providerConfig.subtitle}</div>
+                  <div className={`tc-subtitle ${this.state.provider === 'RELIGARE' || this.state.provider === 'GMC' ? 'single-heading': '' }`} >{this.state.plan_data && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title: this.state.providerConfig.subtitle}</div>
                 </div>
 
                 <div className="tc-right">
@@ -286,7 +296,7 @@ class GroupHealthPlanDetails extends Component {
                 </div>
               </div>
 
-              <div className="settlement-info">
+              <div className="settlement-info" style={{transform: `${this.state.provider === 'RELIGARE' || this.state.provider === 'GMC' ? 'translateY(-38px)': '' }`}}>
                 Claim Settlement Ratio: {this.state.claim_settlement_ratio}%
               </div>
 
@@ -334,7 +344,7 @@ class GroupHealthPlanDetails extends Component {
                 style={{ border: "none", marginTop: 0, marginBottom: 0 }}
               >
                 <div className="top-tile">
-                  <div className="top-title">Benefits under this plan</div>
+                  <div className="top-title">Plan highlights</div>
                 </div>
 
                 <div
@@ -348,7 +358,7 @@ class GroupHealthPlanDetails extends Component {
                     src={require(`assets/ic_hs_special.svg`)}
                     alt=""
                   />
-                  <span className="special-benefit-text">Special benefits</span>
+                  <span className="special-benefit-text">Special features</span>
                 </div>
                 <div className="common-steps-images">
                   {benefits && benefits.special.map(this.renderSteps)}
@@ -365,7 +375,7 @@ class GroupHealthPlanDetails extends Component {
                     src={require(`assets/ic_hs_main.svg`)}
                     alt=""
                   />
-                  <span className="special-benefit-text">Main benefits</span>
+                  <span className="special-benefit-text">Key features</span>
                 </div>
                 <div className="common-steps-images">
                   {benefits && benefits.main.map(this.renderSteps)}

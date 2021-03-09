@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import { numDifferentiationInr } from 'utils/validators';
 import Container from '../../../common/Container';
 import { initialize, updateBottomPremium } from '../common_data';
-import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
+import { getConfig } from 'utils/functions';
 
 class GroupHealthPlanGoodHealthDeclaration extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            buttonDisabled: true            
+            buttonDisabled: true,
+            checked: false,            
         }
 
         this.initialize = initialize.bind(this);
@@ -23,7 +23,7 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
     
     handleCheckbox = () =>{
         var buttonDisabled = this.state.buttonDisabled;
-        var checked = this.state.checked;
+        var checked = !this.state.checked;
         buttonDisabled = checked ? false : true 
 
         this.setState({
@@ -31,23 +31,30 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
             buttonDisabled: buttonDisabled
         });
     }
+
+    navigate = (pathname) => {
+        this.props.history.push({
+            pathname: pathname,
+            search: getConfig().searchParams
+        });
+    }
     
     handleClick = () =>{
-        if(this.state.buttonDisabled && !this.state.checked){
+        if(this.state.buttonDisabled){
             return;
         }
-        console.log('click')
+        this.navigate('plan-premium-summary')
     }
 
     render() {
         return (
             <Container
-            // events={this.sendEvents("just_set_events")}
+            // events={this.sendEvents('just_set_events')}
             // showLoader={this.state.show_loader}
-            title="Select payment frequency"
+            title="Good health declaration"
+            fullWidthButton={true}
             buttonTitle="CONTINUE"
-            withProvider={true}
-            buttonData={this.state.bottomButtonData}
+            onlyButton={true}
             handleClick={() => this.handleClick()}
             buttonDisabled={this.state.buttonDisabled}
           >
@@ -56,7 +63,7 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
             This is key to avoid rejection of claims later
             </div>
             
-                <div className="check-box-conainer">
+                <div className="declaration-container">
                 <Checkbox
                       defaultChecked
                       checked={this.state.checked}

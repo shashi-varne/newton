@@ -363,7 +363,6 @@ class GroupHealthPlanFinalSummary extends Component {
         accordianData.push(contact_data);
     
         let address_data_backend = [lead.address_details.correspondence_address ,lead.address_details.permanent_address];
-
         if (['HDFCERGO', 'STAR'].includes(provider)) {
             address_data_backend = [lead.address_details.permanent_address]
         }
@@ -371,10 +370,10 @@ class GroupHealthPlanFinalSummary extends Component {
         let data = address_data_backend.map((item, index) => {
             return [
                 {
-                    'title': `${provider==='RELIGARE'? index === 0 ? 'Current address' : 'Permanent address':''}`,
+                    'title': `${(provider==='RELIGARE' || provider === 'GMC') ? index === 0 ? 'Current address' : 'Permanent address':''}`,
                     'subtitle': ' ',
                     'key': 'heading'
-                },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                },
                 {
                     'title': 'Address line 1',
                     'subtitle': item.addr_line1
@@ -525,14 +524,16 @@ class GroupHealthPlanFinalSummary extends Component {
         }
 
 
-        let ped_edit_state = provider === 'STAR'  ? 'edit-star-select-ped' : 'edit-is-ped';
-        let diseases_data = {
-            'title': 'Pre-existing diseases',
-            edit_state: `/group-insurance/group-health/${this.state.provider}/${ped_edit_state}`,
-            data: diseases_data_backend
+        if(provider !== 'GMC'){
+            let ped_edit_state = provider === 'STAR'  ? 'edit-star-select-ped' : 'edit-is-ped';
+            let diseases_data = {
+                'title': 'Pre-existing diseases',
+                edit_state: `/group-insurance/group-health/${this.state.provider}/${ped_edit_state}`,
+                data: diseases_data_backend
+            }
+            accordianData.push(diseases_data);
         }
-
-        accordianData.push(diseases_data);
+        
         this.setState({
             accordianData: accordianData
         })
@@ -804,7 +805,7 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordian = (props, index) => {
-
+        console.log(props.data)
         return (
             <div key={index} onClick={() => this.handleAccordian(index)} className="bc-tile">
                 <div className="bct-top">
@@ -833,7 +834,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {this.state.provider === 'RELIGARE' && <React.Fragment>
+                        {this.state.provider === 'RELIGARE' || this.state.provider === 'GMC' && <React.Fragment>
                             {props.data[1].map(this.renderAccordiansubData)}
                             <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                                 EDIT
@@ -1078,7 +1079,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </Grid>
                     </Grid>
                 </div>
-                  <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical treatments at affordable cost' }} />
+                  <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
             </div>
             {this.state.medical_dialog_data &&
                 <BottomSheet parent={this} data={this.state.medical_dialog_data} />}

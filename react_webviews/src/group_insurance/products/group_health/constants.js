@@ -41,7 +41,7 @@ export const hdfc = {
         'hdfc_ergo_platinum_smart' : 'Platinum Smart Plan'
     },
     landing_screen: {
-        image_list: ['ic_why_hs','ic_why_hs2', 'ic_why_hs3', 'ic_why_hs4'],
+        image_list: ['ic_why_hs.png','ic_why_hs2.png', 'ic_why_hs3.png', 'ic_why_hs4.png'],
         offerImageData: [
             { src: 'hdfc_icn_landing_card_1.png' },
             { src: 'hdfc_icn_landing_card_2.png' },
@@ -92,6 +92,7 @@ export const hdfc = {
         }
     },
     insure_type_screen: {
+        bottom_info_text : 'Pro Tip: The first step to get financial stability is to be medically insured along with your family',
         account_type_options: [
             {
                 'name': 'Self',
@@ -218,6 +219,10 @@ export const religare = {
     logo_summary: 'ic_religare_logo.svg',
     pan_amount: 50000,
     claim_settlement_ratio: 92.58,
+    covers_text:{
+        title: 'Covers your family',
+        subtitle: 'Option to cover your entire family (spouse, kids and parents)'
+    },
     member_assets: ['icn_couple.svg', 'icn_kids.svg', 'icn_parents.svg'],
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
@@ -255,7 +260,7 @@ export const religare = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
-        image_list: ['ic_why_hs','ic_why_hs2', 'ic_why_hs3', 'ic_why_hs4'],
+        image_list: ['ic_why_hs.png','ic_why_hs2.png', 'ic_why_hs3.png', 'ic_why_hs4.png'],
         offerImageData: [
             { src: 'religare_icn_landing_card_1.png' },
             { src: 'religare_icn_landing_card_2.png' },
@@ -322,6 +327,7 @@ export const religare = {
         }
     },
     insure_type_screen: {
+        bottom_info_text : 'Pro Tip: The first step to get financial stability is to be medically insured along with your family',
         account_type_options: [
             {
                 'name': 'Self',
@@ -531,9 +537,9 @@ export const religare = {
 
 export const gmc = {
     key: 'GMC',
-    provider_api: 'gmc',
+    provider_api: 'care_plus',
     title: 'Care Health',
-    title2: 'Care Health',
+    title2: 'fisdom Care Health+',
     subtitle: 'fisdom Care Health+',
     address_field_max_length: 60,
     logo: 'ic_religare_logo.svg',
@@ -549,19 +555,18 @@ export const gmc = {
     member_assets: ['icn_couple.svg', 'icn_kids.svg'],
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
-        insure_type_screen: 'plan-dob-religare',
         add_members_screen: 'plan-dob',
-        plan_dob_screen: 'plan-list',
+        plan_dob_screen: 'plan-details',
         religare_dob: 'plan-list',
         plan_list_screen: 'plan-details',
         plan_details_screens: 'plan-select-sum-assured',
         sum_assured_screen: {
-            floater: 'plan-select-floater',
-            not_floater: 'plan-select-add-ons'
+            floater: 'plan-select-payment-frequency',
+            not_floater: 'plan-select-payment-frequency'
         },
         cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period',
-        nominee_screen: 'plan-lifestyle-details'
+        nominee_screen: 'final-summary'
     },
     validation_props: {
         'dob_adult': { min: 18, max: 99 }, 
@@ -583,7 +588,7 @@ export const gmc = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
-        image_list: ['ic_why_hs_gmc_1','ic_why_hs2', 'ic_why_hs_gmc_2'],
+        image_list: ['ic_why_hs_gmc_1.png', 'ic_why_hs2.png', 'ic_why_hs_gmc_2.png'],
         offerImageData: [
             { src: 'gmc_icn_landing_card_3.svg' },
             { src: 'gmc_icn_landing_card_2.svg' },
@@ -609,7 +614,7 @@ export const gmc = {
             'steps': {
                 'options': [
                     {
-                        'title': 'Is coronavirus treatment covered in this plan?',
+                        'title': 'Is Coronavirus treatment covered in this plan?',
                         'subtitle': 'Yes, this health insurance policy for family covers hospitalisation expenses to Coronavirus (COVID-19) subject to all terms and conditions of the policy.'
                     },
                     {
@@ -621,20 +626,12 @@ export const gmc = {
                         'subtitle': 'Yes, within 15 days from the receipt of the policy document you may return/cancel the policy, and premium after proportionate deduction would be refunded.'
                     },
                     {
-                        'title': 'How does Auto recharge work?',
-                        'subtitle': 'Sum Insured will be automatically restored (once every policy year) in case the sum insured and any no claim bonus accumulated is exhausted during the policy year. It cannot be used against an illness/disease for which a claim has already been made in the current policy year.'
-                    },
-                    {
                         'title': 'What is the waiting period for existing diseases? Can it be reduced?',
-                        'subtitle': 'There is a waiting period of 48 months for existing and 24 months for specified diseases. This waiting period of 48 months can be reduced by taking the additional cover of ‘Reduction in PED Wait Period’'
+                        'subtitle': 'There is a waiting period of 24 months for both existing and specified diseases.'
                     },
                     {
                         'title': 'What do you mean by Network hospital?',
                         'subtitle': 'Network hospital is one, which has an agreement with Care Health Insurance for providing cashless treatment to its customers.'
-                    },
-                    {
-                        'title': 'What is a No Claim Bonus?',
-                        'subtitle': 'A policyholder, who hasn’t made any claim in a year, will have his Sum insured increased by a certain amount (bonus). CARE offers a 10% increase in the policy sum insured for every claim-free year, with no change in premium.'
                     },
                     {
                         'title': 'How to file and track your claim?',
@@ -650,29 +647,30 @@ export const gmc = {
         }
     },
     insure_type_screen: {
+        bottom_info_text : 'Medical expenses are unpredictable - protect yourself with fisdom Care Health+',
         account_type_options: [
             {
                 'name': 'Self',
                 'value': 'self'
             },
-            {
-                'name': 'Family members',
-                'value': 'family'
-            },
+            // {
+            //     'name': 'Family members',
+            //     'value': 'family'
+            // },
             {
                 'name': 'Self & family members',
                 'value': 'self_family'
             },
-            {
-                'name': 'Parents',
-                'value': 'parents'
-            }
+            // {
+            //     'name': 'Parents',
+            //     'value': 'parents'
+            // }
         ]
     },
     add_members_screen: {
-        son_max: 4,
-        daughter_max: 4,
-        total_plus_minus_max: 4
+        son_max: 2,
+        daughter_max: 2,
+        total_plus_minus_max: 2
     },
     plan_list_screen: {
         tile_mid_data: [
@@ -902,7 +900,7 @@ export const star = {
         ]
     },
     landing_screen: {
-        image_list: ['ic_why_hs','ic_why_hs2', 'ic_why_hs3', 'ic_why_hs4'],
+        image_list: ['ic_why_hs.png','ic_why_hs2.png', 'ic_why_hs3.png', 'ic_why_hs4.png'],
         offerImageData: [
             { src: 'star_icn_landing_card_1.svg' },
             { src: 'star_icn_landing_card_2.svg' },
@@ -957,6 +955,7 @@ export const star = {
         }
     },
     insure_type_screen: {
+        bottom_info_text : 'Pro Tip: The first step to get financial stability is to be medically insured along with your family',
         account_type_options: [
             {
                 'name': 'Family members',

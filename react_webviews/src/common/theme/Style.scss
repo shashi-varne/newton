@@ -1083,7 +1083,7 @@ input#pan {
 
 .common-top-page-subtitle {
   color: #767e86;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   margin: -10px 0 30px 0px;
   line-height: 1.6;
@@ -1095,6 +1095,7 @@ input#pan {
   align-items: center;
   justify-content: space-between;
   position: relative;
+  margin-bottom: 10px;
   img{
     margin: 0;
     align-self: flex-start;
@@ -1124,6 +1125,13 @@ input#pan {
   margin: -8px 0 0px 0;
   line-height: 19px;
 }
+.common-top-page-subtitle-light{
+  color: #767E86;
+  font-size: 13px;
+  margin-top: -10px;
+  font-family: 'Work Sans';
+}
+
 
 .common-how-steps {
   margin: 50px 0 40px 0;
@@ -1335,7 +1343,7 @@ input#pan {
 }
 
 .FlexItem1-withProvider-footer .text-block-2-img {
-  margin: 0px 5px 0 0;
+  margin: 0px 0 0 5px;
   vertical-align: middle;
 }
 
@@ -1565,4 +1573,56 @@ input#pan {
 .callback-button-container img{
   width: 100%;
   object-fit: cover;
+}
+
+
+.what-is-covered {
+  background: #19487F;
+  
+  padding: 10px 10px 10px 0;
+  border-radius: 4px;
+  margin: 10px 0 0 0;
+  cursor: pointer;
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    height: 30px;
+    margin-left: 20px;
+    padding-left: 0;
+  }
+
+  .wic-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .content {
+    margin: 20px 0 0 20px;
+    padding-left: 0;
+  }
+
+  .circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 100px;
+    margin-right: 5px;
+    background-color: white;
+  }
+
+  .wic-tile {
+    display: flex;
+    align-items: baseline;
+    margin: 15px 0 10px 5px;
+    color: white;
+    font-size: 12px;
+      font-weight: 400;
+  }
+  
+  .wic-tile-right {
+    margin: 0 0 0 5px;
+    font-size: 13px;
+    text-align: left;
+  }
 }

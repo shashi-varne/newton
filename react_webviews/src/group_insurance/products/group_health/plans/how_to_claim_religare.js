@@ -38,7 +38,7 @@ class GroupHealthPlanHowToClaimReligare extends Component {
             {
                 'title': 'Contact details',
                 'subtitle': <div className="contact_mail">customerfirst@careinsurance.com</div>,
-                'contact_no':<div className="contact_mail"><span id="contact-no">1800-102-4488</span> (toll free number)</div>
+                'contact_no':<div className="contact_mail"><span id="contact-no" style={{color: getConfig().primary}}>1800-102-4488</span> (toll free number)</div>
             },
             {
                 'title': 'Cashless claims:',

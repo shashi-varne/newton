@@ -235,10 +235,11 @@ class GroupHealthPlanAddMembers extends Component {
 
         for (var key in adult_keys) {
             if (ui_members[adult_keys[key]]) {
+                console.log(adult_keys[key])
                 adult_total++;
             }
         }
-
+        console.log(adult_total)
         let total_insured = adult_total + child_total;
 
         let post_body = this.state.groupHealthPlanData.post_body || {};
@@ -299,6 +300,8 @@ class GroupHealthPlanAddMembers extends Component {
             groupHealthPlanData.eldest_dob = ''; //reset
             this.setLocalProviderData(groupHealthPlanData);
             this.sendEvents('next', ui_members);
+            var page = this.state.next_screen || 'plan-dob';
+            console.log(page)
             this.navigate(this.state.next_screen || 'plan-dob');
         }
         
@@ -432,7 +435,7 @@ class GroupHealthPlanAddMembers extends Component {
               <div className="InputField">
                 <RadioWithoutIcon
                   width="40"
-                  label="Gender"
+                  label="Your gender"
                   class="Gender:"
                   options={genderOptions}
                   id="self_gender"
