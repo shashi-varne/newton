@@ -46,6 +46,25 @@ export const postWithdrawReasons = async (params) => {
   }
 }
 
+export const getTaxes = async (params) => {
+  
+  try {
+    const res = await Api.post('api/invest/withdrawal/get_taxes', params);
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const getRecommendedSwitch = async (amount) => {
   try {
     // const res = await Api.get(`api/invest/switch/systematic/recommend?amount=${amount}`);
@@ -1120,88 +1139,302 @@ const switchFunds = {
 }
 
 const systematic = {
-  pfwuser_id: 5121843795066880,
-  pfwresponse: {
-    status_code: 200,
-    requestapi: '',
-    result: {
-      message: 'success',
-      recommendations: [
+  "pfwuser_id": 5121843795066880,
+  "pfwresponse": {
+    "status_code": 200,
+    "requestapi": "",
+    "result": {
+      "message": "success",
+      "recommendations": [
         {
-          tax_generated: true,
-          subtype: null,
-          debt_stcg_applied: true,
-          itype: 'overall',
-          name: 'Overall',
-          allocations: [
+          "tax_generated": true,
+          "subtype": null,
+          "debt_stcg_applied": true,
+          "itype": "overall",
+          "name": "Overall",
+          "allocations": [
             {
-              folios: [
+              "folios": [
                 {
-                  available_amount: 20655.461008599996,
-                  all_units: false,
-                  amount: 14200,
-                  folio_number: '477156831544',
-                },
+                  "available_amount": 5509.569270000001,
+                  "all_units": true,
+                  "amount": 5509.569270000001,
+                  "folio_number": "3623599/90"
+                }
               ],
-              ltcg_tax: 42.25869095757578,
-              exit_load: 0,
-              stcg_percent: 30,
-              stcg_tax: 710.9604507186922,
-              debt_stcg_applied: true,
-              amc_logo_small:
-                'https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png',
-              amc_logo_big:
-                'https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png',
-              know_how_msg:
-                'You can avoid short term taxes by holding your investments for 3 years',
-              message: '* STCG Tax and LTCG Tax applicable',
-              invested_since: '01 Aug 2016',
-              ltcg_percent: 20,
-              mf: {
-                amfi: 'INF204K01BU4',
-                amc: 'Nippon India Mutual Fund',
-                fisdom_rating: 3,
-                curr_nav: 29.7286,
-                amc_logo_small:
-                  'https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png',
-                amc_logo_big:
-                  'https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png',
-                amc_logo_zoomed:
-                  'https://my.fisdom.com/static/img/amc-logo/high-zoom/nippon_india.png',
-                name:
-                  'Nippon India Gilt Securities Fund -Growth Plan - Growth Option',
-                friendly_name: 'Nippon India Gilt Securities Fund',
-                mfid: 'INF204K01BU4',
-                nav_date: '03/03/2021',
-                isin: 'INF204K01BU4',
-                bond_stock: 'bond',
+              "ltcg_tax": 0,
+              "exit_load": 0,
+              "stcg_percent": 30,
+              "stcg_tax": 152.8770313500003,
+              "debt_stcg_applied": true,
+              "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/kotak_mahindra_new.png",
+              "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/kotak_mahindra_new.png",
+              "know_how_msg": "You can avoid short term taxes by holding your investments for 3 years",
+              "message": "* STCG Tax applicable",
+              "invested_since": "02 Jul 2019",
+              "ltcg_percent": 20,
+              "mf": {
+                "amfi": "INF174K01FD6",
+                "amc": "Kotak Mahindra Mutual Fund",
+                "fisdom_rating": 2,
+                "curr_nav": 33.63,
+                "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/kotak_mahindra_new.png",
+                "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/kotak_mahindra_new.png",
+                "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/kotak_mahindra_new.png",
+                "name": "Kotak Savings Fund -Growth",
+                "friendly_name": "Kotak Savings Fund (G)",
+                "mfid": "INF174K01FD6",
+                "nav_date": "03/08/2021",
+                "isin": "INF174K01FD6",
+                "bond_stock": "bond"
               },
-              tax_type: 'debt',
-              friendly_name: 'Nippon India Gilt Securities Fund',
-              amount: 14200,
-              units: 719.2189999999999,
-              isin: 'INF204K01BU4',
-              balance: 21381.37,
-              withdrawal_amount: 14200,
+              "tax_type": "debt",
+              "friendly_name": "Kotak Savings Fund (G)",
+              "amount": 5509.569270000001,
+              "units": 163.829,
+              "isin": "INF174K01FD6",
+              "balance": 5509.57,
+              "withdrawal_amount": 5510
             },
+            {
+              "folios": [
+                {
+                  "available_amount": 897.5493359999999,
+                  "all_units": true,
+                  "amount": 897.5493359999999,
+                  "folio_number": "401162225816"
+                }
+              ],
+              "ltcg_tax": 0,
+              "exit_load": 0,
+              "stcg_percent": 30,
+              "stcg_tax": 3.2470139999999788,
+              "debt_stcg_applied": true,
+              "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png",
+              "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png",
+              "know_how_msg": "You can avoid short term taxes by holding your investments for 3 years",
+              "message": "* STCG Tax applicable",
+              "invested_since": "25 Jun 2020",
+              "ltcg_percent": 20,
+              "mf": {
+                "amfi": "INF204K01UN9",
+                "amc": "Nippon India Mutual Fund",
+                "fisdom_rating": 3,
+                "curr_nav": 4986.3852,
+                "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png",
+                "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png",
+                "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/nippon_india.png",
+                "name": "Nippon India Liquid Fund -Growth Plan",
+                "friendly_name": "Nippon India Liquid Fund",
+                "mfid": "INF204K01UN9",
+                "nav_date": "03/08/2021",
+                "isin": "INF204K01UN9",
+                "bond_stock": "bond"
+              },
+              "tax_type": "debt",
+              "friendly_name": "Nippon India Liquid Fund",
+              "amount": 897.5493359999999,
+              "units": 0.18,
+              "isin": "INF204K01UN9",
+              "balance": 897.55,
+              "withdrawal_amount": 898
+            },
+            {
+              "folios": [
+                {
+                  "available_amount": 911.3585514,
+                  "all_units": true,
+                  "amount": 911.3585514,
+                  "folio_number": "8261000/15"
+                }
+              ],
+              "ltcg_tax": 0,
+              "exit_load": 0,
+              "stcg_percent": 30,
+              "stcg_tax": 3.3375683099999947,
+              "debt_stcg_applied": true,
+              "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/icici_new.png",
+              "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/icici_new.png",
+              "know_how_msg": "You can avoid short term taxes by holding your investments for 3 years",
+              "message": "* STCG Tax applicable",
+              "invested_since": "29 Jun 2020",
+              "ltcg_percent": 20,
+              "mf": {
+                "amfi": "INF109K01VQ1",
+                "amc": "ICICI Prudential Mutual Fund",
+                "fisdom_rating": 5,
+                "curr_nav": 302.3751,
+                "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/icici_new.png",
+                "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/icici_new.png",
+                "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/icici_new.png",
+                "name": "ICICI Prudential Liquid Fund - Growth",
+                "friendly_name": "ICICI Pru Liquid Fund (G)",
+                "mfid": "INF109K01VQ1",
+                "nav_date": "03/08/2021",
+                "isin": "INF109K01VQ1",
+                "bond_stock": "bond"
+              },
+              "tax_type": "debt",
+              "friendly_name": "ICICI Pru Liquid Fund (G)",
+              "amount": 911.3585514,
+              "units": 3.0140000000000002,
+              "isin": "INF109K01VQ1",
+              "balance": 911.36,
+              "withdrawal_amount": 911
+            },
+            {
+              "folios": [
+                {
+                  "available_amount": 724.2915995999999,
+                  "all_units": true,
+                  "amount": 724.2915995999999,
+                  "folio_number": "477158941712"
+                },
+                {
+                  "available_amount": 20609.326222199998,
+                  "all_units": true,
+                  "amount": 20609.326222199998,
+                  "folio_number": "477156831544"
+                }
+              ],
+              "ltcg_tax": 68.67011137757572,
+              "exit_load": 0,
+              "stcg_percent": 30,
+              "stcg_tax": 685.0502769899994,
+              "debt_stcg_applied": true,
+              "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png",
+              "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png",
+              "know_how_msg": "You can avoid short term taxes by holding your investments for 3 years",
+              "message": "* STCG Tax and LTCG Tax applicable",
+              "invested_since": "01 Aug 2016",
+              "ltcg_percent": 20,
+              "mf": {
+                "amfi": "INF204K01BU4",
+                "amc": "Nippon India Mutual Fund",
+                "fisdom_rating": 3,
+                "curr_nav": 29.6622,
+                "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/nippon_india.png",
+                "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/nippon_india.png",
+                "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/nippon_india.png",
+                "name": "Nippon India Gilt Securities Fund -Growth Plan - Growth Option",
+                "friendly_name": "Nippon India Gilt Securities Fund",
+                "mfid": "INF204K01BU4",
+                "nav_date": "03/08/2021",
+                "isin": "INF204K01BU4",
+                "bond_stock": "bond"
+              },
+              "tax_type": "debt",
+              "friendly_name": "Nippon India Gilt Securities Fund",
+              "amount": 21333.6178218,
+              "units": 719.2189999999999,
+              "isin": "INF204K01BU4",
+              "balance": 21333.62,
+              "withdrawal_amount": 21334
+            },
+            {
+              "folios": [
+                {
+                  "available_amount": 117582.88762590002,
+                  "all_units": false,
+                  "amount": 95100,
+                  "folio_number": "15423002"
+                }
+              ],
+              "ltcg_tax": 2965.6753631273027,
+              "exit_load": 0,
+              "stcg_percent": 15,
+              "stcg_tax": 0,
+              "debt_stcg_applied": false,
+              "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/sbi.png",
+              "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/sbi.png",
+              "know_how_msg": "",
+              "message": "* LTCG Tax applicable",
+              "invested_since": "26 Apr 2016",
+              "ltcg_percent": 10,
+              "mf": {
+                "amfi": "INF200K01305",
+                "amc": "SBI Mutual Fund",
+                "fisdom_rating": 3,
+                "curr_nav": 292.1089,
+                "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/sbi.png",
+                "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/sbi.png",
+                "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/sbi.png",
+                "name": "SBI LARGE & MIDCAP FUND- REGULAR PLAN -Growth",
+                "friendly_name": "SBI Large & Midcap Fund Reg (G)",
+                "mfid": "INF200K01305",
+                "nav_date": "03/08/2021",
+                "isin": "INF200K01305",
+                "bond_stock": "stock"
+              },
+              "tax_type": "equity",
+              "friendly_name": "SBI Large & Midcap Fund Reg (G)",
+              "amount": 95100,
+              "units": 411.2730000000001,
+              "isin": "INF200K01305",
+              "balance": 120136.5,
+              "withdrawal_amount": 95100
+            },
+            {
+              "folios": [
+                {
+                  "available_amount": 114032.63424,
+                  "all_units": false,
+                  "amount": 88900,
+                  "folio_number": "8495046/60"
+                }
+              ],
+              "ltcg_tax": 2662.5736711871323,
+              "exit_load": 0,
+              "stcg_percent": 15,
+              "stcg_tax": 0,
+              "debt_stcg_applied": false,
+              "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/icici_new.png",
+              "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/icici_new.png",
+              "know_how_msg": "",
+              "message": "* LTCG Tax applicable",
+              "invested_since": "26 Apr 2016",
+              "ltcg_percent": 10,
+              "mf": {
+                "amfi": "INF109K01AF8",
+                "amc": "ICICI Prudential Mutual Fund",
+                "fisdom_rating": 3,
+                "curr_nav": 196.44,
+                "amc_logo_small": "https://my.fisdom.com/static/img/amc-logo/low-res/icici_new.png",
+                "amc_logo_big": "https://my.fisdom.com/static/img/amc-logo/high-res/icici_new.png",
+                "amc_logo_zoomed": "https://my.fisdom.com/static/img/amc-logo/high-zoom/icici_new.png",
+                "name": "ICICI Prudential Value Discovery Fund - Growth",
+                "friendly_name": "ICICI Pru Value Discovery Fund (G)",
+                "mfid": "INF109K01AF8",
+                "nav_date": "03/08/2021",
+                "isin": "INF109K01AF8",
+                "bond_stock": "stock"
+              },
+              "tax_type": "equity",
+              "friendly_name": "ICICI Pru Value Discovery Fund (G)",
+              "amount": 88900,
+              "units": 719.481,
+              "isin": "INF109K01AF8",
+              "balance": 141334.85,
+              "withdrawal_amount": 88900
+            }
           ],
-          overall_tax: {
-            ltcg_tax: 42.25869095757578,
-            stcg_tax: 710.9604507186922,
-            exit_load: 0,
+          "overall_tax": {
+            "ltcg_tax": 68.67011137757572,
+            "stcg_tax": 844.5118906499996,
+            "exit_load": 0
           },
-          extra_messages: [
-            'All tax computations are based on your holding with us. Capital losses are also offset against overall gains wherever applicable.',
-            '* Actual withdrawal may differ slightly as it depends on NAV',
-            '** STCG Tax is computed based on the highest tax bracket. Actual amount will depend on individual taxable income',
-            '*** LTCG tax is applicable only if total capital gain is more than 1 Lakh in a financial year. Total LTCG tax shown here is computed @10% on the gains over 1 Lakh. Current computation considers all LT gains till today.',
-          ],
-        },
-      ],
-    },
+          "extra_messages": [
+            "All tax computations are based on your holding with us. Capital losses are also offset against overall gains wherever applicable.",
+            "* Actual withdrawal may differ slightly as it depends on NAV",
+            "** STCG Tax is computed based on the highest tax bracket. Actual amount will depend on individual taxable income",
+            "*** LTCG tax is applicable only if total capital gain is more than 1 Lakh in a financial year. Total LTCG tax shown here is computed @10% on the gains over 1 Lakh. Current computation considers all LT gains till today."
+          ]
+        }
+      ]
+    }
   },
-  pfwmessage: 'Success',
-  pfwutime: '',
-  pfwstatus_code: 200,
-  pfwtime: '2021-03-03 19:23:29.008908',
+  "pfwmessage": "Success",
+  "pfwutime": "",
+  "pfwstatus_code": 200,
+  "pfwtime": "2021-03-08 20:41:13.287322"
 }
