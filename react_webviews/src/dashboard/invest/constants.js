@@ -1,5 +1,3 @@
-import { getConfig } from "../../utils/functions";
-
 export const apiConstants = {
   accountSummary: "/api/user/account/summary",
   npsInvestStatus: "/api/nps/invest/status/v2",

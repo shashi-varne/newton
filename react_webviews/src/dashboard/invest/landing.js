@@ -22,7 +22,6 @@ class Landing extends Component {
       verificationFailed: false,
       modalData: {},
       openKycStatusDialog: false,
-      modalData: {},
       openKycPremiumLanding: false,
     };
     this.initialize = initialize.bind(this);
@@ -338,7 +337,7 @@ class Landing extends Component {
           {productName !== "fisdom" &&
             productName !== "finity" &&
             productName !== "ktb" && (
-              <div className="contact-us">
+              <div className="invest-contact-us">
                 In partnership with
                 <span>
                   {productName === "bfdlmobile" ||

@@ -245,14 +245,26 @@ export function getKycAppStatus(kyc) {
 }
 
 export function getDocuments(userKyc) {
-  return [
+  if(userKyc.kyc_status === 'compliant') {
+    return [
+      {
+        key: "sign",
+        title: "Signature",
+        doc_status: userKyc.sign.doc_status,
+        default_image: "sign_default.svg",
+        approved_image: "sign_approved.svg",
+      }
+    ];
+  }
+
+  let documents =  [
     {
       key: "pan",
       title: "PAN card",
       subtitle: userKyc.pan.meta_data.pan_number,
       doc_status: userKyc.pan.doc_status,
       default_image: 'pan_default.svg',
-      // approved_image: partner.assets.pan_approved
+      approved_image: "pan_approved.svg",
     },
 
     {
@@ -261,7 +273,7 @@ export function getDocuments(userKyc) {
       subtitle: getAddressProof(userKyc),
       doc_status: userKyc.address.doc_status,
       default_image: 'regi_default.svg',
-      // approved_image: partner.assets.regi_approved
+      approved_image: "regi_approved.svg",
     },
 
     {
@@ -269,7 +281,7 @@ export function getDocuments(userKyc) {
       title: "Selfie",
       doc_status: userKyc.identification.doc_status,
       default_image: 'selfie_default.svg',
-      // approved_image: partner.assets.selfie_approved
+      approved_image: "selfie_approved.svg",
     },
 
     {
@@ -277,7 +289,7 @@ export function getDocuments(userKyc) {
       title: "Selfie video (IPV)",
       doc_status: userKyc.ipvvideo.doc_status,
       default_image: 'video_default.svg',
-      // approved_image: partner.assets.video_approved
+      approved_image: "video_approved.svg",
     },
 
     {
@@ -285,7 +297,7 @@ export function getDocuments(userKyc) {
       title: "Bank details",
       doc_status: userKyc.bank.meta_data_status,
       default_image: 'default.svg',
-      // approved_image: partner.assets.approved
+      approved_image: "approved.svg",
     },
 
     {
@@ -293,9 +305,23 @@ export function getDocuments(userKyc) {
       title: "Signature",
       doc_status: userKyc.sign.doc_status,
       default_image: 'sign_default.svg',
-      // approved_image: partner.assets.sign_approved
+      approved_image: "sign_approved.svg",
     }
-  ]
+  ];
+
+  if(userKyc.address.meta_data.is_nri) {
+    const data = {
+      key: "nriaddress",
+      title: "Foreign Address proof",
+      subtitle: docMapper[userKyc.address_doc_type],
+      doc_status: userKyc.nri_address.doc_status,
+      default_image: "regi_default.svg",
+      approved_image:"regi_approved.svg",
+    };
+
+    documents.splice(2, 0, data);
+  }
+  return documents;
 }
 
 function getAddressProof(userKyc) {

@@ -1044,7 +1044,7 @@ export function initilizeKyc() {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
   }
-  let isReadyToInvestBase = isReadyToInvest()
+  let isReadyToInvestBase = isReadyToInvest();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
   this.setState({
     isCompliant,
@@ -1150,3 +1150,9 @@ export function openKyc() {
     }
   }
 }
+
+export const resetRiskProfileJourney = () => {
+  storageService().set("came_from_risk_webview", "");
+  storageService().set("firsttime_from_risk_webview_invest", "");
+  return;
+};

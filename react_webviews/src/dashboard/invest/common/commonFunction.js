@@ -42,9 +42,9 @@ export const corpusValue = (stockSplitVal, amount, investtype, isRecurring, term
   let principle = amount;
   var corpus_value = 0;
   for (var i = 0; i < term; i++) {
-    if (isRecurring || investtype === 'buildwealth') {
+    if (isRecurring) {
       var n = (i + 1) * 12;
-      var mr = getRateOfInterest(stockSplitVal) / 12 / 100;
+      var mr = (getRateOfInterest(stockSplitVal) / 12) / 100;
       corpus_value = (amount * (Math.pow(1 + mr, n) - 1)) / mr;
     } else {
       var currInterest = (principle * getRateOfInterest(stockSplitVal)) / 100;

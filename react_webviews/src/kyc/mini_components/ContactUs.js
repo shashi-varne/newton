@@ -4,7 +4,7 @@ import { getConfig } from "utils/functions";
 const partner = getConfig().partner;
 const ContactUs = () => {
   return (
-    <footer className="contact-us">
+    <footer className="kyc-contact-us">
       For any query, reach us at
       <div className="partner-info">
         <div>{partner.mobile}</div>

@@ -55,7 +55,8 @@ const InvestedAmount = (props) => {
     try {
       setLoader(true);
       const data = await get_recommended_funds(params);
-      graphData = { ...graphData, ...data };
+      console.log("data is", data);
+      graphData = { ...graphData, ...data, amount};
       storageService().setObject('graphData', graphData);
       setLoader(false);
       navigate(`recommendations`);
@@ -141,7 +142,7 @@ const InvestedAmount = (props) => {
           <div className='invested-amount-display-left'>
             <div className='invested-amount-display-left-text'>Invested Amount</div>
             <div className='invested-amount-display-left-val'>
-              {formatAmountInr(amount)} per month
+              {formatAmountInr(amount)} {investTypeDisplay === 'sip' ? 'per month' : ''}
             </div>
           </div>
           <div className='invested-amount-display-right'>
