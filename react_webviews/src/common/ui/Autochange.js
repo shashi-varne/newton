@@ -8,7 +8,6 @@ import Select from "react-dropdown-select";
 class SelectDropDown extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             multi: false,           // For multi Activate
             itemRenderer: false,   // For multi Select with checkbox
@@ -37,18 +36,29 @@ class SelectDropDown extends React.Component {
             direction: "ltr",
             dropdownHeight: "280px",
             options: this.props.options,
+            selectedValue: this.props.value,
         };
     }
 
-    componentDidUpdate(prevState) {  
+    componentDidUpdate(prevState) {
+        if (prevState.value !== this.props.value) {
+            this.setState({ selectedValue: this.props.value })
+          }
+
         if (prevState.options !== this.props.options) {
-          this.setState({ options: this.props.options })
+            this.setState({ options: this.props.options,})
         }
-      }
+    }
 
     setValues = selectValues => {
         this.setState({ selectValues })
-        this.props.onChange(selectValues[0].value);
+        if (selectValues[0]) {
+            if (selectValues[0] && selectValues[0].isArray) {
+                this.props.onChange(selectValues[0].name);
+            } else {
+                this.props.onChange(selectValues[0].value);
+            }
+        }
     }
 
     contentRenderer = ({ props, state }) => {
@@ -163,7 +173,14 @@ class SelectDropDown extends React.Component {
     }
 
     render() {
-        const options = this.state.options;
+        let options = this.state.options; 
+        if (!!options.length && !options[0].value) {
+          options = this.state.options.map((ele, index) => {
+                return ({
+                    'name': ele, 'value': index, 'isArray': true
+                })
+            })
+        }
         window.addEventListener('load', function () {
             let paragraphs = document.getElementsByTagName("ins");
             var loop = function () {
@@ -174,105 +191,109 @@ class SelectDropDown extends React.Component {
             loop();
         })
 
-        return (
-            <FormControl className="Dropdown label" disabled={this.props.disabled}> 
-            {console.log(options.find(opt => opt.value === this.props.value) , 'options.find(opt => opt.value === this.props.value)', this.props.value)}
-                {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
-                {/* <div className={this.props.className}> */}
-                <span className="label2">{this.props.label || 'label'}</span>
-                <div>
-                    <div style={{ width: "100%", height: '52px', }}>
-                        <StyledSelect
-                            placeholder=""
-                            addPlaceholder={this.state.addPlaceholder}
-                            color={this.state.color}
-                            disabled={this.state.disabled}
-                            loading={this.state.loading}
-                            searchBy={this.state.searchBy}
-                            separator={this.state.separator}
-                            clearable={this.state.clearable}
-                            searchable={this.state.searchable}
-                            create={this.state.create}
-                            keepOpen={this.state.forceOpen}
-                            dropdownHandle={this.state.handle}
-                            dropdownHeight={this.state.dropdownHeight}
-                            direction={this.state.direction}
-                            multi={this.state.multi}
-                            // values={[options.find(opt => opt.value === this.props.value)]}
-                            labelField={this.state.labelField}
-                            valueField={this.state.valueField}
-                            options={options}
-                            dropdownGap={5}
-                            keepSelectedInList={this.state.keepSelectedInList}
-                            onDropdownOpen={() => this.removeIns()}
-                            onDropdownClose={() => undefined}
-                            onClearAll={() => undefined}
-                            onSelectAll={() => undefined}
-                            onChange={values => this.setValues(values)}
-                            noDataLabel="No matches found"
-                            closeOnSelect={this.state.closeOnSelect}
-                            noDataRenderer={
-                                this.state.noDataRenderer
-                                    ? () => this.noDataRenderer()
-                                    : undefined
-                            }
-                            dropdownPosition={this.state.dropdownPosition}
-                            itemRenderer={
-                                this.state.itemRenderer
-                                    ? (item, itemIndex, props, state, methods) =>
-                                        this.itemRenderer(item, itemIndex, props, state, methods)
-                                    : undefined
-                            }
-                            inputRenderer={
-                                this.state.inputRenderer
-                                    ? (props, state, methods) =>
-                                        this.inputRenderer(props, state, methods)
-                                    : undefined
-                            }
-                            optionRenderer={
-                                this.state.optionRenderer
-                                    ? (option, props, state, methods) =>
-                                        this.optionRenderer(option, props, state, methods)
-                                    : undefined
-                            }
-                            contentRenderer={
-                                this.state.contentRenderer
-                                    ? (innerProps, innerState) =>
-                                        this.contentRenderer(innerProps, innerState)
-                                    : undefined
-                            }
-                            dropdownRenderer={
-                                this.state.dropdownRenderer
-                                    ? (innerProps, innerState, innerMethods) =>
-                                        this.dropdownRenderer(
-                                            innerProps,
-                                            innerState,
-                                            innerMethods
-                                        )
-                                    : undefined
-                            }
-                        />
-                        {(this.props.error) ?
-                            <span className='error-radiogrp'>
-                                {this.props.helperText || 'Please select an option'}
-                            </span> :
-                            <span className='error-radiogrp'>
-                                {this.props.helperText || ''}
-                            </span>
-                        }
-                    </div>
-                </div>
-
-
-                { /* --------------------  Drop Down ------------------    */}
-
-                {/* </div> */}
-            </FormControl>
-        );
+        const value = options.find(opt => opt.value === this.state.selectedValue || opt.name === this.state.selectedValue);
+            if(!!options.length && value){
+                return (
+                    <FormControl className="Dropdown label" disabled={this.props.disabled}>
+                        {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
+                        {/* <div className={this.props.className}> */}
+                        <span className="label2">{this.props.label || 'label'}</span>
+                        <div>
+                            <div style={{ width: "100%", height: '52px', }}>
+                                <StyledSelect
+                                    placeholder=""
+                                    addPlaceholder={this.state.addPlaceholder}
+                                    color={this.state.color}
+                                    disabled={this.state.disabled}
+                                    loading={this.state.loading}
+                                    searchBy={this.state.searchBy}
+                                    separator={this.state.separator}
+                                    clearable={this.state.clearable}
+                                    searchable={this.state.searchable}
+                                    create={this.state.create}
+                                    keepOpen={this.state.forceOpen}
+                                    dropdownHandle={this.state.handle}
+                                    dropdownHeight={this.state.dropdownHeight}
+                                    direction={this.state.direction}
+                                    multi={this.state.multi}
+                                    values={value ? [{name: value.name, value: ''}] : []}
+                                    labelField={this.state.labelField}
+                                    valueField={this.state.valueField}
+                                    options={options}
+                                    dropdownGap={5}
+                                    keepSelectedInList={this.state.keepSelectedInList}
+                                    onDropdownOpen={() => this.removeIns()}
+                                    onDropdownClose={() => undefined}
+                                    onClearAll={() => undefined}
+                                    onSelectAll={() => undefined}
+                                    onChange={values => this.setValues(values)}
+                                    noDataLabel="No matches found"
+                                    closeOnSelect={this.state.closeOnSelect}
+                                    noDataRenderer={
+                                        this.state.noDataRenderer
+                                            ? () => this.noDataRenderer()
+                                            : undefined
+                                    }
+                                    dropdownPosition={this.state.dropdownPosition}
+                                    itemRenderer={
+                                        this.state.itemRenderer
+                                            ? (item, itemIndex, props, state, methods) =>
+                                                this.itemRenderer(item, itemIndex, props, state, methods)
+                                            : undefined
+                                    }
+                                    inputRenderer={
+                                        this.state.inputRenderer
+                                            ? (props, state, methods) =>
+                                                this.inputRenderer(props, state, methods)
+                                            : undefined
+                                    }
+                                    optionRenderer={
+                                        this.state.optionRenderer
+                                            ? (option, props, state, methods) =>
+                                                this.optionRenderer(option, props, state, methods)
+                                            : undefined
+                                    }
+                                    contentRenderer={
+                                        this.state.contentRenderer
+                                            ? (innerProps, innerState) =>
+                                                this.contentRenderer(innerProps, innerState)
+                                            : undefined
+                                    }
+                                    dropdownRenderer={
+                                        this.state.dropdownRenderer
+                                            ? (innerProps, innerState, innerMethods) =>
+                                                this.dropdownRenderer(
+                                                    innerProps,
+                                                    innerState,
+                                                    innerMethods
+                                                )
+                                            : undefined
+                                    }
+                                />
+                                {(this.props.error) ?
+                                    <span className='error-radiogrp'>
+                                        {this.props.helperText || 'Please select an option'}
+                                    </span> :
+                                    <span className='error-radiogrp'>
+                                        {this.props.helperText || ''}
+                                    </span>
+                                }
+                            </div>
+                        </div>
+        
+        
+                        { /* --------------------  Drop Down ------------------    */}
+        
+                        {/* </div> */}
+                    </FormControl>
+                );
+            } else {
+                return (<div></div>);
+            }
     }
 }
 
-const Autochange = (props) => {   console.log(props, "Autochange.......,")
+const Autochange = (props) => {
     return (<SelectDropDown {...props} />)
 }
 
