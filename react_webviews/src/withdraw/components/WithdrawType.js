@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import Container from '../common/Container';
 import FundCard from '../mini_components/FundCard';
 import isEmpty from 'lodash/isEmpty';
-import { getRecommendedFund,getTaxes } from '../common/Api';
+import { getRecommendedFund, getTaxes } from '../common/Api';
 import { inrFormatDecimal } from 'utils/validators';
 import { navigate as navigateFunc } from '../common/commonFunction';
 import toast from 'common/ui/Toast';
+import Typography from '@material-ui/core/Typography';
+import { getConfig } from 'utils/functions';
 
 const Landing = (props) => {
   const { type } = props.match?.params;
@@ -18,8 +20,7 @@ const Landing = (props) => {
   const [investedUser, setInvestedUser] = useState(false);
   const [fetchFailed, setFetchFailed] = useState(false);
   const [zeroInvested, setZeroInvested] = useState(false);
-  const [buttonTitle,setButtonTitle] = useState('CONTINUE');
-
+  const [buttonTitle, setButtonTitle] = useState('CONTINUE');
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     try {
@@ -41,6 +42,7 @@ const Landing = (props) => {
             setInvestedUser(true);
           } else if (recData.ir_funds_available && !recData.all_success) {
             setFetchFailed(true);
+            setButtonTitle('RETRY');
           } else {
             setZeroInvested(true);
             setButtonTitle('DEPOSIT NOW');
@@ -50,13 +52,15 @@ const Landing = (props) => {
         }
       } else {
         setRecommendedFunds(data?.recommendations[0]);
-        if(type === 'systematic'){
+        if (type === 'systematic') {
           let val = {};
           // eslint-disable-next-line no-unused-expressions
-          data?.recommendations[0]?.allocations?.forEach(el =>{
-              val ={...val,[el?.mf?.isin]:Math.ceil(el?.amount)}
-          })
+          data?.recommendations[0]?.allocations?.forEach((el) => {
+            val = { ...val, [el?.mf?.isin]: Math.ceil(el?.amount) };
+          });
           setValue(val);
+          const totalAmount = getTotalAmount(val);
+          setTotalAmount(totalAmount);
         }
       }
     } catch (err) {
@@ -65,67 +69,68 @@ const Landing = (props) => {
   };
 
   const fetchTaxes = async () => {
-    try{
+    try {
       await getTaxes(value);
-     // navigate here to Summary;
-    } catch(err){
+      // navigate here to Summary;
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
   useEffect(() => {
     fetchRecommendedFunds();
   }, []);
 
   const calcTotalAmount = (isin, num) => {
-    if(num === 0){
-      if(value[isin]){
+    if (num === 0) {
+      if (value[isin]) {
         const newValue = value;
         delete newValue[isin];
         const totalAmount = getTotalAmount(newValue);
         setTotalAmount(totalAmount);
         setValue(newValue);
       }
-    } else{
-        const totalAmount = getTotalAmount({...value,[isin]:num});
-        setTotalAmount(totalAmount);
-        setValue({...value,[isin]:num});
+    } else {
+      const totalAmount = getTotalAmount({ ...value, [isin]: num });
+      setTotalAmount(totalAmount);
+      setValue({ ...value, [isin]: num });
     }
-    
   };
   const getTotalAmount = (val) => {
-    if(val){
-      return Object.keys(val)?.reduce((total,num) => {
+    if (val) {
+      return Object.keys(val)?.reduce((total, num) => {
         return total + val[num];
-      },0)
-    } else{
+      }, 0);
+    } else {
       return 0;
     }
-  }
+  };
   const handleClick = () => {
     if (zeroInvested) {
-      navigate('/invest/insta-redeem',null,null,true);
-    } else{
-    if(!totalAmount){
-      toast("Please enter the withdraw amount");
-      return;
+      navigate('/invest/insta-redeem', null, null, true);
+    } else if (fetchFailed) {
+      fetchRecommendedFunds();
+    } else {
+      if (!totalAmount) {
+        toast('Please enter the withdraw amount');
+        return;
       }
-      if(!isEmpty(value)){
+      if (!isEmpty(value)) {
         fetchTaxes();
-      } else{
-        toast("error");
+      } else {
+        toast('error');
       }
     }
   };
   const checkError = (err) => {
-    setError(err)
-  }
+    setError(err);
+  };
   return (
     <Container
-      buttonTitle={type !== 'insta-redeem' ? inrFormatDecimal(totalAmount) : buttonTitle }
+      buttonTitle={type !== 'insta-redeem' ? inrFormatDecimal(totalAmount) : buttonTitle}
       fullWidthButton
       classOverRideContainer='pr-container'
       hideInPageTitle
-      disable={type === 'insta-redeem' ? limitCrossed || error: true}
+      disable={type === 'insta-redeem' ? limitCrossed || error : true}
       handleClick={type === 'insta-redeem' ? handleClick : ''}
       twoButton={type !== 'insta-redeem'}
       buttonTitle2={type !== 'insta-redeem' ? 'CONTINUE' : ''}
@@ -164,19 +169,18 @@ const Landing = (props) => {
               </div>
             </section>
           )}
-
-          {type === 'insta-redeem' && investedUser && (
-            <section className='withdraw-instant-msg'>
-              <div>Instant in bank account</div>
-              <div>|</div>
-              <div>Get it in 30 mins</div>
-            </section>
-          )}
         </>
       )}
 
       {fetchFailed && <InstaRedeemFailed />}
       {zeroInvested && <InstaRedeemZero />}
+      {type === 'insta-redeem' && !fetchFailed && !isEmpty(recommendedFunds?.allocations) &&(
+        <section className='withdraw-instant-msg'>
+          <div>Instant in bank account</div>
+          <div>|</div>
+          <div>Get it in 30 mins</div>
+        </section>
+      )}
     </Container>
   );
 };
@@ -187,7 +191,7 @@ const InstaRedeemZero = () => {
   return (
     <section className='withdraw-insta'>
       <div className='withdraw-insta-icon'>
-        <img src='' alt='' style={{ height: '50px', width: '50px', background: 'red' }} />
+        <img src={require('assets/piggy_bank@4x.png')} alt='' />
       </div>
       <div className='withdraw-insta-head'>Current invested amount: ₹0</div>
       <div className='withdraw-insta-info'>
@@ -199,16 +203,30 @@ const InstaRedeemZero = () => {
 };
 
 const InstaRedeemFailed = () => {
+  const product_name = getConfig().productName;
+
   return (
-    <section className='withdraw-insta'>
-      <div className='withdraw-insta-icon'>
-        <img src='' alt='' style={{ height: '150px', width: '150px', background: 'red' }} />
-      </div>
-      <div className='withdraw-insta-head'>Oops!</div>
-      <div className='withdraw-insta-info'>
+    <div className='pr-error-container withdraw-insta-failed'>
+      <section className='image-cover'>
+        <img
+          src={require(`assets/${product_name}/server_error_page.svg`)}
+          alt='Server Error'
+          className='error-page'
+        />
+      </section>
+      <Typography className='error-text-title'>Oops!</Typography>
+      <Typography className='error-text'>
         Currently, we’re unable to fetch the redeemable amount due to technical issues. Please try
         again after some time.
-      </div>
-    </section>
+      </Typography>
+      <section className='pr-help-container '>
+        <Typography className='help-text'>For any help, reach us at</Typography>
+        <div className='help-contact-email flex-item'>
+          <Typography className='help-contact'>+91-7829228886</Typography>
+          <hr style={{ height: '9px', margin: '0', borderWidth: '0.6px' }} />
+          <Typography className='help-email'>ASK@FISDOM.COM</Typography>
+        </div>
+      </section>
+    </div>
   );
 };

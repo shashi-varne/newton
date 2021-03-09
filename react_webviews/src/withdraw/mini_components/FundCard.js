@@ -79,14 +79,17 @@ const FundCard = ({ type, expand, data,disabled, calcTotalAmount, checkError }) 
       if (num > Math.ceil(compNum)) {
         setError(true);
         setHelperText('Amount cannot be more than withdrawable amount');
+        checkError(true);
       } else if (num <= 0) {
         setError(true);
         setHelperText('Minimum withdrawal amount for fund is 1');
+        checkError(true);
         return;
       } else {
         if (error) {
           setError(false);
         }
+        checkError(false);
       }
       calcTotalAmount(isin,num);
     }
