@@ -160,15 +160,9 @@ export class TwoButtonLayout extends Component {
     return (
       <div className="FooterDefaultLayout">
         <div className="FlexItem2 two-button Card" style={{ marginBottom: 0 }}>
-          <div
-            className="footer-content"
-          >
-            <div className="footer-one">
-             Withdraw amount
-            </div>
-            <div className="footer-two">
-            ₹ {props?.footerText1}
-            </div>
+          <div className="footer-content">
+            <div className="footer-one">Withdraw amount</div>
+            <div className="footer-two">₹ {props?.footerText1}</div>
           </div>
           <Buttons
             variant="raised"
@@ -181,11 +175,13 @@ export class TwoButtonLayout extends Component {
             }`}
             onClick={() => {
               if (!props.disable2 && !props.isApiRunning2) {
-                props.handleClick2()
+                if (typeof handleClick2 === 'function') {
+                  props.handleClick2()
+                }
               }
             }}
           >
-            {props.buttonTitle2}
+            {props.buttonTitle}
             {props.isApiRunning2 && (
               <div className="loader">
                 <CircularProgress size={20} thickness={5} />

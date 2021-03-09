@@ -128,7 +128,7 @@ const Landing = (props) => {
   }
   return (
     <Container
-      buttonTitle2={zeroInvested ? 'DEPOSIT NOW' : 'CONTINUE'}
+      buttonTitle={zeroInvested ? 'DEPOSIT NOW' : 'CONTINUE'}
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
@@ -138,7 +138,7 @@ const Landing = (props) => {
       handleClick={handleClick}
       showSkelton={isEmpty(recommendedFunds)}
       twoButton={type !== 'insta-redeem'}
-      footerText1={'1000'}
+      footerText1={totalAmount}
       disable2={error}
     >
       {recommendedFunds?.allocations && (
