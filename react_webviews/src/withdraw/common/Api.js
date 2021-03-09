@@ -95,13 +95,13 @@ export const getRecommendedFund = async (type, amount = null) => {
       api += `?amount=${amount}`
     }
     let res = await Api.get(api)
-    // if (type === 'insta-redeem') {
-    //   res = insta
-    // } else if (type === 'self') {
-    //   res = self
-    // } else if (type === 'systematic') {
-    //   res = systematic
-    // }
+    if (type === 'insta-redeem') {
+      res = insta
+    } else if (type === 'self') {
+      res = self
+    } else if (type === 'systematic') {
+      res = systematic
+    }
     if (
       !res?.pfwresponse || res.pfwresponse.status_code !== 200 ||
       !res.pfwresponse ||
