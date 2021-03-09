@@ -191,8 +191,8 @@ class SelectDropDown extends React.Component {
             loop();
         })
 
-        const value = options.find(opt => opt.value === this.state.selectedValue || opt.name === this.state.selectedValue);
-            if(!!options.length && value){
+        const value = options.find(opt => opt.value === this.state.selectedValue || opt.name === this.state.selectedValue); console.log(value)
+            if(!!options.length){
                 return (
                     <FormControl className="Dropdown label" disabled={this.props.disabled}>
                         {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
@@ -201,7 +201,7 @@ class SelectDropDown extends React.Component {
                         <div>
                             <div style={{ width: "100%", height: '52px', }}>
                                 <StyledSelect
-                                    placeholder=""
+                                    placeholder={''}
                                     addPlaceholder={this.state.addPlaceholder}
                                     color={this.state.color}
                                     disabled={this.state.disabled}
