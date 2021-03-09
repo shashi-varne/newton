@@ -66,7 +66,7 @@ const RiskProfiler = (props) => {
           <Route path={`${url}/question4`} component={QuestionScreen4} />
           <Route path={`${url}/question5`} component={QuestionScreen5} />
           <Route path={`${url}/recommendation`} component={Recommendation} />
-          <Route path={`${url}/result/v1`} component={Result} />
+          <Route path={`${url}/result-new`} render={(props) => <Result {...props} useNewFlow={true} />} />
           <Route path={`${url}/result`} component={Result} />
           <Route component={NotFound} />
         </Switch>

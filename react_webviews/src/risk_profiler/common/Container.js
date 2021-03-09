@@ -87,6 +87,7 @@ class Container extends Component {
     if (search.indexOf('goBack') < 0) {
       if (pathname.indexOf('result') >= 0) {
         if (getConfig().isWebCode) {
+          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
           nativeCallback({ action: 'exit', events: this.getEvents('back') });
@@ -170,7 +171,6 @@ class Container extends Component {
     });
 
     nativeCallback({ action: this.state.callbackType, events: this.getEvents('exit_yes') });
-
   }
 
   renderPopup = () => {

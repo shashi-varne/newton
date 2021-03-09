@@ -123,12 +123,12 @@ class QuestionScreen5 extends Component {
         if (res.pfwresponse.result.message === 'success') {
           let score = res.pfwresponse.result.score;
           window.sessionStorage.setItem('score', JSON.stringify(score));
-          const showOldFlow = storageService().getObject('showOldFlow');
-          if (!showOldFlow || isEmpty(showOldFlow)) {
+          const useNewFlow = storageService().getObject('useNewFlow');
+          if (!useNewFlow || isEmpty(useNewFlow)) {
             this.navigate('result');
           } else {
-            storageService().remove('showOldFlow');
-            this.navigate('result/v1');
+            storageService().remove('useNewFlow');
+            this.navigate('result-new');
           }
         }
 

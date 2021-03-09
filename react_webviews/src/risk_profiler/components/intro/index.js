@@ -14,6 +14,7 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { storageService } from "../../../utils/validators";
 
+const platform = getConfig().productName;
 class Intro extends Component {
   constructor(props) {
     super(props);
@@ -144,7 +145,7 @@ class Intro extends Component {
     return (
       <div key={index} className="risk_profiler-benefitList">
         <img
-          src={require(`assets/${props.icon}.svg`)}
+          src={require(`assets/${platform}/${props.icon}.svg`)}
           alt=""
           className="risk_profiler-benefitList-img"
         />
@@ -167,7 +168,7 @@ class Intro extends Component {
         <div className="risk_profiler-intro">
           <h1 className="risk_profiler-intro-heading">What is Risk Profile</h1>
           <img
-            src={require("../../../assets/risk_profile_illustration.svg")}
+            src={require(`assets/${platform}/rp_intro_banner.svg`)}
             alt=""
             className="risk_profiler-intro-image"
           />

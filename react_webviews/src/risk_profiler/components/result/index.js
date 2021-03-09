@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import qs from 'qs';
 import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
@@ -23,9 +22,7 @@ import { pick, get } from 'lodash';
 class Result extends Component {
   constructor(props) {
     super(props);
-    const [lastParam] = props.match.path.split('/').reverse();
     this.state = {
-      showOldFlow: lastParam === 'v1',
       show_loader: true,
       openDialogReset: false,
       params: this.setEntryParams(),
@@ -78,7 +75,7 @@ class Result extends Component {
           show_loader: false,
         });
       } else {
-        storageService().setObject('showOldFlow', this.state.showOldFlow);
+        storageService().setObject('useNewFlow', this.props.useNewFlow);
         this.navigate('intro', true);
       }
     } catch (err) {
@@ -93,7 +90,6 @@ class Result extends Component {
     let params = {
       indicator: (this.state.score) ? this.state.score.indicator : false
     };
-    pathname = '/risk/' + pathname;
 
     if (!replace) {
       this.props.history.push({
@@ -129,7 +125,7 @@ class Result extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
-    if (this.state.showOldFlow) {
+    if (!this.props.useNewFlow) {
       this.navigate('recommendation');
       return;
     }
@@ -138,13 +134,7 @@ class Result extends Component {
     if (openWebModule) {
       window.location.href = this.redirectUrlBuilder();
     } else {
-      // TODO: Inform native of this callback
-      nativeCallback({
-        action: 'recommendation',
-        message: {
-          ...this.state.params,
-        }
-      });
+      nativeCallback({ action: 'exit' });
     }
   }
 
@@ -153,7 +143,6 @@ class Result extends Component {
     var r = this.getRateOfInterest();
     var a = corpusValue;
     var i = (r / 12) / 100;
-    console.log('---', n, r, a, i, corpusValue);
     var tmp = Math.pow((1 + i), n) - 1;
     var monthlyInvestment = (a * i) / tmp;
     var monthlyAmount = monthlyInvestment;
