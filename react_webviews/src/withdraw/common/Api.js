@@ -75,17 +75,16 @@ export const getRecommendedFund = async (type, amount = null) => {
     if (amount) {
       api += `?amount=${amount}`
     }
-    await Api.get(api)
-    let res
-    if (type === 'insta-redeem') {
-      res = insta
-    } else if (type === 'self') {
-      res = self
-    } else if (type === 'systematic') {
-      res = systematic
-    }
+    let res = await Api.get(api)
+    // if (type === 'insta-redeem') {
+    //   res = insta
+    // } else if (type === 'self') {
+    //   res = self
+    // } else if (type === 'systematic') {
+    //   res = systematic
+    // }
     if (
-      res.pfwstatus_code !== 200 ||
+      !res?.pfwresponse || res.pfwresponse.status_code !== 200 ||
       !res.pfwresponse ||
       isEmpty(res.pfwresponse)
     ) {
@@ -100,6 +99,25 @@ export const getRecommendedFund = async (type, amount = null) => {
     }
   } catch (err) {
     throw err
+  }
+}
+
+export const getBalance = async () => {
+  const url = `api/invest/redeem/recommendv3/mine/balance`
+  const res = await Api.get(url)
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error(genericErrMsg)
+  }
+  const { result, status_code: status } = res.pfwresponse
+
+  if (status === 200) {
+    return result
+  } else {
+    throw new Error(result.error || result.message || genericErrMsg)
   }
 }
 

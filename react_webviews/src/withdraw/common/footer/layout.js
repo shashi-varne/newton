@@ -159,29 +159,17 @@ export class TwoButtonLayout extends Component {
     const props = this.props
     return (
       <div className="FooterDefaultLayout">
-        <div className="FlexItem2 two-button">
-          <Buttons
-            variant="raised"
-            size="large"
-            color="secondary"
-            type={props.type}
-            disabled={props.disable}
-            className={`footer-button first-button ${props.buttonClassName} ${
-              props.disable && 'disabled'
-            }`}
-            onClick={() => {
-              if (!props.disable && !props.isApiRunning) {
-                props.handleClick()
-              }
-            }}
+        <div className="FlexItem2 two-button Card" style={{ marginBottom: 0 }}>
+          <div
+            className="footer-content"
           >
-            {props.buttonTitle}
-            {props.isApiRunning && (
-              <div className="loader">
-                <CircularProgress size={20} thickness={5} />
-              </div>
-            )}
-          </Buttons>
+            <div className="footer-one">
+             Withdraw amount
+            </div>
+            <div className="footer-two">
+            ₹ {props?.footerText1}
+            </div>
+          </div>
           <Buttons
             variant="raised"
             size="large"

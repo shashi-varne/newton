@@ -212,16 +212,18 @@ const Container = (props) => {
       )}
 
       {/* Children Block */}
-      <div
-        style={props.styleContainer}
-        className={`
+      {!props.showSkelton && (
+        <div
+          style={props.styleContainer}
+          className={`
             Container 
             ${props.classOverRideContainer}
             ${props.noPadding ? 'no-padding' : ''}
           `}
-      >
-        {props.children}
-      </div>
+        >
+          {props.children}
+        </div>
+      )}
 
       {/* Footer Block */}
       {!props.noFooter && (
@@ -241,6 +243,7 @@ const Container = (props) => {
           twoButton={props.twoButton}
           buttonClassName={props.buttonClassName}
           buttonClassName2={props.buttonClassName2}
+          footerText1={props.footerText1}
         />
       )}
       {/* No Internet */}

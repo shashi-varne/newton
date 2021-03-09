@@ -21,6 +21,7 @@ const Landing = (props) => {
   const fetchRecommendedFunds = async () => {
     try {
       const data = await getRecommendedFund(type, amount);
+      console.log(data)
       if (type === 'insta-redeem') {
         if (data?.recommendations && data?.recommendations?.length > 0) {
           const recData = data?.recommendations[0];
@@ -118,14 +119,18 @@ const Landing = (props) => {
   };
   return (
     <Container
-      buttonTitle={zeroInvested ? 'DEPOSIT NOW' : 'CONTINUE'}
+      buttonTitle2={zeroInvested ? 'DEPOSIT NOW' : 'CONTINUE'}
       fullWidthButton
       classOverRideContainer='pr-container'
+      classOverRide="withdraw-two-button"
       hideInPageTitle
       disable={limitCrossed}
       handleClick={handleClick}
+      showSkelton={isEmpty(recommendedFunds)}
+      twoButton={true}
+      footerText1={'1000'}
     >
-      {!isEmpty(recommendedFunds?.allocations) && (
+      {(recommendedFunds?.allocations) && (
         <>
           {(investedUser || type !== 'insta-redeem') && (
             <section>
