@@ -131,10 +131,9 @@ export async function getContact() {
 }
 
 export function navigate(pathname, data = {}) {
-  console.log(getConfig())
   this.props.history.push({
     pathname: pathname,
-    search: (data.searchParams || getConfig().searchParams) + '&redirect_url=' + getConfig().current_params.plutus_redirect_url,
+    search: data.searchParams || getConfig().searchParams,
     params: data.params || {},
   });
 }
