@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getConfig } from "utils/functions";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
 import { getDocuments, initData } from "../services";
-import { isEmpty, storageService } from "../../utils/validators";
+import { isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
@@ -37,12 +36,21 @@ const Progress = (props) => {
   };
 
   let documents = [];
+  let totalDocs = 0;
+  let canGoNext = false;
 
   if (!isEmpty(kyc) && !loading) {
     documents = getDocuments(kyc);
+    for (let document of documents) {
+      if (
+        document.doc_status === "submitted" ||
+        document.doc_status === "approved"
+      ) {
+        totalDocs++;
+      }
+    }
+    canGoNext = documents.length === totalDocs;
   }
-
-  let totalDocs = 0;
 
   const handleCards = (key, index) => {
     if (disableNext) return;
@@ -53,7 +61,7 @@ const Progress = (props) => {
       nriaddress: getPathname.uploadNriAddress,
       selfie: getPathname.uploadSelfie,
       selfie_video: getPathname.uploadSelfieVideo,
-      bank: `/kyc/non-compliant/bank-details`,
+      bank: `/kyc/${kyc.kyc_status}/bank-details`,
       sign: getPathname.uploadSign,
     };
 
@@ -65,7 +73,7 @@ const Progress = (props) => {
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       noFooter={disableNext}
-      disable={loading}
+      disable={loading || !canGoNext}
       classOverRideContainer="pr-container"
       showSkelton={loading}
       skeltonType="p"
@@ -75,7 +83,7 @@ const Progress = (props) => {
       }}
     >
       <section id="kyc-upload-progress">
-        <div className="header">Upload Documents</div>
+        <div className="header">Upload documents</div>
         <main className="documents">
           {documents.map((document, index) => (
             <div key={index} className="document">
@@ -83,7 +91,9 @@ const Progress = (props) => {
                 default_image={document.default_image}
                 title={document.title}
                 subtitle={document.subtitle}
+                doc_status={document.doc_status}
                 onClick={() => handleCards(document.key, index)}
+                approved_image={document.approved_image}
               />
             </div>
           ))}

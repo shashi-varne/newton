@@ -22,7 +22,6 @@ class Landing extends Component {
       verificationFailed: false,
       modalData: {},
       openKycStatusDialog: false,
-      modalData: {},
       openKycPremiumLanding: false,
     };
     this.initialize = initialize.bind(this);

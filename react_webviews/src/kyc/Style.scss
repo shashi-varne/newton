@@ -173,6 +173,7 @@
             .subtitle {
               color: #8d879b;
               font-size: 14px;
+              word-break: break-word;
             }
           }
 
@@ -1078,6 +1079,17 @@
     cursor: pointer;
     margin: 10px 0 10px 0;
     line-height: 1.5;
+
+    .image {
+      position: relative;
+
+      .check-icon {
+        position: absolute;
+        width: 12px;
+        left: 49px;
+        top: 9px;
+      }
+    }
 
     .title {
       margin-left: 10px;

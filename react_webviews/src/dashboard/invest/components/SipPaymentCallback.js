@@ -10,7 +10,7 @@ import { initData } from "../../../kyc/services";
 const SipPaymentCallback = (props) => {
   const params = props.match.params || {};
   const status = params.status || "";
-  const message = params.message || "";
+  let message = params.message || "";
   const [campaign, setCampaign] = useState({});
   const [currentUser, setCurrentUser] = useState(
     storageService().getObject("user") || {}
@@ -45,8 +45,8 @@ const SipPaymentCallback = (props) => {
         campaignData =
           userCampaign.find((obj) => {
             return (
-              obj.campaign.name == "auto_debit_campaign" ||
-              obj.campaign.name == "enach_mandate_campaign" ||
+              obj.campaign.name === "auto_debit_campaign" ||
+              obj.campaign.name === "enach_mandate_campaign" ||
               obj.campaign.name === "indb_mandate_campaign"
             );
           }) || {};
@@ -98,6 +98,7 @@ const SipPaymentCallback = (props) => {
           ) {
             let auto_debit_campaign_url = target.url;
             auto_debit_campaign_url +=
+              // eslint-disable-next-line
               (auto_debit_campaign_url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
@@ -114,6 +115,7 @@ const SipPaymentCallback = (props) => {
           ) {
             let url = campaign.notification_visual_data.target[0].url;
             url +=
+              // eslint-disable-next-line
               (url.match(/[\?]/g) ? "&" : "?") +
               "campaign_version=1&generic_callback=true&plutus_redirect_url=" +
               encodeURIComponent(
