@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react';
 import Container from '../common/Container';
 import FundCard from '../mini_components/FundCard';
 import isEmpty from 'lodash/isEmpty';
-import { getRecommendedFund } from '../common/Api';
-import { validateNumber } from 'utils/validators';
+import { getRecommendedFund,getTaxes } from '../common/Api';
+import { inrFormatDecimal } from 'utils/validators';
 import { navigate as navigateFunc } from '../common/commonFunction';
+import toast from 'common/ui/Toast';
 
 const Landing = (props) => {
   const { type } = props.match?.params;
   const amount = props.location?.state?.amount;
-  const [value, setValue] = useState('');
   const [error, setError] = useState(false);
-  const [helperText, setHelperText] = useState('');
+  const [totalAmount, setTotalAmount] = useState('');
+  const [value, setValue] = useState({});
   const [recommendedFunds, setRecommendedFunds] = useState(null);
   const [limitCrossed, setLimitCrossed] = useState(false);
   const [investedUser, setInvestedUser] = useState(false);
   const [fetchFailed, setFetchFailed] = useState(false);
   const [zeroInvested, setZeroInvested] = useState(false);
+  const [buttonTitle,setButtonTitle] = useState('CONTINUE');
+
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     try {
@@ -40,90 +43,94 @@ const Landing = (props) => {
             setFetchFailed(true);
           } else {
             setZeroInvested(true);
+            setButtonTitle('DEPOSIT NOW');
           }
         } else {
           setFetchFailed(true);
         }
       } else {
         setRecommendedFunds(data?.recommendations[0]);
+        if(type === 'systematic'){
+          let val = {};
+          // eslint-disable-next-line no-unused-expressions
+          data?.recommendations[0]?.allocations?.forEach(el =>{
+              val ={...val,[el?.mf?.isin]:Math.ceil(el?.amount)}
+          })
+          setValue(val);
+        }
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const fetchTaxes = async () => {
+    try{
+      await getTaxes(value);
+     // navigate here to Summary;
+    } catch(err){
+      console.log(err);
+    }
+  }
   useEffect(() => {
     fetchRecommendedFunds();
   }, []);
 
-  const handleChange = (data) => (el) => {
-    if (el.target.value === '' || validateNumber(el.target.value)) {
-      checkLimit(Math.ceil(el.target.value), Math.ceil(data?.amount));
-      setValue(el.target.value);
-    }
-  };
-
-  const checkLimit = (num, compNum) => {
-    if (type !== 'insta-redeem') {
-      if (compNum > 1000) {
-        if (num < 1000) {
-          setError(true);
-          setHelperText('Minimum withdrawal amount for each fund is 1000');
-        } else if (num > compNum) {
-          setError(true);
-          setHelperText('Amount cannot be more than withdrawable amount');
-          return;
-        } else {
-          if (error) {
-            setError(false);
-          }
-        }
-        setValue(num);
-      } else {
-        if (num < compNum) {
-          setError(true);
-          setHelperText(`Withdrawal amount ${num} cannot be less than compNum ${compNum} amount`);
-        } else if (num > compNum) {
-          setError(true);
-          setHelperText(
-            `Withdrawal amount ${num} cannot be greater than compNum ${compNum} amount`
-          );
-        } else {
-          if (error) {
-            setError(false);
-          }
-        }
-        setValue(num);
+  const calcTotalAmount = (isin, num) => {
+    if(num === 0){
+      if(value[isin]){
+        const newValue = value;
+        delete newValue[isin];
+        const totalAmount = getTotalAmount(newValue);
+        setTotalAmount(totalAmount);
+        setValue(newValue);
       }
-    } else {
-      if (num > Math.ceil(compNum)) {
-        setError(true);
-        setHelperText('Amount cannot be more than withdrawable amount');
-      } else if (num <= 0) {
-        setError(true);
-        setHelperText('Minimum withdrawal amount for fund is 1');
-        setValue('');
-        return;
-      } else {
-        if (error) {
-          setError(false);
-        }
-      }
-      setValue(num);
+    } else{
+        const totalAmount = getTotalAmount({...value,[isin]:num});
+        setTotalAmount(totalAmount);
+        setValue({...value,[isin]:num});
     }
+    
   };
+  const getTotalAmount = (val) => {
+    if(val){
+      return Object.keys(val)?.reduce((total,num) => {
+        return total + val[num];
+      },0)
+    } else{
+      return 0;
+    }
+  }
   const handleClick = () => {
     if (zeroInvested) {
-      navigate('');
+      navigate('/invest/insta-redeem',null,null,true);
+    } else{
+    if(!totalAmount){
+      toast("Please enter the withdraw amount");
+      return;
+      }
+      if(!isEmpty(value)){
+        fetchTaxes();
+      } else{
+        toast("error");
+      }
     }
   };
+  const checkError = (err) => {
+    setError(err)
+  }
   return (
     <Container
-      buttonTitle={zeroInvested ? 'DEPOSIT NOW' : 'CONTINUE'}
+      buttonTitle={type !== 'insta-redeem' ? inrFormatDecimal(totalAmount) : buttonTitle }
       fullWidthButton
       classOverRideContainer='pr-container'
       hideInPageTitle
-      disable={limitCrossed}
-      handleClick={handleClick}
+      disable={type === 'insta-redeem' ? limitCrossed || error: true}
+      handleClick={type === 'insta-redeem' ? handleClick : ''}
+      twoButton={type !== 'insta-redeem'}
+      buttonTitle2={type !== 'insta-redeem' ? 'CONTINUE' : ''}
+      handleClick2={handleClick}
+      disable2={error}
     >
       {!isEmpty(recommendedFunds?.allocations) && (
         <>
@@ -131,15 +138,13 @@ const Landing = (props) => {
             <section>
               {recommendedFunds?.allocations?.map((el, idx) => (
                 <FundCard
-                  error={error}
-                  helperText={helperText}
-                  key={el}
+                  key={idx}
                   expand={idx === 0}
                   type={type}
                   data={el}
-                  handleChange={handleChange(el)}
-                  value={value}
                   disabled={type === 'systematic' || limitCrossed}
+                  calcTotalAmount={calcTotalAmount}
+                  checkError={checkError}
                 />
               ))}
             </section>
