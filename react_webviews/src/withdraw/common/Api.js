@@ -65,6 +65,25 @@ export const getTaxes = async (params) => {
   }
 };
 
+export const postSwitchOrders = async (params) => {
+  
+  try {
+    const res = await Api.post('api/invest/switch/orders', params);
+    if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
+      throw genericErrMsg;
+    }
+    const { result, status_code: status } = res.pfwresponse;
+
+    if (status === 200) {
+      return result;
+    } else {
+      throw result.error || result.message || genericErrMsg;
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const getRecommendedSwitch = async (amount) => {
   try {
     // const res = await Api.get(`api/invest/switch/systematic/recommend?amount=${amount}`);
@@ -1453,3 +1472,5 @@ const systematic = {
   "pfwstatus_code": 200,
   "pfwtime": "2021-03-08 20:41:13.287322"
 }
+
+
