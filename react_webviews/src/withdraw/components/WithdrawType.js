@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Container from '../common/Container'
 import FundCard from '../mini_components/FundCard'
 import isEmpty from 'lodash/isEmpty'
-import { getRecommendedFund, getTaxes } from '../common/Api'
-import { inrFormatDecimal } from 'utils/validators'
+import { getRecommendedFund } from '../common/Api'
 import { navigate as navigateFunc } from '../common/commonFunction'
 import toast from 'common/ui/Toast'
 import Typography from '@material-ui/core/Typography'
@@ -25,7 +24,6 @@ const Landing = (props) => {
   const fetchRecommendedFunds = async () => {
     try {
       const data = await getRecommendedFund(type, amount)
-      console.log(data)
       if (type === 'insta-redeem') {
         if (data?.recommendations && data?.recommendations?.length > 0) {
           const recData = data?.recommendations[0]
@@ -70,14 +68,6 @@ const Landing = (props) => {
     }
   }
 
-  const fetchTaxes = async () => {
-    try {
-      await getTaxes(value)
-      // navigate here to Summary;
-    } catch (err) {
-      console.log(err)
-    }
-  }
   useEffect(() => {
     fetchRecommendedFunds()
   }, [])
@@ -116,11 +106,7 @@ const Landing = (props) => {
         toast('Please enter the withdraw amount')
         return
       }
-      if (!isEmpty(value)) {
-        fetchTaxes()
-      } else {
-        toast('error')
-      }
+      navigate(`${type}/summary`,value);
     }
   }
   const checkError = (err) => {
@@ -128,13 +114,13 @@ const Landing = (props) => {
   }
   return (
     <Container
-      buttonTitle={zeroInvested ? 'DEPOSIT NOW' : 'CONTINUE'}
+      buttonTitle={buttonTitle}
       fullWidthButton
       classOverRideContainer="pr-container"
       classOverRide="withdraw-two-button"
       hideInPageTitle
       disable={type === 'insta-redeem' ? limitCrossed || error : true}
-      handleClick2={type === 'insta-redeem' ? handleClick : ''}
+      handleClick2={handleClick}
       handleClick={handleClick}
       showSkelton={isEmpty(recommendedFunds)}
       twoButton={type !== 'insta-redeem'}
@@ -162,7 +148,7 @@ const Landing = (props) => {
           {limitCrossed && (
             <section className="withdraw-insta-exceed">
               <div className="withdraw-insta-exceed-icon">
-                <img src="" alt="" style={{ width: '30px', height: '30px' }} />
+                <img src={require('assets/error_icon.svg')} alt="error"  />
               </div>
               <div className="withdraw-insta-exceed-msg">
                 <div className="withdraw-insta-exceed-head">

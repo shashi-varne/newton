@@ -175,7 +175,7 @@ export class TwoButtonLayout extends Component {
             }`}
             onClick={() => {
               if (!props.disable2 && !props.isApiRunning2) {
-                if (typeof handleClick2 === 'function') {
+                if (typeof props.handleClick2 === 'function') {
                   props.handleClick2()
                 }
               }
