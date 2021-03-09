@@ -30,7 +30,7 @@ class GroupHealthPlanSelectPed extends Component {
                 cta_title: 'OK'
             },
             get_lead: true,
-            show_loader: true,
+            skelton:true,
             selectedIndex: '',
             screen_name: 'select_ped_screen'
         }
@@ -141,7 +141,7 @@ class GroupHealthPlanSelectPed extends Component {
         }, ()=> {
             this.setState({
                 show_checkbox: true,
-                show_loader: false,
+                skelton:false,
             })
         })
 
@@ -406,8 +406,11 @@ class GroupHealthPlanSelectPed extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
+                skelton={this.state.skelton}
                 showLoader={this.state.show_loader}
-                title={this.state.member_key === 'self' ? this.setEditTitle('Your pre-existing diseases') : this.setEditTitle(capitalizeFirstLetter(childeNameMapper(this.state.member_key)) + "'s pre-existing diseases")}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
+                title={this.props.match.params.member_key === 'self' ? this.setEditTitle('Your pre-existing diseases') : this.setEditTitle(capitalizeFirstLetter(childeNameMapper(this.props.match.params.member_key)) + "'s pre-existing diseases")}
                 buttonTitle="CONTINUE"
                 withProvider={true}
                 handleClick2={this.handleClick2}
