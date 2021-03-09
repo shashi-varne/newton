@@ -95,13 +95,13 @@ export const getRecommendedFund = async (type, amount = null) => {
       api += `?amount=${amount}`
     }
     let res = await Api.get(api)
-    if (type === 'insta-redeem') {
-      res = insta
-    } else if (type === 'self') {
-      res = self
-    } else if (type === 'systematic') {
-      res = systematic
-    }
+    // if (type === 'insta-redeem') {
+    //   res = insta
+    // } else if (type === 'self') {
+    //   res = self
+    // } else if (type === 'systematic') {
+    //   res = systematic
+    // }
     if (
       !res?.pfwresponse || res.pfwresponse.status_code !== 200 ||
       !res.pfwresponse ||
@@ -129,6 +129,21 @@ export const getBalance = async () => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
+    throw new Error(genericErrMsg)
+  }
+  const { result, status_code: status } = res.pfwresponse
+
+  if (status === 200) {
+    return result
+  } else {
+    throw new Error(result.error || result.message || genericErrMsg)
+  }
+}
+
+export const redeemOrders = async (type, params) => {
+  const url = `api/invest/redeem/orderv3/mine/${type}`
+  const res = await Api.post(url, params)
+  if (res.pfwstatus_code !== 200 || !res.pfwresponse || isEmpty(res.pfwresponse)) {
     throw new Error(genericErrMsg)
   }
   const { result, status_code: status } = res.pfwresponse

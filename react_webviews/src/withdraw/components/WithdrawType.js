@@ -21,8 +21,11 @@ const Landing = (props) => {
   const [zeroInvested, setZeroInvested] = useState(false)
   const [buttonTitle, setButtonTitle] = useState('CONTINUE')
   const navigate = navigateFunc.bind(props)
+  const [showSkeltonLoader, setShowSkeltonLoader] = useState(false)
+
   const fetchRecommendedFunds = async () => {
     try {
+      setShowSkeltonLoader(true)
       const data = await getRecommendedFund(type, amount)
       if (type === 'insta-redeem') {
         if (data?.recommendations && data?.recommendations?.length > 0) {
@@ -64,7 +67,9 @@ const Landing = (props) => {
         }
       }
     } catch (err) {
-      console.log(err)
+      toast(err, 'error')
+    } finally {
+      setShowSkeltonLoader(false)
     }
   }
 
@@ -106,7 +111,21 @@ const Landing = (props) => {
         toast('Please enter the withdraw amount')
         return
       }
-      navigate(`${type}/summary`,value);
+      if (type === 'manual') {
+        navigate(`self/summary`, {
+          amounts: value,
+          itype: recommendedFunds?.itype,
+          name: recommendedFunds?.name,
+          subtype: recommendedFunds?.subtype,
+        })
+      } else {
+        navigate(`${type}/summary`, {
+          amounts: value,
+          itype: recommendedFunds?.itype,
+          name: recommendedFunds?.name,
+          subtype: recommendedFunds?.subtype,
+        })
+      }
     }
   }
   const checkError = (err) => {
@@ -122,7 +141,7 @@ const Landing = (props) => {
       disable={type === 'insta-redeem' ? limitCrossed || error : true}
       handleClick2={handleClick}
       handleClick={handleClick}
-      showSkelton={isEmpty(recommendedFunds)}
+      showSkelton={isEmpty(recommendedFunds) && showSkeltonLoader}
       twoButton={type !== 'insta-redeem'}
       footerText1={totalAmount}
       disable2={error}
@@ -148,7 +167,7 @@ const Landing = (props) => {
           {limitCrossed && (
             <section className="withdraw-insta-exceed">
               <div className="withdraw-insta-exceed-icon">
-                <img src={require('assets/error_icon.svg')} alt="error"  />
+                <img src={require('assets/error_icon.svg')} alt="error" />
               </div>
               <div className="withdraw-insta-exceed-msg">
                 <div className="withdraw-insta-exceed-head">

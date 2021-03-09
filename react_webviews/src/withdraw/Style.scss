@@ -255,7 +255,7 @@
   .contact-us .contact-us-bottom1 {
     margin: 0 auto;
     font-size: 13px;
-    color: #767E86;
+    color: #767e86;
     margin-bottom: 11px;
   }
 
@@ -272,5 +272,21 @@
       margin: 0 20px 0 20px;
     }
   }
+}
 
+.withdraw-summary-disclaimers {
+  .title {
+    color: #0a1c32;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+  }
+
+  .disclaimer {
+    color: #878787;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    margin: 10px 0 0 0;
+  }
 }

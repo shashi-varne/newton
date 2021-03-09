@@ -19,3 +19,9 @@ export const withdrawOptions = [
     openModal: false
   },
 ]
+
+export const disclaimers = [
+  '* Actual withdrawal may differ slightly as it depends on NAV',
+  '* Actual withdrawal may differ slightly as it depends on NAV',
+  '* Actual withdrawal may differ slightly as it depends on NAV'
+]

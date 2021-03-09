@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Container from '../../common/Container'
+import { disclaimers } from '../../constants'
+import Disclaimer from './Disclaimer'
 import TaxSummaryCard from '../../mini_components/TaxSummaryCard'
 
 const TaxLiability = (props) => {
@@ -44,12 +46,11 @@ const SelfSummary = (props) => {
       <section id="withdraw-system-summary">
         <TaxLiability stcg={4} ltcg={5} />
         <ExitLoad exit_load={0} />
-        <div className="tax-summary">
-          Tax Summary
-        </div>
+        <div className="tax-summary">Tax Summary</div>
         <main className="fund-list">
           <TaxSummaryCard />
         </main>
+        <Disclaimer disclaimers={disclaimers} />
       </section>
     </Container>
   )
