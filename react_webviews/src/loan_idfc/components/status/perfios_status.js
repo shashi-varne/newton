@@ -371,16 +371,6 @@ class PerfiosStatus extends Component {
             <div className="subtitle">{perfios_display_rejection_reason}</div>
           )}
 
-          {perfios_state === "processing" && (
-            <div>
-              <div className="subtitle">
-                <b>Oops!</b> something's not right. We are checking this with
-                IDFC FIRST Bank and will get back to you as soon as possible.
-              </div>
-              <ContactUs />
-            </div>
-          )}
-
           {/* {!perfios_state && (
             <div>
               <img

@@ -30,37 +30,37 @@ class JourneyStepsClass extends Component {
     const props = this.props;
 
     return (
-      <div className="journey-steps-count" key={index} 
-      onClick={() => {
-        options.status !== "pending" && props.handleClick(options.id)
-      }} 
+      <div className="journey-steps-count" key={index}
+        onClick={() => {
+          options.status !== "pending" && props.handleClick(options.id)
+        }}
       >
-          <div className={`circle-count ${options.status || "pending"}`}>
-            {options.status !== "completed" && (
-              <div className="count">{options.step}</div>
-            )}
-            {options.status === "completed" && (
-              <div className="count">
-                <img src={require(`assets/check_icon_color.svg`)} alt="" />
-              </div>
-            )}
-          </div>
-          <div className={`steps-content ${options.status || "pending"}`} style={{
-            borderColor : options.status === "completed" && (getConfig().productName === "fisdom" ? "#D5CCE9" : "#CBDEF6" )
-          }} >
-            <div className="title flex">
-              {options.status === "completed" ? options.titleCompleted : options.title}
-              {options.status && (
-                <span className="status">
-                  {options.cta}
-                </span>
-              )}
-              {options.status === "pending" && (
-                <img src={require(`assets/Vector.svg`)} alt="" />
-              )}
+        <div className={`circle-count ${options.status || "pending"}`}>
+          {options.status !== "completed" && (
+            <div className="count">{options.step}</div>
+          )}
+          {options.status === "completed" && (
+            <div className="count">
+              <img src={require(`assets/check_icon_color.svg`)} alt="" />
             </div>
-            <div className="subtitle">{options.subtitle}</div>
+          )}
+        </div>
+        <div className={`steps-content ${options.status || "pending"}`} style={{
+          borderColor: options.status === "completed" && (getConfig().productName === "fisdom" ? "#D5CCE9" : "#CBDEF6")
+        }} >
+          <div className="title flex">
+            {options.status === "completed" ? options.titleCompleted : options.title}
+            {options.status && (
+              <span className="status">
+                {options.cta}
+              </span>
+            )}
+            {options.status === "pending" && (
+              <img src={require(`assets/Vector.svg`)} alt="" />
+            )}
           </div>
+          <div className="subtitle">{options.subtitle}</div>
+        </div>
       </div>
     );
   };

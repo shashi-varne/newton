@@ -194,7 +194,7 @@ class JourneyMap extends Component {
               ? "START"
               : index === "2"
               ? "RESUME"
-              : index > "2" && "",
+              : index > "2" && <img src={require(`assets/Vector_2.svg`)} alt="" />,
         },
         {
           step: "4",
@@ -210,7 +210,7 @@ class JourneyMap extends Component {
               ? "START"
               : index === "3"
               ? "RESUME"
-              : index > "3" && "",
+              : index > "3" && <img src={require(`assets/Vector_2.svg`)} alt="" />,
         },
         {
           step: "5",

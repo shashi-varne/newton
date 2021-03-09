@@ -407,7 +407,7 @@ class DocumentUpload extends Component {
         
       } else {
         // toast(result.error || result.message || "Something went wrong")
-        let title1 = result.error[0] || "Something went wrong!";
+        let title1 = result.error || "Something went wrong!";
         this.setState({
           show_loader: false,
           isApiRunning: false,

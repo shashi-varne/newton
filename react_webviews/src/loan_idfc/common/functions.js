@@ -619,7 +619,7 @@ export async function updateApplication(
 export async function get05Callback() {
   let loaderData = {
     title: "Hang on while IDFC FIRST Bank evaluates your profile",
-    subtitle: "It usually takes 10 - 15 seconds!",
+    subtitle: "It usually takes 1 minute!",
   };
 
   this.setState({

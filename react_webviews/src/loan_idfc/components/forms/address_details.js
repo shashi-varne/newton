@@ -79,7 +79,7 @@ class AddressDetails extends Component {
 
     let loaderData = {
       title: `Hang on while we create loan application`,
-      subtitle: "It usually takes around 15 seconds!",
+      subtitle: "It usually takes around 15 to 30 seconds!",
     };
 
     form_data.current_address1 = current_address_data.address1;

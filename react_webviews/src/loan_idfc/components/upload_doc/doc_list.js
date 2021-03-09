@@ -80,7 +80,7 @@ class DocumentList extends Component {
           show_loader: false
         })
       } else {
-        let title1 = result.error[0] || "Something went wrong!";
+        let title1 = result.error || "Something went wrong!";
         this.setState({
           show_loader: false,
           skelton: false,
