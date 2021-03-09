@@ -40,7 +40,7 @@ class DropDown extends Component {
                 "id": 2,
                 "disabled": true,
                 "name": "Ervin Howell",
-                "username": "Antonette",
+                "username": "Antonette Multi-layered client-server neural-net harness real-time e-markets Proactive didactic contingency" , // Antonette Antonette Proactive didactic contingency Antonette Antonette Antonette Antonette Antonette Antonette Antonette Antonette",
                 "email": "Shanna@melissa.tv",
                 "address": {
                     "street": "Victor Plains",
@@ -63,7 +63,7 @@ class DropDown extends Component {
             {
                 "id": 3,
                 "name": "Clementine Bauch",
-                "username": "Samantha",
+                "username": "Samantha Antonette Multi-layered client-server neural-net harness real-time e-markets Proactive didactic contingency",
                 "email": "Nathan@yesenia.net",
                 "address": {
                     "street": "Douglas Extension",

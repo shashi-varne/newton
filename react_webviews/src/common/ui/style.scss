@@ -949,22 +949,25 @@ body[data-device="mobile"] {
 
 
 .react-dropdown-select-option-label{
-  padding: 2px;
+  height: 18px;
   color: black;
+  display: inline-flex;
+  align-items: center;
 }
 .react-dropdown-select-option{
   border: 1px solid #D6D6D6;
   width: fit-content;
-  // margin: 6px 2px 2px 0px !important;  
+  height: 23px;
+  padding-top: 3px !important;
 }
 .react-dropdown-select-option-remove{
   color: white;
-  margin-top: 2px !important;
-  margin-right: 2px !important;
+  margin-left: 2px !important;
+  margin-right: 1px !important;
   background-color: #D6D6D6;
-  border-radius: 60%  !important;
-  width: 20px !important;
-  height: 20px !important;
+  border-radius: 50%  !important;
+  width: 17px !important;
+  height: 18px !important;
 }
 
 .react-dropdown-select{
@@ -993,28 +996,28 @@ body[data-device="mobile"] {
 
 .react-dropdown-select-dropdown{
   height : 246px;
+  display: flex;
+  align-items: flex-start;
 }
 
 .react-dropdown-select-item{
-  min-height: 41px;
-  line-height: 41px;
   color: black !important;
-  display: inline-flex;
-  align-items: center;
+  padding: 10px !important;
+  width: 280px;
 }
 
 .react-dropdown-select-content{  
   font-size: 13px;
-  margin-bottom: -20px;
+  margin-bottom: -25px;
   line-height: 21px;
   font-weight: normal;
   color: #161A2E;
   max-width: 200px;
   height: 33px !important;
-  overflow-x: scroll;
+  overflow-x: auto;
+  overflow-y: hidden;
   display: inline-flex !important;
   flex-direction: column;
-  white-space: nowrap;
 }
 
 .react-dropdown-select-dropdown-handle{
@@ -1027,7 +1030,7 @@ body[data-device="mobile"] {
   line-height: 21px !important;
   color: #161A2E;
   margin-top: 5px;
-  margin-left: 5px !important;
+  margin-left: 0px !important;
 }
 
 .react-dropdown-select-dropdown-handle{
@@ -1051,8 +1054,14 @@ body[data-device="mobile"] {
 }
 
 .colorbackground{
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+}
+.colorbackground2{
   background-color: #EEEEEE;
   color: #161A2E;
+  width: 280px;
 }
 
 .css-ge5lft-ReactDropdownSelect:hover{
@@ -1063,12 +1072,29 @@ body[data-device="mobile"] {
   border-bottom: 1px solid #4F2DA7 !important;
 }
 
-.css-v1jrxw-ContentComponent{
+.react-dropdown-select-type-single {
   display: inline-block !important;
   margin-left: 5px;
-  margin-top: 4px;
-}
+  margin-top: -8px;
+  font-size: 13px;
+  line-height: 21px;
+} 
 
-.css-majisu-InputComponent{
-  margin-top: -5px;
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+::-webkit-scrollbar:vertical {
+  width: 3px;
+}
+::-webkit-scrollbar:horizontal {
+  height: 3px;
+  margin-top:  10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d8d8d8;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #ffffff;
 }

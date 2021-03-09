@@ -2,151 +2,148 @@ import React from "react";
 import styled from "@emotion/styled";
 import './style.scss';
 // eslint-disable-next-line
-import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 import Select from "react-dropdown-select";
 
 export default class Autochange extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      multi: false,           // For multi Activate
-      itemRenderer: false,   // For multi Select with checkbox
-      disabled: false,
-      loading: false,
-      contentRenderer: false,
-      dropdownRenderer: false,
-      inputRenderer: false,
-      optionRenderer: false,
-      noDataRenderer: false,
-      selectValues: [],
-      searchBy: "username",
-      clearable: false,
-      searchable: true,
-      create: false,
-      separator: false,
-      forceOpen: false,
-      handle: true,
-      addPlaceholder: "",
-      labelField: "username",
-      valueField: "email",
-      color: "#EEEEEE",
-      keepSelectedInList: true,
-      closeOnSelect: false,
-      dropdownPosition: "bottom",
-      direction: "ltr",
-      dropdownHeight: "280px",
-      options: this.props.options,
+        this.state = {
+            multi: false,           // For multi Activate
+            itemRenderer: false,   // For multi Select with checkbox
+            disabled: false,
+            loading: false,
+            contentRenderer: false,
+            dropdownRenderer: false,
+            inputRenderer: false,
+            optionRenderer: false,
+            noDataRenderer: false,
+            selectValues: [],
+            searchBy: "username",
+            clearable: false,
+            searchable: true,
+            create: false,
+            separator: false,
+            forceOpen: false,
+            handle: true,
+            addPlaceholder: "",
+            labelField: "username",
+            valueField: "email",
+            color: "#EEEEEE",
+            keepSelectedInList: true,
+            closeOnSelect: false,
+            dropdownPosition: "bottom",
+            direction: "ltr",
+            dropdownHeight: "280px",
+            options: this.props.options,
+        };
+    }
+
+    setValues = selectValues => this.setState({ selectValues });
+
+    contentRenderer = ({ props, state }) => {
+        return (
+            <div>
+                {state.values.length} of {props.options.length} Selected
+            </div>
+        );
     };
-  }
 
-  setValues = selectValues => this.setState({ selectValues });
+    noDataRenderer = () => {
+        return (
+            <p style={{ textAlign: "center" }}>
+                <strong>Ooops!</strong> No data found
+            </p>
+        );
+    };
 
-  contentRenderer = ({ props, state }) => {
-    return (
-      <div>
-        {state.values.length} of {props.options.length} Selected
-      </div>
+    itemRenderer = ({ item, itemIndex, props, state, methods }) => (
+        <div key={item[props.valueField]} onClick={() => methods.addItem(item)} className={methods.isSelected(item) ? 'colorbackground colorbackground2' : 'colorbackground'}>
+            <input type="checkbox" checked={methods.isSelected(item)} />
+        &nbsp;&nbsp;&nbsp;<span>{item[props.labelField]}</span>
+        </div>
     );
-  };
 
-  noDataRenderer = () => {
-    return (
-      <p style={{ textAlign: "center" }}>
-        <strong>Ooops!</strong> No data found
-      </p>
+    dropdownRenderer = ({ props, state, methods }) => {
+        const regexp = new RegExp(state.search, "i");
+
+        return (
+            <div>
+                <SearchAndToggle color={this.state.color}>
+                    <Buttons>
+                        <div>Search and select:</div>
+                        {methods.areAllSelected() ? (
+                            <Button className="clear" onClick={methods.clearAll}>
+                                Clear all
+                            </Button>
+                        ) : (
+                                <Button onClick={methods.selectAll}>Select all</Button>
+                            )}
+                    </Buttons>
+                    <input
+                        type="text"
+                        value={state.search}
+                        onChange={methods.setSearch}
+                        placeholder="Type anything"
+                    />
+                </SearchAndToggle>
+                <Items>
+                    {props.options
+                        .filter(item =>
+                            regexp.test(item[props.searchBy] || item[props.labelField])
+                        )
+                        .map(option => {
+                            if (
+                                !this.state.keepSelectedInList &&
+                                methods.isSelected(option)
+                            ) {
+                                return null;
+                            }
+
+                            return (
+                                <Item
+                                    disabled={option.disabled}
+                                    key={option[props.valueField]}
+                                    onClick={
+                                        option.disabled ? null : () => methods.addItem(option)
+                                    }
+                                >
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => methods.addItem(option)}
+                                        checked={state.values.indexOf(option) !== -1}
+                                    />
+                                    <ItemLabel>{option[props.labelField]}</ItemLabel>
+                                </Item>
+                            );
+                        })}
+                </Items>
+            </div>
+        );
+    };
+
+    optionRenderer = ({ option, props, state, methods }) => (
+        <React.Fragment>
+            <div onClick={event => methods.removeItem(event, option, true)}>
+                {option.label}
+            </div>
+        </React.Fragment>
     );
-  };
 
-  itemRenderer = ({ item, itemIndex, props, state, methods }) => (
-    <div key={item[props.valueField]} onClick={() => methods.addItem(item)} className={methods.isSelected(item) ? 'colorbackground' : ''}>
-      <div style={{ margin: "10px", minHeight: '21px' , lineHeight: '21px', position: "relative"  }}>
-        <input type="checkbox" checked={methods.isSelected(item)} />
-        &nbsp;&nbsp;&nbsp;<span style={{ position: 'absolute', top: '0' }}>{item[props.labelField]}</span>
-      </div>
-    </div>
-  );
-
-  dropdownRenderer = ({ props, state, methods }) => {
-    const regexp = new RegExp(state.search, "i");
-
-    return (
-      <div>
-        <SearchAndToggle color={this.state.color}>
-          <Buttons>
-            <div>Search and select:</div>
-            {methods.areAllSelected() ? (
-              <Button className="clear" onClick={methods.clearAll}>
-                Clear all
-              </Button>
-            ) : (
-              <Button onClick={methods.selectAll}>Select all</Button>
-            )}
-          </Buttons>
-          <input
-            type="text"
+    inputRenderer = ({ props, state, methods }) => (
+        <input
+            tabIndex="1"
+            className="react-dropdown-select-input"
+            size={methods.getInputSize()}
             value={state.search}
+            onClick={() => methods.dropDown("open")}
             onChange={methods.setSearch}
-            placeholder="Type anything"
-          />
-        </SearchAndToggle>
-        <Items>
-          {props.options
-            .filter(item =>
-              regexp.test(item[props.searchBy] || item[props.labelField])
-            )
-            .map(option => {
-              if (
-                !this.state.keepSelectedInList &&
-                methods.isSelected(option)
-              ) {
-                return null;
-              }
-
-              return (
-                <Item
-                  disabled={option.disabled}
-                  key={option[props.valueField]}
-                  onClick={
-                    option.disabled ? null : () => methods.addItem(option)
-                  }
-                >
-                  <input
-                    type="checkbox"
-                    onChange={() => methods.addItem(option)}
-                    checked={state.values.indexOf(option) !== -1}
-                  />
-                  <ItemLabel>{option[props.labelField]}</ItemLabel>
-                </Item>
-              );
-            })}
-        </Items>
-      </div>
+            placeholder="Type in"
+        />
     );
-  };
 
-  optionRenderer = ({ option, props, state, methods }) => (
-    <React.Fragment>
-      <div onClick={event => methods.removeItem(event, option, true)}>
-        {option.label}
-      </div>
-    </React.Fragment>
-  );
-
-  inputRenderer = ({ props, state, methods }) => (
-    <input
-      tabIndex="1"
-      className="react-dropdown-select-input"
-      size={methods.getInputSize()}
-      value={state.search}
-      onClick={() => methods.dropDown("open")}
-      onChange={methods.setSearch}
-      placeholder="Type in"
-    />
-  );
-  
-  removeIns(){
+    removeIns() {
         let paragraphs = document.getElementsByTagName("ins");
         var loop = function () {
             for (var i = 0, len = paragraphs.length; i < len; i++) {
@@ -154,7 +151,7 @@ export default class Autochange extends React.Component {
             }
         };
         loop();
-  }
+    }
 
     render() {
         const options = this.state.options
@@ -168,99 +165,107 @@ export default class Autochange extends React.Component {
             loop();
         })
 
-    return (    
-        <FormControl className="Dropdown label" disabled={this.props.disabled}>
-        {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
-      {/* <div className={this.props.className}> */}
-      <span className="label2">label</span>
-        <div>
-          <div style={{ width: "280px" , height: '52px',}}>
-            <StyledSelect
-              placeholder=""
-              addPlaceholder={this.state.addPlaceholder}
-              color={this.state.color}
-              disabled={this.state.disabled}
-              loading={this.state.loading}
-              searchBy={this.state.searchBy}
-              separator={this.state.separator}
-              clearable={this.state.clearable}
-              searchable={this.state.searchable}
-              create={this.state.create}
-              keepOpen={this.state.forceOpen}
-              dropdownHandle={this.state.handle}
-              dropdownHeight={this.state.dropdownHeight}
-              direction={this.state.direction}
-              multi={this.state.multi}
-              values={[options.find(opt => opt.username === "Delphine")]}
-              labelField={this.state.labelField}
-              valueField={this.state.valueField}
-              options={options}
-              dropdownGap={5}
-              keepSelectedInList={this.state.keepSelectedInList}
-              onDropdownOpen={() => this.removeIns()}
-              onDropdownClose={() => undefined}
-              onClearAll={() => undefined}
-              onSelectAll={() => undefined}
-              onChange={values => this.setValues(values)}
-              noDataLabel="No matches found"
-              closeOnSelect={this.state.closeOnSelect}
-              noDataRenderer={
-                this.state.noDataRenderer
-                  ? () => this.noDataRenderer()
-                  : undefined
-              }
-              dropdownPosition={this.state.dropdownPosition}
-              itemRenderer={
-                this.state.itemRenderer
-                  ? (item, itemIndex, props, state, methods) =>
-                      this.itemRenderer(item, itemIndex, props, state, methods)
-                  : undefined
-              }
-              inputRenderer={
-                this.state.inputRenderer
-                  ? (props, state, methods) =>
-                      this.inputRenderer(props, state, methods)
-                  : undefined
-              }
-              optionRenderer={
-                this.state.optionRenderer
-                  ? (option, props, state, methods) =>
-                      this.optionRenderer(option, props, state, methods)
-                  : undefined
-              }
-              contentRenderer={
-                this.state.contentRenderer
-                  ? (innerProps, innerState) =>
-                      this.contentRenderer(innerProps, innerState)
-                  : undefined
-              }
-              dropdownRenderer={
-                this.state.dropdownRenderer
-                  ? (innerProps, innerState, innerMethods) =>
-                      this.dropdownRenderer(
-                        innerProps,
-                        innerState,
-                        innerMethods
-                      )
-                  : undefined
-              }
-            />
-          </div>
-        </div>
+        return (
+            <FormControl className="Dropdown label" disabled={this.props.disabled}>
+                {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
+                {/* <div className={this.props.className}> */}
+                <span className="label2">label</span>
+                <div>
+                    <div style={{ width: "280px", height: '52px', }}>
+                        <StyledSelect
+                            placeholder=""
+                            addPlaceholder={this.state.addPlaceholder}
+                            color={this.state.color}
+                            disabled={this.state.disabled}
+                            loading={this.state.loading}
+                            searchBy={this.state.searchBy}
+                            separator={this.state.separator}
+                            clearable={this.state.clearable}
+                            searchable={this.state.searchable}
+                            create={this.state.create}
+                            keepOpen={this.state.forceOpen}
+                            dropdownHandle={this.state.handle}
+                            dropdownHeight={this.state.dropdownHeight}
+                            direction={this.state.direction}
+                            multi={this.state.multi}
+                            values={[options.find(opt => opt.username === "Delphine")]}
+                            labelField={this.state.labelField}
+                            valueField={this.state.valueField}
+                            options={options}
+                            dropdownGap={5}
+                            keepSelectedInList={this.state.keepSelectedInList}
+                            onDropdownOpen={() => this.removeIns()}
+                            onDropdownClose={() => undefined}
+                            onClearAll={() => undefined}
+                            onSelectAll={() => undefined}
+                            onChange={values => this.setValues(values)}
+                            noDataLabel="No matches found"
+                            closeOnSelect={this.state.closeOnSelect}
+                            noDataRenderer={
+                                this.state.noDataRenderer
+                                    ? () => this.noDataRenderer()
+                                    : undefined
+                            }
+                            dropdownPosition={this.state.dropdownPosition}
+                            itemRenderer={
+                                this.state.itemRenderer
+                                    ? (item, itemIndex, props, state, methods) =>
+                                        this.itemRenderer(item, itemIndex, props, state, methods)
+                                    : undefined
+                            }
+                            inputRenderer={
+                                this.state.inputRenderer
+                                    ? (props, state, methods) =>
+                                        this.inputRenderer(props, state, methods)
+                                    : undefined
+                            }
+                            optionRenderer={
+                                this.state.optionRenderer
+                                    ? (option, props, state, methods) =>
+                                        this.optionRenderer(option, props, state, methods)
+                                    : undefined
+                            }
+                            contentRenderer={
+                                this.state.contentRenderer
+                                    ? (innerProps, innerState) =>
+                                        this.contentRenderer(innerProps, innerState)
+                                    : undefined
+                            }
+                            dropdownRenderer={
+                                this.state.dropdownRenderer
+                                    ? (innerProps, innerState, innerMethods) =>
+                                        this.dropdownRenderer(
+                                            innerProps,
+                                            innerState,
+                                            innerMethods
+                                        )
+                                    : undefined
+                            }
+                        />
+                        {(this.props.error) ?
+                            <span className='error-radiogrp'>
+                                {this.props.helperText || 'Please select an option'}
+                            </span> :
+                            <span className='error-radiogrp'>
+                                {this.props.helperText || ''}
+                            </span>
+                        }
+                    </div>
+                </div>
 
 
-            { /* --------------------  Drop Down ------------------    */}
+                { /* --------------------  Drop Down ------------------    */}
 
-      {/* </div> */}
-      </FormControl>
-    );
-  }
+                {/* </div> */}
+            </FormControl>
+        );
+    }
 }
 
 const StyledSelect = styled(Select)`
   ${({ dropdownRenderer }) =>
-    dropdownRenderer &&
-    `
+        dropdownRenderer &&
+        `
 		.react-dropdown-select-dropdown {
 			overflow: initial;
 		}
@@ -302,13 +307,13 @@ const Item = styled.div`
   }
 
   ${({ disabled }) =>
-    disabled
-      ? `
+        disabled
+            ? `
   	opacity: 0.5;
   	pointer-events: none;
   	cursor: not-allowed;
   `
-      : ""}
+            : ""}
 `;
 
 const ItemLabel = styled.div`
