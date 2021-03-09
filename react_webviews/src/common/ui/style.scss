@@ -958,7 +958,7 @@ body[data-device="mobile"] {
   border: 1px solid #D6D6D6;
   width: fit-content;
   height: 23px;
-  padding-top: 3px !important;
+  padding-top: 1px !important;
 }
 .react-dropdown-select-option-remove{
   color: white;
@@ -967,7 +967,7 @@ body[data-device="mobile"] {
   background-color: #D6D6D6;
   border-radius: 50%  !important;
   width: 17px !important;
-  height: 18px !important;
+  height: 19px !important;
 }
 
 .react-dropdown-select{
@@ -1018,6 +1018,7 @@ body[data-device="mobile"] {
   overflow-y: hidden;
   display: inline-flex !important;
   flex-direction: column;
+  align-content: flex-start
 }
 
 .react-dropdown-select-dropdown-handle{
@@ -1058,7 +1059,7 @@ body[data-device="mobile"] {
 .colorbackground2{
   background-color: #EEEEEE;
   color: #161A2E;
-  width: 280px;
+  width: 100%;
 }
 
 .css-ge5lft-ReactDropdownSelect:hover{
@@ -1088,10 +1089,12 @@ body[data-device="mobile"] {
 ::-webkit-scrollbar:horizontal {
   height: 3px;
   margin-top:  10px;
+  overflow-x: hidden;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #d8d8d8;
-  border-radius: 2px;
+  border-radius: 1px;
+  display: none; 
 }
 ::-webkit-scrollbar-track {
   border-radius: 10px;
