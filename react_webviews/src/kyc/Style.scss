@@ -603,7 +603,7 @@
     .input {
       margin-top: 20px;
 
-      input[type='password'] {
+      input[type="password"] {
         font-size: 24px;
       }
 
@@ -1077,8 +1077,15 @@
     align-items: center;
     cursor: pointer;
     margin: 10px 0 10px 0;
+    line-height: 1.5;
 
     .title {
+      margin-left: 10px;
+    }
+
+    .subtitle {
+      color: #8d879b;
+      font-size: 13px;
       margin-left: 10px;
     }
   }

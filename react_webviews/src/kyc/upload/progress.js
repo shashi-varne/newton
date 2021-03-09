@@ -1,71 +1,96 @@
-import React, { useEffect, useState } from 'react'
-import { getConfig } from 'utils/functions'
-import Container from '../common/Container'
-import UploadCard from './UploadCard'
+import React, { useEffect, useState } from "react";
+import { getConfig } from "utils/functions";
+import Container from "../common/Container";
+import UploadCard from "./UploadCard";
+import { getDocuments, initData } from "../services";
+import { isEmpty, storageService } from "../../utils/validators";
+import { getPathname, storageConstants } from "../constants";
+import toast from "common/ui/Toast";
+import { navigate as navigateFunc } from "../common/functions";
 
-import { getDocuments, initData } from '../services'
-import { isEmpty, storageService } from '../../utils/validators'
-import { storageConstants } from '../constants'
-import { toast } from 'react-toastify'
+const Progress = (props) => {
+  const [kyc, setKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || null
+  );
+  const [loading, setLoading] = useState(false);
+  const disableNext = props.location.state?.disableNext || false;
+  const navigate = navigateFunc.bind(props);
 
-const Progress = () => {
-  const [kyc, setKyc] = useState(storageService().getObject(storageConstants.KYC) || null)
-  const [loading, setLoading] = useState(false)
-  
   useEffect(() => {
     if (isEmpty(kyc)) {
-      initialize()
+      initialize();
     }
-  }, [])
+  }, []);
 
   const initialize = async () => {
     try {
-      setLoading(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
+      setLoading(true);
+      await initData();
+      const kyc = storageService().getObject(storageConstants.KYC);
+      setKyc(kyc);
     } catch (err) {
-      console.error(err)
-      toast(err.message)
+      console.error(err);
+      toast(err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  let documents = []
+  let documents = [];
 
   if (!isEmpty(kyc) && !loading) {
-    documents = getDocuments(kyc)
+    documents = getDocuments(kyc);
   }
+
+  let totalDocs = 0;
+
+  const handleCards = (key, index) => {
+    if (disableNext) return;
+    if (documents[index].doc_status === "approved") return;
+    const stateMapper = {
+      pan: getPathname.uploadPan,
+      address: getPathname.uploadAddress,
+      nriaddress: getPathname.uploadNriAddress,
+      selfie: getPathname.uploadSelfie,
+      selfie_video: getPathname.uploadSelfieVideo,
+      bank: `/kyc/non-compliant/bank-details`,
+      sign: getPathname.uploadSign,
+    };
+
+    navigate(stateMapper[key]);
+  };
 
   return (
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
+      noFooter={disableNext}
       disable={loading}
       classOverRideContainer="pr-container"
       showSkelton={loading}
       skeltonType="p"
       fullWidthButton={true}
-      handleClick={(event) => {
-        console.log(event)
+      handleClick={() => {
+        navigate(getPathname.journey);
       }}
-      disable={true}
     >
       <section id="kyc-upload-progress">
-        <div className="header">
-          Upload Documents
-        </div>
+        <div className="header">Upload Documents</div>
         <main className="documents">
-          {documents.map(document => (
-            <div key={document.title} className="document">
-              <UploadCard default_image={document.default_image} title={document.title} onClick={() => {}}/>
+          {documents.map((document, index) => (
+            <div key={index} className="document">
+              <UploadCard
+                default_image={document.default_image}
+                title={document.title}
+                subtitle={document.subtitle}
+                onClick={() => handleCards(document.key, index)}
+              />
             </div>
           ))}
         </main>
       </section>
     </Container>
-  )
-}
+  );
+};
 
-export default Progress
+export default Progress;
