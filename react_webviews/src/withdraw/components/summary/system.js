@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Container from '../../common/Container'
-import { disclaimers } from '../../constants'
 import Disclaimer from './Disclaimer'
 import TaxSummaryCard from '../../mini_components/TaxSummaryCard'
 import { Redirect } from 'react-router-dom'

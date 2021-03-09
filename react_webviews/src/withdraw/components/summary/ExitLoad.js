@@ -6,7 +6,7 @@ const ExitLoad = ({ exit_load }) => {
       <div className="title">Exit Load</div>
       <div className="total flex-between-center">
         <div className="name">Exit load</div>
-        <div className="value">₹ {exit_load || 0}</div>
+        <div className="value">₹ {Math.ceil(exit_load)}</div>
       </div>
     </section>
   )
