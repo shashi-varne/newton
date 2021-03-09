@@ -1003,7 +1003,7 @@ body[data-device="mobile"] {
 .react-dropdown-select-item{
   color: black !important;
   padding: 10px !important;
-  width: 280px;
+  width: 100%;
 }
 
 .react-dropdown-select-content{  
@@ -1012,7 +1012,7 @@ body[data-device="mobile"] {
   line-height: 21px;
   font-weight: normal;
   color: #161A2E;
-  max-width: 200px;
+  max-width: 80%;
   height: 33px !important;
   overflow-x: auto;
   overflow-y: hidden;
@@ -1022,6 +1022,8 @@ body[data-device="mobile"] {
 
 .react-dropdown-select-dropdown-handle{
   margin-right: 5px !important;
+  position: absolute;
+  right: 10px
 }
 
 .react-dropdown-select-input{
@@ -1033,14 +1035,9 @@ body[data-device="mobile"] {
   margin-left: 0px !important;
 }
 
-.react-dropdown-select-dropdown-handle{
-  position: absolute;
-  left: 250px
-}
-
 .react-dropdown-select-clear{
   position: absolute;
-  left: 225px;
+  left: 25px;
   color: black !important;
 }
 
@@ -1074,6 +1071,8 @@ body[data-device="mobile"] {
 
 .react-dropdown-select-type-single {
   display: inline-block !important;
+  white-space: nowrap;
+  overflow: hidden;
   margin-left: 5px;
   margin-top: -8px;
   font-size: 13px;

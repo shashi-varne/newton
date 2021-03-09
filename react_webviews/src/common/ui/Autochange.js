@@ -5,7 +5,7 @@ import './style.scss';
 import { FormControl } from 'material-ui/Form';
 import Select from "react-dropdown-select";
 
-export default class Autochange extends React.Component {
+class SelectDropDown extends React.Component {
     constructor(props) {
         super(props);
 
@@ -20,27 +20,36 @@ export default class Autochange extends React.Component {
             optionRenderer: false,
             noDataRenderer: false,
             selectValues: [],
-            searchBy: "username",
+            searchBy: "name",
             clearable: false,
             searchable: true,
             create: false,
             separator: false,
             forceOpen: false,
             handle: true,
-            addPlaceholder: "",
-            labelField: "username",
-            valueField: "email",
+            addPlaceholder:"",
+            labelField: "name",
+            valueField: "value",
             color: "#EEEEEE",
             keepSelectedInList: true,
             closeOnSelect: false,
-            dropdownPosition: "bottom",
+            dropdownPosition: "auto",
             direction: "ltr",
             dropdownHeight: "280px",
             options: this.props.options,
         };
     }
 
-    setValues = selectValues => this.setState({ selectValues });
+    componentDidUpdate(prevState) {  
+        if (prevState.options !== this.props.options) {
+          this.setState({ options: this.props.options })
+        }
+      }
+
+    setValues = selectValues => {
+        this.setState({ selectValues })
+        this.props.onChange(selectValues[0].value);
+    }
 
     contentRenderer = ({ props, state }) => {
         return (
@@ -154,7 +163,7 @@ export default class Autochange extends React.Component {
     }
 
     render() {
-        const options = this.state.options
+        const options = this.state.options;
         window.addEventListener('load', function () {
             let paragraphs = document.getElementsByTagName("ins");
             var loop = function () {
@@ -166,12 +175,13 @@ export default class Autochange extends React.Component {
         })
 
         return (
-            <FormControl className="Dropdown label" disabled={this.props.disabled}>
+            <FormControl className="Dropdown label" disabled={this.props.disabled}> 
+            {console.log(options.find(opt => opt.value === this.props.value) , 'options.find(opt => opt.value === this.props.value)', this.props.value)}
                 {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
                 {/* <div className={this.props.className}> */}
-                <span className="label2">label</span>
+                <span className="label2">{this.props.label || 'label'}</span>
                 <div>
-                    <div style={{ width: "280px", height: '52px', }}>
+                    <div style={{ width: "100%", height: '52px', }}>
                         <StyledSelect
                             placeholder=""
                             addPlaceholder={this.state.addPlaceholder}
@@ -188,7 +198,7 @@ export default class Autochange extends React.Component {
                             dropdownHeight={this.state.dropdownHeight}
                             direction={this.state.direction}
                             multi={this.state.multi}
-                            values={[options.find(opt => opt.username === "Delphine")]}
+                            // values={[options.find(opt => opt.value === this.props.value)]}
                             labelField={this.state.labelField}
                             valueField={this.state.valueField}
                             options={options}
@@ -262,6 +272,11 @@ export default class Autochange extends React.Component {
     }
 }
 
+const Autochange = (props) => {   console.log(props, "Autochange.......,")
+    return (<SelectDropDown {...props} />)
+}
+
+export default Autochange;
 const StyledSelect = styled(Select)`
   ${({ dropdownRenderer }) =>
         dropdownRenderer &&
