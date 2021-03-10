@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Imgc } from "../../common/ui/Imgc";
+import { Imgc } from "common/ui/Imgc";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
 
@@ -62,7 +62,7 @@ class Category extends Component {
       <Container
         // skelton={this.state.skelton}
         title="How can we Help?"
-        noFooter={true}
+        noFooter
       >
         <div className="help-Category">
           <div className="search"></div>
@@ -84,7 +84,7 @@ class Category extends Component {
           ))}
           <div className="title">Need more help?</div>
           <div className="generic-hr"></div>
-          <div className="category">
+          <div className="category contact-category">
             <Imgc
               src={require(`assets/${this.state.productName}/icn_contact.svg`)}
               className="contact-img"

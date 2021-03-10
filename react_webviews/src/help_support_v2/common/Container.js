@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 
-import Header from "../../common/components/Header";
+import Header from "./Header";
 import { didmount } from "../../common/components/container_functions";
 import Footer from './footer';
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
 import { getConfig } from "utils/functions";
-// import { checkStringInString, storageService } from "utils/validators";
-// import { forceBackState, goBackMap } from "../constants";
 
 import UiSkelton from "../../common/ui/Skelton";
 
@@ -131,8 +129,8 @@ class Container extends Component {
             />
           )}
           {/* No Internet */}
-          {this.renderDialog()}
-          {this.renderPopup()}
+          {/* {this.renderDialog()} */}
+          {/* {this.renderPopup()} */}
         </div>
       );
     }

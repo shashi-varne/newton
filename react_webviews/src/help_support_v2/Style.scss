@@ -10,6 +10,7 @@
   .category {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
     .img {
       width: 12%;
@@ -27,6 +28,14 @@
     }
   }
 
+  .category:hover {
+    background-color: var(--highlight);
+  }
+
+  .contact-category:hover {
+    background-color: white;
+  }
+
   .name {
     font-size: 16px;
     line-height: 20px;
@@ -36,6 +45,121 @@
     border-bottom: 1px solid var(--highlight);
     padding: 6% 0;
     width: 100%;
+  }
+}
+
+.help-account {
+  .category {
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--highlight);
+    padding: 20px 0;
+    cursor: pointer;
+  }
+
+  .category:hover {
+    background-color: var(--highlight);
+  }
+
+  .category:nth-child(4) {
+    border-bottom: 0px;
+  }
+
+  .sub-title {
+    font-size: 13px;
+    color: #878787;
+    margin: -15px 0 10px;
+  }
+}
+
+.help-questions {
+  .category {
+    font-size: 15px;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--highlight);
+    padding: 20px 0;
+    cursor: pointer;
+  }
+
+  .category:hover {
+    background-color: var(--highlight);
+  }
+
+  .cat-name {
+    color: #4a4a4a;
+    line-height: 25px;
+    width: 85%;
+  }
+}
+
+.help-query-btn {
+  margin-top: 40px;
+  .query-btn {
+    margin: auto;
+    padding: 10px 22px !important;
+    text-transform: uppercase;
+  }
+}
+
+.help-answers {
+  .question {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 23px;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+  }
+
+  .answer {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 26px;
+    color: #595959;
+  }
+
+  .helpful-block {
+    width: max-content;
+    margin: 40px auto;
+    .title {
+      font-size: 13px;
+      color: #878787;
+    }
+
+    .thumb-container {
+      margin: 16px 8px;
+      display: flex;
+      justify-content: space-between;
+
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .hr {
+    border-bottom: 1px solid #dadada !important;
+    margin: 0 -20px;
+  }
+
+  .navigation {
+    display: flex;
+    width: max-content;
+    margin: 20px auto;
+    .nav {
+      color: var(--secondary);
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 30px;
+      cursor: pointer;
+    }
+
+    img {
+      margin: 0 10px;
+    }
   }
 }
 
