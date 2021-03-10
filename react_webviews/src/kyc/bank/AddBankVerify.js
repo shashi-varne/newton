@@ -137,11 +137,16 @@ const AddBankVerify = (props) => {
   };
 
   const uploadDocuments = () => {
-    navigate(`/kyc/${userKyc.kyc_status}/upload-documents`, {
-      searchParams: `${
-        getConfig().searchParams
-      }&additional=true&bank_id=${bank_id}`,
-    });
+    navigate(
+      `/kyc/${
+        userKyc.kyc_status === "compliant" ? "compliant" : "non-compliant"
+      }/upload-documents`,
+      {
+        searchParams: `${
+          getConfig().searchParams
+        }&additional=true&bank_id=${bank_id}`,
+      }
+    );
   };
 
   const goTobankLists = () => {

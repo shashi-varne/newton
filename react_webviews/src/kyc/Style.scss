@@ -1467,6 +1467,8 @@
   .banner .title {
     font-size: 11px;
     color: #767e86;
+    line-height: 20px;
+    font-weight: normal;
   }
   .banner .left {
     display: -ms-flexbox;
@@ -1477,13 +1479,18 @@
   }
 
   .banner .acc_no {
-    margin-top: 10px;
     font-size: 13px;
+
+    .value {
+      line-height: 15px;
+      color: #160D2E;
+    }
   }
 
   .banner .left .icon {
     width: 20px;
     height: 20px;
+    margin-right: 20px;
   }
 
   .banner .edit {

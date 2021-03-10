@@ -1053,6 +1053,7 @@ export function initilizeKyc() {
     userKyc,
     kycJourneyStatus,
     isReadyToInvestBase,
+    getKycAppStatusData,
   });
   let bottom_sheet_dialog_data_premium = {};
   let premium_onb_status = "";
@@ -1082,7 +1083,7 @@ export function initilizeKyc() {
   }
 
   this.setState({ bottom_sheet_dialog_data_premium });
-  if (premium_onb_status && bottom_sheet_dialog_data_premium) {
+  if (premium_onb_status && !isEmpty(bottom_sheet_dialog_data_premium)) {
     let banklist = storageService().getObject("banklist");
     if (banklist && banklist.length) {
       return;

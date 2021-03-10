@@ -382,7 +382,7 @@ const AddressUpload = props => {
               </div>
             </div>
           )}
-          {!getConfig().html_camera && !!onlyFrontDocRequired && (
+          {!getConfig().html_camera && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img
@@ -460,7 +460,7 @@ const AddressUpload = props => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && !!onlyFrontDocRequired && (
+          {getConfig().html_camera && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img
