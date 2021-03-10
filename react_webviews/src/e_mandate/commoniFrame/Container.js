@@ -284,10 +284,10 @@ class Container extends Component {
         {/* Children Block */}
         {this.props.img && <div className={'childblockiframe'} >
           <div className='childblockiframe-element-one'>
-             <h1>{this.props.title}</h1>
+             <div style={{fontSize: '20px', lineHeight:'24px', fontWeight: 'bold', marginBottom: '30px'}}>{this.props.title}</div>
              <span>{this.props.children}</span>
           </div>
-        { <div> <img className='childblockiframe-element-img' src={this.props.img} alt="Mandate" /></div> }
+        { <div className='imgiframe'> <img className='childblockiframe-element-img' src={this.props.img} alt="Mandate" /></div> }
          </div>}
 
          {!this.props.img && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`} style={{marginTop:'90px'}}>    

@@ -66,7 +66,7 @@ const styles = function() {
       topBar: {
         backgroundColor: "#3792FC",
         width: "100%",
-        height: '80px',
+        height: '60px',
         display: 'flex',
         justifyContent: 'space-between',
        paddingLeft: '3%'
@@ -92,7 +92,7 @@ const styles = function() {
     topBar: {
       backgroundColor: 'white',
       width: "100%",
-      height: '80px',
+      height: '60px',
       border: '1px solid white',
       paddingLeft: '3%'
     },

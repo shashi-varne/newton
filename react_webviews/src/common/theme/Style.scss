@@ -1557,12 +1557,16 @@ input#pan {
   position: relative;
 }
 
-.childblockiframe-element-img{
-  width: 200%;
-  position:relative; 
-  left:35%;
-  top: 20%;
+.imgiframe{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
 }
+  .childblockiframe-element-img{ 
+    width: 100%;
+    margin-bottom: 30%;
+  }
 
 .footer-iframe{
   background-color:  white;
@@ -1574,10 +1578,6 @@ input#pan {
 }
 
 @media (max-width: 900px) {
-  .childblockiframe-element-img{
-    width: 80%;
-    left: 10%
-  }
   .childblockiframe-element-one{
     width: 50%;
   }
@@ -1596,11 +1596,10 @@ input#pan {
   }
 
   .childblockiframe-element-img{
-    width: 100%;
-    padding-top: 20%;
-    margin: 0 auto;
-    left:0;
-    top: 0;
+    width: 200%;
+    padding-top: 30%;
+    margin-left: 100% !important;
+    margin-bottom: 30px !important;
   }
 
 }
