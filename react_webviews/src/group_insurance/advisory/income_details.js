@@ -285,7 +285,7 @@ class AdvisoryIncomeDetails extends Component {
              </div>
 
             <div className="InputField" style={{marginBottom: '5px'}}>
-             {/* <DropdownWithoutIcon
+             <Autochange
               parent={this}
               selectedIndex = {this.state.form_data.income_growth_index || 0}
               width="140"
@@ -298,44 +298,12 @@ class AdvisoryIncomeDetails extends Component {
               name="age"
               value={this.state.form_data.income_growth}
               onChange={this.handleChange("income_growth")}
-            /> */}
- {console.log(this.state.incomeGrowthOptions, '---' , this.state.retireOptions)}
-            <Autochange
-              // parent={this}
-              // selectedIndex = {this.state.form_data.income_growth_index || 0}
-              width="140"
-              dataType="AOB"
-              options={this.state.incomeGrowthOptions}
-              id="income-growth"
-              label="What is your expected annual income growth?"
-              error={this.state.form_data.income_growth_error ? true : false}
-              helperText={this.state.form_data.income_growth_error}
-              name="age"
-              value={this.state.form_data.income_growth}
-              onChange={this.handleChange("income_growth")}
             />
             </div>
-
             <div className="InputField">
-            {/* <DropdownWithoutIcon
-              parent={this}
-              selectedIndex = {this.state.form_data.retire_index || 0}
-              width="140"
-              dataType="AOB"
-              options={this.state.retireOptions}
-              id="retire-options"
-              label="When do you wish to retire?"
-              error={this.state.form_data.retire_error ? true : false}
-              helperText={this.state.form_data.retire_error}
-              name="age"
-              value={this.state.form_data.retire || ''}
-              onChange={this.handleChange("retire")}
-            /> */}
-
-
             <Autochange
               parent={this}
-              // selectedIndex = {this.state.form_data.retire_index || 0}
+              selectedIndex = {this.state.form_data.retire_index || 0}
               width="140"
               dataType="AOB"
               options={this.state.retireOptions}
