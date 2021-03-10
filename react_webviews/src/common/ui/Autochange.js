@@ -173,8 +173,8 @@ class SelectDropDown extends React.Component {
     }
 
     render() {
-        let options = this.state.options; 
-        if (!!options.length && !options[0].value) {
+        let options = this.state.options;
+        if (!!options.length && !options[0].value && !options[0].name) {
           options = this.state.options.map((ele, index) => {
                 return ({
                     'name': ele, 'value': index, 'isArray': true
