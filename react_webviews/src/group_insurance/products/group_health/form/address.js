@@ -17,7 +17,7 @@ import Grid from 'material-ui/Grid';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 
-import Autochange from '../../../../common/ui/Autochange'
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
 class GroupHealthPlanAddressDetails extends Component {
@@ -652,7 +652,7 @@ class GroupHealthPlanAddressDetails extends Component {
                             </div>
 
                             <div className="InputField">
-                                <Autochange
+                                <DropDownNew
                                     width="40"
                                     dataType="AOB"
                                     options={this.state.form_data.p_city_list}
@@ -801,7 +801,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
 
                             <div className="InputField">
-                                <Autochange
+                                <DropDownNew
                                     width="40"
                                     dataType="AOB"
                                     options={this.state.form_data.city_list}

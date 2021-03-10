@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Container from '../common/Container';
 import Input from '../../common/ui/Input';
 import { nativeCallback } from 'utils/native_callback';
-import Autochange from '../../common/ui/Autochange'
+import DropDownNew from '../../common/ui/DropDownNew'
 import Dialog, {DialogContent} from 'material-ui/Dialog';
 import MobileInputWithoutIcon from '../../common/ui/MobileInputWithoutIcon';
 import { numberShouldStartWith, validateNumber, containsSpecialCharactersAndNumbers} from 'utils/validators';
@@ -274,7 +274,7 @@ class CallBackDetails extends Component {
             />
             </div>
             <div className="InputField">
-            <Autochange
+            <DropDownNew
               parent={this}
               header_title="What you're interested in"
               selectedIndex = {this.state.form_data.index || 0}

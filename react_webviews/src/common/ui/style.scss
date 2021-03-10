@@ -995,7 +995,8 @@ body[data-device="mobile"] {
 }
 
 .react-dropdown-select-dropdown{
-  height : 246px;
+  // height : 246px;
+  height: auto;
   display: flex;
   align-items: flex-start;
 }
