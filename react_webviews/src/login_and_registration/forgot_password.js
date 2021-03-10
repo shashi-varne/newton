@@ -8,6 +8,8 @@ import { initialize } from "./function";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { validateNumber } from "utils/validators";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 class ForgotPassword extends Component {
   constructor(props) {
@@ -54,6 +56,7 @@ class ForgotPassword extends Component {
     let { loginType, form_data, isApiRunning, productName } = this.state;
     return (
       <div className="login">
+        <ToastContainer autoClose={3000} />
         <div className="header">
           <img
             src={require(`assets/${productName}_white_logo.png`)}

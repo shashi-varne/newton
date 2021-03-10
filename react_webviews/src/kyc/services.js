@@ -304,3 +304,41 @@ function getAddressProof(userKyc) {
   }
   return docMapper[userKyc.address_doc_type]
 }
+
+export function isReadyToInvest() {
+  let userRTI = storageService().getObject("user");
+  let kycRTI = storageService().getObject("kyc");
+
+  if (!kycRTI || !userRTI) {
+    return false;
+  }
+
+  if (kycRTI.kyc_status === "compliant") {
+    if (
+      kycRTI.friendly_application_status === "complete" ||
+      (kycRTI.friendly_application_status === "submitted" &&
+        kycRTI.bank.meta_data_status === "approved")
+    ) {
+      return true;
+    } else if (userRTI.kyc_registration_v2 === "complete") {
+      return true;
+    } else if (kycRTI.provisional_action_status === "approved") {
+      return true;
+    }
+  }
+
+  if (
+    kycRTI.kyc_status === "non-compliant" &&
+    kycRTI.sign_status === "signed"
+  ) {
+    if (userRTI.kyc_registration_v2 === "complete") {
+      return true;
+    } else if (kycRTI.provisional_action_status === "approved") {
+      return true;
+    } else if (kycRTI.friendly_application_status === "complete") {
+      return true;
+    }
+  }
+
+  return false;
+}

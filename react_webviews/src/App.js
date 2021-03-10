@@ -28,6 +28,12 @@ import Whatsapp from './whatsapp';
 import FisdomPartnerRedirect from "./fisdom_partner_redirect"
 import Landing from "./dashboard";
 
+import Login from './login_and_registration/login';
+import Register from './login_and_registration/register';
+import Otp from './login_and_registration/otp';
+import ForgotPassword from './login_and_registration/forgot_password';
+import Kyc from './kyc';
+
 class App extends Component {
   render() {
     return (
@@ -57,6 +63,11 @@ class App extends Component {
           <Route path='/portfolio-rebalancing' component={PortfolioRebalancing} />
           <Route path='/fund-details' component={FundDetails} />
           <Route path='/partner-landing' component={FisdomPartnerRedirect}/>
+          <Route path='/login' component={Login} />
+          <Route path='/register' component={Register} />
+          <Route path='/mobile/verify' component={Otp} />
+          <Route path='/forgot-password' component={ForgotPassword} />
+          <Route path='/kyc' component={Kyc} />
           <Route path='/' component={Landing}/>
           <Route component={NotFound} />
         </Switch>

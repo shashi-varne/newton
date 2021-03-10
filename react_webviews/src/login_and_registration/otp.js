@@ -6,6 +6,8 @@ import { initialize } from "./function";
 import { getConfig } from "utils/functions";
 import toast from "common/ui/Toast";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const isMobileView = getConfig().isMobileDevice;
 
@@ -65,6 +67,7 @@ class Otp extends Component {
     let disabled = isApiRunning || otp.length !== 4;
     return (
       <div className="login otp">
+        <ToastContainer autoClose={3000} />
         {!isMobileView && (
           <div className="header">
             <img

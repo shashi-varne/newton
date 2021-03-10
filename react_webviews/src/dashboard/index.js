@@ -23,33 +23,8 @@ import { create } from "jss";
 import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 
-/////////LOGIN AND REGISTRATION //////////////
-
-import Login from './login_and_registration/login';
-import Register from './login_and_registration/register';
-import Otp from './login_and_registration/otp';
-import ForgotPassword from './login_and_registration/forgot_password';
-
 import MyAccount from './components/my_account';
 import Notification from './components/notification';
-
-
-////////////////////////////// KYC ///////////////////////////////
-
-import Kyc from "./kyc";
-
-import Home from "./kyc/home";
-
-import Aadhar from "./kyc/aadhar";
-import AadharConfirmation from "./kyc/aadhar/confirmation";
-import AadharCallback from "./kyc/aadhar/callback";
-
-import AddBank from "./kyc/bank/AddBank";
-import AddBankVerify from "./kyc/bank/AddBankVerify";
-import BanksList from "./kyc/bank/BanksList";
-import BankDetails from "./kyc/bank/BankDetails";
-
-import RegistrationSuccess from './kyc/success'
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -85,6 +60,7 @@ const Invest = (props) => {
         <Switch>
           <Route exact path={`${url}`} component={Landing} />
           <Route path={`${url}invest`} component={Landing} />
+          <Route path={`${url}landing`} component={Landing} />
           <Route path={`${url}diy`} component={DIY} />
           <Route path={`${url}invest-journey`} component={InvestJourney} />
           <Route
@@ -109,28 +85,9 @@ const Invest = (props) => {
           />
           <Route path={`${url}sipdates`} component={SipDates} />
 
-        {/* LOGIN AND REGISTRATION */}
-
-          <Route path={`${url}login`} component={Login} /> 
-          <Route path={`${url}register`} component={Register} />
-          <Route path={`${url}mobile/verify`} component={Otp} />
-          <Route path={`${url}forgot-password`} component={ForgotPassword} />
           <Route path={`${url}my-account`} component={MyAccount} />
           <Route path={`${url}notification`} component={Notification} />
 
-         {/* KYC ROUTING */}
-          
-          <Route path={`${url}kyc`} component={Kyc} />
-          <Route exact path={`${url}home-kyc`} component={Home} />
-          <Route exact path={`${url}aadhar`} component={Aadhar} />
-          <Route exact path={`${url}aadhar/confirmation`} component={AadharConfirmation} />
-          <Route exact path={`${url}aadhar/callback/:error`} component={AadharCallback} />
-          <Route exact path={`${url}approved/banks/doc`} component={AddBank} />
-          <Route exact path={`${url}approved/banks/verify/:bank_id`} component={AddBankVerify} />
-          <Route exact path={`${url}add-bank`} component={BanksList} />
-          <Route exact path={`${url}add-bank/details/:bank_id`} component={BankDetails} />                
-          <Route exact path={`${url}registration/success`} component={RegistrationSuccess} />
-          
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

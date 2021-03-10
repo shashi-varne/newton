@@ -10,7 +10,7 @@ import {
   kycStatusMapperInvest,
   premiumBottomSheetMapper,
 } from "./constants";
-import { getKycAppStatus, isReadyToInvest } from "../kyc/services";
+import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
@@ -1083,7 +1083,7 @@ export function initilizeKyc() {
   }
 
   this.setState({ bottom_sheet_dialog_data_premium });
-  if (premium_onb_status && bottom_sheet_dialog_data_premium) {
+  if (premium_onb_status && !isEmpty(bottom_sheet_dialog_data_premium)) {
     let banklist = storageService().getObject("banklist");
     if (banklist && banklist.length) {
       return;
