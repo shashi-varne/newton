@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Container from '../common/Container';
 import Input from '../../common/ui/Input';
-// import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon';
 import Autochange from '../../common/ui/Autochange'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
