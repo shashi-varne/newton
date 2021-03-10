@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { Imgc } from "../../common/ui/Imgc";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
-import Tab from "./tab"
+import Tab from "./tab";
 
 class Queries extends Component {
   constructor(props) {
@@ -25,12 +24,12 @@ class Queries extends Component {
       <Container
         // skelton={this.state.skelton}
         title="My Queries"
-        noFooter={true}
+        noFooter
       >
-        <div className="my-queries">
-            <div className="nav-bar">
-                <Tab />
-            </div>
+        <div className="help-queries">
+          <div className="nav-bar">
+            <Tab />
+          </div>
         </div>
       </Container>
     );

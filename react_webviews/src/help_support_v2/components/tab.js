@@ -1,8 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 import SwipeableViews from "react-swipeable-views";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import Tickets from "./tickets";
+import OpenQueries from "./open_queries";
 
 function TabContainer({ children, dir }) {
   return (
@@ -17,16 +20,23 @@ TabContainer.propTypes = {
   dir: PropTypes.string.isRequired,
 };
 
+const styles = (theme) => ({
+  root: {
+    // backgroundColor: theme.palette.background.paper,
+    width: "100%",
+  },
+});
+
 class FullWidthTabs extends React.Component {
   state = {
     value: 0,
   };
 
-  handleChange = (event, value) => {
+  handleChange = (value) => {
     this.setState({ value });
   };
 
-  handleChangeIndex = index => {
+  handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
 
@@ -36,38 +46,41 @@ class FullWidthTabs extends React.Component {
     return (
       <div>
         <div className="tabContainer" style={{ marginTop: "30px" }}>
-          <div
-            className={`tab ${this.state.value === 0 ? "tabclicked" : ""}`}
-            onClick={() => this.handleChange(0)}
-          >
-            Opened queries
+          <div className="tab" onClick={() => this.handleChange(0)}>
+            {theme.direction}
           </div>
-          <div
-            className={`tab ${this.state.value === 1 ? "tabclicked" : ""}`}
-            onClick={() => this.handleChange(1)}
-          >
+          <div className="tab" onClick={() => this.handleChange(1)}>
             Closed queries
           </div>
         </div>
+        <div className="generic-hr"></div>
         <div
           className="generic-hr hr"
           style={{ left: `${this.state.value === 1 ? "50%" : "0%"}` }}
         ></div>
-        <div className="generic-hr"></div>
 
         <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          // axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={"ltr"}>
-            <Tickets />
+            <OpenQueries />
+            {theme.direction}
           </TabContainer>
-          <TabContainer dir={"ltr"}>Item Two</TabContainer>
+          <TabContainer dir={"ltr"}>
+            Item Two
+            {theme.direction}
+          </TabContainer>
         </SwipeableViews>
       </div>
     );
   }
 }
 
-export default FullWidthTabs;
+FullWidthTabs.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles, { withTheme: true })(FullWidthTabs);
