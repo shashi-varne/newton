@@ -1,3 +1,7 @@
+.help-container {
+  height: 100%;
+}
+
 .help-Category {
   .title {
     font-size: 17px;
@@ -159,6 +163,43 @@
 
     img {
       margin: 0 10px;
+    }
+  }
+}
+
+.help-queries {
+  margin: 0 -20px;
+
+  .nav-bar {
+    .MuiTab-label {
+      font-size: 13px;
+      font-weight: 400;
+      text-transform: capitalize;
+    }
+
+    .tabContainer {
+      display: flex;
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.54);
+
+      .tab {
+        width: 100%;
+        text-align: center;
+        padding: 13px 0;
+        cursor: pointer;
+      }
+
+      .tabclicked {
+        color: var(--primary);
+      }
+    }
+
+    .hr {
+      border-top: 1px solid var(--primary);
+      width: 50%;
+      position: relative;
+      // left: 100%;
+      transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     }
   }
 }

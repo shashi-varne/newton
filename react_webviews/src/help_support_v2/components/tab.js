@@ -1,11 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import PropTypes from "prop-types";
+import SwipeableViews from "react-swipeable-views";
+import Typography from "@material-ui/core/Typography";
+import Tickets from "./tickets";
 
 function TabContainer({ children, dir }) {
   return (
@@ -19,13 +16,6 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
   dir: PropTypes.string.isRequired,
 };
-
-const styles = theme => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-  },
-});
 
 class FullWidthTabs extends React.Component {
   state = {
@@ -44,37 +34,40 @@ class FullWidthTabs extends React.Component {
     const { classes, theme } = this.props;
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            fullWidth
+      <div>
+        <div className="tabContainer" style={{ marginTop: "30px" }}>
+          <div
+            className={`tab ${this.state.value === 0 ? "tabclicked" : ""}`}
+            onClick={() => this.handleChange(0)}
           >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-          </Tabs>
-        </AppBar>
+            Opened queries
+          </div>
+          <div
+            className={`tab ${this.state.value === 1 ? "tabclicked" : ""}`}
+            onClick={() => this.handleChange(1)}
+          >
+            Closed queries
+          </div>
+        </div>
+        <div
+          className="generic-hr hr"
+          style={{ left: `${this.state.value === 1 ? "50%" : "0%"}` }}
+        ></div>
+        <div className="generic-hr"></div>
+
         <SwipeableViews
           axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}>Item One</TabContainer>
-          <TabContainer dir={theme.direction}>Item Two</TabContainer>
-          <TabContainer dir={theme.direction}>Item Three</TabContainer>
+          <TabContainer dir={"ltr"}>
+            <Tickets />
+          </TabContainer>
+          <TabContainer dir={"ltr"}>Item Two</TabContainer>
         </SwipeableViews>
       </div>
     );
   }
 }
 
-FullWidthTabs.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles, { withTheme: true })(FullWidthTabs);
+export default FullWidthTabs;
