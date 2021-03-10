@@ -41,24 +41,24 @@ class SelectDropDown extends React.Component {
     }
 
     componentDidUpdate(prevState) {
-        if (prevState.value !== this.props.value) {
+        if (prevState.value !== this.props.value && this.props.value) {
             this.setState({ selectedValue: this.props.value })
           }
 
-        if (prevState.options !== this.props.options) {
+        if (prevState.options !== this.props.options && this.props.options) {
             this.setState({ options: this.props.options,})
         }
     }
 
     setValues = selectValues => {
         this.setState({ selectValues })
-        if (selectValues[0]) {
-            if (selectValues[0] && selectValues[0].isArray) {
+        if (selectValues[0]) {  // eslint-disable-next-line
+            if (selectValues[0] && selectValues[0].name && !selectValues[0].value || selectValues[0] && selectValues[0].isArray) {
                 this.props.onChange(selectValues[0].name);
             } else {
                 this.props.onChange(selectValues[0].value);
             }
-        }
+        }else this.props.onChange('');
     }
 
     contentRenderer = ({ props, state }) => {
@@ -191,10 +191,11 @@ class SelectDropDown extends React.Component {
             loop();
         })
 
-        const value = options.find(opt => opt.value === this.state.selectedValue || opt.name === this.state.selectedValue); console.log(value)
+        const value = options.find(opt => opt.value === this.state.selectedValue || opt.name === this.state.selectedValue);
+
             if(!!options.length){
                 return (
-                    <FormControl className="Dropdown label" disabled={this.props.disabled}>
+                    <FormControl className="Dropdown label" disabled={this.props.disabled} style={{marginBottom: '25px'}}>
                         {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
                         {/* <div className={this.props.className}> */}
                         <span className="label2">{this.props.label || 'label'}</span>
@@ -279,11 +280,7 @@ class SelectDropDown extends React.Component {
                                     </span>
                                 }
                             </div>
-                        </div>
-        
-        
-                        { /* --------------------  Drop Down ------------------    */}
-        
+                        </div>        
                         {/* </div> */}
                     </FormControl>
                 );
@@ -298,6 +295,9 @@ const Autochange = (props) => {
 }
 
 export default Autochange;
+// eslint-disable-next-line
+{ /*-------------------------------------------------------- [ Drop Down  Style Below ] ----------------------------------------------------------*/}
+
 const StyledSelect = styled(Select)`
   ${({ dropdownRenderer }) =>
         dropdownRenderer &&

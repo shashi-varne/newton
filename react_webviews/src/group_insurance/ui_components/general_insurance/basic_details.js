@@ -88,7 +88,7 @@ class BasicDetailsForm extends Component {
             value={this.state.basic_details_data.nominee ? this.state.basic_details_data.nominee.name || '' : ''}
             onChange={this.handleChange('nominee_name')} />
         </div>
-        <div id="nomineeScroll" ref={this.nomineeRef} className="InputField">  
+        <div id="nomineeScroll" ref={this.nomineeRef} className="InputField">
           <Autochange
             width="40"
             options={this.state.relationshipOptions}
