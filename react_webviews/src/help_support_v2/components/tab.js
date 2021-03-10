@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import SwipeableViews from 'react-swipeable-views';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import SwipeableViews from "react-swipeable-views";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import OpenQueries from "./open_queries";
 
 function TabContainer({ children, dir }) {
   return (
@@ -20,10 +20,10 @@ TabContainer.propTypes = {
   dir: PropTypes.string.isRequired,
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
+    // backgroundColor: theme.palette.background.paper,
+    width: "100%",
   },
 });
 
@@ -32,11 +32,11 @@ class FullWidthTabs extends React.Component {
     value: 0,
   };
 
-  handleChange = (event, value) => {
+  handleChange = (value) => {
     this.setState({ value });
   };
 
-  handleChangeIndex = index => {
+  handleChangeIndex = (index) => {
     this.setState({ value: index });
   };
 
@@ -44,28 +44,34 @@ class FullWidthTabs extends React.Component {
     const { classes, theme } = this.props;
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            fullWidth
-          >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-          </Tabs>
-        </AppBar>
+      <div>
+        <div className="tabContainer" style={{ marginTop: "30px" }}>
+          <div className="tab" onClick={() => this.handleChange(0)}>
+            {theme.direction}
+          </div>
+          <div className="tab" onClick={() => this.handleChange(1)}>
+            Closed queries
+          </div>
+        </div>
+        <div className="generic-hr"></div>
+        <div
+          className="generic-hr hr"
+          style={{ left: `${this.state.value === 1 ? "50%" : "0%"}` }}
+        ></div>
+
         <SwipeableViews
-          axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+          // axis={theme.direction === "rtl" ? "x-reverse" : "x"}
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}>Item One</TabContainer>
-          <TabContainer dir={theme.direction}>Item Two</TabContainer>
-          <TabContainer dir={theme.direction}>Item Three</TabContainer>
+          <TabContainer dir={"ltr"}>
+            <OpenQueries />
+            {theme.direction}
+          </TabContainer>
+          <TabContainer dir={"ltr"}>
+            Item Two
+            {theme.direction}
+          </TabContainer>
         </SwipeableViews>
       </div>
     );
