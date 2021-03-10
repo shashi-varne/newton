@@ -39,7 +39,9 @@ class HealthInsuranceLanding extends Component {
       insuranceProducts: [],
       params: qs.parse(props.history.location.search.slice(1)),
       Comprehensive : false,
-      DiseasesSpecificPlan : false
+      DiseasesSpecificPlan : false,
+      lastClickedItem:"",
+      title:"Health insurance"
     }
 
     this.renderPorducts = this.renderPorducts.bind(this);
@@ -61,16 +63,16 @@ class HealthInsuranceLanding extends Component {
     let ic_hospicash = this.state.type !== 'fisdom' ? ic_hospicash_finity : ic_hospicash_fisdom;
     let icn_diseases = this.state.type !== 'fisdom' ? icn_diseases_insurance_finity : icn_diseases_insurance_fisdom
 
-    var health_insurance_option = {
-      key: 'HealthInsuranceEntry',
-      title: 'Comprehensive',
-      subtitle: 'Complete healthcare in one policy',
-      icon: health_suraksha_icon,
-      dropdown : back_nav_bar_icon,
-      uparrow : back_nav_bar_icon_up
-    }
 
     let insuranceProducts = [
+      {
+        key: 'HealthInsuranceEntry',
+        title: 'Comprehensive',
+        subtitle: 'Complete healthcare in one policy',
+        icon: health_suraksha_icon,
+        dropdown : back_nav_bar_icon,
+        uparrow : back_nav_bar_icon_up
+      },
       {
         key: 'DISEASE_SPECIFIC_PLANS',
         title: 'Disease specific plans',
@@ -93,9 +95,6 @@ class HealthInsuranceLanding extends Component {
       }
     ];
 
-    if(!getConfig().iOS){
-      insuranceProducts.unshift(health_insurance_option);
-    }
 
 
     let { params } = this.props.location || {};
@@ -141,12 +140,75 @@ class HealthInsuranceLanding extends Component {
           handleClick1: this.onload,
           button_text1: 'Retry',
           title1: ''
-        }
+        },
+        submit: {
+          handleClick1: this.handleClickEntry,
+          button_text1: "Retry",
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Dismiss",
+        },
       };
   
       this.setState({
-        errorData: mapper[type]
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+
+  }
+
+  handleClickEntry = async (data) => {
+    if (data) {
+      this.setState({
+        lastClickedItem: data
       })
+    }
+    else {
+      data = this.state.lastClickedItem
+    }
+      this.setState({
+        title:''
+      })
+    this.setErrorData("submit");
+    this.setState({
+      skelton: true
+    });
+    let error = "";
+    let errorType = "";
+    try {
+      const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
+
+      let resultData = res.pfwresponse
+      if(res.pfwresponse.status_code === 200){
+        data.insurance_type = 'Comprehensive health insurance'
+        this.sendEvents(data)
+        let fullPath = data.key + '/landing';
+        this.navigate('/group-insurance/group-health/' + fullPath);  
+      }else {
+        error = resultData.error || resultData.message || true;
+      }
+    } catch (err) {
+      console.log(err)
+      this.setState({
+        skelton: false,
+      });
+      error = true;
+      errorType = "crash";
+    }
+    
+    if(error)
+    {
+      this.setState({
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType
+        },
+        showError: "page",
+      });
     }
 
   }
@@ -161,12 +223,6 @@ class HealthInsuranceLanding extends Component {
     let errorType = '';
     try {
       const res = await Api.get('/api/ins_service/api/insurance/application/summary')
-
-      if (!this.state.openModuleData.sub_module) {
-        this.setState({
-          skelton: false
-        })
-      }
 
       if (res.pfwresponse.status_code === 200) {
         var resultData = res.pfwresponse.result.response;
@@ -228,16 +284,16 @@ class HealthInsuranceLanding extends Component {
             this.state.openModuleData.sub_module;
           this.handleClick(pathname);
         }
+        this.setState({
+          skelton: false
+        });
 
       } else {
-
         error = res.pfwresponse.result.error || res.pfwresponse.result.message
         || true;
       }
 
-      this.setState({
-        skelton: false
-      });
+      
 
     } catch (err) {
       console.log(err)
@@ -280,7 +336,7 @@ class HealthInsuranceLanding extends Component {
 
   handleClick2 = () => {
     this.setState({
-      show_loader: true
+      skelton:true
     })
   }
 
@@ -446,11 +502,10 @@ class HealthInsuranceLanding extends Component {
       <Container
         events={this.sendEvents('just_set_events')}
         noFooter={true}
-        showLoader={this.state.show_loader}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        title="Health insurance">
+        title={this.state.title}>
         <div>
           <div className='products' style={{marginTop : '10px'}}>
             <h1 style={{ fontWeight: '500', color: '#160d2e', fontSize: '17px', lineHeight : '20.15px', marginBottom : '15px'}}>Explore best plans for your health</h1>
