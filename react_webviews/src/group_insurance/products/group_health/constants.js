@@ -569,9 +569,9 @@ export const gmc = {
         nominee_screen: 'final-summary'
     },
     validation_props: {
-        'dob_adult': { min: 18, max: 99 }, 
+        'dob_adult': { min: 18, max: 61 }, 
         'dob_child': { minDays: 91, minAge: 5, max: 25 },
-        'dob_married_male': { min: 18, max: 99 },
+        'dob_married_male': { min: 18, max: 61 },
         'dob_married_female': {min: 18}
     },
     applicant_detail_screen: {

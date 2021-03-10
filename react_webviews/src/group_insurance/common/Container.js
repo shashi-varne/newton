@@ -225,7 +225,6 @@ class Container extends Component {
       }
      
     if(this.checkStringInString('group-health')) {
-      console.log('in group healthhhhhhhhhhhhhhhhhhhh')
       // #TODO need to handle back accoridng to entry/landing
       let group_health_landing = '/group-insurance/group-health/landing';
       if(this.props.provider) {
@@ -239,7 +238,6 @@ class Container extends Component {
       if(this.checkStringInString('insure-type') || this.checkStringInString('payment') || 
       this.checkStringInString('final-summary')) {
         this.navigate(group_health_landing);
-        console.log('33333333333333')
         return;
       }
       

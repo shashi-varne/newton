@@ -252,7 +252,7 @@ class GroupHealthReportDetails extends Component {
                 }
     
                 let basePath = `/group-insurance/group-health/${provider}/`;
-                if(provider === 'RELIGARE') {
+                if(provider === 'RELIGARE' || provider === 'GMC') {
                     this.navigate(basePath + 'how-to-claim-religare');
                     return;
                 }
@@ -581,7 +581,7 @@ class GroupHealthReportDetails extends Component {
                             <div className="common-how-steps" style={{ border: 'none', marginTop: 0, marginBottom: 0 }}>
                                 <div className="top-tile">
                                     <div className="top-title">
-                                        Benefits under this plan
+                                        Plan highlights
                             </div>
                                 </div>
 
@@ -590,7 +590,7 @@ class GroupHealthReportDetails extends Component {
                                     style={{ backgroundImage: `url(${this.state.ic_hs_special_benefits})` }}>
                                     <img className="special-benefit-img" src={require(`assets/ic_hs_special.svg`)}
                                         alt="" />
-                                    <span className="special-benefit-text">Special benefits</span>
+                                    <span className="special-benefit-text">Special features</span>
                                 </div>
                                 <div className='common-steps-images'>
                                     {this.state.extra_data.benefits.special.map(this.renderSteps)}
@@ -600,7 +600,7 @@ class GroupHealthReportDetails extends Component {
                                     style={{ backgroundImage: `url(${this.state.ic_hs_main_benefits})` }}>
                                     <img className="special-benefit-img" src={require(`assets/ic_hs_main.svg`)}
                                         alt="" />
-                                    <span className="special-benefit-text">Main benefits</span>
+                                    <span className="special-benefit-text">Key benefits</span>
                                 </div>
                                 <div className='common-steps-images'>
                                     {this.state.extra_data.benefits.main.map(this.renderSteps)}

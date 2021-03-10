@@ -32,7 +32,7 @@ class GroupHealthPlanAddressDetails extends Component {
             get_lead: true,
             next_state: 'nominee',
             screen_name: 'address_screen',
-            same_address: 'NO',
+            same_address: '',
             sameAddressCheck: false
         }
         this.initialize = initialize.bind(this);
@@ -62,6 +62,7 @@ class GroupHealthPlanAddressDetails extends Component {
 
         let correspondence_address = lead.address_details.correspondence_address || {};
         let permanent_address = lead.address_details.permanent_address || {};
+        var same_address = this.state.same_address;
         if (this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') {
             form_data = {
                 ...this.state.form_data,
@@ -80,6 +81,7 @@ class GroupHealthPlanAddressDetails extends Component {
                 p_country: permanent_address.country || '',
 
             };
+            same_address = lead.buyer_details.perm_addr_correspondence_addr_same ? "YES" : "NO";
 
             if(form_data.pincode) {
                 this.getCityListReligare({form_data, name: 'pincode'});
@@ -101,6 +103,7 @@ class GroupHealthPlanAddressDetails extends Component {
         this.setState({
             form_data: form_data,
             lead: lead,
+            same_address: same_address
         })
 
 
@@ -549,14 +552,12 @@ class GroupHealthPlanAddressDetails extends Component {
     handleChangeRadio = name => event => {
 
         let options = yesNoOptions;
-        console.log(options[event].value)
         this.setState({
             [name]: options[event] ? options[event].value : '',
             [name + '_error']: ''
         }, () => {
             if(this.state.same_address === 'NO'){
                 this.setPermAddress();
-                console.log(this.state)
             }
         });
 

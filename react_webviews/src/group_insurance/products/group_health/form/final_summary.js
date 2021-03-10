@@ -343,7 +343,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 }
             }
         }
-        // console.log(med_ques_data);
 
         let contact_data = {
             'title': 'Contact details',
@@ -805,7 +804,6 @@ class GroupHealthPlanFinalSummary extends Component {
     }
 
     renderAccordian = (props, index) => {
-        console.log(props.data)
         return (
             <div key={index} onClick={() => this.handleAccordian(index)} className="bc-tile">
                 <div className="bct-top">
