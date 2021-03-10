@@ -1047,7 +1047,6 @@ export function initilizeKyc() {
   let isReadyToInvestBase = isReadyToInvest();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
 
-  let isReadyToInvestBase = isReadyToInvest();
   this.setState({
     isCompliant,
     kycStatusData,
