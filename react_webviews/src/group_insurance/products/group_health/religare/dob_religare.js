@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 import { nativeCallback } from 'utils/native_callback';
-import BottomInfo from '../../../../common/ui/BottomInfo';
 import { getConfig } from 'utils/functions';
 import { initialize } from '../common_data';
 import Input from '../../../../common/ui/Input';
@@ -262,8 +261,6 @@ class GroupHealthPlanDobReligare extends Component {
                     </div>
 
                 }
-
-                <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />
             </Container>
         );
     }

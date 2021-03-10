@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import BottomInfo from '../../../../common/ui/BottomInfo';
 import {  calculateAge, isValidDate,
      IsFutureDate, formatDate, dobFormatTest, capitalizeFirstLetter } from 'utils/validators';
 import Input from '../../../../common/ui/Input';
@@ -286,8 +285,6 @@ class GroupHealthPlanDob extends Component {
             >
                 
                 {this.state.final_dob_data.map(this.renderDobs)}
-
-                <BottomInfo baseData={{ 'content': 'Illness can hit you any time, get insured today to cover your medical expenses' }} />
             </Container>
         );
     }
