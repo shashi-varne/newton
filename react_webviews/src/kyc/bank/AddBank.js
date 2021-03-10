@@ -65,15 +65,15 @@ const AddBank = (props) => {
           (obj) => obj.bank_id === bank_id
         ) || {};
       data.c_account_number = data.account_number;
-      if (data.user_rejection_attempts === 3) {
+      if (data.user_rejection_attempts === 0) {
         setIsPennyExhausted(true);
-      } else if (bankData.user_rejection_attempts === 2) {
+      } else if (data.user_rejection_attempts === 2) {
         setNote({
           info_text:
             "2 more attempts remaining! Please enter your correct account details to proceed",
           variant: "attention",
         });
-      } else if (bankData.user_rejection_attempts === 1) {
+      } else if (data.user_rejection_attempts === 1) {
         setNote({
           info_text:
             "Just 1 attempt is remaining! Please enter your correct account details to proceed",

@@ -1044,6 +1044,7 @@ export function initilizeKyc() {
       kycStatusData = kycStatusMapperInvest["ground_premium"];
     }
   }
+  let isReadyToInvestBase = isReadyToInvest();
   let kycJourneyStatusMapperData = kycStatusMapper[kycJourneyStatus];
 
   let isReadyToInvestBase = isReadyToInvest();
@@ -1143,7 +1144,7 @@ export function openKyc() {
     }
   } else {
     if (kycJourneyStatus === "ground") {
-      this.navigate("/home-kyc");
+      this.navigate("/kyc/home");
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },
@@ -1151,3 +1152,9 @@ export function openKyc() {
     }
   }
 }
+
+export const resetRiskProfileJourney = () => {
+  storageService().set("came_from_risk_webview", "");
+  storageService().set("firsttime_from_risk_webview_invest", "");
+  return;
+};

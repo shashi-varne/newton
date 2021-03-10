@@ -271,18 +271,20 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("income")}
               disabled={isApiRunning}
             />
-            <RadioWithoutIcon
-              error={form_data.resident_error ? true : false}
-              helperText={form_data.resident_error}
-              width="40"
-              label="Residential status:"
-              class="residential-status"
-              options={residentialOptions}
-              id="account_type"
-              value={form_data.residential_status || ""}
-              onChange={handleChange("residential_status")}
-              disabled={isApiRunning}
-            />
+            <div className={`input ${isApiRunning && `disabled`}`}>
+              <RadioWithoutIcon
+                error={form_data.resident_error ? true : false}
+                helperText={form_data.resident_error}
+                width="40"
+                label="Residential status:"
+                class="residential-status"
+                options={residentialOptions}
+                id="account_type"
+                value={form_data.residential_status || ""}
+                onChange={handleChange("residential_status")}
+                disabled={isApiRunning}
+              />
+            </div>
             {is_nri && (
               <Input
                 label="Tax identification number (optional)"

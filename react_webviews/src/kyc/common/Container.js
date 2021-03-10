@@ -123,12 +123,6 @@ const Container = (props) => {
     }
   }
 
-  const renderSkeltonLoader = (type = 'g') => {
-    if (props.showSkelton) {
-      return <Skelton type={type} />
-    }
-  }
-
   const headerGoBack = () => {
     historyGoBack({ fromHeader: true })
   }
@@ -174,7 +168,7 @@ const Container = (props) => {
       {/* Below Header Block */}
       <div id="HeaderHeight" style={{ top: 56 }}>
         {/* Loader Block */}
-        {renderSkeltonLoader(props?.skeltonType)}
+        {/* {renderSkeltonLoader(props?.skeltonType)} */}
       </div>
 
       {/*  */}
@@ -211,20 +205,24 @@ const Container = (props) => {
         </div>
       )}
 
+      {props.showSkelton && <Skelton type={props.skeltonType || 'g'} />}
+
       {/* Children Block */}
-      <div
-        style={props.styleContainer}
-        className={`
-            Container 
-            ${props.classOverRideContainer}
-            ${props.noPadding ? 'no-padding' : ''}
-          `}
-      >
-        {props.children}
-      </div>
+        <div
+          style={{
+            ...props.styleContainer,
+            backgroundColor: props.showSkelton ? "#fff" : "initial",
+            display: props.showSkelton ? "none" : "",
+          }}
+          className={`Container ${props.classOverRideContainer} ${
+            props.noPadding ? "no-padding" : ""
+          }`}
+        >
+          {props.children}
+        </div>
 
       {/* Footer Block */}
-      {!props.noFooter && (
+      {!props.noFooter && !props.showSkelton && (
         <Footer
           noFooter={props.noFooter}
           fullWidthButton={props.fullWidthButton}

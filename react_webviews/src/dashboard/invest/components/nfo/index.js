@@ -35,7 +35,7 @@ class NfoInfo extends Component {
             }}
             className="bg-image"
           ></div>
-          <div className="info">
+          <div className="info nfo-data">
             {nfoData.info.map((data, index) => {
               return (
                 <div key={index} className="content">

@@ -24,11 +24,13 @@ const KycPremiumLandingDialog = ({
       <DialogContent className="verification-failed-dialog-content kyc-premium-content">
         <div className="title">
           <div className="text">{data.popup_header}</div>
-          <img
-            src={require(`assets/${productName}/${data.icon}`)}
-            alt=""
-            className="img"
-          />
+          {data.icon && (
+            <img
+              src={require(`assets/${productName}/${data.icon}`)}
+              alt=""
+              className="img"
+            />
+          )}
         </div>
         <div className="subtitle" id="subtitle">
           {data.bold_text && <b>{data.bold_text}</b>} {data.popup_message}

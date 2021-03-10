@@ -25,6 +25,8 @@ import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 
 import MyAccount from './components/my_account';
 import Notification from './components/notification';
+import PaymentCallback from "./invest/components/PaymentCallback";
+import SipPaymentCallback from "./invest/components/SipPaymentCallback";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -88,6 +90,8 @@ const Invest = (props) => {
           <Route path={`${url}my-account`} component={MyAccount} />
           <Route path={`${url}notification`} component={Notification} />
 
+          <Route path={`${url}payment/callback/:status/:message`} component={PaymentCallback} />
+          <Route path={`${url}sip/payment/callback/:status/:message`} component={SipPaymentCallback} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

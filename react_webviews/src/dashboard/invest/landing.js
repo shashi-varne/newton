@@ -337,7 +337,7 @@ class Landing extends Component {
           {productName !== "fisdom" &&
             productName !== "finity" &&
             productName !== "ktb" && (
-              <div className="contact-us">
+              <div className="invest-contact-us">
                 In partnership with
                 <span>
                   {productName === "bfdlmobile" ||

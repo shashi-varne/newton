@@ -27,6 +27,7 @@ const PersonalDetails3 = (props) => {
   if (isEdit) {
     title = "Edit professional details";
   }
+  const type = props.type || "";
 
   useEffect(() => {
     initialize();
@@ -75,11 +76,19 @@ const PersonalDetails3 = (props) => {
       };
       const submitResult = await savePanData(item);
       if (!submitResult) return;
-      navigate(getPathname.personalDetails4, {
-        state: {
-          isEdit: isEdit,
-        },
-      });
+      if (type === "digilocker") {
+        if (isEdit) {
+          navigate(getPathname.journey);
+        } else {
+          navigate(getPathname.digilockerPersonalDetails3);
+        }
+      } else {
+        navigate(getPathname.personalDetails4, {
+          state: {
+            isEdit: isEdit,
+          },
+        });
+      }
     } catch (err) {
       console.log(err);
       toast(err);
@@ -111,10 +120,10 @@ const PersonalDetails3 = (props) => {
     >
       <div className="kyc-complaint-personal-details">
         <div className="kyc-main-title">
-          {title} <span>3/4</span>
+          {title} <span>{type === "digilocker" ? 2 : 3}/4</span>
         </div>
         <main>
-          <div className="input">
+          <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.occupation_error ? true : false}
               helperText={form_data.occupation_error}

@@ -14,8 +14,8 @@ import PennyDialog from "../mini_components/PennyDialog";
 import PennyFailedDialog from "../mini_components/PennyFailedDialog";
 import PennySuccessDialog from "../mini_components/PennySuccessDialog";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
-import { SkeltonRect } from "../../common/ui/Skelton";
-import { getConfig } from "../../utils/functions";
+import { SkeltonRect } from "common/ui/Skelton";
+import { getConfig } from "utils/functions";
 
 const AddBankVerify = (props) => {
   const [count, setCount] = useState(20);
@@ -220,10 +220,7 @@ const AddBankVerify = (props) => {
           uploadDocuments={uploadDocuments}
           checkBankDetails={checkBankDetails}
         />
-        <PennySuccessDialog
-          isOpen={isPennySuccess}
-          goTobankLists={goTobankLists}
-        />
+        <PennySuccessDialog isOpen={isPennySuccess} redirect={goTobankLists} />
         <PennyExhaustedDialog
           isOpen={isPennyExhausted}
           redirect={goTobankLists}

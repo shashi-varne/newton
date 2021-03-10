@@ -55,7 +55,7 @@ const PersonalDetails1 = (props) => {
     let formData = {
       name: userkycDetails.pan?.meta_data?.name || "",
       dob: userkycDetails.pan?.meta_data?.dob || "",
-      email: userkycDetails.address?.meta_data?.email || "",
+      email: userkycDetails.identification?.meta_data?.email || "",
       mobile: userkycDetails.identification?.meta_data?.mobile_number || "",
       gender: userkycDetails.identification?.meta_data?.gender || "",
       marital_status:
@@ -78,7 +78,7 @@ const PersonalDetails1 = (props) => {
     let userkycDetails = { ...userkyc };
     userkycDetails.pan.meta_data.name = form_data.name;
     userkycDetails.pan.meta_data.dob = form_data.dob;
-    userkycDetails.address.meta_data.email = form_data.email;
+    userkycDetails.identification.meta_data.email = form_data.email;
     userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.identification.meta_data.marital_status =
@@ -198,7 +198,7 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           )}
-          <div className="input">
+          <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
@@ -212,7 +212,7 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           </div>
-          <div className="input">
+          <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}

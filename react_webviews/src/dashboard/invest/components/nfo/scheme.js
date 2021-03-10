@@ -28,7 +28,7 @@ class NfoScheme extends Component {
         title="Select Scheme"
       >
         <div className="nfo-scheme">
-          <div className="info">
+          <div className="info nfo-data">
             {nfoData.scheme.map((data, index) => {
               return (
                 <div

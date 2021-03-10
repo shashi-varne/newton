@@ -12,7 +12,7 @@ const Intro = (props) => {
   }
   const handleClick = () => {
     const navigate = navigateFunc.bind(props)
-    navigate('upload/progress', null)
+    navigate('/kyc/upload/progress')
   }
   return (
     <Container
