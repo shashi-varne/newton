@@ -953,6 +953,7 @@ body[data-device="mobile"] {
   color: black;
   display: inline-flex;
   align-items: center;
+  white-space: nowrap;
 }
 .react-dropdown-select-option{
   border: 1px solid #D6D6D6;
@@ -1081,23 +1082,23 @@ body[data-device="mobile"] {
   line-height: 21px;
 } 
 
-::-webkit-scrollbar {
-  -webkit-appearance: none;
-}
-::-webkit-scrollbar:vertical {
-  width: 3px;
-}
-::-webkit-scrollbar:horizontal {
-  height: 3px;
-  margin-top:  10px;
-  overflow-x: hidden;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #d8d8d8;
-  border-radius: 1px;
-  display: none; 
-}
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: #ffffff;
-}
+// ::-webkit-scrollbar {
+//   -webkit-appearance: none;
+// }
+// ::-webkit-scrollbar:vertical {
+//   width: 3px;
+// }
+// ::-webkit-scrollbar:horizontal {
+//   height: 3px;
+//   margin-top:  10px;
+//   overflow-x: hidden;
+// }
+// ::-webkit-scrollbar-thumb {
+//   background-color: #d8d8d8;
+//   border-radius: 1px;
+//   display: none; 
+// }
+// ::-webkit-scrollbar-track {
+//   border-radius: 10px;
+//   background-color: #ffffff;
+// }
