@@ -375,11 +375,21 @@ export function renderGenericError() {
 export function renderPageLoader() {
     let quotes_data = [
         'Risk comes from not knowing what you are doing.',
+        'Life insurance will protect your family’s financial future.',
+        'If there’s anyone dependent on you - you need insurance.',
         'Money is a terrible master but an excellent servant.',
+        'Did you know insurance is good investment?',
+        'Insurance is a combination of care, commitment and common sense.',
         'Wealth is the ability to fully experience life.',
+        'Think future, think insurance.',
+        'You’re future-proof when insured!',
         'I’d like to live as a poor man with lots of money.',
+        'How do you ensure your loved ones are safe after you? Insure!',
         'Don’t stay in bed, unless you can make money in bed.',
+        'Insurance is sound planning for life.',
         'It takes as much energy to wish as it does to plan.',
+        'It’s OK to prepare now for tomorrow.',
+        'Secure your loved ones that depend on you.',
         'The best thing money can buy is financial freedom.'
     ]
     var quote = quotes_data[Math.floor(Math.random() * quotes_data.length)];
