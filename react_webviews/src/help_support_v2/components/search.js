@@ -19,6 +19,7 @@ const styles = (theme) => ({
     maxHeight: "100%",
     padding: "0 11px",
     backgroundColor: "var(--highlight)",
+    cursor: "pointer",
   },
   container: {
     borderRadius: 4,
@@ -31,8 +32,7 @@ class SearchInput extends Component {
     super(props);
     this.state = {
       productName: getConfig().productName,
-      changeIcon: false,
-      value: "",
+      value: props.value,
     };
     this.textInput = React.createRef();
     this.focusTextInput = this.focusTextInput.bind(this);
@@ -41,23 +41,10 @@ class SearchInput extends Component {
   focusTextInput = () => {
     // Explicitly focus the text input using the raw DOM API
     // Note: we're accessing "current" to get the DOM node
-
     this.textInput.current.focus();
-    if (this.state.changeIcon) {
-      this.setState({
-        changeIcon: false,
-        value: "",
-      });
+    if (this.props.value.length > 0) {
+      this.props.onChange("");
     }
-  };
-
-  handleChange = (event) => {
-    let value = event.target.value;
-    let changeIcon = value.length > 0 ? true : false;
-    this.setState({
-      changeIcon: changeIcon,
-      value: value,
-    });
   };
 
   render() {
@@ -66,9 +53,9 @@ class SearchInput extends Component {
         <TextField
           id="input-with-icon-textfield"
           placeholder="Search for the issue"
-          onChange={this.handleChange}
+          onChange={(value) => this.props.onChange(value)}
           inputRef={this.textInput}
-          value={this.state.value}
+          value={this.props.value}
           InputProps={{
             endAdornment: (
               <InputAdornment
@@ -78,7 +65,7 @@ class SearchInput extends Component {
               >
                 <img
                   src={require(`assets/${this.state.productName}/${
-                    this.state.changeIcon ? "cross" : "search"
+                    this.props.value.length > 0 ? "cross" : "search"
                   }.svg`)}
                   alt=""
                   width="13"

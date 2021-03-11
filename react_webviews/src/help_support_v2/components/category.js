@@ -48,6 +48,7 @@ class Category extends Component {
     this.state = {
       show_loader: false,
       skelton: "g",
+      value: "",
     };
     this.initialize = initialize.bind(this);
   }
@@ -58,6 +59,13 @@ class Category extends Component {
 
   onload = () => {};
 
+  handleChange = (event) => {
+    let value = event.target ? event.target.value : event;
+    this.setState({
+      value: value,
+    });
+  };
+
   render() {
     return (
       <Container
@@ -67,7 +75,7 @@ class Category extends Component {
       >
         <div className="help-Category">
           <div className="search"></div>
-          <Search />
+          <Search value={this.state.value} onChange={this.handleChange} />
           <div className="title">Category</div>
           {catgories.map((el, index) => (
             <div className="category" key={index}>
