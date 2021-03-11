@@ -38,7 +38,7 @@ class FyntuneLanding extends Component {
     });
   };
 
-  setErrorData = (type) => {
+  setErrorData = (type, cb) => {
     this.setState({
       showError: false
     });
@@ -47,6 +47,11 @@ class FyntuneLanding extends Component {
         'onload':  {
           handleClick1: this.onload,
           button_text1: 'Retry',
+          title1: ''
+        },
+        'onload_provider_error':  {
+          handleClick1: this.handleProviderError,
+          button_text1: 'Okay',
           title1: ''
         },
         'submit': {
@@ -63,6 +68,11 @@ class FyntuneLanding extends Component {
       };
       this.setState({
         errorData: {...mapper[type], setErrorData : this.setErrorData}
+      }, () => {
+        if(typeof cb === 'function') {
+          return cb();
+        }
+        
       })
     }
   }
@@ -75,12 +85,12 @@ class FyntuneLanding extends Component {
     nativeCallback({ action: 'take_control_reset' });
     this.setState({
       skelton: true,
-      openDialogRefresh: false
+      openDialogRefresh: false,
+      providerError: ''
     })
     //resume api
     try{
       var res = await Api.get(`api/ins_service/api/insurance/fyntune/get/resumelist`);
-      
       var resultData = res.pfwresponse.result;
 
       if (res.pfwresponse.status_code === 200) {
@@ -95,7 +105,22 @@ class FyntuneLanding extends Component {
       this.setState({ resume_data : resultData});
         
       } else {
-        // error = res.pfwresponse.result.error || res.pfwresponse.result.message || true
+        this.setState({
+          skelton: false
+        })
+
+        let providerErrors = ["Network error",
+        "Network error call status not in 200",
+        "Error in ref id creation"];
+        error = res.pfwresponse.result.error || res.pfwresponse.result.message || true;
+
+        if(providerErrors.indexOf(error) !== -1) {
+          error = '';
+          this.setErrorData('onload_provider_error');
+          this.setState({
+            providerError: "Something's not right. Retry in a while"
+          })
+        }
       }
     } catch (err) {
       this.setState({
@@ -162,6 +187,12 @@ class FyntuneLanding extends Component {
 
   handleDialogOk = () => {
     this.onload();
+  }
+
+  handleProviderError = () => {
+    this.setState({
+      showError: false
+    })
   }
 
   renderDialog = () => {
@@ -259,6 +290,21 @@ class FyntuneLanding extends Component {
 
   handleClick = async () => {
     this.sendEvents("next");
+
+    if(this.state.providerError) {
+      this.setErrorData('onload_provider_error',() => {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: this.state.providerError
+          },
+          showError: true
+        })
+      });
+      
+
+      return;
+    }
     this.setErrorData('submit');
     let error = '';
     let errorType = '';

@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import { numDifferentiationInr } from 'utils/validators';
 import { initialize, updateBottomPremium } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
@@ -29,6 +28,14 @@ class GroupHealthPlanSelectSumAssured extends Component {
     }
 
     async componentDidMount() {
+        this.onload();
+    }
+
+    onload = async() =>{
+        this.setErrorData("onload");
+        this.setState({ skelton: true });
+        let error = "";
+        let errorType = "";
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
         
@@ -38,10 +45,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }
         this.setLocalProviderData(groupHealthPlanData);
 
-        this.setState({
-            show_loader: true
-        });
-
         let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type'];
         let body = {};
         for(let key of allowed_post_body_keys){
@@ -50,9 +53,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         
         try {
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
-            this.setState({
-                show_loader: false
-            });
+            
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 
@@ -60,25 +61,39 @@ class GroupHealthPlanSelectSumAssured extends Component {
             this.setLocalProviderData(groupHealthPlanData);
                 
             this.setState({
-              premium_data: resultData.premium_details
+              premium_data: resultData.premium_details,
+              skelton: false
             })
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+          }
+        if(!error){
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
         }, () => {
             this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
         })
+        }
     }
 
     navigate = (pathname) => {
@@ -182,7 +197,9 @@ class GroupHealthPlanSelectSumAssured extends Component {
         return (
           <Container
             events={this.sendEvents("just_set_events")}
-            showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             title="Select sum insured"
             buttonTitle="CONTINUE"
             withProvider={true}

@@ -4,20 +4,19 @@ import { getConfig,
  } from 'utils/functions';
 import { ghGetMember } from '../../constants';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import {  openPdfCall } from 'utils/native_callback';
 import { nativeCallback } from 'utils/native_callback';
 import {isEmpty} from '../../../utils/validators';
 import {getGhProviderConfig, memberKeyMapperFunction} from './constants';
 
 export async function initialize() {
-
+    this.setErrorData =setErrorData.bind(this)
     this.navigate = navigate.bind(this);
     this.openInBrowser = openInBrowser.bind(this);
     this.setEditTitle = setEditTitle.bind(this);
     this.setLocalProviderData = setLocalProviderData.bind(this);
     this.memberKeyMapper = memberKeyMapper.bind(this);
-
+    
     let provider = this.props.parent && this.props.parent.props ? this.props.parent.props.match.params.provider : this.props.match.params.provider;
     
     let providerConfig = getGhProviderConfig(provider);
@@ -66,13 +65,16 @@ export async function initialize() {
     let lead = {
         member_base: [],
     };
-
+    let error="";
+    let errorType="";
     if (this.state.get_lead) {
-
+        
+        this.setErrorData("onload")
+        
         try {
 
             this.setState({
-                show_loader: true
+                skelton: true
             });
 
             let quote_id = storageService().get('ghs_ergo_quote_id');
@@ -83,10 +85,9 @@ export async function initialize() {
             if (resume && !application_id) {
                 url = `api/insurancev2/api/insurance/health/quotation/get/quotation_details?quotation_id=${quote_id}`
                 const res = await Api.get(url);
-
-
+                var resultData = res.pfwresponse.result;
                 if (res.pfwresponse.status_code === 200) {
-                    var resultData = res.pfwresponse.result;
+                    
                     lead = resultData;
                     lead.member_base = ghGetMember(lead, this.state.providerConfig);               
                     this.setState({
@@ -96,14 +97,14 @@ export async function initialize() {
                             this.onload();
                         }
                     })
-                    
+                    this.setState({
+                        skelton: false
+                    });
                 } else {
-                    toast(resultData.error || resultData.message ||
-                        'Something went wrong');
+                    error = resultData.error || resultData.message ||
+                        true;
                 }
-                this.setState({
-                    show_loader: false
-                });
+                
             } else if(application_id) {
                 url = `api/insurancev2/api/insurance/proposal/${providerConfig.provider_api}/get_application_details?application_id=${application_id}`;
    
@@ -114,9 +115,7 @@ export async function initialize() {
                 // eslint-disable-next-line
                 var resultData = res.pfwresponse.result;
 
-                this.setState({
-                    show_loader: false
-                });
+               
                 if (res.pfwresponse.status_code === 200) {
                     lead = resultData.quotation_details;
                     var member_base = ghGetMember(lead, this.state.providerConfig);
@@ -136,20 +135,35 @@ export async function initialize() {
                         }
 
                     })
+                    this.setState({
+                        skelton: false
+                    });
 
                 } else {
-                    toast(resultData.error || resultData.message ||
-                        'Something went wrong');
+                    error=resultData.error || resultData.message ||
+                        true;
                 }
             }
         } catch (err) {
             console.log(err);
             this.setState({
-                show_loader: false,
+                skelton: false,
                 lead: lead,
                 common_data: {}
             });
-            toast('Something went wrong');
+            error=true;
+            errorType="crash";
+        }
+        if(error)
+        {
+            this.setState({
+                errorData: {
+                  ...this.state.errorData,
+                  title2: error,
+                  type: errorType
+                },
+                showError: "page",
+              });
         }
     }
 
@@ -255,15 +269,16 @@ export async function initialize() {
         })
         
 
-
-        this.setState({
-            bottomButtonData: bottomButtonData,
-            confirmDialogData: confirmDialogData
-        }, () => {
-            if (this.onload) {
-                this.onload();
-            }
-        })
+        if(!error){
+            this.setState({
+                bottomButtonData: bottomButtonData,
+                confirmDialogData: confirmDialogData
+            }, () => {
+                if (this.onload) {
+                    this.onload();
+                }
+            })
+        }
     }
 }
 
@@ -291,13 +306,16 @@ export function updateBottomPremiumAddOns(premium) {
 }
 
 export async function updateLead( body, quote_id) {
+    let error="";
+    let errorType="";
+    this.setErrorData("submit")
     try {
         if (!quote_id) {
             quote_id = storageService().get('ghs_ergo_quote_id');
         }
 
         this.setState({
-            show_loader: true
+            show_loader: "button"
         });
         let application_id = storageService().get('health_insurance_application_id');
          body.application_id = application_id
@@ -305,8 +323,10 @@ export async function updateLead( body, quote_id) {
         const res = await Api.put(`api/insurancev2/api/insurance/proposal/${this.state.provider_api}/update_application_details` , body)
         var resultData = res.pfwresponse.result;
         if (res.pfwresponse.status_code === 200) {
-
-            if (body.pedcase) { this.initialize(); this.setState({ show_loader: true });return}
+            this.setState({
+                show_loader: false
+            })
+            if (body.pedcase) { this.initialize(); this.setState({ show_loader: "button" });return}
 
             if(this.props.edit && !this.state.force_forward) {
                 this.props.history.goBack();
@@ -326,14 +346,14 @@ export async function updateLead( body, quote_id) {
                     this.sendEvents('next', {bmi_check: true});
                 });
             } else {
-                if(resultData.error && resultData.error.length > 0 && resultData.error[0]){
+                if(resultData.error && resultData.error.length > 0 && resultData.error[0] && Array.isArray(resultData.error)){
                     resultData.error = resultData.error[0]
                 }
-                toast(
+                error=
                     resultData.error ||
                     resultData.message ||
-                    'Something went wrong'
-                );
+                    true;
+                
             }
         }
     } catch (err) {
@@ -341,7 +361,19 @@ export async function updateLead( body, quote_id) {
         this.setState({
             show_loader: false
         });
-        toast('Something went wrong');
+        error=true;
+        errorType="crash";
+    }
+    if(error)
+    {
+        this.setState({
+            errorData: {
+              ...this.state.errorData,
+              title2: error,
+              type: errorType
+            },
+            showError: true,
+          });
     }
 }
 
@@ -363,24 +395,53 @@ export function navigate(pathname, data = {}) {
     }
 
 }
+function setErrorData(type, dismiss, HandleClickFunc) {
+  this.setState({
+    showError: false,
+  });
+  if (type) {
+    let mapper = {
+      onload: {
+        handleClick1: this.state.get_lead ? this.initialize : this.onload,
+        button_text1: "Retry",
+        title1: "",
+      },
+      submit: {
+        handleClick1: HandleClickFunc ? HandleClickFunc : this.handleClick,
+        button_text1: "Retry",
+        handleClick2: () => {
+          this.setState({
+            showError: false,
+          });
+        },
+        button_text2: dismiss ? "Dismiss" : "Edit",
+      },
+    };
 
+    this.setState({
+      errorData: { ...mapper[type], setErrorData: this.setErrorData },
+    });
+  }
+}
 export async function resetQuote() {
-
+    this.setErrorData("submit", true, this.resetQuote)
     this.handleClose();
     this.setState({
-        show_loader: true,
+        show_loader: "page",
         restart_conformation: true
     }, () => {
         this.sendEvents('next');
     });
-
+    let error = "";
+    let errorType = "";
     try {
 
         const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/${this.state.providerConfig.provider_api}/reset_previous_quotations`);
 
         var resultData = res.pfwresponse.result;
+        
         if (res.pfwresponse.status_code === 200) {
-
+            
             let next_state = `/group-insurance/group-health/${this.state.provider}/insure-type`;
             this.navigate(next_state);
             this.setState({
@@ -388,20 +449,29 @@ export async function resetQuote() {
             })
 
         } else {
-            this.setState({
-                show_loader: false
-            });
-
-            toast(resultData.error || resultData.message
-                || 'Something went wrong');
+            error = resultData.error || resultData.message
+                || true;
         }
     } catch (err) {
         console.log(err)
         this.setState({
             show_loader: false
         });
-        toast('Something went wrong');
+        error = true;
+        errorType = "crash";
     }
+    if (error) {
+        this.setState({
+          errorData: {
+            ...this.state.errorData,
+            title2: error,
+            type: errorType
+          },
+          showError: true,
+          show_loader: false
+        });
+        
+      }
 }
 
 export function openInBrowser(url, type) {
@@ -496,6 +566,21 @@ export function openInBrowser(url, type) {
 
     
     
+}
+
+export function openPdf(pdfLink, pdfType){
+    
+    if(getConfig().iOS){
+        nativeCallback({
+          action: 'open_inapp_tab',
+          message: {
+              url: pdfLink  || '',
+              back_url: ''
+          }
+        });
+    }else{
+        this.openInBrowser(pdfLink, pdfType);
+    }
 }
 
 export function setEditTitle(string) {

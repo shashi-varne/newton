@@ -4,7 +4,6 @@ import Container from '../../../common/Container';
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import ReactTooltip from "react-tooltip";
 import { initialize } from '../common_data';
 import GenericTooltip from '../../../../common/ui/GenericTooltip'
@@ -16,7 +15,7 @@ class GroupHealthPlanList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show_loader: true,
+            skelton: true,
             plan_data: {},
             screen_name: 'plan_list_screen'
         }
@@ -29,6 +28,14 @@ class GroupHealthPlanList extends Component {
     }
 
     async componentDidMount() {
+        this.onload();
+    }
+
+    onload = async() =>{
+        this.setErrorData("onload");
+        this.setState({ skelton: true });
+        let error = "";
+        let errorType = "";
         let {groupHealthPlanData : {post_body}} = this.state;
 
         let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details'];
@@ -42,7 +49,7 @@ class GroupHealthPlanList extends Component {
              body);
 
             this.setState({
-                show_loader: false
+                skelton: false
             });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
@@ -56,16 +63,27 @@ class GroupHealthPlanList extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+          }
     }
 
 
@@ -175,7 +193,9 @@ class GroupHealthPlanList extends Component {
         return (
             <Container
                 events={this.sendEvents('just_set_events')}
-                showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title="3 smart plans to choose from"
                 noFooter={true}
                 onlyButton={true}
