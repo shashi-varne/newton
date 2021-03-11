@@ -51,7 +51,7 @@ class Container extends Component {
     if (this.state.mounted) {
       return (
         <div
-          className={`ContainerWrapper help-container ${this.props.classOverRide}  ${
+          className={`ContainerWrapper ${this.props.classOverRide}  ${
             getConfig().productName !== "fisdom" ? "blue" : ""
           }`}
         >
@@ -94,13 +94,13 @@ class Container extends Component {
               ...this.props.styleContainer,
               backgroundColor: this.props.skelton ? "#fff" : "initial",
             }}
-            className={`Container help-container ${
+            className={`Container ${this.props.classOverRideContainer} ${
               this.props.noPadding ? "no-padding" : ""
             }`}
           >
             <div
               className={`${!this.props.skelton ? "fadein-animation" : ""}`}
-              style={{ display: this.props.skelton ? "none" : "", height: '100%' }}
+              style={{ display: this.props.skelton ? "none" : "" }}
             >
               {" "}
               {this.props.children}

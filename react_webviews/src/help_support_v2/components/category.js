@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Imgc } from "common/ui/Imgc";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
+import Search from "./search";
 
 const catgories = [
   {
@@ -66,6 +67,7 @@ class Category extends Component {
       >
         <div className="help-Category">
           <div className="search"></div>
+          <Search />
           <div className="title">Category</div>
           {catgories.map((el, index) => (
             <div className="category" key={index}>

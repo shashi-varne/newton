@@ -18,13 +18,25 @@ class OpenTickets extends Component {
   onload = () => {};
 
   render() {
-      return (
-        <div className="help-tickets">
-          <div className="tickets">
-            
-          </div>
+    return (
+      <div className="help-tickets">
+        <div className="ticket">
+          <div className="title">Ticket ID: 0111</div>
+          <div className="sub-title">I want to know the different.......</div>
+          <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
         </div>
-      )
+        <div className="ticket">
+          <div className="title">Ticket ID: 0111</div>
+          <div className="sub-title">I want to know the different.......</div>
+          <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
+        </div>
+        <div className="ticket">
+          <div className="title">Ticket ID: 0111</div>
+          <div className="sub-title">I want to know the different.......</div>
+          <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
+        </div>
+      </div>
+    );
   }
 }
 

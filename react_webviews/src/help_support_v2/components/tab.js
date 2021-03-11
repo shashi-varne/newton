@@ -1,11 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
 import SwipeableViews from "react-swipeable-views";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import OpenQueries from "./open_queries";
+import Tickets from "./tickets";
 
 function TabContainer({ children, dir }) {
   return (
@@ -19,13 +16,6 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
   dir: PropTypes.string.isRequired,
 };
-
-const styles = (theme) => ({
-  root: {
-    // backgroundColor: theme.palette.background.paper,
-    width: "100%",
-  },
-});
 
 class FullWidthTabs extends React.Component {
   state = {
@@ -41,15 +31,19 @@ class FullWidthTabs extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
-
     return (
-      <div>
-        <div className="tabContainer" style={{ marginTop: "30px" }}>
-          <div className="tab" onClick={() => this.handleChange(0)}>
-            {theme.direction}
+      <Fragment>
+        <div className="tabContainer">
+          <div
+            className={`tab ${this.state.value === 0 ? "tabclicked" : ""}`}
+            onClick={() => this.handleChange(0)}
+          >
+            Open queries
           </div>
-          <div className="tab" onClick={() => this.handleChange(1)}>
+          <div
+            className={`tab ${this.state.value === 1 ? "tabclicked" : ""}`}
+            onClick={() => this.handleChange(1)}
+          >
             Closed queries
           </div>
         </div>
@@ -65,22 +59,15 @@ class FullWidthTabs extends React.Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={"ltr"}>
-            <OpenQueries />
-            {theme.direction}
+            <Tickets />
           </TabContainer>
           <TabContainer dir={"ltr"}>
-            Item Two
-            {theme.direction}
+            <Tickets />
           </TabContainer>
         </SwipeableViews>
-      </div>
+      </Fragment>
     );
   }
 }
 
-FullWidthTabs.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles, { withTheme: true })(FullWidthTabs);
+export default FullWidthTabs;

@@ -1,6 +1,10 @@
-.help-container {
-  height: 100%;
-}
+// .help-container {
+//   height: 100%;
+
+//   .fadein-animation {
+//     height: 100%;
+//   }
+// }
 
 .help-Category {
   .title {
@@ -169,13 +173,11 @@
 
 .help-queries {
   margin: 0 -20px;
+  height: 100%;
 
   .nav-bar {
-    .MuiTab-label {
-      font-size: 13px;
-      font-weight: 400;
-      text-transform: capitalize;
-    }
+    height: 100%;
+    padding-top: 10px;
 
     .tabContainer {
       display: flex;
@@ -200,6 +202,34 @@
       position: relative;
       // left: 100%;
       transition: all 500ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    }
+  }
+}
+
+.help-tickets {
+  line-height: 20px;
+
+  .ticket {
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.07);
+    .title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #595959;
+    }
+
+    .sub-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: #0a1d32;
+      margin: 10px 0;
+    }
+
+    .bottom-title {
+      font-size: 10px;
+      font-weight: 400;
+      color: #979797;
     }
   }
 }
