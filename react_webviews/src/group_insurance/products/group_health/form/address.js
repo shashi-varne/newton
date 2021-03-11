@@ -618,21 +618,6 @@ class GroupHealthPlanAddressDetails extends Component {
 
                             <div className="InputField">
                                 <Input
-                                    type="number"
-                                    width="40"
-                                    disabled={this.state.same_address === 'YES'}
-                                    label="Pincode"
-                                    id="p_pincode"
-                                    name="p_pincode"
-                                    maxLength="6"
-                                    error={(this.state.form_data.p_pincode_error) ? true : false}
-                                    helperText={this.state.form_data.p_pincode_error}
-                                    value={this.state.form_data.p_pincode || ''}
-                                    onChange={this.handlePincodeReligare('p_pincode')} />
-                            </div>
-
-                            <div className="InputField">
-                                <Input
                                     type="text"
                                     disabled={this.state.same_address === 'YES'}
                                     id="p_addr_line1"
@@ -657,6 +642,20 @@ class GroupHealthPlanAddressDetails extends Component {
                                     helperText={this.state.form_data.p_addr_line2_error}
                                     value={this.state.form_data.p_addr_line2 || ''}
                                     onChange={this.handleChange()} />
+                            </div>
+                            <div className="InputField">
+                                <Input
+                                    type="number"
+                                    width="40"
+                                    disabled={this.state.same_address === 'YES'}
+                                    label="Pincode"
+                                    id="p_pincode"
+                                    name="p_pincode"
+                                    maxLength="6"
+                                    error={(this.state.form_data.p_pincode_error) ? true : false}
+                                    helperText={this.state.form_data.p_pincode_error}
+                                    value={this.state.form_data.p_pincode || ''}
+                                    onChange={this.handlePincodeReligare('p_pincode')} />
                             </div>
 
                             <div className="InputField">

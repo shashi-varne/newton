@@ -169,7 +169,10 @@ class GroupHealthPlanDobReligare extends Component {
             
             post_body.eldest_member = this.memberKeyMapper(this.state.eldest_member).backend_key;
             post_body.eldest_dob = this.state.eldest_dob;
-
+            
+            if(this.state.provider === 'GMC'){
+                post_body.plan_id = 'fisdom_care_health_plus'
+            }
             groupHealthPlanData.post_body = post_body;
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate(this.state.next_screen);
@@ -207,6 +210,7 @@ class GroupHealthPlanDobReligare extends Component {
         let currentDate = new Date().toISOString().slice(0, 10);
         const { eldest_member, default_helper_text } = this.state;
         const isSelf = eldest_member === 'self';
+        
 
         return (
             <Container

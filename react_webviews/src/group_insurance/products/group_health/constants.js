@@ -555,9 +555,10 @@ export const gmc = {
     member_assets: ['icn_couple.svg', 'icn_kids.svg'],
     get_next: { //have as a separate map and not screen-specific property to reduce duplication across all providers and for all screens
         landing_screen: 'insure-type',
+        insure_type_screen: 'plan-dob-religare',
         add_members_screen: 'plan-dob',
         plan_dob_screen: 'plan-details',
-        religare_dob: 'plan-list',
+        religare_dob: 'plan-details',
         plan_list_screen: 'plan-details',
         plan_details_screens: 'plan-select-sum-assured',
         sum_assured_screen: {

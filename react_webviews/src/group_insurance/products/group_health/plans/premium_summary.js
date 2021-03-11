@@ -91,10 +91,10 @@ class GroupHealthPlanPremiumSummary extends Component {
         if(typeof(resultData.error) === 'object')
         {
           quote_id =  resultData.error.quotation_id;
-          error = resultData.error.msg || true;
+          // error = resultData.error.msg || true;
         }
         else{
-          error = resultData.error || resultData.message || true
+          // error = resultData.error || resultData.message || true
         }
       }
       

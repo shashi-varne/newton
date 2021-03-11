@@ -29,13 +29,20 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
     componentWillMount(){
         this.initialize();
     }
+    
+    componentDidMount(){
+        this.onload();   
+    }
 
-    async componentDidMount(){
+    onload = async() =>{
+        this.setErrorData("onload");
+        let error = "";
+        let errorType = "";
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
-
+        
         this.setState({
-            show_loader: true
+            skelton: true
         });
 
         let allowed_post_body_keys = ['adults', 'children', 'city', 'member_details', 'plan_id', 'insurance_type', 'si'];
@@ -49,10 +56,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
-                
-                this.setState({
-                    show_loader: false
-                });
 
                 var optionsList = []
                 for(var x of resultData.premium_details){
@@ -66,35 +69,52 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             this.setState({
                 optionsList: optionsList,
                 premium_details: resultData.premium_details,
+                skelton: false
             })
             
 
             } else {
-                toast(resultData.error || resultData.message || 'Something went wrong');
+                error = resultData.error || resultData.message || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
-        var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY';
-        var payment_frequency = freqSelected;
-        var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
-        var checked = this.state.checked;
-        checked = freqSelected === 'MONTHLY' ? true : false;
-        var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
-
-        this.setState({
-            selectedIndex: selectedIndex,
-            payment_frequency : payment_frequency,
-            buttonDisabled: buttonDisabled,
-            checked
-        }, () => {
-            this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium);
-        })
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+          }
+          
+          if(!error){
+              
+            var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY';
+            var payment_frequency = freqSelected;
+            var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
+            var checked = this.state.checked;
+            checked = freqSelected === 'MONTHLY' ? true : false;
+            var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
+    
+            this.setState({
+                selectedIndex: selectedIndex,
+                payment_frequency : payment_frequency,
+                buttonDisabled: buttonDisabled,
+                checked
+            }, () => {
+                this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium);
+            })
+          }
     }
+    
 
     choosePlan = (index, props) => {
         var buttonDisabled = this.state.buttonDisabled;
@@ -136,6 +156,10 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         if(this.state.buttonDisabled && !this.state.checked){
             return;
         }
+
+        this.setErrorData("submit");
+        let error = "";
+        let errorType = "";
         
         let groupHealthPlanData = this.state.groupHealthPlanData;
         let post_body = groupHealthPlanData.post_body;
@@ -147,7 +171,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         }
         body['payment_frequency'] = this.state.payment_frequency;
         this.setState({
-            show_loader: true
+            skelton: true
         });
         try {
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
@@ -183,23 +207,35 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message || 'Something went wrong');
+                error = resultData.error || resultData.message || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
         }
-
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: "page",
+            });
+        }
     }
 
     render() {
         return (
             <Container
             // events={this.sendEvents("just_set_events")}
-            showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             title="Select payment frequency"
             buttonTitle="CONTINUE"
             withProvider={true}

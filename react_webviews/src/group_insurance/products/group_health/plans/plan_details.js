@@ -174,7 +174,7 @@ class GroupHealthPlanDetails extends Component {
             'header_title': mapper_data.header_title,
             'header_subtitle': mapper_data.header_subtitle || `${this.state.providerConfig.title2 ||
               this.state.providerConfig.title} ${this.state.plan_selected.plan_title}`,
-            'bottom_title': '*For detailed list, please refer policy prospectus',
+            'bottom_title': 'For detailed list, please refer policy prospectus',
             'steps': {
                 'options': mapper_data.steps
             },
@@ -350,7 +350,7 @@ class GroupHealthPlanDetails extends Component {
               </div>
 
               {
-                this.state.plan_data && <div className="sum-assured-info">
+                this.state.plan_data && <div className="sum-assured-info" style={{fontSize: '15px'}}>
                   <div className="sai-left">
                       {this.state.plan_data.SI}
                   </div>
@@ -417,8 +417,8 @@ class GroupHealthPlanDetails extends Component {
               </div>
 
               <div className="accident-plan-read" style={{ padding: 0 }}>
-                <div className="accident-plan-read-text">
-                  *For detailed list of all terms and conditions, please refer
+                <div className="accident-plan-read-text" style={{color: '#767E86'}}>
+                  For detailed list of all terms and conditions, please refer
                   <span
                     style={{ color: getConfig().primary }}
                     onClick={() =>

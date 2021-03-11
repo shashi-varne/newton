@@ -66,7 +66,7 @@ class GroupHealthLanding extends Component {
         {
           icon: "icn_hs_assistance",
           title: "Complete assistance",
-          subtitle: "Our experts will help in purchase and claim of policy",
+          subtitle: "Our experts will help in purchase and claim",
         },
         {
           icon: "icn_hs_payment",
@@ -484,13 +484,13 @@ class GroupHealthLanding extends Component {
                   className="Checkbox"
                 />
                 <div className="accident-plan-terms-text" style={{}}>
-                  I agree to the{" "}
+                  I accept{" "}
                    <span
                     onClick={() =>
                       this.openPdf(this.state.common.tnc, "tnc")
                     }
                     className="accident-plan-terms-bold"
-                    style={{ color: getConfig().primary }}
+                    style={{ color: getConfig().primary, textDecoration: 'underline' }}
                   >
                     Terms and conditions
                   </span> 
