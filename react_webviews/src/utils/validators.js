@@ -287,11 +287,24 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
     val = '';
   }
   const isNegativeVal = val < 0;
+  
+  function postFix(val){
+    return parseFloat(val) < 2
+  }
+
   val = Math.abs(val);
-  if (val >= 10000000) val = (val / 10000000).toFixed(decimalPlaces) + ' Cr';
-  else if (val >= 100000) val = (val / 100000).toFixed(decimalPlaces) + ' L';
-  else if (val >= 1000) val = (val / 1000).toFixed(decimalPlaces) + ' K';
-  else if (val) return inrFormatDecimal(val);
+  if (val >= 10000000){ 
+    val = (val / 10000000).toFixed(decimalPlaces) + ' Crore';
+    val = postFix(val) ? val : val + 's' ;
+  }
+  else if (val >= 100000){
+    val = (val / 100000).toFixed(decimalPlaces) + ' Lakh'; 
+    val = postFix(val) ? val : val + 's' ;
+  } 
+  else if (val >= 1000)
+     val = (val / 1000).toFixed(decimalPlaces) + ' K';
+  else if (val) 
+    return inrFormatDecimal(val);
 
   val = val.toString();
   // remove .00
@@ -308,6 +321,7 @@ export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLea
   }
   return val;
 }
+
 
 export function numDifferentiationInr(val, decimalPlaces, retainLeadingZeroes) {
   return numDifferentiation(val, true, decimalPlaces, retainLeadingZeroes);

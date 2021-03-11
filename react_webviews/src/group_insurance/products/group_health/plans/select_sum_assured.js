@@ -125,7 +125,6 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.sendEvents('next');
         let selectedPlan = this.state.premium_data[this.state.selectedIndex];
         let groupHealthPlanData = this.state.groupHealthPlanData;
-        console.log(selectedPlan)
         groupHealthPlanData.selectedIndexSumAssured = this.state.selectedIndex;
         groupHealthPlanData.sum_assured = selectedPlan.sum_insured;
         groupHealthPlanData.post_body.sum_assured = selectedPlan.sum_insured;

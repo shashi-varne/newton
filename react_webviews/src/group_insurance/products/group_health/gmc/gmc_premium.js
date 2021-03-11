@@ -10,7 +10,6 @@ export default class ReligarePremium extends Component {
   }
 
   render() {
-      console.log(this.props)
     return (
 
       <div className="premium-info">

@@ -427,7 +427,7 @@
    font-size: 14px;
 }
 .accident-plan-read {
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   display: flex;
   align-items: center;
   padding: 0 15px;
@@ -502,15 +502,17 @@
     color: #0A1D32;
     font-size: 16px;
     margin: 0 0 10px 0;
-    font-weight: 400;
+    font-weight: 700;
   }
-
+  
+  
   .report-ins-name {
     color: #767E86;
     font-size: 16px;
     margin-bottom: 15px;
     font-weight: 600;
   }
+  
 
   .report-cover {
     display: flex;
@@ -521,6 +523,9 @@
     color: #767E86;
     font-size: 14px;
     margin: 0 0 8px 0;
+    .sub-text-bold{
+      font-weight: 600;
+    }
   }
   .report-cover-amount span {
     font-weight: 500;
@@ -586,6 +591,24 @@
     padding: 10px 0 10px 0;
     cursor: pointer;
   }
+  #agreeScroll{
+    display: flex;
+    align-items: center;
+    
+    .MuiButtonBase-root{
+      width: 20px;
+      height: 20px;
+      transform: translateX(-18px);
+      margin-left: 20px;
+      svg{
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .accident-plan-terms-text{
+      transform: translateX(-8px);
+    }
+  }
 
   .resume-card {
     padding: 20px;
@@ -603,10 +626,18 @@
       display: flex;
       justify-content: space-between;
     }
-    
+    .insurance-type{
+      color: #767E86;
+      font-size: 12px; 
+      padding-top: 2px;
+    }
     .rc-tile-left {
         display: flex;
         /* align-items: center; */
+        img{
+          height: 50px;
+          width: 50px;
+        }
     }
     
     .rct-title {
@@ -817,6 +848,12 @@
     }
     .check-box-container{
       display: flex;
+      align-items: flex-start;
+      svg{  
+        width: 20px;
+        height: 20px;
+        margin-top: -7px;
+      }
       .Checkbox{
         margin-left: -14px;
       }
@@ -828,12 +865,16 @@
   margin-left: -12px;
   display: flex;
   align-items: flex-start;
+  svg{
+    width: 20px;
+    height: 20px;
+  }
   p{
     font-size: 13px;
     line-height: 21px;
   }
   .Checkbox{
-    margin-top: 0;
+    margin-top: -2px;
   }
 }
 .group-health-plan-select-floater {
@@ -964,6 +1005,7 @@
         font-size: 8px;
         font-weight: 700;
         text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
     .mtr-bottom {
@@ -1092,6 +1134,18 @@
   // padding-bottom: 15px;
   justify-content: space-between;
   cursor: pointer;
+  .recommended-tag{
+    font-size: 8px;
+    display: inline-block;
+    margin-left: 5px;
+    background-color: #5240A7;
+    color: white;
+    padding: 0.5px 4px;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transform: translateY(-2px);
+  }
 }
 
   .insurance_plans_types{

@@ -58,11 +58,11 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 for(var x of resultData.premium_details){
                 var temp = {
                     'value': `${numDifferentiationInr(x.premium)}/${getFrequency[x.payment_frequency]}`,
-                    'total_amount': x.total_amount 
+                    'premium': x.premium,
+                    'frequency':  getFrequency[x.payment_frequency]
                 }
                 optionsList.push(temp)
             }
-            console.log(optionsList)
             this.setState({
                 optionsList: optionsList,
                 premium_details: resultData.premium_details,
@@ -79,37 +79,36 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             });
             toast('Something went wrong');
         }
-        var freqIndex = this.state.groupHealthPlanData.paymentFrequencySelectedIndex || 0;
-        var payment_frequency = freqIndex ? "YEARLY" : "MONTHLY"
-        var buttonDisabled = freqIndex ? false : true;
+        var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY';
+        var payment_frequency = freqSelected;
+        var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
+        var checked = this.state.checked;
+        checked = freqSelected === 'MONTHLY' ? true : false;
+        var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
 
-        console.log({freqIndex, payment_frequency})
         this.setState({
-            selectedIndex: freqIndex,
+            selectedIndex: selectedIndex,
             payment_frequency : payment_frequency,
-            buttonDisabled: buttonDisabled
+            buttonDisabled: buttonDisabled,
+            checked
         }, () => {
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].total_amount);
+            this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium);
         })
     }
 
     choosePlan = (index, props) => {
-        
         var buttonDisabled = this.state.buttonDisabled;
-        buttonDisabled = !index ? true : false;
         var checked = this.state.checked;
-
-        if(index){
-            checked = false    
-        }
+        buttonDisabled = props.frequency === 'month' && !checked ? true : false;
         var payment_frequency = this.state.premium_details[index].payment_frequency;
+
         this.setState({
             selectedIndex: index,
             buttonDisabled: buttonDisabled,
             checked: checked,
             payment_frequency: payment_frequency
         }, () => {
-            this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].total_amount);
+            this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium);
         });
     }
     
@@ -147,7 +146,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             body[key] = post_body[key];
         }
         body['payment_frequency'] = this.state.payment_frequency;
-        console.log(this.state.payment_frequency)
         this.setState({
             show_loader: true
         });
@@ -174,7 +172,9 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             groupHealthPlanData.post_body['payment_frequency'] = premium_details.payment_frequency;
             groupHealthPlanData.post_body['floater_type'] = premium_details.floater_type;
             groupHealthPlanData.post_body['total_amount'] = premium_details.total_amount;
-            groupHealthPlanData.paymentFrequencySelectedIndex = this.state.selectedIndex;
+            
+            groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
+
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate('plan-good-health-dec');
             this.setState({

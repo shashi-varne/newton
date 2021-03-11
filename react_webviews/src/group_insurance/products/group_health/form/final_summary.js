@@ -87,10 +87,13 @@ class GroupHealthPlanFinalSummary extends Component {
         }
          member_base.sort((a, b) => {return this.state.member_base.findIndex(p => p.backend_key === a.relation_key) - this.state.member_base.findIndex(p => p.backend_key === b.relation_key)})
 
-
+        if(this.state.provider === "GMC"){
+            var premium_payment_frequency = lead.quotation_details.payment_frequency === "YEARLY" ? 'Annual' : 'Monthly';
+        }
         this.setState({
             applicantIndex: applicantIndex,
-            member_base: member_base
+            member_base: member_base,
+            premium_payment_frequency: premium_payment_frequency || ''
         });
 
         let pan_amount = this.state.pan_amount;
@@ -895,7 +898,7 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                        You will lose your progress till now. Are you sure you want to restart?
+                    You will lose your progress till now. Are you sure you want to restart?
               </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -903,7 +906,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         YES
               </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
-                        CANCEL
+                        NO
               </Button>
                 </DialogActions>
             </Dialog>
@@ -988,7 +991,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                     </div>}
 
-                   {this.state.quotation.floater_type &&
+                   {this.state.quotation.floater_type && this.state.quotation.insurance_type !== 'self' &&
                     <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
@@ -1046,6 +1049,22 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>
                     </div>
+
+                    {this.state.provider === 'GMC' ?
+                        (<div className="member-tile">
+                            <div className="mt-left">
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                            </div>
+                            <div className="mt-right">
+                                <div className="mtr-top">
+                                    PREMIUM PAYMENT FREQUENCY
+                                </div>
+                                <div className="mtr-bottom">
+                                    {this.state.premium_payment_frequency}
+                                </div>
+                            </div>
+                        </div>): null
+                    }
                 </div>
 
                 <div className="bottom-content">

@@ -6,16 +6,13 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { ghGetMember } from "../../constants";
 import HowToSteps from "../../../common/ui/HowToSteps";
-import Checkbox from "material-ui/Checkbox";
+import Checkbox from "../../../common/ui/Checkbox";
 import {
   inrFormatDecimal,
   numDifferentiationInr,
   storageService,
 } from "utils/validators";
 import Grid from "material-ui/Grid";
-import SVG from "react-inlinesvg";
-import down_arrow from "assets/down_arrow.svg";
-import up_arrow from "assets/up_arrow.svg";
 import scrollIntoView from 'scroll-into-view-if-needed';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser } from "./common_data";
@@ -24,6 +21,7 @@ import { getGhProviderConfig } from "./constants";
 import {  setLocalProviderData } from "./common_data";
 import MoreInfoAccordian from "../../../common/ui/MoreInfoAccordian";
 import GenericImageSlider from "../../../common/ui/GenericImageSlider";
+import {insuranceTypeMapper} from './constants';
 
 const screen_name = "landing_screen";
 
@@ -106,8 +104,12 @@ class GroupHealthLanding extends Component {
         lead = resultData.quotation || {};
     
         lead.member_base = [];
-        if (resultData.quotation.id  !== undefined) { 
+        if (resultData.quotation.id) { 
           lead.member_base = ghGetMember(lead, this.state.providerConfig);
+        }
+        var resume_account_type = insuranceTypeMapper(lead.insurance_type);
+        if(this.state.provider === 'GMC'){
+          var premium_payment_frequency  = lead.payment_frequency === 'YEARLY' ? 'year': 'month';
         }
       } else {
         toast(resultData.error || resultData.message || "Something went wrong");
@@ -116,7 +118,9 @@ class GroupHealthLanding extends Component {
         {
           common: resultData,
           quoteResume: lead,
-          applicationData : resultData.application || {}
+          applicationData : resultData.application || {},
+          resume_account_type: resume_account_type,
+          premium_payment_frequency: premium_payment_frequency || ''
         },
         () => {
           if (openModuleData.sub_module === "click-resume") {
@@ -129,6 +133,7 @@ class GroupHealthLanding extends Component {
         }
       );
     } catch (err) {
+
       this.setState({
         show_loader: false,
       });
@@ -287,7 +292,7 @@ class GroupHealthLanding extends Component {
 
           {this.state.quoteResume && this.state.quoteResume.id && (
             <div className="resume-card" onClick={() => this.handleResume()}>
-              <div className="rc-title">Recent activity</div>
+              <div className="rc-title" style={{fontSize: '16px', fontWeight: '500'}}>Recent activity</div>
 
               <div className="rc-tile" style={{ marginBottom: 0 }}>
                 <div className="rc-tile-left">
@@ -298,16 +303,19 @@ class GroupHealthLanding extends Component {
                     />
                   </div>
                   <div className="rc-tile-premium-data">
-                    <div className="rct-title">
+                    <div className="rct-title" style={{color: '#767E86'}}>
                       {this.state.providerConfig.key === "HDFCERGO" ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quoteResume.plan_id]: this.state.providerConfig.subtitle}
                     </div>
                     <div className="rct-subtitle">
-                      {inrFormatDecimal(this.state.quoteResume.total_premium)}
+                      {inrFormatDecimal(this.state.quoteResume.total_premium)}{this.state.provider === 'GMC' ?<span>/{this.state.premium_payment_frequency}</span>: null}
+                    </div>
+                    <div className="insurance-type">
+                        For: {this.state.resume_account_type}
                     </div>
                   </div>
                 </div>
 
-                <div className="generic-page-button-small">RESUME</div>
+                <div className="generic-page-button-small" style={{height: '40px'}}>RESUME</div>
               </div>
 
               <div className="rc-bottom flex-between">
@@ -393,7 +401,7 @@ class GroupHealthLanding extends Component {
 
           <div
             className="accident-plan-read"
-            style={{ padding: 0, margin: "20px 0 10px 0" }}
+            style={{ padding: 0, margin: "20px 0 16px 0" }}
             onClick={() =>
               this.openInBrowser(this.state.common.details_doc, "read_document")
             }
@@ -415,19 +423,15 @@ class GroupHealthLanding extends Component {
             style={{ padding: 0, margin : '10px 0px 34px 0px' }}
           >
           <div id="agreeScroll">
-           <Grid container spacing={16} alignItems="center">
-              <Grid item xs={1} className="TextCenter">
                 <Checkbox
                   defaultChecked
                   checked={this.state.tncChecked}
                   color="default"
                   value="checked"
                   name="checked"
-                  onChange={this.handleTermsAndConditions}
+                  handleChange={this.handleTermsAndConditions}
                   className="Checkbox"
                 />
-              </Grid>
-              <Grid item xs={11}>
                 <div className="accident-plan-terms-text" style={{}}>
                   I agree to the{" "}
                   <span
@@ -440,8 +444,6 @@ class GroupHealthLanding extends Component {
                     Terms and conditions
                   </span>
                 </div>
-              </Grid>
-            </Grid>
           </div>
           </div>
         </div>

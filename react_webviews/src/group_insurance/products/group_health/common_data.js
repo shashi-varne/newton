@@ -253,8 +253,6 @@ export async function initialize() {
             'name': 'GST',
             'value': inrFormatDecimal(gst)
         })
-        console.log(confirmDialogData)
-
 
         this.setState({
             bottomButtonData: bottomButtonData,

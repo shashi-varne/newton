@@ -1358,3 +1358,14 @@ export function getCoverageType(lead) {
 
     return 'Individual';
 }
+
+export function insuranceTypeMapper(type){
+    var ins_type = {
+        'self': 'Self',
+        'family': 'family',
+        'self_family': 'Self & family',
+        'parents': 'Parents',
+        'parents_in_law': 'Parents in-law'
+    }
+    return ins_type[type]
+}

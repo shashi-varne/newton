@@ -66,6 +66,17 @@ class Report extends Component {
         id: policy.fyntune_ref_id, 
         premium: policy.total_amount
       };
+    } else if (provider === 'care_plus') {
+      obj = {
+        ...obj,
+        product_name: policy.product_title,
+        top_title: 'Health insurance',
+        key: policy.vendor,
+        id: policy.application_id,
+        premium: Math.round(policy.total_amount),
+        provider: policy.vendor,
+        valid_from: formatted_valid_from
+      };
     } else if (provider === 'religare') {
       obj = {
         ...obj,
@@ -315,17 +326,19 @@ class Report extends Component {
       if (this.state.termRedirectionPath) {
         path = this.state.termRedirectionPath;
       }
-    } else if (['HDFCERGO', 'RELIGARE', 'STAR'].indexOf(key) !== -1) {
+    } else if (['HDFCERGO', 'RELIGARE', 'STAR', 'GMC'].indexOf(key) !== -1) {
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;
     } else if(key === 'insurance'){
       path = `/group-insurance/group-health/offline-to-online-report-details/${policy.id}`;
-    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star'].indexOf(key) !== -1) {
+    } else if (['HDFCERGO', 'hdfc_ergo','RELIGARE','religare','STAR','star', 'care_plus'].indexOf(key) !== -1) {
       if(key === 'hdfc_ergo'){
         key = 'HDFCERGO';
       }else if(key === 'star'){
         key = 'STAR';
       }else if(key === 'religare'){
         key = 'RELIGARE';
+      }else if(key === 'care_plus'){
+        key = 'GMC';
       }
       path = `/group-insurance/group-health/${key}/reportdetails/${policy.id}`;    
     }else if(key === 'FYNTUNE'){
@@ -333,20 +346,19 @@ class Report extends Component {
     }else {
       path = '/group-insurance/common/reportdetails/' + policy.id;
     }
-
     this.navigate(path, policy.provider);
   }
 
   renderReportCards(props, index) {
-    let health_providers = ['hdfc_ergo', 'religare', 'star'];
+    let health_providers = ['hdfc_ergo', 'religare', 'star', 'care_plus'];
     return (
       <div className="group-insurance-report card"
         onClick={() => this.redirectCards(props)} key={index} style={{ cursor: 'pointer' }}>
 
         <div className="top-title">{props.top_title}</div>
         <div className={`report-color-state ${(props.cssMapper.color)}`}>
-          <div className="circle"></div>
-          <div className="report-color-state-title">{(props.cssMapper.disc)}</div>
+          <div className="circle" style={{ backgroundColor: props.cssMapper.color}}></div>
+          <div className="report-color-state-title" style={{ color: props.cssMapper.color}}>{(props.cssMapper.disc)}</div>
         </div>
 
         <div className="flex">
@@ -354,19 +366,19 @@ class Report extends Component {
             <img style={{ width: 50 }} src={props.logo} alt="" />
           </div>
 
-          <div style={{ margin: '0 0 0 7px' }}>
+          <div style={{ margin: '0 0 0 20px' }}>
             <div className="report-ins-name">{props.product_name}</div>
             {props.provider !== 'EDELWEISS' && health_providers.indexOf(props.provider) === -1 &&
               <div className="report-cover">
-                <div className="report-cover-amount"><span>Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
+                <div className="report-cover-amount"><span className="sub-text-bold">Cover amount:</span> ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                   {props.product_key === 'HOSPICASH' && <span style={{ fontWeight: 400 }}>/day</span>}
                 </div>
-                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key !=='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' &&
                     ' annually' 
                   }
                 </div>}
-                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span>Premium:</span> {inrFormatDecimal(props.premium)}
+                {props.product_key !== 'CORONA' &&  props.product_key ==='offline_insurance' && <div className="report-cover-amount"><span className="sub-text-bold">Premium:</span> {inrFormatDecimal(props.premium)}
                   {props.key !== 'TERM_INSURANCE' && props.frequency !== 'Single' &&
                   <span style={{textTransform : "lowercase", fontWeight : 'normal'}}> {props.frequency}</span>
                   }
@@ -375,23 +387,23 @@ class Report extends Component {
                   }
                 </div>}
                 {props.product_key === 'CORONA' &&
-                  <div className="report-cover-amount"><span>Cover Peroid:</span> {props.tenure} year</div>
+                  <div className="report-cover-amount"><span className="sub-text-bold">Cover Peroid:</span> {props.tenure} year</div>
                 }
               </div>
             }
             {props.provider === 'EDELWEISS' &&
               <div className="report-cover">
-                <div className="report-cover-amount"><span>Transaction ID:</span> {props.transaction_id}
+                <div className="report-cover-amount"><span className="sub-text-bold">Transaction ID:</span> {props.transaction_id}
                 </div>
               </div>
             }
 
             {health_providers.indexOf(props.provider) !== -1 &&
               <div className="report-cover">
-                <div className="report-cover-amount"><span>Sum insured:</span>
+                <div className="report-cover-amount"><span className="sub-text-bold">Sum insured:</span>
                     ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                 </div>
-                <div className="report-cover-amount"><span>Premium:
+                <div className="report-cover-amount"><span className="sub-text-bold">Premium:
                     </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}
                   </div>
               </div>

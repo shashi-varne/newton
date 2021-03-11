@@ -251,7 +251,6 @@ class GroupHealthPlanPremiumSummary extends Component {
   };
 
     renderProviderPremium() {
-    console.log(this.state.provider)
     const premiumComponentMap = {
       religare: <ReligarePremium account_type={this.state.groupHealthPlanData.account_type || this.state.lead.insurance_type} {...this.state.properties} />,
       hdfcergo: <HDFCPremium {...this.state.properties} />,
