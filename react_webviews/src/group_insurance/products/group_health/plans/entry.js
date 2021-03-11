@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import hdfc_logo from '../../../../assets/ic_hdfc_logo.svg';
 import religare_logo from '../../../../assets/ic_care.svg';
 import star_logo from '../../../../assets/ic_star_health.svg'
-import toast from '../../../../common/ui/Toast'
-import Api from 'utils/api'
+
 
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
@@ -77,38 +76,12 @@ class HealthInsuranceEntry extends Component {
   }
 
  
-    handleClick = async (data) => {
 
-      this.setState({
-        show_loader: true
-      });
-
-      try {
-        const res = await Api.get(`/api/ins_service/api/insurance/health/journey/started?product_name=${data.Product_name}`);
-
-        let resultData = res.pfwresponse
-        if(res.pfwresponse.status_code === 200){
-          data.insurance_type = 'Comprehensive health insurance'
-          this.sendEvents(data)
-          let fullPath = data.key + '/landing';
-          this.navigate('/group-insurance/group-health/' + fullPath);  
-        }else {
-          toast(resultData.error || resultData.message || "Something went wrong");
-        }
-      } catch (err) {
-        console.log(err)
-        this.setState({
-          show_loader: false,
-        });
-        toast("Something went wrong");
-      }
-
-    }
-
+    
   renderPorducts(props, index) {
     if(!props.disabled) {
       return (
-        <div className='insurance_plans' style={{width : '100%'}} key={index} onClick={() => this.handleClick(props)}>
+        <div className='insurance_plans' style={{width : '100%'}} key={index} onClick={() => this.props.parent.handleClickEntry(props)}>
           <div className='insurance_plans_types' style={{width : '100%', padding : '0px'}}>
             <img src={props.icon} alt="" className="insurance_plans_logos_small"/>
             <div style={{ borderBottomWidth: '1px', width: this.state.insuranceProducts.length - 1 !== index ? `calc(100% - 85px)` : '100%',

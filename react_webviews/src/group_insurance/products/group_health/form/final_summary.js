@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Container from '../../../common/Container';
 
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import toast from '../../../../common/ui/Toast';
-import { initialize, updateLead, resetQuote, openMedicalDialog } from '../common_data';
+import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
     numDifferentiationInr, inrFormatDecimal,
@@ -46,6 +46,7 @@ class GroupHealthPlanFinalSummary extends Component {
         this.initialize = initialize.bind(this);
         this.updateLead = updateLead.bind(this);
         this.resetQuote = resetQuote.bind(this);
+        this.openPdf = openPdf.bind(this);
         this.openMedicalDialog = openMedicalDialog.bind(this);
     }
 
@@ -54,7 +55,36 @@ class GroupHealthPlanFinalSummary extends Component {
         nativeCallback({ action: 'take_control_reset' });
         this.initialize();
     }
+    setErrorData = (type) => {
 
+        this.setState({
+          showError: false
+        });
+        if(type) {
+          let mapper = {
+            'onload':  {
+              handleClick1: this.onload,
+              button_text1: 'Retry',
+              title1: ''
+            },
+            'submit': {
+              handleClick1: this.handleClick,
+              button_text1: 'Retry',
+              handleClick2: () => {
+                this.setState({
+                  showError: false
+                })
+              },
+              button_text2: 'Dismiss'
+            }
+          };
+      
+          this.setState({
+            errorData: {...mapper[type], setErrorData : this.setErrorData}
+          })
+        }
+    
+      }
  
     onload = () => {
         let { lead, provider } = this.state;  
@@ -545,9 +575,10 @@ class GroupHealthPlanFinalSummary extends Component {
         let resultData = this.state.pg_data;
         let current_url = window.location.href;
         let nativeRedirectUrl = current_url;
-
+        let basepath = getBasePath();
+        
         let paymentRedirectUrl = encodeURIComponent(
-            window.location.origin + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
+            basepath + `/group-insurance/group-health/${this.state.provider}/payment` + getConfig().searchParams
         );
 
 
@@ -583,12 +614,14 @@ class GroupHealthPlanFinalSummary extends Component {
 
 
     startPayment = async (data={}) => {
-
+        this.setErrorData("submit",true);
+        let error="";
+        let errorType="";
         if (this.state.medical_dialog) {
             this.sendEventsPopup('next');
         }
         this.setState({
-            show_loader: true
+            show_loader: "button"
         })
         this.handleClose();
 
@@ -600,7 +633,6 @@ class GroupHealthPlanFinalSummary extends Component {
         try {
             let res = await Api.get(`api/insurancev2/api/insurance/health/payment/start_payment/${this.state.providerConfig.provider_api}?application_id=${application_id}`);       
            
-
             var resultData = res.pfwresponse.result;
             this.setState({
                 pg_data: resultData
@@ -628,16 +660,27 @@ class GroupHealthPlanFinalSummary extends Component {
                 this.setState({
                     show_loader: false
                 });
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong');
+            error=true;
+            errorType= "crash";
         }
+        if (error) {
+            this.setState({
+              errorData: {
+                ...this.state.errorData,
+                title2: error,
+                type: errorType
+              },
+              showError: true,
+            });
+          }
     }
 
     // checkPPC = async () => {
@@ -936,6 +979,9 @@ class GroupHealthPlanFinalSummary extends Component {
             handleReset={this.showDialog}
             events={this.sendEvents('just_set_events')}
             showLoader={this.state.show_loader}
+            skelton={this.state.skelton}
+            showError={this.state.showError}
+            errorData={this.state.errorData}
             title="Summary"
             fullWidthButton={true}
             onlyButton={true}
@@ -1090,7 +1136,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     </Grid>
                     <Grid item xs={11}>
                         <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openInBrowser(this.state.lead.terms_and_condition,
+                        I agree to the <span onClick={() => this.openPdf(this.state.lead.terms_and_condition,
                         'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
                             Terms and conditions</span></div>
                     </Grid>

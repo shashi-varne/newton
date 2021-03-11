@@ -337,6 +337,84 @@ input.default-otp-input {
   width: 20px;
 }
 
+.input-prefix-character{
+  color: #160D2E;
+  position: absolute;
+  font-size: 15px;
+  top: 26.5px;
+  left: 2px;
+}
+
+.status-bar-container{
+  margin: 0px -20px 0 -20px;
+  padding: 0 20px;  
+
+  .status-bar-heading-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .status-bar-heading{
+      font-size: 16px;
+      color: #160D2E;
+      font-weight: 600;
+    }
+    .status-bar-tag{
+      font-size: 9px;
+      background-color: #4F2DA7;
+      color: white;
+      border-radius: 3px;
+      padding: 2px 6px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+  }
+
+  .status-bar{
+    // @keyframes filler {
+    //   0%{width: 0px}
+    // }
+    color: #767E86;
+    .status-bar-background{
+      position: relative;
+      height: 5px;
+      border-radius: 999px;
+    }
+    .status-bar-progress{
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      border-radius: 5px;
+      // animation: filler 2s 1;
+    }
+    .status-bar-numbers{
+      margin-top: -8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .status-bar-info-container{
+    color: #767E86;
+    .status-bar-info{
+      display: flex;
+      align-items: center;
+      margin-top: -8px;
+      .status-bar-info-bar{
+        width: 12px;
+        height: 4px;
+        border-radius: 100px;
+      }
+      .status-bar-info-text{
+        margin: 0 0 0 10px;
+        span{
+          color: #160D2E;
+        }
+        }
+    }
+  }
+}
+
 .MuiInput-underline.MuiInput-disabled:before {
   background-image: none !important;
   border-bottom: 1px solid #d3dbe4;

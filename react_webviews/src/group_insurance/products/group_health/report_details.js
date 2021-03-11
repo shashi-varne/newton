@@ -1,6 +1,5 @@
  import React, { Component } from 'react';
 import Container from '../../common/Container';
-
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
@@ -8,10 +7,9 @@ import {
     numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
 } from 'utils/validators';
 import Api from 'utils/api';
-import toast from '../../../common/ui/Toast';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
 import ic_hs_main_benefits from 'assets/ic_hs_main_benefits.svg';
-import { initialize } from './common_data';
+import { initialize, openPdf } from './common_data';
 import { ghGetMember, getCssMapperReport } from '../../constants';
 import download from 'assets/download.svg';
 import text_error_icon from 'assets/text_error_icon.svg';
@@ -40,12 +38,14 @@ class GroupHealthReportDetails extends Component {
             policy_data: {
                 cssMapper: {}
             },
-            show_loader: true,
+            skelton:true,
             ic_hs_special_benefits: ic_hs_special_benefits,
-            ic_hs_main_benefits: ic_hs_main_benefits
+            ic_hs_main_benefits: ic_hs_main_benefits,
+            dURL:""
         }
 
         this.initialize = initialize.bind(this);
+        this.openPdf = openPdf.bind(this);
 
     }
 
@@ -56,16 +56,16 @@ class GroupHealthReportDetails extends Component {
             policy_id: policy_id
         })
     }
-
     async componentDidMount() {
-
+        this.onload();
+    }
+    onload = async()=>{
+        this.setErrorData("onload");
+        let error='';
+        let errorType='';
         try {        
             
             const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/check_status?application_id=${this.state.policy_id}`);
-        
-            this.setState({
-                show_loader: false
-            });
             var resultData = res.pfwresponse.result;
             if (res.pfwresponse.status_code === 200) {
                 let lead = {};
@@ -129,24 +129,44 @@ class GroupHealthReportDetails extends Component {
                     payment_details: payment_details,
                     premium_payment_frequency: premium_payment_frequency
                 })
-
+                this.setState({
+                    skelton:false
+                });
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error=resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
-                show_loader: false
+                skelton: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
+        }
+        if (error) {
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: "page",
+            });
         }
     }
 
-    downloadPolicy(url) {
 
-
+    downloadPolicy = (url) => {
+        if(url){
+            this.setState({
+                dURL:url
+            })
+        }else{
+            url=this.state.dURL
+        }
+       
         if (this.state.download_link || url) {
             // this.sendEvents('download');
             nativeCallback({
@@ -166,20 +186,22 @@ class GroupHealthReportDetails extends Component {
     }
 
     getDownloadLink = async () => {
+        this.setErrorData("submit", true, this.downloadPolicy)
+        let error = "";
+        let errorType = "";
         try {
 
             this.setState({
-                show_loader: true
+                show_loader: "page"
             });
 
            const res = await Api.get(`api/insurancev2/api/insurance/health/policy/${this.state.providerConfig.provider_api}/policy_download?application_id=${this.state.policy_id}`);
-            this.setState({
-                show_loader: false
-            });
+        
             var resultData = res.pfwresponse.result;
-            if (res.pfwresponse.status_code === 200) {
-
-
+            this.setState({
+                show_loader:false
+            })
+            if (res.pfwresponse.status_code === 200) {  
                 let download_link = resultData.download_link;
                 this.setState({
                     download_link: download_link
@@ -189,15 +211,26 @@ class GroupHealthReportDetails extends Component {
 
 
             } else {
-                toast(resultData.error || resultData.message
-                    || 'Something went wrong');
+                error = resultData.error || resultData.message
+                    || true;
             }
         } catch (err) {
             console.log(err)
             this.setState({
                 show_loader: false
             });
-            toast('Something went wrong');
+            error = true;
+            errorType = "crash";
+        }
+        if(error){
+            this.setState({
+                errorData: {
+                    ...this.state.errorData,
+                    title2: error,
+                    type: errorType
+                },
+                showError: true,
+            });
         }
     }
 
@@ -378,6 +411,9 @@ class GroupHealthReportDetails extends Component {
             <Container
                 events={this.sendEvents('just_set_events')}
                 showLoader={this.state.show_loader}
+                skelton={this.state.skelton}
+                showError={this.state.showError}
+                errorData={this.state.errorData}
                 title={'Health insurance'}
                 fullWidthButton={true}
                 buttonTitle="OK"
@@ -662,7 +698,7 @@ class GroupHealthReportDetails extends Component {
                              <span
                                style={{ color: getConfig().primary }}
                                onClick={() =>
-                                 this.openInBrowser(
+                                 this.openPdf(
                                    this.state.common_data.policy_prospectus,
                                    "read_document"
                                  )

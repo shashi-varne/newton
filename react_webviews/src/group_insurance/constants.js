@@ -539,6 +539,9 @@ export const back_button_mapper = {
   '/group-insurance/life-insurance/entry': '/group-insurance',
   '/group-insurance/life-insurance/app-update': '/group-insurance/life-insurance/entry',
   '/group-insurance/call-back-details' : '/group-insurance',
+  '/group-insurance/advisory/recommendations' : '/group-insurance',
+  '/group-insurance/advisory/landing': '/group-insurance',
+  '/group-insurance/advisory/basic-details': '/group-insurance/advisory/landing'
 };
 
 export const insuranceMaritalStatus = [
