@@ -25,8 +25,8 @@ const Header = ({ classes, title, count, total, current, width,goBack, edit, typ
       className={classes.menuButton} 
       color="inherit" aria-label="Menu" onClick={goBack}
       >
-        {!disableBack && <NavigateBeforeIcon className={classes.NavigateBeforeIcon} style={{ fontSize: 35 }} />}
-        {(disableBack === true || disableBack === 'summary') && <Close style={{ fontSize: 35}}  className={classes.NavigateBeforeIcon} />}
+        {!disableBack && <NavigateBeforeIcon className={classes.NavigateBeforeIcon} />}
+        {(disableBack === true || disableBack === 'summary') && <Close className={classes.NavigateBeforeIcon} />}
       </IconButton>}
       </div>
     <img src={ require(`assets/finity/moneycontrol_logo.svg`)} className={classes.img} style={{ marginTop: '20px', marginBottom: '20px'}} alt=""/> 

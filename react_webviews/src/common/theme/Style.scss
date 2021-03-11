@@ -1552,9 +1552,10 @@ input#pan {
 .childblockiframe-element-one{
   width: 40%;
   margin-left: 4%;
-  height: auto;
+  height: max-content;
   text-align: left !important;
   position: relative;
+  margin-bottom: 60px;
 }
 
 .imgiframe{
@@ -1572,8 +1573,6 @@ input#pan {
   bottom: 0%;
   overflow: hidden;
   margin-top: auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 @media (max-width: 900px) {
@@ -1601,6 +1600,10 @@ input#pan {
     margin-bottom: 30px !important;
   }
 
+}
+
+#iframeFooter{
+  position: fixed !important;
 }
 
 .Loaderiframe {
