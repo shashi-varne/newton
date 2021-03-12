@@ -104,9 +104,13 @@ class Container extends Component {
 
 
   render() {
+    let props_base = {
+      classOverRide : 'paymentMainContainer'
+    }
+
     return(
       <Fragment>
-      {this.commonRender()}
+      {this.commonRender(props_base)}
       </Fragment>
     )
   }
