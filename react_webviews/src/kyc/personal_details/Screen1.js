@@ -34,10 +34,10 @@ const PersonalDetails1 = (props) => {
   const [kyc, user, isLoading] = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc) && !isEmpty(user)) {
+    if (!isEmpty(kyc)) {
       initialize();
     }
-  }, [kyc, user]);
+  }, [kyc]);
 
   const initialize = async () => {
     let formData = {
