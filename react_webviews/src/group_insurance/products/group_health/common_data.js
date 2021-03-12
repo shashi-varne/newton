@@ -283,12 +283,16 @@ export async function initialize() {
 }
 
 
-export function updateBottomPremium(premium) {
+export function updateBottomPremium(premium, postfix) {
     if(this.state.premium_data){
+        var value = inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '');
+        if(this.state.provider  === 'GMC'){
+            value += postfix;
+        }
         this.setState({
             bottomButtonData: {
                 ...this.state.bottomButtonData,
-                leftSubtitle: inrFormatDecimal(premium || this.state.premium_data[this.state.selectedIndex].premium || '')
+                leftSubtitle: value
             }
         })    
     }

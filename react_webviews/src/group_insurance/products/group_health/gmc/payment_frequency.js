@@ -20,7 +20,8 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             selectedIndex : 0,
             ctaWithProvider: true,
             checked: false,
-            buttonDisabled: true            
+            buttonDisabled: true,
+            screen_name: 'plan_payment_frequency'            
         }
 
         this.initialize = initialize.bind(this);
@@ -108,9 +109,10 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 selectedIndex: selectedIndex,
                 payment_frequency : payment_frequency,
                 buttonDisabled: buttonDisabled,
+                postfix: freqSelected === 'YEARLY' ? 'year': 'month',
                 checked
             }, () => {
-                this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium);
+                this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium, `/${this.state.postfix}`);
             })
           }
     }
@@ -121,14 +123,15 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         var checked = this.state.checked;
         buttonDisabled = props.frequency === 'month' && !checked ? true : false;
         var payment_frequency = this.state.premium_details[index].payment_frequency;
-
+        
         this.setState({
             selectedIndex: index,
             buttonDisabled: buttonDisabled,
             checked: checked,
-            payment_frequency: payment_frequency
+            payment_frequency: payment_frequency,
+            postfix: payment_frequency === 'YEARLY' ? 'year' : 'month'
         }, () => {
-            this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium);
+            this.updateBottomPremium(this.state.optionsList[this.state.selectedIndex].premium, `/${this.state.postfix}`);
         });
     }
     

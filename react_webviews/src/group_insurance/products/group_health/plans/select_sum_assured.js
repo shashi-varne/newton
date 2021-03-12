@@ -101,7 +101,11 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setState({
             selectedIndex: this.state.groupHealthPlanData.selectedIndexSumAssured || 0
         }, () => {
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
+            var postfix = ''
+            if(this.state.provider === 'GMC'){
+                postfix = '/year';
+            }
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
         })
         }
     }
@@ -179,7 +183,11 @@ class GroupHealthPlanSelectSumAssured extends Component {
         this.setState({
             selectedIndex: index
         }, () => {
-            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium);
+            var postfix = ''
+            if(this.state.provider === 'GMC'){
+                postfix = '/year';
+            }
+            this.updateBottomPremium(this.state.premium_data[this.state.selectedIndex].premium, postfix);
         });
     }
 
