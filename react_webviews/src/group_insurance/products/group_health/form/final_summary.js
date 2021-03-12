@@ -37,7 +37,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 member_base: []
             },
             quotation : {  member_base : []},
-            tncChecked: true,
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
@@ -727,12 +726,6 @@ class GroupHealthPlanFinalSummary extends Component {
     // }
 
     handleClick = async () => {
-
-
-        if(!this.state.tncChecked){
-            toast('Please Agree to the Terms and Conditions');
-            return;
-          }
         this.sendEvents('next');
         let {lead}  = this.state;
 
@@ -763,7 +756,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
                 'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
                 'edit_clicked': data.edit_clicked || '',
-                't&c_clicked': this.state.tncChecked ? 'yes' : 'no',
             }
         };
 
@@ -821,7 +813,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {this.state.applicantIndex === -1 ? (this.state.quotation.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.key)})
+                            {props.name}<span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>
@@ -968,12 +960,6 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    handleTermsAndConditions = () =>{
-        this.setState({
-          tncChecked : !this.state.tncChecked
-        });
-      }
-      
     render() {
         return (
             <Container
@@ -1122,28 +1108,6 @@ class GroupHealthPlanFinalSummary extends Component {
                     {this.state.accordianData.map(this.renderAccordian)}
 
 
-                </div>
-
-                <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
-                    <Grid container spacing={16} alignItems="center">
-                    <Grid item xs={1} className="TextCenter">           
-                    <Checkbox
-                  defaultChecked
-                  checked={this.state.tncChecked}
-                  color="default"
-                  value="checked"
-                  name="checked"
-                  onChange={this.handleTermsAndConditions}
-                  className="Checkbox"
-                />
-                    </Grid>
-                    <Grid item xs={11}>
-                        <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openPdf(this.state.lead.terms_and_condition,
-                        'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
-                            Terms and conditions</span></div>
-                    </Grid>
-                    </Grid>
                 </div>
                   <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
             </div>

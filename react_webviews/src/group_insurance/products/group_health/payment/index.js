@@ -154,18 +154,26 @@ class GroupHealthPayment extends Component {
           let policy_data = resultData.policy || {};
           let payment_details = resultData.payment_details || {};
           let application_details = resultData.application_details;
-
-          if(this.state.provider === 'GMC'){
-            var postfix = lead.payment_frequency === 'YEARLY' ? ' for a year' : ' for 1st month'            
-          }
           
+          var plan_name = '';
+          if(this.state.provider === 'GMC'){
+            var postfix = lead.payment_frequency === 'YEARLY' ? ' for a year' : ' for 1st month'   
+            plan_name = 'fisdom Care Health+'         
+          }else if(this.state.provider === 'RELIGARE'){
+            plan_name = 'Care'
+          }else if(this.state.provider === 'HDFCERGO'){
+            plan_name = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
+          }else if(this.state.provider === 'STAR'){
+            plan_name = 'Star health';
+          }
           this.setState({
             policy_data: policy_data,
             lead: lead,
             common: resultData.common,
             payment_details : payment_details,
             application_details: application_details,
-            postfix: postfix
+            postfix: postfix,
+            plan_name
           })
         } else {
           error=resultData.error || resultData.message
@@ -337,7 +345,7 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                  Your payment for fisdom care Health+ has failed. <span style={{fontWeight: '700'}}>Please try again.</span>
+                  Your payment for {this.state.plan_name} has failed. <span style={{fontWeight: '700'}}>Please try again.</span>
                             </p>
                   <p className="top-content">
                   In case, you see a debit, rest assured, it will be credited back to your account within 5-7 working days. 

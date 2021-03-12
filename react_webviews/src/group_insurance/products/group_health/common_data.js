@@ -222,6 +222,7 @@ export async function initialize() {
         }
 
         let confirmDialogData = {
+            conten1_title: 'Premium details',
             buttonData: {
                 ...bottomButtonData,
                 leftArrow: 'down'

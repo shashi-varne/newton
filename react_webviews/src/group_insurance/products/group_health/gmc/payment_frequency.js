@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import { initialize, updateBottomPremium } from '../common_data';
+import { nativeCallback } from 'utils/native_callback';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
@@ -160,6 +160,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             return;
         }
 
+        this.sendEvents('next');
         this.setErrorData("submit");
         let error = "";
         let errorType = "";
@@ -232,11 +233,31 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             });
         }
     }
+    sendEvents(user_action) {
+
+        let eventObj  = {}
+            eventObj = {
+                "event_name": 'health_insurance',
+                "properties": {
+                    "user_action": user_action,
+                    "product": 'care_plus',
+                    "flow": this.state.insured_account_type, 
+                    "screen_name": 'select payment frequency',
+                    "frequency": this.state.payment_frequency? this.state.payment_frequency.toLowerCase() : ''
+                }
+            };
+            
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
+    }
 
     render() {
         return (
             <Container
-            // events={this.sendEvents("just_set_events")}
+            events={this.sendEvents("just_set_events")}
             skelton={this.state.skelton}
             showError={this.state.showError}
             errorData={this.state.errorData}

@@ -260,14 +260,16 @@ class GroupHealthPlanAddressDetails extends Component {
         }
 
         let canSubmitForm = true;
+
         let address_field_max_length = this.state.providerConfig.address_field_max_length;
         
-        if(!same_address){
+        if((this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') && same_address === '' ){
             this.setState({
-                same_address_error: 'select a value'
+                same_address_error: 'Choose an option'
             })
             canSubmitForm = false
         }
+
 
         let address_key_check = ['addr_line1', 'addr_line2', 'p_addr_line1', 'p_addr_line2'];
         for(let i = 0; i < address_key_check.length; i++){
@@ -328,7 +330,6 @@ class GroupHealthPlanAddressDetails extends Component {
         this.setState({
             form_data: form_data
         });
-
         if (canSubmitForm) {
             let body = {};
             if (provider === 'HDFCERGO') {
@@ -725,7 +726,7 @@ class GroupHealthPlanAddressDetails extends Component {
             >
                 <div className="insurance-address-container">
                 <div className="common-top-page-subtitle">
-                    {this.state.provider==='RELIGARE'?' Policy will be delivered to the current address':'Policy will be delivered to this address'}
+                    {this.state.provider==='RELIGARE' || this.state.provider === 'GMC' ?' Policy will be delivered to the current address':'Policy will be delivered to this address'}
                 </div>
                 {this.state.provider==='RELIGARE'&&
                 <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginTop: '37px', marginBottom: '20px' }}>

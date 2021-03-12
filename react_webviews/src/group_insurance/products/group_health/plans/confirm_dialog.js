@@ -85,6 +85,7 @@ class ConfirmDialogClass extends Component {
 
                         <div className="hr"></div>
 
+                        <p style={{fontWeight: 'bold'}}>{confirmDialogData.conten1_title}</p>
                         <div className="content">
                             {confirmDialogData.content1.map(this.renderContent1)}
                         </div>

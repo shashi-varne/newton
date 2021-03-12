@@ -52,7 +52,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           alt=""
           width={20}
           src={restart}
-          style={{marginLeft: 'auto'}}
+          style={{marginLeft: 'auto', width: '14px', height: '14px'}}
         />
       }
       {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
