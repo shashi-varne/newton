@@ -5,7 +5,7 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal, formatAMPM ,storageService, numDifferentiationInr, getDateBreakupWithTime } from 'utils/validators';
+import { inrFormatDecimal ,storageService, numDifferentiationInr } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';

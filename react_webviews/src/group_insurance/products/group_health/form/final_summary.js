@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 
 import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
@@ -21,9 +20,7 @@ import BottomSheet from '../../../../common/ui/BottomSheet';
 import { childeNameMapper } from '../../../constants';
 import {getCoverageType} from '../constants';
 
-import Checkbox from 'material-ui/Checkbox';
 // import Checkbox from '../../../../common/ui/Checkbox';
-import Grid from 'material-ui/Grid';
 
 class GroupHealthPlanFinalSummary extends Component {
 
@@ -873,7 +870,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {this.state.provider === 'RELIGARE' || this.state.provider === 'GMC' && <React.Fragment>
+                        {(this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') && <React.Fragment>
                             {props.data[1].map(this.renderAccordiansubData)}
                             <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                                 EDIT

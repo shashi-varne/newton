@@ -10,7 +10,6 @@ import {initialize, openPdf} from '../common_data';
 import ReactHtmlParser from 'react-html-parser';
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import {formatAmount} from '../../../../utils/validators';
-import PlanSuccess from '../../../ui_components/general_insurance/plan_success';
 
 class GroupHealthPlanDetails extends Component {
 
