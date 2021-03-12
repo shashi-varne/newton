@@ -607,10 +607,10 @@ export function openMedicalDialog(type) {
     let data = {
         'header_title': 'Free medical check-up',
         'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
-        'icon': 'ic_medical_checkup2',
+        'icon': `${getConfig().productName}/ic_medical_checkup2.svg`,
         'dialog_name': 'medical_dialog',
-        'cta_title': 'CONTINUE TO PAYMENT',
-        'handleClick': this.redirectToPayment
+        'button_text1': 'CONTINUE TO PAYMENT',
+        'handleClick1': this.redirectToPayment
     };
     let provider = this.state.provider;
 

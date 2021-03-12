@@ -51,6 +51,8 @@ class AppUpdateInfo extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="UPDATE NOW"
+        fullWidthButton={true}
+        onlyButton={true}
       >
       <div style={{textAlign: 'center'}}>
        <div>

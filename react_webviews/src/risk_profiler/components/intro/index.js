@@ -42,7 +42,7 @@ class Intro extends Component {
     // }
     this.sendEvents('next');
 
-    this.navigate('question1');
+    this.navigate('/risk/question1');
   }
 
   openDialogConfirmModal = () => {
@@ -110,7 +110,7 @@ class Intro extends Component {
     })
 
 
-    this.navigate('question1');
+    this.navigate('/risk/question1');
     return;
   }
 
