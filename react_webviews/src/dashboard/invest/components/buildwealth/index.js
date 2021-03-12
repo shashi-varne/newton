@@ -46,7 +46,7 @@ const Landing = (props) => {
   const navigate = navigateFunc.bind(props);
   const fetchRecommendedFunds = async () => {
     const params = {
-      type: 'buildwealth',
+      type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',
     };
     setLoader(true);
     try {
