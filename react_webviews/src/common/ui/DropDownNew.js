@@ -195,7 +195,7 @@ class SelectDropDown extends React.Component {
 
             if(!!options.length){
                 return (
-                    <FormControl className="Dropdown label" disabled={this.props.disabled} style={{marginBottom: '25px'}}>
+                    <FormControl className="Dropdown label" disabled={this.props.disabled} style={{margin: '2px 0px'}}>
                         {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
                         {/* <div className={this.props.className}> */}
                         <span className="label2">{this.props.label || 'label'}</span>

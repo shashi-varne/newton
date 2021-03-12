@@ -101,35 +101,59 @@ const pushEvent = (eventObj) => {
 };
 
 const UpiRows = (props) => {
+  let gpay, phonepe, paytm = false;
   let rows = [];
   let i = 0;
   let upis_keys = Object.keys(upi_apps);
-  for (let key in upi_apps) {
-    if (i === 3) {
-      break;
-    } else {
-      if (upis_keys.length > 3) {
-        if (upis_keys.includes("GPay")) {
-          i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps["GPay"].package_name)}><img alt="payment" src={getImage(upi_apps["GPay"].package_name)} key={i} /><div className="bottomtext">GPay</div></div>)
-        }
-        if (upis_keys.includes("PhonePe")) {
-          i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps["PhonePe"].package_name)}><img alt="payment" src={getImage(upi_apps["PhonePe"].package_name)} key={i} /><div className="bottomtext">PhonePe</div></div>)
-        }
-        if (upis_keys.includes("Paytm")) {
-          i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps["Paytm"].package_name)}><img alt="payment" src={getImage(upi_apps["Paytm"].package_name)} key={i} /><div className="bottomtext">Paytm</div></div>)
-        }
+  let upi_packages = Object.values(upi_apps);
+  upi_packages.findIndex(function (item) {
+    if (item.package_name === "com.google.android.apps.nbu.paisa.user") {
+      gpay = true;
+    }
+    if (item.package_name === "com.phonepe.app") {
+      phonepe = true;
+    }
+    if (item.package_name === "net.one97.paytm") {
+      paytm = true;
+    }
 
-        if (!upis_keys.includes("GPay") && !upis_keys.includes("PhonePe") && !upis_keys.includes("Paytm")) {
-          i++;
-          rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img alt="payment" src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
-        }
-
+    return false;
+  })
+  if (gpay && phonepe && paytm) {
+    rows.push(<div onClick={() => props.goToPayment('com.google.android.apps.nbu.paisa.user')} key={i}><img alt="payment" src={getImage('com.google.android.apps.nbu.paisa.user')} /><div className="bottomtext">GPay</div></div>)
+    rows.push(<div onClick={() => props.goToPayment('com.phonepe.app')} key={i}><img alt="payment" src={getImage('com.phonepe.app')} /><div className="bottomtext">PhonePe</div></div>)
+    rows.push(<div onClick={() => props.goToPayment('net.one97.paytm')} key={i}><img alt="payment" src={getImage('net.one97.paytm')} /><div className="bottomtext">Paytm</div></div>)
+  } else {
+    for (let key in upi_apps) {
+      if (i === 3) {
+        break;
       } else {
-        i++;
-        rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)}><img alt="payment" src={getImage(upi_apps[key].package_name)} key={i} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+        if (upis_keys.length > 3 & i < 3) {
+          if (gpay) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment('com.google.android.apps.nbu.paisa.user')} key={i}><img alt="payment" src={getImage('com.google.android.apps.nbu.paisa.user')} /><div className="bottomtext">GPay</div></div>)
+            gpay = false;
+          }
+          if (phonepe) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment('com.phonepe.app')} key={i}><img alt="payment" src={getImage('com.phonepe.app')} /><div className="bottomtext">PhonePe</div></div>)
+            phonepe = false;
+          }
+          if (paytm) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment('net.one97.paytm')} key={i}><img alt="payment" src={getImage('net.one97.paytm')} /><div className="bottomtext">Paytm</div></div>)
+            paytm = false;
+          }
+
+          if (i < 3 && (!gpay || !phonepe || !paytm)) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+          }
+
+        } else {
+          i++;
+          rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+        }
       }
     }
   }

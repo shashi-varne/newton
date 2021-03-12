@@ -996,10 +996,12 @@ body[data-device="mobile"] {
 }
 
 .react-dropdown-select-dropdown{
-  // height : 246px;
-  height: auto;
   display: flex;
   align-items: flex-start;
+}
+
+.css-1yr7udo-DropDown{
+  max-height: none !important;
 }
 
 .react-dropdown-select-item{
