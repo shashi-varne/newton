@@ -49,6 +49,9 @@ class Category extends Component {
       show_loader: false,
       skelton: "g",
       value: "",
+      faqList: [],
+      sortedList: "",
+      showCategory: true,
     };
     this.initialize = initialize.bind(this);
   }
@@ -61,48 +64,125 @@ class Category extends Component {
 
   handleChange = (event) => {
     let value = event.target ? event.target.value : event;
+    this.setState(
+      {
+        value: value,
+      },
+      () => {
+        this.Searching();
+      }
+    );
+
+    if (
+      value.split(" ").length === 2 &&
+      value.split("").includes(" ") &&
+      value.split(" ")[1] === ""
+    ) {
+      this.handleSearch();
+    }
+  };
+
+  handleSearch = async () => {
+    let value = this.state.value.split(" ")[0];
+    const result = await this.SearchFaq(value);
+
+    this.setState(
+      {
+        faqList: result.faqs,
+      },
+      () => {
+        this.Searching();
+      }
+    );
+  };
+
+  Searching = () => {
+    let { value, faqList } = this.state;
+
+    let len = value.length;
+    let sortedList = faqList.filter(
+      (item) => value.toLowerCase() === item.title.slice(0, len).toLowerCase()
+    );
+
+    console.log(sortedList);
+
     this.setState({
-      value: value,
+      sortedList: sortedList,
     });
   };
 
+  headerWithquery = () => {
+    return (
+      <div className="help-header">
+        <div className="title">How can we Help?</div>
+        <div className="my-query">My queries</div>
+      </div>
+    );
+  };
+
   render() {
+    let { sortedList, value } = this.state;
     return (
       <Container
         // skelton={this.state.skelton}
-        title="How can we Help?"
+        // title="How can we Help?"
+        title={this.headerWithquery()}
+        styleHeader={{
+          width: '100%'
+        }}
         noFooter
       >
         <div className="help-Category">
-          <div className="search"></div>
           <Search value={this.state.value} onChange={this.handleChange} />
-          <div className="title">Category</div>
-          {catgories.map((el, index) => (
-            <div className="category" key={index}>
-              <Imgc
-                src={require(`assets/${this.state.productName}/${el.icon}.svg`)}
-                className="img"
-                alt=""
-              />
-              <div
-                className="name"
-                style={{ border: `${index === catgories.length - 1 && "0px"}` }}
-              >
-                {el.name}
+          {sortedList &&
+            value.length !== 0 &&
+            sortedList.map((item, index) => (
+              <div className="search-inputs" key={index}>
+                <div className="faq">
+                  <span style={{ color: "var(--primary)" }}>
+                    {item.title.slice(0, value.length)}
+                  </span>
+                  {item.title.slice(value.length)}
+                </div>
+                <div className="tag">Mutual funds</div>
               </div>
+            ))}
+          {value.length !== 0 && sortedList.length === 0 && (
+            <div className="no-result">Sorry! No results.</div>
+          )}
+          {value.length === 0 && (
+            <div className="fade-in">
+              <div className="title">Category</div>
+              {catgories.map((el, index) => (
+                <div className="category" key={index}>
+                  <Imgc
+                    src={require(`assets/${this.state.productName}/${el.icon}.svg`)}
+                    className="img"
+                    alt=""
+                  />
+                  <div
+                    className="name"
+                    style={{
+                      border: `${index === catgories.length - 1 && "0px"}`,
+                    }}
+                  >
+                    {el.name}
+                  </div>
+                </div>
+              ))}
+              <div className="title">Need more help?</div>
+              <div className="generic-hr"></div>
+              <div className="category contact-category">
+                <Imgc
+                  src={require(`assets/${this.state.productName}/icn_contact.svg`)}
+                  className="contact-img"
+                  alt=""
+                />
+                <div className="contact">Contact us</div>
+              </div>
+              <div className="generic-hr"></div>
             </div>
-          ))}
-          <div className="title">Need more help?</div>
-          <div className="generic-hr"></div>
-          <div className="category contact-category">
-            <Imgc
-              src={require(`assets/${this.state.productName}/icn_contact.svg`)}
-              className="contact-img"
-              alt=""
-            />
-            <div className="contact">Contact us</div>
-          </div>
-          <div className="generic-hr"></div>
+          )}
         </div>
       </Container>
     );
