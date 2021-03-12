@@ -10,18 +10,20 @@ import { getConfig } from 'utils/functions';
 import DotDotLoaderNew from './DotDotLoaderNew';
 import { disableBodyTouch } from 'utils/validators';
 
+const typeToClass = {
+  'outlined' : 'generic-button-outlined',
+  'textonly': 'generic-button-textonly'
+}
 
 class CustomButton extends Component {
   render() {
     let props = this.props;
     let showLoader = props.showLoader;
     showLoader = showLoader === 'button' ? true : false;
-    // showLoader= true;
 
     
     if(!showLoader || !props.showError){
       disableBodyTouch(true); //touch enabled
-      // disableBodyOverflow(true);
     }
 
     if(props.showError){
@@ -94,15 +96,16 @@ class CustomButton extends Component {
       );
     } else {
       return (
-        <div>
+        // <div>
           <Button
             fullWidth={(props.reset || props.type === 'summary') ? true : false}
             variant="raised"
             size="large"
             color="secondary"
-            style={{backgroundColor: getConfig().secondary, color: 'white'}}
-            className={buttonClass}
+            style={props.style}
+            className={`${buttonClass} ${typeToClass[props.type || ''] || ''}`}
             classes={classes}
+            onClick={props.onClick}
             disabled={props.disable}
           >
             {!showLoader && props.buttonTitle}
@@ -114,7 +117,7 @@ class CustomButton extends Component {
               <img alt="" src={arrow} width={20} className="FooterButtonArrow" />
             }
           </Button>
-        </div>
+        // </div>
       );
     }
     
@@ -129,7 +132,7 @@ const styles = {
     fontSize: '16px !important',
     boxShadow: 'none',
     // boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149)',
-    width: !getConfig().isMobileDevice ? 'auto' : '100% !important'
+    width: !getConfig().isMobileDevice ? 'auto' :  '100%'
   },
   label: {},
 }

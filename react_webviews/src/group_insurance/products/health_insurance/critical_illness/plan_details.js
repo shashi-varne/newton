@@ -11,6 +11,7 @@ import ic_hospicash_b2_myway from 'assets/ic_hospicash_b2_myway.svg';
 
 import ic_ci_b3_fisdom from 'assets/ic_ci_b3_fisdom.svg';
 import ic_ci_b3_myway from 'assets/ic_ci_b3_myway.svg';
+import { Fragment } from 'react';
 
 
 class HealthCriticalIllness extends Component {
@@ -134,11 +135,11 @@ class HealthCriticalIllness extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PlanDetails
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 
