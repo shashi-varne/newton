@@ -232,12 +232,15 @@ class GroupHealthPlanFinalSummary extends Component {
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
+            if(member.key === 'self' && lead.quotation_details.insurance_type === 'self_family'){
+                obj.title = 'Self details';
+            }
             if (member.key === 'applicant') {
                 obj.title = 'Applicant details';
             }
 
             if (lead.quotation_details.insurance_type === 'self') {
-                obj.title = 'Personal details';
+                obj.title = 'Self details';
             }
 
             let info = {};

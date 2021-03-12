@@ -612,7 +612,7 @@ class GroupHealthPlanAddressDetails extends Component {
                     {this.state.same_address === 'NO' &&
 
                         <div>
-                            <div style={{ color: '#64778D', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
+                            <div style={{ color: '#000000', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
                                 Permanent Address
                             </div>
 
@@ -732,7 +732,9 @@ class GroupHealthPlanAddressDetails extends Component {
                     Current Address
                 </div>}
                 <FormControl fullWidth>
-
+                <div style={{ color: '#000000', fontSize: 13, fontWeight: 300, marginBottom: '20px' }}>
+                                Current Address
+                </div>
                     <div className="InputField">
                         <Input
                             type="text"
