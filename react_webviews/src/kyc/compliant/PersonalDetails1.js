@@ -58,11 +58,19 @@ const PersonalDetails1 = (props) => {
     if (isNri) {
       selectedIndexResidentialStatus = 1;
     }
+    let mobile_number =
+      userkycDetails.identification.meta_data.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
+    }
     let formData = {
       pan: userkycDetails.pan.meta_data.pan_number,
       dob: userkycDetails.pan.meta_data.dob,
       email: userkycDetails.address.meta_data.email,
-      mobile: userkycDetails.identification.meta_data.mobile_number,
+      mobile: mobile_number,
+      country_code: country_code,
       occupation: userkycDetails.identification.meta_data.occupation,
       income: userkycDetails.identification.meta_data.gross_annual_income,
       residential_status:
@@ -90,11 +98,16 @@ const PersonalDetails1 = (props) => {
       setFormData(data);
       return;
     }
+    let mobile_number = form_data.mobile;
+    if (form_data.country_code) {
+      mobile_number = form_data.country_code + "|" + mobile_number;
+    }
     let userkycDetails = { ...userkyc };
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.address.meta_data.email = form_data.email;
-    userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
+    userkycDetails.identification.meta_data.mobile_number = mobile_number;
     userkycDetails.identification.meta_data.gender = form_data.gender;
+    userkycDetails.address.meta_data.is_nri = is_nri;
     let tin_number = form_data.tin_number;
     let item = {
       kyc: {

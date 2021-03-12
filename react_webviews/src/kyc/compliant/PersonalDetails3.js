@@ -134,7 +134,7 @@ const PersonalDetails3 = (props) => {
     >
       <div className="kyc-complaint-personal-details">
         <div className="kyc-main-title">
-          {title} <span>3</span>
+          {title} <span>3/3</span>
         </div>
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
