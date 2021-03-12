@@ -252,7 +252,7 @@ const Journey = (props) => {
     return journeyData
   }
 
-  const initJourneyData = (isCompliant, userKyc, show_aadhaar) => {
+  const initJourneyData = (isCompliant, userKyc, show_aadhaar, user) => {
     let journeyData = getJourneyData(isCompliant, userKyc, show_aadhaar)
     for (let i = 0; i < journeyData.length; i++) {
       let status = 'completed'
@@ -365,6 +365,72 @@ const Journey = (props) => {
       }
     }
     setJourneyData([...journeyData])
+    if (
+      (userKyc?.nomination?.meta_data_status !== 'approved' &&
+        userKyc?.nomination?.meta_data_status !== 'submitted') ||
+      (!userKyc.nomination.nominee_optional && !npsDetailsReq)
+    ) {
+      setIsNomineePopupReq(true)
+      setKycJourneyStatus(getKycAppStatus(userKyc).status)
+      setKycStatus(userKyc.kyc_status)
+      setIsCompliant(userKyc.kyc_status === 'compliant')
+      if (
+        isCompliant &&
+        show_aadhaar &&
+        currentUser.kyc_registration_v2 !== 'submitted' &&
+        currentUser.kyc_registration_v2 !== 'complete' &&
+        props?.location?.state.fromState !== '/kyc/journey'
+      ) {
+        if (
+          !storageService().get('show_aadhaar') &&
+          !userKyc.address.meta_data.is_nri
+        ) {
+          setShowAadhaar(true)
+          storageService().set('show_aadhaar', true)
+        }
+      }
+      if (
+        isCompliant &&
+        currentUser.active_investment &&
+        currentUser.kyc_registration_v2 !== 'submitted'
+      ) {
+        setTopTitle('Investment pending')
+        setInvestmentPending(true)
+      } else if (isCompliant) {
+        setTopTitle('What next?')
+      } else if (isCompliant && show_aadhaar) {
+        setTopTitle('Steps to follow:')
+      } else {
+        setTopTitle('KYC journey')
+      }
+      setCustomerVerified(
+        kycJourneyStatus === 'ground_premium' ? false : true
+      )
+      if (customer_verified) {
+        setCtaText('UNLOCK_NOW')
+      }
+    }
+    if (
+      urlParams?.show_aadhaar === 'true' ||
+      urlParams?.kycJourneyStatus === 'ground_aadhaar' || kycJourneyStatus === 'ground_aadhaar' || true) {
+      setShowAadhaar(true)
+    }
+    if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
+      navigate('/nps/identity')
+      return
+    } else if (
+      currentUser.kyc_registration_v2 == 'submitted' &&
+      userKyc.sign_status === 'signed'
+    ) {
+      navigate('/kyc/report')
+      return
+    } else if (
+      currentUser.kyc_registration_v2 == 'complete' &&
+      userKyc.sign_status === 'signed'
+    ) {
+      navigate('/invest')
+      return
+    }
   }
 
   let ctaText = ''
@@ -518,80 +584,17 @@ const Journey = (props) => {
   useEffect(() => {
     if (isEmpty(kyc) || isEmpty(currentUser)) {
       initialize()
+    } else {
+      const isCompliant = kyc?.kyc_status === 'compliant'
+      initJourneyData(isCompliant, kyc, show_aadhaar, currentUser)
     }
   }, [])
 
-  useEffect(() => {
-    if (!isEmpty(kyc) && !isEmpty(currentUser)) {
-      initJourneyData(isCompliant, kyc, show_aadhaar)
-      if (
-        (kyc?.nomination?.meta_data_status !== 'approved' &&
-          kyc?.nomination?.meta_data_status !== 'submitted') ||
-        (!kyc.nomination.nominee_optional && !npsDetailsReq)
-      ) {
-        setIsNomineePopupReq(true)
-        setKycJourneyStatus(getKycAppStatus(kyc).status)
-        setKycStatus(kyc.kyc_status)
-        setIsCompliant(kyc.kyc_status === 'compliant')
-        if (
-          isCompliant &&
-          show_aadhaar &&
-          currentUser.kyc_registration_v2 !== 'submitted' &&
-          currentUser.kyc_registration_v2 !== 'complete' &&
-          props?.location?.state.fromState !== '/kyc/journey'
-        ) {
-          if (
-            !storageService().get('show_aadhaar') &&
-            !kyc.address.meta_data.is_nri
-          ) {
-            setShowAadhaar(true)
-            storageService().set('show_aadhaar', true)
-          }
-        }
-        if (
-          isCompliant &&
-          currentUser.active_investment &&
-          currentUser.kyc_registration_v2 !== 'submitted'
-        ) {
-          setTopTitle('Investment pending')
-          setInvestmentPending(true)
-        } else if (isCompliant) {
-          setTopTitle('What next?')
-        } else if (isCompliant && show_aadhaar) {
-          setTopTitle('Steps to follow:')
-        } else {
-          setTopTitle('KYC journey')
-        }
-        setCustomerVerified(
-          kycJourneyStatus === 'ground_premium' ? false : true
-        )
-        if (customer_verified) {
-          setCtaText('UNLOCK_NOW')
-        }
-      }
-      if (
-        urlParams?.show_aadhaar === 'true' ||
-        urlParams?.kycJourneyStatus === 'ground_aadhaar' || kycJourneyStatus === 'ground_aadhaar' || true) {
-        setShowAadhaar(true)
-      }
-      if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
-        navigate('/nps/identity')
-        return
-      } else if (
-        currentUser.kyc_registration_v2 == 'submitted' &&
-        kyc.sign_status === 'signed'
-      ) {
-        navigate('/kyc/report')
-        return
-      } else if (
-        currentUser.kyc_registration_v2 == 'complete' &&
-        kyc.sign_status === 'signed'
-      ) {
-        navigate('/invest')
-        return
-      }
-    }
-  }, [kyc, currentUser])
+  // useEffect(() => {
+  //   if (!isEmpty(kyc) && !isEmpty(currentUser)) {
+  //     const isCompliant = kyc?.kyc_status === 'compliant'
+  //   }
+  // }, [kyc, currentUser])
 
   const initialize = async () => {
     try {
@@ -601,6 +604,8 @@ const Journey = (props) => {
       const user = storageService().getObject(storageConstants.USER)
       setKyc(() => ({ ...userKyc }))
       setCurrentUser(() => ({ ...user }))
+      const isCompliant = userKyc?.kyc_status === 'compliant'
+      initJourneyData(isCompliant, userKyc, show_aadhaar, user)
     } catch (err) {
       toast(err.message)
       console.error(err)
@@ -621,24 +626,101 @@ const Journey = (props) => {
       storageService().get('is_secure')
   )
 
-  const redirect = () => {
-    /**
-     * @TODO
-     * native callback redirection
-     */
-  }
+  // const redirect = () => {
+  //   /**
+  //    * @TODO
+  //    * native callback redirection
+  //    */
+  // }
 
   const cancel = () => {
     setOpen(false)
     navigate('/kyc/journey', { show_aadhar: false })
   }
 
+
+// $scope.proceed = function () {
+//     var outerScope = $scope;
+//     $mdDialog.show({
+//       controller: function ($scope, $state, $rootScope, storageService, $location) {
+//         $scope.redirectUrl = encodeURIComponent(
+//           $location.protocol() + "://" + $location.host() + ":" + $location.port() +
+//           "/#!/digilocker/callback?is_secure=" + storageService.get("is_secure")
+//         );
+//         $scope.icon = $rootScope.partner.assets.ic_aadhaar_handy;
+//         $scope.cancel = function () {
+//           $mdDialog.cancel();
+//           $state.go("kyc-journey", { show_aadhaar: false });
+//         };
+//         $scope.redirect = function () {
+//           outerScope.sendCleverTapEvents('procced', 'aadhar link mobile popup');
+//           if (!callbackWeb.isWeb() && storageService.get('native')) {
+//             var data = {
+//               url: $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/#!/kyc/journey?show_aadhaar=true&is_secure=' + storageService.get("is_secure"),
+//               message: 'You are almost there, do you really want to go back?'
+//             }
+//             if (isMobile.apple.device) {
+//               callbackWeb.show_top_bar({ title: 'Aadhaar KYC' })
+//             }
+//             callbackWeb.take_back_button_control(data);
+//           } else if (!callbackWeb.isWeb()) {
+//             var redirectData = {
+//               show_toolbar: false,
+//               icon: 'back',
+//               dialog: {
+//                 message: 'You are almost there, do you really want to go back?',
+//                 action: [{
+//                   action_name: 'positive',
+//                   action_text: 'Yes',
+//                   action_type: 'redirect',
+//                   redirect_url: encodeURIComponent($location.protocol() + '://' + $location.host() + ':' + $location.port() + '/#!/kyc/journey?show_aadhaar=true&is_secure=' + storageService.get("is_secure"))
+//                 }, {
+//                   action_name: 'negative',
+//                   action_text: 'No',
+//                   action_type: 'cancel',
+//                   redirect_url: ''
+//                 }]
+//               },
+//               data: {
+//                 type: 'server'
+//               }
+//             };
+//             if (isMobile.apple.device) {
+//               redirectData.show_toolbar = true;
+//             }
+
+//             callbackWeb.third_party_redirect(redirectData);
+//           }
+//           window.location.href = helpers.updateQueryStringParameter($rootScope.userKyc.digilocker_url, "redirect_url", $scope.redirectUrl);
+//           $mdDialog.cancel();
+//         };
+//       },
+//       templateUrl: 'components/modal/aadhaarDialog.html',
+//       parent: angular.element(document.body),
+//       clickOutsideToClose: true,
+//       fullscreen: false
+//     })
+//   }
+
   const proceed = () => {
-    /**
-     * @TODO native callback handlers
-     */
     setShowAadhaar(true)
     setOpen(true)
+
+  }
+
+  function updateQueryStringParameter(uri, key, value) {
+    var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+    var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+    if (uri.match(re)) {
+        return uri.replace(re, '$1' + key + "=" + value + '$2');
+    }
+    else {
+        return uri + separator + key + "=" + value;
+    }
+}
+
+  const connectDigiLocker = () => {
+    window.location.href = updateQueryStringParameter(kyc.digilocker_url, "redirect_url", redirectUrl)
   }
 
   return (
@@ -795,6 +877,7 @@ const Journey = (props) => {
       <ShowAadharDialog
         open={show_aadhaar && open}
         onClose={() => setOpen(false)}
+        connectDigiLocker={connectDigiLocker}
       />
     </Container>
   )
