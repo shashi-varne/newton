@@ -977,3 +977,48 @@ body[data-device="mobile"] {
   color: white;
   background-color: var(--secondary);
 }
+
+/********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
+.MuiInput-root{
+background: rgba(238, 238, 238, 0.3);
+height: 62px !important;
+}
+
+.MuiInput-underline:before {
+background-color: #D6D6D6 !important;
+height: 1px;
+}
+
+.MuiInput-underline:after {
+background-color: #3792FC !important;
+height: 1px;
+}
+
+.MuiInput-underline:hover:not(.MuiInput-disabled):before {
+background-color: #878787 !important;
+height: 1px;
+}
+
+.MuiInput-input{
+  margin-left:  10px !important;
+  padding-top: 20px !important;
+}
+
+label + .MuiInput-formControl {
+margin-top: -10px !important;
+transform : translate(0, 5px) scale(1);
+}
+
+.MuiInput-inputType{
+  height: 3.1875em !important;
+}
+
+label {
+font-size: 13px !important;
+margin-top: 5px !important;
+}
+
+.MuiInputLabel-animated{
+  top : -6px !important;
+  left:10px !important;
+}
