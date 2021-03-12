@@ -24,6 +24,8 @@ import JssProvider from "react-jss/lib/JssProvider";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import PaymentCallback from "./invest/components/PaymentCallback";
 import SipPaymentCallback from "./invest/components/SipPaymentCallback";
+import PageCallback from "./invest/components/PageCallback";
+import PaymentOptions from "./invest/components/PaymentOptions";
 
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
@@ -85,7 +87,15 @@ const Invest = (props) => {
           <Route path={`${url}sipdates`} component={SipDates} />
           <Route path={`${url}payment/callback/:status/:message`} component={PaymentCallback} />
           <Route path={`${url}sip/payment/callback/:status/:message`} component={SipPaymentCallback} />
-          <Route component={NotFound} />
+          <Route path={`${url}payment/options`} component={PaymentOptions} />
+          <Route
+            path={[
+              `${url}page/callback/:investment_type/:investment_amount`,
+              `${url}page/callback/:investment_type/:investment_amount/:status`,
+              `${url}page/callback/:investment_type/:investment_amount/:status/:message`,
+            ]}
+            component={PageCallback}
+          /><Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>
     </JssProvider>

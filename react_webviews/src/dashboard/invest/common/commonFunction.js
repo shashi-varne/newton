@@ -1,6 +1,6 @@
 import { storageService, formatAmountInr } from 'utils/validators';
 import { getConfig } from "utils/functions";
-export function navigate(pathname, data, redirect) {
+export function navigate(pathname, data, redirect) {console.log(getConfig().searchParams)
   if (redirect) {
     this.history.push({
       pathname: pathname,
