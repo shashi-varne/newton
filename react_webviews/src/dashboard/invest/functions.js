@@ -1051,11 +1051,11 @@ export async function proceedInvestmentChild(data) {
           this.setState({ openSuccessDialog: true, investResponse: result });
           return;
         }
-        if (!getConfig().Web) {
+        if (getConfig().Web) {
           // handleIframe
           window.location.href = pgLink;
         } else {
-          if (!result.rta_enabled) {
+          if (result.rta_enabled) {
             navigation(history, "/payment/options", {
               state: {
                 pg_options: result.pg_options,
