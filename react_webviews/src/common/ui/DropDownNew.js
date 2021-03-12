@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { InputLabel } from 'material-ui/Input';
 import './style.scss';
 // eslint-disable-next-line
 import { FormControl } from 'material-ui/Form';
@@ -27,6 +28,7 @@ class SelectDropDown extends React.Component {
             forceOpen: false,
             handle: true,
             addPlaceholder:"",
+            placeholder: 'selected',
             labelField: "name",
             valueField: "value",
             color: "#EEEEEE",
@@ -37,6 +39,7 @@ class SelectDropDown extends React.Component {
             dropdownHeight: "280px",
             options: this.props.options,
             selectedValue: this.props.value,
+            isplaceholder: true
         };
     }
 
@@ -163,6 +166,9 @@ class SelectDropDown extends React.Component {
     );
 
     removeIns() {
+        this.setState({
+            isplaceholder: false
+        })
         let paragraphs = document.getElementsByTagName("ins");
         var loop = function () {
             for (var i = 0, len = paragraphs.length; i < len; i++) {
@@ -197,12 +203,14 @@ class SelectDropDown extends React.Component {
                 return (
                     <FormControl className="Dropdown label" disabled={this.props.disabled} style={{margin: '2px 0px'}}>
                         {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
+                        {this.state.isplaceholder && <InputLabel htmlFor={this.props.id}><span style={{marginLeft: '10px'}}>{this.props.label}</span></InputLabel>}
                         {/* <div className={this.props.className}> */}
-                        <span className="label2">{this.props.label || 'label'}</span>
+                        {!this.state.isplaceholder && <span className="label2">{this.props.label || 'label'}</span>}
                         <div>
                             <div style={{ width: "100%", height: '52px', }}>
                                 <StyledSelect
-                                    placeholder={''}
+                                //    placeholder={this.state.isplaceholder ? this.props.label : '' }
+                                    placeholder=''
                                     addPlaceholder={this.state.addPlaceholder}
                                     color={this.state.color}
                                     disabled={this.state.disabled}
@@ -224,7 +232,7 @@ class SelectDropDown extends React.Component {
                                     dropdownGap={5}
                                     keepSelectedInList={this.state.keepSelectedInList}
                                     onDropdownOpen={() => this.removeIns()}
-                                    onDropdownClose={() => undefined}
+                                    onDropdownClose={() =>  this.setState({isplaceholder: true})}
                                     onClearAll={() => undefined}
                                     onSelectAll={() => undefined}
                                     onChange={values => this.setValues(values)}
