@@ -993,11 +993,11 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                     <div className="left">
                           {
-                              this.state.provider !== 'RELIGARE' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
+                              this.state.provider === 'HDFCERGO' || this.state.provider === 'STAR' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
                           }
                           
 
-                        <div className="tc-subtitle">{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
+                        <div className="tc-subtitle" style={{fontSize: '17px', marginTop: `${this.state.provider === 'GMC' ? '-24px': ''}`}}>{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
                     </div>
 
                     <div className="tc-right">
@@ -1037,6 +1037,20 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                     </div>}
 
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                COVER PERIOD
+                            </div>
+                            <div className="mtr-bottom">
+                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
+                            </div>
+                        </div>
+                    </div>
+                    
                    {this.state.quotation.floater_type && this.state.quotation.insurance_type !== 'self' &&
                     <div className="member-tile">
                         <div className="mt-left">
@@ -1051,20 +1065,6 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>
                     </div>}
-
-                    <div className="member-tile">
-                        <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
-                        </div>
-                        <div className="mt-right">
-                            <div className="mtr-top">
-                                COVER PERIOD
-                            </div>
-                            <div className="mtr-bottom">
-                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="member-tile">
                         <div className="mt-left">

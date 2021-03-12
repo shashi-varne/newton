@@ -199,6 +199,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             groupHealthPlanData.post_body['payment_frequency'] = premium_details.payment_frequency;
             groupHealthPlanData.post_body['floater_type'] = premium_details.floater_type;
             groupHealthPlanData.post_body['total_amount'] = premium_details.total_amount;
+            groupHealthPlanData['gmc_cta_postfix'] = premium_details.payment_frequency === 'MONTHLY' ? 'month' : 'year';
             
             groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
 

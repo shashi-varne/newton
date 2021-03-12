@@ -88,13 +88,10 @@ class GroupHealthPlanPremiumSummary extends Component {
         quote_id = resultData.quotation ? resultData.quotation.id : '';
       }
       else{
-        if(typeof(resultData.error) === 'object')
-        {
+        if(typeof(resultData.error) === 'object' && resultData.error.quotation_id){
           quote_id =  resultData.error.quotation_id;
-          // error = resultData.error.msg || true;
-        }
-        else{
-          // error = resultData.error || resultData.message || true
+        }else{
+          error = resultData.error || resultData.message || true
         }
       }
       
