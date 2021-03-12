@@ -33,7 +33,7 @@ import BanksList from './bank/BanksList'
 import BankDetails from './bank/BankDetails'
 
 import CompliantPersonalDetails1 from './compliant/PersonalDetails1'
-import CompliantPersonalDetails2 from './compliant/PersonalDetails2'
+import CompliantPersonalDetails4 from './compliant/PersonalDetails4'
 import ConfirmPan from './compliant/ConfirmPan'
 import KycComplete from './compliant/Complete'
 import CompliantReport from './compliant/Report'
@@ -143,8 +143,8 @@ const Kyc = (props) => {
           />
           <Route
             exact
-            path={`${url}/compliant-personal-details2`}
-            component={CompliantPersonalDetails2}
+            path={`${url}/compliant-personal-details4`}
+            component={CompliantPersonalDetails4}
           />
           <Route
             exact

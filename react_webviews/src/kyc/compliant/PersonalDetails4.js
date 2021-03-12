@@ -20,7 +20,7 @@ import { savePanData } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "common/ui/Toast";
 
-const PersonalDetails2 = (props) => {
+const PersonalDetails4 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
   const [showLoader, setShowLoader] = useState(true);
@@ -204,4 +204,4 @@ const PersonalDetails2 = (props) => {
   );
 };
 
-export default PersonalDetails2;
+export default PersonalDetails4;
