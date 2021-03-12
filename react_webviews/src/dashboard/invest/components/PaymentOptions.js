@@ -8,7 +8,6 @@ import { getbankInvestment } from "../common/api";
 const PaymentOptions = (props) => {
   const state = props.location.state || {};
   const [show_skelton, setShowSkelton] = useState(true);
-  const [isApiRunning, setIsApiRunning] = useState(false);
   let {
     pg_options,
     investment_type,
@@ -19,6 +18,7 @@ const PaymentOptions = (props) => {
 
   let pg_link = "";
   if (!pg_options || isEmpty(pg_options)) props.history.goBack();
+
   useEffect(() => {
     initialize();
   }, []);
@@ -26,134 +26,12 @@ const PaymentOptions = (props) => {
   const initialize = async () => {
     if (pg_options.length === 1) {
       let mode = pg_options[0];
-      if (mode.pg_type === "bank") {
-        try {
-          const result = await getbankInvestment({ url: mode.link });
-          if (!result) {
-            setShowSkelton(false);
-            return;
-          }
-          let redirectData = {
-            redirect_url: encodeURIComponent(
-              `${window.location.origin}/sdk/page/callback${
-                getConfig().searchParams
-              }&is_secure=${storageService().get("is_secure")}`
-            ),
-            invest_id: result.post_args.ppt_id,
-            remark: remark,
-            account_number: result.post_args.account_no,
-            amount: result.post_args.amount,
-            data: {
-              type: "bank",
-              link: result.confirm_pay_url,
-            },
-          };
-          // handle call back web make_bank_payment
-        } catch (err) {
-          console.log(err);
-          toast(err);
-        } finally {
-          setShowSkelton(false);
-        }
-      } else {
-        let redirectData = {
-          show_toolbar: false,
-          icon: "back",
-          dialog: {
-            message: "Are you sure you want to exit?",
-            action: [
-              {
-                action_name: "positive",
-                action_text: "Yes",
-                action_type: "redirect",
-                redirect_url: encodeURIComponent(
-                  `${
-                    window.location.origin
-                  }/page/callback/${investment_type}/${investment_amount}${
-                    getConfig().searchParams
-                  }&is_secure=${storageService().get("is_secure")}`
-                ),
-              },
-              {
-                action_name: "negative",
-                action_text: "No",
-                action_type: "cancel",
-                redirect_url: "",
-              },
-            ],
-          },
-          data: {
-            type: "server",
-          },
-        };
-
-        if (isMobile.iOS) {
-          redirectData.show_toolbar = true;
-        }
-        // handle call back web third_party_redirect
-        // setShowSkelton(false);
-        // return;
-        pg_link = mode.link;
-        if (mode.pg_type === "otp") {
-          if (storageService().get("sdk_capabilities")) {
-            window.location.href = pg_link +=
-              (pg_link.match(/[\?]/g) ? "&" : "?") +
-              "plutus_redirect_url=" +
-              encodeURIComponent(
-                `${
-                  window.location.origin
-                }/page/callback/${investment_type}/${investment_amount}${
-                  getConfig().searchParams
-                }&is_secure=${storageService().get("is_secure")}`
-              ) +
-              "&sdk_capabilities=" +
-              storageService().get("sdk_capabilities");
-          } else {
-            window.location.href = pg_link +=
-              (pg_link.match(/[\?]/g) ? "&" : "?") +
-              "plutus_redirect_url=" +
-              encodeURIComponent(
-                `${
-                  window.location.origin
-                }/page/callback/${investment_type}/${investment_amount}${
-                  getConfig().searchParams
-                }&is_secure=${storageService().get("is_secure")}`
-              );
-          }
-        } else {
-          if (storageService().get("sdk_capabilities")) {
-            window.location.href = pg_link +=
-              (pg_link.match(/[\?]/g) ? "&" : "?") +
-              "redirect_url=" +
-              encodeURIComponent(
-                `${
-                  window.location.origin
-                }/page/callback/${investment_type}/${investment_amount}${
-                  getConfig().searchParams
-                }&is_secure=${storageService().get("is_secure")}`
-              ) +
-              "&sdk_capabilities=" +
-              storageService().get("sdk_capabilities");
-          } else {
-            window.location.href = pg_link +=
-              (pg_link.match(/[\?]/g) ? "&" : "?") +
-              "redirect_url=" +
-              encodeURIComponent(
-                `${
-                  window.location.origin
-                }/page/callback/${investment_type}/${investment_amount}${
-                  getConfig().searchParams
-                }&is_secure=${storageService().get("is_secure")}`
-              );
-          }
-        }
-      }
-      setShowSkelton(false);
+      redirectPayment(mode, false);
     }
   };
 
-  const redirectPayment = async (mode) => {
-    setIsApiRunning(true);
+  const redirectPayment = async (mode, partner_check) => {
+    setShowSkelton(true);
     if (mode.pg_type === "bank") {
       try {
         const result = await getbankInvestment({ url: mode.link });
@@ -181,7 +59,7 @@ const PaymentOptions = (props) => {
         console.log(err);
         toast(err);
       } finally {
-        setIsApiRunning(false);
+        setShowSkelton(false);
       }
     } else {
       let redirectData = {
@@ -215,11 +93,14 @@ const PaymentOptions = (props) => {
         },
       };
 
-      if (isMobile.iOS && getConfig().partner.code !== "alb") {
-        redirectData.show_toolbar = true;
+      if (isMobile.iOS) {
+        if (!partner_check) {
+          redirectData.show_toolbar = true;
+        } else if (getConfig().partner.code !== "alb") {
+          redirectData.show_toolbar = true;
+        }
       }
       // handle call back web third_party_redirect
-      //   return;
       pg_link = mode.link;
       if (mode.pg_type === "otp") {
         if (storageService().get("sdk_capabilities")) {
@@ -274,7 +155,7 @@ const PaymentOptions = (props) => {
             );
         }
       }
-      setIsApiRunning(false)
+      setShowSkelton(false);
     }
   };
 
@@ -283,7 +164,6 @@ const PaymentOptions = (props) => {
       hideInPageTitle
       noFooter={true}
       showLoader={show_skelton}
-      isApiRunning={isApiRunning}
       title="Select Payment Option"
     >
       <section className="invest-payment-options">
@@ -294,7 +174,7 @@ const PaymentOptions = (props) => {
               <div
                 key={index}
                 className="option"
-                onClick={() => redirectPayment(option)}
+                onClick={() => redirectPayment(option, true)}
               >
                 <div className="left">
                   <img src={option.banner} alt="" />
