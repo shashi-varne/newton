@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="60px" viewBox="0 0 70 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>70x60_icons/others/pan_icon/default</title>
+    <desc>Created with Sketch.</desc>
+    <g id="70x60_icons/others/pan_icon/default" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="base" x="0" y="0" width="70" height="60"></rect>
+        <g id="70x60_icons" transform="translate(15.000000, 17.000000)">
+            <g id="pan_icn">
+                <rect id="Rectangle-2" fill="#94C5FF" x="0" y="0" width="40" height="26" rx="4"></rect>
+                <circle id="Oval-6" stroke="#3792FC" cx="30" cy="16" r="4.5"></circle>
+                <polygon id="Rectangle-path" fill="#D3DBE4" points="5 18 15 18 15 20 5 20"></polygon>
+                <rect id="Rectangle-path" fill="#D3DBE4" x="5" y="14" width="14" height="2"></rect>
+                <polygon id="Shape" fill="#F0F7FF" points="35 8 25 8 25 6 35 6"></polygon>
+                <polygon id="Shape" fill="#F0F7FF" points="15 8 5 8 5 6 15 6"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

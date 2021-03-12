@@ -19,6 +19,8 @@ import toast from '../../common/ui/Toast';
 import morning_star_logo from 'assets/morning_star_logo.png';
 import { getConfig } from 'utils/functions';
 import { withStyles } from '@material-ui/core/styles';
+import { storageService } from 'utils/validators';
+import CartDialog from './CartDialog';
 
 import './Style.scss';
 const styles = {
@@ -33,13 +35,70 @@ const FundDetails = ({ classes, history }) => {
   const [graph, setGraph] = useState(null);
   const [selectedIsin, setSelectedIsin] = useState(0);
   const productType = getConfig().productName;
+
+  const { type } = getUrlParams();
+  const EMPTY_CART = 'EMPTY_CART';
+  const FUND_ADDED = 'FUND_ADDED';
+  const ADD_CART = '+ Add to Cart';
+  const ENTER_AMOUNT = 'Enter Amount';
+  const CART_LIMIT = 24;
+
+  const funds = storageService().getObject('diystore_cart') || [];
+  const fund = storageService().getObject('diystore_fundInfo') || {};
+  let currentStatus = type === 'diy' ? EMPTY_CART : '';
+  let currentTitle = 'Ok';
+  if (type === "diy") {
+    funds.forEach((item) => {
+      if (item.isin === fund.isin) {
+        currentStatus = FUND_ADDED;
+      }
+    });
+    currentTitle = ADD_CART;
+  }
+  const [cart, setCart] = useState([...funds])
+  const [isOpen, setIsOpen] = useState(false)
+  const [status, setStatus] = useState(currentStatus)
+  const [buttonTitle, setButtonTitle] = useState(currentTitle);
+  
+  const buttonData = (length) => {
+    return (
+      <div className="content">
+        <div className="cart-content">
+          <img alt="" src={require(`assets/add_cart_icon.png`)} />
+          <span>{length}</span>
+        </div>
+        <span>funds in cart</span>
+      </div>
+    );
+  };
+
+  const handleRemoveFromCart = (item) => () => {
+    if (cart.length > 0) {
+      const updatedCartItems = cart.filter(({ isin }) => isin !== item.isin);
+      setCart(updatedCartItems);
+      storageService().setObject("diystore_cart", updatedCartItems);
+      if(item.isin === fund.isin) {
+        setStatus(EMPTY_CART)
+        setButtonTitle(ADD_CART)  
+      } else {
+        setButtonTitle(buttonData(updatedCartItems.length))
+      }
+      if(updatedCartItems.length === 0) close();
+    }
+  };
+  
   useEffect(() => {
+    if(status === FUND_ADDED && type === 'diy') 
+      setButtonTitle(buttonData(cart.length));
     (async () => {
       try {
         setLoading(true);
         const { isins, selected_isin } = getUrlParams();
         const response = await fetch_fund_details(isins);
-        const index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
+        let index = response?.text_report?.findIndex((el) => el.isin === selected_isin);
+        if(isins === selected_isin){
+          index = -1;
+        }
 
         const { idx, array } = swap_fund_index(index, response?.text_report);
         if (idx) {
@@ -87,9 +146,44 @@ const FundDetails = ({ classes, history }) => {
     fetch_graph_data(reports[el].isin);
     setFundDetails(reports[el]);
   };
-  const goBack = () => {
-    history.goBack();
+
+  const handleClick = () => {
+    if (type === "diy") {
+      let stage = status;
+      switch (stage) {
+        case "EMPTY_CART":
+          if(cart.length >= CART_LIMIT) {
+            toast(`You can only invest in ${CART_LIMIT} funds at a time. Please change one of the funds.`);
+            return
+          }
+          let updatedList = [...cart, fund];
+          setCart(updatedList);
+          storageService().setObject("diystore_cart", updatedList);
+          setButtonTitle(buttonData(updatedList.length));
+          setStatus(FUND_ADDED);
+          break;
+        case "FUND_ADDED":
+          setIsOpen(true);
+          break;
+        default:
+          break;
+      }
+    } else {
+      history.goBack();
+    }
   };
+
+  const close = () => {
+    setIsOpen(false)
+  }
+
+  const handleClick2 = () => {
+    history.push({
+      pathname: "diy/invest",
+      search: getConfig().searchParams,
+    });
+  };
+
   return (
     <div>
       <Container
@@ -97,10 +191,13 @@ const FundDetails = ({ classes, history }) => {
         hideInPageTitle={true}
         noPadding
         fullWidthButton
-        handleClick={goBack}
-        buttonTitle='Ok'
+        handleClick={handleClick}
+        buttonTitle={buttonTitle}
         showLoader={isLoading}
         classOverRideContainer='fd-container'
+        twoButton= {status === 'FUND_ADDED'}
+        buttonTitle2={ENTER_AMOUNT}
+        handleClick2={handleClick2}
       >
         {fundDetails && (
           <>
@@ -298,6 +395,16 @@ const FundDetails = ({ classes, history }) => {
               </section>
             </div>
           </>
+        )}
+       {type === "diy" && (
+          <CartDialog
+            open={isOpen}
+            close={close}
+            cart={cart}
+            setCart={setCart}
+            handleRemoveFromCart={handleRemoveFromCart}
+            handleClick={handleClick2}
+          />
         )}
       </Container>
     </div>
