@@ -39,7 +39,7 @@ class SelectDropDown extends React.Component {
             dropdownHeight: "280px",
             options: this.props.options,
             selectedValue: this.props.value,
-            isplaceholder: true
+            isplaceholder: this.props.value ? false : true
         };
     }
 
@@ -54,7 +54,7 @@ class SelectDropDown extends React.Component {
     }
 
     setValues = selectValues => {
-        this.setState({ selectValues })
+        this.setState({ selectValues , isplaceholder : false })
         if (selectValues[0]) {  // eslint-disable-next-line
             if (selectValues[0] && selectValues[0].name && !selectValues[0].value || selectValues[0] && selectValues[0].isArray) {
                 this.props.onChange(selectValues[0].name);
@@ -167,7 +167,8 @@ class SelectDropDown extends React.Component {
 
     removeIns() {
         this.setState({
-            isplaceholder: false
+            isplaceholder: false,
+            isLable: true
         })
         let paragraphs = document.getElementsByTagName("ins");
         var loop = function () {
@@ -198,18 +199,19 @@ class SelectDropDown extends React.Component {
         })
 
         const value = options.find(opt => opt.value === this.state.selectedValue || opt.name === this.state.selectedValue);
+       let isvalueLabel =  this.state.selectValues.length !== 0 ? true : value ? value.name ? true : false : true; 
 
-            if(!!options.length){
+            if(!!options.length){ 
                 return (
                     <FormControl className="Dropdown label" disabled={this.props.disabled} style={{margin: '2px 0px'}}>
                         {/* <InputLabel htmlFor={this.props.id}>{"label"} *</InputLabel> */}
                         {this.state.isplaceholder && <InputLabel htmlFor={this.props.id}><span style={{marginLeft: '10px'}}>{this.props.label}</span></InputLabel>}
                         {/* <div className={this.props.className}> */}
-                        {!this.state.isplaceholder && <span className="label2">{this.props.label || 'label'}</span>}
+                        { this.state.isLable  && isvalueLabel && <span className="label2">{this.props.label || 'label'}</span>}
                         <div>
                             <div style={{ width: "100%", height: '52px', }}>
                                 <StyledSelect
-                                //    placeholder={this.state.isplaceholder ? this.props.label : '' }
+                                    //placeholder={this.state.isplaceholder ? this.props.label : '' }
                                     placeholder=''
                                     addPlaceholder={this.state.addPlaceholder}
                                     color={this.state.color}
@@ -232,10 +234,10 @@ class SelectDropDown extends React.Component {
                                     dropdownGap={5}
                                     keepSelectedInList={this.state.keepSelectedInList}
                                     onDropdownOpen={() => this.removeIns()}
-                                    onDropdownClose={() =>  this.setState({isplaceholder: true})}
+                                    onDropdownClose={() =>  this.setState({ isLable : this.state.selectValues.length !== 0 ? true : false , isplaceholder : this.state.selectValues.length === 0  ? true  : (this.state.placeholder && this.state.selectValues.length !== 0) ? false : false } , () => console.log(this.state.isplaceholder , " whats this ?",  this.state.selectValues.length))}  //isplaceholder: true 
                                     onClearAll={() => undefined}
                                     onSelectAll={() => undefined}
-                                    onChange={values => this.setValues(values)}
+                                    onChange={values =>  this.setValues(values)}
                                     noDataLabel="No matches found"
                                     closeOnSelect={this.state.closeOnSelect}
                                     noDataRenderer={
