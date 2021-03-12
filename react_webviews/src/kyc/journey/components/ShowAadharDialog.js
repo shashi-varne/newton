@@ -4,7 +4,7 @@ import Dialog from '../../../common/ui/Dialog'
 import { getConfig } from 'utils/functions'
 import { Button } from '@material-ui/core'
 
-const ShowAadharDialog = ({ open, onClose }) => {
+const ShowAadharDialog = ({ open, onClose, connectDigiLocker }) => {
   const productName = getConfig().productName
   
   
@@ -37,7 +37,7 @@ const ShowAadharDialog = ({ open, onClose }) => {
             <div className="title">No document asked</div>
           </div>
         </main>
-        <Button variant="contained" fullWidth className="action-btn">
+        <Button variant="contained" fullWidth className="action-btn" onClick={connectDigiLocker}>
           <span className="btn-text">connect digilocker</span>
         </Button>
       </section>

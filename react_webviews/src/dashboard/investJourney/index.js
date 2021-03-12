@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from '../common/Container';
 
 import account_icon from "assets/account_icon.png"
@@ -6,19 +6,104 @@ import bse_icon from "assets/bse_icon.png"
 import fund_house_icon from "assets/fund_house_icon.png"
 import safe_secure_journey from "assets/safe_secure_journey.png"
 
+import { navigate as navigateFunc } from '../invest/common/commonFunction';
+
 import "./style.scss"
+import { proceedInvestmentChild } from '../invest/functions';
+import PennyVerificationPending from '../invest/components/mini_components/PennyVerificationPending';
+import InvestError from '../invest/components/mini_components/InvestError';
 
 const InvestJourney = (props) => {
+    const [isApiRunning, setIsApiRunning] = useState(false);
+    const navigate = navigateFunc.bind(props);
+    const [dialogStates, setDialogStates] = useState({
+      openPennyVerificationPendind: false,
+      openInvestError: false,
+      errorMessage: "",
+    });
+    const state = props.location.state || {};
+    const investment =
+      JSON.parse(window.localStorage.getItem("investment")) ||
+      JSON.parse(state.investment);
+    let { type, order_type, investType } = investment;
+    const sipTypesKeys = [
+      "buildwealth",
+      "savetaxsip",
+      "saveforgoal",
+      "indexsip",
+      "shariahsip",
+      "sectoralsip",
+      "midcapsip",
+      "balancedsip",
+      "goldsip",
+      "diysip",
+    ];
+    let sipOrOneTime = "";
+    if ((type !== "riskprofile") & (type !== "insta-redeem")) {
+      sipOrOneTime = "onetime";
+      if (sipTypesKeys.indexOf(investType) !== -1) sipOrOneTime = "sip";
+    } else {
+      sipOrOneTime = order_type;
+    }
+  
+    const proceedInvestment = () => {
+      setIsApiRunning(true);
+  
+      // const isRedirectToPayment = true;
+  
+      let paymentRedirectUrl = encodeURIComponent(
+        `${window.location.origin}/page/callback/${sipOrOneTime}/${investment.amount}`
+      );
+  
+      // if (investService.isInvestRefferalRequired($rootScope.partner.code) && !isReferralGiven) {
+      //   $scope.investCtaEvents = ev;
+      //   $rootScope.openPopupInvestReferral($scope.refOnKey);
+      //   return;
+      // }
+  
+      let body = {
+        investment: investment,
+      };
+  
+      //   if (isReferralGiven && $scope.invRefData.code) {
+      //     $scope.body.referral_code = $scope.invRefData.code;
+      //   }
+  
+      proceedInvestmentChild({
+        sipOrOnetime: sipOrOneTime,
+        body: body,
+        isInvestJourney: true,
+        paymentRedirectUrl: paymentRedirectUrl,
+        isSipDatesScreen: false,
+        history: props.history,
+        handleApiRunning: handleApiRunning,
+        handleDialogStates: handleDialogStates,
+      });
+    };
+  
+    const handleApiRunning = (result) => {
+      setIsApiRunning(result);
+    };
+  
+    const handleDialogStates = (key, value, errorMessage) => {
+      let dialog_states = { ...dialogStates };
+      dialog_states[key] = value;
+      if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+      setDialogStates({ ...dialog_states });
+    };
+  
   return (
     <Container
       classOverRide='pr-error-container'
       fullWidthButton
-      buttonTitle='Continue to KYC'
+      buttonTitle='Proceed'
       helpContact
       hideInPageTitle
       hidePageTitle
       title="How it works"
       classOverRideContainer='pr-container'
+      handleClick={proceedInvestment}
+      isApiRunning={isApiRunning}
     >
      <section className="invest-journey-container">
         <div className="invest-journey-header">
@@ -63,6 +148,15 @@ const InvestJourney = (props) => {
                 </div>
             </div>
         </div>
+        <PennyVerificationPending
+          isOpen={dialogStates.openPennyVerificationPendind}
+          handleClick={() => navigate("/kyc/add-bank", null, true)}
+        />
+        <InvestError
+          isOpen={dialogStates.openInvestError}
+          errorMessage={dialogStates.errorMessage}
+          handleClick={() => navigate("/invest", null, true)}
+        />
      </section>
     </Container>
   );

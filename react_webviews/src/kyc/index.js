@@ -136,17 +136,6 @@ const Kyc = (props) => {
             component={Nominee}
           />
           <Route exact path={`${url}/report`} component={Report} />
-          {/* <Route exact path={`${url}/aadhar`} component={Aadhar} />
-          <Route
-            exact
-            path={`${url}/aadhar/confirmation`}
-            component={AadharConfirmation}
-          />
-          <Route
-            exact
-            path={`${url}/aadhar/callback/:error`}
-            component={AadharCallback}
-          /> */}
           <Route
             exact
             path={`${url}/compliant-personal-details`}

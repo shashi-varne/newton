@@ -1,126 +1,130 @@
-import React, { useEffect, useRef, useState } from 'react'
-import Container from '../common/Container'
-import RadioWithoutIcon from '../../common/ui/RadioWithoutIcon'
+import React, { useEffect, useRef, useState } from "react";
+import Container from "../common/Container";
+import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 
-import { storageConstants, verificationDocOptions } from '../constants'
+import { storageConstants, verificationDocOptions } from "../constants";
 
-import { uploadBankDocuments } from '../common/api'
-import PendingBankVerificationDialog from './PendingBankVerificationDialog'
-import { getUrlParams, isEmpty, storageService } from '../../utils/validators'
+import { uploadBankDocuments } from "../common/api";
+import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
+import { getUrlParams, isEmpty, storageService } from "utils/validators";
 
-import { navigate as navigateFunc } from '../common/functions'
-import { initData } from '../services'
+import { navigate as navigateFunc } from "../common/functions";
+import { initData } from "../services";
 
 const KycUploadDocuments = (props) => {
-  const [showLoader, setShowLoader] = useState(false)
-  const [showSkelton, setShowSkelton] = useState(false)
-  const [showModal, setShowModal] = useState(false)
-  const [isApiRunning, setIsApiRunning] = useState(false)
-  const [showError, setShowError] = useState(false)
+  const [showLoader, setShowLoader] = useState(false);
+  const [showSkelton, setShowSkelton] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [kyc, setKyc] = useState(
     storageService().getObject(storageConstants.KYC)
-  )
-  const [selected, setSelected] = useState(null)
-  const [showPendingModal, setShowPendingModal] = useState(false)
-  const [file, setFile] = useState(null)
-  const inputEl = useRef(null)
+  );
+  const [selected, setSelected] = useState(null);
+  const [showPendingModal, setShowPendingModal] = useState(false);
+  const [file, setFile] = useState(null);
+  const inputEl = useRef(null);
 
-  let bankData = kyc?.bank?.meta_data
+  let bankData = {};
 
-  const userType = props?.match.params?.userType
+  const userType = props?.match.params?.userType;
 
-  const urlparams = getUrlParams(props.location.search)
+  const urlparams = getUrlParams(props.location.search);
 
-  const additional = urlparams?.additional
-  const isEdit = urlparams?.isEdit
+  const additional = urlparams?.additional;
+  const isEdit = urlparams?.isEdit;
 
-  let bank_id = urlparams.bank_id || kyc?.bank?.meta_data?.bank_id
+  let bank_id = urlparams.bank_id || kyc?.bank?.meta_data?.bank_id;
 
-  bankData = kyc?.additional_approved_banks?.find(function (obj) {
-    return obj.bank_id === Number(bank_id)
-  })
+  if (!urlparams.bank_id) {
+    bankData = kyc?.bank?.meta_data;
+  } else {
+    bankData = kyc?.additional_approved_banks?.find(function (obj) {
+      return obj.bank_id === Number(bank_id);
+    });
+  }
 
   const handleChange = (event) => {
-    setFile(event.target.files[0])
-    console.log(event.target.files[0])
-  }
+    setFile(event.target.files[0]);
+    console.log(event.target.files[0]);
+  };
 
   const handleDocType = (index) => {
-    setSelected(index)
-  }
+    setSelected(index);
+  };
 
   const handleUpload = () => {
-    inputEl.current.click()
-  }
+    inputEl.current.click();
+  };
 
   const handleImageLoad = (event) => {
-    URL.revokeObjectURL(event.target.src)
-  }
+    URL.revokeObjectURL(event.target.src);
+  };
 
   const handleSubmit = async () => {
     try {
-      setIsApiRunning(true)
+      setIsApiRunning(true);
       const result = await uploadBankDocuments(
         file,
         verificationDocOptions[selected].value,
         bank_id
-      )
-      console.log(result)
-      setShowPendingModal(true)
+      );
+      console.log(result);
+      setShowPendingModal(true);
     } catch (err) {
-      setShowPendingModal(true)
+      setShowPendingModal(true);
     } finally {
-      setIsApiRunning(false)
+      setIsApiRunning(false);
     }
-  }
+  };
 
   const handleEdit = () => {
-    const navigate = navigateFunc.bind(props)
-    navigate('/kyc/compliant/bank-details')
-  }
+    const navigate = navigateFunc.bind(props);
+    navigate(`/kyc/${userType}/bank-details`);
+  };
 
   const handleSampleDocument = () => {
-    const navigate = navigateFunc.bind(props)
-    navigate('/kyc/sample-documents')
-  }
+    const navigate = navigateFunc.bind(props);
+    navigate("/kyc/sample-documents");
+  };
 
   useEffect(() => {
     if (!kyc || isEmpty(kyc)) {
-      initialize()
+      initialize();
     }
-  }, [])
+  }, []);
 
   const initialize = async () => {
     try {
-      setShowSkelton(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      console.log(kyc)
-      setKyc(kyc)
+      setShowSkelton(true);
+      await initData();
+      const kyc = storageService().getObject(storageConstants.KYC);
+      console.log(kyc);
+      setKyc(kyc);
     } catch (err) {
-      setShowError(true)
+      setShowError(true);
     } finally {
-      setShowSkelton(false)
+      setShowSkelton(false);
     }
-  }
+  };
 
   const proceed = () => {
-    const navigate = navigateFunc.bind(props)
+    const navigate = navigateFunc.bind(props);
     if (additional) {
-      navigate('/kyc/add-bank')
-    } else if (userType === 'compliant') {
+      navigate("/kyc/add-bank");
+    } else if (userType === "compliant") {
       if (isEdit) {
-        navigate('/kyc/journey')
+        navigate("/kyc/journey");
       } else {
-        navigate('/kyc/upload/sign')
+        navigate("/kyc/upload/sign");
       }
     } else {
-      navigate('/kyc/esign')
+      navigate("/kyc/esign");
     }
-  }
+  };
 
   const selectedDocValue =
-    selected && selected >= 0 ? verificationDocOptions[selected].value : ''
+    selected && selected >= 0 ? verificationDocOptions[selected].value : "";
 
   return (
     <Container
@@ -137,10 +141,10 @@ const KycUploadDocuments = (props) => {
         <div className="banner">
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />
-          </div>
-          <div className="acc_no">
-            <div className="title">Account number</div>
-            <div className="value">{bankData?.account_number}</div>
+            <div className="acc_no">
+              <div className="title">Account number</div>
+              <div className="value">{bankData?.account_number}</div>
+            </div>
           </div>
 
           <div className="edit" onClick={handleEdit}>
@@ -173,7 +177,7 @@ const KycUploadDocuments = (props) => {
                 ) : (
                   <img
                     className="sign-img"
-                    src={require('assets/signature_icon.svg')}
+                    src={require("assets/signature_icon.svg")}
                     alt=""
                   />
                 )}
@@ -183,7 +187,7 @@ const KycUploadDocuments = (props) => {
                   type="file"
                   ref={inputEl}
                   capture
-                  style={{ display: 'none' }}
+                  style={{ display: "none" }}
                   onChange={handleChange}
                 />
                 <svg
@@ -209,7 +213,7 @@ const KycUploadDocuments = (props) => {
         </div>
         <footer className="ssl-container">
           <img
-            src={require('assets/ssl_icon_new.svg')}
+            src={require("assets/ssl_icon_new.svg")}
             alt="SSL Secure Encryption"
           />
         </footer>
@@ -226,7 +230,7 @@ const KycUploadDocuments = (props) => {
         cancel={setShowPendingModal}
       />
     </Container>
-  )
-}
+  );
+};
 
-export default KycUploadDocuments
+export default KycUploadDocuments;

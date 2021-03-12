@@ -61,7 +61,9 @@ const Progress = (props) => {
       nriaddress: getPathname.uploadNriAddress,
       selfie: getPathname.uploadSelfie,
       selfie_video: getPathname.uploadSelfieVideo,
-      bank: `/kyc/${kyc.kyc_status}/bank-details`,
+      bank: `/kyc/${
+        kyc.kyc_status === "compliant" ? "compliant" : "non-compliant"
+      }/bank-details`,
       sign: getPathname.uploadSign,
     };
 

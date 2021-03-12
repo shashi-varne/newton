@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Container from "fund_details/common/Container";
+import Container from "../../../common/Container";
 import { storageService } from "utils/validators";
 import { initialize } from "../../functions";
 import Input from "common/ui/Input";
@@ -9,6 +9,8 @@ import toast from "common/ui/Toast";
 import { nfoData } from "../../constants";
 import TermsAndCond from "../../../mini-components/TermsAndCond";
 import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
+import PennyVerificationPending from "../mini_components/PennyVerificationPending";
+import InvestError from "../mini_components/InvestError";
 
 class Checkout extends Component {
   constructor(props) {
@@ -60,8 +62,7 @@ class Checkout extends Component {
       }
     } else if (type === "diy") {
       let schemeType = storageService().get(CATEGORY) || "";
-      let categoryName =
-        storageService().get(SUBCATEGORY) || "";
+      let categoryName = storageService().get(SUBCATEGORY) || "";
       fundsData = !storageService().getObject(CART)
         ? [storageService().getObject("diystore_fundInfo")]
         : storageService().getObject(CART);
@@ -118,7 +119,7 @@ class Checkout extends Component {
       }
     });
     if (submit) {
-      this.setState({ totalAmount: totalAmount }, () =>
+      this.setState({ totalAmount: totalAmount, isApiRunning: true }, () =>
         this.proceedInvestment()
       );
     } else {
@@ -184,6 +185,9 @@ class Checkout extends Component {
       loadingText,
       type,
       renderData,
+      openPennyVerificationPending,
+      openInvestError,
+      errorMessage,
     } = this.state;
     if (fundsData && fundsData.length === 0) ctc_title = "BACK";
     return (
@@ -286,6 +290,15 @@ class Checkout extends Component {
               })}
           </div>
           <TermsAndCond />
+          <PennyVerificationPending
+            isOpen={openPennyVerificationPending}
+            handleClick={() => this.navigate("/kyc/add-bank")}
+          />
+          <InvestError
+            isOpen={openInvestError}
+            errorMessage={errorMessage}
+            handleClick={() => this.navigate("/invest")}
+          />
         </div>
       </Container>
     );
