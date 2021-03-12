@@ -438,53 +438,19 @@ const Journey = (props) => {
     ctaText = 'UNLOCK NOW'
   }
 
-  // $scope.goNext = function () {
-  //   $scope.sendCleverTapEvents('next');
-  //   if (!$scope.canSubmit) {
-  //     for (var i = 0; i < $scope.journeyData.length; i++) {
-  //       if ($scope.journeyData[i].status !== "completed") {
-  //         if ($scope.kyc_status !== 'compliant' && $scope.show_aadhaar && $scope.journeyData[i].key === 'digilocker') {
-  //           $scope.proceed();
-  //           break;
-  //         } else {
-  //           $scope.handleEdit($scope.journeyData[i].key, i);
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   if ($scope.kycJourneyStatus === "rejected" && !$scope.show_aadhaar) {
-  //     $scope.handleEdit($scope.journeyData[3].key, 3);
-  //   }
-
-  //   if ($scope.canSubmit) {
-  //     $scope.finalSubmissionData = {
-  //       kyc: {
-  //         identification: {
-  //           fatca_declaration: true
-  //         }
-  //       }
-  //     };
-  //     $scope.submitData();
-  //   }
-  // };
-
   const goNext = async () => {
     try {
       if (!canSubmit()) {
         for (var i = 0; i < journeyData.length; i++) {
           if (journeyData[i].status !== 'completed') {
-            console.log('completed not **** ')
             if (
-              kyc_status !== 'compliant' &&
+              kyc?.kyc_status !== 'compliant' &&
               show_aadhaar &&
               journeyData[i].key === 'digilocker'
             ) {
               await proceed()
               break
             } else {
-              console.log('Here')
               handleEdit(journeyData[i].key, i)
               break
             }
@@ -492,30 +458,26 @@ const Journey = (props) => {
         }
       }
 
-      if (kycJourneyStatus === 'rejected' && !show_aadhaar) {
-        console.log('Rejected')
+      if (kyc.kyc_status === 'rejected' && !show_aadhaar) {
         handleEdit(journeyData[3].key, 3)
       }
 
       if (canSubmit()) {
-        console.log('Submit Data')
         await submitData()
       }
     } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('finally')
-    }
+      Toast(err.message)
+    } 
   }
 
   const handleEdit = (key, index, isEdit) => {
     console.log('Inside handleEdit')
-    if (isCompliant) {
+    let stateMapper = {}
+    if (kyc?.kyc_status === 'compliant') {
       if (key === 'pan' && !customer_verified) {
         navigate('/kyc/compliant-confirm-pan')
-        return
       }
-      var stateMapper = {
+       stateMapper = {
         personal: '/kyc/compliant-personal-details',
         nominee: '/kyc/compliant-nominee-details',
         bank: '/kyc/compliant/bank-details',
@@ -527,28 +489,39 @@ const Journey = (props) => {
         backToJourney: key === 'sign' ? true : null,
         userType: 'compliant',
       })
-      return
     } else {
+      console.log("Non Compliant journey")
+      console.log(show_aadhaar)
       if (show_aadhaar) {
-        var stateMapper = {
+        console.log(key)
+        stateMapper = {
           pan: '/kyc/home',
-          personal: '/kyc/dl-personal-details1',
+          personal: '/kyc/dl/personal-details1',
           bank_esign: '/kyc/non-compliant/bank-details',
+          address: '/kyc/address-details1',
+          docs: '/kyc/upload/intro',
+          esign: '/kyc-esign/info'
         }
+        console.log(stateMapper)
+        navigate(stateMapper[key], {
+          isEdit: isEdit,
+          userType: 'non-compliant',
+        })
       } else {
-        var stateMapper = {
+        console.log("Non show aadhaar")
+        stateMapper = {
           pan: '/kyc/home',
           personal: '/kyc/personal-details1',
           address: '/kyc/address-details1',
           docs: '/kyc/upload/intro',
           esign: '/kyc-esign/info',
         }
+        console.log(stateMapper[key])
       }
       navigate(stateMapper[key], {
         isEdit: isEdit,
         userType: 'non-compliant',
       })
-      return
     }
   }
 
@@ -573,7 +546,6 @@ const Journey = (props) => {
       } else {
         navigate('/kyc/report')
       }
-      console.log(result)
     } catch (err) {
       Toast(err.message, 'error')
     } finally {
@@ -589,12 +561,6 @@ const Journey = (props) => {
       initJourneyData(isCompliant, kyc, show_aadhaar, currentUser)
     }
   }, [])
-
-  // useEffect(() => {
-  //   if (!isEmpty(kyc) && !isEmpty(currentUser)) {
-  //     const isCompliant = kyc?.kyc_status === 'compliant'
-  //   }
-  // }, [kyc, currentUser])
 
   const initialize = async () => {
     try {
@@ -626,81 +592,10 @@ const Journey = (props) => {
       storageService().get('is_secure')
   )
 
-  // const redirect = () => {
-  //   /**
-  //    * @TODO
-  //    * native callback redirection
-  //    */
-  // }
-
   const cancel = () => {
     setOpen(false)
     navigate('/kyc/journey', { show_aadhar: false })
   }
-
-
-// $scope.proceed = function () {
-//     var outerScope = $scope;
-//     $mdDialog.show({
-//       controller: function ($scope, $state, $rootScope, storageService, $location) {
-//         $scope.redirectUrl = encodeURIComponent(
-//           $location.protocol() + "://" + $location.host() + ":" + $location.port() +
-//           "/#!/digilocker/callback?is_secure=" + storageService.get("is_secure")
-//         );
-//         $scope.icon = $rootScope.partner.assets.ic_aadhaar_handy;
-//         $scope.cancel = function () {
-//           $mdDialog.cancel();
-//           $state.go("kyc-journey", { show_aadhaar: false });
-//         };
-//         $scope.redirect = function () {
-//           outerScope.sendCleverTapEvents('procced', 'aadhar link mobile popup');
-//           if (!callbackWeb.isWeb() && storageService.get('native')) {
-//             var data = {
-//               url: $location.protocol() + '://' + $location.host() + ':' + $location.port() + '/#!/kyc/journey?show_aadhaar=true&is_secure=' + storageService.get("is_secure"),
-//               message: 'You are almost there, do you really want to go back?'
-//             }
-//             if (isMobile.apple.device) {
-//               callbackWeb.show_top_bar({ title: 'Aadhaar KYC' })
-//             }
-//             callbackWeb.take_back_button_control(data);
-//           } else if (!callbackWeb.isWeb()) {
-//             var redirectData = {
-//               show_toolbar: false,
-//               icon: 'back',
-//               dialog: {
-//                 message: 'You are almost there, do you really want to go back?',
-//                 action: [{
-//                   action_name: 'positive',
-//                   action_text: 'Yes',
-//                   action_type: 'redirect',
-//                   redirect_url: encodeURIComponent($location.protocol() + '://' + $location.host() + ':' + $location.port() + '/#!/kyc/journey?show_aadhaar=true&is_secure=' + storageService.get("is_secure"))
-//                 }, {
-//                   action_name: 'negative',
-//                   action_text: 'No',
-//                   action_type: 'cancel',
-//                   redirect_url: ''
-//                 }]
-//               },
-//               data: {
-//                 type: 'server'
-//               }
-//             };
-//             if (isMobile.apple.device) {
-//               redirectData.show_toolbar = true;
-//             }
-
-//             callbackWeb.third_party_redirect(redirectData);
-//           }
-//           window.location.href = helpers.updateQueryStringParameter($rootScope.userKyc.digilocker_url, "redirect_url", $scope.redirectUrl);
-//           $mdDialog.cancel();
-//         };
-//       },
-//       templateUrl: 'components/modal/aadhaarDialog.html',
-//       parent: angular.element(document.body),
-//       clickOutsideToClose: true,
-//       fullscreen: false
-//     })
-//   }
 
   const proceed = () => {
     setShowAadhaar(true)
