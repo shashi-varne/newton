@@ -20,6 +20,7 @@ class SipDates extends Component {
       show_loader: false,
       productName: getConfig().productName,
       screenName: "sip_dates",
+      dialogStates: {},
       isSipDatesScreen: true,
     };
     this.initialize = initialize.bind(this);
@@ -92,6 +93,8 @@ class SipDates extends Component {
       body: sipBaseData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: isSipDatesScreen,
+      handleApiRunning: this.handleApiRunning,
+      handleDialogStates: this.handleDialogStates,
     });
   };
 
@@ -137,16 +140,25 @@ class SipDates extends Component {
     });
   };
 
+  handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...this.state.dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    this.setState({ dialogStates: dialog_states });
+  };
+
+  handleApiRunning = (isApiRunning) => {
+    this.setState({ isApiRunning: isApiRunning });
+  };
+
   render() {
     let {
       sips,
       form_data,
       buttonTitle,
       openSuccessDialog,
-      openInvestError,
-      errorMessage,
-      openPennyVerificationPending,
       isApiRunning,
+      dialogStates,
     } = this.state;
     return (
       <Container
@@ -195,12 +207,12 @@ class SipDates extends Component {
             handleClick={() => this.handleClose()}
           />
           <PennyVerificationPending
-            isOpen={openPennyVerificationPending}
+            isOpen={dialogStates.openPennyVerificationPending}
             handleClick={() => this.navigate("/kyc/add-bank")}
           />
           <InvestError
-            isOpen={openInvestError}
-            errorMessage={errorMessage}
+            isOpen={dialogStates.openInvestError}
+            errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
           />
         </div>

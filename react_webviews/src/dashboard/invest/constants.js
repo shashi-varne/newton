@@ -6,6 +6,7 @@ export const apiConstants = {
   getNfoRecommendation: "/api/invest/nfo/recommendations",
   getPurchaseLimit: "/api/mf/funddata/",
   triggerInvestment: "/api/invest",
+  verifyCode: "/api/checkpromocode",
 };
 
 export const investCardsBase = {

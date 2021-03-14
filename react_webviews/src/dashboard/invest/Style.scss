@@ -1380,3 +1380,85 @@
     }
   }
 }
+
+.invest-refferal-dialog {
+  color: #333333;
+  line-height: 1.5;
+
+  .invest-refferal-dialog-content {
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 10px;
+      color: #0a1d32;
+      font-size: 16px;
+      font-weight: 600;
+      padding-bottom: 10px;
+    }
+
+    .sub-text {
+      color: #767e86;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .input {
+      padding: 10px 0;
+
+      .text {
+        color: #878787;
+        font-weight: 600;
+        cursor: pointer;
+        position: relative;
+        font-size: 13px;
+
+        .verify {
+          color: var(--secondary);
+          font-size: 15px;
+        }
+      }
+
+      .referral-loader {
+        position: absolute;
+
+        .dot-spinner {
+          padding-right: 22px;
+        }
+      }
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding-top: 20px;
+
+      button {
+        min-width: 140px;
+        color: white;
+        background-color: var(--secondary);
+        padding: 5px 15px;
+        border-radius: 5px;
+        min-height: 42px;
+        line-height: 36px;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+      }
+
+      .trasparent-button {
+        border: 1px solid var(--secondary);
+        color: var(--secondary);
+        background-color: white;
+      }
+
+      .disabled {
+        background-color: #bfc1c1 !important;
+        color: rgba(0, 0, 0, 0.38) !important;
+        border: 1px solid #bfc1c1 !important;
+      }
+    }
+  }
+}

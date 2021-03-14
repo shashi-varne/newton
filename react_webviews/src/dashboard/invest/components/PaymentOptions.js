@@ -11,7 +11,7 @@ const PaymentOptions = (props) => {
   let {
     pg_options,
     investment_type,
-    consent_bank,
+    // consent_bank,
     investment_amount,
     remark,
   } = state;
@@ -105,6 +105,7 @@ const PaymentOptions = (props) => {
       if (mode.pg_type === "otp") {
         if (storageService().get("sdk_capabilities")) {
           window.location.href = pg_link +=
+            // eslint-disable-next-line
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "plutus_redirect_url=" +
             encodeURIComponent(
@@ -118,6 +119,7 @@ const PaymentOptions = (props) => {
             storageService().get("sdk_capabilities");
         } else {
           window.location.href = pg_link +=
+            // eslint-disable-next-line
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "plutus_redirect_url=" +
             encodeURIComponent(
@@ -131,6 +133,7 @@ const PaymentOptions = (props) => {
       } else {
         if (storageService().get("sdk_capabilities")) {
           window.location.href = pg_link +=
+            // eslint-disable-next-line
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "redirect_url=" +
             encodeURIComponent(
@@ -144,6 +147,7 @@ const PaymentOptions = (props) => {
             storageService().get("sdk_capabilities");
         } else {
           window.location.href = pg_link +=
+            // eslint-disable-next-line
             (pg_link.match(/[\?]/g) ? "&" : "?") +
             "redirect_url=" +
             encodeURIComponent(
