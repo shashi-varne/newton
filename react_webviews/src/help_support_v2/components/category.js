@@ -1,46 +1,9 @@
 import React, { Component } from "react";
 import { Imgc } from "common/ui/Imgc";
 import Container from "../common/Container";
+import { categories } from "../constants";
 import { initialize } from "../common/functions";
 import Search from "./search";
-
-const catgories = [
-  {
-    category: "Mutual Fund",
-    icon: "mutual_fund",
-    name: "Mutual Funds",
-  },
-  {
-    category: "Digital Gold",
-    icon: "gold",
-    name: "Gold",
-  },
-  {
-    category: "Insurance",
-    icon: "term_insurance",
-    name: "Insurance",
-  },
-  {
-    category: "Digital Gold",
-    icon: "nps",
-    name: "National Pensing Scheme",
-  },
-  {
-    category: "Lending",
-    icon: "loan_icon",
-    name: "Loans",
-  },
-  {
-    category: "Accounts",
-    icon: "account",
-    name: "Account",
-  },
-  {
-    category: "payments",
-    icon: "payment_transaction",
-    name: "Payments/transactions",
-  },
-];
 
 class Category extends Component {
   constructor(props) {
@@ -52,6 +15,8 @@ class Category extends Component {
       faqList: [],
       sortedList: "",
       showCategory: true,
+      categoryList: "",
+      screen_name: "categories",
     };
     this.initialize = initialize.bind(this);
   }
@@ -60,7 +25,19 @@ class Category extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    // let { categoryList } = this.state;
+
+    // categoryList.map((item) => {
+    //   item.name = categories[item.cms_category_id].tag_name;
+    //   item.icon = categories[item.cms_category_id].icon;
+
+    //   return item;
+    // });
+    // this.setState({
+    //   categoryList: categoryList,
+    // });
+  };
 
   handleChange = (event) => {
     let value = event.target ? event.target.value : event;
@@ -111,25 +88,14 @@ class Category extends Component {
     });
   };
 
-  headerWithquery = () => {
-    return (
-      <div className="help-header">
-        <div className="title">How can we Help?</div>
-        <div className="my-query">My queries</div>
-      </div>
-    );
-  };
-
   render() {
     let { sortedList, value } = this.state;
     return (
       <Container
         // skelton={this.state.skelton}
-        // title="How can we Help?"
-        title={this.headerWithquery()}
-        styleHeader={{
-          width: '100%'
-        }}
+        title="How can we Help?"
+        queryTitle="My queries"
+        querycta={true}
         noFooter
       >
         <div className="help-Category">
@@ -144,29 +110,31 @@ class Category extends Component {
                   </span>
                   {item.title.slice(value.length)}
                 </div>
-                <div className="tag">Mutual funds</div>
+                <div className="tag">{'MUTUAL FUNDS'}</div>
               </div>
             ))}
           {value.length !== 0 && sortedList.length === 0 && (
-            <div className="no-result">Sorry! No results.</div>
+            <div className="no-result">No result found</div>
           )}
-          {value.length === 0 && (
+          {value.length === 0 && categories && (
             <div className="fade-in">
               <div className="title">Category</div>
-              {catgories.map((el, index) => (
+              {categories.map((el, index) => (
                 <div className="category" key={index}>
-                  <Imgc
-                    src={require(`assets/${this.state.productName}/${el.icon}.svg`)}
-                    className="img"
-                    alt=""
-                  />
+                  {el.icon && (
+                    <Imgc
+                      src={require(`assets/${this.state.productName}/${el.icon}`)}
+                      className="img"
+                      alt=""
+                    />
+                  )}
                   <div
                     className="name"
                     style={{
-                      border: `${index === catgories.length - 1 && "0px"}`,
+                      border: `${index === categories.length - 1 && "0px"}`,
                     }}
                   >
-                    {el.name}
+                    {el.tag_name}
                   </div>
                 </div>
               ))}

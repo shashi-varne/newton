@@ -12,6 +12,7 @@ import Category from './components/category';
 import Queries from './components/queries';
 import Account from "./components/account";
 import SubCategory from "./components/sub_category";
+import TicketDetails from "./components/ticket_details";
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -54,6 +55,7 @@ const HelpSupport = (props) => {
           <Route path={`${url}/queries`} component={Queries} />
           <Route path={`${url}/account`} component={Account} />
           <Route path={`${url}/sub-category`} component={SubCategory} />
+          <Route path={`${url}/ticket-details`} component={TicketDetails} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

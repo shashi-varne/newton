@@ -1570,3 +1570,12 @@ input#pan {
   width: 100%;
   object-fit: cover;
 }
+
+.header-query {
+  font-size: 15px;
+  font-weight: 500;
+  height: fit-content;
+  border-bottom: 1px solid;
+  color: var(--secondary);
+  cursor: pointer;
+}
