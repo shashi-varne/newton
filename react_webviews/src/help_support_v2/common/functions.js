@@ -8,22 +8,33 @@ export async function initialize() {
   this.navigate = navigate.bind(this);
   this.SearchFaq = SearchFaq.bind(this);
   this.getAllCategories = getAllCategories.bind(this);
+  this.getSubCategories = getSubCategories.bind(this);
+  this.getAllfaqs = getAllfaqs.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
-  this.setState(
-    {
-      productName: getConfig().productName,
-    }
-  );
+  this.setState({
+    productName: getConfig().productName,
+  });
 
   let { screen_name } = this.state;
 
-  if (screen_name === 'categories') {
+  if (screen_name === "category-list") {
     let result = await this.getAllCategories();
     this.setState({
-      categoryList: result.categories
-    })
+      categoryList: result.categories,
+    });
+  }
+
+  if (screen_name === "category") {
+    let category = this.props.location.state
+      ? this.props.location.state.category
+      : {};
+
+    this.setState({
+      category: category,
+    });
+    await this.getSubCategories(category.cms_category_id);
   }
 
   this.onload();
@@ -60,16 +71,16 @@ export async function SearchFaq(word) {
 
 export async function getAllCategories() {
   this.setState({
-    skelton: true
-  })
+    skelton: true,
+  });
   try {
-    const res = await Api.get('/relay/hns/api/categories');
+    const res = await Api.get("/relay/hns/api/categories");
 
     let { result, status_code: status } = res.pfwresponse;
 
     this.setState({
-      skelton: false
-    })
+      skelton: false,
+    });
 
     if (status === 200) {
       return result;
@@ -77,7 +88,67 @@ export async function getAllCategories() {
   } catch (err) {
     console.log(err);
     this.setState({
-      skelton: false
-    })
+      skelton: false,
+    });
+  }
+}
+
+export async function getSubCategories(category_id) {
+  this.setState({
+    skelton: true,
+  });
+  try {
+    const res = await Api.get(
+      `/relay/hns/api/sub_categories?category_id=${category_id}`
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      this.setState({
+        sub_categories: result.sub_categories,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+  }
+}
+
+export async function getAllfaqs(sub_category_id) {
+  this.setState({
+    skelton: true,
+  });
+  try {
+    const res = await Api.get(
+      `/relay/hns/api/faqs?sub_category_id=${sub_category_id}`
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      let { faqs } = this.state;
+
+      faqs[sub_category_id.toString()] = result.faqs;
+
+      this.setState({
+        faqs: faqs
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
   }
 }

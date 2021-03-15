@@ -7,6 +7,8 @@ class Questions extends Component {
     this.state = {
       show_loader: false,
       skelton: "g",
+      sub_category_id: "",
+      faqs: '',
     };
     this.initialize = initialize.bind(this);
   }
@@ -15,21 +17,30 @@ class Questions extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    this.setState({
+      faqs: this.props.faqs,
+      sub_category_id: this.props.id
+    });
+  };
 
   render() {
+    let { faqs, sub_category_id } = this.state;
+
     return (
       <div className="help-questions">
-        <div className="category">
-          <div className="cat-name">
-            How to update email ID on the application ?
+        {Object.keys(faqs).length > 0 && faqs[sub_category_id].map((item, index) => (
+          <div className="category" key={index}>
+            <div className="cat-name">
+              How to update email ID on the application ?
+            </div>
+            <img
+              src={require(`assets/${this.state.productName}/next_arrow.svg`)}
+              alt=""
+            />
           </div>
-          <img
-            src={require(`assets/${this.state.productName}/next_arrow.svg`)}
-            alt=""
-          />
-        </div>
-        <div className="category">
+        ))}
+        {/* <div className="category">
           <div className="cat-name">
             How to update phone number on the application?
           </div>
@@ -46,7 +57,7 @@ class Questions extends Component {
             src={require(`assets/${this.state.productName}/next_arrow.svg`)}
             alt=""
           />
-        </div>
+        </div> */}
         <div className="help-query-btn">
           <div className="generic-page-button-small query-btn">
             Unable to find my query

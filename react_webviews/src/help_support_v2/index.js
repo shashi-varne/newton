@@ -8,9 +8,9 @@ import { ToastContainer } from "react-toastify";
 
 import './Style.scss';
 import NotFound from "../common/components/NotFound";
-import Category from './components/category';
+import CategoryList from './components/categoryList';
 import Queries from './components/queries';
-import Account from "./components/account";
+import Category from "./components/category";
 import SubCategory from "./components/sub_category";
 import TicketDetails from "./components/ticket_details";
 
@@ -51,9 +51,9 @@ const HelpSupport = (props) => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route path={`${url}`} component={Category} />
+          <Route exact path={`${url}`} component={CategoryList} />
           <Route path={`${url}/queries`} component={Queries} />
-          <Route path={`${url}/account`} component={Account} />
+          <Route path={`${url}/category`} component={Category} />
           <Route path={`${url}/sub-category`} component={SubCategory} />
           <Route path={`${url}/ticket-details`} component={TicketDetails} />
           <Route component={NotFound} />

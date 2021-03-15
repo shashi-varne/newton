@@ -41,7 +41,7 @@ class Answers extends Component {
   render() {
     return (
       <div className="help-answers">
-        <div style={{margin: '0 -20px'}}>
+        <div style={{margin: '10px -20px 0'}}>
           <SwipeableViews
             // axis={theme.direction === "rtl" ? "x-reverse" : "x"}
             index={this.state.value}
