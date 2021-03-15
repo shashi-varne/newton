@@ -989,6 +989,11 @@ background-color: #D6D6D6 !important;
 height: 1px;
 }
 
+.MuiInput-underline.MuiInput-error:after{
+background-color: red !important;
+}
+
+
 .MuiInput-underline:after {
 background-color: #3792FC !important;
 height: 1px;
