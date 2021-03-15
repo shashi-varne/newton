@@ -1571,11 +1571,12 @@ input#pan {
   object-fit: cover;
 }
 
+// --Iframe Container CSS Below--:
 .childblockiframe{
   display: flex;
   flex-direction: row;
   overflow: scroll ;
-  padding-top: 80px;
+  padding-top: 100px;
   overflow-x: hidden;
   height: 100%;
 }
@@ -1603,8 +1604,6 @@ input#pan {
   bottom: 0%;
   overflow: hidden;
   margin-top: auto;
-  // padding-top: 20px;
-  // padding-bottom: 20px;
 }
 
 @media (max-width: 900px) {
@@ -1617,7 +1616,7 @@ input#pan {
   .childblockiframe {
     flex-direction: column-reverse;
     height: auto;
-    padding-top: 52px;
+    padding: 52px 0px 52px 0px;
   }
   .childblockiframe-element-one{
     width: 90%;
@@ -1632,11 +1631,15 @@ input#pan {
     margin-bottom: 30px !important;
   }
 
+  #iframeFooter{
+    position: fixed !important;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
 }
 
 #iframeFooter{
-  position: relative !important;
-  // margin: 0px 0px 13px 0px !important;
+  position: relative;
   margin: 0 auto;
   margin-bottom: 13px !important;
   padding-top: 20px;
