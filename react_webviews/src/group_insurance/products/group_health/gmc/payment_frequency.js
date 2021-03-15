@@ -175,7 +175,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         }
         body['payment_frequency'] = this.state.payment_frequency;
         this.setState({
-            skelton: true
+            // skelton: true
         });
         try {
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
@@ -201,6 +201,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             groupHealthPlanData.post_body['total_amount'] = premium_details.total_amount;
             
             groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
+            groupHealthPlanData.goodhealthDecSelected = this.state.payment_frequency + 'For_goodhealthDec'
 
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate('plan-good-health-dec');
