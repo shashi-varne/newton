@@ -33,7 +33,11 @@ function useUserKycHook() {
         }
     }, []);
 
-    return [userKyc, user, isLoading];
+    const setKycToSession = (kycData) => {
+        storageService().setObject("kyc", kycData);
+    };
+
+    return [userKyc, user, isLoading, setKycToSession];
 }
 
 export default useUserKycHook
