@@ -981,7 +981,7 @@ body[data-device="mobile"] {
 /********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
 .MuiInput-root{
 background: rgba(238, 238, 238, 0.3);
-height: 62px !important;
+height: 55px !important;
 }
 
 .MuiInput-underline:before {
@@ -1007,15 +1007,21 @@ height: 1px;
 label + .MuiInput-formControl {
 margin-top: -10px !important;
 transform : translate(0, 5px) scale(1);
+font-size: 13px;
+line-height: 21px;
 }
 
 .MuiInput-inputType{
-  height: 3.1875em !important;
+  height: 2.1875em !important;
 }
 
 label {
 font-size: 13px !important;
-margin-top: 5px !important;
+margin-top: 4px;
+}
+
+.input-value{
+  margin-left: 10px;
 }
 
 .MuiInputLabel-animated{
