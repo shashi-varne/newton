@@ -4,6 +4,7 @@ import Container from "../common/Container";
 import { categories } from "../constants";
 import { initialize } from "../common/functions";
 import Search from "./search";
+import { getConfig } from "utils/functions";
 
 class Category extends Component {
   constructor(props) {
@@ -26,17 +27,17 @@ class Category extends Component {
   }
 
   onload = () => {
-    // let { categoryList } = this.state;
+    let { categoryList } = this.state;
 
-    // categoryList.map((item) => {
-    //   item.name = categories[item.cms_category_id].tag_name;
-    //   item.icon = categories[item.cms_category_id].icon;
+    categoryList.map((item) => {
+      item.name = categories[item.cms_category_id].tag_name;
+      item.icon = categories[item.cms_category_id].icon;
 
-    //   return item;
-    // });
-    // this.setState({
-    //   categoryList: categoryList,
-    // });
+      return item;
+    });
+    this.setState({
+      categoryList: categoryList,
+    });
   };
 
   handleChange = (event) => {
@@ -89,7 +90,7 @@ class Category extends Component {
   };
 
   render() {
-    let { sortedList, value } = this.state;
+    let { sortedList, value, categoryList } = this.state;
     return (
       <Container
         // skelton={this.state.skelton}
@@ -116,10 +117,10 @@ class Category extends Component {
           {value.length !== 0 && sortedList.length === 0 && (
             <div className="no-result">No result found</div>
           )}
-          {value.length === 0 && categories && (
+          {value.length === 0 && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
-              {categories.map((el, index) => (
+              {categoryList.map((el, index) => (
                 <div className="category" key={index}>
                   {el.icon && (
                     <Imgc
@@ -131,15 +132,16 @@ class Category extends Component {
                   <div
                     className="name"
                     style={{
-                      border: `${index === categories.length - 1 && "0px"}`,
+                      border: `${index === categoryList.length - 1 && "0px"}`,
                     }}
                   >
-                    {el.tag_name}
+                    {el.cms_category_name}
                   </div>
                 </div>
               ))}
               <div className="title">Need more help?</div>
               <div className="generic-hr"></div>
+              <a href={`tel:${getConfig().mobile}`}>
               <div className="category contact-category">
                 <Imgc
                   src={require(`assets/${this.state.productName}/icn_contact.svg`)}
@@ -148,6 +150,7 @@ class Category extends Component {
                 />
                 <div className="contact">Contact us</div>
               </div>
+              </a>
               <div className="generic-hr"></div>
             </div>
           )}
