@@ -270,12 +270,12 @@ class SelectDropDown extends React.Component {
                                 }
 
 
-                                contentRenderer={
-                                   ( this.state.contentRenderer && !this.state.multi)
-                                        ? (innerProps, innerState) =>
-                                            this.contentRenderer(innerProps, innerState)
-                                        : undefined
-                                }
+                                // contentRenderer={
+                                //    ( !this.state.contentRenderer && !this.state.multi)
+                                //         ? (innerProps, innerState) =>
+                                //             this.contentRenderer(innerProps, innerState)
+                                //         : undefined
+                                // }
 
                                 dropdownRenderer={
                                     this.state.dropdownRenderer
