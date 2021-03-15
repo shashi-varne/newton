@@ -100,7 +100,8 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
               
             var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY';
             var payment_frequency = freqSelected;
-            var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
+            // var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
+            var selectedIndex  = this.state.groupHealthPlanData.sum_assured === 500000 ? 1 : 0;
             var checked = this.state.checked;
             checked = freqSelected === 'MONTHLY' ? true : false;
             var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
