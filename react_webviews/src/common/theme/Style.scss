@@ -1575,15 +1575,14 @@ input#pan {
   display: flex;
   flex-direction: row;
   overflow: scroll ;
-  padding-top: 100px;
-  padding-bottom: 5px;
+  padding-top: 80px;
   overflow-x: hidden;
   height: 100%;
 }
 
 .childblockiframe-element-one{
   width: 40%;
-  margin-left: 4%;
+  margin-left: 6%;
   height: auto;
   text-align: left !important;
   position: relative;
@@ -1604,8 +1603,8 @@ input#pan {
   bottom: 0%;
   overflow: hidden;
   margin-top: auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  // padding-top: 20px;
+  // padding-bottom: 20px;
 }
 
 @media (max-width: 900px) {
@@ -1637,6 +1636,11 @@ input#pan {
 
 #iframeFooter{
   position: relative !important;
+  // margin: 0px 0px 13px 0px !important;
+  margin: 0 auto;
+  margin-bottom: 13px !important;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .Loaderiframe {
