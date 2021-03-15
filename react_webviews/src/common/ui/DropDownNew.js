@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-// import { InputLabel } from 'material-ui/Input';
+import { InputLabel } from 'material-ui/Input';
 import './style.scss';
 // eslint-disable-next-line
 import { FormControl } from 'material-ui/Form';
@@ -49,6 +49,19 @@ class SelectDropDown extends React.Component {
         if (prevState.value !== this.props.value && this.props.value) { this.setState({ selectedValue: this.props.value }) }
         if (prevState.options !== this.props.options && this.props.options) { this.setState({ options: this.props.options }) }
     }
+
+
+
+// componentWillReceiveProps(nextProps) {
+//     if (nextProps.value !== this.props.value) {
+//     //   const clinicId = nextProps.match.params;
+//         // console.log(nextProps , this.props.value)
+//     }
+//   }
+
+
+
+
 
     setValues = selectValues => {
         if (!selectValues.length) {
@@ -210,11 +223,13 @@ class SelectDropDown extends React.Component {
         if (!!options.length) {
             return (
                 <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
-                    {(!value && !this.state.selectValues[0]) && <span className="label3" style={{ marginLeft: '10px' }}>{this.props.label || 'label'}</span>}
-                    {(value || !!this.state.selectValues[0]) && <span className="label2">{this.props.label || 'label'}</span>}
+                   {/* <InputLabel htmlFor={this.props.id}>{this.props.label}</InputLabel>   */}
+                    {/* {(!value && !this.state.selectValues[0]) && <span className="label3" style={{ marginLeft: '10px' }}>{this.props.label || 'label'}</span>}
+                    {(value || !!this.state.selectValues[0]) && <span className="label2">{this.props.label || 'label'}</span>} */}
                     <div>
                         <div style={{ width: "100%", height: '52px', }}>
-                            <Select
+                            <Select 
+                                // placeholder={"" || this.props.label}
                                 placeholder=''
                                 addPlaceholder={this.state.addPlaceholder}
                                 color={this.state.color}
@@ -239,7 +254,7 @@ class SelectDropDown extends React.Component {
                                 keepSelectedInList={this.state.keepSelectedInList}
                                 onDropdownOpen={() => this.removeIns()}
                                 onDropdownClose={() => this.setState({ contentRenderer: this.state.multi ? false : true })}
-                                onClearAll={() => undefined}
+                                onClearAll={() => console.log("hello")}
                                 onSelectAll={() => undefined}
                                 onChange={values => this.setValues(values)}
                                 noDataLabel="No matches found"
@@ -271,7 +286,7 @@ class SelectDropDown extends React.Component {
 
 
                                 // contentRenderer={
-                                //    ( !this.state.contentRenderer && !this.state.multi)
+                                //    ( this.state.contentRenderer && !this.state.multi)
                                 //         ? (innerProps, innerState) =>
                                 //             this.contentRenderer(innerProps, innerState)
                                 //         : undefined
