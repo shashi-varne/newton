@@ -990,6 +990,13 @@ body[data-device="mobile"] {
   left: 10px;
 }
 
+ .label3{
+  margin-top: 18px;
+  position: absolute;
+  font-size: 13px;
+  line-height: 21px;
+}
+
 .css-ge5lft-ReactDropdownSelect{
   border: none !important;
   border-bottom: 1px solid #D6D6D6 !important;
@@ -1042,8 +1049,9 @@ body[data-device="mobile"] {
 
 .react-dropdown-select-clear{
   position: absolute;
-  left: 25px;
+  right: 35px;
   color: black !important;
+  margin-top: 5px !important;
 }
 
 .css-s60fer-OptionComponent{
