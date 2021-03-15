@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Api from 'utils/api';
-import toast from '../../../../common/ui/Toast';
+// import toast from '../../../../common/ui/Toast';
 import Container from '../../../common/Container';
 import { initialize, updateBottomPremium } from '../common_data';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
-import { numDifferentiationInr } from 'utils/validators';
+import { numberWithCommas } from 'utils/validators';
 
 var getFrequency = {
     'MONTHLY': 'month',
@@ -61,7 +61,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 var optionsList = []
                 for(var x of resultData.premium_details){
                 var temp = {
-                    'value': `${numDifferentiationInr(x.premium)}/${getFrequency[x.payment_frequency]}`,
+                    'value': `₹${numberWithCommas(x.premium)}/${getFrequency[x.payment_frequency]}`,
                     'premium': x.premium,
                     'frequency':  getFrequency[x.payment_frequency]
                 }
@@ -183,7 +183,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             if (res.pfwresponse.status_code === 200) {
                 
             var premium_details = resultData.premium_details.premium;
-            console.log(premium_details)
             groupHealthPlanData.payment_frequency = this.state.payment_frequency.toLowerCase();
             var plan_selected_final = {}
             plan_selected_final['base_premium'] = premium_details.base_premium
