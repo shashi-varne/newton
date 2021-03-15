@@ -31,7 +31,7 @@ const PersonalDetails1 = (props) => {
     title = "Edit personal details";
   }
 
-  const [kyc, user, isLoading, setKycToSession] = useUserKycHook();
+  const [kyc, user, isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -85,7 +85,6 @@ const PersonalDetails1 = (props) => {
         },
       };
       const submitResult = await savePanData(item);
-      setKycToSession(submitResult.kyc);
       if (!submitResult) return;
       navigate(getPathname.personalDetails2, {
         state: {
