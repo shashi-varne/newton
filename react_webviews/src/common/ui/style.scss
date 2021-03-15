@@ -981,7 +981,7 @@ body[data-device="mobile"] {
 /********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
 .MuiInput-root{
 background: rgba(238, 238, 238, 0.3);
-height: 55px !important;
+height: 57px !important;
 }
 
 .MuiInput-underline:before {
@@ -1032,4 +1032,12 @@ margin-top: 4px;
 .MuiInputLabel-animated{
   top : -6px !important;
   left:10px !important;
+}
+
+ /*----------------- Auto FILL Bckground Color  ----------------------*/
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: transparent;
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: black !important;
 }
