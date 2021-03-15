@@ -391,7 +391,7 @@ class GroupHealthReportDetails extends Component {
                         {this.state.applicantIndex === -1 ? (this.state.lead.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') :dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name}{} <span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation_details.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
+                            {props.name} <span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation_details.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>

@@ -58,7 +58,6 @@ class GroupHealthPayment extends Component {
   async componentWillMount() {
     
     nativeCallback({ action: 'take_control_reset' });
-    console.log(this.state.params)
     let { status } = this.state.params;
 
     let paymentFailed = false

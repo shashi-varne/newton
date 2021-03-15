@@ -184,7 +184,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             if (res.pfwresponse.status_code === 200) {
                 
             var premium_details = resultData.premium_details.premium;
-            console.log(premium_details)
             groupHealthPlanData.payment_frequency = this.state.payment_frequency.toLowerCase();
             var plan_selected_final = {}
             plan_selected_final['base_premium'] = premium_details.base_premium
