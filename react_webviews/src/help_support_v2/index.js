@@ -51,7 +51,7 @@ const HelpSupport = (props) => {
         <ScrollToTop />
         <ToastContainer autoClose={3000} />
         <Switch>
-          <Route path={`${url}/categories`} component={Category} />
+          <Route path={`${url}`} component={Category} />
           <Route path={`${url}/queries`} component={Queries} />
           <Route path={`${url}/account`} component={Account} />
           <Route path={`${url}/sub-category`} component={SubCategory} />
