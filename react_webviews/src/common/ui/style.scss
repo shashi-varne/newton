@@ -1007,10 +1007,6 @@ body[data-device="mobile"] {
   align-items: flex-start;
 }
 
-.css-1yr7udo-DropDown{
-  max-height: none !important;
-}
-
 .react-dropdown-select-item{
   color: black !important;
   padding: 10px !important;
@@ -1035,6 +1031,7 @@ body[data-device="mobile"] {
 .react-dropdown-select-dropdown-handle{
   margin-right: 5px !important;
   position: absolute;
+  max-height: 500px !important;
   right: 10px
 }
 
