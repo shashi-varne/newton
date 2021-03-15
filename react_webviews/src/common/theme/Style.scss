@@ -88,6 +88,7 @@ body[data-device="web"] {
 
   .Banner {
     max-width: var(--desktop-width);
+    margin-top: 9px;
   }
 
   .header-annual-inc-info {
@@ -122,8 +123,11 @@ body[data-device="web"] {
     height: 47px;
   }
 
-  #root > div:nth-child(2) {
+  #root > div:nth-child(1) {
     height: 100%;
+  }
+  .Toastify {
+    height: auto !important;
   }
 
   .Loader {
@@ -419,6 +423,12 @@ button {
 .FooterDefaultLayout .FlexItem2,
 .FooterDefaultLayout .FlexItem1 {
   text-align: center;
+}
+
+.FlexButtonGenericColor{
+  background-color: rgb(53, 203, 93);
+  color: white;
+  border-radius: 6px;
 }
 
 .FooterTwoButtonLayout button.borderButton {
@@ -1035,10 +1045,20 @@ input#pan {
   font-weight: 400 !important;
 }
 
-.main-top-title-header {
+@mixin main-top-title-header-base {
   font-size: 16px !important;
   color: #160d2e;
   font-weight: 400 !important;
+}
+
+.main-top-title-header {
+  @include main-top-title-header-base();
+  color: #160d2e;
+}
+
+.main-top-title-header-old {
+  @include main-top-title-header-base();
+  color: white;
 }
 
 .slide-fade {
@@ -1329,6 +1349,7 @@ input#pan {
   white-space: break-spaces;
   overflow: hidden;
   width: 95%;
+  margin-bottom: 3px;
 }
 .FlexItem1-withProvider-footer .text-block {
   width: 100%;
@@ -1336,7 +1357,7 @@ input#pan {
 
 .FlexItem1-withProvider-footer .text-block-2 {
   color: #0a1d32;
-  font-size: 16px;
+  font-size: 15px;
   text-align: left;
   /* padding: 5px 0 0 0; */
 }
@@ -1368,6 +1389,18 @@ input#pan {
   left: -20px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+}
+
+#bottom-popup {
+  .content-button {
+    margin: 0 20px 20px 20px;
+    display: flex;
+    width: auto;
+    justify-content: center;
+  }
+  button {
+    margin: 0px;
+  }
 }
 
 /* autosuggest */

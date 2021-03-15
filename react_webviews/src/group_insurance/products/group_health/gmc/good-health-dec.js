@@ -3,6 +3,7 @@ import Container from '../../../common/Container';
 import { initialize, updateBottomPremium } from '../common_data';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
+import { nativeCallback } from 'utils/native_callback';
 
 class GroupHealthPlanGoodHealthDeclaration extends Component {
 
@@ -23,7 +24,7 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
     componentDidMount(){
         var groupHealthPlanData = this.state.groupHealthPlanData;
         
-        var checked = groupHealthPlanData['goodhealthDec_' + `${groupHealthPlanData.goodhealthDecSelected}`] || false;
+        var checked =  groupHealthPlanData[`goodhealthDec_${groupHealthPlanData.goodhealthDecSelected}`] || false;
         var buttonDisabled = checked ? false : true;
         this.setState({checked,buttonDisabled})
         this.setLocalProviderData(groupHealthPlanData);
@@ -52,18 +53,39 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
         if(this.state.buttonDisabled){
             return;
         }
+        this.sendEvents('next');
         
         var groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData['goodhealthDec_' + `${groupHealthPlanData.goodhealthDecSelected}`] = true;
+        groupHealthPlanData[`goodhealthDec_${groupHealthPlanData.goodhealthDecSelected}`] = true;
         this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate('plan-premium-summary')
+    }
+    sendEvents(user_action) {
+
+        let eventObj  = {}
+            eventObj = {
+                "event_name": 'health_insurance',
+                "properties": {
+                    "user_action": user_action,
+                    "product": 'care_plus',
+                    "flow": this.state.insured_account_type, 
+                    "screen_name": 'health declaration',
+                    "medical_condition": !this.state.checked ? 'yes' : 'no'
+                }
+            };
+            
+        if (user_action === 'just_set_events') {
+            return eventObj;
+        } else {
+            nativeCallback({ events: eventObj });
+        }
     }
 
     render() {
         return (
             <Container
-            // events={this.sendEvents('just_set_events')}
+            events={this.sendEvents('just_set_events')}
             // showLoader={this.state.show_loader}
             title="Good health declaration"
             fullWidthButton={true}

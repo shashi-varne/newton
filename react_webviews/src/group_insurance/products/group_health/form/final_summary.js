@@ -3,7 +3,6 @@ import Container from '../../../common/Container';
 
 import { getConfig, getBasePath } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
-import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead, resetQuote, openMedicalDialog, openPdf } from '../common_data';
 import BottomInfo from '../../../../common/ui/BottomInfo';
 import {
@@ -21,9 +20,7 @@ import BottomSheet from '../../../../common/ui/BottomSheet';
 import { childeNameMapper } from '../../../constants';
 import {getCoverageType} from '../constants';
 
-import Checkbox from 'material-ui/Checkbox';
 // import Checkbox from '../../../../common/ui/Checkbox';
-import Grid from 'material-ui/Grid';
 
 class GroupHealthPlanFinalSummary extends Component {
 
@@ -37,7 +34,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 member_base: []
             },
             quotation : {  member_base : []},
-            tncChecked: true,
             accordianData: [],
             openDialogReset: false,
             quote_id: storageService().get('ghs_ergo_quote_id'),
@@ -232,12 +228,15 @@ class GroupHealthPlanFinalSummary extends Component {
                 edit_state: `/group-insurance/group-health/${this.state.provider}/edit-personal-details/${member.key}`
             }
 
+            if(member.key === 'self' && lead.quotation_details.insurance_type === 'self_family'){
+                obj.title = 'Self details';
+            }
             if (member.key === 'applicant') {
                 obj.title = 'Applicant details';
             }
 
             if (lead.quotation_details.insurance_type === 'self') {
-                obj.title = 'Personal details';
+                obj.title = 'Self details';
             }
 
             let info = {};
@@ -724,12 +723,6 @@ class GroupHealthPlanFinalSummary extends Component {
     // }
 
     handleClick = async () => {
-
-
-        if(!this.state.tncChecked){
-            toast('Please Agree to the Terms and Conditions');
-            return;
-          }
         this.sendEvents('next');
         let {lead}  = this.state;
 
@@ -760,7 +753,6 @@ class GroupHealthPlanFinalSummary extends Component {
                 'restart_clicked': this.state.restart_clicked ? 'yes' : 'no',
                 'restart_conformation': this.state.restart_conformation ? 'yes' : 'no',
                 'edit_clicked': data.edit_clicked || '',
-                't&c_clicked': this.state.tncChecked ? 'yes' : 'no',
             }
         };
 
@@ -818,7 +810,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             {this.state.applicantIndex === -1 ? (this.state.quotation.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') : dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.key)})
+                            {props.name}<span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>
@@ -878,7 +870,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             EDIT
                         </div>
                         <br />
-                        {this.state.provider === 'RELIGARE' || this.state.provider === 'GMC' && <React.Fragment>
+                        {(this.state.provider === 'RELIGARE' || this.state.provider === 'GMC') && <React.Fragment>
                             {props.data[1].map(this.renderAccordiansubData)}
                             <div onClick={() => this.openEdit(props.edit_state, props.title)} className="generic-page-button-small">
                                 EDIT
@@ -965,12 +957,6 @@ class GroupHealthPlanFinalSummary extends Component {
         });
     }
 
-    handleTermsAndConditions = () =>{
-        this.setState({
-          tncChecked : !this.state.tncChecked
-        });
-      }
-      
     render() {
         return (
             <Container
@@ -993,11 +979,11 @@ class GroupHealthPlanFinalSummary extends Component {
                 <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                     <div className="left">
                           {
-                              this.state.provider !== 'RELIGARE' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
+                              this.state.provider === 'HDFCERGO' || this.state.provider === 'STAR' ? <div className="tc-title">{this.state.providerData.title2 || this.state.common_data.base_plan_title}</div>: ''
                           }
                           
 
-                        <div className="tc-subtitle">{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
+                        <div className="tc-subtitle" style={{fontSize: '17px', marginTop: `${this.state.provider === 'GMC' ? '-24px': ''}`}}>{ this.state.providerData.hdfc_plan_title_mapper ? this.state.providerData.hdfc_plan_title_mapper[this.state.quotation.plan_id] : this.state.providerData.subtitle }</div>
                     </div>
 
                     <div className="tc-right">
@@ -1037,6 +1023,20 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                     </div>}
 
+                    <div className="member-tile">
+                        <div className="mt-left">
+                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                        </div>
+                        <div className="mt-right">
+                            <div className="mtr-top">
+                                COVER PERIOD
+                            </div>
+                            <div className="mtr-bottom">
+                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
+                            </div>
+                        </div>
+                    </div>
+                    
                    {this.state.quotation.floater_type && this.state.quotation.insurance_type !== 'self' &&
                     <div className="member-tile">
                         <div className="mt-left">
@@ -1051,20 +1051,6 @@ class GroupHealthPlanFinalSummary extends Component {
                             </div>
                         </div>
                     </div>}
-
-                    <div className="member-tile">
-                        <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
-                        </div>
-                        <div className="mt-right">
-                            <div className="mtr-top">
-                                COVER PERIOD
-                            </div>
-                            <div className="mtr-bottom">
-                                {this.state.quotation.tenure} year{this.state.quotation.tenure>'1' && <span>s</span>}
-                            </div>
-                        </div>
-                    </div>
 
                     <div className="member-tile">
                         <div className="mt-left">
@@ -1119,28 +1105,6 @@ class GroupHealthPlanFinalSummary extends Component {
                     {this.state.accordianData.map(this.renderAccordian)}
 
 
-                </div>
-
-                <div className="CheckBlock2 accident-plan-terms" style={{ padding: 0 }}>
-                    <Grid container spacing={16} alignItems="center">
-                    <Grid item xs={1} className="TextCenter">           
-                    <Checkbox
-                  defaultChecked
-                  checked={this.state.tncChecked}
-                  color="default"
-                  value="checked"
-                  name="checked"
-                  onChange={this.handleTermsAndConditions}
-                  className="Checkbox"
-                />
-                    </Grid>
-                    <Grid item xs={11}>
-                        <div className="accident-plan-terms-text" style={{}}>
-                        I agree to the <span onClick={() => this.openPdf(this.state.lead.terms_and_condition,
-                        'tnc')} className="accident-plan-terms-bold" style={{ color: getConfig().primary }}>
-                            Terms and conditions</span></div>
-                    </Grid>
-                    </Grid>
                 </div>
                   <BottomInfo baseData={{ 'content': 'Get best health insurance benefits at this amount and have a secured future' }} />
             </div>

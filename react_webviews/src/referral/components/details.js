@@ -131,7 +131,7 @@ class Details extends Component {
   }
 
   shareHandler = () => {
-    let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${this.state.referral_code.toUpperCase()}. Click here to download: ${this.state.link}`;
+    let message = `Try out ${this.state.type}: a simple app to make smart investments with zero paperwork! Use my referral code ${(this.state.referral_code || '').toUpperCase()}. Click here to download: ${this.state.link}`;
     let eventObj = {
       "event_name": "share_clicked",
       "properties": {
@@ -158,6 +158,7 @@ class Details extends Component {
         showLoader={this.state.show_loader}
         title={'Refer & Earn'}
         background='GreyBackground'
+        noFooter={true}
       >
         <div className="Refer pad15">
           <Card nopadding={true}>

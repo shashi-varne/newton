@@ -168,7 +168,7 @@ export async function initialize() {
     }
 
     if (this.state.ctaWithProvider) { 
-        let leftTitle, leftSubtitle, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, gst = '';
+        let leftTitle, leftSubtitle, individual_sum_insured, tenure, base_premium, total_amount, net_premium, total_discount, payment_frequency, postfix = '', gst = '';
         if (this.state.get_lead) {
             leftTitle = lead.plan_title || '';
             // eslint-disable-next-line 
@@ -181,12 +181,19 @@ export async function initialize() {
             gst = lead.gst;
             net_premium = lead.total_premium - lead.gst;
             
+            if(this.state.provider === 'GMC'){
+                payment_frequency = lead.payment_frequency;
+                postfix = payment_frequency === 'MONTHLY' ? '/month' : '/year';
+            }
+            
             if(provider === 'HDFCERGO'){
                 leftTitle = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
             }else if(provider === 'RELIGARE'){
                 leftTitle = 'Care'
-            }else{
+            }else if(provider === 'STAR'){
                 leftTitle = 'Star health'
+            }else{
+                leftTitle = 'fisdom Care Health+'
             }
 
 
@@ -204,10 +211,10 @@ export async function initialize() {
             }
 
         }
-
+        
         let bottomButtonData = {
             leftTitle: leftTitle,
-            leftSubtitle: inrFormatDecimal(leftSubtitle),
+            leftSubtitle: inrFormatDecimal(leftSubtitle) + postfix,
             leftSubtitleUnformatted: leftSubtitle,
             leftArrow: 'up',
             provider: providerConfig.key,
@@ -215,6 +222,7 @@ export async function initialize() {
         }
 
         let confirmDialogData = {
+            conten1_title: 'Premium details',
             buttonData: {
                 ...bottomButtonData,
                 leftArrow: 'down'
@@ -600,10 +608,10 @@ export function openMedicalDialog(type) {
     let data = {
         'header_title': 'Free medical check-up',
         'content': 'Based on your details, a medical checkup will be required to issue the policy. HDFC ERGO team will contact you for the <b>free medical checkup</b> after the policy payment.', //ppc
-        'icon': 'ic_medical_checkup2',
+        'icon': `${getConfig().productName}/ic_medical_checkup2.svg`,
         'dialog_name': 'medical_dialog',
-        'cta_title': 'CONTINUE TO PAYMENT',
-        'handleClick': this.redirectToPayment
+        'button_text1': 'CONTINUE TO PAYMENT',
+        'handleClick1': this.redirectToPayment
     };
     let provider = this.state.provider;
 

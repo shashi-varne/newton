@@ -17,6 +17,8 @@ import ReactHtmlParser from 'react-html-parser';
 import { childeNameMapper , ProviderName } from '../../constants';
 import {getCoverageType} from './constants';
 
+
+var hide_policy_period = ['incomplete', 'expired', 'rejected', 'policy_expired', 'failed', 'cancelled', 'Pending', 'Rejected', 'declined']
 class GroupHealthReportDetails extends Component {
 
     constructor(props) {
@@ -389,7 +391,7 @@ class GroupHealthReportDetails extends Component {
                         {this.state.applicantIndex === -1 ? (this.state.lead.insurance_type !== 'self' ? dateOrdinal(index + 1) : '') :dateOrdinal(index)} Insured name
                         </div>
                         <div className="mtr-bottom">
-                            {props.name} ({childeNameMapper(props.key)})
+                            {props.name} <span style={{textTransform: 'none'}}> {props.key === 'self' && this.state.quotation_details.insurance_type === 'self'? '': `(${childeNameMapper(props.key)})`}</span>
                         </div>
                     </div>
                 </div>
@@ -550,7 +552,8 @@ class GroupHealthReportDetails extends Component {
                             </div>
                         </div>
                     </div>
-
+                    
+                    {hide_policy_period.indexOf(this.state.policy_data.status) === -1 ? (
                     <div className="member-tile">
                         <div className="mt-left">
                             <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
@@ -560,10 +563,14 @@ class GroupHealthReportDetails extends Component {
                                 POLICY PERIOD
                                 </div>
                             <div className="mtr-bottom">
-                            {this.state.policy_data && (`${this.state.policy_data.valid_from} - ${this.state.policy_data.valid_upto}`)} 
+                            {
+                                this.state.policy_data && this.state.policy_data.status === 'policy_issued' ? `${this.state.policy_data.valid_from} - ${this.state.policy_data.valid_upto}`: 'To be issued'
+                            }
                             </div>
                         </div>
-                    </div>
+                    </div>) : (null)
+                    }
+                    
 
                     {this.state.policy_data.status && this.state.policy_data.status === 'policy_issued' &&
                       <div className="member-tile">

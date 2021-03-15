@@ -5,11 +5,12 @@ import Container from '../../../common/Container';
 import { getUrlParams } from 'utils/validators';
 // eslint-disable-next-line
 import { nativeCallback } from 'utils/native_callback';
-import { inrFormatDecimal, formatAMPM ,storageService, numDifferentiationInr, getDateBreakupWithTime } from 'utils/validators';
+import { inrFormatDecimal ,storageService, numDifferentiationInr } from 'utils/validators';
 import ContactUs from '../../../../common/components/contact_us';
 import { initialize } from '../common_data';
 import Api from 'utils/api';
 import { getConfig } from 'utils/functions';
+import ConfirmDialog from './../plans/confirm_dialog';
 
 const commonMapper = {
   'success': {
@@ -79,13 +80,19 @@ class GroupHealthPayment extends Component {
     }
 
 
+    var ctaWithProvider = false;
+    if(paymentFailed){
+      ctaWithProvider = true
+    }
+
     this.setState({
       status: status,
       commonMapper: commonMapper[status],
       paymentSuccess: paymentSuccess,
       paymentPending: paymentPending,
       paymentFailed: paymentFailed,
-      get_lead: get_lead
+      get_lead: get_lead,
+      ctaWithProvider: ctaWithProvider
     }, () => {
       this.initialize();
     })
@@ -146,13 +153,26 @@ class GroupHealthPayment extends Component {
           let policy_data = resultData.policy || {};
           let payment_details = resultData.payment_details || {};
           let application_details = resultData.application_details;
-
+          
+          var plan_name = '';
+          if(this.state.provider === 'GMC'){
+            var postfix = lead.payment_frequency === 'YEARLY' ? ' for a year' : ' for 1st month'   
+            plan_name = 'fisdom Care Health+'         
+          }else if(this.state.provider === 'RELIGARE'){
+            plan_name = 'Care'
+          }else if(this.state.provider === 'HDFCERGO'){
+            plan_name = this.state.providerConfig.hdfc_plan_title_mapper[lead.plan_id];
+          }else if(this.state.provider === 'STAR'){
+            plan_name = 'Star health';
+          }
           this.setState({
             policy_data: policy_data,
             lead: lead,
             common: resultData.common,
             payment_details : payment_details,
-            application_details: application_details
+            application_details: application_details,
+            postfix: postfix,
+            plan_name
           })
         } else {
           error=resultData.error || resultData.message
@@ -222,9 +242,20 @@ class GroupHealthPayment extends Component {
     
   }
 
+  handleClick2 = () => {
+    this.setState({
+      openConfirmDialog: true,
+    })
+  }
+  handleClose = () => {
+    this.setState({
+      openConfirmDialog: false,
+    });
+
+  }
+
   render() {
     let {policy_data, screenData, provider} = this.state;
-    
     return (
       <Container
         provider={this.state.provider}
@@ -236,9 +267,12 @@ class GroupHealthPayment extends Component {
         title={this.state.commonMapper['top_title']}
         handleClick={this.handleClick}
         edit={this.props.edit}
-        fullWidthButton={true}
-        onlyButton={true}
+        fullWidthButton={this.state.paymentSuccess}
+        onlyButton={this.state.paymentSuccess}
+        withProvider={this.state.paymentFailed}
+        buttonData={this.state.bottomButtonData}
         buttonTitle={this.state.commonMapper.button_title}
+        handleClick2={this.handleClick2}
         events={this.sendEvents('just_set_events')}
         headerData={{
           icon: 'close'
@@ -290,6 +324,14 @@ class GroupHealthPayment extends Component {
 
                 </div>
               }
+              
+              {this.state.paymentSuccess && provider === 'GMC' &&
+              <div>
+                <p className="top-content">
+                You have access to quality health care across 15,500+ network health care providers.
+                </p>
+                </div>
+              }
 
               {this.state.paymentPending &&
                 <div>
@@ -302,10 +344,10 @@ class GroupHealthPayment extends Component {
               {this.state.paymentFailed &&
                 <div>
                   <p className="top-content">
-                    Payment of {inrFormatDecimal(this.state.lead.total_premium)} for {provider === 'HDFCERGO' ? `${this.state.providerData.title}  ${this.state.common.base_plan_title} ${this.state.providerData.hdfc_plan_title_mapper[this.state.lead.plan_id]}`  : this.state.common.base_plan_title} {this.state.lead.plan_title} has failed.
+                  Your payment for {this.state.plan_name} has failed. <span style={{fontWeight: '700'}}>Please try again.</span>
                             </p>
                   <p className="top-content">
-                    If amount has been debited it will be refunded back to you in 5-7 business days.
+                  In case, you see a debit, rest assured, it will be credited back to your account within 5-7 working days. 
                   </p>
                 </div>
               }
@@ -345,12 +387,6 @@ class GroupHealthPayment extends Component {
                     <div style={{ margin: '5px 0 6px 0' }}>Propsal number : {this.state.application_details && this.state.application_details.proposal_number}</div>
                     }
                     <div style={{ margin: '5px 0 6px 0' }}>
-                  { this.state.payment_details.dt_created && 
-                  <span> 
-                    {(getDateBreakupWithTime(this.state.payment_details.dt_created).dom)}{' '}
-                    {(getDateBreakupWithTime(this.state.payment_details.dt_created).month)}{', '}
-                   {formatAMPM(this.state.payment_details.dt_created)}
-                    </span> }
                       </div>
                   </div>
                 </div>
@@ -360,7 +396,7 @@ class GroupHealthPayment extends Component {
 
             {!this.state.paymentFailed &&
               <div>
-                <div className="mid-title">{this.state.commonMapper.mid_title}</div>
+                <div className="mid-title" style={{fontWeight: '700'}}>{this.state.commonMapper.mid_title}</div>
                 <div className="content">
                   <div className="content-points">
                     <div className="content-points-inside-text">
@@ -385,7 +421,7 @@ class GroupHealthPayment extends Component {
                 <div className="content2">
                   <div className="content2-points">
                     <div className="content2-points-inside-text">
-                      Total amount paid
+                      Total amount paid {this.state.postfix}
                               </div>
                     <div className="content2-points-inside-text">
                       {inrFormatDecimal(this.state.lead.total_premium)}
@@ -396,8 +432,9 @@ class GroupHealthPayment extends Component {
               </div>
             }
           </div>
-
+          
           <ContactUs />
+          <ConfirmDialog parent={this} />
         </div>
       </Container>
     );

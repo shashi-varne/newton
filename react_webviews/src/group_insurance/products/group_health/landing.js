@@ -12,7 +12,6 @@ import {
   numDifferentiationInr,
   storageService,
 } from "utils/validators";
-import Grid from "material-ui/Grid";
 import scrollIntoView from 'scroll-into-view-if-needed';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { openInBrowser, openPdf } from "./common_data";

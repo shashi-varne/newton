@@ -816,6 +816,7 @@ export function getCssMapperReport(policy) {
 }
 
 export function childeNameMapper(name) {
+  
   let mapper = {
     'son1': '1st Son',
     'son2': '2nd Son',
@@ -830,9 +831,8 @@ export function childeNameMapper(name) {
     'father_in_law': 'father in law',
     'mother_in_law': 'mother in law'
   };
-
-  return mapper[name] || name;
   
+  return (mapper[name] || name).toLowerCase();
 }
 
 export function TitleMaper(name){

@@ -9,6 +9,7 @@ import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
 import '../theme/Style.scss';
+import restart from 'assets/restart_nav_icn.svg';
 
 const headerIconMapper = {
   back: back_arrow,
@@ -17,32 +18,44 @@ const headerIconMapper = {
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title, className ,style, headerData={}}) => (
+  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, 
+  className ,style, headerData={}, new_header}) => (
   <AppBar position="fixed" color="primary" 
-  className={`Header transition ${classes.root} ${inPageTitle ? 'header-topbar-white' : 'header-topbar-white'} ${className}`}
+  className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
   style={style}
   >
     <Toolbar>
-      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" onClick={headerData.goBack ||
+      <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
+      onClick={headerData.goBack ||
          goBack}>
         {!disableBack && !headerData.hide_icon &&
         <SVG
-          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
+          preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
           src={headerData ? headerIconMapper[headerData.icon || 'back'] : back_arrow}
         />
         }
-        {(disableBack === true) && !headerData.hide_icon &&
+        {(disableBack === true || disableBack === 'summary') && !headerData.hide_icon &&
          <Close />}
       </IconButton>
 
       <div>
         <div
         style={style}
-          className={`${classes.flex},PageTitle main-top-title-header ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
+          className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
+          ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
         >
           {title}
         </div>
       </div>
+      {resetpage &&
+        <img onClick={handleReset}
+          alt=""
+          width={20}
+          src={restart}
+          style={{marginLeft: 'auto', width: '14px', height: '14px'}}
+        />
+      }
+      {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
     </Toolbar>
   </AppBar >
 );
