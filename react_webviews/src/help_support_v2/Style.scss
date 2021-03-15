@@ -155,9 +155,12 @@
     color: #595959;
     text-align: justify;
 
+    img {
+      width: 100%;
+    }
+
     p {
-      color: red !important;
-      text-align: left !important;
+      text-align: justify !important;
 
       span {
         font-family: inherit !important;
@@ -336,7 +339,7 @@
 }
 
 @media only screen and (min-width: 300px) and (max-width: 500px) {
-  .help-Category {
+  .help-CategoryList {
     .category {
       .img {
         width: 18%;

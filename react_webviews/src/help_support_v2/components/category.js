@@ -23,7 +23,7 @@ class Category extends Component {
 
   handleClick = (sub_category) => {
     this.props.history.push(
-      { pathname: 'sub-category', search: getConfig().searchParams },
+      { pathname: 'questions', search: getConfig().searchParams },
       { sub_category: sub_category }
     );
   }

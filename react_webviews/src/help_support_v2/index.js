@@ -11,7 +11,8 @@ import NotFound from "../common/components/NotFound";
 import CategoryList from './components/categoryList';
 import Queries from './components/queries';
 import Category from "./components/category";
-import SubCategory from "./components/sub_category";
+import Questions from "./components/questions";
+import Answers from "./components/answers";
 import TicketDetails from "./components/ticket_details";
 
 import { create } from 'jss';
@@ -54,7 +55,8 @@ const HelpSupport = (props) => {
           <Route exact path={`${url}`} component={CategoryList} />
           <Route path={`${url}/queries`} component={Queries} />
           <Route path={`${url}/category`} component={Category} />
-          <Route path={`${url}/sub-category`} component={SubCategory} />
+          <Route path={`${url}/questions`} component={Questions} />
+          <Route path={`${url}/answers`} component={Answers} />
           <Route path={`${url}/ticket-details`} component={TicketDetails} />
           <Route component={NotFound} />
         </Switch>

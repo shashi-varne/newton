@@ -9,6 +9,7 @@ export async function initialize() {
   this.SearchFaq = SearchFaq.bind(this);
   this.getAllCategories = getAllCategories.bind(this);
   this.getSubCategories = getSubCategories.bind(this);
+  this.getFaqDescription = getFaqDescription.bind(this);
   this.getAllfaqs = getAllfaqs.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
@@ -139,10 +140,42 @@ export async function getAllfaqs(sub_category_id) {
     if (status === 200) {
       let { faqs } = this.state;
 
-      faqs[sub_category_id.toString()] = result.faqs;
+      faqs[sub_category_id] = result.faqs;
 
       this.setState({
         faqs: faqs
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+  }
+}
+
+export async function getFaqDescription(faq_id) {
+  this.setState({
+    skelton: true,
+  });
+  try {
+    const res = await Api.get(
+      `/relay/hns/api/faq/${faq_id}/desc`
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      let { faqDesc } = this.state;
+
+      faqDesc[faq_id] = result.faq;
+
+      this.setState({
+        faqDesc: faqDesc
       });
     }
   } catch (err) {

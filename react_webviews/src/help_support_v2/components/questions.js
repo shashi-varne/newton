@@ -1,14 +1,15 @@
 import React, { Component } from "react";
+import Container from "../common/Container";
 import { initialize } from "../common/functions";
-
+import { getConfig } from "utils/functions";
 class Questions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
       skelton: "g",
-      sub_category_id: "",
-      faqs: '',
+      sub_category: "",
+      faqs: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -17,53 +18,54 @@ class Questions extends Component {
     this.initialize();
   }
 
-  onload = () => {
+  onload = async () => {
+    let sub_category = this.props.location.state
+      ? this.props.location.state.sub_category
+      : {};
+
     this.setState({
-      faqs: this.props.faqs,
-      sub_category_id: this.props.id
+      sub_category: sub_category,
     });
+
+    await this.getAllfaqs(sub_category.cms_category_id);
   };
 
+  handleClick = (index) => {
+    let { sub_category, faqs } = this.state;
+
+    this.props.history.push(
+      { pathname: 'answers', search: getConfig().searchParams },
+      { sub_category: sub_category, faqs: faqs, index: index },
+    );
+  }
+
   render() {
-    let { faqs, sub_category_id } = this.state;
+    let { sub_category, faqs } = this.state;
 
     return (
-      <div className="help-questions">
-        {Object.keys(faqs).length > 0 && faqs[sub_category_id].map((item, index) => (
-          <div className="category" key={index}>
-            <div className="cat-name">
-              How to update email ID on the application ?
-            </div>
-            <img
-              src={require(`assets/${this.state.productName}/next_arrow.svg`)}
-              alt=""
-            />
-          </div>
-        ))}
-        {/* <div className="category">
-          <div className="cat-name">
-            How to update phone number on the application?
-          </div>
-          <img
-            src={require(`assets/${this.state.productName}/next_arrow.svg`)}
-            alt=""
-          />
+      <Container
+        title={sub_category.cms_category_name}
+        queryTitle="My queries"
+        querycta={true}
+        noFooter
+      >
+        <div className="help-questions">
+          {Object.keys(faqs).length > 0 &&
+            faqs[sub_category.cms_category_id].map((item, index) => (
+              <div
+                className="category"
+                key={index}
+                onClick={() => this.handleClick(index)}
+              >
+                <div className="cat-name">{item.title}</div>
+                <img
+                  src={require(`assets/${this.state.productName}/next_arrow.svg`)}
+                  alt=""
+                />
+              </div>
+            ))}
         </div>
-        <div className="category">
-          <div className="cat-name">
-            How to update address detail on the application ?
-          </div>
-          <img
-            src={require(`assets/${this.state.productName}/next_arrow.svg`)}
-            alt=""
-          />
-        </div> */}
-        <div className="help-query-btn">
-          <div className="generic-page-button-small query-btn">
-            Unable to find my query
-          </div>
-        </div>
-      </div>
+      </Container>
     );
   }
 }

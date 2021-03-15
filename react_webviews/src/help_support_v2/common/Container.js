@@ -34,6 +34,10 @@ class Container extends Component {
     this.didupdate();
   }
 
+  headerGoBack = () => {
+    this.historyGoBack({fromHeader: true});
+  }
+
   historyGoBack = () => {
     let pathname = this.props.history.location.pathname;
 
@@ -42,6 +46,7 @@ class Container extends Component {
         nativeCallback({ action: "exit", events: this.getEvents() });
         break;
       default:
+        this.props.history.goBack();
     }
   };
 
