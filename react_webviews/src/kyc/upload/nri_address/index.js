@@ -3,10 +3,10 @@ import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
 import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, docMapper } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
-import toast from '../../../common/ui/Toast'
+import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
 
@@ -47,7 +47,7 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const AddressUpload = (props) => {
+const NRIAddressUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
@@ -224,9 +224,9 @@ const AddressUpload = (props) => {
       setIsApiRunning(true)
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address')
+        result = await upload(frontDoc, 'address', addressProofKey)
       } else {
-        result = await upload(file, 'address')
+        result = await upload(file, 'address', addressProofKey)
       }
       console.log(result)
       setKyc(result.kyc)
@@ -554,4 +554,4 @@ const AddressUpload = (props) => {
   )
 }
 
-export default AddressUpload
+export default NRIAddressUpload

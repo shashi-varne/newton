@@ -70,6 +70,12 @@ export const docMapper = {
   LAT_BANK_PB: "Passbook",
 };
 
+export const nriDocMapper = {
+  DL: "Driving license",
+  UTILITY_BILL: "Gas receipt",
+  LAT_BANK_PB: "Passbook",
+}
+
 export const occupationOptions = [
   {
     name: "Private Sector",
