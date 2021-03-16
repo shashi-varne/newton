@@ -14,6 +14,7 @@ import Category from "./components/category";
 import Questions from "./components/questions";
 import Answers from "./components/answers";
 import TicketDetails from "./components/ticket_details";
+import SendQuery from "./components/send_query";
 
 import { create } from 'jss';
 import JssProvider from 'react-jss/lib/JssProvider';
@@ -58,6 +59,7 @@ const HelpSupport = (props) => {
           <Route path={`${url}/questions`} component={Questions} />
           <Route path={`${url}/answers`} component={Answers} />
           <Route path={`${url}/ticket-details`} component={TicketDetails} />
+          <Route path={`${url}/send-query`} component={SendQuery} />
           <Route component={NotFound} />
         </Switch>
       </MuiThemeProvider>

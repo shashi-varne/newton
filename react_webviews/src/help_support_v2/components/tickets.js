@@ -7,6 +7,7 @@ class OpenTickets extends Component {
     this.state = {
       show_loader: false,
       skelton: "g",
+      tickets: "",
     };
     this.initialize = initialize.bind(this);
   }
@@ -15,12 +16,25 @@ class OpenTickets extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    this.setState({
+      tickets: this.props.tickets,
+    });
+  };
 
   render() {
+    let { tickets } = this.state;
+
     return (
       <div className="help-tickets">
-        <div className="ticket">
+        {tickets.map((item, index) => (
+          <div className="ticket" key={index}>
+            <div className="title">Ticket ID: {item.ticket_id}</div>
+            <div className="sub-title">{item.subject}</div>
+            <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
+          </div>
+        ))}
+        {/* <div className="ticket">
           <div className="title">Ticket ID: 0111</div>
           <div className="sub-title">I want to know the different.......</div>
           <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
@@ -29,12 +43,7 @@ class OpenTickets extends Component {
           <div className="title">Ticket ID: 0111</div>
           <div className="sub-title">I want to know the different.......</div>
           <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
-        </div>
-        <div className="ticket">
-          <div className="title">Ticket ID: 0111</div>
-          <div className="sub-title">I want to know the different.......</div>
-          <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
-        </div>
+        </div> */}
       </div>
     );
   }

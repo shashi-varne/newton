@@ -11,6 +11,7 @@ export async function initialize() {
   this.getSubCategories = getSubCategories.bind(this);
   this.getFaqDescription = getFaqDescription.bind(this);
   this.getAllfaqs = getAllfaqs.bind(this);
+  this.getUserTickets = getUserTickets.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -177,6 +178,37 @@ export async function getFaqDescription(faq_id) {
       this.setState({
         faqDesc: faqDesc
       });
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+  }
+}
+
+export async function getUserTickets(params) {
+  this.setState({
+    skelton: true,
+  });
+  try {
+    const res = await Api.get(
+      `/relay/hns/api/freshdesk/ticket/all?status=${params}`
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      let { tickets } = this.state;
+
+      tickets[params] = result.tickets;
+      this.setState({
+        tickets: tickets
+      })
     }
   } catch (err) {
     console.log(err);

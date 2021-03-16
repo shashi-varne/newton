@@ -19,10 +19,10 @@
 
   @keyframes fadeIn {
     0% {
-      opacity:0;
+      opacity: 0;
     }
     100% {
-      opacity:1;
+      opacity: 1;
     }
   }
 
@@ -218,6 +218,25 @@
     height: 100%;
     padding-top: 10px;
 
+    .balance-skelton {
+      border-radius: 6px;
+      width: 100% !important;
+      height: 120px !important;
+    }
+
+    .img {
+      width: 100%;
+      margin-top: 30px;
+      margin-bottom: 25px;
+    }
+
+    .no-tickets {
+      text-align: center;
+      color: #767e86;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
     .tabContainer {
       display: flex;
       font-size: 13px;
@@ -285,7 +304,7 @@
   }
 
   .chat-box {
-    background: #F7F6F6;
+    background: #f7f6f6;
     width: fit-content;
     padding: 10px;
     border-radius: 4px;
@@ -293,7 +312,7 @@
     .chat {
       font-size: 13px;
       font-weight: 400;
-      color: #0A1D32;
+      color: #0a1d32;
       margin-bottom: 10px;
       line-height: 20px;
     }
@@ -326,7 +345,7 @@
   .user-tag {
     font-size: 13px;
     font-weight: 500;
-    color: #0A1D32;
+    color: #0a1d32;
     margin: 11px 0 30px;
     width: max-content;
     display: flex;
@@ -335,6 +354,57 @@
     img {
       margin-right: 10px;
     }
+  }
+}
+
+.send-query {
+  .sub-title {
+    font-size: 11px;
+    color: #595959;
+    margin: -15px 0 10px;
+  }
+
+  textarea {
+    border: 0;
+    resize: none;
+    height: 100%;
+    width: 96%;
+    margin: 11px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    line-height: 20px;
+  }
+
+  textarea::placeholder {
+    color: #c4c4c4;
+  }
+
+  .input {
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 30px;
+  }
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-scrollbar:vertical {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar:horizontal {
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d8d8d8;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
   }
 }
 
@@ -357,6 +427,12 @@
       .contact {
         font-size: 13px;
       }
+    }
+  }
+
+  .send-query {
+    textarea {
+      width: 94%;
     }
   }
 }
