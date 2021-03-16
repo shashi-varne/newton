@@ -10,21 +10,15 @@ import toast from 'common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
 import { submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
+import useUserKycHook from '../common/hooks/userKycHook'
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const [investmentPending, setInvestmentPending] = useState(false)
   const [isNomineePopupReq, setIsNomineePopupReq] = useState(false)
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER || null)
-  )
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [show_aadhaar, setShowAadhaar] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [npsDetailsReq, setNpsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
@@ -41,6 +35,15 @@ const Journey = (props) => {
   const [top_title, setTopTitle] = useState('')
   const [cta_text, setCtaText] = useState('')
   const [customer_verified, setCustomerVerified] = useState('')
+
+  const [kyc, user, isLoading] = useUserKycHook();
+
+  useEffect(() => {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
+      const isCompliant = kyc?.kyc_status === 'compliant'
+      initJourneyData(isCompliant, kyc, show_aadhaar, user)
+    }
+  }, [kyc, user]);
 
   const canSubmit = () => {
     if (journeyData.length) {
@@ -377,8 +380,8 @@ const Journey = (props) => {
       if (
         isCompliant &&
         show_aadhaar &&
-        currentUser.kyc_registration_v2 !== 'submitted' &&
-        currentUser.kyc_registration_v2 !== 'complete' &&
+        user.kyc_registration_v2 !== 'submitted' &&
+        user.kyc_registration_v2 !== 'complete' &&
         props?.location?.state.fromState !== '/kyc/journey'
       ) {
         if (
@@ -391,8 +394,8 @@ const Journey = (props) => {
       }
       if (
         isCompliant &&
-        currentUser.active_investment &&
-        currentUser.kyc_registration_v2 !== 'submitted'
+        user.active_investment &&
+        user.kyc_registration_v2 !== 'submitted'
       ) {
         setTopTitle('Investment pending')
         setInvestmentPending(true)
@@ -415,17 +418,17 @@ const Journey = (props) => {
       urlParams?.kycJourneyStatus === 'ground_aadhaar' || kycJourneyStatus === 'ground_aadhaar' || true) {
       setShowAadhaar(true)
     }
-    if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
+    if (npsDetailsReq && user.kyc_registration_v2 == 'submitted') {
       navigate('/nps/identity')
       return
     } else if (
-      currentUser.kyc_registration_v2 == 'submitted' &&
+      user.kyc_registration_v2 == 'submitted' &&
       userKyc.sign_status === 'signed'
     ) {
       navigate('/kyc/report')
       return
     } else if (
-      currentUser.kyc_registration_v2 == 'complete' &&
+      user.kyc_registration_v2 == 'complete' &&
       userKyc.sign_status === 'signed'
     ) {
       navigate('/invest')
@@ -553,33 +556,6 @@ const Journey = (props) => {
     }
   }
 
-  useEffect(() => {
-    if (isEmpty(kyc) || isEmpty(currentUser)) {
-      initialize()
-    } else {
-      const isCompliant = kyc?.kyc_status === 'compliant'
-      initJourneyData(isCompliant, kyc, show_aadhaar, currentUser)
-    }
-  }, [])
-
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const userKyc = storageService().getObject(storageConstants.KYC)
-      const user = storageService().getObject(storageConstants.USER)
-      setKyc(() => ({ ...userKyc }))
-      setCurrentUser(() => ({ ...user }))
-      const isCompliant = userKyc?.kyc_status === 'compliant'
-      initJourneyData(isCompliant, userKyc, show_aadhaar, user)
-    } catch (err) {
-      toast(err.message)
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const productName = getConfig().productName
 
   const redirectUrl = encodeURIComponent(
@@ -622,13 +598,13 @@ const Journey = (props) => {
     <Container
       hideInPageTitle
       buttonTitle={getButtonText()}
-      disable={loading}
+      disable={isLoading}
       title="KYC Journey"
       classOverRideContainer="pr-container"
-      showSkelton={loading || isEmpty(kyc) || isEmpty(currentUser)}
+      showSkelton={isLoading || isEmpty(kyc) || isEmpty(user)}
       handleClick={goNext}
     >
-      {kyc && currentUser && (
+      {kyc && user && (
         <div className="kyc-journey">
           {kycJourneyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
@@ -720,7 +696,7 @@ const Journey = (props) => {
             <Alert
               variant="attention"
               message="Please share following mandatory details within 24 hrs to execute the investment."
-              title={`Hey ${currentUser.name}`}
+              title={`Hey ${user.name}`}
             />
           )}
           <main className="steps-container">
