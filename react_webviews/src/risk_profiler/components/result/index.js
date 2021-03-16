@@ -198,6 +198,7 @@ class Result extends Component {
       'amount=' + entryParams.amount +
       '&type=' + entryParams.type +
       '&term=' + entryParams.term +
+      '&flow=' + entryParams.flow +
       '&fromRisk=true';
       // '&webview_redirect_url=' + webview_redirect_url;
   }
