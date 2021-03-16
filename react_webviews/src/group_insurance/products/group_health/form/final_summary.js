@@ -1063,7 +1063,7 @@ class GroupHealthPlanFinalSummary extends Component {
                             <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                 <div>
                                     <div> {inrFormatDecimal(this.state.quotation.total_premium - this.state.quotation.gst)} </div>
-                                    <div style={{ fontSize: 10 }}> (Net premium)</div>
+                                    <div style={{ fontSize: 10 }}> {this.state.provider !== 'GMC' ? '(Net premium)' : '(Basic premium)'}</div>
                                 </div>
                                 <div>
                                     &nbsp;+&nbsp;

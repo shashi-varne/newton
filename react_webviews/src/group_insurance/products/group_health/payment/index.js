@@ -400,8 +400,7 @@ class GroupHealthPayment extends Component {
                 <div className="content">
                   <div className="content-points">
                     <div className="content-points-inside-text">
-                      Net premium
-                                </div>
+                      {this.state.provider !== 'GMC' ? 'Net premium' : 'Basic premium'}</div>
                     <div className="content-points-inside-text">
                       {inrFormatDecimal(this.state.lead.total_premium - this.state.lead.gst)}
                     </div>
