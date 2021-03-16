@@ -8,15 +8,15 @@ import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 
 import { getConfig } from 'utils/functions';
-import { storageService, formatAmountInr } from 'utils/validators';
+import { storageService, formatAmountInr,isEmpty } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
-import { isEmpty } from '../../utils/validators';
 import { initData } from '../../kyc/services';
-import { proceedInvestmentChild } from '../invest/functions';
+import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
 import PennyVerificationPending from '../invest/components/mini_components/PennyVerificationPending';
 import InvestError from '../invest/components/mini_components/InvestError';
+import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
 
 const Recommendations = (props) => {
   const graphData = storageService().getObject("graphData") || {};
@@ -74,8 +74,7 @@ const Recommendations = (props) => {
     }
   }
 
-  const proceedInvestment = () => {
-    setIsApiRunning(true);
+  const proceedInvestment = (investReferralData, isReferralGiven) => {
     let investmentObject = {};
     if (type !== "riskprofile") {
       var allocations = [];
@@ -150,15 +149,21 @@ const Recommendations = (props) => {
       }
     }
 
-      // if (investService.isInvestRefferalRequired($rootScope.partner.code) && !isReferralGiven) {
-      //   $scope.investCtaEvents = ev;
-      //   $rootScope.openPopupInvestReferral($scope.refOnKey);
-      //   return;
-      // }
-
+      if (
+        isInvestRefferalRequired(getConfig().partner.code) &&
+        !isReferralGiven
+      ) {
+        handleDialogStates("openInvestReferral", true);
+        return;
+      }
+  
       let body = {
         investment: investmentObject,
       };
+  
+      if (isReferralGiven && investReferralData.code) {
+        body.referral_code = investReferralData.code;
+      }
 
       proceedInvestmentChild({
         userKyc: userKyc,
@@ -218,7 +223,7 @@ const Recommendations = (props) => {
         currentUser &&
         !currentUser.active_investment &&
         partner.code !== "bfdlmobile"
-          ? "How It Works?"
+          ? "HOW IT WORKS?"
           : investCtaText
       }
       helpContact
@@ -272,6 +277,11 @@ const Recommendations = (props) => {
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
+        />
+        <InvestReferralDialog
+          isOpen={dialogStates.openInvestReferral}
+          proceedInvestment={proceedInvestment}
+          close={() => handleDialogStates("openInvestReferral", false)}
         />
       </section>
     </Container>

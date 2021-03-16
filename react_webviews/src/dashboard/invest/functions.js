@@ -456,7 +456,6 @@ export function corpusValue(data) {
   let corpus_value = 0;
   for (var i = 0; i < data.term; i++) {
     if (this.state.isRecurring || data.investType === "buildwealth") {
-      // isRecurring not initialised
       let n = (i + 1) * 12;
       let mr = getRateOfInterest(data) / 12 / 100;
       corpus_value = (data.amount * (Math.pow(1 + mr, n) - 1)) / mr;
@@ -475,7 +474,7 @@ export async function getRecommendedPlans(amount) {
       type: this.state.investType,
       amount: amount,
       term: this.state.term,
-      subType: this.state.subType, // not initailised
+      subType: this.state.subType,
       equity: this.state.stockSplit,
       debt: this.state.bondSplit,
     });
@@ -487,10 +486,10 @@ export async function getRecommendedPlans(amount) {
         amount: result.amount,
         term: this.state.term,
         investType: this.state.investType,
-        name: this.state.investName, // not initailised
+        name: this.state.investName,
         subType: this.state.subType,
         graphType: this.state.investType,
-        investTypeDisplay: this.state.investTypeDisplay, // not initailised
+        investTypeDisplay: this.state.investTypeDisplay,
         stock: this.state.stockSplit,
         bond: this.state.bondSplit,
       };
@@ -866,14 +865,14 @@ export function checkLimit(amount, index) {
   });
 }
 
-function isInvestRefferalRequired(partner_code) {
+export function isInvestRefferalRequired(partner_code) {
   if (partner_code === "ktb") {
     return true;
   }
   return false;
 }
 
-export async function proceedInvestment(event, isReferralGiven) {
+export async function proceedInvestment(investReferralData, isReferralGiven) {
   let {
     partner_code,
     fundsData,
@@ -882,8 +881,7 @@ export async function proceedInvestment(event, isReferralGiven) {
     totalAmount,
   } = this.state;
   if (isInvestRefferalRequired(partner_code) && !isReferralGiven) {
-    // let investCtaEvents = event;
-    // $rootScope.openPopupInvestReferral(refOnKey);
+    this.handleDialogStates("openInvestReferral", true);
     return;
   }
 
@@ -925,16 +923,16 @@ export async function proceedInvestment(event, isReferralGiven) {
     {
       investment_type: investment_type,
       paymentRedirectUrl: paymentRedirectUrl,
+      investReferralData: investReferralData,
     },
-    () => this.makeInvestment(event, investment, isReferralGiven)
+    () => this.makeInvestment(investment, isReferralGiven)
   );
 }
 
-export async function makeInvestment(event, investment, isReferralGiven) {
+export async function makeInvestment(investment, isReferralGiven) {
   let {
     isRedirectToPayment,
     investment_type,
-    invRefData,
     totalAmount,
     type,
     currentUser,
@@ -942,6 +940,7 @@ export async function makeInvestment(event, investment, isReferralGiven) {
     paymentRedirectUrl,
     userKyc,
     isSipDatesScreen,
+    investReferralData,
   } = this.state;
 
   isRedirectToPayment = true;
@@ -967,31 +966,28 @@ export async function makeInvestment(event, investment, isReferralGiven) {
     this.navigate("/invest-journey");
   }
 
-  if (isReferralGiven && invRefData.code) {
-    body.referral_code = invRefData.code;
+  if (isReferralGiven && investReferralData.code) {
+    body.referral_code = investReferralData.code;
   }
-  this.setState(
-    {
-      isApiRunning: true,
-      sipOrOnetime: investment_type,
-      body: body,
-      isRedirectToPayment: isRedirectToPayment,
-      investmentEventData: investmentEventData,
-    },
-    () =>
-      this.proceedInvestmentChild({
-        userKyc: userKyc,
-        sipOrOnetime: investment_type,
-        body: body,
-        investmentEventData: investmentEventData,
-        paymentRedirectUrl: paymentRedirectUrl,
-        isSipDatesScreen: isSipDatesScreen,
-        isInvestJourney: this.state.isInvestJourney,
-        history: this.props.history,
-      })
-  );
 
-  // $broadcast ('parentChildCommunication', {key: 'proceedInvestmentChild'});
+  this.setState({
+    sipOrOnetime: investment_type,
+    body: body,
+    isRedirectToPayment: isRedirectToPayment,
+    investmentEventData: investmentEventData,
+  });
+  this.proceedInvestmentChild({
+    userKyc: userKyc,
+    sipOrOnetime: investment_type,
+    body: body,
+    investmentEventData: investmentEventData,
+    paymentRedirectUrl: paymentRedirectUrl,
+    isSipDatesScreen: isSipDatesScreen,
+    isInvestJourney: this.state.isInvestJourney,
+    history: this.props.history,
+    handleDialogStates: this.handleDialogStates,
+    handleApiRunning: this.handleApiRunning,
+  });
 }
 
 export async function proceedInvestmentChild(data) {
@@ -1004,14 +1000,13 @@ export async function proceedInvestmentChild(data) {
     body,
     paymentRedirectUrl,
     history,
-    graphData,
     handleApiRunning,
     handleDialogStates,
   } = data;
 
   let isKycNeeded = false;
   if (
-    (getConfig().partner.code == "bfdlmobile" && !data.isInvestJourney) ||
+    (getConfig().partner.code === "bfdlmobile" && !data.isInvestJourney) ||
     data.isInvestJourney ||
     data.isSipDatesScreen
   ) {
@@ -1030,7 +1025,7 @@ export async function proceedInvestmentChild(data) {
     if (!investmentEventData) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
     }
-
+    handleApiRunning(true);
     try {
       const res = await Api.post(apiConstants.triggerInvestment, body);
       const { result, status_code: status } = res.pfwresponse;
@@ -1081,35 +1076,16 @@ export async function proceedInvestmentChild(data) {
             redirectToKyc(kycJourneyStatus, history);
             break;
           case 305:
-            if (this) {
-              this.setState({ openPennyVerificationPending: true });
-            } else {
-              handleDialogStates("openPennyVerificationPending", true);
-            }
+            handleDialogStates("openPennyVerificationPending", true);
             break;
           default:
-            // if (graphData?.type === "riskprofile") {
-            //   navigation("risk-recommendations-error");
-            // } else {
-            if (this) {
-              this.setState({
-                openInvestError: true,
-                errorMessage: errorMessage,
-              });
-            } else {
-              handleDialogStates("openInvestError", true, errorMessage);
-            }
-            // }
+            handleDialogStates("openInvestError", true, errorMessage);
             break;
         }
       }
     } catch (error) {
       console.log(error);
-      if (this) {
-        this.setState({ show_loader: false });
-      } else {
-        handleApiRunning(false);
-      }
+      handleApiRunning(false);
       toast("Something went wrong!");
     }
   }

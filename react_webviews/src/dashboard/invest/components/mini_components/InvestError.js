@@ -3,6 +3,9 @@ import Dialog, { DialogContent, DialogActions } from "material-ui/Dialog";
 import Button from "@material-ui/core/Button";
 
 const InvestError = ({ isOpen, handleClick, errorMessage }) => {
+  if (!errorMessage) {
+    errorMessage = "Something went wrong. Please try again later";
+  }
   const getMessage = (id) => {
     const element = document.getElementById(id);
     if (!element) return;
