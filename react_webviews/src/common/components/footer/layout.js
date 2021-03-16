@@ -173,15 +173,20 @@ export class FooterLayoutBase extends Component {
 
   renderDefaultLayout = (props) => {
     return(
-      <div className="FooterDefaultLayout" onClick={props.handleClick}>
-      <div className="FlexItem2 FlexButtonGenericColor">
+      <div className="FooterDefaultLayout" onClick={() => {
+        if (!props.disable) {
+          props.handleClick();
+        }
+      }}>
+      <div className={`FlexItem2 ${!props.disable ? 'FlexButtonGenericColor' : ''}`}>
         <Button
           type={props.type}
+          disable={props.disable}
           {...props} />
       </div>
     </div>
     )
-}
+  }
 
 WithProviderLayoutGold = (props) => {
   const leftArrowMapper = {
