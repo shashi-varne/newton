@@ -44,8 +44,18 @@ const IpvVideo = (props) => {
   const handleChange = (event) => {
     console.log(event.target.files)
     const uploadedFile = event.target.files[0]
-    let acceptedTypes = [' ']
-    setFile(event.target.files[0])
+    let acceptedTypes = [
+      'video/mp4',
+      'video/webm',
+      'video/ogg',
+      'video/x-flv',
+      'video/x-ms-wmv',
+    ]
+    if (acceptedTypes.includes(uploadedFile.type)) {
+      setFile(event.target.files[0])
+    } else {
+      toast('Upload a valid file format')
+    }
   }
 
   const handleUpload = () => {

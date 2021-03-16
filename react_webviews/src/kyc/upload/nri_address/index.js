@@ -70,17 +70,6 @@ const NRIAddressUpload = (props) => {
     }
   }, [])
 
-  if (!isEmpty(kyc)) {
-    if (kyc?.address.meta_data.is_nri) {
-      var address_proof = 'Passport'
-      var address_proof_key = 'passport'
-    } else {
-      var address_proof = docMapper[kyc?.address_doc_type]
-
-      var address_proof_key = kyc?.address_doc_type
-    }
-  }
-
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     if (getConfig().generic_callback) {
       window.callbackWeb[method_name]({
@@ -224,11 +213,14 @@ const NRIAddressUpload = (props) => {
       setIsApiRunning(true)
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address', addressProofKey)
+        result = await upload(frontDoc, 'nri_address', {
+          address_proof_key: addressProofKey,
+        })
       } else {
-        result = await upload(file, 'address', addressProofKey)
+        result = await upload(file, 'nri_address', {
+          addressProofKey,
+        })
       }
-      console.log(result)
       setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')

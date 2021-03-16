@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
+import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, docMapper } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
-import toast from '../../../common/ui/Toast'
+import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
-import useUserKycHook from '../../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -47,25 +47,28 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const AddressUpload = (props) => {
+const ChangeAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const [kycData, , isLoading] = useUserKycHook();
-  const [kyc, setKyc] = useState(
-    kycData
-  )
 
-  useEffect(() => {
-    setKyc(kycData)
-  }, [kycData])
+  const [kyc, setKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || null
+  )
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
+
+  useEffect(() => {
+    if (isEmpty(kyc)) {
+      initialize()
+    }
+  }, [])
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     if (getConfig().generic_callback) {
@@ -122,6 +125,19 @@ const AddressUpload = (props) => {
     }
   }
 
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      await initData()
+      const kyc = storageService().getObject(storageConstants.KYC)
+      setKyc(kyc)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      console.log('Finally')
+      setLoading(false)
+    }
+  }
   const handleChange = (type) => (event) => {
     console.log(event.target.files)
     const uploadedFile = event.target.files[0]
@@ -197,15 +213,14 @@ const AddressUpload = (props) => {
       setIsApiRunning(true)
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address', {
+        result = await upload(frontDoc, 'nri_address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        result = await upload(file, 'address', {
-          address_proof_key: addressProofKey,
+        result = await upload(file, 'nri_address', {
+          addressProofKey,
         })
       }
-      console.log(result)
       setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
@@ -224,15 +239,19 @@ const AddressUpload = (props) => {
     return addressLine
   }
 
-  var addressProofKey = kyc?.address?.meta_data?.is_nri
+  const addressProofKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
     : kyc?.address_doc_type
-  var addressProof = kyc?.address?.meta_data?.is_nri
+  const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
     : docMapper[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
+
+  const title = kyc?.address?.meta_data?.is_nri
+    ? 'Upload Indian Address Proof'
+    : 'Upload address proof'
 
   const getFullAddress = () => {
     let addressFull = ''
@@ -266,15 +285,21 @@ const AddressUpload = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={isLoading}
+      showSkelton={loading}
       handleClick={handleSubmit}
       disable={(!frontDoc && !backDoc) || isApiRunning}
       isApiRunning={isApiRunning}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="title">Upload address proof</div>
-          <div className="sub-title">{getFullAddress()}</div>
+          <div className="flex-between">
+            <div className="title">{title}</div>
+            <div className="kyc-main-title">
+              <span>1/4</span>
+            </div>
+          </div>
+          {/* <div className="sub-title">{getFullAddress()}</div> */}
+
           <Alert
             variant="attention"
             title="Note"
@@ -531,4 +556,4 @@ const AddressUpload = (props) => {
   )
 }
 
-export default AddressUpload
+export default ChangeAddressDetails2
