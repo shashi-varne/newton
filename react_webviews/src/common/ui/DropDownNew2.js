@@ -48,6 +48,8 @@ class SelectDropDown2 extends React.Component {
 
   render() {
 
+  //  const Option = props => { return ( <div> <components.Option {...props}> <input type="checkbox" checked={props.isSelected} onChange={() => null} /> <label>{props.value}</label> </components.Option> </div> ); };
+
     const options = this.props.options.map((ele, index) => {
         return ({
            'value': ele.value, 'label': ele.name
@@ -61,13 +63,14 @@ class SelectDropDown2 extends React.Component {
 
       {(value && <span className="label2">{this.props.label || 'label'}</span> )} {console.log(value)}
         <Select
+          components={{ Option }}
           defaultValue={value}
           placeholder={this.props.label}
           isClearable
           isSearchable={this.props.options.length <= 6 ? false : true}
           value={value}
           onChange={this.handleChange}
-          options={options}
+          options={Option}
           menuPlacement={'top'}
 
           textFieldProps={{
