@@ -5,7 +5,7 @@ import { nativeCallback } from "utils/native_callback";
 import { storageService } from "utils/validators";
 import { initialize } from "../common_data";
 import { ghGetMember} from "../../../constants";
-import { getConfig } from "utils/functions";
+// import { getConfig } from "utils/functions";
 import BottomInfo from "../../../../common/ui/BottomInfo";
 import Api from "utils/api";
 import ReligarePremium from "../religare/religare_premium";
@@ -330,9 +330,9 @@ class GroupHealthPlanPremiumSummary extends Component {
             </div>
           </div>
           {this.state.properties && this.renderProviderPremium()}
-          <div className="premium-summary-disclaimer" style={{ color: getConfig().primary }}>
-            {/* <p>Premium values are being rounded off for ease of representation, there may be a small difference in final payable value.</p> */}
-          </div>
+          {/* <div className="premium-summary-disclaimer" style={{ color: getConfig().primary }}>
+            <p>Premium values are being rounded off for ease of representation, there may be a small difference in final payable value.</p>
+          </div> */}
           <BottomInfo baseData={{ 'content': 'Complete your details and get quality medical care at affordable cost' }} />
         </div>
       </Container>

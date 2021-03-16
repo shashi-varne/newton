@@ -284,10 +284,6 @@ export function inrFormatDecimalWithoutIcon(number) {
   }
 }
 
-export function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 export function numDifferentiation(val, withSymbol, decimalPlaces = 2, retainLeadingZeroes = false) {
   if (!val) {
     val = '';

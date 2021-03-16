@@ -7,7 +7,7 @@ import { nativeCallback } from 'utils/native_callback';
 import ValueSelector from '../../../../common/ui/ValueSelector';
 import Checkbox from '../../../../common/ui/Checkbox';
 import { getConfig } from 'utils/functions';
-import { numberWithCommas } from 'utils/validators';
+import { inrFormatDecimal } from 'utils/validators';
 
 var getFrequency = {
     'MONTHLY': 'month',
@@ -62,7 +62,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 var optionsList = []
                 for(var x of resultData.premium_details){
                 var temp = {
-                    'value': `₹${numberWithCommas(x.premium)}/${getFrequency[x.payment_frequency]}`,
+                    'value': `${inrFormatDecimal(x.premium)}/${getFrequency[x.payment_frequency]}`,
                     'premium': x.premium,
                     'frequency':  getFrequency[x.payment_frequency]
                 }
@@ -177,7 +177,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         }
         body['payment_frequency'] = this.state.payment_frequency;
         this.setState({
-            // skelton: true
+            skelton: true
         });
         try {
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
