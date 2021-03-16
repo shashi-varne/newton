@@ -164,7 +164,7 @@ class GroupHealthPlanSelectSumAssured extends Component {
         }
         groupHealthPlanData.add_ons_data = [];
         groupHealthPlanData.post_body.add_ons_json = {};
-
+        groupHealthPlanData.checkbox = true;
         this.setLocalProviderData(groupHealthPlanData);
 
         if(groupHealthPlanData.account_type === 'self' || total_member === 1) {

@@ -99,14 +99,19 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
           
           if(!error){
               
-            var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY';
+            var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY'; console.log(groupHealthPlanData)
             var payment_frequency = freqSelected;
-            // var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
-            var selectedIndex  = this.state.groupHealthPlanData.sum_assured === 500000 ? 1 : 0;
-            var checked = this.state.checked;
-            checked = freqSelected === 'MONTHLY' ? true : false;
-            var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
-    
+             var checked = this.state.checked;
+             var selectedIndex, buttonDisabled
+             if(this.state.groupHealthPlanData.checkbox){
+                selectedIndex  = this.state.groupHealthPlanData.sum_assured === 500000 ? 1 : 0;
+                checked = this.state.groupHealthPlanData.sum_assured === 500000 ? true : false;
+                buttonDisabled = this.state.groupHealthPlanData.sum_assured === 500000 ? false : true;
+             }  else {
+                selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
+                buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
+                checked = freqSelected === 'MONTHLY' ? true : false;
+             }
             this.setState({
                 selectedIndex: selectedIndex,
                 payment_frequency : payment_frequency,
@@ -205,6 +210,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             
             groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
             groupHealthPlanData.goodhealthDecSelected = this.state.payment_frequency + 'For_goodhealthDec'
+            groupHealthPlanData.checkbox = false;
 
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate('plan-good-health-dec');
