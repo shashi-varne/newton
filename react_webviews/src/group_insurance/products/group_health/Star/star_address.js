@@ -8,7 +8,7 @@ import Api from 'utils/api';
 import toast from '../../../../common/ui/Toast';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
-import DropDownNew from '../../../../common/ui/DropDownNew'
+import DropDownNew2 from '../../../../common/ui/DropDownNew2'
 import { isEmpty , validateLengthDynamic } from '../../../../utils/validators';
 import DotDotLoader from '../../../../common/ui/DotDotLoader';
 
@@ -373,7 +373,7 @@ class StarAddress extends Component {
             </div>
           </FormControl>
           <div className="InputField">
-            <DropDownNew
+            <DropDownNew2
               width="40"
               dataType="AOB"
               options={this.state.cityList}
@@ -392,7 +392,7 @@ class StarAddress extends Component {
             />
           </div>
           <div className="InputField">
-            <DropDownNew
+            <DropDownNew2
               width="40"
               dataType="AOB"
               options={this.state.areaList || [{name: 'null' , value: 'null'}]}

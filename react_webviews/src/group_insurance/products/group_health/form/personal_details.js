@@ -18,7 +18,6 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
-import DropDownNew from '../../../../common/ui/DropDownNew'
 import DropDownNew2 from '../../../../common/ui/DropDownNew2'
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import { storageService } from 'utils/validators';
@@ -767,18 +766,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         {this.state.providerConfig.key === "STAR" &&
           this.state.member_key !== "applicant" && (
             <div className="InputField">
-            < DropDownNew   
-              options={this.state.occupationOptions}
-              label='Occupation'
-              id="occupation"
-              name="occupation"
-              error={this.state.form_data.occupation_error ? true : false}
-              helperText={this.state.form_data.occupation_error}
-              value={this.state.form_data.occupation || ""}
-              onChange={this.handleChange("occupation")}
-            />
-
-           < DropDownNew2   
+            < DropDownNew2   
               options={this.state.occupationOptions}
               label='Occupation'
               id="occupation"

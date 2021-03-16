@@ -327,11 +327,11 @@ class SelectDropDown extends React.Component {
     }
 }
 
-const DropDownNew = (props) => {
+const DropDownNew2 = (props) => {
     return (<SelectDropDown {...props} />)
 }
 
-export default DropDownNew;
+export default DropDownNew2;
 // eslint-disable-next-line
 { /*-------------------------------------------------------- [ Drop Down  Style Below ] ----------------------------------------------------------*/ }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Container from '../../common/Container';
-import DropDownNew from '../../../common/ui/DropDownNew'
+import DropDownNew2 from '../../../common/ui/DropDownNew2'
 
 class DropDown extends Component {
     constructor(props) {
@@ -298,7 +298,7 @@ class DropDown extends Component {
                 title="Other Insurance"
             >
                 <div style={{ height: '100vh' }}>
-                    <DropDownNew options={option} />
+                    <DropDownNew2 options={option} />
                 </div>
             </Container>
         );

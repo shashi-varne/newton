@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Container from '../common/Container';
 import Input from '../../common/ui/Input';
-import DropDownNew from '../../common/ui/DropDownNew'
+import DropDownNew2 from '../../common/ui/DropDownNew2'
 import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {advisoryConstants} from './constants';
@@ -284,7 +284,7 @@ class AdvisoryIncomeDetails extends Component {
              </div>
 
             <div className="InputField" style={{marginBottom: '5px'}}>
-             <DropDownNew
+             <DropDownNew2
               parent={this}
               selectedIndex = {this.state.form_data.income_growth_index || 0}
               width="140"
@@ -300,7 +300,7 @@ class AdvisoryIncomeDetails extends Component {
             />
             </div>
             <div className="InputField">
-            <DropDownNew
+            <DropDownNew2
               parent={this}
               selectedIndex = {this.state.form_data.retire_index || 0}
               width="140"

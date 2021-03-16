@@ -8,7 +8,7 @@ import {containsSpecialCharactersAndNumbers} from 'utils/validators';
 import PlusMinusInput from '../../common/ui/PlusMinusInput';
 import { genderOptions, yesNoOptions } from '../../group_insurance/constants' 
 import {advisoryConstants} from './constants';
-import DropDownNew from '../../common/ui/DropDownNew'
+import DropDownNew2 from '../../common/ui/DropDownNew2'
 import { updateLead, getLead } from './common_data';
 import {storageService, isEmpty} from "utils/validators";
 
@@ -395,7 +395,7 @@ class AdvisoryBasicDetails extends Component {
             </div>
 
             <div className="InputField adv-drop-down">
-            <DropDownNew
+            <DropDownNew2
               parent={this}
               header_title="What you're interested in"
               selectedIndex = {this.state.form_data.age_index || 0}
@@ -427,7 +427,7 @@ class AdvisoryBasicDetails extends Component {
             </div>
 
             <div className="InputField adv-drop-down">
-            <DropDownNew
+            <DropDownNew2
               parent={this}
               selectedIndex = {this.state.form_data.city_index || 0}
               width="140"

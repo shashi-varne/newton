@@ -3,7 +3,7 @@ import { FormControl } from 'material-ui/Form';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
-import DropDownNew from '../../../common/ui/DropDownNew'
+import DropDownNew2 from '../../../common/ui/DropDownNew2'
 import TitleWithIcon from '../../../common/ui/TitleWithIcon';
 import marital from 'assets/marital_status_dark_icn.png';
 import { fetchFHCData } from '../../common/ApiCalls';
@@ -121,7 +121,7 @@ class PersonalDetails2 extends Component {
     const has_kids = this.state.has_kids;
     if (has_kids) {
       kidsSelect = <div className="InputField">
-        <DropDownNew
+        <DropDownNew2
           error={(fhc_data.num_kids_error) ? true : false}
           helperText={fhc_data.num_kids_error}
           width="40"
