@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import { checkMerge, getPan, logout, savePanData } from "../common/api";
+import { checkMerge, getPan, logout, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
@@ -134,7 +134,7 @@ const Home = (props) => {
         setIsUserCompliant(false);
       }
     } catch (err) {
-      toast(err || genericErrorMessage);
+      toast(err.message || genericErrorMessage);
     } finally {
       setIsApiRunning(false);
     }
@@ -242,7 +242,7 @@ const Home = (props) => {
           address: userKyc.address.meta_data,
         },
       };
-      let result = await savePanData(body);
+      let result = await kycSubmit(body);
       if (!result) return;
       currentUser.name = result.kyc.pan.meta_data.name;
       if (
@@ -267,7 +267,7 @@ const Home = (props) => {
       }
     } catch (err) {
       console.log(err);
-      toast(err || genericErrorMessage);
+      toast(err.message || genericErrorMessage);
     } finally {
       setIsApiRunning(false);
     }

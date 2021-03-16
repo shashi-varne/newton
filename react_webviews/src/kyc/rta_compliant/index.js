@@ -2,56 +2,42 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import CompliantHelpDialog from "../mini_components/CompliantHelpDialog";
-import { initData } from "../services";
 import {
-  storageService,
   formatDate,
   dobFormatTest,
   isEmpty,
   validateNumber,
 } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { getCVL, savePanData } from "../common/api";
-import { getPathname, storageConstants } from "../constants";
+import { getCVL, kycSubmit } from "../common/api";
+import { getPathname } from "../constants";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const RtaCompliantPersonalDetails = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
+  const [kyc, user, isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
-    setShowLoader(false);
     let formData = {
-      pan: userkycDetails.pan.meta_data.pan_number,
-      dob: userkycDetails.pan.meta_data.dob,
-      email: userkycDetails.address.meta_data.email,
-      mobile: userkycDetails.identification.meta_data.mobile_number,
+      pan: kyc.pan.meta_data.pan_number,
+      dob: kyc.pan.meta_data.dob,
+      email: kyc.address.meta_data.email,
+      mobile: kyc.identification.meta_data.mobile_number,
     };
     setFormData({ ...formData });
   };
@@ -62,18 +48,17 @@ const RtaCompliantPersonalDetails = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["dob", "mobile"];
-    if (currentUser.email === null) keysToCheck.push("email");
+    if (user.email === null) keysToCheck.push("email");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.address.meta_data.email = form_data.email;
     userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
-    setUserKyc({ ...userkycDetails });
     let body = {
       pan_number: form_data.pan.toUpperCase(),
       dob: form_data.dob,
@@ -94,7 +79,7 @@ const RtaCompliantPersonalDetails = (props) => {
           address: userKyc.address.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       navigate(getPathname.invest);
     } catch (err) {
@@ -123,12 +108,12 @@ const RtaCompliantPersonalDetails = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       hideInPageTitle
       id="kyc-rta-compliant-personal-details"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-complaint-personal-details">
@@ -142,7 +127,7 @@ const RtaCompliantPersonalDetails = (props) => {
             HELP
           </div>
         </div>
-        {!showLoader && (
+        {!isLoading && (
           <main>
             <Input
               label="Date of birth(DD/MM/YYYY)"
@@ -155,7 +140,7 @@ const RtaCompliantPersonalDetails = (props) => {
               type="text"
               id="dob"
             />
-            {currentUser && currentUser.email === null && (
+            {user && user.email === null && (
               <Input
                 label="Email"
                 class="input"
@@ -167,7 +152,7 @@ const RtaCompliantPersonalDetails = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            {currentUser && currentUser.mobile === null && (
+            {user && user.mobile === null && (
               <Input
                 label="Mobile number"
                 class="input"

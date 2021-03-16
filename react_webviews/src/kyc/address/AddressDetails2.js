@@ -1,22 +1,23 @@
 import TextField from '@material-ui/core/TextField'
 import React, { useState, useEffect } from 'react'
 import Toast from '../../common/ui/Toast'
-import { getUrlParams, isEmpty, storageService } from 'utils/validators'
+import { getUrlParams, isEmpty } from 'utils/validators'
 import { getPinCodeData, submit } from '../common/api'
 import Container from '../common/Container'
-import { storageConstants, kycDocNameMapper } from '../constants'
-import { initData } from '../services'
+import { kycDocNameMapper } from '../constants'
 import { navigate as navigateFunc } from '../common/functions'
+import useUserKycHook from '../common/hooks/userKycHook'
 
 const AddressDetails2 = (props) => {
-  const [showSkelton, setShowSkelton] = useState(false)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [pinTouched, setPinTouched] = useState(false)
   const [showError, setShowError] = useState(false)
+  const [kycData, , isLoading] = useUserKycHook();
+  const [kyc, setKyc] = useState(kycData);
 
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
+  useEffect(() => {
+    setKyc(kycData)
+  }, [kycData])
 
   const getHelperText = (pincode) => {
     if (typeof pincode === 'string') {
@@ -188,24 +189,6 @@ const AddressDetails2 = (props) => {
     return kycDocNameMapper[kyc?.address_doc_type]
   }
 
-  const initialize = async () => {
-    try {
-      setShowSkelton(true)
-      const result = await initData()
-      setKyc(result.kyc)
-    } catch (err) {
-      setShowError(true)
-    } finally {
-      setShowSkelton(false)
-    }
-  }
-
-  useEffect(() => {
-    if (!kyc || isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
-
   useEffect(() => {
     if (kyc?.address?.meta_data?.pincode?.length === 6) {
       fetchPincodeData()
@@ -221,7 +204,7 @@ const AddressDetails2 = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={showSkelton}
+      showSkelton={isLoading}
       disable={isDisabled}
       hideInPageTitle
       handleClick={handleSubmit}

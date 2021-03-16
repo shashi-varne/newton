@@ -5,6 +5,7 @@ import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants } from '../../constants'
 import { upload } from '../../common/api'
+import useUserKycHook from '../../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -46,32 +47,11 @@ const MessageComponent = (kyc) => {
 const Pan = () => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
 
+  const [kyc, ,isLoading] = useUserKycHook();
+  
   const inputEl = useRef(null)
 
-  useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
-
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('Finally')
-      setLoading(false)
-    }
-  }
   const handleChange = (event) => {
     console.log(event.target.files)
     setFile(event.target.files[0])
@@ -89,8 +69,8 @@ const Pan = () => {
     try {
       setIsApiRunning(true)
       const result = await upload(file, 'pan')
-      console.log(result)
-      setKyc(result.kyc)
+      // console.log(result)
+      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
     } catch (err) {
       console.error(err)
@@ -106,7 +86,7 @@ const Pan = () => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={loading}
+      showSkelton={isLoading}
       handleClick={handleSubmit}
       disable={!file || isApiRunning}
       isApiRunning={isApiRunning}

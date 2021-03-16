@@ -62,6 +62,7 @@ const AddBankVerify = (props) => {
         pennyLoader();
       }
     } catch (err) {
+      console.log(err)
     } finally {
       setIsApiRunning(false);
     }

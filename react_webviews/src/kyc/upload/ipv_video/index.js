@@ -7,16 +7,14 @@ import { navigate as navigateFunc } from '../../common/functions'
 import { getConfig } from 'utils/functions'
 import toast from 'common/ui/Toast'
 import KnowMore from './KnowMore'
+import useUserKycHook from '../../common/hooks/userKycHook'
 
 const IpvVideo = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [ipvcode, setIpvCode] = useState('')
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
-
+  const [kyc, ,isLoading] = useUserKycHook();
   const [showKnowMoreDialog, setKnowMoreDialog] = useState(false)
 
   const open = () => {
@@ -35,7 +33,6 @@ const IpvVideo = (props) => {
 
   const fetchIpvCode = async () => {
     try {
-      setLoading(true)
       const result = await getIpvCode()
       setIpvCode(result.ipv_code)
     } catch (err) {
@@ -62,8 +59,8 @@ const IpvVideo = (props) => {
     try {
       setIsApiRunning(true)
       const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
-      console.log(result)
-      setKyc(result.kyc)
+      // console.log(result)
+      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/journey')
     } catch (err) {
@@ -82,7 +79,7 @@ const IpvVideo = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={loading}
+      showSkelton={loading || isLoading}
       handleClick={handleSubmit}
       disable={!file || isApiRunning}
       isApiRunning={isApiRunning}

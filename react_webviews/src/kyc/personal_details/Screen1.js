@@ -15,13 +15,12 @@ import {
   isEmpty,
 } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
 import toast from "common/ui/Toast";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
@@ -40,16 +39,22 @@ const PersonalDetails1 = (props) => {
   }, [kyc]);
 
   const initialize = async () => {
+    let mobile_number = kyc.identification?.meta_data?.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
+    }
     let formData = {
       name: kyc.pan?.meta_data?.name || "",
       dob: kyc.pan?.meta_data?.dob || "",
       email: kyc.identification?.meta_data?.email || "",
-      mobile: kyc.identification?.meta_data?.mobile_number || "",
+      mobile: mobile_number,
+      country_code: country_code,
       gender: kyc.identification?.meta_data?.gender || "",
       marital_status:
         kyc.identification?.meta_data?.marital_status || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -63,11 +68,16 @@ const PersonalDetails1 = (props) => {
       setFormData(data);
       return;
     }
+
+    let mobile_number = form_data.mobile;
+    if (form_data.country_code) {
+      mobile_number = form_data.country_code + "|" + mobile_number;
+    }
     let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.name = form_data.name;
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.email = form_data.email;
-    userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
+    userkycDetails.identification.meta_data.mobile_number = mobile_number;
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
@@ -84,7 +94,7 @@ const PersonalDetails1 = (props) => {
           identification: userKyc.identification.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       setKycToSession(submitResult.kyc);
       if (!submitResult) return;
       navigate(getPathname.personalDetails2, {
@@ -94,7 +104,7 @@ const PersonalDetails1 = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -123,12 +133,11 @@ const PersonalDetails1 = (props) => {
 
   return (
     <Container
-      showLoader={showLoader}
       id="kyc-personal-details1"
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
       showSkelton={isLoading}
     >

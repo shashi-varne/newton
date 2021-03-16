@@ -9,7 +9,7 @@ import {
   validateFields,
   navigate as navigateFunc,
 } from "../../common/functions";
-import { savePanData } from "../../common/api";
+import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
 
 const NriAddressDetails1 = (props) => {
@@ -76,7 +76,7 @@ const NriAddressDetails1 = (props) => {
           nri_address: userKyc.nri_address.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       navigate(getPathname.nriAddressDetails2, {
         state: {
@@ -86,7 +86,7 @@ const NriAddressDetails1 = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }

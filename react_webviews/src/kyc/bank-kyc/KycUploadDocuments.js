@@ -1,29 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 
-import { storageConstants, verificationDocOptions } from "../constants";
+import { verificationDocOptions } from "../constants";
 
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
-import { getUrlParams, isEmpty, storageService } from "utils/validators";
+import { getUrlParams, isEmpty } from "utils/validators";
 
 import { navigate as navigateFunc } from "../common/functions";
-import { initData } from "../services";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const KycUploadDocuments = (props) => {
-  const [showLoader, setShowLoader] = useState(false);
-  const [showSkelton, setShowSkelton] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC)
-  );
   const [selected, setSelected] = useState(null);
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
+
+  const [kyc, , isLoading] = useUserKycHook();
 
   let bankData = {};
 
@@ -88,26 +83,6 @@ const KycUploadDocuments = (props) => {
     navigate("/kyc/sample-documents");
   };
 
-  useEffect(() => {
-    if (!kyc || isEmpty(kyc)) {
-      initialize();
-    }
-  }, []);
-
-  const initialize = async () => {
-    try {
-      setShowSkelton(true);
-      await initData();
-      const kyc = storageService().getObject(storageConstants.KYC);
-      console.log(kyc);
-      setKyc(kyc);
-    } catch (err) {
-      setShowError(true);
-    } finally {
-      setShowSkelton(false);
-    }
-  };
-
   const proceed = () => {
     const navigate = navigateFunc.bind(props);
     if (additional) {
@@ -128,9 +103,8 @@ const KycUploadDocuments = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={showSkelton}
+      showSkelton={isLoading}
       disable={isApiRunning}
       hideInPageTitle
       handleClick={handleSubmit}

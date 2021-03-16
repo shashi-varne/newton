@@ -5,47 +5,36 @@ import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
   occupationTypeOptions,
   incomeOptions,
-  storageConstants,
   getPathname,
 } from "../constants";
-import { initData } from "../services";
-import { storageService, isEmpty } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../common/hooks/userKycHook";
+import { isEmpty } from "../../utils/validators";
 
 const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   let title = "Professional details";
   if (isEdit) {
     title = "Edit professional details";
   }
   const type = props.type || "";
 
+  const [kyc, ,isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC) || {};
-      setUserKyc(userkycDetails);
-    }
     let formData = {
-      income:
-        userkycDetails.identification?.meta_data?.gross_annual_income || "",
-      occupation: userkycDetails.identification?.meta_data?.occupation || "",
+      income: kyc.identification?.meta_data?.gross_annual_income || "",
+      occupation: kyc.identification?.meta_data?.occupation || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -57,7 +46,7 @@ const PersonalDetails3 = (props) => {
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.identification.meta_data.gross_annual_income =
       form_data.income;
     userkycDetails.identification.meta_data.occupation = form_data.occupation;
@@ -74,7 +63,7 @@ const PersonalDetails3 = (props) => {
           identification: userKyc.identification,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       if (type === "digilocker") {
         if (isEdit) {
@@ -91,7 +80,7 @@ const PersonalDetails3 = (props) => {
       }
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -110,12 +99,12 @@ const PersonalDetails3 = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       id="kyc-personal-details3"
       hideInPageTitle
       buttonTitle="CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-complaint-personal-details">

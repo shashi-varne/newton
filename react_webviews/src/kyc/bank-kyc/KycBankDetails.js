@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
-import { storageService, validateNumber, isEmpty } from "utils/validators";
+import { validateNumber, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
-  storageConstants,
   bankAccountTypeOptions,
   getPathname,
   getIfscCodeError,
@@ -13,23 +12,17 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc, validateFields } from "../common/functions";
-import { initData } from "../services";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
-import { getIFSC, savePanData } from "../common/api";
+import { getIFSC, kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
 import { getConfig } from "utils/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const KycBankDetails = (props) => {
   const genericErrorMessage = "Something Went wrong!";
   const partner = getConfig().partner;
   const navigate = navigateFunc.bind(props);
   const [isPennyExhausted, setIsPennyExhausted] = useState(false);
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const params = props.match.params || {};
   const userType = params.userType || "";
   const isEdit = props.location.state?.isEdit || false;
@@ -49,7 +42,6 @@ const KycBankDetails = (props) => {
       "As per SEBI, it is mandatory for mutual fund investors to provide their own bank account details.",
     variant: "info",
   });
-  const [showLoader, setShowLoader] = useState(true);
   const [disableFields, setDisableFields] = useState({
     skip_api_call: false,
     account_number_disabled: false,
@@ -59,25 +51,20 @@ const KycBankDetails = (props) => {
   });
   const [dl_flow, setDlFlow] = useState(false);
 
+  const [kyc, user, isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc, user]);
 
   let initialize = async () => {
-    let kycDetails = { ...userKyc };
-    let user = { ...currentUser };
-    if (isEmpty(kycDetails) || isEmpty(user)) {
-      await initData();
-      kycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(kycDetails);
-    }
     let disableData = { ...disableFields };
     if (
       user.active_investment ||
-      kycDetails.bank.meta_data_status === "approved" ||
-      kycDetails.bank.meta_data.bank_status === "doc_submitted"
+      kyc.bank.meta_data_status === "approved" ||
+      kyc.bank.meta_data.bank_status === "doc_submitted"
     ) {
       disableData.skip_api_call = true;
       disableData.account_number_disabled = true;
@@ -87,16 +74,16 @@ const KycBankDetails = (props) => {
     }
     setDisableFields({ ...disableData });
     if (
-      kycDetails.kyc_status !== "compliant" &&
-      !kycDetails.address.meta_data.is_nri &&
-      kycDetails.dl_docs_status !== "" &&
-      kycDetails.dl_docs_status !== "init" &&
-      kycDetails.dl_docs_status !== null
+      kyc.kyc_status !== "compliant" &&
+      !kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== "" &&
+      kyc.dl_docs_status !== "init" &&
+      kyc.dl_docs_status !== null
     ) {
       setDlFlow(true);
     }
-    setName(kycDetails.pan.meta_data.name || "");
-    let data = kycDetails.bank.meta_data || {};
+    setName(kyc.pan.meta_data.name || "");
+    let data = kyc.bank.meta_data || {};
     data.c_account_number = data.account_number;
     if (data.user_rejection_attempts === 0) {
       setIsPennyExhausted(true);
@@ -120,15 +107,14 @@ const KycBankDetails = (props) => {
         variant: "success",
       });
     }
-    setShowLoader(false);
     setBankData({ ...data });
     setAccountTypes([
-      ...bankAccountTypeOptions(kycDetails?.address?.meta_data?.is_nri || ""),
+      ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
     ]);
   };
 
   const uploadDocuments = () => {
-    navigate(`/kyc/${userKyc.kyc_status}/upload-documents`);
+    navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
   };
 
   const redirect = () => {
@@ -181,9 +167,9 @@ const KycBankDetails = (props) => {
     } else {
       if (dl_flow) {
         if (
-          userKyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          userKyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          userKyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+          kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
         )
           navigate(getPathname.uploadPan);
         else navigate(getPathname.kycEsign);
@@ -194,7 +180,7 @@ const KycBankDetails = (props) => {
   const saveBankData = async (data) => {
     try {
       setIsApiRunning(true);
-      const result = await savePanData({
+      const result = await kycSubmit({
         kyc: {
           bank: data,
         },
@@ -206,7 +192,7 @@ const KycBankDetails = (props) => {
         navigate(`/kyc/${userType}/bank-verify`);
       }
     } catch (err) {
-      toast(err || genericErrorMessage);
+      toast(err.message || genericErrorMessage);
     } finally {
       setIsApiRunning(false);
     }
@@ -292,16 +278,16 @@ const KycBankDetails = (props) => {
   return (
     <Container
       hideInPageTitle
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-approved-bank">
         <div className="kyc-main-title">Enter bank account details</div>
-        {!showLoader && (
+        {!isLoading && (
           <>
             <Alert
               variant={note.variant}

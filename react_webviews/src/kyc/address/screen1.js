@@ -9,12 +9,13 @@ import {
 import { initData } from '../services'
 import { storageService, isEmpty } from 'utils/validators'
 import { validateFields, navigate as navigateFunc } from '../common/functions'
-import { savePanData } from '../common/api'
+import { kycSubmit } from '../common/api'
 import toast from 'common/ui/Toast'
 import SVG from 'react-inlinesvg'
 import { getConfig } from 'utils/functions'
 
 const AddressDetails1 = (props) => {
+  const genericErrorMessage = 'Something went wrong!'
   const navigate = navigateFunc.bind(props)
   const [showLoader, setShowLoader] = useState(true)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -110,7 +111,7 @@ const AddressDetails1 = (props) => {
           nri_address: userKyc.nri_address.meta_data,
         },
       };
-      const submitResult = await savePanData(item)
+      const submitResult = await kycSubmit(item)
       if (!submitResult) return
       navigate(getPathname.addressDetails2, {
         state: {
@@ -120,7 +121,7 @@ const AddressDetails1 = (props) => {
       })
     } catch (err) {
       console.log(err)
-      toast(err)
+      toast(err.message || genericErrorMessage)
     } finally {
       setIsApiRunning(false)
     }
