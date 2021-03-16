@@ -382,6 +382,21 @@ export function renderPageLoader() {
         'It takes as much energy to wish as it does to plan.',
         'The best thing money can buy is financial freedom.'
     ]
+
+    // let quotes_data_insurance = [
+    //     'Life insurance will protect your family’s financial future.',
+    //     'If there’s anyone dependent on you - you need insurance.',
+    //     'Did you know insurance is good investment?',
+    //     'Insurance is a combination of care, commitment and common sense.',
+    //     'Think future, think insurance.',
+    //     'You’re future-proof when insured!',
+    //     'How do you ensure your loved ones are safe after you? Insure!',
+    //     'Insurance is sound planning for life.',
+    //     'It’s OK to prepare now for tomorrow.',
+    //     'Secure your loved ones that depend on you.',
+    // ]
+
+    
     var quote = quotes_data[Math.floor(Math.random() * quotes_data.length)];
 
     let loaderData = this.props.loaderData || {};
