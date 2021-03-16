@@ -12,6 +12,7 @@ class QuestionScreen4 extends Component {
     super(props);
     this.state = {
       show_loader: true,
+      rpEntryParams: storageService().getObject('risk-entry-params') || {},
       questionnaire: [],
       question1: '',
       question1_error: '',
@@ -75,7 +76,7 @@ class QuestionScreen4 extends Component {
         "screen_name": 'Stock',
         "q1": this.state.question1 ? 'answered' : 'empty',
         "q2": this.state.question2 ? 'answered' : 'empty',
-        flow: storageService().get('risk-entry-flow') || '',
+        flow: this.state.rpEntryParams.flow,
       }
     };
     if (user_action === 'just_set_events') {
@@ -119,7 +120,7 @@ class QuestionScreen4 extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="Save and Continue"
-        topIcon="close"
+        topIcon={this.state.rpEntryParams.hideClose ? '' : 'close'}
         classOverRideContainer="question-container"
         events={this.sendEventsForInputsNextClick('just_set_events')}
       >

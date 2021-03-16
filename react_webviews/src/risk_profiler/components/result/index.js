@@ -32,13 +32,14 @@ class Result extends Component {
 
   setEntryParams = () => {
     let urlParams = getUrlParams();
-    // const entryParams = storageService().getObject('risk-entry-params') || {};
     if (urlParams.fromExternalSrc) {
       storageService().setObject(
         'risk-entry-params',
-        pick(urlParams, ['amount', 'flow', 'term', 'type', 'year', 'subType', 'partner_code', 'hideRPReset'])
+        pick(
+          urlParams,
+          ['amount', 'flow', 'term', 'type', 'year', 'subType', 'hideRPReset', 'hideClose']
+        )
       );
-      storageService().set('flow', urlParams.flow);
     } else {
       urlParams = storageService().getObject('risk-entry-params') || {};
     }
