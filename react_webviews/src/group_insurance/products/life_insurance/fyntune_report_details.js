@@ -127,7 +127,8 @@ class FyntuneReportDetails extends Component {
                     </div> 
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
-                            <h2 style={{margin: "0px 0px"}}>Sanchay Plus</h2>
+                        {this.state.policy_data.product_title && <h3 style={{margin: "0px 0px",fontSize: '20px',lineHeight: '24px', fontWeight:'bold'}}> {this.state.policy_data.product_title}</h3> }
+                        {this.state.policy_data.product_subtitle && <span style={{margin: "0px 0px",fontSize: '15px',lineHeight: '24px',fontWeight:'400'}}>{this.state.policy_data.product_subtitle}</span>}
                             {this.state.policy_data.product_name && <p style={{margin: "5px 0px"}}>({this.state.policy_data.subtitle})</p> }
                         </div>
 
