@@ -127,7 +127,6 @@ class QuestionScreen5 extends Component {
           if (!useNewFlow || isEmpty(useNewFlow)) {
             this.navigate('result');
           } else {
-            storageService().remove('useNewFlow');
             this.navigate('result-new');
           }
         }

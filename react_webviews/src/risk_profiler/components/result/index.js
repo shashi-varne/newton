@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { getConfig } from 'utils/functions';
 import toast from '../../../common/ui/Toast';
 import Container from '../../common/Container';
-import meter1 from 'assets/meter1.svg';
-import meter2 from 'assets/meter2.svg';
-import meter3 from 'assets/meter3.svg';
-import meter4 from 'assets/meter4.svg';
-import meter5 from 'assets/meter5.svg';
+import conservative from 'assets/meter-conservative.svg';
+import moderatelyConservative from 'assets/meter-moderately-conservative.svg';
+import moderate from 'assets/meter-moderate.svg';
+import moderatelyAggresive from 'assets/meter-moderately-aggresive.svg';
+import aggresive from 'assets/meter-aggresive.svg';
 import { nativeCallback } from 'utils/native_callback';
 
 import Api from 'utils/api';
@@ -275,27 +275,27 @@ class Result extends Component {
       1: {
         title: 'Conservative Investor',
         contennt: 'Investor like you are comfortable in accepting lower returns for a higher degree of liquidity or stability. Typically, a Conservative investor primarly seeks to minimize risk and loss of money.',
-        img: meter1
+        img: conservative
       },
       2: {
-        title: 'Low risk Investor',
+        title: 'Moderately Conservative Investor',
         contennt: 'You have a low risk appetite. Consistent and sustainable returns are what you as an investor need.',
-        img: meter2
+        img: moderatelyConservative
       },
       3: {
         title: 'Moderate Investor',
         contennt: 'You have a moderate tolerance for risk, investors like you values reducing risks and enhancing returns equally. Also, moderate investors are willing to accept modest risks to seek higher long-term returns.',
-        img: meter3
+        img: moderate
       },
       4: {
-        title: 'High risk Investor',
+        title: 'Moderately Aggresive Investor',
         contennt: 'You are ready to take high risk by investing in risky bets. You seem to be okay with risks as long as the reward compensates well.',
-        img: meter4
+        img: moderatelyAggresive
       },
       5: {
         title: 'Aggressive Investor',
         contennt: 'You have a very high tolerance for risk, investors like you prefer to stay in the market in times of extreme volatility in exchange for the possibility of receiving high relative returns over the time to outpace inflation.',
-        img: meter5
+        img: aggresive
       }
     }
 
@@ -304,11 +304,11 @@ class Result extends Component {
 
   getImg(score) {
     let map = {
-      1: meter1,
-      2: meter2,
-      3: meter3,
-      4: meter4,
-      5: meter5
+      1: conservative,
+      2: moderatelyConservative,
+      3: moderate,
+      4: moderatelyAggresive,
+      5: aggresive
 
     }
     return map[score];
