@@ -64,6 +64,7 @@ import Selfie from './upload/selfie'
 import IpvVideo from './upload/ipv_video'
 import DigilockerCallback from './digilocker/components/digilockercallback'
 import NRIAddressUpload from './upload/nri_address'
+import ChangeAddressDetails2 from './address/change_address/ChangeAddressDetails2'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -111,6 +112,11 @@ const Kyc = (props) => {
             exact
             path={`${url}/change-address-details1`}
             component={ChangeAddressDetails1}
+          />
+          <Route
+            exact
+            path={`${url}/change-address-details2`}
+            component={ChangeAddressDetails2}
           />
           <Route
             exact

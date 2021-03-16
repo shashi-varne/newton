@@ -191,14 +191,22 @@ export const addAdditionalBank = async (data) => {
 export const upload = async (file, type = 'pan', data = {}) => {
   const formData = new FormData()
   formData.set('res', file)
+  let address_proof_key = ''
   if (!isEmpty(data)) {
     switch (type) {
       case 'ipvvideo':
         formData.append('ipv_code', data.ipv_code)
         break
+      case 'address':
+        address_proof_key = data?.address_proof_key
+        break
+      case 'nri_address':
+       address_proof_key = data?.address_proof_key
+       break
     }
   }
-  const res = await Api.post(`/api/kyc/v2/doc/mine/${type}`, formData)
+  const url = isEmpty(address_proof_key) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${address_proof_key}`
+  const res = await Api.post(url, formData)
   if (
     res.pfwresponse.status_code === 200 &&
     res.pfwresponse.result.message === 'success'

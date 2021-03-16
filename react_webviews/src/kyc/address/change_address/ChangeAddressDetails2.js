@@ -3,10 +3,10 @@ import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
 import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, docMapper } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
-import toast from '../../../common/ui/Toast'
+import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
 
@@ -47,7 +47,7 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const AddressUpload = (props) => {
+const ChangeAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
@@ -213,15 +213,14 @@ const AddressUpload = (props) => {
       setIsApiRunning(true)
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address', {
+        result = await upload(frontDoc, 'nri_address', {
           address_proof_key: addressProofKey,
         })
       } else {
-        result = await upload(file, 'address', {
-          address_proof_key: addressProofKey,
+        result = await upload(file, 'nri_address', {
+          addressProofKey,
         })
       }
-      console.log(result)
       setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
@@ -240,15 +239,19 @@ const AddressUpload = (props) => {
     return addressLine
   }
 
-  var addressProofKey = kyc?.address?.meta_data?.is_nri
+  const addressProofKey = kyc?.address?.meta_data?.is_nri
     ? 'passport'
     : kyc?.address_doc_type
-  var addressProof = kyc?.address?.meta_data?.is_nri
+  const addressProof = kyc?.address?.meta_data?.is_nri
     ? 'Passport'
     : docMapper[kyc?.address_doc_type]
   const onlyFrontDocRequired = ['UTILITY_BILL', 'LAT_BANK_PB'].includes(
     addressProofKey
   )
+
+  const title = kyc?.address?.meta_data?.is_nri
+    ? 'Upload Indian Address Proof'
+    : 'Upload address proof'
 
   const getFullAddress = () => {
     let addressFull = ''
@@ -289,8 +292,14 @@ const AddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="title">Upload address proof</div>
-          <div className="sub-title">{getFullAddress()}</div>
+          <div className="flex-between">
+            <div className="title">{title}</div>
+            <div className="kyc-main-title">
+              <span>1/4</span>
+            </div>
+          </div>
+          {/* <div className="sub-title">{getFullAddress()}</div> */}
+
           <Alert
             variant="attention"
             title="Note"
@@ -547,4 +556,4 @@ const AddressUpload = (props) => {
   )
 }
 
-export default AddressUpload
+export default ChangeAddressDetails2
