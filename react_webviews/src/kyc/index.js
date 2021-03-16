@@ -12,7 +12,6 @@ import { ToastContainer } from 'react-toastify'
 import NotFound from '../common/components/NotFound'
 
 import Journey from './journey'
-import Upload from './upload'
 import Intro from './upload/intro'
 import Progress from './upload/progress'
 import Pan from './upload/pan'
@@ -64,6 +63,7 @@ import Sign from './upload/sign'
 import Selfie from './upload/selfie'
 import IpvVideo from './upload/ipv_video'
 import DigilockerCallback from './digilocker/components/digilockercallback'
+import NRIAddressUpload from './upload/nri_address'
 
 const theme = createMuiTheme(themeConfig)
 
@@ -117,7 +117,6 @@ const Kyc = (props) => {
             path={`${url}/nri-address-details1`}
             component={NriAddressDetails1}
           />
-          <Route exact path={`${url}/upload`} component={Upload} />
           <Route exact path={`${url}/upload/intro`} component={Intro} />
           <Route exact path={`${url}/upload/progress`} component={Progress} />
           <Route exact path={`${url}/upload/pan`} component={Pan} />
@@ -128,6 +127,11 @@ const Kyc = (props) => {
             exact
             path={`${url}/upload/address`}
             component={AddressUpload}
+          />
+          <Route
+            exact
+            path={`${url}/upload/address-nri`}
+            component={NRIAddressUpload}
           />
           <Route exact path={`${url}/home`} component={Home} />
           <Route

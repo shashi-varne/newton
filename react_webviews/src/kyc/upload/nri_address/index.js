@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
+import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
-import { storageConstants, docMapper } from '../../constants'
+import { storageConstants, nriDocMapper as docMapper } from '../../constants'
 import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
-import toast from '../../../common/ui/Toast'
+import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
-import useUserKycHook from '../../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -47,25 +47,39 @@ const MessageComponent = (kyc) => {
   )
 }
 
-const AddressUpload = (props) => {
+const NRIAddressUpload = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const [kycData, , isLoading] = useUserKycHook();
-  const [kyc, setKyc] = useState(
-    kycData
-  )
 
-  useEffect(() => {
-    setKyc(kycData)
-  }, [kycData])
+  const [kyc, setKyc] = useState(
+    storageService().getObject(storageConstants.KYC) || null
+  )
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
+
+  useEffect(() => {
+    if (isEmpty(kyc)) {
+      initialize()
+    }
+  }, [])
+
+  if (!isEmpty(kyc)) {
+    if (kyc?.address.meta_data.is_nri) {
+      var address_proof = 'Passport'
+      var address_proof_key = 'passport'
+    } else {
+      var address_proof = docMapper[kyc?.address_doc_type]
+
+      var address_proof_key = kyc?.address_doc_type
+    }
+  }
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     if (getConfig().generic_callback) {
@@ -122,6 +136,19 @@ const AddressUpload = (props) => {
     }
   }
 
+  const initialize = async () => {
+    try {
+      setLoading(true)
+      await initData()
+      const kyc = storageService().getObject(storageConstants.KYC)
+      setKyc(kyc)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      console.log('Finally')
+      setLoading(false)
+    }
+  }
   const handleChange = (type) => (event) => {
     console.log(event.target.files)
     const uploadedFile = event.target.files[0]
@@ -197,9 +224,9 @@ const AddressUpload = (props) => {
       setIsApiRunning(true)
       let result
       if (onlyFrontDocRequired) {
-        result = await upload(frontDoc, 'address')
+        result = await upload(frontDoc, 'address', addressProofKey)
       } else {
-        result = await upload(file, 'address')
+        result = await upload(file, 'address', addressProofKey)
       }
       console.log(result)
       setKyc(result.kyc)
@@ -262,7 +289,7 @@ const AddressUpload = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={isLoading}
+      showSkelton={loading}
       handleClick={handleSubmit}
       disable={(!frontDoc && !backDoc) || isApiRunning}
       isApiRunning={isApiRunning}
@@ -527,4 +554,4 @@ const AddressUpload = (props) => {
   )
 }
 
-export default AddressUpload
+export default NRIAddressUpload

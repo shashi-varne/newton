@@ -145,103 +145,101 @@ async function setNpsData(result) {
 }
 
 export function getKycAppStatus(kyc) {
-  let rejected = 0
-  let metaRejected = 0
-  let docRejected = 0
-  let rejectedItems = []
-  let fieldsToCheck = []
-  if (kyc?.kyc_status === 'compliant') {
-    fieldsToCheck = [
-      { name: 'pan', keys: ['meta_data_status'] },
-      { name: 'bank', keys: ['meta_data_status'] },
-      { name: 'identification', keys: ['meta_data_status'] },
-      { name: 'nomination', keys: ['meta_data_status'] },
-      { name: 'sign', keys: ['doc_status'] },
-    ]
+  var rejected = 0;
+  var metaRejected = 0;
+  var docRejected = 0;
+  var rejectedItems = [];
+  if (kyc.kyc_status == "compliant") {
+    var fieldsToCheck = [
+      { name: "pan", keys: ["meta_data_status"] },
+      { name: "bank", keys: ["meta_data_status"] },
+      { name: "identification", keys: ["meta_data_status"] },
+      { name: "nomination", keys: ["meta_data_status"] },
+      { name: "sign", keys: ["doc_status"] }
+    ];
   } else {
-    fieldsToCheck = [
-      { name: 'pan', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'address', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'bank', keys: ['meta_data_status'] },
-      { name: 'identification', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'nomination', keys: ['doc_status', 'meta_data_status'] },
-      { name: 'sign', keys: ['doc_status'] },
-      { name: 'ipvvideo', keys: ['doc_status'] },
-    ]
-  }
-  if (kyc?.address?.meta_data?.is_nri) {
-    fieldsToCheck.push({
-      name: 'nri_address',
-      keys: ['doc_status', 'meta_data_status'],
-    })
+    var fieldsToCheck = [
+      { name: "pan", keys: ["doc_status", "meta_data_status"] },
+      { name: "address", keys: ["doc_status", "meta_data_status"] },
+      { name: "bank", keys: ["meta_data_status"] },
+      { name: "identification", keys: ["doc_status", "meta_data_status"] },
+      { name: "nomination", keys: ["doc_status", "meta_data_status"] },
+      { name: "sign", keys: ["doc_status"] },
+      { name: "ipvvideo", keys: ["doc_status"] }
+    ];
   }
 
-  fieldsToCheck.forEach((field) => {
-    const { name, keys } = field
-    const objRej = {
-      name,
-      keys: [],
-    }
-    keys.forEach((key) => {
-      if (kyc[name][key] === 'rejected') {
-        if (key === 'meta_data_status') {
-          ++metaRejected
+  if (kyc.address.meta_data.is_nri) {
+    var obj = {
+      name: "nri_address",
+      keys: ["doc_status", "meta_data_status"]
+    };
+
+    fieldsToCheck.push(obj);
+  }
+
+  for (var i = 0; i < fieldsToCheck.length; i++) {
+    var objRej = {
+      name: fieldsToCheck[i].name,
+      keys: []
+    };
+    for (var j = 0; j < fieldsToCheck[i].keys.length; j++) {
+      var k = fieldsToCheck[i].keys[j];
+      if (kyc[fieldsToCheck[i].name][k] === "rejected") {
+        if (k === "meta_data_status") {
+          metaRejected++;
         }
-        if (key === 'doc_status') {
-          ++docRejected
+        if (k === "doc_status") {
+          docRejected++;
         }
-        objRej.keys.push(key)
-        ++rejected
+        objRej.keys.push(k);
+        rejected++;
       }
-    })
-    if (objRej.keys.length !== 0) {
-      rejectedItems.push(objRej)
     }
-  })
-  let status = ''
+
+    if (objRej.keys.length !== 0) {
+      rejectedItems.push(objRej);
+    }
+  }
+
+  var status;
   if (rejected > 0) {
-    status = 'rejected'
+    status = "rejected";
   } else {
-    status = kyc.application_status_v2
+    status = kyc.application_status_v2;
   }
 
-  if (
-    !kyc.pan.meta_data.pan_number ||
-    (kyc.pan.meta_data.pan_number && kyc.customer_verified !== 'VERIFIED')
-  ) {
-    status = 'ground'
+  if (!kyc.pan.meta_data.pan_number || (kyc.pan.meta_data.pan_number &&
+    kyc.customer_verified !== 'VERIFIED')) {
+    status = 'ground';
   }
 
-  if (
-    kyc?.kyc_status === 'compilant' &&
-    kyc?.application_status_v2 !== 'submitted' &&
-    kyc?.customer_vrified !== 'VERIFIED'
-  ) {
-    status = 'ground'
+  if (kyc.kyc_status === 'compliant' && (kyc.application_status_v2 !== 'submitted' &&
+    kyc.application_status_v2 !== 'complete') && kyc.customer_verified == 'UNVERIFIED') {
+    status = 'ground_premium';
   }
 
-  if (kyc?.kyc_status === 'compilant' && (kyc?.application_status_v2 !== 'submitted' && kyc?.application_status_v2 !== 'complete') && kyc?.customer_verified === 'UNVERIFIED') {
-    status = 'ground_premium'
+  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
+    status = 'ground_aadhaar';
   }
 
-  if (!kyc?.address.meta_data?.is_nri && kyc?.kyc_status !== 'comliant' && kyc?.dl_docs_status !== '' && kyc?.dl_docs_status !== 'init' && kyc?.dl_docs_status !== null) {
-    status = 'ground_aadhar'
-  }
-
-  if (kyc?.application_status_v2 === 'init' && kyc?.pan.meta_data.pan_number && kyc?.customer_verified === 'VERIFIED' && (kyc?.dl_docs_status === '' || kyc?.dl_docs_status === 'init' || kyc?.dl_docs_status === null)) {
-    status = 'incomplete'
-  }
-
-  if (kyc?.kyc_status !== 'compliant' && (kyc?.dl_docs_status === '' || kyc?.dl_docs_status === 'init' || kyc?.dl_docs_status === null) && (kyc?.application_status_v2 === 'submitted' || kyc?.application_status_v2 === 'complete') && kyc?.sign_status !== 'signed') {
+  if (kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
+    kyc.customer_verified == 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
     status = 'incomplete';
   }
 
-  return {
-    status,
-    metaRejected,
-    docRejected,
-    rejectedItems
+  if (kyc.kyc_status !== 'compliant' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null) && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+    status = 'incomplete';
   }
+
+  var result = {
+    status: status,
+    metaRejected: metaRejected,
+    docRejected: docRejected,
+    rejectedItems: rejectedItems
+  };
+
+  return result;
 }
 
 export function getDocuments(userKyc) {

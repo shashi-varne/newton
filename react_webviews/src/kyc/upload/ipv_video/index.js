@@ -21,8 +21,8 @@ const IpvVideo = (props) => {
     setKnowMoreDialog(true)
   }
 
-  const toggleKnowMoreDialog = () => {
-    setKnowMoreDialog(!showKnowMoreDialog)
+  const close = () => {
+    setKnowMoreDialog(false)
   }
 
   const inputEl = useRef(null)
@@ -43,6 +43,8 @@ const IpvVideo = (props) => {
   }
   const handleChange = (event) => {
     console.log(event.target.files)
+    const uploadedFile = event.target.files[0]
+    let acceptedTypes = [' ']
     setFile(event.target.files[0])
   }
 
@@ -151,13 +153,13 @@ const IpvVideo = (props) => {
           <div className="ipv_code">{ipvcode}</div>
           <div className="flex-between-center">
             <div className="know_more">How to make a selfie video ?</div>
-            <div className="link" onClick={() => {}}>
+            <div className="link" onClick={() => open()}>
               KNOW MORE
             </div>
           </div>
         </section>
       )}
-      <KnowMore isOpen={showKnowMoreDialog} />
+      <KnowMore isOpen={showKnowMoreDialog} close={close} />
     </Container>
   )
 }

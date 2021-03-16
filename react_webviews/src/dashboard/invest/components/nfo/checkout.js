@@ -11,6 +11,7 @@ import TermsAndCond from "../../../mini-components/TermsAndCond";
 import { CATEGORY, FUNDSLIST, SUBCATEGORY, CART } from "../../../diy/constants";
 import PennyVerificationPending from "../mini_components/PennyVerificationPending";
 import InvestError from "../mini_components/InvestError";
+import InvestReferralDialog from "../mini_components/InvestReferralDialog";
 
 class Checkout extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class Checkout extends Component {
       renderData: nfoData.checkoutInvestType,
       type: props.type,
       currentUser: storageService().getObject("user") || {},
+      dialogStates: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -128,6 +130,17 @@ class Checkout extends Component {
     }
   };
 
+  handleDialogStates = (key, value, errorMessage) => {
+    let dialog_states = { ...this.state.dialogStates };
+    dialog_states[key] = value;
+    if (errorMessage) dialog_states["errorMessage"] = errorMessage;
+    this.setState({ dialogStates: dialog_states });
+  };
+
+  handleApiRunning = (isApiRunning) => {
+    this.setState({ isApiRunning: isApiRunning });
+  };
+
   handleChange = (name, index = 0) => async (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
@@ -185,9 +198,7 @@ class Checkout extends Component {
       loadingText,
       type,
       renderData,
-      openPennyVerificationPending,
-      openInvestError,
-      errorMessage,
+      dialogStates,
     } = this.state;
     if (fundsData && fundsData.length === 0) ctc_title = "BACK";
     return (
@@ -291,13 +302,18 @@ class Checkout extends Component {
           </div>
           <TermsAndCond />
           <PennyVerificationPending
-            isOpen={openPennyVerificationPending}
+            isOpen={dialogStates.openPennyVerificationPending}
             handleClick={() => this.navigate("/kyc/add-bank")}
           />
           <InvestError
-            isOpen={openInvestError}
-            errorMessage={errorMessage}
+            isOpen={dialogStates.openInvestError}
+            errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
+          />
+          <InvestReferralDialog
+            isOpen={dialogStates.openInvestReferral}
+            proceedInvestment={this.proceedInvestment}
+            close={() => this.handleDialogStates("openInvestReferral", false)}
           />
         </div>
       </Container>

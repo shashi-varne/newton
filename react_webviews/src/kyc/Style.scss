@@ -241,8 +241,13 @@
     .input {
       margin-top: 20px;
 
+      .MuiGrid-grid-xs-5 {
+        max-width: fit-content;
+        flex-basis: 0;
+      }
+
       .MuiGrid-item {
-        min-width: fit-content;
+        min-width: 146px;
 
         label {
           .inside-text {
@@ -1129,6 +1134,7 @@
 }
 
 #kyc-upload-pan,
+#kyc-upload-address,
 #kyc-upload-ipv-video,
 #kyc-upload-sign,
 #kyc-upload-identification .page-body-kyc {
@@ -1174,6 +1180,7 @@
       color: var(--secondary);
       font-size: 10px;
       margin: 5px 0 0;
+      cursor: pointer;
     }
   }
 }
@@ -1483,7 +1490,7 @@
 
     .value {
       line-height: 15px;
-      color: #160D2E;
+      color: #160d2e;
     }
   }
 
@@ -1756,6 +1763,10 @@
 
 .kyc-address-details {
   .input {
+    .MuiGrid-item {
+      min-width: 164px !important;
+    }
+
     .address-label {
       color: #8d879b;
       font-size: 16px;
@@ -1767,7 +1778,7 @@
       flex-wrap: wrap;
 
       .address-proof-option {
-        margin: 10px 10px 10px 0;
+        margin: 10px 15px 10px 0;
         padding: 8px 10px 8px 10px;
         display: flex;
         justify-content: space-between;
@@ -1777,7 +1788,7 @@
         color: #160d2e;
         border: 1px solid;
         border-color: #767e86;
-        min-width: 130px;
+        min-width: 145px;
         cursor: pointer;
 
         .check-icon {
@@ -1931,4 +1942,70 @@
 
 .kyc-dl-aadhaar-dialog .dialog-actions {
   margin-top: 25px;
+}
+
+.ipv-know-more-dialog {
+  .MuiDialog-paper {
+    margin: 0 !important;
+  }
+
+  .know-more-dialog-content {
+    color: #333333;
+    line-height: 1.5;
+    padding: 15px 15px 10px 15px;
+
+    header {
+      width: 40px;
+      padding-bottom: 40px;
+      cursor: pointer;
+
+      .close-icon {
+        width: 15px;
+        height: 15px;
+      }
+    }
+
+    main {
+      padding-bottom: 30px;
+
+      .title {
+        font-size: 20px;
+        color: #160d2e;
+        font-weight: 600;
+      }
+
+      .content {
+        text-align: center;
+
+        .text {
+          font-size: 14px;
+          color: #160d2e;
+          text-align: left;
+          padding: 15px 0 5px 0;
+
+          b {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .action {
+    width: 100% !important;
+    margin: 8px 0 !important;
+
+    button {
+      color: white;
+      background-color: var(--secondary);
+      width: 100%;
+      text-align: center;
+      margin: 0 15px;
+    }
+
+    button:hover {
+      color: white;
+      background-color: var(--secondary);
+    }
+  }
 }
