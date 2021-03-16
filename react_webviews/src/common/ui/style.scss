@@ -987,3 +987,8 @@ body[data-device="mobile"] {
   color: white;
   background-color: var(--secondary);
 }
+
+.carousel.carousel-slider{
+  display: flex;
+  flex-direction: column-reverse;
+}

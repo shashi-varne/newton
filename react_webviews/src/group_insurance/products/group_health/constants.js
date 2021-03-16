@@ -562,8 +562,8 @@ export const gmc = {
         plan_list_screen: 'plan-details',
         plan_details_screens: 'plan-select-sum-assured',
         sum_assured_screen: {
-            floater: 'plan-select-payment-frequency',
-            not_floater: 'plan-select-payment-frequency'
+            floater: 'plan-select-paying-frequency',
+            not_floater: 'plan-select-paying-frequency'
         },
         cover_type_screen: 'plan-select-add-ons',
         add_ons_screen: 'plan-select-cover-period',
