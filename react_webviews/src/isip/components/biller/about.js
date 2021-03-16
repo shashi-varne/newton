@@ -42,7 +42,7 @@ class About extends Component {
 
   handleClick = async () => {
     this.sendEvents('next');
-    this.navigate('steps');
+    this.navigate('/isip/biller/steps');
   }
 
   render() {

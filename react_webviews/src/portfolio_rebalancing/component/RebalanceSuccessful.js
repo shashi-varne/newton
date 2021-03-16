@@ -44,7 +44,6 @@ const RebalanceSuccessful = () => {
     <Container
       goBack={handleClick}
       buttonTitle='View Details'
-      fullWidthButton
       helpContact
       disableBack
       handleClick={handleClick}

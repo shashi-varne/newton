@@ -273,6 +273,7 @@ class Earnings extends Component {
       <Container
         showLoader={this.state.show_loader}
         title={'Earnings'}
+        noFooter={true}
       >
         <div className="Earning">
           <div className={`ReferPaytmGrid pad25 GreyBackground ${(this.state.total_earnings > 0) ? '' : 'EarningsPaytmGrid'}`}>

@@ -348,7 +348,7 @@ class PlanSuccessClass extends Component {
   render() {
     return (
       <Container
-        twoButtons={true}
+        twoButton={true}
         product_key={this.props.parent ? this.props.parent.state.product_key : ''}
         events={this.sendEvents('just_set_events')}
         buttonOneTitle="Download Policy"

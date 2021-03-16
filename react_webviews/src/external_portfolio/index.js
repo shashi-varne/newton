@@ -1,14 +1,7 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { withRouter } from "react-router";
-import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
 import "./components/Style.scss";
 import "./mini-components/Style.scss";
-import { themeConfig } from 'utils/constants';
-import { create } from "jss";
-import JssProvider from "react-jss/lib/JssProvider";
-import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
-import { ToastContainer } from 'react-toastify';
 
 // Component Paths
 import EmailEntry from './components/email_entry';
@@ -22,35 +15,11 @@ import Settings from './components/settings';
 import PANSelector from './components/select_PAN';
 import CamsRequestStepsPage from './components/cams_request_steps_page';
 import CamsWebpage from './components/cams_webpage';
-// 
-
-const generateClassName = createGenerateClassName({
-  dangerouslyUseGlobalCSS: true,
-  productionPrefix: "f"
-});
-const jss = create(jssPreset());
-const theme = createMuiTheme(themeConfig);
-const ScrollToTop = withRouter(
-  class ScrollToTopWithoutRouter extends Component {
-    componentDidUpdate(prevProps) {
-      if (this.props.location !== prevProps.location) {
-        window.scrollTo(0, 0);
-      }
-    }
-
-    render() {
-      return null;
-    }
-  }
-);
 
 function external_portfolio(props) {
   const { url } = props.match;
   return (
-    <JssProvider jss={jss} generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <ScrollToTop />
-        <ToastContainer autoClose={3000} />
+     <Fragment>
         <Switch>
           <Route path={`${url}/email_entry`} component={EmailEntry} />
           <Route path={`${url}/statement_request/:email`} component={StatementRequestPage} />
@@ -65,8 +34,8 @@ function external_portfolio(props) {
           <Route path={`${url}/select_pan`} component={PANSelector} />
           <Route path={`${url}/fund_holdings`} component={FundHoldings} />
         </Switch>
-      </MuiThemeProvider>
-    </JssProvider>
+     </Fragment>
+ 
   );
 }
 

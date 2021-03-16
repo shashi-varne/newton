@@ -37,7 +37,6 @@ const ErrorPage = (props) => {
     <Container
       goBack={goBack}
       classOverRide='pr-error-container'
-      fullWidthButton
       buttonTitle='Retry'
       helpContact
       disableBack

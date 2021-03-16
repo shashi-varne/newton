@@ -322,7 +322,7 @@ class GoldSummary extends Component {
       if(this.state.onloadError) {
         this.onload();
       } else {
-        this.navigate('gold-locker');
+        this.navigate('/gold/gold-locker');
       }
     }
   }
@@ -523,7 +523,7 @@ class GoldSummary extends Component {
 
   rendertopInfoImage() {
     return(
-      <div className="infoimage-block1" onClick={() => this.navigate('check-how1')} >
+      <div className="infoimage-block1" onClick={() => this.navigate('/gold/check-how1')} >
             <Imgc 
             style={{width:'100%',cursor:'pointer', minHeight: 233}} 
             src={ require(`assets/${this.state.productName}/crd_gold_info.svg`)}
