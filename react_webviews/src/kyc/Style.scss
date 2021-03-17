@@ -1993,6 +1993,7 @@
 
   .action {
     width: 100% !important;
+    padding: 0 15px;
     margin: 8px 0 !important;
 
     button {
@@ -2000,7 +2001,7 @@
       background-color: var(--secondary);
       width: 100%;
       text-align: center;
-      margin: 0 15px;
+      margin: 0;
     }
 
     button:hover {

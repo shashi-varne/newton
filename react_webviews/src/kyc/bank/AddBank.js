@@ -74,6 +74,7 @@ const AddBank = (props) => {
       }
     }
     setBankData({ ...data });
+    setBankIcon(data.ifsc_image || '')
     setAccountTypes([
       ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
     ]);

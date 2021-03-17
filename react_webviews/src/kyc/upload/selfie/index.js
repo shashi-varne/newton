@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
-import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants } from '../../constants'
 import { upload } from '../../common/api'
@@ -34,7 +33,7 @@ const Sign = props => {
       // console.log(result)
       // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/journey')
+      navigate('/kyc/upload/progress')
     } catch (err) {
       console.error(err)
     } finally {

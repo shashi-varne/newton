@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
-import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants, nriDocMapper as docMapper } from '../../constants'
 import { upload } from '../../common/api'
@@ -9,6 +8,7 @@ import { getBase64, getConfig } from '../../../utils/functions'
 import toast from 'common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
+import useUserKycHook from '../../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -51,24 +51,15 @@ const ChangeAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [frontDoc, setFrontDoc] = useState(null)
   const [backDoc, setBackDoc] = useState(null)
-  const [loading, setLoading] = useState(false)
 
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
 
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
+  const [kyc, ,isLoading] = useUserKycHook();
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
-
-  useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
     if (getConfig().generic_callback) {
@@ -125,19 +116,6 @@ const ChangeAddressDetails2 = (props) => {
     }
   }
 
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('Finally')
-      setLoading(false)
-    }
-  }
   const handleChange = (type) => (event) => {
     console.log(event.target.files)
     const uploadedFile = event.target.files[0]
@@ -221,7 +199,7 @@ const ChangeAddressDetails2 = (props) => {
           addressProofKey,
         })
       }
-      setKyc(result.kyc)
+      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {
@@ -285,7 +263,7 @@ const ChangeAddressDetails2 = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={loading}
+      showSkelton={isLoading}
       handleClick={handleSubmit}
       disable={(!frontDoc && !backDoc) || isApiRunning}
       isApiRunning={isApiRunning}

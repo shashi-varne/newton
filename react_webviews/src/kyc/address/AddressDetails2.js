@@ -1,7 +1,7 @@
 import TextField from '@material-ui/core/TextField'
 import React, { useState, useEffect } from 'react'
 import Toast from '../../common/ui/Toast'
-import { getUrlParams, isEmpty } from 'utils/validators'
+import { isEmpty } from 'utils/validators'
 import { getPinCodeData, submit } from '../common/api'
 import Container from '../common/Container'
 import { kycDocNameMapper } from '../constants'
@@ -18,20 +18,6 @@ const AddressDetails2 = (props) => {
   useEffect(() => {
     setKyc(kycData)
   }, [kycData])
-
-  const getHelperText = (pincode) => {
-    if (typeof pincode === 'string') {
-      if (pincode.length === 0) {
-        return 'This is required'
-      }
-      if (pincode.length < 6) {
-        return 'Minlength is 6'
-      }
-      if (pincode.length > 6) {
-        return 'Maxlength is 6'
-      }
-    }
-  }
 
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
@@ -51,7 +37,7 @@ const AddressDetails2 = (props) => {
         navigate('/kyc/upload/address')
       } else {
         if (kyc?.address?.meta_data?.is_nri) {
-          navigate('/kyc/nri-address-details-1', {
+          navigate('/kyc/nri-address-details1', {
             isEdit,
           })
         } else {
@@ -158,10 +144,10 @@ const AddressDetails2 = (props) => {
     }))
   }
 
-  const urlParams = getUrlParams(props?.location?.search)
+  const stateParams = props.location?.state || {};
 
-  const isEdit = urlParams?.isEdit
-  const backToJourney = urlParams?.backToJourney
+  const isEdit = stateParams?.isEdit || ""
+  const backToJourney = stateParams?.backToJourney || null
   let title = ''
 
   if (kyc?.address?.meta_data?.is_nri) {
@@ -199,7 +185,24 @@ const AddressDetails2 = (props) => {
   const addressline = kyc?.address?.meta_data?.addressline || ''
   const state = kyc?.address?.meta_data?.state || ''
   const city = kyc?.address?.meta_data?.city || ''
-  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning || pincode?.length < 6
+
+  const getHelperText = (pincode) => {
+    if (typeof pincode === 'string') {
+      if (pincode.length === 0) {
+        return 'This is required'
+      }
+      if (pincode.length < 6) {
+        return 'Minlength is 6'
+      }
+      if (pincode.length > 6) {
+        return 'Maxlength is 6'
+      }
+      if(pincode.length === 6 && state === '') {
+        return 'Please enter valid pincode'
+      }
+    }
+  }
 
   return (
     <Container
@@ -224,9 +227,9 @@ const AddressDetails2 = (props) => {
             value={pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={pinTouched && getHelperText(pincode)}
+            helperText={(pinTouched || (state === '' && pincode.length === 6) ) && getHelperText(pincode)}
             inputProps={{ minLength: 6, maxLength: 6 }}
-            error={pinTouched && pincode.length !== 6}
+            error={(pinTouched && pincode.length !== 6) || (state === '' && pincode.length === 6) }
             size="6"
             required
           />

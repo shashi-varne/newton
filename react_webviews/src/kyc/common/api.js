@@ -63,7 +63,7 @@ export const getPan = async (data, accountMerge) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrorMessage
+    throw new Error (res?.pfwmessage || genericErrorMessage);
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -76,7 +76,7 @@ export const getPan = async (data, accountMerge) => {
       toast('Network error')
       return
     default:
-      throw result.error || result.message || genericErrorMessage
+      throw new Error (result.error || result.message || genericErrorMessage);
   }
 }
 
@@ -116,7 +116,7 @@ export const kycSubmit = async (body) => {
       toast(msg)
       break
     default:
-      throw new  Error(result.error || result.message || 'Server error')
+      throw new Error(result.error || result.message || 'Server error')
   }
 }
 

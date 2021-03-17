@@ -6,6 +6,7 @@ import Container from '../../common/Container'
 import { kycNRIDocNameMapper } from '../../constants'
 import { navigate as navigateFunc } from '../../common/functions'
 import useUserKycHook from '../../common/hooks/userKycHook'
+import { isEmpty } from '../../../utils/validators'
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -17,23 +18,8 @@ const NRIAddressDetails2 = (props) => {
   useEffect(() => {
     setKyc(kycData)
   }, [kycData])
-  
-  const isDisabled = isApiRunning
-  const stateParams = props?.location?.state
 
-  const getHelperText = (pincode) => {
-    if (typeof pincode === 'string') {
-      if (pincode.length === 0) {
-        return 'This is required'
-      }
-      if (pincode.length < 6) {
-        return 'Minlength is 6'
-      }
-      if (pincode.length > 6) {
-        return 'Maxlength is 6'
-      }
-    }
-  }
+  const stateParams = props?.location?.state
 
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
@@ -209,6 +195,24 @@ const NRIAddressDetails2 = (props) => {
   const state = kyc?.nri_address?.meta_data?.state || ''
   const city = kyc?.nri_address?.meta_data?.city || ''
   const country = kyc?.nri_address?.meta_data?.country || ''
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning || pincode?.length < 6
+
+  const getHelperText = (pincode) => {
+    if (typeof pincode === 'string') {
+      if (pincode.length === 0) {
+        return 'This is required'
+      }
+      if (pincode.length < 6) {
+        return 'Minlength is 6'
+      }
+      if (pincode.length > 6) {
+        return 'Maxlength is 6'
+      }
+      if(pincode.length === 6 && state === '') {
+        return 'Please enter valid pincode'
+      }
+    }
+  }
 
   return (
     <Container
@@ -233,9 +237,9 @@ const NRIAddressDetails2 = (props) => {
             value={pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={pinTouched && getHelperText(pincode)}
+            helperText={(pinTouched || (state === '' && pincode.length === 6) ) && getHelperText(pincode)}
             inputProps={{ minLength: 6, maxLength: 6 }}
-            error={pinTouched && pincode.length !== 6}
+            error={(pinTouched && pincode.length !== 6) || (state === '' && pincode.length === 6) }
             size="6"
             required
           />
