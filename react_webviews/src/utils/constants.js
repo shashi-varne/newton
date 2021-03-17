@@ -102,7 +102,8 @@ export const themeConfig = {
             disabled: {
                 // opacity: 0.4,
                 color: '#fff !important',
-                backgroundColor: '#b4ebc3 !important'
+                backgroundColor: 'var(--color-action-disable) !important',
+                touchAction: 'none'
             },
             label: {
                 textTransform: 'capitalize'
@@ -121,6 +122,11 @@ export const themeConfig = {
                 color: getConfig().primary,
                 position: 'relative',
                 left: '-15px'
+            }
+        },
+        MuiDialogActions: {
+            root: {
+                display: 'block'
             }
         }
     }

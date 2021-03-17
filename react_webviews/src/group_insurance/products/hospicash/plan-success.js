@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import PlanSuccess from '../../ui_components/general_insurance/plan_success';
 
 class HospicashPlanSuccess extends Component {
@@ -13,11 +14,11 @@ class HospicashPlanSuccess extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PlanSuccess
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 }

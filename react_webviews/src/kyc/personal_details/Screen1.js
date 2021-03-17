@@ -5,20 +5,18 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
   genderOptions,
   maritalStatusOptions,
-  storageConstants,
   getPathname,
 } from "../constants";
-import { initData } from "../services";
 import {
-  storageService,
   formatDate,
   dobFormatTest,
-  isEmpty,
   validateNumber,
   validateAlphabets,
+  isEmpty,
 } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { savePanData } from "../common/api";
+import useUserKycHook from "../common/hooks/userKycHook";
 import toast from "common/ui/Toast";
 
 const PersonalDetails1 = (props) => {
@@ -27,39 +25,29 @@ const PersonalDetails1 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
+  
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
+  const [kyc, user, isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
     let formData = {
-      name: userkycDetails.pan?.meta_data?.name || "",
-      dob: userkycDetails.pan?.meta_data?.dob || "",
-      email: userkycDetails.identification?.meta_data?.email || "",
-      mobile: userkycDetails.identification?.meta_data?.mobile_number || "",
-      gender: userkycDetails.identification?.meta_data?.gender || "",
+      name: kyc.pan?.meta_data?.name || "",
+      dob: kyc.pan?.meta_data?.dob || "",
+      email: kyc.identification?.meta_data?.email || "",
+      mobile: kyc.identification?.meta_data?.mobile_number || "",
+      gender: kyc.identification?.meta_data?.gender || "",
       marital_status:
-        userkycDetails.identification?.meta_data?.marital_status || "",
+        kyc.identification?.meta_data?.marital_status || "",
     };
     setShowLoader(false);
     setFormData({ ...formData });
@@ -67,15 +55,15 @@ const PersonalDetails1 = (props) => {
 
   const handleClick = () => {
     let keysToCheck = ["name", "dob", "gender", "marital_status"];
-    if (currentUser.email === null) keysToCheck.push("email");
-    if (currentUser.mobile === null) keysToCheck.push("mobile");
+    if (user.email === null) keysToCheck.push("email");
+    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.name = form_data.name;
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.email = form_data.email;
@@ -141,6 +129,7 @@ const PersonalDetails1 = (props) => {
       isApiRunning={isApiRunning}
       disable={isApiRunning || showLoader}
       handleClick={handleClick}
+      showSkelton={isLoading}
     >
       <div className="kyc-complaint-personal-details">
         <div className="kyc-main-title">
@@ -173,7 +162,7 @@ const PersonalDetails1 = (props) => {
             id="dob"
             disabled={isApiRunning}
           />
-          {currentUser.email === null && (
+          {user.email === null && (
             <Input
               label="Email"
               class="input"
@@ -185,7 +174,7 @@ const PersonalDetails1 = (props) => {
               disabled={isApiRunning}
             />
           )}
-          {currentUser.mobile === null && (
+          {user.mobile === null && (
             <Input
               label="Mobile number"
               class="input"

@@ -2,14 +2,12 @@ import React from 'react';
 import Container from '../common/Container';
 import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
+import { getImage } from '../constants'
 import "./Style.css";
 import "./Style.scss";
 
 import icn_upi_apps from 'assets/icn_upi_apps.svg';
 import icn_debit_card from 'assets/icn_debit_card.svg';
-import icn_gpay from 'assets/icn_gpay.svg';
-import icn_phonepe from 'assets/icn_phonepe.svg';
-import icn_paytm from 'assets/icn_paytm.svg';
 import icn_more from 'assets/icn_more.svg';
 import icn_secure_payment from 'assets/icn_secure_payment.svg';
 import completed_step from 'assets/completed_step.svg';
@@ -21,6 +19,7 @@ import toast from '../../common/ui/Toast';
 let store = {};
 let intent_supported = false;
 let upi_others = true;
+let upi_apps = {};
 let nativeData;
 function getAllUrlParams(url) {
 
@@ -92,6 +91,7 @@ if (urlParams.payment_data) {
   nativeData = JSON.parse(decodeData);
   intent_supported = nativeData.intent_supported;
   upi_others = nativeData.upi_others;
+  upi_apps = nativeData.upi_apps;
 }
 
 window.PlutusInitState = {};
@@ -99,6 +99,66 @@ window.PlutusInitState = {};
 const pushEvent = (eventObj) => {
   nativeCallback({ events: eventObj });
 };
+
+const UpiRows = (props) => {
+  let gpay, phonepe, paytm = false;
+  let rows = [];
+  let i = 0;
+  let upis_keys = Object.keys(upi_apps);
+  let upi_packages = Object.values(upi_apps);
+  upi_packages.findIndex(function (item) {
+    if (item.package_name === "com.google.android.apps.nbu.paisa.user") {
+      gpay = true;
+    }
+    if (item.package_name === "com.phonepe.app") {
+      phonepe = true;
+    }
+    if (item.package_name === "net.one97.paytm") {
+      paytm = true;
+    }
+
+    return false;
+  })
+  if (gpay && phonepe && paytm) {
+    rows.push(<div onClick={() => props.goToPayment('com.google.android.apps.nbu.paisa.user')} key={i}><img alt="payment" src={getImage('com.google.android.apps.nbu.paisa.user')} /><div className="bottomtext">GPay</div></div>)
+    rows.push(<div onClick={() => props.goToPayment('com.phonepe.app')} key={i}><img alt="payment" src={getImage('com.phonepe.app')} /><div className="bottomtext">PhonePe</div></div>)
+    rows.push(<div onClick={() => props.goToPayment('net.one97.paytm')} key={i}><img alt="payment" src={getImage('net.one97.paytm')} /><div className="bottomtext">Paytm</div></div>)
+  } else {
+    for (let key in upi_apps) {
+      if (i === 3) {
+        break;
+      } else {
+        if (upis_keys.length > 3 & i < 3) {
+          if (gpay) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment('com.google.android.apps.nbu.paisa.user')} key={i}><img alt="payment" src={getImage('com.google.android.apps.nbu.paisa.user')} /><div className="bottomtext">GPay</div></div>)
+            gpay = false;
+          }
+          if (phonepe) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment('com.phonepe.app')} key={i}><img alt="payment" src={getImage('com.phonepe.app')} /><div className="bottomtext">PhonePe</div></div>)
+            phonepe = false;
+          }
+          if (paytm) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment('net.one97.paytm')} key={i}><img alt="payment" src={getImage('net.one97.paytm')} /><div className="bottomtext">Paytm</div></div>)
+            paytm = false;
+          }
+
+          if (i < 3 && (!gpay || !phonepe || !paytm)) {
+            i++;
+            rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+          }
+
+        } else {
+          i++;
+          rows.push(<div onClick={() => props.goToPayment(upi_apps[key].package_name)} key={i}><img alt="payment" src={getImage(upi_apps[key].package_name)} /><div className="bottomtext">{key.split(" ")[0]}</div></div>)
+        }
+      }
+    }
+  }
+  return (rows)
+}
 
 const UpiModal = (props) => {
   window.PlutusInitState.page = 'modal';
@@ -135,7 +195,7 @@ const UpiModal = (props) => {
           <label className="checkbox"><input type="checkbox" onChange={() => props.handleCheck()} /><span className={`checkmark ${store.partner}`}></span></label>
           <div className={`${props.highlighttnc ? 'active' : ''} ${store.partner}`}>Make sure to use same <b>VPA(UPI ID)</b> linked to above selected account</div>
         </div>
-        <div className="upi-button margin-top">
+        <div className={`${getConfig().app === 'ios' ? 'ios' : ''} upi-button margin-top`}>
           <button className={`${props.checked ? 'active' : ''} ${store.partner}`} onClick={() => props.loadUPi()}>Continue to Pay ₹ {store.amount}</button>
         </div>
       </div>
@@ -185,7 +245,7 @@ const SelectBankModal = (props) => {
         <div className="list">
           {bankList}
         </div>
-        <div className="footer upi-button margin-top">
+        <div className={`${getConfig().app === 'ios' ? 'ios' : ''} footer upi-button margin-top`}>
           <button className={`active ${store.partner}`} onClick={() => props.closeBankModal(true)}>Continue</button>
         </div>
       </div>
@@ -234,7 +294,7 @@ class PaymentOption extends React.Component {
       showCancelModal: false,
       showDebitLoader: false,
       showBilldeskLoader: false,
-      show_loader: true
+      skelton: true
     };
 
     this.goToBank = this.goToBank.bind(this);
@@ -251,7 +311,7 @@ class PaymentOption extends React.Component {
     this.selectedBank = this.selectedBank.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-  
+
   componentWillMount() {
     nativeCallback({ action: 'take_control_reset' });
   }
@@ -259,7 +319,7 @@ class PaymentOption extends React.Component {
   componentDidMount = async () => {
     window.PlutusInitState.page = this.props.page;
     this.setState({
-      show_loader: true
+      skelton: true
     })
     let url = getConfig().base_url + '/api/invest/pg/paynow/' + getConfig().pc_urlsafe;
     try {
@@ -269,6 +329,11 @@ class PaymentOption extends React.Component {
       if (store.sdk_capabilities && store.sdk_capabilities.razorpay) {
         intent_supported = true;
         upi_others = false;
+      }
+
+      if (store.partner === 'ippb') {
+        intent_supported = false;
+        upi_others = true;
       }
       const supportedBanks = store.banks.filter((item, i) => {
         return item.bank_supported;
@@ -291,7 +356,7 @@ class PaymentOption extends React.Component {
       });
       let activeIndex = store.banks.findIndex(x => x.is_primary_bank === true);
       this.setState({
-        show_loader: false,
+        skelton: false,
         notSupportedBankCount: unSupportedBanks.length,
         supportedBanks: supportedBanks,
         unSupportedBanks: unSupportedBanks,
@@ -303,7 +368,7 @@ class PaymentOption extends React.Component {
       })
     } catch (err) {
       this.setState({
-        show_loader: false
+        skelton: false
       })
       toast("Something went wrong");
     }
@@ -382,7 +447,7 @@ class PaymentOption extends React.Component {
       pushEvent(eventObj);
 
       // show loader
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -473,7 +538,7 @@ class PaymentOption extends React.Component {
 
   goToPayment(type) {
     if (type === "debit") {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -482,7 +547,7 @@ class PaymentOption extends React.Component {
       });
       window.location.href = store.url + '&gateway_type=HMP';
     } else if (type === "netbanking") {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -496,7 +561,7 @@ class PaymentOption extends React.Component {
         { store: store, neftBanks: this.state.neftBanks }
       );
     } else if (type === "upi") {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -505,26 +570,16 @@ class PaymentOption extends React.Component {
       });
       window.location.href = store.url + '&account_number=' + this.state.selectedBank.account_number + '&gateway_type=UPI';
     } else {
-      let upi_name = '';
-      if (type === 'com.google.android.apps.nbu.paisa.user') {
-        upi_name = 'gpay'
-      }
-      if (type === 'com.phonepe.app') {
-        upi_name = 'phonepe'
-      }
-      if (type === 'net.one97.paytm') {
-        upi_name = 'paytm'
-      }
       let eventObj = {
         "event_name": "pg_payment_option",
         "properties": {
           "user_action": "next",
-          "upi_name": upi_name
+          "upi_name": type
         }
       };
       pushEvent(eventObj);
       toast('Pay using bank a/c - ' + this.state.selectedBank.obscured_account_number + ' only');
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       let that = this;
       Api.get(store.intent_url + '?bank_id=' + this.state.selectedBank.bank_id + `&gateway_type=UPI`).then(data => {
         if (data.pfwresponse.status_code === 200) {
@@ -583,7 +638,7 @@ class PaymentOption extends React.Component {
 
     // show loader
     if (item.bank_code) {
-      this.setState({ show_loader: true });
+      this.setState({ show_loader: 'page' });
       nativeCallback({
         action: 'take_control', message: {
           back_url: window.location.href,
@@ -616,6 +671,7 @@ class PaymentOption extends React.Component {
     return (
       <Container
         showLoader={this.state.show_loader}
+        skelton={this.state.skelton}
         header={true}
         noFooter={true}
         page="pg_option"
@@ -653,9 +709,7 @@ class PaymentOption extends React.Component {
                     </div>
                   </label>
                   {intent_supported && !upi_others && <div className="add-button tab-content">
-                    <div onClick={() => this.goToPayment('com.google.android.apps.nbu.paisa.user')}><img src={icn_gpay} alt="gpay" /><div className="bottomtext">Google Pay</div></div>
-                    <div onClick={() => this.goToPayment('com.phonepe.app')}><img src={icn_phonepe} alt="phonepe" /><div className="bottomtext">PhonePe</div></div>
-                    <div onClick={() => this.goToPayment('net.one97.paytm')}><img src={icn_paytm} alt="paytm" /><div className="bottomtext">Paytm</div></div>
+                    <UpiRows goToPayment={this.goToPayment} />
                     <div onClick={() => this.goToPayment('others')}><img src={icn_more} alt="more" /><div className="bottomtext">Others</div></div>
                   </div>}
                   {intent_supported && upi_others && <div className="add-button tab-content">

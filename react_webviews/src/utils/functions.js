@@ -495,8 +495,9 @@ function getPartnerConfig(partner_code) {
   let config_to_return = baseConfig[productType];
 
   if (isStaging) {
-    config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
+    // config_to_return.webAppUrl = 'https://mayank-dot-plutus-web.appspot.com/#!/';
     // config_to_return.webAppUrl = 'http://localhost:3001/#!/';
+    config_to_return.webAppUrl = window.location.origin + '/appl/web/view#!/';
   }
 
   config_to_return.isStaging = isStaging;
@@ -546,6 +547,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--label`, `${config_to_return.label}`);
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
+  html.style.setProperty('--color-action-disable', '#E8ECF1');
 
   return config_to_return;
 }
@@ -578,17 +580,52 @@ export const isMobileDevice = () => {
   return mobileDevice;
 };
 
+export function getParamsMark(data) {
+  return (data.match(/[?]/g) ? "&": "?");
+}
+
 export const getConfig = () => {
   let main_pathname = window.location.pathname;
   let main_query_params = getUrlParams();
+
+
   let { base_url } = main_query_params;
+
+  let origin = window.location.origin;
+
+  let isProdFisdom = origin.indexOf('wv.fisdom.com') >= 0;
+  let isProdFinity = origin.indexOf('wv.mywaywealth.com') >= 0;
+
+  var base_href = window.sessionStorage.getItem('base_href') || '';
+  let base_url_default = '';
+
+  if(base_href) {
+    base_url_default = window.location.origin;
+  }
+
+  if(!base_url) {
+    if(isProdFisdom) {
+      base_url_default = 'https://my.fisdom.com';
+    }
+  
+    if(isProdFinity) {
+      base_url_default = 'https://api.mywaywealth.com';
+    }
+  }
+  
+
+  if(base_url_default) {
+    base_url = base_url_default;
+  }
+
+
   let { generic_callback } = main_query_params;
   let { redirect_url } = main_query_params;
   let { sdk_capabilities } = main_query_params;
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-  let project = 'insurance';
+  let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';
@@ -638,13 +675,20 @@ export const getConfig = () => {
 
   let returnConfig = getPartnerConfig(partner_code);
 
-  let searchParams = `?base_url=${base_url}`;
-  let searchParamsMustAppend = `?base_url=${base_url}`;
+  let searchParams = ``;
+  let searchParamsMustAppend = ``;
+
+
+  if(!base_url_default) {
+    searchParams += getParamsMark(searchParams) + `base_url=${base_url}`;
+    searchParamsMustAppend += getParamsMark(searchParams) + `base_url=${base_url}`;
+  }
+  
 
   if (checkValidString(generic_callback)) {
     returnConfig.generic_callback = generic_callback;
-    searchParams += `&generic_callback=${generic_callback}`;
-    searchParamsMustAppend += `&generic_callback=${generic_callback}`;
+    searchParams += getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
+    searchParamsMustAppend +=  getParamsMark(searchParams) + `generic_callback=${generic_callback}`;
   }
 
   returnConfig.redirect_url = '';
@@ -654,26 +698,26 @@ export const getConfig = () => {
     returnConfig.webAppUrl = decodeURIComponent(redirect_url).split('#')[0] + '#!/';
     redirect_url = encodeURIComponent(redirect_url);
     returnConfig.redirect_url = redirect_url;
-    searchParams += `&redirect_url=${redirect_url}`;
-    searchParamsMustAppend += `&redirect_url=${redirect_url}`;
+    searchParams +=  getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
+    searchParamsMustAppend += getParamsMark(searchParams) +  `redirect_url=${redirect_url}`;
   }
 
   if (sdk_capabilities) {
     returnConfig.sdk_capabilities = sdk_capabilities;
-    searchParams += `&sdk_capabilities=${sdk_capabilities}`;
-    searchParamsMustAppend += `&sdk_capabilities=${sdk_capabilities}`;
+    searchParams += getParamsMark(searchParams) +  `sdk_capabilities=${sdk_capabilities}`;
+    searchParamsMustAppend += getParamsMark(searchParams) +  `sdk_capabilities=${sdk_capabilities}`;
   }
 
   if (checkValidString(partner_code)) {
     returnConfig.partner_code = partner_code;
-    searchParams += `&partner_code=${partner_code}`;
-    searchParamsMustAppend += `&partner_code=${partner_code}`;
+    searchParams += getParamsMark(searchParams) + `partner_code=${partner_code}`;
+    searchParamsMustAppend += getParamsMark(searchParams) +  `partner_code=${partner_code}`;
   }
 
   if (checkValidString(pc_urlsafe)) {
     returnConfig.pc_urlsafe = pc_urlsafe;
-    searchParams += `&pc_urlsafe=${pc_urlsafe}`;
-    searchParamsMustAppend += `&pc_urlsafe=${pc_urlsafe}`;
+    searchParams += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
+    searchParamsMustAppend += getParamsMark(searchParams) + `pc_urlsafe=${pc_urlsafe}`;
   }
 
   if (project === 'insurance' || project_child === 'term') {
@@ -681,12 +725,12 @@ export const getConfig = () => {
     let { insurance_id } = main_query_params;
     let { isJourney } = main_query_params;
 
-    searchParams += '&insurance_id=' + insurance_id + '&insurance_v2=' + insurance_v2;
-    searchParamsMustAppend += '&insurance_v2=' + insurance_v2;
+    searchParams += getParamsMark(searchParams) + 'insurance_id=' + insurance_id + '&insurance_v2=' + insurance_v2;
+    searchParamsMustAppend += getParamsMark(searchParams) + 'insurance_v2=' + insurance_v2;
 
     if (checkValidString(isJourney)) {
-      searchParams += '&isJourney=' + isJourney;
-      searchParamsMustAppend += '&isJourney=' + isJourney;
+      searchParams += getParamsMark(searchParams) + 'isJourney=' + isJourney;
+      searchParamsMustAppend += getParamsMark(searchParams) + 'isJourney=' + isJourney;
     }
   }
 
@@ -697,7 +741,7 @@ export const getConfig = () => {
   let { insurance_allweb } = main_query_params;
   if (insurance_allweb) {
     returnConfig.insurance_allweb = insurance_allweb;
-    searchParams += '&insurance_allweb=' + insurance_allweb;
+    searchParams += getParamsMark(searchParams) + 'insurance_allweb=' + insurance_allweb;
   }
 
   if (isMobile.Android() && typeof window.Android !== 'undefined') {
@@ -721,8 +765,8 @@ export const getConfig = () => {
     let { email } = main_query_params;
     let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
     let { html_camera } = main_query_params;
-    searchParams +=
-      '&key=' + key + '&name=' + name + '&email=' + email + '&campaign_version=' + campaign_version;
+    searchParams += getParamsMark(searchParams) + 
+      'key=' + key + '&name=' + name + '&email=' + email + '&campaign_version=' + campaign_version;
 
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
@@ -740,7 +784,7 @@ export const getConfig = () => {
 
   if (project === 'isip') {
     let campaign_version = generic_callback === 'true' ? 1 : main_query_params.campaign_version;
-    searchParams += '&campaign_version=' + campaign_version;
+    searchParams += getParamsMark(searchParams) + 'campaign_version=' + campaign_version;
 
     // eslint-disable-next-line
     returnConfig.campaign_version = parseInt(campaign_version);
@@ -752,8 +796,8 @@ export const getConfig = () => {
   returnConfig.app_version = '';
   if (checkValidString(app_version)) {
     returnConfig.app_version = app_version;
-    searchParams += `&app_version=${app_version}`;
-    searchParamsMustAppend += `&app_version=${app_version}`;
+    searchParams += getParamsMark(searchParams) + `app_version=${app_version}`;
+    searchParamsMustAppend += getParamsMark(searchParams) + `app_version=${app_version}`;
   }
 
   // should be last
@@ -887,4 +931,12 @@ export function capitalize(string) {
   return string.toLowerCase().replace(/(^|\s)[a-z]/g, function (f) {
     return f.toUpperCase();
   });
+}
+
+export function getBasePath() {
+  var basename = window.sessionStorage.getItem('base_href') || '';
+  if(basename && basename.indexOf('appl/webview') !== -1) {
+    basename = basename ? basename + 'view' : '';
+  }
+  return window.location.origin + basename;
 }
