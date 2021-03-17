@@ -44,6 +44,11 @@ class SelectDropDown2 extends React.Component {
 
   render() {
 
+    let components;
+    if (this.state.multi) {
+      components = { Option, MultiValue, IndicatorSeparator: () => null }
+    } else components = { IndicatorSeparator: () => null }
+
     const options = this.props.options.map((ele, index) => {
       return ({
         'value': ele.value, 'label': ele.name
@@ -55,7 +60,7 @@ class SelectDropDown2 extends React.Component {
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><span
         style={{ marginLeft: '10px', position: 'absolute' , marginTop: '1px' }} >{this.props.label}</span></InputLabel>)}
-        {(!this.state.multi && <span className="label2">{this.props.label || 'label'}</span> )}
+        {/* {(!this.state.multi && <span className="label2">{this.props.label || 'label'}</span> )} */}
          <Select
           defaultValue={value}
           onMenuOpen={() =>  this.setState({shrink: true})}
@@ -71,7 +76,8 @@ class SelectDropDown2 extends React.Component {
               shrink: true,
             },
           }}
-          isMulti={true}
+          isMulti={this.state.multi}
+          components={components}
           styles={{
             dropdownIndicator: (provided, state) => ({
                 ...provided,
@@ -81,9 +87,9 @@ class SelectDropDown2 extends React.Component {
         hideSelectedOptions={false}
         options={options}
         closeMenuOnSelect={false}
-        components={{ Option, MultiValue, IndicatorSeparator: () => null  }}
         onChange={this.handleChange}
         allowSelectAll={true}
+        // menuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
           <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || ''} </span>}
@@ -107,7 +113,7 @@ const Option = props => {
           checked={props.isSelected}
           onChange={() => null}
         />{" "}
-        <label>{props.label}</label>
+        <span style={{ marginLeft:'10px'}}>{props.label}</span>
       </components.Option>
     </div>
   );
