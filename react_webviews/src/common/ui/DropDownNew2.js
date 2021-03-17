@@ -89,9 +89,9 @@ class SelectDropDown2 extends React.Component {
           }}
           hideSelectedOptions={false}
           options={options}
-          closeMenuOnSelect={false}
           onChange={this.handleChange}
           allowSelectAll={true}
+          closeMenuOnSelect={true}
           // menuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
