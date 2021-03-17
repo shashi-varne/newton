@@ -6,14 +6,15 @@ import { categories } from "../constants";
 import { initialize } from "../common/functions";
 import Search from "./search";
 import { getConfig } from "utils/functions";
-import { nativeCallback } from 'utils/native_callback';
+import { nativeCallback } from "utils/native_callback";
+import { SkeltonRect } from "common/ui/Skelton";
 
 class CategoryList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: 'p',
+      skelton: "p",
       value: "",
       faqList: [],
       sortedList: "",
@@ -93,10 +94,14 @@ class CategoryList extends Component {
 
   handleClick = (category) => {
     this.props.history.push(
-      { pathname: 'help/category', search: getConfig().searchParams },
+      { pathname: "help/category", search: getConfig().searchParams },
       { category: category }
     );
-  }
+  };
+
+  handleQuery = () => {
+    this.navigate("help/queries");
+  };
 
   render() {
     let { sortedList, value, categoryList } = this.state;
@@ -106,6 +111,7 @@ class CategoryList extends Component {
         title="How can we Help?"
         queryTitle="My queries"
         querycta={true}
+        handleQuery={() => this.handleQuery()}
         noFooter
       >
         <div className="help-CategoryList">
@@ -120,18 +126,30 @@ class CategoryList extends Component {
                   </span>
                   {item.title.slice(value.length)}
                 </div>
-                <div className="tag">{'MUTUAL FUNDS'}</div>
+                <div className="tag">{"MUTUAL FUNDS"}</div>
               </div>
             ))}
           {value.length !== 0 && sortedList.length === 0 && (
             <div className="no-result">No result found</div>
           )}
 
-          {value.length === 0 && categoryList && (
+          {this.state.skelton &&
+            [...Array(4)].map(() => (
+              <div className="skelton">
+                <SkeltonRect className="balance-skelton skelton-img" />
+                <SkeltonRect className="balance-skelton text" />
+              </div>
+            ))}
+          {!this.state.skelton && value.length === 0 && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
+
               {categoryList.map((el, index) => (
-                <div className="category" key={index} onClick={() => this.handleClick(el)}>
+                <div
+                  className="category"
+                  key={index}
+                  onClick={() => this.handleClick(el)}
+                >
                   {el.icon && (
                     <Imgc
                       src={require(`assets/${this.state.productName}/${el.icon}`)}
@@ -149,16 +167,20 @@ class CategoryList extends Component {
                   </div>
                 </div>
               ))}
+
               <div className="title">Need more help?</div>
               <div className="generic-hr"></div>
-              <div className="category contact-category" onClick={() => {
-                nativeCallback({
-                  action: 'open_in_browser',
-                  message: {
-                      url: `tel:${getConfig().mobile}`
-                  }
-              });
-              }}>
+              <div
+                className="category contact-category"
+                onClick={() => {
+                  nativeCallback({
+                    action: "open_in_browser",
+                    message: {
+                      url: `tel:${getConfig().mobile}`,
+                    },
+                  });
+                }}
+              >
                 <Imgc
                   src={require(`assets/${this.state.productName}/icn_contact.svg`)}
                   className="contact-img"

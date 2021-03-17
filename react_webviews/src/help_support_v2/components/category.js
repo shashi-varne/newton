@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
 import { getConfig } from "utils/functions";
+import { SkeltonRect } from "common/ui/Skelton";
 class Category extends Component {
   constructor(props) {
     super(props);
@@ -23,10 +24,10 @@ class Category extends Component {
 
   handleClick = (sub_category) => {
     this.props.history.push(
-      { pathname: 'questions', search: getConfig().searchParams },
+      { pathname: "questions", search: getConfig().searchParams },
       { sub_category: sub_category }
     );
-  }
+  };
 
   render() {
     let { category, sub_categories } = this.state;
@@ -40,10 +41,18 @@ class Category extends Component {
       >
         <div className="help-category">
           <div className="sub-title">Your query is related to</div>
-          {sub_categories &&
+          {this.state.skelton &&
+            [...Array(2)].map(() => (
+              <div className="skelton">
+                <SkeltonRect className="balance-skelton text" />
+                <SkeltonRect className="balance-skelton" />
+              </div>
+            ))}
+          {!this.state.skelton &&
+            sub_categories &&
             sub_categories.map((item, index) => (
               <div
-                className="category"
+                className="category fade-in"
                 key={index}
                 style={{
                   borderColor: `${

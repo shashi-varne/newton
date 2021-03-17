@@ -123,6 +123,7 @@ export function commonRender(props_base) {
                     hideBack={this.props.hideBack}
                     queryTitle={this.props.queryTitle}
                     querycta={this.props.querycta}
+                    handleQuery={this.props.handleQuery}
                 />
                 }
                 {/* Below Header Block */}
@@ -566,7 +567,7 @@ export function new_header_scroll() {
             </div>
 
             {this.props.querycta && (
-              <div className="header-query">{this.props.queryTitle}</div>
+              <div onClick={this.props.handleQuery} className="header-query">{this.props.queryTitle}</div>
             )}
 
             {this.state.inPageTitle && this.props.count &&

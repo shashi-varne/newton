@@ -12,6 +12,7 @@ export async function initialize() {
   this.getFaqDescription = getFaqDescription.bind(this);
   this.getAllfaqs = getAllfaqs.bind(this);
   this.getUserTickets = getUserTickets.bind(this);
+  this.getTicketConversations = getTicketConversations.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -208,6 +209,41 @@ export async function getUserTickets(params) {
       tickets[params] = result.tickets;
       this.setState({
         tickets: tickets
+      })
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+  }
+}
+
+export async function getTicketConversations(params = '') {
+  this.setState({
+    skelton: true,
+  });
+  try {
+    const res = await Api.get(
+      `/relay/hns/api/freshdesk/ticket/487094/conversations`
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      let { ticket_status, conversations } = this.state;
+
+      ticket_status = result.response.status;
+      conversations = result.response.conversations;
+
+      this.setState({
+        ticket_status: ticket_status,
+        conversations: conversations,
+        result: result
       })
     }
   } catch (err) {
