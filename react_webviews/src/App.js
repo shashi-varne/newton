@@ -34,6 +34,8 @@ import Otp from './login_and_registration/otp';
 import ForgotPassword from './login_and_registration/forgot_password';
 import Kyc from './kyc';
 
+import ProtectedRoute from './ProtectedRoute';
+
 class App extends Component {
   render() {
     return (
@@ -68,7 +70,7 @@ class App extends Component {
           <Route path='/mobile/verify' component={Otp} />
           <Route path='/forgot-password' component={ForgotPassword} />
           <Route path='/kyc' component={Kyc} />
-          <Route path='/' component={Landing}/>
+          <ProtectedRoute path='/' component={Landing}/>
           <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
