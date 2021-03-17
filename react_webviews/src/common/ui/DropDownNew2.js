@@ -52,18 +52,18 @@ class SelectDropDown2 extends React.Component {
     const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
-        {(<InputLabel shrink={!!this.state.selectedOption || this.state.shrink } htmlFor={this.props.id}><span
-        style={{ marginLeft: '10px', position: 'absolute' , marginTop: '1px'}} >{this.props.label}</span></InputLabel>)}
+        {(<InputLabel shrink={!!value || this.state.shrink } htmlFor={this.props.id}><span
+        style={{ marginLeft: '10px', position: 'absolute' , marginTop: '1px' }} >{this.props.label}</span></InputLabel>)}
         {/* {(!value && <span className="label2">{this.props.label || 'label'}</span> )} */}
-        <Select
+         <Select
           // components={{ Option }}
-          defaultValue={value}
+          // defaultValue={value}
           onMenuOpen={() =>  this.setState({shrink: true})}
           onMenuClose={() => this.setState({shrink: false})}
           placeholder={''}
           isClearable
           isSearchable={this.props.options.length <= 6 ? false : true}
-          value={this.state.selectedOption}
+          value={value}
           onChange={this.handleChange}
           options={options}
           menuPlacement={'auto'}
@@ -83,7 +83,7 @@ class SelectDropDown2 extends React.Component {
                 transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
             })
         }}
-        defaultMenuIsOpen={true}
+        // defaultMenuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
           <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || ''} </span>}
@@ -93,7 +93,7 @@ class SelectDropDown2 extends React.Component {
 }
 
 const DropDownNew2 = (props) => {
-  return (<SelectDropDown2 {...props} />)
+    return (<SelectDropDown2 {...props} />)
 }
 
 export default DropDownNew2;

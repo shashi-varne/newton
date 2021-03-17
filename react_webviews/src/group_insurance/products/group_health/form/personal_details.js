@@ -773,7 +773,7 @@ class GroupHealthPlanPersonalDetails extends Component {
               name="occupation"
               error={this.state.form_data.occupation_error ? true : false}
               helperText={this.state.form_data.occupation_error}
-              // value={this.state.form_data.occupation || ""}
+              value={this.state.form_data.occupation || ""}
               onChange={this.handleChange("occupation")}
             />
             </div>
