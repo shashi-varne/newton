@@ -10,7 +10,7 @@ class SelectDropDown2 extends React.Component {
     this.state = {
       selectedOption: this.props.value,
       options: this.props.options,
-      multi: this.state.multi,
+      multi: this.props.multi,
     };
   }
 
