@@ -99,19 +99,13 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
           
           if(!error){
               
-            var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY'; console.log(groupHealthPlanData)
+            var freqSelected = this.state.groupHealthPlanData.paymentFrequencySelected || 'YEARLY'; 
             var payment_frequency = freqSelected;
-             var checked = this.state.checked;
-             var selectedIndex, buttonDisabled
-             if(this.state.groupHealthPlanData.checkbox){
-                selectedIndex  = this.state.groupHealthPlanData.sum_assured === 500000 ? 1 : 0;
-                checked = this.state.groupHealthPlanData.sum_assured === 500000 ? true : false;
-                buttonDisabled = this.state.groupHealthPlanData.sum_assured === 500000 ? false : true;
-             }  else {
-                selectedIndex = freqSelected === 'YEARLY' ? 1 : 0 ;
-                buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
-                checked = freqSelected === 'MONTHLY' ? true : false;
-             }
+             var selectedIndex = freqSelected === 'YEARLY' ? 1 : 0;
+            var checked = this.state.checked;
+            checked = freqSelected === 'MONTHLY' ? true : false;
+            var buttonDisabled = freqSelected === 'MONTHLY' && !checked ? true : false
+             
             this.setState({
                 selectedIndex: selectedIndex,
                 payment_frequency : payment_frequency,
@@ -130,7 +124,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         var checked = this.state.checked;
         buttonDisabled = props.frequency === 'month' && !checked ? true : false;
         var payment_frequency = this.state.premium_details[index].payment_frequency;
-        
+        console.log(payment_frequency)
         this.setState({
             selectedIndex: index,
             buttonDisabled: buttonDisabled,
@@ -181,6 +175,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             body[key] = post_body[key];
         }
         body['payment_frequency'] = this.state.payment_frequency;
+        console.log(this.state.payment_frequency)
         this.setState({
             skelton: true
         });
@@ -209,8 +204,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             groupHealthPlanData['gmc_cta_postfix'] = premium_details.payment_frequency === 'MONTHLY' ? 'month' : 'year';
             
             groupHealthPlanData.paymentFrequencySelected = premium_details.payment_frequency;
-            groupHealthPlanData.goodhealthDecSelected = this.state.payment_frequency + 'For_goodhealthDec'
-            groupHealthPlanData.checkbox = false;
 
             this.setLocalProviderData(groupHealthPlanData);
             this.navigate('plan-good-health-dec');

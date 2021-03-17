@@ -130,6 +130,13 @@ class GroupHealthPayment extends Component {
   }
   onload = async() => {
     this.setErrorData("onload");
+    
+    if(this.state.provider === 'GMC'){
+      var groupHealthPlanData = this.state.groupHealthPlanData || {};
+      groupHealthPlanData['goodHDec'] = false;
+      this.setLocalProviderData(groupHealthPlanData)
+    }
+    
     let error = "";
     let errorType = "";
     if(!this.state.get_lead || true) {

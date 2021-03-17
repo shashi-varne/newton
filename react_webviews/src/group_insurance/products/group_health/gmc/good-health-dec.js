@@ -23,10 +23,12 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
 
     componentDidMount(){
         var groupHealthPlanData = this.state.groupHealthPlanData;
-        
-        var checked =  groupHealthPlanData[`goodhealthDec_${groupHealthPlanData.goodhealthDecSelected}`] || false;
+        var checked = groupHealthPlanData['goodHDec'] || false;
         var buttonDisabled = checked ? false : true;
-        this.setState({checked,buttonDisabled})
+        this.setState({
+            checked,
+            buttonDisabled
+        })
         this.setLocalProviderData(groupHealthPlanData);
     }
 
@@ -56,7 +58,7 @@ class GroupHealthPlanGoodHealthDeclaration extends Component {
         this.sendEvents('next');
         
         var groupHealthPlanData = this.state.groupHealthPlanData;
-        groupHealthPlanData[`goodhealthDec_${groupHealthPlanData.goodhealthDecSelected}`] = true;
+        groupHealthPlanData['goodHDec'] = true;
         this.setLocalProviderData(groupHealthPlanData);
 
         this.navigate('plan-premium-summary')
