@@ -20,58 +20,46 @@ import {
   validateNumber,
 } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { getCVL, savePanData } from "../common/api";
+import { getCVL, kycSubmit } from "../common/api";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   let title = "Basic details";
   const [is_nri, setIsNri] = useState();
   if (isEdit) {
     title = "Edit basic details";
   }
 
+  const [kyc, user, isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
-    let isNri = userkycDetails.address.meta_data.is_nri;
+    let isNri = kyc.address.meta_data.is_nri;
     let selectedIndexResidentialStatus = 0;
     if (isNri) {
       selectedIndexResidentialStatus = 1;
     }
     let formData = {
-      pan: userkycDetails.pan.meta_data.pan_number,
-      dob: userkycDetails.pan.meta_data.dob,
-      email: userkycDetails.address.meta_data.email,
-      mobile: userkycDetails.identification.meta_data.mobile_number,
-      occupation: userkycDetails.identification.meta_data.occupation,
-      income: userkycDetails.identification.meta_data.gross_annual_income,
+      pan: kyc.pan.meta_data.pan_number,
+      dob: kyc.pan.meta_data.dob,
+      email: kyc.address.meta_data.email,
+      mobile: kyc.identification.meta_data.mobile_number,
+      occupation: kyc.identification.meta_data.occupation,
+      income: kyc.identification.meta_data.gross_annual_income,
       residential_status:
         residentialOptions[selectedIndexResidentialStatus].value,
-      tin_number: userkycDetails.nri_address.tin_number,
+      tin_number: kyc.nri_address.tin_number,
     };
-    setShowLoader(false);
     setIsNri(isNri);
     setFormData({ ...formData });
   };
@@ -89,14 +77,14 @@ const PersonalDetails1 = (props) => {
       "residential_status",
     ];
     if (is_nri) keysToCheck.push("tin_number");
-    if (currentUser.email === null) keysToCheck.push("email");
+    if (user.email === null) keysToCheck.push("email");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.address.meta_data.email = form_data.email;
     userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
@@ -137,7 +125,7 @@ const PersonalDetails1 = (props) => {
           tin_number: tin_number || "",
         };
       }
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       if (is_nri) {
         let toState = "kyc-bank-details";
@@ -187,12 +175,12 @@ const PersonalDetails1 = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       hideInPageTitle
       id="kyc-personal-details1"
       buttonTitle="CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-complaint-personal-details">
@@ -206,7 +194,7 @@ const PersonalDetails1 = (props) => {
             HELP
           </div>
         </div>
-        {!showLoader && (
+        {!isLoading && (
           <main>
             <Input
               label="Date of birth(DD/MM/YYYY)"
@@ -220,7 +208,7 @@ const PersonalDetails1 = (props) => {
               id="dob"
               disabled={isApiRunning}
             />
-            {currentUser && currentUser.email === null && (
+            {user && user.email === null && (
               <Input
                 label="Email"
                 class="input"
@@ -232,7 +220,7 @@ const PersonalDetails1 = (props) => {
                 disabled={isApiRunning}
               />
             )}
-            {currentUser && currentUser.mobile === null && (
+            {user && user.mobile === null && (
               <Input
                 label="Mobile number"
                 class="input"

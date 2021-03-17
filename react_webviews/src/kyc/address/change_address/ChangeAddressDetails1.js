@@ -1,46 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import {
-  storageConstants,
-  getPathname,
-  addressProofOptions,
-} from "../../constants";
-import { initData } from "../../services";
-import { storageService, isEmpty } from "utils/validators";
+import { getPathname, addressProofOptions } from "../../constants";
+import { isEmpty } from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
 } from "../../common/functions";
+import useUserKycHook from "../../common/hooks/userKycHook";
 
 const ChangeAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [form_data, setFormData] = useState({});
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
+  const [kyc, , isLoading] = useUserKycHook();
   const [title, setTitle] = useState("");
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
-  const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(userkycDetails);
-    }
+  const initialize = () => {
     let topTilte = "";
-    if (userkycDetails.address.meta_data.is_nri) {
+    if (kyc.address.meta_data.is_nri) {
       topTilte = "Change indian address";
     } else {
       topTilte = "Change address";
     }
     setTitle(topTilte);
-    let isNri = userkycDetails.address.meta_data.is_nri;
+    let isNri = kyc.address.meta_data.is_nri;
     let selectedIndexResidentialStatus = 0;
     if (isNri) {
       selectedIndexResidentialStatus = 1;
@@ -48,10 +35,8 @@ const ChangeAddressDetails1 = (props) => {
     let address_doc_type =
       selectedIndexResidentialStatus === 1 ? "PASSPORT" : "";
     let formData = {
-      address_doc_type:
-        userkycDetails.address?.address_doc_type || address_doc_type,
+      address_doc_type: kyc.address?.address_doc_type || address_doc_type,
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -78,14 +63,14 @@ const ChangeAddressDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
-  const disabled = userkyc?.address?.meta_data?.is_nri || false;
+  const disabled = kyc?.address?.meta_data?.is_nri || false;
   return (
     <Container
-      showLoader={showLoader}
+      showLoader={isLoading}
       id="kyc-change-address-details1"
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      disable={showLoader}
+      disable={isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">

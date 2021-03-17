@@ -2,20 +2,19 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import { storageService, validatePan, isEmpty } from "utils/validators";
 import Input from "common/ui/Input";
-import { checkMerge, getPan, logout, savePanData } from "../common/api";
+import { checkMerge, getPan, logout, kycSubmit } from "../common/api";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import ResidentDialog from "./residentDialog";
 import Alert from "../mini_components/Alert";
 import { navigate as navigateFunc } from "../common/functions";
 import AccountMerge from "../mini_components/AccountMerge";
-import { initData } from "../services";
 import { getConfig } from "../../utils/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
-  const [showLoader, setShowLoader] = useState(false);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [buttonTitle, setButtonTitle] = useState("CHECK STATUS");
   const [isStartKyc, setIsStartKyc] = useState(false);
@@ -24,35 +23,20 @@ const Home = (props) => {
   const [panError, setPanError] = useState("");
   const [openResident, setOpenResident] = useState(false);
   const [openAccountMerge, setOpenAccountMerge] = useState(false);
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
   const [homeData, setHomeData] = useState({});
   const [accountMergeData, setAccountMergeData] = useState({});
   const [authIds, setAuthIds] = useState({});
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
 
-  useEffect(() => {
-    initialize();
-  }, []);
+  const [kyc, user, isLoading] = useUserKycHook();
 
-  const initialize = async () => {
-    let userkycDetails = { ...userKyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      setShowLoader(true);
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setUserKyc(userkycDetails);
-      setCurrentUser(user);
-      setShowLoader(false);
-    }
-    setPan(userkycDetails.pan?.meta_data?.pan_number || "");
+  useEffect(() => {
+    if (!isEmpty(kyc) && !isEmpty(user)) initialize();
+  }, [kyc, user]);
+
+  const initialize = () => {
+    setPan(kyc.pan?.meta_data?.pan_number || "");
     let data = {
       investType: "mutual fund",
       npsDetailsRequired: false,
@@ -110,7 +94,7 @@ const Home = (props) => {
 
     if (!isStartKyc) checkCompliant();
     else if (!isUserCompliant) setOpenResident(true);
-    else savePan(userKyc.address?.meta_data?.is_nri || false);
+    else savePan(kyc.address?.meta_data?.is_nri || false);
   };
 
   const checkCompliant = async () => {
@@ -134,7 +118,7 @@ const Home = (props) => {
         setIsUserCompliant(false);
       }
     } catch (err) {
-      toast(err || genericErrorMessage);
+      toast(err.message || genericErrorMessage);
     } finally {
       setIsApiRunning(false);
     }
@@ -227,24 +211,24 @@ const Home = (props) => {
     try {
       setIsApiRunning(true);
       if (is_nri) {
-        userKyc.address.meta_data.is_nri = true;
+        kyc.address.meta_data.is_nri = true;
       } else {
-        userKyc.address.meta_data.is_nri = false;
+        kyc.address.meta_data.is_nri = false;
       }
-      let dob = userKyc.pan.meta_data.dob;
-      let oldObject = userKyc.pan.meta_data;
+      let dob = kyc.pan.meta_data.dob;
+      let oldObject = kyc.pan.meta_data;
       let newObject = Object.assign({}, oldObject);
       newObject.dob = dob;
       newObject.pan_number = pan;
       let body = {
         kyc: {
           pan: newObject,
-          address: userKyc.address.meta_data,
+          address: kyc.address.meta_data,
         },
       };
-      let result = await savePanData(body);
+      let result = await kycSubmit(body);
       if (!result) return;
-      currentUser.name = result.kyc.pan.meta_data.name;
+      user.name = result.kyc.pan.meta_data.name;
       if (
         (isUserCompliant || result.kyc.kyc_status === "compliant") &&
         (homeData.kycConfirmPanScreen || isPremiumFlow)
@@ -267,7 +251,7 @@ const Home = (props) => {
       }
     } catch (err) {
       console.log(err);
-      toast(err || genericErrorMessage);
+      toast(err.message || genericErrorMessage);
     } finally {
       setIsApiRunning(false);
     }
@@ -275,12 +259,12 @@ const Home = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       hideInPageTitle
       id="kyc-home"
       buttonTitle={buttonTitle}
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       {!isEmpty(homeData) && (

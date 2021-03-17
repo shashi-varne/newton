@@ -6,40 +6,18 @@ import { isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
 import toast from "common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const Progress = (props) => {
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  );
-  const [loading, setLoading] = useState(false);
+  const [kyc, ,isLoading] = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
-
-  useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize();
-    }
-  }, []);
-
-  const initialize = async () => {
-    try {
-      setLoading(true);
-      await initData();
-      const kyc = storageService().getObject(storageConstants.KYC);
-      setKyc(kyc);
-    } catch (err) {
-      console.error(err);
-      toast(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   let documents = [];
   let totalDocs = 0;
   let canGoNext = false;
 
-  if (!isEmpty(kyc) && !loading) {
+  if (!isEmpty(kyc) && !isLoading) {
     documents = getDocuments(kyc);
     for (let document of documents) {
       if (
@@ -75,9 +53,9 @@ const Progress = (props) => {
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       noFooter={disableNext}
-      disable={loading || !canGoNext}
+      disable={isLoading || !canGoNext}
       classOverRideContainer="pr-container"
-      showSkelton={loading}
+      showSkelton={isLoading}
       skeltonType="p"
       fullWidthButton={true}
       handleClick={() => {

@@ -1,50 +1,36 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import { storageConstants, getPathname } from "../constants";
-import { initData } from "../services";
-import {
-  storageService,
-  isEmpty,
-  validateAlphabets,
-} from "../../utils/validators";
+import { getPathname } from "../constants";
+import { isEmpty, validateAlphabets } from "../../utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails2 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
+  const [kyc, ,isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(userkycDetails);
-    }
     let formData = {
-      father_name: userkycDetails.pan?.meta_data?.father_name || "",
-      mother_name: userkycDetails.pan?.meta_data?.mother_name || "",
-      marital_status:
-        userkycDetails.identification.meta_data.marital_status || "",
-      spouse_name: userkycDetails.identification.meta_data.spouse_name || "",
+      father_name: kyc.pan?.meta_data?.father_name || "",
+      mother_name: kyc.pan?.meta_data?.mother_name || "",
+      marital_status: kyc.identification.meta_data.marital_status || "",
+      spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -57,11 +43,11 @@ const PersonalDetails2 = (props) => {
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.father_name = form_data.father_name;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.pan.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
     savePersonalDetails2(userkycDetails);
   };
 
@@ -74,7 +60,7 @@ const PersonalDetails2 = (props) => {
           identification: userKyc.identification.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       navigate(getPathname.personalDetails3, {
         state: {
@@ -83,7 +69,7 @@ const PersonalDetails2 = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -101,55 +87,53 @@ const PersonalDetails2 = (props) => {
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={isLoading}
       id="kyc-personal-details2"
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-complaint-personal-details">
         <div className="kyc-main-title">
           {title} <span>2/4</span>
         </div>
-        {!showLoader && (
-          <main>
+        <main>
+          <Input
+            label="Father's name"
+            class="input"
+            value={form_data.father_name || ""}
+            error={form_data.father_name_error ? true : false}
+            helperText={form_data.father_name_error || ""}
+            onChange={handleChange("father_name")}
+            maxLength={20}
+            type="text"
+            disabled={isApiRunning}
+          />
+          <Input
+            label="Mother's name"
+            class="input"
+            value={form_data.mother_name || ""}
+            error={form_data.mother_name_error ? true : false}
+            helperText={form_data.mother_name_error || ""}
+            onChange={handleChange("mother_name")}
+            type="text"
+            disabled={isApiRunning}
+          />
+          {form_data.marital_status === "MARRIED" && (
             <Input
-              label="Father's name"
+              label="Spouse"
               class="input"
-              value={form_data.father_name || ""}
-              error={form_data.father_name_error ? true : false}
-              helperText={form_data.father_name_error || ""}
-              onChange={handleChange("father_name")}
-              maxLength={20}
+              value={form_data.spouse_name || ""}
+              error={form_data.spouse_name_error ? true : false}
+              helperText={form_data.spouse_name_error || ""}
+              onChange={handleChange("spouse_name")}
               type="text"
               disabled={isApiRunning}
             />
-            <Input
-              label="Mother's name"
-              class="input"
-              value={form_data.mother_name || ""}
-              error={form_data.mother_name_error ? true : false}
-              helperText={form_data.mother_name_error || ""}
-              onChange={handleChange("mother_name")}
-              type="text"
-              disabled={isApiRunning}
-            />
-            {form_data.marital_status === "MARRIED" && (
-              <Input
-                label="Spouse"
-                class="input"
-                value={form_data.spouse_name || ""}
-                error={form_data.spouse_name_error ? true : false}
-                helperText={form_data.spouse_name_error || ""}
-                onChange={handleChange("spouse_name")}
-                type="text"
-                disabled={isApiRunning}
-              />
-            )}
-          </main>
-        )}
+          )}
+        </main>
       </div>
     </Container>
   );

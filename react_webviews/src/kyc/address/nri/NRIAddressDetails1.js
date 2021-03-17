@@ -2,30 +2,28 @@ import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import { storageConstants, getPathname } from "../../constants";
-import { initData } from "../../services";
-import { storageService, isEmpty, validateNumber } from "utils/validators";
+import { getPathname } from "../../constants";
+import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
 } from "../../common/functions";
-import { savePanData } from "../../common/api";
+import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../../common/hooks/userKycHook";
 
 const NriAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const state = props.location.state || {};
   const isEdit = state.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   let title = "Foreign address details";
   if (isEdit) {
     title = "Edit foreign address details";
   }
+
+  const [kyc, , isLoading] = useUserKycHook();
 
   const addressProofOptions = [
     { name: "Driving license", value: "DL" },
@@ -34,21 +32,21 @@ const NriAddressDetails1 = (props) => {
   ];
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) initialize();
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      setUserKyc(userkycDetails);
+    let mobile_number = kyc.nri_address?.meta_data?.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
     }
     let formData = {
-      mobile_number: userkycDetails.nri_address?.meta_data?.mobile_number || "",
-      address_doc_type: userkycDetails.address_doc_type || "",
+      mobile_number: mobile_number,
+      country_code: country_code,
+      address_doc_type: kyc.address_doc_type || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -60,9 +58,12 @@ const NriAddressDetails1 = (props) => {
       setFormData(data);
       return;
     }
-    let userkycDetails = { ...userkyc };
-    userkycDetails.nri_address.meta_data.mobile_number =
-      form_data.mobile_number;
+    let mobile_number = form_data.mobile;
+    if (form_data.country_code) {
+      mobile_number = form_data.country_code + "|" + mobile_number;
+    }
+    let userkycDetails = { ...kyc };
+    userkycDetails.nri_address.meta_data.mobile_number = mobile_number;
     userkycDetails.nri_address.meta_data.address_doc_type =
       form_data.address_doc_type;
     saveNriAddressDetails1(userkycDetails);
@@ -76,7 +77,7 @@ const NriAddressDetails1 = (props) => {
           nri_address: userKyc.nri_address.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       navigate(getPathname.nriAddressDetails2, {
         state: {
@@ -86,7 +87,7 @@ const NriAddressDetails1 = (props) => {
       });
     } catch (err) {
       console.log(err);
-      toast(err);
+      toast(err.message);
     } finally {
       setIsApiRunning(false);
     }
@@ -106,15 +107,15 @@ const NriAddressDetails1 = (props) => {
 
   return (
     <Container
-      showLoader={showLoader}
+      showLoader={isLoading}
       id="kyc-personal-details1"
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
-      <div className="kyc-complaint-personal-details">
+      <div className="kyc-complaint-personal-details kyc-address-details">
         <div className="kyc-main-title">
           {title} <span>3/4</span>
         </div>

@@ -16,41 +16,36 @@ import {
 } from "../constants";
 import { initData } from "../services";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
-import { savePanData } from "../common/api";
+import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails2 = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
   let title = "Nominee detail";
   if (isEdit) {
     title = "Edit nominee detail";
   }
 
+  const [kyc, isLoading] = useUserKycHook();
+
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc)) {
+      initialize();
+    }
+  }, [kyc]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    if (isEmpty(userkycDetails)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-    }
-    setUserKyc(userkycDetails);
     let is_checked = false;
     if (
-      userkycDetails.nomination.nominee_optional ||
-      (userkycDetails.nomination.meta_data_status !== "submitted" &&
-        userkycDetails.nomination.meta_data_status !== "approved")
+      kyc.nomination.nominee_optional ||
+      (kyc.nomination.meta_data_status !== "submitted" &&
+        kyc.nomination.meta_data_status !== "approved")
     ) {
       is_checked = true;
     }
@@ -58,11 +53,10 @@ const PersonalDetails2 = (props) => {
     setIsChecked(is_checked);
 
     let formData = {
-      name: userkycDetails.nomination.meta_data.name,
-      dob: userkycDetails.nomination.meta_data.dob,
-      relationship: userkycDetails.nomination.meta_data.relationship,
+      name: kyc.nomination.meta_data.name,
+      dob: kyc.nomination.meta_data.dob,
+      relationship: kyc.nomination.meta_data.relationship,
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -76,7 +70,7 @@ const PersonalDetails2 = (props) => {
         return;
       }
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.nomination.meta_data.dob = form_data.dob;
     userkycDetails.nomination.meta_data.name = form_data.name;
     userkycDetails.nomination.meta_data.relationship = form_data.relationship;
@@ -97,7 +91,7 @@ const PersonalDetails2 = (props) => {
   const saveCompliantPersonalDetails2 = async (body) => {
     try {
       setIsApiRunning(true);
-      const submitResult = await savePanData(body);
+      const submitResult = await kycSubmit(body);
       if (!submitResult) return;
       if (isChecked) {
         if (isEdit) navigate(getPathname.journey);
@@ -137,12 +131,12 @@ const PersonalDetails2 = (props) => {
 
   return (
     <Container
-      showLoader={showLoader}
+      showLoader={isLoading}
       hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      disable={isApiRunning || isLoading}
       handleClick={handleClick}
     >
       <div className="kyc-nominee">

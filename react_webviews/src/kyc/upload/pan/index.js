@@ -8,6 +8,7 @@ import { upload } from '../../common/api'
 import { getBase64, getConfig } from '../../../utils/functions'
 import toast from 'common/ui/Toast'
 import { navigate as navigateFunc } from '../../common/functions'
+import useUserKycHook from '../../common/hooks/userKycHook'
 
 const getTitleList = ({ kyc }) => {
   let titleList = [
@@ -55,10 +56,12 @@ const Pan = (props) => {
   const [subTitle, setSubTitle] = useState('')
   const [title, setTitle] = useState('')
   const [showLoader, setShowLoader] = useState(false)
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
+  // const [kyc, setKyc] = useState(
+  //   storageService().getObject(storageConstants.KYC) || null
+  // )
 
+  const [kyc, ,isLoading] = useUserKycHook();
+  
   const inputEl = useRef(null)
 
   const native_call_handler = (method_name, doc_type, doc_name, doc_side) => {
@@ -98,25 +101,25 @@ const Pan = (props) => {
     }
   }
 
-  useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (isEmpty(kyc)) {
+  //     initialize()
+  //   }
+  // }, [])
 
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('Finally')
-      setLoading(false)
-    }
-  }
+  // const initialize = async () => {
+  //   try {
+  //     setLoading(true)
+  //     await initData()
+  //     const kyc = storageService().getObject(storageConstants.KYC)
+  //     setKyc(kyc)
+  //   } catch (err) {
+  //     console.error(err)
+  //   } finally {
+  //     console.log('Finally')
+  //     setLoading(false)
+  //   }
+  // }
   const handleChange = (event) => {
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -144,8 +147,8 @@ const Pan = (props) => {
     try {
       setIsApiRunning(true)
       const result = await upload(file, 'pan')
-      console.log(result)
-      setKyc(result.kyc)
+      // console.log(result)
+      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       if (
         (result.pan_ocr && !result.pan_ocr.ocr_pan_kyc_matches) ||
@@ -184,7 +187,7 @@ const Pan = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={loading}
+      showSkelton={isLoading}
       handleClick={handleSubmit}
       disable={!file || isApiRunning}
       isApiRunning={isApiRunning}

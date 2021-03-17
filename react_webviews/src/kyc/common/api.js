@@ -8,30 +8,36 @@ import { getConfig } from 'utils/functions'
 const partner = getConfig().partner
 const genericErrorMessage = 'Something Went wrong!'
 
+export const handleApi = (res) => {
+    if (
+      res.pfwstatus_code !== 200 ||
+      !res.pfwresponse ||
+      isEmpty(res.pfwresponse)
+    ) {
+      throw new Error( res?.pfwmessage || genericErrorMessage);
+    }
+    const { result, status_code: status } = res.pfwresponse;
+    if (status === 200) {
+      return result;
+    } else {
+      throw new Error( result.error || result.message || genericErrorMessage );
+    }
+};
+
 export const getUserKycFromSummary = async () => {
   try {
     const res = await Api.post(apiConstants.accountSummary, {
       kyc: ['kyc'],
       user: ['user'],
     })
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
-      throw genericErrorMessage
+    const result = handleApi(res)
+    if(result) {
+      let user = result.data.user.user.data
+      let kyc = result.data.kyc.kyc.data
+      storageService().setObject(storageConstants.KYC, kyc)
+      storageService().setObject(storageConstants.USER, user)
     }
-    const { result, status_code: status } = res.pfwresponse
-    switch (status) {
-      case 200:
-        let user = result.data.user.user.data
-        let kyc = result.data.kyc.kyc.data
-        storageService().setObject(storageConstants.KYC, kyc)
-        storageService().setObject(storageConstants.USER, user)
-        break
-      default:
-        throw result.error || result.message || genericErrorMessage
-    }
+    return result;
   } catch (err) {
     console.log(err)
   }
@@ -40,25 +46,13 @@ export const getUserKycFromSummary = async () => {
 export const logout = async () => {
   try {
     const res = await Api.get('api/logout')
-
-    if (
-      res.pfwstatus_code !== 200 ||
-      !res.pfwresponse ||
-      isEmpty(res.pfwresponse)
-    ) {
-      throw genericErrorMessage
-    }
-
-    const { result, status_code: status } = res.pfwresponse
-
-    if (status === 200) {
-      storageService().clear()
+    const result = handleApi(res);
+    if(result) {
+      storageService().clear();
       return result
-    } else {
-      throw result.error || result.message || genericErrorMessage
     }
   } catch (err) {
-    toast(err || genericErrorMessage)
+    toast(err.message || genericErrorMessage)
   }
 }
 
@@ -69,7 +63,7 @@ export const getPan = async (data, accountMerge) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrorMessage
+    throw new Error (res?.pfwmessage || genericErrorMessage);
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -82,7 +76,7 @@ export const getPan = async (data, accountMerge) => {
       toast('Network error')
       return
     default:
-      throw result.error || result.message || genericErrorMessage
+      throw new Error (result.error || result.message || genericErrorMessage);
   }
 }
 
@@ -90,18 +84,10 @@ export const checkMerge = async (pan) => {
   const res = await Api.post(
     `/api/user/account/merge?pan_number=${pan}&verify_only=true`
   )
-  if (
-    res.pfwstatus_code !== 200 ||
-    !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
-  ) {
-    throw genericErrorMessage
-  }
-
-  return res.pfwresponse
+  return handleApi(res);
 }
 
-export const savePanData = async (body) => {
+export const kycSubmit = async (body) => {
   const res = await Api.post(apiConstants.submit, {
     ...body,
   })
@@ -110,7 +96,7 @@ export const savePanData = async (body) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrorMessage
+    throw new Error( res?.pfwmessage || genericErrorMessage);
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
@@ -130,44 +116,18 @@ export const savePanData = async (body) => {
       toast(msg)
       break
     default:
-      throw result.error || result.message || 'Server error'
+      throw new Error(result.error || result.message || 'Server error')
   }
 }
 
 export const getMyAccount = async () => {
   const res = await Api.get(apiConstants.getMyaccount)
-  if (
-    res.pfwstatus_code !== 200 ||
-    !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
-  ) {
-    throw genericErrorMessage
-  }
-  const { result, status_code: status } = res.pfwresponse
-  switch (status) {
-    case 200:
-      return result
-    default:
-      throw result.error || result.message || genericErrorMessage
-  }
+  return handleApi(res);
 }
 
 export const getIFSC = async (data) => {
   const res = await Api.get(`${apiConstants.getIFSC}${data}`)
-  if (
-    res.pfwstatus_code !== 200 ||
-    !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
-  ) {
-    throw genericErrorMessage
-  }
-  const { result, status_code: status } = res.pfwresponse
-  switch (status) {
-    case 200:
-      return result
-    default:
-      throw result.error || result.message || genericErrorMessage
-  }
+  return handleApi(res);
 }
 
 export const addAdditionalBank = async (data) => {
@@ -177,14 +137,14 @@ export const addAdditionalBank = async (data) => {
     !res.pfwresponse ||
     isEmpty(res.pfwresponse)
   ) {
-    throw genericErrorMessage
+    throw new Error (res?.pfwmessage || genericErrorMessage);
   }
   const { result, status_code: status } = res.pfwresponse
   switch (status) {
     case 200:
       return result
     default:
-      throw result.message || result.error || genericErrorMessage
+      throw new Error(result.message || result.error || genericErrorMessage);
   }
 }
 
@@ -219,58 +179,20 @@ export const upload = async (file, type = 'pan', data = {}) => {
       genericErrorMessage
   )
 }
+
 export const saveBankData = async (data) => {
   const res = await Api.post(apiConstants.pennyVerification, data)
-  if (
-    res.pfwstatus_code !== 200 ||
-    !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
-  ) {
-    throw genericErrorMessage
-  }
-  const { result, status_code: status } = res.pfwresponse
-  switch (status) {
-    case 200:
-      return result
-    default:
-      throw result.error || result.message || genericErrorMessage
-  }
+  return handleApi(res);
 }
 
 export const getBankStatus = async (data) => {
   const res = await Api.post(apiConstants.getBankStatus, data)
-  if (
-    res.pfwstatus_code !== 200 ||
-    !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
-  ) {
-    throw genericErrorMessage
-  }
-  const { result, status_code: status } = res.pfwresponse
-  switch (status) {
-    case 200:
-      return result
-    default:
-      throw result.error || result.message || genericErrorMessage
-  }
+  return handleApi(res);
 }
 
 export const getCVL = async (data) => {
   const res = await Api.post(apiConstants.getCVL, data)
-  if (
-    res.pfwstatus_code !== 200 ||
-    !res.pfwresponse ||
-    isEmpty(res.pfwresponse)
-  ) {
-    throw genericErrorMessage
-  }
-  const { result, status_code: status } = res.pfwresponse
-  switch (status) {
-    case 200:
-      return result
-    default:
-      throw result.message || result.error || genericErrorMessage
-  }
+  return handleApi(res);
 }
 
 export const uploadBankDocuments = async (file, type, bank_id) => {
@@ -278,17 +200,7 @@ export const uploadBankDocuments = async (file, type, bank_id) => {
   formData.set('res', file)
   formData.set('bank_id', bank_id)
   const res = await Api.post(`api/kyc/v2/doc/mine/bank/${type}`, formData)
-  if (
-    res.pfwresponse.status_code === 200 &&
-    res.pfwresponse.result.message === 'success'
-  ) {
-    return res.pfwresponse.result
-  }
-  throw new Error(
-    res?.pfwresponse?.result?.message ||
-      res?.pfwresponse?.result?.error ||
-      genericErrorMessage
-  )
+  return handleApi(res);
 }
 
 export const getPinCodeData = async (pincode) => {

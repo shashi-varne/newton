@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
-import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants } from '../../constants'
 import { upload } from '../../common/api'
 import { navigate as navigateFunc } from '../../common/functions'
 import { getConfig, getBase64 } from 'utils/functions'
 import toast from 'common/ui/Toast'
+import useUserKycHook from '../../common/hooks/userKycHook'
 
 const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -14,9 +14,9 @@ const Sign = (props) => {
   const [fileToShow, setFileToShow] = useState(null)
   const [loading, setLoading] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
+  // const [kyc, setKyc] = useState(
+  //   storageService().getObject(storageConstants.KYC) || null
+  // )
 
   const inputEl = useRef(null)
 
@@ -57,25 +57,7 @@ const Sign = (props) => {
     }
   }
 
-  useEffect(() => {
-    if (isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
-
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      console.log('Finally')
-      setLoading(false)
-    }
-  }
+  const [kyc, ,isLoading] = useUserKycHook();
 
   const handleUpload = () => {
     inputEl.current.click()
@@ -105,10 +87,10 @@ const Sign = (props) => {
     try {
       setIsApiRunning(true)
       const result = await upload(file, 'identification')
-      console.log(result)
-      setKyc(result.kyc)
+      // console.log(result)
+      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
-      navigate('/kyc/journey')
+      navigate('/kyc/upload/progress')
     } catch (err) {
       console.error(err)
     } finally {
@@ -125,7 +107,7 @@ const Sign = (props) => {
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
       fullWidthButton={true}
-      showSkelton={loading}
+      showSkelton={isLoading}
       handleClick={handleSubmit}
       disable={!file || isApiRunning}
       isApiRunning={isApiRunning}

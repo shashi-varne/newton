@@ -1,36 +1,23 @@
 import TextField from '@material-ui/core/TextField'
 import React, { useState, useEffect } from 'react'
 import Toast from '../../common/ui/Toast'
-import { getUrlParams, isEmpty, storageService } from 'utils/validators'
+import { isEmpty } from 'utils/validators'
 import { getPinCodeData, submit } from '../common/api'
 import Container from '../common/Container'
-import { storageConstants, kycDocNameMapper } from '../constants'
-import { initData } from '../services'
+import { kycDocNameMapper } from '../constants'
 import { navigate as navigateFunc } from '../common/functions'
+import useUserKycHook from '../common/hooks/userKycHook'
 
 const AddressDetails2 = (props) => {
-  const [showSkelton, setShowSkelton] = useState(false)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [pinTouched, setPinTouched] = useState(false)
   const [showError, setShowError] = useState(false)
+  const [kycData, , isLoading] = useUserKycHook();
+  const [kyc, setKyc] = useState(kycData);
 
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
-
-  const getHelperText = (pincode) => {
-    if (typeof pincode === 'string') {
-      if (pincode.length === 0) {
-        return 'This is required'
-      }
-      if (pincode.length < 6) {
-        return 'Minlength is 6'
-      }
-      if (pincode.length > 6) {
-        return 'Maxlength is 6'
-      }
-    }
-  }
+  useEffect(() => {
+    setKyc(kycData)
+  }, [kycData])
 
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
@@ -50,7 +37,7 @@ const AddressDetails2 = (props) => {
         navigate('/kyc/upload/address')
       } else {
         if (kyc?.address?.meta_data?.is_nri) {
-          navigate('/kyc/nri-address-details-1', {
+          navigate('/kyc/nri-address-details1', {
             isEdit,
           })
         } else {
@@ -157,10 +144,10 @@ const AddressDetails2 = (props) => {
     }))
   }
 
-  const urlParams = getUrlParams(props?.location?.search)
+  const stateParams = props.location?.state || {};
 
-  const isEdit = urlParams?.isEdit
-  const backToJourney = urlParams?.backToJourney
+  const isEdit = stateParams?.isEdit || ""
+  const backToJourney = stateParams?.backToJourney || null
   let title = ''
 
   if (kyc?.address?.meta_data?.is_nri) {
@@ -188,24 +175,6 @@ const AddressDetails2 = (props) => {
     return kycDocNameMapper[kyc?.address_doc_type]
   }
 
-  const initialize = async () => {
-    try {
-      setShowSkelton(true)
-      const result = await initData()
-      setKyc(result.kyc)
-    } catch (err) {
-      setShowError(true)
-    } finally {
-      setShowSkelton(false)
-    }
-  }
-
-  useEffect(() => {
-    if (!kyc || isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
-
   useEffect(() => {
     if (kyc?.address?.meta_data?.pincode?.length === 6) {
       fetchPincodeData()
@@ -216,12 +185,29 @@ const AddressDetails2 = (props) => {
   const addressline = kyc?.address?.meta_data?.addressline || ''
   const state = kyc?.address?.meta_data?.state || ''
   const city = kyc?.address?.meta_data?.city || ''
-  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning || pincode?.length < 6
+
+  const getHelperText = (pincode) => {
+    if (typeof pincode === 'string') {
+      if (pincode.length === 0) {
+        return 'This is required'
+      }
+      if (pincode.length < 6) {
+        return 'Minlength is 6'
+      }
+      if (pincode.length > 6) {
+        return 'Maxlength is 6'
+      }
+      if(pincode.length === 6 && state === '') {
+        return 'Please enter valid pincode'
+      }
+    }
+  }
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={showSkelton}
+      showSkelton={isLoading}
       disable={isDisabled}
       hideInPageTitle
       handleClick={handleSubmit}
@@ -241,9 +227,9 @@ const AddressDetails2 = (props) => {
             value={pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={pinTouched && getHelperText(pincode)}
+            helperText={(pinTouched || (state === '' && pincode.length === 6) ) && getHelperText(pincode)}
             inputProps={{ minLength: 6, maxLength: 6 }}
-            error={pinTouched && pincode.length !== 6}
+            error={(pinTouched && pincode.length !== 6) || (state === '' && pincode.length === 6) }
             size="6"
             required
           />

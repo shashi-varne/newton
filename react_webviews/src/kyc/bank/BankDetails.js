@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Container from "../common/Container";
 import { formatAmountInr, storageService, isEmpty } from "utils/validators";
 import { navigate as navigateFunc } from "../common/functions";
-import { initData } from "../services";
 import { storageConstants } from "../constants";
 import { getConfig } from "utils/functions";
 import { getMyAccount } from "../common/api";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const BankDetails = (props) => {
   const [showLoader, setShowLoader] = useState(true);
@@ -19,15 +19,12 @@ const BankDetails = (props) => {
   }
   const [bank, setBank] = useState({});
   const navigate = navigateFunc.bind(props);
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
 
   const handleClick = () => {
     if (bank.status === "default") {
-      navigate(`/kyc/${userKyc.kyc_status}/upload-documents`);
+      navigate(`/kyc/${kyc.kyc_status}/upload-documents`);
     } else {
-      navigate(`/kyc/${userKyc.kyc_status}/upload-documents`, {
+      navigate(`/kyc/${kyc.kyc_status}/upload-documents`, {
         searchParams: `${
           getConfig().searchParams
         }&additional=true&bank_id=${bank_id}`,
@@ -35,12 +32,13 @@ const BankDetails = (props) => {
     }
   };
 
+  const [kyc, ,isLoading] = useUserKycHook();
+
   useEffect(() => {
     initialize();
   }, []);
 
   let initialize = async () => {
-    let kyc = { ...userKyc };
     let banksInfo = [...banks];
     if (isEmpty(banksInfo)) {
       try {
@@ -66,16 +64,11 @@ const BankDetails = (props) => {
       banksInfo.find((obj) => obj.bank_id?.toString() === bank_id) || {};
     setBank(bankData);
     setShowLoader(false);
-    if (isEmpty(kyc)) {
-      await initData();
-      kyc = storageService().getObject(storageConstants.KYC);
-      setUserKyc({ ...kyc });
-    }
   };
 
   return (
     <Container
-      showSkelton={showLoader}
+      showSkelton={showLoader || isLoading}
       hideInPageTitle
       id="bank-details"
       buttonTitle="RE-UPLOAD DOCUMENT"

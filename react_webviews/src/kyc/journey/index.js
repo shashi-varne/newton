@@ -10,28 +10,24 @@ import toast from 'common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
 import { submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
+import useUserKycHook from '../common/hooks/userKycHook'
 import { isMobile } from 'utils/functions'
 import { nativeCallback } from 'utils/native_callback'
 
 const Journey = (props) => {
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER || null)
-  )
   const [isApiRunning, setIsApiRunning] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [npsDetailsReq, setNpsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
 
   const [open, setOpen] = useState(true)
 
+  const [kyc, user, isLoading] = useUserKycHook();
+
   const initJourneyData = () => {
-    if (!isEmpty(kyc) && !isEmpty(currentUser)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       let journeyData = getJourneyData()
       for (let i = 0; i < journeyData.length; i++) {
         let status = 'completed'
@@ -148,8 +144,8 @@ const Journey = (props) => {
 
       if (
         isCompliant &&
-        currentUser.active_investment &&
-        currentUser.kyc_registration_v2 !== 'submitted'
+        user.active_investment &&
+        user.kyc_registration_v2 !== 'submitted'
       ) {
         topTitle = 'Investment pending'
         investmentPending = true
@@ -494,28 +490,6 @@ const Journey = (props) => {
     }
   }
 
-  useEffect(() => {
-    if (isEmpty(kyc) || isEmpty(currentUser)) {
-      initialize()
-    }
-  }, [])
-
-  const initialize = async () => {
-    try {
-      setLoading(true)
-      await initData()
-      const userKyc = storageService().getObject(storageConstants.KYC)
-      const user = storageService().getObject(storageConstants.USER)
-      setKyc(() => ({ ...userKyc }))
-      setCurrentUser(() => ({ ...user }))
-    } catch (err) {
-      toast(err.message)
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const productName = getConfig().productName
 
   const redirectUrl = encodeURIComponent(
@@ -612,7 +586,7 @@ const Journey = (props) => {
     )
   }
 
-  if (!isEmpty(kyc) && !isEmpty(currentUser)) {
+  if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
     var stage = 0
     var stageDetail = ''
@@ -625,18 +599,18 @@ const Journey = (props) => {
     var kycJourneyData = initJourneyData() || []
   }
 
-  if (!isEmpty(kyc) && !isEmpty(currentUser)) {
-    if (npsDetailsReq && currentUser.kyc_registration_v2 == 'submitted') {
+  if (!isEmpty(kyc) && !isEmpty(user)) {
+    if (npsDetailsReq && user.kyc_registration_v2 == 'submitted') {
       navigate('/nps/identity')
       return
     } else if (
-      currentUser.kyc_registration_v2 == 'submitted' &&
+      user.kyc_registration_v2 == 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/kyc/report')
       return
     } else if (
-      currentUser.kyc_registration_v2 == 'complete' &&
+      user.kyc_registration_v2 == 'complete' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/invest')
@@ -648,13 +622,13 @@ const Journey = (props) => {
     <Container
       hideInPageTitle
       buttonTitle={getButtonText()}
-      disable={loading}
+      disable={isLoading}
       title="KYC Journey"
       classOverRideContainer="pr-container"
-      showSkelton={loading || isEmpty(kyc) || isEmpty(currentUser)}
+      showSkelton={isLoading || isEmpty(kyc) || isEmpty(user)}
       handleClick={goNext}
     >
-      {!isEmpty(kyc) && !isEmpty(currentUser) && (
+      {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey">
           {journeyStatus === 'ground_premium' && (
             <div className="kyc-journey-caption">
@@ -743,12 +717,12 @@ const Journey = (props) => {
           )}
 
           {isCompliant &&
-            currentUser.active_investment &&
-            currentUser.kyc_registration_v2 !== 'submitted' && (
+            user.active_investment &&
+            user.kyc_registration_v2 !== 'submitted' && (
               <Alert
                 variant="attention"
                 message="Please share following mandatory details within 24 hrs to execute the investment."
-                title={`Hey ${currentUser.name}`}
+                title={`Hey ${user.name}`}
               />
             )}
           <main className="steps-container">

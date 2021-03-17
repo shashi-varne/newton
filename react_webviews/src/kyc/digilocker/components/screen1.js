@@ -16,7 +16,7 @@ import {
   validateAlphabets,
 } from "utils/validators";
 import { validateFields, navigate as navigateFunc } from "../../common/functions";
-import { savePanData } from "../../common/api";
+import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
 
 const PersonalDetails1 = (props) => {
@@ -50,11 +50,19 @@ const PersonalDetails1 = (props) => {
       setCurrentUser(user);
       setUserKyc(userkycDetails);
     }
+    let mobile_number =
+      userkycDetails.identification.meta_data.mobile_number || "";
+    let country_code = "";
+    if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
+      country_code = mobile_number.split("|")[0];
+      mobile_number = mobile_number.split("|")[1];
+    }
     let formData = {
       name: userkycDetails.pan?.meta_data?.name || "",
       dob: userkycDetails.pan?.meta_data?.dob || "",
       email: userkycDetails.identification?.meta_data?.email || "",
-      mobile: userkycDetails.identification?.meta_data?.mobile_number || "",
+      mobile: mobile_number,
+      country_code: country_code,
       gender: userkycDetails.identification?.meta_data?.gender || "",
       marital_status:
         userkycDetails.identification?.meta_data?.marital_status || "",
@@ -69,7 +77,6 @@ const PersonalDetails1 = (props) => {
   const handleClick = () => {
     let keysToCheck = [
       "name",
-      "dob",
       "gender",
       "marital_status",
       "father_name",
@@ -84,11 +91,15 @@ const PersonalDetails1 = (props) => {
       setFormData(data);
       return;
     }
+    let mobile_number = form_data.mobile;
+    if (form_data.country_code) {
+      mobile_number = form_data.country_code + "|" + mobile_number;
+    }
     let userkycDetails = { ...userkyc };
     userkycDetails.pan.meta_data.name = form_data.name;
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.email = form_data.email;
-    userkycDetails.identification.meta_data.mobile_number = form_data.mobile;
+    userkycDetails.identification.meta_data.mobile_number = mobile_number;
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
@@ -108,7 +119,7 @@ const PersonalDetails1 = (props) => {
           identification: userKyc.identification.meta_data,
         },
       };
-      const submitResult = await savePanData(item);
+      const submitResult = await kycSubmit(item);
       if (!submitResult) return;
       navigate(getPathname.digilockerPersonalDetails2, {
         state: {

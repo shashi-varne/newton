@@ -1,39 +1,25 @@
 import TextField from '@material-ui/core/TextField'
 import React, { useState, useEffect } from 'react'
 import Toast from 'common/ui/Toast'
-import { getUrlParams, isEmpty, storageService } from 'utils/validators'
 import { getPinCodeData, submit } from '../../common/api'
 import Container from '../../common/Container'
-import { storageConstants, kycNRIDocNameMapper } from '../../constants'
-import { initData } from '../../services'
+import { kycNRIDocNameMapper } from '../../constants'
 import { navigate as navigateFunc } from '../../common/functions'
+import useUserKycHook from '../../common/hooks/userKycHook'
+import { isEmpty } from '../../../utils/validators'
 
 const NRIAddressDetails2 = (props) => {
-  const [showSkelton, setShowSkelton] = useState(false)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [pinTouched, setPinTouched] = useState(false)
   const [showError, setShowError] = useState(false)
+  const [kycData, , isLoading] = useUserKycHook();
+  const [kyc, setKyc] = useState(kycData);
 
-  const [kyc, setKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || null
-  )
+  useEffect(() => {
+    setKyc(kycData)
+  }, [kycData])
 
-  const isDisabled = isApiRunning
   const stateParams = props?.location?.state
-
-  const getHelperText = (pincode) => {
-    if (typeof pincode === 'string') {
-      if (pincode.length === 0) {
-        return 'This is required'
-      }
-      if (pincode.length < 6) {
-        return 'Minlength is 6'
-      }
-      if (pincode.length > 6) {
-        return 'Maxlength is 6'
-      }
-    }
-  }
 
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
@@ -198,25 +184,6 @@ const NRIAddressDetails2 = (props) => {
     address_proof = kycNRIDocNameMapper[kyc?.address_doc_type]
   }
 
-  const initialize = async () => {
-    try {
-      setShowSkelton(true)
-      await initData()
-      const kyc = storageService().getObject(storageConstants.KYC)
-      setKyc(kyc)
-    } catch (err) {
-      setShowError(true)
-    } finally {
-      setShowSkelton(false)
-    }
-  }
-
-  useEffect(() => {
-    if (!kyc || isEmpty(kyc)) {
-      initialize()
-    }
-  }, [])
-
   useEffect(() => {
     if (kyc?.nri_address?.meta_data?.pincode.length === 6) {
       fetchPincodeData()
@@ -228,11 +195,29 @@ const NRIAddressDetails2 = (props) => {
   const state = kyc?.nri_address?.meta_data?.state || ''
   const city = kyc?.nri_address?.meta_data?.city || ''
   const country = kyc?.nri_address?.meta_data?.country || ''
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning || pincode?.length < 6
+
+  const getHelperText = (pincode) => {
+    if (typeof pincode === 'string') {
+      if (pincode.length === 0) {
+        return 'This is required'
+      }
+      if (pincode.length < 6) {
+        return 'Minlength is 6'
+      }
+      if (pincode.length > 6) {
+        return 'Maxlength is 6'
+      }
+      if(pincode.length === 6 && state === '') {
+        return 'Please enter valid pincode'
+      }
+    }
+  }
 
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={showSkelton}
+      showSkelton={isLoading}
       disable={isDisabled}
       hideInPageTitle
       handleClick={handleSubmit}
@@ -252,9 +237,9 @@ const NRIAddressDetails2 = (props) => {
             value={pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={pinTouched && getHelperText(pincode)}
+            helperText={(pinTouched || (state === '' && pincode.length === 6) ) && getHelperText(pincode)}
             inputProps={{ minLength: 6, maxLength: 6 }}
-            error={pinTouched && pincode.length !== 6}
+            error={(pinTouched && pincode.length !== 6) || (state === '' && pincode.length === 6) }
             size="6"
             required
           />
