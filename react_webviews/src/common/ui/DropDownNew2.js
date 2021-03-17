@@ -15,14 +15,8 @@ class SelectDropDown2 extends React.Component {
 
 
   handleChange = selectedOption => {
-    // if (!selectedOption.length) {
-    //   return (
-    //     null // this.setState({ error: !this.state.error })
-    //   )
-    // }
-
-
     this.setState({ selectedOption })
+
     if (selectedOption) {
       if (selectedOption.value && (selectedOption.value + "").length) {
         this.props.onChange(selectedOption.value);
@@ -31,6 +25,7 @@ class SelectDropDown2 extends React.Component {
         this.props.onChange(selectedOption.label);
       }
     } else {
+      this.props.onChange('');
     }
   }
 
@@ -47,8 +42,6 @@ class SelectDropDown2 extends React.Component {
   }
 
   render() {
-
-    //  const Option = props => { return ( <div> <components.Option {...props}> <input type="checkbox" checked={props.isSelected} onChange={() => null} /> <label>{props.value}</label> </components.Option> </div> ); };
 
     const options = this.props.options.map((ele, index) => {
       return ({

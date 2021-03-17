@@ -328,7 +328,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let { provider } = this.state;
 
-    if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
+    if ((provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false || form_data.occupation === '') && this.state.member_key !== 'applicant')) {
       form_data.occupation_error = 'please select one occupation';
     }
 
