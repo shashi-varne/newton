@@ -66,7 +66,7 @@ class SelectDropDown2 extends React.Component {
           value={this.state.selectedOption}
           onChange={this.handleChange}
           options={options}
-          menuPlacement={'top'}
+          menuPlacement={'auto'}
           textFieldProps={{
             label: 'Label',
             InputLabelProps: {
@@ -77,6 +77,12 @@ class SelectDropDown2 extends React.Component {
           components={{
             IndicatorSeparator: () => null
           }}
+          styles={{
+            dropdownIndicator: (provided, state) => ({
+                ...provided,
+                transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
+            })
+        }}
         // defaultMenuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
