@@ -45,8 +45,15 @@ class Answers extends Component {
     await this.getFaqDescription(faq_id);
   };
 
-  handleChangeIndex = (index) => {
+  handleChangeIndex = async (index) => {
     this.setState({ index: index });
+
+    let { faqs, sub_category, faqDesc } = this.state;
+    let faq_id = faqs[sub_category.cms_category_id][index].cms_faq_id;
+
+    if (!faqDesc[faq_id]) {
+      await this.getFaqDescription(faq_id);
+    }
   };
 
   handleClick = async (dir) => {
