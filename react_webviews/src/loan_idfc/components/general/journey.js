@@ -346,7 +346,7 @@ class JourneyMap extends Component {
           this.navigate("ckyc-summary");
         } else {
           let resume = false;
-          if (idfc_loan_status === 'ckyc') {
+          if (idfc_loan_status === 'ckyc' || idfc_loan_status === 'idfc_null_submitted' || idfc_loan_status === 'idfc_null_failed') {
             resume = true
           }
           this.sendEvents('next', {stage: stage, resume: resume});
