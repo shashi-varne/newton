@@ -80,6 +80,7 @@ class Container extends Component {
       case "/risk":
       case "/risk/intro":
         if (getConfig().isWebCode) {
+          nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
           nativeCallback({ action: 'exit', events: this.getEvents('back') });

@@ -160,7 +160,6 @@ class Intro extends Component {
         showLoader={this.state.show_loader}
         title="Risk Analyser"
         handleClick={this.handleClick}
-        fullWidthButton={true}
         edit={this.props.edit}
         buttonTitle="Let’s get started"
         events={this.sendEvents("just_set_events")}
