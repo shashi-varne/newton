@@ -1189,7 +1189,7 @@ body[data-device="mobile"] {
 
 .css-g1d714-ValueContainer{
   font-size: 13px;
-  margin-bottom: -10px;
+  margin-bottom: 0px;
   line-height: 21px;
   font-weight: normal;
   color: #161A2E;
@@ -1201,6 +1201,7 @@ body[data-device="mobile"] {
   flex-direction: column;
   align-content: flex-start;
   position: relative;
-
-
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
 }

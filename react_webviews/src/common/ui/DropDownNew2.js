@@ -1,5 +1,5 @@
 import React from 'react';
-import Select , { components } from 'react-select';
+import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import './style.scss';
@@ -59,12 +59,13 @@ class SelectDropDown2 extends React.Component {
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><span
-        style={{ marginLeft: '10px', position: 'absolute' , marginTop: '1px' }} >{this.props.label}</span></InputLabel>)}
+          style={{ marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px' }}>
+          {this.props.label}</span></InputLabel>)}
         {/* {(!this.state.multi && <span className="label2">{this.props.label || 'label'}</span> )} */}
-         <Select
+        <Select
           defaultValue={value}
-          onMenuOpen={() =>  this.setState({shrink: true})}
-          onMenuClose={() => this.setState({shrink: false})}
+          onMenuOpen={() => this.setState({ shrink: true })}
+          onMenuClose={() => this.setState({ shrink: false })}
           placeholder={''}
           isClearable
           isSearchable={this.props.options.length <= 6 ? false : true}
@@ -80,15 +81,15 @@ class SelectDropDown2 extends React.Component {
           components={components}
           styles={{
             dropdownIndicator: (provided, state) => ({
-                ...provided,
-                transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
+              ...provided,
+              transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
             })
-        }}
-        hideSelectedOptions={false}
-        options={options}
-        closeMenuOnSelect={false}
-        onChange={this.handleChange}
-        allowSelectAll={true}
+          }}
+          hideSelectedOptions={false}
+          options={options}
+          closeMenuOnSelect={false}
+          onChange={this.handleChange}
+          allowSelectAll={true}
         // menuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
@@ -99,7 +100,7 @@ class SelectDropDown2 extends React.Component {
 }
 
 const DropDownNew2 = (props) => {
-    return (<SelectDropDown2 {...props} />)
+  return (<SelectDropDown2 {...props} />)
 }
 
 export default DropDownNew2;
@@ -113,7 +114,7 @@ const Option = props => {
           checked={props.isSelected}
           onChange={() => null}
         />{" "}
-        <span style={{ marginLeft:'10px'}}>{props.label}</span>
+        <span style={{ marginLeft: '10px' }}>{props.label}</span>
       </components.Option>
     </div>
   );
