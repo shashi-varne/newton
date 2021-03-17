@@ -70,7 +70,9 @@ class SelectDropDown2 extends React.Component {
           isClearable
           isSearchable={this.props.options.length <= 6 ? false : true}
           value={value}
-          menuPlacement={'auto'}
+          maxMenuHeight={320}
+          menuPlacement="auto"
+          menuPortalTarget={document.querySelector('body')}
           textFieldProps={{
             label: 'Label',
             InputLabelProps: {
@@ -90,7 +92,7 @@ class SelectDropDown2 extends React.Component {
           closeMenuOnSelect={false}
           onChange={this.handleChange}
           allowSelectAll={true}
-        // menuIsOpen={true}
+          // menuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
           <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || ''} </span>}
