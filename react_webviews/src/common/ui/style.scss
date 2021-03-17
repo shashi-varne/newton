@@ -1137,15 +1137,6 @@ body[data-device="mobile"] {
   border-bottom: 1px solid #4F2DA7 !important;
 }
 
-.css-yt9ioa-option{
-  display: flex;  
-  align-items: flex-start;
-
-  font-size: 13px !important;
-  font-weight: normal;
-  line-height: 21px !important;
-  color: #161A2E;
-}
 
 .css-9gakcf-option{
  background-color: #EEEEEE !important;
@@ -1158,8 +1149,26 @@ body[data-device="mobile"] {
 }
 
 .css-1n7v3ny-option{
+  display: flex;  
+  align-items: flex-start;
   background-color: white !important;
+  font-size: 13px !important;
+  line-height: 21px;
+  color: #161A2E !important;
+  min-height: 41px !important;
 }
+
+.css-yt9ioa-option{
+  display: flex;  
+  align-items: flex-start;
+  font-size: 13px !important;
+  // font-weight: normal;
+  line-height: 21px !important;
+  color: #161A2E !important;
+  min-height: 41px !important;
+}
+
+
 
 .css-1uccc91-singleValue{
   margin-top: 3px;

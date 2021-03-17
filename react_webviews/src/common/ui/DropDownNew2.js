@@ -83,7 +83,7 @@ class SelectDropDown2 extends React.Component {
                 transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
             })
         }}
-        // defaultMenuIsOpen={true}
+        defaultMenuIsOpen={true}
         />
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
           <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || ''} </span>}
