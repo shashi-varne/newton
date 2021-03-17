@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-import {
-  genderOptions,
-  maritalStatusOptions,
-  getPathname,
-} from "../constants";
+import { genderOptions, maritalStatusOptions, getPathname } from "../constants";
 import {
   formatDate,
   dobFormatTest,
@@ -24,7 +20,7 @@ const PersonalDetails1 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  
+
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
@@ -52,8 +48,7 @@ const PersonalDetails1 = (props) => {
       mobile: mobile_number,
       country_code: country_code,
       gender: kyc.identification?.meta_data?.gender || "",
-      marital_status:
-        kyc.identification?.meta_data?.marital_status || "",
+      marital_status: kyc.identification?.meta_data?.marital_status || "",
     };
     setFormData({ ...formData });
   };
@@ -85,7 +80,7 @@ const PersonalDetails1 = (props) => {
   };
 
   const savePersonalDetails1 = async (userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning('button');
     try {
       let item = {
         kyc: {
@@ -134,17 +129,21 @@ const PersonalDetails1 = (props) => {
   return (
     <Container
       id="kyc-personal-details1"
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      // disable={showLoader || isLoading}
       handleClick={handleClick}
-      showSkelton={isLoading}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      title={title}
+      count="1"
+      current="1"
+      total="4"
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title} <span>1/4</span>
-        </div>
+        </div> */}
         <div className="kyc-main-subtitle">
           We need basic details to verify identity
         </div>

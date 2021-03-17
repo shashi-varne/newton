@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Container from '../../common/Container'
-import { initData } from '../../services'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants } from '../../constants'
 import { upload } from '../../common/api'
@@ -56,28 +55,8 @@ const Sign = (props) => {
     }
   }
 
-  // useEffect(() => {
-  //   if (isEmpty(kyc)) {
-  //     initialize()
-  //   }
-  // }, [])
-
-  // const initialize = async () => {
-  //   try {
-  //     setLoading(true)
-  //     await initData()
-  //     const kyc = storageService().getObject(storageConstants.KYC)
-  //     setKyc(kyc)
-  //   } catch (err) {
-  //     console.error(err)
-  //   } finally {
-  //     console.log('Finally')
-  //     setLoading(false)
-  //   }
-  // }
   const [kyc, ,isLoading] = useUserKycHook();
   
-
   const handleChange = (event) => {
     const uploadedFile = event.target.files[0]
     let acceptedType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp']
@@ -104,7 +83,7 @@ const Sign = (props) => {
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const result = await upload(file, 'sign')
       // console.log(result)
       // setKyc(result.kyc)
@@ -140,18 +119,19 @@ const Sign = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={isLoading}
+      // fullWidthButton={true}
+      skelton={isLoading}
       handleClick={handleSubmit}
-      disable={!file || isApiRunning}
-      isApiRunning={isApiRunning}
+      disable={!file}
+      showLoader={isApiRunning}
+      title="Share Signature"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan" className="page-body-kyc">
-          <div className="title">Share Signature</div>
+          {/* <div className="title">Share Signature</div> */}
           <div className="sub-title">
             Signature should match with your PAN’s signature
           </div>

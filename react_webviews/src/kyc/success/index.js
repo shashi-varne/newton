@@ -51,13 +51,14 @@ const RegistrationSuccess = (props) => {
 
   return (
     <Container
-      showSkelton={isLoading}
-      hideInPageTitle
+      skelton={isLoading}
+      // hideInPageTitle
       id="registration-success"
       buttonTitle={buttonTitle}
       title="KYC Submitted"
-      disable={isLoading}
+      // disable={isLoading}
       handleClick={handleClick}
+      force_hide_inpage_title={true}
     >
       <div className="kyc-registration-success">
         <img src={require(`assets/thumpsup.png`)} alt="Success" />

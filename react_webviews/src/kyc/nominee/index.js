@@ -63,7 +63,7 @@ const Nominee = (props) => {
 
   const saveNomineeDetails = async (body) => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
       navigate(getPathname.kycReport);
@@ -94,16 +94,17 @@ const Nominee = (props) => {
 
   return (
     <Container
-      showSkelton={isLoading}
-      hideInPageTitle
+      skelton={isLoading}
+      // hideInPageTitle
       id="kyc-home"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      title={title}
     >
       <div className="kyc-nominee">
-        <div className="kyc-main-title">{title}</div>
+        {/* <div className="kyc-main-title">{title}</div> */}
         {!isEmpty(kyc) && (
           <main>
             <Input

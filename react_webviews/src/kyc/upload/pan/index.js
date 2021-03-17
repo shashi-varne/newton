@@ -145,7 +145,7 @@ const Pan = (props) => {
 
   const handleSubmit = async () => {
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const result = await upload(file, 'pan')
       // console.log(result)
       // setKyc(result.kyc)
@@ -183,18 +183,19 @@ const Pan = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={isLoading}
+      // fullWidthButton={true}
+      skelton={isLoading}
       handleClick={handleSubmit}
-      disable={!file || isApiRunning}
-      isApiRunning={isApiRunning}
+      disable={!file}
+      showLoader={isApiRunning}
+      title="Upload PAN"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan" className="page-body-kyc">
-          <div className="title">Upload PAN</div>
+          {/* <div className="title">Upload PAN</div> */}
           <div className="sub-title">
             PAN Card {kyc?.pan?.meta_data?.pan_number}
           </div>

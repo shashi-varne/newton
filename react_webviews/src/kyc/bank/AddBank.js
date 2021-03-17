@@ -127,7 +127,7 @@ const AddBank = (props) => {
 
   const saveBankData = async (data) => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await addAdditionalBank(data);
       if (!result) return;
       if (result.bank.bank_status === "approved") {
@@ -192,7 +192,7 @@ const AddBank = (props) => {
         partner.code !== "cub" &&
         partner.code !== "ippb")
     ) {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
@@ -222,16 +222,17 @@ const AddBank = (props) => {
 
   return (
     <Container
-      hideInPageTitle
-      showSkelton={isLoading}
+      // hideInPageTitle
+      skelton={isLoading}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      disable={isLoading}
       handleClick={handleClick}
+      title="Enter bank account details"
     >
       <div className="kyc-approved-bank">
-        <div className="kyc-main-title">Enter bank account details</div>
+        {/* <div className="kyc-main-title">Enter bank account details</div> */}
         {!isLoading && (
           <>
             <Alert

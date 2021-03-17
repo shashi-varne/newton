@@ -85,7 +85,7 @@ const Sign = (props) => {
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const result = await upload(file, 'identification')
       // console.log(result)
       // setKyc(result.kyc)
@@ -103,18 +103,19 @@ const Sign = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={isLoading}
+      // fullWidthButton={true}
+      skelton={isLoading}
       handleClick={handleSubmit}
-      disable={!file || isApiRunning}
-      isApiRunning={isApiRunning}
+      disable={!file}
+      showLoader={isApiRunning}
+      title="Upload Selfie"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan" className="page-body-kyc">
-          <div className="title">Upload Selfie</div>
+          {/* <div className="title">Upload Selfie</div> */}
           <div className="sub-title">Ears must be visible</div>
           {!getConfig().html_camera && (
             <div className="kyc-doc-upload-container">

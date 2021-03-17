@@ -58,7 +58,7 @@ const KycUploadDocuments = (props) => {
 
   const handleSubmit = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await uploadBankDocuments(
         file,
         verificationDocOptions[selected].value,
@@ -104,14 +104,14 @@ const KycUploadDocuments = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={isLoading}
-      disable={isApiRunning}
+      skelton={isLoading}
       hideInPageTitle
       handleClick={handleSubmit}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
+      title="Upload documents"
     >
       <section id="kyc-bank-kyc-upload-docs" className="page-body-kyc">
-        <div className="title">Upload documents</div>
+        {/* <div className="title">Upload documents</div> */}
         <div className="banner">
           <div className="left">
             <img src={bankData?.ifsc_image} alt="bank" className="icon" />

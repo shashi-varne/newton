@@ -18,7 +18,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit personal details";
   }
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const [kyc, , isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -47,12 +47,13 @@ const PersonalDetails2 = (props) => {
     userkycDetails.pan.meta_data.father_name = form_data.father_name;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name =
+        form_data.spouse_name;
     savePersonalDetails2(userkycDetails);
   };
 
   const savePersonalDetails2 = async (userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       let item = {
         kyc: {
@@ -89,16 +90,22 @@ const PersonalDetails2 = (props) => {
     <Container
       showSkelton={isLoading}
       id="kyc-personal-details2"
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      // isApiRunning={isApiRunning}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      title={title}
+      count="2"
+      current="2"
+      total="4"
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title} <span>2/4</span>
-        </div>
+        </div> */}
         <main>
           <Input
             label="Father's name"

@@ -69,7 +69,7 @@ const RtaCompliantPersonalDetails = (props) => {
   };
 
   const saveRtaCompliantPersonalDetails = async (body, userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       const result = await getCVL(body);
       if (!result) return;
@@ -108,16 +108,17 @@ const RtaCompliantPersonalDetails = (props) => {
 
   return (
     <Container
-      showSkelton={isLoading}
-      hideInPageTitle
+      skelton={isLoading}
+      // hideInPageTitle
       id="kyc-rta-compliant-personal-details"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      title={title}
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">{title}</div>
+        {/* <div className="kyc-main-title">{title}</div> */}
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>

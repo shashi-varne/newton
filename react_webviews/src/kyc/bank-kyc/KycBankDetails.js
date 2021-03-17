@@ -180,7 +180,7 @@ const KycBankDetails = (props) => {
 
   const saveBankData = async (data) => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await kycSubmit({
         kyc: {
           bank: data,
@@ -248,7 +248,7 @@ const KycBankDetails = (props) => {
         partner.code !== "cub" &&
         partner.code !== "ippb")
     ) {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
@@ -278,16 +278,17 @@ const KycBankDetails = (props) => {
 
   return (
     <Container
-      hideInPageTitle
-      showSkelton={isLoading}
+      // hideInPageTitle
+      skelton={isLoading}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      skelton={isLoading}
       handleClick={handleClick}
+      title="Enter bank account details"
     >
       <div className="kyc-approved-bank">
-        <div className="kyc-main-title">Enter bank account details</div>
+        {/* <div className="kyc-main-title">Enter bank account details</div> */}
         {!isLoading && (
           <>
             <Alert

@@ -45,10 +45,10 @@ const Report = (props) => {
   const [kyc, user] = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
-  }, [kyc]);
+  }, [kyc, user]);
 
   const initialize = () => {
     let is_compliant = kyc.kyc_status === "compliant" ? true : false;
@@ -302,13 +302,15 @@ const Report = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       id="kyc-home"
       buttonTitle={buttonTitle}
       handleClick={handleClick}
+      title={topTitle}
+      noFooter={isEmpty(cardDetails)}
     >
       <div className="kyc-report">
-        <div className="kyc-main-title">{topTitle}</div>
+        {/* <div className="kyc-main-title">{topTitle}</div> */}
         <main>
           <Imgc
             src={require(`assets/${productName}/congratulations_illustration.svg`)}

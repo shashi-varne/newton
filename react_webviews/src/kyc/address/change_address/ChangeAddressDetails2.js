@@ -188,7 +188,7 @@ const ChangeAddressDetails2 = (props) => {
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       let result
       if (onlyFrontDocRequired) {
         result = await upload(frontDoc, 'nri_address', {
@@ -262,11 +262,11 @@ const ChangeAddressDetails2 = (props) => {
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={isLoading}
+      // fullWidthButton={true}
+      skelton={isLoading}
       handleClick={handleSubmit}
-      disable={(!frontDoc && !backDoc) || isApiRunning}
-      isApiRunning={isApiRunning}
+      disable={(!frontDoc && !backDoc)}
+      showLoader={isApiRunning}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">

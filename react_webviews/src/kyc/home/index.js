@@ -15,7 +15,7 @@ import useUserKycHook from "../common/hooks/userKycHook";
 const Home = (props) => {
   const navigate = navigateFunc.bind(props);
   const genericErrorMessage = "Something Went wrong!";
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [buttonTitle, setButtonTitle] = useState("CHECK STATUS");
   const [isStartKyc, setIsStartKyc] = useState(false);
   const [isUserCompliant, setIsUserCompliant] = useState();
@@ -98,7 +98,7 @@ const Home = (props) => {
   };
 
   const checkCompliant = async () => {
-    setIsApiRunning(true);
+    setShowLoader("button");
     try {
       let result = await getPan(
         {
@@ -120,7 +120,7 @@ const Home = (props) => {
     } catch (err) {
       toast(err.message || genericErrorMessage);
     } finally {
-      setIsApiRunning(false);
+      setShowLoader(false);
     }
   };
 
@@ -209,7 +209,7 @@ const Home = (props) => {
 
   const savePan = async (is_nri) => {
     try {
-      setIsApiRunning(true);
+      setShowLoader("button");
       if (is_nri) {
         kyc.address.meta_data.is_nri = true;
       } else {
@@ -253,23 +253,23 @@ const Home = (props) => {
       console.log(err);
       toast(err.message || genericErrorMessage);
     } finally {
-      setIsApiRunning(false);
+      setShowLoader(false);
     }
   };
 
   return (
     <Container
-      showSkelton={isLoading}
-      hideInPageTitle
+      skelton={isLoading}
       id="kyc-home"
       buttonTitle={buttonTitle}
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={showLoader}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      title={homeData.title}
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home">
-          <div className="kyc-main-title">{homeData.title}</div>
+          {/* <div className="kyc-main-title">{homeData.title}</div> */}
           <div className="kyc-main-subtitle">{homeData.subtitle}</div>
           <main>
             <Input
@@ -281,7 +281,7 @@ const Home = (props) => {
               onChange={handleChange}
               maxLength={10}
               type="text"
-              disabled={isApiRunning}
+              disabled={showLoader}
             />
             {isStartKyc && isUserCompliant && (
               <Alert

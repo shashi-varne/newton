@@ -21,10 +21,11 @@ const Complete = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       id="kyc-compliant-complete"
       buttonTitle="Ok"
       handleClick={handleClick}
+      force_hide_inpage_title={true}
     >
       <div className="kyc-compliant-complete">
         <header>

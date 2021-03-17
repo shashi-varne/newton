@@ -26,9 +26,9 @@ const Failed = (props) => {
 
   const productName = getConfig().productName
   return (
-    <Container showLoader={showLoader} hideInPageTitle noFooter>
+    <Container skelton={showLoader} title="Aadhaar KYC Failed !" noFooter>
       <section id="digilocker-failed">
-        <div className="page-title">Aadhaar KYC Failed !</div>
+        {/* <div className="page-title">Aadhaar KYC Failed !</div> */}
         <img
           className="digi-image"
           src={require(`assets/${productName}/ils_digilocker_failed.svg`)}

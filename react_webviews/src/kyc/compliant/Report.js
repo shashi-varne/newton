@@ -12,7 +12,7 @@ const CompliantReport = (props) => {
   const [is_nri, setIsNri] = useState(false);
   const [cardDetails, setCardDetails] = useState([]);
   const [topTitle, setTopTitle] = useState("KYC details");
-  
+
   const handleTiles = (index, key) => {
     if (key === "docs") {
       return;
@@ -24,7 +24,7 @@ const CompliantReport = (props) => {
   const [kyc, user] = useUserKycHook();
 
   useEffect(() => {
-    if (!isEmpty(kyc)) {
+    if (!isEmpty(kyc) && !isEmpty(user)) {
       initialize();
     }
   }, [kyc, user]);
@@ -151,9 +151,9 @@ const CompliantReport = (props) => {
   };
 
   return (
-    <Container hideInPageTitle id="kyc-home" noFooter={true}>
+    <Container id="kyc-home" noFooter={true} title={topTitle}>
       <div className="kyc-report">
-        <div className="kyc-main-title">{topTitle}</div>
+        {/* <div className="kyc-main-title">{topTitle}</div> */}
         <main>
           <section>
             {cardDetails &&

@@ -622,10 +622,10 @@ const Journey = (props) => {
     <Container
       hideInPageTitle
       buttonTitle={getButtonText()}
-      disable={isLoading}
+      // disable={isLoading}
       title="KYC Journey"
       classOverRideContainer="pr-container"
-      showSkelton={isLoading || isEmpty(kyc) || isEmpty(user)}
+      skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
       handleClick={goNext}
     >
       {!isEmpty(kyc) && !isEmpty(user) && (

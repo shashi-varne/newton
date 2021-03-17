@@ -16,15 +16,16 @@ const Intro = (props) => {
   }
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="CONTINUE"
-      disable={loading}
+      // disable={loading}
       title="Intro"
       classOverRideContainer="pr-container"
-      showSkelton={loading}
+      skelton={loading}
       skeltonType="p"
-      fullWidthButton={true}
+      // fullWidthButton={true}
       handleClick={handleClick}
+      force_hide_inpage_title={true}
     >
       <section id="kyc-upload-intro">
         <div className="banner">

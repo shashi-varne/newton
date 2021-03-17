@@ -66,17 +66,21 @@ const ChangeAddressDetails1 = (props) => {
   const disabled = kyc?.address?.meta_data?.is_nri || false;
   return (
     <Container
-      showLoader={isLoading}
+      skelton={isLoading}
       id="kyc-change-address-details1"
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      disable={isLoading}
+      // disable={isLoading}
       handleClick={handleClick}
+      title={title}
+      count={1}
+      current={1}
+      total={4}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title} <span>1/4</span>
-        </div>
+        </div> */}
         <main>
           <div className={`input ${disabled && `disabled`}`}>
             <RadioWithoutIcon

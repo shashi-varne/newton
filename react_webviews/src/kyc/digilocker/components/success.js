@@ -14,9 +14,9 @@ const Success = (props) => {
     navigate('/kyc/journey')
   }
   return (
-    <Container showLoader={showLoader} hideInPageTitle buttonTitle="PROCEED" handleClick={proceed}>
+    <Container skelton={showLoader} title="Share Details" buttonTitle="PROCEED" handleClick={proceed}>
       <section id="digilocker-success">
-        <div className="page-title">Share Details</div>
+        {/* <div className="page-title">Share Details</div> */}
         <div className="page-desc">
           Tap on Proceed to allow fisdom to access your following documents
         </div>

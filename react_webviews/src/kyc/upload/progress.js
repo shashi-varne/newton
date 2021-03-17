@@ -50,20 +50,21 @@ const Progress = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       noFooter={disableNext}
-      disable={isLoading || !canGoNext}
+      disable={!canGoNext}
       classOverRideContainer="pr-container"
-      showSkelton={isLoading}
+      skelton={isLoading}
       skeltonType="p"
-      fullWidthButton={true}
+      // fullWidthButton={true}
       handleClick={() => {
         navigate(getPathname.journey);
       }}
+      title="Upload documents"
     >
       <section id="kyc-upload-progress">
-        <div className="header">Upload documents</div>
+        {/* <div className="header">Upload documents</div> */}
         <main className="documents">
           {documents.map((document, index) => (
             <div key={index} className="document">

@@ -5,72 +5,54 @@ import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
   genderOptions,
   maritalStatusOptions,
-  storageConstants,
   getPathname,
 } from "../../constants";
-import { initData } from "../../services";
+import { validateNumber, validateAlphabets } from "utils/validators";
 import {
-  storageService,
-  isEmpty,
-  validateNumber,
-  validateAlphabets,
-} from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../../common/functions";
+  validateFields,
+  navigate as navigateFunc,
+} from "../../common/functions";
 import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
+import useUserKycHook from "../../common/hooks/userKycHook";
+import { isEmpty } from "../../../utils/validators";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
-  const [showLoader, setShowLoader] = useState(true);
-  const [isApiRunning, setIsApiRunning] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [userkyc, setUserKyc] = useState(
-    storageService().getObject(storageConstants.KYC) || {}
-  );
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject(storageConstants.USER) || {}
-  );
+
+  const [kyc, user, isLoading] = useUserKycHook();
+
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
   useEffect(() => {
-    initialize();
-  }, []);
+    if (!isEmpty(kyc) & !isEmpty(user)) initialize();
+  }, [kyc, user]);
 
   const initialize = async () => {
-    let userkycDetails = { ...userkyc };
-    let user = { ...currentUser };
-    if (isEmpty(userkycDetails) || isEmpty(user)) {
-      await initData();
-      userkycDetails = storageService().getObject(storageConstants.KYC);
-      user = storageService().getObject(storageConstants.USER);
-      setCurrentUser(user);
-      setUserKyc(userkycDetails);
-    }
-    let mobile_number =
-      userkycDetails.identification.meta_data.mobile_number || "";
+    let mobile_number = kyc.identification.meta_data.mobile_number || "";
     let country_code = "";
     if (mobile_number && !isNaN(mobile_number.toString().split("|")[1])) {
       country_code = mobile_number.split("|")[0];
       mobile_number = mobile_number.split("|")[1];
     }
     let formData = {
-      name: userkycDetails.pan?.meta_data?.name || "",
-      dob: userkycDetails.pan?.meta_data?.dob || "",
-      email: userkycDetails.identification?.meta_data?.email || "",
+      name: kyc.pan?.meta_data?.name || "",
+      dob: kyc.pan?.meta_data?.dob || "",
+      email: kyc.identification?.meta_data?.email || "",
       mobile: mobile_number,
       country_code: country_code,
-      gender: userkycDetails.identification?.meta_data?.gender || "",
-      marital_status:
-        userkycDetails.identification?.meta_data?.marital_status || "",
-      father_name: userkycDetails.pan?.meta_data?.father_name || "",
-      mother_name: userkycDetails.pan?.meta_data?.mother_name || "",
-      spouse_name: userkycDetails.identification.meta_data.spouse_name || "",
+      gender: kyc.identification?.meta_data?.gender || "",
+      marital_status: kyc.identification?.meta_data?.marital_status || "",
+      father_name: kyc.pan?.meta_data?.father_name || "",
+      mother_name: kyc.pan?.meta_data?.mother_name || "",
+      spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
-    setShowLoader(false);
     setFormData({ ...formData });
   };
 
@@ -83,8 +65,8 @@ const PersonalDetails1 = (props) => {
       "mother_name",
     ];
     if (form_data.marital_status === "MARRIED") keysToCheck.push("spouse_name");
-    if (currentUser.email === null) keysToCheck.push("email");
-    if (currentUser.mobile === null) keysToCheck.push("mobile");
+    if (user.email === null) keysToCheck.push("email");
+    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -95,7 +77,7 @@ const PersonalDetails1 = (props) => {
     if (form_data.country_code) {
       mobile_number = form_data.country_code + "|" + mobile_number;
     }
-    let userkycDetails = { ...userkyc };
+    let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.name = form_data.name;
     userkycDetails.pan.meta_data.dob = form_data.dob;
     userkycDetails.identification.meta_data.email = form_data.email;
@@ -111,7 +93,7 @@ const PersonalDetails1 = (props) => {
   };
 
   const savePersonalDetails1 = async (userKyc) => {
-    setIsApiRunning(true);
+    setShowLoader("button");
     try {
       let item = {
         kyc: {
@@ -130,7 +112,7 @@ const PersonalDetails1 = (props) => {
       console.log(err);
       toast(err);
     } finally {
-      setIsApiRunning(false);
+      setShowLoader(false);
     }
   };
 
@@ -150,18 +132,22 @@ const PersonalDetails1 = (props) => {
 
   return (
     <Container
-      showLoader={showLoader}
+      skelton={isLoading}
       id="kyc-personal-details1"
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || showLoader}
+      showLoader={showLoader}
+      // disable={showLoader}
       handleClick={handleClick}
+      title={title}
+      count={1}
+      current={1}
+      total={4}
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title} <span>1/4</span>
-        </div>
+        </div> */}
         <div className="kyc-main-subtitle">
           Please fill your basic details for further verification
         </div>
@@ -175,9 +161,9 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={showLoader}
           />
-          {currentUser.email === null && (
+          {user.email === null && (
             <Input
               label="Email"
               class="input"
@@ -186,10 +172,10 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.email_error || ""}
               onChange={handleChange("email")}
               type="text"
-              disabled={isApiRunning}
+              disabled={showLoader}
             />
           )}
-          {currentUser.mobile === null && (
+          {user.mobile === null && (
             <Input
               label="Mobile number"
               class="input"
@@ -199,7 +185,7 @@ const PersonalDetails1 = (props) => {
               onChange={handleChange("mobile")}
               maxLength={10}
               type="text"
-              disabled={isApiRunning}
+              disabled={showLoader}
             />
           )}
           <Input
@@ -211,7 +197,7 @@ const PersonalDetails1 = (props) => {
             onChange={handleChange("father_name")}
             maxLength={20}
             type="text"
-            disabled={isApiRunning}
+            disabled={showLoader}
           />
           <Input
             label="Mother's name"
@@ -221,9 +207,9 @@ const PersonalDetails1 = (props) => {
             helperText={form_data.mother_name_error || ""}
             onChange={handleChange("mother_name")}
             type="text"
-            disabled={isApiRunning}
+            disabled={showLoader}
           />
-          <div className={`input ${isApiRunning && `disabled`}`}>
+          <div className={`input ${showLoader && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.gender_error ? true : false}
               helperText={form_data.gender_error}
@@ -234,10 +220,10 @@ const PersonalDetails1 = (props) => {
               id="account_type"
               value={form_data.gender || ""}
               onChange={handleChange("gender")}
-              disabled={isApiRunning}
+              disabled={showLoader}
             />
           </div>
-          <div className={`input ${isApiRunning && `disabled`}`}>
+          <div className={`input ${showLoader && `disabled`}`}>
             <RadioWithoutIcon
               error={form_data.marital_status_error ? true : false}
               helperText={form_data.marital_status_error}
@@ -248,7 +234,7 @@ const PersonalDetails1 = (props) => {
               id="account_type"
               value={form_data.marital_status || ""}
               onChange={handleChange("marital_status")}
-              disabled={isApiRunning}
+              disabled={showLoader}
             />
           </div>
           {form_data.marital_status === "MARRIED" && (
@@ -260,7 +246,7 @@ const PersonalDetails1 = (props) => {
               helperText={form_data.spouse_name_error || ""}
               onChange={handleChange("spouse_name")}
               type="text"
-              disabled={isApiRunning}
+              disabled={showLoader}
             />
           )}
         </main>

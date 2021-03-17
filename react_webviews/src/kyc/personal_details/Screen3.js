@@ -24,7 +24,7 @@ const PersonalDetails3 = (props) => {
   }
   const type = props.type || "";
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const [kyc, , isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -56,7 +56,7 @@ const PersonalDetails3 = (props) => {
   };
 
   const savePersonalDetails3 = async (userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       let item = {
         kyc: {
@@ -103,14 +103,18 @@ const PersonalDetails3 = (props) => {
       id="kyc-personal-details3"
       hideInPageTitle
       buttonTitle="CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      title={title}
+      count={type === "digilocker" ? 2 : 3}
+      current={type === "digilocker" ? 2 : 3}
+      total="4"
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title} <span>{type === "digilocker" ? 2 : 3}/4</span>
-        </div>
+        </div> */}
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

@@ -29,7 +29,7 @@ const NRIAddressDetails2 = (props) => {
           nri_address: kyc?.nri_address.meta_data,
         },
       }
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const result = await submit(item)
       setKyc(result.kyc)
       if (stateParams?.toState) {
@@ -195,7 +195,7 @@ const NRIAddressDetails2 = (props) => {
   const state = kyc?.nri_address?.meta_data?.state || ''
   const city = kyc?.nri_address?.meta_data?.city || ''
   const country = kyc?.nri_address?.meta_data?.country || ''
-  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning || pincode?.length < 6
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || pincode?.length < 6
 
   const getHelperText = (pincode) => {
     if (typeof pincode === 'string') {
@@ -217,17 +217,21 @@ const NRIAddressDetails2 = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={isLoading}
+      skelton={isLoading}
       disable={isDisabled}
-      hideInPageTitle
+      // hideInPageTitle
       handleClick={handleSubmit}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
+      title={title}
+      current={4}
+      count={4}
+      total={4}
     >
       <section id="kyc-address-details-2" className="page-body-kyc">
-        <div className="flex-between flex-center">
+        {/* <div className="flex-between flex-center">
           <div className="title">{title}</div>
           <div className="pageno">4/4</div>
-        </div>
+        </div> */}
         <div className="sub-title">Address as per {address_proof}</div>
         <form className="form-container">
           <TextField

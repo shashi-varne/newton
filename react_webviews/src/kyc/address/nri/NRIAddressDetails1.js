@@ -70,7 +70,7 @@ const NriAddressDetails1 = (props) => {
   };
 
   const saveNriAddressDetails1 = async (userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       let item = {
         kyc: {
@@ -107,18 +107,22 @@ const NriAddressDetails1 = (props) => {
 
   return (
     <Container
-      showLoader={isLoading}
+      skelton={isLoading}
       id="kyc-personal-details1"
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      title={title}
+      current={3}
+      count={3}
+      total={4}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title} <span>3/4</span>
-        </div>
+        </div> */}
         <main>
           <Input
             label="Contact number"

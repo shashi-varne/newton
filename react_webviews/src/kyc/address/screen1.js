@@ -83,7 +83,7 @@ const AddressDetails1 = (props) => {
   };
 
   const saveNriAddressDetails1 = async (userKyc) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     try {
       let item = {
         kyc: {
@@ -126,20 +126,28 @@ const AddressDetails1 = (props) => {
     setFormData({ ...formData });
   };
 
+  const getTotalPages = (residential_status) => {
+    return residential_status === "NRI" ? 4 : 2;
+  };
+
   return (
     <Container
-      showLoader={isLoading}
+      skelton={isLoading}
       id="kyc-address-details1"
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      disable={isLoading}
       handleClick={handleClick}
+      showLoader={isApiRunning}
+      title={title}
+      current={1}
+      count={1}
+      total={getTotalPages(form_data.residential_status)}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
-        <div className="kyc-main-title">
-          {title} <span>1/4</span>
-        </div>
+        {/* <div className="kyc-main-title">
+          {title} <span>1/{getTotalPages()}</span>
+        </div> */}
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

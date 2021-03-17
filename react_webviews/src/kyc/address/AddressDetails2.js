@@ -30,7 +30,7 @@ const AddressDetails2 = (props) => {
       }
       const nomination_address = kyc?.nomination?.meta_data?.nominee_address
       item.kyc.nomination.address = nomination_address
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const result = await submit(item)
       setKyc(result.kyc)
       if (backToJourney !== null) {
@@ -185,7 +185,7 @@ const AddressDetails2 = (props) => {
   const addressline = kyc?.address?.meta_data?.addressline || ''
   const state = kyc?.address?.meta_data?.state || ''
   const city = kyc?.address?.meta_data?.city || ''
-  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || isApiRunning || pincode?.length < 6
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || pincode?.length < 6
 
   const getHelperText = (pincode) => {
     if (typeof pincode === 'string') {
@@ -207,17 +207,21 @@ const AddressDetails2 = (props) => {
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
-      showSkelton={isLoading}
+      skelton={isLoading}
       disable={isDisabled}
-      hideInPageTitle
+      // hideInPageTitle
       handleClick={handleSubmit}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
+      title={title}
+      current={2}
+      count={2}
+      total={getTotalPages(kyc)}
     >
       <section id="kyc-bank-kyc-address-details-2" className="page-body-kyc">
-        <div className="flex-between flex-center">
+        {/* <div className="flex-between flex-center">
           <div className="title">{title}</div>
           <div className="pageno">2/{getTotalPages(kyc)}</div>
-        </div>
+        </div> */}
         <div className="sub-title">Address as per {getAddressProof(kyc)}</div>
         <form className="form-container">
           <TextField

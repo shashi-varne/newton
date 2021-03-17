@@ -50,7 +50,7 @@ const KycBankVerify = (props) => {
 
   const handleClick = async () => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const result = await saveBankData({ bank_id: bankData.bank_id });
       if (!result) return;
       if (result.code === "ERROR") {
@@ -166,15 +166,16 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       id="kyc-bank-verify"
       buttonTitle="VERIFY BANK ACCOUNT"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      noFooter={isEmpty(bankData)}
       handleClick={handleClick}
+      title="Verify your bank account"
     >
       <div className="kyc-approved-bank-verify">
-        <div className="kyc-main-title">Verify your bank account</div>
+        {/* <div className="kyc-main-title">Verify your bank account</div> */}
         <Alert
           variant="info"
           title="Important"

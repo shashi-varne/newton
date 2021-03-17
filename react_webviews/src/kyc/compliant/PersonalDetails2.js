@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import {
-  storageService,
   dobFormatTest,
   formatDate,
   isEmpty,
@@ -10,11 +9,9 @@ import Input from "common/ui/Input";
 import Checkbox from "common/ui/Checkbox";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import {
-  storageConstants,
   relationshipOptions,
   getPathname,
 } from "../constants";
-import { initData } from "../services";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { kycSubmit } from "../common/api";
 import { validateAlphabets } from "../../utils/validators";
@@ -32,7 +29,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit nominee detail";
   }
 
-  const [kyc, isLoading] = useUserKycHook();
+  const [kyc, ,isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -90,7 +87,7 @@ const PersonalDetails2 = (props) => {
 
   const saveCompliantPersonalDetails2 = async (body) => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
       if (isChecked) {
@@ -131,16 +128,17 @@ const PersonalDetails2 = (props) => {
 
   return (
     <Container
-      showLoader={isLoading}
-      hideInPageTitle
+      skelton={isLoading}
+      // hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      showLoader={isApiRunning}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      title={title}
     >
       <div className="kyc-nominee">
-        <div className="kyc-main-title">{title}</div>
+        {/* <div className="kyc-main-title">{title}</div> */}
         <main>
           <div className="nominee-checkbox">
             <Checkbox

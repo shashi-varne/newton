@@ -79,7 +79,7 @@ const PersonalDetails4 = (props) => {
 
   const savePersonalDetails4 = async (body) => {
     try {
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       const submitResult = await kycSubmit(body);
       if (!submitResult) return;
       if (type === "digilocker") {
@@ -130,15 +130,21 @@ const PersonalDetails4 = (props) => {
       hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
-      isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
+      // isApiRunning={isApiRunning}
+      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      title={title}
+      count={type === "digilocker" ? 3 : 4}
+      current={type === "digilocker" ? 3 : 4}
+      total="4"
     >
       <div className="kyc-nominee">
-        <div className="kyc-main-title">
+        {/* <div className="kyc-main-title">
           {title}
           <span>{type === "digilocker" ? 3 : 4}/4</span>
-        </div>
+        </div> */}
         <main>
           <div className="nominee-checkbox">
             <Checkbox

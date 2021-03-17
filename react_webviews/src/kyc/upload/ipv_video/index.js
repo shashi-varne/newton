@@ -65,7 +65,7 @@ const IpvVideo = (props) => {
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       const result = await upload(file, 'ipvvideo', { ipv_code: ipvcode })
       // console.log(result)
       // setKyc(result.kyc)
@@ -82,18 +82,19 @@ const IpvVideo = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={loading || isLoading}
+      // fullWidthButton={true}
+      skelton={loading || isLoading}
       handleClick={handleSubmit}
-      disable={!file || isApiRunning}
-      isApiRunning={isApiRunning}
+      disable={!file}
+      showLoader={isApiRunning}
+      title="Upload video (IPV)"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-ipv-video" className="page-body-kyc">
-          <div className="title">Upload video (IPV)</div>
+          {/* <div className="title">Upload video (IPV)</div> */}
           <div className="sub-title">
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).

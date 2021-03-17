@@ -74,9 +74,10 @@ const BankDetails = (props) => {
       buttonTitle="RE-UPLOAD DOCUMENT"
       handleClick={handleClick}
       noFooter={bank.bank_status !== "rejected"}
+      title="Bank accounts"
     >
       <div className="bank-details">
-        <div className="kyc-main-title">Bank accounts</div>
+        {/* <div className="kyc-main-title">Bank accounts</div> */}
         {!showLoader && (
           <>
             <div className="bank-info">

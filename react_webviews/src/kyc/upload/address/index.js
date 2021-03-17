@@ -194,7 +194,7 @@ const AddressUpload = (props) => {
   const handleSubmit = async () => {
     const navigate = navigateFunc.bind(props)
     try {
-      setIsApiRunning(true)
+      setIsApiRunning("button")
       let result
       if (onlyFrontDocRequired) {
         result = await upload(frontDoc, 'address', {
@@ -262,18 +262,19 @@ const AddressUpload = (props) => {
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       classOverRideContainer="pr-container"
-      fullWidthButton={true}
-      showSkelton={isLoading}
+      // fullWidthButton={true}
+      skelton={isLoading}
       handleClick={handleSubmit}
-      disable={(!frontDoc && !backDoc) || isApiRunning}
-      isApiRunning={isApiRunning}
+      disable={!frontDoc && !backDoc}
+      showLoader={isApiRunning}
+      title="Upload address proof"
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="title">Upload address proof</div>
+          {/* <div className="title">Upload address proof</div> */}
           <div className="sub-title">{getFullAddress()}</div>
           <Alert
             variant="attention"

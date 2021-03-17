@@ -106,7 +106,7 @@ const PersonalDetails1 = (props) => {
   };
 
   const saveCompliantPersonalDetails1 = async (body, data) => {
-    setIsApiRunning(true);
+    setIsApiRunning("button");
     let { userKyc, tin_number } = data;
     try {
       const result = await getCVL(body);
@@ -175,16 +175,16 @@ const PersonalDetails1 = (props) => {
 
   return (
     <Container
-      showSkelton={isLoading}
-      hideInPageTitle
+      skelton={isLoading}
+      // hideInPageTitle
       id="kyc-personal-details1"
       buttonTitle="CONTINUE"
       isApiRunning={isApiRunning}
-      disable={isApiRunning || isLoading}
       handleClick={handleClick}
+      title={title}
     >
       <div className="kyc-complaint-personal-details">
-        <div className="kyc-main-title">{title}</div>
+        {/* <div className="kyc-main-title">{title}</div> */}
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>

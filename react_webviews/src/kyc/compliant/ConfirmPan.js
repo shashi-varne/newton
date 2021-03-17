@@ -38,7 +38,7 @@ const ConfirmPan = (props) => {
           address: kyc.address.meta_data,
         },
       };
-      setIsApiRunning(true);
+      setIsApiRunning("button");
       let result = await kycSubmit(body);
       if (!result) return;
       if (
@@ -69,23 +69,28 @@ const ConfirmPan = (props) => {
     }
   };
 
-  const [kyc] = useUserKycHook();
+  const [kyc, ,isLoading] = useUserKycHook();
 
   return (
     <Container
-      hideInPageTitle
+      // hideInPageTitle
       id="confirm-pan"
-      buttonTitle="EDIT PAN"
-      buttonTitle2="CONFIRM PAN"
-      isApiRunning2={isApiRunning}
-      disable2={isApiRunning}
-      handleClick={handleClick}
-      handleClick2={handleClick2}
+      buttonOneTitle="EDIT PAN"
+      buttonTwoTitle="CONFIRM PAN"
+      // isApiRunning2={isApiRunning}
+      // disable2={isApiRunning}
+      skelton={isLoading}
+      showLoader={isApiRunning}
+      disable={isApiRunning}
+      handleClickOne={handleClick}
+      handleClickTwo={handleClick2}
       twoButton={true}
       buttonClassName="confirm-pan-button1"
+      title='Confirm PAN'
+      dualbuttonwithouticon={true}
     >
       <div className="kyc-compliant-confirm-pan">
-        <div className="kyc-main-title">Confirm PAN</div>
+        {/* <div className="kyc-main-title">Confirm PAN</div> */}
         <div className="kyc-main-subtitle">
           Confirm your PAN to unlock premium onboarding
         </div>
