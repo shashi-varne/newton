@@ -78,7 +78,13 @@ export function headerGoBack() {
     this.historyGoBack({ fromHeader: true });
 }
 
+function addContainerClass (props_base){
+    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
+}
+
 export function commonRender(props_base) {
+
+    this.addContainerClass = addContainerClass.bind(this);
 
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -90,10 +96,12 @@ export function commonRender(props_base) {
         }
     }
 
+    
+
     if (this.state.mounted) {
         return (
 
-   <div className={`ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`} >
+   <div className={this.addContainerClass(props_base)} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && <Header
