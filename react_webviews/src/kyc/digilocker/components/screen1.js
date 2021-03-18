@@ -88,7 +88,7 @@ const PersonalDetails1 = (props) => {
     userkycDetails.pan.meta_data.father_name = form_data.father_name;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.pan.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
     savePersonalDetails1(userkycDetails);
   };
 

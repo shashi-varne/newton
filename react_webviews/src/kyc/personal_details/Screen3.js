@@ -50,8 +50,8 @@ const PersonalDetails3 = (props) => {
     userkycDetails.identification.meta_data.gross_annual_income =
       form_data.income;
     userkycDetails.identification.meta_data.occupation = form_data.occupation;
-    userkycDetails.identification.politically_exposed = "NOT APPLICABLE";
-    userkycDetails.identification.fatca_declaration = true;
+    userkycDetails.identification.meta_data.politically_exposed = "NOT APPLICABLE";
+    userkycDetails.identification.meta_data.fatca_declaration = true;
     savePersonalDetails3(userkycDetails);
   };
 
@@ -60,7 +60,7 @@ const PersonalDetails3 = (props) => {
     try {
       let item = {
         kyc: {
-          identification: userKyc.identification,
+          identification: userKyc.identification.meta_data,
         },
       };
       const submitResult = await kycSubmit(item);

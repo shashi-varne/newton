@@ -37,7 +37,7 @@ const NRIAddressDetails2 = (props) => {
       } else if (stateParams?.backToJourney) {
         navigate('/kyc/upload/address')
       } else if (stateParams?.userType === 'compliant') {
-        navigate('/kyc/compliant-personal-details2')
+        navigate('/kyc/compliant-personal-details4')
       } else {
         navigate('/kyc/journey')
       }

@@ -47,7 +47,7 @@ export const getPathname = {
   nriAddressDetails1: '/kyc/nri-address-details1',
   nriAddressDetails2: '/kyc/nri-address-details2',
   uploadPan: '/kyc/upload/pan',
-  kycEsign: '/kyc/esign',
+  kycEsign: '/kyc-esign/info',
   uploadAddress: '/kyc/upload/address',
   uploadNriAddress: '/kyc/upload/address-nri',
   uploadSelfie: '/kyc/upload/selfie',

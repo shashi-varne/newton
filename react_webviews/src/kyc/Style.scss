@@ -302,6 +302,14 @@
   font-size: 20px;
   font-weight: 600;
   margin: 0 0 20px 0;
+
+  .pj-sub-text {
+    font-size: 13px;
+    color: #8d879b;
+    padding: 0 15px 0 0px;
+    font-weight: normal;
+    margin-bottom: 20px;
+  }
 }
 
 .kyc-pj-bottom-info-box {
@@ -1518,19 +1526,21 @@
   .MuiGrid-item {
     flex: 1 0 50%;
     max-width: 100%;
+    // min-width: 170px;
     padding: 10px;
     box-sizing: border-box;
   }
 
   .MuiGrid-item:nth-of-type(3) {
-    max-width: 70%;
+    max-width: 60%;
   }
 
   .RadioButton label {
-    font-size: 11px;
+    font-size: 13px;
     border: 1px solid black;
     color: black;
     box-sizing: border-box;
+    padding: 10px;
   }
 
   .RadioLabelChecked {

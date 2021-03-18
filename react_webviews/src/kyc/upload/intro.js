@@ -25,7 +25,8 @@ const Intro = (props) => {
       skeltonType="p"
       // fullWidthButton={true}
       handleClick={handleClick}
-      force_hide_inpage_title={true}
+      title='Upload documents'
+      // force_hide_inpage_title={true}
     >
       <section id="kyc-upload-intro">
         <div className="banner">

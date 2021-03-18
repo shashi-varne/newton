@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Container from "../common/Container";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 
@@ -17,8 +17,21 @@ const KycUploadDocuments = (props) => {
   const [showPendingModal, setShowPendingModal] = useState(false);
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
-
+  const [dlFlow, setDlFlow] = useState(false);
   const [kyc, , isLoading] = useUserKycHook();
+
+  useEffect(() => {
+    if (
+      !isEmpty(kyc) &&
+      kyc.kyc_status !== "compliant" &&
+      kyc.address.meta_data.is_nri &&
+      kyc.dl_docs_status !== "" &&
+      kyc.dl_docs_status !== "init" &&
+      kyc.dl_docs_status !== null
+    ) {
+      setDlFlow(true);
+    }
+  }, [kyc]);
 
   let bankData = {};
 
@@ -91,10 +104,26 @@ const KycUploadDocuments = (props) => {
       if (isEdit) {
         navigate("/kyc/journey");
       } else {
-        navigate("/kyc/upload/sign");
+        navigate("/kyc/upload/sign", {
+          state: {
+            backToJourney: true,
+          },
+        });
       }
     } else {
-      navigate("/kyc/esign");
+      if (dlFlow) {
+        if (
+          kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+        ) {
+          navigate('/kyc/upload/pan')
+        } else {
+          navigate('/kyc-esign/info')
+        }
+      } else {
+        navigate('/kyc/upload/progress')
+      }
     }
   };
 

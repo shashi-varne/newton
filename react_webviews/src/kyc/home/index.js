@@ -76,7 +76,7 @@ const Home = (props) => {
         "As per Govt norm. you need to do a one-time registration process to complete KYC.",
     },
     success: {
-      title: "Hey ",
+      title: `Hey ${user.name},`,
       subtitle: "You’re investment ready and eligible for premium onboarding.",
     },
   };

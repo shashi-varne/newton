@@ -55,12 +55,12 @@ const PersonalDetails1 = (props) => {
       pan: kyc.pan.meta_data.pan_number,
       dob: kyc.pan.meta_data.dob,
       email: kyc.address.meta_data.email,
-      mobile: kyc.identification.meta_data.mobile_number,
-      occupation: kyc.identification.meta_data.occupation,
-      income: kyc.identification.meta_data.gross_annual_income,
+      mobile: mobile_number,
+      country_code: country_code,
       residential_status:
         residentialOptions[selectedIndexResidentialStatus].value,
       tin_number: kyc.nri_address.tin_number,
+      gender: kyc.identification.meta_data.gender || "",
     };
     setIsNri(isNri);
     setFormData({ ...formData });

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "../common/Container";
 import Input from "common/ui/Input";
-import {
-  getPathname,
-  maritalStatusOptions,
-} from "../constants";
+import { getPathname, maritalStatusOptions } from "../constants";
 import { isEmpty, validateAlphabets } from "utils/validators";
 import { validateFields, navigate as navigateFunc } from "../common/functions";
 import { kycSubmit } from "../common/api";
@@ -22,7 +19,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit personal details";
   }
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const [kyc, , isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -32,9 +29,9 @@ const PersonalDetails2 = (props) => {
 
   const initialize = () => {
     let formData = {
-      name: kyc.nomination.meta_data.name,
-      dob: kyc.nomination.meta_data.dob,
-      relationship: kyc.nomination.meta_data.relationship,
+      mother_name: kyc.pan?.meta_data?.mother_name || "",
+      marital_status: kyc.identification.meta_data.marital_status || "",
+      spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
     setFormData({ ...formData });
   };
@@ -53,7 +50,7 @@ const PersonalDetails2 = (props) => {
       form_data.marital_status;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.pan.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
     let item = {
       kyc: {
         pan: userkycDetails.pan.meta_data,

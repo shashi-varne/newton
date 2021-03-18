@@ -23,9 +23,9 @@ const Report = (props) => {
   const [isCompliant, setIsCompliant] = useState();
   const [is_nri, setIsNri] = useState();
   const [topTitle, setTopTitle] = useState("KYC status");
-  const [appText, setAppText] = useState("Your application is submitted.");
-  const [buttonTitle, setButtonTitle] = useState("OK");
   const [addressProof, setAddressProof] = useState({});
+  const [buttonTitle, setButtonTitle] = useState("OK");
+  const appText = "Your application is submitted.";
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -77,10 +77,7 @@ const Report = (props) => {
     });
 
     if (is_compliant) {
-      setButtonTitle("Invest Now");
-      setAppText(
-        "Your application is submitted. After BSE (Bombay stock exchange) verification, you can see your investment growth in Portfolio."
-      );
+      setButtonTitle("INVEST NOW");
     }
 
     let reportCards = [...reportCardDetails];
