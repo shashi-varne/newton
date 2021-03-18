@@ -90,7 +90,7 @@ class CategoryList extends Component {
 
     this.setState(
       {
-        faql: result ? list : [],
+        faqList: result ? list : [],
       },
       () => {
         this.Searching();
