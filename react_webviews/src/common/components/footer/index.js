@@ -19,7 +19,7 @@ const Footer = (props) => {
   } else if(props.withProvider) {
     return (
    
-        <div className="Footer" style={{border: '1px solid rgb(235, 235, 226)'}}>
+        <div className="Footer" style={{border: '1px solid rgb(235, 235, 226)', padding: '0 10px'}}>
           <FooterLayoutBase type="withProvider" {...props} />
         </div>
     );   

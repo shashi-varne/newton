@@ -150,7 +150,7 @@ body[data-device="web"] {
   }
 
   .FlexItem2-withProvider-footer {
-    margin: 0 10px 0 10px;
+    margin: 0 10px 0 0;
   }
 
   .FlexItem1-withProvider-footer .text-block-1 {
@@ -1340,7 +1340,6 @@ input#pan {
 
 .FlexItem2-withProvider-footer {
   flex: 1;
-  margin: 0 10px 0 0;
 }
 
 .FlexItem1-withProvider-footer .text-block-1 {
@@ -1356,6 +1355,7 @@ input#pan {
 }
 .FlexItem1-withProvider-footer .text-block {
   width: 100%;
+  margin-left: 10px;
 }
 
 .FlexItem1-withProvider-footer .text-block-2 {
@@ -1373,7 +1373,6 @@ input#pan {
 .FlexItem1-withProvider-footer .image-block {
   /* margin: 5px 5px 10px 3px;
   height: 48px; */
-  margin: 0px 9px 0px 3px;
 }
 
 .FlexItem2-withProvider-footer button {
