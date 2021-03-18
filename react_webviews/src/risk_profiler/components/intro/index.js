@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import qs from "qs";
 
 import Container from "../../common/Container";
-// import intro from "assets/risk profiler intro_icn.svg";
-// import intro_myway from "assets/risk profiler intro_icn.svg";
 import Button from "material-ui/Button";
 import Dialog, {
   DialogActions,
