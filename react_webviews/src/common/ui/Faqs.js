@@ -48,7 +48,7 @@ class FaqsClass extends Component {
                style={{borderTop: index === 0 ? '1px solid #d7d4d4' : ''}}
                 onClick={() => this.showHideSteps(index)}>
                 <div className="top-tile">
-                    <div className="top-title">
+                    <div className="top-title-text">
                         {option.title}
                     </div>
                     <div className="top-icon">
