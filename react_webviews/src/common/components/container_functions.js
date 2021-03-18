@@ -69,7 +69,7 @@ export function didMount() {
         });
     }
 
-    window.addEventListener("scroll", this.onScroll, false);
+    window.addEventListener("scroll", this.onScroll, true);
 
     this.check_hide_header_title();
 }
