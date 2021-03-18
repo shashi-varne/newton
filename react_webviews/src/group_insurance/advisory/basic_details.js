@@ -395,7 +395,7 @@ class AdvisoryBasicDetails extends Component {
             </div>
 
             <div className="InputField adv-drop-down">
-            {/* <DropDownNew2
+            <DropDownNew2
               parent={this}
               header_title="What you're interested in"
               selectedIndex = {this.state.form_data.age_index || 0}
@@ -409,7 +409,7 @@ class AdvisoryBasicDetails extends Component {
               name="age"
               value={this.state.form_data.age || ''}
               onChange={this.handleChange("age")}
-            /> */}
+            />
             </div>
              <div className="InputField">
                 <RadioWithoutIcon
