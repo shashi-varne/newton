@@ -28,7 +28,14 @@ class SelectDropDown2 extends React.Component {
     this.setState({ shrink: false })
   };
 
-  handleCreate = (inputValue) => {
+  hello = () => {
+    if (this.state.value) {
+      this.select.state.inputValue = this.state.value.label;
+    }
+    this.setState({ shrink: true })
+  }
+
+  handleCreate = (inputValue) => { console.log(inputValue)
     this.setState({ isLoading: true });
     setTimeout(() => {
       const { options } = this.state;
@@ -71,10 +78,15 @@ class SelectDropDown2 extends React.Component {
 
   render() {
 
+    var classname = document.getElementsByClassName("css-g1d714-ValueContainer");
+    for (var i = 0; i < classname.length; i++) {
+      classname[i].addEventListener('click',  () => console.log("clicked") );
+  }
+
     let components;
     if (this.state.multi) {
-      components = { Option, MultiValue, IndicatorSeparator: () => null , Input }
-    } else components = { IndicatorSeparator: () => null }
+      components = { Option, MultiValue, IndicatorSeparator: () => null ,  Input}
+    } else components = { IndicatorSeparator: () => null , Input }
 
     const options = this.props.options.map((ele, index) => {
       return ({
@@ -87,7 +99,8 @@ class SelectDropDown2 extends React.Component {
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(  !!value || (!!this.state.selectedOption)  || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
           style={{ marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '0px' ,
-          minWidth: '300px' , color : this.props.error ? '#D0021B' : ''}}>
+          minWidth: '300px' , color : this.props.error ? '#D0021B' : '',
+          }}>
           {this.props.label}</div></InputLabel>)}
         {/* {(!this.state.multi && <span className="label2">{this.props.label || 'label'}</span> )} */}
         <div style={{ borderBottom: this.props.error ? '1px solid red' : '' }}>
@@ -103,7 +116,8 @@ class SelectDropDown2 extends React.Component {
           onMenuClose={this.handleMenuClose}
           onFocus={this.handleFocus}
           className={this.state.error ? "" : ''}
-          onMenuOpen={() => this.setState({ shrink: true })}
+          // onMenuOpen={() => this.setState({ shrink: true })}
+          onMenuOpen={this.hello}
           placeholder={''}  
           isClearable={true}
           isSearchable={this.props.options.length <= 6 ? false : true}
@@ -129,7 +143,7 @@ class SelectDropDown2 extends React.Component {
           options={options}
           onChange={this.handleChange}
           allowSelectAll={true}
-          closeMenuOnSelect={true}
+          closeMenuOnSelect={false}
           // menuIsOpen={true}
         />
         </div>

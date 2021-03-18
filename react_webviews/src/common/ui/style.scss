@@ -1133,6 +1133,7 @@ body[data-device="mobile"] {
   border: none !important;
   box-shadow: none !important;
   border-bottom: 1px solid #4F2DA7 !important;
+  border-radius: 0px !important;
 }
 
 
@@ -1171,7 +1172,7 @@ body[data-device="mobile"] {
 
 
 .css-1uccc91-singleValue{
-  margin-top: 0px;
+  margin-top: 2px !important;
   font-size: 13px;
   line-height: 21px;
   display: inline-block !important;
@@ -1213,5 +1214,5 @@ body[data-device="mobile"] {
 }
 .css-b8ldur-Input{
   margin: 4px !important;
-  margin-top: 7px !important;
+  margin-top: 10px !important;
 }
