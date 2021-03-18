@@ -3,6 +3,7 @@ import Container from "../common/Container";
 import { initialize } from "../common/functions";
 import { getConfig } from "utils/functions";
 import { SkeltonRect } from "common/ui/Skelton";
+import { nativeCallback } from "utils/native_callback";
 class Questions extends Component {
   constructor(props) {
     super(props);
@@ -34,8 +35,30 @@ class Questions extends Component {
     await this.getAllfaqs(sub_category.cms_category_id);
   };
 
+  sendEvents(user_action, data = {}) {
+    let eventObj = {
+      event_name: "help_and_support",
+      properties: {
+        user_action: user_action,
+        screen_name: "question_answer",
+        question_clicked: data.id || "",
+        my_queries_clicked: data.my_queries_clicked || "no",
+        unable_to_find_clicked: data.unable_to_find_query || "no",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleClick = (index) => {
     let { sub_category, faqs, category_name } = this.state;
+    this.sendEvents("next", {
+      id: faqs[sub_category.cms_category_id][index].cms_faq_id,
+    });
 
     this.props.history.push(
       { pathname: "answers", search: getConfig().searchParams },
@@ -49,10 +72,12 @@ class Questions extends Component {
   };
 
   handleQuery = () => {
+    this.sendEvents("next", { my_queries_clicked: "yes" });
     this.navigate("queries");
   };
 
   handleCta = () => {
+    this.sendEvents("next", { unable_to_find_query: "yes" });
     let { sub_category, category_name } = this.state;
 
     this.props.history.push(
@@ -64,6 +89,24 @@ class Questions extends Component {
     );
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          title1: this.state.title1 || true,
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let { sub_category, faqs } = this.state;
 
@@ -73,6 +116,9 @@ class Questions extends Component {
         queryTitle="My queries"
         querycta={true}
         handleQuery={() => this.handleQuery()}
+        events={this.sendEvents("just_set_events")}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         noFooter
       >
         <div className="help-questions">
@@ -98,12 +144,12 @@ class Questions extends Component {
                 />
               </div>
             ))}
-          <div
+          {!this.state.skelton && <div
             className="generic-page-button-small query-btn fade-in"
             onClick={() => this.handleCta()}
           >
             Unable to find my query
-          </div>
+          </div>}
         </div>
       </Container>
     );

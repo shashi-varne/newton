@@ -24,26 +24,6 @@ export async function initialize() {
     productName: getConfig().productName,
   });
 
-  let { screen_name } = this.state;
-
-  if (screen_name === "category-list") {
-    let result = await this.getAllCategories();
-    this.setState({
-      categoryList: result.categories,
-    });
-  }
-
-  if (screen_name === "category") {
-    let category = this.props.location.state
-      ? this.props.location.state.category
-      : {};
-
-    this.setState({
-      category: category,
-    });
-    await this.getSubCategories(category.cms_category_id);
-  }
-
   this.onload();
 }
 
@@ -59,7 +39,8 @@ export async function SearchFaq(word) {
   this.setState({
     isApiRunning: true,
   });
-
+  this.setErrorData("onload");
+  let error = "";
   try {
     const res = await Api.get(`/relay/hns/api/faq/search?word=${word}`);
 
@@ -71,22 +52,37 @@ export async function SearchFaq(word) {
 
     if (status === 200) {
       return result;
+    } else {
+      error = result.error || result.message || true;
     }
   } catch (err) {
     this.setState({
       isApiRunning: false,
+      skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
     });
     console.log(err);
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
+    });
   }
 }
 
 export async function updateFeedback(status, id) {
-
   try {
-    // const res = await Api.post(`/relay/hns/api/faq/${id}/action?action=${status}`);
-
+    const res = await Api.post(`/relay/hns/api/faq/${id}/action?action=${status}`);
     // let { result, status_code: status } = res.pfwresponse;
-
   } catch (err) {
     this.setState({
       isApiRunning: false,
@@ -99,6 +95,8 @@ export async function getAllCategories() {
   this.setState({
     skelton: true,
   });
+  this.setErrorData("onload");
+  let error = "";
   try {
     const res = await Api.get("/relay/hns/api/categories");
 
@@ -110,11 +108,28 @@ export async function getAllCategories() {
 
     if (status === 200) {
       return result;
+    } else {
+      error = result.error || result.message || true;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
+    });
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
     });
   }
 }
@@ -123,6 +138,8 @@ export async function getSubCategories(category_id) {
   this.setState({
     skelton: true,
   });
+  this.setErrorData("onload");
+  let error = "";
   try {
     const res = await Api.get(
       `/relay/hns/api/sub_categories?category_id=${category_id}`
@@ -138,11 +155,28 @@ export async function getSubCategories(category_id) {
       this.setState({
         sub_categories: result.sub_categories,
       });
+    } else {
+      error = result.error || result.message || true;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
+    });
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
     });
   }
 }
@@ -151,6 +185,8 @@ export async function getAllfaqs(sub_category_id) {
   this.setState({
     skelton: true,
   });
+  this.setErrorData("onload");
+  let error = "";
   try {
     const res = await Api.get(
       `/relay/hns/api/faqs?sub_category_id=${sub_category_id}`
@@ -170,11 +206,28 @@ export async function getAllfaqs(sub_category_id) {
       this.setState({
         faqs: faqs,
       });
+    } else {
+      error = result.error || result.message || true;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
+    });
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
     });
   }
 }
@@ -183,6 +236,8 @@ export async function getFaqDescription(faq_id) {
   this.setState({
     skelton: true,
   });
+  this.setErrorData("onload");
+  let error = "";
   try {
     const res = await Api.get(`/relay/hns/api/faq/${faq_id}/desc`);
 
@@ -194,7 +249,7 @@ export async function getFaqDescription(faq_id) {
       if (fromScreen === "categoryList" && Object.keys(faqs).length === 0) {
         this.setState({
           sub_category_id: result.faq.cms_sub_category_id,
-          index: result.faq.sequence_no - 1
+          index: result.faq.sequence_no - 1,
         });
 
         await this.getAllfaqs(result.faq.cms_sub_category_id);
@@ -208,11 +263,28 @@ export async function getFaqDescription(faq_id) {
           faqDesc: faqDesc,
         });
       }
+    } else {
+      error = result.error || result.message || true;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
+    });
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
     });
   }
 }
@@ -273,7 +345,7 @@ export async function getTicketConversations(ticket_id) {
         ticket_status: ticket_status,
         conversations: conversations,
         category: result.response.category,
-        sub_category: result.response.sub_category
+        sub_category: result.response.sub_category,
       });
     }
   } catch (err) {
@@ -290,11 +362,11 @@ export async function createTicket(body = {}) {
   });
 
   let body_data = new FormData();
-  // body_data.set('subject', 'test');
-  body_data.set('description', 'testing service');
-  // body_data.set('cf_category', 'Mutual Fund');
+  body_data.set("subject", "Buy and Sell Gold");
+  body_data.set("description", "testing service");
+  body_data.set("cf_category", "Mutual Fund");
   // body_data.set('product', 'Mutual Fund');
-  // body_data.set('cf_subcategory', 'Goals');
+  body_data.set("cf_subcategory", "Goals");
   // body_data.set('cf_old_ticket_reference_id', '500413');
 
   // body = {
@@ -307,17 +379,20 @@ export async function createTicket(body = {}) {
   // }
   try {
     const res = await Api.post(
-      `/relay/hns/api/freshdesk/ticket/500413/reply`, body_data
+      // `/relay/hns/api/freshdesk/ticket/500413/reply`,
+      `/relay/hns/api/freshdesk/ticket/create`,
+      body
     );
 
     let { result, status_code: status } = res.pfwresponse;
 
     this.setState({
       skelton: false,
+      show_loader: false,
     });
 
     if (status === 200) {
-      console.log(result)
+      console.log(result);
     }
   } catch (err) {
     console.log(err);
@@ -330,7 +405,7 @@ export async function createTicket(body = {}) {
 export function getPdf(e) {
   e.preventDefault();
 
-  let file = e.target.files[0];
+  let file = e.target.files[0] || "";
 
   if (file.size >= 15000000) {
     toast("Please select pdf file less than 15 MB only");
@@ -345,23 +420,28 @@ export function getPdf(e) {
     "image/bmp",
   ];
 
-  if (acceptedType.indexOf(file.type) === -1) {
+  if (file && acceptedType.indexOf(file.type) === -1) {
     toast("Please select pdf file only");
     return;
   }
 
-  let { documents, count } = this.state;
-  file.doc_type = file.type;
+  if (file) {
+    let { documents, count } = this.state;
+    file.doc_type = file.type;
 
-  let duplicate = documents.filter((item) => {
-    return item.name === file.name;
-  });
+    let duplicate = documents.filter((item) => {
+      return item.name === file.name;
+    });
 
-  duplicate.length === 0 && documents.length < 10 && documents.push(file);
-  console.log(file);
-  this.setState({
-    documents: documents,
-    confirmed: duplicate.length !== 0 ? true : false,
-    count: count,
-  });
+    duplicate.length === 0 && documents.length < 10 && documents.push(file);
+
+    this.setState(
+      {
+        documents: documents,
+        confirmed: duplicate.length !== 0 ? true : false,
+        count: count,
+      },
+      () => this.handleScroll()
+    );
+  }
 }

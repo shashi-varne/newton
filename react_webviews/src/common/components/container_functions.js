@@ -124,6 +124,7 @@ export function commonRender(props_base) {
                     queryTitle={this.props.queryTitle}
                     querycta={this.props.querycta}
                     handleQuery={this.props.handleQuery}
+                    headerStatus={this.props.headerStatus}
                 />
                 }
                 {/* Below Header Block */}

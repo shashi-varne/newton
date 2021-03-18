@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { initialize } from "../common/functions";
 
+const moment = require('moment');
 class OpenTickets extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +32,7 @@ class OpenTickets extends Component {
           <div className="ticket" key={index} onClick={() => this.props.onClick(item)}>
             <div className="title">Ticket ID: {item.ticket_id}</div>
             <div className="sub-title">{item.subject}</div>
-            <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>
+            <div className="bottom-title">Last updated: {moment(item.dt_updated).format('DD-MM-YYYY hh:mma')}</div>
           </div>
         ))}
       </div>

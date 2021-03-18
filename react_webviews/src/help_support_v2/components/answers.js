@@ -4,6 +4,7 @@ import SwipeableViews from "react-swipeable-views";
 import ReactHtmlParser from "react-html-parser";
 import Container from "../common/Container";
 import { SkeltonRect } from "common/ui/Skelton";
+import { nativeCallback } from "utils/native_callback";
 class Answers extends Component {
   constructor(props) {
     super(props);
@@ -121,6 +122,45 @@ class Answers extends Component {
     this.updateFeedback(status, faq_id);
   };
 
+  sendEvents(user_action, data = {}) {
+    let eventObj = {
+      event_name: "help_and_support",
+      properties: {
+        user_action: user_action,
+        screen_name: "question_answer",
+        related_questions_clicked: data.id || "",
+        related_questions_id: '',
+        my_queries_clicked: data.my_queries_clicked || "no",
+        helpful_clicked: data.unable_to_find_query || "no",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          title1: this.state.title1 || true,
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
+
   render() {
     let {
       sub_category,
@@ -137,6 +177,9 @@ class Answers extends Component {
         queryTitle="My queries"
         querycta={true}
         handleQuery={() => this.handleQuery()}
+        events={this.sendEvents("just_set_events")}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         noFooter
       >
         {Object.keys(faqs).length === 0 && (

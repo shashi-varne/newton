@@ -4,7 +4,7 @@ import { initialize } from "../common/functions";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
-// import { getConfig } from "utils/functions";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 const Transition = (props) => {
   return <Slide direction="up" {...props} />;
@@ -19,6 +19,8 @@ class SendQuery extends Component {
       ticket: "",
       sub_category: "",
       category: "",
+      value: "",
+      documents: [],
     };
     this.initialize = initialize.bind(this);
   }
@@ -49,10 +51,24 @@ class SendQuery extends Component {
     });
   };
 
-  handleChange = () => {};
+  handleClick = async () => {
+    this.setState({
+      show_loader: 'button'
+    })
 
-  handleClick = () => {
-    this.createTicket();
+    let body_data = new FormData();
+    body_data.set("subject", this.state.sub_category);
+    body_data.set("description", this.state.value);
+    body_data.set('cf_product', 'Gold');
+    body_data.set("cf_category", this.state.category);
+    body_data.set("cf_subcategory", this.state.sub_category);
+    this.state.documents.forEach((item) => {
+      body_data.append("res[]", item)
+    })
+
+
+
+    await this.createTicket(body_data);
     // this.setState({
     //   openConfirmDialog: true,
     // });
@@ -108,22 +124,63 @@ class SendQuery extends Component {
     );
   };
 
+  handleChange = (e) => {
+    let value = e.target.value;
+
+    this.setState({
+      value: value,
+    });
+  };
+
+  handleScroll = () => {
+    setTimeout(function () {
+      let element = document.getElementById("viewScroll");
+      if (!element || element === null) {
+        return;
+      }
+
+      scrollIntoView(element, {
+        block: "start",
+        inline: "nearest",
+        behavior: "smooth",
+      });
+    }, 50);
+  };
+
+  handleDelete = (index) => {
+    let { documents } = this.state;
+
+    documents.splice(index, 1)
+    this.setState({
+      documents: documents
+    })
+  }
+
   render() {
-    let { ticket, category, sub_category } = this.state;
+    let { ticket, category, sub_category, documents } = this.state;
 
     return (
       <Container
         title="Write to us"
         buttonTitle="SUBMIT"
         handleClick={this.handleClick}
+        showLoader={this.state.show_loader}
+        disable={!this.state.value && documents.length !== 0}
         // skelton={this.state.skelton}
       >
         <div className="send-query">
           <div className="sub-title">
             {category} {">"} {sub_category}
           </div>
-          <div className="ticket-id">Old Ticket: {ticket.ticket_id}</div>
-          <RenderAttachment row={8} />
+          {ticket && <div className="ticket-id">Old Ticket: {ticket.ticket_id}</div>}
+          <RenderAttachment
+            row={8}
+            handleChange={this.handleChange}
+            getPdf={this.getPdf}
+            documents={this.state.documents}
+            handleDelete={this.handleDelete}
+          />
+          <div id="viewScroll"></div>
         </div>
         {this.renderDialog()}
       </Container>

@@ -41,6 +41,9 @@ class Container extends Component {
   historyGoBack = () => {
     let pathname = this.props.history.location.pathname;
 
+    let action = 'back';
+    nativeCallback({ events: this.getEvents(action) });
+
     switch (pathname) {
       case "/help":
         nativeCallback({ action: "exit", events: this.getEvents() });

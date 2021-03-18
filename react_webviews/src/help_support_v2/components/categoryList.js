@@ -30,8 +30,10 @@ class CategoryList extends Component {
     this.initialize();
   }
 
-  onload = () => {
-    let { categoryList } = this.state;
+  onload = async () => {
+    let result = await this.getAllCategories();
+
+    let categoryList = result ? result.categories : [];
 
     categoryList.map((item) => {
       item.name = categories[item.cms_category_id].tag_name;
@@ -39,19 +41,20 @@ class CategoryList extends Component {
 
       return item;
     });
+    
     this.setState({
       categoryList: categoryList,
     });
   };
 
-  sendEvents(user_action) {
+  sendEvents(user_action, data = {}) {
     let eventObj = {
       event_name: "help_and_support",
       properties: {
         user_action: user_action,
         screen_name: "category",
-        category_clicked: "",
-        my_queries_clicked: "",
+        category_clicked: data.card_name || '',
+        my_queries_clicked: data.my_queries_clicked || "no",
         initial_kyc: "",
         invested: "",
       },
@@ -76,17 +79,18 @@ class CategoryList extends Component {
     );
 
     if (value.length === 3) {
-      this.handleSearch();
+      this.handleSearch(value);
     }
   };
 
-  handleSearch = async () => {
-    let { value } = this.state;
+  handleSearch = async (value) => {
     const result = await this.SearchFaq(value);
+
+    let list = result.faqs;
 
     this.setState(
       {
-        faqList: result.faqs,
+        faql: result ? list : [],
       },
       () => {
         this.Searching();
@@ -103,6 +107,7 @@ class CategoryList extends Component {
   };
 
   handleClick = (category) => {
+    this.sendEvents("next", { card_name: category.cms_category_name });
     this.props.history.push(
       { pathname: "help/category", search: getConfig().searchParams },
       { category: category }
@@ -110,23 +115,45 @@ class CategoryList extends Component {
   };
 
   handleQuery = () => {
+    this.sendEvents("next", { my_queries_clicked: "yes" });
     this.navigate("help/queries");
   };
 
   handleSearchItem = (item) => {
-    console.log(item)
+    this.sendEvents("search");
 
     this.props.history.push(
       { pathname: "help/answers", search: getConfig().searchParams },
-      { question: item, fromScreen: 'categoryList' }
+      { question: item, fromScreen: "categoryList" }
     );
-  }
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          title1: this.state.title1 || true
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
 
   render() {
     let { sortedList, value, categoryList, isApiRunning } = this.state;
+
     return (
       <Container
         // skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
         title="How can we Help?"
         queryTitle="My queries"
@@ -139,7 +166,11 @@ class CategoryList extends Component {
           {sortedList &&
             value.length !== 0 &&
             sortedList.map((item, index) => (
-              <div className="search-inputs" key={index} onClick={() => this.handleSearchItem(item)}>
+              <div
+                className="search-inputs"
+                key={index}
+                onClick={() => this.handleSearchItem(item)}
+              >
                 <div className="faq">
                   <span style={{ color: "var(--primary)" }}>
                     {item.title.slice(0, value.length)}

@@ -18,7 +18,7 @@ const headerIconMapper = {
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, querycta, queryTitle, handleQuery,
+  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, querycta, queryTitle, handleQuery, headerStatus,
   className ,style, headerData={}, new_header}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -61,6 +61,11 @@ const Header = ({ classes, title, count, total, current, goBack,
         style={{
           margin: '0 8px 0 auto'
         }}>{queryTitle}</div>
+      )}
+      {headerStatus && (
+        <div  className={`header-status ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`} style={{margin: '0 8px 0 auto'}}>Status: <span
+          style={{color: `${headerStatus === 'Closed' ? 'red' : 'green'}`}}
+        >{headerStatus}</span></div>
       )}
       {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
     </Toolbar>

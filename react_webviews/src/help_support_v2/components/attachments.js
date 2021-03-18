@@ -10,9 +10,9 @@ import $ from "jquery";
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText
-} from 'material-ui/Dialog';
-import Button from 'material-ui/Button';
+  DialogContentText,
+} from "material-ui/Dialog";
+import Button from "material-ui/Button";
 
 class RenderAttachment extends Component {
   constructor(props) {
@@ -61,42 +61,38 @@ class RenderAttachment extends Component {
     this.setState({ open: true });
   };
 
-  handleClose = () => {
+  handleClose = (status) => {
+    if (status === 'yes') this.props.handleDelete(this.state.index);
+
     this.setState({ open: false });
   };
 
   renderDialog = () => {
     return (
       <Dialog
-          open={this.state.open || false}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose}>
-              Disagree
-            </Button>
-            <Button onClick={this.handleClose} autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
-        </Dialog>
+        open={this.state.open || false}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this attached file?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions style={{ display: "flex" }}>
+          <Button onClick={() => this.handleClose("yes")}>YES</Button>
+          <Button onClick={() => this.handleClose()}>NO</Button>
+        </DialogActions>
+      </Dialog>
     );
   };
 
-  handledelete = () => {
-    this.setState({ open: true });
-  }
+  handledelete = (index) => {
+    this.setState({ open: true, index: index });
+  };
 
   render() {
-    let { documents } = this.state;
     return (
       <div className="render-attachment fade-in">
         <div
@@ -111,10 +107,10 @@ class RenderAttachment extends Component {
             rows={this.props.row}
             placeholder="Write your query here"
             //   value={this.state.query}
-            //   onChange={this.handleChange()}
+            onChange={(e) => this.props.handleChange(e)}
           ></textarea>
         </div>
-        {documents.map((item, index) => (
+        {this.props.documents.map((item, index) => (
           <div className="attachment" key={index}>
             <div className="attachment-title">
               <img
@@ -127,7 +123,7 @@ class RenderAttachment extends Component {
             </div>
             <img
               style={{ cursor: "pointer", marginLeft: "10px" }}
-              onClick={() => this.handledelete()}
+              onClick={() => this.handledelete(index)}
               src={require("assets/sign_icon.svg")}
               alt=""
             />
@@ -141,7 +137,7 @@ class RenderAttachment extends Component {
             <input
               type="file"
               style={{ display: "none" }}
-              onChange={(e) => this.getPdf(e)}
+              onChange={(e) => this.props.getPdf(e)}
               id="myFile"
             />
             <SVG

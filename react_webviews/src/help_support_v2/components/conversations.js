@@ -5,6 +5,7 @@ import scrollIntoView from "scroll-into-view-if-needed";
 import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
 
+const moment = require('moment');
 class TicketConversations extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ class TicketConversations extends Component {
       category: "",
       sub_category: "",
       openTextBox: false,
+      documents: [],
     };
     this.initialize = initialize.bind(this);
   }
@@ -84,23 +86,55 @@ class TicketConversations extends Component {
   };
 
   handleClick = () => {
-    let { ticket, category, index, sub_category, splitConversation, sortedConverstations } = this.state;
+    let {
+      ticket,
+      category,
+      index,
+      sub_category,
+      splitConversation,
+      sortedConverstations,
+      openTextBox
+    } = this.state;
 
     if (this.state.ticket_status === "Closed") {
       this.props.history.push(
         { pathname: "send-query", search: getConfig().searchParams },
         { ticket: ticket, category: category, sub_category: sub_category }
       );
-    } else {
+    } else if (!openTextBox) {
       splitConversation = [].concat(...sortedConverstations);
       index = sortedConverstations.length + 1;
+      this.setState(
+        {
+          openTextBox: true,
+          splitConversation: splitConversation,
+          index: index,
+        },
+        () => this.handleScroll()
+      );
+    } else {
       this.setState({
-        openTextBox: true,
-        splitConversation: splitConversation,
-        index: index
-      }, () => this.handleScroll())
+        show_loader: 'button'
+      })
     }
   };
+
+  handleChange = (e) => {
+    let value = e.target.value;
+
+    this.setState({
+      value: value,
+    });
+  };
+
+  handleDelete = (index) => {
+    let { documents } = this.state;
+
+    documents.splice(index, 1)
+    this.setState({
+      documents: documents
+    })
+  }
 
   render() {
     let {
@@ -112,15 +146,18 @@ class TicketConversations extends Component {
       index,
       openTextBox,
       ticket_status,
+      documents
     } = this.state;
-
+    
     return (
       <Container
         skelton={this.state.skelton}
         title={`Ticket ID: ${ticket.ticket_id}`}
-        buttonTitle={ticket_status === "Closed" ? "REOPEN" : "REPLY"}
+        buttonTitle={ticket_status === "Closed" ? "REOPEN" : openTextBox ? "SUBMIT" : "REPLY"}
         handleClick={this.handleClick}
         headerStatus={ticket_status}
+        disable={openTextBox && (!this.state.value && documents.length === 0)}
+        showLoader={this.state.show_loader}
         event={""}
       >
         <div className="ticket-details">
@@ -146,7 +183,7 @@ class TicketConversations extends Component {
                               <div>{el.name}</div>
                             </div>
                           ))}
-                        <div className="date">12-11-2020 11:30pm</div>
+                        <div className="date">{moment(item.dt_updated).format('DD-MM-YYYY hh:mma')}</div>
                       </div>
                       <div className="user-tag">
                         <img src={require(`assets/ic_user.svg`)} alt="" />
@@ -177,7 +214,7 @@ class TicketConversations extends Component {
                               <div>{el.name}</div>
                             </a>
                           ))}
-                        <div className="date">12-11-2020 11:30pm</div>
+                        <div className="date">{moment(item.dt_updated).format('DD-MM-YYYY hh:mma')}</div>
                       </div>
                       <div className="user-tag agent-tag">
                         <div>Team {this.state.productName}</div>
@@ -195,7 +232,15 @@ class TicketConversations extends Component {
               View more <img src={require(`assets/down_nav.svg`)} alt="" />
             </div>
           )}
-          {openTextBox && <RenderAttachment row={4} />}
+          {openTextBox && (
+            <RenderAttachment
+              row={4}
+              handleChange={this.handleChange}
+              getPdf={this.getPdf}
+              documents={this.state.documents}
+              handleDelete={this.handleDelete}
+            />
+          )}
           <div id="viewScroll"></div>
         </div>
       </Container>
