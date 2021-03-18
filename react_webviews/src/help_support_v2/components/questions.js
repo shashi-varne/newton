@@ -40,6 +40,14 @@ class Questions extends Component {
     );
   };
 
+  handleQuery = () => {
+    this.navigate("queries");
+  };
+
+  handleCta = () => {
+    this.navigate('send-query')
+  }
+
   render() {
     let { sub_category, faqs } = this.state;
 
@@ -48,14 +56,15 @@ class Questions extends Component {
         title={sub_category.cms_category_name}
         queryTitle="My queries"
         querycta={true}
+        handleQuery={() => this.handleQuery()}
         noFooter
       >
         <div className="help-questions">
           {this.state.skelton &&
-            [...Array(2)].map(() => (
-              <div className="skelton">
-                <SkeltonRect className="balance-skelton text" />
+            [...Array(4)].map((item, index) => (
+              <div className="skelton" key={index}>
                 <SkeltonRect className="balance-skelton" />
+                <SkeltonRect className="balance-skelton balance-skelton2" />
               </div>
             ))}
           {!this.state.skelton &&
@@ -73,6 +82,12 @@ class Questions extends Component {
                 />
               </div>
             ))}
+          <div
+            className="generic-page-button-small query-btn fade-in"
+            onClick={() => this.handleCta()}
+          >
+            Unable to find my query
+          </div>
         </div>
       </Container>
     );

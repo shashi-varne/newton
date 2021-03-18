@@ -44,18 +44,11 @@ export async function initialize() {
 }
 
 export function navigate(pathname, data = {}) {
-  if (this.props.edit || data.edit) {
-    this.props.history.replace({
-      pathname: pathname,
-      search: getConfig().searchParams,
-    });
-  } else {
-    this.props.history.push({
-      pathname: pathname,
-      search: data.searchParams || getConfig().searchParams,
-      params: data.params || {},
-    });
-  }
+  this.props.history.push({
+    pathname: pathname,
+    search: data.searchParams || getConfig().searchParams,
+    params: data.params || {},
+  });
 }
 
 export async function SearchFaq(word) {
@@ -145,7 +138,7 @@ export async function getAllfaqs(sub_category_id) {
       faqs[sub_category_id] = result.faqs;
 
       this.setState({
-        faqs: faqs
+        faqs: faqs,
       });
     }
   } catch (err) {
@@ -161,9 +154,7 @@ export async function getFaqDescription(faq_id) {
     skelton: true,
   });
   try {
-    const res = await Api.get(
-      `/relay/hns/api/faq/${faq_id}/desc`
-    );
+    const res = await Api.get(`/relay/hns/api/faq/${faq_id}/desc`);
 
     let { result, status_code: status } = res.pfwresponse;
 
@@ -177,7 +168,7 @@ export async function getFaqDescription(faq_id) {
       faqDesc[faq_id] = result.faq;
 
       this.setState({
-        faqDesc: faqDesc
+        faqDesc: faqDesc,
       });
     }
   } catch (err) {
@@ -208,8 +199,8 @@ export async function getUserTickets(params) {
 
       tickets[params] = result.tickets;
       this.setState({
-        tickets: tickets
-      })
+        tickets: tickets,
+      });
     }
   } catch (err) {
     console.log(err);
@@ -219,7 +210,7 @@ export async function getUserTickets(params) {
   }
 }
 
-export async function getTicketConversations(params = '') {
+export async function getTicketConversations(params = "") {
   this.setState({
     skelton: true,
   });
@@ -243,8 +234,8 @@ export async function getTicketConversations(params = '') {
       this.setState({
         ticket_status: ticket_status,
         conversations: conversations,
-        result: result
-      })
+        result: result,
+      });
     }
   } catch (err) {
     console.log(err);

@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
-import { getConfig } from "utils/functions";
-import SVG from "react-inlinesvg";
-import ic_clip from "assets/ic_clip.svg";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
+import RenderAttachment from "./attachments";
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+const Transition = (props) => {
+  return <Slide direction="up" {...props} />;
+};
 class SendQuery extends Component {
   constructor(props) {
     super(props);
@@ -87,7 +85,7 @@ class SendQuery extends Component {
 
   render() {
     return (
-      <Container // skelton={this.state.skelton}
+      <Container
         title="Write to us"
         buttonTitle="PROCEED"
         handleClick={this.handleClick}
@@ -95,41 +93,7 @@ class SendQuery extends Component {
       >
         <div className="send-query">
           <div className="sub-title">Insurance {">"} Health insurance</div>
-          <div
-            className="input"
-            style={{
-              border: `1px solid ${
-                getConfig().productName === "finity" ? "#CBDEF6" : "#D5CCE9"
-              }`,
-            }}
-          >
-            <textarea
-              rows="8"
-              placeholder="Write your query here"
-              //   value={this.state.query}
-              //   onChange={this.handleChange()}
-            ></textarea>
-          </div>
-          <div
-            className="pdf-upload"
-            onClick={() => this.startUpload("open_file", "bank_statement")}
-          >
-            <div className="plus-sign">
-              <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={this.getPdf}
-                id="myFile"
-              />
-              <SVG
-                preProcessor={(code) =>
-                  code.replace(/fill=".*?"/g, "fill=" + getConfig().secondary)
-                }
-                src={ic_clip}
-              />
-            </div>
-            <div>UPLOAD ATTACHMENTS</div>
-          </div>
+          <RenderAttachment row={8} />
         </div>
         {this.renderDialog()}
       </Container>

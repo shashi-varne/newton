@@ -74,6 +74,10 @@ class Queries extends Component {
     
   }
 
+  handleClick = (item) => {
+    this.navigate('conversation')
+  }
+
   render() {
     let { tickets } = this.state;
 
@@ -114,7 +118,7 @@ class Queries extends Component {
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
-                  <Tickets tickets={tickets.open} />
+                  <Tickets tickets={tickets.open} onClick={this.handleClick} />
                 )}
                 {tickets.open && tickets.open.length === 0 && (
                   <div className="no-tickets">
@@ -135,7 +139,7 @@ class Queries extends Component {
               </TabContainer>
               <TabContainer dir={"ltr"}>
                 {tickets.closed && tickets.closed.length > 0 && (
-                  <Tickets tickets={tickets.open} />
+                  <Tickets tickets={tickets.open} onClick={this.handleClick} />
                 )}
                 {tickets.closed && tickets.closed.length === 0 && (
                   <div className="no-tickets">

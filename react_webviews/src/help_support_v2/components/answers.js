@@ -77,6 +77,10 @@ class Answers extends Component {
     }
   };
 
+  handleQuery = () => {
+    this.navigate("queries");
+  };
+
   render() {
     let { sub_category, faqs, faqDesc } = this.state;
 
@@ -85,6 +89,7 @@ class Answers extends Component {
         title={sub_category.cms_category_name}
         queryTitle="My queries"
         querycta={true}
+        handleQuery={() => this.handleQuery()}
         noFooter
       >
         <div className="help-answers">
@@ -105,7 +110,7 @@ class Answers extends Component {
               {faqs &&
                 faqs[sub_category.cms_category_id].map((item, index) => (
                   <div key={index}>
-                    <div className="question">{item.title}</div>
+                    <div className="question">{`${item.title}${item.title[item.title.length - 1] !== '?' ? '.' : ''}`}</div>
                     <div className="answer">
                       {faqDesc[item.cms_faq_id] &&
                         ReactHtmlParser(faqDesc[item.cms_faq_id].description)}

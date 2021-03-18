@@ -8,7 +8,7 @@ class Category extends Component {
     super(props);
     this.state = {
       show_loader: false,
-      skelton: "g",
+      skelton: "p",
       screen_name: "category",
       category: "",
       sub_categories: "",
@@ -29,6 +29,10 @@ class Category extends Component {
     );
   };
 
+  handleQuery = () => {
+    this.navigate("queries");
+  };
+
   render() {
     let { category, sub_categories } = this.state;
 
@@ -37,15 +41,17 @@ class Category extends Component {
         title={category.cms_category_name}
         queryTitle="My queries"
         querycta={true}
+        handleQuery={() => this.handleQuery()}
+        // skelton={this.state.skelton}
         noFooter
       >
         <div className="help-category">
           <div className="sub-title">Your query is related to</div>
           {this.state.skelton &&
-            [...Array(2)].map(() => (
-              <div className="skelton">
-                <SkeltonRect className="balance-skelton text" />
+            [...Array(4)].map((item, index) => (
+              <div className="skelton" key={index}>
                 <SkeltonRect className="balance-skelton" />
+                <SkeltonRect className="balance-skelton balance-skelton2" />
               </div>
             ))}
           {!this.state.skelton &&

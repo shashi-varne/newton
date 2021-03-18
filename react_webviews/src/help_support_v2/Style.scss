@@ -14,19 +14,13 @@
   }
 
   .skelton {
-    display: flex;
-    align-items: center;
-
-    .skelton-img {
-      width: 70px !important;
-      height: 70px !important;
+    margin-top: 40px;
+    .balance-skelton {
       margin: 10px 0;
     }
-
-    .text {
-      height: 25px !important;
-      width: 300px !important;
-      margin: 0 0 0 17px;
+    .balance-skelton2 {
+      width: 75% !important;
+      margin-bottom: 40px !important;
     }
   }
 
@@ -124,9 +118,15 @@
     margin: -15px 0 10px;
   }
 
-  .balance-skelton {
-    margin: 30px 0;
-    width: 75% !important;
+  .skelton {
+    margin-top: 40px;
+    .balance-skelton {
+      margin: 10px 0;
+    }
+    .balance-skelton2 {
+      width: 75% !important;
+      margin-bottom: 40px !important;
+    }
   }
 
   .text {
@@ -168,9 +168,15 @@
     width: 85%;
   }
 
-  .balance-skelton {
-    margin: 30px 0;
-    width: 75% !important;
+  .skelton {
+    margin-top: 40px;
+    .balance-skelton {
+      margin: 10px 0;
+    }
+    .balance-skelton2 {
+      width: 75% !important;
+      margin-bottom: 40px !important;
+    }
   }
 
   .text {
@@ -191,13 +197,10 @@
   }
 }
 
-.help-query-btn {
-  margin-top: 40px;
-  .query-btn {
-    margin: auto;
-    padding: 10px 22px !important;
-    text-transform: uppercase;
-  }
+.query-btn {
+  margin: 40px auto;
+  padding: 10px 22px !important;
+  text-transform: uppercase;
 }
 
 .help-answers {
@@ -207,6 +210,17 @@
     line-height: 23px;
     color: #4a4a4a;
     margin-bottom: 10px;
+  }
+
+  .skelton {
+    margin-top: 40px;
+    .balance-skelton {
+      margin: 10px 0;
+    }
+    .balance-skelton2 {
+      width: 75% !important;
+      margin-bottom: 40px !important;
+    }
   }
 
   .answer {
@@ -354,6 +368,7 @@
 }
 
 .ticket-details {
+  margin-bottom: 40px;
   .sub-title {
     color: #595959;
     font-size: 11px;
@@ -466,13 +481,7 @@
   }
 }
 
-.send-query {
-  .sub-title {
-    font-size: 11px;
-    color: #595959;
-    margin: -15px 0 10px;
-  }
-
+.render-attachment {
   textarea {
     border: 0;
     resize: none;
@@ -521,7 +530,7 @@
     font-size: 12px;
     font-weight: 1000;
     background: linear-gradient(90deg, #f7f6f6 0%, #ffffff 98.76%);
-    margin: 20px -20px 50px;
+    margin: 30px -20px 50px;
     display: flex;
     align-items: center;
     padding: 18px 20px;
@@ -541,6 +550,14 @@
       color: #767e86;
       margin-left: 15px;
     }
+  }
+}
+
+.send-query {
+  .sub-title {
+    font-size: 11px;
+    color: #595959;
+    margin: -15px 0 10px;
   }
 }
 
@@ -574,23 +591,6 @@
 
       .contact {
         font-size: 13px;
-      }
-    }
-
-    .skelton {
-      display: flex;
-      align-items: center;
-
-      .skelton-img {
-        width: 55px !important;
-        height: 55px !important;
-        margin: 10px 0;
-      }
-
-      .text {
-        height: 20px !important;
-        width: 200px !important;
-        margin: 0 0 0 18px;
       }
     }
   }

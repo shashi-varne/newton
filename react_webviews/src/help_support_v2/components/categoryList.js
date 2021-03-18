@@ -43,6 +43,26 @@ class CategoryList extends Component {
     });
   };
 
+  sendEvents(user_action) {
+    let eventObj = {
+      event_name: "help_and_support",
+      properties: {
+        user_action: user_action,
+        screen_name: "category",
+        category_clicked: "",
+        my_queries_clicked: "",
+        initial_kyc: "",
+        invested: "",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
   handleChange = (event) => {
     let value = event.target ? event.target.value : event;
     this.setState(
@@ -54,17 +74,13 @@ class CategoryList extends Component {
       }
     );
 
-    if (
-      value.split(" ").length === 2 &&
-      value.split("").includes(" ") &&
-      value.split(" ")[1] === ""
-    ) {
+    if (value.length === 3) {
       this.handleSearch();
     }
   };
 
   handleSearch = async () => {
-    let value = this.state.value.split(" ")[0];
+    let { value } = this.state;
     const result = await this.SearchFaq(value);
 
     this.setState(
@@ -88,7 +104,7 @@ class CategoryList extends Component {
     console.log(sortedList);
 
     this.setState({
-      sortedList: sortedList,
+      sortedList: faqList,
     });
   };
 
@@ -108,6 +124,7 @@ class CategoryList extends Component {
     return (
       <Container
         // skelton={this.state.skelton}
+        events={this.sendEvents("just_set_events")}
         title="How can we Help?"
         queryTitle="My queries"
         querycta={true}
@@ -126,7 +143,11 @@ class CategoryList extends Component {
                   </span>
                   {item.title.slice(value.length)}
                 </div>
-                <div className="tag">{"MUTUAL FUNDS"}</div>
+                <div className="tag">
+                  {item.cms_category_name}
+                  {" > "}
+                  {item.cms_sub_category_name}
+                </div>
               </div>
             ))}
           {value.length !== 0 && sortedList.length === 0 && (
@@ -134,12 +155,13 @@ class CategoryList extends Component {
           )}
 
           {this.state.skelton &&
-            [...Array(4)].map(() => (
-              <div className="skelton">
-                <SkeltonRect className="balance-skelton skelton-img" />
-                <SkeltonRect className="balance-skelton text" />
+            [...Array(4)].map((item, index) => (
+              <div className="skelton" key={index}>
+                <SkeltonRect className="balance-skelton" />
+                <SkeltonRect className="balance-skelton balance-skelton2" />
               </div>
             ))}
+
           {!this.state.skelton && value.length === 0 && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
