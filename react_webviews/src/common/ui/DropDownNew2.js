@@ -58,21 +58,21 @@ class SelectDropDown2 extends React.Component {
     const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
-        {(<InputLabel shrink={(!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
+        {(<InputLabel shrink={(  !!value || (!!this.state.selectedOption)  || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
           style={{ marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px' ,
-          minWidth: '300px'
-          }}>
-          {this.props.label}</div></InputLabel>)} {console.log(this.props.label)}
+          minWidth: '300px' , color : this.props.error ? '#D0021B' : '#4F2DA7'}}>
+          {this.props.label}</div></InputLabel>)} {console.log(value, this.state.selectedOption)}
         {/* {(!this.state.multi && <span className="label2">{this.props.label || 'label'}</span> )} */}
         <Select
           defaultValue={value}
+          className={this.state.error ? "" : ''}
           onMenuOpen={() => this.setState({ shrink: true })}
           onMenuClose={() => this.setState({ shrink: false })}
-          placeholder={''}
-          isClearable
+          placeholder={''}  
+          isClearable={true}
           isSearchable={this.props.options.length <= 6 ? false : true}
           value={value}
-          maxMenuHeight={320}
+          // maxMenuHeight={false}
           menuPlacement="auto"
           menuPortalTarget={document.querySelector('body')}
           textFieldProps={{
