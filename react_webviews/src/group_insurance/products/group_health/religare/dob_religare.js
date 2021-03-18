@@ -41,7 +41,7 @@ class GroupHealthPlanDobReligare extends Component {
         
         this.setState({
             header_title: isSelf ? 'Your date of birth' : 'Date of birth details',
-            default_helper_text: `${isSelf ? "Your" : "Adult member's"} age should be more than 18 yrs`,
+            default_helper_text: `${isSelf ? "You" : "Adult member's age"} should be 18 years or older`,
         });
 
 
