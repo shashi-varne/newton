@@ -625,7 +625,7 @@ class GroupHealthReportDetails extends Component {
                     </div>}
 
                     {!this.state.showPlanDetails &&
-                        <div className="report-detail-download">
+                        <div className="report-detail-download" style={{border: 'none'}}>
 
                             <div className="report-detail-download-text" style={{ fontWeight: 400 }} onClick={() => {
                                 this.setState({
@@ -639,7 +639,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             {this.state.policy_data && this.state.policy_data.status === 'policy_issued' &&
                                 <div className="flex">
-                                    <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
+                                    <div style={{ color: '#d8dadd', margin: '0 22px' }}>
                                         |
                                     </div>
 
@@ -730,7 +730,7 @@ class GroupHealthReportDetails extends Component {
                                 alt="" />
                             <div className="bd-content">What is not covered?</div>
                         </div>}
-                        <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
+                        <div className="bd-tile" style={{marginTop: '15px'}} onClick={() => this.navigateBenefits('how_to_claim')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
                                 alt="" />
                             <div className="bd-content">How to claim?</div>
