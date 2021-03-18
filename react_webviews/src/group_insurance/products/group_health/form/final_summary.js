@@ -1085,7 +1085,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     {this.state.provider === 'GMC' ?
                         (<div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/ic_hs_pay_freq.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
