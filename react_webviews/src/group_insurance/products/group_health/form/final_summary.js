@@ -933,16 +933,16 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                    You will lose your progress till now. Are you sure you want to restart?
-              </DialogContentText>
+                    <p style={{color: '#0A1D32'}}>You will lose your progress till now. Are you sure you want to restart?</p>
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.resetQuote} color="default">
                         YES
-              </Button>
+                    </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
                         NO
-              </Button>
+                    </Button>
                 </DialogActions>
             </Dialog>
         );
