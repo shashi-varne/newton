@@ -115,7 +115,7 @@ class QuestionScreen1 extends Component {
         "screen_name": 'Saving',
         "q1": this.state.question1 ? 'answered' : 'empty',
         "q2": this.state.question2 ? 'answered' : 'empty',
-        flow: this.state.rpEntryParams.flow || '',
+        flow: this.state.rpEntryParams.flow || 'risk analyser',
       }
     };
     if (user_action === 'just_set_events') {

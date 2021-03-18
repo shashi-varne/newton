@@ -114,7 +114,7 @@ class Result extends Component {
         "user_action": user_action,
         "screen_name": 'Result',
         "risk_tolerance": this.state.score.indicator,
-        flow: this.state.params.flow || '',
+        flow: this.state.params.flow || 'risk analyser',
       }
     };
     if (user_action === 'just_set_events') {

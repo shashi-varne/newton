@@ -23,6 +23,7 @@ class Intro extends Component {
       openDialogConfirm: false,
       openDialog: false,
       benefitsList: [],
+      rpEntryParams: storageService().getObject('risk-entry-params') || {},
     };
     this.handleClose = this.handleClose.bind(this);
     this.renderBenefits = this.renderBenefits.bind(this);
@@ -119,7 +120,7 @@ class Intro extends Component {
       properties: {
         user_action: user_action,
         screen_name: "Intro",
-        flow: storageService().get('risk-entry-flow') || '',
+        flow: this.state.rpEntryParams.flow || 'risk analyser',
       },
     };
 
