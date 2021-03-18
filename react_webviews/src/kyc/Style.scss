@@ -1304,9 +1304,10 @@
       color: #160d2e;
       font-size: 20px;
       font-weight: 600;
+      padding-bottom: 10px;
 
       .text {
-        margin: 15px 0;
+        margin: 30px 0 0px 0;
       }
     }
 
@@ -1314,6 +1315,7 @@
       color: #767e86;
       font-size: 14px;
       margin: 10px 0 20px 0;
+      line-height: 1.5;
     }
 
     .divider {
@@ -1512,39 +1514,52 @@
     margin-right: 20px;
   }
 
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    line-height: 1.5;
+    padding-bottom: 20px;
+
+    .option-type {
+      color: #160d2e;
+      border: 1px solid #767e86;
+      text-align: left;
+      padding: 9px 10px;
+      font-size: 13px;
+      border-radius: 4px;
+      margin: 10px 10px 0 0;
+      min-width: 140px;
+      max-width: fit-content;
+      display: flex;
+      justify-content: space-between;
+      column-gap: 10px;
+    }
+
+    .option-type:nth-child(3) {
+      min-width: 170px;
+    }
+
+    .disabled {
+      border-color: #9b98a2;
+      color: #9b98a2;
+    }
+
+    .selected {
+      color: var(--primary);
+      font-weight: 600;
+
+      .check-icon {
+        width: 10px;
+      }
+    }
+  }
+
   .banner .edit {
     text-transform: uppercase;
     color: var(--secondary);
     font-weight: bold;
     cursor: pointer;
-  }
-
-  .MuiGrid-container {
-    align-items: center;
-  }
-
-  .MuiGrid-item {
-    flex: 1 0 50%;
-    max-width: 100%;
-    // min-width: 170px;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-
-  .MuiGrid-item:nth-of-type(3) {
-    max-width: 60%;
-  }
-
-  .RadioButton label {
-    font-size: 13px;
-    border: 1px solid black;
-    color: black;
-    box-sizing: border-box;
-    padding: 10px;
-  }
-
-  .RadioLabelChecked {
-    font-weight: 600;
   }
 
   .doc-title {

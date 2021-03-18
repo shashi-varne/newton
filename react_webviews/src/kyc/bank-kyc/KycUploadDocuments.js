@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Container from "../common/Container";
-import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
-
 import { verificationDocOptions } from "../constants";
-
 import { uploadBankDocuments } from "../common/api";
 import PendingBankVerificationDialog from "./PendingBankVerificationDialog";
 import { getUrlParams, isEmpty } from "utils/validators";
-
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
+import SVG from "react-inlinesvg";
+import { getConfig } from "../../utils/functions";
 
 const KycUploadDocuments = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -70,6 +68,7 @@ const KycUploadDocuments = (props) => {
   };
 
   const handleSubmit = async () => {
+    if (selected === null || !file) return;
     try {
       setIsApiRunning("button");
       const result = await uploadBankDocuments(
@@ -77,7 +76,6 @@ const KycUploadDocuments = (props) => {
         verificationDocOptions[selected].value,
         bank_id
       );
-      console.log(result);
       setShowPendingModal(true);
     } catch (err) {
       setShowPendingModal(true);
@@ -117,18 +115,18 @@ const KycUploadDocuments = (props) => {
           kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
         ) {
-          navigate('/kyc/upload/pan')
+          navigate("/kyc/upload/pan");
         } else {
-          navigate('/kyc-esign/info')
+          navigate("/kyc-esign/info");
         }
       } else {
-        navigate('/kyc/upload/progress')
+        navigate("/kyc/upload/progress");
       }
     }
   };
 
   const selectedDocValue =
-    selected && selected >= 0 ? verificationDocOptions[selected].value : "";
+    selected !== null ? verificationDocOptions[selected].value : "";
 
   return (
     <Container
@@ -160,12 +158,36 @@ const KycUploadDocuments = (props) => {
             Make sure your name is clearly visible in the document
           </div>
           <div className="options">
-            <RadioWithoutIcon
-              width="40"
-              options={verificationDocOptions}
-              value={selectedDocValue}
-              onChange={handleDocType}
-            />
+            {verificationDocOptions.map((data, index) => {
+              const selectedType = data.value === selectedDocValue;
+              const disableField =
+                kyc.address?.meta_data?.is_nri && data.value !== "cheque";
+              return (
+                <div
+                  key={index}
+                  className={`option-type ${selectedType && "selected"} ${
+                    disableField && "disabled"
+                  }`}
+                  onClick={() => {
+                    if (!disableField) handleDocType(index);
+                  }}
+                >
+                  {data.name}
+                  {selectedType && (
+                    <SVG
+                      className="check-icon"
+                      preProcessor={(code) =>
+                        code.replace(
+                          /fill=".*?"/g,
+                          "fill=" + getConfig().primary
+                        )
+                      }
+                      src={require(`assets/check_selected_blue.svg`)}
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
           {!isEmpty(selected) && selected >= 0 && (
             <div className="docs-image-container">
@@ -211,9 +233,11 @@ const KycUploadDocuments = (props) => {
             </div>
           )}
         </main>
-        <div className="sample-document" onClick={handleSampleDocument}>
-          view sample document
-        </div>
+        {selectedDocValue && (
+          <div className="sample-document" onClick={handleSampleDocument}>
+            view sample document
+          </div>
+        )}
         <footer className="ssl-container">
           <img
             src={require("assets/ssl_icon_new.svg")}
@@ -224,11 +248,9 @@ const KycUploadDocuments = (props) => {
       <PendingBankVerificationDialog
         open={showPendingModal}
         close={setShowPendingModal}
-        id="pending-bank-documents-dialog"
         title="Bank Verification Pending!"
         description="We’ve added your bank account details. The verification is in progress, meanwhile you can continue with KYC"
-        label="continue with kyc"
-        className="kyc-pending-dialog"
+        label="CONTINUE WITH KYC"
         proceed={proceed}
         cancel={setShowPendingModal}
       />

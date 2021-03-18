@@ -35,6 +35,10 @@ const Journey = (props) => {
   const initialize = async () => {
     try {
       const result = await getUserKycFromSummary()
+      if(!result) {
+        setIsLoading(false);
+        return;
+      }
       let currentUser = result.data.user.user.data
       let userKyc = result.data.kyc.kyc.data
       setKyc(userKyc)
