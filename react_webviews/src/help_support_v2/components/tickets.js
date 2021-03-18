@@ -28,7 +28,7 @@ class OpenTickets extends Component {
     return (
       <div className="help-tickets">
         {tickets.map((item, index) => (
-          <div className="ticket" key={index} onClick={(item) => this.props.onClick(item)}>
+          <div className="ticket" key={index} onClick={() => this.props.onClick(item)}>
             <div className="title">Ticket ID: {item.ticket_id}</div>
             <div className="sub-title">{item.subject}</div>
             <div className="bottom-title">Last updated: 12-11-2020 11:30pm</div>

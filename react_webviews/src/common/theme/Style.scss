@@ -1579,3 +1579,13 @@ input#pan {
   color: var(--secondary);
   cursor: pointer;
 }
+
+.header-status {
+  font-size: 13px;
+  font-weight: 400;
+  color: #333333;
+
+  span {
+    opacity: 0.6;
+  }
+}

@@ -3,6 +3,7 @@ import Container from "../common/Container";
 import { initialize } from "../common/functions";
 import scrollIntoView from "scroll-into-view-if-needed";
 import RenderAttachment from "./attachments";
+import { getConfig } from "utils/functions";
 
 class TicketConversations extends Component {
   constructor(props) {
@@ -14,6 +15,10 @@ class TicketConversations extends Component {
       conversations: "",
       sortedConverstations: "",
       index: 0,
+      ticket: {},
+      category: "",
+      sub_category: "",
+      openTextBox: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -23,7 +28,12 @@ class TicketConversations extends Component {
   }
 
   onload = async () => {
-    await this.getTicketConversations();
+    let ticket = this.props.location.state.ticket;
+    this.setState({
+      ticket: ticket,
+    });
+
+    await this.getTicketConversations(ticket.ticket_id);
     let { conversations } = this.state;
 
     let sortedConverstations = [];
@@ -41,7 +51,7 @@ class TicketConversations extends Component {
     // console.log([].concat(...sortedConverstations))
   };
 
-  handleScroll = (value) => {
+  handleScroll = () => {
     setTimeout(function () {
       let element = document.getElementById("viewScroll");
       if (!element || element === null) {
@@ -73,18 +83,50 @@ class TicketConversations extends Component {
     }
   };
 
+  handleClick = () => {
+    let { ticket, category, index, sub_category, splitConversation, sortedConverstations } = this.state;
+
+    if (this.state.ticket_status === "Closed") {
+      this.props.history.push(
+        { pathname: "send-query", search: getConfig().searchParams },
+        { ticket: ticket, category: category, sub_category: sub_category }
+      );
+    } else {
+      splitConversation = [].concat(...sortedConverstations);
+      index = sortedConverstations.length + 1;
+      this.setState({
+        openTextBox: true,
+        splitConversation: splitConversation,
+        index: index
+      }, () => this.handleScroll())
+    }
+  };
+
   render() {
-    let { splitConversation, sortedConverstations, index } = this.state;
+    let {
+      splitConversation,
+      sortedConverstations,
+      ticket,
+      category,
+      sub_category,
+      index,
+      openTextBox,
+      ticket_status,
+    } = this.state;
 
     return (
       <Container
         skelton={this.state.skelton}
-        title="Ticket ID: 0111"
-        buttonTitle="REPLY"
+        title={`Ticket ID: ${ticket.ticket_id}`}
+        buttonTitle={ticket_status === "Closed" ? "REOPEN" : "REPLY"}
+        handleClick={this.handleClick}
+        headerStatus={ticket_status}
         event={""}
       >
         <div className="ticket-details">
-          <div className="sub-title">insurance {">"} Health Insurance</div>
+          <div className="sub-title">
+            {category} {">"} {sub_category}
+          </div>
           {!this.state.skelton &&
             splitConversation &&
             splitConversation.map((item, index) => (
@@ -153,8 +195,8 @@ class TicketConversations extends Component {
               View more <img src={require(`assets/down_nav.svg`)} alt="" />
             </div>
           )}
+          {openTextBox && <RenderAttachment row={4} />}
           <div id="viewScroll"></div>
-          <RenderAttachment row={4} />
         </div>
       </Container>
     );

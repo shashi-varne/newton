@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Tickets from "./tickets";
 import { Imgc } from "common/ui/Imgc";
 import { SkeltonRect } from "common/ui/Skelton";
+import { getConfig } from "utils/functions";
 
 function TabContainer({ children, dir }) {
   return (
@@ -28,7 +29,7 @@ class Queries extends Component {
       show_loader: false,
       skelton: {
         closed: false,
-        open: false
+        open: false,
       },
       value: 0,
       percent: 0,
@@ -70,13 +71,14 @@ class Queries extends Component {
     });
   };
 
-  renderTicketError = () => {
-    
-  }
+  renderTicketError = () => {};
 
   handleClick = (item) => {
-    this.navigate('conversation')
-  }
+    this.props.history.push(
+      { pathname: "conversation", search: getConfig().searchParams },
+      { ticket: item }
+    );
+  };
 
   render() {
     let { tickets } = this.state;

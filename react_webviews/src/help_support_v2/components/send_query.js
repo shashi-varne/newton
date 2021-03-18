@@ -4,6 +4,7 @@ import { initialize } from "../common/functions";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
+// import { getConfig } from "utils/functions";
 
 const Transition = (props) => {
   return <Slide direction="up" {...props} />;
@@ -15,6 +16,9 @@ class SendQuery extends Component {
       show_loader: false,
       skelton: "g",
       openConfirmDialog: false,
+      ticket: "",
+      sub_category: "",
+      category: "",
     };
     this.initialize = initialize.bind(this);
   }
@@ -23,14 +27,35 @@ class SendQuery extends Component {
     this.initialize();
   }
 
-  onload = () => {};
+  onload = () => {
+    let { ticket, category, sub_category } = this.state;
+
+    if (this.props.location.state.ticket) {
+      ticket = this.props.location.state.ticket;
+      category = this.props.location.state.category;
+      sub_category = this.props.location.state.sub_category;
+
+      this.setState({
+        ticket: ticket,
+      });
+    } else {
+      category = this.props.location.state.category;
+      sub_category = this.props.location.state.sub_category;
+    }
+
+    this.setState({
+      category: category,
+      sub_category: sub_category,
+    });
+  };
 
   handleChange = () => {};
 
   handleClick = () => {
-    this.setState({
-      openConfirmDialog: true,
-    });
+    this.createTicket();
+    // this.setState({
+    //   openConfirmDialog: true,
+    // });
   };
 
   handleClose = () => {
@@ -84,15 +109,20 @@ class SendQuery extends Component {
   };
 
   render() {
+    let { ticket, category, sub_category } = this.state;
+
     return (
       <Container
         title="Write to us"
-        buttonTitle="PROCEED"
+        buttonTitle="SUBMIT"
         handleClick={this.handleClick}
         // skelton={this.state.skelton}
       >
         <div className="send-query">
-          <div className="sub-title">Insurance {">"} Health insurance</div>
+          <div className="sub-title">
+            {category} {">"} {sub_category}
+          </div>
+          <div className="ticket-id">Old Ticket: {ticket.ticket_id}</div>
           <RenderAttachment row={8} />
         </div>
         {this.renderDialog()}

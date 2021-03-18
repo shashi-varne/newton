@@ -24,19 +24,27 @@ class Questions extends Component {
       ? this.props.location.state.sub_category
       : {};
 
+    let category_name = this.props.location.state.category_name;
+
     this.setState({
       sub_category: sub_category,
+      category_name: category_name,
     });
 
     await this.getAllfaqs(sub_category.cms_category_id);
   };
 
   handleClick = (index) => {
-    let { sub_category, faqs } = this.state;
+    let { sub_category, faqs, category_name } = this.state;
 
     this.props.history.push(
       { pathname: "answers", search: getConfig().searchParams },
-      { sub_category: sub_category, faqs: faqs, index: index }
+      {
+        sub_category: sub_category,
+        faqs: faqs,
+        index: index,
+        category_name: category_name,
+      }
     );
   };
 
@@ -45,8 +53,16 @@ class Questions extends Component {
   };
 
   handleCta = () => {
-    this.navigate('send-query')
-  }
+    let { sub_category, category_name } = this.state;
+
+    this.props.history.push(
+      { pathname: "send-query", search: getConfig().searchParams },
+      {
+        sub_category: sub_category.cms_category_name,
+        category: category_name,
+      }
+    );
+  };
 
   render() {
     let { sub_category, faqs } = this.state;

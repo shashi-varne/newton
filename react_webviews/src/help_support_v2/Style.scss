@@ -38,6 +38,7 @@
   }
 
   .search-inputs {
+    cursor: pointer;
     padding: 20px;
     margin: 0 -20px;
     border-bottom: 2px solid var(--highlight);
@@ -213,9 +214,10 @@
   }
 
   .skelton {
-    margin-top: 40px;
+    margin-top: 20px;
     .balance-skelton {
       margin: 10px 0;
+      height: 20px !important;
     }
     .balance-skelton2 {
       width: 75% !important;
@@ -252,7 +254,8 @@
     }
 
     .thumb-container {
-      margin: 16px 8px;
+      margin: 16px auto;
+      width: 80px;
       display: flex;
       justify-content: space-between;
 
@@ -474,6 +477,7 @@
     font-size: 15px;
     color: var(--secondary);
     text-align: center;
+    cursor: pointer;
 
     img {
       vertical-align: middle;
@@ -528,7 +532,7 @@
   .pdf-upload {
     color: var(--secondary);
     font-size: 12px;
-    font-weight: 1000;
+    font-weight: 700;
     background: linear-gradient(90deg, #f7f6f6 0%, #ffffff 98.76%);
     margin: 30px -20px 50px;
     display: flex;
@@ -551,6 +555,38 @@
       margin-left: 15px;
     }
   }
+
+  .fade-in {
+    animation: fadeIn ease 0.5s;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .attachment-title {
+    font-size: 12px;
+    color: #0a1d32;
+    font-weight: 400;
+    line-height: 17px;
+
+    .bytes {
+      color: #595959;
+      margin-left: 15px;
+    }
+  }
+
+  .attachment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+  }
 }
 
 .send-query {
@@ -558,6 +594,12 @@
     font-size: 11px;
     color: #595959;
     margin: -15px 0 10px;
+  }
+
+  .ticket-id {
+    font-size: 13px;
+    font-weight: 600;
+    color: #4A4A4A;
   }
 }
 

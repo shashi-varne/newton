@@ -570,6 +570,12 @@ export function new_header_scroll() {
               <div onClick={this.props.handleQuery} className="header-query">{this.props.queryTitle}</div>
             )}
 
+            {this.props.headerStatus && (
+              <div  className="header-status">Status: <span
+                style={{color: `${this.props.headerStatus === 'Closed' ? 'red' : 'green'}`}}
+              >{this.props.headerStatus}</span></div>
+            )}
+
             {this.state.inPageTitle && this.props.count &&
                 <span color="inherit"
                     className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}

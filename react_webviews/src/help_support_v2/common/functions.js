@@ -3,6 +3,7 @@ import { getConfig } from "utils/functions";
 import Api from "utils/api";
 // import toast from '../../common/ui/Toast';
 import { nativeCallback } from "utils/native_callback";
+import toast from "common/ui/Toast";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -13,6 +14,9 @@ export async function initialize() {
   this.getAllfaqs = getAllfaqs.bind(this);
   this.getUserTickets = getUserTickets.bind(this);
   this.getTicketConversations = getTicketConversations.bind(this);
+  this.createTicket = createTicket.bind(this);
+  this.getPdf = getPdf.bind(this);
+  this.updateFeedback = updateFeedback.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -52,15 +56,41 @@ export function navigate(pathname, data = {}) {
 }
 
 export async function SearchFaq(word) {
+  this.setState({
+    isApiRunning: true,
+  });
+
   try {
     const res = await Api.get(`/relay/hns/api/faq/search?word=${word}`);
 
     let { result, status_code: status } = res.pfwresponse;
 
+    this.setState({
+      isApiRunning: false,
+    });
+
     if (status === 200) {
       return result;
     }
   } catch (err) {
+    this.setState({
+      isApiRunning: false,
+    });
+    console.log(err);
+  }
+}
+
+export async function updateFeedback(status, id) {
+
+  try {
+    // const res = await Api.post(`/relay/hns/api/faq/${id}/action?action=${status}`);
+
+    // let { result, status_code: status } = res.pfwresponse;
+
+  } catch (err) {
+    this.setState({
+      isApiRunning: false,
+    });
     console.log(err);
   }
 }
@@ -158,18 +188,26 @@ export async function getFaqDescription(faq_id) {
 
     let { result, status_code: status } = res.pfwresponse;
 
-    this.setState({
-      skelton: false,
-    });
-
     if (status === 200) {
-      let { faqDesc } = this.state;
+      let { faqDesc, fromScreen, faqs } = this.state;
 
-      faqDesc[faq_id] = result.faq;
+      if (fromScreen === "categoryList" && Object.keys(faqs).length === 0) {
+        this.setState({
+          sub_category_id: result.faq.cms_sub_category_id,
+          index: result.faq.sequence_no - 1
+        });
 
-      this.setState({
-        faqDesc: faqDesc,
-      });
+        await this.getAllfaqs(result.faq.cms_sub_category_id);
+      } else {
+        this.setState({
+          skelton: false,
+        });
+        faqDesc[faq_id] = result.faq;
+
+        this.setState({
+          faqDesc: faqDesc,
+        });
+      }
     }
   } catch (err) {
     console.log(err);
@@ -210,13 +248,13 @@ export async function getUserTickets(params) {
   }
 }
 
-export async function getTicketConversations(params = "") {
+export async function getTicketConversations(ticket_id) {
   this.setState({
     skelton: true,
   });
   try {
     const res = await Api.get(
-      `/relay/hns/api/freshdesk/ticket/487094/conversations`
+      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations`
     );
 
     let { result, status_code: status } = res.pfwresponse;
@@ -234,7 +272,8 @@ export async function getTicketConversations(params = "") {
       this.setState({
         ticket_status: ticket_status,
         conversations: conversations,
-        result: result,
+        category: result.response.category,
+        sub_category: result.response.sub_category
       });
     }
   } catch (err) {
@@ -243,4 +282,86 @@ export async function getTicketConversations(params = "") {
       skelton: false,
     });
   }
+}
+
+export async function createTicket(body = {}) {
+  this.setState({
+    skelton: true,
+  });
+
+  let body_data = new FormData();
+  // body_data.set('subject', 'test');
+  body_data.set('description', 'testing service');
+  // body_data.set('cf_category', 'Mutual Fund');
+  // body_data.set('product', 'Mutual Fund');
+  // body_data.set('cf_subcategory', 'Goals');
+  // body_data.set('cf_old_ticket_reference_id', '500413');
+
+  // body = {
+  //   subject: 'test',
+  //   description: 'testing service',
+  //   product: 'Mutual Fund',
+  //   cf_category: 'Mutual Fund',
+  //   cf_subcategory: 'Goals',
+  //   cf_old_ticket_reference_id: '500413'
+  // }
+  try {
+    const res = await Api.post(
+      `/relay/hns/api/freshdesk/ticket/500413/reply`, body_data
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      console.log(result)
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+  }
+}
+
+export function getPdf(e) {
+  e.preventDefault();
+
+  let file = e.target.files[0];
+
+  if (file.size >= 15000000) {
+    toast("Please select pdf file less than 15 MB only");
+    return;
+  }
+
+  let acceptedType = [
+    "application/pdf",
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/bmp",
+  ];
+
+  if (acceptedType.indexOf(file.type) === -1) {
+    toast("Please select pdf file only");
+    return;
+  }
+
+  let { documents, count } = this.state;
+  file.doc_type = file.type;
+
+  let duplicate = documents.filter((item) => {
+    return item.name === file.name;
+  });
+
+  duplicate.length === 0 && documents.length < 10 && documents.push(file);
+  console.log(file);
+  this.setState({
+    documents: documents,
+    confirmed: duplicate.length !== 0 ? true : false,
+    count: count,
+  });
 }

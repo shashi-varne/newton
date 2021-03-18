@@ -21,6 +21,7 @@ class CategoryList extends Component {
       showCategory: true,
       categoryList: "",
       screen_name: "category-list",
+      isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -94,14 +95,7 @@ class CategoryList extends Component {
   };
 
   Searching = () => {
-    let { value, faqList } = this.state;
-
-    let len = value.length;
-    let sortedList = faqList.filter(
-      (item) => value.toLowerCase() === item.title.slice(0, len).toLowerCase()
-    );
-
-    console.log(sortedList);
+    let { faqList } = this.state;
 
     this.setState({
       sortedList: faqList,
@@ -119,8 +113,17 @@ class CategoryList extends Component {
     this.navigate("help/queries");
   };
 
+  handleSearchItem = (item) => {
+    console.log(item)
+
+    this.props.history.push(
+      { pathname: "help/answers", search: getConfig().searchParams },
+      { question: item, fromScreen: 'categoryList' }
+    );
+  }
+
   render() {
-    let { sortedList, value, categoryList } = this.state;
+    let { sortedList, value, categoryList, isApiRunning } = this.state;
     return (
       <Container
         // skelton={this.state.skelton}
@@ -136,7 +139,7 @@ class CategoryList extends Component {
           {sortedList &&
             value.length !== 0 &&
             sortedList.map((item, index) => (
-              <div className="search-inputs" key={index}>
+              <div className="search-inputs" key={index} onClick={() => this.handleSearchItem(item)}>
                 <div className="faq">
                   <span style={{ color: "var(--primary)" }}>
                     {item.title.slice(0, value.length)}
@@ -150,8 +153,15 @@ class CategoryList extends Component {
                 </div>
               </div>
             ))}
-          {value.length !== 0 && sortedList.length === 0 && (
+          {value.length !== 0 && sortedList.length === 0 && !isApiRunning && (
             <div className="no-result">No result found</div>
+          )}
+
+          {value.length !== 0 && isApiRunning && (
+            <div className="skelton">
+              <SkeltonRect className="balance-skelton" />
+              <SkeltonRect className="balance-skelton balance-skelton2" />
+            </div>
           )}
 
           {this.state.skelton &&
