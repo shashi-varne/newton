@@ -307,7 +307,7 @@ class GroupHealthPlanPremiumSummary extends Component {
         title="Premium summary"
         fullWidthButton={true}
         onlyButton={true}
-        buttonTitle="CONTINUE AND PROVIDE DETAILS"
+        buttonTitle="CONTINUE"
         handleClick={() => this.handleClick()}
       >
         <div className="group-health-plan-premium-summary">
