@@ -13,10 +13,9 @@ class CheckBox extends Component {
     render() {
         return (
             <div>
+                <p className="generic-page-title" style={{ margin: "40px 0 20px 0" }}>{this.props.title}</p>
                 <div className="his">
-                    <p className="generic-page-title" style={{ margin: "40px 0 20px 0" }}>{this.props.title}</p>
                     <div className="horizontal-images-scroll">
-
                         {this.props.image_list.map((item, index) =>{
                             return <img
                                     className="image"
