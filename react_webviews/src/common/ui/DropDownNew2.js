@@ -1,5 +1,5 @@
 import React from 'react';
-import Select, { components } from 'react-select';
+import Select, { components  } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import './style.scss';
@@ -11,12 +11,39 @@ class SelectDropDown2 extends React.Component {
       selectedOption: this.props.value,
       options: this.props.options,
       multi: this.props.multi,
+      value: this.props.value,
     };
   }
 
 
+  handleFocus = element => {
+    if (this.state.value) {
+      this.select.state.inputValue = this.state.value.label;
+    }
+  };
+
+
+  handleMenuClose = () => {
+    this.select.blur();
+    this.setState({ shrink: false })
+  };
+
+  handleCreate = (inputValue) => {
+    this.setState({ isLoading: true });
+    setTimeout(() => {
+      const { options } = this.state;
+      const newOption = createOption(inputValue);
+      this.setState({
+        isLoading: false,
+        options: [...options, newOption],
+        value: newOption
+      });
+    }, 1000);
+  };
+
+
   handleChange = selectedOption => {
-    this.setState({ selectedOption })
+    this.setState({ selectedOption , value : selectedOption , inputValue : selectedOption ? selectedOption.label : ""  })
 
     if (selectedOption) {
       if (selectedOption.value && (selectedOption.value + "").length) {
@@ -46,7 +73,7 @@ class SelectDropDown2 extends React.Component {
 
     let components;
     if (this.state.multi) {
-      components = { Option, MultiValue, IndicatorSeparator: () => null }
+      components = { Option, MultiValue, IndicatorSeparator: () => null , Input }
     } else components = { IndicatorSeparator: () => null }
 
     const options = this.props.options.map((ele, index) => {
@@ -59,15 +86,24 @@ class SelectDropDown2 extends React.Component {
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(  !!value || (!!this.state.selectedOption)  || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
-          style={{ marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-2px' ,
+          style={{ marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '0px' ,
           minWidth: '300px' , color : this.props.error ? '#D0021B' : ''}}>
           {this.props.label}</div></InputLabel>)}
         {/* {(!this.state.multi && <span className="label2">{this.props.label || 'label'}</span> )} */}
+        <div style={{ borderBottom: this.props.error ? '1px solid red' : '' }}>
         <Select
           defaultValue={value}
+          ref={ref => {
+            this.select = ref;
+          }}
+          blurInputOnSelect={true}
+          isDisabled={this.state.isLoading}
+          isLoading={this.state.isLoading}
+          onCreateOption={this.handleCreate}
+          onMenuClose={this.handleMenuClose}
+          onFocus={this.handleFocus}
           className={this.state.error ? "" : ''}
           onMenuOpen={() => this.setState({ shrink: true })}
-          onMenuClose={() => this.setState({ shrink: false })}
           placeholder={''}  
           isClearable={true}
           isSearchable={this.props.options.length <= 6 ? false : true}
@@ -96,6 +132,7 @@ class SelectDropDown2 extends React.Component {
           closeMenuOnSelect={true}
           // menuIsOpen={true}
         />
+        </div>
         {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
           <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || ''} </span>}
       </FormControl>
@@ -129,3 +166,11 @@ const MultiValue = props => (
     <span>{props.data.label}</span>
   </components.MultiValue>
 );
+const Input = (props) => <components.Input {...props} isHidden={false} />;
+
+
+
+const createOption = (label) => ({
+  label,
+  value: label.toLowerCase().replace(/\W/g, "")
+});
