@@ -8,13 +8,14 @@ import { storageConstants } from '../constants'
 import { initData, getKycAppStatus } from '../services'
 import toast from 'common/ui/Toast'
 import { navigate as navigateFunc } from '../common/functions'
-import { submit } from '../common/api'
+import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import useUserKycHook from '../common/hooks/userKycHook'
 import { isMobile } from 'utils/functions'
 import { nativeCallback } from 'utils/native_callback'
 
 const Journey = (props) => {
+  console.log(props)
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -23,13 +24,34 @@ const Journey = (props) => {
   )
 
   const [open, setOpen] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const [kyc, setKyc] = useState({})
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    initialize()
+  }, [])
+
+  const initialize = async () => {
+    try {
+      const result = await getUserKycFromSummary()
+      let currentUser = result.data.user.user.data
+      let userKyc = result.data.kyc.kyc.data
+      setKyc(userKyc)
+      setUser(currentUser)
+    } catch (err) {
+      toast(err.message, 'error')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const initJourneyData = () => {
+    let i, j, k, data;
     if (!isEmpty(kyc) && !isEmpty(user)) {
       let journeyData = getJourneyData()
-      for (let i = 0; i < journeyData.length; i++) {
+      for (i = 0; i < journeyData.length; i++) {
         let status = 'completed'
         if (journeyData[i].key === 'digilocker') {
           if (
@@ -52,7 +74,7 @@ const Journey = (props) => {
           journeyData[i].key === 'docs' ||
           journeyData[i].key === 'sign'
         ) {
-          for (let j = 0; j < journeyData[i].inputsForStatus.length; j++) {
+          for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             let data = journeyData[i].inputsForStatus[j]
             if (data !== 'bank' && kyc[data].doc_status === 'init') {
               status = 'init'
@@ -83,13 +105,13 @@ const Journey = (props) => {
               journeyData[i].isEditAllowed = false
             }
           }
-          for (let j = 0; j < journeyData[i].inputsForStatus.length; j++) {
+          for (j = 0; j < journeyData[i].inputsForStatus.length; j++) {
             for (
-              let k = 0;
+              k = 0;
               k < journeyData[i].inputsForStatus[j].keys.length;
               k++
             ) {
-              let data = journeyData[i].inputsForStatus[j]
+              data = journeyData[i].inputsForStatus[j]
 
               if (
                 isEmpty(kyc[data.name]['meta_data'][data.keys[k]]) ||
@@ -121,9 +143,9 @@ const Journey = (props) => {
         }
       }
 
-      for (var i = 0; i < journeyData.length - 1; i++) {
+      for (i = 0; i < journeyData.length - 1; i++) {
         if (journeyData[i].status === 'init') {
-          for (var j = i + 1; j < journeyData.length; j++) {
+          for (j = i + 1; j < journeyData.length; j++) {
             journeyData[j].status = 'pending'
           }
         }
@@ -131,7 +153,7 @@ const Journey = (props) => {
 
       // for events
 
-      for (let i = 0; i < journeyData.length; i++) {
+      for (i = 0; i < journeyData.length; i++) {
         if (
           journeyData[i].status === 'init' ||
           journeyData[i].status === 'pending'
@@ -179,7 +201,7 @@ const Journey = (props) => {
 
   const getButtonText = () => {
     let ctaText = ''
-    if (customerVerified) {
+    if (!customerVerified) {
       ctaText = 'UNLOCK NOW'
     }
     if (canSubmit()) {
@@ -412,6 +434,7 @@ const Journey = (props) => {
     if (kyc?.kyc_status === 'compliant') {
       if (key === 'pan' && !customerVerified) {
         navigate('/kyc/compliant-confirm-pan')
+        return
       }
       stateMapper = {
         personal: '/kyc/compliant-personal-details',
@@ -425,6 +448,7 @@ const Journey = (props) => {
         backToJourney: key === 'sign' ? true : null,
         userType: 'compliant',
       })
+      return
     } else {
       console.log('Non Compliant journey')
       console.log(show_aadhaar)
@@ -443,6 +467,7 @@ const Journey = (props) => {
           isEdit: isEdit,
           userType: 'non-compliant',
         })
+        return
       } else {
         console.log('Non show aadhaar')
         stateMapper = {
@@ -458,6 +483,7 @@ const Journey = (props) => {
         isEdit: isEdit,
         userType: 'non-compliant',
       })
+      return
     }
   }
 
@@ -597,6 +623,15 @@ const Journey = (props) => {
       journeyStatus === 'ground_aadhaar' || urlParams.show_aadhaar === 'true'
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []
+    var ctaText = ''
+    if (canSubmit()) {
+      ctaText = 'SUBMIT'
+    } else {
+      if (!customerVerified) {
+        ctaText = 'UNLOCK NOW'
+      } else
+      ctaText = 'CONTINUE'
+    }
   }
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
@@ -620,10 +655,8 @@ const Journey = (props) => {
 
   return (
     <Container
-      hideInPageTitle
-      buttonTitle={getButtonText()}
-      // disable={isLoading}
-      title="KYC Journey"
+      force_hide_inpage_title
+      buttonTitle={ctaText}
       classOverRideContainer="pr-container"
       skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
       handleClick={goNext}
@@ -704,14 +737,14 @@ const Journey = (props) => {
             </div>
           )}
           <div className="kyc-journey-title">{topTitle}</div>
-          {show_aadhaar && (
+          {!show_aadhaar && (
             <div className="kyc-journey-subtitle">
               Please keep your PAN ({kyc?.pan?.meta_data?.pan_number}) and
               address proof handy to complete KYC
             </div>
           )}
           {kyc?.kyc_status === 'compliant' && !investmentPending && (
-            <div class="kyc-journey-subtitle">
+            <div className="kyc-journey-subtitle">
               To unlock premium onboarding, complete these simple steps
             </div>
           )}
