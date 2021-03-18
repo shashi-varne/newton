@@ -17,7 +17,7 @@ const commonMapper = {
     'top_icon': 'ils_covid_success',
     'top_title': 'Payment successful',
     'mid_title': 'Premium payment details',
-    'button_title': 'CHECK REPORTS'
+    'button_title': 'VIEW POLICY SUMMARY'
   },
   'pending': {
     'top_icon': 'ils_covid_pending',
