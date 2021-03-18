@@ -1127,7 +1127,7 @@ body[data-device="mobile"] {
   border: none !important;
 }
 
-.css-1pahdxg-control{  // for the Box DrodownBox
+.css-1pahdxg-control{  // for the Box DrodownBox hover
   background: rgba(238, 238, 238, 0.3) !important;
   min-height: 51px !important;
   border: none !important;
@@ -1171,10 +1171,9 @@ body[data-device="mobile"] {
 
 
 .css-1uccc91-singleValue{
-  margin-top: 3px;
+  margin-top: 0px;
   font-size: 13px;
   line-height: 21px;
-  // margin-left: -80px !important;
   display: inline-block !important;
   flex-direction: row !important;
   position: absolute;
@@ -1211,4 +1210,8 @@ body[data-device="mobile"] {
 .drop-up .Select-menu-outer {
   top: auto;
   bottom: 100%;
+}
+.css-b8ldur-Input{
+  margin: 4px !important;
+  margin-top: 7px !important;
 }
