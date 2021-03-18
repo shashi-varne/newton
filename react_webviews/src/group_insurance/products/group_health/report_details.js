@@ -556,7 +556,7 @@ class GroupHealthReportDetails extends Component {
                     {hide_policy_period.indexOf(this.state.policy_data.status) === -1 ? (
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
+                            <img src={require(`assets/${this.state.productName}/ic_policy_period.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
