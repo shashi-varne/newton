@@ -76,7 +76,7 @@ class QuestionScreen4 extends Component {
         "screen_name": 'Stock',
         "q1": this.state.question1 ? 'answered' : 'empty',
         "q2": this.state.question2 ? 'answered' : 'empty',
-        flow: this.state.rpEntryParams.flow,
+        flow: this.state.rpEntryParams.flow || '',
       }
     };
     if (user_action === 'just_set_events') {

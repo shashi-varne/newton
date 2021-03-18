@@ -101,7 +101,7 @@ class Container extends Component {
     }
   }
 
-  handleClose = () => {
+  handleCloseCallback = () => {
     if (this.state.openPopup) {
       nativeCallback({ events: this.getEvents('exit_no') });
     }
@@ -109,7 +109,6 @@ class Container extends Component {
       openDialog: false,
       openPopup: false
     });
-
   }
 
 
