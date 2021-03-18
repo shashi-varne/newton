@@ -589,7 +589,7 @@ export const gmc = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
-        image_list: ['ic_why_hs_gmc_1.png', 'ic_why_hs2.png', 'ic_why_hs_gmc_2.png'],
+        image_list: ['ic_why_hs_gmc_1.png', 'ic_why_hs_gmc_3.png', 'ic_why_hs_gmc_2.png'],
         offerImageData: [
             { src: 'gmc_icn_landing_card_3.svg' },
             { src: 'gmc_icn_landing_card_2.svg' },
