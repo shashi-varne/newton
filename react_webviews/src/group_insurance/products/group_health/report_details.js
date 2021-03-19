@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter, convertDateFormat
 } from 'utils/validators';
 import Api from 'utils/api';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -78,17 +78,10 @@ class GroupHealthReportDetails extends Component {
                 let payment_details = resultData.payment_details;
                 let application_details = resultData.application_details;
                 
-                let valid_from = new Date(policy_data.valid_from);
-                let valid_upto = new Date(policy_data.valid_upto);
-                let payment_success_dt = new Date(payment_details.payment_success_dt);
-
-                // let valid_from = getDateBreakup(policy_data.valid_from)
-                // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
-                payment_details.payment_success_dt = payment_success_dt.getDate()+'/'+ (payment_success_dt.getMonth()+1) +'/'+ payment_success_dt.getFullYear();
+                payment_details.payment_success_dt = convertDateFormat(payment_details.payment_success_dt)
                 
-                policy_data.valid_from = valid_from.getDate()+'/'+ (valid_from.getMonth()+1) +'/'+ valid_from.getFullYear();
-                policy_data.valid_upto = valid_upto.getDate()+'/'+ (valid_upto.getMonth()+1) +'/'+ valid_upto.getFullYear();
-                // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+                policy_data.valid_from = convertDateFormat(policy_data.valid_from)
+                policy_data.valid_upto = convertDateFormat(policy_data.valid_upto)
                 
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
