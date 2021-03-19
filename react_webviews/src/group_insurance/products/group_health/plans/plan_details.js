@@ -198,8 +198,14 @@ class GroupHealthPlanDetails extends Component {
             }
 
             if(provider === 'RELIGARE' || provider === 'GMC' ) {
-                this.navigate('how-to-claim-religare');
-                return;
+                this.props.history.push({
+                  pathname: 'how-to-claim-religare',
+                  search: getConfig().searchParams,
+                  params: {
+                      cta_title: 'BACK TO PLAN' 
+                  }
+              });
+              return;
             }
 
             if(provider === 'STAR') {

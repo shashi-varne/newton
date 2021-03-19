@@ -26,9 +26,10 @@ class GroupHealthPlanHowToClaimReligare extends Component {
     }
 
     handleData = () => {
+        let { params } = this.props.location || {};
         let renderData = {
             'header_title': 'How to claim?',
-            'cta_title': 'OKAY'
+            'cta_title': params ? params.cta_title : 'OKAY'
         }
 
         renderData.steps = [

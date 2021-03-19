@@ -291,11 +291,16 @@ class GroupHealthReportDetails extends Component {
                         }
                     ]
                 }
-    
                 let basePath = `/group-insurance/group-health/${provider}/`;
-                if(provider === 'RELIGARE' || provider === 'GMC') {
-                    this.navigate(basePath + 'how-to-claim-religare');
-                    return;
+                if(provider === 'RELIGARE' || provider === 'GMC' ) {
+                    this.props.history.push({
+                      pathname: basePath + 'how-to-claim-religare',
+                      search: getConfig().searchParams,
+                      params: {
+                          cta_title: 'OKAY' 
+                      }
+                  });
+                  return;
                 }
     
                 if(provider === 'STAR') {
@@ -730,7 +735,7 @@ class GroupHealthReportDetails extends Component {
                                 alt="" />
                             <div className="bd-content">What is not covered?</div>
                         </div>}
-                        <div className="bd-tile" style={{marginTop: '15px'}} onClick={() => this.navigateBenefits('how_to_claim')}>
+                        <div className="bd-tile" onClick={() => this.navigateBenefits('how_to_claim')}>
                             <img className="bf-img" src={require(`assets/${this.state.productName}/ic_how_to_claim.svg`)}
                                 alt="" />
                             <div className="bd-content">How to claim?</div>
