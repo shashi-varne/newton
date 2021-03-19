@@ -7,7 +7,7 @@ import {
   genderOptions, insuranceMaritalStatus, relationshipOptionsGroupInsuranceAll,
   insuranceProductTitleMapper
 } from '../../constants';
-import DropDownNew2 from '../../../common/ui/DropDownNew2'
+import DropDownNew from '../../../common/ui/DropDownNew'
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Api from 'utils/api';
@@ -89,7 +89,7 @@ class BasicDetailsForm extends Component {
             onChange={this.handleChange('nominee_name')} />
         </div>
         <div id="nomineeScroll" ref={this.nomineeRef} className="InputField">
-          <DropDownNew2
+          <DropDownNew
             width="40"
             options={this.state.relationshipOptions}
             id="relation"

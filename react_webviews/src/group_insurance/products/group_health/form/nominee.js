@@ -6,7 +6,7 @@ import { nativeCallback } from 'utils/native_callback';
 import { FormControl } from 'material-ui/Form';
 import { validateAlphabets, calculateAge, isValidDate,
     formatDate, dobFormatTest, IsFutureDate, containsSpecialCharactersAndNumbers} from 'utils/validators';
-import DropDownNew2 from '../../../../common/ui/DropDownNew2'
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import Input from '../../../../common/ui/Input';
 import { initialize, updateLead } from '../common_data';
 import ConfirmDialog from './../plans/confirm_dialog';
@@ -351,7 +351,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                 />
               </div>
               <div className="InputField">
-                <DropDownNew2
+                <DropDownNew
                   width="40"
                   dataType="AOB"
                   options={this.state.appointeeRelationOptions}
@@ -422,7 +422,7 @@ class GroupHealthPlanNomineeDetails extends Component {
                             onChange={this.handleChange('name')} />
                     </div>
                     <div className="InputField">
-                        <DropDownNew2
+                        <DropDownNew
                             width="40"
                             dataType="AOB"
                             options={this.state.relationshipOptions}
