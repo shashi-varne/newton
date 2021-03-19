@@ -1204,11 +1204,6 @@ body[data-device="mobile"] {
   align-items: center;
 }
 
-
-.css-1rhbuit-multiValue{
-  margin-top: 12px !important;
-}
-
 .drop-up .Select-menu-outer {
   top: auto;
   bottom: 100%;
@@ -1217,3 +1212,42 @@ body[data-device="mobile"] {
   margin: 4px !important;
   margin-top: 10px !important;
 }
+
+.css-1rhbuit-multiValue {  //Multi-select Box Container:
+  background: rgba(238, 238, 238, 0.3) !important;
+  margin-top: 12px !important;
+  border: 1px solid #D6D6D6;
+  height: 18px !important;
+  line-height: 17px !important;
+  font-size: 13px !important;
+}
+.css-12jo7m5{  // Content Box
+  padding: 0 !important;
+  margin-left: 4px ;
+}
+
+.css-26l3qy-menu{
+  margin-top: 2px !important;
+}
+
+#react-select-2-input{
+  font-size: 13px !important;
+  line-height: 21px;
+  color: #161A2E !important;
+}
+
+.css-xb97g8{
+  margin-top: 3px;
+  border-radius: 50% !important;
+  margin-left: 6px !important;
+  margin-right: 6px !important;
+  background-color: #D6D6D6 !important;
+  height: 10px !important;
+  width: 10px !important;
+  padding: 0 !important;
+}
+.css-6q0nyr-Svg{
+  color: #767E86 !important;
+  padding: 0 !important;
+}
+
