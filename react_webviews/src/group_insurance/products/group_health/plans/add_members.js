@@ -468,12 +468,12 @@ class GroupHealthPlanAddMembers extends Component {
                 </div>
 
                 <div className="plus-minus-input-label">
-                  Children (upto {this.state.total_plus_minus_max})
+                  Children (up to {this.state.total_plus_minus_max})
                 </div>
                 <div className="generic-hr"></div>
-                <PlusMinusInput name="son" parent={this} />
-                <div className="generic-hr"></div>
                 <PlusMinusInput name="daughter" parent={this} />
+                <div className="generic-hr"></div>
+                <PlusMinusInput name="son" parent={this} />
                 <div className="generic-hr"></div>
               </div>
             )}
