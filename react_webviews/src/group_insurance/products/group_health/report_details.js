@@ -430,7 +430,7 @@ class GroupHealthReportDetails extends Component {
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.provider === 'STAR' ? this.state.providerConfig.title: ''}</div>
-                            <div className="tc-subtitle" style={{marginTop: (this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') ? "-22px": ""}} >{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
+                            <div className="tc-subtitle" style={{marginTop: (this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') ? "-22px": "", fontSize: '17px'}} >{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
