@@ -8,10 +8,8 @@ import { storageService } from 'utils/validators'
 const AadhaarDialog = ({ id, open, close, handleProcced, ...props }) => {
   const productName = getConfig().productName
   const handleProceed = () => {
-    const redirect_url = encodeURIComponent(`${window.location.protocol}
-    :// 
-    ${window.location.host}
-    /kyc/journey?show_aadhaar=true&is_secure=
+    const redirect_url = encodeURIComponent(`${window.location.origin}
+    /kyc/journey${getConfig().searchParams}&show_aadhaar=true&is_secure=
     ${storageService().get('is_secure')}`)
     if (!getConfig().Web) {
       if (isMobile.iOS()) {
@@ -55,7 +53,7 @@ const AadhaarDialog = ({ id, open, close, handleProcced, ...props }) => {
             onClick={handleProceed}
             fullWidth
           >
-            Proceed
+            PROCEED
           </Button>
         </div>
       </section>

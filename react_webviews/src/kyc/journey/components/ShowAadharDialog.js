@@ -1,15 +1,13 @@
 import React from 'react'
 import Dialog from '../../../common/ui/Dialog'
-
 import { getConfig } from 'utils/functions'
 import { Button } from '@material-ui/core'
 
 const ShowAadharDialog = ({ open, onClose, connectDigiLocker }) => {
   const productName = getConfig().productName
   
-  
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} id='kyc-bottom-dialog' >
       <section className="kyc-show-aadhar">
         <header className="header">
           <h1>Aadhar KYC</h1>
