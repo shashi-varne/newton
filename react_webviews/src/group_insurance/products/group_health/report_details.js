@@ -478,7 +478,7 @@ class GroupHealthReportDetails extends Component {
                        {this.state.quotation_details && this.state.quotation_details.insurance_type !== 'self' && 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
