@@ -8,6 +8,12 @@ import Search from "./search";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { SkeltonRect } from "common/ui/Skelton";
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from "material-ui/Dialog";
+import Button from "material-ui/Button";
 
 class CategoryList extends Component {
   constructor(props) {
@@ -137,6 +143,30 @@ class CategoryList extends Component {
     );
   };
 
+  renderDialog = () => {
+    return (
+      <Dialog
+        open={this.state.open || false}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please contact us to this number {getConfig().mobile}.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions style={{ display: "flex" }}>
+          <Button onClick={() => this.handleClose()}>GOT IT</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   setErrorData = (type) => {
     this.setState({
       showError: false,
@@ -154,6 +184,21 @@ class CategoryList extends Component {
       });
     }
   };
+
+  handleContact = () => {
+    if (getConfig().Web) {
+      this.setState({
+        open: true
+      })
+    } else {
+        nativeCallback({
+          action: "open_in_browser",
+          message: {
+            url: `tel:${getConfig().mobile}`,
+          },
+        });
+    }
+  }
 
   render() {
     let { sortedList, value, categoryList, isApiRunning } = this.state;
@@ -244,14 +289,7 @@ class CategoryList extends Component {
               <div className="generic-hr"></div>
               <div
                 className="category contact-category"
-                onClick={() => {
-                  nativeCallback({
-                    action: "open_in_browser",
-                    message: {
-                      url: `tel:${getConfig().mobile}`,
-                    },
-                  });
-                }}
+                onClick={() => this.handleContact()}
               >
                 <Imgc
                   src={require(`assets/${this.state.productName}/icn_contact.svg`)}
@@ -263,6 +301,7 @@ class CategoryList extends Component {
               <div className="generic-hr"></div>
             </div>
           )}
+          {this.renderDialog()}
         </div>
       </Container>
     );

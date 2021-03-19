@@ -4,8 +4,9 @@ import { initialize } from "../common/functions";
 import scrollIntoView from "scroll-into-view-if-needed";
 import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "utils/native_callback";
 
-const moment = require('moment');
+const moment = require("moment");
 class TicketConversations extends Component {
   constructor(props) {
     super(props);
@@ -15,13 +16,14 @@ class TicketConversations extends Component {
       ticket_status: "",
       conversations: "",
       sortedConverstations: "",
+      splitConversation: [],
       index: 0,
       ticket: {},
       category: "",
       sub_category: "",
       openTextBox: false,
       documents: [],
-      value: ''
+      value: "",
     };
     this.initialize = initialize.bind(this);
   }
@@ -37,21 +39,36 @@ class TicketConversations extends Component {
       skelton: true,
     });
 
-    await this.getTicketConversations(ticket.ticket_id);
+    let result = await this.getTicketConversations(ticket.ticket_id);
+
     let { conversations } = this.state;
 
     let sortedConverstations = [];
+    let splitConversation = []
     while (conversations.length) {
       sortedConverstations.push(conversations.splice(0, 3));
     }
 
-    let splitConversation = sortedConverstations[0];
+    splitConversation = sortedConverstations[0] || [];
 
     this.setState({
       conversations: conversations,
       sortedConverstations: sortedConverstations,
+    });
+
+    if (splitConversation.length === 0) {
+      splitConversation.push({
+        description: result.description,
+        dt_updated: result.updated_at,
+        attachment: [],
+        message_from: 'user'
+      });
+    }
+
+    this.setState({
       splitConversation: splitConversation,
     });
+
     // console.log([].concat(...sortedConverstations))
   };
 
@@ -96,7 +113,7 @@ class TicketConversations extends Component {
       splitConversation,
       sortedConverstations,
       openTextBox,
-      documents
+      documents,
     } = this.state;
 
     if (this.state.ticket_status === "Closed") {
@@ -117,8 +134,8 @@ class TicketConversations extends Component {
       );
     } else {
       this.setState({
-        show_loader: 'button'
-      })
+        show_loader: "button",
+      });
 
       let body_data = new FormData();
       body_data.set("description", this.state.value);
@@ -129,8 +146,8 @@ class TicketConversations extends Component {
       }
 
       let result = await this.ticketReply(body_data, ticket.ticket_id);
-      
-      if (result.message === 'success') {
+
+      if (result.message === "success") {
         let result = await this.getTicketConversations(ticket.ticket_id);
 
         let conversations = result.conversations;
@@ -141,11 +158,14 @@ class TicketConversations extends Component {
         }
 
         splitConversation = [].concat(...sortedConverstations);
-        
-        this.setState({
-          sortedConverstations: sortedConverstations,
-          splitConversation: splitConversation
-        },() => this.handleScroll())
+
+        this.setState(
+          {
+            sortedConverstations: sortedConverstations,
+            splitConversation: splitConversation,
+          },
+          () => this.handleScroll()
+        );
       }
     }
   };
@@ -161,11 +181,11 @@ class TicketConversations extends Component {
   handleDelete = (index) => {
     let { documents } = this.state;
 
-    documents.splice(index, 1)
+    documents.splice(index, 1);
     this.setState({
-      documents: documents
-    })
-  }
+      documents: documents,
+    });
+  };
 
   render() {
     let {
@@ -177,17 +197,23 @@ class TicketConversations extends Component {
       index,
       openTextBox,
       ticket_status,
-      documents
+      documents,
     } = this.state;
-    
+
     return (
       <Container
         skelton={this.state.skelton}
         title={`Ticket ID: ${ticket.ticket_id}`}
-        buttonTitle={ticket_status === "Closed" ? "REOPEN" : openTextBox ? "SUBMIT" : "REPLY"}
+        buttonTitle={
+          ticket_status === "Closed"
+            ? "REOPEN"
+            : openTextBox
+            ? "SUBMIT"
+            : "REPLY"
+        }
         handleClick={this.handleClick}
         headerStatus={ticket_status}
-        disable={openTextBox && (!this.state.value && documents.length === 0)}
+        disable={openTextBox && !this.state.value && documents.length === 0}
         showLoader={this.state.show_loader}
         event={""}
       >
@@ -206,7 +232,20 @@ class TicketConversations extends Component {
                         <div className="chat">{item.description}</div>
                         {item.attachment.length > 0 &&
                           item.attachment.map((el, index) => (
-                            <a href={el.thumb_url} className="download" key={index} download>
+                            <a
+                              href={el.attachment_url}
+                              className="download"
+                              key={index}
+                              // onClick={() => {
+                              //   nativeCallback({
+                              //     action: 'open_in_browser',
+                              //     message: {
+                              //         url: el.attachment_url
+                              //     }
+                              // });
+                              // window.location.href = el.attachment_url
+                              // }}
+                            >
                               <img
                                 src={require(`assets/${this.state.productName}/download.svg`)}
                                 alt=""
@@ -214,7 +253,9 @@ class TicketConversations extends Component {
                               <div>{el.name}</div>
                             </a>
                           ))}
-                        <div className="date">{moment(item.dt_updated).format('DD-MM-YYYY hh:mma')}</div>
+                        <div className="date">
+                          {moment(item.dt_updated).format("DD-MM-YYYY hh:mma")}
+                        </div>
                       </div>
                       <div className="user-tag">
                         <img src={require(`assets/ic_user.svg`)} alt="" />
@@ -245,7 +286,9 @@ class TicketConversations extends Component {
                               <div>{el.name}</div>
                             </a>
                           ))}
-                        <div className="date">{moment(item.dt_updated).format('DD-MM-YYYY hh:mma')}</div>
+                        <div className="date">
+                          {moment(item.dt_updated).format("DD-MM-YYYY hh:mma")}
+                        </div>
                       </div>
                       <div className="user-tag agent-tag">
                         <div>Team {this.state.productName}</div>
