@@ -81,6 +81,10 @@ class RenderAttachment extends Component {
             });
             switch (file.type) {
               case "application/pdf":
+              case "image/jpeg":
+              case "image/jpg":
+              case "image/png":
+              case "image/bmp":
                 that.props.save(file);
                 break;
               default:
