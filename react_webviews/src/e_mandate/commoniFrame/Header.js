@@ -9,25 +9,7 @@ import close_blue from 'assets/close_blue.svg';
 import back_blue from 'assets/back_blue.svg';
 import { getConfig } from 'utils/functions';
 
-const Header = ({
-  classes,
-  title,
-  count,
-  total,
-  current,
-  width,
-  goBack,
-  edit,
-  type,
-  resetpage,
-  handleReset,
-  smallTitle,
-  disableBack,
-  provider,
-  topIcon,
-  handleTopIcon,
-  noBack,
-}) => {
+const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack }) => {
   const isMobile = getConfig().isMobileDevice;
   return (
     <AppBar position='fixed' color='primary' style={{ width: width }} className={classes.topBar}>
@@ -50,14 +32,6 @@ const Header = ({
                 <img src={close} alt='close' style={{ cursor: 'pointer' }} />
               )}
             </div>
-            {/* {!noBack &&   
-      <IconButton 
-      className={classes.menuButton} 
-      color="inherit" aria-label="Menu" onClick={goBack}
-      >
-        {!disableBack && <NavigateBeforeIcon className={classes.NavigateBeforeIcon} />}
-        {(disableBack === true || disableBack === 'summary') && <Close className={classes.NavigateBeforeIcon} />}
-      </IconButton>} */}
             <img
               src={require(`assets/finity/moneycontrol_logo.svg`)}
               className={classes.img}
