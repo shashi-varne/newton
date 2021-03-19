@@ -131,7 +131,7 @@ class FyntuneReportDetails extends Component {
                         {this.state.policy_data.product_title && <h3 style={{margin: "0px 0px",fontSize: '20px',lineHeight: '24px', fontWeight:'bold'}}> {this.state.policy_data.product_title}</h3> }
                         
                         {this.state.policy_data && this.state.policy_data.insurance_type === 'Saving' ? 
-                        <span style={{margin: "0 0 20px 0",fontSize: '15px',lineHeight: '24px',fontWeight:'400'}}>({this.state.sanchay_subtitle})</span> 
+                        <span style={{margin: "0 0 20px 0",fontSize: '15px',lineHeight: '24px',fontWeight:'400'}}>{this.state.sanchay_subtitle}</span> 
                         : null}
                         </div>
 
