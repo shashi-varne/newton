@@ -246,6 +246,9 @@ class GroupHealthPlanFinalSummary extends Component {
                 info = Object.assign({}, personal_details_to_copy[pc]);
                 info.subtitle = member[info.key];
 
+                if(info.key === 'gender'){
+                    info.subtitle = capitalizeFirstLetter(member[info.key].toLowerCase());
+                }
                 if (member.key === 'applicant') {
 
                     if (info.key === 'name') {
@@ -830,7 +833,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="subtitle" style={{margin : '7px 0 0 0', overflowWrap: 'break-word'}}>
                           {capitalizeFirstLetter(props.subtitle + "")}
-                             {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                             {(props.title==='Height' && <span> cm</span>) || (props.title==='Weight' && <span> kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
