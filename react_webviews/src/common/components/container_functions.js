@@ -78,7 +78,13 @@ export function headerGoBack() {
     this.historyGoBack({ fromHeader: true });
 }
 
+function addContainerClass (props_base){
+    return `ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`;
+}
+
 export function commonRender(props_base) {
+
+    this.addContainerClass = addContainerClass.bind(this);
 
     let steps = [];
     for (var i = 0; i < this.props.total; i++) {
@@ -90,10 +96,12 @@ export function commonRender(props_base) {
         }
     }
 
+    
+
     if (this.state.mounted) {
         return (
 
-   <div className={`ContainerWrapper  ${this.props.background || ''} ${props_base &&  props_base.classOverRide ? props_base.classOverRide : ''} ${this.props.classOverRide || ''} ${this.props.noPadding ? "no-padding" : ""}`} >
+   <div className={this.addContainerClass(props_base)} >
                 {/* Header Block */}
                 {(!this.props.noHeader && !getConfig().hide_header) && this.props.showLoader !== true
                 && !this.props.showLoaderModal && <Header
@@ -492,23 +500,28 @@ export function renderGenericError() {
 export function renderPageLoader() {
     let quotes_data = [
         'Risk comes from not knowing what you are doing.',
-        'Life insurance will protect your family’s financial future.',
-        'If there’s anyone dependent on you - you need insurance.',
         'Money is a terrible master but an excellent servant.',
-        'Did you know insurance is good investment?',
-        'Insurance is a combination of care, commitment and common sense.',
         'Wealth is the ability to fully experience life.',
-        'Think future, think insurance.',
-        'You’re future-proof when insured!',
         'I’d like to live as a poor man with lots of money.',
-        'How do you ensure your loved ones are safe after you? Insure!',
         'Don’t stay in bed, unless you can make money in bed.',
-        'Insurance is sound planning for life.',
         'It takes as much energy to wish as it does to plan.',
-        'It’s OK to prepare now for tomorrow.',
-        'Secure your loved ones that depend on you.',
         'The best thing money can buy is financial freedom.'
     ]
+
+    // let quotes_data_insurance = [
+    //     'Life insurance will protect your family’s financial future.',
+    //     'If there’s anyone dependent on you - you need insurance.',
+    //     'Did you know insurance is good investment?',
+    //     'Insurance is a combination of care, commitment and common sense.',
+    //     'Think future, think insurance.',
+    //     'You’re future-proof when insured!',
+    //     'How do you ensure your loved ones are safe after you? Insure!',
+    //     'Insurance is sound planning for life.',
+    //     'It’s OK to prepare now for tomorrow.',
+    //     'Secure your loved ones that depend on you.',
+    // ]
+
+    
     var quote = quotes_data[Math.floor(Math.random() * quotes_data.length)];
 
     let loaderData = this.props.loaderData || {};
