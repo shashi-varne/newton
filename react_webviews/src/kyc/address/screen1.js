@@ -59,7 +59,7 @@ const AddressDetails1 = (props) => {
     let address_doc_type =
       selectedIndexResidentialStatus === 1 ? "PASSPORT" : "";
     let formData = {
-      address_doc_type: kyc.address?.address_doc_type || address_doc_type,
+      address_doc_type: kyc.address_doc_type || address_doc_type,
       residential_status:
         residentialOptions[selectedIndexResidentialStatus].value || "",
     };
@@ -75,19 +75,19 @@ const AddressDetails1 = (props) => {
       return;
     }
     let userkycDetails = { ...kyc };
-    userkycDetails.nri_address.meta_data.mobile_number =
-      form_data.mobile_number;
-    userkycDetails.nri_address.meta_data.address_doc_type =
+    userkycDetails.address.meta_data.address_doc_type =
       form_data.address_doc_type;
-    saveNriAddressDetails1(userkycDetails);
+    userkycDetails.address.meta_data.is_nri =
+      form_data.residential_status === "NRI";
+    saveAddressDetails1(userkycDetails);
   };
 
-  const saveNriAddressDetails1 = async (userKyc) => {
+  const saveAddressDetails1 = async (userKyc) => {
     setIsApiRunning("button");
     try {
       let item = {
         kyc: {
-          nri_address: userKyc.nri_address.meta_data,
+          address: userKyc.address.meta_data,
         },
       };
       const submitResult = await kycSubmit(item);

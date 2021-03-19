@@ -7,7 +7,7 @@ import { getUrlParams, isEmpty, storageService } from '../../utils/validators'
 import { storageConstants } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from 'common/ui/Toast'
-import { navigate as navigateFunc } from '../common/functions'
+import { navigate as navigateFunc, updateQueryStringParameter } from '../common/functions'
 import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import { isMobile } from 'utils/functions'
@@ -523,16 +523,6 @@ const Journey = (props) => {
     setAadhaarLinkDialog(true)
   }
 
-  function updateQueryStringParameter(uri, key, value) {
-    var re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i')
-    var separator = uri.indexOf('?') !== -1 ? '&' : '?'
-    if (uri.match(re)) {
-      return uri.replace(re, '$1' + key + '=' + value + '$2')
-    } else {
-      return uri + separator + key + '=' + value
-    }
-  }
-
   const connectDigiLocker = () => {
     const data = {
       url: `${window.location.origin}/kyc/journey${
@@ -806,6 +796,7 @@ const Journey = (props) => {
           setAadhaarLinkDialog(false)
         }}
         handleProceed={connectDigiLocker}
+        kyc={kyc}
       />
     </Container>
   )
