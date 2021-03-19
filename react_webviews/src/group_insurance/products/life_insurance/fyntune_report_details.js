@@ -199,7 +199,7 @@ class FyntuneReportDetails extends Component {
                             </div>
                         </div>)}
                         
-                        { this.state.policy_data.insurance_type === 'Ulip' && (
+                        {/* { this.state.policy_data.insurance_type === 'Ulip' && (
                             <div className="member-tile-fyntune">
                                 <div className="mt-left-fyntune">
                                     <img src={require(`assets/${this.state.productName}/certificate-rs.svg`)} alt="" />
@@ -213,7 +213,7 @@ class FyntuneReportDetails extends Component {
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        )} */}
                     
                         <div className="member-tile-fyntune">
                             <div className="mt-left-fyntune">
