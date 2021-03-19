@@ -57,7 +57,10 @@ class CustomButton extends Component {
             className={`${buttonClass} filledButton`}
             disabled={props.disable}
           >
-            {props.buttonTwoTitle}
+            {!showLoader && props.buttonTwoTitle}
+            {showLoader && <DotDotLoaderNew
+            styleBounce={{backgroundColor:'white'}}
+            />}
           </Button>
         </div>
       );
