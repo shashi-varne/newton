@@ -16,7 +16,11 @@ class DigiStatus extends Component {
   }
 
   handleClick = () => {
-    nativeCallback({ action: 'exit_web' });
+    // nativeCallback({ action: 'exit_web' });
+    this.props.history.push({
+      pathname: '/invest',
+      search:  getConfig().searchParams
+    })
   }
 
   render() {

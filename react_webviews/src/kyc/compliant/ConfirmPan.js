@@ -81,7 +81,7 @@ const ConfirmPan = (props) => {
       // disable2={isApiRunning}
       skelton={isLoading}
       showLoader={isApiRunning}
-      disable={isApiRunning}
+      // disable={isApiRunning}
       handleClickOne={handleClick}
       handleClickTwo={handleClick2}
       twoButton={true}

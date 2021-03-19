@@ -26,6 +26,7 @@ const Report = (props) => {
   const [addressProof, setAddressProof] = useState({});
   const [buttonTitle, setButtonTitle] = useState("OK");
   const appText = "Your application is submitted.";
+  const goBackPage = props.location.state?.goBack || "";
 
   const handleTiles = (index, key) => {
     if (key === "docs") {
@@ -297,6 +298,14 @@ const Report = (props) => {
     }
   };
 
+  const goBack = () => {
+    if (goBackPage) {
+      navigate(goBackPage);
+    } else {
+      props.history.goBack();
+    }
+  }
+
   return (
     <Container
       // hideInPageTitle
@@ -305,6 +314,7 @@ const Report = (props) => {
       handleClick={handleClick}
       title={topTitle}
       noFooter={isEmpty(cardDetails)}
+      headerData={{goBack}}
     >
       <div className="kyc-report">
         {/* <div className="kyc-main-title">{topTitle}</div> */}

@@ -25,7 +25,7 @@ const AadhaarDialog = ({ id, open, close, handleProceed, ...props }) => {
             onClick={handleProceed}
             fullWidth
           >
-            Proceed
+            PROCEED
           </Button>
         </div>
       </section>

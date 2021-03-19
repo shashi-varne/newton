@@ -219,7 +219,8 @@ export function getKycAppStatus(kyc) {
     status = 'ground_premium';
   }
 
-  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null) {
+  if (!kyc.address.meta_data.is_nri && kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 !== 'init' && kyc.application_status_v2 !== 'submitted' &&
+    kyc.application_status_v2 !== 'complete') && kyc.dl_docs_status !== null) {
     status = 'ground_aadhaar';
   }
 
@@ -228,7 +229,7 @@ export function getKycAppStatus(kyc) {
     status = 'incomplete';
   }
 
-  if (kyc.kyc_status !== 'compliant' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null) && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
+  if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';
   }
 

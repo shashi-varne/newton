@@ -168,9 +168,10 @@ const KycBankDetails = (props) => {
     } else {
       if (dl_flow) {
         if (
-          kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+          kyc.pan.doc_status !== "submitted"
         )
           navigate(getPathname.uploadPan);
         else navigate(getPathname.kycEsign);
@@ -248,7 +249,6 @@ const KycBankDetails = (props) => {
         partner.code !== "cub" &&
         partner.code !== "ippb")
     ) {
-      setIsApiRunning("button");
       try {
         const result = (await getIFSC(bankData.ifsc_code)) || [];
         if (result && result.length > 0) {
@@ -265,8 +265,6 @@ const KycBankDetails = (props) => {
         }
       } catch (err) {
         console.log(err);
-      } finally {
-        setIsApiRunning(false);
       }
     } else {
       bank.branch_name = "";

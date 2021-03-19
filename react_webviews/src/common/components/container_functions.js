@@ -69,7 +69,7 @@ export function didMount() {
         });
     }
 
-    window.addEventListener("scroll", this.onScroll, false);
+    window.addEventListener("scroll", this.onScroll, true);
 
     this.check_hide_header_title();
 }
@@ -567,8 +567,7 @@ export function new_header_scroll() {
 
             {this.state.inPageTitle && this.props.count &&
                 <span color="inherit"
-                    className={`${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}
-                    style={{ fontSize: 10 }}>
+                    className={`header-title-page-count-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`}>
                     <span style={{ fontWeight: 600 }}>{this.props.current}</span>/<span>{this.props.total}</span>
                 </span>}
         </div>

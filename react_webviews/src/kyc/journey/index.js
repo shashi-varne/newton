@@ -511,10 +511,7 @@ const Journey = (props) => {
   const productName = getConfig().productName
 
   const redirectUrl = encodeURIComponent(
-    window.location.origin +
-      `/digilocker/callback${
-        getConfig().searchParams
-      }&is_secure=${storageService().get('is_secure')}`
+    `${window.location.origin}/digilocker/callback${getConfig().searchParams}&is_secure=${storageService().get('is_secure')}`
   )
 
   const cancel = () => {
@@ -538,60 +535,61 @@ const Journey = (props) => {
 
   const connectDigiLocker = () => {
     const data = {
-      url:
-        window.location.origin +
-        `/kyc/journey?show_aadhaar=true&is_secure=
-        ${storageService().get('is_secure')}`,
-      message: 'You are almost there, do you really want to go back?',
-    }
+      url: `${window.location.origin}/kyc/journey${
+        getConfig().searchParams
+      }&show_aadhaar=true&is_secure=
+        ${storageService().get("is_secure")}`,
+      message: "You are almost there, do you really want to go back?",
+    };
     if (isMobile.any() && storageService().get(storageConstants.NATIVE)) {
       if (isMobile.iOS()) {
         nativeCallback({
-          action: 'show_top_bar',
-          message: { title: 'Aadhaar KYC' },
-        })
+          action: "show_top_bar",
+          message: { title: "Aadhaar KYC" },
+        });
       }
-      nativeCallback({ action: 'take_control', message: data })
+      nativeCallback({ action: "take_control", message: data });
     } else if (!isMobile.any()) {
       const redirectData = {
         show_toolbar: false,
-        icon: 'back',
+        icon: "back",
         dialog: {
-          message: 'You are almost there, do you really want to go back?',
+          message: "You are almost there, do you really want to go back?",
           action: [
             {
-              action_name: 'positive',
-              action_text: 'Yes',
-              action_type: 'redirect',
+              action_name: "positive",
+              action_text: "Yes",
+              action_type: "redirect",
               redirect_url: encodeURIComponent(
-                window.location.origin +
-                  '/kyc/journey?show_aadhaar=true&is_secure=' +
-                  storageService().get('is_secure')
+                `${window.location.origin}/kyc/journey${
+                  getConfig().searchParams
+                }&show_aadhaar=true&is_secure=
+                  ${storageService().get("is_secure")}`
               ),
             },
             {
-              action_name: 'negative',
-              action_text: 'No',
-              action_type: 'cancel',
-              redirect_url: '',
+              action_name: "negative",
+              action_text: "No",
+              action_type: "cancel",
+              redirect_url: "",
             },
           ],
         },
         data: {
-          type: 'server',
+          type: "server",
         },
-      }
+      };
       if (isMobile.iOS()) {
-        redirectData.show_toolbar = true
+        redirectData.show_toolbar = true;
       }
-      nativeCallback({ action: 'third_party_redirect', message: redirectData })
+      nativeCallback({ action: "third_party_redirect", message: redirectData });
     }
     window.location.href = updateQueryStringParameter(
       kyc.digilocker_url,
-      'redirect_url',
+      "redirect_url",
       redirectUrl
-    )
-  }
+    );
+  };
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
     var topTitle = ''
@@ -600,8 +598,10 @@ const Journey = (props) => {
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
     var journeyStatus = getKycAppStatus(kyc).status || ''
+    var dlCondition = !isCompliant && !kyc.address.meta_data.is_nri &&
+     kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null;
     var show_aadhaar =
-      journeyStatus === 'ground_aadhaar' || urlParams.show_aadhaar === 'true'
+      journeyStatus === 'ground_aadhaar' || urlParams.show_aadhaar === 'true' || dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []
     var ctaText = ''
@@ -617,19 +617,18 @@ const Journey = (props) => {
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 == 'submitted') {
       navigate('/nps/identity')
-      return
     } else if (
       user.kyc_registration_v2 == 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
-      navigate('/kyc/report')
-      return
+      navigate('/kyc/report', {
+        state: { goBack: '/invest' }
+      })
     } else if (
       user.kyc_registration_v2 == 'complete' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/invest')
-      return
     }
   }
 

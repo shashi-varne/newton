@@ -9,7 +9,6 @@ import { storageService } from 'utils/validators'
 
 
 const Failed = (props) => {
-  const [showLoader, setShowLoader] = useState(false)
   const [open, setOpen] = useState(false)
 
   const close = () => {
@@ -56,7 +55,7 @@ const Failed = (props) => {
 
   const productName = getConfig().productName
   return (
-    <Container skelton={showLoader} title="Aadhaar KYC Failed !" noFooter>
+    <Container title="Aadhaar KYC Failed !" noFooter>
       <section id="digilocker-failed">
         {/* <div className="page-title">Aadhaar KYC Failed !</div> */}
         <img
