@@ -547,6 +547,7 @@ function getPartnerConfig(partner_code) {
   html.style.setProperty(`--label`, `${config_to_return.label}`);
   html.style.setProperty(`--desktop-width`, '640px');
   html.style.setProperty(`--tooltip-width`, '540px');
+  html.style.setProperty('--color-action-disable', '#E8ECF1');
 
   return config_to_return;
 }
@@ -624,7 +625,7 @@ export const getConfig = () => {
   let { partner_code } = main_query_params;
   let { app_version } = main_query_params;
   let { pc_urlsafe } = main_query_params;
-  let project = 'insurance';
+  let project = '';
   let project_child = '';
   if (main_pathname.indexOf('group-insurance') >= 0) {
     project = 'group-insurance';
@@ -931,6 +932,13 @@ export function capitalize(string) {
   });
 }
 
+export function isIframe() {
+  if (window.top !== window.self) {
+    return true;
+  } else {
+    return false;
+  }
+}
 export function getBasePath() {
   var basename = window.sessionStorage.getItem('base_href') || '';
   if(basename && basename.indexOf('appl/webview') !== -1) {
