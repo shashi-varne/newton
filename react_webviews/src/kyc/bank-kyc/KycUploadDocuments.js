@@ -22,7 +22,7 @@ const KycUploadDocuments = (props) => {
     if (
       !isEmpty(kyc) &&
       kyc.kyc_status !== "compliant" &&
-      kyc.address.meta_data.is_nri &&
+      !kyc.address.meta_data.is_nri &&
       kyc.dl_docs_status !== "" &&
       kyc.dl_docs_status !== "init" &&
       kyc.dl_docs_status !== null
@@ -111,9 +111,10 @@ const KycUploadDocuments = (props) => {
     } else {
       if (dlFlow) {
         if (
-          kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed"
+          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+          kyc.pan.doc_status !== "submitted"
         ) {
           navigate("/kyc/upload/pan");
         } else {

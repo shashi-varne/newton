@@ -596,8 +596,10 @@ const Journey = (props) => {
     var investmentPending = null
     var isCompliant = kyc?.kyc_status === 'compliant'
     var journeyStatus = getKycAppStatus(kyc).status || ''
+    var dlCondition = !isCompliant && !kyc.address.meta_data.is_nri &&
+     kyc.dl_docs_status !== '' && kyc.dl_docs_status !== 'init' && kyc.dl_docs_status !== null;
     var show_aadhaar =
-      journeyStatus === 'ground_aadhaar' || urlParams.show_aadhaar === 'true'
+      journeyStatus === 'ground_aadhaar' || urlParams.show_aadhaar === 'true' || dlCondition
     var customerVerified = journeyStatus === 'ground_premium' ? false : true
     var kycJourneyData = initJourneyData() || []
     var ctaText = ''
@@ -614,19 +616,18 @@ const Journey = (props) => {
   if (!isEmpty(kyc) && !isEmpty(user)) {
     if (npsDetailsReq && user.kyc_registration_v2 == 'submitted') {
       navigate('/nps/identity')
-      return
     } else if (
       user.kyc_registration_v2 == 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
-      navigate('/kyc/report')
-      return
+      navigate('/kyc/report', {
+        state: { goBack: '/invest' }
+      })
     } else if (
       user.kyc_registration_v2 == 'complete' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/invest')
-      return
     }
   }
 
