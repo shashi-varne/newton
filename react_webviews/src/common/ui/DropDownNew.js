@@ -84,11 +84,17 @@ class SelectDropDown2 extends React.Component {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input }
     } else components = { IndicatorSeparator: () => null, Input }
 
+
+
     const options = this.props.options.map((ele, index) => {
-      return ({
-        'value': ele.value, 'label': ele.name
+      if(ele.value) {
+        return ({
+          'value': ele.value, 'label': ele.name
+        })
+      }else return({
+        'value': ele, 'label': ele
       })
-    })
+    });
 
     const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     return (
