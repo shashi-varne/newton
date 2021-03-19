@@ -71,7 +71,7 @@ class MandateSuccess extends Component {
         buttonTitle="Ok"
         noFooter={this.state.session_less_enach}
         noBack={this.state.session_less_enach}
-        img={this.state.sip_resumed}
+        iframeIcon={this.state.sip_resumed}
       >
         <div>
           {!this.state.iframe &&  <div className="success-img">

@@ -70,7 +70,7 @@ class PaymentFailedClass extends Component {
         title="Authorisation failed"
         disableBack={true}
         classOverRideContainer="payment-failed"
-        img={this.state.iframeIcon}
+        iframeIcon={this.state.iframeIcon}
       >
         <div>
           {!this.state.iframe && <div className="payment-failed-icon">

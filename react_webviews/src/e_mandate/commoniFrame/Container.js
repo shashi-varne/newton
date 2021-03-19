@@ -282,15 +282,15 @@ class Container extends Component {
         </div>
 
         {/* Children Block */}
-        {this.props.img && <div className={'childblockiframe'} >
+        {this.props.iframeIcon && <div className={'childblockiframe'} >
           <div className='childblockiframe-element-one'>
              <div style={{fontSize: '20px', lineHeight:'24px', fontWeight: 'bold', marginBottom: '30px'}}>{this.props.title}</div>
              <span>{this.props.children}</span>
           </div>
-        { <div className='imgiframe'> <img className='childblockiframe-element-img' src={this.props.img} alt="Mandate" /></div> }
+        { <div className='imgiframe'> <img className='childblockiframe-element-img' src={this.props.iframeIcon} alt="Mandate" /></div> }
          </div>}
 
-         {!this.props.img && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`} style={{marginTop:'90px'}}>    
+         {!this.props.iframeIcon && <div className={`ContainerWrapper ${this.props.classOverRideContainer}`} style={{marginTop:'90px'}}>    
          <h1>{this.props.title}</h1> 
          {this.props.children} </div> }
 
@@ -298,7 +298,7 @@ class Container extends Component {
         {/* Footer Block */}
 
       <div className='footer-iframe'>
-        {!this.props.noFooter && this.props.img &&
+        {!this.props.noFooter && this.props.iframeIcon &&
           <Footer
             iframe={true}
             fullWidthButton={this.props.fullWidthButton}  

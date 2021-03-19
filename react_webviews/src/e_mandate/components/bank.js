@@ -249,7 +249,7 @@ class SelectBank extends Component {
         handleClick={this.handleClick}
         edit={this.props.edit}
         buttonTitle="AUTHORISE E-MANDATE"
-        img={this.state.iframeIcon}
+        iframeIcon={this.state.iframeIcon}
       >
         <div className="infocard">
           <div className="title">

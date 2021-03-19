@@ -214,7 +214,7 @@ class About extends Component {
         edit={this.props.edit}
         buttonTitle="Select Bank for e-mandate"
         events={this.sendEvents('just_set_events')}
-        img={this.state.iframeIcon}
+        iframeIcon={this.state.iframeIcon}
       >
         <div style={{ textAlign: 'center' }}>
         {!this.state.iframe && <Imgc style={{minHeight:140, width:"100%"}} src={this.state.top_icon} alt="Mandate" />}
