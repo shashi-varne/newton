@@ -124,7 +124,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         var checked = this.state.checked;
         buttonDisabled = props.frequency === 'month' && !checked ? true : false;
         var payment_frequency = this.state.premium_details[index].payment_frequency;
-        console.log(payment_frequency)
         this.setState({
             selectedIndex: index,
             buttonDisabled: buttonDisabled,
