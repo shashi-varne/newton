@@ -43,6 +43,10 @@ class Queries extends Component {
     this.initialize();
   }
 
+  componentDidUpdate() {
+    this.swipeableActions.updateHeight();
+  }
+
   onload = async () => {
     await this.getUserTickets("open");
   };
@@ -157,7 +161,11 @@ class Queries extends Component {
               index={this.state.value}
               onChangeIndex={this.handleChangeIndex}
               onSwitching={this.handleSwitch}
+              action={(actions) => {
+                this.swipeableActions = actions;
+              }}
               enableMouseEvents
+              animateHeight
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
