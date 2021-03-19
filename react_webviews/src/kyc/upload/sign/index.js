@@ -117,6 +117,8 @@ const Sign = (props) => {
     }
   }
 
+  const isWeb = getConfig().isWebCode
+
   return (
     <Container
       // hideInPageTitle
@@ -135,7 +137,7 @@ const Sign = (props) => {
           <div className="sub-title">
             Signature should match with your PAN’s signature
           </div>
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div
               className="kyc-doc-upload-container"
               style={{ border: 'none' }}
@@ -215,7 +217,7 @@ const Sign = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div
               className="kyc-doc-upload-container noBorder"
               style={{ marginTop: '70px' }}

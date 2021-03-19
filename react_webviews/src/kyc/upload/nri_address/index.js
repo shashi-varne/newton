@@ -275,6 +275,8 @@ const NRIAddressUpload = (props) => {
     return addressFull
   }
 
+  const isWeb = getConfig().isWebCode
+
   return (
     <Container
       // hideInPageTitle
@@ -296,7 +298,7 @@ const NRIAddressUpload = (props) => {
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
                 <img
@@ -374,7 +376,7 @@ const NRIAddressUpload = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
                 <img
@@ -418,7 +420,7 @@ const NRIAddressUpload = (props) => {
               </div>
             </div>
           )}
-          {!getConfig().html_camera && !onlyFrontDocRequired && (
+          {!isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img
@@ -496,7 +498,7 @@ const NRIAddressUpload = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && !onlyFrontDocRequired && (
+          {isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img

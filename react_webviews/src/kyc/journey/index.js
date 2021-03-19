@@ -12,12 +12,14 @@ import { getUserKycFromSummary, submit } from '../common/api'
 import Toast from '../../common/ui/Toast'
 import { isMobile } from 'utils/functions'
 import { nativeCallback } from 'utils/native_callback'
+import AadhaarDialog from '../mini_components/AadhaarDialog'
 
 const Journey = (props) => {
   console.log(props)
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const [isApiRunning, setIsApiRunning] = useState(false)
+  const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
   const [npsDetailsReq, setNpsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
@@ -35,9 +37,9 @@ const Journey = (props) => {
   const initialize = async () => {
     try {
       const result = await getUserKycFromSummary()
-      if(!result) {
-        setIsLoading(false);
-        return;
+      if (!result) {
+        setIsLoading(false)
+        return
       }
       let currentUser = result.data.user.user.data
       let userKyc = result.data.kyc.kyc.data
@@ -51,7 +53,7 @@ const Journey = (props) => {
   }
 
   const initJourneyData = () => {
-    let i, j, k, data;
+    let i, j, k, data
     if (!isEmpty(kyc) && !isEmpty(user)) {
       let journeyData = getJourneyData()
       for (i = 0; i < journeyData.length; i++) {
@@ -122,9 +124,9 @@ const Journey = (props) => {
               ) {
                 if (
                   data.name === 'nomination' &&
-                    (kyc.nomination.nominee_optional ||
-                  (kyc.address.meta_data.is_nri &&
-                    kyc.nomination.nominee_optional === null))
+                  (kyc.nomination.nominee_optional ||
+                    (kyc.address.meta_data.is_nri &&
+                      kyc.nomination.nominee_optional === null))
                 ) {
                   //
                 } else {
@@ -510,7 +512,9 @@ const Journey = (props) => {
 
   const redirectUrl = encodeURIComponent(
     window.location.origin +
-      `/digilocker/callback${getConfig().searchParams}&is_secure=${storageService().get('is_secure')}`
+      `/digilocker/callback${
+        getConfig().searchParams
+      }&is_secure=${storageService().get('is_secure')}`
   )
 
   const cancel = () => {
@@ -519,7 +523,7 @@ const Journey = (props) => {
   }
 
   const proceed = () => {
-    setOpen(true)
+    setAadhaarLinkDialog(true)
   }
 
   function updateQueryStringParameter(uri, key, value) {
@@ -606,8 +610,7 @@ const Journey = (props) => {
     } else {
       if (!customerVerified) {
         ctaText = 'UNLOCK NOW'
-      } else
-      ctaText = 'CONTINUE'
+      } else ctaText = 'CONTINUE'
     }
   }
 
@@ -683,8 +686,11 @@ const Journey = (props) => {
           {show_aadhaar && (
             <div className="kyc-pj-content">
               <div className="left">
-                <div className="pj-header">Aadhaar KYC
-                <div className='pj-sub-text'>Link with Digilocker to complete Aadhaar KYC</div>
+                <div className="pj-header">
+                  Aadhaar KYC
+                  <div className="pj-sub-text">
+                    Link with Digilocker to complete Aadhaar KYC
+                  </div>
                 </div>
                 <div className="pj-bottom-info-box">
                   <img
@@ -765,7 +771,13 @@ const Journey = (props) => {
                     idx === stage - 1 ? 'title title__selected' : 'title'
                   }
                 >
-                  {item.title}
+                  <div className="flex flex-between">
+                    {item.title}
+                    {item?.value && (
+                      <span className="field_value">: {item?.value}</span>
+                    )}
+                  </div>
+
                   {item.status === 'completed' && item.isEditAllowed && (
                     <span
                       className="edit"
@@ -788,6 +800,13 @@ const Journey = (props) => {
         open={show_aadhaar && open}
         onClose={() => setOpen(false)}
         connectDigiLocker={connectDigiLocker}
+      />
+      <AadhaarDialog
+        open={aadhaarLinkDialog}
+        onClose={() => {
+          setAadhaarLinkDialog(false)
+        }}
+        handleProceed={connectDigiLocker}
       />
     </Container>
   )

@@ -79,6 +79,7 @@ const IpvVideo = (props) => {
   }
 
   const productName = getConfig().productName
+  const isWeb = getConfig().isWebCode
 
   return (
     <Container
@@ -99,7 +100,7 @@ const IpvVideo = (props) => {
             As per SEBI, it's compulsory for all investors to go through IPV (In
             Person Verification Process).
           </div>
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div className="kyc-doc-upload-container">
               {file && (
                 <img
@@ -180,7 +181,7 @@ const IpvVideo = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
               {file && (
                 <img

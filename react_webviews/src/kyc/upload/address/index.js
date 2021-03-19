@@ -4,7 +4,7 @@ import Alert from '../../mini_components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants, docMapper } from '../../constants'
 import { upload } from '../../common/api'
-import { getBase64, getConfig } from '../../../utils/functions'
+import { getBase64, getConfig, isMobile } from '../../../utils/functions'
 import toast from '../../../common/ui/Toast'
 import { combinedDocBlob } from '../../common/functions'
 import { navigate as navigateFunc } from '../../common/functions'
@@ -260,6 +260,8 @@ const AddressUpload = (props) => {
     return addressFull
   }
 
+  const isWeb = getConfig().isWebCode
+
   return (
     <Container
       // hideInPageTitle
@@ -281,7 +283,7 @@ const AddressUpload = (props) => {
             title="Note"
             renderMessage={() => <MessageComponent kyc={kyc} />}
           />
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
                 <img
@@ -359,7 +361,7 @@ const AddressUpload = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
               {frontDoc && state.frontFileShow && (
                 <img
@@ -403,7 +405,7 @@ const AddressUpload = (props) => {
               </div>
             </div>
           )}
-          {!getConfig().html_camera && !onlyFrontDocRequired && (
+          {!isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img
@@ -481,7 +483,7 @@ const AddressUpload = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && !onlyFrontDocRequired && (
+          {isWeb && !onlyFrontDocRequired && (
             <div className="kyc-doc-upload-container">
               {backDoc && state.backFileShow && (
                 <img

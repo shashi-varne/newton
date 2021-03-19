@@ -2,41 +2,11 @@ import React from 'react'
 import SlidingDialog from './SlideBottomDialog'
 import Button from '@material-ui/core/Button'
 import { getConfig, isMobile } from 'utils/functions'
-import { nativeCallback } from 'utils/native_callback'
-import { storageService } from 'utils/validators'
 
-const AadhaarDialog = ({ id, open, close, handleProcced, ...props }) => {
+const AadhaarDialog = ({ id, open, close, handleProceed, ...props }) => {
   const productName = getConfig().productName
-  const handleProceed = () => {
-    const redirect_url = encodeURIComponent(`${window.location.protocol}
-    :// 
-    ${window.location.host}
-    /kyc/journey?show_aadhaar=true&is_secure=
-    ${storageService().get('is_secure')}`)
-    if (!getConfig().Web) {
-      if (isMobile.iOS()) {
-        nativeCallback({
-          action: 'show_top_bar',
-          message: { title: 'Aadhaar KYC' },
-        })
-      }
-      nativeCallback({
-        action: 'take_control',
-        back_url: redirect_url,
-        back_text: 'You are almost there, do you really want to go back?',
-        title: 'Aadhaar KYC',
-        show_back_top_bar: true,
-      })
-    }
-    window.location.href =
-      getConfig().base_url +
-      '/api/digilocker/getauthorisationcode/kyc?redirect_url=' +
-      redirect_url
-
-    close()
-  }
   return (
-    <SlidingDialog id={id} open={open} close={close} {...props}>
+    <SlidingDialog id={id} open={open} close={close} {...props} onClick={close}>
       <section className="kyc-dl-aadhaar-dialog">
         <div className="flex-between">
           <div className="heading">

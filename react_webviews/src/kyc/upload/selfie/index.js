@@ -100,6 +100,7 @@ const Sign = (props) => {
   }
 
   const productName = getConfig().productName
+  const isWeb = getConfig().isWebCode
 
   return (
     <Container
@@ -117,7 +118,7 @@ const Sign = (props) => {
         <section id="kyc-upload-pan" className="page-body-kyc">
           {/* <div className="title">Upload Selfie</div> */}
           <div className="sub-title">Ears must be visible</div>
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div className="kyc-doc-upload-container">
               {file && fileToShow && (
                 <img src={fileToShow} className="preview" alt="" />
@@ -194,7 +195,7 @@ const Sign = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
               {file && fileToShow && (
                 <img

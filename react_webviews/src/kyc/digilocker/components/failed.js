@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import Container from '../../common/Container'
-import { initData } from '../../services'
-import toast from 'common/ui/Toast'
-import { getConfig } from 'utils/functions'
+import { getConfig, isMobile } from 'utils/functions'
 import { navigate as navigateFunc } from '../../common/functions'
 import Button from '@material-ui/core/Button'
 import AadhaarDialog from '../../mini_components/AadhaarDialog'
+import { nativeCallback } from 'utils/native_callback'
+import { storageService } from 'utils/validators'
+
 
 const Failed = (props) => {
   const [showLoader, setShowLoader] = useState(false)
@@ -17,6 +18,35 @@ const Failed = (props) => {
 
   const retry = () => {
     setOpen(true)
+  }
+
+  const handleProceed = () => {
+    const redirect_url = encodeURIComponent(`${window.location.protocol}
+    :// 
+    ${window.location.host}
+    /kyc/journey?show_aadhaar=true&is_secure=
+    ${storageService().get('is_secure')}`)
+    if (!getConfig().Web) {
+      if (isMobile.iOS()) {
+        nativeCallback({
+          action: 'show_top_bar',
+          message: { title: 'Aadhaar KYC' },
+        })
+      }
+      nativeCallback({
+        action: 'take_control',
+        back_url: redirect_url,
+        back_text: 'You are almost there, do you really want to go back?',
+        title: 'Aadhaar KYC',
+        show_back_top_bar: true,
+      })
+    }
+    window.location.href =
+      getConfig().base_url +
+      '/api/digilocker/getauthorisationcode/kyc?redirect_url=' +
+      redirect_url
+
+    close()
   }
 
   const manual = () => {
@@ -62,7 +92,7 @@ const Failed = (props) => {
           </Button>
         </footer>
       </section>
-      <AadhaarDialog open={open} id="kyc-aadhaar-dialog" close={close} />
+      <AadhaarDialog open={open} id="kyc-aadhaar-dialog" close={close} handleProceed={handleProceed} />
     </Container>
   )
 }

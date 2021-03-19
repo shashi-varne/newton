@@ -181,6 +181,8 @@ const Pan = (props) => {
     }
   }
 
+  const isWeb = getConfig().isWebCode
+
   return (
     <Container
       // hideInPageTitle
@@ -207,7 +209,7 @@ const Pan = (props) => {
               !subTitle ? () => <MessageComponent kyc={kyc} /> : null
             }
           />
-          {!getConfig().html_camera && (
+          {!isWeb && (
             <div
               className="kyc-doc-upload-container"
             >
@@ -280,7 +282,7 @@ const Pan = (props) => {
               </div>
             </div>
           )}
-          {getConfig().html_camera && (
+          {isWeb && (
             <div className="kyc-doc-upload-container">
               {file && fileToShow && (
                 <img
