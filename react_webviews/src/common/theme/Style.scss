@@ -1579,14 +1579,15 @@ input#pan {
   padding-top: 100px;
   overflow-x: hidden;
   height: 100%;
+  padding-left: 80px;
+  padding-right: 80px;
 }
 
 .childblockiframe-element-one{
-  width: 40%;
-  margin-left: 6%;
   height: auto;
   text-align: left !important;
   position: relative;
+  flex: 1 1 55%;
 }
 
 .imgiframe{

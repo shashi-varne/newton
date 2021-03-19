@@ -2,37 +2,29 @@ import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-// import Arrow from '@material-ui/icons/ArrowBack';
-import Close from '@material-ui/icons//Close';
 import restart from 'assets/restart_nav_icn.svg';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
+import back_arrow from 'assets/back_moneycontrol.svg';
+import close from 'assets/close_moneycontrol.svg';
 
 const Header = ({ classes, title, count, total, current, width,goBack, edit, type, resetpage, handleReset, smallTitle, disableBack, provider, topIcon, handleTopIcon, noBack }) => (
    <AppBar position="fixed" color="primary" style={{width: width,}} className={classes.topBar} >
     <Toolbar>
-      <Typography variant="subheading" color="inherit" className={classes.flex}>
-        {smallTitle && smallTitle !== undefined &&
-          <div>
-            <div style={{ fontWeight: 500 }}>{title}</div>
-          </div>}
-         {!smallTitle && 
-      <div style={{display: 'flex', justifyContent: 'space-between' , direction: 'row'}}>  
-       <div style={{marginLeft: '5px' }}>
-      {!noBack &&   
+      <div style={{display: 'flex', paddingLeft:"26px",paddingRight:"10px", justifyContent: 'space-between' , direction: 'row',alignItems:"center",width:"100%"}}>  
+      <div onClick={goBack}>
+
+        {!disableBack && <img src={back_arrow} alt="back" style={{cursor:"pointer"}}/>}
+        {(disableBack === true || disableBack === 'summary') && <img src={close} alt="close" style={{cursor:"pointer"}}/>}
+      </div>
+      {/* {!noBack &&   
       <IconButton 
       className={classes.menuButton} 
       color="inherit" aria-label="Menu" onClick={goBack}
       >
         {!disableBack && <NavigateBeforeIcon className={classes.NavigateBeforeIcon} />}
         {(disableBack === true || disableBack === 'summary') && <Close className={classes.NavigateBeforeIcon} />}
-      </IconButton>}
-      </div>
+      </IconButton>} */}
     <img src={ require(`assets/finity/moneycontrol_logo.svg`)} className={classes.img} style={{ marginTop: '20px', marginBottom: '20px'}} alt=""/> 
-    {<img src={ require(`assets/finity/Finity_Logo.svg`)} style={{paddingRight: '40px', marginTop: '32px', marginBottom: '32px'}} alt=""/> } 
-        </div>}
-      </Typography>
+    {<img src={ require(`assets/finity_white_logo_2.png`)} style={{paddingRight: '40px', marginTop: '32px', marginBottom: '32px'}} alt=""/> } 
       {resetpage &&
         <img onClick={handleReset}
           alt=""
@@ -40,8 +32,7 @@ const Header = ({ classes, title, count, total, current, width,goBack, edit, typ
           src={restart}
         />
       }
-      {topIcon === 'close' && <Close onClick={handleTopIcon} />}
-      {!edit && count && <span color="inherit">{current}/{total}</span>}
+      </div>
     </Toolbar>
   </AppBar>
 );
