@@ -50,8 +50,8 @@ class FyntuneReportDetails extends Component {
                 let final_status = fyntuneConstants.fyntune_policy_report_status_mapper[policy_data.status]
                 policy_data.final_status = final_status; 
                 
-                let sanchay_subtitle = policy_data.product_subtitle ? policy_data.product_subtitle.match(/\(([^)]+)\)/)[1] : '';
-                
+                let sanchay_subtitle = policy_data.product_subtitle ? policy_data.product_subtitle : '';
+
                 this.setState({
                     policy_data: policy_data,
                     sanchay_subtitle
@@ -131,7 +131,7 @@ class FyntuneReportDetails extends Component {
                         {this.state.policy_data.product_title && <h3 style={{margin: "0px 0px",fontSize: '20px',lineHeight: '24px', fontWeight:'bold'}}> {this.state.policy_data.product_title}</h3> }
                         
                         {this.state.policy_data && this.state.policy_data.insurance_type === 'Saving' ? 
-                        <span style={{margin: "0px 0px",fontSize: '15px',lineHeight: '24px',fontWeight:'400'}}>{this.state.sanchay_subtitle}</span> 
+                        <span style={{margin: "0 0 20px 0",fontSize: '15px',lineHeight: '24px',fontWeight:'400'}}>({this.state.sanchay_subtitle})</span> 
                         : null}
                         </div>
 
@@ -164,7 +164,7 @@ class FyntuneReportDetails extends Component {
                                     INSURANCE TYPE
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data.insurance_type}
+                                    {this.state.policy_data.insurance_type === 'Ulip' ? this.state.policy_data.insurance_type.toUpperCase() : this.state.policy_data.insurance_type}
                                 </div>
                             </div>
                         </div>
@@ -199,7 +199,7 @@ class FyntuneReportDetails extends Component {
                             </div>
                         </div>)}
                         
-                        { this.state.policy_data.insurance_type === 'ULIPs' && (
+                        { this.state.policy_data.insurance_type === 'Ulip' && (
                             <div className="member-tile-fyntune">
                                 <div className="mt-left-fyntune">
                                     <img src={require(`assets/${this.state.productName}/certificate-rs.svg`)} alt="" />
@@ -209,7 +209,7 @@ class FyntuneReportDetails extends Component {
                                         INVESTMENT FUND
                                     </div>
                                     <div className="mtr-bottom-fyntune">
-                                        {this.state.policy_data.type_investment_fund}
+                                        {this.state.policy_data.type_investment_fund ? this.state.policy_data.type_investment_fund : '-'}
                                     </div>
                                 </div>
                             </div>
@@ -291,7 +291,7 @@ class FyntuneReportDetails extends Component {
                                     PREMIUM DUE DATE
                                 </div>
                                 <div className="mtr-bottom-fyntune">
-                                    {this.state.policy_data && this.state.policy_data.dt_policy_end}
+                                    {this.state.policy_data.dt_policy_end ? this.state.policy_data.dt_policy_end : '-' }
                                 </div>
                             </div>
                         </div>
