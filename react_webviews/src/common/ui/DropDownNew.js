@@ -33,7 +33,6 @@ class SelectDropDown2 extends React.Component {
   }
 
   handleCreate = (inputValue) => {
-    console.log(inputValue)
     this.setState({ isLoading: true });
     setTimeout(() => {
       const { options } = this.state;
@@ -84,10 +83,8 @@ class SelectDropDown2 extends React.Component {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input }
     } else components = { IndicatorSeparator: () => null, Input }
 
-
-
     const options = this.props.options.map((ele, index) => {
-      if(ele.value) {
+      if(ele.name) {
         return ({
           'value': ele.value, 'label': ele.name
         })
@@ -104,7 +101,7 @@ class SelectDropDown2 extends React.Component {
             marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '0px',
             minWidth: '300px', color: this.props.error ? '#f44336' : '',
           }}>
-          {this.props.label}</div></InputLabel>)} {  console.log(  value ,this.state.shrink , this.state.selectedOption )  }
+          {this.props.label}</div></InputLabel>)}
         <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
           <Select
             // defaultValue={value}
