@@ -98,7 +98,7 @@ class SelectDropDown2 extends React.Component {
             marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '0px',
             minWidth: '300px', color: this.props.error ? '#f44336' : '',
           }}>
-          {this.props.label}</div></InputLabel>)}
+          {this.props.label}</div></InputLabel>)} {  console.log(  value ,this.state.shrink , this.state.selectedOption )  }
         <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
           <Select
             // defaultValue={value}
@@ -109,10 +109,10 @@ class SelectDropDown2 extends React.Component {
             // isDisabled={this.state.isLoading}
             // isLoading={this.state.isLoading}
             // onCreateOption={this.handleCreate}
-            // onMenuClose={this.handleMenuClose}
             // onFocus={this.handleFocus}
             className={this.state.error ? "" : ''}
             onMenuOpen={this.onMenuOpen}
+            onMenuClose={this.handleMenuClose}
             placeholder={''}
             isClearable={true}
             isSearchable={this.props.options.length <= 6 ? false : true}
