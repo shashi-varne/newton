@@ -14,7 +14,7 @@ class TicketConversations extends Component {
       show_loader: false,
       skelton: "g",
       ticket_status: "",
-      conversations: "",
+      conversations: [],
       sortedConverstations: "",
       splitConversation: [],
       index: 0,
@@ -45,18 +45,24 @@ class TicketConversations extends Component {
 
     let sortedConverstations = [];
     let splitConversation = [];
-    while (conversations.length) {
-      sortedConverstations.push(conversations.splice(0, 3));
-    }
 
-    splitConversation = sortedConverstations[0] || [];
+    if (conversations && conversations.length > 0) {
+      while (conversations.length) {
+        sortedConverstations.push(conversations.splice(0, 3));
+      }
+  
+      splitConversation = sortedConverstations[0] || [];
+  
+      this.setState({
+        conversations: conversations,
+        sortedConverstations: sortedConverstations,
+      });
+  
+    } else {
 
-    this.setState({
-      conversations: conversations,
-      sortedConverstations: sortedConverstations,
-    });
-
-    if (splitConversation.length === 0) {
+    // }
+    
+    // if (splitConversation.length === 0) {
       splitConversation.push({
         description: result.description,
         dt_updated: result.updated_at,
