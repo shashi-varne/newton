@@ -8,7 +8,7 @@ import Input from '../../common/ui/Input'
 import Dialog, { DialogContent  } from 'material-ui/Dialog';
 import Api from '../../../src/utils/api';
 import toast from '../../common/ui/Toast'
-import DropdownWithoutIcon from '../../common/ui/SelectWithoutIcon'
+import DropDownNew from '../../common/ui/DropDownNew'
 
 class AddPolicy extends Component {
 
@@ -324,7 +324,7 @@ handleClick = async () => {
         {/* <div className='health_insurance' style={{fontWeight: '700', fontSize:'20px', marginTop:'' }}> Enter your policy details   </div> */}
             <div className="InputField">
             <div>
-            <DropdownWithoutIcon
+            <DropDownNew
               parent={this}
               header_title="Insurance Company"
               cta_title="SAVE"

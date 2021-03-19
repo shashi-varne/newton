@@ -18,7 +18,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import ReactTooltip from "react-tooltip";
 import Button from 'material-ui/Button';
-import DropdownWithoutIcon from '../../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../../common/ui/DropDownNew'
 import GenericTooltip from '../../../../common/ui/GenericTooltip';
 import { storageService } from 'utils/validators';
 
@@ -328,7 +328,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     let { provider } = this.state;
 
-    if (provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false) && this.state.member_key !== 'applicant') {
+    if ((provider === 'STAR' && (form_data.occupation === null || form_data.occupation === false || form_data.occupation === '') && this.state.member_key !== 'applicant')) {
       form_data.occupation_error = 'please select one occupation';
     }
 
@@ -766,19 +766,19 @@ class GroupHealthPlanPersonalDetails extends Component {
         {this.state.providerConfig.key === "STAR" &&
           this.state.member_key !== "applicant" && (
             <div className="InputField">
-              <DropdownWithoutIcon
-                width="40"
-                dataType="AOB"
-                options={this.state.occupationOptions}
-                id="occupation"
-                label="Occupation"
-                name="occupation"
-                error={this.state.form_data.occupation_error ? true : false}
-                helperText={this.state.form_data.occupation_error}
-                value={this.state.form_data.occupation || ""}
-                onChange={this.handleChange("occupation")}
-              />
+            < DropDownNew   
+              options={this.state.occupationOptions}
+              label='Occupation'
+              id="occupation"
+              name="occupation"
+              error={this.state.form_data.occupation_error ? true : false}
+              helperText={this.state.form_data.occupation_error}
+              value={this.state.form_data.occupation || ""}
+              onChange={this.handleChange("occupation")}
+            />
             </div>
+
+            
           )}
         <ConfirmDialog parent={this} />
         {this.renderBmiDialog()}
