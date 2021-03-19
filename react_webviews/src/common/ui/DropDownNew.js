@@ -74,7 +74,7 @@ class SelectDropDown2 extends React.Component {
 
   componentWillMount() {
     const value = this.props.options.find(opt => opt.value === this.props.value || opt.name === this.props.value);
-    this.setState({ selectedOption: value })
+    // this.setState({ selectedOption: value.value })
   }
 
   render() {
@@ -86,14 +86,14 @@ class SelectDropDown2 extends React.Component {
     const options = this.props.options.map((ele, index) => {
       if(ele.name) {
         return ({
-          'value': ele.value, 'label': ele.name
+          'value': ele.value, 'name': ele.name
         })
       }else return({
-        'value': ele, 'label': ele
+        'value': ele, 'name': ele
       })
     });
 
-    const value = options.find(opt => opt.value === this.state.selectedOption || opt.label === this.state.selectedOption);
+    const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
@@ -101,7 +101,7 @@ class SelectDropDown2 extends React.Component {
             marginLeft: '12px', position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px',
             minWidth: '300px', color: this.props.error ? '#f44336' : '',
           }}>
-          {this.props.label}</div></InputLabel>)} {console.log(value , options ,this.state.selectedOption)}
+          {this.props.label}</div></InputLabel>)}
         <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
           <Select
             // defaultValue={value}
@@ -113,6 +113,8 @@ class SelectDropDown2 extends React.Component {
             // isLoading={this.state.isLoading}
             // onCreateOption={this.handleCreate}
             // onFocus={this.handleFocus}
+            getOptionLabel={option => option.name}
+            getOptionValue={option => option.value}
             className={this.state.error ? "" : ''}
             onMenuOpen={this.onMenuOpen}
             onMenuClose={this.handleMenuClose}

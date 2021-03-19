@@ -765,7 +765,7 @@ class GroupHealthPlanPersonalDetails extends Component {
         )}
         {this.state.providerConfig.key === "STAR" &&
           this.state.member_key !== "applicant" && (
-            <div className="InputField">
+            <div className="InputField"> {console.log(this.state.form_data.occupation )}
             < DropDownNew   
               options={this.state.occupationOptions}
               label='Occupation'
