@@ -1265,7 +1265,7 @@ body[data-device="mobile"] {
   
   label + .MuiInput-formControl {
   margin-top: -10px !important;
-  // transform : translate(0, 15px) scale(1);
+  // transform : translate(0, 0, 15px, 15px) scale(1);
   font-size: 13px;
   line-height: 21px;
   }
@@ -1293,5 +1293,5 @@ body[data-device="mobile"] {
   input:-webkit-autofill {
     -webkit-text-fill-color: transparent;
     transition: background-color 5000s ease-in-out 0s;
-    -webkit-text-fill-color: black !important;
+    -webkit-text-fill-color: rgb(22,26,46) !important;
   }
