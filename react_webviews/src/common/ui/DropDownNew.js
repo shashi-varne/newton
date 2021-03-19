@@ -98,7 +98,7 @@ class SelectDropDown2 extends React.Component {
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
           style={{
-            marginLeft: '12px', position: 'absolute', marginTop: (!!value || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '0px',
+            marginLeft: '12px', position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px',
             minWidth: '300px', color: this.props.error ? '#f44336' : '',
           }}>
           {this.props.label}</div></InputLabel>)}
