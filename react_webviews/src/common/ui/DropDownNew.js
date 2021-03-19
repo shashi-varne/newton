@@ -100,12 +100,11 @@ class SelectDropDown2 extends React.Component {
           style={{
             position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px',
             minWidth: '300px', color: this.props.error ? '#f44336' : '',
-
-            //   position: 'absolute !important', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px !important' : '-4px !important',
+            //   position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px !important' : '-4px !important',
             // minWidth: '300px !important', color: this.props.error ? '#f44336 !important' : '',
           }}>
           {this.props.label}</div></InputLabel>)}
-        <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
+        <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' , borderTop: '1px solid green !important' }}>
           <Select
             // defaultValue={value}
             ref={ref => {
