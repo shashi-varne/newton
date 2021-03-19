@@ -273,7 +273,7 @@ class GroupHealthReportDetails extends Component {
                 'steps': {
                     'options': mapper_data.steps
                 },
-                'cta_title': 'OK'
+                'cta_title': 'OKAY'
             }
     
             if (type === 'how_to_claim') {
@@ -418,7 +418,7 @@ class GroupHealthReportDetails extends Component {
                 errorData={this.state.errorData}
                 title={'Health insurance'}
                 fullWidthButton={true}
-                buttonTitle="OK"
+                buttonTitle="OKAY"
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
