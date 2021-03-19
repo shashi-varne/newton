@@ -438,7 +438,7 @@ class AdvisoryBasicDetails extends Component {
               error={this.state.form_data.city_error ? true : false}
               helperText={this.state.form_data.city_error}
               name="city"
-            //   value={this.state.form_data.city || ''}
+              value={this.state.form_data.city || ''}
               onChange={this.handleChange("city")}
             />
             </div>

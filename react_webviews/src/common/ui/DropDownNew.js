@@ -93,7 +93,7 @@ class SelectDropDown2 extends React.Component {
       })
     });
 
-    const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
+    const value = options.find(opt => opt.value === this.state.selectedOption || opt.label === this.state.selectedOption);
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={(!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
@@ -101,7 +101,7 @@ class SelectDropDown2 extends React.Component {
             marginLeft: '12px', position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px',
             minWidth: '300px', color: this.props.error ? '#f44336' : '',
           }}>
-          {this.props.label}</div></InputLabel>)}
+          {this.props.label}</div></InputLabel>)} {console.log(value , options ,this.state.selectedOption)}
         <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
           <Select
             // defaultValue={value}
