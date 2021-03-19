@@ -60,7 +60,7 @@ class TicketConversations extends Component {
       splitConversation.push({
         description: result.description,
         dt_updated: result.updated_at,
-        attachment: [],
+        attachment: result.attachments,
         message_from: 'user'
       });
     }
