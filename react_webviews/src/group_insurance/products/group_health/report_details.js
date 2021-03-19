@@ -502,7 +502,7 @@ class GroupHealthReportDetails extends Component {
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
                                             <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
-                                            <div style={{fontSize:10}}> (Net premium)</div>
+                                            <div style={{fontSize:10}}> {this.state.provider !== 'GMC' ? '(Net premium)' : '(Basic premium)'}</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
