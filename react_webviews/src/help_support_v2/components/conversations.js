@@ -21,6 +21,7 @@ class TicketConversations extends Component {
       sub_category: "",
       openTextBox: false,
       documents: [],
+      value: ''
     };
     this.initialize = initialize.bind(this);
   }
@@ -85,7 +86,7 @@ class TicketConversations extends Component {
     }
   };
 
-  handleClick = () => {
+  handleClick = async () => {
     let {
       ticket,
       category,
@@ -93,7 +94,8 @@ class TicketConversations extends Component {
       sub_category,
       splitConversation,
       sortedConverstations,
-      openTextBox
+      openTextBox,
+      documents
     } = this.state;
 
     if (this.state.ticket_status === "Closed") {
@@ -116,6 +118,17 @@ class TicketConversations extends Component {
       this.setState({
         show_loader: 'button'
       })
+
+      let body_data = new FormData();
+      body_data.set("description", this.state.value);
+      if (documents.length > 0) {
+        documents.forEach((item) => {
+          body_data.append("res[]", item);
+        });
+      }
+
+      let result = await this.ticketReply(body_data, ticket.ticket_id);
+      console.log(result)
     }
   };
 

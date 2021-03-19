@@ -74,16 +74,26 @@ class Answers extends Component {
       sub_category_id: sub_category_id,
     });
 
-    let faq_id = faqs[sub_category.cms_category_id || sub_category_id][index].cms_faq_id;
+    let faq_id =
+      faqs[sub_category.cms_category_id || sub_category_id][index].cms_faq_id;
     await this.getFaqDescription(faq_id);
   };
 
   handleChangeIndex = async (index) => {
-    this.setState({ index: index, thumbStatus: "" });
+    this.setState({
+      index: index,
+      thumbStatus: "",
+      related_questions_clicked: "yes",
+      helpful_clicked: "no",
+    });
 
     let { faqs, sub_category_id, faqDesc } = this.state;
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
 
+    this.sendEvents("next", {
+      related_questions_clicked: "yes",
+      related_questions_id: faq_id,
+    });
     if (!faqDesc[faq_id]) {
       await this.getFaqDescription(faq_id);
     }
@@ -99,9 +109,16 @@ class Answers extends Component {
     this.setState({
       index: index,
       thumbStatus: "",
+      related_questions_clicked: "yes",
+      helpful_clicked: "no",
     });
 
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
+
+    this.sendEvents("next", {
+      related_questions_clicked: "yes",
+      related_questions_id: faq_id,
+    });
 
     if (!faqDesc[faq_id]) {
       await this.getFaqDescription(faq_id);
@@ -109,6 +126,7 @@ class Answers extends Component {
   };
 
   handleQuery = () => {
+    this.sendEvents("next", { my_queries_clicked: "yes" });
     this.navigate("queries");
   };
 
@@ -117,21 +135,24 @@ class Answers extends Component {
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
     this.setState({
       thumbStatus: status,
+      helpful_clicked: "yes",
     });
 
     this.updateFeedback(status, faq_id);
   };
 
   sendEvents(user_action, data = {}) {
+    let { helpful_clicked } = this.state;
+
     let eventObj = {
       event_name: "help_and_support",
       properties: {
         user_action: user_action,
         screen_name: "question_answer",
-        related_questions_clicked: data.id || "",
-        related_questions_id: '',
+        related_questions_clicked: data.related_questions_clicked || "no",
+        related_questions_id: data.related_questions_id,
         my_queries_clicked: data.my_queries_clicked || "no",
-        helpful_clicked: data.unable_to_find_query || "no",
+        helpful_clicked: helpful_clicked || "no",
       },
     };
 
@@ -159,7 +180,6 @@ class Answers extends Component {
       });
     }
   };
-
 
   render() {
     let {
@@ -217,10 +237,12 @@ class Answers extends Component {
                       <div className="answer">
                         {faqDesc[item.cms_faq_id] &&
                           ReactHtmlParser(faqDesc[item.cms_faq_id].description)}
-                        {!faqDesc[item.cms_faq_id] && <div className="skelton">
-                          <SkeltonRect className="balance-skelton" />
-                          <SkeltonRect className="balance-skelton balance-skelton2" />
-                        </div>}
+                        {!faqDesc[item.cms_faq_id] && (
+                          <div className="skelton">
+                            <SkeltonRect className="balance-skelton" />
+                            <SkeltonRect className="balance-skelton balance-skelton2" />
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

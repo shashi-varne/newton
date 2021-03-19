@@ -99,10 +99,15 @@ class CategoryList extends Component {
   };
 
   Searching = () => {
-    let { faqList } = this.state;
+    let { value, faqList } = this.state;
+
+    let len = value.length;
+    let sortedList = faqList.filter(
+      (item) => value.toLowerCase() === item.title.slice(0, len).toLowerCase()
+    );
 
     this.setState({
-      sortedList: faqList,
+      sortedList: sortedList,
     });
   };
 

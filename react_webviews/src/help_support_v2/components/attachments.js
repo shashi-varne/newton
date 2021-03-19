@@ -19,8 +19,10 @@ class RenderAttachment extends Component {
     super(props);
     this.state = {
       documents: [],
+      count: 0
     };
     this.initialize = initialize.bind(this);
+    this.native_call_handler = this.native_call_handler.bind(this);
   }
 
   componentWillMount() {
@@ -54,6 +56,38 @@ class RenderAttachment extends Component {
       this.openFileExplorer();
     } else {
       //   this.native_call_handler(method_name, doc_type);
+    }
+  }
+
+  native_call_handler(method_name, doc_type) {
+    let that = this;
+    if (getConfig().generic_callback) {
+      window.callbackWeb[method_name]({
+        type: "doc",
+        doc_type: doc_type,
+        // callbacks from native
+        upload: function upload(file) {
+          try {
+            that.setState({
+              docType: this.doc_type,
+              show_loader: true,
+            });
+            switch (file.type) {
+              case "application/pdf":
+                that.save(file);
+                break;
+              default:
+                alert("Please select pdf file");
+                that.setState({
+                  docType: this.doc_type,
+                  show_loader: false,
+                });
+            }
+          } catch (e) {
+            //
+          }
+        },
+      });
     }
   }
 

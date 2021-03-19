@@ -15,6 +15,7 @@ export async function initialize() {
   this.getUserTickets = getUserTickets.bind(this);
   this.getTicketConversations = getTicketConversations.bind(this);
   this.createTicket = createTicket.bind(this);
+  this.ticketReply = ticketReply.bind(this);
   this.getPdf = getPdf.bind(this);
   this.updateFeedback = updateFeedback.bind(this);
 
@@ -79,15 +80,36 @@ export async function SearchFaq(word) {
   }
 }
 
-export async function updateFeedback(status, id) {
+export async function updateFeedback(feedback, id) {
+  this.setErrorData("onload");
+  let error = "";
   try {
-    const res = await Api.post(`/relay/hns/api/faq/${id}/action?action=${status}`);
-    // let { result, status_code: status } = res.pfwresponse;
+    const res = await Api.post(`/relay/hns/api/faq/${id}/action?action=${feedback}`);
+    let { result, status_code: status } = res.pfwresponse;
+
+    if (status !== 200) {
+      error = result.error || result.message || true;
+    }
   } catch (err) {
     this.setState({
-      isApiRunning: false,
+      skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
     });
     console.log(err);
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
+    });
   }
 }
 
@@ -293,6 +315,8 @@ export async function getUserTickets(params) {
   this.setState({
     skelton: true,
   });
+  this.setErrorData("onload");
+  let error = "";
   try {
     const res = await Api.get(
       `/relay/hns/api/freshdesk/ticket/all?status=${params}`
@@ -311,11 +335,28 @@ export async function getUserTickets(params) {
       this.setState({
         tickets: tickets,
       });
+    } else {
+      error = result.error || result.message || true;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      showError: true,
+      errorData: {
+        ...this.state.errorData,
+        type: "crash",
+      },
+    });
+  }
+
+  if (error) {
+    this.setState({
+      errorData: {
+        ...this.state.errorData,
+        title1: error,
+      },
+      showError: "page",
     });
   }
 }
@@ -359,24 +400,9 @@ export async function getTicketConversations(ticket_id) {
 export async function createTicket(body = {}) {
   this.setState({
     skelton: true,
+    show_loader: 'button'
   });
 
-  let body_data = new FormData();
-  body_data.set("subject", "Buy and Sell Gold");
-  body_data.set("description", "testing service");
-  body_data.set("cf_category", "Mutual Fund");
-  // body_data.set('product', 'Mutual Fund');
-  body_data.set("cf_subcategory", "Goals");
-  // body_data.set('cf_old_ticket_reference_id', '500413');
-
-  // body = {
-  //   subject: 'test',
-  //   description: 'testing service',
-  //   product: 'Mutual Fund',
-  //   cf_category: 'Mutual Fund',
-  //   cf_subcategory: 'Goals',
-  //   cf_old_ticket_reference_id: '500413'
-  // }
   try {
     const res = await Api.post(
       // `/relay/hns/api/freshdesk/ticket/500413/reply`,
@@ -392,12 +418,44 @@ export async function createTicket(body = {}) {
     });
 
     if (status === 200) {
-      console.log(result);
+      return result;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      show_loader: false,
+    });
+  }
+}
+
+export async function ticketReply(body = {}, id) {
+  this.setState({
+    skelton: true,
+    show_loader: 'button'
+  });
+
+  try {
+    const res = await Api.post(
+      `/relay/hns/api/freshdesk/ticket/${id}/reply`,
+      body
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+      show_loader: false,
+    });
+
+    if (status === 200) {
+      return result;
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+      show_loader: false,
     });
   }
 }
@@ -444,4 +502,45 @@ export function getPdf(e) {
       () => this.handleScroll()
     );
   }
+}
+
+export function save(file) {
+  let acceptedType = ["application/pdf"];
+
+  if (file.size >= 6000000) {
+    toast("Please select pdf file less than 6 MB only");
+    this.setState({
+      show_loader: false,
+    })
+    return;
+  }
+
+  if (acceptedType.indexOf(file.type) === -1) {
+    toast("Please select pdf file only");
+    return;
+  }
+
+  let { documents, count } = this.state;
+  file.doc_type = file.type;
+
+  file.name = !file.file_name
+    ? `attachment ${count + 1}`
+    : `${file.file_name}`;
+  file.id = count++;
+
+  if (!file.name.includes(".pdf")) {
+    file.name = `${file.name}.pdf`;
+  }
+
+  let duplicate = documents.filter((item) => {
+    return item.name === file.name;
+  });
+
+  duplicate.length === 0 && documents.length < 10 && documents.push(file);
+
+
+  this.setState({
+    documents: documents,
+    show_loader: false,
+  });
 }

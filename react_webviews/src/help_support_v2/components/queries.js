@@ -8,6 +8,7 @@ import Tickets from "./tickets";
 import { Imgc } from "common/ui/Imgc";
 import { SkeltonRect } from "common/ui/Skelton";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "utils/native_callback";
 
 function TabContainer({ children, dir }) {
   return (
@@ -74,10 +75,47 @@ class Queries extends Component {
   renderTicketError = () => {};
 
   handleClick = (item) => {
+    this.sendEvents("next", {ticket_id: item.ticket_id})
     this.props.history.push(
       { pathname: "conversation", search: getConfig().searchParams },
       { ticket: item }
     );
+  };
+
+  sendEvents(user_action, data = {}) {
+    let eventObj = {
+      event_name: "help_and_support",
+      properties: {
+        user_action: user_action,
+        screen_name: "my_queries",
+        open_queries: this.state.tickets.open ? this.state.tickets.open.length > 0 ? 'yes' : 'no' : "no",
+        ticket_clicked: data.ticket_id || "",
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          title1: this.state.title1 || true,
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
   };
 
   render() {
@@ -86,6 +124,9 @@ class Queries extends Component {
     return (
       <Container
         // skelton={this.state.skelton}
+        events={this.sendEvents("just_set_events")}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title="My Queries"
         noFooter
       >

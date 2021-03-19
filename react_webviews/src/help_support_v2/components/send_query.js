@@ -53,25 +53,26 @@ class SendQuery extends Component {
 
   handleClick = async () => {
     this.setState({
-      show_loader: 'button'
-    })
+      show_loader: "button",
+    });
 
     let body_data = new FormData();
     body_data.set("subject", this.state.sub_category);
     body_data.set("description", this.state.value);
-    body_data.set('cf_product', 'Gold');
+    body_data.set("cf_product", "Gold");
     body_data.set("cf_category", this.state.category);
     body_data.set("cf_subcategory", this.state.sub_category);
     this.state.documents.forEach((item) => {
-      body_data.append("res[]", item)
-    })
+      body_data.append("res[]", item);
+    });
 
+    let result = await this.createTicket(body_data);
 
-
-    await this.createTicket(body_data);
-    // this.setState({
-    //   openConfirmDialog: true,
-    // });
+    if (result) {
+      this.setState({
+        openConfirmDialog: true,
+      });
+    }
   };
 
   handleClose = () => {
@@ -112,7 +113,8 @@ class SendQuery extends Component {
             </div>
             <div>
               <button
-                onClick={() => this.handleClose()}
+                style={{cursor: 'pointer'}}
+                onClick={() => this.navigate('queries')}
                 className="call-back-popup-button"
               >
                 OKAY
@@ -150,11 +152,11 @@ class SendQuery extends Component {
   handleDelete = (index) => {
     let { documents } = this.state;
 
-    documents.splice(index, 1)
+    documents.splice(index, 1);
     this.setState({
-      documents: documents
-    })
-  }
+      documents: documents,
+    });
+  };
 
   render() {
     let { ticket, category, sub_category, documents } = this.state;
@@ -172,7 +174,9 @@ class SendQuery extends Component {
           <div className="sub-title">
             {category} {">"} {sub_category}
           </div>
-          {ticket && <div className="ticket-id">Old Ticket: {ticket.ticket_id}</div>}
+          {ticket && (
+            <div className="ticket-id">Old Ticket: {ticket.ticket_id}</div>
+          )}
           <RenderAttachment
             row={8}
             handleChange={this.handleChange}
