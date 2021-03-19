@@ -181,6 +181,7 @@ class SendQuery extends Component {
             row={8}
             handleChange={this.handleChange}
             getPdf={this.getPdf}
+            save={this.save}
             documents={this.state.documents}
             handleDelete={this.handleDelete}
           />

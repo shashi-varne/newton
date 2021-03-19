@@ -34,6 +34,7 @@ class TicketConversations extends Component {
     let ticket = this.props.location.state.ticket;
     this.setState({
       ticket: ticket,
+      skelton: true,
     });
 
     await this.getTicketConversations(ticket.ticket_id);
@@ -128,7 +129,24 @@ class TicketConversations extends Component {
       }
 
       let result = await this.ticketReply(body_data, ticket.ticket_id);
-      console.log(result)
+      
+      if (result.message === 'success') {
+        let result = await this.getTicketConversations(ticket.ticket_id);
+
+        let conversations = result.conversations;
+
+        let sortedConverstations = [];
+        while (conversations.length) {
+          sortedConverstations.push(conversations.splice(0, 3));
+        }
+
+        splitConversation = [].concat(...sortedConverstations);
+        
+        this.setState({
+          sortedConverstations: sortedConverstations,
+          splitConversation: splitConversation
+        },() => this.handleScroll())
+      }
     }
   };
 
@@ -188,13 +206,13 @@ class TicketConversations extends Component {
                         <div className="chat">{item.description}</div>
                         {item.attachment.length > 0 &&
                           item.attachment.map((el, index) => (
-                            <div className="download" key={index}>
+                            <a href={el.thumb_url} className="download" key={index} download>
                               <img
                                 src={require(`assets/${this.state.productName}/download.svg`)}
                                 alt=""
                               />
                               <div>{el.name}</div>
-                            </div>
+                            </a>
                           ))}
                         <div className="date">{moment(item.dt_updated).format('DD-MM-YYYY hh:mma')}</div>
                       </div>

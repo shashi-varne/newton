@@ -41,6 +41,13 @@ class RenderAttachment extends Component {
     }
   }
 
+  showLoaderNative() {
+    this.setState({
+      show_loader: true
+    })
+  }
+
+
   onload = () => {};
 
   openFileExplorer() {
@@ -55,7 +62,7 @@ class RenderAttachment extends Component {
     if (getConfig().Web || isMobile.iOS()) {
       this.openFileExplorer();
     } else {
-      //   this.native_call_handler(method_name, doc_type);
+        this.native_call_handler(method_name, doc_type);
     }
   }
 
@@ -74,7 +81,7 @@ class RenderAttachment extends Component {
             });
             switch (file.type) {
               case "application/pdf":
-                that.save(file);
+                that.props.save(file);
                 break;
               default:
                 alert("Please select pdf file");
@@ -165,7 +172,7 @@ class RenderAttachment extends Component {
         ))}
         <div
           className="pdf-upload"
-          onClick={() => this.startUpload("open_camera", "attachment")}
+          onClick={() => this.startUpload("open_file", "attachment")}
         >
           <div className="plus-sign">
             <input

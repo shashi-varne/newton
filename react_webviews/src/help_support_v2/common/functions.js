@@ -17,6 +17,7 @@ export async function initialize() {
   this.createTicket = createTicket.bind(this);
   this.ticketReply = ticketReply.bind(this);
   this.getPdf = getPdf.bind(this);
+  this.save = save.bind(this);
   this.updateFeedback = updateFeedback.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
@@ -84,7 +85,9 @@ export async function updateFeedback(feedback, id) {
   this.setErrorData("onload");
   let error = "";
   try {
-    const res = await Api.post(`/relay/hns/api/faq/${id}/action?action=${feedback}`);
+    const res = await Api.post(
+      `/relay/hns/api/faq/${id}/action?action=${feedback}`
+    );
     let { result, status_code: status } = res.pfwresponse;
 
     if (status !== 200) {
@@ -362,9 +365,6 @@ export async function getUserTickets(params) {
 }
 
 export async function getTicketConversations(ticket_id) {
-  this.setState({
-    skelton: true,
-  });
   try {
     const res = await Api.get(
       `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations`
@@ -387,12 +387,19 @@ export async function getTicketConversations(ticket_id) {
         conversations: conversations,
         category: result.response.category,
         sub_category: result.response.sub_category,
+        show_loader: false,
+        openTextBox: false,
+        value: '',
+        documents: []
       });
+
+      return result.response;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+      show_loader: false,
     });
   }
 }
@@ -400,7 +407,7 @@ export async function getTicketConversations(ticket_id) {
 export async function createTicket(body = {}) {
   this.setState({
     skelton: true,
-    show_loader: 'button'
+    show_loader: "button",
   });
 
   try {
@@ -431,8 +438,7 @@ export async function createTicket(body = {}) {
 
 export async function ticketReply(body = {}, id) {
   this.setState({
-    skelton: true,
-    show_loader: 'button'
+    show_loader: "button",
   });
 
   try {
@@ -445,7 +451,6 @@ export async function ticketReply(body = {}, id) {
 
     this.setState({
       skelton: false,
-      show_loader: false,
     });
 
     if (status === 200) {
@@ -511,7 +516,7 @@ export function save(file) {
     toast("Please select pdf file less than 6 MB only");
     this.setState({
       show_loader: false,
-    })
+    });
     return;
   }
 
@@ -523,9 +528,7 @@ export function save(file) {
   let { documents, count } = this.state;
   file.doc_type = file.type;
 
-  file.name = !file.file_name
-    ? `attachment ${count + 1}`
-    : `${file.file_name}`;
+  file.name = !file.file_name ? `attachment ${count + 1}` : `${file.file_name}`;
   file.id = count++;
 
   if (!file.name.includes(".pdf")) {
@@ -537,7 +540,6 @@ export function save(file) {
   });
 
   duplicate.length === 0 && documents.length < 10 && documents.push(file);
-
 
   this.setState({
     documents: documents,

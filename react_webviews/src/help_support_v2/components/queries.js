@@ -182,7 +182,7 @@ class Queries extends Component {
               </TabContainer>
               <TabContainer dir={"ltr"}>
                 {tickets.closed && tickets.closed.length > 0 && (
-                  <Tickets tickets={tickets.open} onClick={this.handleClick} />
+                  <Tickets tickets={tickets.closed} onClick={this.handleClick} />
                 )}
                 {tickets.closed && tickets.closed.length === 0 && (
                   <div className="no-tickets">

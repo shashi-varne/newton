@@ -106,6 +106,10 @@ class CategoryList extends Component {
       (item) => value.toLowerCase() === item.title.slice(0, len).toLowerCase()
     );
 
+    if (sortedList.length === 0) {
+      sortedList = faqList
+    }
+
     this.setState({
       sortedList: sortedList,
     });
