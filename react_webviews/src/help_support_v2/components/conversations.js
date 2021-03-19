@@ -44,7 +44,7 @@ class TicketConversations extends Component {
     let { conversations } = this.state;
 
     let sortedConverstations = [];
-    let splitConversation = []
+    let splitConversation = [];
     while (conversations.length) {
       sortedConverstations.push(conversations.splice(0, 3));
     }
@@ -61,7 +61,7 @@ class TicketConversations extends Component {
         description: result.description,
         dt_updated: result.updated_at,
         attachment: result.attachments,
-        message_from: 'user'
+        message_from: "user",
       });
     }
 
@@ -232,26 +232,25 @@ class TicketConversations extends Component {
                         <div className="chat">{item.description}</div>
                         {item.attachment.length > 0 &&
                           item.attachment.map((el, index) => (
-                            <a
-                              href={el.attachment_url}
+                            <div
+                              // href={el.attachment_url}
                               className="download"
                               key={index}
-                              // onClick={() => {
-                              //   nativeCallback({
-                              //     action: 'open_in_browser',
-                              //     message: {
-                              //         url: el.attachment_url
-                              //     }
-                              // });
-                              // window.location.href = el.attachment_url
-                              // }}
+                              onClick={() => {
+                                nativeCallback({
+                                  action: "open_in_browser",
+                                  message: {
+                                    url: el.attachment_url,
+                                  },
+                                });
+                              }}
                             >
                               <img
                                 src={require(`assets/${this.state.productName}/download.svg`)}
                                 alt=""
                               />
                               <div>{el.name}</div>
-                            </a>
+                            </div>
                           ))}
                         <div className="date">
                           {moment(item.dt_updated).format("DD-MM-YYYY hh:mma")}
@@ -273,18 +272,25 @@ class TicketConversations extends Component {
                         <div className="chat">{item.description}</div>
                         {item.attachment.length > 0 &&
                           item.attachment.map((el, index) => (
-                            <a
-                              href={el.thumb_url}
+                            <div
+                              // href={el.attachment_url}
                               className="download"
                               key={index}
-                              download
+                              onClick={() => {
+                                nativeCallback({
+                                  action: "open_in_browser",
+                                  message: {
+                                    url: el.attachment_url,
+                                  },
+                                });
+                              }}
                             >
                               <img
                                 src={require(`assets/${this.state.productName}/download.svg`)}
                                 alt=""
                               />
                               <div>{el.name}</div>
-                            </a>
+                            </div>
                           ))}
                         <div className="date">
                           {moment(item.dt_updated).format("DD-MM-YYYY hh:mma")}
@@ -311,6 +317,7 @@ class TicketConversations extends Component {
               row={4}
               handleChange={this.handleChange}
               getPdf={this.getPdf}
+              save={this.save}
               documents={this.state.documents}
               handleDelete={this.handleDelete}
             />
