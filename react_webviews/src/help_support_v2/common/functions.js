@@ -1,4 +1,3 @@
-// import { storageservice } from 'utils/validators';
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
 // import toast from '../../common/ui/Toast';
@@ -412,7 +411,6 @@ export async function createTicket(body = {}) {
 
   try {
     const res = await Api.post(
-      // `/relay/hns/api/freshdesk/ticket/500413/reply`,
       `/relay/hns/api/freshdesk/ticket/create`,
       body
     );
@@ -510,7 +508,13 @@ export function getPdf(e) {
 }
 
 export function save(file) {
-  let acceptedType = ["application/pdf"];
+  let acceptedType = [
+    "application/pdf",
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/bmp",
+  ];
 
   if (file.size >= 6000000) {
     toast("Please select pdf file less than 6 MB only");
