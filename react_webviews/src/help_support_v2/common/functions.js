@@ -535,8 +535,9 @@ export function save(file) {
   file.name = !file.file_name ? `attachment ${count + 1}` : `${file.file_name}`;
   file.id = count++;
 
-  if (!file.name.includes(".pdf")) {
-    file.name = `${file.name}.pdf`;
+  let ext = file.type.split('/')[1]
+  if (!file.name.includes(`.${ext}`)) {
+    file.name = `${file.name}.${ext}`;
   }
 
   let duplicate = documents.filter((item) => {

@@ -141,7 +141,7 @@ class TicketConversations extends Component {
       body_data.set("description", this.state.value);
       if (documents.length > 0) {
         documents.forEach((item) => {
-          body_data.append("res[]", item);
+          body_data.append("res[]", item, item.name);
         });
       }
 

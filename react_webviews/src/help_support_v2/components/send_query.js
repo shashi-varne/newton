@@ -63,7 +63,7 @@ class SendQuery extends Component {
     body_data.set("cf_category", this.state.category);
     body_data.set("cf_subcategory", this.state.sub_category);
     this.state.documents.forEach((item) => {
-      body_data.append("res[]", item);
+      body_data.append("res[]", item, item.name);
     });
 
     let result = await this.createTicket(body_data);
