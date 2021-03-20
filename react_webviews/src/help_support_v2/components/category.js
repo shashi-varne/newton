@@ -63,7 +63,11 @@ class Category extends Component {
 
   handleQuery = () => {
     this.sendEvents("next", { my_queries_clicked: "yes" });
-    this.navigate("queries");
+    
+    this.props.history.push(
+      { pathname: "help/queries", search: getConfig().searchParams },
+      { fromScreen: "sub-category" }
+    );
   };
 
   setErrorData = (type) => {
@@ -74,7 +78,8 @@ class Category extends Component {
       let mapper = {
         onload: {
           handleClick1: this.onload,
-          title1: this.state.title1 || true,
+          title1: this.state.title1,
+          button_text1: "Retry",
         },
       };
 
@@ -96,7 +101,6 @@ class Category extends Component {
         handleQuery={() => this.handleQuery()}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        // skelton={this.state.skelton}
         noFooter
       >
         <div className="help-category">

@@ -73,7 +73,11 @@ class Questions extends Component {
 
   handleQuery = () => {
     this.sendEvents("next", { my_queries_clicked: "yes" });
-    this.navigate("queries");
+    
+    this.props.history.push(
+      { pathname: "help/queries", search: getConfig().searchParams },
+      { fromScreen: "questions" }
+    );
   };
 
   handleCta = () => {
@@ -97,7 +101,8 @@ class Questions extends Component {
       let mapper = {
         onload: {
           handleClick1: this.onload,
-          title1: this.state.title1 || true,
+          title1: this.state.title1,
+          button_text1: "Retry",
         },
       };
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import {SkeltonRect} from 'common/ui/Skelton';
+import { storageService } from "utils/validators";
 import { Imgc } from "common/ui/Imgc";
 import Container from "../common/Container";
 import { categories } from "../constants";
@@ -8,6 +8,7 @@ import Search from "./search";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { SkeltonRect } from "common/ui/Skelton";
+import ReactHtmlParser from "react-html-parser";
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -44,10 +45,10 @@ class CategoryList extends Component {
     categoryList.map((item) => {
       item.name = categories[item.cms_category_id].tag_name;
       item.icon = categories[item.cms_category_id].icon;
-
+      storageService().set(item.cms_category_name, item.cms_category_id);
       return item;
     });
-    
+
     this.setState({
       categoryList: categoryList,
     });
@@ -59,7 +60,7 @@ class CategoryList extends Component {
       properties: {
         user_action: user_action,
         screen_name: "category",
-        category_clicked: data.card_name || '',
+        category_clicked: data.card_name || "",
         my_queries_clicked: data.my_queries_clicked || "no",
         initial_kyc: "",
         invested: "",
@@ -92,11 +93,11 @@ class CategoryList extends Component {
   handleSearch = async (value) => {
     const result = await this.SearchFaq(value);
 
-    let list = result.faqs;
+    let list = result ? result.faqs : [];
 
     this.setState(
       {
-        faqList: result ? list : [],
+        faqList: list,
       },
       () => {
         this.Searching();
@@ -113,7 +114,7 @@ class CategoryList extends Component {
     );
 
     if (sortedList.length === 0) {
-      sortedList = faqList
+      sortedList = faqList;
     }
 
     this.setState({
@@ -131,7 +132,11 @@ class CategoryList extends Component {
 
   handleQuery = () => {
     this.sendEvents("next", { my_queries_clicked: "yes" });
-    this.navigate("help/queries");
+
+    this.props.history.push(
+      { pathname: "help/queries", search: getConfig().searchParams },
+      { fromScreen: "help" }
+    );
   };
 
   handleSearchItem = (item) => {
@@ -175,7 +180,8 @@ class CategoryList extends Component {
       let mapper = {
         onload: {
           handleClick1: this.onload,
-          title1: this.state.title1 || true
+          title1: this.state.title1,
+          button_text1: "Retry",
         },
       };
 
@@ -188,16 +194,29 @@ class CategoryList extends Component {
   handleContact = () => {
     if (getConfig().Web) {
       this.setState({
-        open: true
-      })
+        open: true,
+      });
     } else {
-        nativeCallback({
-          action: "open_in_browser",
-          message: {
-            url: `tel:${getConfig().mobile}`,
-          },
-        });
+      this.openInBrowser(`tel:${getConfig().mobile}`);
     }
+  };
+
+  renderHighlight = (title) => {
+    let { value } = this.state;
+    let highlight = title.split(' ').map((word) => {
+      let text = value.toLowerCase().split(' ');
+
+      if (text.includes(word.toLowerCase())) {
+        return `<span style='color: var(--primary)'>${word}</span>`
+      } else {
+        return word
+      }
+    })
+    // console.log(value.toLowerCase().split(' '))
+    //  title = "Why should <span style='color: var(--primary)'>you</span> stay invested in SIP for a longer duration?"
+    return (
+      <span>{ReactHtmlParser(highlight.join(' '))}</span>
+    )
   }
 
   render() {
@@ -205,7 +224,6 @@ class CategoryList extends Component {
 
     return (
       <Container
-        // skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
@@ -226,10 +244,11 @@ class CategoryList extends Component {
                 onClick={() => this.handleSearchItem(item)}
               >
                 <div className="faq">
-                  <span style={{ color: "var(--primary)" }}>
+                  {/* <span style={{ color: "var(--primary)" }}>
                     {item.title.slice(0, value.length)}
                   </span>
-                  {item.title.slice(value.length)}
+                  {item.title.slice(value.length)} */}
+                  {this.renderHighlight(item.title)}
                 </div>
                 <div className="tag">
                   {item.cms_category_name}

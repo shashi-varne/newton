@@ -20,7 +20,7 @@ class OpenTickets extends Component {
   }
 
   onload = () => {
-    let tickets = this.props.tickets;
+    let tickets = [...this.props.tickets];
 
     // let sortedTickets = [];s
     // while (tickets.length) {

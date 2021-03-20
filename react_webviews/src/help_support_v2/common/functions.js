@@ -6,6 +6,7 @@ import toast from "common/ui/Toast";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
+  this.openInBrowser = openInBrowser.bind(this);
   this.SearchFaq = SearchFaq.bind(this);
   this.getAllCategories = getAllCategories.bind(this);
   this.getSubCategories = getSubCategories.bind(this);
@@ -36,13 +37,77 @@ export function navigate(pathname, data = {}) {
   });
 }
 
-export async function SearchFaq(word) {
-  this.setState({
-    isApiRunning: true,
+export function openInBrowser(url) {
+  nativeCallback({
+    action: "open_in_browser",
+    message: {
+      url: url,
+    },
   });
+}
+
+export async function getAllCategories() {
   this.setErrorData("onload");
   let error = "";
+  let errorType = "";
+
   try {
+    this.setState({
+      skelton: true,
+    });
+
+    const res = await Api.get("/relay/hns/api/categories");
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      return result;
+    } else {
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: "page",
+    });
+  }
+}
+
+export async function SearchFaq(word) {
+  this.setErrorData("onload");
+  let error = "";
+  let errorType = "";
+
+  try {
+    this.setState({
+      isApiRunning: true,
+    });
+
     const res = await Api.get(`/relay/hns/api/faq/search?word=${word}`);
 
     let { result, status_code: status } = res.pfwresponse;
@@ -54,26 +119,91 @@ export async function SearchFaq(word) {
     if (status === 200) {
       return result;
     } else {
-      error = result.error || result.message || true;
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";
     }
   } catch (err) {
-    this.setState({
-      isApiRunning: false,
-      skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
-    });
     console.log(err);
+    this.setState({
+      skelton: false,
+    });
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    let value = "";
+    this.setState(
+      {
+        show_loader: false,
+        errorData: {
+          ...this.state.errorData,
+          title2: error,
+          type: errorType,
+        },
+        showError: "page",
+      },
+      () => this.handleChange(value)
+    );
+  }
+}
+
+export async function getSubCategories(category_id) {
+  this.setErrorData("onload");
+  let error = "";
+  let errorType = "";
+
+  try {
+    this.setState({
+      skelton: true,
+    });
+
+    const res = await Api.get(
+      `/relay/hns/api/sub_categories?category_id=${category_id}`
+    );
+
+    let { result, status_code: status } = res.pfwresponse;
+
+    this.setState({
+      skelton: false,
+    });
+
+    if (status === 200) {
+      this.setState({
+        sub_categories: result.sub_categories,
+      });
+    } else {
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";
+    }
+  } catch (err) {
+    console.log(err);
+    this.setState({
+      skelton: false,
+    });
+    error = true;
+    errorType = "crash";
   }
 
   if (error) {
     this.setState({
+      show_loader: false,
       errorData: {
         ...this.state.errorData,
-        title1: error,
+        title2: error,
+        type: errorType,
       },
       showError: "page",
     });
@@ -115,103 +245,16 @@ export async function updateFeedback(feedback, id) {
   }
 }
 
-export async function getAllCategories() {
-  this.setState({
-    skelton: true,
-  });
-  this.setErrorData("onload");
-  let error = "";
-  try {
-    const res = await Api.get("/relay/hns/api/categories");
-
-    let { result, status_code: status } = res.pfwresponse;
-
-    this.setState({
-      skelton: false,
-    });
-
-    if (status === 200) {
-      return result;
-    } else {
-      error = result.error || result.message || true;
-    }
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
-    });
-  }
-
-  if (error) {
-    this.setState({
-      errorData: {
-        ...this.state.errorData,
-        title1: error,
-      },
-      showError: "page",
-    });
-  }
-}
-
-export async function getSubCategories(category_id) {
-  this.setState({
-    skelton: true,
-  });
-  this.setErrorData("onload");
-  let error = "";
-  try {
-    const res = await Api.get(
-      `/relay/hns/api/sub_categories?category_id=${category_id}`
-    );
-
-    let { result, status_code: status } = res.pfwresponse;
-
-    this.setState({
-      skelton: false,
-    });
-
-    if (status === 200) {
-      this.setState({
-        sub_categories: result.sub_categories,
-      });
-    } else {
-      error = result.error || result.message || true;
-    }
-  } catch (err) {
-    console.log(err);
-    this.setState({
-      skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
-    });
-  }
-
-  if (error) {
-    this.setState({
-      errorData: {
-        ...this.state.errorData,
-        title1: error,
-      },
-      showError: "page",
-    });
-  }
-}
-
 export async function getAllfaqs(sub_category_id) {
-  this.setState({
-    skelton: true,
-  });
   this.setErrorData("onload");
   let error = "";
+  let errorType = "";
+
   try {
+    this.setState({
+      skelton: true,
+    });
+
     const res = await Api.get(
       `/relay/hns/api/faqs?sub_category_id=${sub_category_id}`
     );
@@ -231,25 +274,31 @@ export async function getAllfaqs(sub_category_id) {
         faqs: faqs,
       });
     } else {
-      error = result.error || result.message || true;
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
     });
+    error = true;
+    errorType = "crash";
   }
 
   if (error) {
     this.setState({
+      show_loader: false,
       errorData: {
         ...this.state.errorData,
-        title1: error,
+        title2: error,
+        type: errorType,
       },
       showError: "page",
     });
@@ -366,7 +415,7 @@ export async function getUserTickets(params) {
 export async function getTicketConversations(ticket_id) {
   try {
     const res = await Api.get(
-      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations`
+      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations?page_no=1`
     );
 
     let { result, status_code: status } = res.pfwresponse;
@@ -388,8 +437,8 @@ export async function getTicketConversations(ticket_id) {
         sub_category: result.response.sub_category,
         show_loader: false,
         openTextBox: false,
-        value: '',
-        documents: []
+        value: "",
+        documents: [],
       });
 
       return result.response;
@@ -410,10 +459,7 @@ export async function createTicket(body = {}) {
   });
 
   try {
-    const res = await Api.post(
-      `/relay/hns/api/freshdesk/ticket/create`,
-      body
-    );
+    const res = await Api.post(`/relay/hns/api/freshdesk/ticket/create`, body);
 
     let { result, status_code: status } = res.pfwresponse;
 
@@ -535,7 +581,7 @@ export function save(file) {
   file.name = !file.file_name ? `attachment ${count + 1}` : `${file.file_name}`;
   file.id = count++;
 
-  let ext = file.type.split('/')[1]
+  let ext = file.type.split("/")[1];
   if (!file.name.includes(`.${ext}`)) {
     file.name = `${file.name}.${ext}`;
   }
