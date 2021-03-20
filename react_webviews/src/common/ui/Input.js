@@ -19,9 +19,7 @@ const Input = (props) => {
         fullWidth
         required={props.required}
         className={props.class}
-        // id={props.id}
-        id="filled-basic"
-        variant="filled"
+        id={props.id}
         label={props.label}
         onFocus={props.onFocus}
         name={props.name}
@@ -42,15 +40,13 @@ const Input = (props) => {
         placeholder={props.placeholder}
         required={props.required}
         className={props.class}
-        // id={props.id}
-        id="filled-basic"
-        variant="filled"
+        id={props.id}
         label={props.label}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
         name={props.name}
         onChange={props.onChange}
-        // variant={props.variant}
+        variant={props.variant}
         onKeyPress={props.onKeyChange}
         inputProps={{
           maxLength: props.maxLength,

@@ -3,7 +3,6 @@ import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
 import './style.scss';
-
 class SelectDropDown2 extends React.Component {
   constructor(props) {
     super(props);
@@ -50,6 +49,9 @@ class SelectDropDown2 extends React.Component {
 
     this.setState({ selectedOption, value: selectedOption, inputValue: selectedOption ? selectedOption.label : "" })
 
+    if (this.state.multi) {
+      return;
+    }
     this.props.onChange(selectedOption ? selectedOption.value : '');
 
     // if (selectedOption) {
@@ -73,15 +75,17 @@ class SelectDropDown2 extends React.Component {
   }
 
   componentWillMount() {
-    const value = this.props.options.find(opt => opt.value === this.props.value || opt.name === this.props.value);
+    // const value = this.props.options.find(opt => opt.value === this.props.value || opt.name === this.props.value);
     // this.setState({ selectedOption: value.value })
   }
 
   render() {
     let components;
     if (this.state.multi) {
-      components = { Option, MultiValue, IndicatorSeparator: () => null, Input }
-    } else components = { IndicatorSeparator: () => null, Input }
+      components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
+    } else {
+      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
+    }
 
     const options = this.props.options.map((ele, index) => {
       if (ele.name) {
@@ -94,17 +98,26 @@ class SelectDropDown2 extends React.Component {
     });
 
     const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
+    const isLableOpen = (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi)
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
-        {(<InputLabel shrink={(!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi)} htmlFor={this.props.id}><div
+        {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}><div
+          ref={element => {
+            if (element && isLableOpen) {
+              element.style.setProperty('margin-top', '4px', 'important');
+            } else if (element && !isLableOpen) {
+              element.style.setProperty('margin-top', '-4px', 'important');
+            }
+          }}
           style={{
-            position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px' : '-4px',
-            minWidth: '300px', color: this.props.error ? '#f44336' : '',
-            //   position: 'absolute', marginTop: (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.state.multi) ? '2px !important' : '-4px !important',
-            // minWidth: '300px !important', color: this.props.error ? '#f44336 !important' : '',
+            position: 'absolute',
+            // marginTop: isLableOpen ? '4px' : '-5px',
+            minWidth: '300px',
+            color: this.props.error ? '#D0021B' : '',
+            fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px'
           }}>
           {this.props.label}</div></InputLabel>)}
-        <div style={{ borderBottom: this.props.error ? '2px solid #f44336' : this.state.shrink ? '1px solid #4F2DA7' : '' , borderTop: '1px solid green !important' }}>
+        <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : ''  }}>
           <Select
             // defaultValue={value}
             ref={ref => {
@@ -145,12 +158,12 @@ class SelectDropDown2 extends React.Component {
             options={options}
             onChange={this.handleChange}
             allowSelectAll={true}
-            closeMenuOnSelect={false}
+            closeMenuOnSelect={true}
           // menuIsOpen={true}
           />
         </div>
-        {(this.props.error || this.state.error) ? <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
-          <span className='error-radiogrp'> {this.props.helperText || this.state.helperText || ''} </span>}
+        {(this.props.error || this.state.error) ? <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
+          <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || ''} </span>}
       </FormControl>
     );
   }
@@ -171,7 +184,7 @@ const Option = props => {
           checked={props.isSelected}
           onChange={() => null}
         />{" "}
-        <span style={{ marginLeft: '10px' }}>{props.label}</span>
+        <span style={{ marginLeft: '10px', marginTop: '-1px' }}>{props.label}</span>
       </components.Option>
     </div>
   );
@@ -179,7 +192,7 @@ const Option = props => {
 
 const MultiValue = props => (
   <components.MultiValue {...props}>
-    <span>{props.data.label}</span>
+    <span>{props.data.name}</span>
   </components.MultiValue>
 );
 const Input = (props) => <components.Input {...props} isHidden={false} />;
@@ -190,3 +203,32 @@ const createOption = (label) => ({
   label,
   value: label.toLowerCase().replace(/\W/g, "")
 });
+
+const DropdownIndicator = (props) => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 1L7 7L13 1" stroke="#767E86" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </components.DropdownIndicator>
+  );
+};
+
+const ClearIndicator = (props) => {
+  return (
+    <components.ClearIndicator {...props}>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.66659 1.27334L8.72659 0.333336L4.99992 4.06L1.27325 0.333336L0.333252 1.27334L4.05992 5L0.333252 8.72667L1.27325 9.66667L4.99992 5.94L8.72659 9.66667L9.66659 8.72667L5.93992 5L9.66659 1.27334Z" fill="#767E86" />
+      </svg>
+
+    </components.ClearIndicator>
+  );
+}
+
+const ErrorMessageStyle = {
+  lineHeight: '18px',
+  fontSize: '11px',
+  color: '#D0021B',
+  marginLeft: '10px',
+  marginTop: '-4px'
+}
