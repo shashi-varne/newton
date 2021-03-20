@@ -18,7 +18,7 @@ const Header = ({ classes, width, goBack, resetpage, handleReset, disableBack })
           <div
             style={{
               display: 'flex',
-              paddingLeft: '26px',
+              paddingLeft: '23px',
               paddingRight: '10px',
               justifyContent: 'space-between',
               direction: 'row',
