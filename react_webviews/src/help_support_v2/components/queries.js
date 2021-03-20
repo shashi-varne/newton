@@ -164,6 +164,7 @@ class Queries extends Component {
               action={(actions) => {
                 this.swipeableActions = actions;
               }}
+              style={{height: '80vh'}}
               enableMouseEvents
               animateHeight
             >

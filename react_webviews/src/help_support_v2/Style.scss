@@ -295,7 +295,7 @@
 
 .help-queries {
   margin: 0 -20px;
-  max-height: 85vh;
+  height: 80vh;
 
   .nav-bar {
     height: 100%;
@@ -348,10 +348,6 @@
 
 .help-tickets {
   line-height: 20px;
-  height: 85vh;
-  overflow: scroll;
-  margin: 0 -22px;
-  padding: 0 20px 60px;
 
   .fade-in {
     animation: fadeIn ease 0.5s;
@@ -364,28 +360,6 @@
     100% {
       opacity: 1;
     }
-  }
-
-  ::-webkit-scrollbar {
-    -webkit-appearance: none;
-  }
-
-  ::-webkit-scrollbar:vertical {
-    width: 3px;
-  }
-
-  ::-webkit-scrollbar:horizontal {
-    height: 3px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: #d8d8d8;
-    border-radius: 2px;
-  }
-
-  ::-webkit-scrollbar-track {
-    border-radius: 10px;
-    background-color: #ffffff;
   }
 
   .ticket {
