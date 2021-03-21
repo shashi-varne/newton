@@ -1334,8 +1334,18 @@ body[data-device="mobile"] {
   .MuiInput-inputType{
     height: 2.1875em !important;
   }
+  .css-1hwfws3{
+    align-items: center;
+    display: inline-flex !important;
+    flex-direction: column;
+    align-content: flex-start;
+    overflow-x: auto !important;
+    height: 33px !important;
+  }
   
-  
+  .css-1hb7zxy-IndicatorsContainer{
+    margin-right: 14px !important;
+  }
   .input-value{
     margin-left: 10px;
   }

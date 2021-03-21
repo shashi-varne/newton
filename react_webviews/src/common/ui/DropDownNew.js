@@ -122,7 +122,7 @@ class SelectDropDown2 extends React.Component {
             ref={ref => {
               this.select = ref;
             }}
-            // blurInputOnSelect={true}
+            blurInputOnSelect={false}
             // isDisabled={this.state.isLoading}
             // isLoading={this.state.isLoading}
             // onCreateOption={this.handleCreate}
@@ -156,7 +156,7 @@ class SelectDropDown2 extends React.Component {
             hideSelectedOptions={false}
             options={options}
             onChange={this.handleChange}
-            allowSelectAll={true}
+            // allowSelectAll={true}
             closeMenuOnSelect={this.state.multi ? false : true}
           // menuIsOpen={true}
           />
