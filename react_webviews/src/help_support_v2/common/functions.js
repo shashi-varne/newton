@@ -512,7 +512,7 @@ export async function createTicket(body = {}) {
     if (status === 200) {
       return result;
     } else {
-      let title1 = result.error[0] || "Something went wrong!";
+      let title1 = result.error || "Something went wrong!";
       this.setState({
         show_loader: false,
         loaderWithData: false,
@@ -570,7 +570,7 @@ export async function ticketReply(body = {}, id) {
     if (status === 200) {
       return result;
     } else {
-      let title1 = result.error[0] || "Something went wrong!";
+      let title1 = result.error || "Something went wrong!";
       this.setState({
         show_loader: false,
         loaderWithData: false,

@@ -61,7 +61,7 @@ class Answers extends Component {
       sub_category = this.props.location.state?.sub_category || {};
 
       faqs = this.props.location.state?.faqs || {};
-      index = this.props.location.state?.index || {};
+      index = this.props.location.state ? this.props.location.state.index : '';
       sub_category_id = sub_category.cms_category_id;
 
       this.setState({
@@ -120,7 +120,6 @@ class Answers extends Component {
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
 
     if (index !== 0 && index !== faqs[sub_category_id].length-1) {
-      console.log(index)
       this.sendEvents("next", {
         related_questions_clicked: "yes",
         related_questions_id: faq_id,

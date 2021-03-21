@@ -581,7 +581,7 @@ export function new_header_scroll() {
             </div>
 
             {this.props.querycta && (
-                <div style={{width: '100px'}}>
+                <div style={{width: '150px'}}>
                     <div onClick={this.props.handleQuery} className="header-query">{this.props.queryTitle}</div>
                 </div>
             )}
