@@ -74,10 +74,6 @@ class SelectDropDown2 extends React.Component {
     if (prevState.options !== this.props.options && this.props.options) { this.setState({ options: this.props.options }) }
   }
 
-  componentWillMount() {
-    // const value = this.props.options.find(opt => opt.value === this.props.value || opt.name === this.props.value);
-    // this.setState({ selectedOption: value.value })
-  }
 
   render() {
     let components;
@@ -118,11 +114,11 @@ class SelectDropDown2 extends React.Component {
           {this.props.label}</div></InputLabel>)}
         <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : ''  }}>
           <Select
-            // defaultValue={value}
             ref={ref => {
               this.select = ref;
             }}
             blurInputOnSelect={false}
+            // defaultValue={value}
             // isDisabled={this.state.isLoading}
             // isLoading={this.state.isLoading}
             // onCreateOption={this.handleCreate}
@@ -136,7 +132,6 @@ class SelectDropDown2 extends React.Component {
             isClearable={true}
             isSearchable={this.props.options.length <= 6 ? false : true}
             value={value}
-            // maxMenuHeight={false}
             menuPlacement="auto"
             menuPortalTarget={document.querySelector('body')}
             textFieldProps={{
@@ -151,14 +146,31 @@ class SelectDropDown2 extends React.Component {
               dropdownIndicator: (provided, state) => ({
                 ...provided,
                 transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
-              })
+              }),
+              menuList: (base) => ({
+                ...base,            
+               "::-webkit-scrollbar": {
+                 width: "5px",
+                 height: '20px',
+                 background: '#C4C4C4',
+               },
+               "::-webkit-scrollbar-track": {
+                 background: "white",
+                 borderRadius: '100px',
+               },
+               "::-webkit-scrollbar-thumb": {
+                 background: "#C4C4C4",
+               },
+               "::-webkit-scrollbar-thumb:hover": {
+                 background: "#C4C4C4",
+               }
+            })
             }}
             hideSelectedOptions={false}
             options={options}
             onChange={this.handleChange}
             // allowSelectAll={true}
             closeMenuOnSelect={this.state.multi ? false : true}
-          // menuIsOpen={true}
           />
         </div>
         {(this.props.error || this.state.error) ? <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
