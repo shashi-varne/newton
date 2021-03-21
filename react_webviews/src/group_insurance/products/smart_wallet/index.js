@@ -13,6 +13,7 @@ import ic_wallet_b2_myway from 'assets/ic_wallet_b2_myway.svg';
 import ic_wallet_b3_myway from 'assets/ic_wallet_b3_myway.svg';
 
 import ic_wallet_b4_myway from 'assets/ic_wallet_b4_myway.svg';
+import { Fragment } from 'react';
 class SmartwalletPlanDetails extends Component {
 
   constructor(props) {
@@ -135,11 +136,11 @@ class SmartwalletPlanDetails extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PlanDetails
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 

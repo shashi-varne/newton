@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Fragment } from 'react';
 import BasicDetails from '../../ui_components/general_insurance/basic_details';
 
 class SmartwalletForm extends Component {
@@ -12,11 +13,11 @@ class SmartwalletForm extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <BasicDetails
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 }

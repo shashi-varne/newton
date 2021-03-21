@@ -22,6 +22,7 @@ class Terms extends Component {
         showLoader={this.state.show_loader}
         title={'Terms & Conditions'}
         background='GreyBackground'
+        noFooter={true}
       >
         <div className="Terms pad25">
           <div className="List">
