@@ -39,14 +39,17 @@ class TicketConversations extends Component {
       skelton: true,
     });
 
-    let result = await this.getTicketConversations(ticket.ticket_id);
+    let result = await this.getTicketConversations(ticket.ticket_id, "1");
 
-    this.setState({
-      category: result.category,
-      sub_category: result.sub_category,
-      ticket_status: result.status,
-    });
-    this.sortConversations(result);
+    if (result) {
+      this.setState({
+        category: result.category || "",
+        sub_category: result.sub_category || "",
+        ticket_status: result.status || "",
+      });
+      this.sortConversations(result);
+    }
+
     // console.log([].concat(...sortedConverstations))
   };
 
@@ -60,8 +63,8 @@ class TicketConversations extends Component {
         category: category,
         sub_category: sub_category,
         ticket_closed: ticket_status,
-        reopen: data.reopen || 'no',
-        reply: data.reply || 'no'
+        reopen: data.reopen || "no",
+        reply: data.reply || "no",
       },
     };
 
@@ -72,7 +75,7 @@ class TicketConversations extends Component {
     }
   }
 
-  sortConversations = (result, reply = false) => {
+  sortConversations = async (result, reply = false) => {
     let conversations = [];
     let sortedConverstations = [];
     let splitConversation = [];
@@ -85,7 +88,18 @@ class TicketConversations extends Component {
     };
 
     if (result.conversations) {
-      conversations = [description, ...result.conversations];
+      if (result.conversations && result.conversations.length === 30) {
+        let details = await this.getTicketConversations(
+          this.state.ticket.ticket_id,
+          "2"
+        );
+
+        conversations = [...result.conversations, ...details.conversations];
+      } else {
+        conversations = [...result.conversations];
+      }
+
+      conversations = [description, ...conversations];
     } else {
       conversations = [description];
     }
@@ -159,7 +173,7 @@ class TicketConversations extends Component {
     } = this.state;
 
     if (this.state.ticket_status === "Closed") {
-      this.sendEvents('next', { reopen: 'yes'})
+      this.sendEvents("next", { reopen: "yes" });
       this.props.history.push(
         { pathname: "send-query", search: getConfig().searchParams },
         { ticket: ticket }
@@ -182,7 +196,7 @@ class TicketConversations extends Component {
         () => this.handleScroll()
       );
     } else {
-      this.sendEvents('next', { reply: 'yes'})
+      this.sendEvents("next", { reply: "yes" });
       this.setState({
         show_loader: "button",
       });
@@ -197,7 +211,7 @@ class TicketConversations extends Component {
 
       let result = await this.ticketReply(body_data, ticket.ticket_id);
 
-      if (result.message === "success") {
+      if (result && result.message === "success") {
         let result = await this.getTicketConversations(ticket.ticket_id);
 
         this.sortConversations(result, true);
@@ -220,6 +234,36 @@ class TicketConversations extends Component {
     this.setState({
       documents: documents,
     });
+  };
+
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        onload: {
+          handleClick1: this.onload,
+          title1: this.state.title1,
+          button_text1: "Retry",
+        },
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
   };
 
   render() {
@@ -253,7 +297,6 @@ class TicketConversations extends Component {
         headerStatus={ticket_status}
         disable={openTextBox && !this.state.value && documents.length === 0}
         showLoader={this.state.show_loader}
-        event={""}
       >
         <div className="ticket-details">
           <div className="sub-title">

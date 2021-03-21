@@ -172,7 +172,17 @@ class Answers extends Component {
       let mapper = {
         onload: {
           handleClick1: this.onload,
-          title1: this.state.title1 || true,
+          title1: this.state.title1,
+          button_text1: "Retry",
+        },
+        upldateFeedback: {
+          handleClick1: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          title1: this.state.title1,
+          button_text1: "Dismiss",
         },
       };
 

@@ -75,6 +75,7 @@ class SendQuery extends Component {
   }
 
   handleClick = async () => {
+    this.sendEvents('next')
     this.setState({
       show_loader: "button",
     });
@@ -137,7 +138,12 @@ class SendQuery extends Component {
             <div>
               <button
                 style={{ cursor: "pointer" }}
-                onClick={() => this.navigate("queries")}
+                onClick={() => {
+                  this.props.history.push(
+                    { pathname: "queries", search: getConfig().searchParams },
+                    { fromScreen: "send_query" }
+                  );
+                }}
                 className="call-back-popup-button"
               >
                 OKAY
@@ -188,6 +194,31 @@ class SendQuery extends Component {
     );
   };
 
+  setErrorData = (type) => {
+    this.setState({
+      showError: false,
+    });
+    if (type) {
+      let mapper = {
+        submit: {
+          handleClick1: this.handleClick,
+          button_text1: "Retry",
+          title1: this.state.title1,
+          handleClick2: () => {
+            this.setState({
+              showError: false,
+            });
+          },
+          button_text2: "Edit",
+        },
+      };
+
+      this.setState({
+        errorData: { ...mapper[type], setErrorData: this.setErrorData },
+      });
+    }
+  };
+
   render() {
     let { ticket, category, sub_category, documents } = this.state;
 
@@ -198,6 +229,8 @@ class SendQuery extends Component {
         handleClick={this.handleClick}
         showLoader={this.state.show_loader}
         events={this.sendEvents("just_set_events")}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         disable={!this.state.value && documents.length === 0}
       >
         <div className="send-query">

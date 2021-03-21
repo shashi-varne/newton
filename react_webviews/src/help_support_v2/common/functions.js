@@ -10,15 +10,15 @@ export async function initialize() {
   this.SearchFaq = SearchFaq.bind(this);
   this.getAllCategories = getAllCategories.bind(this);
   this.getSubCategories = getSubCategories.bind(this);
-  this.getFaqDescription = getFaqDescription.bind(this);
   this.getAllfaqs = getAllfaqs.bind(this);
+  this.getFaqDescription = getFaqDescription.bind(this);
+  this.updateFeedback = updateFeedback.bind(this);
   this.getUserTickets = getUserTickets.bind(this);
   this.getTicketConversations = getTicketConversations.bind(this);
   this.createTicket = createTicket.bind(this);
   this.ticketReply = ticketReply.bind(this);
   this.getPdf = getPdf.bind(this);
   this.save = save.bind(this);
-  this.updateFeedback = updateFeedback.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -214,41 +214,6 @@ export async function getSubCategories(category_id) {
   }
 }
 
-export async function updateFeedback(feedback, id) {
-  this.setErrorData("onload");
-  let error = "";
-  try {
-    const res = await Api.post(
-      `/relay/hns/api/faq/${id}/action?action=${feedback}`
-    );
-    let { result, status_code: status } = res.pfwresponse;
-
-    if (status !== 200) {
-      error = result.error || result.message || true;
-    }
-  } catch (err) {
-    this.setState({
-      skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
-    });
-    console.log(err);
-  }
-
-  if (error) {
-    this.setState({
-      errorData: {
-        ...this.state.errorData,
-        title1: error,
-      },
-      showError: "page",
-    });
-  }
-}
-
 export async function getAllfaqs(sub_category_id) {
   this.setErrorData("onload");
   let error = "";
@@ -310,12 +275,14 @@ export async function getAllfaqs(sub_category_id) {
 }
 
 export async function getFaqDescription(faq_id) {
-  this.setState({
-    skelton: true,
-  });
   this.setErrorData("onload");
   let error = "";
+  let errorType = "";
+
   try {
+    this.setState({
+      skelton: true,
+    });
     const res = await Api.get(`/relay/hns/api/faq/${faq_id}/desc`);
 
     let { result, status_code: status } = res.pfwresponse;
@@ -341,38 +308,84 @@ export async function getFaqDescription(faq_id) {
         });
       }
     } else {
-      error = result.error || result.message || true;
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
     });
+    error = true;
+    errorType = "crash";
   }
 
   if (error) {
     this.setState({
+      show_loader: false,
       errorData: {
         ...this.state.errorData,
-        title1: error,
+        title2: error,
+        type: errorType,
       },
       showError: "page",
     });
   }
 }
 
+export async function updateFeedback(feedback, id) {
+  this.setErrorData("upldateFeedback");
+  let error = "";
+  let errorType = "";
+
+  try {
+    const res = await Api.post(
+      `/relay/hns/api/faq/${id}/action?action=${feedback}`
+    );
+    let { result, status_code: status } = res.pfwresponse;
+
+    if (status !== 200) {
+      error = result.error || result.message || true;
+      errorType = "form";
+    }
+  } catch (err) {
+    this.setState({
+      skelton: false,
+      show_loader: false,
+    });
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
+    });
+  }
+}
+
 export async function getUserTickets(params) {
-  this.setState({
-    skelton: true,
-  });
   this.setErrorData("onload");
   let error = "";
+  let errorType = "";
+
   try {
+    this.setState({
+      skelton: true,
+    });
+
     const res = await Api.get(
       `/relay/hns/api/freshdesk/ticket/all?status=${params}`
     );
@@ -391,63 +404,102 @@ export async function getUserTickets(params) {
         tickets: tickets,
       });
     } else {
-      error = result.error || result.message || true;
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";;
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
-      showError: true,
-      errorData: {
-        ...this.state.errorData,
-        type: "crash",
-      },
     });
+    error = true;
+    errorType = "crash";
   }
 
   if (error) {
     this.setState({
+      show_loader: false,
       errorData: {
         ...this.state.errorData,
-        title1: error,
+        title2: error,
+        type: errorType,
       },
       showError: "page",
     });
   }
 }
 
-export async function getTicketConversations(ticket_id) {
+export async function getTicketConversations(ticket_id, page_no) {
+  this.setErrorData("onload");
+  let error = "";
+  let errorType = "";
+
   try {
+    this.setState({
+      skelton: true,
+    });
+
     const res = await Api.get(
-      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations?page_no=1`
+      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations?page_no=${page_no}`
     );
 
     let { result, status_code: status } = res.pfwresponse;
 
     this.setState({
       skelton: false,
-      show_loader: false
+      show_loader: false,
     });
 
     if (status === 200) {
       return result.response;
+    } else {
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+
+      this.setErrorData("onload");
+      error = true;
+      errorType = "generic";
     }
   } catch (err) {
     console.log(err);
     this.setState({
       skelton: false,
+    });
+    error = true;
+    errorType = "crash";
+  }
+
+  if (error) {
+    this.setState({
       show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: "page",
     });
   }
 }
 
 export async function createTicket(body = {}) {
-  this.setState({
-    skelton: true,
-    show_loader: "button",
-  });
+  this.setErrorData("submit");
+
+  let error = "";
+  let errorType = "";
 
   try {
+    this.setState({
+      show_loader: "button",
+    });
     const res = await Api.post(`/relay/hns/api/freshdesk/ticket/create`, body);
 
     let { result, status_code: status } = res.pfwresponse;
@@ -459,22 +511,51 @@ export async function createTicket(body = {}) {
 
     if (status === 200) {
       return result;
+    } else {
+      let title1 = result.error[0] || "Something went wrong!";
+      this.setState({
+        show_loader: false,
+        loaderWithData: false,
+        skelton: false,
+        title1: title1,
+      });
+
+      this.setErrorData("submit");
+      error = true;
+      errorType = "form";
     }
   } catch (err) {
-    console.log(err);
     this.setState({
       skelton: false,
       show_loader: false,
+    });
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
     });
   }
 }
 
 export async function ticketReply(body = {}, id) {
-  this.setState({
-    show_loader: "button",
-  });
+  this.setErrorData("submit");
 
+  let error = "";
+  let errorType = "";
+  
   try {
+    this.setState({
+      show_loader: "button",
+    });
     const res = await Api.post(
       `/relay/hns/api/freshdesk/ticket/${id}/reply`,
       body
@@ -488,12 +569,37 @@ export async function ticketReply(body = {}, id) {
 
     if (status === 200) {
       return result;
+    } else {
+      let title1 = result.error[0] || "Something went wrong!";
+      this.setState({
+        show_loader: false,
+        loaderWithData: false,
+        skelton: false,
+        title1: title1,
+      });
+
+      this.setErrorData("submit");
+      error = true;
+      errorType = "form";
     }
   } catch (err) {
-    console.log(err);
     this.setState({
       skelton: false,
       show_loader: false,
+    });
+    error = true;
+    errorType = "form";
+  }
+
+  if (error) {
+    this.setState({
+      show_loader: false,
+      errorData: {
+        ...this.state.errorData,
+        title2: error,
+        type: errorType,
+      },
+      showError: true,
     });
   }
 }

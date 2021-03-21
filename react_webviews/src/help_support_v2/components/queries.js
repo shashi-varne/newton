@@ -121,7 +121,8 @@ class Queries extends Component {
       let mapper = {
         onload: {
           handleClick1: this.onload,
-          title1: this.state.title1 || true,
+          title1: this.state.title1,
+          button_text1: "Retry",
         },
       };
 
@@ -130,6 +131,15 @@ class Queries extends Component {
       });
     }
   };
+
+  goBack = () => {
+    this.sendEvents('back')
+    if (this.state.fromScreen === 'send_query') {
+      this.navigate('/help')
+    } else {
+      this.props.history.goBack();
+    }
+  }
 
   render() {
     let { tickets } = this.state;
@@ -141,6 +151,9 @@ class Queries extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         title="My Queries"
+        headerData={{
+          goBack: this.goBack
+        }}
         noFooter
       >
         <div className="help-queries">

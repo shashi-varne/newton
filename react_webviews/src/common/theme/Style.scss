@@ -1578,7 +1578,8 @@ input#pan {
   border-bottom: 1px solid;
   color: var(--secondary);
   cursor: pointer;
-  width: 74px;
+  width: fit-content;
+  float: right;
 }
 
 .header-status {
