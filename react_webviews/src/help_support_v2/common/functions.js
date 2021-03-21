@@ -441,9 +441,9 @@ export async function getTicketConversations(ticket_id, page_no) {
   let errorType = "";
 
   try {
-    this.setState({
-      skelton: true,
-    });
+    // this.setState({
+    //   skelton: true,
+    // });
 
     const res = await Api.get(
       `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations?page_no=${page_no}`
@@ -452,8 +452,8 @@ export async function getTicketConversations(ticket_id, page_no) {
     let { result, status_code: status } = res.pfwresponse;
 
     this.setState({
-      skelton: false,
-      show_loader: false,
+      skelton: result.conversations?.length === 30 ? true : false,
+      show_loader: result.conversations?.length === 30 ? "button" : false,
     });
 
     if (status === 200) {

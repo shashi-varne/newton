@@ -89,10 +89,7 @@ class TicketConversations extends Component {
 
     if (result.conversations) {
       if (result.conversations && result.conversations.length === 30) {
-        let details = await this.getTicketConversations(
-          this.state.ticket.ticket_id,
-          "2"
-        );
+        let details = await this.getTicketConversations(this.state.ticket.ticket_id, "2");
 
         conversations = [...result.conversations, ...details.conversations];
       } else {
@@ -212,7 +209,7 @@ class TicketConversations extends Component {
       let result = await this.ticketReply(body_data, ticket.ticket_id);
 
       if (result && result.message === "success") {
-        let result = await this.getTicketConversations(ticket.ticket_id);
+        let result = await this.getTicketConversations(ticket.ticket_id, "1");
 
         this.sortConversations(result, true);
       }
