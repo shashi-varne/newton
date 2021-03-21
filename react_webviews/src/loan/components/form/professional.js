@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 import {
      validateAlphabets, validateNumber
 } from 'utils/validators';
@@ -223,7 +223,7 @@ class ProfessionalDetails extends Component {
                 <FormControl fullWidth>
 
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             options={this.state.eduQuaOptions}
                             id="educational_qualification"
