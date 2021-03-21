@@ -5,6 +5,7 @@ import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
 import scrollIntoView from "scroll-into-view-if-needed";
+import { getConfig } from "utils/functions";
 
 const Transition = (props) => {
   return <Slide direction="up" {...props} />;
@@ -34,8 +35,8 @@ class SendQuery extends Component {
 
     if (this.props.location.state.ticket) {
       ticket = this.props.location.state.ticket;
-      category = this.props.location.state.category;
-      sub_category = this.props.location.state.sub_category;
+      category = ticket.category;
+      sub_category = ticket.sub_category;
 
       this.setState({
         ticket: ticket,
@@ -113,8 +114,8 @@ class SendQuery extends Component {
             </div>
             <div>
               <button
-                style={{cursor: 'pointer'}}
-                onClick={() => this.navigate('queries')}
+                style={{ cursor: "pointer" }}
+                onClick={() => this.navigate("queries")}
                 className="call-back-popup-button"
               >
                 OKAY
@@ -158,6 +159,13 @@ class SendQuery extends Component {
     });
   };
 
+  redirectOldTicket = (ticket) => {
+    this.props.history.push(
+      { pathname: "conversation", search: getConfig().searchParams },
+      { ticket: ticket }
+    );
+  };
+
   render() {
     let { ticket, category, sub_category, documents } = this.state;
 
@@ -175,7 +183,12 @@ class SendQuery extends Component {
             {category} {">"} {sub_category}
           </div>
           {ticket && (
-            <div className="ticket-id">Old Ticket: {ticket.ticket_id}</div>
+            <div
+              className="ticket-id"
+              onClick={() => this.redirectOldTicket(ticket)}
+            >
+              Old Ticket: {ticket.ticket_id}
+            </div>
           )}
           <RenderAttachment
             row={8}

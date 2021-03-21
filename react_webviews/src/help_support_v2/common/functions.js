@@ -422,25 +422,10 @@ export async function getTicketConversations(ticket_id) {
 
     this.setState({
       skelton: false,
+      show_loader: false
     });
 
     if (status === 200) {
-      let { ticket_status, conversations } = this.state;
-
-      ticket_status = result.response.status;
-      conversations = result.response.conversations;
-
-      this.setState({
-        ticket_status: ticket_status,
-        conversations: conversations,
-        category: result.response.category,
-        sub_category: result.response.sub_category,
-        show_loader: false,
-        openTextBox: false,
-        value: "",
-        documents: [],
-      });
-
       return result.response;
     }
   } catch (err) {

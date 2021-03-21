@@ -34,6 +34,7 @@ class TicketConversations extends Component {
 
   onload = async () => {
     let ticket = this.props.location.state.ticket;
+    console.log(ticket);
     this.setState({
       ticket: ticket,
       skelton: true,
@@ -41,41 +42,56 @@ class TicketConversations extends Component {
 
     let result = await this.getTicketConversations(ticket.ticket_id);
 
-    let { conversations } = this.state;
+    this.setState({
+      category: result.category,
+      sub_category: result.sub_category,
+      ticket_status: result.status,
+    });
+    this.sortConversations(result);
+    // console.log([].concat(...sortedConverstations))
+  };
 
+  sortConversations = (result, reply = false) => {
+    let conversations = [];
     let sortedConverstations = [];
     let splitConversation = [];
 
-    if (conversations && conversations.length > 0) {
-      while (conversations.length) {
-        sortedConverstations.push(conversations.splice(0, 3));
-      }
-  
-      splitConversation = sortedConverstations[0] || [];
-  
-      this.setState({
-        conversations: conversations,
-        sortedConverstations: sortedConverstations,
-      });
-  
-    } else {
+    let description = {
+      description: result.description,
+      dt_updated: result.created_at,
+      attachment: result.attachments,
+      message_from: "user",
+    };
 
-    // }
-    
-    // if (splitConversation.length === 0) {
-      splitConversation.push({
-        description: result.description,
-        dt_updated: result.updated_at,
-        attachment: result.attachments,
-        message_from: "user",
-      });
+    if (result.conversations) {
+      conversations = [description, ...result.conversations];
+    } else {
+      conversations = [description];
     }
 
     this.setState({
-      splitConversation: splitConversation,
+      length: conversations.length,
     });
 
-    // console.log([].concat(...sortedConverstations))
+    while (conversations.length) {
+      sortedConverstations.push(conversations.splice(0, 5));
+    }
+
+    if (!reply) {
+      splitConversation = sortedConverstations[0] || [];
+    } else {
+      splitConversation = [].concat(...sortedConverstations);
+    }
+
+    this.setState({
+      sortedConverstations: sortedConverstations,
+      splitConversation: splitConversation,
+      openTextBox: false,
+      value: "",
+      documents: [],
+    });
+
+    if (reply) this.handleScroll();
   };
 
   handleScroll = () => {
@@ -113,23 +129,28 @@ class TicketConversations extends Component {
   handleClick = async () => {
     let {
       ticket,
-      category,
       index,
-      sub_category,
       splitConversation,
       sortedConverstations,
       openTextBox,
+      length,
       documents,
     } = this.state;
 
     if (this.state.ticket_status === "Closed") {
       this.props.history.push(
         { pathname: "send-query", search: getConfig().searchParams },
-        { ticket: ticket, category: category, sub_category: sub_category }
+        { ticket: ticket }
       );
     } else if (!openTextBox) {
-      splitConversation = [].concat(...sortedConverstations);
-      index = sortedConverstations.length + 1;
+      if (splitConversation.length !== length) {
+        splitConversation = [...splitConversation].concat(
+          ...sortedConverstations.slice(index + 1)
+        );
+
+        index = sortedConverstations.length + 1;
+      }
+
       this.setState(
         {
           openTextBox: true,
@@ -156,22 +177,7 @@ class TicketConversations extends Component {
       if (result.message === "success") {
         let result = await this.getTicketConversations(ticket.ticket_id);
 
-        let conversations = result.conversations;
-
-        let sortedConverstations = [];
-        while (conversations.length) {
-          sortedConverstations.push(conversations.splice(0, 3));
-        }
-
-        splitConversation = [].concat(...sortedConverstations);
-
-        this.setState(
-          {
-            sortedConverstations: sortedConverstations,
-            splitConversation: splitConversation,
-          },
-          () => this.handleScroll()
-        );
+        this.sortConversations(result, true);
       }
     }
   };
@@ -231,86 +237,55 @@ class TicketConversations extends Component {
             splitConversation &&
             splitConversation.map((item, index) => (
               <div className="fade-in" key={index}>
-                {item.message_from === "user" && (
-                  <div className="ticket-reply">
-                    <div style={{ marginRight: "10%" }}>
-                      <div className="chat-box">
-                        <div className="chat">{item.description}</div>
-                        {item.attachment.length > 0 &&
-                          item.attachment.map((el, index) => (
-                            <div
-                              // href={el.attachment_url}
-                              className="download"
-                              key={index}
-                              onClick={() => {
-                                nativeCallback({
-                                  action: "open_in_browser",
-                                  message: {
-                                    url: el.attachment_url,
-                                  },
-                                });
-                              }}
-                            >
-                              <img
-                                src={require(`assets/${this.state.productName}/download.svg`)}
-                                alt=""
-                              />
-                              <div>{el.name}</div>
-                            </div>
-                          ))}
-                        <div className="date">
-                          {moment(item.dt_updated).format("DD-MM-YYYY hh:mma")}
-                        </div>
+                <div className="ticket-reply">
+                  <div
+                    className={
+                      item.message_from === "user" ? "leftTag" : "rightTag"
+                    }
+                  >
+                    <div className={`chat-box ${item.message_from}`}>
+                      <div className="chat">{item.description}</div>
+                      {item.attachment.length > 0 &&
+                        item.attachment.map((el, index) => (
+                          <div
+                            className="download"
+                            key={index}
+                            onClick={() => {
+                              nativeCallback({
+                                action: "open_in_browser",
+                                message: {
+                                  url: el.attachment_url,
+                                },
+                              });
+                            }}
+                          >
+                            <img
+                              src={require(`assets/${this.state.productName}/download.svg`)}
+                              alt=""
+                            />
+                            <div>{el.name}</div>
+                          </div>
+                        ))}
+                      <div className="date">
+                        {moment(item.created_at).format("DD-MM-YYYY hh:mma")}
                       </div>
+                    </div>
+                    {item.message_from === "user" && (
                       <div className="user-tag">
                         <img src={require(`assets/ic_user.svg`)} alt="" />
                         You
                       </div>
-                    </div>
-                  </div>
-                )}
-                {item.message_from === "agent" && (
-                  <div className="ticket-reply">
-                    <div
-                      style={{ marginLeft: "20%", textAlign: "-webkit-right" }}
-                    >
-                      <div className="chat-box agent">
-                        <div className="chat">{item.description}</div>
-                        {item.attachment.length > 0 &&
-                          item.attachment.map((el, index) => (
-                            <div
-                              // href={el.attachment_url}
-                              className="download"
-                              key={index}
-                              onClick={() => {
-                                nativeCallback({
-                                  action: "open_in_browser",
-                                  message: {
-                                    url: el.attachment_url,
-                                  },
-                                });
-                              }}
-                            >
-                              <img
-                                src={require(`assets/${this.state.productName}/download.svg`)}
-                                alt=""
-                              />
-                              <div>{el.name}</div>
-                            </div>
-                          ))}
-                        <div className="date">
-                          {moment(item.dt_updated).format("DD-MM-YYYY hh:mma")}
-                        </div>
-                      </div>
+                    )}
+                    {item.message_from === "agent" && (
                       <div className="user-tag agent-tag">
                         <div>Team {this.state.productName}</div>
                         <div className="product-tag">
                           T{this.state.productName[0].toUpperCase()}
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             ))}
           {sortedConverstations[index + 1] && (
