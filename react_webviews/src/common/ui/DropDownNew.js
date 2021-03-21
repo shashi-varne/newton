@@ -104,14 +104,13 @@ class SelectDropDown2 extends React.Component {
         {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}><div
           ref={element => {
             if (element && isLableOpen) {
-              element.style.setProperty('margin-top', '4px', 'important');
+              element.style.setProperty('margin-top', '3px', 'important');
             } else if (element && !isLableOpen) {
-              element.style.setProperty('margin-top', '-4px', 'important');
+              element.style.setProperty('margin-top', '1px', 'important');
             }
           }}
           style={{
             position: 'absolute',
-            // marginTop: isLableOpen ? '4px' : '-5px',
             minWidth: '300px',
             color: this.props.error ? '#D0021B' : '',
             fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px'
@@ -158,7 +157,7 @@ class SelectDropDown2 extends React.Component {
             options={options}
             onChange={this.handleChange}
             allowSelectAll={true}
-            closeMenuOnSelect={true}
+            closeMenuOnSelect={this.state.multi ? false : true}
           // menuIsOpen={true}
           />
         </div>

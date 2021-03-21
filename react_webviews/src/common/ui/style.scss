@@ -149,7 +149,7 @@
   min-height: 1em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1em;
-  color: #f44336;
+  color: #D0021B;
   position: relative;
   top: 5px;
 }
@@ -1170,6 +1170,11 @@ body[data-device="mobile"] {
   color: #161A2E !important;
   min-height: 41px !important;
 }
+.css-1g6gooi{
+  margin-top: 6px !important;
+  font-size: 13px !important;
+  line-height: 21px;
+}
 
 .css-yt9ioa-option{
   align-items: flex-start;
@@ -1194,7 +1199,9 @@ body[data-device="mobile"] {
   left: 10px;
 }
 .MuiInputLabel-shrink{
-  margin-top: 5px !important;
+  margin-top: 8px !important;
+  font-size: 11px !important;
+  line-height: 18px !important;
 }
 
 
@@ -1226,7 +1233,7 @@ body[data-device="mobile"] {
 }
 .css-b8ldur-Input{
   margin: 4px !important;
-  margin-top: 10px !important;
+  margin-top: 8px !important;
 }
 
 .css-1rhbuit-multiValue {  //Multi-select Box Container:
@@ -1305,7 +1312,10 @@ body[data-device="mobile"] {
   }
   
   .MuiInput-input{
-    margin-left:  10px !important;
+    padding-left:  10px !important;
+    color: #161A2E  !important;
+    font-size: 13px  !important;
+    line-height: 21px  !important;
   }
 
   .MuiFormLabel-root{
@@ -1325,18 +1335,15 @@ body[data-device="mobile"] {
     height: 2.1875em !important;
   }
   
-  label {
-  font-size: 13px !important;
-  margin-top: 4px;
-  }
   
   .input-value{
     margin-left: 10px;
   }
   
   .MuiInputLabel-animated{
-    top : -8px !important;
+    top: -8px !important;
     left:10px !important;
+    font-size: 13px !important;
   }
   
    /*----------------- Auto FILL Background Color  ----------------------*/
