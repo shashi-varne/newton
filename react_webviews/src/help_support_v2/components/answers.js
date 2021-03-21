@@ -48,6 +48,10 @@ class Answers extends Component {
     });
 
     if (fromScreen === "categoryList") {
+      this.setState({
+        headerTitle: question?.cms_sub_category_name || "",
+      });
+
       await this.getFaqDescription(question.cms_faq_id);
 
       faqs = this.state.faqs;
@@ -102,23 +106,27 @@ class Answers extends Component {
 
     index = dir === "next" ? index + 1 : index - 1;
 
-    index = index === -1 || index === faqs[sub_category_id].length ? 0 : index;
+
+    index = index === -1 ? 0 : index === faqs[sub_category_id].length ? faqs[sub_category_id].length-1 : index;
 
     this.setState({
       index: index,
       thumbStatus: "",
       related_questions_clicked: "yes",
       helpful_clicked: false,
-      not_helpful_clicked: false
+      not_helpful_clicked: false,
     });
 
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
 
-    this.sendEvents("next", {
-      related_questions_clicked: "yes",
-      related_questions_id: faq_id,
-    });
-
+    if (index !== 0 && index !== faqs[sub_category_id].length-1) {
+      console.log(index)
+      this.sendEvents("next", {
+        related_questions_clicked: "yes",
+        related_questions_id: faq_id,
+      });
+    }
+    
     if (!faqDesc[faq_id]) {
       await this.getFaqDescription(faq_id);
     }
@@ -134,8 +142,8 @@ class Answers extends Component {
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
     this.setState({
       thumbStatus: status,
-      helpful_clicked: status === 'thumbs_up',
-      not_helpful_clicked: status === 'thunbs_down'
+      helpful_clicked: status === "thumbs_up",
+      not_helpful_clicked: status === "thunbs_down",
     });
 
     this.updateFeedback(status, faq_id);
@@ -152,8 +160,8 @@ class Answers extends Component {
         related_questions_clicked: data.related_questions_clicked || "no",
         related_questions_id: data.related_questions_id,
         my_queries_clicked: data.my_queries_clicked || "no",
-        helpful_clicked: helpful_clicked ? 'yes' : "no",
-        not_helpful_clicked: not_helpful_clicked ? 'yes' : 'no'
+        helpful_clicked: helpful_clicked ? "yes" : "no",
+        not_helpful_clicked: not_helpful_clicked ? "yes" : "no",
       },
     };
 
@@ -286,11 +294,19 @@ class Answers extends Component {
             </div>
             <div className="generic-hr hr"></div>
             <div className="navigation">
-              <div className="nav" onClick={() => this.handleClick("prev")}>
+              <div
+                className="nav"
+                onClick={() => this.handleClick("prev")}
+                style={{ opacity: this.state.index === 0 ? 0.5 : 1 }}
+              >
                 <img src={require(`assets/back_nav_bar_icon.svg`)} alt="" />
                 Prev
               </div>
-              <div className="nav" onClick={() => this.handleClick("next")}>
+              <div
+                className="nav"
+                onClick={() => this.handleClick("next")}
+                style={{ opacity: this.state.index === faqs[sub_category_id].length - 1 ? 0.5 : 1 }}
+              >
                 Next
                 <img src={require(`assets/next_nav_bar_icon.svg`)} alt="" />
               </div>
