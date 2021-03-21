@@ -6,7 +6,7 @@ import { FormControl } from 'material-ui/Form';
 
 import Input from '../../../common/ui/Input';
 import { initialize } from '../../common/functions';
-import DropdownWithoutIcon from '../../../common/ui/SelectWithoutIcon';
+import DropDownNew from '../../../common/ui/DropDownNew';
 import RadioWithoutIcon from '../../../common/ui/RadioWithoutIcon';
 import {
     formatDate, validatePan, validateAlphabets
@@ -270,7 +270,7 @@ class PersonalDetails extends Component {
                             onChange={this.handleChangeRadio('gender')} />
                     </div>
                     <div className="InputField">
-                        <DropdownWithoutIcon
+                        <DropDownNew
                             width="40"
                             options={this.state.maritalStatusOptions}
                             id="marital_status"
