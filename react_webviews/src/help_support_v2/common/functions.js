@@ -117,7 +117,11 @@ export async function SearchFaq(word) {
     });
 
     if (status === 200) {
-      return result;
+      let list = result ? result.faqs : [];
+
+      this.setState({
+        faqList: list,
+      });
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({

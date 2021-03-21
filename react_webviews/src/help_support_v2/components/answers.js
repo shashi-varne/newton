@@ -43,7 +43,7 @@ class Answers extends Component {
     let sub_category = "";
 
     this.setState({
-      headerTitle: question ? question.cms_category_name : "",
+      headerTitle: question?.cms_category_name || "",
       fromScreen: fromScreen || "",
     });
 
@@ -54,12 +54,10 @@ class Answers extends Component {
       sub_category_id = this.state.sub_category_id;
       index = this.state.index;
     } else {
-      sub_category = this.props.location.state
-        ? this.props.location.state.sub_category
-        : {};
+      sub_category = this.props.location.state?.sub_category || {};
 
-      faqs = this.props.location.state ? this.props.location.state.faqs : {};
-      index = this.props.location.state ? this.props.location.state.index : {};
+      faqs = this.props.location.state?.faqs || {};
+      index = this.props.location.state?.index || {};
       sub_category_id = sub_category.cms_category_id;
 
       this.setState({
@@ -110,7 +108,8 @@ class Answers extends Component {
       index: index,
       thumbStatus: "",
       related_questions_clicked: "yes",
-      helpful_clicked: "no",
+      helpful_clicked: false,
+      not_helpful_clicked: false
     });
 
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
@@ -135,14 +134,15 @@ class Answers extends Component {
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
     this.setState({
       thumbStatus: status,
-      helpful_clicked: "yes",
+      helpful_clicked: status === 'thumbs_up',
+      not_helpful_clicked: status === 'thunbs_down'
     });
 
     this.updateFeedback(status, faq_id);
   };
 
   sendEvents(user_action, data = {}) {
-    let { helpful_clicked } = this.state;
+    let { helpful_clicked, not_helpful_clicked } = this.state;
 
     let eventObj = {
       event_name: "help_and_support",
@@ -152,7 +152,8 @@ class Answers extends Component {
         related_questions_clicked: data.related_questions_clicked || "no",
         related_questions_id: data.related_questions_id,
         my_queries_clicked: data.my_queries_clicked || "no",
-        helpful_clicked: helpful_clicked || "no",
+        helpful_clicked: helpful_clicked ? 'yes' : "no",
+        not_helpful_clicked: not_helpful_clicked ? 'yes' : 'no'
       },
     };
 

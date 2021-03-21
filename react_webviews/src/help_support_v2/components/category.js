@@ -22,9 +22,7 @@ class Category extends Component {
   }
 
   onload = async () => {
-    let category = this.props.location.state
-      ? this.props.location.state.category
-      : {};
+    let category = this.props.location.state?.category || {};
 
     this.setState({
       category: category,
@@ -65,8 +63,8 @@ class Category extends Component {
     this.sendEvents("next", { my_queries_clicked: "yes" });
     
     this.props.history.push(
-      { pathname: "help/queries", search: getConfig().searchParams },
-      { fromScreen: "sub-category" }
+      { pathname: "queries", search: getConfig().searchParams },
+      { fromScreen: "category" }
     );
   };
 

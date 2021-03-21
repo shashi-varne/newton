@@ -42,6 +42,11 @@ class Container extends Component {
   historyGoBack = () => {
     let pathname = this.props.history.location.pathname;
 
+    if (this.props.headerData && this.props.headerData.goBack) {
+      this.props.headerData.goBack();
+      return;
+    }
+
     if(goBackMap(pathname)) {
       this.navigate(goBackMap(pathname));
       return;

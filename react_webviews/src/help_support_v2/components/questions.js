@@ -21,9 +21,7 @@ class Questions extends Component {
   }
 
   onload = async () => {
-    let sub_category = this.props.location.state
-      ? this.props.location.state.sub_category
-      : {};
+    let sub_category = this.props.location.state?.sub_category || {};
 
     let category_name = this.props.location.state.category_name;
 
@@ -40,8 +38,8 @@ class Questions extends Component {
       event_name: "help_and_support",
       properties: {
         user_action: user_action,
-        screen_name: "question_answer",
-        question_clicked: data.id || "",
+        screen_name: "questions",
+        question_clicked: data.id || "no",
         my_queries_clicked: data.my_queries_clicked || "no",
         unable_to_find_clicked: data.unable_to_find_query || "no",
       },
@@ -75,7 +73,7 @@ class Questions extends Component {
     this.sendEvents("next", { my_queries_clicked: "yes" });
     
     this.props.history.push(
-      { pathname: "help/queries", search: getConfig().searchParams },
+      { pathname: "queries", search: getConfig().searchParams },
       { fromScreen: "questions" }
     );
   };

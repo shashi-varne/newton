@@ -34,7 +34,6 @@ class TicketConversations extends Component {
 
   onload = async () => {
     let ticket = this.props.location.state.ticket;
-    console.log(ticket);
     this.setState({
       ticket: ticket,
       skelton: true,
@@ -50,6 +49,28 @@ class TicketConversations extends Component {
     this.sortConversations(result);
     // console.log([].concat(...sortedConverstations))
   };
+
+  sendEvents(user_action, data = {}) {
+    let { category, sub_category, ticket_status } = this.state;
+    let eventObj = {
+      event_name: "help_and_support",
+      properties: {
+        user_action: user_action,
+        screen_name: "ticket_details",
+        category: category,
+        sub_category: sub_category,
+        ticket_closed: ticket_status,
+        reopen: data.reopen || 'no',
+        reply: data.reply || 'no'
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   sortConversations = (result, reply = false) => {
     let conversations = [];
@@ -138,6 +159,7 @@ class TicketConversations extends Component {
     } = this.state;
 
     if (this.state.ticket_status === "Closed") {
+      this.sendEvents('next', { reopen: 'yes'})
       this.props.history.push(
         { pathname: "send-query", search: getConfig().searchParams },
         { ticket: ticket }
@@ -160,6 +182,7 @@ class TicketConversations extends Component {
         () => this.handleScroll()
       );
     } else {
+      this.sendEvents('next', { reply: 'yes'})
       this.setState({
         show_loader: "button",
       });
@@ -215,6 +238,9 @@ class TicketConversations extends Component {
     return (
       <Container
         skelton={this.state.skelton}
+        events={this.sendEvents("just_set_events")}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
         title={`Ticket ID: ${ticket.ticket_id}`}
         buttonTitle={
           ticket_status === "Closed"

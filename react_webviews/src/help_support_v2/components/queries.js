@@ -35,6 +35,7 @@ class Queries extends Component {
       value: 0,
       percent: 0,
       tickets: {},
+      fromScreen: 'help'
     };
     this.initialize = initialize.bind(this);
   }
@@ -48,6 +49,10 @@ class Queries extends Component {
   }
 
   onload = async () => {
+    let fromScreen = this.props.location.state?.fromScreen || '/help';
+    this.setState({
+      fromScreen: fromScreen
+    })
     await this.getUserTickets("open");
   };
 
@@ -79,7 +84,7 @@ class Queries extends Component {
   renderTicketError = () => {};
 
   handleClick = (item) => {
-    this.sendEvents("next", {ticket_id: item.ticket_id})
+    this.sendEvents("next", { ticket_id: item.ticket_id });
     this.props.history.push(
       { pathname: "conversation", search: getConfig().searchParams },
       { ticket: item }
@@ -92,7 +97,11 @@ class Queries extends Component {
       properties: {
         user_action: user_action,
         screen_name: "my_queries",
-        open_queries: this.state.tickets.open ? this.state.tickets.open.length > 0 ? 'yes' : 'no' : "no",
+        open_queries: this.state.tickets.open
+          ? this.state.tickets.open.length > 0
+            ? "yes"
+            : "no"
+          : "no",
         ticket_clicked: data.ticket_id || "",
       },
     };
@@ -164,7 +173,7 @@ class Queries extends Component {
               action={(actions) => {
                 this.swipeableActions = actions;
               }}
-              style={{height: '80vh'}}
+              style={{ height: "80vh" }}
               enableMouseEvents
               animateHeight
             >
@@ -191,7 +200,10 @@ class Queries extends Component {
               </TabContainer>
               <TabContainer dir={"ltr"}>
                 {tickets.closed && tickets.closed.length > 0 && (
-                  <Tickets tickets={tickets.closed} onClick={this.handleClick} />
+                  <Tickets
+                    tickets={tickets.closed}
+                    onClick={this.handleClick}
+                  />
                 )}
                 {tickets.closed && tickets.closed.length === 0 && (
                   <div className="no-tickets">

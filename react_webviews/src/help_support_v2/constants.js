@@ -38,7 +38,7 @@ export const categories = {
 
 export function goBackMap(path) {
     let mapper = {
-        '/help/queries': '/help',
+        // '/help/queries': '/help',
         // '/help/category': '/help',
         // '/help/questions': '/help/category',
         // '/help/answers': '/help/questions',

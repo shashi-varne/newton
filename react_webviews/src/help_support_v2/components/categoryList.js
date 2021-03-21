@@ -9,6 +9,7 @@ import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { SkeltonRect } from "common/ui/Skelton";
 import ReactHtmlParser from "react-html-parser";
+import debounce from "lodash/debounce";
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -23,7 +24,7 @@ class CategoryList extends Component {
       show_loader: false,
       skelton: "p",
       value: "",
-      faqList: [],
+      faqList: "",
       sortedList: "",
       showCategory: true,
       categoryList: "",
@@ -55,17 +56,30 @@ class CategoryList extends Component {
   };
 
   sendEvents(user_action, data = {}) {
-    let eventObj = {
-      event_name: "help_and_support",
-      properties: {
-        user_action: user_action,
-        screen_name: "category",
-        category_clicked: data.card_name || "",
-        my_queries_clicked: data.my_queries_clicked || "no",
-        initial_kyc: "",
-        invested: "",
-      },
-    };
+    let eventObj = {};
+
+    if (data.screen === "search") {
+      eventObj = {
+        event_name: "help_and_support",
+        properties: {
+          user_action: user_action,
+          screen_name: "search_questions",
+          category: data.item.cms_category_name,
+          sub_category: data.item.cms_sub_category_name,
+          question_clicked: data.item.cms_faq_id
+        },
+      };
+    } else {
+      eventObj = {
+        event_name: "help_and_support",
+        properties: {
+          user_action: user_action,
+          screen_name: "category",
+          category_clicked: data.card_name || "",
+          my_queries_clicked: data.my_queries_clicked || "no",
+        },
+      };
+    }
 
     if (user_action === "just_set_events") {
       return eventObj;
@@ -74,53 +88,28 @@ class CategoryList extends Component {
     }
   }
 
-  handleChange = (event) => {
+  handleChange = async (event) => {
     let value = event.target ? event.target.value : event;
-    this.setState(
-      {
-        value: value,
-      },
-      () => {
-        this.Searching();
-      }
-    );
+    this.setState({
+      value: value,
+    });
 
-    if (value.length === 3) {
+    if (value === "") this.setState({ faqList: "" });
+
+    if (value[value.length - 1] === " ") {
+      await this.SearchFaq(value);
+    } else {
       this.handleSearch(value);
     }
   };
 
-  handleSearch = async (value) => {
-    const result = await this.SearchFaq(value);
-
-    let list = result ? result.faqs : [];
-
-    this.setState(
-      {
-        faqList: list,
-      },
-      () => {
-        this.Searching();
-      }
-    );
-  };
-
-  Searching = () => {
-    let { value, faqList } = this.state;
-
-    let len = value.length;
-    let sortedList = faqList.filter(
-      (item) => value.toLowerCase() === item.title.slice(0, len).toLowerCase()
-    );
-
-    if (sortedList.length === 0) {
-      sortedList = faqList;
-    }
-
-    this.setState({
-      sortedList: sortedList,
-    });
-  };
+  handleSearch = debounce(
+    async (value) => {
+      await this.SearchFaq(value);
+    },
+    1000,
+    { trailing: true }
+  );
 
   handleClick = (category) => {
     this.sendEvents("next", { card_name: category.cms_category_name });
@@ -140,7 +129,7 @@ class CategoryList extends Component {
   };
 
   handleSearchItem = (item) => {
-    this.sendEvents("search");
+    this.sendEvents("next", { item: item, screen: "search" });
 
     this.props.history.push(
       { pathname: "help/answers", search: getConfig().searchParams },
@@ -203,24 +192,27 @@ class CategoryList extends Component {
 
   renderHighlight = (title) => {
     let { value } = this.state;
-    let highlight = title.split(' ').map((word) => {
-      let text = value.toLowerCase().split(' ');
+    let string = title.slice(0, title.length - 1);
+
+    let highlight = string.split(" ").map((word) => {
+      let text = value.toLowerCase().split(" ");
 
       if (text.includes(word.toLowerCase())) {
-        return `<span style='color: var(--primary)'>${word}</span>`
+        return `<span style='color: var(--primary)'>${word}</span>`;
       } else {
-        return word
+        return word;
       }
-    })
-    // console.log(value.toLowerCase().split(' '))
-    //  title = "Why should <span style='color: var(--primary)'>you</span> stay invested in SIP for a longer duration?"
+    });
+
     return (
-      <span>{ReactHtmlParser(highlight.join(' '))}</span>
-    )
-  }
+      <span>
+        {ReactHtmlParser(highlight.join(" ") + title[title.length - 1])}
+      </span>
+    );
+  };
 
   render() {
-    let { sortedList, value, categoryList, isApiRunning } = this.state;
+    let { faqList, value, categoryList, isApiRunning } = this.state;
 
     return (
       <Container
@@ -235,21 +227,15 @@ class CategoryList extends Component {
       >
         <div className="help-CategoryList">
           <Search value={this.state.value} onChange={this.handleChange} />
-          {sortedList &&
+          {faqList &&
             value.length !== 0 &&
-            sortedList.map((item, index) => (
+            faqList.map((item, index) => (
               <div
                 className="search-inputs"
                 key={index}
                 onClick={() => this.handleSearchItem(item)}
               >
-                <div className="faq">
-                  {/* <span style={{ color: "var(--primary)" }}>
-                    {item.title.slice(0, value.length)}
-                  </span>
-                  {item.title.slice(value.length)} */}
-                  {this.renderHighlight(item.title)}
-                </div>
+                <div className="faq">{this.renderHighlight(item.title)}</div>
                 <div className="tag">
                   {item.cms_category_name}
                   {" > "}
@@ -257,7 +243,7 @@ class CategoryList extends Component {
                 </div>
               </div>
             ))}
-          {value.length !== 0 && sortedList.length === 0 && !isApiRunning && (
+          {value.length !== 0 && faqList.length === 0 && !isApiRunning && (
             <div className="no-result">No result found</div>
           )}
 

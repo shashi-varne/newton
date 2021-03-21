@@ -6,6 +6,7 @@ import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
 import scrollIntoView from "scroll-into-view-if-needed";
 import { getConfig } from "utils/functions";
+import { nativeCallback } from "utils/native_callback";
 
 const Transition = (props) => {
   return <Slide direction="up" {...props} />;
@@ -51,6 +52,27 @@ class SendQuery extends Component {
       sub_category: sub_category,
     });
   };
+
+  sendEvents(user_action, data = {}) {
+    let { category, sub_category, ticket, documents, value } = this.state;
+    let eventObj = {
+      event_name: "help_and_support",
+      properties: {
+        user_action: user_action,
+        screen_name: ticket ? 'reopen_query' : 'unable_to_find_query',
+        query_edit: value ? 'yes' : 'no',
+        add_attachment: documents.length !== 0 ? 'yes' : 'no',
+        category: category,
+        sub_category: sub_category
+      },
+    };
+
+    if (user_action === "just_set_events") {
+      return eventObj;
+    } else {
+      nativeCallback({ events: eventObj });
+    }
+  }
 
   handleClick = async () => {
     this.setState({
@@ -175,8 +197,8 @@ class SendQuery extends Component {
         buttonTitle="SUBMIT"
         handleClick={this.handleClick}
         showLoader={this.state.show_loader}
-        disable={!this.state.value && documents.length !== 0}
-        // skelton={this.state.skelton}
+        events={this.sendEvents("just_set_events")}
+        disable={!this.state.value && documents.length === 0}
       >
         <div className="send-query">
           <div className="sub-title">
