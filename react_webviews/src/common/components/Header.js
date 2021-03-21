@@ -104,9 +104,6 @@ const Header = ({ classes, title, count, total, current, goBack,
           </>}
         </div>
 
-
-
-      
     </Toolbar>
   </AppBar >
 );

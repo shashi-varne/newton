@@ -402,7 +402,7 @@ class LoanStatus extends Component {
         title={commonMapper.top_title}
         buttonTitle={commonMapper.button_title}
         handleClick={this.handleClick}
-        hidePageTitle={commonMapper.hidePageTitle || this.state.skelton}
+        force_hide_inpage_title={commonMapper.hidePageTitle || this.state.skelton}
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}

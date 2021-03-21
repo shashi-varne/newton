@@ -263,7 +263,7 @@ class PerfiosStatus extends Component {
           icon: commonMapper.icon || "",
           goBack: this.goBack,
         }}
-        hidePageTitle={this.state.skelton}
+        force_hide_inpage_title={this.state.skelton}
         loaderWithData={this.state.loaderWithData}
         loaderData={this.state.loaderData}
         showError={this.state.showError}
