@@ -24,7 +24,7 @@ class CategoryList extends Component {
       show_loader: false,
       skelton: "p",
       value: "",
-      faqList: "",
+      faqList: [],
       sortedList: "",
       showCategory: true,
       categoryList: "",
@@ -94,7 +94,7 @@ class CategoryList extends Component {
       value: value,
     });
 
-    if (value === "") this.setState({ faqList: "" });
+    if (!value) this.setState({ faqList: [] });
 
     if (value[value.length - 1] === " ") {
       await this.SearchFaq(value);
@@ -227,7 +227,7 @@ class CategoryList extends Component {
       >
         <div className="help-CategoryList">
           <Search value={this.state.value} onChange={this.handleChange} />
-          {faqList &&
+          {faqList.length > 0 &&
             value.length !== 0 &&
             faqList.map((item, index) => (
               <div
@@ -247,7 +247,7 @@ class CategoryList extends Component {
             <div className="no-result">No result found</div>
           )}
 
-          {value.length !== 0 && isApiRunning && (
+          {value.length !== 0 && faqList.length === 0 && isApiRunning && (
             <div className="skelton">
               <SkeltonRect className="balance-skelton" />
               <SkeltonRect className="balance-skelton balance-skelton2" />

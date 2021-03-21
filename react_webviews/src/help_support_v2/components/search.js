@@ -24,7 +24,7 @@ const styles = (theme) => ({
   container: {
     borderRadius: 4,
     overflow: "hidden",
-    marginBottom: '10px'
+    marginBottom: "10px",
   },
 });
 
@@ -57,7 +57,7 @@ class SearchInput extends Component {
           onChange={(value) => this.props.onChange(value)}
           inputRef={this.textInput}
           value={this.props.value}
-          autoComplete='off'
+          autoComplete="off"
           InputProps={{
             endAdornment: (
               <InputAdornment

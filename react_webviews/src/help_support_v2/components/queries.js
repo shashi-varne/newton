@@ -35,7 +35,7 @@ class Queries extends Component {
       value: 0,
       percent: 0,
       tickets: {},
-      fromScreen: 'help'
+      fromScreen: ''
     };
     this.initialize = initialize.bind(this);
   }
