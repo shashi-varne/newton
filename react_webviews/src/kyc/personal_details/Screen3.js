@@ -7,7 +7,11 @@ import {
   incomeOptions,
   getPathname,
 } from "../constants";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -17,6 +21,7 @@ const PersonalDetails3 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
+  const [oldState, setOldState] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   let title = "Professional details";
   if (isEdit) {
@@ -36,6 +41,7 @@ const PersonalDetails3 = (props) => {
       occupation: kyc.identification?.meta_data?.occupation || "",
     };
     setFormData({ ...formData });
+    setOldState(formData);
   };
 
   const handleClick = () => {
@@ -46,11 +52,16 @@ const PersonalDetails3 = (props) => {
       setFormData(data);
       return;
     }
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      handleNavigation();
+      return;
+    }
     let userkycDetails = { ...kyc };
     userkycDetails.identification.meta_data.gross_annual_income =
       form_data.income;
     userkycDetails.identification.meta_data.occupation = form_data.occupation;
-    userkycDetails.identification.meta_data.politically_exposed = "NOT APPLICABLE";
+    userkycDetails.identification.meta_data.politically_exposed =
+      "NOT APPLICABLE";
     userkycDetails.identification.meta_data.fatca_declaration = true;
     savePersonalDetails3(userkycDetails);
   };
@@ -65,24 +76,28 @@ const PersonalDetails3 = (props) => {
       };
       const submitResult = await kycSubmit(item);
       if (!submitResult) return;
-      if (type === "digilocker") {
-        if (isEdit) {
-          navigate(getPathname.journey);
-        } else {
-          navigate(getPathname.digilockerPersonalDetails3);
-        }
-      } else {
-        navigate(getPathname.personalDetails4, {
-          state: {
-            isEdit: isEdit,
-          },
-        });
-      }
+      handleNavigation();
     } catch (err) {
       console.log(err);
       toast(err.message);
     } finally {
       setIsApiRunning(false);
+    }
+  };
+
+  const handleNavigation = () => {
+    if (type === "digilocker") {
+      if (isEdit) {
+        navigate(getPathname.journey);
+      } else {
+        navigate(getPathname.digilockerPersonalDetails3);
+      }
+    } else {
+      navigate(getPathname.personalDetails4, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
     }
   };
 
@@ -112,9 +127,6 @@ const PersonalDetails3 = (props) => {
       total="4"
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>{type === "digilocker" ? 2 : 3}/4</span>
-        </div> */}
         <main>
           <div className={`input ${isApiRunning && `disabled`}`}>
             <RadioWithoutIcon

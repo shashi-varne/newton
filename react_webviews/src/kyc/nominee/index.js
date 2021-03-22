@@ -3,7 +3,11 @@ import Container from "../common/Container";
 import Input from "common/ui/Input";
 import DropdownWithoutIcon from "common/ui/SelectWithoutIcon";
 import { relationshipOptions, getPathname } from "../constants";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit } from "../common/api";
 import {
   validateAlphabets,
@@ -19,6 +23,7 @@ const Nominee = (props) => {
   const navigate = navigateFunc.bind(props);
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
+  const [oldState, setOldState] = useState({});
   const state = props.location.state || {};
   const isEdit = state.isEdit || false;
   let finalSubmissionData = state.finalSubmissionData || {
@@ -29,7 +34,7 @@ const Nominee = (props) => {
     title = "Edit nominee detail";
   }
 
-  const [kyc, isLoading] = useUserKycHook();
+  const [kyc, , isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -42,6 +47,7 @@ const Nominee = (props) => {
       relationship: kyc.nomination.meta_data.relationship || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -58,6 +64,10 @@ const Nominee = (props) => {
     userkycDetails.nomination.meta_data.relationship = form_data.relationship;
     let body = { ...finalSubmissionData };
     body.kyc.nomination = userkycDetails.nomination.meta_data;
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.kycReport);
+      return;
+    }
     saveNomineeDetails(body);
   };
 

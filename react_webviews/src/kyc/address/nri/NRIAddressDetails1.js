@@ -7,6 +7,7 @@ import { isEmpty, validateNumber } from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
+  compareObjects,
 } from "../../common/functions";
 import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
@@ -18,6 +19,7 @@ const NriAddressDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const state = props.location.state || {};
   const isEdit = state.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Foreign address details";
   if (isEdit) {
     title = "Edit foreign address details";
@@ -48,6 +50,7 @@ const NriAddressDetails1 = (props) => {
       address_doc_type: kyc.address_doc_type || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -56,6 +59,15 @@ const NriAddressDetails1 = (props) => {
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
+      return;
+    }
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.nriAddressDetails2, {
+        state: {
+          isEdit: isEdit,
+          backToJourney: state.backToJourney,
+        },
+      });
       return;
     }
     let mobile_number = form_data.mobile;
@@ -109,10 +121,8 @@ const NriAddressDetails1 = (props) => {
     <Container
       skelton={isLoading}
       id="kyc-personal-details1"
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={title}
       current={3}
@@ -120,9 +130,6 @@ const NriAddressDetails1 = (props) => {
       total={4}
     >
       <div className="kyc-complaint-personal-details kyc-address-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>3/4</span>
-        </div> */}
         <main>
           <Input
             label="Contact number"

@@ -261,23 +261,17 @@ const ChangeAddressDetails2 = (props) => {
     <Container
       hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      // fullWidthButton={true}
       skelton={isLoading}
       handleClick={handleSubmit}
       disable={(!frontDoc && !backDoc)}
       showLoader={isApiRunning}
+      title={title}
+      count={1}
+      current={1}
+      total={4}
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          <div className="flex-between">
-            <div className="title">{title}</div>
-            <div className="kyc-main-title">
-              <span>1/4</span>
-            </div>
-          </div>
-          {/* <div className="sub-title">{getFullAddress()}</div> */}
-
           <Alert
             variant="attention"
             title="Note"
@@ -529,7 +523,6 @@ const ChangeAddressDetails2 = (props) => {
           )}
         </section>
       )}
-      {/* {!isEmpty(file) && <img src={URL.createObjectURL(file)} alt="preview" />} */}
     </Container>
   )
 }

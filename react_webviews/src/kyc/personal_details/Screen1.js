@@ -10,7 +10,11 @@ import {
   validateAlphabets,
   isEmpty,
 } from "../../utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit } from "../common/api";
 import useUserKycHook from "../common/hooks/userKycHook";
 import toast from "common/ui/Toast";
@@ -20,13 +24,14 @@ const PersonalDetails1 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
 
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const [kyc, user, isLoading, setKycToSession] = useUserKycHook();
+  const [kyc, user, isLoading] = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -51,6 +56,7 @@ const PersonalDetails1 = (props) => {
       marital_status: kyc.identification?.meta_data?.marital_status || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -63,7 +69,6 @@ const PersonalDetails1 = (props) => {
       setFormData(data);
       return;
     }
-
     let mobile_number = form_data.mobile;
     if (form_data.country_code) {
       mobile_number = form_data.country_code + "|" + mobile_number;
@@ -76,11 +81,19 @@ const PersonalDetails1 = (props) => {
     userkycDetails.identification.meta_data.gender = form_data.gender;
     userkycDetails.identification.meta_data.marital_status =
       form_data.marital_status;
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.personalDetails2, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+      return;
+    }
     savePersonalDetails1(userkycDetails);
   };
 
   const savePersonalDetails1 = async (userKyc) => {
-    setIsApiRunning('button');
+    setIsApiRunning("button");
     try {
       let item = {
         kyc: {
@@ -90,7 +103,6 @@ const PersonalDetails1 = (props) => {
         },
       };
       const submitResult = await kycSubmit(item);
-      setKycToSession(submitResult.kyc);
       if (!submitResult) return;
       navigate(getPathname.personalDetails2, {
         state: {
@@ -129,9 +141,7 @@ const PersonalDetails1 = (props) => {
   return (
     <Container
       id="kyc-personal-details1"
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      // disable={showLoader || isLoading}
       handleClick={handleClick}
       skelton={isLoading}
       showLoader={isApiRunning}
@@ -141,9 +151,6 @@ const PersonalDetails1 = (props) => {
       total="4"
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>1/4</span>
-        </div> */}
         <div className="kyc-main-subtitle">
           We need basic details to verify identity
         </div>

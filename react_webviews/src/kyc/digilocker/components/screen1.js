@@ -11,6 +11,7 @@ import { validateNumber, validateAlphabets } from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
+  compareObjects,
 } from "../../common/functions";
 import { kycSubmit } from "../../common/api";
 import toast from "common/ui/Toast";
@@ -22,6 +23,7 @@ const PersonalDetails1 = (props) => {
   const [showLoader, setShowLoader] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
 
   const [kyc, user, isLoading] = useUserKycHook();
 
@@ -54,6 +56,7 @@ const PersonalDetails1 = (props) => {
       spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
     setFormData({ ...formData });
+    setOldState({...formData});
   };
 
   const handleClick = () => {
@@ -88,7 +91,16 @@ const PersonalDetails1 = (props) => {
     userkycDetails.pan.meta_data.father_name = form_data.father_name;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name =
+        form_data.spouse_name;
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.digilockerPersonalDetails2, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+      return;
+    }
     savePersonalDetails1(userkycDetails);
   };
 
@@ -134,10 +146,8 @@ const PersonalDetails1 = (props) => {
     <Container
       skelton={isLoading}
       id="kyc-personal-details1"
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       showLoader={showLoader}
-      // disable={showLoader}
       handleClick={handleClick}
       title={title}
       count={1}
@@ -145,9 +155,6 @@ const PersonalDetails1 = (props) => {
       total={4}
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>1/4</span>
-        </div> */}
         <div className="kyc-main-subtitle">
           Please fill your basic details for further verification
         </div>

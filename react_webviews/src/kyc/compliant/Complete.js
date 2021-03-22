@@ -21,7 +21,6 @@ const Complete = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       id="kyc-compliant-complete"
       buttonTitle="OK"
       handleClick={handleClick}

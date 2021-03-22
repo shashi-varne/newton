@@ -8,7 +8,11 @@ import {
   getPathname,
 } from "../constants";
 import { isEmpty } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit, getCVL } from "../common/api";
 import toast from "common/ui/Toast";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -19,6 +23,7 @@ const PersonalDetails3 = (props) => {
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
   const [kyc, , isLoading] = useUserKycHook();
+  const [oldState, setOldState] = useState({});
   let title = "Professional details";
   if (isEdit) {
     title = "Edit professional details";
@@ -34,6 +39,7 @@ const PersonalDetails3 = (props) => {
       occupation: kyc.identification?.meta_data?.occupation || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -44,6 +50,12 @@ const PersonalDetails3 = (props) => {
       setFormData(data);
       return;
     }
+
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      handleNavigation(kyc.address.meta_data.is_nri);
+      return;
+    }
+
     let userkycDetails = { ...kyc };
     userkycDetails.identification.meta_data.gross_annual_income =
       form_data.income;
@@ -76,26 +88,30 @@ const PersonalDetails3 = (props) => {
       if (!result) return;
       const submitResult = await kycSubmit(submitData);
       if (!submitResult) return;
-      if (is_nri) {
-        navigate(getPathname.nriAddressDetails2, {
-          state: {
-            isEdit: isEdit,
-            userType: "compliant",
-          },
-        });
-      } else {
-        navigate(getPathname.compliantPersonalDetails4, {
-          state: {
-            isEdit: isEdit,
-            userType: "compliant",
-          },
-        });
-      }
+      handleNavigation(is_nri);
     } catch (err) {
       console.log(err);
       toast(err.message);
     } finally {
       setIsApiRunning(false);
+    }
+  };
+
+  const handleNavigation = (is_nri) => {
+    if (is_nri) {
+      navigate(getPathname.nriAddressDetails2, {
+        state: {
+          isEdit: isEdit,
+          userType: "compliant",
+        },
+      });
+    } else {
+      navigate(getPathname.compliantPersonalDetails4, {
+        state: {
+          isEdit: isEdit,
+          userType: "compliant",
+        },
+      });
     }
   };
 

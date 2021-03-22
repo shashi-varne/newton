@@ -1,6 +1,8 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
 import { getBase64 } from 'utils/functions'
+import { storageConstants } from '../constants'
+import { storageService } from '../../utils/validators'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -75,6 +77,11 @@ export const validateFields = (formData, keyToCheck) => {
             canSubmit = false
           }
           break
+        case 'pincode':
+          if(value.length !== 6) {
+            formData[`${key}_error`] = 'Minimum length is 6'
+            canSubmit = false
+          }
         default:
           break
       }
@@ -159,4 +166,19 @@ export function updateQueryStringParameter(uri, key, value) {
   } else {
     return uri + separator + key + '=' + value
   }
+}
+
+export const compareObjects = (keysToCheck, oldState, newState) => {
+  let compare = true;
+  keysToCheck.forEach((key) => {
+    if (oldState[key] !== newState[key]) {
+      compare = false;
+    }
+  });
+  return compare;
+};
+
+export const compareKycObject = (userKyc) => {
+  const kyc = storageService().getObject(storageConstants.KYC) || {}
+  return JSON.stringify(userKyc) === JSON.stringify(kyc)
 }

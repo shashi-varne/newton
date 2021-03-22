@@ -87,22 +87,39 @@ const Home = (props) => {
         setPanError("Minimum length is 10");
         return;
       }
-  
+
       if (!validatePan(pan)) {
         setPanError("Invalid PAN number");
         return;
       }
-  
-      if (!isStartKyc) {
-        await checkCompliant();
-      }
-      else if (!isUserCompliant) setOpenResident(true);
-      else savePan(kyc.address?.meta_data?.is_nri || false);
 
-    } catch(err) {
+      const skipApiCall = pan === kyc?.pan?.meta_data?.pan_number;
+      if (!isStartKyc) {
+        if (skipApiCall) {
+          setIsStartKyc(true);
+          if (kyc?.kyc_status === "compliant") {
+            setIsUserCompliant(true);
+            setButtonTitle("CONTINUE");
+          } else {
+            setButtonTitle("START KYC");
+            setIsUserCompliant(false);
+          }
+          return;
+        }
+        await checkCompliant();
+      } else if (!isUserCompliant) setOpenResident(true);
+      else {
+        if (skipApiCall) {
+          handleNavigation(
+            kyc.address?.meta_data?.is_nri || false,
+            kyc?.kyc_status
+          );
+        }
+        savePan(kyc.address?.meta_data?.is_nri || false);
+      }
+    } catch (err) {
       toast(err.message || genericErrorMessage);
     }
-    
   };
 
   const checkCompliant = async () => {
@@ -126,8 +143,8 @@ const Home = (props) => {
         setIsUserCompliant(false);
       }
     } catch (err) {
-      console.log(err)
-      throw new Error(err.message)
+      console.log(err);
+      throw new Error(err.message);
     } finally {
       setShowLoader(false);
     }
@@ -183,14 +200,14 @@ const Home = (props) => {
     let email = config.partner.email;
     let name = "fisdom";
     if (config.productName === "finity") name = "finity";
-    const message = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
+    const toastMessage = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
     if (config.isIframe) {
-      toast(message);
+      toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
       if (!response) return;
       let { message, auth_ids } = response;
-      if (message === 'success') {
+      if (message === "success") {
         setAuthIds(auth_ids);
         setAccountMergeData({
           title: "PAN Already Exists",
@@ -201,17 +218,15 @@ const Home = (props) => {
         });
         setOpenAccountMerge(true);
       } else if (response?.different_login) {
-         
-          setAccountMergeData({
-            title: "PAN Is already registered",
-            subtitle: response?.message,
-            buttonTitle: "SIGN OUT",
-            step: "STEP2",
-          });
-          setOpenAccountMerge(true);
-        
+        setAccountMergeData({
+          title: "PAN Is already registered",
+          subtitle: response?.message,
+          buttonTitle: "SIGN OUT",
+          step: "STEP2",
+        });
+        setOpenAccountMerge(true);
       } else {
-        toast(message);
+        toast(toastMessage);
       }
     }
   };
@@ -237,32 +252,35 @@ const Home = (props) => {
       };
       let result = await kycSubmit(body);
       if (!result) return;
-      user.name = result.kyc.pan.meta_data.name;
-      if (
-        (isUserCompliant || result.kyc.kyc_status === "compliant") &&
-        (homeData.kycConfirmPanScreen || isPremiumFlow)
-      ) {
-        navigate(getPathname.compliantPersonalDetails1);
-      } else {
-        if (isUserCompliant || result.kyc.kyc_status === "compliant") {
-          navigate(getPathname.journey);
-        } else {
-          if (is_nri) {
-            navigate(`${getPathname.journey}`, {
-              searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
-            });
-          } else {
-            navigate(`${getPathname.journey}`, {
-              searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
-            });
-          }
-        }
-      }
+      handleNavigation(is_nri, result.kyc.kyc_status);
     } catch (err) {
       console.log(err);
       toast(err.message || genericErrorMessage);
     } finally {
       setShowLoader(false);
+    }
+  };
+
+  const handleNavigation = (is_nri, kyc_status) => {
+    if (
+      (isUserCompliant || kyc_status === "compliant") &&
+      (homeData.kycConfirmPanScreen || isPremiumFlow)
+    ) {
+      navigate(getPathname.compliantPersonalDetails1);
+    } else {
+      if (isUserCompliant || kyc_status === "compliant") {
+        navigate(getPathname.journey);
+      } else {
+        if (is_nri) {
+          navigate(`${getPathname.journey}`, {
+            searchParams: `${getConfig().searchParams}&show_aadhaar=false`,
+          });
+        } else {
+          navigate(`${getPathname.journey}`, {
+            searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+          });
+        }
+      }
     }
   };
 

@@ -52,11 +52,9 @@ const RegistrationSuccess = (props) => {
   return (
     <Container
       skelton={isLoading}
-      // hideInPageTitle
       id="registration-success"
       buttonTitle={buttonTitle}
       title="KYC Submitted"
-      // disable={isLoading}
       handleClick={handleClick}
       force_hide_inpage_title={true}
     >

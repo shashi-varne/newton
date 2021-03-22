@@ -20,14 +20,12 @@ const Verify = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       id="kyc-compliant-verify"
       buttonTitle="INVEST NOW"
       handleClick={handleClick}
       title="KYC verified"
     >
       <div className="kyc-compliant-complete kyc-compliant-verify">
-        {/* <div className="kyc-main-title">KYC verified</div> */}
         <header>
           <img
             src={require(`assets/${productName}/ic_process_done.svg`)}

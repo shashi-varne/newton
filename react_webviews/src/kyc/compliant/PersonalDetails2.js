@@ -3,7 +3,11 @@ import Container from "../common/Container";
 import Input from "common/ui/Input";
 import { getPathname, maritalStatusOptions } from "../constants";
 import { isEmpty, validateAlphabets } from "utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import {
+  validateFields,
+  navigate as navigateFunc,
+  compareObjects,
+} from "../common/functions";
 import { kycSubmit } from "../common/api";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import toast from "common/ui/Toast";
@@ -14,6 +18,7 @@ const PersonalDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
@@ -34,6 +39,7 @@ const PersonalDetails2 = (props) => {
       spouse_name: kyc.identification.meta_data.spouse_name || "",
     };
     setFormData({ ...formData });
+    setOldState({ ...formData });
   };
 
   const handleClick = () => {
@@ -50,13 +56,22 @@ const PersonalDetails2 = (props) => {
       form_data.marital_status;
     userkycDetails.pan.meta_data.mother_name = form_data.mother_name;
     if (form_data.marital_status === "MARRIED")
-      userkycDetails.identification.meta_data.spouse_name = form_data.spouse_name;
+      userkycDetails.identification.meta_data.spouse_name =
+        form_data.spouse_name;
     let item = {
       kyc: {
         pan: userkycDetails.pan.meta_data,
         identification: userkycDetails.identification.meta_data,
       },
     };
+    if (compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.compliantPersonalDetails3, {
+        state: {
+          isEdit: isEdit,
+        },
+      });
+      return;
+    }
     savePersonalDetails2(item);
   };
 
