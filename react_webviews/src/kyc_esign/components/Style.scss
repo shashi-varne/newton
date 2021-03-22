@@ -99,10 +99,15 @@ $text-color2: #8D879B;
     }
 }
 
-#kyc-eisign-back-dialog  {
-  .MuiDialogContent-root {
-    .text {
-      color: red;
-    }
+#kyc-esign-back-dialog  {
+  .text {
+    margin: 10px 0;
+    color: #160d2e;
+    font-size: 16px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
   }
 }

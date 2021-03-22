@@ -12,7 +12,6 @@ const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
   // const [kyc, setKyc] = useState(
   //   storageService().getObject(storageConstants.KYC) || null
@@ -39,8 +38,10 @@ const Sign = (props) => {
                 getBase64(file, function (img) {
                   setFileToShow(img)
                 })
+                break;
               default:
                 toast('Please select image file')
+                break
             }
           } catch (e) {
             //

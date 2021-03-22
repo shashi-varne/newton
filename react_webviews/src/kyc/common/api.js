@@ -163,6 +163,8 @@ export const upload = async (file, type = 'pan', data = {}) => {
       case 'nri_address':
        address_proof_key = data?.address_proof_key
        break
+       default:
+         break
     }
   }
   const url = isEmpty(address_proof_key) ? `/api/kyc/v2/doc/mine/${type}` : `/api/kyc/v2/doc/mine/${type}/${address_proof_key}`

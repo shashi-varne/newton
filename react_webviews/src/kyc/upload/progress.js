@@ -4,7 +4,6 @@ import UploadCard from "./UploadCard";
 import { getDocuments, initData } from "../services";
 import { isEmpty, storageService } from "utils/validators";
 import { getPathname, storageConstants } from "../constants";
-import toast from "common/ui/Toast";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 
