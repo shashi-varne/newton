@@ -142,16 +142,16 @@
   height: auto;
 }
 .error-radiogrp {
-  margin: 0;
+  // margin: 0;
   font-size: 0.75rem;
   text-align: left;
-  margin-top: 8px;
+  // margin-top: 8px;
   min-height: 1em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   line-height: 1em;
   color: #D0021B;
   position: relative;
-  top: 5px;
+  // top: 5px;
 }
 .MuiDialog-paper {
   margin: 0 20px 0px 20px !important;
@@ -1130,6 +1130,23 @@ body[data-device="mobile"] {
     background: #C4C4C4,
   }
 }
+
+@media only screen and (min-width: 600px) {
+  /* Scroll Bar */
+  .css-yk16xz-control::-webkit-scrollbar {
+    height: 5px;
+    scrollbar-width: 20px;
+  }
+  .css-yk16xz-control::-webkit-scrollbar-track {
+    background: white;
+  }
+  .css-yk16xz-control::-webkit-scrollbar-thumb {
+    background: #C4C4C4,
+  }
+  .css-yk16xz-control::-webkit-scrollbar-thumb:hover {
+    background: #C4C4C4,
+  }
+}
 /********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
 .MuiInput-root{
   background: rgba(238, 238, 238, 0.3);
@@ -1153,7 +1170,7 @@ body[data-device="mobile"] {
     color:  #D0021B !important;
     font-size: 11px;
     line-height: 18px;
-    margin-top: 2px;
+    margin-top: 5px;
   }
   
   

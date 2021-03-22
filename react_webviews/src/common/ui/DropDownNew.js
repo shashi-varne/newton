@@ -159,10 +159,10 @@ class SelectDropDown2 extends React.Component {
                },
                "::-webkit-scrollbar-track": {
                  background: "white",
-                 borderRadius: '100px',
                },
                "::-webkit-scrollbar-thumb": {
                  background: "#C4C4C4",
+                 borderRadius: '100px',
                },
                "::-webkit-scrollbar-thumb:hover": {
                  background: "#C4C4C4",
@@ -244,5 +244,5 @@ const ErrorMessageStyle = {
   fontSize: '11px',
   color: '#D0021B',
   marginLeft: '10px',
-  marginTop: '-3px'
+  marginTop: '5px'
 }
