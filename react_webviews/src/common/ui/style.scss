@@ -1086,6 +1086,11 @@ body[data-device="mobile"] {
 
 .css-26l3qy-menu{
   margin-top: 2px !important;
+  border-radius: 0px !important;
+}
+
+.css-xb97g8:hover {
+  color: #4A4A4A  !important; 
 }
 
 #react-select-2-input{
@@ -1201,7 +1206,6 @@ body[data-device="mobile"] {
   .input-value{
     margin-left: 10px;
   }
-  
   .MuiInputLabel-animated{
     top: -8px !important;
     left: 11px !important;

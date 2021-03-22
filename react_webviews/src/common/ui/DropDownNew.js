@@ -119,6 +119,7 @@ class SelectDropDown2 extends React.Component {
               this.select = ref;
             }}
             blurInputOnSelect={false}
+            onBlurResetsInput={true}
             menuShouldBlockScroll={ isMobile.any() ? false : true}
             // defaultValue={value}
             // isDisabled={this.state.isLoading}
@@ -243,5 +244,5 @@ const ErrorMessageStyle = {
   fontSize: '11px',
   color: '#D0021B',
   marginLeft: '10px',
-  marginTop: '-4px'
+  marginTop: '-3px'
 }
