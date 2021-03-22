@@ -34,7 +34,7 @@ const getTitleList = ({ kyc }) => {
 }
 
 const MessageComponent = (kyc) => {
-  const [titleList, setTitleList] = useState(getTitleList(kyc))
+  const [titleList, _] = useState(getTitleList(kyc))
   return (
     <section className="pan-alert">
       {titleList.map((title, idx) => (

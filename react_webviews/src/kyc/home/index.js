@@ -151,7 +151,7 @@ const Home = (props) => {
   };
 
   const handleChange = (event) => {
-    let value = event.target ? event.target.value : event;
+    let value = event.target ? event.target.value.trim() : event;
     setPan(value);
     if (value) setPanError("");
     else setPanError("This is required");
@@ -306,7 +306,7 @@ const Home = (props) => {
               error={panError ? true : false}
               helperText={panError || ""}
               onChange={handleChange}
-              maxLength={10}
+              maxLength={11}
               type="text"
               disabled={showLoader}
             />
