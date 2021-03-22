@@ -7,6 +7,7 @@ import { getConfig } from 'utils/functions';
 
 
 import {didMount ,commonRender} from '../../common/components/container_functions';
+import { storageService } from '../../utils/validators';
 
 
 
@@ -79,7 +80,9 @@ class Container extends Component {
     switch (pathname) {
       case "/risk":
       case "/risk/intro":
-        if (getConfig().isWebCode) {
+        const { flow } = storageService().getObject('risk-entry-params') || {};
+
+        if (getConfig().isWebCode && flow) {
           nativeCallback({ events: this.getEvents('back') });
           this.props.history.goBack();
         } else {
