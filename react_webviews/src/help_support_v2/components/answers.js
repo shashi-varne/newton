@@ -19,6 +19,7 @@ class Answers extends Component {
       fromScreen: "",
       sub_category_id: "",
       thumbStatus: "",
+      isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
   }
@@ -207,6 +208,7 @@ class Answers extends Component {
       faqDesc,
       headerTitle,
       thumbStatus,
+      isApiRunning
     } = this.state;
 
     return (
@@ -274,14 +276,14 @@ class Answers extends Component {
               </div>
               <div className="thumb-container">
                 <img
-                  onClick={() => this.handleFeedBack("thumbs_up")}
+                  onClick={() => !isApiRunning && this.handleFeedBack("thumbs_up")}
                   src={require(`assets/${
                     thumbStatus === "thumbs_up" ? "thumb_up_fill" : "thumb_up"
                   }.svg`)}
                   alt=""
                 />
                 <img
-                  onClick={() => this.handleFeedBack("thumbs_down")}
+                  onClick={() => !isApiRunning && this.handleFeedBack("thumbs_down")}
                   src={require(`assets/${
                     thumbStatus === "thumbs_down"
                       ? "thumb_down_fill"

@@ -282,6 +282,7 @@ export async function getFaqDescription(faq_id) {
   try {
     this.setState({
       skelton: true,
+      isApiRunning: true
     });
     const res = await Api.get(`/relay/hns/api/faq/${faq_id}/desc`);
 
@@ -300,6 +301,7 @@ export async function getFaqDescription(faq_id) {
       } else {
         this.setState({
           skelton: false,
+          isApiRunning: false
         });
         faqDesc[faq_id] = result.faq;
 
@@ -329,6 +331,7 @@ export async function getFaqDescription(faq_id) {
   if (error) {
     this.setState({
       show_loader: false,
+      isApiRunning: false,
       errorData: {
         ...this.state.errorData,
         title2: error,
