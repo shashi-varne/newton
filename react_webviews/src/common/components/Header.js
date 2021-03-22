@@ -56,7 +56,7 @@ const Header = ({ classes, title, count, total, current, goBack,
       />
       }
       {querycta && (
-        <div style={{width: '150px', margin: '0 8px 0 auto'}}>
+        <div style={{width: '130px', margin: '0 8px 0 auto'}}>
           <div className={`header-query ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`}
             onClick={handleQuery}>{queryTitle}</div>
         </div>

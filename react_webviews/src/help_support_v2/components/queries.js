@@ -188,11 +188,17 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
-              animateHeight
+              animateHeight={tickets.closed?.length > 0 || (tickets.closed?.length !== 0 && tickets.open?.length !== 0 )}
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
                   <Tickets tickets={tickets.open} onClick={this.handleClick} />
+                )}
+                {!tickets.open && (
+                  <SkeltonRect
+                    className="balance-skelton"
+                    hide={!this.state.skelton}
+                  />
                 )}
                 {tickets.open && tickets.open.length === 0 && (
                   <div className="no-tickets">
@@ -203,12 +209,6 @@ class Queries extends Component {
                     />
                     You don't have any open tickets
                   </div>
-                )}
-                {!tickets.open && (
-                  <SkeltonRect
-                    className="balance-skelton"
-                    hide={!this.state.skelton}
-                  />
                 )}
               </TabContainer>
               <TabContainer dir={"ltr"}>

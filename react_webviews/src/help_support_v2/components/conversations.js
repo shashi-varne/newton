@@ -88,7 +88,12 @@ class TicketConversations extends Component {
     };
 
     if (result.conversations) {
+
       if (result.conversations && result.conversations.length === 30) {
+        this.setState({
+          skelton: true,
+        });
+
         let details = await this.getTicketConversations(this.state.ticket.ticket_id, "2");
 
         conversations = [...result.conversations, ...details.conversations];
@@ -171,6 +176,8 @@ class TicketConversations extends Component {
 
     if (this.state.ticket_status === "Closed") {
       this.sendEvents("next", { reopen: "yes" });
+      ticket.category = this.state.category;
+      ticket.sub_category = this.state.sub_category;
       this.props.history.push(
         { pathname: "send-query", search: getConfig().searchParams },
         { ticket: ticket }
