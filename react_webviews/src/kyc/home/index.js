@@ -81,20 +81,28 @@ const Home = (props) => {
     },
   };
 
-  const handleClick = () => {
-    if (pan.length !== 10) {
-      setPanError("Minimum length is 10");
-      return;
-    }
+  const handleClick = async () => {
+    try {
+      if (pan.length !== 10) {
+        setPanError("Minimum length is 10");
+        return;
+      }
+  
+      if (!validatePan(pan)) {
+        setPanError("Invalid PAN number");
+        return;
+      }
+  
+      if (!isStartKyc) {
+        await checkCompliant();
+      }
+      else if (!isUserCompliant) setOpenResident(true);
+      else savePan(kyc.address?.meta_data?.is_nri || false);
 
-    if (!validatePan(pan)) {
-      setPanError("Invalid PAN number");
-      return;
+    } catch(err) {
+      toast(err.message || genericErrorMessage);
     }
-
-    if (!isStartKyc) checkCompliant();
-    else if (!isUserCompliant) setOpenResident(true);
-    else savePan(kyc.address?.meta_data?.is_nri || false);
+    
   };
 
   const checkCompliant = async () => {
@@ -108,9 +116,9 @@ const Home = (props) => {
         },
         accountMerge
       );
-      if (!result) return;
+      if (isEmpty(result)) return;
       setIsStartKyc(true);
-      if (result.kyc.status) {
+      if (result?.kyc?.status) {
         setIsUserCompliant(true);
         setButtonTitle("CONTINUE");
       } else {
@@ -118,7 +126,8 @@ const Home = (props) => {
         setIsUserCompliant(false);
       }
     } catch (err) {
-      toast(err.message || genericErrorMessage);
+      console.log(err)
+      throw new Error(err.message)
     } finally {
       setShowLoader(false);
     }
@@ -180,9 +189,9 @@ const Home = (props) => {
     } else {
       let response = await checkMerge(pan.toUpperCase());
       if (!response) return;
-      let { result, status_code } = response;
-      if (status_code === 200) {
-        setAuthIds(result.auth_ids);
+      let { message, auth_ids } = response;
+      if (message === 'success') {
+        setAuthIds(auth_ids);
         setAccountMergeData({
           title: "PAN Already Exists",
           subtitle:
@@ -192,16 +201,14 @@ const Home = (props) => {
         });
         setOpenAccountMerge(true);
       } else {
-        if (result.different_login) {
+        if (response?.different_login) {
           setAccountMergeData({
             title: "PAN Is already registered",
-            subtitle: result.error,
+            subtitle: response?.message,
             buttonTitle: "SIGN OUT",
             step: "STEP2",
           });
           setOpenAccountMerge(true);
-        } else {
-          toast(message);
         }
       }
     }
