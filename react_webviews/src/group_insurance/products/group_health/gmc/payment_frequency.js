@@ -174,7 +174,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             body[key] = post_body[key];
         }
         body['payment_frequency'] = this.state.payment_frequency;
-        console.log(this.state.payment_frequency)
         this.setState({
             skelton: true
         });

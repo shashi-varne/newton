@@ -30,7 +30,7 @@ class MoreInfoAccordian extends Component {
     };
 
     render() {
-        var key = this.props.key;
+        var key = this.props.id;
         return (
            <div>
                   <div

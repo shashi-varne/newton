@@ -184,7 +184,7 @@ class HealthInsuranceLanding extends Component {
       let resultData = res.pfwresponse
       if(res.pfwresponse.status_code === 200){
         data.insurance_type = 'Comprehensive health insurance'
-        this.sendEvents(data)
+        this.sendEvents('next', data.insurance_type, data.Product_name);
         let fullPath = data.key + '/landing';
         this.navigate('/group-insurance/group-health/' + fullPath);  
       }else {
@@ -365,7 +365,6 @@ class HealthInsuranceLanding extends Component {
       this.DISEASE_SPECIFIC_PLANS();
       return;
     }
-
     this.sendEvents('next', title ? title : '')
 
     if (product_key === 'HEALTH_SUPER_TOPUP') {
@@ -477,6 +476,8 @@ class HealthInsuranceLanding extends Component {
       "properties": {
         "user_action": user_action,
         "screen_name": 'health insurance',
+        'insurance_type': insurance_type,
+        'product_selected': product_selected
       }
     };
 

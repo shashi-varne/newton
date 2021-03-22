@@ -225,8 +225,8 @@ class GroupHealthLanding extends Component {
         product: this.state.providerConfig.provider_api,
         screen_name: "introduction",
         coverage_overview_click: `${
-          this.state.whats_covered_clicked ? "what is covered," : ""
-        } ${this.state.whats_not_covered_clicked ? "what is not covered" : ""}`,
+          this.state.whats_covered_clicked ? "what is covered" : ""
+        } ${this.state.whats_not_covered_clicked ? ",what is not covered" : ""}`,
         things_to_know: data.things_to_know || data.more_info || "",
         benifits_carousel: this.state.selectedIndex + 1,
         resume_clicked: this.state.resume_clicked ? "yes" : "no",
@@ -237,6 +237,13 @@ class GroupHealthLanding extends Component {
     } else {
       nativeCallback({ events: eventObj });
     }
+  }
+  
+  updateMoreInfoEvent = (key) =>{
+    console.log({key})
+    this.setState({
+      [key + "_clicked"]: true,
+    })
   }
   
   handleResume = () => {
@@ -414,13 +421,15 @@ class GroupHealthLanding extends Component {
 
           <MoreInfoAccordian 
             parent={this} 
+            id="whats_covered" 
             key="whats_covered" 
             title="What is covered?" 
             data={this.state.whats_covered}
           />
           <MoreInfoAccordian 
             parent={this} 
-            key="whats_not_covered" 
+            id="whats_not_covered" 
+            key="whats_not_covered"
             title="What is not covered?" 
             data={this.state.whats_not_covered}
           />
