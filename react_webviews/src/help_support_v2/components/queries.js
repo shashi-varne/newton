@@ -188,7 +188,7 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
-              animateHeight={tickets.closed?.length > 0 || (tickets.closed?.length !== 0 && tickets.open?.length !== 0 )}
+              animateHeight={tickets.closed}
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
