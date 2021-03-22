@@ -98,3 +98,11 @@ $text-color2: #8D879B;
       margin: 10px 0 10px 0;
     }
 }
+
+#kyc-eisign-back-dialog  {
+  .MuiDialogContent-root {
+    .text {
+      color: red;
+    }
+  }
+}

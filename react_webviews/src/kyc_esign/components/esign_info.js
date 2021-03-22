@@ -4,6 +4,8 @@ import { nativeCallback } from 'utils/native_callback';
 import { getConfig } from 'utils/functions';
 import toast from '../../common/ui/Toast';
 import Api from '../../utils/api';
+import { navigate as navigateFunc } from '../common/functions'
+import ConfirmBackModal from './confirm_back'
 
 class ESignInfo extends Component {
   constructor(props) {
@@ -11,11 +13,21 @@ class ESignInfo extends Component {
     this.state = {
       show_loader: false,
       productName: getConfig().productName,
+      backModal: false,
     }
   }
 
   handleBack = () => {
-    nativeCallback({ action: 'exit_web' });
+    this.setState({ backModal: true })
+  }
+
+  confirm = () => {
+    const navigate = navigateFunc.bind(this.props);
+    navigate('/kyc/journey');
+  }
+
+  cancel = () => {
+    this.setState({ backModal: false })
   }
 
   handleClick = async () => {
@@ -116,6 +128,7 @@ class ESignInfo extends Component {
             </div>
           </div>
         </div>
+        <ConfirmBackModal id="kyc-esign-confirm-modal" open={this.state.backModal} cancel={this.cancel} confirm={this.confirm} />
       </Container>
     );
   };

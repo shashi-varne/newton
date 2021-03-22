@@ -52,7 +52,6 @@ import PersonalDetails3 from './personal_details/Screen3'
 import PersonalDetails4 from './personal_details/Screen4'
 import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
 import SampleDocuments from './bank-kyc/SampleDocuments'
-import Esign from './esign'
 import AddressDetails2 from './address/AddressDetails2'
 import AddressDetails1 from './address/screen1'
 import DigilockerPersonalDetails1 from './digilocker/components/screen1'
@@ -230,7 +229,6 @@ const Kyc = (props) => {
             path={`${url}/sample-documents`}
             component={SampleDocuments}
           />
-          <Route exact path={`${url}/esign`} component={Esign} />
           <Route
             exact
             path={`${url}/address-details2`}
