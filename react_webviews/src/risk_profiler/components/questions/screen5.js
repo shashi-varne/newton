@@ -166,9 +166,12 @@ class QuestionScreen5 extends Component {
                   helperText={this.state.question1_error}
                   width="40"
                   label={this.state.questionnaire[this.state.indexMain].question}
-                  class="MaritalStatus"
+                  class="risk-question"
+                  labelClasses={{
+                    root: 'risk-question'
+                  }}
                   options={this.state.question1Options}
-                  id="marital-status"
+                  id="risk-question"
                   value={this.state.question1}
                   onChange={this.handleQuestionRadio('question1')} />
               </div>
@@ -180,9 +183,12 @@ class QuestionScreen5 extends Component {
                     width="40"
                     disabled={!this.state.question1}
                     label={this.state.questionnaire[this.state.indexMain + 1].question}
-                    class="MaritalStatus"
+                    class="risk-question"
+                    labelClasses={{
+                      root: 'risk-question'
+                    }}
                     options={this.state.question2Options}
-                    id="marital-status"
+                    id="risk-question"
                     value={this.state.question2}
                     onChange={this.handleQuestionRadio('question2')} />
                 </div>}
