@@ -398,6 +398,14 @@
     justify-self: flex-end;
     cursor: pointer;
   }
+
+  .field_key {
+    color: #160d2e;
+  }
+
+  .field_value {
+    margin-left: 10px;
+  }
 }
 
 .kyc-journey .steps-container .step .disc {
