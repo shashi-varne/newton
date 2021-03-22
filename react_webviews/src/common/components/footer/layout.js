@@ -247,6 +247,12 @@ WithProviderLayoutGold = (props) => {
       }
     }
 
+    if(type === 'summary') {
+      if(project !== 'insurance') {
+        type = 'default';
+      }
+    }
+
     if(project === 'gold') {
       if(type === 'withProvider') {
         type = 'withProviderGold';

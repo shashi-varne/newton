@@ -265,7 +265,7 @@ class GroupHealthStarPlanSelectPed extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        title="Pre-existing conditions"
+        title={this.setEditTitle('Pre-existing conditions')}
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}
