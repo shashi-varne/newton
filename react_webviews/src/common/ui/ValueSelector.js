@@ -10,10 +10,7 @@ class ValueSelector extends Component {
                     <div className="name">
                         {props.value}
                     </div>
-                    <div className="completed-icon">
-                        {index === this.props.selectedIndex &&
-                            <img src={require(`assets/completed_step.svg`)} alt="" />}
-                    </div>
+                    {index === this.props.selectedIndex && <img className="completed-icon" src={require(`assets/completed_step.svg`)} alt="" />}
                 </div>
             </div >
         )

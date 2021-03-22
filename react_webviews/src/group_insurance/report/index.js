@@ -403,8 +403,10 @@ class Report extends Component {
                 <div className="report-cover-amount"><span className="sub-text-bold">Sum insured:</span>
                     ₹{inrFormatDecimalWithoutIcon(props.sum_assured)}
                 </div>
-                <div className="report-cover-amount"><span className="sub-text-bold">Premium:
-                    </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}
+                <div className="report-cover-amount">
+                  {props.provider !== 'care_plus' ? 
+                  <p><span className="sub-text-bold">Premium: </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} for {props.tenure} year{props.tenure > 1 && (<span>s</span>)}</p>
+                  : <p><span className="sub-text-bold">Premium: </span> ₹{inrFormatDecimalWithoutIcon(props.premium)} {props.payment_frequency === 'Yearly' ? 'annually' : 'monthly'}</p>}
                   </div>
               </div>
             }

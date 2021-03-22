@@ -163,7 +163,7 @@ class GroupHealthPlanContactDetails extends Component {
                 "flow": this.state.insured_account_type || '',
                 "screen_name": 'contact details',
                 'email': this.state.form_data.email,
-                'phone_number': this.state.form_data.phone_number,
+                'mobile_number': this.state.form_data.phone_number,
                 'from_edit': this.props.edit ? 'yes' : 'no'
             }
         };

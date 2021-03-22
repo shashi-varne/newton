@@ -225,8 +225,8 @@ class GroupHealthLanding extends Component {
         product: this.state.providerConfig.provider_api,
         screen_name: "introduction",
         coverage_overview_click: `${
-          this.state.whats_covered_clicked ? "what is covered" : ""
-        } ${this.state.whats_not_covered_clicked ? ",what is not covered" : ""}`,
+          this.state.whats_covered_clicked ? "what is covered," : ""
+        } ${this.state.whats_not_covered_clicked ? "what is not covered" : ""}`,
         things_to_know: data.things_to_know || data.more_info || "",
         benifits_carousel: this.state.selectedIndex + 1,
         resume_clicked: this.state.resume_clicked ? "yes" : "no",

@@ -182,6 +182,10 @@ class GroupHealthPlanDob extends Component {
 
         let post_body = groupHealthPlanData.post_body;
 
+        if(post_body && post_body.quotation_id){
+            delete post_body['quotation_id'];
+        }
+
         for(var age in child_ages) {
             for(var adult in adult_ages) {
                 if(child_ages[age] >= adult_ages[adult]) {

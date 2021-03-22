@@ -109,6 +109,10 @@ class GroupHealthPlanDobReligare extends Component {
         let {validation_props, groupHealthPlanData } = this.state || {};
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
+        var post_body = groupHealthPlanData.post_body;
+        if(post_body && post_body.quotation_id){
+            delete post_body['quotation_id'];
+        }
 
         let ui_members = groupHealthPlanData.ui_members || {};
         
