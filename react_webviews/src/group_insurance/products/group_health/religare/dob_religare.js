@@ -41,7 +41,7 @@ class GroupHealthPlanDobReligare extends Component {
         
         this.setState({
             header_title: isSelf ? 'Your date of birth' : 'Date of birth details',
-            default_helper_text: `${isSelf ? "Your" : "Adult member's"} age should be more than 18 yrs`,
+            default_helper_text: `${isSelf ? "You" : "Adult member's age"} should be 18 years or older`,
         });
 
 
@@ -109,6 +109,10 @@ class GroupHealthPlanDobReligare extends Component {
         let {validation_props, groupHealthPlanData } = this.state || {};
 
         groupHealthPlanData = resetInsuredMembers(groupHealthPlanData) || {};
+        var post_body = groupHealthPlanData.post_body;
+        if(post_body && post_body.quotation_id){
+            delete post_body['quotation_id'];
+        }
 
         let ui_members = groupHealthPlanData.ui_members || {};
         

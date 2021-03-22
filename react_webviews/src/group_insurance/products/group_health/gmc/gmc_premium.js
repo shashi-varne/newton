@@ -48,7 +48,7 @@ export default class ReligarePremium extends Component {
 
         <div className="generic-hr"></div>
         <div className="flex-between pi-tile" style={{ fontWeight: 600 }}>
-          <div className="pi-tile-left">Total payable per year</div>
+          <div className="pi-tile-left">Total payable per {this.props.payment_frequency === 'YEARLY' ? 'year' : 'month'}</div>
           <div className="pi-tile-right">{inrFormatDecimal(this.props.total_amount)}</div>
         </div>
         <div className="generic-hr"></div>

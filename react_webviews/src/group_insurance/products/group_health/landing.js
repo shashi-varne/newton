@@ -239,6 +239,12 @@ class GroupHealthLanding extends Component {
     }
   }
   
+  updateMoreInfoEvent = (key) =>{
+    this.setState({
+      [key + "_clicked"]: true,
+    })
+  }
+  
   handleResume = () => {
     if (!this.state.quoteResume || !this.state.quoteResume.id) {
       return;
@@ -414,13 +420,15 @@ class GroupHealthLanding extends Component {
 
           <MoreInfoAccordian 
             parent={this} 
+            id="whats_covered" 
             key="whats_covered" 
             title="What is covered?" 
             data={this.state.whats_covered}
           />
           <MoreInfoAccordian 
             parent={this} 
-            key="whats_not_covered" 
+            id="whats_not_covered" 
+            key="whats_not_covered"
             title="What is not covered?" 
             data={this.state.whats_not_covered}
           />

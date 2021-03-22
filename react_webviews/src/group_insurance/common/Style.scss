@@ -829,9 +829,7 @@
   margin: 60px 0 0 0;
 
   .disclaimer-checkbox{
-    margin:0 20px 0 0;
-    position: absolute;
-    bottom: 100px;
+    margin: 100px 20px 0 0;
     color:  #6D7278;
     font-size: 13px;
     line-height: 20px;
@@ -849,14 +847,14 @@
     .check-box-container{
       display: flex;
       align-items: flex-start;
-      svg{  
+      margin-top: 16px;
+      span, svg{
         width: 20px;
         height: 20px;
-        margin-top: -7px;
       }
-      .Checkbox{
-        margin-left: -14px;
-      }
+      p{
+      margin: 0 0 0 10px;
+      } 
     }
   }
 }
@@ -988,7 +986,9 @@
 .group-health-select-ped {
   margin: 0 0 50px 0;
 }
-
+.MuiDialogActions-root{
+  text-align: right;
+}
 .group-health-final-summary {
   .member-tile {
       display: flex;

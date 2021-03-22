@@ -246,6 +246,9 @@ class GroupHealthPlanFinalSummary extends Component {
                 info = Object.assign({}, personal_details_to_copy[pc]);
                 info.subtitle = member[info.key];
 
+                if(info.key === 'gender'){
+                    info.subtitle = capitalizeFirstLetter(member[info.key].toLowerCase());
+                }
                 if (member.key === 'applicant') {
 
                     if (info.key === 'name') {
@@ -830,7 +833,7 @@ class GroupHealthPlanFinalSummary extends Component {
                         </div>
                         <div className="subtitle" style={{margin : '7px 0 0 0', overflowWrap: 'break-word'}}>
                           {capitalizeFirstLetter(props.subtitle + "")}
-                             {(props.title==='Height' && <span>cm</span>) || (props.title==='Weight' && <span>kg</span>)}
+                             {(props.title==='Height' && <span> cm</span>) || (props.title==='Weight' && <span> kg</span>)}
                         </div>
                         {props.subtitle2 && <div className="subtitle">
                             {props.subtitle2}
@@ -933,16 +936,16 @@ class GroupHealthPlanFinalSummary extends Component {
             >
                 <DialogContent>
                     <DialogContentText>
-                    You will lose your progress till now. Are you sure you want to restart?
-              </DialogContentText>
+                    <p style={{color: '#0A1D32'}}>You will lose your progress till now. Are you sure you want to restart?</p>
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.resetQuote} color="default">
                         YES
-              </Button>
+                    </Button>
                     <Button onClick={this.handleClose} color="default" autoFocus>
                         NO
-              </Button>
+                    </Button>
                 </DialogActions>
             </Dialog>
         );
@@ -1085,7 +1088,7 @@ class GroupHealthPlanFinalSummary extends Component {
                     {this.state.provider === 'GMC' ?
                         (<div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/ic_hs_pay_freq.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">

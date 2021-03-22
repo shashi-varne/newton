@@ -315,7 +315,7 @@ export const religare = {
                     },
                     {
                         'title': 'How to file and track your claim?',
-                        'subtitle': 'You can file a claim by contacting Care Health customer help desk at customerfirst@careinsurance.com or 1800-102-4488. Claim status can be tracked online here or contacting customer care at the above number.'
+                        'subtitle': 'You can file a claim by contacting Care Health customer help desk at customerfirst@careinsurance.com or 1800-102-4488.'
                     },
                     {
                         'title': 'How much time does it take for a claim to be processed?',
@@ -589,7 +589,7 @@ export const gmc = {
         ncb: 'No Claim Bonus Super'
     },
     landing_screen: {
-        image_list: ['ic_why_hs_gmc_1.png', 'ic_why_hs2.png', 'ic_why_hs_gmc_2.png'],
+        image_list: ['ic_why_hs_gmc_1.png', 'ic_why_hs_gmc_3.png', 'ic_why_hs_gmc_2.png'],
         offerImageData: [
             { src: 'gmc_icn_landing_card_3.svg' },
             { src: 'gmc_icn_landing_card_2.svg' },
@@ -636,7 +636,7 @@ export const gmc = {
                     },
                     {
                         'title': 'How to file and track your claim?',
-                        'subtitle': 'You can file a claim by contacting Care Health customer help desk at customerfirst@careinsurance.com or 1800-102-4488. Claim status can be tracked online here or contacting customer care at the above number.'
+                        'subtitle': 'You can file a claim by contacting Care Health customer help desk at customerfirst@careinsurance.com or 1800-102-4488.'
                     },
                     {
                         'title': 'How much time does it take for a claim to be processed?',

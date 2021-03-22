@@ -4,7 +4,7 @@ import { getConfig } from 'utils/functions';
 import { nativeCallback } from 'utils/native_callback';
 import {
     inrFormatDecimal,
-    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter
+    numDifferentiationInr, dateOrdinal , capitalizeFirstLetter, convertDateFormat
 } from 'utils/validators';
 import Api from 'utils/api';
 import ic_hs_special_benefits from 'assets/ic_hs_special_benefits.svg';
@@ -78,17 +78,10 @@ class GroupHealthReportDetails extends Component {
                 let payment_details = resultData.payment_details;
                 let application_details = resultData.application_details;
                 
-                let valid_from = new Date(policy_data.valid_from);
-                let valid_upto = new Date(policy_data.valid_upto);
-                let payment_success_dt = new Date(payment_details.payment_success_dt);
-
-                // let valid_from = getDateBreakup(policy_data.valid_from)
-                // let formatted_day = valid_from.plainDate.toString().length === 1 ? '0' +valid_from.plainDate : valid_from.plainDate ;
-                payment_details.payment_success_dt = payment_success_dt.getDate()+'/'+ (payment_success_dt.getMonth()+1) +'/'+ payment_success_dt.getFullYear();
+                payment_details.payment_success_dt = convertDateFormat(payment_details.payment_success_dt)
                 
-                policy_data.valid_from = valid_from.getDate()+'/'+ (valid_from.getMonth()+1) +'/'+ valid_from.getFullYear();
-                policy_data.valid_upto = valid_upto.getDate()+'/'+ (valid_upto.getMonth()+1) +'/'+ valid_upto.getFullYear();
-                // policy_data.valid_from =  formatted_day +' '+ valid_from.month +' '+ valid_from.year;
+                policy_data.valid_from = convertDateFormat(policy_data.valid_from)
+                policy_data.valid_upto = convertDateFormat(policy_data.valid_upto)
                 
                 lead.insurance_type = resultData.quotation_details.insurance_type;
                 let insured_members = resultData.insured_member_details;
@@ -273,7 +266,7 @@ class GroupHealthReportDetails extends Component {
                 'steps': {
                     'options': mapper_data.steps
                 },
-                'cta_title': 'OK'
+                'cta_title': 'OKAY'
             }
     
             if (type === 'how_to_claim') {
@@ -291,11 +284,16 @@ class GroupHealthReportDetails extends Component {
                         }
                     ]
                 }
-    
                 let basePath = `/group-insurance/group-health/${provider}/`;
-                if(provider === 'RELIGARE' || provider === 'GMC') {
-                    this.navigate(basePath + 'how-to-claim-religare');
-                    return;
+                if(provider === 'RELIGARE' || provider === 'GMC' ) {
+                    this.props.history.push({
+                      pathname: basePath + 'how-to-claim-religare',
+                      search: getConfig().searchParams,
+                      params: {
+                          cta_title: 'OKAY' 
+                      }
+                  });
+                  return;
                 }
     
                 if(provider === 'STAR') {
@@ -418,7 +416,7 @@ class GroupHealthReportDetails extends Component {
                 errorData={this.state.errorData}
                 title={'Health insurance'}
                 fullWidthButton={true}
-                buttonTitle="OK"
+                buttonTitle="OKAY"
                 onlyButton={true}
                 handleClick={() => this.handleClick()}
                 noFooter={!this.state.showPlanDetails}
@@ -432,7 +430,7 @@ class GroupHealthReportDetails extends Component {
                     <div className="group-health-top-content-plan-logo" style={{ marginBottom: 0 }}>
                         <div className="left">
                             <div className="tc-title">{provider === 'HDFCERGO' ? this.state.providerData.subtitle  : this.state.provider === 'STAR' ? this.state.providerConfig.title: ''}</div>
-                            <div className="tc-subtitle" style={{marginTop: (this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') ? "-22px": ""}} >{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
+                            <div className="tc-subtitle" style={{marginTop: (this.state.provider === 'GMC' || this.state.provider === 'RELIGARE') ? "-22px": "", fontSize: '17px'}} >{Object.keys(this.state.plan_selected).length > 0 && this.state.provider !== 'STAR' ? this.state.plan_selected.plan_title : this.state.provider === 'HDFCERGO' && this.state.quotation_details ? this.state.providerConfig.hdfc_plan_title_mapper[this.state.quotation_details.plan_id]: this.state.providerConfig.subtitle}</div>
                         </div>
 
                         <div className="tc-right">
@@ -478,7 +476,7 @@ class GroupHealthReportDetails extends Component {
                        {this.state.quotation_details && this.state.quotation_details.insurance_type !== 'self' && 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_periods.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
@@ -502,7 +500,7 @@ class GroupHealthReportDetails extends Component {
                                 <div className="mtr-bottom flex" style={{textTransform:'none'}}>
                                         <div>
                                             <div>  { this.state.quotation_details && inrFormatDecimal(this.state.quotation_details.total_premium - this.state.quotation_details.gst)} </div>
-                                            <div style={{fontSize:10}}> (Net premium)</div>
+                                            <div style={{fontSize:10}}> {this.state.provider !== 'GMC' ? '(Net premium)' : '(Basic premium)'}</div>
                                         </div>
                                         <div>
                                             &nbsp;+&nbsp;
@@ -556,7 +554,7 @@ class GroupHealthReportDetails extends Component {
                     {hide_policy_period.indexOf(this.state.policy_data.status) === -1 ? (
                     <div className="member-tile">
                         <div className="mt-left">
-                            <img src={require(`assets/${this.state.productName}/ic_date_payment.svg`)} alt="" />
+                            <img src={require(`assets/${this.state.productName}/ic_policy_period.svg`)} alt="" />
                         </div>
                         <div className="mt-right">
                             <div className="mtr-top">
@@ -625,7 +623,7 @@ class GroupHealthReportDetails extends Component {
                     </div>}
 
                     {!this.state.showPlanDetails &&
-                        <div className="report-detail-download">
+                        <div className="report-detail-download" style={{border: 'none'}}>
 
                             <div className="report-detail-download-text" style={{ fontWeight: 400 }} onClick={() => {
                                 this.setState({
@@ -639,7 +637,7 @@ class GroupHealthReportDetails extends Component {
                             </div>
                             {this.state.policy_data && this.state.policy_data.status === 'policy_issued' &&
                                 <div className="flex">
-                                    <div style={{ color: '#d8dadd', margin: '0 10px 0 10px' }}>
+                                    <div style={{ color: '#d8dadd', margin: '0 22px' }}>
                                         |
                                     </div>
 

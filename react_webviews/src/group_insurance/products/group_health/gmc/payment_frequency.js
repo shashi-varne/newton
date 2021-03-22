@@ -124,7 +124,6 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         var checked = this.state.checked;
         buttonDisabled = props.frequency === 'month' && !checked ? true : false;
         var payment_frequency = this.state.premium_details[index].payment_frequency;
-        console.log(payment_frequency)
         this.setState({
             selectedIndex: index,
             buttonDisabled: buttonDisabled,
@@ -175,9 +174,8 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             body[key] = post_body[key];
         }
         body['payment_frequency'] = this.state.payment_frequency;
-        console.log(this.state.payment_frequency)
         this.setState({
-            skelton: true
+            show_loader: "button"
         });
         try {
             const res = await Api.post(`api/insurancev2/api/insurance/health/quotation/get_premium/${this.state.providerConfig.provider_api}`,body);
@@ -218,7 +216,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
         } catch (err) {
             console.log(err)
             this.setState({
-                skelton: false
+                show_loader: false
             });
             error = true;
             errorType = "crash";
@@ -231,6 +229,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
                 type: errorType
               },
               showError: "page",
+              show_loader:false,
             });
         }
     }
@@ -263,6 +262,7 @@ class GroupHealthPlanSelectPaymentFrequency extends Component {
             showError={this.state.showError}
             errorData={this.state.errorData}
             title="Select payment frequency"
+            showLoader={this.state.show_loader}
             buttonTitle="CONTINUE"
             withProvider={true}
             buttonData={this.state.bottomButtonData}
