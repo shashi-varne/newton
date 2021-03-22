@@ -200,8 +200,8 @@ const Home = (props) => {
           step: "STEP1",
         });
         setOpenAccountMerge(true);
-      } else {
-        if (response?.different_login) {
+      } else if (response?.different_login) {
+         
           setAccountMergeData({
             title: "PAN Is already registered",
             subtitle: response?.message,
@@ -209,7 +209,9 @@ const Home = (props) => {
             step: "STEP2",
           });
           setOpenAccountMerge(true);
-        }
+        
+      } else {
+        toast(message);
       }
     }
   };
