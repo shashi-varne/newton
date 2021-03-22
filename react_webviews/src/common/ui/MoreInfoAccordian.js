@@ -35,10 +35,6 @@ class MoreInfoAccordian extends Component {
            <div>
                   <div
                   className="what-is-covered"
-                  style={{
-                    background:
-                      this.state.productName === "fisdom" ? "#5721AE" : "#19487F",
-                  }}
                   onClick={() => this.handleClickPoints(key)}
                 >
                   <div className="top">
@@ -47,7 +43,7 @@ class MoreInfoAccordian extends Component {
                       <SVG
                         className="text-block-2-img"
                         preProcessor={(code) =>
-                          code.replace(/fill=".*?"/g, "fill=#fff")
+                          code.replace(/fill=".*?"/g, "fill=#5c5c5c")
                         }
                         src={this.state[`${key}_open`] ? up_arrow : down_arrow}
                       />

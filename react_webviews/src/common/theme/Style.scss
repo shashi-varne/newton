@@ -1611,8 +1611,8 @@ input#pan {
 
 
 .what-is-covered {
-  background: #19487F;
-  
+  background: #EEEEEE;
+  color: #161A2E;
   padding: 10px 10px 10px 0;
   border-radius: 4px;
   margin: 10px 0 0 0;
@@ -1628,35 +1628,37 @@ input#pan {
   }
 
   .wic-title {
-    color: white;
     font-size: 13px;
     font-weight: 500;
+    font-weight: bold;
   }
+  
   .content {
     margin: 20px 20px 0 20px;
     padding-left: 0;
   }
 
-  .circle {
-    width: 8px;
-    height: 8px;
-    border-radius: 100px;
-    margin-right: 5px;
-    background-color: white;
-  }
+  
 
   .wic-tile {
     display: flex;
     align-items: baseline;
     margin: 15px 0 10px 5px;
-    color: white;
     font-size: 12px;
       font-weight: 400;
+      .circle {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        background-color: #161A2E;
+      }
+      .wic-tile-right {
+        margin: 0 0 0 10px;
+        font-size: 13px;
+        text-align: left;
+        color: #161A2E;
+      }
   }
   
-  .wic-tile-right {
-    margin: 0 0 0 5px;
-    font-size: 13px;
-    text-align: left;
-  }
+  
 }

@@ -25,7 +25,7 @@ export default class RadioBtn extends Component {
             className={`${this.props.type} ${this.props.isChecked ? getConfig().configPrimaryColorClass + ' RadioLabelChecked' :
               ''} ${this.props.disabledWithValue ? " radioDisabledWithValue" : ""}`}
           >
-            <div className="inside-text">{this.props.text}</div>
+            <div className="inside-text" style={{fontWeight: `${this.props.isChecked ? '700' : '400'}`}}>{this.props.text}</div>
             {this.props.isChecked && 
              <SVG className="tickmark-img"
              preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + getConfig().primary)}
