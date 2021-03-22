@@ -81,7 +81,7 @@ class SelectDropDown2 extends React.Component {
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
     } else {
-      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
+      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator}
     }
 
     const options = this.props.options.map((ele, index) => {
@@ -158,7 +158,8 @@ class SelectDropDown2 extends React.Component {
                  background: '#C4C4C4',
                },
                "::-webkit-scrollbar-track": {
-                 background: "white",
+                 background: "#000000",
+                 opacity: '0.2'
                },
                "::-webkit-scrollbar-thumb": {
                  background: "#C4C4C4",

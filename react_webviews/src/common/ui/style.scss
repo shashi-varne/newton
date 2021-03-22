@@ -1050,16 +1050,16 @@ body[data-device="mobile"] {
   font-weight: normal;
   color: #161A2E;
   max-width: 80%;
-  height: 33px !important;
-  overflow-x: auto !important;
-  overflow-y: hidden;
-  display: inline-flex !important;
-  flex-direction: column;
-  align-content: flex-start;
-  position: relative;
-  justify-content: center;
-  flex-wrap: wrap;
-  align-items: center;
+  // height: 33px !important;
+  // overflow-x: auto !important;
+  // overflow-y: hidden;
+  // display: inline-flex !important;
+  // flex-direction: column;
+  // align-content: flex-start;
+  // position: relative;
+  // justify-content: center;
+  // flex-wrap: wrap;
+  // align-items: center;
 }
 
 .drop-up .Select-menu-outer {
@@ -1073,11 +1073,14 @@ body[data-device="mobile"] {
 
 .css-1rhbuit-multiValue {  //Multi-select Box Container:
   background: rgba(238, 238, 238, 0.3) !important;
-  margin-top: 8px !important;
+  margin-top: 16px !important;
   border: 1px solid #D6D6D6;
   height: 18px !important;
   line-height: 17px !important;
   font-size: 13px !important;
+}
+.css-1rhbuit-multiValue + .css-b8ldur-Input{
+  margin-top: 16px !important;
 }
 .css-12jo7m5{  // Content Box
   padding: 0 !important;
@@ -1090,7 +1093,7 @@ body[data-device="mobile"] {
 }
 
 .css-xb97g8:hover {
-  color: #4A4A4A  !important; 
+  background-color: #4A4A4A  !important; 
 }
 
 #react-select-2-input{
