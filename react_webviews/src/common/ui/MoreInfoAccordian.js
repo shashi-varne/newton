@@ -26,6 +26,8 @@ class MoreInfoAccordian extends Component {
         this.setState({
           [key + "_open"]: !this.state[key + "_open"],
           [key + "_clicked"]: true,
+        },()=>{
+          this.props.parent.updateMoreInfoEvent(key);
         });
     };
 

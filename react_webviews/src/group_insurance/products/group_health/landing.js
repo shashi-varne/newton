@@ -240,7 +240,6 @@ class GroupHealthLanding extends Component {
   }
   
   updateMoreInfoEvent = (key) =>{
-    console.log({key})
     this.setState({
       [key + "_clicked"]: true,
     })
