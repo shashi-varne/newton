@@ -2,6 +2,7 @@ import React from 'react';
 import Select, { components } from 'react-select';
 import { FormControl } from 'material-ui/Form';
 import { InputLabel } from 'material-ui/Input';
+import { isMobile } from 'utils/functions';
 import './style.scss';
 class SelectDropDown2 extends React.Component {
   constructor(props) {
@@ -118,7 +119,7 @@ class SelectDropDown2 extends React.Component {
               this.select = ref;
             }}
             blurInputOnSelect={false}
-            menuShouldBlockScroll={true}
+            menuShouldBlockScroll={ isMobile.any() ? false : true}
             // defaultValue={value}
             // isDisabled={this.state.isLoading}
             // isLoading={this.state.isLoading}
@@ -170,7 +171,7 @@ class SelectDropDown2 extends React.Component {
             hideSelectedOptions={false}
             options={options}
             onChange={this.handleChange}
-            // allowSelectAll={true}
+            allowSelectAll={true}
             closeMenuOnSelect={this.state.multi ? false : true}
           />
         </div>

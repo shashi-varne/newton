@@ -960,173 +960,7 @@ body[data-device="mobile"] {
   }
 }
 
-// --------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-// .react-dropdown-select-option-label{
-//   height: 18px;
-//   color: black;
-//   display: inline-flex;
-//   align-items: center;
-//   white-space: nowrap;
-// }
-// .react-dropdown-select-option{
-//   border: 1px solid #D6D6D6;
-//   width: fit-content;
-//   height: 23px;
-//   padding-top: 1px !important;
-// }
-// .react-dropdown-select-option-remove{
-//   color: white;
-//   margin-left: 2px !important;
-//   margin-right: 1px !important;
-//   background-color: #D6D6D6;
-//   border-radius: 50%  !important;
-//   width: 17px !important;
-//   height: 19px !important;
-// }
-
-// .react-dropdown-select{
-//   background: rgba(238, 238, 238, 0.3) !important;
-//   min-height: 52px !important;
-//   border: none;
-// }
-
-// .label{
-//   position: relative;
-// }
-
-// .label2{
-//   position: absolute;
-//   font-size: 11px;
-//   font-weight: normal;
-//   line-height: 18px;
-//   top: -2px;
-//   left: 10px;
-//   color: #767E86;
-// }
-
-//  .label3{
-//   margin-top: 18px;
-//   position: absolute;
-//   font-size: 13px;
-//   line-height: 21px;
-// }
-
-// .css-ge5lft-ReactDropdownSelect{
-//   border: none !important;
-//   border-bottom: 1px solid #D6D6D6 !important;
-// }
-
-// .react-dropdown-select-dropdown{
-//   display: flex;
-//   align-items: flex-start;
-// }
-
-// .react-dropdown-select-item{
-//   color: black !important;
-//   padding: 10px !important;
-//   width: 100%;
-// }
-
-// .react-dropdown-select-content{  
-//   font-size: 13px;
-//   margin-bottom: -25px;
-//   line-height: 21px;
-//   font-weight: normal;
-//   color: #161A2E;
-//   max-width: 80%;
-//   height: 33px !important;
-//   overflow-x: auto;
-//   overflow-y: hidden;
-//   display: inline-flex !important;
-//   flex-direction: column;
-//   align-content: flex-start
-// }
-
-// .react-dropdown-select-dropdown-handle{
-//   margin-right: 5px !important;
-//   position: absolute;
-//   max-height: 500px !important;
-//   right: 10px
-// }
-
-// .react-dropdown-select-input{
-//   font-size: 13px !important;
-//   font-weight: normal;
-//   line-height: 21px !important;
-//   color: #161A2E;
-//   margin-top: 5px;
-//   margin-left: 0px !important;
-// }
-
-// .react-dropdown-select-clear{
-//   position: absolute;
-//   right: 35px;
-//   color: black !important;
-//   margin-top: 5px !important;
-// }
-
-// .css-s60fer-OptionComponent{
-//   margin: 3px 0px 0px 5px !important;
-// }
-
-// .css-163mfpo-ItemComponent{
-//   background-color: white !important;
-//   color: #767E86 !important;
-// }
-
-// .colorbackground{
-//   display: flex;
-//   align-items: flex-start;
-//   padding: 10px;
-// }
-// .colorbackground2{
-//   background-color: #EEEEEE;
-//   color: #161A2E;
-//   width: 100%;
-// }
-
-// .css-ge5lft-ReactDropdownSelect:hover{
-//   border-bottom: 1px solid #D6D6D6 !important;;
-// }
-
-// .css-ge5lft-ReactDropdownSelect:focus-within {
-//   border-bottom: 1px solid #4F2DA7 !important;
-// }
-
-// .react-dropdown-select-type-single {
-//   display: inline-block !important;
-//   white-space: nowrap;
-//   overflow: hidden;
-//   margin-left: 5px;
-//   margin-top: -8px;
-//   font-size: 13px;
-//   line-height: 21px;
-// } 
-
-// ::-webkit-scrollbar {
-//   -webkit-appearance: none;
-// }
-// ::-webkit-scrollbar:vertical {
-//   width: 3px;
-// }
-// ::-webkit-scrollbar:horizontal {
-//   height: 3px;
-//   margin-top:  10px;
-//   overflow-x: hidden;
-// }
-// ::-webkit-scrollbar-thumb {
-//   background-color: #d8d8d8;
-//   border-radius: 1px;
-//   display: none; 
-// }
-// ::-webkit-scrollbar-track {
-//   border-radius: 10px;
-//   background-color: #ffffff;
-// }
-
 //-------------------------------------------------------------------------------------------------
-
 
 .css-2b097c-container{
   border: none !important;
@@ -1375,7 +1209,11 @@ body[data-device="mobile"] {
   label{
     font-size: 13px !important;
   }
-  
+  .css-gg45go-NoOptionsMessage{
+    text-align:left !important;
+    color: #161A2E !important;
+    font-size: 13px !important;
+  }
    /*----------------- Auto FILL Background Color  ----------------------*/
   
   input:-webkit-autofill {
