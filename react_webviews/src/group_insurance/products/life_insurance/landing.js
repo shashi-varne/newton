@@ -460,8 +460,8 @@ class FyntuneLanding extends Component {
           )}
         <div>
           <p className="fyntune-heading">What is Insurance Savings Plan?</p>
-          <p className="fyntune-info" style={{textAlign: 'justify'}}>
-            This is a plan for your investment cum insurance needs. Sanchay Plus from HDFC Life is one such product which provides you with a chance to create wealth and even gives financial security to your loved ones in case of any unforseen event.
+          <p className="fyntune-info">
+          This is a plan for your investment cum insurance needs which provides you with a chance to create wealth and even gives financial security to your loved ones in case of any unforeseen event.
           </p>
         </div>
 
