@@ -4,7 +4,7 @@ import Container from '../common/Container'
 import ShowAadharDialog from './components/ShowAadharDialog'
 import Alert from '../mini_components/Alert'
 import { getUrlParams, isEmpty, storageService } from '../../utils/validators'
-import { storageConstants } from '../constants'
+import { getPathname, storageConstants } from '../constants'
 import { getKycAppStatus } from '../services'
 import toast from 'common/ui/Toast'
 import { navigate as navigateFunc, updateQueryStringParameter } from '../common/functions'
@@ -24,7 +24,7 @@ const Journey = (props) => {
     storageService().get('nps_additional_details_required')
   )
 
-  const [open, setOpen] = useState(false)
+  const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
   const [kyc, setKyc] = useState({})
@@ -515,8 +515,11 @@ const Journey = (props) => {
   )
 
   const cancel = () => {
-    setOpen(false)
-    navigate('/kyc/journey', { show_aadhar: false })
+    setDlAadhaar(false)
+    navigate(`${getPathname.journey}`, {
+      searchParams: `${getConfig().searchParams}&show_aadhaar=true`,
+    });
+    // navigate('/kyc/journey', { show_aadhar: false })
   }
 
   const proceed = () => {
@@ -601,6 +604,15 @@ const Journey = (props) => {
       if (!customerVerified) {
         ctaText = 'UNLOCK NOW'
       } else ctaText = 'CONTINUE'
+    }
+    if (!isCompliant && !show_aadhaar && user.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete" 
+    // && $rootScope.fromState !== 'kyc-journey'
+    ) {
+      if (!storageService().get("show_aadhaar") && !kyc.address.meta_data.is_nri) {
+        // showAadhaar();
+        setDlAadhaar(true)
+        storageService().set("show_aadhaar", true);
+      }
     }
   }
 
@@ -786,16 +798,15 @@ const Journey = (props) => {
         </div>
       )}
       <ShowAadharDialog
-        open={show_aadhaar && open}
-        onClose={() => setOpen(false)}
-        connectDigiLocker={connectDigiLocker}
+        open={showDlAadhaar}
+        onClose={() => setDlAadhaar(false)}
+        redirect={cancel}
       />
       <AadhaarDialog
         open={aadhaarLinkDialog}
         onClose={() => {
           setAadhaarLinkDialog(false)
         }}
-        handleProceed={connectDigiLocker}
         kyc={kyc}
       />
     </Container>
