@@ -222,6 +222,7 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if(name === 'weight'){
       value = event.target ? event.target.value.substr(0,3) : event;
+      if(parseInt(value) <= 0) return;
     }
 
     if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
