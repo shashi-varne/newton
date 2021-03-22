@@ -29,7 +29,7 @@ const PersonalDetails3 = (props) => {
   }
   const type = props.type || "";
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();

@@ -21,7 +21,7 @@ const CompliantReport = (props) => {
     else setOpenIndex(index);
   };
 
-  const [kyc, user] = useUserKycHook();
+  const {kyc, user} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) {

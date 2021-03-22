@@ -1,6 +1,6 @@
 import React from "react";
-import { navigate as navigateFunc } from "../../common/functions";
-import { getUrlParams } from "../../../utils/validators";
+import { navigate as navigateFunc } from "../common/functions";
+import { getUrlParams } from "../../utils/validators";
 
 const DigilockerCallback = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -11,7 +11,7 @@ const DigilockerCallback = (props) => {
     navigate("/kyc/digilocker/failed");
   }
 
-  return <></>;
+  return <div></div>;
 };
 
 export default DigilockerCallback;

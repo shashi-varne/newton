@@ -1,8 +1,5 @@
 import { getConfig } from 'utils/functions'
 import { calculateAge, isValidDate, validateEmail } from 'utils/validators'
-import { getBase64 } from 'utils/functions'
-import { storageConstants } from '../constants'
-import { storageService } from '../../utils/validators'
 
 export function navigate(pathname, data = {}) {
   if (data?.edit) {
@@ -177,8 +174,3 @@ export const compareObjects = (keysToCheck, oldState, newState) => {
   });
   return compare;
 };
-
-export const compareKycObject = (userKyc) => {
-  const kyc = storageService().getObject(storageConstants.KYC) || {}
-  return JSON.stringify(userKyc) === JSON.stringify(kyc)
-}

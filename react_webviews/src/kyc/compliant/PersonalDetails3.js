@@ -22,7 +22,7 @@ const PersonalDetails3 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
   const [form_data, setFormData] = useState({});
   const isEdit = props.location.state?.isEdit || false;
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [oldState, setOldState] = useState({});
   let title = "Professional details";
   if (isEdit) {

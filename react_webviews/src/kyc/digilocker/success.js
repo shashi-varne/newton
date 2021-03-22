@@ -1,22 +1,18 @@
-import React, { useState } from 'react'
-import Container from '../../common/Container'
-import { initData } from '../../services'
-import toast from 'common/ui/Toast'
-import { getConfig } from '../../../utils/functions'
-import { dlDocs } from '../../constants'
-import { navigate as navigateFunc } from '../../common/functions'
+import React from 'react'
+import Container from '../common/Container'
+import { getConfig } from '../../utils/functions'
+import { dlDocs } from '../constants'
+import { navigate as navigateFunc } from '../common/functions'
 
 const Success = (props) => {
   const productName = getConfig().productName
-  const [showLoader, setShowLoader] = useState(false)
   const proceed = () => {
     const navigate = navigateFunc.bind(props)
     navigate('/kyc/journey')
   }
   return (
-    <Container skelton={showLoader} title="Share Details" buttonTitle="PROCEED" handleClick={proceed}>
+    <Container title="Share Details" buttonTitle="PROCEED" handleClick={proceed}>
       <section id="digilocker-success">
-        {/* <div className="page-title">Share Details</div> */}
         <div className="page-desc">
           Tap on Proceed to allow fisdom to access your following documents
         </div>
@@ -26,6 +22,7 @@ const Success = (props) => {
               <img
                 src={require(`assets/${productName}/${icon}.svg`)}
                 className="doc-icon"
+                alt=""
               />
               <div className="doc-name">{idx + 1}{'. '}{name}</div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import Alert from '../../mini_components/Alert'
 import { storageService, isEmpty } from '../../../utils/validators'
@@ -56,7 +56,7 @@ const ChangeAddressDetails2 = (props) => {
 
   const [state, setState] = useState({})
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   const frontDocRef = useRef(null)
   const backDocRef = useRef(null)
@@ -199,7 +199,6 @@ const ChangeAddressDetails2 = (props) => {
           addressProofKey,
         })
       }
-      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {

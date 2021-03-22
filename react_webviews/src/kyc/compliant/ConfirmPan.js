@@ -14,6 +14,7 @@ const ConfirmPan = (props) => {
   const kycConfirmPanScreen = true;
   const isUserCompliant = "";
   const isPremiumFlow = "";
+  const {kyc, isLoading} = useUserKycHook();
 
   const handleClick = () => {
     navigate(getPathname.homeKyc, {
@@ -68,8 +69,6 @@ const ConfirmPan = (props) => {
       setIsApiRunning(false);
     }
   };
-
-  const [kyc, ,isLoading] = useUserKycHook();
 
   return (
     <Container

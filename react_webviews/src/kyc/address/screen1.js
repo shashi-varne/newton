@@ -17,7 +17,7 @@ const AddressDetails1 = (props) => {
   const [form_data, setFormData] = useState({});
   const state = props.location?.state || {};
   const isEdit = state.isEdit || false;
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
 
   const residentialOptions = [

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Container from "../../common/Container";
+import Container from "../common/Container";
 import { getConfig } from "utils/functions";
-import { navigate as navigateFunc } from "../../common/functions";
+import { navigate as navigateFunc } from "../common/functions";
 import Button from "@material-ui/core/Button";
-import AadhaarDialog from "../../mini_components/AadhaarDialog";
-import useUserKycHook from "../../common/hooks/userKycHook";
+import AadhaarDialog from "../mini_components/AadhaarDialog";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const Failed = (props) => {
   const [open, setOpen] = useState(false);
@@ -22,15 +22,15 @@ const Failed = (props) => {
     navigate("/kyc/journey");
   };
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   const productName = getConfig().productName;
   return (
     <Container title="Aadhaar KYC Failed !" noFooter skelton={isLoading}>
       <section id="digilocker-failed">
-        {/* <div className="page-title">Aadhaar KYC Failed !</div> */}
         <img
           className="digi-image"
+          alt=""
           src={require(`assets/${productName}/ils_digilocker_failed.svg`)}
         />
         <div className="body-text1">

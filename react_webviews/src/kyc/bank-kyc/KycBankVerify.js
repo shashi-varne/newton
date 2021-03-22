@@ -27,7 +27,7 @@ const KycBankVerify = (props) => {
   const [bankData, setBankData] = useState({});
   const navigate = navigateFunc.bind(props);
   const [dl_flow, setDlFlow] = useState(false);
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -166,7 +166,6 @@ const KycBankVerify = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       id="kyc-bank-verify"
       buttonTitle="VERIFY BANK ACCOUNT"
       showLoader={isApiRunning}
@@ -175,7 +174,6 @@ const KycBankVerify = (props) => {
       title="Verify your bank account"
     >
       <div className="kyc-approved-bank-verify">
-        {/* <div className="kyc-main-title">Verify your bank account</div> */}
         <Alert
           variant="info"
           title="Important"

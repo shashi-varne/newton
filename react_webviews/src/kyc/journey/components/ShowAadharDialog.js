@@ -24,6 +24,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             <img
               src={require(`assets/${productName}/ic_instant.svg`)}
               className="icon"
+              alt=""
             />
             <div className="title">Instant Investment</div>
           </div>
@@ -31,6 +32,7 @@ const ShowAadharDialog = ({ open, onClose, redirect }) => {
             <img
               src={require(`assets/${productName}/ic_no_doc.svg`)}
               className="icon"
+              alt=""
             />
             <div className="title">No document asked</div>
           </div>

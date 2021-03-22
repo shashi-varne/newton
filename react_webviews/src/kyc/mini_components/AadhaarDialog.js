@@ -83,6 +83,7 @@ const AadhaarDialog = ({ id, open, close, kyc, ...props }) => {
           <img
             className="img-right-top"
             src={require(`assets/${productName}/ic_aadhaar_handy.svg`)}
+            alt=""
           />
         </div>
 

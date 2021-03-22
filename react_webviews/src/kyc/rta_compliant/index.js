@@ -8,7 +8,7 @@ import {
   isEmpty,
   validateNumber,
 } from "../../utils/validators";
-import { validateFields, navigate as navigateFunc } from "../common/functions";
+import { validateFields, navigate as navigateFunc, compareObjects } from "../common/functions";
 import { getCVL, kycSubmit } from "../common/api";
 import { getPathname } from "../constants";
 import useUserKycHook from "../common/hooks/userKycHook";
@@ -19,12 +19,13 @@ const RtaCompliantPersonalDetails = (props) => {
   const [form_data, setFormData] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const isEdit = props.location.state?.isEdit || false;
+  const [oldState, setOldState] = useState({});
   let title = "Personal details";
   if (isEdit) {
     title = "Edit personal details";
   }
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -40,6 +41,7 @@ const RtaCompliantPersonalDetails = (props) => {
       mobile: kyc.identification.meta_data.mobile_number,
     };
     setFormData({ ...formData });
+    setOldState({...formData});
   };
 
   const close = () => {
@@ -47,13 +49,18 @@ const RtaCompliantPersonalDetails = (props) => {
   };
 
   const handleClick = () => {
-    let keysToCheck = ["dob", "mobile"];
+    let keysToCheck = ["dob"];
     if (user.email === null) keysToCheck.push("email");
+    if (user.mobile === null) keysToCheck.push("mobile");
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
       setFormData(data);
       return;
+    }
+    if(compareObjects(keysToCheck, oldState, form_data)) {
+      navigate(getPathname.invest);
+      return
     }
     let userkycDetails = { ...kyc };
     userkycDetails.pan.meta_data.dob = form_data.dob;
@@ -109,16 +116,13 @@ const RtaCompliantPersonalDetails = (props) => {
   return (
     <Container
       skelton={isLoading}
-      // hideInPageTitle
       id="kyc-rta-compliant-personal-details"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={title}
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">{title}</div> */}
         <div className="kyc-main-subtitle">
           <div>
             <div>Share your date of birth as per PAN:</div>

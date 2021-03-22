@@ -15,9 +15,7 @@ import { validateNumber } from "utils/validators";
 
 const AddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [pinTouched, setPinTouched] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [form_data, setFormData] = useState({
     pincode: "",
   });
@@ -79,17 +77,15 @@ const AddressDetails2 = (props) => {
       userKycDetails.nomination.meta_data.nominee_address.addressline =
         form_data.addressline;
       const nomination_address =
-        userKycDetails?.nomination?.meta_data?.nominee_address;
+        userKycDetails.nomination.meta_data.nominee_address;
       item.kyc.nomination.address = nomination_address;
       setIsApiRunning("button");
       await submit(item);
       handleNavigation();
     } catch (err) {
-      setShowError(err.message);
       Toast(err.message, "error");
     } finally {
       setIsApiRunning(false);
-      setShowError(false);
     }
   };
 
@@ -132,8 +128,8 @@ const AddressDetails2 = (props) => {
         formData.city = "";
         formData.state = "";
       } else {
-        formData.city = data[0].district_name.toUpperCase();
-        formData.state = data[0].state_name.toUpperCase();
+        formData.city = data[0].district_name?.toUpperCase();
+        formData.state = data[0].state_name?.toUpperCase();
       }
     } catch (err) {
       console.error(err);
@@ -142,10 +138,7 @@ const AddressDetails2 = (props) => {
   };
 
   useEffect(() => {
-    if (
-      form_data.pincode.length === 6 &&
-      form_data.pincode !== kyc.address.meta_data.pincode
-    ) {
+    if (form_data.pincode.length === 6) {
       fetchPincodeData();
     }
   }, [form_data.pincode]);

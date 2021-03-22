@@ -4,14 +4,14 @@ import { initData } from "../../services";
 import { isEmpty, storageService, } from "../../../utils/validators";
 
 function useUserKycHook() {
-    const [userKyc, setUserKyc] = useState(
+    const [kyc, setUserKyc] = useState(
         storageService().getObject(storageConstants.KYC) || {}
     );
     const [user, setUser] = useState(
         storageService().getObject(storageConstants.USER) || {}
     );
     const [isLoading, setIsLoading] = useState(function () {
-        if (isEmpty(user) || isEmpty(userKyc)) {
+        if (isEmpty(user) || isEmpty(kyc)) {
             return true;
         }
         return false;
@@ -28,7 +28,7 @@ function useUserKycHook() {
             setUser(userDetails);
             setUserKyc(kycDetails);
         };
-        if (isEmpty(user) || isEmpty(userKyc)) {
+        if (isEmpty(user) || isEmpty(kyc)) {
             init();
         }
     }, []);
@@ -37,7 +37,7 @@ function useUserKycHook() {
         storageService().setObject("kyc", kycData);
     };
 
-    return [userKyc, user, isLoading, setKycToSession];
+    return {kyc,user, isLoading, setKycToSession};
 }
 
 export default useUserKycHook

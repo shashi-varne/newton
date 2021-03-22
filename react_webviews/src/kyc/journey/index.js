@@ -23,7 +23,7 @@ const Journey = (props) => {
   const urlParams = getUrlParams(props?.location?.search)
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [aadhaarLinkDialog, setAadhaarLinkDialog] = useState(false)
-  const [npsDetailsReq, setNpsDetailsReq] = useState(
+  const [npsDetailsReq] = useState(
     storageService().get('nps_additional_details_required')
   )
 
@@ -89,7 +89,7 @@ const Journey = (props) => {
               break
             }
 
-            if (data == 'bank' && kyc[data].meta_data_status === 'init') {
+            if (data === 'bank' && kyc[data].meta_data_status === 'init') {
               status = 'init'
               break
             }
@@ -486,7 +486,7 @@ const Journey = (props) => {
     const isCompliant = kyc?.kyc_status === 'compliant'
     try {
       setIsApiRunning('button')
-      const result = await submit({
+      await submit({
         kyc: {
           identification: {
             fatca_declaration: true,
@@ -635,17 +635,17 @@ const Journey = (props) => {
   }
 
   if (!isEmpty(kyc) && !isEmpty(user)) {
-    if (npsDetailsReq && user.kyc_registration_v2 == 'submitted') {
+    if (npsDetailsReq && user.kyc_registration_v2 === 'submitted') {
       navigate('/nps/identity')
     } else if (
-      user.kyc_registration_v2 == 'submitted' &&
+      user.kyc_registration_v2 === 'submitted' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/kyc/report', {
         state: { goBack: '/invest' },
       })
     } else if (
-      user.kyc_registration_v2 == 'complete' &&
+      user.kyc_registration_v2 === 'complete' &&
       kyc.sign_status === 'signed'
     ) {
       navigate('/invest')

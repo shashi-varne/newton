@@ -26,7 +26,7 @@ const PersonalDetails4 = (props) => {
   if (isEdit) {
     title = "Edit nominee detail";
   }
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();

@@ -13,9 +13,6 @@ const Sign = (props) => {
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
   const [showLoader, setShowLoader] = useState(false)
-  // const [kyc, setKyc] = useState(
-  //   storageService().getObject(storageConstants.KYC) || null
-  // )
 
   const inputEl = useRef(null)
 
@@ -51,14 +48,14 @@ const Sign = (props) => {
 
       window.callbackWeb.add_listener({
         type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+        show_loader: function () {
           setShowLoader(true)
         },
       })
     }
   }
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   const handleUpload = () => {
     inputEl.current.click()
@@ -88,8 +85,6 @@ const Sign = (props) => {
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'identification')
-      // console.log(result)
-      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       navigate('/kyc/upload/progress')
     } catch (err) {
@@ -105,11 +100,8 @@ const Sign = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      // fullWidthButton={true}
-      skelton={isLoading}
+      skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
@@ -117,7 +109,6 @@ const Sign = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan" className="page-body-kyc">
-          {/* <div className="title">Upload Selfie</div> */}
           <div className="sub-title">Ears must be visible</div>
           {!isWeb && (
             <div className="kyc-doc-upload-container">

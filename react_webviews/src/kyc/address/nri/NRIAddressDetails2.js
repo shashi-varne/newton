@@ -1,7 +1,7 @@
 import TextField from "@material-ui/core/TextField";
 import React, { useState, useEffect } from "react";
 import Toast from "common/ui/Toast";
-import { getPinCodeData, submit } from "../../common/api";
+import { submit } from "../../common/api";
 import Container from "../../common/Container";
 import { kycNRIDocNameMapper } from "../../constants";
 import {
@@ -14,11 +14,9 @@ import { isEmpty, validateNumber } from "../../../utils/validators";
 
 const NRIAddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
-  const [pinTouched, setPinTouched] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [form_data, setFormData] = useState({
-    pincode: "",
+    nri_pincode: "",
   });
   const [oldState, setOldState] = useState({});
   const navigate = navigateFunc.bind(props);
@@ -29,7 +27,7 @@ const NRIAddressDetails2 = (props) => {
 
   const initialize = () => {
     let formData = {};
-    formData.pincode = kyc?.nri_address?.meta_data?.pincode || "";
+    formData.nri_pincode = kyc?.nri_address?.meta_data?.pincode || "";
     formData.addressline = kyc?.nri_address?.meta_data?.addressline || "";
     formData.state = kyc?.nri_address?.meta_data?.state || "";
     formData.city = kyc?.nri_address?.meta_data?.city || "";
@@ -41,8 +39,13 @@ const NRIAddressDetails2 = (props) => {
   const stateParams = props?.location?.state;
 
   const handleSubmit = async () => {
-    let keysToCheck = ["pincode", "addressline", "state", "city", "country"];
-
+    let keysToCheck = [
+      "nri_pincode",
+      "addressline",
+      "state",
+      "city",
+      "country",
+    ];
     let result = validateFields(form_data, keysToCheck);
     if (!result.canSubmit) {
       let data = { ...result.formData };
@@ -50,7 +53,7 @@ const NRIAddressDetails2 = (props) => {
       return;
     }
 
-    if (form_data.pincode_error) {
+    if (form_data.nri_pincode_error) {
       return;
     }
 
@@ -69,11 +72,9 @@ const NRIAddressDetails2 = (props) => {
       await submit(item);
       handleNavigation();
     } catch (err) {
-      setShowError(err.message);
       Toast(err.message, "error");
     } finally {
       setIsApiRunning(false);
-      setShowError(false);
     }
   };
 
@@ -92,11 +93,7 @@ const NRIAddressDetails2 = (props) => {
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    if (
-      name === "pincode" &&
-      ((value && value.length > 6) || !validateNumber(value))
-    )
-      return;
+    if (name === "nri_pincode" && !validateNumber(value)) return;
     let formData = { ...form_data };
     formData[name] = value;
     if (!value) {
@@ -104,28 +101,6 @@ const NRIAddressDetails2 = (props) => {
     } else formData[`${name}_error`] = "";
     setFormData({ ...formData });
   };
-
-  // const fetchPincodeData = async () => {
-  //   let formData = { ...form_data };
-  //   try {
-  //     const data = await getPinCodeData(form_data.pincode);
-  //     if (data && data.length === 0) {
-  //       formData["pincode_error"] = "Please enter valid pincode";
-  //       formData.country = "";
-  //       formData.city = "";
-  //       formData.state = "";
-  //     } else {
-  //       formData.country = "INDIA";
-  //       formData.city = data[0].district_name;
-  //       formData.state = data[0].state_name;
-  //       formData.city_error = "";
-  //       formData.state_error = "";
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  //   setFormData({ ...formData });
-  // };
 
   const isEdit = stateParams?.isEdit;
   let title = "";
@@ -152,12 +127,6 @@ const NRIAddressDetails2 = (props) => {
     address_proof = kycNRIDocNameMapper[kyc?.address_doc_type];
   }
 
-  // useEffect(() => {
-  //   if (form_data.pincode.length === 6) {
-  //     fetchPincodeData();
-  //   }
-  // }, [form_data.pincode]);
-
   return (
     <Container
       buttonTitle="SAVE AND CONTINUE"
@@ -174,13 +143,12 @@ const NRIAddressDetails2 = (props) => {
         <form className="form-container">
           <TextField
             label="Pincode"
-            name="pincode"
-            className=""
-            value={form_data.pincode}
+            name="nri_pincode"
+            value={form_data.nri_pincode}
             onChange={handleChange}
             margin="normal"
-            helperText={form_data.pincode_error || ""}
-            error={form_data.pincode_error ? true : false}
+            helperText={form_data.nri_pincode_error || ""}
+            error={form_data.nri_pincode_error ? true : false}
           />
           <TextField
             label="Address"

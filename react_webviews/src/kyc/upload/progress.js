@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Container from "../common/Container";
 import UploadCard from "./UploadCard";
-import { getDocuments, initData } from "../services";
-import { isEmpty, storageService } from "utils/validators";
-import { getPathname, storageConstants } from "../constants";
+import { getDocuments } from "../services";
+import { isEmpty } from "utils/validators";
+import { getPathname } from "../constants";
 import { navigate as navigateFunc } from "../common/functions";
 import useUserKycHook from "../common/hooks/userKycHook";
 
 const Progress = (props) => {
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const disableNext = props.location.state?.disableNext || false;
   const navigate = navigateFunc.bind(props);
 
@@ -49,21 +49,18 @@ const Progress = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
       noFooter={disableNext}
       disable={!canGoNext}
       classOverRideContainer="pr-container"
       skelton={isLoading}
       skeltonType="p"
-      // fullWidthButton={true}
       handleClick={() => {
         navigate(getPathname.journey);
       }}
       title="Upload documents"
     >
       <section id="kyc-upload-progress">
-        {/* <div className="header">Upload documents</div> */}
         <main className="documents">
           {documents.map((document, index) => (
             <div key={index} className="document">

@@ -54,16 +54,15 @@ import KycUploadDocuments from './bank-kyc/KycUploadDocuments'
 import SampleDocuments from './bank-kyc/SampleDocuments'
 import AddressDetails2 from './address/AddressDetails2'
 import AddressDetails1 from './address/screen1'
-import DigilockerPersonalDetails1 from './digilocker/components/screen1'
+import DigilockerPersonalDetails1 from './digilocker/screen1'
 import ChangeAddressDetails1 from './address/change_address/ChangeAddressDetails1'
 import NriAddressDetails1 from './address/nri/NRIAddressDetails1'
 import NRIAddressDetails2 from './address/nri/NRIAddressDetails2'
-import Success from './digilocker/components/success'
-import Failed from './digilocker/components/failed'
+import Success from './digilocker/success'
+import Failed from './digilocker/failed'
 import Sign from './upload/sign'
 import Selfie from './upload/selfie'
 import IpvVideo from './upload/ipv_video'
-import DigilockerCallback from './digilocker/components/digilockercallback'
 import NRIAddressUpload from './upload/nri_address'
 import ChangeAddressDetails2 from './address/change_address/ChangeAddressDetails2'
 
@@ -255,7 +254,6 @@ const Kyc = (props) => {
           />
           <Route exact path={`${url}/digilocker/success`} component={Success} />
           <Route exact path={`${url}/digilocker/failed`} component={Failed} />
-          {/* <Route exact path={`${url}/digilocker/callback/:status`} component={DigilockerCallback} /> */}
           <Route
             exact
             path={`${url}/nri-address-details1`}

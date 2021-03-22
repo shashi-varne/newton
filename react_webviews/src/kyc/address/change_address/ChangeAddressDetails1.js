@@ -12,7 +12,7 @@ import useUserKycHook from "../../common/hooks/userKycHook";
 const ChangeAddressDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
   const [form_data, setFormData] = useState({});
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   const [title, setTitle] = useState("");
 
   useEffect(() => {

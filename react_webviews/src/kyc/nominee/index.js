@@ -34,7 +34,7 @@ const Nominee = (props) => {
     title = "Edit nominee detail";
   }
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
@@ -105,16 +105,13 @@ const Nominee = (props) => {
   return (
     <Container
       skelton={isLoading}
-      // hideInPageTitle
       id="kyc-home"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={title}
     >
       <div className="kyc-nominee">
-        {/* <div className="kyc-main-title">{title}</div> */}
         {!isEmpty(kyc) && (
           <main>
             <Input

@@ -25,7 +25,7 @@ const NriAddressDetails1 = (props) => {
     title = "Edit foreign address details";
   }
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   const addressProofOptions = [
     { name: "Driving license", value: "DL" },

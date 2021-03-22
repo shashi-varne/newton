@@ -26,7 +26,7 @@ import PaymentCallback from "./invest/components/PaymentCallback";
 import SipPaymentCallback from "./invest/components/SipPaymentCallback";
 import PageCallback from "./invest/components/PageCallback";
 import PaymentOptions from "./invest/components/PaymentOptions";
-import DigilockerCallback from "../kyc/digilocker/components/digilockercallback";
+import DigilockerCallback from "../kyc/digilocker/digilockercallback";
 const generateClassName = createGenerateClassName({
   dangerouslyUseGlobalCSS: true,
   productionPrefix: "f",

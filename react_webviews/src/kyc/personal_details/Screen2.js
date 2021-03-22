@@ -23,7 +23,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit personal details";
   }
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();

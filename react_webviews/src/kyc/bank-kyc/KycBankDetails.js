@@ -11,7 +11,7 @@ import {
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Alert from "../mini_components/Alert";
-import { navigate as navigateFunc, validateFields } from "../common/functions";
+import { compareObjects, navigate as navigateFunc, validateFields } from "../common/functions";
 import PennyExhaustedDialog from "../mini_components/PennyExhaustedDialog";
 import { getIFSC, kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
@@ -34,6 +34,7 @@ const KycBankDetails = (props) => {
     account_type: "",
     ifsc_code: "",
   });
+  const [oldState, setOldState] = useState({});
   const [bankIcon, setBankIcon] = useState("");
   const [accountTypes, setAccountTypes] = useState([]);
   const [name, setName] = useState("");
@@ -51,7 +52,7 @@ const KycBankDetails = (props) => {
   });
   const [dl_flow, setDlFlow] = useState(false);
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -108,6 +109,7 @@ const KycBankDetails = (props) => {
       });
     }
     setBankData({ ...data });
+    setOldState({...data})
     setBankIcon(data.ifsc_image || '')
     setAccountTypes([
       ...bankAccountTypeOptions(kyc?.address?.meta_data?.is_nri || ""),
@@ -151,6 +153,10 @@ const KycBankDetails = (props) => {
       let data = { ...bankData };
       if (!["incomplete", "submitted"].includes(bankData.bank_status)) {
         data.bank_id = "";
+      }
+      if(compareObjects(keysToCheck, oldState ,bankData)) {
+        handleNavigation();
+        return
       }
       saveBankData(data);
     }
@@ -276,8 +282,6 @@ const KycBankDetails = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
-      skelton={isLoading}
       id="kyc-approved-bank"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
@@ -286,7 +290,6 @@ const KycBankDetails = (props) => {
       title="Enter bank account details"
     >
       <div className="kyc-approved-bank">
-        {/* <div className="kyc-main-title">Enter bank account details</div> */}
         {!isLoading && (
           <>
             <Alert

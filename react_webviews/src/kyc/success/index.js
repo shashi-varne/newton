@@ -11,7 +11,7 @@ const RegistrationSuccess = (props) => {
   const [isCompliant, setIsCompliant] = useState();
   const [buttonTitle, setButtonTitle] = useState();
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

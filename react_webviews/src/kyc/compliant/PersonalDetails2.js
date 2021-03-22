@@ -24,7 +24,7 @@ const PersonalDetails2 = (props) => {
     title = "Edit personal details";
   }
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {
@@ -110,11 +110,9 @@ const PersonalDetails2 = (props) => {
   return (
     <Container
       skelton={isLoading}
-      // hideInPageTitle
       id="kyc-compliant-personal-details2"
       buttonTitle="SAVE AND CONTINUE"
       showLoader={isApiRunning}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={title}
       count={2}
@@ -122,9 +120,6 @@ const PersonalDetails2 = (props) => {
       total={3}
     >
       <div className="kyc-complaint-personal-details">
-        {/* <div className="kyc-main-title">
-          {title} <span>2/3</span>
-        </div> */}
         {!isLoading && (
           <main>
             <div className={`input ${isApiRunning && `disabled`}`}>

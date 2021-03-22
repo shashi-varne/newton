@@ -16,7 +16,7 @@ const KycUploadDocuments = (props) => {
   const [file, setFile] = useState(null);
   const inputEl = useRef(null);
   const [dlFlow, setDlFlow] = useState(false);
-  const [kyc, , isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (

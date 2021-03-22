@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Container from '../../common/Container'
 import { storageService, isEmpty } from '../../../utils/validators'
 import { storageConstants } from '../../constants'
@@ -13,7 +13,6 @@ const Sign = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
   const [file, setFile] = useState(null)
   const [fileToShow, setFileToShow] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [showLoader, setShowLoader] = useState(false)
 
   const inputEl = useRef(null)
@@ -48,14 +47,14 @@ const Sign = (props) => {
 
       window.callbackWeb.add_listener({
         type: 'native_receiver_image',
-        show_loader: function (show_loader) {
+        show_loader: function () {
           setShowLoader(true)
         },
       })
     }
   }
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
   
   const handleChange = (event) => {
     const uploadedFile = event.target.files[0]
@@ -81,12 +80,9 @@ const Sign = (props) => {
   }
 
   const handleSubmit = async () => {
-    const navigate = navigateFunc.bind(props)
     try {
       setIsApiRunning("button")
       const result = await upload(file, 'sign')
-      // console.log(result)
-      // setKyc(result.kyc)
       storageService().setObject(storageConstants.KYC, result.kyc)
       const dlFlow =
         result.kyc.kyc_status !== 'compliant' &&
@@ -121,11 +117,8 @@ const Sign = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      // fullWidthButton={true}
-      skelton={isLoading}
+      skelton={isLoading || showLoader}
       handleClick={handleSubmit}
       disable={!file}
       showLoader={isApiRunning}
@@ -133,7 +126,6 @@ const Sign = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-pan" className="page-body-kyc">
-          {/* <div className="title">Share Signature</div> */}
           <div className="sub-title">
             Signature should match with your PAN’s signature
           </div>

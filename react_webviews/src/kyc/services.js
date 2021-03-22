@@ -149,7 +149,7 @@ export function getKycAppStatus(kyc) {
   var metaRejected = 0;
   var docRejected = 0;
   var rejectedItems = [];
-  if (kyc.kyc_status == "compliant") {
+  if (kyc.kyc_status === "compliant") {
     var fieldsToCheck = [
       { name: "pan", keys: ["meta_data_status"] },
       { name: "bank", keys: ["meta_data_status"] },
@@ -215,7 +215,7 @@ export function getKycAppStatus(kyc) {
   }
 
   if (kyc.kyc_status === 'compliant' && (kyc.application_status_v2 !== 'submitted' &&
-    kyc.application_status_v2 !== 'complete') && kyc.customer_verified == 'UNVERIFIED') {
+    kyc.application_status_v2 !== 'complete') && kyc.customer_verified === 'UNVERIFIED') {
     status = 'ground_premium';
   }
 
@@ -224,8 +224,8 @@ export function getKycAppStatus(kyc) {
     status = 'ground_aadhaar';
   }
 
-  if (kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
-    kyc.customer_verified == 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
+  if (kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number &&
+    kyc.customer_verified === 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
     status = 'incomplete';
   }
 

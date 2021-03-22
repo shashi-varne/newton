@@ -55,7 +55,7 @@ const AddressUpload = (props) => {
   const [file, setFile] = useState(null)
 
   const [state, setState] = useState({})
-  const [kycData, , isLoading] = useUserKycHook();
+  const {kyc: kycData, isLoading} = useUserKycHook();
   const [kyc, setKyc] = useState(
     kycData
   )
@@ -264,10 +264,7 @@ const AddressUpload = (props) => {
 
   return (
     <Container
-      // hideInPageTitle
       buttonTitle="SAVE AND CONTINUE"
-      classOverRideContainer="pr-container"
-      // fullWidthButton={true}
       skelton={isLoading}
       handleClick={handleSubmit}
       disable={!frontDoc && !backDoc}
@@ -276,7 +273,6 @@ const AddressUpload = (props) => {
     >
       {!isEmpty(kyc) && (
         <section id="kyc-upload-address" className="page-body-kyc">
-          {/* <div className="title">Upload address proof</div> */}
           <div className="sub-title">{getFullAddress()}</div>
           <Alert
             variant="attention"

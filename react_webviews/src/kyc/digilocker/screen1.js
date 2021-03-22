@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Container from "../../common/Container";
+import Container from "../common/Container";
 import Input from "common/ui/Input";
 import RadioWithoutIcon from "common/ui/RadioWithoutIcon";
 import {
   genderOptions,
   maritalStatusOptions,
   getPathname,
-} from "../../constants";
-import { validateNumber, validateAlphabets } from "utils/validators";
+} from "../constants";
+import { validateNumber, validateAlphabets, isEmpty} from "utils/validators";
 import {
   validateFields,
   navigate as navigateFunc,
   compareObjects,
-} from "../../common/functions";
-import { kycSubmit } from "../../common/api";
+} from "../common/functions";
+import { kycSubmit } from "../common/api";
 import toast from "common/ui/Toast";
-import useUserKycHook from "../../common/hooks/userKycHook";
-import { isEmpty } from "../../../utils/validators";
+import useUserKycHook from "../common/hooks/userKycHook";
 
 const PersonalDetails1 = (props) => {
   const navigate = navigateFunc.bind(props);
@@ -25,7 +24,7 @@ const PersonalDetails1 = (props) => {
   const isEdit = props.location.state?.isEdit || false;
   const [oldState, setOldState] = useState({});
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   let title = "Personal details";
   if (isEdit) {

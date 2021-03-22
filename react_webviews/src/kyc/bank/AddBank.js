@@ -41,7 +41,7 @@ const AddBank = (props) => {
     variant: "info",
   });
 
-  const [kyc, ,isLoading] = useUserKycHook();
+  const {kyc, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) {

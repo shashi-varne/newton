@@ -29,7 +29,7 @@ const Home = (props) => {
   const stateParams = props.match.state || {};
   const isPremiumFlow = stateParams.isPremiumFlow || false;
 
-  const [kyc, user, isLoading] = useUserKycHook();
+  const {kyc, user, isLoading} = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc) && !isEmpty(user)) initialize();
@@ -290,13 +290,11 @@ const Home = (props) => {
       id="kyc-home"
       buttonTitle={buttonTitle}
       showLoader={showLoader}
-      // disable={isApiRunning || isLoading}
       handleClick={handleClick}
       title={homeData.title}
     >
       {!isEmpty(homeData) && (
         <div className="kyc-home">
-          {/* <div className="kyc-main-title">{homeData.title}</div> */}
           <div className="kyc-main-subtitle">{homeData.subtitle}</div>
           <main>
             <Input
