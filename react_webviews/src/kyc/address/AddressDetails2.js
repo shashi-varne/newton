@@ -7,6 +7,7 @@ import Container from '../common/Container'
 import { kycDocNameMapper } from '../constants'
 import { navigate as navigateFunc } from '../common/functions'
 import useUserKycHook from '../common/hooks/userKycHook'
+import { validateNumber } from 'utils/validators';
 
 const AddressDetails2 = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -62,17 +63,22 @@ const AddressDetails2 = (props) => {
           if (!pinTouched) {
             setPinTouched(true)
           }
-          setKyc((kyc) => ({
-            ...kyc,
-            address: {
-              ...kyc?.address,
-              meta_data: {
-                ...kyc?.address?.meta_data,
-                [name]: value,
+        if (value === '' || validateNumber(value)) {
+            setKyc((kyc) => ({
+              ...kyc,
+              address: {
+                ...kyc?.address,
+                meta_data: {
+                  ...kyc?.address?.meta_data,
+                  [name]: value
+                },
               },
-            },
-          }))
-          setNomineeData(name, value)
+            }))
+            if(value.length === 6){
+              setPinTouched(false);
+            }
+            setNomineeData(name, value);
+          }
         }
         break
       case 'addressline':
@@ -95,6 +101,7 @@ const AddressDetails2 = (props) => {
 
   const fetchPincodeData = async () => {
     try {
+      setPinTouched(true);
       const data = await getPinCodeData(pincode)
       if (data.length === 0) {
         setKyc((userKyc) => ({
@@ -125,6 +132,8 @@ const AddressDetails2 = (props) => {
       }
     } catch (err) {
       Toast(err.message, 'error')
+    } finally{
+      setPinTouched(false);
     }
   }
 
@@ -185,7 +194,7 @@ const AddressDetails2 = (props) => {
   const addressline = kyc?.address?.meta_data?.addressline || ''
   const state = kyc?.address?.meta_data?.state || ''
   const city = kyc?.address?.meta_data?.city || ''
-  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || pincode?.length < 6
+  const isDisabled = isEmpty(pincode) || isEmpty(addressline) || pincode?.length < 6 || pinTouched || state === '';
 
   const getHelperText = (pincode) => {
     if (typeof pincode === 'string') {

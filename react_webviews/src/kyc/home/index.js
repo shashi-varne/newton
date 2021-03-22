@@ -173,6 +173,7 @@ const Home = (props) => {
     let config = getConfig();
     let email = config.partner.email;
     let name = "fisdom";
+    alert("hello")
     if (config.productName === "finity") name = "finity";
     const message = `The PAN is already associated with another ${name} account. Kindly send mail to ${email} for any clarification`;
     if (config.isIframe) {
@@ -275,7 +276,7 @@ const Home = (props) => {
             <Input
               label="Enter PAN"
               class="input"
-              value={pan}
+              value={pan.toUpperCase()}
               error={panError ? true : false}
               helperText={panError || ""}
               onChange={handleChange}
