@@ -9,6 +9,7 @@ const styles = (theme) => ({
   bootstrapInput: {
     backgroundColor: "var(--highlight)",
     fontSize: 13,
+    fontWeight: '400 !important',
     padding: "8px 11px",
     width: "calc(100% - 24px)",
     transition: theme.transitions.create(["border-color", "box-shadow"]),

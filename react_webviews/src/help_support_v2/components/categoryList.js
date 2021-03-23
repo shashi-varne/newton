@@ -233,12 +233,22 @@ class CategoryList extends Component {
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
         title={
-          <MyQueries title="How can we help?" onClick={this.handleQuery} />
+          <MyQueries
+            title="How can we help?"
+            onClick={this.handleQuery}
+            search={true}
+            value={this.state.searchInput}
+            onChange={this.handleChange}
+          />
         }
+        headerData={{
+          style: { display: "none" },
+        }}
+        classHeader={"fixed-header"}
         noFooter
       >
         <div className="help-CategoryList">
-          <Search value={this.state.searchInput} onChange={this.handleChange} />
+          {/* <Search value={this.state.searchInput} onChange={this.handleChange} /> */}
           {faqList.length > 0 &&
             searchInput.length !== 0 &&
             faqList.map((item, index) => (

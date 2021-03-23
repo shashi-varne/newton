@@ -99,8 +99,6 @@ class TicketConversations extends Component {
       conversations = [description];
     }
 
-    console.log(conversations)
-
     this.setState({
       conversations: conversations,
       length: conversations.length,
@@ -117,23 +115,6 @@ class TicketConversations extends Component {
       })
     } 
   };
-
-  // handleScroll = throttle(
-  //   () => {
-  //     let element = document.getElementById("viewScroll");
-  //     if (!element || element === null) {
-  //       return;
-  //     }
-
-  //     scrollIntoView(element, {
-  //       block: "start",
-  //       inline: "nearest",
-  //       behavior: "smooth",
-  //     });
-  //   },
-  //   50,
-  //   { trailing: true }
-  // );
 
   handleView = () => {
     this.setState(
@@ -245,7 +226,6 @@ class TicketConversations extends Component {
       ticket,
       category,
       sub_category,
-      index,
       openTextBox,
       ticket_status,
       documents,

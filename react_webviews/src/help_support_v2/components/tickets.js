@@ -9,7 +9,7 @@ class OpenTickets extends Component {
       show_loader: false,
       skelton: "g",
       tickets: "",
-      index: 0,
+      index: 5,
     };
     this.initialize = initialize.bind(this);
     this.handleScroll = handleScroll.bind(this);
@@ -22,43 +22,30 @@ class OpenTickets extends Component {
   onload = () => {
     let tickets = [...this.props.tickets];
 
-    let sortedTickets = [];
-    while (tickets.length) {
-      sortedTickets.push(tickets.splice(0, 5));
-    }
-
-    let splitTickets = sortedTickets[0] || [];
-
     this.setState({
       tickets: tickets,
-      sortedTickets: sortedTickets,
-      splitTickets: splitTickets,
+      length: tickets.length,
     });
   };
 
   handleCta = () => {
-    let { sortedTickets, splitTickets, index } = this.state;
-    index += 1;
+    let { index } = this.state;
+    index += 5;
 
-    if (sortedTickets[index]) {
-      splitTickets.push(...sortedTickets[index]);
-
-      this.setState(
-        {
-          index: index,
-          splitTickets: splitTickets,
-        },
-        () => this.handleScroll(),
-      );
-    }
+    this.setState(
+      {
+        index: index,
+      },
+      () => this.handleScroll()
+    );
   };
 
   render() {
-    let { tickets, sortedTickets, splitTickets, index } = this.state;
+    let { tickets, index, length } = this.state;
 
     return (
       <div className="help-tickets">
-        {splitTickets.map((item, index) => (
+        {tickets.slice(0, index).map((item, index) => (
           <div
             className="ticket fade-in"
             key={index}
@@ -72,13 +59,13 @@ class OpenTickets extends Component {
             </div>
           </div>
         ))}
-        {sortedTickets[index + 1] && (
-          <div
-            className="generic-page-button-small query-btn fade-in"
-            onClick={() => this.handleCta()}
-          >
-            Load more tickets
-          </div>
+        {tickets.slice(0, index).length !== length && (
+        <div
+          className="generic-page-button-small query-btn fade-in"
+          onClick={() => this.handleCta()}
+        >
+          Load more tickets
+        </div>
         )}
         <div id="viewScroll"></div>
       </div>

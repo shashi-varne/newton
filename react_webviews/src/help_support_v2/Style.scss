@@ -1,4 +1,5 @@
 .help-CategoryList {
+  margin-top: 140px;
   .title {
     font-size: 17px;
     font-weight: 700;
@@ -278,6 +279,7 @@
       color: #767e86;
       font-size: 15px;
       font-weight: 500;
+      height: 50vh;
     }
 
     .tabContainer {
@@ -308,15 +310,15 @@
 
 .help-tickets {
   line-height: 20px;
-  padding-bottom: 40px;
   margin: 0 -20px;
-  
+
   .ticket {
     cursor: pointer;
     margin-bottom: 20px;
     padding: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.07);
     margin: 0 20px 20px;
+
     .title {
       font-size: 13px;
       font-weight: 500;
@@ -628,6 +630,20 @@
   }
 }
 
+.fixed-header {
+  position: fixed;
+  z-index: 1000;
+  width: var(--desktop-width);
+}
+
+.search-bar-header {
+  padding: 20px 0;
+
+  .help-search-bar {
+    margin-top: 40px;
+  }
+}
+
 @media only screen and (min-width: 300px) and (max-width: 500px) {
   .help-CategoryList {
     .category {
@@ -670,5 +686,9 @@
     textarea {
       width: 94%;
     }
+  }
+
+  .fixed-header {
+    width: 100%;
   }
 }
