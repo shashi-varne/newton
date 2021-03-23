@@ -634,6 +634,12 @@
     }
   }
 
+  .help-answers {
+    .question {
+      font-weight: 600 !important;
+    }
+  }
+
   .send-query {
     textarea {
       width: 94%;

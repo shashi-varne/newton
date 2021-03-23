@@ -233,7 +233,7 @@ class CategoryList extends Component {
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
         title={
-          <MyQueries title="How can we Help?" onClick={this.handleQuery} />
+          <MyQueries title="How can we help?" onClick={this.handleQuery} />
         }
         twoTitle={true}
         noFooter

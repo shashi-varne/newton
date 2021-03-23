@@ -23,17 +23,17 @@ class OpenTickets extends Component {
   onload = () => {
     let tickets = [...this.props.tickets];
 
-    let sortedTickets = [];
-    while (tickets.length) {
-      sortedTickets.push(tickets.splice(0, 5));
-    }
+    // let sortedTickets = [];
+    // while (tickets.length) {
+    //   sortedTickets.push(tickets.splice(0, 5));
+    // }
 
-    let splitTickets = sortedTickets[0] || [];
+    // let splitTickets = sortedTickets[0] || [];
 
     this.setState({
       tickets: tickets,
-      sortedTickets: sortedTickets,
-      splitTickets: splitTickets,
+      // sortedTickets: sortedTickets,
+      // splitTickets: splitTickets,
     });
   };
 
@@ -72,11 +72,11 @@ class OpenTickets extends Component {
   };
 
   render() {
-    let { sortedTickets, splitTickets, index } = this.state;
+    let { tickets, sortedTickets, splitTickets, index } = this.state;
 
     return (
       <div className="help-tickets">
-        {splitTickets.map((item, index) => (
+        {tickets.map((item, index) => (
           <div
             className="ticket fade-in"
             key={index}
@@ -90,14 +90,14 @@ class OpenTickets extends Component {
             </div>
           </div>
         ))}
-        {sortedTickets[index + 1] && (
+        {/* {sortedTickets[index + 1] && (
           <div
             className="generic-page-button-small query-btn fade-in"
             onClick={() => this.handleCta()}
           >
             Load more tickets
           </div>
-        )}
+        )} */}
         <div id="viewScroll"></div>
       </div>
     );
