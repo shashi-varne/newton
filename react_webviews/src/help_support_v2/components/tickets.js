@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { initialize } from "../common/functions";
 import scrollIntoView from "scroll-into-view-if-needed";
+import throttle from 'lodash/throttle';
 
 const moment = require("moment");
 class OpenTickets extends Component {
@@ -36,8 +37,8 @@ class OpenTickets extends Component {
     });
   };
 
-  handleScroll = () => {
-    setTimeout(function () {
+  handleScroll = throttle(
+    () => {
       let element = document.getElementById("viewScroll");
       if (!element || element === null) {
         return;
@@ -48,8 +49,10 @@ class OpenTickets extends Component {
         inline: "nearest",
         behavior: "smooth",
       });
-    }, 50);
-  };
+    },
+    50,
+    { trailing: true }
+  )
 
   handleCta = () => {
     let { sortedTickets, splitTickets, index } = this.state;

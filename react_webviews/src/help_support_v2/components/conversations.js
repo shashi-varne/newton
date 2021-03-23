@@ -6,6 +6,7 @@ import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { TicketStatus } from "../common/mini_components";
+import throttle from 'lodash/throttle';
 
 const moment = require("moment");
 class TicketConversations extends Component {
@@ -132,8 +133,8 @@ class TicketConversations extends Component {
     if (reply) this.handleScroll();
   };
 
-  handleScroll = () => {
-    setTimeout(function () {
+  handleScroll = throttle(
+    () => {
       let element = document.getElementById("viewScroll");
       if (!element || element === null) {
         return;
@@ -144,8 +145,10 @@ class TicketConversations extends Component {
         inline: "nearest",
         behavior: "smooth",
       });
-    }, 50);
-  };
+    },
+    50,
+    { trailing: true }
+  )
 
   handleView = () => {
     let { sortedConverstations, splitConversation, index } = this.state;
