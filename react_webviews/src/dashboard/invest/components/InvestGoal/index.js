@@ -33,16 +33,17 @@ const InvestGoal = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
+      // fullWidthButton
       buttonTitle='Next'
-      helpContact
-      hideInPageTitle
+      // helpContact
+      // hideInPageTitle
       hidePageTitle
       title="Save for a Goal"
       noFooter
       classOverRideContainer='pr-container'
     >
      <section className="invest-goal-container">
+       <div className='title'>What is the purpose of this goal?</div>
        <div className="invest-goal-list-type">
         {
           Object.keys(saveGoal).map((key,idx) => {

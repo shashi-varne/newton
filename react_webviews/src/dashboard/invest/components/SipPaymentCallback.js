@@ -16,6 +16,7 @@ const SipPaymentCallback = (props) => {
     storageService().getObject("user") || {}
   );
   const [isApiRunning, setIsApiRunning] = useState(false);
+  const [skelton, setSkelton] = useState(true);
 
   resetRiskProfileJourney();
   const config = getConfig();
@@ -62,6 +63,8 @@ const SipPaymentCallback = (props) => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setSkelton(false)
     }
   };
 
@@ -88,7 +91,7 @@ const SipPaymentCallback = (props) => {
         !isEmpty(campaign) &&
         campaign.notification_visual_data.target
       ) {
-        setIsApiRunning(true);
+        setIsApiRunning("button");
         campaign.notification_visual_data.target.forEach((target) => {
           if (
             (campaign.campaign.name === "auto_debit_campaign" ||
@@ -140,14 +143,15 @@ const SipPaymentCallback = (props) => {
     <Container
       buttonTitle={buttonTitle}
       hideInPageTitle
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
       handleClick={() => handleClick()}
-      disable={isApiRunning}
+      title='Congratulations! Order placed'
+      skelton={skelton}
     >
       <section className="invest-sip-payment-callback">
         {!paymentError && (
           <div className="content">
-            <div className="title">Congratulations! Order placed</div>
+            {/* <div className="title">Congratulations! Order placed</div> */}
             <Imgc
               src={require(`assets/${config.productName}/congratulations_illustration.svg`)}
               alt=""

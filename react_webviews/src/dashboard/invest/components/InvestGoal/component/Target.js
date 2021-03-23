@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Container from '../../../../common/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
@@ -74,7 +73,7 @@ const Target = (props) => {
         subtype,
         term,
       };
-      setLoader(true);
+      setLoader("button");
       const recurring = isRecurring('saveforgoal');
       const { recommendation } = await get_recommended_funds(params);
       const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
@@ -106,15 +105,13 @@ const Target = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      helpContact
-      hideInPageTitle
       hidePageTitle
-      title='Some heading'
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
+      title='Save for a Goal'
+      buttonTitle='Next'
       handleClick={goNext}
       classOverRideContainer='pr-container'
-      disable={!targetAmount || loader}
+      disable={!targetAmount}
+      showLoader={loader}
     >
       <section className='invest-goal-type-container'>
         <div>Set your target amount</div>

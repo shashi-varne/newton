@@ -79,6 +79,7 @@ export const validateFields = (formData, keyToCheck) => {
             formData[`${key}_error`] = 'Minimum length is 6'
             canSubmit = false
           }
+          break
         default:
           break
       }

@@ -73,7 +73,7 @@ class InvestAmount extends Component {
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
         disable={amount_error ? true : false}
-        hideInPageTitle
+        hidePageTitle
       >
         <div className="insta-redeem-invest-amount">
           <div className="header">

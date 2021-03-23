@@ -195,7 +195,7 @@ class Checkout extends Component {
       ctc_title,
       fundsData,
       disableInputSummary,
-      loadingText,
+      isApiRunning,
       type,
       renderData,
       dialogStates,
@@ -203,15 +203,13 @@ class Checkout extends Component {
     if (fundsData && fundsData.length === 0) ctc_title = "BACK";
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         buttonTitle={ctc_title}
         handleClick={this.handleClick}
         disable={disableInputSummary}
-        hideInPageTitle
         title="Your Mutual Fund Plan"
-        loaderData={{
-          loadingText,
-        }}
+        hidePageTitle
+        showLoader={isApiRunning}
       >
         <div className="nfo-checkout">
           <div className="checkout-invest-type">

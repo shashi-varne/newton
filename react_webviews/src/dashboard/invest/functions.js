@@ -1025,7 +1025,7 @@ export async function proceedInvestmentChild(data) {
     if (!investmentEventData) {
       investmentEventData = storageService().getObject("mf_invest_data") || {};
     }
-    handleApiRunning(true);
+    handleApiRunning("button");
     try {
       const res = await Api.post(apiConstants.triggerInvestment, body);
       const { result, status_code: status } = res.pfwresponse;

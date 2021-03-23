@@ -56,10 +56,10 @@ const GoalType = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
+      // fullWidthButton
       buttonTitle='Next'
-      helpContact
-      hideInPageTitle
+      // helpContact
+      // hideInPageTitle
       hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}

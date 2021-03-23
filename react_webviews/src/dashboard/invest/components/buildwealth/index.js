@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Container from '../../../common/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import InvestType from '../mini_components/InvestType';
 import toast from 'common/ui/Toast';
 
@@ -48,7 +47,7 @@ const Landing = (props) => {
     const params = {
       type: investTypeDisplay === "sip" ? 'buildwealth' : 'buildwealthot',
     };
-    setLoader(true);
+    setLoader("button");
     try {
       const recurring = isRecurring(params.type);
       const data = await get_recommended_funds(params);
@@ -86,16 +85,17 @@ const Landing = (props) => {
 
   return (
     <Container
-      classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-      helpContact
-      disable={loader}
-      hideInPageTitle
+      // classOverRide='pr-error-container'
+      // fullWidthButton
+      buttonTitle='Next'
+      // helpContact
+      // disable={loader}
+      // hideInPageTitle
       hidePageTitle
-      title='Build Wealth'
+      // title='Build Wealth'
       handleClick={fetchRecommendedFunds}
-      classOverRideContainer='pr-container'
+      showLoader={loader}
+      // classOverRideContainer='pr-container'
     >
       <section className='invest-amount-common'>
         <InvestType

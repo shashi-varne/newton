@@ -77,16 +77,16 @@ const InvestExplore = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      helpContact
-      hideInPageTitle
+      hidePageTitle
       title="Explore All Mutual Funds"
       classOverRideContainer="pr-container"
       handleClick={goNext}
-      showLoader={loader}
+      skelton={loader}
       rightIcon={search}
       handleRightIconClick={handleRightIconClick}
     >
       <section className="invest-explore-cards" id="invest-explore">
+        <div className='title'>Where do you want to invest?</div>
         {exploreMFMappings.map(({ title, description, src }) => (
           <div key={title} onClick={goNext(title)}>
             <InvestExploreCard

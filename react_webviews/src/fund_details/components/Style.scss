@@ -328,9 +328,11 @@
     }
   }
 
-  button {
-    min-height: 47px;
-    background-color: var(--secondary);
-    margin: 0 15px 15px 15px;
+  .action {
+    padding: 0 15px 15px 15px;
+    button {
+      min-height: 47px;
+      background-color: var(--secondary);
+    }
   }
 }

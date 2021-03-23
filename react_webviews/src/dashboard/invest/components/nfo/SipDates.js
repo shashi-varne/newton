@@ -93,6 +93,7 @@ class SipDates extends Component {
       body: sipBaseData,
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: isSipDatesScreen,
+      history: this.props.history,
       handleApiRunning: this.handleApiRunning,
       handleDialogStates: this.handleDialogStates,
     });
@@ -162,14 +163,14 @@ class SipDates extends Component {
     } = this.state;
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         handleClick={this.handleClick}
         buttonTitle={buttonTitle}
-        hideInPageTitle
-        isApiRunning={isApiRunning}
+        title="Select investment date"
+        showLoader={isApiRunning}
       >
         <div className="sip-dates">
-          <div className="main-top-title">Select investment date</div>
+          {/* <div className="main-top-title">Select investment date</div> */}
           {sips &&
             sips.map((sip, index) => {
               let options = [];

@@ -217,8 +217,6 @@ const Recommendations = (props) => {
 
   return (
     <Container
-      classOverRide='pr-error-container'
-      fullWidthButton
       buttonTitle={
         currentUser &&
         !currentUser.active_investment &&
@@ -226,13 +224,14 @@ const Recommendations = (props) => {
           ? "HOW IT WORKS?"
           : investCtaText
       }
-      helpContact
-      hideInPageTitle
+      // helpContact
+      // hideInPageTitle
       hidePageTitle
+      // force_hide_inpage_title
       title='Recommended Funds'
       handleClick={goNext}
-      classOverRideContainer='pr-container'
-      isApiRunning={isApiRunning}
+      // classOverRideContainer='pr-container'
+      showLoader={isApiRunning}
     >
       <section className='recommendations-common-container'>
         <div className='recommendations-header'>

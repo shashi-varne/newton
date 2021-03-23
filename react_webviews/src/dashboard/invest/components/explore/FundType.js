@@ -106,8 +106,8 @@ const FundType = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      helpContact
-      hideInPageTitle
+      // helpContact
+      hidePageTitle
       title="Explore All Mutual Funds"
       classOverRideContainer="pr-container"
     >

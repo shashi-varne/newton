@@ -98,15 +98,15 @@ const InvestJourney = (props) => {
   return (
     <Container
       classOverRide="pr-error-container"
-      fullWidthButton
+      // fullWidthButton
       buttonTitle="PROCEED"
-      helpContact
-      hideInPageTitle
+      // helpContact
+      // hideInPageTitle
       hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={proceedInvestment}
-      isApiRunning={isApiRunning}
+      showLoader={isApiRunning}
     >
       <section className="invest-journey-container">
         <div className="invest-journey-header">

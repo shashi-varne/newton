@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Container from '../../../common/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
@@ -93,7 +92,7 @@ const InvestAmount = (props) => {
         amount,
         type: investType,
       };
-      setLoader(true);
+      setLoader("button");
       if (investType === 'saveforgoal') {
         params.subtype = graphData?.subtype;
         params.term = graphData?.term;
@@ -142,12 +141,13 @@ const InvestAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      fullWidthButton
-      buttonTitle={loader ? <CircularProgress size={22} thickness={4} /> : 'Next'}
-      helpContact
-      hideInPageTitle
+      // fullWidthButton
+      buttonTitle='Next'
+      // helpContact
+      // hideInPageTitle
       hidePageTitle
-      disable={error || loader}
+      disable={error}
+      showLoader={loader}
       title={title}
       handleClick={goNext}
       classOverRideContainer='pr-container'

@@ -22,10 +22,10 @@ class NfoInfo extends Component {
   render() {
     return (
       <Container
-        showLoader={this.state.show_loader}
+        skelton={this.state.show_loader}
         buttonTitle="CONTINUE"
         handleClick={this.handleClick}
-        hideInPageTitle
+        hidePageTitle
         title='Invest in NFO'
       >
         <div className="nfo-info">

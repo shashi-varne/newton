@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Container from '../../../fund_details/common/Container'
+import Container from '../../common/Container'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
@@ -108,13 +108,13 @@ const FundList = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      helpContact
-      hideInPageTitle
+      // helpContact
+      hidePageTitle
       title={
         match.params.type.charAt(0).toUpperCase() + match.params.type.slice(1)
       }
       showLoader={showLoader}
-      classOverRideContainer="pr-containe>r"
+      classOverRideContainer="pr-container"
       id="diy-fundlist-container"
     >
       <div className="diy-tab-container">
@@ -215,8 +215,11 @@ const DiyFundCard = ({
   parentProps,
   ...props
 }) => {
-  const handleClick = () => {
+  const handleClick = (data) => {
     const navigate = navigateFunc.bind(parentProps)
+    let dataCopy = Object.assign({}, data);
+    dataCopy.diy_type = "categories";
+    storageService().setObject("diystore_fundInfo", dataCopy);
     console.log(parentProps.location.search + '&isins=' + props.isin)
     navigate(
       `/fund-details`,
@@ -237,7 +240,7 @@ const DiyFundCard = ({
         />
       </div>
       <div className="diy-fund-card-details">
-        <div className="diy-fund-card-name" onClick={handleClick}>
+        <div className="diy-fund-card-name" onClick={() => handleClick(props)}>
           {props.legal_name}
         </div>
         <div className="diy-fund-card-info-container">
