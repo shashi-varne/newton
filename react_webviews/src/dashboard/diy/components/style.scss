@@ -150,7 +150,6 @@
 
   .diy-bottom-sheet .filter {
     display: flex;
-    border-top: 1px solid #e8e8e8;
     background-color: #fff;
   }
 
@@ -208,6 +207,32 @@
     }
   }
 
+  .diy-filter-bottom-sheet {
+    header {
+      margin: -20px -20px 0 -20px;
+      border-bottom: 1px solid #e8e8e8;
+      padding: 8px 20px;
+      font-size: 15px;
+    }
+
+    .filter {
+      .title {
+        background-color: #e8e8e8;
+        margin-left: -20px;
+        font-size: 15px;
+      }
+    }
+
+    footer {
+      margin: 0 -20px -20px -20px;
+
+      button {
+        border-radius: 0;
+        padding: 14px 10px;
+      }
+    }
+  }
+
   .diy-fund-houses {
     .house {
       display: flex;
@@ -219,7 +244,7 @@
     svg {
       fill: var(--label);
       font-weight: bold;
-      font-size: 36px;
+      font-size: 25px;
     }
 
     .checked {

@@ -14,14 +14,6 @@ import { getKycAppStatus, isReadyToInvest } from "../../kyc/services";
 
 let errorMessage = "Something went wrong!";
 export async function initialize() {
-  //   let isLoggedIn = storageService().get("currentUser");
-
-  //   if (!isLoggedIn) {
-  //     this.props.history.push({
-  //       pathname: "login",
-  //       search: getConfig().searchParams,
-  //     });
-  //   }
   this.getSummary = getSummary.bind(this);
   this.setSummaryData = setSummaryData.bind(this);
   this.setInvestCardsData = setInvestCardsData.bind(this);
@@ -964,6 +956,7 @@ export async function makeInvestment(investment, isReferralGiven) {
     type === "diy"
   ) {
     this.navigate("/invest-journey");
+    return
   }
 
   if (isReferralGiven && investReferralData.code) {
@@ -1083,6 +1076,7 @@ export async function proceedInvestmentChild(data) {
             break;
         }
       }
+      handleApiRunning(false);
     } catch (error) {
       console.log(error);
       handleApiRunning(false);

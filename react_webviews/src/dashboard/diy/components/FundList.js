@@ -108,12 +108,11 @@ const FundList = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      // helpContact
       hidePageTitle
       title={
-        match.params.type.charAt(0).toUpperCase() + match.params.type.slice(1)
+        match.params?.key?.replace(/_/g, " ") || ""
       }
-      showLoader={showLoader}
+      skelton={showLoader}
       classOverRideContainer="pr-container"
       id="diy-fundlist-container"
     >
@@ -220,7 +219,6 @@ const DiyFundCard = ({
     let dataCopy = Object.assign({}, data);
     dataCopy.diy_type = "categories";
     storageService().setObject("diystore_fundInfo", dataCopy);
-    console.log(parentProps.location.search + '&isins=' + props.isin)
     navigate(
       `/fund-details`,
       {
@@ -236,7 +234,7 @@ const DiyFundCard = ({
           src={props.amc_logo_small}
           alt="some"
           width="90"
-          onClick={handleClick}
+          onClick={() => handleClick(props)}
         />
       </div>
       <div className="diy-fund-card-details">

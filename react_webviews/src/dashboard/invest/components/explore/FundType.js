@@ -106,13 +106,12 @@ const FundType = (props) => {
     <Container
       classOverRIde="pr-error-container"
       noFooter
-      // helpContact
       hidePageTitle
-      title="Explore All Mutual Funds"
+      title={props.match.params?.type || ""}
       classOverRideContainer="pr-container"
     >
       <section id="invest-explore-fund-type">
-        <h6 className="heading">Top trending {type} funds</h6>
+        <h6 className="heading top-title">Top trending {type} funds</h6>
         <div className="scroll">
           {trendingFunds[type]?.map((fund, idx) => (
             <TrendingCard key={idx} cart={cart} setCart={setCart} type={type} {...fund} parentProps={props} />
