@@ -152,9 +152,6 @@ class Queries extends Component {
         headerData={{
           goBack: this.goBack,
         }}
-        styleHeader={{
-          position: 'fixed'
-        }}
         noFooter
       >
         <div className="help-queries">

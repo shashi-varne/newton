@@ -256,8 +256,9 @@
 }
 
 .help-queries {
-  margin: 40px -20px 0;
-  height: 80vh;
+  margin: 0 -20px;
+  position: fixed;
+  width: var(--desktop-width);
 
   .nav-bar {
     height: 100%;
@@ -686,6 +687,10 @@
     textarea {
       width: 94%;
     }
+  }
+
+  .help-queries {
+    width: 100%;
   }
 
   .fixed-header {

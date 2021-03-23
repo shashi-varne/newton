@@ -572,7 +572,7 @@ export function new_header_scroll() {
         <div id="header-title-page"
             style={this.props.styleHeader}
             className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle || this.props.headerData.style ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
+            <div className={`header-title-page-text ${this.state.inPageTitle || this.props.headerData?.style ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '100%' }}>
                 {this.props.title}
             </div>
 
