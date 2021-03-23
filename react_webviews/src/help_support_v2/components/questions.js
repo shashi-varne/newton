@@ -127,7 +127,7 @@ class Questions extends Component {
         title={
           <MyQueries title={sub_category.cms_category_name} onClick={this.handleQuery} />
         }
-        twoTitle={true}
+        
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}

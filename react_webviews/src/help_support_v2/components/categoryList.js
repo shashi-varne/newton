@@ -98,8 +98,8 @@ class CategoryList extends Component {
 
     if (!value) {
       this.setState({ faqList: [] });
-      return
-    } 
+      return;
+    }
 
     if (value[value.length - 1] === " ") {
       let result = await this.SearchFaq(value);
@@ -235,7 +235,6 @@ class CategoryList extends Component {
         title={
           <MyQueries title="How can we help?" onClick={this.handleQuery} />
         }
-        twoTitle={true}
         noFooter
       >
         <div className="help-CategoryList">
@@ -256,9 +255,9 @@ class CategoryList extends Component {
                 </div>
               </div>
             ))}
-          {searchInput.length !== 0 && faqList.length === 0 && !isApiRunning && (
-            <div className="no-result">No result found</div>
-          )}
+          {searchInput.length !== 0 &&
+            faqList.length === 0 &&
+            !isApiRunning && <div className="no-result">No result found</div>}
 
           {searchInput.length !== 0 && faqList.length === 0 && isApiRunning && (
             <CustomSkelton />

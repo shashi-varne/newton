@@ -257,6 +257,8 @@
 .help-queries {
   margin: 0 -20px;
   height: 80vh;
+  // position: fixed;
+  // width: 100%;
 
   .nav-bar {
     height: 100%;
@@ -308,12 +310,17 @@
 
 .help-tickets {
   line-height: 20px;
-
+  height: 80vh;
+  overflow-y: scroll;
+  padding-bottom: 40px;
+  margin: 0 -20px;
+  
   .ticket {
     cursor: pointer;
     margin-bottom: 20px;
     padding: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.07);
+    margin: 0 20px 20px;
     .title {
       font-size: 13px;
       font-weight: 500;
@@ -332,6 +339,28 @@
       font-weight: 400;
       color: #979797;
     }
+  }
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-scrollbar:vertical {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar:horizontal {
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d8d8d8;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
   }
 }
 

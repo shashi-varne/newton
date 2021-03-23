@@ -190,11 +190,13 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
-              animateHeight={tickets.closed?.length > 0 && tickets.open?.length > 0}
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
-                  <Tickets tickets={tickets.open} onClick={this.handleClick} />
+                  <Tickets
+                    tickets={tickets.open}
+                    onClick={this.handleClick}
+                  />
                 )}
                 {!tickets.open && (
                   <SkeltonRect
@@ -217,7 +219,8 @@ class Queries extends Component {
                 {tickets.closed && tickets.closed.length > 0 && (
                   <Tickets
                     tickets={tickets.closed}
-                    onClick={this.handleClick} />
+                    onClick={this.handleClick}
+                  />
                 )}
                 {tickets.closed && tickets.closed.length === 0 && (
                   <div className="no-tickets">

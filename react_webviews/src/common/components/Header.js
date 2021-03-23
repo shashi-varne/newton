@@ -18,7 +18,7 @@ const headerIconMapper = {
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, twoTitle,
+  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon,
   className ,style, headerData={}, new_header}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -38,7 +38,7 @@ const Header = ({ classes, title, count, total, current, goBack,
          <Close />}
       </IconButton>
 
-      <div style={{width: `${twoTitle ? '90%' : '' }`}}>
+      <div style={{width: '100%'}}>
         <div
         style={style}
           className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 

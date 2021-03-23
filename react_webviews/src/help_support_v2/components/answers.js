@@ -259,7 +259,7 @@ class Answers extends Component {
             onClick={this.handleQuery}
           />
         }
-        twoTitle={true}
+        
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}

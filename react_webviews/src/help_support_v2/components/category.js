@@ -103,7 +103,7 @@ class Category extends Component {
             onClick={this.handleQuery}
           />
         }
-        twoTitle={true}
+        
         showError={this.state.showError}
         errorData={this.state.errorData}
         noFooter

@@ -312,7 +312,7 @@ class TicketConversations extends Component {
         headerData={{
           goBack: this.goBack,
         }}
-        twoTitle={true}
+        
         title={
           <TicketStatus
             title={`Ticket ID: ${ticket.ticket_id}`}
