@@ -144,7 +144,7 @@ class Queries extends Component {
   }
 
   render() {
-    let { tickets } = this.state;
+    let { tickets, value } = this.state;
 
     return (
       <Container
@@ -165,13 +165,13 @@ class Queries extends Component {
           <div className="nav-bar">
             <div className="tabContainer">
               <div
-                className={`tab ${this.state.value === 0 ? "tabclicked" : ""}`}
+                className={`tab ${value === 0 ? "tabclicked" : ""}`}
                 onClick={() => this.handleChange(0)}
               >
                 Open queries
               </div>
               <div
-                className={`tab ${this.state.value === 1 ? "tabclicked" : ""}`}
+                className={`tab ${value === 1 ? "tabclicked" : ""}`}
                 onClick={() => this.handleChange(1)}
               >
                 Closed queries
@@ -180,7 +180,7 @@ class Queries extends Component {
             <div className="generic-hr"></div>
             <div
               className="generic-hr hr"
-              style={{ left: `${this.state.percent / 2}%` }}
+              style={{ left: `${value === 1 ? "50" : '0'}%` }}
             ></div>
 
             <SwipeableViews
@@ -191,7 +191,7 @@ class Queries extends Component {
               action={(actions) => {
                 this.swipeableActions = actions;
               }}
-              style={{ height: "80vh" }}
+              // style={{ height: "80vh" }}
               enableMouseEvents
               animateHeight
             >
