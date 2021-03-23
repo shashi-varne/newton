@@ -39,12 +39,12 @@ const Filter = ({
     setLocalFundOption('growth')
     setLocalSortFilter('returns')
     setLocalFundHouse('')
-    close()
+    // close()
   }
 
   return (
     <DiyDialog close={close} open={isOpen}>
-      <section className="diy-bottom-sheet">
+      <section className="diy-bottom-sheet diy-filter-bottom-sheet">
         <header className="header">
           <div className="text">Filter</div>
           <Button color="secondary" onClick={reset}>Reset</Button>
@@ -99,14 +99,16 @@ const Filter = ({
             )}
           </div>
         </main>
-        <Button
-          variant="contained"
-          fullWidth
-          color="secondary"
-          onClick={apply}
-        >
-          Apply
-        </Button>
+        <footer>
+          <Button
+            variant="contained"
+            fullWidth
+            color="secondary"
+            onClick={apply}
+          >
+            Apply
+          </Button>
+        </footer>
       </section>
     </DiyDialog>
   )

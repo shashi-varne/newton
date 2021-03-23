@@ -10,6 +10,7 @@ import { navigate as navigateFunc } from "../invest/common/commonFunction";
 
 import "./style.scss";
 import {
+  canDoInvestment,
   isInvestRefferalRequired,
   proceedInvestmentChild,
 } from "../invest/functions";
@@ -17,6 +18,8 @@ import PennyVerificationPending from "../invest/components/mini_components/Penny
 import InvestError from "../invest/components/mini_components/InvestError";
 import { getConfig } from "../../utils/functions";
 import InvestReferralDialog from "../invest/components/mini_components/InvestReferralDialog";
+import useUserKycHook from "../../kyc/common/hooks/userKycHook";
+import { formatAmountInr } from "../../utils/validators";
 
 const InvestJourney = (props) => {
   const [isApiRunning, setIsApiRunning] = useState(false);
@@ -26,11 +29,12 @@ const InvestJourney = (props) => {
     openInvestError: false,
     errorMessage: "",
   });
+  const {kyc: userKyc, isLoading} = useUserKycHook()
   const state = props.location.state || {};
   const investment =
     JSON.parse(window.localStorage.getItem("investment")) ||
     JSON.parse(state.investment);
-  let { type, order_type, investType } = investment;
+  let { type, order_type } = investment;
   const sipTypesKeys = [
     "buildwealth",
     "savetaxsip",
@@ -46,7 +50,9 @@ const InvestJourney = (props) => {
   let sipOrOneTime = "";
   if ((type !== "riskprofile") & (type !== "insta-redeem")) {
     sipOrOneTime = "onetime";
-    if (sipTypesKeys.indexOf(investType) !== -1) sipOrOneTime = "sip";
+    if (sipTypesKeys.indexOf(investment.type) !== -1) {
+      sipOrOneTime = "sip";
+    }
   } else {
     sipOrOneTime = order_type;
   }
@@ -79,6 +85,7 @@ const InvestJourney = (props) => {
       paymentRedirectUrl: paymentRedirectUrl,
       isSipDatesScreen: false,
       history: props.history,
+      userKyc: userKyc,
       handleApiRunning: handleApiRunning,
       handleDialogStates: handleDialogStates,
     });
@@ -95,18 +102,17 @@ const InvestJourney = (props) => {
     setDialogStates({ ...dialog_states });
   };
 
+  const ctcTitle = userKyc && !canDoInvestment(userKyc) ? "CONTINUE TO KYC" : "PROCEED"
   return (
     <Container
       classOverRide="pr-error-container"
-      // fullWidthButton
-      buttonTitle="PROCEED"
-      // helpContact
-      // hideInPageTitle
+      buttonTitle={ctcTitle}
       hidePageTitle
       title="How it works"
       classOverRideContainer="pr-container"
       handleClick={proceedInvestment}
       showLoader={isApiRunning}
+      skelton={isLoading}
     >
       <section className="invest-journey-container">
         <div className="invest-journey-header">
@@ -124,7 +130,9 @@ const InvestJourney = (props) => {
               <div className="invest-journey-connect-step">
                 <p>Step - 1</p>
                 <div>Your bank account</div>
-                <div>₹ 5,000 per month</div>
+                <div>
+                  {formatAmountInr(investment.amount)}{sipOrOneTime === 'sip' && ' per month'}
+                </div>
               </div>
             </div>
             <div className="invest-journey-connect-content">

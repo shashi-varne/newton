@@ -37,7 +37,7 @@ const SaveGoal = (props) => {
         subtype,
         term,
       };
-      setLoader("button");
+      setLoader(true);
       const recurring = isRecurring('saveforgoal');
       const { recommendation } = await get_recommended_funds(params);
       const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
@@ -81,15 +81,12 @@ const SaveGoal = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      // fullWidthButton
-      // helpContact
-      // hideInPageTitle
       hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}
       noFooter
       classOverRideContainer='pr-container'
-      showLoader={loader}
+      skelton={loader}
     >
       <section className='invest-goal-save-container'>
         <div className='invest-goal-save-header'>

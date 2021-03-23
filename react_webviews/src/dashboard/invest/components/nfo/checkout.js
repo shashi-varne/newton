@@ -21,7 +21,7 @@ class Checkout extends Component {
       screenName: "nfo_checkout",
       ctc_title: "INVEST",
       form_data: [],
-      investType: "onetime",
+      investType: props.type === "diy" ? "sip" : "onetime",
       partner_code: getConfig().partner_code,
       disableInput: [],
       fundsData: [],
@@ -45,14 +45,15 @@ class Checkout extends Component {
       partner_code,
       ctc_title,
       type,
-      currentUser,
+      investType,
     } = this.state;
+    ctc_title = this.getButtonText(investType)
     if (type === "nfo") {
       let fund = storageService().getObject("nfo_detail_fund");
       if (fund) {
         fundsData.push(fund);
         fundsData.forEach(() => form_data.push({}));
-        this.setState({ fundsData: fundsData, form_data: form_data }, () =>
+        this.setState({ fundsData: fundsData, form_data: form_data, ctc_title }, () =>
           this.getNfoPurchaseLimit({
             investType: this.state.investType,
             isins: fund.isin,
@@ -76,8 +77,6 @@ class Checkout extends Component {
           (data) => (data.selected_icon = "bfdl_selected.png")
         );
       }
-      if (!currentUser.active_investment && partner_code !== "bfdlmobile")
-        ctc_title = "HOW IT WORKS?";
       this.setState(
         {
           fundsData: fundsData,
@@ -95,6 +94,17 @@ class Checkout extends Component {
           })
       );
     }
+  };
+
+  getButtonText = (investType) => {
+    let {type, currentUser, partner_code} = this.state;
+    if (!currentUser.active_investment && partner_code !== "bfdlmobile" && type === 'diy') {
+      return "HOW IT WORKS?";
+    }
+    if (investType === "sip") {
+      return "SELECT SIP DATE";
+    }
+    return "INVEST";
   };
 
   getIsins = (fundsData) => {
@@ -144,15 +154,17 @@ class Checkout extends Component {
   handleChange = (name, index = 0) => async (event) => {
     let value = event.target ? event.target.value : event;
     let id = (event.target && event.target.id) || "";
-    let { form_data, ctc_title, fundsData, investType, type } = this.state;
+    let {
+      form_data,
+      ctc_title,
+      fundsData,
+      investType,
+      type,
+    } = this.state;
     if (id === "sip" || id === "onetime") {
       if (id === investType) return;
       investType = id;
-      if (id === "sip") {
-        ctc_title = "SELECT SIP DATE";
-      } else {
-        ctc_title = "INVEST";
-      }
+      ctc_title = this.getButtonText(investType)
       this.setState({
         form_data: form_data,
         ctc_title: ctc_title,
@@ -200,7 +212,8 @@ class Checkout extends Component {
       renderData,
       dialogStates,
     } = this.state;
-    if (fundsData && fundsData.length === 0) ctc_title = "BACK";
+    let allowedFunds = fundsData.filter((data) => data.allow_purchase);
+    if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container
         skelton={this.state.show_loader}

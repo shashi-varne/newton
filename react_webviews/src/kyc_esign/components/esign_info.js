@@ -35,7 +35,7 @@ class ESignInfo extends Component {
       window.location.origin + '/kyc-esign/nsdl' + getConfig().searchParams
     );
 
-    this.setState({ show_loader: true });
+    this.setState({ show_loader: "button" });
 
     try {
       let res = await Api.get(`/api/kyc/formfiller2/kraformfiller/upload_n_esignlink?kyc_platform=app&redirect_url=${redirectUrl}`);

@@ -8,15 +8,15 @@ import single_star from 'assets/single_star.png';
 import morning_text from 'assets/morning_text.png';
 
 import { getConfig } from 'utils/functions';
-import { storageService, formatAmountInr,isEmpty } from 'utils/validators';
+import { storageService, formatAmountInr } from 'utils/validators';
 import { navigate as navigateFunc } from '../invest/common/commonFunction';
 
 import './style.scss';
-import { initData } from '../../kyc/services';
 import { isInvestRefferalRequired, proceedInvestmentChild } from '../invest/functions';
 import PennyVerificationPending from '../invest/components/mini_components/PennyVerificationPending';
 import InvestError from '../invest/components/mini_components/InvestError';
 import InvestReferralDialog from '../invest/components/mini_components/InvestReferralDialog';
+import useUserKycHook from '../../kyc/common/hooks/userKycHook';
 
 const Recommendations = (props) => {
   const graphData = storageService().getObject("graphData") || {};
@@ -39,12 +39,7 @@ const Recommendations = (props) => {
   const [isins, setIsins] = useState("");
   const [isApiRunning, setIsApiRunning] = useState(false);
   const partner_code = getConfig().partner_code;
-  const [currentUser, setCurrentUser] = useState(
-    storageService().getObject("user") || {}
-  );
-  const [userKyc, setUserKyc] = useState(
-    storageService().getObject("kyc") || {}
-  );
+  const {kyc: userKyc, user: currentUser, isLoading} = useUserKycHook();
   const partner = getConfig().partner;
   const sipTypesKeys = [
     "buildwealth",
@@ -195,16 +190,8 @@ const Recommendations = (props) => {
       return el.mf.isin;
     });
     setIsins(isinsVal?.join(","));
-    if (isEmpty(currentUser) || isEmpty(userKyc)) {
-      initialize();
-    }
   }, []);
 
-  const initialize = async () => {
-    await initData();
-    setCurrentUser(storageService().getObject("user") || {});
-    setUserKyc(storageService().getObject("kyc") || {});
-  };
 
   const navigate = navigateFunc.bind(props);
   const EditFund = () => {
@@ -224,13 +211,10 @@ const Recommendations = (props) => {
           ? "HOW IT WORKS?"
           : investCtaText
       }
-      // helpContact
-      // hideInPageTitle
       hidePageTitle
-      // force_hide_inpage_title
+      skelton={isLoading}
       title='Recommended Funds'
       handleClick={goNext}
-      // classOverRideContainer='pr-container'
       showLoader={isApiRunning}
     >
       <section className='recommendations-common-container'>
