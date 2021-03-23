@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize } from "../common/functions";
+import { initialize, getAllfaqs } from "../common/functions";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { MyQueries, CustomSkelton } from "../common/mini_components";
@@ -14,6 +14,7 @@ class Questions extends Component {
       faqs: {},
     };
     this.initialize = initialize.bind(this);
+    this.getAllfaqs = getAllfaqs.bind(this);
   }
 
   componentWillMount() {

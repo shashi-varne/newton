@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize } from "../common/functions";
+import { initialize, getTicketConversations, ticketReply } from "../common/functions";
 import scrollIntoView from "scroll-into-view-if-needed";
 import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
@@ -28,6 +28,8 @@ class TicketConversations extends Component {
       value: "",
     };
     this.initialize = initialize.bind(this);
+    this.getTicketConversations = getTicketConversations.bind(this);
+    this.ticketReply = ticketReply.bind(this);
   }
 
   componentWillMount() {

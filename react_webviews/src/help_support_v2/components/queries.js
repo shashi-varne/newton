@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize } from "../common/functions";
+import { initialize, getUserTickets } from "../common/functions";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import Typography from "@material-ui/core/Typography";
@@ -38,6 +38,7 @@ class Queries extends Component {
       fromScreen: ''
     };
     this.initialize = initialize.bind(this);
+    this.getUserTickets = getUserTickets.bind(this);
   }
 
   componentWillMount() {

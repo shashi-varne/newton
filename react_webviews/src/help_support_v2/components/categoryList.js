@@ -3,7 +3,7 @@ import { storageService } from "utils/validators";
 import { Imgc } from "common/ui/Imgc";
 import Container from "../common/Container";
 import { categories } from "../constants";
-import { initialize } from "../common/functions";
+import { initialize, getAllCategories, SearchFaq } from "../common/functions";
 import Search from "./search";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
@@ -32,6 +32,8 @@ class CategoryList extends Component {
       isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
+    this.getAllCategories = getAllCategories.bind(this);
+    this.SearchFaq = SearchFaq.bind(this);
   }
 
   componentWillMount() {

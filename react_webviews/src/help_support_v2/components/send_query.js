@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize } from "../common/functions";
+import { initialize, createTicket } from "../common/functions";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
@@ -25,6 +25,7 @@ class SendQuery extends Component {
       documents: [],
     };
     this.initialize = initialize.bind(this);
+    this.createTicket = createTicket.bind(this);
   }
 
   componentWillMount() {

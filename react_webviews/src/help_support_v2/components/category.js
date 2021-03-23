@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize } from "../common/functions";
+import { initialize, getSubCategories } from "../common/functions";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { MyQueries, CustomSkelton } from "../common/mini_components";
@@ -15,6 +15,7 @@ class Category extends Component {
       sub_categories: "",
     };
     this.initialize = initialize.bind(this);
+    this.getSubCategories = getSubCategories.bind(this);
   }
 
   componentWillMount() {

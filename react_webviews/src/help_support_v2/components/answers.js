@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { initialize } from "../common/functions";
+import { initialize, getFaqDescription, getAllfaqs, updateFeedback } from "../common/functions";
 import SwipeableViews from "react-swipeable-views";
 import ReactHtmlParser from "react-html-parser";
 import Container from "../common/Container";
@@ -22,6 +22,9 @@ class Answers extends Component {
       isApiRunning: false,
     };
     this.initialize = initialize.bind(this);
+    this.getAllfaqs = getAllfaqs.bind(this);
+    this.getFaqDescription = getFaqDescription.bind(this);
+    this.updateFeedback = updateFeedback.bind(this);
   }
 
   componentWillMount() {

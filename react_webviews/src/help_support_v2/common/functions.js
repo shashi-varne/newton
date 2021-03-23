@@ -7,16 +7,6 @@ import toast from "common/ui/Toast";
 export async function initialize() {
   this.navigate = navigate.bind(this);
   this.openInBrowser = openInBrowser.bind(this);
-  this.SearchFaq = SearchFaq.bind(this);
-  this.getAllCategories = getAllCategories.bind(this);
-  this.getSubCategories = getSubCategories.bind(this);
-  this.getAllfaqs = getAllfaqs.bind(this);
-  this.getFaqDescription = getFaqDescription.bind(this);
-  this.updateFeedback = updateFeedback.bind(this);
-  this.getUserTickets = getUserTickets.bind(this);
-  this.getTicketConversations = getTicketConversations.bind(this);
-  this.createTicket = createTicket.bind(this);
-  this.ticketReply = ticketReply.bind(this);
   this.getPdf = getPdf.bind(this);
   this.save = save.bind(this);
   this.handleError = handleError.bind(this);
