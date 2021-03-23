@@ -411,7 +411,7 @@ export async function createTicket(body = {}) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType, false)
   }
 }
 
@@ -455,7 +455,7 @@ export async function ticketReply(body = {}, id) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType, false)
   }
 }
 

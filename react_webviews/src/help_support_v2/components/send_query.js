@@ -104,6 +104,10 @@ class SendQuery extends Component {
     this.setState({
       openConfirmDialog: false,
     });
+    this.props.history.push(
+      { pathname: "queries", search: getConfig().searchParams },
+      { fromScreen: "send_query" }
+    );
   };
 
   renderDialog = () => {
