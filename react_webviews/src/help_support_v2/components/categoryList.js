@@ -23,7 +23,7 @@ class CategoryList extends Component {
     this.state = {
       show_loader: false,
       skelton: "p",
-      value: "",
+      searchInput: "",
       faqList: [],
       sortedList: "",
       showCategory: true,
@@ -91,7 +91,7 @@ class CategoryList extends Component {
   handleChange = async (event) => {
     let value = event.target ? event.target.value : event;
     this.setState({
-      value: value,
+      searchInput: value,
     });
 
     if (!value) {
@@ -202,11 +202,11 @@ class CategoryList extends Component {
   };
 
   renderHighlight = (title) => {
-    let { value } = this.state;
+    let { searchInput } = this.state;
     let string = title.slice(0, title.length - 1);
 
     let highlight = string.split(" ").map((word) => {
-      let text = value.toLowerCase().split(" ");
+      let text = searchInput.toLowerCase().split(" ");
 
       if (text.includes(word.toLowerCase())) {
         return `<span style='color: var(--primary)'>${word}</span>`;
@@ -223,7 +223,7 @@ class CategoryList extends Component {
   };
 
   render() {
-    let { faqList, value, categoryList, isApiRunning } = this.state;
+    let { faqList, searchInput, categoryList, isApiRunning } = this.state;
 
     return (
       <Container
@@ -237,9 +237,9 @@ class CategoryList extends Component {
         noFooter
       >
         <div className="help-CategoryList">
-          <Search value={this.state.value} onChange={this.handleChange} />
+          <Search value={this.state.searchInput} onChange={this.handleChange} />
           {faqList.length > 0 &&
-            value.length !== 0 &&
+            searchInput.length !== 0 &&
             faqList.map((item, index) => (
               <div
                 className="search-inputs"
@@ -254,17 +254,17 @@ class CategoryList extends Component {
                 </div>
               </div>
             ))}
-          {value.length !== 0 && faqList.length === 0 && !isApiRunning && (
+          {searchInput.length !== 0 && faqList.length === 0 && !isApiRunning && (
             <div className="no-result">No result found</div>
           )}
 
-          {value.length !== 0 && faqList.length === 0 && isApiRunning && (
+          {searchInput.length !== 0 && faqList.length === 0 && isApiRunning && (
             <CustomSkelton />
           )}
 
           {this.state.skelton && <CustomSkelton />}
 
-          {!this.state.skelton && value.length === 0 && categoryList && (
+          {!this.state.skelton && searchInput.length === 0 && categoryList && (
             <div className="fade-in">
               <div className="title">Category</div>
 
