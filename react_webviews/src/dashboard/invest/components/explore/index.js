@@ -83,8 +83,8 @@ const InvestExplore = (props) => {
       classOverRideContainer="pr-container"
       handleClick={goNext}
       skelton={loader}
-      rightIcon={search}
-      handleRightIconClick={handleRightIconClick}
+      rightIcon="search"
+      handleTopClick={handleRightIconClick}
     >
       <section className="invest-explore-cards" id="invest-explore">
         <div className='title'>Where do you want to invest?</div>
