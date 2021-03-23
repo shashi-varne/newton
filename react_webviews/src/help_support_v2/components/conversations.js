@@ -5,6 +5,7 @@ import scrollIntoView from "scroll-into-view-if-needed";
 import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
+import { TicketStatus } from "../common/mini_components";
 
 const moment = require("moment");
 class TicketConversations extends Component {
@@ -49,8 +50,6 @@ class TicketConversations extends Component {
       });
       this.sortConversations(result);
     }
-
-    // console.log([].concat(...sortedConverstations))
   };
 
   sendEvents(user_action, data = {}) {
@@ -88,13 +87,15 @@ class TicketConversations extends Component {
     };
 
     if (result.conversations) {
-
       if (result.conversations && result.conversations.length === 30) {
         this.setState({
           skelton: true,
         });
 
-        let details = await this.getTicketConversations(this.state.ticket.ticket_id, "2");
+        let details = await this.getTicketConversations(
+          this.state.ticket.ticket_id,
+          "2"
+        );
 
         conversations = [...result.conversations, ...details.conversations];
       } else {
@@ -270,6 +271,11 @@ class TicketConversations extends Component {
     }
   };
 
+  goBack = () => {
+    this.sendEvents("back");
+    this.navigate("queries");
+  };
+
   render() {
     let {
       splitConversation,
@@ -281,15 +287,15 @@ class TicketConversations extends Component {
       openTextBox,
       ticket_status,
       documents,
+      skelton,
     } = this.state;
 
     return (
       <Container
-        skelton={this.state.skelton}
+        skelton={skelton}
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        title={`Ticket ID: ${ticket.ticket_id}`}
         buttonTitle={
           ticket_status === "Closed"
             ? "REOPEN"
@@ -298,7 +304,16 @@ class TicketConversations extends Component {
             : "REPLY"
         }
         handleClick={this.handleClick}
-        headerStatus={ticket_status}
+        headerData={{
+          goBack: this.goBack,
+        }}
+        twoTitle={true}
+        title={
+          <TicketStatus
+            title={`Ticket ID: ${ticket.ticket_id}`}
+            headerStatus={ticket_status}
+          />
+        }
         disable={openTextBox && !this.state.value && documents.length === 0}
         showLoader={this.state.show_loader}
       >
@@ -353,7 +368,7 @@ class TicketConversations extends Component {
                       <div className="user-tag agent-tag">
                         <div>Team {this.state.productName}</div>
                         <div className="product-tag">
-                          T{this.state.productName[0].toUpperCase()}
+                          T{this.state.productName[0]}
                         </div>
                       </div>
                     )}
@@ -363,7 +378,12 @@ class TicketConversations extends Component {
             ))}
           {sortedConverstations[index + 1] && (
             <div className="view-more" onClick={() => this.handleView()}>
-              View more <img src={require(`assets/down_nav.svg`)} alt="" />
+              View more
+              {/* <SVG
+                preProcessor={code => code.replace(/stroke=".*?"/g, 'stroke=' + (getConfig().secondary))}
+                src={require(`assets/down_nav.svg`)}
+              /> */}
+              <img src={require(`assets/down_nav.svg`)} alt="" />
             </div>
           )}
           {openTextBox && (
@@ -372,6 +392,7 @@ class TicketConversations extends Component {
               handleChange={this.handleChange}
               getPdf={this.getPdf}
               save={this.save}
+              value={this.state.value}
               documents={this.state.documents}
               handleDelete={this.handleDelete}
             />

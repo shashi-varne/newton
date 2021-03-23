@@ -129,10 +129,7 @@ export function commonRender(props_base) {
                     filterPage={this.props.filterPage}
                     handleFilter={this.props.handleFilter} 
                     hideBack={this.props.hideBack}
-                    queryTitle={this.props.queryTitle}
-                    querycta={this.props.querycta}
-                    handleQuery={this.props.handleQuery}
-                    headerStatus={this.props.headerStatus}
+                    twoTitle={this.props.twoTitle}
                 />
                 }
                 {/* Below Header Block */}
@@ -576,21 +573,9 @@ export function new_header_scroll() {
         <div id="header-title-page"
             style={this.props.styleHeader}
             className={`header-title-page  ${this.props.classHeader}`}>
-            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : '' }}>
+            <div className={`header-title-page-text ${this.state.inPageTitle ? 'slide-fade-show' : 'slide-fade'}`} style={{ width: this.props.count ? '75%' : this.props.twoTitle ? '100%' : '' }}>
                 {this.props.title}
             </div>
-
-            {this.props.querycta && (
-                <div style={{width: '130px'}}>
-                    <div onClick={this.props.handleQuery} className="header-query">{this.props.queryTitle}</div>
-                </div>
-            )}
-
-            {this.props.headerStatus && (
-              <div  className="header-status">Status: <span
-                style={{color: `${this.props.headerStatus === 'Closed' ? 'red' : 'green'}`}}
-              >{this.props.headerStatus}</span></div>
-            )}
 
             {this.state.inPageTitle && this.props.count &&
                 <span color="inherit"

@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
 import { getConfig } from "utils/functions";
-import { SkeltonRect } from "common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
+import { MyQueries, CustomSkelton } from "../common/mini_components";
 class Category extends Component {
   constructor(props) {
     super(props);
@@ -27,7 +27,10 @@ class Category extends Component {
     this.setState({
       category: category,
     });
-    await this.getSubCategories(category.cms_category_id);
+    let result = await this.getSubCategories(category.cms_category_id);
+    this.setState({
+      sub_categories: result?.sub_categories || [],
+    });
   };
 
   sendEvents(user_action, data = {}) {
@@ -61,7 +64,7 @@ class Category extends Component {
 
   handleQuery = () => {
     this.sendEvents("next", { my_queries_clicked: "yes" });
-    
+
     this.props.history.push(
       { pathname: "queries", search: getConfig().searchParams },
       { fromScreen: "category" }
@@ -93,23 +96,20 @@ class Category extends Component {
     return (
       <Container
         events={this.sendEvents("just_set_events")}
-        title={category.cms_category_name}
-        queryTitle="My queries"
-        querycta={true}
-        handleQuery={() => this.handleQuery()}
+        title={
+          <MyQueries
+            title={category.cms_category_name}
+            onClick={this.handleQuery}
+          />
+        }
+        twoTitle={true}
         showError={this.state.showError}
         errorData={this.state.errorData}
         noFooter
       >
         <div className="help-category">
           <div className="sub-title">Your query is related to</div>
-          {this.state.skelton &&
-            [...Array(4)].map((item, index) => (
-              <div className="skelton" key={index}>
-                <SkeltonRect className="balance-skelton" />
-                <SkeltonRect className="balance-skelton balance-skelton2" />
-              </div>
-            ))}
+          {this.state.skelton && <CustomSkelton />}
           {!this.state.skelton &&
             sub_categories &&
             sub_categories.map((item, index) => (

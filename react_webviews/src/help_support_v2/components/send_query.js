@@ -250,8 +250,9 @@ class SendQuery extends Component {
             handleChange={this.handleChange}
             getPdf={this.getPdf}
             save={this.save}
+            value={this.state.value}
             documents={this.state.documents}
-            handleDelete={this.handleDelete}
+            onDelete={this.handleDelete}
           />
           <div id="viewScroll"></div>
         </div>

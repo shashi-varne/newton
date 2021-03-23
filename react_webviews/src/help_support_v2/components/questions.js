@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import Container from "../common/Container";
 import { initialize } from "../common/functions";
 import { getConfig } from "utils/functions";
-import { SkeltonRect } from "common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
+import { MyQueries, CustomSkelton } from "../common/mini_components";
 class Questions extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +30,15 @@ class Questions extends Component {
       category_name: category_name,
     });
 
-    await this.getAllfaqs(sub_category.cms_category_id);
+    let sub_category_id = sub_category.cms_category_id
+    let result = await this.getAllfaqs(sub_category_id);
+
+    let { faqs } = this.state;
+    faqs[sub_category_id] = result.faqs;
+
+    this.setState({
+      faqs: faqs,
+    })
   };
 
   sendEvents(user_action, data = {}) {
@@ -115,23 +123,17 @@ class Questions extends Component {
 
     return (
       <Container
-        title={sub_category.cms_category_name}
-        queryTitle="My queries"
-        querycta={true}
-        handleQuery={() => this.handleQuery()}
+        title={
+          <MyQueries title={sub_category.cms_category_name} onClick={this.handleQuery} />
+        }
+        twoTitle={true}
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}
         noFooter
       >
         <div className="help-questions">
-          {this.state.skelton &&
-            [...Array(4)].map((item, index) => (
-              <div className="skelton" key={index}>
-                <SkeltonRect className="balance-skelton" />
-                <SkeltonRect className="balance-skelton balance-skelton2" />
-              </div>
-            ))}
+          {this.state.skelton && <CustomSkelton />}
           {!this.state.skelton &&
             Object.keys(faqs).length > 0 &&
             faqs[sub_category.cms_category_id].map((item, index) => (

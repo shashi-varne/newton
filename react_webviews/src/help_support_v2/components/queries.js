@@ -134,7 +134,8 @@ class Queries extends Component {
 
   goBack = () => {
     this.sendEvents('back')
-    if (this.state.fromScreen === 'send_query') {
+    let { fromScreen } = this.state;
+    if (fromScreen === 'send_query' || fromScreen === '/help') {
       this.navigate('/help')
     } else {
       this.props.history.goBack();
@@ -188,7 +189,7 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
-              animateHeight={tickets.closed}
+              animateHeight={tickets.closed?.length > 0}
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (

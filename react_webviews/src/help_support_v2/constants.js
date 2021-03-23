@@ -35,15 +35,3 @@ export const categories = {
         icon: "payment_transaction.svg",
     },
 }
-
-export function goBackMap(path) {
-    let mapper = {
-        // '/help/queries': '/help',
-        // '/help/category': '/help',
-        // '/help/questions': '/help/category',
-        // '/help/answers': '/help/questions',
-        // '/help/conversation': '/help/queries'
-    }
-
-    return mapper[path] || false;
-}

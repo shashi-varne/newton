@@ -69,7 +69,7 @@ class OpenTickets extends Component {
   };
 
   render() {
-    let { tickets, sortedTickets, splitTickets, index } = this.state;
+    let { sortedTickets, splitTickets, index } = this.state;
 
     return (
       <div className="help-tickets">

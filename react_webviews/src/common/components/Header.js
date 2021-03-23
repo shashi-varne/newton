@@ -18,7 +18,7 @@ const headerIconMapper = {
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
-  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, querycta, queryTitle, handleQuery, headerStatus,
+  inPageTitle, force_hide_inpage_title,topIcon, handleTopIcon, twoTitle,
   className ,style, headerData={}, new_header}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -38,7 +38,7 @@ const Header = ({ classes, title, count, total, current, goBack,
          <Close />}
       </IconButton>
 
-      <div>
+      <div style={{width: `${twoTitle ? '90%' : '' }`}}>
         <div
         style={style}
           className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
@@ -55,17 +55,6 @@ const Header = ({ classes, title, count, total, current, goBack,
         src={restart}
       />
       }
-      {querycta && (
-        <div style={{width: '130px', margin: '0 8px 0 auto'}}>
-          <div className={`header-query ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`}
-            onClick={handleQuery}>{queryTitle}</div>
-        </div>
-      )}
-      {headerStatus && (
-        <div  className={`header-status ${inPageTitle ? 'slide-fade' : 'slide-fade-show'}`} style={{margin: '0 8px 0 auto'}}>Status: <span
-          style={{color: `${headerStatus === 'Closed' ? 'red' : 'green'}`}}
-        >{headerStatus}</span></div>
-      )}
       {topIcon === 'close' && <Close style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
     </Toolbar>
   </AppBar >

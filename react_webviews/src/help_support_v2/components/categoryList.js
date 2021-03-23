@@ -7,9 +7,9 @@ import { initialize } from "../common/functions";
 import Search from "./search";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
-import { SkeltonRect } from "common/ui/Skelton";
 import ReactHtmlParser from "react-html-parser";
 import debounce from "lodash/debounce";
+import { MyQueries, CustomSkelton } from "../common/mini_components";
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -66,7 +66,7 @@ class CategoryList extends Component {
           screen_name: "search_questions",
           category: data.item.cms_category_name,
           sub_category: data.item.cms_sub_category_name,
-          question_clicked: data.item.cms_faq_id
+          question_clicked: data.item.cms_faq_id,
         },
       };
     } else {
@@ -94,10 +94,17 @@ class CategoryList extends Component {
       value: value,
     });
 
-    if (!value) this.setState({ faqList: [] });
+    if (!value) {
+      this.setState({ faqList: [] });
+      return
+    } 
 
     if (value[value.length - 1] === " ") {
-      await this.SearchFaq(value);
+      let result = await this.SearchFaq(value);
+      let list = result ? result.faqs : [];
+      this.setState({
+        faqList: list,
+      });
     } else {
       this.handleSearch(value);
     }
@@ -105,7 +112,11 @@ class CategoryList extends Component {
 
   handleSearch = debounce(
     async (value) => {
-      await this.SearchFaq(value);
+      let result = await this.SearchFaq(value);
+      let list = result ? result.faqs : [];
+      this.setState({
+        faqList: list,
+      });
     },
     1000,
     { trailing: true }
@@ -219,10 +230,10 @@ class CategoryList extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
-        title="How can we Help?"
-        queryTitle="My queries"
-        querycta={true}
-        handleQuery={() => this.handleQuery()}
+        title={
+          <MyQueries title="How can we Help?" onClick={this.handleQuery} />
+        }
+        twoTitle={true}
         noFooter
       >
         <div className="help-CategoryList">
@@ -248,19 +259,10 @@ class CategoryList extends Component {
           )}
 
           {value.length !== 0 && faqList.length === 0 && isApiRunning && (
-            <div className="skelton">
-              <SkeltonRect className="balance-skelton" />
-              <SkeltonRect className="balance-skelton balance-skelton2" />
-            </div>
+            <CustomSkelton />
           )}
 
-          {this.state.skelton &&
-            [...Array(4)].map((item, index) => (
-              <div className="skelton" key={index}>
-                <SkeltonRect className="balance-skelton" />
-                <SkeltonRect className="balance-skelton balance-skelton2" />
-              </div>
-            ))}
+          {this.state.skelton && <CustomSkelton />}
 
           {!this.state.skelton && value.length === 0 && categoryList && (
             <div className="fade-in">

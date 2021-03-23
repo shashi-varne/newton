@@ -4,7 +4,6 @@ import { withRouter } from "react-router";
 import { didMount, commonRender } from "common/components/container_functions";
 import { nativeCallback } from "utils/native_callback";
 import "../../utils/native_listner";
-import { goBackMap} from '../constants';
 
 class Container extends Component {
   constructor(props) {
@@ -44,11 +43,6 @@ class Container extends Component {
 
     if (this.props.headerData && this.props.headerData.goBack) {
       this.props.headerData.goBack();
-      return;
-    }
-
-    if(goBackMap(pathname)) {
-      this.navigate(goBackMap(pathname));
       return;
     }
 

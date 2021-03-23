@@ -309,7 +309,7 @@
 
     .img {
       width: 100%;
-      margin-top: 30px;
+      margin: 30px 0;
     }
 
     .no-tickets {
@@ -464,6 +464,7 @@
       margin-left: 10px;
       font-size: 10px;
       padding-top: 4px;
+      text-transform: uppercase;
     }
   }
 
@@ -626,6 +627,7 @@
     font-size: 13px;
     font-weight: 600;
     color: #4a4a4a;
+    cursor: pointer;
   }
 }
 
@@ -638,6 +640,30 @@
 
   .content-mid {
     margin-bottom: 30px;
+  }
+}
+
+.help-header-title {
+  display: flex;
+  justify-content: space-between;
+  .header-query {
+    font-size: 15px;
+    font-weight: 500;
+    height: fit-content;
+    border-bottom: 1px solid;
+    color: var(--secondary);
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .header-status {
+    font-size: 13px;
+    font-weight: 400;
+    color: #333333;
+  
+    span {
+      opacity: 0.6;
+    }
   }
 }
 

@@ -1571,27 +1571,6 @@ input#pan {
   object-fit: cover;
 }
 
-.header-query {
-  font-size: 15px;
-  font-weight: 500;
-  height: fit-content;
-  border-bottom: 1px solid;
-  color: var(--secondary);
-  cursor: pointer;
-  width: fit-content;
-  float: right;
-}
-
-.header-status {
-  font-size: 13px;
-  font-weight: 400;
-  color: #333333;
-
-  span {
-    opacity: 0.6;
-  }
-}
-
 // --Iframe Container CSS Below--:
 .childblockiframe{
   display: flex;

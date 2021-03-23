@@ -19,6 +19,7 @@ export async function initialize() {
   this.ticketReply = ticketReply.bind(this);
   this.getPdf = getPdf.bind(this);
   this.save = save.bind(this);
+  this.handleError = handleError.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -43,6 +44,20 @@ export function openInBrowser(url) {
     message: {
       url: url,
     },
+  });
+}
+
+export function handleError(error, errorType, fullScreen = true) {
+  this.setState({
+    show_loader: false,
+    skelton: false,
+    isApiRunning: false,
+    errorData: {
+      ...this.state.errorData,
+      title2: error,
+      type: errorType,
+    },
+    showError: fullScreen ? "page" : true,
   });
 }
 
@@ -73,28 +88,16 @@ export async function getAllCategories() {
       });
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: "page",
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -117,44 +120,26 @@ export async function SearchFaq(word) {
     });
 
     if (status === 200) {
-      let list = result ? result.faqs : [];
-
-      this.setState({
-        faqList: list,
-      });
+      return result;
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
         title1: title1,
       });
+      let value = "";
+      this.handleChange(value)
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    let value = "";
-    this.setState(
-      {
-        show_loader: false,
-        errorData: {
-          ...this.state.errorData,
-          title2: error,
-          type: errorType,
-        },
-        showError: "page",
-      },
-      () => this.handleChange(value)
-    );
+    this.handleError(error, errorType)
   }
 }
 
@@ -179,9 +164,7 @@ export async function getSubCategories(category_id) {
     });
 
     if (status === 200) {
-      this.setState({
-        sub_categories: result.sub_categories,
-      });
+      return result;
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
@@ -189,28 +172,16 @@ export async function getSubCategories(category_id) {
       });
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: "page",
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -235,13 +206,7 @@ export async function getAllfaqs(sub_category_id) {
     });
 
     if (status === 200) {
-      let { faqs } = this.state;
-
-      faqs[sub_category_id] = result.faqs;
-
-      this.setState({
-        faqs: faqs,
-      });
+      return result;
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
@@ -249,28 +214,16 @@ export async function getAllfaqs(sub_category_id) {
       });
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: "page",
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -282,33 +235,18 @@ export async function getFaqDescription(faq_id) {
   try {
     this.setState({
       skelton: true,
-      isApiRunning: true
+      isApiRunning: true,
     });
     const res = await Api.get(`/relay/hns/api/faq/${faq_id}/desc`);
 
     let { result, status_code: status } = res.pfwresponse;
 
+    this.setState({
+      skelton: false,
+      isApiRunning: false,
+    })
     if (status === 200) {
-      let { faqDesc, fromScreen, faqs } = this.state;
-
-      if (fromScreen === "categoryList" && Object.keys(faqs).length === 0) {
-        this.setState({
-          sub_category_id: result.faq.cms_sub_category_id,
-          index: result.faq.sequence_no - 1,
-        });
-
-        await this.getAllfaqs(result.faq.cms_sub_category_id);
-      } else {
-        this.setState({
-          skelton: false,
-          isApiRunning: false
-        });
-        faqDesc[faq_id] = result.faq;
-
-        this.setState({
-          faqDesc: faqDesc,
-        });
-      }
+      return result
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
@@ -316,29 +254,16 @@ export async function getFaqDescription(faq_id) {
       });
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      isApiRunning: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: "page",
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -354,28 +279,21 @@ export async function updateFeedback(feedback, id) {
     let { result, status_code: status } = res.pfwresponse;
 
     if (status !== 200) {
-      error = result.error || result.message || true;
-      errorType = "form";
+      let title1 = result.error || result.message || "Something went wrong!";
+      this.setState({
+        title1: title1,
+      });
+      this.setErrorData("upldateFeedback");
+      throw error
     }
   } catch (err) {
-    this.setState({
-      skelton: false,
-      show_loader: false,
-    });
+    console.log(err);
     error = true;
     errorType = "form";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: true,
-    });
+    this.handleError(error, errorType, false)
   }
 }
 
@@ -413,28 +331,16 @@ export async function getUserTickets(params) {
       });
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";;
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: "page",
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -444,10 +350,6 @@ export async function getTicketConversations(ticket_id, page_no) {
   let errorType = "";
 
   try {
-    // this.setState({
-    //   skelton: true,
-    // });
-
     const res = await Api.get(
       `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations?page_no=${page_no}`
     );
@@ -455,8 +357,9 @@ export async function getTicketConversations(ticket_id, page_no) {
     let { result, status_code: status } = res.pfwresponse;
 
     this.setState({
-      skelton: result.conversations?.length === 30 ? true : false,
-      show_loader: result.conversations?.length === 30 ? "button" : false,
+      skelton: result.response?.conversations?.length === 30 ? true : false,
+      show_loader:
+        result.response.response?.conversations?.length === 30 ? "button" : false,
     });
 
     if (status === 200) {
@@ -468,28 +371,16 @@ export async function getTicketConversations(ticket_id, page_no) {
       });
 
       this.setErrorData("onload");
-      error = true;
-      errorType = "generic";
+      throw error;
     }
   } catch (err) {
     console.log(err);
-    this.setState({
-      skelton: false,
-    });
     error = true;
     errorType = "crash";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: "page",
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -517,35 +408,20 @@ export async function createTicket(body = {}) {
     } else {
       let title1 = result.error || "Something went wrong!";
       this.setState({
-        show_loader: false,
-        loaderWithData: false,
-        skelton: false,
         title1: title1,
       });
 
       this.setErrorData("submit");
-      error = true;
-      errorType = "form";
+      throw error;
     }
   } catch (err) {
-    this.setState({
-      skelton: false,
-      show_loader: false,
-    });
+    console.log(err);
     error = true;
     errorType = "form";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: true,
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -554,7 +430,7 @@ export async function ticketReply(body = {}, id) {
 
   let error = "";
   let errorType = "";
-  
+
   try {
     this.setState({
       show_loader: "button",
@@ -575,9 +451,6 @@ export async function ticketReply(body = {}, id) {
     } else {
       let title1 = result.error || "Something went wrong!";
       this.setState({
-        show_loader: false,
-        loaderWithData: false,
-        skelton: false,
         title1: title1,
       });
 
@@ -586,24 +459,13 @@ export async function ticketReply(body = {}, id) {
       errorType = "form";
     }
   } catch (err) {
-    this.setState({
-      skelton: false,
-      show_loader: false,
-    });
+    console.log(err);
     error = true;
     errorType = "form";
   }
 
   if (error) {
-    this.setState({
-      show_loader: false,
-      errorData: {
-        ...this.state.errorData,
-        title2: error,
-        type: errorType,
-      },
-      showError: true,
-    });
+    this.handleError(error, errorType)
   }
 }
 
@@ -612,8 +474,8 @@ export function getPdf(e) {
 
   let file = e.target.files[0] || "";
 
-  if (file.size >= 15000000) {
-    toast("Please select pdf file less than 15 MB only");
+  if (file.size >= 10000000) {
+    toast("Please select pdf/image file less than 10 MB only");
     return;
   }
 
@@ -626,7 +488,7 @@ export function getPdf(e) {
   ];
 
   if (file && acceptedType.indexOf(file.type) === -1) {
-    toast("Please select pdf file only");
+    toast("Please select pdf/image file only");
     return;
   }
 
@@ -660,24 +522,21 @@ export function save(file) {
     "image/bmp",
   ];
 
-  if (file.size >= 6000000) {
-    toast("Please select pdf file less than 6 MB only");
+  if (file.size >= 10000000) {
+    toast("Please select pdf/image file less than 10 MB only");
     this.setState({
       show_loader: false,
     });
     return;
   }
 
-  if (acceptedType.indexOf(file.type) === -1) {
-    toast("Please select pdf file only");
+  if (!acceptedType.includes(file.type)) {
+    toast("Please select pdf/image file only");
     return;
   }
 
-  let { documents, count } = this.state;
+  let { documents } = this.state;
   file.doc_type = file.type;
-
-  file.name = !file.file_name ? `attachment ${count + 1}` : `${file.file_name}`;
-  file.id = count++;
 
   let ext = file.type.split("/")[1];
   if (!file.name.includes(`.${ext}`)) {

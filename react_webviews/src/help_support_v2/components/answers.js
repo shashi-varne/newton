@@ -3,8 +3,8 @@ import { initialize } from "../common/functions";
 import SwipeableViews from "react-swipeable-views";
 import ReactHtmlParser from "react-html-parser";
 import Container from "../common/Container";
-import { SkeltonRect } from "common/ui/Skelton";
 import { nativeCallback } from "utils/native_callback";
+import { MyQueries, CustomSkelton } from "../common/mini_components";
 class Answers extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +42,7 @@ class Answers extends Component {
     let index = 0;
     let faqs = {};
     let sub_category = "";
+    let faqDesc = {};
 
     this.setState({
       headerTitle: question?.cms_category_name || "",
@@ -53,7 +54,22 @@ class Answers extends Component {
         headerTitle: question?.cms_sub_category_name || "",
       });
 
-      await this.getFaqDescription(question.cms_faq_id);
+      let res = await this.getFaqDescription(question.cms_faq_id);
+
+      if (fromScreen === "categoryList" && Object.keys(this.state.faqs).length === 0) {
+        this.setState({
+          sub_category_id: res.faq.cms_sub_category_id,
+          index: res.faq.sequence_no - 1,
+        });
+
+        let result = await this.getAllfaqs(res.faq.cms_sub_category_id);
+
+        faqs[res.faq.cms_sub_category_id] = result.faqs;
+
+        this.setState({
+          faqs: faqs,
+        });
+      }
 
       faqs = this.state.faqs;
       sub_category_id = this.state.sub_category_id;
@@ -62,7 +78,7 @@ class Answers extends Component {
       sub_category = this.props.location.state?.sub_category || {};
 
       faqs = this.props.location.state?.faqs || {};
-      index = this.props.location.state ? this.props.location.state.index : '';
+      index = this.props.location.state ? this.props.location.state.index : "";
       sub_category_id = sub_category.cms_category_id;
 
       this.setState({
@@ -77,9 +93,15 @@ class Answers extends Component {
       sub_category_id: sub_category_id,
     });
 
-    let faq_id =
-      faqs[sub_category.cms_category_id || sub_category_id][index].cms_faq_id;
-    await this.getFaqDescription(faq_id);
+    let faq_id = faqs[sub_category.cms_category_id || sub_category_id][index].cms_faq_id;
+
+    let result = await this.getFaqDescription(faq_id);
+
+    faqDesc[faq_id] = result.faq;
+
+    this.setState({
+      faqDesc: faqDesc,
+    });
   };
 
   handleChangeIndex = async (index) => {
@@ -98,7 +120,12 @@ class Answers extends Component {
       related_questions_id: faq_id,
     });
     if (!faqDesc[faq_id]) {
-      await this.getFaqDescription(faq_id);
+      let result = await this.getFaqDescription(faq_id);
+      faqDesc[faq_id] = result.faq;
+
+      this.setState({
+        faqDesc: faqDesc,
+      });
     }
   };
 
@@ -107,8 +134,12 @@ class Answers extends Component {
 
     index = dir === "next" ? index + 1 : index - 1;
 
-
-    index = index === -1 ? 0 : index === faqs[sub_category_id].length ? faqs[sub_category_id].length-1 : index;
+    index =
+      index === -1
+        ? 0
+        : index === faqs[sub_category_id].length
+        ? faqs[sub_category_id].length - 1
+        : index;
 
     this.setState({
       index: index,
@@ -120,15 +151,21 @@ class Answers extends Component {
 
     let faq_id = faqs[sub_category_id][index].cms_faq_id;
 
-    if (index !== 0 && index !== faqs[sub_category_id].length-1) {
+    if (index !== 0 && index !== faqs[sub_category_id].length - 1) {
       this.sendEvents("next", {
         related_questions_clicked: "yes",
         related_questions_id: faq_id,
       });
     }
-    
+
     if (!faqDesc[faq_id]) {
-      await this.getFaqDescription(faq_id);
+      let result = await this.getFaqDescription(faq_id);
+
+      faqDesc[faq_id] = result.faq;
+
+      this.setState({
+        faqDesc: faqDesc,
+      });
     }
   };
 
@@ -208,15 +245,18 @@ class Answers extends Component {
       faqDesc,
       headerTitle,
       thumbStatus,
-      isApiRunning
+      isApiRunning,
     } = this.state;
 
     return (
       <Container
-        title={headerTitle || sub_category.cms_category_name}
-        queryTitle="My queries"
-        querycta={true}
-        handleQuery={() => this.handleQuery()}
+        title={
+          <MyQueries
+            title={headerTitle || sub_category.cms_category_name}
+            onClick={this.handleQuery}
+          />
+        }
+        twoTitle={true}
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}
@@ -224,12 +264,7 @@ class Answers extends Component {
       >
         {Object.keys(faqs).length === 0 && (
           <div className="help-questions">
-            {[...Array(4)].map((item, index) => (
-              <div className="skelton" key={index}>
-                <SkeltonRect className="balance-skelton" />
-                <SkeltonRect className="balance-skelton balance-skelton2" />
-              </div>
-            ))}
+            <CustomSkelton />
           </div>
         )}
         {Object.keys(faqs).length !== 0 && (
@@ -258,10 +293,7 @@ class Answers extends Component {
                         {faqDesc[item.cms_faq_id] &&
                           ReactHtmlParser(faqDesc[item.cms_faq_id].description)}
                         {!faqDesc[item.cms_faq_id] && (
-                          <div className="skelton">
-                            <SkeltonRect className="balance-skelton" />
-                            <SkeltonRect className="balance-skelton balance-skelton2" />
-                          </div>
+                          <CustomSkelton length={1} />
                         )}
                       </div>
                     </div>
@@ -276,14 +308,18 @@ class Answers extends Component {
               </div>
               <div className="thumb-container">
                 <img
-                  onClick={() => !isApiRunning && this.handleFeedBack("thumbs_up")}
+                  onClick={() =>
+                    !isApiRunning && this.handleFeedBack("thumbs_up")
+                  }
                   src={require(`assets/${
                     thumbStatus === "thumbs_up" ? "thumb_up_fill" : "thumb_up"
                   }.svg`)}
                   alt=""
                 />
                 <img
-                  onClick={() => !isApiRunning && this.handleFeedBack("thumbs_down")}
+                  onClick={() =>
+                    !isApiRunning && this.handleFeedBack("thumbs_down")
+                  }
                   src={require(`assets/${
                     thumbStatus === "thumbs_down"
                       ? "thumb_down_fill"
@@ -306,7 +342,12 @@ class Answers extends Component {
               <div
                 className="nav"
                 onClick={() => this.handleClick("next")}
-                style={{ opacity: this.state.index === faqs[sub_category_id].length - 1 ? 0.5 : 1 }}
+                style={{
+                  opacity:
+                    this.state.index === faqs[sub_category_id].length - 1
+                      ? 0.5
+                      : 1,
+                }}
               >
                 Next
                 <img src={require(`assets/next_nav_bar_icon.svg`)} alt="" />

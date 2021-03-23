@@ -19,15 +19,14 @@ class RenderAttachment extends Component {
     super(props);
     this.state = {
       documents: [],
-      count: 0
+      count: 0,
+      productName: getConfig().productName
     };
     this.initialize = initialize.bind(this);
     this.native_call_handler = this.native_call_handler.bind(this);
   }
 
-  componentWillMount() {
-    this.initialize();
-  }
+  componentWillMount() {}
 
   componentDidMount() {
     let that = this;
@@ -48,7 +47,7 @@ class RenderAttachment extends Component {
   }
 
 
-  onload = () => {};
+  // onload = () => {};
 
   openFileExplorer() {
     $("input").trigger("click");
@@ -88,7 +87,7 @@ class RenderAttachment extends Component {
                 that.props.save(file);
                 break;
               default:
-                alert("Please select pdf file");
+                alert("Please select pdf/image file");
                 that.setState({
                   docType: this.doc_type,
                   show_loader: false,
@@ -107,7 +106,7 @@ class RenderAttachment extends Component {
   };
 
   handleClose = (status) => {
-    if (status === 'yes') this.props.handleDelete(this.state.index);
+    if (status === 'yes') this.props.onDelete(this.state.index);
 
     this.setState({ open: false });
   };
@@ -133,7 +132,7 @@ class RenderAttachment extends Component {
     );
   };
 
-  handledelete = (index) => {
+  handleDelete = (index) => {
     this.setState({ open: true, index: index });
   };
 
@@ -151,7 +150,7 @@ class RenderAttachment extends Component {
           <textarea
             rows={this.props.row}
             placeholder="Write your query here"
-            //   value={this.state.query}
+              value={this.props.value}
             onChange={(e) => this.props.handleChange(e)}
           ></textarea>
         </div>
@@ -168,7 +167,7 @@ class RenderAttachment extends Component {
             </div>
             <img
               style={{ cursor: "pointer", marginLeft: "10px" }}
-              onClick={() => this.handledelete(index)}
+              onClick={() => this.handleDelete(index)}
               src={require("assets/sign_icon.svg")}
               alt=""
             />
