@@ -1080,7 +1080,7 @@ body[data-device="mobile"] {
   font-size: 13px !important;
 }
 .css-1rhbuit-multiValue + .css-b8ldur-Input{
-  margin-top: 16px !important;
+  margin-top: 17px !important;
 }
 .css-12jo7m5{  // Content Box
   padding: 0 !important;
@@ -1117,39 +1117,39 @@ body[data-device="mobile"] {
   padding: 0 !important;
 }
 
-@media only screen and (min-width: 600px) {
-  /* Scroll Bar */
-  .css-g1d714-ValueContainer::-webkit-scrollbar {
-    height: 5px;
-    scrollbar-width: 20px;
-  }
-  .css-g1d714-ValueContainer::-webkit-scrollbar-track {
-    background: white;
-  }
-  .css-g1d714-ValueContainer::-webkit-scrollbar-thumb {
-    background: #C4C4C4,
-  }
-  .css-g1d714-ValueContainer::-webkit-scrollbar-thumb:hover {
-    background: #C4C4C4,
-  }
-}
+// @media only screen and (min-width: 600px) {
+//   /* Scroll Bar */
+//   .css-g1d714-ValueContainer::-webkit-scrollbar {
+//     height: 5px;
+//     scrollbar-width: 20px;
+//   }
+//   .css-g1d714-ValueContainer::-webkit-scrollbar-track {
+//     background: white;
+//   }
+//   .css-g1d714-ValueContainer::-webkit-scrollbar-thumb {
+//     background: #C4C4C4,
+//   }
+//   .css-g1d714-ValueContainer::-webkit-scrollbar-thumb:hover {
+//     background: #C4C4C4,
+//   }
+// }
 
-@media only screen and (min-width: 600px) {
-  /* Scroll Bar */
-  .css-yk16xz-control::-webkit-scrollbar {
-    height: 5px;
-    scrollbar-width: 20px;
-  }
-  .css-yk16xz-control::-webkit-scrollbar-track {
-    background: white;
-  }
-  .css-yk16xz-control::-webkit-scrollbar-thumb {
-    background: #C4C4C4,
-  }
-  .css-yk16xz-control::-webkit-scrollbar-thumb:hover {
-    background: #C4C4C4,
-  }
-}
+// @media only screen and (min-width: 600px) {
+//   /* Scroll Bar */
+//   .css-yk16xz-control::-webkit-scrollbar {
+//     height: 5px;
+//     scrollbar-width: 20px;
+//   }
+//   .css-yk16xz-control::-webkit-scrollbar-track {
+//     background: white;
+//   }
+//   .css-yk16xz-control::-webkit-scrollbar-thumb {
+//     background: #C4C4C4,
+//   }
+//   .css-yk16xz-control::-webkit-scrollbar-thumb:hover {
+//     background: #C4C4C4,
+//   }
+// }
 /********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
 .MuiInput-root{
   background: rgba(238, 238, 238, 0.3);
