@@ -255,10 +255,8 @@
 }
 
 .help-queries {
-  margin: 0 -20px;
+  margin: 40px -20px 0;
   height: 80vh;
-  // position: fixed;
-  // width: 100%;
 
   .nav-bar {
     height: 100%;
@@ -310,8 +308,6 @@
 
 .help-tickets {
   line-height: 20px;
-  height: 80vh;
-  overflow-y: scroll;
   padding-bottom: 40px;
   margin: 0 -20px;
   
@@ -470,8 +466,9 @@
     text-align: center;
     cursor: pointer;
 
-    img {
+    SVG {
       vertical-align: middle;
+      margin-left: 10px;
     }
   }
 }

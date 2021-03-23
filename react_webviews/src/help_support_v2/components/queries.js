@@ -156,6 +156,9 @@ class Queries extends Component {
         headerData={{
           goBack: this.goBack
         }}
+        styleHeader={{
+          position: 'fixed'
+        }}
         noFooter
       >
         <div className="help-queries">
@@ -190,6 +193,7 @@ class Queries extends Component {
               }}
               style={{ height: "80vh" }}
               enableMouseEvents
+              animateHeight
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
@@ -229,7 +233,7 @@ class Queries extends Component {
                       className="img"
                       alt=""
                     />
-                    You don't have any open tickets
+                    You don't have any closed tickets
                   </div>
                 )}
                 {!tickets.closed && (

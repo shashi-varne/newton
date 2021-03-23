@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize, getTicketConversations, ticketReply } from "../common/functions";
-import scrollIntoView from "scroll-into-view-if-needed";
+import {
+  initialize,
+  getTicketConversations,
+  ticketReply,
+  handleScroll
+} from "../common/functions";
 import RenderAttachment from "./attachments";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import { TicketStatus } from "../common/mini_components";
-import throttle from 'lodash/throttle';
+import SVG from "react-inlinesvg";
 
 const moment = require("moment");
 class TicketConversations extends Component {
@@ -26,10 +30,12 @@ class TicketConversations extends Component {
       openTextBox: false,
       documents: [],
       value: "",
+      splitIndex: 5,
     };
     this.initialize = initialize.bind(this);
     this.getTicketConversations = getTicketConversations.bind(this);
     this.ticketReply = ticketReply.bind(this);
+    this.handleScroll = handleScroll.bind(this);
   }
 
   componentWillMount() {
@@ -43,7 +49,7 @@ class TicketConversations extends Component {
       skelton: true,
     });
 
-    let result = await this.getTicketConversations(ticket.ticket_id, "1");
+    let result = await this.getTicketConversations(ticket.ticket_id);
 
     if (result) {
       this.setState({
@@ -79,8 +85,6 @@ class TicketConversations extends Component {
 
   sortConversations = async (result, reply = false) => {
     let conversations = [];
-    let sortedConverstations = [];
-    let splitConversation = [];
 
     let description = {
       description: result.description,
@@ -89,96 +93,59 @@ class TicketConversations extends Component {
       message_from: "user",
     };
 
-    if (result.conversations) {
-      if (result.conversations && result.conversations.length === 30) {
-        this.setState({
-          skelton: true,
-        });
-
-        let details = await this.getTicketConversations(
-          this.state.ticket.ticket_id,
-          "2"
-        );
-
-        conversations = [...result.conversations, ...details.conversations];
-      } else {
-        conversations = [...result.conversations];
-      }
-
-      conversations = [description, ...conversations];
+    if (result.conversations?.length > 0) {
+      conversations = [description, ...result.conversations];
     } else {
       conversations = [description];
     }
 
+    console.log(conversations)
+
     this.setState({
+      conversations: conversations,
       length: conversations.length,
-    });
-
-    while (conversations.length) {
-      sortedConverstations.push(conversations.splice(0, 5));
-    }
-
-    if (!reply) {
-      splitConversation = sortedConverstations[0] || [];
-    } else {
-      splitConversation = [].concat(...sortedConverstations);
-    }
-
-    this.setState({
-      sortedConverstations: sortedConverstations,
-      splitConversation: splitConversation,
       openTextBox: false,
       value: "",
       documents: [],
     });
 
-    if (reply) this.handleScroll();
+    if (reply) {
+      this.handleScroll();
+
+      this.setState({
+        splitIndex: conversations.length
+      })
+    } 
   };
 
-  handleScroll = throttle(
-    () => {
-      let element = document.getElementById("viewScroll");
-      if (!element || element === null) {
-        return;
-      }
+  // handleScroll = throttle(
+  //   () => {
+  //     let element = document.getElementById("viewScroll");
+  //     if (!element || element === null) {
+  //       return;
+  //     }
 
-      scrollIntoView(element, {
-        block: "start",
-        inline: "nearest",
-        behavior: "smooth",
-      });
-    },
-    50,
-    { trailing: true }
-  )
+  //     scrollIntoView(element, {
+  //       block: "start",
+  //       inline: "nearest",
+  //       behavior: "smooth",
+  //     });
+  //   },
+  //   50,
+  //   { trailing: true }
+  // );
 
   handleView = () => {
-    let { sortedConverstations, splitConversation, index } = this.state;
-    index += 1;
-
-    if (sortedConverstations[index]) {
-      splitConversation.push(...sortedConverstations[index]);
-
-      this.setState(
-        {
-          index: index,
-          splitConversation: splitConversation,
-        },
-        () => this.handleScroll()
-      );
-    }
+    this.setState(
+      {
+        splitIndex: this.state.splitIndex + 5,
+      },
+      () => this.handleScroll()
+    );
   };
 
   handleClick = async () => {
-    let {
-      ticket,
-      index,
-      splitConversation,
-      sortedConverstations,
-      openTextBox,
-      length,
-      documents,
-    } = this.state;
+    let { ticket, openTextBox, length, documents } = this.state;
 
     if (this.state.ticket_status === "Closed") {
       this.sendEvents("next", { reopen: "yes" });
@@ -188,20 +155,12 @@ class TicketConversations extends Component {
         { pathname: "send-query", search: getConfig().searchParams },
         { ticket: ticket }
       );
+
     } else if (!openTextBox) {
-      if (splitConversation.length !== length) {
-        splitConversation = [...splitConversation].concat(
-          ...sortedConverstations.slice(index + 1)
-        );
-
-        index = sortedConverstations.length + 1;
-      }
-
       this.setState(
         {
           openTextBox: true,
-          splitConversation: splitConversation,
-          index: index,
+          splitIndex: length,
         },
         () => this.handleScroll()
       );
@@ -222,7 +181,7 @@ class TicketConversations extends Component {
       let result = await this.ticketReply(body_data, ticket.ticket_id);
 
       if (result && result.message === "success") {
-        let result = await this.getTicketConversations(ticket.ticket_id, "1");
+        let result = await this.getTicketConversations(ticket.ticket_id);
 
         this.sortConversations(result, true);
       }
@@ -283,8 +242,6 @@ class TicketConversations extends Component {
 
   render() {
     let {
-      splitConversation,
-      sortedConverstations,
       ticket,
       category,
       sub_category,
@@ -293,6 +250,9 @@ class TicketConversations extends Component {
       ticket_status,
       documents,
       skelton,
+      conversations,
+      splitIndex,
+      length,
     } = this.state;
 
     return (
@@ -312,7 +272,6 @@ class TicketConversations extends Component {
         headerData={{
           goBack: this.goBack,
         }}
-        
         title={
           <TicketStatus
             title={`Ticket ID: ${ticket.ticket_id}`}
@@ -327,8 +286,8 @@ class TicketConversations extends Component {
             {category} {">"} {sub_category}
           </div>
           {!this.state.skelton &&
-            splitConversation &&
-            splitConversation.map((item, index) => (
+            conversations &&
+            conversations.slice(0, splitIndex).map((item, index) => (
               <div className="fade-in" key={index}>
                 <div className="ticket-reply">
                   <div
@@ -381,14 +340,18 @@ class TicketConversations extends Component {
                 </div>
               </div>
             ))}
-          {sortedConverstations[index + 1] && (
+          {conversations.slice(0, splitIndex).length !== length && (
             <div className="view-more" onClick={() => this.handleView()}>
               View more
-              {/* <SVG
-                preProcessor={code => code.replace(/stroke=".*?"/g, 'stroke=' + (getConfig().secondary))}
+              <SVG
+                preProcessor={(code) =>
+                  code.replace(
+                    /stroke=".*?"/g,
+                    "stroke=" + getConfig().secondary
+                  )
+                }
                 src={require(`assets/down_nav.svg`)}
-              /> */}
-              <img src={require(`assets/down_nav.svg`)} alt="" />
+              />
             </div>
           )}
           {openTextBox && (

@@ -1,8 +1,9 @@
 import { getConfig } from "utils/functions";
 import Api from "utils/api";
-// import toast from '../../common/ui/Toast';
 import { nativeCallback } from "utils/native_callback";
 import toast from "common/ui/Toast";
+import throttle from "lodash/throttle";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -36,6 +37,23 @@ export function openInBrowser(url) {
     },
   });
 }
+
+export const handleScroll = throttle(
+  () => {
+    let element = document.getElementById("viewScroll");
+    if (!element || element === null) {
+      return;
+    }
+
+    scrollIntoView(element, {
+      block: "start",
+      inline: "nearest",
+      behavior: "smooth",
+    });
+  },
+  50,
+  { trailing: true }
+);
 
 export function handleError(error, errorType, fullScreen = true) {
   this.setState({
@@ -334,22 +352,21 @@ export async function getUserTickets(params) {
   }
 }
 
-export async function getTicketConversations(ticket_id, page_no) {
+export async function getTicketConversations(ticket_id) {
   this.setErrorData("onload");
   let error = "";
   let errorType = "";
 
   try {
     const res = await Api.get(
-      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations?page_no=${page_no}`
+      `/relay/hns/api/freshdesk/ticket/${ticket_id}/conversations`
     );
 
     let { result, status_code: status } = res.pfwresponse;
 
     this.setState({
-      skelton: result.response?.conversations?.length === 30 ? true : false,
-      show_loader:
-        result.response.response?.conversations?.length === 30 ? "button" : false,
+      skelton: false,
+      show_loader: false,
     });
 
     if (status === 200) {
