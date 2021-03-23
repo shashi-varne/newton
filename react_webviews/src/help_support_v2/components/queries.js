@@ -33,9 +33,8 @@ class Queries extends Component {
         open: false,
       },
       value: 0,
-      percent: 0,
       tickets: {},
-      fromScreen: ''
+      fromScreen: "",
     };
     this.initialize = initialize.bind(this);
     this.getUserTickets = getUserTickets.bind(this);
@@ -49,37 +48,34 @@ class Queries extends Component {
     this.swipeableActions.updateHeight();
   }
 
-  onload = async () => {
-    let fromScreen = this.props.location.state?.fromScreen || '/help';
+  onload = () => {
+    let fromScreen = this.props.location.state?.fromScreen || "/help";
     this.setState({
-      fromScreen: fromScreen
-    })
-    await this.getUserTickets("open");
+      fromScreen: fromScreen,
+    });
+    this.getTickets("open")
   };
 
-  handleChange = async (value) => {
-    this.setState({ value: value, percent: value === 1 ? 100 : 0 });
+  getTickets = async (value) => {
+    let result = await this.getUserTickets(value);
 
     let { tickets } = this.state;
-    if (value === 1 && !tickets.closed) {
-      await this.getUserTickets("closed");
-    }
-  };
 
-  handleChangeIndex = async (index) => {
+    tickets[value] = result.tickets;
+    this.setState({
+      tickets: tickets,
+    });
+  }
+
+  handleChangeIndex = (index) => {
     this.setState({ value: index });
 
     let { tickets } = this.state;
     if (index === 1 && !tickets.closed) {
-      await this.getUserTickets("closed");
+      !tickets.closed && this.getTickets("closed");
+    } else {
+      !tickets.open && this.getTickets("open");
     }
-  };
-
-  handleSwitch = (index) => {
-    let percent = (index / 1) * 100;
-    this.setState({
-      percent: percent,
-    });
   };
 
   renderTicketError = () => {};
@@ -134,14 +130,14 @@ class Queries extends Component {
   };
 
   goBack = () => {
-    this.sendEvents('back')
+    this.sendEvents("back");
     let { fromScreen } = this.state;
-    if (fromScreen === 'send_query' || fromScreen === '/help') {
-      this.navigate('/help')
+    if (fromScreen === "send_query" || fromScreen === "/help") {
+      this.navigate("/help");
     } else {
       this.props.history.goBack();
     }
-  }
+  };
 
   render() {
     let { tickets } = this.state;
@@ -154,7 +150,7 @@ class Queries extends Component {
         errorData={this.state.errorData}
         title="My Queries"
         headerData={{
-          goBack: this.goBack
+          goBack: this.goBack,
         }}
         noFooter
       >
@@ -163,13 +159,13 @@ class Queries extends Component {
             <div className="tabContainer">
               <div
                 className={`tab ${this.state.value === 0 ? "tabclicked" : ""}`}
-                onClick={() => this.handleChange(0)}
+                onClick={() => this.handleChangeIndex(0)}
               >
                 Open queries
               </div>
               <div
                 className={`tab ${this.state.value === 1 ? "tabclicked" : ""}`}
-                onClick={() => this.handleChange(1)}
+                onClick={() => this.handleChangeIndex(1)}
               >
                 Closed queries
               </div>
@@ -177,14 +173,13 @@ class Queries extends Component {
             <div className="generic-hr"></div>
             <div
               className="generic-hr hr"
-              style={{ left: `${this.state.percent / 2}%` }}
+              style={{ left: `${this.state.value === 0 ? "0%" : "50%"}` }}
             ></div>
 
             <SwipeableViews
               // axis={theme.direction === "rtl" ? "x-reverse" : "x"}
               index={this.state.value}
               onChangeIndex={this.handleChangeIndex}
-              onSwitching={this.handleSwitch}
               action={(actions) => {
                 this.swipeableActions = actions;
               }}
@@ -194,7 +189,11 @@ class Queries extends Component {
             >
               <TabContainer dir={"ltr"}>
                 {tickets.open && tickets.open.length > 0 && (
-                  <Tickets tickets={tickets.open} onClick={this.handleClick} />
+                  <Tickets
+                    tickets={tickets.open}
+                    onClick={this.handleClick}
+                    viewMore={() => {console.log("hi"); this.swipeableActions.updateHeight();}}
+                  />
                 )}
                 {!tickets.open && (
                   <SkeltonRect
@@ -217,7 +216,9 @@ class Queries extends Component {
                 {tickets.closed && tickets.closed.length > 0 && (
                   <Tickets
                     tickets={tickets.closed}
-                    onClick={this.handleClick} />
+                    onClick={this.handleClick}
+                    viewMore={() => {console.log('hi'); this.swipeableActions.updateHeight();}}
+                  />
                 )}
                 {tickets.closed && tickets.closed.length === 0 && (
                   <div className="no-tickets">
@@ -226,7 +227,7 @@ class Queries extends Component {
                       className="img"
                       alt=""
                     />
-                    You don't have any open tickets
+                    You don't have any closed tickets
                   </div>
                 )}
                 {!tickets.closed && (

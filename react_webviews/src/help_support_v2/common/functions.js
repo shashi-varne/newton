@@ -308,12 +308,7 @@ export async function getUserTickets(params) {
     });
 
     if (status === 200) {
-      let { tickets } = this.state;
-
-      tickets[params] = result.tickets;
-      this.setState({
-        tickets: tickets,
-      });
+      return result
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
