@@ -293,7 +293,7 @@ class GroupHealthPlanMedicalHistory extends Component {
         skelton={this.state.skelton}
         showError={this.state.showError}
         errorData={this.state.errorData}
-        title="Medical history details"
+        title={this.setEditTitle('Medical history details')}
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}

@@ -23,12 +23,13 @@ export default function PieChart (props) {
         data={data}
         // height={height}
         // width={width}
+        isInteractive={false} // https://fisdom.atlassian.net/browse/SUP-710?focusedCommentId=24548
         innerRadius={0.6}
         enableRadialLabels={false}
-        enableSlicesLabels={false}
+        enableSliceLabels={false}
         animate={true}
         tooltip={customTooltip}
-        colors={item => item.color}
+        colors={{ datum: 'data.color' }}
         theme={{
           tooltip: {
             container: {

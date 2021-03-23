@@ -79,6 +79,7 @@ const InvestExplore = (props) => {
       noFooter
       hidePageTitle
       title="Explore All Mutual Funds"
+      fixedTitle={true}
       classOverRideContainer="pr-container"
       handleClick={goNext}
       skelton={loader}

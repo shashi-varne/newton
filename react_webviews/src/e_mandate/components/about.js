@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-
-import Container from '../common/Container';
-import { getConfig } from 'utils/functions';
+// import Container from '../common/Container'; 
+import { getConfig, isIframe } from 'utils/functions';
 import expand from 'assets/expand_icn.png';
 import shrink from 'assets/shrink_icn.png';
 import top_icon_fisdom from 'assets/sip_action_illustration_fisdom.svg';
@@ -13,7 +12,7 @@ import ic_b_fisdom from 'assets/ic_auth_bank_fisdom.svg';
 import ic_e_fisdom from 'assets/ic_auth_emandate_fisdom.svg';
 import ic_sb_fisdom from 'assets/ic_select_bank_fisdom.svg';
 import trust_icon from 'assets/trust_icons_emandate.svg';
-
+import illustration from 'assets/finity/illustration.svg'
 import toast from '../../common/ui/Toast';
 import Api from 'utils/api';
 import { nativeCallback } from 'utils/native_callback';
@@ -48,9 +47,11 @@ class About extends Component {
       b_icon: getConfig().productName !== 'fisdom' ? ic_b_myway : ic_b_fisdom,
       e_icon: getConfig().productName !== 'fisdom' ? ic_e_myway : ic_e_fisdom,
       sb_icon: getConfig().productName !== 'fisdom' ? ic_sb_myway : ic_sb_fisdom,
+      iframeIcon: illustration,
       emandate: {},
       pc_urlsafe: getConfig().pc_urlsafe,
-      params: getConfig().current_params
+      params: getConfig().current_params,
+      iframe: isIframe()
     }
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -194,7 +195,16 @@ class About extends Component {
     )
   }
 
+  loadComponent() {
+    if (this.state.iframe) {
+      return require(`../commoniFrame/Container`).default;
+    } else {
+      return require(`../common/Container`).default;
+    }
+  }
+
   render() {
+      const Container = this.loadComponent();
     return (
       <Container
         noBack={this.state.params.referral_code ? true: false}
@@ -204,9 +214,10 @@ class About extends Component {
         edit={this.props.edit}
         buttonTitle="Select Bank for e-mandate"
         events={this.sendEvents('just_set_events')}
+        iframeIcon={this.state.iframeIcon}
       >
         <div style={{ textAlign: 'center' }}>
-          <Imgc style={{minHeight:140, width:"100%"}} src={this.state.top_icon} alt="Mandate" />
+        {!this.state.iframe && <Imgc style={{minHeight:140, width:"100%"}} src={this.state.top_icon} alt="Mandate" />}
         </div>
         <div style={{
           color: '#767e86', margin: '10px 0px 10px 0px',

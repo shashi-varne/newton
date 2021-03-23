@@ -16,8 +16,8 @@ class Container extends Component {
       callbackType: "",
       inPageTitle: true,
       force_hide_inpage_title: this.props.hidePageTitle,
-      new_header:true,
-      project: 'kyc' ,//to use in common functions
+      new_header: true,
+      project: 'landing' ,//to use in common functions
       
     };
     this.historyGoBack = this.historyGoBack.bind(this);
