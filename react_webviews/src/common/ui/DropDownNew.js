@@ -95,7 +95,8 @@ class SelectDropDown2 extends React.Component {
     });
 
     const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
-    const isLableOpen = (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.props.multi);
+    let isLableOpen = (!!value || (!!this.state.selectedOption) || this.state.shrink) || (this.state.selectedOption && this.props.multi);
+    isLableOpen = !!isLableOpen;
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
         {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}><div
