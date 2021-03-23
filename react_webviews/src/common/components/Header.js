@@ -22,7 +22,7 @@ const headerRightIconMapper = {
   search: SearchIcon
 }
 
-const Header = ({ classes, title, fixedTitle, count, total, current, goBack, 
+const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
   className ,style, headerData={}, new_header}) => {
@@ -50,7 +50,7 @@ const Header = ({ classes, title, fixedTitle, count, total, current, goBack,
             <div
             style={style}
               className={`${classes.flex},PageTitle ${new_header ? 'main-top-title-header' : 'main-top-title-header-old'} 
-              ${inPageTitle && !fixedTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
+              ${inPageTitle ? 'slide-fade' : 'slide-fade-show'} ${className}`}
             >
               {title}
             </div>
