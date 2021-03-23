@@ -92,7 +92,7 @@ class Otp extends Component {
       })
       return;
     }
-    let url = this.state.params.base_url + this.state.verify_link + '/' + this.state.provider + 
+    let url = this.state.verify_link + '/' + this.state.provider + 
               '?otp=' + this.state.otp;
 
     try {
@@ -150,7 +150,7 @@ class Otp extends Component {
       resend_otp_clicked: true
     })
 
-    let url = this.state.params.base_url + this.state.resend_link;
+    let url =  this.state.resend_link;
     try {
       this.setState({
         show_loader: true
