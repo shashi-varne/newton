@@ -108,6 +108,7 @@ export function commonRender(props_base) {
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
+                    fixedTitle={this.props.fixedTitle}
                     provider={this.props.provider}
                     count={this.props.count}
                     total={this.props.total}
