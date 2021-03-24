@@ -283,7 +283,7 @@ const DiyFundCard = ({
             </div>
             :
             <Button buttonTitle='Invest' 
-            style={{height:"20px",color: '#fff', borderRadius: '4px', backgroundColor: '#35cb5d'}} 
+            style={{height:"20px",color: '#fff', borderRadius: '4px', backgroundColor: '#35cb5d', width: '90px'}} 
             onClick={handleInvest}/>
             }
         </div>
