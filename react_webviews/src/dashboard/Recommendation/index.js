@@ -183,6 +183,7 @@ const Recommendations = (props) => {
     if(errorMessage)
     dialog_states['errorMessage'] = errorMessage;
     setDialogStates({...dialog_states});
+    handleApiRunning(false);
   }
 
   useEffect(() => {

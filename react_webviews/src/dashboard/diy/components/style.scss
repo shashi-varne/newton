@@ -118,6 +118,10 @@
   background-color: #fff;
 }
 
+.diy-cart-footer .diy-filter-button:hover {
+  background-color: #fff;
+}
+
 .diy-cart-footer .button:nth-of-type(2) {
   margin-left: 10px;
 }
@@ -369,6 +373,14 @@
   margin: -20px;
   .MuiTabs-flexContainer {
     justify-content: flex-start;
+  }
+
+  .tab-flex-container {
+    button {
+      .MuiSvgIcon-root {
+        color: rgba(0,0,0,0.54);
+      }
+    }
   }
 }
 

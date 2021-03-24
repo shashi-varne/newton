@@ -734,11 +734,11 @@ export async function getNfoPurchaseLimit(data) {
       `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
-    let { fundsData } = this.state;
+    let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data;
+      purchaseLimitData[data.investType] = result.funds_data;
       let disableInputSummary = true;
-      if (purchaseLimitData[0].ot_sip_flag) {
+      if (purchaseLimitData[data.investType][0].ot_sip_flag) {
         fundsData[0].allow_purchase = true;
         disableInputSummary = false;
       }
@@ -763,10 +763,10 @@ export async function getDiyPurchaseLimit(data) {
       `${apiConstants.getPurchaseLimit}${data.investType}?type=isin&isins=${data.isins}`
     );
     const { result, status_code: status } = res.pfwresponse;
-    let { fundsData } = this.state;
+    let { fundsData, purchaseLimitData } = this.state;
     if (status === 200) {
-      let purchaseLimitData = result.funds_data;
-      purchaseLimitData = purchaseLimitData.map((dict) => {
+      purchaseLimitData[data.investType] = result.funds_data;
+      purchaseLimitData[data.investType] = purchaseLimitData[data.investType].map((dict) => {
         var results = fundsData.filter((obj) => {
           if (obj.isin === dict["isin"]) {
             obj["allow_purchase"] = dict["ot_sip_flag"];
@@ -781,12 +781,12 @@ export async function getDiyPurchaseLimit(data) {
         return dict;
       });
 
-      let isDisabledFundCount = 0;
+      // let isDisabledFundCount = 0;
       this.setState({
         show_loader: false,
         fundsData: fundsData,
         purchaseLimitData: purchaseLimitData,
-        isDisabledFundCount: isDisabledFundCount,
+        // isDisabledFundCount: isDisabledFundCount,
       });
     }
   } catch (error) {
@@ -817,8 +817,9 @@ export function checkLimit(amount, index) {
     disableInputSummary,
     disableInput,
     fundsData,
+    investType,
   } = this.state;
-  let limitData = purchaseLimitData.find(
+  let limitData = purchaseLimitData[investType].find(
     (data) => data.isin === fundsData[index].isin
   );
   if (!limitData) return;
@@ -881,7 +882,7 @@ export async function proceedInvestment(investReferralData, isReferralGiven) {
   fundsData
     .filter((data) => data.allow_purchase)
     .forEach((fund) => {
-      let limitData = purchaseLimitData.find(
+      let limitData = purchaseLimitData[investType].find(
         (element) => element.isin === fund.isin
       );
       if (!limitData) return;
@@ -1036,7 +1037,7 @@ export async function proceedInvestmentChild(data) {
         storageService().setObject("mf_invest_data", investmentEventData);
 
         if (isSipDatesScreen) {
-          this.setState({ openSuccessDialog: true, investResponse: result });
+          this.setState({ openSuccessDialog: true, investResponse: result, isApiRunning: false });
           return;
         }
         if (getConfig().Web) {
