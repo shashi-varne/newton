@@ -118,7 +118,7 @@ export function commonRender(props_base) {
                     resetpage={this.props.resetpage}
                     handleReset={this.props.handleReset}
                     topIcon={this.props.topIcon || this.props.rightIcon}
-                    handleTopIcon={this.props.handleTopIcon}
+                    handleTopIcon={this.handleTopIcon}
                     inPageTitle={this.state.inPageTitle}
                     force_hide_inpage_title={this.state.force_hide_inpage_title}
                     style={this.props.styleHeader}

@@ -83,7 +83,7 @@ const InvestExplore = (props) => {
       handleClick={goNext}
       skelton={loader}
       rightIcon="search"
-      handleTopClick={handleRightIconClick}
+      handleTopIcon={handleRightIconClick}
     >
       <section className="invest-explore-cards" id="invest-explore">
         <div className='title'>Where do you want to invest?</div>

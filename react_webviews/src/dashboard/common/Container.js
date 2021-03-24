@@ -21,6 +21,7 @@ class Container extends Component {
       
     };
     this.historyGoBack = this.historyGoBack.bind(this);
+    this.handleTopIcon = this.handleTopIcon.bind(this);
 
     this.didMount = didMount.bind(this);
     this.commonRender =  commonRender.bind(this);
@@ -32,6 +33,10 @@ class Container extends Component {
 
   componentWillUnmount() {
     this.unmount();
+  }
+
+  handleTopIcon = () => {
+    this.props.handleTopIcon();
   }
 
   historyGoBack = (backData) => {
