@@ -99,21 +99,23 @@ class SelectDropDown2 extends React.Component {
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
     isLableOpen = !!isLableOpen; 
     return (
-      <div style={{marginTop: '30px', marginBottom: '20px'}}>
+      <div>
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ marginTop: '5px' }}>
         {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}  style={{  color : isLableOpen ? '':'#767E86'}}><div
           ref={element => {
             if (element && isLableOpen) {
-              element.style.setProperty('margin-top', '3px', 'important');
+              element.style.setProperty('margin-top', '4px', 'important');
+              element.style.setProperty('margin-left', '14px', 'important');
             } else if (element && !isLableOpen) {
-              element.style.setProperty('margin-top', '1px', 'important');
+              element.style.setProperty('margin-top', '-5px', 'important');
+              element.style.setProperty('margin-left', '12px', 'important');
             }
           }}
           style={{
             position: 'absolute',
             minWidth: '300px',
             color: this.props.error ? '#D0021B' : '',
-            fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px'
+            fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
           }}>
           {this.props.label}</div></InputLabel>)}
         <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : ''  }}>
