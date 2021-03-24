@@ -142,6 +142,7 @@ const FundList = (props) => {
           <Tab label="5Y" />
         </Tabs>
         <TabContainer>
+        <div className='fund-change-message'>Sorted on {sortFilter}, filtered for {fundOption} option</div>
           {fundsList
             .filter((item) => {
               if (!fundHouse) {
