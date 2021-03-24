@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { initialize } from "../common/functions";
-import scrollIntoView from "scroll-into-view-if-needed";
-import throttle from 'lodash/throttle';
+import { initialize, handleScroll } from "../common/functions";
 
 const moment = require("moment");
 class OpenTickets extends Component {
@@ -11,9 +9,10 @@ class OpenTickets extends Component {
       show_loader: false,
       skelton: "g",
       tickets: "",
-      index: 0,
+      index: 5,
     };
     this.initialize = initialize.bind(this);
+    this.handleScroll = handleScroll.bind(this);
   }
 
   componentWillMount() {
@@ -23,60 +22,30 @@ class OpenTickets extends Component {
   onload = () => {
     let tickets = [...this.props.tickets];
 
-    // let sortedTickets = [];
-    // while (tickets.length) {
-    //   sortedTickets.push(tickets.splice(0, 5));
-    // }
-
-    // let splitTickets = sortedTickets[0] || [];
-
     this.setState({
       tickets: tickets,
-      // sortedTickets: sortedTickets,
-      // splitTickets: splitTickets,
+      length: tickets.length,
     });
   };
 
-  handleScroll = throttle(
-    () => {
-      let element = document.getElementById("viewScroll");
-      if (!element || element === null) {
-        return;
-      }
-
-      scrollIntoView(element, {
-        block: "start",
-        inline: "nearest",
-        behavior: "smooth",
-      });
-    },
-    50,
-    { trailing: true }
-  )
-
   handleCta = () => {
-    let { sortedTickets, splitTickets, index } = this.state;
-    index += 1;
+    let { index } = this.state;
+    index += 5;
 
-    if (sortedTickets[index]) {
-      splitTickets.push(...sortedTickets[index]);
-
-      this.setState(
-        {
-          index: index,
-          splitTickets: splitTickets,
-        },
-        () => this.handleScroll()
-      );
-    }
+    this.setState(
+      {
+        index: index,
+      },
+      () => this.handleScroll()
+    );
   };
 
   render() {
-    let { tickets, sortedTickets, splitTickets, index } = this.state;
+    let { tickets, index, length } = this.state;
 
     return (
       <div className="help-tickets">
-        {tickets.map((item, index) => (
+        {tickets.slice(0, index).map((item, index) => (
           <div
             className="ticket fade-in"
             key={index}
@@ -90,14 +59,14 @@ class OpenTickets extends Component {
             </div>
           </div>
         ))}
-        {/* {sortedTickets[index + 1] && (
-          <div
-            className="generic-page-button-small query-btn fade-in"
-            onClick={() => this.handleCta()}
-          >
-            Load more tickets
-          </div>
-        )} */}
+        {tickets.slice(0, index).length !== length && (
+        <div
+          className="generic-page-button-small query-btn fade-in"
+          onClick={() => this.handleCta()}
+        >
+          Load more tickets
+        </div>
+        )}
         <div id="viewScroll"></div>
       </div>
     );

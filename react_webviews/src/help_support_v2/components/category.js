@@ -72,25 +72,6 @@ class Category extends Component {
     );
   };
 
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        onload: {
-          handleClick1: this.onload,
-          title1: this.state.title1,
-          button_text1: "Retry",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
-  };
-
   render() {
     let { category, sub_categories } = this.state;
 
@@ -103,7 +84,7 @@ class Category extends Component {
             onClick={this.handleQuery}
           />
         }
-        twoTitle={true}
+        
         showError={this.state.showError}
         errorData={this.state.errorData}
         noFooter

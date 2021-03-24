@@ -1,4 +1,5 @@
 .help-CategoryList {
+  margin-top: 140px;
   .title {
     font-size: 17px;
     font-weight: 700;
@@ -256,7 +257,8 @@
 
 .help-queries {
   margin: 0 -20px;
-  height: 80vh;
+  position: fixed;
+  width: var(--desktop-width);
 
   .nav-bar {
     height: 100%;
@@ -278,6 +280,7 @@
       color: #767e86;
       font-size: 15px;
       font-weight: 500;
+      height: 50vh;
     }
 
     .tabContainer {
@@ -308,12 +311,16 @@
 
 .help-tickets {
   line-height: 20px;
+  margin: 0 -20px;
 
   .ticket {
     cursor: pointer;
     margin-bottom: 20px;
     padding: 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.07);
+    margin: 0 20px 20px;
+    border-radius: 4px;
+
     .title {
       font-size: 13px;
       font-weight: 500;
@@ -332,6 +339,28 @@
       font-weight: 400;
       color: #979797;
     }
+  }
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-scrollbar:vertical {
+    width: 3px;
+  }
+
+  ::-webkit-scrollbar:horizontal {
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d8d8d8;
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
   }
 }
 
@@ -441,8 +470,9 @@
     text-align: center;
     cursor: pointer;
 
-    img {
+    SVG {
       vertical-align: middle;
+      margin-left: 10px;
     }
   }
 }
@@ -602,6 +632,21 @@
   }
 }
 
+.fixed-header {
+  position: fixed;
+  z-index: 1000;
+  width: var(--desktop-width);
+}
+
+.search-bar-header {
+  padding: 20px 0;
+  width: 100%;
+
+  .help-search-bar {
+    margin-top: 40px;
+  }
+}
+
 @media only screen and (min-width: 300px) and (max-width: 500px) {
   .help-CategoryList {
     .category {
@@ -644,5 +689,13 @@
     textarea {
       width: 94%;
     }
+  }
+
+  .help-queries {
+    width: 100%;
+  }
+
+  .fixed-header {
+    width: 100%;
   }
 }

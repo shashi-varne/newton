@@ -1,13 +1,21 @@
 import React, { Fragment } from "react";
 import { SkeltonRect } from "common/ui/Skelton";
+import Search from "../components/search";
 
 export const MyQueries = (props) => {
   return (
-    <div className="help-header-title">
-      <div style={{width: '75%'}}>{props.title}</div>
-      <div onClick={() => props.onClick()} className="header-query">
-        My queries
+    <div className={`${props.search ? "search-bar-header" : ""}`}>
+      <div className="help-header-title">
+        <div style={{ width: "75%" }}>{props.title}</div>
+        <div onClick={() => props.onClick()} className="header-query">
+          My queries
+        </div>
       </div>
+      {props.search && (
+        <div className="help-search-bar">
+          <Search value={props.value} onChange={(e) => props.onChange(e)} maxLength={50} />
+        </div>
+      )}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Imgc } from "common/ui/Imgc";
 import Container from "../common/Container";
 import { categories } from "../constants";
 import { initialize, getAllCategories, SearchFaq } from "../common/functions";
-import Search from "./search";
+import scrollIntoView from "scroll-into-view-if-needed";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 import ReactHtmlParser from "react-html-parser";
@@ -77,7 +77,7 @@ class CategoryList extends Component {
         properties: {
           user_action: user_action,
           screen_name: "category",
-          category_clicked: data.card_name || "",
+          category_clicked: data.card_name || "no",
           my_queries_clicked: data.my_queries_clicked || "no",
         },
       };
@@ -98,8 +98,16 @@ class CategoryList extends Component {
 
     if (!value) {
       this.setState({ faqList: [] });
-      return
-    } 
+      let element = document.getElementById("categoryList");
+      if (!element || element === null) {
+        return;
+      }
+
+      scrollIntoView(element, {
+        block: "end",
+      });
+      return;
+    }
 
     if (value[value.length - 1] === " ") {
       let result = await this.SearchFaq(value);
@@ -174,25 +182,6 @@ class CategoryList extends Component {
     this.setState({ open: false });
   };
 
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        onload: {
-          handleClick1: this.onload,
-          title1: this.state.title1,
-          button_text1: "Retry",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
-  };
-
   handleContact = () => {
     if (getConfig().Web) {
       this.setState({
@@ -232,15 +221,25 @@ class CategoryList extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
-        title={
-          <MyQueries title="How can we help?" onClick={this.handleQuery} />
-        }
-        twoTitle={true}
+        styleHeader={{
+          display: !this.state.showError ? "none" : 'inherit',
+        }}
         noFooter
       >
         <div className="help-CategoryList">
-          <Search value={this.state.searchInput} onChange={this.handleChange} />
+          <div className="Header header-title-page header-title-page-text">
+            <MyQueries
+              title="How can we help?"
+              onClick={this.handleQuery}
+              search={true}
+              value={this.state.searchInput}
+              onChange={this.handleChange}
+            />
+          </div>
+
+          <div id="categoryList"></div>
           {faqList.length > 0 &&
+            !isApiRunning &&
             searchInput.length !== 0 &&
             faqList.map((item, index) => (
               <div
@@ -256,13 +255,11 @@ class CategoryList extends Component {
                 </div>
               </div>
             ))}
-          {searchInput.length !== 0 && faqList.length === 0 && !isApiRunning && (
-            <div className="no-result">No result found</div>
-          )}
+          {searchInput.length !== 0 &&
+            faqList.length === 0 &&
+            !isApiRunning && <div className="no-result">No result found</div>}
 
-          {searchInput.length !== 0 && faqList.length === 0 && isApiRunning && (
-            <CustomSkelton />
-          )}
+          {searchInput.length !== 0 && isApiRunning && <CustomSkelton />}
 
           {this.state.skelton && <CustomSkelton />}
 

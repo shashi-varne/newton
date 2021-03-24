@@ -9,6 +9,7 @@ const styles = (theme) => ({
   bootstrapInput: {
     backgroundColor: "var(--highlight)",
     fontSize: 13,
+    fontWeight: '400 !important',
     padding: "8px 11px",
     width: "calc(100% - 24px)",
     transition: theme.transitions.create(["border-color", "box-shadow"]),
@@ -78,6 +79,10 @@ class SearchInput extends Component {
             classes: {
               input: this.props.classes.bootstrapInput,
             },
+          }}
+          // eslint-disable-next-line
+          inputProps={{
+            maxLength: this.props.maxLength,
           }}
         />
       </div>

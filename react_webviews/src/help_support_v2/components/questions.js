@@ -100,25 +100,6 @@ class Questions extends Component {
     );
   };
 
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        onload: {
-          handleClick1: this.onload,
-          title1: this.state.title1,
-          button_text1: "Retry",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
-  };
-
   render() {
     let { sub_category, faqs } = this.state;
 
@@ -127,7 +108,7 @@ class Questions extends Component {
         title={
           <MyQueries title={sub_category.cms_category_name} onClick={this.handleQuery} />
         }
-        twoTitle={true}
+        
         events={this.sendEvents("just_set_events")}
         showError={this.state.showError}
         errorData={this.state.errorData}
