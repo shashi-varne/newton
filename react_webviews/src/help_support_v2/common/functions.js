@@ -590,6 +590,7 @@ export function save(file) {
     return;
   }
 
+  file.name = file.file_name;
   file.doc_type = file.type;
 
   let ext = file.type.split("/")[1];
