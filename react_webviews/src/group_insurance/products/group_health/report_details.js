@@ -523,7 +523,7 @@ class GroupHealthReportDetails extends Component {
                         {this.state.provider === 'GMC' ? ( 
                         <div className="member-tile">
                             <div className="mt-left">
-                                <img src={require(`assets/${this.state.productName}/ic_hs_cover_amount.svg`)} alt="" />
+                                <img src={require(`assets/${this.state.productName}/cash-payment.svg`)} alt="" />
                             </div>
                             <div className="mt-right">
                                 <div className="mtr-top">
