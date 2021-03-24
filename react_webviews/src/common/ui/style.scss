@@ -1005,7 +1005,7 @@ body[data-device="mobile"] {
   min-height: 41px !important;
 }
 .css-1g6gooi{
-  margin-top: 6px !important;
+  margin-top: 3px !important;
   font-size: 13px !important;
   line-height: 21px;
 }
@@ -1025,7 +1025,7 @@ body[data-device="mobile"] {
 .css-1uccc91-singleValue{
   margin-top: 2px !important;
   color: #161A2E !important;
-  margin-left: 2px !important;
+  margin-left: 0px !important;
   font-size: 13px;
   line-height: 21px;
   display: inline-block !important;
@@ -1211,14 +1211,19 @@ body[data-device="mobile"] {
   .MuiInput-inputType{
     height: 2.1875em !important;
   }
-  .css-1hwfws3{
-    align-items: center;
-    display: inline-flex !important;
-    flex-direction: column;
-    align-content: flex-start;
-    overflow-x: auto !important;
-    height: 33px !important;
+  // .css-1hwfws3{
+  //   align-items: center;
+  //   display: inline-flex !important;
+  //   flex-direction: column;
+  //   align-content: flex-start;
+  //   overflow-x: auto !important;
+  //   height: 33px !important;
+  // }
+
+  .css-1rhbuit-multiValue + .css-1g6gooi{
+    margin-top: 15px !important;
   }
+  
   
   .css-1hb7zxy-IndicatorsContainer{
     margin-right: 14px !important;
