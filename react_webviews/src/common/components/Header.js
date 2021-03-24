@@ -8,7 +8,7 @@ import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
-import search from 'assets/search.png';
+import search from 'assets/icon_search.svg';
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
 
