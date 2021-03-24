@@ -52,17 +52,14 @@ const GoalType = (props) => {
       }
     } else {
       setError(true);
-      setErrorMsg('Incorrect year');
+      setErrorMsg('Please enter a valid year');
     }
   };
   
   return (
     <Container
       classOverRide='pr-error-container'
-      // fullWidthButton
       buttonTitle='Next'
-      // helpContact
-      // hideInPageTitle
       hidePageTitle
       title='Save for a Goal'
       handleClick={goNext}

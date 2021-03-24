@@ -33,7 +33,7 @@ const Recommendations = (props) => {
     type,
     term,
     name,
-    graphType,
+    subtype,
   } = graphData;
   const state = props.location.state || {};
   const [isins, setIsins] = useState("");
@@ -88,7 +88,7 @@ const Recommendations = (props) => {
       investmentObject.amount = amount;
       investmentObject.term = term;
       investmentObject.type = investType;
-      investmentObject.subtype = graphType;
+      investmentObject.subtype = subtype;
       investmentObject.allocations = allocations;
 
     } else {
