@@ -5,7 +5,6 @@ import ic_clip from "assets/ic_clip.svg";
 import { initialize } from "../common/functions";
 import { bytesToSize } from "utils/validators";
 import { isMobile } from "utils/functions";
-// import toast from "common/ui/Toast";
 import $ from "jquery";
 import Dialog, {
   DialogActions,

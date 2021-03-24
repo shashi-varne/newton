@@ -5,6 +5,7 @@ import toast from "common/ui/Toast";
 import throttle from "lodash/throttle";
 import scrollIntoView from "scroll-into-view-if-needed";
 import { TotalSize } from "../constants";
+import { bytesToSize } from "utils/validators";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -527,7 +528,7 @@ export function getPdf(e) {
   sum += file.size;
 
   if (sum > TotalSize) {
-    toast("total size of uploaded documents should be less than 15MB");
+    toast(`total size of uploaded documents should be less than ${bytesToSize(TotalSize)}`);
     return;
   }
 
@@ -580,7 +581,7 @@ export function save(file) {
   sum += file.size;
 
   if (sum > TotalSize) {
-    toast("total size of uploaded documents should be less than 15MB");
+    toast(`total size of uploaded documents should be less than ${bytesToSize(TotalSize)}`);
     return;
   }
 
