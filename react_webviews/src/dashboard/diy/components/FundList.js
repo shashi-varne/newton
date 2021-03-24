@@ -4,8 +4,10 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import RatingStar from '../../../fund_details/common/RatingStar'
+import Button from 'common/ui/Button';
 import './style.scss'
 import { storageService } from '../../../utils/validators'
+import { getConfig } from 'utils/functions';
 
 import { navigate as navigateFunc } from '../../invest/common/commonFunction'
 
@@ -50,6 +52,7 @@ const FundList = (props) => {
 
   const [cart, setCart] = useState(storageService().getObject(CART) || [])
   const [showLoader, setShowLoader] = useState(false)
+  const productType = getConfig().productName;
   const handleChange = (_, value) => {
     setValue(value)
   }
@@ -187,20 +190,23 @@ const FundList = (props) => {
             ))}
         </TabContainer>
       </div>
-      <CartFooter
-        cart={cart}
-        fundsList={fundsList}
-        setCart={setCart}
-        setFundsList={setFundsList}
-        sortFilter={sortFilter}
-        fundHouse={fundHouse}
-        fundOption={fundOption}
-        setSortFilter={setSortFilter}
-        setFundHouse={setFundHouse}
-        setFundsList={setFundOption}
-        setFundOption={setFundOption}
-        {...parentProps}
-      />
+      {
+        productType !== 'finity' && 
+        <CartFooter
+          cart={cart}
+          fundsList={fundsList}
+          setCart={setCart}
+          setFundsList={setFundsList}
+          sortFilter={sortFilter}
+          fundHouse={fundHouse}
+          fundOption={fundOption}
+          setSortFilter={setSortFilter}
+          setFundHouse={setFundHouse}
+          setFundsList={setFundOption}
+          setFundOption={setFundOption}
+          {...parentProps}
+        />
+      }
     </Container>
   )
 }
@@ -214,6 +220,8 @@ const DiyFundCard = ({
   parentProps,
   ...props
 }) => {
+  const productType = getConfig().productName;
+
   const handleClick = (data) => {
     const navigate = navigateFunc.bind(parentProps)
     let dataCopy = Object.assign({}, data);
@@ -226,6 +234,11 @@ const DiyFundCard = ({
       },
       true
     )
+  }
+  const handleInvest = () => {
+    storageService().setObject('diystore_cart', [props]);
+    const navigate = navigateFunc.bind(parentProps);
+    navigate('/diy/invest', null, true, parentProps.location.search);
   }
   return (
     <div className="diy-fund-card">
@@ -249,22 +262,29 @@ const DiyFundCard = ({
             </p>
             <RatingStar value={props.morning_star_rating} />
           </div>
-          <div
-            className={
+          {
+            productType !== 'finity' ?
+            <div
+              className={
               addedToCart
-                ? 'diy-fund-card-button diy-fund-card-added'
+              ? 'diy-fund-card-button diy-fund-card-added'
                 : 'diy-fund-card-button'
+              }
+              role="button"
+              onClick={handleCart(props)}
+            >
+              <img
+                src={addedToCart ? remove_cart_icon : add_cart_icon}
+                alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
+                width="20"
+              />
+              <div className="action">{!addedToCart ? '+' : '-'}</div>
+            </div>
+            :
+            <Button buttonTitle='Invest' 
+            style={{height:"20px",color: '#fff', borderRadius: '4px', backgroundColor: '#35cb5d'}} 
+            onClick={handleInvest}/>
             }
-            role="button"
-            onClick={handleCart(props)}
-          >
-            <img
-              src={addedToCart ? remove_cart_icon : add_cart_icon}
-              alt={addedToCart ? 'Add to Cart' : 'Remove from cart'}
-              width="20"
-            />
-            <div className="action">{!addedToCart ? '+' : '-'}</div>
-          </div>
         </div>
       </div>
     </div>

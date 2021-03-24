@@ -125,7 +125,6 @@ const Target = (props) => {
             error={!targetAmount}
             helperText={!targetAmount && 'This is a required field'}
             autoFocus
-            maxLength={4}
             inputMode='numeric'
             pattern='[0-9]*'
           />

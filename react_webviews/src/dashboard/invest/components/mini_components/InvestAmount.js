@@ -166,11 +166,12 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          {goalRecommendation.id === 'investsurplus' || investTypeDisplay !== 'sip' || goalRecommendation.itype !== 'saveforgoal' ? (
-            <p className='invest-amount-input-duration'>from my savings</p>
-          ) : (
+          { investTypeDisplay === 'sip' || goalRecommendation.itype === 'saveforgoal' ? (
             <p className='invest-amount-input-duration'>per month</p>
-          )}
+            ) : (
+            <p className='invest-amount-input-duration'>from my savings</p>
+            )
+          }
         </div>
         <div className='invest-amount-corpus'>
           {goalRecommendation.id === 'savetax' ? (

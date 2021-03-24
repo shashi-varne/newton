@@ -108,7 +108,6 @@ export function commonRender(props_base) {
                     disableBack={this.props.disableBack}
                     title={this.props.title}
                     smallTitle={this.props.smallTitle}
-                    fixedTitle={this.props.fixedTitle}
                     provider={this.props.provider}
                     count={this.props.count}
                     total={this.props.total}
@@ -119,7 +118,7 @@ export function commonRender(props_base) {
                     resetpage={this.props.resetpage}
                     handleReset={this.props.handleReset}
                     topIcon={this.props.topIcon || this.props.rightIcon}
-                    handleTopIcon={this.handleTopIcon}
+                    handleTopIcon={this.props.handleTopIcon}
                     inPageTitle={this.state.inPageTitle}
                     force_hide_inpage_title={this.state.force_hide_inpage_title}
                     style={this.props.styleHeader}

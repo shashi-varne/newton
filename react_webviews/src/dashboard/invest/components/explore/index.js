@@ -79,12 +79,11 @@ const InvestExplore = (props) => {
       noFooter
       hidePageTitle
       title="Explore All Mutual Funds"
-      fixedTitle={true}
       classOverRideContainer="pr-container"
       handleClick={goNext}
       skelton={loader}
-      rightIcon={search}
-      handleRightIconClick={handleRightIconClick}
+      rightIcon="search"
+      handleTopClick={handleRightIconClick}
     >
       <section className="invest-explore-cards" id="invest-explore">
         <div className='title'>Where do you want to invest?</div>
