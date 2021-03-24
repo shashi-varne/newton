@@ -3,6 +3,7 @@
 }
 .InputField {
   margin-bottom: 20px;
+  margin-top: 30px;
 }
 .RadioButton.unchecked label {
   background: #fff;
@@ -1158,7 +1159,7 @@ body[data-device="mobile"] {
 /********************  TEXT FEILD NEW DESIGN CHANGES  ***************/
 .MuiInput-root{
   background: rgba(238, 238, 238, 0.3);
-  height: 53px !important;
+  height: 52px !important;
   }
   
   .MuiInput-underline:before {
@@ -1196,7 +1197,7 @@ body[data-device="mobile"] {
     margin-left: 2px !important;
     color: #161A2E  !important;
     font-size: 13px  !important;
-    padding-top: 12px !important;
+    padding-top: 13px !important;
     line-height: 21px  !important;
   }
 
@@ -1246,7 +1247,7 @@ body[data-device="mobile"] {
   }
   .css-gg45go-NoOptionsMessage, .css-1gl4k7y{
     text-align:left !important;
-    color: #161A2E !important;
+    color: #767E86 !important;
     font-size: 13px !important;
   }
    /*----------------- Auto FILL Background Color  ----------------------*/

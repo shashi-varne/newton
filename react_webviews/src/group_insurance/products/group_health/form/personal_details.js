@@ -729,7 +729,7 @@ class GroupHealthPlanPersonalDetails extends Component {
             </div>
           )}
         {this.state.member_key !== "applicant" && (
-          <div>
+          <div className="InputField">
             <DropdownInModal
               parent={this}
               options={this.state.height_options}

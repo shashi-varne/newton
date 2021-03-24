@@ -99,7 +99,8 @@ class SelectDropDown2 extends React.Component {
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
     isLableOpen = !!isLableOpen; 
     return (
-      <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
+      <div style={{marginTop: '30px', marginBottom: '20px'}}>
+      <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ marginTop: '5px' }}>
         {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}  style={{  color : isLableOpen ? '':'#767E86'}}><div
           ref={element => {
             if (element && isLableOpen) {
@@ -181,6 +182,7 @@ class SelectDropDown2 extends React.Component {
         {(this.props.error || this.state.error) ? <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
           <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || ''} </span>}
       </FormControl>
+      </div>
     );
   }
 }
