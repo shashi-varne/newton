@@ -99,7 +99,7 @@ class CategoryList extends Component {
     if (!value) {
       this.setState({ faqList: [] });
       let element = document.getElementById("categoryList");
-      console.log(element)
+      console.log(element);
       if (!element || element === null) {
         return;
       }
@@ -243,24 +243,30 @@ class CategoryList extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
-        title={
-          <MyQueries
-            title="How can we help?"
-            onClick={this.handleQuery}
-            search={true}
-            value={this.state.searchInput}
-            onChange={this.handleChange}
-          />
-        }
         headerData={{
-          style: { display: "none" },
+          hide_icon: true,
         }}
+        styleHeader={{
+          display: "none",
+        }}
+        new_header={true}
         classHeader={"fixed-header"}
         noFooter
       >
         <div className="help-CategoryList">
+          <div className="Header header-title-page header-title-page-text">
+            <MyQueries
+              title="How can we help?"
+              onClick={this.handleQuery}
+              search={true}
+              value={this.state.searchInput}
+              onChange={this.handleChange}
+            />
+          </div>
+
           <div id="categoryList"></div>
-          {faqList.length > 0 && !isApiRunning &&
+          {faqList.length > 0 &&
+            !isApiRunning &&
             searchInput.length !== 0 &&
             faqList.map((item, index) => (
               <div
@@ -280,14 +286,12 @@ class CategoryList extends Component {
             faqList.length === 0 &&
             !isApiRunning && <div className="no-result">No result found</div>}
 
-          {searchInput.length !== 0 && isApiRunning && (
-            <CustomSkelton />
-          )}
+          {searchInput.length !== 0 && isApiRunning && <CustomSkelton />}
 
           {this.state.skelton && <CustomSkelton />}
-          
+
           {!this.state.skelton && searchInput.length === 0 && categoryList && (
-            <div className="fade-in" >
+            <div className="fade-in">
               <div className="title">Category</div>
 
               {categoryList.map((el, index) => (

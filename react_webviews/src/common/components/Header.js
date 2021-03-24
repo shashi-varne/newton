@@ -22,7 +22,7 @@ const Header = ({ classes, title, count, total, current, goBack,
   className ,style, headerData={}, new_header}) => (
   <AppBar position="fixed" color="primary" 
   className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
-  style={style, headerData.style}
+  style={style}
   >
     <Toolbar>
       <IconButton className={classes.menuButton} color="inherit" aria-label="Menu" 
