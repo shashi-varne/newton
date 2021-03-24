@@ -29,6 +29,7 @@ class Checkout extends Component {
       type: props.type,
       currentUser: storageService().getObject("user") || {},
       dialogStates: {},
+      purchaseLimitData: {},
     };
     this.initialize = initialize.bind(this);
   }
@@ -55,7 +56,11 @@ class Checkout extends Component {
         fundsData.forEach(() => form_data.push({}));
         this.setState({ fundsData: fundsData, form_data: form_data, ctc_title }, () =>
           this.getNfoPurchaseLimit({
-            investType: this.state.investType,
+            investType: 'sip',
+            isins: fund.isin,
+          }),
+          this.getNfoPurchaseLimit({
+            investType: 'onetime',
             isins: fund.isin,
           })
         );
@@ -89,7 +94,11 @@ class Checkout extends Component {
         },
         () =>
           this.getDiyPurchaseLimit({
-            investType: this.state.investType,
+            investType: 'sip',
+            isins: isins,
+          }),
+          this.getDiyPurchaseLimit({
+            investType: 'onetime',
             isins: isins,
           })
       );
@@ -145,6 +154,7 @@ class Checkout extends Component {
     dialog_states[key] = value;
     if (errorMessage) dialog_states["errorMessage"] = errorMessage;
     this.setState({ dialogStates: dialog_states });
+    this.handleApiRunning(false)
   };
 
   handleApiRunning = (isApiRunning) => {
@@ -159,7 +169,6 @@ class Checkout extends Component {
       ctc_title,
       fundsData,
       investType,
-      type,
     } = this.state;
     if (id === "sip" || id === "onetime") {
       if (id === investType) return;
@@ -169,23 +178,12 @@ class Checkout extends Component {
         form_data: form_data,
         ctc_title: ctc_title,
         investType: investType,
-      });
-      if (type === "nfo") {
-        await this.getNfoPurchaseLimit({
-          investType: id,
-          isins: fundsData[index].isin,
+      }, () => {
+        fundsData.forEach((fund, index) => {
+          if (fund.amount) {
+            this.checkLimit(fundsData[index].amount, index);
+          }
         });
-      } else {
-        let isins = this.getIsins(fundsData);
-        await this.getDiyPurchaseLimit({
-          investType: id,
-          isins: isins,
-        });
-      }
-      fundsData.forEach((fund, index) => {
-        if (fund.amount) {
-          this.checkLimit(fundsData[index].amount, index);
-        }
       });
     } else if (name) {
       if (!isNaN(parseInt(value, 10))) {
@@ -212,7 +210,7 @@ class Checkout extends Component {
       renderData,
       dialogStates,
     } = this.state;
-    let allowedFunds = fundsData.filter((data) => data.allow_purchase);
+    let allowedFunds = fundsData.filter((data) => data.allow_purchase) || [];
     if (allowedFunds && allowedFunds.length === 0) ctc_title = "BACK";
     return (
       <Container

@@ -99,7 +99,7 @@ class SipDates extends Component {
     });
   };
 
-  handleClose = () => {
+  handleSuccessDialog = () => {
     let { investResponse, paymentRedirectUrl } = this.state;
     let pgLink = investResponse.investments[0].pg_link;
     pgLink +=
@@ -146,6 +146,7 @@ class SipDates extends Component {
     dialog_states[key] = value;
     if (errorMessage) dialog_states["errorMessage"] = errorMessage;
     this.setState({ dialogStates: dialog_states });
+    this.handleApiRunning(false)
   };
 
   handleApiRunning = (isApiRunning) => {
@@ -170,7 +171,6 @@ class SipDates extends Component {
         showLoader={isApiRunning}
       >
         <div className="sip-dates">
-          {/* <div className="main-top-title">Select investment date</div> */}
           {sips &&
             sips.map((sip, index) => {
               let options = [];
@@ -205,7 +205,7 @@ class SipDates extends Component {
           <SuccessDialog
             isOpen={openSuccessDialog}
             sips={sips}
-            handleClick={() => this.handleClose()}
+            handleClick={this.handleSuccessDialog}
           />
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPending}

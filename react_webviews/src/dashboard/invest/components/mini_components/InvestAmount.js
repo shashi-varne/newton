@@ -141,10 +141,7 @@ const InvestAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      // fullWidthButton
       buttonTitle='Next'
-      // helpContact
-      // hideInPageTitle
       hidePageTitle
       disable={error}
       showLoader={loader}
