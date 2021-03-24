@@ -100,7 +100,7 @@ class SelectDropDown2 extends React.Component {
     isLableOpen = !!isLableOpen; 
     return (
       <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ margin: '2px 0px' }}>
-        {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}  style={{  color : isLableOpen ? '#4f2da7':'#4a4a4a'}}><div
+        {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}  style={{  color : isLableOpen ? '#4f2da7':'#767E86'}}><div
           ref={element => {
             if (element && isLableOpen) {
               element.style.setProperty('margin-top', '3px', 'important');
