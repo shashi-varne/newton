@@ -67,6 +67,7 @@ const Landing = (props) => {
         bondSplit: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
+        name:'Tax saving'
       };
       storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);

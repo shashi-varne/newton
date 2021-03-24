@@ -3,8 +3,8 @@ import Container from '../../../../common/Container';
 import Input from 'common/ui/Input';
 import toast from 'common/ui/Toast'
 
-import { storageService } from 'utils/validators';
-import {getRateOfInterest, navigate as navigateFunc, isRecurring} from '../../../common/commonFunction';
+import { storageService, formatAmountInr } from 'utils/validators';
+import {getRateOfInterest, navigate as navigateFunc, isRecurring, convertInrAmountToNumber} from '../../../common/commonFunction';
 import { get_recommended_funds } from '../../../common/api';
 import './style.scss';
 
@@ -42,10 +42,12 @@ const Target = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    let value = e.target.value || "";
+    value = convertInrAmountToNumber(value);
     // eslint-disable-next-line radix
-    if (!isNaN(parseInt(e.target.value))) {
+    if (!isNaN(parseInt(value))) {
       // eslint-disable-next-line radix
-      setTargetAmount(parseInt(e.target.value));
+      setTargetAmount(parseInt(value));
     } else {
       setTargetAmount('');
     }
@@ -77,7 +79,7 @@ const Target = (props) => {
       const recurring = isRecurring('saveforgoal');
       const { recommendation } = await get_recommended_funds(params);
       const monthlyAmount = getMonthlyCommitmentNew(amount, recommendation.equity);
-      const graphData = {
+      const graphsData = {
         year,
         amount: monthlyAmount,
         corpus: amount,
@@ -86,10 +88,11 @@ const Target = (props) => {
         term,
         investType: 'saveforgoal',
         isRecurring: recurring,
-        investTypeDisplay:"sip"
+        investTypeDisplay:"sip",
+        name:"Saving for goal"
       };
       storageService().setObject('goalRecommendations', recommendation.goal);
-      storageService().setObject('graphData', graphData);
+      storageService().setObject('graphData', graphsData);
       setLoader(false);
       navigate(`savegoal/${subtype}/amount`, true);
     } catch (err) {
@@ -119,7 +122,7 @@ const Target = (props) => {
           <Input
             id='invest-amount'
             class='invest-amount-num'
-            value={targetAmount}
+            value={targetAmount ? formatAmountInr(targetAmount) : ""}
             onChange={handleChange}
             type='text'
             error={!targetAmount}

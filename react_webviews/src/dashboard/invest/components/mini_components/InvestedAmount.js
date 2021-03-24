@@ -55,7 +55,7 @@ const InvestedAmount = (props) => {
       setLoader("button");
       const data = await get_recommended_funds(params);
       console.log("data is", data);
-      graphData = { ...graphData, ...data, amount};
+      graphData = { ...graphData, ...data};
       storageService().setObject('graphData', graphData);
       setLoader(false);
       navigate(`recommendations`);

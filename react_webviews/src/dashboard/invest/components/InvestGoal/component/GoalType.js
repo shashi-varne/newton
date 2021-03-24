@@ -18,7 +18,7 @@ const GoalType = (props) => {
   const graphData = storageService().getObject("graphData")
 
   const goNext = () => {
-    storageService().setObject("graphData",{...graphData,year})
+    storageService().setObject("graphData",{...graphData,name:"Saving for goal", year})
     if (subtype === 'other') {
       navigate(`savegoal/${subtype}/target`);
     } else {
