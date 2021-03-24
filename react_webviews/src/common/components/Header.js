@@ -4,29 +4,26 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import Close from '@material-ui/icons/Close';
-import SearchIcon from '@material-ui/icons/Search';
 import SVG from 'react-inlinesvg';
 import {getConfig} from 'utils/functions';
 import back_arrow from 'assets/back_arrow.svg';
 import close_icn from 'assets/close_icn.svg';
+import search from 'assets/search.png';
 import '../theme/Style.scss';
 import restart from 'assets/restart_nav_icn.svg';
 
 const headerIconMapper = {
   back: back_arrow,
-  close: close_icn
-}
-
-const headerRightIconMapper = {
-  close: Close,
-  search: SearchIcon
+  close: close_icn,
+  search: search,
+  restart: restart
 }
 
 const Header = ({ classes, title, count, total, current, goBack, 
   edit, type, resetpage, handleReset, smallTitle, disableBack, provider, 
   inPageTitle, force_hide_inpage_title, topIcon, handleTopIcon, 
   className ,style, headerData={}, new_header}) => {
-    const Icon = headerRightIconMapper[topIcon];
+    const rightIcon = headerIconMapper[topIcon];
     return (
       <AppBar position="fixed" color="primary" 
       className={`Header transition ${classes.root} ${inPageTitle || new_header ? 'header-topbar-white' : ''} ${className || ''}`}
@@ -55,15 +52,14 @@ const Header = ({ classes, title, count, total, current, goBack,
               {title}
             </div>
           </div>
-          {resetpage &&
+          {topIcon &&
             <SVG
             style={{marginLeft: 'auto', width:20}}
-            onClick={handleReset}
+            onClick={handleTopIcon}
             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
-            src={restart}
+            src={rightIcon}
           />
           }
-          {Icon && <Icon style={{marginLeft: 'auto'}} onClick={handleTopIcon} />}
         </Toolbar>
       </AppBar >
     )

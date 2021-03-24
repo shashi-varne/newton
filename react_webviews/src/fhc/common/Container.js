@@ -91,13 +91,17 @@ class Container extends Component {
   }
 
   handleTopIcon() {
-    this.setState({
-      callbackType: 'exit',
-      openPopup: true,
-      popupText: <Fragment>Are you sure you want to <b>exit</b>? 
-        <br />We will save your information securely.
-      </Fragment>
-    })
+    if (this.props.topIcon === "close") {
+      this.setState({
+        callbackType: 'exit',
+        openPopup: true,
+        popupText: <Fragment>Are you sure you want to <b>exit</b>? 
+          <br />We will save your information securely.
+        </Fragment>
+      })
+    } else if (this.props.topIcon === "restart") {
+      this.props.handleReset()
+    }
   }
 
 
