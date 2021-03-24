@@ -35,3 +35,5 @@ export const categories = {
         icon: "payment_transaction.svg",
     },
 }
+
+export const TotalSize = 15000000;

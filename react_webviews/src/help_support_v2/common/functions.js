@@ -4,6 +4,7 @@ import { nativeCallback } from "utils/native_callback";
 import toast from "common/ui/Toast";
 import throttle from "lodash/throttle";
 import scrollIntoView from "scroll-into-view-if-needed";
+import { TotalSize } from "../constants";
 
 export async function initialize() {
   this.navigate = navigate.bind(this);
@@ -525,7 +526,7 @@ export function getPdf(e) {
 
   sum += file.size;
 
-  if (sum > 15000000) {
+  if (sum > TotalSize) {
     toast("total size of uploaded documents should be less than 15MB");
     return;
   }
@@ -578,7 +579,7 @@ export function save(file) {
 
   sum += file.size;
 
-  if (sum > 15000000) {
+  if (sum > TotalSize) {
     toast("total size of uploaded documents should be less than 15MB");
     return;
   }

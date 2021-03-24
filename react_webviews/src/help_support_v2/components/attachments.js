@@ -46,9 +46,6 @@ class RenderAttachment extends Component {
     })
   }
 
-
-  // onload = () => {};
-
   openFileExplorer() {
     $("input").trigger("click");
   }
