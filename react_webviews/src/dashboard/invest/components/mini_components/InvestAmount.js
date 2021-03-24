@@ -56,10 +56,10 @@ const InvestAmount = (props) => {
     if(error){
       setError(false);
     }
-    if(goalRecommendation.itype !== 'saveforgoal'){
+    if(goalRecommendation.itype !== "saveforgoal"){
 
       let result;
-      if (investTypeDisplay === 'sip') {
+      if (investTypeDisplay === "sip") {
         result = validateSipAmount(amount);
       } else {
         result = validateOtAmount(amount);
@@ -72,7 +72,7 @@ const InvestAmount = (props) => {
         setError(false);
       }
     }
-    if (goalRecommendation.id === 'savetax') {
+    if (goalRecommendation.id === "savetax") {
       calculateTax(graphData?.corpus);
     } else {
       const valueOfCorpus = corpusValue(
@@ -93,7 +93,7 @@ const InvestAmount = (props) => {
         type: investType,
       };
       setLoader("button");
-      if (investType === 'saveforgoal') {
+      if (investType === "saveforgoal") {
         params.subtype = graphData?.subtype;
         params.term = graphData?.term;
       } else if (investType === 'investsurplus') {
@@ -126,7 +126,7 @@ const InvestAmount = (props) => {
       duration = 1;
     }
     let tempAmount = 0;
-    if (investType === 'savetaxsip') {
+    if (investType === "savetaxsip") {
       tempAmount = amount;
       tempAmount = tempAmount * duration;
     } else {
@@ -166,7 +166,7 @@ const InvestAmount = (props) => {
               pattern='[0-9]*'
             />
           </div>
-          { investTypeDisplay === 'sip' || goalRecommendation.itype === 'saveforgoal' ? (
+          { investTypeDisplay === "sip" || goalRecommendation.itype === "saveforgoal" ? (
             <p className='invest-amount-input-duration'>per month</p>
             ) : (
             <p className='invest-amount-input-duration'>from my savings</p>
@@ -174,7 +174,7 @@ const InvestAmount = (props) => {
           }
         </div>
         <div className='invest-amount-corpus'>
-          {goalRecommendation.id === 'savetax' ? (
+          {goalRecommendation.id === "savetax" ? (
             <div className='invest-amount-corpus-duration'>
               till Mar {date.getFullYear()} to save tax upto:
             </div>
