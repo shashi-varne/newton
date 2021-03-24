@@ -99,15 +99,12 @@ class CategoryList extends Component {
     if (!value) {
       this.setState({ faqList: [] });
       let element = document.getElementById("categoryList");
-      console.log(element);
       if (!element || element === null) {
         return;
       }
 
       scrollIntoView(element, {
         block: "end",
-        // inline: "nearest",
-        // behavior: "smooth",
       });
       return;
     }
@@ -185,25 +182,6 @@ class CategoryList extends Component {
     this.setState({ open: false });
   };
 
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        onload: {
-          handleClick1: this.onload,
-          title1: this.state.title1,
-          button_text1: "Retry",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
-  };
-
   handleContact = () => {
     if (getConfig().Web) {
       this.setState({
@@ -243,13 +221,9 @@ class CategoryList extends Component {
         showError={this.state.showError}
         errorData={this.state.errorData}
         events={this.sendEvents("just_set_events")}
-        headerData={{
-          hide_icon: true,
-        }}
         styleHeader={{
-          display: "none",
+          display: !this.state.showError ? "none" : 'inherit',
         }}
-        new_header={true}
         classHeader={"fixed-header"}
         noFooter
       >

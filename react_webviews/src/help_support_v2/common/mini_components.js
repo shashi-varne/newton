@@ -13,7 +13,7 @@ export const MyQueries = (props) => {
       </div>
       {props.search && (
         <div className="help-search-bar">
-          <Search value={props.value} onChange={(e) => props.onChange(e)} />
+          <Search value={props.value} onChange={(e) => props.onChange(e)} maxLength={50} />
         </div>
       )}
     </div>

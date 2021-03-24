@@ -80,6 +80,9 @@ class SearchInput extends Component {
               input: this.props.classes.bootstrapInput,
             },
           }}
+          inputProps={{
+            maxLength: this.props.maxLength,
+          }}
         />
       </div>
     );

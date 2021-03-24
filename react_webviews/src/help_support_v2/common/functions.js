@@ -11,6 +11,7 @@ export async function initialize() {
   this.getPdf = getPdf.bind(this);
   this.save = save.bind(this);
   this.handleError = handleError.bind(this);
+  this.setErrorData = setErrorData.bind(this);
 
   nativeCallback({ action: "take_control_reset" });
 
@@ -36,6 +37,45 @@ export function openInBrowser(url) {
       url: url,
     },
   });
+}
+
+export function setErrorData(type) {
+  this.setState({
+    showError: false,
+  });
+  if (type) {
+    let mapper = {
+      onload: {
+        handleClick1: this.onload,
+        title1: this.state.title1,
+        button_text1: "Retry",
+      },
+      upldateFeedback: {
+        handleClick1: () => {
+          this.setState({
+            showError: false,
+          });
+        },
+        title1: this.state.title1,
+        button_text1: "Dismiss",
+      },
+      submit: {
+        handleClick1: this.handleClick,
+        button_text1: "Retry",
+        title1: this.state.title1,
+        handleClick2: () => {
+          this.setState({
+            showError: false,
+          });
+        },
+        button_text2: "Edit",
+      },
+    };
+
+    this.setState({
+      errorData: { ...mapper[type], setErrorData: this.setErrorData },
+    });
+  }
 }
 
 export const handleScroll = throttle(
@@ -105,7 +145,7 @@ export async function getAllCategories() {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -135,7 +175,7 @@ export async function SearchFaq(word) {
         title1: title1,
       });
       let value = "";
-      this.handleChange(value)
+      this.handleChange(value);
 
       this.setErrorData("onload");
       throw error;
@@ -147,7 +187,7 @@ export async function SearchFaq(word) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -189,7 +229,7 @@ export async function getSubCategories(category_id) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -231,7 +271,7 @@ export async function getAllfaqs(sub_category_id) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -252,9 +292,9 @@ export async function getFaqDescription(faq_id) {
     this.setState({
       skelton: false,
       isApiRunning: false,
-    })
+    });
     if (status === 200) {
-      return result
+      return result;
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
@@ -271,7 +311,7 @@ export async function getFaqDescription(faq_id) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -290,9 +330,10 @@ export async function updateFeedback(feedback, id) {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
         title1: title1,
+        thumbStatus: "",
       });
       this.setErrorData("upldateFeedback");
-      throw error
+      throw error;
     }
   } catch (err) {
     console.log(err);
@@ -301,7 +342,7 @@ export async function updateFeedback(feedback, id) {
   }
 
   if (error) {
-    this.handleError(error, errorType, false)
+    this.handleError(error, errorType, false);
   }
 }
 
@@ -326,7 +367,7 @@ export async function getUserTickets(params) {
     });
 
     if (status === 200) {
-      return result
+      return result;
     } else {
       let title1 = result.error || result.message || "Something went wrong!";
       this.setState({
@@ -343,7 +384,7 @@ export async function getUserTickets(params) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -382,7 +423,7 @@ export async function getTicketConversations(ticket_id) {
   }
 
   if (error) {
-    this.handleError(error, errorType)
+    this.handleError(error, errorType);
   }
 }
 
@@ -423,7 +464,7 @@ export async function createTicket(body = {}) {
   }
 
   if (error) {
-    this.handleError(error, errorType, false)
+    this.handleError(error, errorType, false);
   }
 }
 
@@ -467,7 +508,7 @@ export async function ticketReply(body = {}, id) {
   }
 
   if (error) {
-    this.handleError(error, errorType, false)
+    this.handleError(error, errorType, false);
   }
 }
 
@@ -476,8 +517,16 @@ export function getPdf(e) {
 
   let file = e.target.files[0] || "";
 
-  if (file.size >= 10000000) {
-    toast("Please select pdf/image file less than 10 MB only");
+  let { documents } = this.state;
+  let sum = 0;
+  documents.forEach((item) => {
+    sum += item?.size || 0;
+  });
+
+  sum += file.size;
+
+  if (sum > 15000000) {
+    toast("total size of uploaded documents should be less than 15MB");
     return;
   }
 
@@ -495,7 +544,6 @@ export function getPdf(e) {
   }
 
   if (file) {
-    let { documents, count } = this.state;
     file.doc_type = file.type;
 
     let duplicate = documents.filter((item) => {
@@ -507,8 +555,6 @@ export function getPdf(e) {
     this.setState(
       {
         documents: documents,
-        confirmed: duplicate.length !== 0 ? true : false,
-        count: count,
       },
       () => this.handleScroll()
     );
@@ -524,11 +570,16 @@ export function save(file) {
     "image/bmp",
   ];
 
-  if (file.size >= 10000000) {
-    toast("Please select pdf/image file less than 10 MB only");
-    this.setState({
-      show_loader: false,
-    });
+  let { documents } = this.state;
+  let sum = 0;
+  documents.forEach((item) => {
+    sum += item?.size || 0;
+  });
+
+  sum += file.size;
+
+  if (sum > 15000000) {
+    toast("total size of uploaded documents should be less than 15MB");
     return;
   }
 
@@ -537,7 +588,6 @@ export function save(file) {
     return;
   }
 
-  let { documents } = this.state;
   file.doc_type = file.type;
 
   let ext = file.type.split("/")[1];

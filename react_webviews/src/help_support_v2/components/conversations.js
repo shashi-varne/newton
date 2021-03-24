@@ -186,36 +186,6 @@ class TicketConversations extends Component {
     });
   };
 
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        onload: {
-          handleClick1: this.onload,
-          title1: this.state.title1,
-          button_text1: "Retry",
-        },
-        submit: {
-          handleClick1: this.handleClick,
-          button_text1: "Retry",
-          title1: this.state.title1,
-          handleClick2: () => {
-            this.setState({
-              showError: false,
-            });
-          },
-          button_text2: "Edit",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
-  };
-
   goBack = () => {
     this.sendEvents("back");
     this.navigate("queries");

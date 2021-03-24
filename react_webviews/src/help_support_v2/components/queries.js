@@ -110,25 +110,6 @@ class Queries extends Component {
     }
   }
 
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        onload: {
-          handleClick1: this.onload,
-          title1: this.state.title1,
-          button_text1: "Retry",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
-  };
-
   goBack = () => {
     this.sendEvents("back");
     let { fromScreen } = this.state;

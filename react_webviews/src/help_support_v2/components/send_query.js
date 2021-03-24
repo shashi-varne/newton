@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import Container from "../common/Container";
-import { initialize, createTicket } from "../common/functions";
+import { initialize, createTicket, handleScroll } from "../common/functions";
 import Dialog, { DialogContent } from "material-ui/Dialog";
 import Slide from "@material-ui/core/Slide";
 import RenderAttachment from "./attachments";
-import scrollIntoView from "scroll-into-view-if-needed";
 import { getConfig } from "utils/functions";
 import { nativeCallback } from "utils/native_callback";
 
@@ -26,6 +25,7 @@ class SendQuery extends Component {
     };
     this.initialize = initialize.bind(this);
     this.createTicket = createTicket.bind(this);
+    this.handleScroll = handleScroll.bind(this);
   }
 
   componentWillMount() {
@@ -168,21 +168,6 @@ class SendQuery extends Component {
     });
   };
 
-  handleScroll = () => {
-    setTimeout(function () {
-      let element = document.getElementById("viewScroll");
-      if (!element || element === null) {
-        return;
-      }
-
-      scrollIntoView(element, {
-        block: "start",
-        inline: "nearest",
-        behavior: "smooth",
-      });
-    }, 50);
-  };
-
   handleDelete = (index) => {
     let { documents } = this.state;
 
@@ -197,31 +182,6 @@ class SendQuery extends Component {
       { pathname: "conversation", search: getConfig().searchParams },
       { ticket: ticket }
     );
-  };
-
-  setErrorData = (type) => {
-    this.setState({
-      showError: false,
-    });
-    if (type) {
-      let mapper = {
-        submit: {
-          handleClick1: this.handleClick,
-          button_text1: "Retry",
-          title1: this.state.title1,
-          handleClick2: () => {
-            this.setState({
-              showError: false,
-            });
-          },
-          button_text2: "Edit",
-        },
-      };
-
-      this.setState({
-        errorData: { ...mapper[type], setErrorData: this.setErrorData },
-      });
-    }
   };
 
   render() {
