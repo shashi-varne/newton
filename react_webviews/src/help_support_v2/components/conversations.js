@@ -88,7 +88,7 @@ class TicketConversations extends Component {
 
     let description = {
       description: result.description,
-      dt_updated: result.created_at,
+      created_at: result.created_at,
       attachment: result.attachments,
       message_from: "user",
     };
