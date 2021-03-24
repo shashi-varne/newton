@@ -225,9 +225,8 @@ class CategoryList extends Component {
           display: !this.state.showError ? "none" : 'inherit',
         }}
         styleContainer={{
-          height: '100% !important'
+          height: '100%',
         }}
-        classHeader={"fixed-header"}
         noFooter
       >
         <div className="help-CategoryList">

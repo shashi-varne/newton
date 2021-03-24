@@ -80,6 +80,7 @@ class SearchInput extends Component {
               input: this.props.classes.bootstrapInput,
             },
           }}
+          // eslint-disable-next-line
           inputProps={{
             maxLength: this.props.maxLength,
           }}
