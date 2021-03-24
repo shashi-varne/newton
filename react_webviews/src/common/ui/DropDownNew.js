@@ -105,7 +105,7 @@ class SelectDropDown2 extends React.Component {
           ref={element => {
             if (element && isLableOpen) {
               element.style.setProperty('margin-top', '4px', 'important');
-              element.style.setProperty('margin-left', '14px', 'important');
+              element.style.setProperty('margin-left', '13px', 'important');
             } else if (element && !isLableOpen) {
               element.style.setProperty('margin-top', '-7px', 'important');
               element.style.setProperty('margin-left', '12px', 'important');
@@ -139,7 +139,7 @@ class SelectDropDown2 extends React.Component {
             placeholder={''}
             isClearable={true}
             isSearchable={this.props.options.length <= 6 ? false : true}
-            value={value}
+            value={value || ''}
             menuPlacement="auto"
             menuPortalTarget={document.querySelector('body')}
             textFieldProps={{
