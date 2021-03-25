@@ -8,7 +8,7 @@ import Container from '../../common/Container';
 import Api from 'utils/api';
 import { inrFormatDecimal } from 'utils/validators';
 import { nativeCallback } from 'utils/native_callback';
-import { getConfig } from 'utils/functions';
+import { getConfig, getBasePath } from 'utils/functions';
 import check from 'assets/check_mark.png';
 
 import Button from 'material-ui/Button';
@@ -193,6 +193,7 @@ class Recommendation extends Component {
   handleClick = async (event, isin) => {
 
     this.sendEvents('next');
+    let basepath = getBasePath();
     if (this.state.funds.length === 0) {
 
       this.setState({
@@ -203,7 +204,7 @@ class Recommendation extends Component {
 
 
     // eslint-disable-next-line
-    let nativeRedirectUrl = window.location.origin +
+    let nativeRedirectUrl = basepath +
       '/risk/recommendation' + getConfig().searchParams;
 
     let backData = {
@@ -240,7 +241,7 @@ class Recommendation extends Component {
     investment.allocations = allocations;
 
     let webview_redirect_url = encodeURIComponent(
-      window.location.origin + '/risk/recommendation' + 
+      basepath + '/risk/recommendation' + 
                                 getConfig().searchParams
     );
 
