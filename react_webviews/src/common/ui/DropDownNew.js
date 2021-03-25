@@ -47,12 +47,10 @@ class SelectDropDown2 extends React.Component {
 
 
   handleChange = selectedOption => {
-
-    this.setState({ selectedOption, value: selectedOption, inputValue: selectedOption ? selectedOption.label : "" })
-
-    if (this.state.multi) {
-      return;
-    }
+    this.setState({
+      selectedOption: selectedOption ? selectedOption.value ? selectedOption.value : selectedOption : ''
+      , value: selectedOption, inputValue: selectedOption ? selectedOption.label : ""
+    })
     this.props.onChange(selectedOption ? selectedOption.value : '');
 
     // if (selectedOption) {
@@ -81,9 +79,8 @@ class SelectDropDown2 extends React.Component {
     if (this.state.multi) {
       components = { Option, MultiValue, IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator }
     } else {
-      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator}
-    }
-
+      components = { IndicatorSeparator: () => null, Input, DropdownIndicator, ClearIndicator: () => null }
+    };
     const options = this.props.options.map((ele, index) => {
       if (ele.name) {
         return ({
@@ -97,93 +94,94 @@ class SelectDropDown2 extends React.Component {
     const OptionPresent = this.state.selectedOption ? !!this.state.selectedOption.length : false
     const value = options.find(opt => opt.value === this.state.selectedOption || opt.name === this.state.selectedOption);
     let isLableOpen = (!!value || (OptionPresent) || this.state.shrink) || (OptionPresent && this.props.multi);
-    isLableOpen = !!isLableOpen; 
+    isLableOpen = !!isLableOpen;
     return (
       <div>
-      <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ marginTop: '5px' }}>
-        {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id}  style={{  color : isLableOpen ? '':'#767E86'}}><div
-          ref={element => {
-            if (element && isLableOpen) {
-              element.style.setProperty('margin-top', '4px', 'important');
-              element.style.setProperty('margin-left', '13px', 'important');
-            } else if (element && !isLableOpen) {
-              element.style.setProperty('margin-top', '-7px', 'important');
-              element.style.setProperty('margin-left', '12px', 'important');
-            }
-          }}
-          style={{
-            position: 'absolute',
-            minWidth: '300px',
-            color: this.props.error ? '#D0021B' : '',
-            fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
-          }}>
-          {this.props.label}</div></InputLabel>)}
-        <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : ''  }}>
-          <Select
-            ref={ref => {
-              this.select = ref;
+        <FormControl className="Dropdown label" disabled={this.props.disabled} style={{ marginTop: '5px' }}>
+          {(<InputLabel shrink={isLableOpen} htmlFor={this.props.id} style={{ color: isLableOpen ? '' : '#767E86' }}><div
+            ref={element => {
+              if (element && isLableOpen) {
+                element.style.setProperty('margin-top', '6px', 'important');
+                element.style.setProperty('margin-left', '13px', 'important');
+              } else if (element && !isLableOpen) {
+                element.style.setProperty('margin-top', '-7px', 'important');
+                element.style.setProperty('margin-left', '12px', 'important');
+              }
             }}
-            blurInputOnSelect={false}
-            onBlurResetsInput={true}
-            menuShouldBlockScroll={ isMobile.any() ? false : true}
-            // defaultValue={value}
-            // isDisabled={this.state.isLoading}
-            // isLoading={this.state.isLoading}
-            // onCreateOption={this.handleCreate}
-            // onFocus={this.handleFocus}
-            getOptionLabel={option => option.name}
-            getOptionValue={option => option.value}
-            className={this.state.error ? "" : ''}
-            onMenuOpen={this.onMenuOpen}
-            onMenuClose={this.handleMenuClose}
-            placeholder={''}
-            isClearable={true}
-            isSearchable={this.props.options.length <= 6 ? false : true}
-            value={value || ''}
-            menuPlacement="auto"
-            menuPortalTarget={document.querySelector('body')}
-            textFieldProps={{
-              label: 'Label',
-              InputLabelProps: {
-                shrink: true,
-              },
-            }}
-            isMulti={this.state.multi}
-            components={components}
-            styles={{
-              dropdownIndicator: (provided, state) => ({
-                ...provided,
-                transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
-              }),
-              menuList: (base) => ({
-                ...base,            
-               "::-webkit-scrollbar": {
-                 width: "5px",
-                 height: '20px',
-                 background: '#C4C4C4',
-               },
-               "::-webkit-scrollbar-track": {
-                background: 'white',
-               },
-               "::-webkit-scrollbar-thumb": {
-                 background: "#C4C4C4",
-                 borderRadius: '100px',
-               },
-               "::-webkit-scrollbar-thumb:hover": {
-                 background: "#C4C4C4",
-               }
-            }),
-            }}
-            hideSelectedOptions={false}
-            options={options}
-            onChange={this.handleChange}
-            allowSelectAll={true}
-            closeMenuOnSelect={this.state.multi ? false : true}
-          />
-        </div>
-        {(this.props.error || this.state.error) ? <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
-          <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || ''} </span>}
-      </FormControl>
+            style={{
+              position: 'absolute',
+              minWidth: '300px',
+              color: this.props.error ? '#D0021B' : '',
+              fontSize: isLableOpen ? '11px' : '13px', lineHeight: isLableOpen ? '18px' : '21px',
+            }}>
+            {this.props.label}</div></InputLabel>)}
+          <div style={{ borderBottom: this.props.error ? '1px solid #D0021B' : this.state.shrink ? '1px solid #4F2DA7' : '' }}>
+            <Select
+              ref={ref => {
+                this.select = ref;
+              }}
+              blurInputOnSelect={false}
+              onBlurResetsInput={true}
+              openMenuOnClick={false}
+              menuShouldBlockScroll={true}
+              // defaultValue={value}
+              // isDisabled={this.state.isLoading}
+              // isLoading={this.state.isLoading}
+              // onCreateOption={this.handleCreate}
+              // onFocus={this.handleFocus}
+              getOptionLabel={option => option.name}
+              getOptionValue={option => option.value}
+              className={this.state.error ? "" : ''}
+              onMenuOpen={this.onMenuOpen}
+              onMenuClose={this.handleMenuClose}
+              placeholder={''}
+              isClearable={true}
+              isSearchable={this.props.options.length <= 6 ? false : true}
+              value={value || ''}
+              menuPlacement="auto"
+              menuPortalTarget={document.querySelector('body')}
+              textFieldProps={{
+                label: 'Label',
+                InputLabelProps: {
+                  shrink: true,
+                },
+              }}
+              isMulti={this.state.multi}
+              components={components}
+              styles={{
+                dropdownIndicator: (provided, state) => ({
+                  ...provided,
+                  transform: state.selectProps.menuIsOpen && 'rotate(180deg)'
+                }),
+                menuList: (base) => ({
+                  ...base,
+                  "::-webkit-scrollbar": {
+                    width: "5px",
+                    height: '20px',
+                    background: '#C4C4C4',
+                  },
+                  "::-webkit-scrollbar-track": {
+                    background: 'white',
+                  },
+                  "::-webkit-scrollbar-thumb": {
+                    background: "#C4C4C4",
+                    borderRadius: '100px',
+                  },
+                  "::-webkit-scrollbar-thumb:hover": {
+                    background: "#C4C4C4",
+                  }
+                }),
+              }}
+              hideSelectedOptions={false}
+              options={options}
+              onChange={this.handleChange}
+              allowSelectAll={true}
+              closeMenuOnSelect={this.state.multi ? false : true}
+            />
+          </div>
+          {(this.props.error || this.state.error) ? <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || 'Please select an option'} </span> :
+            <span className='error-radiogrp' style={ErrorMessageStyle}> {this.props.helperText || this.state.helperText || ''} </span>}
+        </FormControl>
       </div>
     );
   }
@@ -228,7 +226,7 @@ const DropdownIndicator = (props) => {
   return (
     <components.DropdownIndicator {...props}>
       <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-       <path d="M1 1L7 7L13 1" stroke="#767E86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M1 1L7 7L13 1" stroke="#767E86" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </components.DropdownIndicator>
   );
@@ -240,7 +238,6 @@ const ClearIndicator = (props) => {
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9.66659 1.27334L8.72659 0.333336L4.99992 4.06L1.27325 0.333336L0.333252 1.27334L4.05992 5L0.333252 8.72667L1.27325 9.66667L4.99992 5.94L8.72659 9.66667L9.66659 8.72667L5.93992 5L9.66659 1.27334Z" fill="#767E86" />
       </svg>
-
     </components.ClearIndicator>
   );
 }
