@@ -50,6 +50,7 @@ const Landing = (props) => {
         bondSplit: data.recommendation.debt,
         isRecurring: recurring,
         investTypeDisplay,
+        name: 'Wealth building'
       };
       storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
@@ -71,7 +72,7 @@ const Landing = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      buttonTitle='Next'
+      buttonTitle='NEXT'
       hidePageTitle
       showLoader={loader}
       title='Park Money'

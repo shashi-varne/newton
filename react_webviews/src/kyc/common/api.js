@@ -84,7 +84,14 @@ export const checkMerge = async (pan) => {
   const res = await Api.post(
     `/api/user/account/merge?pan_number=${pan}&verify_only=true`
   )
-  return handleApi(res);
+  if (
+    res.pfwstatus_code !== 200 ||
+    !res.pfwresponse ||
+    isEmpty(res.pfwresponse)
+  ) {
+    throw new Error( res?.pfwmessage || genericErrorMessage);
+  }
+  return res.pfwresponse;
 }
 
 export const kycSubmit = async (body) => {

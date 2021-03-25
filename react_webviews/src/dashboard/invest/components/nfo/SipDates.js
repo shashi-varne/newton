@@ -64,6 +64,12 @@ class SipDates extends Component {
     let buttonTitle =
       finalPurchases.length === 1 ? "CONFIRM DATE" : "CONFIRM DATES";
 
+    const paymentRedirectUrl = encodeURIComponent(
+      `${window.location.origin}/page/callback/sip/${
+        sipBaseData.investment.amount
+      }${getConfig().searchParams}`
+    );
+
     this.setState({
       form_data: form_data,
       sips: finalPurchases,
@@ -71,19 +77,22 @@ class SipDates extends Component {
       sipOrOnetime: sipOrOnetime,
       buttonTitle: buttonTitle,
       sipBaseData: sipBaseData,
+      paymentRedirectUrl: paymentRedirectUrl,
       props: this.props,
     });
   };
 
   handleClick = () => {
-    let { sipBaseData, sips, userKyc, isSipDatesScreen } = this.state;
+    let {
+      sipBaseData,
+      sips,
+      userKyc,
+      isSipDatesScreen,
+      paymentRedirectUrl,
+    } = this.state;
     sips.forEach((sip, index) => {
       sipBaseData.investment.allocations[index].sip_date = sip.sip_date;
     });
-
-    let paymentRedirectUrl = encodeURIComponent(
-      `${window.location.origin}/page/callback/sip/${sipBaseData.investment.amount}`
-    );
 
     window.localStorage.setItem("investment", JSON.stringify(sipBaseData));
 
@@ -146,7 +155,7 @@ class SipDates extends Component {
     dialog_states[key] = value;
     if (errorMessage) dialog_states["errorMessage"] = errorMessage;
     this.setState({ dialogStates: dialog_states });
-    this.handleApiRunning(false)
+    this.handleApiRunning(false);
   };
 
   handleApiRunning = (isApiRunning) => {
@@ -206,6 +215,7 @@ class SipDates extends Component {
             isOpen={openSuccessDialog}
             sips={sips}
             handleClick={this.handleSuccessDialog}
+            close={() => this.setState({openSuccessDialog : false})}
           />
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPending}
@@ -215,6 +225,7 @@ class SipDates extends Component {
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
+            close={() => this.handleDialogStates('openInvestError', false)}
           />
         </div>
       </Container>

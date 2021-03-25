@@ -10,10 +10,12 @@ import {
   validateOtAmount,
   validateSipAmount,
   selectTitle,
+  convertInrAmountToNumber,
 } from '../../common/commonFunction';
 import { get_recommended_funds } from '../../common/api';
 
 import './style.scss';
+import { formatAmountInr } from '../../../../utils/validators';
 const date = new Date();
 
 const InvestAmount = (props) => {
@@ -34,10 +36,12 @@ const InvestAmount = (props) => {
   }, []);
 
   const handleChange = (e) => {
+    let value = e.target.value || "";
+    value = convertInrAmountToNumber(value);
     // eslint-disable-next-line radix
-    if (!isNaN(parseInt(e.target.value))) {
+    if (!isNaN(parseInt(value))) {
       // eslint-disable-next-line radix
-      setAmount(parseInt(e.target.value));
+      setAmount(parseInt(value));
     } else {
       setAmount('');
       setCorpus(0);
@@ -141,8 +145,9 @@ const InvestAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      buttonTitle='Next'
+      buttonTitle='NEXT'
       hidePageTitle
+      title={graphData.name}
       disable={error}
       showLoader={loader}
       title={title}
@@ -156,7 +161,7 @@ const InvestAmount = (props) => {
             <Input
               id='invest-amount'
               class='invest-amount-num'
-              value={amount}
+              value={amount ? formatAmountInr(amount) : ""}
               onChange={handleChange}
               type='text'
               error={error}

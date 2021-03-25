@@ -63,6 +63,7 @@ const Landing = (props) => {
         bondSplit: data.recommendation.debt,
         isRecurring: investTypeDisplay === 'sip' ? true : false,
         investTypeDisplay,
+        name: 'Wealth building'
       };
       storageService().setObject('goalRecommendations', data.recommendation.goal);
       storageService().setObject('graphData', graphData);
@@ -85,17 +86,11 @@ const Landing = (props) => {
 
   return (
     <Container
-      // classOverRide='pr-error-container'
-      // fullWidthButton
-      buttonTitle='Next'
-      // helpContact
-      // disable={loader}
-      // hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
-      // title='Build Wealth'
+      title='Build Wealth'
       handleClick={fetchRecommendedFunds}
       showLoader={loader}
-      // classOverRideContainer='pr-container'
     >
       <section className='invest-amount-common'>
         <InvestType

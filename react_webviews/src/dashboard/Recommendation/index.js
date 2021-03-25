@@ -33,7 +33,7 @@ const Recommendations = (props) => {
     type,
     term,
     name,
-    graphType,
+    subtype,
   } = graphData;
   const state = props.location.state || {};
   const [isins, setIsins] = useState("");
@@ -88,7 +88,7 @@ const Recommendations = (props) => {
       investmentObject.amount = amount;
       investmentObject.term = term;
       investmentObject.type = investType;
-      investmentObject.subtype = graphType;
+      investmentObject.subtype = subtype;
       investmentObject.allocations = allocations;
 
     } else {
@@ -230,7 +230,7 @@ const Recommendations = (props) => {
         <div className='recommendations-funds-lists'>
           {recommendation &&
             recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} history={props.history} />
+              <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
             ))}
         </div>
         <div className='recommendations-total-investment'>
@@ -261,6 +261,7 @@ const Recommendations = (props) => {
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
+          close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
           isOpen={dialogStates.openInvestReferral}

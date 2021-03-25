@@ -1210,6 +1210,10 @@
   }
 }
 
+#kyc-upload-address {
+  padding-bottom: 30px;
+}
+
 .kyc-doc-upload-container {
   margin-top: 20px;
   border: 1px dashed var(--skelton-color);
@@ -2057,5 +2061,22 @@
       color: white;
       background-color: var(--secondary);
     }
+  }
+}
+
+#kyc-journey-back {
+  .text {
+    margin: 10px 0;
+    color: #160d2e;
+    font-size: 16px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .MuiButton-label {
+    font-weight: bold;
   }
 }

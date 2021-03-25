@@ -54,7 +54,7 @@ const Header = ({ classes, title, count, total, current, goBack,
           </div>
           {topIcon &&
             <SVG
-            style={{marginLeft: 'auto', width:20}}
+            style={{marginLeft: 'auto', width:20, cursor:'pointer'}}
             onClick={handleTopIcon}
             preProcessor={code => code.replace(/fill=".*?"/g, 'fill=' + (new_header ? getConfig().primary : 'white'))}
             src={rightIcon}
