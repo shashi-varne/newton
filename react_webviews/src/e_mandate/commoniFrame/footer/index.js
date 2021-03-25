@@ -5,7 +5,7 @@ import { DefaultLayout } from './layout';
 const Footer = (props) => {
 
   return (
-    <div className={`Footer`}>
+    <div className="Footer" id="iframeFooter">
       <DefaultLayout type="default" isDisabled={props.isDisabled} {...props} />
     </div>
   );

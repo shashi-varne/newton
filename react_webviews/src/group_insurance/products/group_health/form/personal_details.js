@@ -28,10 +28,8 @@ class GroupHealthPlanPersonalDetails extends Component {
     super(props);
     this.state = {
       type: getConfig().productName,
-      header_title: 'Personal details',
       form_data: {},
       ctaWithProvider: true,
-      show_loader: true,
       quotation : { member_details : {}  },
       get_lead: true,
       openBmiDialog: false,
@@ -42,6 +40,21 @@ class GroupHealthPlanPersonalDetails extends Component {
     this.initialize = initialize.bind(this);
     this.updateLead = updateLead.bind(this);
     this.resetQuote = resetQuote.bind(this);
+  }
+  
+  pageTitle = () =>{
+    let member_key = this.props.member_key;
+    let header_title = `${capitalizeFirstLetter(childeNameMapper(member_key))}'s details`;
+    let header_subtitle = '';
+
+    if (member_key === 'self') {
+      header_title = 'Personal details';
+      header_subtitle = 'Policy will be issued basis these details';
+    }
+    this.setState({
+      header_title: header_title,
+      header_subtitle: header_subtitle
+    })
   }
 
   onload = () => {
@@ -189,10 +202,11 @@ class GroupHealthPlanPersonalDetails extends Component {
   }
 
   componentWillMount() {
+    this.pageTitle()
     this.initialize()
   }
 
- 
+
   handleChange = name => event => {
 
     var input = document.getElementById('dob');
@@ -208,6 +222,8 @@ class GroupHealthPlanPersonalDetails extends Component {
 
     if(name === 'weight'){
       value = event.target ? event.target.value.substr(0,3) : event;
+      // eslint-disable-next-line
+      if(parseInt(value) <= 0) return;
     }
 
     if(containsSpecialCharactersAndNumbers(value) && name === 'name'){
@@ -614,6 +630,9 @@ class GroupHealthPlanPersonalDetails extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        skelton={this.state.skelton}
         title={this.setEditTitle(this.state.header_title)}
         withProvider={true}
         handleClick2={this.handleClick2}

@@ -147,11 +147,11 @@ class HomeInsurance extends Component {
 
   render() {
     return (
-      <div>
+      // <div>
         <PlanDetails
           parent={this}
         />
-      </div>
+      // </div>
     );
   }
 

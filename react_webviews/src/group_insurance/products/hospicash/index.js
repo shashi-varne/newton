@@ -10,6 +10,7 @@ import ic_hospicash_b4_fisdom from 'assets/ic_hospicash_b4_fisdom.svg';
 import ic_hospicash_b1_myway from 'assets/ic_hospicash_b1_myway.svg';
 import ic_hospicash_b2_myway from 'assets/ic_hospicash_b2_myway.svg';
 import ic_hospicash_b4_myway from 'assets/ic_hospicash_b4_myway.svg';
+import { Fragment } from 'react';
 
 class HospicashPlanDetails extends Component {
 
@@ -138,11 +139,11 @@ class HospicashPlanDetails extends Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <PlanDetails
           parent={this}
         />
-      </div>
+      </Fragment>
     );
   }
 

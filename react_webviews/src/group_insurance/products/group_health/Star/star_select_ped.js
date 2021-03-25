@@ -262,7 +262,10 @@ class GroupHealthStarPlanSelectPed extends Component {
       <Container
         events={this.sendEvents("just_set_events")}
         showLoader={this.state.show_loader}
-        title="Pre-existing conditions"
+        skelton={this.state.skelton}
+        showError={this.state.showError}
+        errorData={this.state.errorData}
+        title={this.setEditTitle('Pre-existing conditions')}
         buttonTitle="CONTINUE"
         withProvider={true}
         handleClick2={this.handleClick2}

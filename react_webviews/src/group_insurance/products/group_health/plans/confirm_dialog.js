@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import Dialog, {
     DialogContent
 } from 'material-ui/Dialog';
-import { WithProviderLayout } from '../../../common/footer/layout';
+
+import {FooterLayoutBase} from 'common/components/footer/layout';
 import ReactHtmlParser from 'react-html-parser';
 import { numDifferentiationInr } from 'utils/validators';
 
@@ -63,7 +64,9 @@ class ConfirmDialogClass extends Component {
                 <div style={{padding: '0px 5px 0px 10px',fontSize:'14px'}} >
                     <div className="gold-dialog" id="alert-dialog-description">
                         <div className="mid-buttons">
-                            <WithProviderLayout type="default"
+                            <FooterLayoutBase 
+                                project="insurance"
+                                type="withProvider"
                                 handleClick2={parent.handleClose}
                                 handleClick={parent.handleClose}
                                 buttonTitle={confirmDialogData.buttonTitle}
