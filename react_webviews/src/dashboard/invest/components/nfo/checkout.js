@@ -321,17 +321,17 @@ class Checkout extends Component {
           </div>
           <TermsAndCond />
           <PennyVerificationPending
-            isOpen={dialogStates.openPennyVerificationPending || false}
+            isOpen={dialogStates.openPennyVerificationPending ? dialogStates.openPennyVerificationPending : false}
             handleClick={() => this.navigate("/kyc/add-bank")}
           />
           <InvestError
-            isOpen={dialogStates.openInvestError || false}
+            isOpen={dialogStates.openInvestError ? dialogStates.openInvestError : false}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
             close={() => this.handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog
-            isOpen={dialogStates.openInvestReferral || false}
+            isOpen={dialogStates.openInvestReferral ? dialogStates.openInvestReferral : false}
             proceedInvestment={this.proceedInvestment}
             close={() => this.handleDialogStates("openInvestReferral", false)}
           />
