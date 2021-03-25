@@ -77,6 +77,11 @@ class Checkout extends Component {
       fundsData = !storageService().getObject(CART)
         ? [storageService().getObject("diystore_fundInfo")]
         : storageService().getObject(CART);
+
+      if(!fundsData || fundsData?.length < 1) {
+        //this.props.history.goBack(); -> flashing the current page and then going back.
+        return;
+      };
       fundsData.forEach(() => form_data.push({}));
       let fundsArray = storageService().getObject(FUNDSLIST);
       let isins = this.getIsins(fundsData);
