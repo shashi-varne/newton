@@ -166,6 +166,7 @@ const InvestJourney = (props) => {
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest", null, true)}
+          close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
           isOpen={dialogStates.openInvestReferral}

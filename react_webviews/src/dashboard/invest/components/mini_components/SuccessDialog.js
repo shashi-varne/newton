@@ -4,7 +4,7 @@ import { getConfig } from "utils/functions";
 import Button from "@material-ui/core/Button";
 import { dateOrdinal } from "utils/validators";
 
-const SuccessDialog = ({ isOpen, handleClick, sips = [] }) => {
+const SuccessDialog = ({ isOpen, handleClick, sips = [], close }) => {
   const productName = getConfig().productName;
   return (
     <Dialog
@@ -14,6 +14,7 @@ const SuccessDialog = ({ isOpen, handleClick, sips = [] }) => {
       aria-describedby="success-dialog"
       className="invest-redeem-dialog"
       id="invest-bottom-dialog"
+      onClose={close}
     >
       <DialogContent className="dialog-content">
         <div className="head-bar">

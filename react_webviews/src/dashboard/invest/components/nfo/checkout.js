@@ -328,6 +328,7 @@ class Checkout extends Component {
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
+            close={() => this.handleDialogStates("openInvestError", false)}
           />
           <InvestReferralDialog
             isOpen={dialogStates.openInvestReferral}

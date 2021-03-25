@@ -90,10 +90,7 @@ const Landing = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      buttonTitle='Next'
-      // helpContact
-      // disable={loader}
-      // hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
       title='Save Tax'
       handleClick={fetchRecommendedFunds}
