@@ -91,6 +91,10 @@ class SendQuery extends Component {
       body_data.append("res[]", item, item.name);
     });
 
+    if (this.state.ticket) {
+      body_data.set("cf_old_ticket_reference_id", this.state.ticket?.ticket_id);
+    }
+
     let result = await this.createTicket(body_data);
 
     if (result) {
@@ -180,7 +184,7 @@ class SendQuery extends Component {
   redirectOldTicket = (ticket) => {
     this.props.history.push(
       { pathname: "conversation", search: getConfig().searchParams },
-      { ticket: ticket }
+      { ticket: ticket, fromScreen: 'send-query' }
     );
   };
 

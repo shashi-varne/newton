@@ -31,6 +31,9 @@ class TicketConversations extends Component {
       documents: [],
       value: "",
       splitIndex: 5,
+      old_ticket_reference_id: '',
+      fromTicket: '',
+      fromScreen: ''
     };
     this.initialize = initialize.bind(this);
     this.getTicketConversations = getTicketConversations.bind(this);
@@ -44,8 +47,11 @@ class TicketConversations extends Component {
 
   onload = async () => {
     let ticket = this.props.location.state.ticket;
+    let fromScreen = this.props.location.state.fromScreen || '';
+
     this.setState({
       ticket: ticket,
+      fromScreen: fromScreen,
       skelton: true,
     });
 
@@ -56,6 +62,7 @@ class TicketConversations extends Component {
         category: result.category || "",
         sub_category: result.sub_category || "",
         ticket_status: result.status || "",
+        old_ticket_reference_id: result.old_ticket_reference_id || ""
       });
       this.sortConversations(result);
     }
@@ -188,14 +195,54 @@ class TicketConversations extends Component {
 
   goBack = () => {
     this.sendEvents("back");
-    this.navigate("queries");
+
+    let { fromTicket, ticket, oldReferenceClicked, fromScreen } = this.state;
+
+    if (fromScreen) {
+      this.props.history.push(
+        { pathname: "send-query", search: getConfig().searchParams },
+        { ticket: this.state.ticket }
+      );
+    } else if (oldReferenceClicked) {
+      ticket.ticket_id = fromTicket;
+
+      this.setState({
+        ticket: ticket,
+        skelton: true,
+        oldReferenceClicked: false,
+        ticket_status: ''
+      })
+      this.onload();
+    } else {
+      this.navigate("queries");
+    }
   };
+
+  redirectOldTicket = () => {
+    let { ticket, old_ticket_reference_id } = this.state;
+    let fromTicket = ticket.ticket_id;
+
+    ticket.ticket_id = old_ticket_reference_id;
+
+    this.setState({
+      ticket: ticket,
+      old_ticket_reference_id: "",
+      ticket_status: "",
+      skelton: true,
+      oldReferenceClicked: true,
+      fromTicket: fromTicket,
+      fromScreen: ''
+    })
+
+    this.onload();
+  }
 
   render() {
     let {
       ticket,
       category,
       sub_category,
+      old_ticket_reference_id,
       openTextBox,
       ticket_status,
       documents,
@@ -235,6 +282,14 @@ class TicketConversations extends Component {
           <div className="sub-title">
             {category} {">"} {sub_category}
           </div>
+          {old_ticket_reference_id && (
+            <div
+              className="ticket-id"
+              onClick={() => this.redirectOldTicket()}
+            >
+              Old Ticket: {old_ticket_reference_id}
+            </div>
+          )}
           {!this.state.skelton &&
             conversations &&
             conversations.slice(0, splitIndex).map((item, index) => (
