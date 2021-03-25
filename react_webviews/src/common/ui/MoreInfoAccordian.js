@@ -45,7 +45,7 @@ class MoreInfoAccordian extends Component {
                       <SVG
                         className="text-block-2-img"
                         preProcessor={(code) =>
-                          code.replace(/fill=".*?"/g, "fill=#5c5c5c")
+                          code.replace(/fill=".*?"/g, "fill=#FFFFFF")
                         }
                         src={this.state[`${key}_open`] ? up_arrow : down_arrow}
                       />
