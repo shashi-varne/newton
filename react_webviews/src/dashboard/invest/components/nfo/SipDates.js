@@ -215,6 +215,7 @@ class SipDates extends Component {
             isOpen={openSuccessDialog}
             sips={sips}
             handleClick={this.handleSuccessDialog}
+            close={() => this.setState({openSuccessDialog : false})}
           />
           <PennyVerificationPending
             isOpen={dialogStates.openPennyVerificationPending}
@@ -224,6 +225,7 @@ class SipDates extends Component {
             isOpen={dialogStates.openInvestError}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
+            close={() => this.handleDialogStates('openInvestError', false)}
           />
         </div>
       </Container>

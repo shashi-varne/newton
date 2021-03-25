@@ -230,7 +230,7 @@ const Recommendations = (props) => {
         <div className='recommendations-funds-lists'>
           {recommendation &&
             recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} history={props.history} />
+              <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
             ))}
         </div>
         <div className='recommendations-total-investment'>
@@ -261,6 +261,7 @@ const Recommendations = (props) => {
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
+          close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
           isOpen={dialogStates.openInvestReferral}

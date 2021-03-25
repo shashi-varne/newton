@@ -110,7 +110,7 @@ const Target = (props) => {
       classOverRide='pr-error-container'
       hidePageTitle
       title='Save for a Goal'
-      buttonTitle='Next'
+      buttonTitle='NEXT'
       handleClick={goNext}
       classOverRideContainer='pr-container'
       disable={!targetAmount}

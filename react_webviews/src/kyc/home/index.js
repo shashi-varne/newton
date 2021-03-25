@@ -184,7 +184,7 @@ const Home = (props) => {
       storageService().setObject(storageConstants.AUTH_IDS, authIds);
       navigate(`${getPathname.accountMerge}${pan.toUpperCase()}`);
     } else {
-      if (getConfig().web) {
+      if (getConfig().Web) {
         let result = await logout();
         if (!result) return;
         navigate("/login");
@@ -205,9 +205,11 @@ const Home = (props) => {
       toast(toastMessage);
     } else {
       let response = await checkMerge(pan.toUpperCase());
+      console.log(response)
       if (!response) return;
-      let { message, auth_ids } = response;
-      if (message === "success") {
+      let { result, status_code } = response;
+      let { different_login, auth_ids} = result;
+      if (status_code === 200) {
         setAuthIds(auth_ids);
         setAccountMergeData({
           title: "PAN Already Exists",
@@ -217,10 +219,10 @@ const Home = (props) => {
           step: "STEP1",
         });
         setOpenAccountMerge(true);
-      } else if (response?.different_login) {
+      } else if (different_login) {
         setAccountMergeData({
           title: "PAN Is already registered",
-          subtitle: response?.message,
+          subtitle: result?.message,
           buttonTitle: "SIGN OUT",
           step: "STEP2",
         });

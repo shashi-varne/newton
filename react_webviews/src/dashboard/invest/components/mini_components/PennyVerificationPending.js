@@ -7,7 +7,7 @@ const PennyVerificationPending = ({ isOpen, handleClick }) => {
   const productName = getConfig().productName;
   return (
     <Dialog
-      open={isOpen}
+      open={isOpen ? isOpen : false}
       aria-labelledby="success-dialog"
       keepMounted
       aria-describedby="success-dialog"

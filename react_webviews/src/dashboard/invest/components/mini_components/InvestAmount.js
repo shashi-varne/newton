@@ -145,8 +145,9 @@ const InvestAmount = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      buttonTitle='Next'
+      buttonTitle='NEXT'
       hidePageTitle
+      title={graphData.name}
       disable={error}
       showLoader={loader}
       title={title}

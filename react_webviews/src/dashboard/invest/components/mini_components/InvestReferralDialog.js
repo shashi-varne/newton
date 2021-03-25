@@ -75,7 +75,7 @@ const InvestReferralDialog = ({ isOpen, close, proceedInvestment }) => {
 
   return (
     <Dialog
-      open={isOpen}
+      open={isOpen ? isOpen : false}
       aria-labelledby="invest-refferal-dialog"
       keepMounted
       aria-describedby="invest-refferal-dialog"

@@ -33,10 +33,7 @@ const InvestGoal = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      // fullWidthButton
-      buttonTitle='Next'
-      // helpContact
-      // hideInPageTitle
+      buttonTitle='NEXT'
       hidePageTitle
       title="Save for a Goal"
       noFooter
