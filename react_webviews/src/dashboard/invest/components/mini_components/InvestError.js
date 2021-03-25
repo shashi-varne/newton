@@ -14,7 +14,7 @@ const InvestError = ({ isOpen, handleClick, errorMessage, close }) => {
 
   return (
     <Dialog
-      open={isOpen}
+      open={isOpen ? isOpen : false}
       aria-labelledby="success-dialog"
       keepMounted
       aria-describedby="success-dialog"

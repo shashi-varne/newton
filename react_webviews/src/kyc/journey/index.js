@@ -16,9 +16,9 @@ import Toast from '../../common/ui/Toast'
 import { isMobile } from 'utils/functions'
 import { nativeCallback } from 'utils/native_callback'
 import AadhaarDialog from '../mini_components/AadhaarDialog'
+import KycBackModal from '../mini_components/KycBack'
 
 const Journey = (props) => {
-  console.log(props)
   const navigate = navigateFunc.bind(props)
   const urlParams = getUrlParams(props?.location?.search)
   const [isApiRunning, setIsApiRunning] = useState(false)
@@ -29,9 +29,23 @@ const Journey = (props) => {
 
   const [showDlAadhaar, setDlAadhaar] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [goBackModal, setGoBackModal] = useState(false)
 
   const [kyc, setKyc] = useState({})
   const [user, setUser] = useState({})
+
+  const closeGoBackModal = () => {
+    setGoBackModal(false)
+  }
+
+  const openGoBackModal = () => {
+    setGoBackModal(true)
+  }
+
+  const confirmGoBack = () => {
+      closeGoBackModal()
+      props.history.goBack()
+  }
 
   useEffect(() => {
     initialize()
@@ -445,8 +459,6 @@ const Journey = (props) => {
       })
       return
     } else {
-      console.log('Non Compliant journey')
-      console.log(show_aadhaar)
       if (show_aadhaar) {
         console.log(key)
         stateMapper = {
@@ -457,7 +469,7 @@ const Journey = (props) => {
           docs: '/kyc/upload/intro',
           esign: '/kyc-esign/info',
         }
-        console.log(stateMapper)
+
         navigate(stateMapper[key], {
           isEdit: isEdit,
           userType: 'non-compliant',
@@ -660,6 +672,7 @@ const Journey = (props) => {
       skelton={isLoading || isEmpty(kyc) || isEmpty(user)}
       handleClick={goNext}
       showLoader={isApiRunning}
+      headerData={{ goBack: openGoBackModal }}
     >
       {!isEmpty(kyc) && !isEmpty(user) && (
         <div className="kyc-journey">
@@ -790,9 +803,12 @@ const Journey = (props) => {
                   }
                 >
                   <div className="flex flex-between">
-                    <span className="field_key">{item.title}{item?.value ? ':' : ''}</span>
+                    <span className="field_key">
+                      {item.title}
+                      {item?.value ? ':' : ''}
+                    </span>
                     {item?.value && (
-                      <span className="field_value">{' '}{item?.value}</span>
+                      <span className="field_value"> {item?.value}</span>
                     )}
                   </div>
 
@@ -825,6 +841,12 @@ const Journey = (props) => {
           setAadhaarLinkDialog(false)
         }}
         kyc={kyc}
+      />
+      <KycBackModal
+        id="kyc-back-modal"
+        open={goBackModal}
+        confirm={confirmGoBack}
+        cancel={closeGoBackModal}
       />
     </Container>
   )

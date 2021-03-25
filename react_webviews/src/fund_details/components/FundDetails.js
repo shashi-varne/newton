@@ -155,7 +155,7 @@ const FundDetails = ({ classes, history }) => {
   };
 
   const handleClick = () => {
-    if( productType === 'finity' ){
+    if( productType === 'finity' && type === "diy"){
       storageService().setObject("diystore_cart", [fund]);
       handleClick2();
       return;
