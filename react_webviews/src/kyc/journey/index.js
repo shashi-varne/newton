@@ -33,6 +33,8 @@ const Journey = (props) => {
 
   const [kyc, setKyc] = useState({})
   const [user, setUser] = useState({})
+  const state = props.location.state || {};
+  let { fromState } = state;
 
   const closeGoBackModal = () => {
     setGoBackModal(false)
@@ -632,8 +634,8 @@ const Journey = (props) => {
       !isCompliant &&
       !show_aadhaar &&
       user.kyc_registration_v2 !== 'submitted' &&
-      user.kyc_registration_v2 !== 'complete'
-      // && $rootScope.fromState !== 'kyc-journey'
+      user.kyc_registration_v2 !== 'complete' &&
+      fromState !== "digilocker-failed"
     ) {
       if (
         !storageService().get('show_aadhaar') &&

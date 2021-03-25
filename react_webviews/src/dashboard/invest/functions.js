@@ -1222,6 +1222,10 @@ export function openKyc() {
   } else {
     if (kycJourneyStatus === "ground") {
       this.navigate("/kyc/home");
+    } else if (kycJourneyStatus === "ground_pan") {
+      this.navigate('/kyc/journey', { state: {
+        show_aadhaar: true, fromState: "invest" }
+      });
     } else {
       this.navigate(kycStatusData.next_state, {
         state: { fromState: "invest" },

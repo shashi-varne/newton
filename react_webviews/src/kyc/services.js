@@ -229,6 +229,10 @@ export function getKycAppStatus(kyc) {
     status = 'ground';
   }
 
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 === 'init' && kyc.pan.meta_data.pan_number && kyc.customer_verified === 'UNVERIFIED' && kyc.kyc_type === "init") {
+    status = 'ground_pan';
+  }
+
   if (kyc.kyc_status === 'compliant' && (kyc.application_status_v2 !== 'submitted' &&
     kyc.application_status_v2 !== 'complete') && kyc.customer_verified === 'UNVERIFIED') {
     status = 'ground_premium';
@@ -243,6 +247,11 @@ export function getKycAppStatus(kyc) {
     kyc.customer_verified === 'VERIFIED' && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
     status = 'incomplete';
   }
+
+  if (kyc.kyc_status !== 'compliant' && kyc.application_status_v2 == 'init' && kyc.pan.meta_data.pan_number &&
+      kyc.kyc_type === "manual" && (kyc.dl_docs_status === '' || kyc.dl_docs_status === 'init' || kyc.dl_docs_status === null)) {
+      status = 'incomplete';
+    }
 
   if (kyc.kyc_status !== 'compliant' && (kyc.application_status_v2 === 'submitted' || kyc.application_status_v2 === 'complete') && kyc.sign_status !== 'signed') {
     status = 'incomplete';

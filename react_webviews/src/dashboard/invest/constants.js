@@ -326,6 +326,13 @@ export const kycStatusMapperInvest = {
     button_text: "COMPLETE NOW",
     next_state: "/kyc/journey",
   },
+  ground_pan: {
+    icon: "ic_card_kyc_default.svg",
+    title: "Complete your KYC",
+    subtitle: "Don’t miss out good returns by Delaying",
+    button_text: "COMPLETE NOW",
+    next_state: "/kyc/journey"
+  },
   ground_aadhaar: {
     icon: "ic_card_kyc_default.svg",
     title: "Complete your KYC",

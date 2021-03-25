@@ -259,3 +259,19 @@ export const getIpvCode = async () => {
       genericErrorMessage
   )
 }
+
+export const setKycType = async (type) => {
+  const url = `api/kyc/user/set_kyc_type?kyc_type=${type}`;
+  const res = await Api.get(url);
+  if (res.pfwresponse.status_code === 200) {
+    const result = res.pfwresponse.result;
+    storageService().setObject('kyc', result.kyc);
+    storageService().setObject('user', result.user);
+    return result;
+  }
+  throw new Error(
+    res?.pfwresponse?.result?.message ||
+      res?.pfwresponse?.result?.error ||
+      genericErrorMessage
+  )
+}
