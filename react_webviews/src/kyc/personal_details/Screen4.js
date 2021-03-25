@@ -29,7 +29,7 @@ const PersonalDetails4 = (props) => {
   const type = props.type || "";
   const keysToCheck = ["dob", "name", "relationship"];
 
-  const [kyc, , isLoading] = useUserKycHook();
+  const { kyc, isLoading  } = useUserKycHook();
 
   useEffect(() => {
     if (!isEmpty(kyc)) initialize();
