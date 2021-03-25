@@ -261,6 +261,7 @@ const Recommendations = (props) => {
           isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
+          close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
           isOpen={dialogStates.openInvestReferral}

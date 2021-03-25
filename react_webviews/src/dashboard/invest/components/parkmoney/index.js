@@ -72,7 +72,7 @@ const Landing = (props) => {
   return (
     <Container
       classOverRide='pr-error-container'
-      buttonTitle='Next'
+      buttonTitle='NEXT'
       hidePageTitle
       showLoader={loader}
       title='Park Money'
