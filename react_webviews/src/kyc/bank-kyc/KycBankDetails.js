@@ -177,7 +177,7 @@ const KycBankDetails = (props) => {
           (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
           kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
-          kyc.pan.doc_status !== "submitted"
+          kyc.pan.doc_status !== "approved"
         )
           navigate(getPathname.uploadPan);
         else navigate(getPathname.kycEsign);

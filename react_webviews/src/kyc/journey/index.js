@@ -39,12 +39,16 @@ const Journey = (props) => {
   }
 
   const openGoBackModal = () => {
-    setGoBackModal(true)
+    if (user?.kyc_registration_v2 !== "submitted" && user.kyc_registration_v2 !== "complete") {
+      setGoBackModal(true)
+    } else {
+      navigate('/invest')
+    }
   }
 
   const confirmGoBack = () => {
       closeGoBackModal()
-      props.history.goBack()
+      navigate('/invest')
   }
 
   useEffect(() => {
