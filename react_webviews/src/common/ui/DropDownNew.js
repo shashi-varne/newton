@@ -171,6 +171,24 @@ class SelectDropDown2 extends React.Component {
                     background: "#C4C4C4",
                   }
                 }),
+                option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+                  return {
+                    ...styles,
+                    backgroundColor: (isSelected) ? "#EEEEEE" : null,
+                    ':hover': {
+                      backgroundColor: '#EEEEEE'
+                    },
+                    color: "#161A2E",
+                    minHeight: '41px',
+                    fontSize: '13px',
+                    padding: '10px',
+                    paddingTop: '13px',
+                    paddingLeft: '12px',
+                    ':active': {
+                      backgroundColor: "#EEEEEE"
+                    }
+                  };
+                },
               }}
               hideSelectedOptions={false}
               options={options}
