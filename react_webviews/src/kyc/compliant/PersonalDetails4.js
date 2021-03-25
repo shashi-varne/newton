@@ -69,8 +69,7 @@ const PersonalDetails4 = (props) => {
         handleNavigation();
         return;
       }
-    }
-    if (compareObjects(keysToCheck, oldState, form_data)) {
+    } else if (compareObjects(keysToCheck, oldState, form_data)) {
       handleNavigation();
       return;
     }
