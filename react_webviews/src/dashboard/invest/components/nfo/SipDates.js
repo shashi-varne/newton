@@ -218,11 +218,11 @@ class SipDates extends Component {
             close={() => this.setState({openSuccessDialog : false})}
           />
           <PennyVerificationPending
-            isOpen={dialogStates.openPennyVerificationPending}
+            isOpen={dialogStates.openPennyVerificationPending ? dialogStates.openPennyVerificationPending : false}
             handleClick={() => this.navigate("/kyc/add-bank")}
           />
           <InvestError
-            isOpen={dialogStates.openInvestError}
+            isOpen={dialogStates.openInvestError ? dialogStates.openInvestError : false}
             errorMessage={dialogStates.errorMessage}
             handleClick={() => this.navigate("/invest")}
             close={() => this.handleDialogStates('openInvestError', false)}

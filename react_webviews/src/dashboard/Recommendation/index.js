@@ -230,7 +230,7 @@ const Recommendations = (props) => {
         <div className='recommendations-funds-lists'>
           {recommendation &&
             recommendation?.map((el, idx) => (
-              <FundCard isins={isins} graph key={idx} fund={el} history={props.history} />
+              <FundCard isins={isins} graph key={idx} fund={el} parentProps={props} />
             ))}
         </div>
         <div className='recommendations-total-investment'>
@@ -254,17 +254,17 @@ const Recommendations = (props) => {
           <img alt='trust_sebi_secure' src={trust_icons} />
         </div>
         <PennyVerificationPending
-          isOpen={dialogStates.openPennyVerificationPendind}
+          isOpen={dialogStates.openPennyVerificationPendind ? dialogStates.openPennyVerificationPendind : false}
           handleClick={() => navigate("/kyc/add-bank")}
         />
         <InvestError
-          isOpen={dialogStates.openInvestError}
+          isOpen={dialogStates.openInvestError ? dialogStates.openInvestError : false}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
           close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
-          isOpen={dialogStates.openInvestReferral}
+          isOpen={dialogStates.openInvestReferral ? dialogStates.openInvestReferral : false}
           proceedInvestment={proceedInvestment}
           close={() => handleDialogStates("openInvestReferral", false)}
         />
