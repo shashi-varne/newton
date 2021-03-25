@@ -98,32 +98,34 @@ const KycUploadDocuments = (props) => {
     const navigate = navigateFunc.bind(props);
     if (additional) {
       navigate("/kyc/add-bank");
-    } else if (userType === "compliant") {
-      if (isEdit) {
-        navigate("/kyc/journey");
-      } else {
-        navigate("/kyc/upload/sign", {
-          state: {
-            backToJourney: true,
-          },
-        });
-      }
     } else {
-      if (dlFlow) {
-        if (
-          (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
-          kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
-          kyc.pan.doc_status !== "submitted"
-        ) {
-          navigate("/kyc/upload/pan");
+      if (userType === "compliant") {
+        if (isEdit) {
+          navigate("/kyc/journey");
         } else {
-          navigate("/kyc-esign/info");
+          navigate("/kyc/upload/sign", {
+            state: {
+              backToJourney: true,
+            },
+          });
         }
       } else {
-        navigate("/kyc/upload/progress");
+        if (dlFlow) {
+          if (
+            (kyc.all_dl_doc_statuses.pan_fetch_status === null ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "" ||
+            kyc.all_dl_doc_statuses.pan_fetch_status === "failed") && 
+            kyc.pan.doc_status !== "approved"
+          ) {
+            navigate("/kyc/upload/pan");
+          } else {
+            navigate("/kyc-esign/info");
+          }
+        } else {
+          navigate("/kyc/upload/progress");
+        }
       }
-    }
+    } 
   };
 
   const selectedDocValue =
