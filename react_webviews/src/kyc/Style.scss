@@ -2059,3 +2059,20 @@
     }
   }
 }
+
+#kyc-journey-back {
+  .text {
+    margin: 10px 0;
+    color: #160d2e;
+    font-size: 16px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .MuiButton-label {
+    font-weight: bold;
+  }
+}
