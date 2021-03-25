@@ -254,17 +254,17 @@ const Recommendations = (props) => {
           <img alt='trust_sebi_secure' src={trust_icons} />
         </div>
         <PennyVerificationPending
-          isOpen={dialogStates.openPennyVerificationPendind ? dialogStates.openPennyVerificationPendind : false}
+          isOpen={dialogStates.openPennyVerificationPendind}
           handleClick={() => navigate("/kyc/add-bank")}
         />
         <InvestError
-          isOpen={dialogStates.openInvestError ? dialogStates.openInvestError : false}
+          isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest")}
           close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
-          isOpen={dialogStates.openInvestReferral ? dialogStates.openInvestReferral : false}
+          isOpen={dialogStates.openInvestReferral}
           proceedInvestment={proceedInvestment}
           close={() => handleDialogStates("openInvestReferral", false)}
         />

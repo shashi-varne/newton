@@ -159,17 +159,17 @@ const InvestJourney = (props) => {
           </div>
         </div>
         <PennyVerificationPending
-          isOpen={dialogStates.openPennyVerificationPendind ? dialogStates.openPennyVerificationPendind : false}
+          isOpen={dialogStates.openPennyVerificationPendind}
           handleClick={() => navigate("/kyc/add-bank", null, true)}
         />
         <InvestError
-          isOpen={dialogStates.openInvestError ? dialogStates.openInvestError : false}
+          isOpen={dialogStates.openInvestError}
           errorMessage={dialogStates.errorMessage}
           handleClick={() => navigate("/invest", null, true)}
           close={() => handleDialogStates("openInvestError", false)}
         />
         <InvestReferralDialog
-          isOpen={dialogStates.openInvestReferral ? dialogStates.openInvestReferral : false}
+          isOpen={dialogStates.openInvestReferral}
           proceedInvestment={proceedInvestment}
           close={() => handleDialogStates("openInvestReferral", false)}
         />
